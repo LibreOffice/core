@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-10 11:30:28 $
+ *  last change: $Author: os $ $Date: 2002-08-16 13:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,11 +422,14 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
     { SW_PROP_NMID(UNO_NAME_ANCHOR_FRAME), RES_ANCHOR,             CPPU_E2T(CPPUTYPE_REFTEXTFRAME),    PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORFRAME},             \
     ANCHOR_TYPES_PROPERTY\
     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },                      \
-    { SW_PROP_NMID(UNO_NAME_CONTENT_PROTECTED), RES_PROTECT,            CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_PROTECT_CONTENT   },                          \
+    { SW_PROP_NMID(UNO_NAME_BACK_COLOR_R_G_B), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},    \
+    { SW_PROP_NMID(UNO_NAME_BACK_COLOR_TRANSPARENCY), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE ,MID_BACK_COLOR_TRANSPARENCY},    \
+    { SW_PROP_NMID(UNO_NAME_CONTENT_PROTECTED), RES_PROTECT,            CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_PROTECT_CONTENT  },                          \
     { SW_PROP_NMID(UNO_NAME_FRAME_STYLE_NAME), FN_UNO_FRAME_STYLE_NAME,CPPU_E2T(CPPUTYPE_OUSTRING),         PROPERTY_NONE, 0},                                   \
     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE ,MID_GRAPHIC_URL    },                 \
     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE ,MID_GRAPHIC_FILTER    },              \
     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         CPPU_E2T(CPPUTYPE_GRAPHICLOC), PROPERTY_NONE ,MID_GRAPHIC_POSITION},    \
+    { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_TRANSPARENCY), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENCY},    \
     { SW_PROP_NMID(UNO_NAME_LEFT_MARGIN), RES_LR_SPACE,             CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},            \
     { SW_PROP_NMID(UNO_NAME_RIGHT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},            \
     { SW_PROP_NMID(UNO_NAME_WIDTH), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT32)  ,         PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS},\
@@ -1659,6 +1662,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     _REDLINE_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
+                    {SW_PROP_NMID(UNO_NAME_REDLINE_START), 0, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
+                    {SW_PROP_NMID(UNO_NAME_REDLINE_END), 0, CPPU_E2T(CPPUTYPE_REFINTERFACE),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRedlineMap_Impl;
@@ -1694,7 +1699,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 aMapArr[nPropertyId] = aRedlinePortionMap_Impl;
             }
             break;
-//!!!
             case  PROPERTY_MAP_FLDTYP_DATETIME:
             {
                 static SfxItemPropertyMap aDateTimeFieldPropMap[] =
