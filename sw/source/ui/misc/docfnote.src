@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:53:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ english_us ] = "Styles" ;
         Text[ chinese_simplified ] = "ΡωΚ½";
         Text[ russian ] = "Ρςθλθ";
-        Text[ polish ] = "Szablony";
+        Text[ polish ] = "Style";
         Text[ japanese ] = "½ΐ²Ω";
         Text[ chinese_traditional ] = "ΌΛ¦΅";
         Text[ arabic ] = "ΓδγΗΨ";
@@ -783,7 +783,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ japanese ] = "‹r’‚ªΝί°Όή‚Ι‘±‚­Ϋ‚Μ’Σ‘‚«";
         Text[ chinese_traditional ] = "¦h­¶µωΈ}ªΊ΄£¥ά¤ε";
         Text[ arabic ] = "γαΗΝΩΙ Ϊαμ Τία ΝζΗΤν ΣέανΙ έν ΓίΛΡ γδ ΥέΝΙ";
-        Text[ greek ] = "Κείμενο υπόδειξης συνέχισης υποσημειώσεων";
+        Text[ greek ] = "Κείμενο συμβουλής πολυσέλιδων υποσημειώσεων";
         Text[ korean ] = "Ώ©·― ΖδΐΜΑφΐΗ ΉΩ΄Ϊ±ΫΏ΅ ΄λΗΡ Βό°ν";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
@@ -1203,7 +1203,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ english_us ] = "Styles" ;
         Text[ chinese_simplified ] = "ΡωΚ½";
         Text[ russian ] = "Ρςθλθ";
-        Text[ polish ] = "Szablony";
+        Text[ polish ] = "Style";
         Text[ japanese ] = "½ΐ²Ω";
         Text[ chinese_traditional ] = "ΌΛ¦΅";
         Text[ arabic ] = "ΓδγΗΨ";
@@ -1493,7 +1493,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ japanese ] = "‹r’‚ªΝί°Όή‚Ι‘±‚­Ϋ‚Μ’Σ‘‚«";
         Text[ chinese_traditional ] = "¦h­¶µωΈ}ªΊ΄£¥ά¤ε";
         Text[ arabic ] = "γαΗΝΩΙ Ϊαμ Τία ΝζΗΤν ΣέανΙ έν ΓίΛΡ γδ ΥέΝΙ";
-        Text[ greek ] = "Κείμενο υπόδειξης συνέχισης υποσημειώσεων";
+        Text[ greek ] = "Κείμενο συμβουλής πολυσέλιδων υποσημειώσεων";
         Text[ korean ] = "Ώ©·― ΖδΐΜΑφΐΗ ΉΩ΄Ϊ±ΫΏ΅ ΄λΗΡ Βό°ν";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
