@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:58:20 $
+ *  last change: $Author: mba $ $Date: 2001-05-07 11:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,8 +380,9 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
     ANY aReturn( ::cppu::queryInterface(    rType                                       ,
                                                static_cast< XTYPEPROVIDER*      > ( this )  ,
                                                static_cast< XCONTROLLER*        > ( this )  ,
-#if SUPD>626
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
+#if SUPD>630
+                                            static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ,
 #endif
                                                static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
 
@@ -445,10 +446,11 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
         {
             // Create a static typecollection ...
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
-#if SUPD>626
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
-#endif
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
+#if SUPD>626
+                                                    ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER  >*)NULL ) ,
+#endif
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -763,4 +765,47 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
         m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame()->GetWorkWindow_Impl() );
     return m_pData->m_xIndicator;
 }
+
+::rtl::OUString SAL_CALL SfxBaseController::queryDescription( const ::rtl::OUString& rURL ) throw( RUNTIMEEXCEPTION )
+{
+    if ( m_pData->m_pViewShell )
+    {
+        SfxViewFrame* pAct = m_pData->m_pViewShell->GetViewFrame() ;
+        if ( !m_pData->m_bDisposing )
+        {
+            sal_uInt16 nId = 0;
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            if ( rURL.compareToAscii( ".uno:", 5 ) == 0 )
+            {
+                ::rtl::OUString aPath = rURL.copy( 5 );
+                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pAct );
+                const SfxSlot* pSlot = rPool.GetUnoSlot( aPath );
+                return rPool.GetSlotName_Impl( *pSlot );
+            }
+            else if ( rURL.compareToAscii( ".slot:", 6 ) == 0 )
+            {
+                ::rtl::OUString aPath = rURL.copy( 6 );
+                nId = (USHORT) rURL.toInt32();
+                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pAct );
+                return rPool.GetSlotName_Impl( nId );
+            }
+        }
+    }
+
+    return ::rtl::OUString();
+}
+
+void SAL_CALL SfxBaseController::queryDescriptions ( const SEQUENCE < ::rtl::OUString >& rURLs, SEQUENCE < ::rtl::OUString >& rDescriptions ) throw( RUNTIMEEXCEPTION )
+{
+    for ( sal_Int32 n=0; n<rURLs.getLength(); n++ )
+    {
+        rDescriptions[n] = SfxBaseController::queryDescription( rURLs[n] );
+    }
+}
+
+SEQUENCE < DISPATCHINFORMATION > SAL_CALL SfxBaseController::getConfigurableDispatchInformation() throw( RUNTIMEEXCEPTION )
+{
+    return SEQUENCE < DISPATCHINFORMATION >();
+}
+
 
