@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:32:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
