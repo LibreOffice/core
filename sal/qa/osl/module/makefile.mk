@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:48:42 $
+#   last change: $Author: rt $ $Date: 2004-05-03 08:57:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ SHL1VERSIONMAP = export_dll.map
 # --- main l ------------------------------------------------------
 SHL2OBJS=  $(SLO)$/osl_Module.obj
 
-SHL2TARGET= Module
+SHL2TARGET= osl_Module
 SHL2STDLIBS=   $(SALLIB) 
 
 .IF "$(GUI)" == "WNT"
