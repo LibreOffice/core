@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
 #endif
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
 
 class CommandEvent;
 struct AcceptDropEvent;
@@ -74,7 +80,6 @@ struct ExecuteDropEvent;
 namespace dbaui
 {
 //........................................................................
-
     //====================================================================
     //= IControlActionListener
     //====================================================================
@@ -108,6 +113,26 @@ namespace dbaui
     public:
         /// called when a drag operation done with a Transferable has been finished
         virtual void        dragFinished( ) = 0;
+    };
+
+    //====================================================================
+    //= IContainerFoundListener
+    //====================================================================
+    class SAL_NO_VTABLE IContainerFoundListener
+    {
+    public:
+        /// called when a container was found
+        virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) = 0;
+    };
+
+    //====================================================================
+    //= IViewChangeListener
+    //====================================================================
+    class SAL_NO_VTABLE IViewChangeListener
+    {
+    public:
+        /// called when the preview mode was changed
+        virtual void previewChanged( sal_Int32 _nMode) = 0;
     };
 
 //........................................................................
