@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:47:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,9 @@ SbiExprNode* SbiExpression::Term()
         }
         if( pDef->IsDefinedAs() )
         {
-            if( eType >= SbxINTEGER && eType <= SbxSTRING )
+            SbxDataType eDefType = pDef->GetType();
+            // #119187 Only error if types conflict
+            if( eType >= SbxINTEGER && eType <= SbxSTRING && eType != eDefType )
             {
                 // Wie? Erst mit AS definieren und dann einen Suffix nehmen?
                 pParser->Error( SbERR_BAD_DECLARATION, aSym );
@@ -326,7 +328,7 @@ SbiExprNode* SbiExpression::Term()
                 // Falls nix angegeben, den Typ des Eintrags nehmen
                 // aber nur, wenn die Var nicht mit AS XXX definiert ist
                 // damit erwischen wir n% = 5 : print n
-                eType = pDef->GetType();
+                eType = eDefType;
         }
         // Funktion?
         if( pDef->GetProcDef() )
@@ -400,11 +402,13 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             bError = TRUE;
         }
     }
+    /* #118410 Allow type for Class methods and RTL object, e.g. RTL.Chr$(97)
     else
     {
         if( pParser->GetType() != SbxVARIANT )
             pParser->Error( SbERR_SYNTAX ), bError = TRUE;
     }
+    */
     if( bError )
         return NULL;
 
