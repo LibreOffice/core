@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-23 08:49:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,9 +597,10 @@ int Export::Execute( int nToken, char * pToken )
     if ( nToken != LEVELDOWN ) {
         USHORT nOpen = 0;
         USHORT nClose = 0;
+        USHORT i;
         BOOL bReadOver = FALSE;
 
-        for ( USHORT i = 0; i < sToken.Len(); i++ ) {
+        for ( i = 0; i < sToken.Len(); i++ ) {
             if ( sToken.GetChar( i ) == '\"' )
                 bReadOver = !bReadOver;
             if ( !bReadOver && ( sToken.GetChar( i ) == '{' ))
