@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2002-04-04 09:04:07 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ namespace framework{
 #define SUBLIST_DETECTSERVICES                      DECLARE_ASCII("DetectServices"                                  )
 #define SUBLIST_FRAMELOADERS                        DECLARE_ASCII("FrameLoaders"                                    )
 #define SUBLIST_CONTENTHANDLERS                     DECLARE_ASCII("ContentHandlers"                                 )
-#define SUBLIST_PROTOCOLHANDLERS                    DECLARE_ASCII("ProtocolHandlers"                                )
 #define SUBLIST_DEFAULTS                            DECLARE_ASCII("Defaults"                                        )
 
 #define TEMPLATENAME_TYPE                           DECLARE_ASCII("Type"                                            )
@@ -180,7 +179,6 @@ namespace framework{
 #define TEMPLATENAME_DETECTSERVICE                  DECLARE_ASCII("DetectService"                                   )
 #define TEMPLATENAME_FRAMELOADER                    DECLARE_ASCII("FrameLoader"                                     )
 #define TEMPLATENAME_CONTENTHANDLER                 DECLARE_ASCII("ContentHandler"                                  )
-#define TEMPLATENAME_PROTOCOLHANDLER                DECLARE_ASCII("ProtocolHandler"                                 )
 
 //*****************************************************************************************************************
 // These defines declare all supported names of configuration key names.
@@ -207,7 +205,6 @@ namespace framework{
 #define SUBKEY_DEFAULTDETECTOR                      DECLARE_ASCII("DetectService"                                   )
 #define SUBKEY_GENERICLOADER                        DECLARE_ASCII("FrameLoader"                                     )
 #define SUBKEY_DATA                                 DECLARE_ASCII("Data"                                            )
-#define SUBKEY_PROTOCOLS                            DECLARE_ASCII("Protocols"                                       )
 #define SUBKEY_UICOMPONENT                          DECLARE_ASCII("UIComponent"                                     )
 
 //*****************************************************************************************************************
@@ -232,7 +229,6 @@ namespace framework{
 #define PROPERTY_TEMPLATENAME                       DECLARE_ASCII("TemplateName"                                    )
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 #define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
-#define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )
 #define PROPERTY_UICOMPONENT                        DECLARE_ASCII("UIComponent"                                     )
 
 //_________________________________________________________________________________________________________________
@@ -567,51 +563,6 @@ struct ContentHandler
 };
 
 //*****************************************************************************************************************
-// Programmer can register his own services to handle different protocols and intercept dispatches.
-// Don't forget: It doesn't mean "handling of documents" ... these services could handle protocols ...
-// e.g. "mailto:*", "file://*"
-//*****************************************************************************************************************
-struct ProtocolHandler
-{
-    //-------------------------------------------------------------------------------------------------------------
-    // public methods
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-
-        inline                   ProtocolHandler(                              ) { impl_clear();               }
-        inline                   ProtocolHandler( const ProtocolHandler& rCopy ) { impl_copy( rCopy );         }
-        inline                  ~ProtocolHandler(                              ) { impl_clear();               }
-        inline ProtocolHandler&  operator=      ( const ProtocolHandler& rCopy ) { return impl_copy( rCopy );  }
-        inline void              free           (                              ) { impl_clear();               }
-
-    //-------------------------------------------------------------------------------------------------------------
-    // private methods
-    //-------------------------------------------------------------------------------------------------------------
-    private:
-
-        inline void impl_clear()
-        {
-            sName = ::rtl::OUString();
-            lProtocols.free();
-        }
-
-        inline ProtocolHandler& impl_copy( const ProtocolHandler& rCopy )
-        {
-            sName       = rCopy.sName       ;
-            lProtocols  = rCopy.lProtocols  ;
-            return (*this);
-        }
-
-    //-------------------------------------------------------------------------------------------------------------
-    // public member
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-
-        ::rtl::OUString     sName       ;
-        StringList          lProtocols  ;
-};
-
-//*****************************************************************************************************************
 // We need different hash maps for different tables of our configuration management.
 // Follow maps convert <names> to <properties> of type, filter, detector, loader ...
 // and could be used in a generic way
@@ -726,7 +677,6 @@ typedef SetNodeHash< Filter >                                       FilterHash  
 typedef SetNodeHash< Detector >                                     DetectorHash                ;
 typedef SetNodeHash< Loader >                                       LoaderHash                  ;
 typedef SetNodeHash< ContentHandler >                               ContentHandlerHash          ;
-typedef SetNodeHash< ProtocolHandler >                              ProtocolHandlerHash         ;
 typedef StringHash                                                  PreferredHash               ;
 typedef StringList                                                  OrderList                   ;
 
@@ -739,7 +689,6 @@ typedef FilterHash::const_iterator                                  ConstFilterI
 typedef DetectorHash::const_iterator                                ConstDetectorIterator       ;
 typedef LoaderHash::const_iterator                                  ConstLoaderIterator         ;
 typedef ContentHandlerHash::const_iterator                          ConstContentHandlerIterator ;
-typedef ProtocolHandlerHash::const_iterator                         ConstProtocolHandlerIterator;
 typedef PerformanceHash::const_iterator                             ConstPerformanceIterator    ;
 typedef PreferredHash::const_iterator                               ConstPreferredIterator      ;
 
@@ -763,21 +712,18 @@ class DataContainer
         void addDetector            (   const   Detector&           aDetector   , sal_Bool bSetModified );
         void addLoader              (   const   Loader&             aLoader     , sal_Bool bSetModified );
         void addContentHandler      (   const   ContentHandler&     aHandler    , sal_Bool bSetModified );
-        void addProtocolHandler     (   const   ProtocolHandler&    aHandler    , sal_Bool bSetModified );
 
         void replaceType            (   const   FileType&           aType       , sal_Bool bSetModified );
         void replaceFilter          (   const   Filter&             aFilter     , sal_Bool bSetModified );
         void replaceDetector        (   const   Detector&           aDetector   , sal_Bool bSetModified );
         void replaceLoader          (   const   Loader&             aLoader     , sal_Bool bSetModified );
         void replaceContentHandler  (   const   ContentHandler&     aHandler    , sal_Bool bSetModified );
-        void replaceProtocolHandler (   const   ProtocolHandler&    aHandler    , sal_Bool bSetModified );
 
         void removeType             (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeFilter           (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeDetector         (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeLoader           (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeContentHandler   (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
-        void removeProtocolHandler  (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
 
         static void             convertStringSequenceToVector              ( const css::uno::Sequence< ::rtl::OUString >&              lSource         ,
                                                                                    StringList&                                         lDestination    );
@@ -795,8 +741,6 @@ class DataContainer
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
                                                                              const ::rtl::OUString&                                    sCurrentLocale  );
         static void             convertContentHandlerToPropertySequence    ( const ContentHandler&                                     aSource         ,
-                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
-        static void             convertProtocolHandlerToPropertySequence   ( const ProtocolHandler&                                    aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
         static void             convertPropertySequenceToFilter            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    Filter&                                             aDestination    ,
@@ -825,12 +769,10 @@ class DataContainer
         DetectorHash            m_aDetectorCache            ;     /// hold all informations about registered detect services
         LoaderHash              m_aLoaderCache              ;     /// hold all informations about registered loader services
         ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all informations about registered content handler services
-        ProtocolHandlerHash     m_aProtocolHandlerCache     ;     /// hold all informations about registered protocol handler services
         PerformanceHash         m_aFastFilterCache          ;     /// hold all registered filter for a special file type
         PerformanceHash         m_aFastDetectorCache        ;     /// hold all registered detect services for a special file type
         PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
         PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
-        PerformanceHash         m_aFastProtocolHandlerCache ;     /// hold all registered protocol handler services for a special protocol pattern
         PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for it
         Detector                m_aDefaultDetector          ;     /// informations about our default deep detection service
         Loader                  m_aGenericLoader            ;     /// informations about our default frame loader
@@ -887,7 +829,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void impl_loadDetectors        ( DataContainer&             rData           );
         void impl_loadLoaders          ( DataContainer&             rData           );
         void impl_loadContentHandlers  ( DataContainer&             rData           );
-        void impl_loadProtocolHandlers ( DataContainer&             rData           );
         void impl_loadDefaults         ( DataContainer&             rData           );
 
         void impl_saveTypes            ( DataContainer&             rData           );    // helper to save configuration parts
@@ -895,7 +836,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void impl_saveDetectors        ( DataContainer&             rData           );
         void impl_saveLoaders          ( DataContainer&             rData           );
         void impl_saveContentHandlers  ( DataContainer&             rData           );
-        void impl_saveProtocolHandlers ( DataContainer&             rData           );
 
         void impl_setProductName       ( StringHash&                lValues         );
         void impl_resetProductName     ( StringHash&                lValues         );
@@ -921,7 +861,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
         sal_Int32       m_nKeyCountDetectors           ;
         sal_Int32       m_nKeyCountLoaders             ;
         sal_Int32       m_nKeyCountContentHandlers     ;
-        sal_Int32       m_nKeyCountProtocolHandlers    ;
         ::rtl::OUString m_sProductName                 ;
         sal_Bool        m_bActivateOpenofficePatch     ;    // <TRUE/> (which is valid for m_sProductname="openoffice.org" only) force replace of 6.0 with 1.0 inside filter uinames!
 };
