@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
+ *  last change: $Author: sab $ $Date: 2001-12-04 18:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ ScMyCell::~ScMyCell()
 
 //==============================================================================
 
-sal_Bool ScMyAnnotation::operator<(const ScMyAnnotation& rAnno)
+sal_Bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno)
 {
     if( aCellAddress.Row != rAnno.aCellAddress.Row )
         return (aCellAddress.Row < rAnno.aCellAddress.Row);
@@ -598,8 +598,31 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
 
 ScMyNotEmptyCellsIterator::~ScMyNotEmptyCellsIterator()
 {
+    Clear();
+}
+
+void ScMyNotEmptyCellsIterator::Clear()
+{
     if (pCellItr)
         delete pCellItr;
+    if (!aAnnotations.empty())
+    {
+        ScMyExportAnnotationList::iterator aItr = aAnnotations.begin();
+        ScMyExportAnnotationList::iterator aEndItr = aAnnotations.end();
+        while (aItr != aEndItr)
+        {
+            delete *aItr;
+            aItr = aAnnotations.erase(aItr);
+        }
+    }
+    pCellItr = NULL;
+    pShapes = NULL;
+    pMergedRanges = NULL;
+    pAreaLinks = NULL;
+    pEmptyDatabaseRanges = NULL;
+    pDetectiveObj = NULL;
+    pDetectiveOp = NULL;
+    nCurrentTable = -1;
 }
 
 void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
@@ -644,11 +667,11 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
     aCell.bHasAnnotation = sal_False;
     if (!aAnnotations.empty())
     {
-        ScMyAnnotationList::iterator aItr = aAnnotations.begin();
-        if ((aCell.aCellAddress.Column == aItr->aCellAddress.Column) &&
-            (aCell.aCellAddress.Row == aItr->aCellAddress.Row))
+        ScMyExportAnnotationList::iterator aItr = aAnnotations.begin();
+        if ((aCell.aCellAddress.Column == (*aItr)->aCellAddress.Column) &&
+            (aCell.aCellAddress.Row == (*aItr)->aCellAddress.Row))
         {
-            aCell.xAnnotation = aItr->xAnnotation;
+            aCell.xAnnotation = (*aItr)->xAnnotation;
             uno::Reference<text::XSimpleText> xSimpleText(aCell.xAnnotation, uno::UNO_QUERY);
             if (aCell.xAnnotation.is() && xSimpleText.is())
             {
@@ -656,6 +679,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
                 if (aCell.sAnnotationText.getLength())
                     aCell.bHasAnnotation = sal_True;
             }
+            delete *aItr;
             aAnnotations.erase(aItr);
         }
     }
@@ -692,11 +716,11 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable,
                     while (xAnnotations->hasMoreElements())
                     {
                         uno::Any aAny = xAnnotations->nextElement();
-                        ScMyAnnotation aAnnotation;
-                        if (aAny >>= aAnnotation.xAnnotation)
+                        ScMyExportAnnotation* pAnnotation = new ScMyExportAnnotation();
+                        if (pAnnotation && (aAny >>= pAnnotation->xAnnotation))
                         {
-                            aAnnotation.aCellAddress = aAnnotation.xAnnotation->getPosition();
-                            aAnnotations.push_back(aAnnotation);
+                            pAnnotation->aCellAddress = pAnnotation->xAnnotation->getPosition();
+                            aAnnotations.push_back(pAnnotation);
                         }
                     }
                     if (!aAnnotations.empty())
