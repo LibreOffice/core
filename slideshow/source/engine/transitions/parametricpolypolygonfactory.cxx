@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parametricpolypolygonfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:07:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,14 +134,16 @@ namespace presentation
                     new CheckerBoardWipe );
             case RANDOMBARWIPE:
                 return ParametricPolyPolygonSharedPtr(
-                    new RandomWipe( 100, true /* bars */ ) );
+                    new RandomWipe( 128, true /* bars */ ) );
             case DISSOLVE:
                 return ParametricPolyPolygonSharedPtr(
-                    new RandomWipe( 100, false /* dissolve */ ) );
+                    new RandomWipe( 16 * 16, // for now until dxcanvas is faster
+//                                     64 * 64 /* elements */,
+                                    false /* dissolve */ ) );
             case WATERFALLWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new WaterfallWipe(
-                        100,
+                        128,
                         // flipOnYAxis:
                         nSubType == VERTICALRIGHT ||
                         nSubType == HORIZONTALLEFT ) );
@@ -178,7 +180,8 @@ namespace presentation
             case SNAKEWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new SnakeWipe(
-                        100,
+                        // elements:
+                        64 * 64,
                         // diagonal:
                         nSubType == TOPLEFTDIAGONAL ||
                         nSubType == TOPRIGHTDIAGONAL ||
@@ -192,7 +195,8 @@ namespace presentation
             case PARALLELSNAKESWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new ParallelSnakesWipe(
-                        100,
+                        // elements:
+                        64 * 64,
                         // diagonal:
                         nSubType == DIAGONALBOTTOMLEFTOPPOSITE ||
                         nSubType == DIAGONALTOPLEFTOPPOSITE,
@@ -212,7 +216,7 @@ namespace presentation
                 return ParametricPolyPolygonSharedPtr(
                     new SpiralWipe(
                         // elements:
-                        100,
+                        64 * 64,
                         // flipOnYAxis:
                         nSubType == TOPLEFTCOUNTERCLOCKWISE ||
                         nSubType == TOPRIGHTCOUNTERCLOCKWISE ||
@@ -222,7 +226,7 @@ namespace presentation
                 return ParametricPolyPolygonSharedPtr(
                     new BoxSnakesWipe(
                         // elements:
-                        100,
+                        64 * 64,
                         // fourBox:
                         nSubType == FOURBOXVERTICAL ||
                         nSubType == FOURBOXHORIZONTAL ) );
