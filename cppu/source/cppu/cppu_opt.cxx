@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppu_opt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:18 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include <typelib/typedescription.h>
-#include <rtl/ustrbuf.hxx>
+#include "typelib/typedescription.h"
+#include "rtl/ustrbuf.hxx"
 
 
 using namespace ::rtl;
@@ -72,8 +72,8 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
 {
     OUStringBuffer buf( 64 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unsatisfied query for interface of type ") );
-    buf.append( * reinterpret_cast< OUString const * >( &pType->pTypeName ) );
-    buf.append( (sal_Unicode)'!' );
+    buf.append( OUString::unacquired( &pType->pTypeName ) );
+    buf.append( (sal_Unicode) '!' );
     OUString ret( buf.makeStringAndClear() );
     rtl_uString_acquire( ret.pData );
     return ret.pData;
