@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:20:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@
 #include "ObjectBarManager.hxx"
 #endif
 #include "sdabstdlg.hxx" //CHINA001
-
+#include "PaneManager.hxx"
 #include <sfx2/ipclient.hxx>
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
@@ -523,7 +523,11 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             // #83951#
             USHORT nId = Svx3DChildWindow::GetChildWindowId();
-            SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow(nId);
+            SfxViewFrame* pFrame = GetViewFrame();
+            ::std::auto_ptr<PaneManagerState> pPaneManagerState (
+                GetViewShellBase().GetPaneManager().GetState());
+
+            SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
             if(pWindow)
             {
                 Svx3DWin* p3DWin = (Svx3DWin*)(pWindow->GetWindow());
@@ -536,7 +540,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // Normale Weiterleitung an ViewFrame zur Ausfuehrung
             GetViewFrame()->ExecuteSlot(rReq);
 
-            // Muss sofort beendet werden
+            // From here on we must copy with this object already being
+            // deleted.  Do not call any methods or use data members.
+            ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pFrame);
+            OSL_ASSERT(pBase!=NULL);
+            pBase->GetPaneManager().SetState(*pPaneManagerState);
+
+            // We have to return immediately to avoid accessing this object.
             return;
         }
         break;
