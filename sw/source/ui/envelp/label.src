@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:53:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@
     Text[ czech ] = "Štítky"; \
     Text[ hebrew ] = "‮מדבקות‬";  \
     Text[ hindi ] = "लेबिलें";    \
-    Text[ slovak ] = "Štítky";
+    Text[ slovak ] = "Štítky"; \
+    Text[ hungarian ] = "Címkék"; \
+    Text[ slovenian ] = "Nalepke";
 
 #define BUSINESS_CARD_STRING \
     Text = "Visitenkarten" ;                            \
@@ -122,7 +124,9 @@
     Text[ czech ] = "Vizitky";  \
     Text[ hebrew ] = "‮כרטיסי ביקור‬";   \
     Text[ hindi ] = "व्यवहार कार्डस"; \
-    Text[ slovak ] = "Vizitky";
+    Text[ slovak ] = "Vizitky"; \
+    Text[ hungarian ] = "Névjegykártyák"; \
+    Text[ slovenian ] = "Vizitke";
 
  // DLG_LAB ------------------------------------------------------------------
 TabDialog DLG_LAB
@@ -174,6 +178,8 @@ TabDialog DLG_LAB
                 Text[ hebrew ] = "‮אישי‬";
                 Text[ hindi ] = "वैयक्तिक";
                 Text[ slovak ] = "Súkromné";
+                Text[ hungarian ] = "Magán";
+                Text[ slovenian ] = "Zasebno";
             };
             PageItem
             {
@@ -207,6 +213,8 @@ TabDialog DLG_LAB
                 Text[ hebrew ] = "‮עיסקי‬";
                 Text[ hindi ] = "व्यवहार";
                 Text[ slovak ] = "Pracovné";
+                Text[ hungarian ] = "Üzleti";
+                Text[ slovenian ] = "Poslovno";
             };
             PageItem
             {
@@ -240,6 +248,8 @@ TabDialog DLG_LAB
                 Text[ hebrew ] = "‮עיצוב‬";
                 Text[ hindi ] = "रचना";
                 Text[ slovak ] = "Formát";
+                Text[ hungarian ] = "Formátum";
+                Text[ slovenian ] = "Oblika";
             };
             PageItem
             {
@@ -250,7 +260,7 @@ TabDialog DLG_LAB
                 Text [ english_us ] = "Options" ;
                 Text [ portuguese_brazilian ] = "Op��es" ;
                 Text [ swedish ] = "Till�gg" ;
-                Text [ danish ] = "Flere" ;
+                Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Extra" ;
                 Text [ spanish ] = "Opciones" ;
                 Text [ french ] = "Options" ;
@@ -273,6 +283,8 @@ TabDialog DLG_LAB
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
                 Text[ slovak ] = "Nastavenia";
+                Text[ hungarian ] = "Beállítások";
+                Text[ slovenian ] = "Možnosti";
             };
         };
     };
@@ -314,6 +326,8 @@ TabDialog DLG_LAB
         Text[ hebrew ] = "‮מדיה‬";
         Text[ hindi ] = "मीडियम";
         Text[ slovak ] = "Médium";
+        Text[ hungarian ] = "Médium";
+        Text[ slovenian ] = "Srednje";
     };
 };
  // TP_LAB_LAB ---------------------------------------------------------------
@@ -357,6 +371,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮תוכן‬";
         Text[ hindi ] = "लेबिल टेक्स्ट्";
         Text[ slovak ] = "Text štítku";
+        Text[ hungarian ] = "Címke szövege";
+        Text[ slovenian ] = "Besedilo nalepke";
     };
     CheckBox BOX_ADDR
     {
@@ -392,6 +408,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮כתובת‬";
         Text[ hindi ] = "पता";
         Text[ slovak ] = "Adresa";
+        Text[ hungarian ] = "Cím";
+        Text[ slovenian ] = "Naslov";
     };
     MultiLineEdit EDT_WRITING
     {
@@ -437,6 +455,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮מסד נתונים‬";
         Text[ hindi ] = "लेखासंचय";
         Text[ slovak ] = "Databáza";
+        Text[ hungarian ] = "Adatbázis";
+        Text[ slovenian ] = "Zbirka podatkov";
     };
     ListBox LB_DATABASE
     {
@@ -478,6 +498,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
         Text[ slovak ] = "Tabuľka";
+        Text[ hungarian ] = "Táblázat";
+        Text[ slovenian ] = "Tabela";
     };
     ListBox LB_TABLE
     {
@@ -527,6 +549,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮שדה מסד נתונים‬";
         Text[ hindi ] = "लेखासंचय क्षेत्र";
         Text[ slovak ] = "Pole databázy";
+        Text[ hungarian ] = "Adatbázismező";
+        Text[ slovenian ] = "Polje zbirke podatkov";
     };
     ListBox LB_DBFIELD
     {
@@ -548,7 +572,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese_brazilian ] = "Inscri��o" ;
         Text [ portuguese ] = "Inscri��o" ;
         Text [ finnish ] = "Liiteteksti" ;
-        Text [ danish ] = "Etikettekst" ;
+        Text [ danish ] = "Inskription" ;
         Text [ french ] = "Inscription" ;
         Text [ swedish ] = "P�skrift" ;
         Text [ dutch ] = "Opschrift" ;
@@ -570,6 +594,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮כיתוב‬";
         Text[ hindi ] = "नक्श";
         Text[ slovak ] = "Text na štítku";
+        Text[ hungarian ] = "Felirat";
+        Text[ slovenian ] = "Napis";
     };
     RadioButton BTN_CONT
     {
@@ -584,7 +610,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese_brazilian ] = "~Cont�nuo" ;
         Text [ portuguese ] = "~Cont�nuo" ;
         Text [ finnish ] = "~Jatkuva" ;
-        Text [ danish ] = "Endel�s" ;
+        Text [ danish ] = "~Gennemg�ende" ;
         Text [ french ] = "Continu" ;
         Text [ swedish ] = "~Kontinuerlig" ;
         Text [ dutch ] = "~Eindeloos" ;
@@ -606,6 +632,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮רציף‬";
         Text[ hindi ] = "~निरन्तर";
         Text[ slovak ] = "~Spojitý";
+        Text[ hungarian ] = "~Leporelló";
+        Text[ slovenian ] = "~Zvezno";
     };
     RadioButton BTN_SHEET
     {
@@ -618,10 +646,10 @@ TabPage TP_LAB_LAB
         Text [ portuguese_brazilian ] = "~Folha" ;
         Text [ portuguese ] = "~Folha" ;
         Text [ finnish ] = "Taulukko" ;
-        Text [ danish ] = "Ark" ;
+        Text [ danish ] = "~Ark" ;
         Text [ french ] = "~Feuille" ;
         Text [ swedish ] = "~Ark" ;
-        Text [ dutch ] = "~Blad" ;
+        Text [ dutch ] = "~Vel" ;
         Text [ spanish ] = "~Hoja" ;
         Text [ english_us ] = "~Sheet" ;
         Text[ chinese_simplified ] = "纸张(~S)";
@@ -640,6 +668,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮דפים‬";
         Text[ hindi ] = "~शीट्";
         Text[ slovak ] = "Ta~buľka";
+        Text[ hungarian ] = "~Lap";
+        Text[ slovenian ] = "Li~st";
     };
     FixedText TXT_MAKE
     {
@@ -675,6 +705,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮יצרן‬";
         Text[ hindi ] = "व्यापारिक चिन्ह";
         Text[ slovak ] = "Značka";
+        Text[ hungarian ] = "Márka";
+        Text[ slovenian ] = "Znamka";
     };
     ListBox BOX_MAKE
     {
@@ -696,7 +728,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Type" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "~Typ" ;
         Text [ dutch ] = "~Type" ;
@@ -718,6 +750,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox BOX_TYPE
     {
@@ -767,6 +801,8 @@ TabPage TP_LAB_LAB
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
 };
 #define WIDTH  100
@@ -814,6 +850,8 @@ FloatingWindow DLG_SYNC_BTN
         Text[ hebrew ] = "Etiketten synchronisieren";
         Text[ hindi ] = "लेबिलों का समीकरण";
         Text[ slovak ] = "Synchronizovať značky";
+        Text[ hungarian ] = "Címkék egyeztetése";
+        Text[ slovenian ] = "Sinhroniziraj nalepke";
     };
 };
  // String *******************************************************************
@@ -848,6 +886,8 @@ String STR_DOC_TITLE
     Text[ hebrew ] = "‮מדבקות‬";
     Text[ hindi ] = "लेबिलें";
     Text[ slovak ] = "Štítky";
+    Text[ hungarian ] = "Címkék";
+    Text[ slovenian ] = "Nalepke";
 };
 String STR_CUSTOM
 {
@@ -878,6 +918,8 @@ String STR_CUSTOM
     Text[ hebrew ] = "[Benutzer]";
     Text[ hindi ] = "[उपभोक्ता]";
     Text[ slovak ] = "[Užívateľský]";
+    Text[ hungarian ] = "[Egyéni]";
+    Text[ slovenian ] = "[Uporabnik]";
 };
 /********************************************************************/
 TabPage TP_VISITING_CARDS
@@ -907,7 +949,7 @@ TabPage TP_VISITING_CARDS
         Text[ french ] = "AutoTexte - ~Section";
         Text[ spanish ] = "Texto autom�tico - ~Secci�n";
         Text[ italian ] = "Testo automatico - Sezione";
-        Text[ danish ] = "AutoTekst - omr�de";
+        Text[ danish ] = "AutoTekst - Sektion";
         Text[ swedish ] = "AutoText - omr�de";
         Text[ polish ] = "Autotekst - Sekcja";
         Text[ portuguese_brazilian ] = "AutoTexto - Se��o";
@@ -925,6 +967,8 @@ TabPage TP_VISITING_CARDS
         Text[ hebrew ] = "‮סוג טקסט מקובץ‬";
         Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट् - विभाग";
         Text[ slovak ] = "Automatický text - sekcia";
+        Text[ hungarian ] = "Szöveg-o-mata - szakasz";
+        Text[ slovenian ] = "Samobesedilo - odsek";
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
@@ -966,6 +1010,8 @@ TabPage TP_VISITING_CARDS
         Text[ hebrew ] = "‮תוכן‬";
         Text[ hindi ] = "विषय";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Tartalom";
+        Text[ slovenian ] = "Vsebina";
     };
     Window WIN_EXAMPLE
     {
@@ -1014,6 +1060,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮פרטים אישיים‬";
         Text[ hindi ] = "वैयक्तिक ड़ॉटा";
         Text[ slovak ] = "Súkromné údaje";
+        Text[ hungarian ] = "Személyes adatok";
+        Text[ slovenian ] = "Osebni podatki";
     };
     FixedText FT_NAME
     {
@@ -1029,7 +1077,7 @@ TabPage TP_PRIVATE_DATA
         Text[ french ] = "Pr�nom/Nom/Initiales";
         Text[ spanish ] = "No~mbre/Apellidos/Iniciales";
         Text[ italian ] = "Nome/Cognome/Iniziali";
-        Text[ danish ] = "For-/Efternavn/Initialer";
+        Text[ danish ] = "F~or-/Efternavn/Initialer";
         Text[ swedish ] = "~F�r-/efternamn/initialer";
         Text[ polish ] = "Imi�/n~azwisko/inicja�y";
         Text[ portuguese_brazilian ] = "~Nome / Sobrenome / Iniciais";
@@ -1047,6 +1095,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮שם פרטי/משפחה/ראשי תיבות‬";
         Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल";
         Text[ slovak ] = "Me~no/Priezvisko/Iniciály";
+        Text[ hungarian ] = "~Utónév, vezetéknév, monogram";
+        Text[ slovenian ] = "~Ime/Priimek/Začetnice";
     };
     Edit ED_FIRSTNAME
     {
@@ -1097,6 +1147,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮שם פרטי/משפחה/ראשי תיבות 2‬";
         Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल 2";
         Text[ slovak ] = "Meno / ~Priezvisko  / Iniciály 2";
+        Text[ hungarian ] = "~Utónév, vezetéknév, monogram 2";
+        Text[ slovenian ] = "~Ime/priimek/začetnice 2";
     };
     Edit ED_FIRSTNAME_2
     {
@@ -1130,7 +1182,7 @@ TabPage TP_PRIVATE_DATA
         Text[ french ] = "Rue";
         Text[ spanish ] = "~Calle";
         Text[ italian ] = "Via";
-        Text[ danish ] = "Gade";
+        Text[ danish ] = "~Gade";
         Text[ swedish ] = "Gatuadres~s";
         Text[ polish ] = "~Ulica";
         Text[ portuguese_brazilian ] = "~Endere�o";
@@ -1148,6 +1200,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮רחוב‬";
         Text[ hindi ] = "स~ड़क";
         Text[ slovak ] = "U~lica";
+        Text[ hungarian ] = "U~tca";
+        Text[ slovenian ] = "U~lica";
     };
     Edit ED_STREET
     {
@@ -1187,6 +1241,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "PLZ/Or~t";
         Text[ hindi ] = "Zip/नग~र";
         Text[ slovak ] = "PSČ/O~bec";
+        Text[ hungarian ] = "~Irányítószám, város";
+        Text[ slovenian ] = "Pošta/~kraj";
     };
     Edit ED_ZIP
     {
@@ -1232,6 +1288,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮מחוז/מדינה‬";
         Text[ hindi ] = "दे~श/राज्य";
         Text[ slovak ] = "Kra~jina/Štát";
+        Text[ hungarian ] = "~Ország és állam";
+        Text[ slovenian ] = "Dr~žava/zvezna država";
     };
     Edit ED_COUNTRY
     {
@@ -1259,7 +1317,7 @@ TabPage TP_PRIVATE_DATA
         Text[ french ] = "~Titre/Profession";
         Text[ spanish ] = "T�tulo/Pro~fesi�n";
         Text[ italian ] = "Titolo/Professione";
-        Text[ danish ] = "Titel/Stilling";
+        Text[ danish ] = "T~itel/Stilling";
         Text[ swedish ] = "~Titel/Yrke";
         Text[ polish ] = "Tytu�/~Zaw�d";
         Text[ portuguese_brazilian ] = "T�tulo / ~Profiss�o";
@@ -1277,6 +1335,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮תואר/מקצוע‬";
         Text[ hindi ] = "शीर्षक/~पदवी";
         Text[ slovak ] = "Titul/~Profesia";
+        Text[ hungarian ] = "~Cím és foglalkozás";
+        Text[ slovenian ] = "Naziv/~poklic";
     };
     Edit ED_TITLE
     {
@@ -1321,6 +1381,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮טלפון/טלפון נייד‬";
         Text[ hindi ] = "फोन/मोबैल";
         Text[ slovak ] = "Tel./Mobilný tel.";
+        Text[ hungarian ] = "Vezetékes és mobiltelefon";
+        Text[ slovenian ] = "Telefon/mobilni";
     };
     Edit ED_PHONE
     {
@@ -1348,7 +1410,7 @@ TabPage TP_PRIVATE_DATA
         Text[ french ] = "~Fax";
         Text[ spanish ] = "Fa~x";
         Text[ italian ] = "Fa~x";
-        Text[ danish ] = "Fax";
+        Text[ danish ] = "Fa~x";
         Text[ swedish ] = "Fa~x";
         Text[ polish ] = "~Faks";
         Text[ portuguese_brazilian ] = "Fa~x";
@@ -1366,6 +1428,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮פקס‬";
         Text[ hindi ] = "फॉ~क्स";
         Text[ slovak ] = "Fa~x";
+        Text[ hungarian ] = "~Fax";
+        Text[ slovenian ] = "Fa~ks";
     };
     Edit ED_FAX
     {
@@ -1405,6 +1469,8 @@ TabPage TP_PRIVATE_DATA
         Text[ hebrew ] = "‮דף בית/דואר אלקטרוני‬";
         Text[ hindi ] = "मुख्य पृष्ठ / इ-मेइल";
         Text[ slovak ] = "Domovská stránka/email";
+        Text[ hungarian ] = "Honlap, e-mail";
+        Text[ slovenian ] = "Domača stran / e-pošta";
     };
     Edit ED_WWW
     {
@@ -1456,6 +1522,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮פרטים עיסקיים‬";
         Text[ hindi ] = "व्यवहार ड़ॉटा";
         Text[ slovak ] = "Obchodné informácie";
+        Text[ hungarian ] = "Céges adatok";
+        Text[ slovenian ] = "Poslovni podatki";
     };
     FixedText FT_COMP
     {
@@ -1489,6 +1557,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮חברה‬";
         Text[ hindi ] = "संस्था";
         Text[ slovak ] = "Spoločnosť";
+        Text[ hungarian ] = "Vállalat";
+        Text[ slovenian ] = "Podjetje";
     };
     Edit ED_COMP
     {
@@ -1528,6 +1598,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮חברה, שורה שניה‬";
         Text[ hindi ] = "संस्था 2nd रेखा";
         Text[ slovak ] = "Spoločnosť (druhý riadok)";
+        Text[ hungarian ] = "Vállalat (2. sor)";
+        Text[ slovenian ] = "Podjetje 2. vrstica";
     };
     Edit ED_COMP_EXT
     {
@@ -1567,6 +1639,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮משפט מפתח‬";
         Text[ hindi ] = "स्लोगन";
         Text[ slovak ] = "Motto";
+        Text[ hungarian ] = "Jelmondat";
+        Text[ slovenian ] = "Moto";
     };
     Edit ED_SLOGAN
     {
@@ -1606,6 +1680,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮רחוב‬";
         Text[ hindi ] = "सड़क";
         Text[ slovak ] = "Ulica";
+        Text[ hungarian ] = "Utca";
+        Text[ slovenian ] = "Ulica";
     };
     Edit ED_STREET
     {
@@ -1645,6 +1721,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮מיקוד/עיר‬";
         Text[ hindi ] = "ZIP/नगर";
         Text[ slovak ] = "PSČ/Obec";
+        Text[ hungarian ] = "Irányítószám és város";
+        Text[ slovenian ] = "Pošta/kraj";
     };
     Edit ED_ZIP
     {
@@ -1690,6 +1768,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮מחוז/מדינה‬";
         Text[ hindi ] = "देश/राज्य";
         Text[ slovak ] = "Krajina/Štát";
+        Text[ hungarian ] = "Ország és állam";
+        Text[ slovenian ] = "Država/zvezna država";
     };
     Edit ED_COUNTRY
     {
@@ -1735,6 +1815,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮תפקיד‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     Edit ED_POSITION
     {
@@ -1773,6 +1855,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮טלפון/טלפון נייד‬";
         Text[ hindi ] = "दूरभाष/मोबैल";
         Text[ slovak ] = "Tel./Mobilný tel.";
+        Text[ hungarian ] = "Vezetékes és mobiltelefon";
+        Text[ slovenian ] = "Telefon/mobilni";
     };
     Edit ED_PHONE
     {
@@ -1817,6 +1901,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮פקס‬";
         Text[ hindi ] = "फॉक्स";
         Text[ slovak ] = "Fax";
+        Text[ hungarian ] = "Fax";
+        Text[ slovenian ] = "Faks";
     };
     Edit ED_FAX
     {
@@ -1856,6 +1942,8 @@ TabPage TP_BUSINESS_DATA
         Text[ hebrew ] = "‮דף בית/דואר אלקטרוני‬";
         Text[ hindi ] = "~मुख्य पृष्ठ / इ-मेइल";
         Text[ slovak ] = "Do~movská stránka/e-mail";
+        Text[ hungarian ] = "Hon~lap és e-mail";
+        Text[ slovenian ] = "Do~mača stran / e-pošta";
     };
     Edit ED_WWW
     {
@@ -1870,6 +1958,17 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 
