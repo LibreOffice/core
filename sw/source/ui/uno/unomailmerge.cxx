@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:06:15 $
+ *  last change: $Author: hr $ $Date: 2003-09-30 13:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,7 +1205,7 @@ uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
 uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames()
     throw()
 {
-    uno::Sequence< OUString > aNames(1);
+    uno::Sequence< OUString > aNames(2);
     OUString *pName = aNames.getArray();
     pName[0] = C2U( SN_MAIL_MERGE );
     pName[1] = C2U( SN_DATA_ACCESS_DESCRIPTOR );
