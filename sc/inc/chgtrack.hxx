@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:18:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,8 @@ public:
                                 ScChangeActionLinkEntry(
                                         ScChangeActionLinkEntry** ppPrevP,
                                         ScChangeAction* pActionP )
-                                    :   ppPrev( ppPrevP ),
-                                        pNext( *ppPrevP ),
+                                    :   pNext( *ppPrevP ),
+                                        ppPrev( ppPrevP ),
                                         pAction( pActionP ),
                                         pLink( NULL )
                                     {
@@ -259,8 +259,8 @@ class ScChangeActionCellListEntry
                                 ScChangeActionCellListEntry(
                                     ScChangeActionContent* pContentP,
                                     ScChangeActionCellListEntry* pNextP )
-                                    :   pContent( pContentP ),
-                                        pNext( pNextP )
+                                    :   pNext( pNextP ),
+                                        pContent( pContentP )
                                     {}
 
 public:
