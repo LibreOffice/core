@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-15 18:27:55 $
+ *  last change:$Date: 2003-05-27 12:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,13 @@ public class OfficeProvider implements AppProvider {
 
     protected static boolean debug = false;
 
+    /**
+     * Dispose the office.
+     * This method can only be used, if the office was connected in the first
+     * place: getManager() was called first.
+     */
     public boolean disposeManager(lib.TestParameters param) {
-        XMultiServiceFactory msf = param.getMSF();
+        XMultiServiceFactory msf = (XMultiServiceFactory)param.getMSF();
         if (msf == null) {
             return true;
         } else {
@@ -111,21 +116,13 @@ public class OfficeProvider implements AppProvider {
      */
     public Object getManager(lib.TestParameters param) {
         String cncstr = "uno:"+param.get("ConnectionString")+
-                                                ";urp;StarOffice.ServiceManager";
+                                            ";urp;StarOffice.ServiceManager";
         debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
-        XMultiServiceFactory msf = null;
-        String exc = "";
-        try {
-            msf = connect(cncstr);
-        } catch (com.sun.star.uno.Exception ue) {
-            exc=ue.getMessage();
-        } catch (java.lang.Exception je) {
-            exc=je.getMessage();
-        }
+        XMultiServiceFactory msf = connectOffice(cncstr);
         if (msf != null) {
             return msf;
         }
-        if (debug) System.out.println("Not connected to existing office");
+        String exc = "";
         boolean isExecutable = false;
         boolean isAppKnown = cncstr.indexOf("host=localhost")>0;
         isAppKnown &= !((String) param.get("AppExecutionCommand")).equals("");
@@ -145,7 +142,6 @@ public class OfficeProvider implements AppProvider {
         } else {
             return msf;
         }
-        exc = "";
         int k=0;
         while ((k<11) && (msf==null)) {
             try {
@@ -158,10 +154,14 @@ public class OfficeProvider implements AppProvider {
             }
             k++;
         }
-        if (debug && msf==null) System.out.println("Exception while connecting "+exc);
+        if (debug && msf==null) System.out.println(
+                                        "Exception while connecting "+exc);
         return msf;
     }
 
+    /**
+     * Connect an Office
+     */
     protected static XMultiServiceFactory connect( String connectStr )
                             throws com.sun.star.uno.Exception,
                                 com.sun.star.uno.RuntimeException,
@@ -193,6 +193,82 @@ public class OfficeProvider implements AppProvider {
         }
 
         return ( xMSF );
+    }
+
+    /**
+     * Close an office.
+     * @param param The test parameters.
+     * @param closeIfPossible If true, close even if
+     * it was running before the test
+     */
+    public boolean closeExistingOffice(lib.TestParameters param,
+                                                boolean closeIfPossible) {
+        debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
+        XMultiServiceFactory msf = (XMultiServiceFactory)param.getMSF();
+        boolean alreadyConnected = (msf != null);
+        if (alreadyConnected) {
+            ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
+            if (ph == null) {
+                if(closeIfPossible)
+                    return disposeOffice(msf);
+            }
+            else {
+                ph.kill();
+                // dispose watcher in case it's still running.
+                int timeOut = param.getInt("TimeOut");
+                if (timeOut==0) {
+                    System.out.println("finish watcher.");
+                    OfficeWatcher ow = (OfficeWatcher)param.get("Watcher");
+                    if (ow != null && ow.isAlive()) {
+                        ow.finish = true;
+                    }
+                }
+                return true;
+            }
+        }
+        else {
+            String cncstr = "uno:"+param.get("ConnectionString")+
+                                            ";urp;StarOffice.ServiceManager";
+            msf = connectOffice(cncstr);
+            if(closeIfPossible)
+                return disposeOffice(msf);
+        }
+        return true;
+    }
+
+    private XMultiServiceFactory connectOffice(String cncstr) {
+        XMultiServiceFactory msf = null;
+        String exc = "";
+        try {
+            msf = connect(cncstr);
+        } catch (com.sun.star.uno.Exception ue) {
+            exc=ue.getMessage();
+        } catch (java.lang.Exception je) {
+            exc=je.getMessage();
+        }
+        if (debug) System.out.println("Could not connect an Office. "+exc);
+        return msf;
+    }
+
+    private boolean disposeOffice(XMultiServiceFactory msf) {
+        XDesktop desk = null;
+        if (msf != null) {
+            try {
+                desk = (XDesktop) UnoRuntime.queryInterface(
+                    XDesktop.class, msf.createInstance(
+                                "com.sun.star.frame.Desktop"));
+                msf = null;
+                if (desk != null) {
+                    desk.terminate();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (java.lang.InterruptedException ie) {}
+                }
+            } catch (com.sun.star.uno.Exception ue) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
