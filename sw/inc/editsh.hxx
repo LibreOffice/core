@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:17:01 $
+ *  last change: $Author: jp $ $Date: 2000-11-23 20:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,11 +157,6 @@ class SwAuthEntry;
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
 #define GETSELTXT_PARABRK_TO_ONLYCR     2
-
-#define SCRIPTTYPE_NONE     0
-#define SCRIPTTYPE_LATIN    1
-#define SCRIPTTYPE_ASIAN    2
-#define SCRIPTTYPE_COMPLEX  4
 
 /****************************************************************
  *  zum Abfragen der INet-Attribute fuer den Navigator
