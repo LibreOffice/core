@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:25:25 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2001-02-02 16:25:25 $ $Revision: 1.7 $
+// $Author: kz $ $Date: 2001-02-09 20:20:03 $ $Revision: 1.8 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Inicja³y";
         Text[ portuguese_brazilian ] = "Identifier";
         Text[ japanese ] = "’˜‘ID";
-        Text[ korean ] = "ÀÌ´Ï¼È";
+        Text[ korean ] = "¸Ó¸®±ÛÀÚ";
         Text[ chinese_simplified ] = "±êÊ¶";
         Text[ chinese_traditional ] = "ÁY¼g";
         Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
@@ -264,7 +264,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Miesi¹c";
         Text[ portuguese_brazilian ] = "Month";
         Text[ japanese ] = "Œ";
-        Text[ korean ] = "´Ş";
+        Text[ korean ] = "¿ù";
         Text[ chinese_simplified ] = "ÔÂ";
         Text[ chinese_traditional ] = "¤ë";
         Text[ arabic ] = "ÇáÔåÑ";
@@ -296,7 +296,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Rok";
         Text[ portuguese_brazilian ] = "Year";
         Text[ japanese ] = "”N";
-        Text[ korean ] = "ÇØ";
+        Text[ korean ] = "³âµµ";
         Text[ chinese_simplified ] = "Äê";
         Text[ chinese_traditional ] = "¦~";
         Text[ arabic ] = "ÇáÓäÉ";
@@ -488,7 +488,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Rodzaj publikacji";
         Text[ portuguese_brazilian ] = "How published";
         Text[ japanese ] = "¶ÊŞ°À²Ìß";
-        Text[ korean ] = "¹ßÇà À¯Çü";
+        Text[ korean ] = "¹ßÇà Á¾·ù";
         Text[ chinese_simplified ] = "·¢ĞĞ·½Ê½";
         Text[ chinese_traditional ] = "¥Xª©Ãş«¬";
         Text[ arabic ] = "ØÑíŞÉ ÇáäÔÑ";
@@ -679,7 +679,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ japanese ] = "‘gD’c‘Ì–¼";
         Text[ korean ] = "´ÜÃ¼";
         Text[ chinese_simplified ] = "×éÖ¯";
-        Text[ chinese_traditional ] = "²ÕÂ´";
+        Text[ chinese_traditional ] = "¾÷ºc";
         Text[ arabic ] = "ÇáãäÙãÉ";
         Text[ turkish ] = "Organizasyon";
     };
@@ -708,7 +708,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Strona(y)";
         Text[ portuguese_brazilian ] = "Page(s)";
         Text[ japanese ] = "Íß°¼Ş”";
-        Text[ korean ] = "ÆäÀÌÁö ¼ö";
+        Text[ korean ] = "ÂÊ£¨µé£©";
         Text[ chinese_simplified ] = "Ò³";
         Text[ chinese_traditional ] = "­¶";
         Text[ arabic ] = "ÕİÍÉ (ÕİÍÇÊ)";
@@ -803,7 +803,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Szko³a wy¿sza";
         Text[ portuguese_brazilian ] = "School";
         Text[ japanese ] = "‹³ˆç‹@ŠÖ–¼";
-        Text[ korean ] = "ÇĞ±³";
+        Text[ korean ] = "´ëÇĞ";
         Text[ chinese_simplified ] = "´óÑ§";
         Text[ chinese_traditional ] = "°ªµ¥°|®Õ";
         Text[ arabic ] = "ÇáÌÇãÚÉ";
@@ -866,7 +866,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Rodzaj raportu";
         Text[ portuguese_brazilian ] = "Report type";
         Text[ japanese ] = "ÚÎß°Ä‚Ìí—Ş";
-        Text[ korean ] = "º¸°í¼­ À¯Çü";
+        Text[ korean ] = "º¸°í¼­ Á¾·ù";
         Text[ chinese_simplified ] = "±¨µÀÀàĞÍ";
         Text[ chinese_traditional ] = "³ø§iÃş«¬";
         Text[ arabic ] = "äæÚ ÇáÊŞÑíÑ";
@@ -961,7 +961,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Pole u¿ytkownika 1";
         Text[ portuguese_brazilian ] = "Custom field 1";
         Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ1";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ ÇÊµå 1";
+        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 1";
         Text[ chinese_simplified ] = "ÓÃ»§À¸ 1";
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 1";
         Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 1";
@@ -993,7 +993,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Pole u¿ytkownika 2";
         Text[ portuguese_brazilian ] = "Custom field 2";
         Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ2";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ ÇÊµå 2";
+        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 2";
         Text[ chinese_simplified ] = "ÓÃ»§À¸ 2";
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 2";
         Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 2";
@@ -1025,7 +1025,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Pole u¿ytkownika 3";
         Text[ portuguese_brazilian ] = "Custom field 3";
         Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ3";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ ÇÊµå 3";
+        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 3";
         Text[ chinese_simplified ] = "ÓÃ»§À¸ 3";
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 3";
         Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 3";
@@ -1056,7 +1056,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Pole u¿ytkownika 4";
         Text[ portuguese_brazilian ] = "Custom field 4";
         Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ4";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ ÇÊµå 4";
+        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 4";
         Text[ chinese_simplified ] = "ÓÃ»§À¸ 4";
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 4";
         Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 4";
@@ -1087,7 +1087,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Pole u¿ytkownika 5";
         Text[ portuguese_brazilian ] = "Custom field 5";
         Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ5";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ ÇÊµå 5";
+        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 5";
         Text[ chinese_simplified ] = "ÓÃ»§À¸ 5";
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 5";
         Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 5";
@@ -1136,7 +1136,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
     Text[ portuguese_brazilian ] = "Column assignment for table %1";
     Text[ japanese ] = "%1 Ã°ÌŞÙ‚Ì—ñ•ª—Ş";
-    Text[ korean ] = "Å×ÀÌºí¿ë ¿­ ·¹ÀÌ¾Æ¿ô %1";
+    Text[ korean ] = "Ç¥ %1ÀÇ¡¡¿­¡¡·¹ÀÌ¾Æ¿ô";
     Text[ chinese_simplified ] = "Îª±í¸ñ %1 ±àÅÅÉè¼ÆÁĞ";
     Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
