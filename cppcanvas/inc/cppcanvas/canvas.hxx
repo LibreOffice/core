@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:50:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,11 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvas;
     struct ViewState;
-} } } } }
+} } } }
 
 
 /* Definition of BitmapCanvas */
@@ -123,7 +123,7 @@ namespace cppcanvas
                 actual primitive bounding box, when the canvas
                 performs anti-aliasing.
              */
-            ANTIALIASING_EXTRA_SIZE=2
+            ANTIALIASING_EXTRA_SIZE=3
         };
 
         virtual ~Canvas() {}
@@ -143,8 +143,8 @@ namespace cppcanvas
         // this should be considered private. if RTTI gets enabled
         // someday, remove that to a separate interface
         virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::rendering::XCanvas >          getUNOCanvas() const = 0;
-        virtual ::drafts::com::sun::star::rendering::ViewState      getViewState() const = 0;
+            ::com::sun::star::rendering::XCanvas >          getUNOCanvas() const = 0;
+        virtual ::com::sun::star::rendering::ViewState      getViewState() const = 0;
     };
 
 }
