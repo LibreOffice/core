@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
+ *  last change: $Author: ka $ $Date: 2002-11-21 10:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ SdMorphDlg::SdMorphDlg( Window* pParent, const SdrObject* pObj1, const SdrObject
     const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
     if ( ( ( eLineStyle1 == XLINE_NONE ) || ( eLineStyle2 == XLINE_NONE ) ) &&
-         ( ( eFillStyle1 != XFILL_SOLID ) || ( eFillStyle2 == XFILL_SOLID ) ) )
+         ( ( eFillStyle1 != XFILL_SOLID ) || ( eFillStyle2 != XFILL_SOLID ) ) )
     {
         aCbxAttributes.Disable();
     }
