@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:55:19 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 09:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ ULONG SwRTFWriter::WriteStream()
 
     bOutStyleTab = bOutTable = bOutPageDesc = bOutPageDescTbl =
     bAutoAttrSet = bOutListNumTxt = bOutLeftHeadFoot = bIgnoreNextPgBreak =
-        FALSE;
+        bTxtAttr = FALSE;
 
     pCurEndPosLst = 0;
     nBkmkTabPos = USHRT_MAX;
@@ -1418,11 +1418,14 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.4 2001-02-06 15:55:19 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.5 2001-02-13 09:24:35 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/02/06 15:55:19  mib
+      real 6.0 file format
+
       Revision 1.3  2000/11/16 09:57:36  jp
       export CJK attributes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 16:20:36 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 09:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _RTFKEYWD_HXX //autogen
 #include <svtools/rtfkeywd.hxx>
+#endif
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
 #endif
 #ifndef _RTFOUT_HXX
 #include <svtools/rtfout.hxx>
@@ -387,6 +390,101 @@ Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr )
     return rWrt;
 }
 
+void SwRTFWriter::Get_StyleDefaults( const SwFmt& rFmt )
+{
+    BOOL aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
+    USHORT nStt = RES_CHRATR_BEGIN, nEnd, n;
+    SfxItemSet** ppSet;
+    if( RES_CHRFMT == rFmt.Which() )
+    {
+        ppSet = &pCharDefaults;
+           nEnd = RES_TXTATR_END;
+    }
+    else
+    {
+        ppSet = &pParaDefaults;
+          nEnd = RES_FRMATR_END;
+    }
+
+    *ppSet = new SfxItemSet( *rFmt.GetAttrSet().GetPool(), nStt, nEnd );
+
+    // dynamic defaults
+    const SfxItemPool& rPool = *rFmt.GetAttrSet().GetPool();
+    for( n = nStt; n < nEnd; ++n )
+        aFlags[ n - RES_CHRATR_BEGIN ] = 0 != rPool.GetPoolDefaultItem( n );
+
+    // static defaults, that differs between WinWord and SO
+    if( RES_CHRFMT != rFmt.Which() )
+    {
+        aFlags[ RES_PARATR_WIDOWS - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ RES_PARATR_HYPHENZONE - RES_CHRATR_BEGIN ] = 1;
+    }
+    aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
+//  aFlags[ RES_CHRATR_CJK_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
+//  aFlags[ RES_CHRATR_CTL_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
+
+    aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
+//  aFlags[ RES_CHRATR_CJK_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
+//  aFlags[ RES_CHRATR_CTL_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
+
+    const BOOL* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
+    for( n = nStt; n < nEnd; ++n, ++pFlags )
+        if( *pFlags && SFX_ITEM_SET != rFmt.GetItemState( n, FALSE ))
+            (*ppSet)->Put( rFmt.GetAttr( n, TRUE ));
+}
+
+
+void OutRTF_SfxItemSet( Writer& rWrt, const SfxItemSet& rSet )
+{
+    // erst die eigenen Attribute ausgeben
+    const SfxItemPool& rPool = *rSet.GetPool();
+    SfxWhichIter aIter( rSet );
+    const SfxPoolItem* pItem;
+    FnAttrOut pOut;
+    register USHORT nWhich = aIter.FirstWhich();
+    while( nWhich )
+    {
+        if( SFX_ITEM_SET == rSet.GetItemState( nWhich, TRUE, &pItem ))
+        {
+            pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
+            if( pOut &&
+                ( *pItem != rPool.GetDefaultItem( nWhich )
+                    || ( rSet.GetParent() &&
+                        *pItem != rSet.GetParent()->Get( nWhich ) )
+              ) )
+                ;
+            else
+                pOut = 0;
+        }
+        else if( 0 != ( pItem = rPool.GetPoolDefaultItem( nWhich )) )
+            pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
+        else
+            switch( nWhich )
+            {
+            case RES_CHRATR_FONTSIZE:
+//          case RES_CHRATR_CJK_FONTSIZE:
+//          case RES_CHRATR_CTL_FONTSIZE:
+
+            case RES_CHRATR_LANGUAGE:
+//          case RES_CHRATR_CJK_LANGUAGE:
+//          case RES_CHRATR_CTL_LANGUAGE:
+
+            case RES_PARATR_WIDOWS:
+            case RES_PARATR_HYPHENZONE:
+                pItem = &rPool.GetDefaultItem( nWhich );
+                pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
+                break;
+
+            default:
+                pOut = 0;
+            }
+
+        if( pOut )
+            (*pOut)( rWrt, *pItem );
+        nWhich = aIter.NextWhich();
+    }
+}
+
 // fuer die Formate muesste eine einzige Ausgabe-Funktion genuegen !
 /*
  * Formate wie folgt ausgeben:
@@ -436,7 +534,7 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
                     aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineOffset() );
 
                     aSet.Put( aLR );
-                    Out_SfxItemSet( aRTFAttrFnTab, rWrt, aSet, TRUE );
+                    OutRTF_SfxItemSet( rWrt, aSet );
                     bOutItemSet = FALSE;
                 }
             }
@@ -459,7 +557,8 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
     }
 
     if( bOutItemSet )
-        Out_SfxItemSet( aRTFAttrFnTab, rWrt, rFmt.GetAttrSet(), TRUE );
+        OutRTF_SfxItemSet( rWrt, rFmt.GetAttrSet() );
+
     return rWrt;
 }
 
@@ -677,7 +776,7 @@ RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd )
         while( nChg < nLen )
         {
             USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-            nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
                switch( nScript )
             {
             case ::com::sun::star::i18n::ScriptType::LATIN:
@@ -3400,11 +3499,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.9 2000-12-21 16:20:36 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.10 2001-02-13 09:24:35 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2000/12/21 16:20:36  jp
+      writegraphic optional in original format and not general as JPG
+
       Revision 1.8  2000/12/12 14:37:48  jp
       Bug #81815#: export rtl fonts with F instead of AF token
 
