@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-18 16:48:27 $
+ *  last change: $Author: pl $ $Date: 2000-11-29 19:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,18 +1176,30 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                 ImplFontData *pFontData = new ImplFontData;
                 pFontData->mpSysData = (void*)*it;
 
-                pFontData->meFamily     = ToFontFamily (aInfo.m_eFamilyStyle);
-                pFontData->meWeight     = ToFontWeight (aInfo.m_eWeight);
-                pFontData->meItalic     = ToFontItalic (aInfo.m_eItalic);
-                pFontData->meWidthType  = ToFontWidth  (aInfo.m_eWidth);
-                pFontData->mePitch      = ToFontPitch  (aInfo.m_ePitch);
-                pFontData->meCharSet    = aInfo.m_aEncoding;
-                pFontData->maName       = aInfo.m_aFamilyName;
+                pFontData->meFamily             = ToFontFamily (aInfo.m_eFamilyStyle);
+                pFontData->meWeight             = ToFontWeight (aInfo.m_eWeight);
+                pFontData->meItalic             = ToFontItalic (aInfo.m_eItalic);
+                pFontData->meWidthType          = ToFontWidth  (aInfo.m_eWidth);
+                pFontData->mePitch              = ToFontPitch  (aInfo.m_ePitch);
+                pFontData->meCharSet            = aInfo.m_aEncoding;
+                pFontData->maName               = aInfo.m_aFamilyName;
+                pFontData->meScript             = SCRIPT_DONTKNOW;
                 /* pFontData->maStyleName  = XXX */
 
-                pFontData->mbOrientation = TRUE;
-                pFontData->mbDevice      = aInfo.m_eType == psp::fonttype::Builtin;
+                pFontData->mnWidth              = 0;
+                pFontData->mnHeight             = 0;
+                pFontData->mbOrientation        = TRUE;
+                pFontData->mnQuality            = aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0;
+                pFontData->mnVerticalOrientation= 0;
+                pFontData->meType               = TYPE_SCALABLE;
+                pFontData->mbDevice             = aInfo.m_eType == psp::fonttype::Builtin;
 
+#ifdef DEBUG
+                if( pFontData->maName.EqualsIgnoreCaseAscii( "helvetica" ) )
+                {
+                    fprintf( stderr, "" );
+                }
+#endif
                 pList->Add( pFontData );
             }
         }
