@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: os $ $Date: 2001-06-15 14:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,12 +127,6 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #endif
@@ -148,6 +142,16 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -230,9 +234,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 using namespace ::ucb;
 using namespace ::rtl;
@@ -735,10 +739,10 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             if( xMgr.is() )
             {
                 Sequence <Any> aProps(1);
-                aProps.getArray()[0] <<= C2U("FileOpen");
+                aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
                 xFP = Reference< XFilePicker >(
                         xMgr->createInstanceWithArguments(
-                            C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                            C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                         UNO_QUERY );
             }
             SvtPathOptions aPathOpt;
@@ -768,7 +772,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             if( i && RET_OK == xFP->execute() )
             {
-                if( pGlossaryHdl->ImportGlossaries( xFP->getPath().getConstArray()[0] ))
+                if( pGlossaryHdl->ImportGlossaries( xFP->getFiles().getConstArray()[0] ))
                     Init();
                 else
                 {
