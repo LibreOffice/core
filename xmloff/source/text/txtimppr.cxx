@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:41:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,10 +364,11 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
     sal_uInt16 i; // for the "for" loop
 
-    for( ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         property++ )
+    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+         aIter != rProperties.end();
+         ++aIter )
     {
+        XMLPropertyState* property = &(*aIter);
         if( -1 == property->mnIndex )
             continue;
 
