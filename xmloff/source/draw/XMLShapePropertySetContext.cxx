@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapePropertySetContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 16:58:04 $
+ *  last change: $Author: cl $ $Date: 2001-08-29 07:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #ifndef _XMLOFF_XMLNUMI_HXX
 #include "xmlnumi.hxx"
 #endif
+#ifndef _XMLOFF_XMLTABI_HXX
+#include "xmltabi.hxx"
+#endif
+#ifndef _XMLOFF_TEXTPRMAP_HXX_
+#include "txtprmap.hxx"
+#endif
 
 #include "sdpropls.hxx"
 
@@ -129,6 +135,11 @@ SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
     case CTF_NUMBERINGRULES:
         mnBulletIndex = rProp.mnIndex;
         mxBulletStyle = pContext = new SvxXMLListStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        break;
+    case CTF_TABSTOP:
+        pContext = new SvxXMLTabStopImportContext( GetImport(), nPrefix,
+                                                   rLocalName, rProp,
+                                                   rProperties );
         break;
     }
 
