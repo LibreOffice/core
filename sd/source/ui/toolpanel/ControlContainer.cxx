@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:30:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,17 +105,20 @@ void ControlContainer::DeleteChildren (void)
 
 
 
-void ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
+sal_uInt32 ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
     pControl->GetWindow()->Show();
+    sal_uInt32 nIndex = maControlList.size();
     maControlList.push_back (pControl.get());
     pControl.release();
 
     SetExpansionState (maControlList.size()-1, ES_EXPAND);
 
     ListHasChanged ();
+
+    return nIndex;
 }
 
 
