@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:17:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3362,6 +3362,8 @@ void Frame::impl_checkMenuCloser()
         )
        )
     {
+        // others[0] can't be the backing component!
+        // Because it's set at the special member aAnalyzer.m_xBackingComponent ... :-)
         xNewCloserFrame = aAnalyzer.m_lOtherVisibleFrames[0];
     }
     else
@@ -3372,7 +3374,8 @@ void Frame::impl_checkMenuCloser()
     if (
         (aAnalyzer.m_lOtherVisibleFrames.getLength()==0) &&
         (!aAnalyzer.m_bReferenceIsHelp                 ) &&
-        (!aAnalyzer.m_bReferenceIsHidden               )
+        (!aAnalyzer.m_bReferenceIsHidden               ) &&
+        (!aAnalyzer.m_bReferenceIsBacking              )
        )
     {
         xNewCloserFrame = this;
