@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:07:23 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 07:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "request.hxx"
 #include "mnumgr.hxx"
 #include "statcach.hxx"
+#include "macrconf.hxx"
 
 //====================================================================
 
@@ -550,7 +551,7 @@ void SfxShell::SetUndoManager( SfxUndoManager *pNewUndoMgr )
 {
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
-        pUndoMgr->SetMaxUndoActionCount( SvtUndoOptions().GetUndoCount() );
+        pUndoMgr->SetMaxUndoActionCount( (USHORT) SvtUndoOptions().GetUndoCount() );
 }
 
 //--------------------------------------------------------------------
@@ -1192,11 +1193,21 @@ const SfxPoolItem* SfxShell::ExecuteSlot
 {
     if ( !pIF )
         pIF = GetInterface();
-    const SfxSlot *pSlot = pIF->GetSlot(rReq.GetSlot());
+
+    USHORT nSlot = rReq.GetSlot();
+    const SfxSlot* pSlot = NULL;
+    if ( nSlot >= SID_VERB_START && nSlot <= SID_VERB_END )
+        pSlot = GetVerbSlot_Impl(nSlot);
+    if ( !pSlot )
+        pSlot = pIF->GetSlot(nSlot);
+    if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlot ) )
+        pSlot = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlot)->GetSlot();
+
     DBG_ASSERT( pSlot, "slot not supported" );
 
     SfxExecFunc pFunc = pSlot->GetExecFnc();
-    CallExec( pFunc, rReq );
+    if ( pFunc )
+        CallExec( pFunc, rReq );
 
     return rReq.GetReturnValue();
 }
@@ -1254,7 +1265,15 @@ const SfxPoolItem* SfxShell::GetSlotState
         pIF = GetInterface();
     SfxItemState eState;
     SfxItemPool &rPool = GetPool();
-    const SfxSlot *pSlot = pIF->GetSlot(nSlotId);
+
+    const SfxSlot* pSlot = NULL;
+    if ( nSlotId >= SID_VERB_START && nSlotId <= SID_VERB_END )
+        pSlot = GetVerbSlot_Impl(nSlotId);
+    if ( !pSlot )
+        pSlot = pIF->GetSlot(nSlotId);
+    if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlotId ) )
+        pSlot = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlotId)->GetSlot();
+
     if ( pSlot )
         // ggf. auf Which-Id mappen
         nSlotId = pSlot->GetWhich( rPool );
@@ -1266,7 +1285,8 @@ const SfxPoolItem* SfxShell::GetSlotState
     {
         // Status-Methode rufen
         SfxStateFunc pFunc = pSlot->GetStateFnc();
-        CallState( pFunc, aSet );
+        if ( pFunc )
+            CallState( pFunc, aSet );
         eState = aSet.GetItemState( nSlotId, TRUE, &pItem );
 
         // ggf. Default-Item besorgen
