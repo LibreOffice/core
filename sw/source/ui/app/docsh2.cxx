@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:12:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,6 +1611,12 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_60;
+        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
+    }
+    else if (nVersion == SOFFICE_FILEFORMAT_8)
+    {
+        *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
+        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
 
