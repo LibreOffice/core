@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: rt $ $Date: 2001-05-15 10:05:23 $
+#   last change: $Author: gh $ $Date: 2001-05-15 16:51:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -3011,8 +3011,11 @@ $(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES)
     @echo ---------------
     @+if exist $@ del $@
     @$(TOUCH) $@
+    @+if exist $(SRS)\*.hid dir $(SRS)\*.hid
     @+if exist $(SRS)\*.hid type $(SRS)\*.hid >> $@
-    @+if exist $(MISC)\*.lst $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
+#   @+if exist $(MISC)\*.lst $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
+    @+if exist $(MISC)\*.* $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
+    @echo done Making $@
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
