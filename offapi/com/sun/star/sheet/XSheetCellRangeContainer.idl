@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCellRangeContainer.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:46:04 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellRanges
     /** add the given range to the cell ranges.
         @param bMergeRanges
         With the second parameter is it possible to define how the range
-        should be added. To merge the ranges need more time, but the memory
+        should be added. To merge the ranges takes more time, but the memory
         usage is lower.
      */
     void addRangeAddress( [in] com::sun::star::table::CellRangeAddress aCellRangeAddress, [in] boolean bMergeRanges );
@@ -107,7 +107,7 @@ interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellRanges
     /** add the given ranges to the cell ranges.
         @param bMergeRanges
         With the second parameter is it possible to define how the ranges
-        should be added. To merge the ranges need more time, but the memory
+        should be added. To merge the ranges takes more time, but the memory
         usage is lower.
      */
     void addRangeAddresses( [in] sequence<com::sun::star::table::CellRangeAddress> aCellRangeAddresses, [in] boolean bMergeRanges );

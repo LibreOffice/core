@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocumentSettings.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 07:01:04 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ service SpreadsheetDocumentSettings
     //-------------------------------------------------------------------------
 
     /** if this property is set, regular expressions in formulas are enabled,
-        e.g. for functions which look up spreadsheet contents.
+        e.g., for functions which look up spreadsheet contents.
      */
     [property] boolean RegularExpressions;
 
@@ -200,10 +200,10 @@ service SpreadsheetDocumentSettings
     //-------------------------------------------------------------------------
 
     /** If this property is set the document has DrawPages. Use this property
-        to find out, whether the document has a DrawPages or not, because the
+        to find out, whether the document has DrawPages or not, because the
         getDrawPage method on the XDrawPageSupplier and the getDrawPages method
-        on the XDrawPagesSupplier allways creates the DrawPages
-        if there are no and this is very slow and needs more memory.
+        on the XDrawPagesSupplier always creates the DrawPages
+        if there are none; and this is very slow and needs more memory.
      */
     [readonly, property] boolean HasDrawPages;
 
@@ -216,6 +216,9 @@ service SpreadsheetDocumentSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/07/26 07:01:04  sab
+    #90139#; property HasDrawPages and ForbiddenCharacters added
+
     Revision 1.4  2001/05/15 18:09:59  er
     #78323# new document settings property RegularExpressions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-21 11:28:28 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ interface XArrayFormulaRange;
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::sheet::SheetCellRange
-/** an extenion of the CellRange service for use
+/** an extension of the CellRange service for use
     in spreadsheet documents.@see com::sun::star::table::CellRange
  */
 service SheetCellRange
@@ -166,6 +166,9 @@ service SheetCellRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/21 11:28:28  mi
+    XChartData is accessible, documentation was missing
+
     Revision 1.4  2000/12/21 08:35:12  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 
