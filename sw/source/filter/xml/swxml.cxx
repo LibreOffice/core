@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
+ *  last change: $Author: dvo $ $Date: 2001-03-05 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,12 +339,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                                         sal_False );
             xObjectResolver = pObjectHelper;
         }
-
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
-        xDocStream = pStorage->OpenStream( sDocName,
-                                  STREAM_READ | STREAM_NOCREATE );
-        xDocStream->SetBufferSize( 16*1024 );
-        xInputStream = new utl::OInputStreamWrapper( *xDocStream );
     }
     else if( pMedium )
     {
@@ -423,14 +417,14 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     {
         // read storage streams
 
-        ReadThroughComponent(
+        nRet = ReadThroughComponent(
            pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
            "com.sun.star.comp.Writer.XMLContentImporter",
            aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
 
         ReadThroughComponent(
-            pStorage, xModelComp, "styles.xml", "", xServiceFactory,
+            pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesImporter",
             aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
@@ -461,7 +455,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             xSourceControl->start();
         }
 
-        ReadThroughComponent(
+        nRet = ReadThroughComponent(
             xInputStream, xModelComp, xServiceFactory,
             "com.sun.star.comp.Writer.XMLImporter",
             aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
