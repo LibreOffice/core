@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:45:06 $
+ *  last change: $Author: dg $ $Date: 2002-05-28 11:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,88 +63,193 @@
 <xsl:transform 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:oor="http://openoffice.org/2001/registry">
-		
-<xsl:output method="xml" indent="yes"/>
+		xmlns:oor="http://openoffice.org/2001/registry"
+		xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"			
+		extension-element-prefixes="filehelper">
+
+<!-- Get the correct format -->
+<xsl:output method="xml" indent="yes" />
 
 <!--************************** PARAMETER ******************************** -->
-
-<!-- locales, delimeter is colon -->
 <xsl:param name="locale"/>
+<xsl:param name="xcs"/>
+<xsl:param name="schemaRoot">.</xsl:param>
+
+<xsl:variable name="schemaRootURL"><xsl:value-of select="filehelper:makeAbs($schemaRoot)"/></xsl:variable>
+<xsl:variable name="schemaURL"><xsl:value-of select="filehelper:makeAbs($xcs)"/></xsl:variable>
 
 <!--************************** TEMPLATES ******************************** -->
-
 <!-- ensure that at least root is available -->
 	<xsl:template match="/oor:node">		
 		<xsl:copy>
 			<xsl:apply-templates select = "@*" />
-			<xsl:apply-templates/>					
-		</xsl:copy>		
+			<xsl:choose>
+				<xsl:when test="string-length($locale)">
+					<xsl:apply-templates select="." mode="locale"/>				
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:for-each select="node|prop">
+						<xsl:variable name="component-schema" select="document($schemaURL)/oor:component-schema"/>
+						<xsl:apply-templates select="." mode="non-locale">
+							<xsl:with-param name="component-schema" select="$component-schema"/>
+							<xsl:with-param name="context" select="$component-schema/component/*[@oor:name = current()/@oor:name]"/>
+						</xsl:apply-templates>
+					</xsl:for-each>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:copy>				
 	</xsl:template>
 
-<!-- process all elements -->
-	<xsl:template match="*">		
-		<xsl:variable name="hasValue"><xsl:call-template name="hasValue"/></xsl:variable>
-		<xsl:if test="$hasValue = 'true'">
+<!-- locale dependent data -->
+	<xsl:template match="node|prop" mode = "locale">				
+		<xsl:if test="count(descendant::value[@xml:lang = $locale])">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*" />
-				<xsl:apply-templates/>					
+				<xsl:apply-templates select = "@*"/>
+				<xsl:apply-templates mode = "locale"/>					
 			</xsl:copy>
 		</xsl:if>		
 	</xsl:template>
 
-<!-- process values dependent on the locales -->
-	<xsl:template match="value">		
-		<xsl:choose>
-			<!-- locale independent value -->
-			<xsl:when test="not (string-length($locale))">				
-				<xsl:choose>				
-					<xsl:when test="not (@xml:lang)">
-						<xsl:copy>
-							<xsl:apply-templates select = "@*" />
-							<xsl:value-of select="."/>
-						</xsl:copy>
+	<xsl:template match="value" mode="locale">		
+		<xsl:if test="@xml:lang = $locale">
+			<xsl:copy>
+				<xsl:apply-templates select = "@*"/>
+				<xsl:value-of select="."/>
+			</xsl:copy>	
+		</xsl:if>		
+	</xsl:template>
+
+<!-- locale independent data -->
+	<xsl:template match="node" mode="non-locale">
+		<xsl:param name = "context"/>
+		<xsl:param name = "component-schema"/>		
+		<xsl:if test="count(descendant::value[not (@xml:lang)]) or @oor:finalized='true'">
+			<xsl:copy>
+				<xsl:apply-templates select = "@*" />
+				<xsl:choose>
+					<!-- look for matching templates in other components -->
+					<xsl:when test="$context/@oor:node-type and $context/@oor:component">
+						<xsl:variable name="fileURL">
+							<xsl:call-template name="composeFileURL">
+								<xsl:with-param name="component-schema" select="$component-schema"/>
+								<xsl:with-param name="componentName"><xsl:value-of select="$context/@oor:component"/></xsl:with-param>
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:for-each select="node|prop">						
+							<xsl:apply-templates select="." mode="non-locale">
+								<xsl:with-param name="component-schema" select="$component-schema"/>
+								<xsl:with-param name="context" select="document($fileURL)/oor:component-schema/templates/*[@oor:name = $context/@oor:node-type]"/>
+							</xsl:apply-templates>
+						</xsl:for-each>
 					</xsl:when>
-					<!-- if no locale independent value available, take en-US as default -->
-					<xsl:when test="lang('en-US') and not (../value[not (@xml:lang)])">
-						<xsl:copy>
-							<xsl:apply-templates select = "@xsi:nil|@oor:separator" />
-							<xsl:value-of select="."/>
-						</xsl:copy>
+					<!-- look for matching templates within the same component -->
+					<xsl:when test="$context/@oor:node-type">
+						<xsl:for-each select="node|prop">						
+							<xsl:apply-templates select="." mode="non-locale">
+								<xsl:with-param name="component-schema" select="$component-schema"/>
+								<xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $context/@oor:node-type]"/>
+							</xsl:apply-templates>
+						</xsl:for-each>
 					</xsl:when>
+					<xsl:otherwise>	
+						<xsl:for-each select="node|prop">						
+							<xsl:apply-templates select="." mode="non-locale">
+								<xsl:with-param name="component-schema" select="$component-schema"/>
+								<xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>
+							</xsl:apply-templates>
+						</xsl:for-each>
+					</xsl:otherwise>
 				</xsl:choose>
-			</xsl:when>
-			<!-- test for matching locale -->
-			<xsl:when test="@xml:lang = $locale">
+			</xsl:copy>
+		</xsl:if>	
+	</xsl:template>
+
+	<xsl:template match="prop" mode="non-locale">
+		<xsl:param name = "context"/>		
+		<xsl:choose>		
+			<xsl:when test="not ($context) or @oor:finalized='true'">
 				<xsl:copy>
-					<xsl:apply-templates select = "@*" />
-					<xsl:value-of select="."/>
+					<xsl:apply-templates select = "@*"/>
+					<xsl:apply-templates select = "value" mode="non-locale"/>
 				</xsl:copy>
 			</xsl:when>
+			<!-- copy locale independent values only, if the values differ -->				
+			<xsl:otherwise>					
+				<xsl:variable name="isEqual">
+					<xsl:call-template name="isEqual">
+						<xsl:with-param name="left"  select="$context/value"/>
+						<xsl:with-param name="right" select="value[not (@xml:lang)]"/>
+					</xsl:call-template>						
+				</xsl:variable>
+				<xsl:if test="$isEqual ='false'">
+					<xsl:copy>
+						<xsl:apply-templates select = "@*"/>
+						<xsl:apply-templates select = "value" mode="non-locale"/>
+					</xsl:copy>
+				</xsl:if>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
-<!-- copy of all attributes of current node -->
-	<xsl:template match = "@*">
-		<xsl:copy/>
+	<xsl:template match="value" mode="non-locale">		
+		<xsl:if test="not (@xml:lang)">
+			<xsl:copy>
+				<xsl:apply-templates select = "@*"/>
+				<xsl:value-of select="."/>
+			</xsl:copy>						
+		</xsl:if>
 	</xsl:template>
 
-<!-- suppress the location of the schema -->
-	<xsl:template match = "@xsi:schemaLocation"/>
+<!-- common templates -->
+	<xsl:template match = "@*">
+		<xsl:copy/>
+	</xsl:template>	
 
-<!-- determine if locale specific value is within the tree -->
-	<xsl:template name="hasValue">		
+<!-- suppress all merge instructions -->
+	<xsl:template match = "@oor:op"/>
+
+<!-- compares two values -->
+	<xsl:template name="isEqual">		
+		<xsl:param name = "left"/>
+		<xsl:param name = "right"/>
 		<xsl:choose>
-			<xsl:when test="not (string-length($locale))">
+			<xsl:when test="not ($left)">
+				<xsl:choose>
+					<xsl:when test=" not ($right) ">
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:when test="string-length ($right) = 0 and not ($right/@xsi:nil)">						
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="not ($right)">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
-			<xsl:when test="count(descendant::value[@xml:lang != ''])">
+			<xsl:when test="$left/@xsi:nil='true' and $right/@xsi:nil='true'">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:when test="$left/@xsi:nil or $right/@xsi:nil">
+				<xsl:value-of select="false()"/>
+			</xsl:when>
+			<xsl:when test="$left = $right">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="false()"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="composeFileURL">
+		<xsl:param name="componentName"/>
+		<xsl:variable name="fileURL">
+			<xsl:value-of select="$schemaRootURL"/>/<xsl:value-of select="translate($componentName,'.','/')"/>.xcs
+		</xsl:variable>		
+		<xsl:value-of select="$fileURL"/>
 	</xsl:template>
 
 </xsl:transform>

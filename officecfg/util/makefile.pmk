@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-19 22:54:50 $
+#   last change: $Author: dg $ $Date: 2002-05-28 11:50:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ $(MISC)$/registry$/schema$/%.xcs : %.xcs
 $(MISC)$/registry$/data$/%.xcu : %.xcu
     -$(MKDIR) -p $(@:d) 
     java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/data_val.xsl $(@:d)$(<:b).val xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp file=$(<:d)$(<:b) pathSeparator=$/
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema
     java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
     +$(RM) $(@:d)$(<:b).tmp
     +$(RM) $(@:d)$(<:b).val
@@ -92,7 +92,7 @@ $(MISC)$/registry$/data$/%.xcu : %.xcu
 # creating locale dependent entries
 $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
     -$(MKDIR) -p $(@:d)
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp file=$(<:d)$(<:b) pathSeparator=$/ locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
     java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
     +$(RM) $(@:d)$(<:b).tmp
     
