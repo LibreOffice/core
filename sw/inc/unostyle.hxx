@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:19:45 $
+ *  last change: $Author: mtg $ $Date: 2001-10-17 12:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
 #endif
 
 class SwDocShell;
@@ -216,7 +219,8 @@ class SwXStyle : public cppu::WeakImplHelper6
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::beans::XPropertyState
 >,
-        public SfxListener
+        public SfxListener,
+        public SwClient
 {
     friend class SwXStyleFamily;
     SwDoc*                  m_pDoc;
@@ -238,9 +242,11 @@ protected:
 
     void                SetStyleName(const String& rSet){ sStyleName = rSet;}
     SwStyleProperties_Impl* GetPropImpl(){return pPropImpl;}
+    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
+    com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
 
 public:
-    SwXStyle(SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, BOOL bConditional = FALSE);
+    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, BOOL bConditional = FALSE);
     SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
                                 SwDoc*  pDoc,
                                 const String& rStyleName);//,
@@ -308,6 +314,7 @@ public:
                                 StartListening(*pBasePool);
                             }
     SwDoc*                GetDoc() const { return m_pDoc; }
+    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 /* -----------------------------15.12.00 14:25--------------------------------
 
@@ -320,9 +327,7 @@ public:
                                 SwDoc*  pDoc,
                                 const String& rStyleName) :
         SwXStyle(rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
-    SwXFrameStyle() :
-        SwXStyle(SFX_STYLE_FAMILY_FRAME, FALSE){}
-
+    SwXFrameStyle( SwDoc *pDoc );
     ~SwXFrameStyle();
 
     virtual void SAL_CALL acquire(  ) throw(){SwXStyle::acquire();}
