@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:52 $
+#   last change: $Author: pl $ $Date: 2001-11-01 19:28:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,30 +107,4 @@ SRCFILES= \
 
 # --- Targets -------------------------------------------------------
 
-.IF "$(depend)" = ""
-
-ALL: \
-    ALLTAR \
-    $(BIN)$/$(SDINAME).tlb
-
-.ENDIF
-
-
 .INCLUDE :  target.mk
-
-.IF "$(GUIBASE)$(VCL)"=="WIN"
-$(BIN)$/$(SDINAME).tlb: \
-    $(MISCX)$/$(SDINAME).odl
-    rscpp -I.;$(SVSDIINC);$(INC) -DSOLAR_VERSION=$(solar_version) $(MISC)$/$(SDINAME).odl $(MISC)$/$(SDINAME).odx
-.IF "$(GUI)"=="WIN"
-    wx /w mktyplib /nocpp /o $(MISC)$/$(SDINAME).err /tlb $(BIN)$/$(SDINAME).tlb $(MISC)$/$(SDINAME).odx
-.ELSE
-    mktyplib /win32 /nocpp /o $(MISC)$/$(SDINAME).err /tlb $(BIN)$/$(SDINAME).tlb $(MISC)$/$(SDINAME).odx
-.ENDIF
-    @+type $(MISC)$/$(SDINAME).err
-.ELSE
-$(BIN)$/$(SDINAME).tlb:
-    @echo nix
-.ENDIF
-
-
