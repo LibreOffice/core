@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-07 12:55:33 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 07:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,6 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_pSplitter(NULL)
     ,m_pCurrentlyDisplayed(NULL)
     ,m_nAsyncDrop(0)
-    ,m_nAsyncClose( 0 )
     ,m_bQueryEscapeProcessing( sal_False )
     ,m_bHiContrast(sal_False)
 {
@@ -416,9 +415,6 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
 SbaTableQueryBrowser::~SbaTableQueryBrowser()
 {
     DBG_DTOR(SbaTableQueryBrowser,NULL);
-
-    if ( m_nAsyncClose )
-        Application::RemoveUserEvent( m_nAsyncClose );
 }
 
 //------------------------------------------------------------------------------
@@ -1516,21 +1512,20 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
     if (!getBrowserView() || !getBrowserView()->getVclControl())
         return aReturn;
 
-    sal_Bool bHandled = sal_False;
-    // "toggle explorer" is always enabled (if we have a explorer)
-    switch( nId)
+    switch (nId)
     {
-        case ID_BROWSER_EXPLORER:
-            // this slot is available even if no form is loaded
-            aReturn.bEnabled = sal_True;
-            aReturn.aState = ::cppu::bool2any(haveExplorer());
-            return aReturn;
-        break;
         case ID_BROWSER_CLOSE:
             // the close button should always be enabled
             aReturn.bEnabled = sal_True;
-            bHandled = sal_True;
+            return aReturn;
             break;
+    // "toggle explorer" is always enabled (if we have a explorer)
+        case ID_BROWSER_EXPLORER:
+        {       // this slot is available even if no form is loaded
+            aReturn.bEnabled = sal_True;
+            aReturn.aState = ::cppu::bool2any(haveExplorer());
+            return aReturn;
+        }
     }
 
     if (!isLoaded())
@@ -1725,9 +1720,10 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 
         case ID_BROWSER_REFRESH_REBUILD:
         {
-            if ( !SaveModified( ) )
+            if (!SaveData(sal_True, sal_False))   // may be SaveModified( ) call
                 // nothing to do
                 break;
+
             SvLBoxEntry* pSelected = m_pCurrentlyDisplayed;
             // unload
             unloadAndCleanup( sal_False, sal_True );
@@ -1830,8 +1826,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             break;
 
         case ID_BROWSER_CLOSE:
-            if ( !m_nAsyncClose )
-                m_nAsyncClose = Application::PostUserEvent( LINK( this, SbaTableQueryBrowser, OnAsyncClose ) );
+            closeTask();
             // if it's not 0, such a async close is already pending
             break;
 
@@ -4149,18 +4144,6 @@ void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _
         _xColContainer->removeByName(*pBegin);
         ::comphelper::disposeComponent(xColumn);
     }
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK( SbaTableQueryBrowser, OnAsyncClose, void*, NOTINTERESTEDIN )
-{
-    {
-        m_nAsyncClose = 0;
-
-        // simply dispose the frame we live in
-        Reference<XComponent> xComp(m_xCurrentFrame,UNO_QUERY);
-        ::comphelper::disposeComponent( xComp );
-    }
-    return 0L;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::isHiContrast() const
