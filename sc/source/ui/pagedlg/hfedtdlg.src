@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:49:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Attributi di testo" ;
         QuickHelpText [ portuguese_brazilian ] = "Atributos de Texto" ;
         QuickHelpText [ portuguese ] = "Atributos de texto" ;
-        QuickHelpText [ finnish ] = "Tekstin ominaisuudet!" ;
+        QuickHelpText [ finnish ] = "Tekstin ominaisuudet" ;
         QuickHelpText [ danish ] = "Tekstattributter" ;
         QuickHelpText [ french ] = "Attributs de texte" ;
         QuickHelpText [ swedish ] = "Textattribut" ;
@@ -845,15 +845,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? ƒndern der Textattribute der aktuellen Selektion : éndern der Textattribute der aktuellen Selektion */
     QuickHelpText[ russian ] = "¿ÚË·ÛÚ˚ ÚÂÍÒÚ‡";
-        QuickHelpText[ polish ] = "Atrybuty tekstu!";
-        QuickHelpText[ japanese ] = "√∑ΩƒÇÃëÆê´!";
+        QuickHelpText[ polish ] = "Atrybuty tekstu";
+        QuickHelpText[ japanese ] = "√∑ΩƒÇÃëÆê´";
         QuickHelpText[ chinese_simplified ] = "’˝Œƒ Ù–‘";
         QuickHelpText[ chinese_traditional ] = "§Â¶rƒ›© ";
         QuickHelpText[ arabic ] = "”„«  «·‰’";
         QuickHelpText[ dutch ] = "Tekstattributen";
         QuickHelpText[ chinese_simplified ] = "’˝Œƒ Ù–‘";
         QuickHelpText[ greek ] = "…‰È¸ÙÁÙÂÚ ÍÂÈÏ›ÌÔı";
-        QuickHelpText[ korean ] = "≈ÿΩ∫∆Æ°°º”º∫!";
+        QuickHelpText[ korean ] = "≈ÿΩ∫∆Æ°°º”º∫";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Textattribute";
         QuickHelpText[ catalan ] = "Atributos de texto";
@@ -870,7 +870,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Nome del file" ;
         QuickHelpText [ portuguese_brazilian ] = "Nome do Arquivo" ;
         QuickHelpText [ portuguese ] = "Nome do ficheiro" ;
-        QuickHelpText [ finnish ] = "Tiedoston nimi!" ;
+        QuickHelpText [ finnish ] = "Tiedoston nimi" ;
         QuickHelpText [ danish ] = "Filnavn" ;
         QuickHelpText [ french ] = "Nom de fichier" ;
         QuickHelpText [ swedish ] = "Filnamn" ;
@@ -884,15 +884,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen des Dateinames des aktuellen Dokumentes : Einf≥gen des Dateinames des aktuellen Dokumentes */
         QuickHelpText[ russian ] = "»Ïˇ Ù‡ÈÎ‡";
-        QuickHelpText[ polish ] = "Nazwa pliku!";
-        QuickHelpText[ japanese ] = "Ãß≤Ÿñº!";
+        QuickHelpText[ polish ] = "Nazwa pliku";
+        QuickHelpText[ japanese ] = "Ãß≤Ÿñº";
         QuickHelpText[ chinese_simplified ] = "Œƒº˛√˚";
         QuickHelpText[ chinese_traditional ] = "¿…Æ◊¶W∫Ÿ";
         QuickHelpText[ arabic ] = "«”„ «·„·›";
         QuickHelpText[ dutch ] = "Bestandsnaam";
         QuickHelpText[ chinese_simplified ] = "Œƒº˛√˚";
         QuickHelpText[ greek ] = "ºÌÔÏ· ·Ò˜ÂﬂÔı";
-        QuickHelpText[ korean ] = "∆ƒ¿œ°°¿Ã∏ß!";
+        QuickHelpText[ korean ] = "∆ƒ¿œ°°¿Ã∏ß";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dateiname";
         QuickHelpText[ catalan ] = "Nombre de archivo";
@@ -1009,7 +1009,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Nome tabella" ;
         QuickHelpText [ portuguese_brazilian ] = "Tabela Nome" ;
         QuickHelpText [ portuguese ] = "Nome da folha" ;
-        QuickHelpText [ finnish ] = "Lomakkeen nimi!" ;
+        QuickHelpText [ finnish ] = "Lomakkeen nimi" ;
         QuickHelpText [ danish ] = "Arknavn" ;
         QuickHelpText [ french ] = "Nom de feuille" ;
         QuickHelpText [ swedish ] = "Tabellnamn" ;
@@ -1023,15 +1023,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen des aktuellen Tabellennamens : Einf≥gen des aktuellen Tabellennamens */
     QuickHelpText[ russian ] = "»Ïˇ ÎËÒÚ‡";
-        QuickHelpText[ polish ] = "Nazwa tabeli!";
-        QuickHelpText[ japanese ] = "ï\\ñº!";
+        QuickHelpText[ polish ] = "Nazwa tabeli";
+        QuickHelpText[ japanese ] = "ï\\ñº";
         QuickHelpText[ chinese_simplified ] = "±Ì∏Ò√˚≥∆";
         QuickHelpText[ chinese_traditional ] = "§uß@™Ì¶W∫Ÿ";
         QuickHelpText[ arabic ] = "«”„ «·ÃœÊ·";
         QuickHelpText[ dutch ] = "Tabelnaam";
         QuickHelpText[ chinese_simplified ] = "±Ì∏Ò√˚≥∆";
         QuickHelpText[ greek ] = "ºÌÔÏ· ﬂÌ·Í·";
-        QuickHelpText[ korean ] = "«•°°¿Ã∏ß!";
+        QuickHelpText[ korean ] = "«•°°¿Ã∏ß";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenname";
         QuickHelpText[ catalan ] = "Nombre de la hoja";
@@ -1048,7 +1048,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Pagina" ;
         QuickHelpText [ portuguese_brazilian ] = "P·gina" ;
         QuickHelpText [ portuguese ] = "P·gina" ;
-        QuickHelpText [ finnish ] = "Sivu!" ;
+        QuickHelpText [ finnish ] = "Sivu" ;
         QuickHelpText [ danish ] = "Side" ;
         QuickHelpText [ french ] = "Page" ;
         QuickHelpText [ swedish ] = "Sida" ;
@@ -1062,15 +1062,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen der aktuellen Seitenzahl : Einf≥gen der aktuellen Seitenzahl */
     QuickHelpText[ russian ] = "—Ú‡ÌËˆ‡";
-        QuickHelpText[ polish ] = "Strona!";
-        QuickHelpText[ japanese ] = "Õﬂ∞ºﬁ!";
+        QuickHelpText[ polish ] = "Strona";
+        QuickHelpText[ japanese ] = "Õﬂ∞ºﬁ";
         QuickHelpText[ chinese_simplified ] = "“≥√Ê";
         QuickHelpText[ chinese_traditional ] = "≠∂";
         QuickHelpText[ arabic ] = "’›Õ…";
         QuickHelpText[ dutch ] = "Pagina";
         QuickHelpText[ chinese_simplified ] = "“≥√Ê";
         QuickHelpText[ greek ] = "”ÂÎﬂ‰·";
-        QuickHelpText[ korean ] = "¬ !";
+        QuickHelpText[ korean ] = "¬ ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seite";
         QuickHelpText[ catalan ] = "P·gina";
@@ -1087,7 +1087,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Pagine" ;
         QuickHelpText [ portuguese_brazilian ] = "P·ginas" ;
         QuickHelpText [ portuguese ] = "P·ginas" ;
-        QuickHelpText [ finnish ] = "Sivut!" ;
+        QuickHelpText [ finnish ] = "Sivut" ;
         QuickHelpText [ danish ] = "Sider" ;
         QuickHelpText [ french ] = "Pages" ;
         QuickHelpText [ swedish ] = "Sidor" ;
@@ -1101,15 +1101,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen der letzten Seitenzahl : Einf≥gen der letzten Seitenzahl */
     QuickHelpText[ russian ] = "—Ú‡ÌËˆ˚";
-        QuickHelpText[ polish ] = "Strony!";
-        QuickHelpText[ japanese ] = "Õﬂ∞ºﬁ!";
+        QuickHelpText[ polish ] = "Strony";
+        QuickHelpText[ japanese ] = "Õﬂ∞ºﬁ";
         QuickHelpText[ chinese_simplified ] = "“≥ ˝";
         QuickHelpText[ chinese_traditional ] = "≠∂";
         QuickHelpText[ arabic ] = "’›Õ« ";
         QuickHelpText[ dutch ] = "Pagina's";
         QuickHelpText[ chinese_simplified ] = "“≥ ˝";
         QuickHelpText[ greek ] = "”ÂÎﬂ‰ÂÚ";
-        QuickHelpText[ korean ] = "¬ µÈ!";
+        QuickHelpText[ korean ] = "¬ µÈ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
         QuickHelpText[ catalan ] = "P·ginas";
@@ -1126,7 +1126,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Data" ;
         QuickHelpText [ portuguese_brazilian ] = "Data" ;
         QuickHelpText [ portuguese ] = "Data" ;
-        QuickHelpText [ finnish ] = "P‰iv‰m‰‰r‰!" ;
+        QuickHelpText [ finnish ] = "P‰iv‰m‰‰r‰" ;
         QuickHelpText [ danish ] = "Dato" ;
         QuickHelpText [ french ] = "Date" ;
         QuickHelpText [ swedish ] = "Datum" ;
@@ -1140,15 +1140,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen des aktuellen Datums : Einf≥gen des aktuellen Datums */
     QuickHelpText[ russian ] = "ƒ‡Ú‡";
-        QuickHelpText[ polish ] = "Data!";
-        QuickHelpText[ japanese ] = "ì˙ït!";
+        QuickHelpText[ polish ] = "Data";
+        QuickHelpText[ japanese ] = "ì˙ït";
         QuickHelpText[ chinese_simplified ] = "»’∆⁄";
         QuickHelpText[ chinese_traditional ] = "§È¥¡";
         QuickHelpText[ arabic ] = "«· «—ÌŒ";
         QuickHelpText[ dutch ] = "Datum";
         QuickHelpText[ chinese_simplified ] = "»’∆⁄";
         QuickHelpText[ greek ] = "«ÏÂÒÔÏÁÌﬂ·";
-        QuickHelpText[ korean ] = "≥Ø¬•!";
+        QuickHelpText[ korean ] = "≥Ø¬•";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum";
         QuickHelpText[ catalan ] = "Fecha";
@@ -1165,7 +1165,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Ora" ;
         QuickHelpText [ portuguese_brazilian ] = "Hora" ;
         QuickHelpText [ portuguese ] = "Hora" ;
-        QuickHelpText [ finnish ] = "Aika!" ;
+        QuickHelpText [ finnish ] = "Aika" ;
         QuickHelpText [ danish ] = "KlokkeslÊt" ;
         QuickHelpText [ french ] = "Heure" ;
         QuickHelpText [ swedish ] = "Klockslag" ;
@@ -1179,15 +1179,15 @@ TabPage RID_HFBASE
         };
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen der aktuellen Uhrzeit : Einf≥gen der aktuellen Uhrzeit */
     QuickHelpText[ russian ] = "¬ÂÏˇ";
-        QuickHelpText[ polish ] = "Godzina!";
-        QuickHelpText[ japanese ] = "éûçè!";
+        QuickHelpText[ polish ] = "Godzina";
+        QuickHelpText[ japanese ] = "éûçè";
         QuickHelpText[ chinese_simplified ] = " ±º‰";
         QuickHelpText[ chinese_traditional ] = "Æ…∂°";
         QuickHelpText[ arabic ] = "«·Êﬁ ";
         QuickHelpText[ dutch ] = "Tijd";
         QuickHelpText[ chinese_simplified ] = " ±º‰";
         QuickHelpText[ greek ] = "øÒ·";
-        QuickHelpText[ korean ] = "Ω√∞£!";
+        QuickHelpText[ korean ] = "Ω√∞£";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Uhrzeit";
         QuickHelpText[ catalan ] = "Hora";
@@ -1375,5 +1375,6 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
