@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-14 07:51:55 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 20:20:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,16 @@ LINKOUTPUT_FILTER=
 
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1
+
+# Workaround for Mac OS X duplicate symbol plugin bug
+.IF "$(TARGET)"!=""
+CDEFS+=-Dcomponent_getImplementationEnvironment=lib$(TARGET)component_getImplementationEnvironment \
+  -Dcomponent_writeInfo=lib$(TARGET)component_writeInfo \
+  -Dcomponent_getFactory=lib$(TARGET)component_getFactory \
+  -Dcomponent_getDescriptionFunc=lib$(TARGET)component_getDescriptionFunc \
+  -Duno_initEnvironment=lib$(TARGET)uno_initEnvironment \
+  -Duno_ext_getMapping=lib$(TARGET)uno_ext_getMapping
+.ENDIF
 
 # Temporary settings to enable VCL test code. These should be deleted once
 # VCL development is complete.
