@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:16 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,14 +195,22 @@ void PackageUri::init() const
                             nStart, aPureUri.getLength() - nStart, aNormPackage );
                 m_aPackage = decodeSegment( aNormPackage );
                 m_aPath = rtl::OUString::createFromAscii( "/" );
+                m_aUri = m_aUri.replaceAt( 0, ( nParam >= 0 ) ? nParam : m_aUri.getLength(), aPureUri );
+
+                sal_Int32 nLastSlash = m_aPackage.lastIndexOf( '/' );
+                if ( nLastSlash != -1 )
+                    m_aName = m_aPackage.copy( nLastSlash + 1 );
+                else
+                    m_aName = m_aPackage;
             }
             else
             {
                 m_aPath = aPureUri.copy( nEnd + 1 );
 
-                // Empty path segments?
-                if ( m_aPath.indexOf(
-                            rtl::OUString::createFromAscii( "//" ) ) != -1 )
+                // Empty path segments or encoded slashes?
+                if ( m_aPath.indexOf( rtl::OUString::createFromAscii( "//" ) ) != -1
+                  || m_aPath.indexOf( rtl::OUString::createFromAscii( "%2F" ) ) != -1
+                  || m_aPath.indexOf( rtl::OUString::createFromAscii( "%2f" ) ) != -1 )
                 {
                     // error, but remember that we did a init().
                     m_aPath = rtl::OUString::createFromAscii( "/" );
@@ -214,14 +222,18 @@ void PackageUri::init() const
 
                 aPureUri = aPureUri.replaceAt(
                             nStart, nEnd - nStart, aNormPackage );
-                m_aPackage = decodeSegment( aNormPackage );
+                aPureUri = aPureUri.replaceAt(
+                            nEnd + 1, aPureUri.getLength() - nEnd - 1, encodeSegmentsForSure( m_aPath ) );
 
+                m_aPackage = decodeSegment( aNormPackage );
+                m_aPath = decodeSegment( m_aPath );
+                m_aUri = m_aUri.replaceAt( 0, ( nParam >= 0 ) ? nParam : m_aUri.getLength(), aPureUri );
 
                 sal_Int32 nLastSlash = aPureUri.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
                 {
                     m_aParentUri = aPureUri.copy( 0, nLastSlash );
-                    m_aName      = aPureUri.copy( nLastSlash + 1 );
+                    m_aName      = decodeSegment( aPureUri.copy( nLastSlash + 1 ) );
                 }
             }
 
@@ -247,12 +259,12 @@ inline bool isUSASCII(sal_uInt32 nChar)
     return nChar <= 0x7F;
 }
 
-/*
+
 inline bool isVisible(sal_uInt32 nChar)
 {
     return nChar >= '!' && nChar <= '~';
 }
-*/
+
 
 inline bool isDigit(sal_uInt32 nChar)
 {
@@ -313,7 +325,6 @@ enum DecodeMechanism
     DECODE_WITH_CHARSET
 };
 
-/*
 enum Part
 {
     PART_OBSOLETE_NORMAL = 0x001, // Obsolete, do not use!
@@ -340,7 +351,6 @@ enum Part
     max_part = 0x80000000
         // Do not use!  Only there to allow compatible changes in the future.
 };
-*/
 
 enum EscapeType
 {
@@ -357,7 +367,6 @@ inline void appendEscape(rtl::OUStringBuffer & rTheText,
     rTheText.append(sal_Unicode(getHexDigit(int(nOctet & 15))));
 }
 
-#if 0
 inline bool mustEncode(sal_uInt32 nUTF32, Part ePart)
 {
     enum
@@ -485,9 +494,7 @@ inline bool mustEncode(sal_uInt32 nUTF32, Part ePart)
     /*   */ 0 };
     return !isUSASCII(nUTF32) || !(aMap[nUTF32] & ePart);
 }
-#endif
 
-/*
 void appendUCS4Escape(rtl::OUStringBuffer & rTheText, sal_Char cEscapePrefix,
                       sal_uInt32 nUCS4)
 {
@@ -588,7 +595,6 @@ void appendUCS4(rtl::OUStringBuffer & rTheText, sal_uInt32 nUCS4,
     else
         rTheText.append(sal_Unicode(nUCS4));
 }
-*/
 
 sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
                     bool bOctets, sal_Char cEscapePrefix,
@@ -715,7 +721,6 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
     return nUTF32;
 }
 
-/*
 static rtl::OUString encodeText(sal_Unicode const * pBegin,
                                 sal_Unicode const * pEnd, bool bOctets,
                                 Part ePart, sal_Char cEscapePrefix,
@@ -734,7 +739,6 @@ static rtl::OUString encodeText(sal_Unicode const * pBegin,
     }
     return aResult.makeStringAndClear();
 }
-*/
 
 static rtl::OUString decode(sal_Unicode const * pBegin,
                             sal_Unicode const * pEnd, sal_Char cEscapePrefix,
@@ -812,6 +816,7 @@ rtl::OUString PackageUri::encodeURL( const rtl::OUString& rSource )
 
     return aResult.makeStringAndClear();
 }
+*/
 
 //=========================================================================
 // static
@@ -822,4 +827,31 @@ rtl::OUString PackageUri::encodeSegment( const rtl::OUString& rSource )
                       PART_PCHAR, '%', ENCODE_ALL, RTL_TEXTENCODING_UTF8,
                       false);
 }
-*/
+
+//=========================================================================
+// static
+rtl::OUString PackageUri::encodeSegmentsForSure( const rtl::OUString& rSource )
+{
+    rtl::OUString aResult;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        sal_Int32 nNext = rSource.indexOf( '/', nIndex );
+        if ( nNext != -1 )
+        {
+            if ( nNext > nIndex )
+                aResult += encodeSegment( decodeSegment( rSource.copy( nIndex, nNext - nIndex ) ) );
+            aResult += ::rtl::OUString::createFromAscii( "/" );
+            nIndex = nNext + 1;
+        }
+        else
+        {
+            aResult += encodeSegment( decodeSegment( rSource.copy( nIndex ) ) );
+            nIndex = -1;
+        }
+    }
+    while ( nIndex >= 0 && nIndex < rSource.getLength() );
+
+    return aResult;
+}
+
