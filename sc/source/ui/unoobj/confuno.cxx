@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:30:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPro
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -399,8 +399,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsUseUserData() );
             else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
             {
-                uno::Reference<i18n::XForbiddenCharacters> xForbidden = new ScForbiddenCharsObj( pDocShell );
-                aRet <<= xForbidden;
+                aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
                 aRet <<= static_cast<sal_Int16> ( pDoc->GetAsianCompression() );
