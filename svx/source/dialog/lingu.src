@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:20:06 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ QueryBox RID_SVXQB_THESAURUS
     MESSAGE [ portuguese_brazilian ] = "Esta palavra aparece na lista de palavras que se deseja evitar! Deseja iniciar o dicion�rio de sin�nimos?" ;
     MESSAGE [ portuguese ] = "Evite esta palavra! Iniciar o dicion�rio de sin�nimos?" ;
     MESSAGE [ finnish ] = "T�m� sana esiintyy v�ltett�vien sanojen luettelossa. Avataanko synonyymisanasto?" ;
-    MESSAGE [ danish ] = "Undg� venligst dette ord! Vil du bruge synonymordbogen?" ;
+    MESSAGE [ danish ] = "Dette ord findes i listen over ord, du �nsker at undg�. Start synonymordbogen?" ;
     MESSAGE [ french ] = "Evitez l'utilisation de ce mot ! Lancer le dictionnaire des synonymes ?" ;
     MESSAGE [ swedish ] = "Undvik det h�r ordet! Starta synonymordlista?" ;
     MESSAGE [ dutch ] = "Dit woord is niet zo geschikt. Thesaurus starten?" ;
@@ -97,6 +97,8 @@ QueryBox RID_SVXQB_THESAURUS
     MESSAGE[ hebrew ] = "Dieses Wort sollten Sie vermeiden! Thesaurus starten?";
     MESSAGE[ hindi ] = "इस शब्द उन शब्दों की सूची में है जिसको आप त्यागना चाहते है । शब्दकोश प्रारंभ करना है?";
     MESSAGE[ slovak ] = "Toto slovo sa nachádza v zozname slov, ktorým sa chcete vyhnúť.\nSpustiť slovník synoným?";
+    MESSAGE[ hungarian ] = "Ez a szó szerepel a kerülendő szavak listáján. Elindítsam a szókincstárat?";
+    MESSAGE[ slovenian ] = "Ta beseda je na seznamu besed, ki se jim želite izogniti. Potrebujete slovar sopomenk?";
 };
 QueryBox RID_SVXQB_CONTINUE
 {
@@ -133,6 +135,8 @@ QueryBox RID_SVXQB_CONTINUE
     MESSAGE[ hebrew ] = "Überprüfung am Anfang des Dokumentes fortsetzen?";
     MESSAGE[ hindi ] = "लेखपत्र की प्रारंभ से जाँच जारी रखना है?";
     MESSAGE[ slovak ] = "Pokračovať v kontrole od začiatku dokumentu?";
+    MESSAGE[ hungarian ] = "Kívánja folytatni az ellenőrzést a dokumentum elejétől?";
+    MESSAGE[ slovenian ] = "Ali naj se preverjanje nadaljuje na začetku dokumenta?";
 };
 QueryBox RID_SVXQB_BW_CONTINUE
 {
@@ -168,6 +172,8 @@ QueryBox RID_SVXQB_BW_CONTINUE
     Message[ hebrew ] = "Überprüfung am Ende des Dokumentes fortsetzen?";
     Message[ hindi ] = "लेखपत्र की अंत से जाँच जारी रखना है?";
     Message[ slovak ] = "Pokračovať v kontrole od konca dokumentu?";
+    Message[ hungarian ] = "Kívánja folytatni az ellenőrzést a dokumentum végétől?";
+    Message[ slovenian ] = "Ali naj se preverjanje nadaljuje na koncu dokumenta?";
 };
 QueryBox RID_SVXQB_BODYTEXT
 {
@@ -183,7 +189,7 @@ QueryBox RID_SVXQB_BODYTEXT
     MESSAGE [ portuguese_brazilian ] = "Deseja verificar o texto principal?" ;
     MESSAGE [ portuguese ] = "Deseja verificar o texto principal?" ;
     MESSAGE [ finnish ] = "Haluatko tarkistaa p��tekstin?" ;
-    MESSAGE [ danish ] = "Vil du kontrollere br�dteksten?" ;
+    MESSAGE [ danish ] = "Vil du kontrollere hovedteksten?" ;
     MESSAGE [ french ] = "Voulez-vous v�rifier le texte principal ?" ;
     MESSAGE [ swedish ] = "Vill du kontrollera huvudtexten?" ;
     MESSAGE [ dutch ] = "Wilt u de hoofdtekst controleren?" ;
@@ -205,6 +211,8 @@ QueryBox RID_SVXQB_BODYTEXT
     MESSAGE[ hebrew ] = "Möchten Sie den Haupttext prüfen?";
     MESSAGE[ hindi ] = "आप प्रधान टेक्स्ट् को जाँच करना चाहते है?";
     MESSAGE[ slovak ] = "Prajete si skontrolovať hlavný text?";
+    MESSAGE[ hungarian ] = "Kívánja ellenőrizni a főszöveget?";
+    MESSAGE[ slovenian ] = "Ali želite preveriti glavno besedilo?";
 };
 QueryBox RID_SVXQB_SPECIAL
 {
@@ -241,6 +249,8 @@ QueryBox RID_SVXQB_SPECIAL
     MESSAGE[ hebrew ] = "Sonderbereiche prüfen?";
     MESSAGE[ hindi ] = "आप विशेष प्रदेशों को जाँच करना चाहते है?";
     MESSAGE[ slovak ] = "Prajete si skontrolovať špeciálne oblasti?";
+    MESSAGE[ hungarian ] = "Ellenőrzi a speciális területeket?";
+    MESSAGE[ slovenian ] = "Ali želite preveriti posebna področja?";
 };
 QueryBox RID_SVXQB_SPECIAL_FORCED
 {
@@ -255,7 +265,7 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     MESSAGE [ portuguese_brazilian ] = "A verifica��o de regi�es especiais est� desativada. Verificar mesmo assim?" ;
     MESSAGE [ portuguese ] = "A revis�o de �reas especiais est� desactivada. Mesmo assim prosseguir?" ;
     MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu k�yt�st�. Tarkistetaanko kuitenkin?" ;
-    MESSAGE [ danish ] = "Stavekontrol i s�romr�der er sl�et fra, skal der kontrolleres alligevel?" ;
+    MESSAGE [ danish ] = "Stavekontrol af s�romr�der er sl�et fra. Skal der kontrolleres alligevel?" ;
     MESSAGE [ french ] = "La v�rification dans les zones sp�ciales est d�sactiv�e. V�rifier tout de m�me ?" ;
     MESSAGE [ swedish ] = "Kontroll av specialomr�den �r avst�ngd. Kontrollera �nd�?" ;
     MESSAGE [ dutch ] = "De functie 'Speciale bereiken controleren' is uitgeschakeld. Controle toch uitvoeren?" ;
@@ -277,6 +287,8 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     MESSAGE[ hebrew ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?";
     MESSAGE[ hindi ] = "विशेष प्रदेशों की जाँच निष्क्रिय किया है । किसी तरह जाँच करना चाहते है?";
     MESSAGE[ slovak ] = "Kontrola špeciálnych oblastí je vypnutá. Napriek tomu skontrolovať?";
+    MESSAGE[ hungarian ] = "A speciális területek ellenőrzése ki van kapcsolva. Ez esetben is ellenőrzi?";
+    MESSAGE[ slovenian ] = "Preverjanje posebnih področij je deaktivirano. Ali želite vseeno preveriti?";
 };
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_HMSTATUS_OK
@@ -288,7 +300,7 @@ String RID_SVXSTR_HMSTATUS_OK
     Text [ portuguese_brazilian ] = "A palavra est� escrita corretamente." ;
     Text [ portuguese ] = "A palavra est� correcta." ;
     Text [ finnish ] = "Sana on kirjoitettu oikein" ;
-    Text [ danish ] = "Ordet er stavet rigtigt" ;
+    Text [ danish ] = "Ordet er stavet korrekt" ;
     Text [ french ] = "Mot correctement orthographi�" ;
     Text [ swedish ] = "Ordet �r riktigt stavat" ;
     Text [ dutch ] = "Dit woord is correct geschreven" ;
@@ -310,6 +322,8 @@ String RID_SVXSTR_HMSTATUS_OK
     Text[ hebrew ] = "Das Wort ist korrekt geschrieben";
     Text[ hindi ] = "शब्द को ठीक तरह से लिखा है";
     Text[ slovak ] = "Slovo je napísané správne";
+    Text[ hungarian ] = "A szó helyesírása jó";
+    Text[ slovenian ] = "Beseda je pravilno zapisana.";
 };
 String RID_SVXSTR_HMSTATUS_DONTUSE
 {
@@ -320,7 +334,7 @@ String RID_SVXSTR_HMSTATUS_DONTUSE
     Text [ portuguese_brazilian ] = "Evite usar esta palavra" ;
     Text [ portuguese ] = "Tente evitar esta palavra." ;
     Text [ finnish ] = "V�lt� t�m�n sanan k�ytt�mist�" ;
-    Text [ danish ] = "Undg� venligst dette ord" ;
+    Text [ danish ] = "Undg� dette ord" ;
     Text [ french ] = "N'utilisez pas ce mot" ;
     Text [ swedish ] = "Undvik det h�r ordet" ;
     Text [ dutch ] = "Vermijd het gebruik van dit woord" ;
@@ -342,6 +356,8 @@ String RID_SVXSTR_HMSTATUS_DONTUSE
     Text[ hebrew ] = "Dieses Wort sollten Sie vermeiden";
     Text[ hindi ] = "इस शब्द को त्यागना";
     Text[ slovak ] = "Vyhnúť sa používaniu tohoto slova";
+    Text[ hungarian ] = "Szóhasználat kerülése";
+    Text[ slovenian ] = "Izogni se tej besedi";
 };
 String RID_SVXSTR_HMSTATUS_WRONG
 {
@@ -374,6 +390,8 @@ String RID_SVXSTR_HMSTATUS_WRONG
     Text[ hebrew ] = "Das Wort ist unbekannt.";
     Text[ hindi ] = "अज्ञात शब्द ।";
     Text[ slovak ] = "Neznáme slovo.";
+    Text[ hungarian ] = "Ismeretlen szó";
+    Text[ slovenian ] = "Neznana beseda";
 };
 String RID_SVXSTR_HMSTATUS_CAPERROR
 {
@@ -408,6 +426,8 @@ String RID_SVXSTR_HMSTATUS_CAPERROR
     Text[ hebrew ] = "Groß- / Kleinschreibungs - Fehler";
     Text[ hindi ] = "केपिटलइसेशन् गलती";
     Text[ slovak ] = "Chyba pri rozlišovaní malých/veľkých písmen";
+    Text[ hungarian ] = "Nagybetűvé alakítási hiba";
+    Text[ slovenian ] = "Napaka v veliki začetnici";
 };
 String RID_SVXSTR_HMSTATUS_INVALID_LANG
 {
@@ -438,6 +458,8 @@ String RID_SVXSTR_HMSTATUS_INVALID_LANG
     Text[ hebrew ] = "Sprache wird nicht unterstützt";
     Text[ hindi ] = "भाषा समर्थित नहीं है";
     Text[ slovak ] = "Jazyk nie je podporovaný";
+    Text[ hungarian ] = "Nem támogatott nyelv";
+    Text[ slovenian ] = "Ne podpira jezika";
 };
 String RID_SVXSTR_HMERR_CHECKINSTALL
 {
@@ -450,7 +472,7 @@ String RID_SVXSTR_HMERR_CHECKINSTALL
     TEXT [ portuguese_brazilian ] = "n�o est� dispon�vel para a verifica��o ortogr�fica.\nConfira a sua instala��o e instale o idioma desejado\n" ;
     TEXT [ portuguese ] = "n�o est� dispon�vel para a verifica��o ortogr�fica.\nConfira a sua instala��o e, se necess�rio, instale a l�ngua desejada\n" ;
     TEXT [ finnish ] = "ei ole k�ytett�viss� oikeinkirjoituksen tarkistusta varten\nTarkista asennetut osat ja asenna haluttu kieli\n" ;
-    TEXT [ danish ] = "st�r ikke til r�dighed for stavekontrollen.\nKontroller venligst din installation og installer i\ngivet fald det �nskede sprog" ;
+    TEXT [ danish ] = "er ikke tilg�ngelig for stavekontrollen.\nKontroller venligst din installation og installer\ndet �nskede sprog\n" ;
     TEXT [ french ] = "n'est pas disponible pour la v�rification. Veuillez v�rifier l'installation et installer, le cas �ch�ant, la langue souhait�e" ;
     TEXT [ swedish ] = " �r inte tillg�nglig f�r stavningskontroll\nKontrollera din installation och installera\neventuellt �nskat spr�k" ;
     TEXT [ dutch ] = "is niet beschikbaar voor spellingcontrole\nControleer uw installatie en installeer\neventueel de gewenste taal." ;
@@ -472,6 +494,8 @@ String RID_SVXSTR_HMERR_CHECKINSTALL
     TEXT[ hebrew ] = " ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache";
     TEXT[ hindi ] = "अक्षर जाँच कलिए उपलब्ध नहीं है\nकृपया प्रतिष्ठापन का जाँच कीजिए और आवश्यक भाषा की प्रतिष्ठापन कीजिए\n";
     TEXT[ slovak ] = "nieje dostupná pre kontrolu pravopisu\nProsím skontrolujte svoju inštaláciu a doplňte požadovaný jazyk\n";
+    TEXT[ hungarian ] = "nyelvű helyesírás-ellenőrzés nem lehetséges.\nTelepítse a kívánt nyelvhez tartozó támogatást.\n";
+    TEXT[ slovenian ] = "ni na voljo za preverjanje črkovanja\nProsimo, preverite namestitev in namestite željeni jezik\n";
 };
 String RID_SVXSTR_HMERR_ADDWORD
 {
@@ -484,7 +508,7 @@ String RID_SVXSTR_HMERR_ADDWORD
     Text [ portuguese_brazilian ] = "N�o foi poss�vel acrescentar a palavra ao dicion�rio." ;
     Text [ portuguese ] = "Foi imposs�vel acrescentar a palavra no dicion�rio." ;
     Text [ finnish ] = "Sanaa ei voitu lis�t� sanastoon" ;
-    Text [ danish ] = "Det var ikke muligt at tilf�je dette ord til ordbogen." ;
+    Text [ danish ] = "Det var ikke muligt at tilf�je ordet til ordbogen" ;
     Text [ french ] = "Impossible d'ajouter ce mot au dictionnaire" ;
     Text [ swedish ] = "Det gick inte att l�gga in ordet i ordlistan." ;
     Text [ dutch ] = "Woord kan niet in woordenboek worden opgenomen" ;
@@ -506,6 +530,8 @@ String RID_SVXSTR_HMERR_ADDWORD
     Text[ hebrew ] = "Das Wort konnte nicht ins Wörterbuch aufgenommen werden.";
     Text[ hindi ] = "शब्द को शब्दकोश में नहीं जोड़ सकते है";
     Text[ slovak ] = "Nie je možné pridať slovo do slovníka";
+    Text[ hungarian ] = "A szó nem adható hozzá a szótárhoz";
+    Text[ slovenian ] = "Besede ni mogoče dodati v slovar";
 };
 String RID_SVXSTR_HMERR_HYPH
 {
@@ -518,7 +544,7 @@ String RID_SVXSTR_HMERR_HYPH
     TEXT [ portuguese_brazilian ] = "A divis�o sil�bica n�o est� dispon�vel" ;
     TEXT [ portuguese ] = "Divis�o sil�bica n�o se encontra dispon�vel" ;
     TEXT [ finnish ] = "Tavutusta ei ole k�ytett�viss�" ;
-    TEXT [ danish ] = "Orddelingen st�r ikke til r�dighed" ;
+    TEXT [ danish ] = "Orddelingen er ikke tilg�ngelig" ;
     TEXT [ french ] = "Coupure des mots non disponible" ;
     TEXT [ swedish ] = "Avstavningshj�lpen �r inte tillg�nglig" ;
     TEXT [ dutch ] = "Afbrekingshulp is niet beschikbaar" ;
@@ -540,6 +566,8 @@ String RID_SVXSTR_HMERR_HYPH
     TEXT[ hebrew ] = "Die Trennhilfe ist nicht verfügbar";
     TEXT[ hindi ] = "हाइफनेशन् उपलब्ध नहीं है";
     TEXT[ slovak ] = "Delenie slov nie je k dispozícii";
+    TEXT[ hungarian ] = "Az elválasztás nem elérhető.";
+    TEXT[ slovenian ] = "Deljenje besed ni na voljo";
 };
 String RID_SVXSTR_HMERR_THESAURUS
 {
@@ -552,7 +580,7 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT [ portuguese_brazilian ] = "O dicion�rio de sin�nimos n�o est� dispon�vel para o idioma selecionado. \nConfira a sua instala��o e instale o idioma desejado.\n" ;
     TEXT [ portuguese ] = "O dicion�rio de sin�nimos n�o est� dispon�vel para a l�ngua seleccionada. \nConfira a sua instala��o e, se necess�rio, instale a l�ngua desejada.\n" ;
     TEXT [ finnish ] = "Valitulle kielelle ei ole k�ytett�viss� synonyymisanastoa. \nTarkista asennetut osat ja asenna haluttu kieli\n" ;
-    TEXT [ danish ] = "Synonymordbogen st�r ikke til r�dighed for det angivne sprog.\nKontroller venligst din installation og installer i\ngivet fald det �nskede sprog" ;
+    TEXT [ danish ] = "Synonymordbogen er ikke tilg�ngelig for det angivne sprog.\nKontroller venligst din installation og installer det �nskede sprog\n" ;
     TEXT [ french ] = "Aucun dictionnaire des synonymes n'est disponible pour la langue s�lectionn�e.\nVeuillez v�rifiez l'installation et installer\nle cas �ch�ant la langue concern�e." ;
     TEXT [ swedish ] = "Ingen synonymordlista �r tillg�nglig f�r det inst�llda spr�ket. \nKontrollera din installation och installera\neventuellt �nskat spr�k." ;
     TEXT [ dutch ] = "Voor de ingestelde taal is geen Thesaurus beschikbaar. \nControleer uw installatie en\ninstalleer eventueel de gewenste taal." ;
@@ -574,6 +602,8 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT[ hebrew ] = "Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache";
     TEXT[ hindi ] = "चुने हुए भाषा केलिए विश्वकोश उपलब्ध नहीं है ।\nकृपया आपका प्रतिष्ठापन का जाँच कीजिए और आवश्यक भाषा की प्रतिष्ठापन कीजिए\n";
     TEXT[ slovak ] = "Slovník synoným nieje pre daný jazyk dostupný. \nProsím skontrolujte svoju inštaláciu a doplňte požadovaný jazyk\n";
+    TEXT[ hungarian ] = "A kiválasztott nyelvhez nincs elérhető szókincstár.\nKérem ellenőrizze a telepítést, és telepítse a megfelelő nyelvű szótárt.\n";
+    TEXT[ slovenian ] = "Za izbrani jezik ni na voljo slovarja sopomenk. \nProsimo, preverite namestitev in namestite željeni jezik\n";
 };
 String RID_SVXSTR_DIC_ERR_UNKNOWN
 {
@@ -604,6 +634,8 @@ String RID_SVXSTR_DIC_ERR_UNKNOWN
     Text[ hebrew ] = "Das Wort konnte aus einem unbekanntem Grund\nnicht ins Wörterbuch aufgenommen werden.";
     Text[ hindi ] = "अज्ञात कारण केलिए\nशब्द को शब्दकोश में नहीं जोड़ सकते है ।";
     Text[ slovak ] = "Nie je možné pridať slovo do slovníka\nz neznámeho dôvodu.";
+    Text[ hungarian ] = "Ismeretlen hiba miatt \na szót nem lehet hozzáadni a szótárhoz.";
+    Text[ slovenian ] = "Besede ni mogoče dodati v slovar\nzaradi neznanega vzroka.";
 };
 String RID_SVXSTR_DIC_ERR_FULL
 {
@@ -634,6 +666,8 @@ String RID_SVXSTR_DIC_ERR_FULL
     Text[ hebrew ] = "Das Wörterbuch ist bereits voll.";
     Text[ hindi ] = "शब्दकोश पहिले से ही भरा हुआ है ।";
     Text[ slovak ] = "Slovník je už plný.";
+    Text[ hungarian ] = "A szótár már tele van.";
+    Text[ slovenian ] = "Slovar je poln.";
 };
 String RID_SVXSTR_DIC_ERR_READONLY
 {
@@ -664,9 +698,12 @@ String RID_SVXSTR_DIC_ERR_READONLY
     Text[ hebrew ] = "Das Wörterbuch ist schreibgeschützt.";
     Text[ hindi ] = "शब्दकोश केवल पढ़ने केलिए ।";
     Text[ slovak ] = "Slovník je iba na čítanie.";
+    Text[ hungarian ] = "A szótár csak olvasható.";
+    Text[ slovenian ] = "Slovar je samo za branje";
 };
 
  // ********************************************************************** EOF
+
 
 
 
