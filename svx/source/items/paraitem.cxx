@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-23 10:34:23 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef PRODUCT
@@ -527,7 +527,7 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -655,7 +655,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -716,7 +716,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -828,7 +828,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1216,7 +1216,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
@@ -1233,7 +1233,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
                 if ( bComma )
                     rText += sal_Unicode(',');
                 rText += GetMetricText(
-                    (long)((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit );
+                    (long)((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
                 if ( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
                     rText += SVX_RESSTR(GetMetricId(ePresUnit));
                 bComma = sal_True;
@@ -1382,7 +1382,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1449,7 +1449,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
