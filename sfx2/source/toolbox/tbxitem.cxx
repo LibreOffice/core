@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:01:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,15 @@
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
 #include <drafts/com/sun/star/ui/XUIElementFactory.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XUIFUNCTIONLISTENER_HPP_
+#include <com/sun/star/ui/XUIFunctionListener.hpp>
+#endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -195,6 +204,7 @@ using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::container;
 using namespace ::drafts::com::sun::star::frame;
 using namespace ::drafts::com::sun::star::ui;
 
@@ -483,7 +493,8 @@ Any SAL_CALL SfxToolBoxControl::queryInterface( const Type & rType )
 throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                           SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindowListener*, this ) );
+                                           SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindowListener*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::frame::XSubToolbarController*, this ));
     return (aRet.hasValue() ? aRet : svt::ToolboxController::queryInterface( rType ));
 }
 
@@ -608,6 +619,27 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 }
 
+// XSubToolbarController
+::sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+::rtl::OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+{
+    return rtl::OUString();
+}
+
+void SAL_CALL SfxToolBoxControl::functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // must be implemented by sub-class
+}
+
+void SAL_CALL SfxToolBoxControl::updateImage() throw (::com::sun::star::uno::RuntimeException)
+{
+    // must be implemented by sub-class
+}
+
 // XToolbarController
 void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -718,25 +750,126 @@ throw (::com::sun::star::uno::RuntimeException)
             Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
 
             Window* pParent = VCLUnoHelper::GetWindow( xParent );
-            xLayoutManager->hideElement( aSubToolBarResName );
-            xLayoutManager->floatWindow( aSubToolBarResName );
 
             Reference< ::com::sun::star::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xSubToolBar.is() )
+            Reference< ::com::sun::star::beans::XPropertySet > xProp( xUIElement, UNO_QUERY );
+            if ( xSubToolBar.is() && xProp.is() )
             {
-                Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                ToolBox* pToolBar( 0 );
-                if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
-                    pToolBar = (ToolBox *)pTbxWindow;
+                rtl::OUString aPersistentString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
+                try
+                {
+                    Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+                    ToolBox* pToolBar( 0 );
+                    if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
+                    {
+                        pToolBar = (ToolBox *)pTbxWindow;
 
-                ::Size aSize = pToolBar->CalcPopupWindowSizePixel();    // use the same size as for popup mode
-                pToolBar->SetOutputSizePixel( aSize );
+                        Any a;
+                        a = xProp->getPropertyValue( aPersistentString );
+                        xProp->setPropertyValue( aPersistentString, makeAny( sal_False ));
 
-                xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
-                xLayoutManager->showElement( aSubToolBarResName );
+                        xLayoutManager->hideElement( aSubToolBarResName );
+                        xLayoutManager->floatWindow( aSubToolBarResName );
+
+                        xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
+                        xLayoutManager->showElement( aSubToolBarResName );
+
+                        xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" )), a );
+                    }
+                }
+                catch ( RuntimeException& e )
+                {
+                    throw e;
+                }
+                catch ( Exception& )
+                {
+                }
             }
         }
     }
+}
+
+::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& xFrame, const ::rtl::OUString& rSubToolBarResName )
+{
+    ::Size  aToolboxSize;
+/*
+    static WeakReference< XNameAccess >         xWeakPersistentWindowStateSupplier;
+    static WeakReference< XModuleManager >      xWeakModuleManager;
+
+    Reference< XMultiServiceFactory >   xServiceManager = getServiceManager();
+    Reference< XNameAccess >            xPersistentWindowStateSupplier;
+    Reference< XModuleManager >         xModuleManager;
+    rtl::OUString                       aModuleIdentifier;
+
+    xPersistentWindowStateSupplier = xWeakPersistentWindowStateSupplier;
+    if ( !xPersistentWindowStateSupplier.is() )
+    {
+        xPersistentWindowStateSupplier = Reference< XNameAccess >(
+            xServiceManager->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.ui.WindowStateConfiguration" ))),
+            UNO_QUERY );
+        xWeakPersistentWindowStateSupplier = xPersistentWindowStateSupplier;
+    }
+
+    xModuleManager = xWeakModuleManager;
+    if ( !xModuleManager.is() )
+    {
+        xModuleManager = Reference< XModuleManager >(
+            xServiceManager->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.frame.ModuleManager" ))),
+            UNO_QUERY );
+        xWeakModuleManager = xModuleManager;
+    }
+
+    try
+    {
+        aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
+    }
+    catch ( Exception& )
+    {
+    }
+
+    if ( aModuleIdentifier.getLength() > 0 && xPersistentWindowStateSupplier.is() )
+    {
+        Reference< XNameAccess > xPersistentWindowState;
+
+        // Retrieve persistent window state reference for our new module
+        try
+        {
+            if ( xPersistentWindowStateSupplier.is() )
+                xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= xPersistentWindowState;
+            if ( xPersistentWindowState.is() )
+            {
+                Any a;
+                com::sun::star::awt::Size aSize;
+                Sequence< PropertyValue > aWindowState;
+
+                a = xPersistentWindowState->getByName( rSubToolBarResName );
+                if ( a >>= aWindowState )
+                {
+                    for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
+                    {
+                        if ( aWindowState[n].Name.equalsAscii( "Size" ))
+                        {
+                            if ( aWindowState[n].Value >>= aSize )
+                            {
+                                aToolboxSize.setWidth( aSize.Width );
+                                aToolboxSize.setHeight( aSize.Height );
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        catch ( NoSuchElementException& )
+        {
+        }
+    }
+*/
+    return aToolboxSize;
 }
 
 void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSubToolBarResName )
@@ -745,6 +878,8 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 
     if ( pImpl->pBox )
     {
+        static WeakReference< XUIElementFactory > xWeakUIElementFactory;
+
         USHORT nItemId = pImpl->pBox->GetDownItemId();
 
         if ( !nItemId )
@@ -756,10 +891,16 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
         Reference< XUIElement >             xUIElement;
         Reference< XUIElementFactory >      xUIEementFactory;
 
-        xUIEementFactory = Reference< XUIElementFactory >(
+        xUIEementFactory = xWeakUIElementFactory;
+        if ( !xUIEementFactory.is() )
+        {
+            xUIEementFactory = Reference< XUIElementFactory >(
                 xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "drafts.com.sun.star.ui.UIElementFactoryManager" ))), UNO_QUERY );
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "drafts.com.sun.star.ui.UIElementFactoryManager" ))),
+                UNO_QUERY );
+            xWeakUIElementFactory = xUIEementFactory;
+        }
 
         Sequence< PropertyValue > aPropSeq( 2 );
         aPropSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
@@ -805,8 +946,12 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     pToolBar = (ToolBox *)pTbxWindow;
 
-                // calc and set size for popup mode
-                ::Size aSize = pToolBar->CalcPopupWindowSizePixel();
+                ::Size aSize = getPersistentFloatingSize( xFrame, rSubToolBarResName );
+                if ( aSize.Width() == 0 || aSize.Height() == 0 )
+                {
+                    // calc and set size for popup mode
+                    aSize = pToolBar->CalcPopupWindowSizePixel();
+                }
                 pToolBar->SetSizePixel( aSize );
 
                 // open subtoolbox in popup mode
@@ -1834,90 +1979,6 @@ void SfxAddonsToolBoxControl_Impl::Click( )
     SfxToolBoxControl::Click();
 }
 
-//--------------------------------------------------------------------
-/*
-
-SfxDragToolBoxControl_Impl::SfxDragToolBoxControl_Impl( USHORT nId, ToolBox& rBox )
-    :   SfxToolBoxControl( nId, rBox )
-{
-}
-
-Window* SfxDragToolBoxControl_Impl::CreateItemWindow( Window *pParent )
-{
-    return new SfxDragButton_Impl( pParent );
-}
-
-void SfxDragToolBoxControl_Impl::Select( BOOL bMod1 )
-{
-    SfxToolBoxControl::Select( bMod1 );
-//    GetBindings().Execute( SID_CREATELINK, NULL, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-}
-
-SfxDragButton_Impl::SfxDragButton_Impl( Window *pParent )
-    : FixedImage( pParent )
-{
-    SetBackground( pParent->GetBackground() );
-    Image aImage( SfxResId( RID_GREPIMAGE ) );
-    SetImage( aImage );
-    Size aSize( aImage.GetSizePixel() );
-    aSize.Width() += 6;
-    SetSizePixel( aSize );
-}
-
-void SfxDragButton_Impl::Command ( const CommandEvent& rCEvt )
-{
-    if( rCEvt.GetCommand() != COMMAND_STARTDRAG )
-        return;
-}
-
-void SfxDragButton_Impl::MouseMove( const ::MouseEvent& rEvt )
-{
-    SetPointer( Pointer( POINTER_HAND ) );
-}
-
-void SfxDragButton_Impl::MouseButtonDown( const ::MouseEvent& rEvt )
-{
-}
-*/
-/*
-SfxHistoryToolBoxControl_Impl::SfxHistoryToolBoxControl_Impl( USHORT nId, ToolBox& rBox )
-  : SfxToolBoxControl( nId, rBox )
-{
-    aTimer.SetTimeout( 250 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxHistoryToolBoxControl_Impl, Timeout ) );
-}
-
-void SfxHistoryToolBoxControl_Impl::Select( BOOL bMod1 )
-{
-    aTimer.Stop();
-    SfxToolBoxControl::Select( bMod1 );
-}
-
-IMPL_LINK( SfxHistoryToolBoxControl_Impl, Timeout, Timer *, pTimer )
-{
-    ToolBox& rBox = GetToolBox();
-
-    rBox.SetItemDown( GetId(), TRUE );
-
-    SfxApplication* pApp = SFX_APP();
-    ::Rectangle aRect(  rBox.GetItemRect( GetId() ) );
-    aRect.SetPos( rBox.OutputToScreenPixel( aRect.TopLeft() ) );
-
-
-//  SfxFrame *pTop = GetBindings().GetDispatcher()->GetFrame()->GetFrame()->GetTopFrame();
-//  if ( pTop->ExecuteHistoryMenu_Impl( GetId(), aRect, POPUPMENU_EXECUTE_UP ) )
-//      rBox.SetItemDown( GetId(), FALSE );
-
-    return 0;
-}
-
-void SfxHistoryToolBoxControl_Impl::Click( )
-{
-    aTimer.Start();
-    SfxToolBoxControl::Click();
-}
-*/
-
 SfxReloadToolBoxControl_Impl::SfxReloadToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
   : SfxToolBoxControl( nSlotId, nId, rBox )
 {
@@ -1941,33 +2002,3 @@ void SfxReloadToolBoxControl_Impl::Select( USHORT nModifier )
             xDispatch->dispatch( aTargetURL, aArgs );
     }
 }
-
-/*
-SfxUnoToolBoxControl* SfxToolBoxControl::CreateControl( const String& rCmd,
-        USHORT nId, ToolBox *pBox, SfxBindings &rBindings )
-{
-    return new SfxUnoToolBoxControl( rCmd, nId, pBox, rBindings );
-}
-
-SfxUnoToolBoxControl::SfxUnoToolBoxControl( const String& rCmd, USHORT nId,
-    ToolBox *pBox, SfxBindings& rBindings )
-    : SfxToolBoxControl( nId, *pBox, rBindings )
-{
-    UnBind();
-    pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
-    pUnoCtrl->acquire();
-    pUnoCtrl->GetNewDispatch();
-}
-
-SfxUnoToolBoxControl::~SfxUnoToolBoxControl()
-{
-    pUnoCtrl->UnBind();
-    pUnoCtrl->release();
-}
-
-void SfxUnoToolBoxControl::Select( BOOL bMod1 )
-{
-    pUnoCtrl->Execute();
-}
-*/
-
