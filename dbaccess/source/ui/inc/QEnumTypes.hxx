@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QEnumTypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:39:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,12 @@ namespace dbaui
         DROP,
         KEY,
         ADD_DROP
+    };
+
+    enum EImportMode
+    {
+        COPY,
+        MOVE
     };
 
 
