@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:49:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTMODE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -606,39 +609,39 @@ void ScXMLExportDataPilot::WriteDatePart(sal_Int32 nPart)
 {
     switch(nPart)
     {
-    case SC_DP_DATE_SECONDS :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_SECONDS);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_SECONDS);
         }
         break;
-    case SC_DP_DATE_MINUTES :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_MINUTES);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_MINUTES);
         }
         break;
-    case SC_DP_DATE_HOURS :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_HOURS);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_HOURS);
         }
         break;
-    case SC_DP_DATE_DAYS :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_DAYS);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_DAYS);
         }
         break;
-    case SC_DP_DATE_MONTHS :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_MONTHS);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_MONTHS);
         }
         break;
-    case SC_DP_DATE_QUARTERS :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_QUARTERS);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_QUARTERS);
         }
         break;
-    case SC_DP_DATE_YEARS :
+    case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_PART, XML_YEARS);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_YEARS);
         }
         break;
     }
@@ -699,7 +702,7 @@ void ScXMLExportDataPilot::WriteGroupDimAttributes(const ScDPSaveGroupDimension*
     if (pGroupDim)
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD, XML_TRUE);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_SOURCE_FIELD_NAME, pGroupDim->GetSourceDimName());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, pGroupDim->GetSourceDimName());
         if (pGroupDim->GetDatePart())
         {
             WriteDatePart(pGroupDim->GetDatePart());
@@ -708,13 +711,42 @@ void ScXMLExportDataPilot::WriteGroupDimAttributes(const ScDPSaveGroupDimension*
     }
 }
 
-void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveGroupDimension* pGroupDim)
+void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim)
 {
+    if (pNumGroupDim)
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD, XML_TRUE);
+        if (pNumGroupDim->GetDatePart())
+        {
+            WriteDatePart(pNumGroupDim->GetDatePart());
+            WriteNumGroupInfo(pNumGroupDim->GetDateInfo());
+        }
+        else
+        {
+            WriteNumGroupInfo(pNumGroupDim->GetInfo());
+        }
+    }
+}
+
+void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
+{
+    const ScDPSaveGroupDimension* pGroupDim = NULL;
+    const ScDPSaveNumGroupDimension* pNumGroupDim = NULL;
+    if (pDimData)
+    {
+        pGroupDim = pDimData->GetNamedGroupDim(pDim->GetName());
+        WriteGroupDimAttributes(pGroupDim);
+        pNumGroupDim = pDimData->GetNumGroupDim(pDim->GetName());
+        WriteNumGroupDim(pNumGroupDim);
+
+        DBG_ASSERT((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
+    }
+    if (pGroupDim || pNumGroupDim)
+        SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS, sal_True, sal_True);
     if (pGroupDim)
     {
         if (!pGroupDim->GetDatePart())
         {
-            SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS, sal_True, sal_True);
             sal_Int32 nCount = pGroupDim->GetGroupCount();
             for (sal_Int32 i = 0; i < nCount; ++i)
             {
@@ -735,23 +767,6 @@ void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveGroupDimension* p
                     }
                 }
             }
-        }
-    }
-}
-
-void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim)
-{
-    if (pNumGroupDim)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD, XML_TRUE);
-        if (pNumGroupDim->GetDatePart())
-        {
-            WriteDatePart(pNumGroupDim->GetDatePart());
-            WriteNumGroupInfo(pNumGroupDim->GetDateInfo());
-        }
-        else
-        {
-            WriteNumGroupInfo(pNumGroupDim->GetInfo());
         }
     }
 }
@@ -778,19 +793,11 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     ScXMLConverter::GetStringFromFunction( sValueStr,
         (sheet::GeneralFunction) pDim->GetFunction() );
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
-    const ScDPSaveGroupDimension* pGroupDim = NULL;
-    const ScDPSaveNumGroupDimension* pNumGroupDim = NULL;
-    if (pDimData)
-    {
-        pGroupDim = pDimData->GetNamedGroupDim(pDim->GetName());
-        WriteGroupDimAttributes(pGroupDim);
-        pNumGroupDim = pDimData->GetNumGroupDim(pDim->GetName());
-        WriteNumGroupDim(pNumGroupDim);
-    }
+
     SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD, sal_True, sal_True);
     WriteFieldReference(pDim);
     WriteLevels(pDim);
-    WriteGroupDimElements(pGroupDim);
+    WriteGroupDimElements(pDim, pDimData);
 }
 
 void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
