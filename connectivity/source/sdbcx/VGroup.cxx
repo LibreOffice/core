@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:06:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,11 @@ OGroup::OGroup(const ::rtl::OUString& _Name,sal_Bool _bCase) :  OGroup_BASE(m_aM
                         ,m_pUsers(NULL)
 {
     m_Name = _Name;
+}
+// -------------------------------------------------------------------------
+OGroup::~OGroup()
+{
+    delete m_pUsers;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OGroup::queryInterface( const Type & rType ) throw(RuntimeException)

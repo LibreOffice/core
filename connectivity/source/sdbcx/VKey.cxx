@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:06:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,11 @@ OKey::OKey( const ::rtl::OUString& _Name,
                         ,m_DeleteRule(_DeleteRule)
 {
     m_Name = _Name;
+}
+// -------------------------------------------------------------------------
+OKey::~OKey( )
+{
+    delete m_pColumns;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKey::queryInterface( const Type & rType ) throw(RuntimeException)

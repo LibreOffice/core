@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:43:01 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,19 @@ using namespace ::com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
 
+OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const ::std::vector< ::rtl::OUString> &_rVector)
+                     : m_rParent(_rParent)
+                     ,m_rMutex(_rMutex)
+                     ,m_aRefreshListeners(_rMutex)
+                     ,m_aNameMap(_bCase)
+{
+    for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
+}
+// -------------------------------------------------------------------------
+OCollection::~OCollection()
+{
+}
 // -------------------------------------------------------------------------
 void OCollection::disposing(void)
 {
