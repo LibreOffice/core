@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 13:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int fLock)
 
 OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
                                                          const Reference<XInterface>& xInst, GUID* pGuid)
-    : m_xInst(xInst),
+    : m_xInst(xInst), m_refCount(0),
       m_smgr( smgr)
 {
     m_guid = *pGuid;
