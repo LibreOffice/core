@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-07 15:37:38 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1915,14 +1915,78 @@ void ExcBlankMulblank::Save( XclExpStream& r )
 
 //---------------------------------------------------- class ExcNameListEntry -
 
-ExcNameListEntry::~ExcNameListEntry()
+ExcNameListEntry::ExcNameListEntry() :
+    pData( NULL ),
+    nFormLen( 0 ),
+    nTabNum( 0 ),
+    nBuiltInKey( EXC_BUILTIN_UNKNOWN )
 {
 }
 
 
-UINT16 ExcNameListEntry::GetNum( void ) const
+ExcNameListEntry::ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nKey ) :
+    pData( NULL ),
+    nFormLen( 0 ),
+    nTabNum( rRootData.pTabBuffer->GetExcTable( nScTab ) + 1 ),
+    nBuiltInKey( nKey )
+{
+}
+
+
+ExcNameListEntry::~ExcNameListEntry()
+{
+    DeleteData();
+}
+
+
+void ExcNameListEntry::DeleteData()
+{
+    if( pData )
+        delete[] pData;
+    pData = NULL;
+    nFormLen = 0;
+}
+
+
+void ExcNameListEntry::SetCode( const ExcUPN& rUPN )
+{
+    DeleteData();
+
+    nFormLen = rUPN.GetLen();
+    DBG_ASSERT( nFormLen, "ExcNameListEntry::SetCode - No Data, no Name!" );
+    if( nFormLen )
+    {
+        pData = new UINT8[ nFormLen ];
+        memcpy( pData, rUPN.GetData(), nFormLen );
+    }
+}
+
+
+void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
+{
+    DBG_ASSERT( pData, "ExcNameListEntry::SaveCont - no formula data" );
+    rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
+            << (UINT8)  0x00                // chKey (keyboard shortcut)
+            << (UINT8)  0x01                // cch (string len)
+            << nFormLen                     // cce (formula len)
+            << (UINT16) 0x0000              // ixals
+            << nTabNum                      // itab (table index, 1-based)
+            << (UINT32) 0x00000000          // cch
+            << (UINT8)  0x00                // string grbit
+            << nBuiltInKey;                 // string
+    rStrm.Write( pData, nFormLen );
+}
+
+
+UINT16 ExcNameListEntry::GetNum() const
 {
     return 0x0018;
+}
+
+
+ULONG ExcNameListEntry::GetLen() const
+{
+    return 16 + nFormLen;
 }
 
 
@@ -1931,12 +1995,9 @@ UINT16 ExcNameListEntry::GetNum( void ) const
 
 void ExcName::Init( BOOL bHid, BOOL bBIn )
 {
-    nFormLen = 0;
-    pData = NULL;
-    nTabNum = 0;
+    eBiff = pExcRoot->eDateiTyp;
     bHidden = bHid;
     bBuiltIn = bBIn;
-    bDummy = FALSE;
 }
 
 
@@ -1958,56 +2019,35 @@ void ExcName::BuildFormula( const ScRange& rRange )
     }
 
     EC_Codetype         eDummy;
-    ExcUPN              aExcUPN( pExcRoot, aArr, eDummy );
-    nFormLen = aExcUPN.GetLen();
-
-    DBG_ASSERT( nFormLen > 0, "+ExcName::BuildFormula(): No Data, no Name!" );
-
-    if( nFormLen > 0 )
-    {
-        pData = new UINT8[ nFormLen ];
-        memcpy( pData, aExcUPN.GetData(), nFormLen );
-    }
-    else
-        pData = NULL;
+    SetCode( ExcUPN( pExcRoot, aArr, eDummy ) );
 }
 
 
-ExcName::ExcName( RootData* pRD, ScRangeData* pRange ) : eBiff( pRD->eDateiTyp ), ExcRoot( pRD )
+ExcName::ExcName( RootData& rRootData, ScRangeData* pRange ) :
+        ExcRoot( &rRootData )
 {
     Init();
 
     String aRangeName;
     pRange->GetName( aRangeName );
+
+    // no PrintRanges, no PrintTitles
+    if( SetBuiltInName( aRangeName, EXC_BUILTIN_PRINTAREA ) ||
+        SetBuiltInName( aRangeName, EXC_BUILTIN_PRINTTITLES ) )
+        return;
+
     SetName( aRangeName );
-
-    bDummy = aName.CompareToAscii( ScFilterTools::GetBuiltInName( 0x06 ) ) == COMPARE_EQUAL;    // no PrintRanges
-
-    if( !bDummy )
+    const ScTokenArray* pTokArray = pRange->GetCode();
+    if( pTokArray )
     {
-        // Formel wandeln
-        const ScTokenArray* pTokArray = pRange->GetCode();
-        if( pTokArray )
-        {
-            EC_Codetype         eDummy;
-            ExcUPN aExcUPN( pRD, *pTokArray, eDummy );
-            nFormLen = aExcUPN.GetLen();
-
-            DBG_ASSERT( nFormLen > 0, "+ExcName::ExcName(): No Data, no Name!" );
-
-            if( nFormLen > 0 )
-            {
-                pData = new UINT8[ nFormLen ];
-                memcpy( pData, aExcUPN.GetData(), nFormLen );
-            }
-        }
+        EC_Codetype eDummy;
+        SetCode( ExcUPN( pExcRoot, *pTokArray, eDummy ) );
     }
 }
 
 
-ExcName::ExcName( RootData* pRD, ScDBData* pArea ) :
-        ExcRoot( pRD ),
-        eBiff( pRD->eDateiTyp )
+ExcName::ExcName( RootData& rRootData, ScDBData* pArea ) :
+        ExcRoot( &rRootData )
 {
     Init();
 
@@ -2021,9 +2061,8 @@ ExcName::ExcName( RootData* pRD, ScDBData* pArea ) :
 }
 
 
-ExcName::ExcName( RootData* pRD, const ScRange& rRange, const String& rName ) :
-        ExcRoot( pRD ),
-        eBiff( pRD->eDateiTyp )
+ExcName::ExcName( RootData& rRootData, const ScRange& rRange, const String& rName ) :
+        ExcRoot( &rRootData )
 {
     Init();
     SetUniqueName( rName );
@@ -2031,24 +2070,13 @@ ExcName::ExcName( RootData* pRD, const ScRange& rRange, const String& rName ) :
 }
 
 
-ExcName::ExcName( RootData* pRD, const ScRange& rRange, UINT8 nBuiltIn, BOOL bHid ) :
-        ExcRoot( pRD ),
-        eBiff( pRD->eDateiTyp )
+ExcName::ExcName( RootData& rRootData, const ScRange& rRange, UINT8 nKey, BOOL bHid ) :
+        ExcNameListEntry( rRootData, rRange.aStart.Tab(), nKey ),
+        ExcRoot( &rRootData )
 {
     Init( bHid, TRUE );
-
-    sal_Char aChar = (sal_Char) nBuiltIn;
-    aName.AssignAscii( &aChar, 1 );
-    nTabNum = rRange.aStart.Tab() + 1;
-
+    aName = sal_Unicode( nKey );
     BuildFormula( rRange );
-}
-
-
-ExcName::~ExcName()
-{
-    if( pData )
-        delete[] pData;
 }
 
 
@@ -2089,16 +2117,22 @@ void ExcName::SetUniqueName( const String& rRangeName )
 }
 
 
-void ExcName::Save( XclExpStream& rStrm )
+BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
 {
-    if( !bDummy )
-        ExcNameListEntry::Save( rStrm );
+    if( ScFilterTools::IsBuiltInName( nTabNum, rName, nKey ) )
+    {
+        nBuiltInKey = nKey;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 
 void ExcName::SaveCont( XclExpStream& rStrm )
 {
-    UINT8       nNameLen = ( UINT8 ) Min( aName.Len(), ( xub_StrLen ) 255 );
+    DBG_ASSERT( pData, "ExcNameListEntry::SaveCont - no formula data" );
+
+    UINT8       nNameLen = (UINT8) Min( aName.Len(), (xub_StrLen)255 );
     UINT16      nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
 
     rStrm   << nGrbit                   // grbit
@@ -2122,19 +2156,178 @@ void ExcName::SaveCont( XclExpStream& rStrm )
 }
 
 
-ULONG ExcName::GetLen( void ) const
+ULONG ExcName::GetLen() const
 {   // only a guess for Biff8 (8bit/16bit unknown)
-    return bDummy ? 0 : (14 + nFormLen + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), ( xub_StrLen ) 255 ));
+    return 14 + nFormLen + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), (xub_StrLen)255 );
+}
+
+
+
+// ---- class XclBuildInName -----------------------------------------
+
+XclBuildInName::XclBuildInName( RootData& rRootData, UINT16 nScTab, UINT8 nKey ) :
+    ExcNameListEntry( rRootData, nScTab, nKey )
+{
+}
+
+
+void XclBuildInName::CreateFormula( RootData& rRootData )
+{
+    if( aRL.Count() )
+    {
+        ExcUPN* pUPN = CreateExcUpnFromScRangeList( rRootData, aRL );
+        SetCode( *pUPN );
+        delete pUPN;
+    }
+}
+
+
+// ---- class XclPrintRange, class XclTitleRange ---------------------
+
+XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
+        XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTAREA )
+{
+    if( rRootData.pDoc->HasPrintRange() )
+    {
+        UINT16 nCount = rRootData.pDoc->GetPrintRangeCount( nScTab );
+        for( UINT16 nIx = 0 ; nIx < nCount ; nIx++ )
+            Append( *rRootData.pDoc->GetPrintRange( nScTab, nIx ) );
+    }
+    CreateFormula( rRootData );
+}
+
+
+
+
+XclPrintTitles::XclPrintTitles( RootData& rRootData, UINT16 nScTab ) :
+        XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTTITLES )
+{
+    UINT16 nExcTab = rRootData.pTabBuffer->GetExcTable( nScTab );
+    const ScRange* pRange = rRootData.pDoc->GetRepeatColRange( nScTab );
+    if( pRange )
+        Append( ScRange( pRange->aStart.Col(), 0, nExcTab,
+            pRange->aEnd.Col(), rRootData.nRowMax, nExcTab ) );
+    pRange = rRootData.pDoc->GetRepeatRowRange( nScTab );
+    if( pRange )
+        Append( ScRange( 0, pRange->aStart.Row(), nExcTab,
+            rRootData.nColMax, pRange->aEnd.Row(), nExcTab ) );
+    CreateFormula( rRootData );
 }
 
 
 
 //--------------------------------------------------------- class ExcNameList -
 
+ExcNameList::ExcNameList( RootData& rRootData ) :
+    nFirstPrintRangeIx( 0 ),
+    nFirstPrintTitleIx( 0 ),
+    nFirstOtherNameIx( 0 )
+{
+    ScDocument&         rDoc = *rRootData.pDoc;
+    XclExpTabNumBuffer& rTabBuffer = *rRootData.pTabBuffer;
+    USHORT              nCount, nIndex;
+    UINT16              nScTab, nExpIx;
+
+    // print ranges and print titles
+    UINT16 nScTabCount = rTabBuffer.GetScTabCount();
+    for( nScTab = 0; nScTab < nScTabCount; nScTab++ )
+        if( rTabBuffer.IsExportTable( nScTab ) )
+            Append( new XclPrintRange( rRootData, nScTab ) );
+    nFirstPrintTitleIx = List::Count();
+    for( nScTab = 0; nScTab < nScTabCount; nScTab++ )
+        if( rTabBuffer.IsExportTable( nScTab ) )
+            Append( new XclPrintTitles( rRootData, nScTab ) );
+    nFirstOtherNameIx = List::Count();
+
+    // named ranges
+    ScRangeName* pRangeNames = rDoc.GetRangeName();
+    DBG_ASSERT( pRangeNames, "ExcNameList::ExcNameList - missing range name list" );
+    nCount = pRangeNames->GetCount();
+    for( nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        ScRangeData* pData = (*pRangeNames)[ nIndex ];
+        DBG_ASSERT( pData, "ExcNameList::ExcNameList - missing range name" );
+
+        if ( !rRootData.bBreakSharedFormula || !pData->HasType( RT_SHARED ) )
+        {   // no SHARED_FORMULA_... names if not needed
+            ExcName* pExcName = new ExcName( rRootData, pData );
+            if( pExcName->IsDummy() )
+            {
+                nExpIx = GetBuiltInIx( pExcName );
+                delete pExcName;
+            }
+            else
+                nExpIx = Append( pExcName );
+            pData->SetExportIndex( nExpIx );
+        }
+    }
+
+    // data base ranges
+    ScDBCollection* pDBAreas = rDoc.GetDBCollection();
+    DBG_ASSERT( pDBAreas, "ExcNameList::ExcNameList - missing db area list" );
+    nCount = pDBAreas->GetCount();
+    for( nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        ScDBData* pData = (*pDBAreas)[ nIndex ];
+        DBG_ASSERT( pData, "ExcNameList::ExcNameList - missing db area" );
+
+        ExcName* pExcName = new ExcName( rRootData, pData );
+        nExpIx = Append( pExcName );
+        pData->SetExportIndex( nExpIx );
+    }
+}
+
+
 ExcNameList::~ExcNameList()
 {
     for( ExcNameListEntry* pName = _First(); pName; pName = _Next() )
         delete pName;
+}
+
+
+UINT16 ExcNameList::Append( ExcNameListEntry* pName )
+{
+    DBG_ASSERT( pName, "ExcNameList::Append - missing ExcName" );
+
+    BOOL bDelete = (pName->IsDummy() || (List::Count() >= 0xFFFE));
+    if( bDelete )
+        delete pName;
+    else
+        List::Insert( pName, LIST_APPEND );
+    return bDelete ? 0xFFFF : (UINT16) List::Count();
+}
+
+
+UINT16 ExcNameList::GetBuiltInIx( const ExcNameListEntry* pName )
+{
+    DBG_ASSERT( pName, "ExcNameList::GetBuiltInIx - missing ExcName" );
+
+    ULONG nFirstIx = 0;
+    ULONG nLastIx = 0;
+
+    switch( pName->GetBuiltInKey() )
+    {
+        case EXC_BUILTIN_PRINTAREA:
+            nFirstIx = nFirstPrintRangeIx; nLastIx = nFirstPrintTitleIx;
+        break;
+        case EXC_BUILTIN_PRINTTITLES:
+            nFirstIx = nFirstPrintTitleIx; nLastIx = nFirstOtherNameIx;
+        break;
+        default:
+            return 0xFFFF;
+    }
+
+    for( ULONG nIndex = nFirstIx; nIndex < nLastIx; nIndex++ )
+    {
+        ExcNameListEntry* pEntry = _Get( nIndex );
+        if( pEntry && (pEntry->GetTabIndex() == pName->GetTabIndex()) )
+        {
+            DBG_ASSERT( pEntry->GetBuiltInKey() == pName->GetBuiltInKey(),
+                        "ExcNameList::GetBuiltInIx - builtin key mismatch" );
+            return (UINT16)(nIndex + 1);
+        }
+    }
+    return 0xFFFF;
 }
 
 
@@ -4305,7 +4498,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
                         aParam.nCol2, aParam.nRow2, aParam.nTab );
         UINT16  nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
 
-        rRoot.pNameList->Append( new ExcName( &rRoot, aRange, EXC_BUILTIN_AUTOFILTER, TRUE ) );
+        rRoot.pNameList->Append( new ExcName( rRoot, aRange, EXC_BUILTIN_AUTOFILTER, TRUE ) );
 
         // advanced filter
         if( bAdvanced )
@@ -4313,7 +4506,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
             // filter criteria, excel allows only same table
             if( aAdvRange.aStart.Tab() == nTab )
                 rRoot.pNameList->Append(
-                    new ExcName( &rRoot, aAdvRange, EXC_BUILTIN_CRITERIA ) );
+                    new ExcName( rRoot, aAdvRange, EXC_BUILTIN_CRITERIA ) );
 
             // filter destination range, excel allows only same table
             if( !aParam.bInplace )
@@ -4322,7 +4515,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
                 aDestRange.aEnd.IncCol( nColCnt - 1 );
                 if( aDestRange.aStart.Tab() == nTab )
                     rRoot.pNameList->Append(
-                        new ExcName( &rRoot, aDestRange, EXC_BUILTIN_EXTRACT ) );
+                        new ExcName( rRoot, aDestRange, EXC_BUILTIN_EXTRACT ) );
             }
 
             pFilterMode = new ExcFilterMode;

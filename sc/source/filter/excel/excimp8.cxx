@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-06 12:43:11 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2400,9 +2400,10 @@ void ImportExcel8::Name( void )
 
     aIn >> nOpt;
     aIn.Ignore( 1 );
-    aIn >> nLenName >> nLenDef >> nSheet;
+    aIn >> nLenName >> nLenDef;
     aIn.Ignore( 2 );
-    aIn >> nLen;            // length of custom menu text
+    aIn >> nSheet           // sheet index (1-based)
+        >> nLen;            // length of custom menu text
     nLenSeekRel += nLen;
     aIn >> nLen;            // length of description text
     nLenSeekRel += nLen;
@@ -2428,7 +2429,7 @@ void ImportExcel8::Name( void )
     BOOL                bSkip = FALSE;
 
     if( bBuiltIn )
-        aName.AssignAscii( ScFilterTools::GetBuiltInName( cFirstChar ) );   // built-in name
+        ScFilterTools::GetBuiltInName( aName, cFirstChar, nSheet );
     else
         ScFilterTools::ConvertName( aName );
 

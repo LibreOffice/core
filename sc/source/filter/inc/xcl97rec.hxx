@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:46:46 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
-#ifndef SC_RANGELST_HXX
-#include "rangelst.hxx"
-#endif
 
 struct SingleRefData;
 struct ScExtTabOptions;
@@ -1097,53 +1094,6 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual ULONG               GetLen() const;
-};
-
-
-// ---- class XclBuildInName -----------------------------------------
-
-class XclBuildInName : public ExcNameListEntry, private ExcRoot
-{
-private:
-    UINT8                   nKey;
-    UINT8*                  pData;
-    UINT16                  nFormLen;
-    UINT16                  nTabNum;
-    ScRangeList             aRL;
-
-    inline ScRange*         _First()    { return (ScRange*) aRL.First(); }
-    inline ScRange*         _Next()     { return (ScRange*) aRL.Next(); }
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-protected:
-    void                    CreateFormula( void );
-public:
-                            XclBuildInName( RootData*, UINT16 nTabNum, UINT8 nKey );
-    virtual                 ~XclBuildInName();
-
-    inline void             Append( const ScRange& rNew )   { aRL.Append( rNew ); }
-
-    virtual void            Save( XclExpStream& rStrm );
-
-    virtual ULONG           GetLen() const;
-};
-
-
-// ---- class XclPrintRange, class XclTitleRange ---------------------
-
-class XclPrintRange : public XclBuildInName
-{
-public:
-                            XclPrintRange( RootData*, UINT16 nTabNum, ScDocument& rDoc );
-};
-
-
-
-class XclTitleRange : public XclBuildInName
-{
-public:
-                            XclTitleRange( RootData*, UINT16 nTabNum, ScDocument& rDoc );
 };
 
 

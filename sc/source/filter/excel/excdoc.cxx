@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-05 14:23:57 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,9 +315,9 @@ void ExcTable::AddWebQueries()
                             aRangeName = pRangeData->GetName();
                         else
                         {
-                            ExcName* pExcName = new ExcName( pExcRoot, aScDestRange, aURLObj.getBase() );
-                            pExcRoot->pNameList->Append( pExcName );
+                            ExcName* pExcName = new ExcName( *pExcRoot, aScDestRange, aURLObj.getBase() );
                             aRangeName = pExcName->GetName();
+                            pExcRoot->pNameList->Append( pExcName );
                         }
 
                         // create the web query record
@@ -357,12 +357,6 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nExcTabCount    = rTabBuffer.GetExcTabCount();
     UINT16  nCodenames      = rR.nCodenames;
 
-    ExcNameList*    pNameL      = rR.pNameList  = new ExcNameList;
-    ExcPalette2*    pPalette2   = rR.pPalette2  = new ExcPalette2( *rR.pColor );
-    UsedFontList*   pFontRecs   = rR.pFontRecs  = new UsedFontList( rR );
-    UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList( rR );
-    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pPalette2, *pFontRecs, *pFormRecs );
-
     XclSstList*         pSstRecs            = NULL;
     XclExternsheetList* pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
     if ( rR.eDateiTyp >= Biff8 )
@@ -370,6 +364,12 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         rR.pSstRecs         = pSstRecs          = new XclSstList;
         rR.pExternsheetRecs = pExternsheetRecs  = new XclExternsheetList( &rR );
     }
+
+    ExcNameList*    pNameList   = rR.pNameList  = new ExcNameList( rR );
+    ExcPalette2*    pPalette2   = rR.pPalette2  = new ExcPalette2( *rR.pColor );
+    UsedFontList*   pFontRecs   = rR.pFontRecs  = new UsedFontList( rR );
+    UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList( rR );
+    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pPalette2, *pFontRecs, *pFormRecs );
 
     rR.pObjRecs = NULL;             // per sheet
     rR.pNoteRecs = NULL;            // per sheet
@@ -445,33 +445,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
                 pExcExtShtList->Add( new ExcExternsheet( &rR, nC ) );
 
         // Names
-        Add( pNameL );
-
-        ScRangeName&            rRangeNames = *rDoc.GetRangeName();
-        UINT16                  j, nNames;
-        nNames = rRangeNames.GetCount();
-        for( j = 0 ; j < nNames ; j++ )
-        {
-            ScRangeData*        pData = ( ScRangeData * ) rRangeNames[ j ];
-            DBG_ASSERT( pData, "-ExcTable::Header(): 1, 2, 3 - wer zaehlt hier falsch?" );
-
-            if ( !rR.bBreakSharedFormula || !pData->HasType( RT_SHARED ) )
-            {   // no SHARED_FORMULA_... names if not needed
-                pData->SetExportIndex( rR.nRangeNameIndex++ );
-
-                pNameL->Append( new ExcName( &rR, pData ) );
-            }
-        }
-        ScDBCollection&         rDBAreas = *rDoc.GetDBCollection();
-        nNames = rDBAreas.GetCount();
-        for( j = 0 ; j < nNames ; j++ )
-        {
-            ScDBData*           pData = ( ScDBData * ) rDBAreas[ j ];
-            DBG_ASSERT( pData, "-ExcTable::Header(): 1, 2, 3 - wer zaehlt hier falsch?" );
-
-            pData->SetExportIndex( rR.nRangeNameIndex++ );
-            pNameL->Append( new ExcName( &rR, pData ) );
-        }
+        Add( pNameList );
 
         Add( new ExcDummy_040 );
         Add( new Exc1904( rDoc ) );
@@ -569,46 +543,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // SUPBOOKs, XCTs, CRNs, EXTERNSHEET
         Add( pExternsheetRecs );
         // NAMEs
-        Add( pNameL );
-
-        ScRangeName&        rRangeNames = *rDoc.GetRangeName();
-        UINT16              j, nNames;
-        nNames = rRangeNames.GetCount();
-        for( j = 0 ; j < nNames ; j++ )
-        {
-            ScRangeData*    pData = ( ScRangeData * ) rRangeNames[ j ];
-            DBG_ASSERT( pData, "-ExcTable::Header(): 1, 2, 3 - wer zaehlt hier falsch?" );
-
-            if ( !rR.bBreakSharedFormula || !pData->HasType( RT_SHARED ) )
-            {   // no SHARED_FORMULA_... names if not needed
-                ExcName*        pExcNameRec = new ExcName( &rR, pData );
-
-                if( pExcNameRec->IsDummy() )
-                    pData->SetExportIndex( 0xFFFF );
-                else
-                    pData->SetExportIndex( rR.nRangeNameIndex++ );
-
-                pNameL->Append( pExcNameRec );
-            }
-        }
-
-        // print range and titles
-        for( nC = 0 ; nC < nScTabCount ; nC++ )
-        {
-            pNameL->Append( new XclPrintRange( &rR, nC, rDoc ) );
-            pNameL->Append( new XclTitleRange( &rR, nC, rDoc ) );
-        }
-
-        ScDBCollection&     rDBAreas = *rDoc.GetDBCollection();
-        nNames = rDBAreas.GetCount();
-        for( j = 0 ; j < nNames ; j++ )
-        {
-            ScDBData*       pData = ( ScDBData * ) rDBAreas[ j ];
-            DBG_ASSERT( pData, "-ExcTable::Header(): 1, 2, 3 - wer zaehlt hier falsch?" );
-
-            pData->SetExportIndex( rR.nRangeNameIndex++ );
-            pNameL->Append( new ExcName( &rR, pData ) );
-        }
+        Add( pNameList );
 
         // MSODRAWINGGROUP per-document data
         Add( new XclMsodrawinggroup( rR, ESCHER_DggContainer ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:56:08 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ RootData::RootData( void )
     pXFRecs = NULL;
     pExtSheetCntAndRecs = NULL;
     nRowMax = 0;
-    nRangeNameIndex = 1;
 
     pSstRecs = NULL;
     pExternsheetRecs = NULL;

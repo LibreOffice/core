@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:52:01 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,9 +606,10 @@ void ImportExcel::Name25( void )
 
         aIn >> nOpt;
         aIn.Ignore( 1 );
-        aIn >> nLenName >> nLenDef >> nSheet;
+        aIn >> nLenName >> nLenDef;
         aIn.Ignore( 2 );
-        aIn >> nLen;            // length of custom menu text
+        aIn >> nSheet
+            >> nLen;            // length of custom menu text
         nLenSeekRel += nLen;
         aIn >> nLen;            // length of description text
         nLenSeekRel += nLen;
@@ -630,7 +631,7 @@ void ImportExcel::Name25( void )
 
         if( bBuildIn )
         {// Build-in name
-            aName.AssignAscii( ScFilterTools::GetBuiltInName( cFirstNameChar ) );
+            ScFilterTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
         }
         else
             ScFilterTools::ConvertName( aName );
@@ -1883,21 +1884,21 @@ void ImportExcel::Name34( void )
     if( nAttr & EXC_NAME_VB )
         // function, command or name on macro sheet?
         pFormConv->GetDummy( pErgebnis );
-    else if( bBuildIn )
+    else
     {
-        aIn.PushPosition();
+        if( bBuildIn )
+        {
+            aIn.PushPosition();
 
-        if( bPrintArea )
-            pFormConv->Convert( *pPrintRanges, nLenExpr, FT_RangeName );
-        else if( bPrintTitles )
-            pFormConv->Convert( *pPrintTitles, nLenExpr, FT_RangeName );
+            if( bPrintArea )
+                pFormConv->Convert( *pPrintRanges, nLenExpr, FT_RangeName );
+            else if( bPrintTitles )
+                pFormConv->Convert( *pPrintTitles, nLenExpr, FT_RangeName );
 
-        aIn.PopPosition();
-
+            aIn.PopPosition();
+        }
         pFormConv->Convert( pErgebnis, nLenExpr, FT_RangeName );
     }
-    else
-        pFormConv->Convert( pErgebnis, nLenExpr, FT_RangeName );
 
     if( bHidden ) // ohne hidden und complex
         pExcRoot->pRNameBuff->Store( aName, NULL );

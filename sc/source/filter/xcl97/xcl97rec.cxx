@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:48:44 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2426,108 +2426,6 @@ UINT16 XclCodename::GetNum() const
 ULONG XclCodename::GetLen() const
 {
     return aName.GetByteCount();
-}
-
-
-
-// ---- class XclBuildInName -----------------------------------------
-
-XclBuildInName::XclBuildInName( RootData* p, UINT16 nTab, UINT8 nK ) :
-    ExcRoot( p ),
-    nTabNum( nTab ),
-    nKey( nK )
-{
-    pData = NULL;
-    nFormLen = 0;
-}
-
-
-XclBuildInName::~XclBuildInName()
-{
-    if( pData )
-        delete[] pData;
-}
-
-
-void XclBuildInName::CreateFormula( void )
-{
-    if( !pData )
-    {
-        ExcUPN*         p = CreateExcUpnFromScRangeList( *pExcRoot, aRL );
-
-        nFormLen = p->GetLen();
-
-        if( nFormLen )
-        {
-            pData = new UINT8[ nFormLen ];
-            memcpy( pData, p->GetData(), nFormLen );
-        }
-
-        delete p;
-    }
-}
-
-
-void XclBuildInName::SaveCont( XclExpStream& rStrm )
-{
-            //  grbit (built in only )      chKey           cch
-    rStrm   << ( UINT16 ) 0x0020 << ( UINT8 ) 0x00 << ( UINT8 ) 0x01
-            //  cce         itab                cch
-            << nFormLen << nTabNum << ( UINT32 ) 0x00000001
-            //      grbit string
-            << ( UINT16 ) 0x00000 << ( UINT8 ) 0x00 << nKey;
-
-    rStrm.Write( pData, nFormLen );
-}
-
-
-void XclBuildInName::Save( XclExpStream& rStrm )
-{
-    if( pData )
-        ExcNameListEntry::Save( rStrm );
-}
-
-
-ULONG XclBuildInName::GetLen() const
-{
-    return 16 + nFormLen;
-}
-
-
-
-// ---- class XclPrintRange, class XclTitleRange ---------------------
-
-XclPrintRange::XclPrintRange( RootData* p, UINT16 nTabNum, ScDocument& rDoc ) : XclBuildInName( p, nTabNum, 0x06 )
-{
-    if( rDoc.HasPrintRange() )
-    {
-        UINT16          nAnz = rDoc.GetPrintRangeCount( nTabNum );
-
-        for( UINT16 n = 0 ; n < nAnz ; n++ )
-            Append( *rDoc.GetPrintRange( nTabNum, n ) );
-
-        CreateFormula();
-    }
-}
-
-
-
-
-XclTitleRange::XclTitleRange( RootData* p, UINT16 nTabNum, ScDocument& rDoc ) : XclBuildInName( p, nTabNum, 0x07 )
-{
-    const ScRange*      pRepColRange = rDoc.GetRepeatColRange( nTabNum );
-    const ScRange*      pRepRowRange = rDoc.GetRepeatRowRange( nTabNum );
-
-    if( pRepColRange || pRepRowRange )
-    {
-        if( pRepColRange )
-            Append( *pRepColRange );
-
-        if( pRepRowRange )
-            Append( *pRepRowRange );
-
-        CreateFormula();
-    }
 }
 
 

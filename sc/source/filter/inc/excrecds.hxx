@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-05 14:27:07 $
+ *  last change: $Author: dr $ $Date: 2001-06-13 12:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #ifndef SC_FILTER_HXX
 #include "filter.hxx"
 #endif
+#ifndef SC_RANGELST_HXX
+#include "rangelst.hxx"
+#endif
+
 #ifndef _XFBUFF_HXX
 #include "xfbuff.hxx"
 #endif
@@ -875,51 +879,95 @@ inline void ExcBlankMulblank::Append( UINT16 nXF, UINT16 nCount )
 
 class ExcNameListEntry : public ExcRecord
 {
-private:
 protected:
+    UINT8*                  pData;
+    UINT16                  nFormLen;
+
+    UINT16                  nTabNum;            // Excel index, 1-based, 0==none
+    UINT8                   nBuiltInKey;
+
+    void                    DeleteData();
+    void                    SetCode( const ExcUPN& rUPN );
+
+                            // default: save builtin key
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
+                            ExcNameListEntry();
+                            ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nKey );
     virtual                 ~ExcNameListEntry();
-    virtual UINT16          GetNum( void ) const;
+
+    inline UINT16           GetTabIndex() const     { return nTabNum; }
+    inline UINT8            GetBuiltInKey() const   { return nBuiltInKey; }
+    inline BOOL             IsDummy() const         { return pData == NULL; }
+
+    virtual UINT16          GetNum() const;
+    virtual ULONG           GetLen() const;
 };
 
 
 //------------------------------------------------------------- class ExcName -
 
-class ExcName : public ExcNameListEntry, ExcRoot
+class ExcName : public ExcNameListEntry, public ExcRoot
 {
 private:
     String                  aName;
-    UINT8*                  pData;
-    UINT16                  nFormLen;
-    UINT16                  nTabNum;
+    BiffTyp                 eBiff;
     BOOL                    bHidden;
     BOOL                    bBuiltIn;
-    BOOL                    bDummy;
-    BiffTyp                 eBiff;
 
     void                    Init( BOOL bHid = FALSE, BOOL bBIn = FALSE );
     void                    BuildFormula( const ScRange& rRange );
 
-    void                    SaveCont( XclExpStream& rStrm );
-
-protected:
     void                    SetName( const String& rRangeName );
     void                    SetUniqueName( const String& rRangeName );
+    BOOL                    SetBuiltInName( const String& rName, UINT8 nKey );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
-                            ExcName( RootData* pRD, ScRangeData* pRange );
-                            ExcName( RootData* pRD, ScDBData* pArea );
-                            ExcName( RootData* pRD, const ScRange& rRange,
+                            ExcName( RootData& rRootData, ScRangeData* pRange );
+                            ExcName( RootData& rRootData, ScDBData* pArea );
+                            ExcName( RootData& rRootData, const ScRange& rRange,
                                     const String& rName );
-                            ExcName( RootData* pRD, const ScRange& rRange,
-                                    UINT8 nBuiltIn, BOOL bHid = FALSE );
-    virtual                 ~ExcName();
+                            ExcName( RootData& rRootData, const ScRange& rRange,
+                                    UINT8 nKey, BOOL bHid = FALSE );
 
-    virtual void            Save( XclExpStream& rStrm );
-    virtual ULONG           GetLen( void ) const;
+    inline const String&    GetName() const     { return aName; }
 
-    const String&           GetName( void ) const   { return aName; }
-    inline BOOL             IsDummy( void ) const   { return bDummy; }
+    virtual ULONG           GetLen() const;
+};
+
+
+// ---- class XclBuildInName -----------------------------------------
+
+class XclBuildInName : public ExcNameListEntry
+{
+private:
+    ScRangeList             aRL;
+
+protected:
+    inline void             Append( const ScRange& rNew )   { aRL.Append( rNew ); }
+    void                    CreateFormula( RootData& rRootData );
+
+public:
+                            XclBuildInName( RootData& rRootData, UINT16 nScTab, UINT8 nKey );
+};
+
+
+// ---- class XclPrintRange, class XclTitleRange ---------------------
+
+class XclPrintRange : public XclBuildInName
+{
+public:
+                            XclPrintRange( RootData& rRootData, UINT16 nScTab );
+};
+
+
+class XclPrintTitles : public XclBuildInName
+{
+public:
+                            XclPrintTitles( RootData& rRootData, UINT16 nScTab );
 };
 
 
@@ -928,15 +976,21 @@ public:
 class ExcNameList : public ExcEmptyRec, private List
 {
 private:
-    inline ExcNameListEntry* _First()   { return (ExcNameListEntry*) List::First(); }
-    inline ExcNameListEntry* _Next()    { return (ExcNameListEntry*) List::Next(); }
+    ULONG                   nFirstPrintRangeIx;
+    ULONG                   nFirstPrintTitleIx;
+    ULONG                   nFirstOtherNameIx;
 
-protected:
+    inline ExcNameListEntry* _First()       { return (ExcNameListEntry*) List::First(); }
+    inline ExcNameListEntry* _Next()        { return (ExcNameListEntry*) List::Next(); }
+    inline ExcNameListEntry* _Get( ULONG nIndex ) const
+                                            { return (ExcNameListEntry*) List::GetObject( nIndex ); }
+
 public:
+                            ExcNameList( RootData& rRootData );
     virtual                 ~ExcNameList();
 
-    inline void             Append( ExcNameListEntry* pName )
-                                { List::Insert( pName, LIST_APPEND ); }
+    UINT16                  Append( ExcNameListEntry* pName );
+    UINT16                  GetBuiltInIx( const ExcNameListEntry* pName );
 
     virtual void            Save( XclExpStream& rStrm );
 };
