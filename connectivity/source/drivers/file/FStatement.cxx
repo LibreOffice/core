@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-20 09:56:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-29 10:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,11 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if(xTabs.begin() == xTabs.end())
+        {
+            if(!aErr.getLength())
+                aErr = ::rtl::OUString::createFromAscii("Unknown table!");
             throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+        }
 
         OResultSet* pResult = createResultSet();
         pResult->OpenImpl();
