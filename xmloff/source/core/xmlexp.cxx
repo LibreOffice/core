@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 14:33:45 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,7 +1391,7 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
 {
     if (!pProgressBarHelper)
     {
-        pProgressBarHelper = new ProgressBarHelper(xStatusIndicator, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XML Export" )));
+        pProgressBarHelper = new ProgressBarHelper(xStatusIndicator, sal_True);
 
         if (pProgressBarHelper && xExportInfo.is())
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 17:19:03 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,22 +82,18 @@ const sal_Int32 nDefaultProgressBarRange = 1000000;
 const float fProgressStep = 0.5;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
-                                    const ::rtl::OUString& rText)
+                                    const sal_Bool bTempStrict)
     : fOldPercent(0.0),
     nRange(nDefaultProgressBarRange),
     xStatusIndicator(xTempStatusIndicator),
     nReference(0),
-    nValue(0)
+    nValue(0),
+    bStrict(bTempStrict)
 {
-//  if (xStatusIndicator.is())
-//      xStatusIndicator->setText(rText);
-//      xStatusIndicator->start(rText, nProgressBarRange);
 }
 
 ProgressBarHelper::~ProgressBarHelper()
 {
-//  if (xStatusIndicator.is())
-//      xStatusIndicator->end();
 }
 
 sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
@@ -122,7 +118,7 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 
 void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
-    if (nTempValue >= nValue)
+    if ((nTempValue >= nValue) && (!bStrict || (bStrict && (nTempValue <= nReference))))
     {
         // #91317# no progress bar with values > 100%
         nValue = (nTempValue > nReference) ? nReference : nTempValue;
@@ -139,6 +135,6 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
         }
     }
     else
-        DBG_ERROR("tried to decrement the progressbar");
+        DBG_ERROR("tried to set a wrong value on the progressbar");
 }
 
