@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-05-21 14:33:43 $
+ *  last change: $Author: af $ $Date: 2002-05-30 15:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ namespace accessibility {
 class AccessibleShape;
 
 class ChildDescriptor; // See below for declaration.
-class CMShapeIterator;
 
 
 /** This class contains the actual implementation of the children manager.
