@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-03 16:22:33 $
+ *  last change: $Author: hdu $ $Date: 2002-05-29 12:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,19 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef _OSL_FILE_HXX
+#include <osl/file.hxx>
+#endif
+#ifndef _OSL_THREAD_HXX
+#include <osl/thread.hxx>
+#endif
+#ifndef _OSL_PROCESS_HXX
+#include <osl/process.h>
+#endif
 
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
+#endif
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
@@ -170,10 +182,10 @@ struct ImplEnumInfo
 
 static CharSet ImplCharSetToSal( BYTE nCharSet )
 {
+    rtl_TextEncoding eTextEncoding;
+
     if ( nCharSet == OEM_CHARSET )
     {
-        rtl_TextEncoding eTextEncoding;
-
         UINT nCP = (USHORT)GetOEMCP();
         switch ( nCP )
         {
@@ -200,11 +212,16 @@ static CharSet ImplCharSetToSal( BYTE nCharSet )
             case 65400: eTextEncoding = RTL_TEXTENCODING_SYMBOL; break;
             default:    eTextEncoding = RTL_TEXTENCODING_DONTKNOW; break;
         };
-
-        return eTextEncoding;
     }
     else
-        return rtl_getTextEncodingFromWindowsCharset( nCharSet );
+    {
+        if( nCharSet )
+            eTextEncoding = rtl_getTextEncodingFromWindowsCharset( nCharSet );
+        else
+            eTextEncoding = RTL_TEXTENCODING_UNICODE;
+    }
+
+    return eTextEncoding;
 }
 
 // -----------------------------------------------------------------------
@@ -392,6 +409,8 @@ static void ImplLogMetricToDevFontDataA( const LOGFONTA* pLogFont,
     pData->mbOrientation    = (nFontType & RASTER_FONTTYPE) == 0;
     pData->mbDevice         = (pMetric->tmPitchAndFamily & TMPF_DEVICE) != 0;
     pData->mnQuality        = 0;
+    if( pMetric->tmPitchAndFamily & TMPF_TRUETYPE ) // prefer truetype
+        pData->mnQuality    += 100;
 }
 
 // -----------------------------------------------------------------------
@@ -424,6 +443,8 @@ static void ImplLogMetricToDevFontDataW( const LOGFONTW* pLogFont,
     pData->mbOrientation    = (nFontType & RASTER_FONTTYPE) == 0;
     pData->mbDevice         = (pMetric->tmPitchAndFamily & TMPF_DEVICE) != 0;
     pData->mnQuality        = 0;
+    if( pMetric->tmPitchAndFamily & TMPF_TRUETYPE ) // prefer truetype
+        pData->mnQuality    += 100;
 }
 
 // -----------------------------------------------------------------------
@@ -1397,6 +1418,48 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
 
 void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
+    // make sure all fonts are registered at least temporarily
+    static bool bOnce = true;
+    if( bOnce )
+    {
+        bOnce = false;
+
+        // determine font path
+        // since we are only interested in fonts that could not be
+        // registered before because of missing administration rights
+        // only the font path of the user installation is needed
+        ::rtl::OUString aPath;
+        osl_getExecutableFile( &aPath.pData );
+        aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
+        String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
+        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype") );
+
+        // collect fonts in font path that could not be registered
+        osl::Directory aFontDir( aFontDirUrl );
+        osl::FileBase::RC rcOSL = aFontDir.open();
+        if( rcOSL == osl::FileBase::E_None )
+        {
+            osl::DirectoryItem aDirItem;
+            while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
+            {
+                osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+                rcOSL = aDirItem.getFileStatus( aFileStatus );
+
+                ::rtl::OUString aUSytemPath;
+                OSL_VERIFY( osl_File_E_None
+                    == ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
+                if( aSalShlData.mbWNT )
+                    ::AddFontResourceW( aUSytemPath.getStr() );
+                else
+                {
+                    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
+                    ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
+                    ::AddFontResourceA( aCFileName.getStr() );
+                }
+            }
+        }
+    }
+
     ImplEnumInfo aInfo;
     aInfo.mhDC          = maGraphicsData.mhDC;
     aInfo.mpList        = pList;
