@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:32:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,11 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
 #endif
 
 #ifndef _SV_SVDATA_HXX
@@ -112,11 +110,7 @@
 #endif
 #include <unowrap.hxx>
 
-#ifdef REMOTE_APPSERVER
-#include "rmwindow.hxx"
-#endif
 
-#pragma hdrstop
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -589,7 +583,6 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
     if ( pWindow->mbFrame )
     {
-#ifndef REMOTE_APPSERVER
         ULONG           nState = rData.GetState();
         SalFrameState   aState;
         aState.mnMask   = rData.GetMask();
@@ -646,11 +639,6 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         }
 
         mpFrame->SetWindowState( &aState );
-#else
-        ByteString aStr;
-        ImplWindowStateToStr( rData, aStr );
-        mpFrame->SetWindowState( ::rtl::OUString( aStr.GetBuffer(), aStr.Len(), RTL_TEXTENCODING_ASCII_US ) );
-#endif
 
         // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
         // mit der richtigen Groesse rechnen
@@ -719,7 +707,6 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 
     if ( pWindow->mbFrame )
     {
-#ifndef REMOTE_APPSERVER
         SalFrameState aState;
         aState.mnMask = 0xFFFFFFFF;
         if ( mpFrame->GetWindowState( &aState ) )
@@ -743,13 +730,6 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
         }
         else
             rData.SetMask( 0 );
-#else
-        ::rtl::OUString aStr( mpFrame->GetWindowState() );
-        ByteString aByteStr( aStr.getStr(), aStr.getLength(), RTL_TEXTENCODING_ASCII_US );
-        WindowStateData aData;
-        ImplWindowStateFromStr( aData, aByteStr );
-        rData = aData;
-#endif
     }
     else
     {
