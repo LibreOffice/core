@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-30 15:14:02 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 15:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
     pModelStorage = NULL;
     mpForbiddenCharactersTable = NULL;
+    mbModelLocked = FALSE;
 
 #ifdef __LITTLEENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
