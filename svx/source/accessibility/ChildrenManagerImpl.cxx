@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: af $ $Date: 2002-09-24 12:08:31 $
+ *  last change: $Author: af $ $Date: 2002-12-04 13:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
                 if (I->mxShape.is())
                 {
                     Reference<lang::XComponent> xComponent (I->mxAccessibleShape, uno::UNO_QUERY);
-                    xComponent->dispose ();
+                    if (xComponent.is())
+                        xComponent->dispose ();
                     I->mxAccessibleShape = NULL;
                 }
             }
@@ -415,6 +416,80 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
                 AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
                 aNewShape,
                 uno::Any());
+        }
+    }
+}
+
+
+
+
+void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
+{
+    if (rxShape.is())
+    {
+        ::osl::ClearableMutexGuard aGuard (maMutex);
+
+        // Test visibility of the shape.
+        Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
+        Rectangle aBoundingBox (
+            rxShape->getPosition().X,
+            rxShape->getPosition().Y,
+            rxShape->getPosition().X + rxShape->getSize().Width,
+            rxShape->getPosition().Y + rxShape->getSize().Height);
+        if (aBoundingBox.IsOver (aVisibleArea))
+        {
+            // Add shape to list of visible shapes.
+            maVisibleChildren.push_back (ChildDescriptor (rxShape));
+
+            // Create accessibility object.
+            ChildDescriptorListType::iterator I (maVisibleChildren.end());
+            GetChild (*--I);
+
+            // Inform listeners about new child.
+            uno::Any aNewShape;
+            aNewShape <<= I->mxAccessibleShape;
+            aGuard.clear();
+            mrContext.CommitChange (
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                aNewShape,
+                uno::Any());
+        }
+    }
+}
+
+
+
+
+void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape)
+{
+    if (rxShape.is())
+    {
+        ::osl::ClearableMutexGuard aGuard (maMutex);
+
+        // Search shape in list of visible children.
+        ChildDescriptorListType::iterator I (
+            find (maVisibleChildren.begin(), maVisibleChildren.end(),
+                ChildDescriptor (rxShape)));
+        if (I != maVisibleChildren.end())
+        {
+            // Remove descriptor from that list.
+            maVisibleChildren.erase (I);
+            Reference<XAccessible> xAccessibleShape (I->mxAccessibleShape);
+            I->mxAccessibleShape = NULL;
+
+            // Send event that the shape has been removed.
+            uno::Any aOldValue;
+            aOldValue <<= xAccessibleShape;
+            aGuard.clear();
+            mrContext.CommitChange (
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                uno::Any(),
+                aOldValue);
+
+            // Dispose and remove the object.
+            Reference<lang::XComponent> xComponent (xAccessibleShape, uno::UNO_QUERY);
+            //            if (xComponent.is())
+                //                xComponent->dispose ();
         }
     }
 }
@@ -580,14 +655,11 @@ void SAL_CALL
         RTL_CONSTASCII_USTRINGPARAM("ShapeRemoved"));
 
 
-    if (rEventObject.EventName.equals (sShapeInserted)
-        || rEventObject.EventName.equals (sShapeRemoved))
-    {
-        // A child may have been added or removed.  Call Update() to
-        // make the change visible.
-        Update (false);
-        UpdateSelection ();
-    }
+    if (rEventObject.EventName.equals (sShapeInserted))
+        AddShape (Reference<drawing::XShape>(rEventObject.Source, uno::UNO_QUERY));
+    else if (rEventObject.EventName.equals (sShapeRemoved))
+        RemoveShape (Reference<drawing::XShape>(rEventObject.Source, uno::UNO_QUERY));
+    // else ignore unknown event.
 }
 
 
@@ -859,10 +931,10 @@ AccessibleShape* ChildDescriptor::GetAccessibleShape (void) const
  */
 bool ChildDescriptor::operator == (const ChildDescriptor& aDescriptor)
 {
-    if (mxShape == aDescriptor.mxShape)
+    if (mxShape.get() == aDescriptor.mxShape.get())
         if (mxShape.is())
             return true;
-        else if (mxAccessibleShape == aDescriptor.mxAccessibleShape)
+        else if (mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get())
             return true;
 
     return false;
@@ -877,7 +949,7 @@ bool ChildDescriptor::operator == (const ChildDescriptor& aDescriptor)
 */
 bool ChildDescriptor::operator < (const ChildDescriptor& aDescriptor)
 {
-    if (mxShape < aDescriptor.mxShape)
+    if (mxShape.get() < aDescriptor.mxShape.get())
         return true;
     else
         return false;
