@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 11:28:37 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:37:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,8 +87,8 @@ ADDITIONAL_FILES=source$/data$/brkitr$/edit_word.txt \
 .IF "$(COMNAME)"=="sunpro5"
 CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
-.EXPORT : CC CXX
 .ENDIF          # "$(COMNAME)"=="sunpro5"
+.EXPORT : CC CXX
 
 CONFIGURE_DIR=source
 
