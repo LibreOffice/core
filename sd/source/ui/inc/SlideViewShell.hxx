@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:07:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,6 @@ protected:
 
 private:
     SlideView* pSlideView;
-    SdUnoSlideView* pController;
     Point           aDisplayPos;
     Size            aDisplaySize;
     USHORT          nCurFocusPage;
