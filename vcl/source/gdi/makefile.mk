@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 17:59:54 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:18:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,6 +150,7 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/bmpconv.obj		\
+                    $(SLO)$/pdfextoutdevdata.obj	\
                     $(SLO)$/impimagetree.obj		
 
 # --- Targets ------------------------------------------------------
