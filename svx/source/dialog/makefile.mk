@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 18:35:59 $
+#   last change: $Author: obo $ $Date: 2004-03-19 12:18:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -196,7 +196,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/optsave.obj		\
     $(SLO)$/impgrf.obj      \
     $(SLO)$/optpath.obj	\
-    $(SLO)$/taborder.obj 	\
     $(SLO)$/multifil.obj	\
     $(SLO)$/optdict.obj	\
     $(SLO)$/cuigaldlg.obj \
@@ -306,7 +305,6 @@ SLOFILES=\
     $(SLO)$/cuifmsearch.obj \
     $(SLO)$/cuigrfflt.obj \
     $(SLO)$/multipat.obj \
-    $(SLO)$/taborder.obj \
     $(SLO)$/optcolor.obj    \
     $(SLO)$/optjsearch.obj  \
     $(SLO)$/optgenrl.obj	\
@@ -422,7 +420,6 @@ LIB2OBJFILES= \
     $(SLO)$/transfrm.obj \
     $(SLO)$/cuisrchdlg.obj \
     $(SLO)$/cuitbxform.obj \
-    $(SLO)$/taborder.obj \
     $(SLO)$/optdict.obj \
     $(SLO)$/dlgname.obj \
     $(SLO)$/multipat.obj \
