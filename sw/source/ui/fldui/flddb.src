@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:30:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ TabPage TP_FLD_DB
         TEXT [ English ] = "Conditio~n" ;
         TEXT [ norwegian ] = "Vilkår" ;
         TEXT [ italian ] = "Con~dizione" ;
-        TEXT [ portuguese_brazilian ] = "condição" ;
+        TEXT [ portuguese_brazilian ] = "condi??o" ;
         TEXT [ portuguese ] = "~Condição" ;
         TEXT [ finnish ] = "~Ehto" ;
         TEXT [ danish ] = "Betingelse" ;
@@ -161,7 +161,7 @@ TabPage TP_FLD_DB
         TEXT [ English ] = "Setnumber" ;
         TEXT [ norwegian ] = "Setnumber" ;
         TEXT [ italian ] = "Numero di record" ;
-        TEXT [ portuguese_brazilian ] = "Definir número" ;
+        TEXT [ portuguese_brazilian ] = "Definir n?ero" ;
         TEXT [ portuguese ] = "~Número de registo" ;
         TEXT [ finnish ] = "Tietueen numero" ;
         TEXT [ danish ] = "Datapostnummer" ;
