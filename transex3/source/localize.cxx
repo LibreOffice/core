@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-03 14:52:22 $
+ *  last change: $Author: ihi $ $Date: 2002-09-09 12:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ const char *PositiveList[] = {
     "sw/source/ui/inc/toolbox.hrc",
     "offmgr/inc/offmenu.hrc",
     "offmgr/source/offapp/intro/intro.hrc",
+    "dbaccess/source/ui/inc/toolbox.hrc",
     "NULL"
 };
 
