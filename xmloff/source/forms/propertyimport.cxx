@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 09:10:03 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ namespace xmloff
             #ifdef _DEBUG
                 sal_Bool bSuccess =
             #endif
-                _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OString("OPropertyImport::convertString: could not convert \"")
                     +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
@@ -295,7 +295,7 @@ namespace xmloff
                 #ifdef _DEBUG
                     sal_Bool bSuccess =
                 #endif
-                    _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                    _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
                     OSL_ENSURE(bSuccess,
                             ::rtl::OString("OPropertyImport::convertString: could not convert \"")
                         +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
@@ -533,6 +533,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/02/13 09:10:03  fs
+ *  prevent an assertion because of an outdated file format ('til SUPD>=622)
+ *
  *  Revision 1.5  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *

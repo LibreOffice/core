@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ namespace xmloff
         sal_Bool bSucces = sal_False;
 
         double fValue;
-        if (bSucces = _rUnitConverter.convertNumber(fValue, _rStrImpValue))
+        if (bSucces = _rUnitConverter.convertDouble(fValue, _rStrImpValue))
         {
             fValue *= 10;
             _rValue <<= (float)fValue;
@@ -288,7 +288,7 @@ namespace xmloff
         if (bSuccess = (_rValue >>= fAngle))
         {
             rtl::OUStringBuffer sValue;
-            _rUnitConverter.convertNumber(sValue, ((double)fAngle) / 10);
+            _rUnitConverter.convertDouble(sValue, ((double)fAngle) / 10);
             _rStrExpValue = sValue.makeStringAndClear();
         }
 
@@ -343,6 +343,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/19 12:13:57  fs
+ *  some changes ... now the exported styles are XSL conform
+ *
  *  Revision 1.2  2000/12/19 08:43:00  fs
  *  no handling for the font with anymore - stored as measure
  *

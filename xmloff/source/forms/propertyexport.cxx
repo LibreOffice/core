@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ namespace xmloff
             break;
             case TypeClass_DOUBLE:
                 // let the unit converter format is as string
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, getDouble(_rValue));
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertDouble(aBuffer, getDouble(_rValue));
                 break;
             case TypeClass_BOOLEAN:
                 aBuffer = getBOOL(_rValue) ? m_sValueTrue : m_sValueFalse;
@@ -654,7 +654,7 @@ namespace xmloff
                     break;
                 }
                 // let the unit converter format is as string
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, fValue);
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertDouble(aBuffer, fValue);
             }
             break;
         }
@@ -744,6 +744,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.9  2001/01/03 16:25:34  fs
  *  file format change (extra wrapper element for controls, similar to columns)
  *
