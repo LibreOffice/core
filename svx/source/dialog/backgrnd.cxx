@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-06-03 13:18:35 $
+ *  last change: $Author: dr $ $Date: 2002-08-07 13:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
-    SetLineColor( rStyleSettings.GetFieldTextColor() );
+    SetLineColor();
     if(bIsBmp)
         SetFillColor( Color(COL_TRANSPARENT) );
     DrawRect( aDrawRect );
