@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-08-27 14:09:10 $
+#   last change: $Author: toconnor $ $Date: 2003-09-04 17:02:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
+    <pathelement location="${jardir}"/>
     <pathelement path="${install.dir}/bsh-1.2b7.jar"/>
     <pathelement location="${install.dir}/js.jar"/>
   </path>
@@ -108,7 +109,7 @@
   </target>
 
   <!-- ======================== Compile Classes ========================== -->
-  <target name="compile" depends="prepare">
+  <target name="compile" depends="idesupport.compile, prepare">
     <javac srcdir="JRuntime/" destdir="${scriptingclasses}"
          includes="**/*.java" classpathref="idlclasspath"
          debug="${debug}" optimize="${optimize}" deprecation="off"/>
@@ -157,6 +158,9 @@
         <exclude name="**/security/*"/>
         <exclude name="BeanShellRuntimeComponentRegistration.class"/>
         <exclude name="JavaScriptRuntimeComponentRegistration.class"/>
+        <fileset dir="${jardir}">
+          <include name="${idesupport.dir}/**/*.class"/>
+        </fileset>
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
