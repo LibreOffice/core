@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmthbsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
 
     inline SwFmtSoftHyph& operator=(const SwFmtSoftHyph& rSH) {
             return *this;
@@ -97,10 +95,7 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
 
-    virtual USHORT           GetVersion( USHORT nFFVer ) const;
 
     inline sal_Unicode GetChar() const { return cChar; }
     inline SwFmtHardBlank& operator=(const SwFmtHardBlank& rHB)
