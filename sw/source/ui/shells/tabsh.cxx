@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 10:00:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
     //Ersteinmal die einfachen Attribute besorgen.
     rSet.Put( SfxStringItem( FN_PARAM_TABLE_NAME, pFmt->GetName()));
-    rSet.Put( SfxBoolItem( FN_PARAM_TABLE_HEADLINE, rSh.IsHeadlineRepeat()) );
+    rSet.Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, rSh.GetRowsToRepeat() ) );
     rSet.Put( pFmt->GetShadow() );
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
     rSet.Put( pFmt->GetFrmDir() );
@@ -591,7 +591,7 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
 
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, FALSE, &pItem))
-        rSh.SetHeadlineRepeat( ((SfxBoolItem*)pItem)->GetValue() );
+        rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, FALSE, &pItem))
         rSh.SetBoxAlign(((SfxUInt16Item*)(pItem))->GetValue());
