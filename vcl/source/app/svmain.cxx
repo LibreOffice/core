@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 15:57:00 $
+ *  last change: $Author: cd $ $Date: 2001-07-10 06:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#include <rtl/logfile.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -265,6 +266,8 @@ public:
 // =======================================================================
 BOOL SVMain()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SVMain()" );
+
     ImplSVData* pSVData = ImplGetSVData();
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
@@ -299,6 +302,8 @@ public:
 
 BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "InitVCL" );
+
     if( pExceptionHandler != NULL )
         return FALSE;
 
@@ -404,9 +409,11 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Sal initialisieren
 #ifndef REMOTE_APPSERVER
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start CreateSalInstance()" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
         return FALSE;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end CreateSalInstance()" );
 #endif
 
     // Den AppFileName gleich holen und absolut machen, bevor das
