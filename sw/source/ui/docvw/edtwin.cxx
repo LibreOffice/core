@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: fme $ $Date: 2005-03-21 13:02:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4757,13 +4757,19 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 {
     BOOL bRet = FALSE;
-    Point aDocPos( PixelToLogic( rMousePos ) );
+    const Point aDocPos( PixelToLogic( rMousePos ) );
+    // --> OD 2005-02-17 #i42258#
+    const bool bIsInsideSelectedObj( rSh.IsInsideSelectedObj( aDocPos ) );
+    // <--
     //create a synthetic mouse event out of the coordinates
     MouseEvent aMEvt(rMousePos);
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
-        if ( rView.GetDrawFuncPtr() )
+        // --> OD 2005-02-17 #i42258# - no close of insert_draw and reset of
+        // draw mode, if context menu position is inside a selected object.
+        if ( !bIsInsideSelectedObj && rView.GetDrawFuncPtr() )
+        // <--
         {
 
             rView.GetDrawFuncPtr()->Deactivate();
@@ -4881,7 +4887,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     }
     else if ( rSh.IsSelFrmMode() &&
               (aActHitType == SDRHIT_NONE ||
-               !rSh.IsInsideSelectedObj( aDocPos )))
+               !bIsInsideSelectedObj))
     {
         rView.NoRotate();
         BOOL bUnLockView = !rSh.IsViewLocked();
@@ -4930,8 +4936,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             bRet = TRUE;
         }
     }
-    else if ( rSh.IsSelFrmMode() &&
-                rSh.IsInsideSelectedObj( aDocPos ))
+    else if ( rSh.IsSelFrmMode() && bIsInsideSelectedObj )
     {
         // ## object at the mouse cursor is already selected - do nothing
         return FALSE;
