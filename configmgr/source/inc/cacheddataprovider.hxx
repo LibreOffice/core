@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddataprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:04:37 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,31 @@ namespace configmgr
         */
         virtual CacheLocation refreshComponent(ComponentRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
+
+         /** refreshes data of all existing components from the backend
+
+            <p> If the data is in the cache already, it is refreshed from the
+                backend and the changes are notified to all registered listeners.
+            </p>
+            <p> If the data isn't in the cache nothing is done and
+                a NULL location is returned.
+            </p>
+
+            <p>Note: the caller <strong>must not</strong> hold any lock on the cache line affected.</p>
+
+             @throws com::sun::star::uno::Exception
+                if loading the data fails.
+                The exact exception being thrown may depend on the underlying backend.
+        */
+        virtual void refreshAllComponents()
+            CFG_UNO_THROW_ALL() = 0;
+        /** flushes data of all pending updates from cache to the backend(s)
+                @throws com::sun::star::uno::Exception
+                if flushing the data fails.
+                The exact exception being thrown may depend on the underlying backend.
+        */
+        virtual void flushPendingUpdates()
+            CFG_NOTHROW() = 0;
 
         /** locates a template in the cache.
 
