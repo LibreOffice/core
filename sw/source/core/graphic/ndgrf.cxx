@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 11:12:48 $
+ *  last change: $Author: mib $ $Date: 2002-08-02 10:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,7 +1117,10 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 {
     SvStream* pRet;
 
-    if( pGrfObj->IsInSwapOut() && IsSelected() )
+    // #101174#: Keep graphic while in swap in. That's at least important
+    // when breaking links, because in this situation a reschedule call and
+    // a DataChanged call lead to a paint of the graphic.
+    if( pGrfObj->IsInSwapOut() && (IsSelected() || bInSwapIn) )
         pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
     else if( refLink.Is() )
     {
