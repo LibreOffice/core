@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:20:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class Font;
 #define TEXTATTR_HYPERLINK  2
 #define TEXTATTR_FONTWEIGHT 3
 
+#define TEXTATTR_USER_START 1000 //start id for user defined text attributes
 
 
 class TextAttrib
