@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:40:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,6 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
 protected:
     virtual ~SwXNumberingRules();
 public:
-    SwXNumberingRules();
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
     SwXNumberingRules(const SwNumRule& rRule); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
