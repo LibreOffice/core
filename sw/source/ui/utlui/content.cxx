@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 13:14:00 $
+ *  last change: $Author: os $ $Date: 2002-02-28 17:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,21 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #endif
 
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
+#endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
+#endif
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
@@ -548,7 +563,27 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         }
         break;
         case CONTENT_TYPE_DRAWOBJECT:
+        {
             sTypeToken = aEmptyStr;
+            nMemberCount = 0;
+            if(!pMember)
+                pMember = new SwContentArr;
+            else if(pMember->Count())
+                pMember->DeleteAndDestroy(0, pMember->Count());
+
+            SdrModel* pModel = pWrtShell->GetDoc()->GetDrawModel();
+            if(pModel)
+            {
+                SdrPage* pPage = pModel->GetPage(0);
+                sal_uInt32 nCount = pPage->GetObjCount();
+                for( sal_uInt32 i=0; i< nCount; i++ )
+                {
+                    SdrObject* pTemp = pPage->GetObj(i);
+                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+                        nMemberCount++;
+                }
+            }
+        }
         break;
     }
     // ... dann koennen die Daten auch nicht mehr gueltig sein
@@ -868,6 +903,38 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
         }
         break;
         case CONTENT_TYPE_DRAWOBJECT:
+        {
+            nMemberCount = 0;
+            if(!pMember)
+                pMember = new SwContentArr;
+            else if(pMember->Count())
+                pMember->DeleteAndDestroy(0, pMember->Count());
+
+            SdrModel* pModel = pWrtShell->GetDoc()->GetDrawModel();
+            if(pModel)
+            {
+                SdrPage* pPage = pModel->GetPage(0);
+                sal_uInt32 nCount = pPage->GetObjCount();
+                for( sal_uInt32 i=0; i< nCount; i++ )
+                {
+                    SdrObject* pTemp = pPage->GetObj(i);
+                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+                    {
+                        SwContact* pContact = (SwContact*)pTemp->GetUserCall();
+                        long nYPos = 0;
+                        const Point aNullPt;
+                        if(pContact && pContact->GetFmt())
+                            nYPos = pContact->GetFmt()->FindLayoutRect(sal_False, &aNullPt).Top();
+                        SwContent* pCnt = new SwContent(
+                                            this,
+                                            pTemp->GetName(),
+                                            nYPos);
+                        pMember->Insert(pCnt);
+                        nMemberCount++;
+                    }
+                }
+            }
+        }
         break;
     }
     bDataValid = sal_True;
@@ -1368,7 +1435,7 @@ void SwContentTree::Display( sal_Bool bActive )
         if(nRootType == USHRT_MAX)
         {
             for(sal_uInt16 nCntType = CONTENT_TYPE_OUTLINE;
-                        nCntType <= CONTENT_TYPE_POSTIT; nCntType++ )
+                        nCntType <= CONTENT_TYPE_DRAWOBJECT; nCntType++ )
             {
                 SwContentType** ppContentT = bActive ?
                                 &aActiveContentArr[nCntType] :
@@ -3004,7 +3071,29 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             pActiveShell->GotoFld(*((SwPostItContent*)pCnt)->GetPostIt());
         break;
         case CONTENT_TYPE_DRAWOBJECT:
-            DBG_ERROR("unsupported format")
+        {
+            SdrView* pDrawView = pActiveShell->GetDrawView();
+            if (pDrawView)
+            {
+                pDrawView->EndTextEdit();
+                pDrawView->UnmarkAll();
+                SdrModel* pModel = pActiveShell->GetDoc()->GetDrawModel();
+                SdrPage* pPage = pModel->GetPage(0);
+                sal_uInt32 nCount = pPage->GetObjCount();
+                for( sal_uInt32 i=0; i< nCount; i++ )
+                {
+                    SdrObject* pTemp = pPage->GetObj(i);
+                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName() == pCnt->GetName())
+                    {
+                        SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+                        if( pPV )
+                        {
+                            pDrawView->MarkObj( pTemp, pPV );
+                        }
+                    }
+                }
+            }
+        }
         break;
     }
     if(bSel)
