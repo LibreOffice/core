@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 12:42:24 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
-#ifndef _DBACCESS_DBATOOLS_HXX_
-#include "dbatools.hxx"
-#endif
 #ifndef DBAUI_TOKENWRITER_HXX
 #include "TokenWriter.hxx"
 #endif
@@ -131,7 +128,9 @@ namespace dbaui
             ::rtl::OUString sDatasourceName;
             ::rtl::OUString sObjectName;
             sal_Bool bEscapeProcessing = sal_True;
-            extractObjectDescription(m_aSeq, &sDatasourceName, &m_nObjectType, &sObjectName, &bEscapeProcessing);
+            sDatasourceName = _rDatasource;
+            m_nObjectType = _nCommandType;
+            sObjectName = _rCommand;
 
             // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
 

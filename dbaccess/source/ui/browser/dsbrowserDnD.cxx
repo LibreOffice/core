@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:48:34 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
 #endif
-#ifndef _DBACCESS_DBATOOLS_HXX_
-#include "dbatools.hxx"
-#endif
 #ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
 #endif
@@ -163,6 +160,9 @@
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 
 // .........................................................................
 namespace dbaui
@@ -183,6 +183,7 @@ namespace dbaui
     using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::datatransfer;
     using namespace ::dbtools;
+    using namespace ::svx;
 
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData )
@@ -203,23 +204,17 @@ namespace dbaui
                 _rPasteData.GetAny(aFlavor) >>= aDescriptor;
                 DBG_ASSERT(bCorrectFormat, "SbaTableQueryBrowser::implPasteQuery: invalid DnD or clipboard format!");
 
-    #if defined(DBG_UTIL) && defined(PRIV_DEBUG)
-                // temporary - remove this !!!
-                if (!bCorrectFormat)
-                {
-                    createObjectDescriptor(aDescriptor,
-                        ::rtl::OUString::createFromAscii("Bibliography"),
-                        CommandType::QUERY,
-                        ::rtl::OUString::createFromAscii("Query1")
-                        );
-                }
-    #endif
-
                 ::rtl::OUString sDataSourceName;
                 sal_Int32       nCommandType = CommandType::QUERY;
                 ::rtl::OUString sCommand;
                 sal_Bool        bEscapeProcessing = sal_True;
-                extractObjectDescription(aDescriptor, &sDataSourceName, &nCommandType, &sCommand, &bEscapeProcessing);
+                {
+                    ODataAccessDescriptor aDescriptor(aDescriptor);
+                    aDescriptor[daDataSource]       >>= sDataSourceName;
+                    aDescriptor[daCommandType]      >>= nCommandType;
+                    aDescriptor[daCommand]          >>= sCommand;
+                    aDescriptor[daEscapeProcessing] >>= bEscapeProcessing;
+                }
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
@@ -812,6 +807,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/06 13:48:34  oj
+ *  #85664# match copy/cut/paste with the right window
+ *
  *  Revision 1.6  2001/04/03 14:15:53  fs
  *  corrected some wrong OSL_ASSERTs
  *
