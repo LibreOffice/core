@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:05:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,12 +142,35 @@
 #ifndef _XDEF_HXX //autogen
 #include <xdef.hxx>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_AWT_XWindows_HPP_
+//#include <com/sun/star/awt/XWindows.hpp>
+//#endif
+
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -217,7 +240,13 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 
+#include <cppuhelper/bootstrap.hxx>
 
+
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::i18n;
 
 
@@ -521,16 +550,71 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 
         case SID_CHINESE_CONVERSION:
             {
-                sal_Bool bSimplified  = sal_True;    // to be obtained from dialog...
-                sal_Bool bUseVariants = sal_True;    // to be obtained from dialog...
-                LanguageType nSrcLang    = bSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                LanguageType nTargetLang = bSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                sal_Int32 nOptions    = bUseVariants ? TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                //open ChineseTranslationDialog
+                Reference< XComponentContext > xContext(
+                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                if(xContext.is())
+                {
+                    Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+                    if(xMCF.is())
+                    {
+                        Reference< ui::dialogs::XExecutableDialog > xDialog(
+                                xMCF->createInstanceWithContext(
+                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    , xContext), UNO_QUERY);
+                        Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
+                        if( xInit.is() )
+                        {
+                            //  initialize dialog
+                            Reference< awt::XWindow > xDialogParentWindow(0);
+                            Sequence<Any> aSeq(1);
+                            Any* pArray = aSeq.getArray();
+                            PropertyValue aParam;
+                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Value <<= makeAny(xDialogParentWindow);
+                            pArray[0] <<= makeAny(aParam);
+                            xInit->initialize( aSeq );
 
-                Font aTargetFont = pOLV->GetWindow()->GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                            //execute dialog
+                            sal_Int16 nDialogRet = xDialog->execute();
+                            if( RET_OK == nDialogRet )
+                            {
+                                //get some parameters from the dialog
+                                sal_Bool bToSimplified = sal_True;
+                                sal_Bool bUseVariants = sal_True;
+                                sal_Bool bCommonTerms = sal_True;
+                                Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
+                                if( xProp.is() )
+                                {
+                                    try
+                                    {
+                                        xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
+                                        xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
+                                        xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                    }
+                                    catch( Exception& )
+                                    {
+                                    }
+                                }
+
+                                //execute translation
+                                sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                                sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                                sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                                if( !bCommonTerms )
+                                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+
+                                Font aTargetFont = pOLV->GetWindow()->GetDefaultFont( DEFAULTFONT_CJK_TEXT,
                                             nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
-                pOLV->StartTextConversion( nSrcLang, nTargetLang, &aTargetFont, nOptions, sal_False, sal_False );
+                                pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False, sal_False );
+                            }
+                        }
+                        Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
+                        if( xComponent.is() )
+                            xComponent->dispose();
+                    }
+                }
             }
             break;
 
