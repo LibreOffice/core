@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-14 14:16:30 $
+ *  last change: $Author: bm $ $Date: 2002-07-09 09:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ void ScChartArray::CopySettings( SchMemChart& rDest, const SchMemChart& rSource 
     rDest.SetXAxisTitle( rSource.GetXAxisTitle() );
     rDest.SetYAxisTitle( rSource.GetYAxisTitle() );
     rDest.SetZAxisTitle( rSource.GetZAxisTitle() );
+
+    rDest.SomeData1() = rSource.SomeData1();
+    rDest.SomeData2() = rSource.SomeData2();
+    rDest.SomeData3() = rSource.SomeData3();
+    rDest.SomeData4() = rSource.SomeData4();
 
     const long* pArr;
     if ( rSource.GetRowCount() == rDest.GetRowCount() &&
