@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 09:35:13 $
+ *  last change: $Author: os $ $Date: 2002-08-15 07:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -394,54 +396,18 @@ void  SwInputWindow::ApplyFormula()
 
     // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
     //              also wieder entfernen
-    BOOL bIsFormula = FALSE;
     String sEdit( aEdit.GetText() );
     sEdit.EraseLeadingChars().EraseTrailingChars();
     if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
-    {
         sEdit.Erase( 0, 1 );
-        bIsFormula = TRUE;
-    }
-
-    pWrtShell->StartAllAction();
-    if( bDelSel && pWrtShell->HasSelection() )
-    {
-        pWrtShell->StartUndo( UNDO_START );
-        pWrtShell->DelRight();
-    }
-    else
-    {
-        pWrtShell->EnterStdMode();
-        bDelSel = FALSE;
-    }
-
-    if( !bDelSel && pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
-        pMgr->UpdateCurFld( pMgr->GetCurFld()->GetFormat(), aEmptyStr, sEdit );
-    else if( sEdit.Len() )
-    {
-        if( bIsTable )
-        {
-            SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
-            aSet.Put( SwTblBoxFormula( sEdit ));
-            pWrtShell->SetTblBoxFormulaAttrs( aSet );
-            pWrtShell->UpdateTable();
-        }
-        else
-        {
-            SvNumberFormatter* pFormatter = pWrtShell->GetNumberFormatter();
-            ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-            SwInsertFld_Data aData(TYP_FORMELFLD, GSE_FORMULA, aEmptyStr, sEdit, nSysNumFmt);
-            pMgr->InsertFld(aData);
-        }
-     }
-
-    if( bDelSel )
-        pWrtShell->EndUndo( UNDO_END );
-    pWrtShell->EndAllAction();
+    SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);
 
     pWrtShell->EndSelTblCells();
     pView->GetEditWin().GrabFocus();
-    pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SFX_CALLMODE_ASYNCHRON );
+    const SfxPoolItem* aArgs[2];
+    aArgs[0] = &aParam;
+    aArgs[1] = 0;
+    pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs );
 }
 
 //==================================================================
@@ -701,169 +667,6 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
     return aInfo;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/08/16 09:34:40  fme
-    Fix #90760#: Removed VCL defines
-
-    Revision 1.3  2001/06/11 09:18:10  mba
-    #87722#: no global access for ImageManager
-
-    Revision 1.2  2001/06/08 13:47:32  os
-    #84832# #84836# use connection parameter in drag and drop, form letter, merge field and insert db as text
-
-    Revision 1.1.1.1  2000/09/18 17:14:46  hr
-    initial import
-
-    Revision 1.88  2000/09/18 16:06:01  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.87  2000/09/07 15:59:27  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.86  2000/07/03 08:54:31  jp
-    must changes for VCL
-
-    Revision 1.85  2000/04/26 14:56:39  os
-    GetName() returns const String&
-
-    Revision 1.84  2000/04/18 14:54:44  os
-    UNICODE
-
-    Revision 1.83  2000/03/03 15:17:03  os
-    StarView remainders removed
-
-    Revision 1.82  1999/05/18 13:20:16  OS
-    #66203# Undo im Dtor nur, wenn erforderlich
-
-
-      Rev 1.81   18 May 1999 15:20:16   OS
-   #66203# Undo im Dtor nur, wenn erforderlich
-
-      Rev 1.80   24 Apr 1998 17:22:46   OS
-   kein KeyInput waehrend die Rechenleiste aktiv ist #49301#
-
-      Rev 1.79   12 Mar 1998 13:33:12   OM
-   #48084# Formelfeld mit Standardformat einfuegen
-
-      Rev 1.78   22 Jan 1998 20:07:40   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.77   19 Jan 1998 20:08:32   JP
-   Bug #46705#: Undo nur rufen, wenn etwas geloescht wurde
-
-      Rev 1.76   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.75   10 Nov 1997 11:43:12   OS
-   HelpId fuer Edit #45436#
-
-      Rev 1.74   30 Sep 1997 16:28:22   TJ
-
-      Rev 1.73   19 Sep 1997 13:42:56   OS
-   Edit mit WB_NOHIDESELECTION #43891#
-
-      Rev 1.72   04 Sep 1997 17:14:02   MA
-   includes
-
-      Rev 1.71   01 Sep 1997 10:01:24   OS
-   fuer VCL Window uebergeben
-
-      Rev 1.70   29 Aug 1997 16:52:24   MH
-   chg: Syntax
-
-      Rev 1.69   29 Aug 1997 15:45:32   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.68   29 Aug 1997 14:20:12   OS
-   DLL-Umbau
-
-      Rev 1.67   09 Jul 1997 17:36:10   HJS
-   includes
-
-      Rev 1.66   09 May 1997 09:28:42   JP
-   Bug #39214#: Formel nur ersetzen, wenn die sich veraendert hat
-
-      Rev 1.65   29 Apr 1997 16:18:50   OM
-   Unsichtbare Benutzerfelder
-
-      Rev 1.64   09 Apr 1997 16:18:42   MH
-   chg: header
-
-      Rev 1.63   07 Apr 1997 13:40:48   MH
-   chg: header
-
-      Rev 1.62   10 Feb 1997 16:26:40   OS
-   Dispatcher im Childwindow merken
-
-      Rev 1.61   07 Feb 1997 16:41:54   OS
-   Dispatcher nur noch vom ViewFrame holen
-
-      Rev 1.60   05 Feb 1997 14:32:00   JP
-   FormatMenu bei Tabellenzellen entfernen
-
-      Rev 1.59   29 Jan 1997 14:47:18   JP
-   Umstellungen fuers neue Rechnen in Tabellen
-
-      Rev 1.58   21 Jan 1997 13:48:40   JP
-   Update der Eingabe in die TabellenBox
-
-      Rev 1.57   14 Jan 1997 18:22:28   JP
-   UpdateRange: Anfang des BoxNamens korrekt suchen
-
-      Rev 1.56   14 Jan 1997 09:50:32   JP
-   neu: SetFormula; UpdateRange: Crsr hinter die BoxNamen
-
-      Rev 1.55   21 Nov 1996 17:56:44   MA
-   chg: Kein ResMgr fuer GetImage()
-
-      Rev 1.54   11 Nov 1996 11:11:30   MA
-   ResMgr
-
-      Rev 1.53   09 Nov 1996 13:51:40   OS
-   PopupMenu immer im Click
-
-      Rev 1.52   24 Oct 1996 13:36:38   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.51   10 Oct 1996 10:37:12   OS
-   Registrierung der Toolbox am SfxImageManager
-
-      Rev 1.50   28 Aug 1996 13:39:28   OS
-   includes
-
-      Rev 1.49   09 Jul 1996 17:52:42   OM
-   Alternatives Formatmenue fuer Expressionfields
-
-      Rev 1.48   26 Jun 1996 15:26:42   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.47   10 Jun 1996 18:47:04   HJS
-   ; vergessen
-
-      Rev 1.46   10 Jun 1996 11:38:08   OS
-   Reihenfolge Apply und CancelFormula angepasst
-
-      Rev 1.45   09 May 1996 15:34:12   OS
-   HLineal an der View wird nicht mehr geloescht
-
-      Rev 1.44   26 Apr 1996 10:00:32   SWG
-   IMPL-Macro getauscht, GetInfo impl.
-
-      Rev 1.43   10 Mar 1996 15:50:22   OS
-   neu: Round
-
-      Rev 1.42   29 Feb 1996 12:58:30   OS
-   UpdateRange mit zusaetzlichem Parameter
-
-      Rev 1.41   07 Feb 1996 07:29:20   OS
-   Linkumstellung: return sollte ans Ende
-
-      Rev 1.40   06 Feb 1996 15:21:16   JP
-   Link Umstellung 305
-
-------------------------------------------------------------------------*/
 
 
 

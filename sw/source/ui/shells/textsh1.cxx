@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 13:19:40 $
+ *  last change: $Author: os $ $Date: 2002-08-15 07:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
 #endif
+#include "fldmgr.hxx"
 
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
@@ -596,12 +597,64 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         case FN_EDIT_FORMULA:
         {
-            rWrtSh.EndAllTblBoxEdit();
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
             const USHORT nId = SwInputChild::GetChildWindowId();
-            pVFrame->ToggleChildWindow( nId );
-            if( !pVFrame->HasChildWindow( nId ) )
-                pVFrame->GetBindings().InvalidateAll( TRUE );
+            SfxViewFrame* pVFrame = GetView().GetViewFrame();
+            if(pItem)
+            {
+                //if the ChildWindow is active it has to be removed
+                if( pVFrame->HasChildWindow( nId ) )
+                {
+                    pVFrame->ToggleChildWindow( nId );
+                    pVFrame->GetBindings().InvalidateAll( TRUE );
+                }
+
+                String sFormula(((const SfxStringItem*)pItem)->GetValue());
+                SwFldMgr aFldMgr;
+                rWrtSh.StartAllAction();
+                BOOL bDelSel;
+                if( 0 != (bDelSel = rWrtSh.HasSelection()) )
+                {
+                    rWrtSh.StartUndo( UNDO_START );
+                    rWrtSh.DelRight();
+                }
+                else
+                {
+                    rWrtSh.EnterStdMode();
+                }
+
+                if( !bDelSel && aFldMgr.GetCurFld() && TYP_FORMELFLD == aFldMgr.GetCurTypeId() )
+                    aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), aEmptyStr, sFormula );
+                else if( sFormula.Len() )
+                {
+                    if( rWrtSh.IsCrsrInTbl() )
+                    {
+                        SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
+                        aSet.Put( SwTblBoxFormula( sFormula ));
+                        rWrtSh.SetTblBoxFormulaAttrs( aSet );
+                        rWrtSh.UpdateTable();
+                    }
+                    else
+                    {
+                        SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
+                        ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
+                        SwInsertFld_Data aData(TYP_FORMELFLD, GSE_FORMULA, aEmptyStr, sFormula, nSysNumFmt);
+                        aFldMgr.InsertFld(aData);
+                    }
+                }
+
+                if( bDelSel )
+                    rWrtSh.EndUndo( UNDO_END );
+                rWrtSh.EndAllAction();
+                rReq.Done();
+            }
+            else
+            {
+                rWrtSh.EndAllTblBoxEdit();
+                pVFrame->ToggleChildWindow( nId );
+                if( !pVFrame->HasChildWindow( nId ) )
+                    pVFrame->GetBindings().InvalidateAll( TRUE );
+                rReq.Ignore();
+            }
         }
 
         break;

@@ -4269,7 +4269,9 @@ SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFormula FN_EDIT_FORMULA
-()
+(
+    SfxStringItem Formula FN_EDIT_FORMULA
+)
 [
     /* flags: */
     AutoUpdate = FALSE,
