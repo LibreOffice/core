@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:56:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,18 @@
 #include "fmobj.hxx"
 #endif
 
+#ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
+#include "formtoolbars.hxx"
+#endif
+
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
@@ -640,6 +647,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_bSetFocus(sal_False)
         ,m_nLockSlotInvalidation(0)
         ,m_nInvalidationEvent(0)
+        ,m_nActivationEvent(0)
         ,m_bFilterMode(sal_False)
         ,m_bHadPropBrw(sal_False)
         ,m_pExternalViewInterceptor(NULL)
@@ -648,13 +656,12 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_bPreparedClose( sal_False )
         ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
         ,m_eDocumentType( eUnknownDocumentType )
+        ,m_bFirstActivation( sal_True )
 {
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
 
-    // we are a DispatchInterceptor, so we want to be inserted into the frame's dispatch chain, thus having
-    // a chance for frame-spanning communication (via UNO, not slots)
     SfxFrame* pFrame = _pViewFrame ? _pViewFrame->GetFrame() : NULL;
     if ( pFrame )
         m_xAttachedFrame = pFrame->GetFrameInterface();
@@ -897,6 +904,11 @@ void FmXFormShell::disposing()
         {
             Application::RemoveUserEvent(m_nInvalidationEvent);
             m_nInvalidationEvent = 0;
+        }
+        if ( m_nActivationEvent )
+        {
+            Application::RemoveUserEvent( m_nActivationEvent );
+            m_nActivationEvent = 0;
         }
     }
 
@@ -1769,7 +1781,7 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot,
         // if we're doing an UNDO, *and* if the affected form is the form which we also display
         // as external view, then we need to reset the controls of the external form, too
         if ( getInternalForm( _rxForm ) == m_xExternalDisplayedForm )
-            {
+        {
             Reference< XFormController > xExternalFormController( m_xExternalViewController, UNO_QUERY );
             if ( xExternalFormController.is() )
                 aHelper->resetAllControls( Reference< XForm >( xExternalFormController->getModel(), UNO_QUERY ) );
@@ -3871,6 +3883,36 @@ void FmXFormShell::viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeacti
 }
 
 //------------------------------------------------------------------------
+IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, NOTINTERESTEDIN )
+{
+    m_nActivationEvent = 0;
+    SfxObjectShell* pDocument = m_pShell ? m_pShell->GetObjectShell() : NULL;
+    SfxMedium* pMedium = pDocument ? pDocument->GetMedium() : NULL;
+    String sDocumentName = pMedium ? pMedium->GetName() : String();
+
+    if  ( !sDocumentName.Len() )
+    {
+        switch ( getDocumentType() )
+        {
+        case eEnhancedForm:
+            if ( !m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_DATANAVIGATOR ) )
+                m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_SHOW_DATANAVIGATOR );
+
+            // NO break
+        case eDatabaseForm:
+        {   // this is a new form document -> show some toolboxes
+            FormToolboxes aToolboxAccess( getHostFrame(), getDocumentType() );
+            aToolboxAccess.showToolbox( SID_FM_FORM_DESIGN_TOOLS );
+            aToolboxAccess.showToolbox( SID_FM_CONFIG );
+        }
+        break;
+        }
+    }
+
+    return 0L;
+}
+
+//------------------------------------------------------------------------
 void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
     // activate our view if we are activated ourself
@@ -3896,6 +3938,12 @@ void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncActi
 
         // activate the current view
         _pCurrentView->GetImpl()->Activate( _bSyncAction );
+    }
+
+    if ( !hasEverBeenActivated() )
+    {
+        m_nActivationEvent = Application::PostUserEvent( LINK( this, FmXFormShell, OnFirstTimeActivation ) );
+        setHasBeenActivated();
     }
 }
 
