@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:18:24 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 17:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,54 @@ void StyleSettings::CopyData()
         mpData->mnRefCount--;
         mpData = new ImplStyleData( *mpData );
     }
+}
+
+// -----------------------------------------------------------------------
+
+inline BOOL ImplIsBackOrWhite( const Color& rColor )
+{
+    UINT8 nLuminance = rColor.GetLuminance();
+    return ( nLuminance < 8 ) || ( nLuminance > 250 );
+}
+
+BOOL StyleSettings::IsHighContrastBlackAndWhite() const
+{
+    BOOL bBWOnly = TRUE;
+
+    // Only use B&W if fully B&W, like on GNOME.
+    // Some colors like CheckedColor and HighlightColor are not B&W in Windows Standard HC Black,
+    // and we don't want to be B&W then, so check these color first, very probably not B&W.
+
+    // Unfortunately, GNOME uses a very very dark color (0x000033) instead of BLACK (0x000000)
+
+    if ( !ImplIsBackOrWhite( GetFaceColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetHighlightTextColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetWindowColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetWindowTextColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetButtonTextColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetButtonTextColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetGroupTextColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetLabelTextColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetDialogColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetFieldColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetMenuColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetMenuBarColor() ) )
+        bBWOnly = FALSE;
+    else if ( !ImplIsBackOrWhite( GetMenuHighlightColor() ) )
+        bBWOnly = FALSE;
+
+    return bBWOnly;
 }
 
 // -----------------------------------------------------------------------
