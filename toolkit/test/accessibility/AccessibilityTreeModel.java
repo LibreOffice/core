@@ -591,21 +591,17 @@ public class AccessibilityTreeModel
                 sDisplay = "<no name>";
                 // Try to determine some usefull name that indicates the
                 // function of the object in question.
-                if (false) // At the moment no object for which this would
-                           // be interesting implements XServiceName or XServiceInfo.
+        XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
+            XServiceName.class, xAccessible);
+        if (xSN != null)
+            sDisplay = xSN.getServiceName ();
+        else
                 {
-                    XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
-                        XServiceName.class, xAccessible);
-                    if (xSN != null)
-                        sDisplay = xSN.getServiceName ();
-                    else
-                    {
-                        XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
-                            XServiceInfo.class, xAccessible);
-                        if (xSI != null)
-                            sDisplay = xSI.getImplementationName ();
-                    }
-                }
+            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
+            XServiceInfo.class, xAccessible);
+            if (xSI != null)
+            sDisplay = xSI.getImplementationName ();
+        }
             }
         }
         else
