@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 17:53:10 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:33:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,11 +64,9 @@ PRJ=..
 PRJNAME=dbaccess
 TARGET=dba
 TARGET2=dbu
-USE_LDUMP2=TRUE
+USE_DEFFILE=TRUE
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
-
-USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
@@ -91,32 +89,24 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
-        $(SALLIB) \
-        $(OSLLIB) \
-        $(ONELIB) \
-        $(TOOLSLIB) \
-        $(VOSLIB) \
-        $(CPPUHELPERLIB) \
-        $(CPPULIB) \
+        $(SVTOOLLIB) \
         $(VCLLIB) \
         $(UNOTOOLSLIB) \
-        $(SVLLIB) \
-        $(COMPHELPERLIB) \
-        $(SVTOOLLIB) \
+        $(TOOLSLIB) \
         $(DBTOOLSLIB) \
-        $(COMPHELPERLIB)
-
-
-.IF "$(COMPHELPERLIB)" == ""
-SHL1STDLIBS+= icomphelp2.lib
-.ENDIF
+        $(COMPHELPERLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(VOSLIB) \
+        $(SALLIB)
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=$(TARGET).dxp 
+SHL1VERSIONMAP=$(TARGET).map
 
 # --- .res file ----------------------------------------------------------
+
 RES1FILELIST=\
     $(SRS)$/core_strings.srs
 
@@ -140,37 +130,35 @@ LIB2FILES=\
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
-        $(SALLIB)				\
-        $(OSLLIB)				\
-        $(ONELIB)				\
-        $(VOSLIB)				\
-        $(CPPUHELPERLIB)		\
-        $(CPPULIB)				\
-        $(UNOTOOLSLIB)			\
-        $(VCLLIB)				\
-        $(TOOLSLIB)				\
+        $(SVXLIB)				\
         $(SFXLIB)				\
-        $(SVLLIB)				\
+        $(BASICLIB)				\
         $(SVTOOLLIB)			\
         $(TKLIB)				\
-        $(COMPHELPERLIB)		\
-        $(SVXLIB)				\
+        $(VCLLIB)				\
+        $(SVLLIB)				\
         $(SOTLIB)				\
-        $(SO2LIB)				\
+        $(UNOTOOLSLIB)			\
+        $(TOOLSLIB)				\
         $(UCBHELPERLIB) 		\
         $(DBTOOLSLIB)			\
-        $(BASICLIB)
+        $(COMPHELPERLIB)		\
+        $(CPPUHELPERLIB)		\
+        $(CPPULIB)				\
+        $(VOSLIB)				\
+        $(SALLIB)
 
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
-DEF2EXPORTFILE=$(TARGET2).dxp 
+SHL2VERSIONMAP=$(TARGET2).map
 
 ALL: \
     $(LIB2TARGET)	\
     ALLTAR
 
 # --- .res file ----------------------------------------------------------
+
 RES2FILELIST=\
     $(SRS)$/uidlg.srs				\
     $(SRS)$/uicontrols.srs			\
@@ -187,4 +175,3 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
