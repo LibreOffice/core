@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2000-10-31 12:10:24 $
+ *  last change: $Author: dic $ $Date: 2001-02-23 11:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,11 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 
     va_start(args, lpszFormat);
 
+    fprintf(stderr,"Trace Message : ");
+
     vfprintf(stderr,lpszFormat, args);
+
+    fprintf(stderr,"\n");
 
     va_end(args);
 }
