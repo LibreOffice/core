@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlftn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-11-16 10:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,9 +496,9 @@ String SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
     String sRet;
     if( pInfo )
         sRet = pInfo->GetPrefix();
-    sRet = rFmtFtn.GetViewNumStr( *pDoc );
+    sRet += rFmtFtn.GetViewNumStr( *pDoc );
     if( pInfo )
-        sRet = pInfo->GetSuffix();
+        sRet += pInfo->GetSuffix();
 
     return sRet;
 }
