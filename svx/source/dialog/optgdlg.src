@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 14:16:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ TabPage OFA_TP_LANGUAGES
     CheckBox CB_DECIMALSEPARATOR
     {
         Pos = MAP_APPFONT ( 135 , 46) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 119 , 10 ) ;
         Text [ de ] = "~Dem Gebietsschema entsprechend ( %1 )" ;
         Text [ en-US ] = "~Same as locale setting ( %1 )";
     };
@@ -697,8 +697,8 @@ TabPage OFA_TP_LANGUAGES
 
 InfoBox RID_SVX_MSGBOX_LANGUAGE_RESTART
 {
-    Message [ de ] = "Die Spracheinstellung der benutzeroberfläche wurde geändert und wird beim nächsten Start von %PRODUCTNAME %PRODUCTVERSION wirksam";
-    Message [ en-US ] = "The language setting of the userinterface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
+    Message [ de ] = "Die Spracheinstellung der Benutzeroberfläche wurde geändert und wird beim nächsten Start von %PRODUCTNAME %PRODUCTVERSION wirksam";
+    Message [ en-US ] = "The language setting of the user interface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
 };
 
 
