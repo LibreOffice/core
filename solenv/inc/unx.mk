@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-19 13:29:19 $
+#   last change: $Author: hr $ $Date: 2001-06-19 13:46:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,11 +113,11 @@ OLE2DEF=-DOLE2
 .INCLUDE : unxlngp.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXI2REDHAT60"
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXI2REDHAT60"
 .INCLUDE : unxlngi3.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXI2REDHAT60"
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUXI2REDHAT60"
 .INCLUDE : unxlngi4.mk
 .ENDIF
 
