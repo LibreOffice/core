@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 08:50:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 // This method exports the given XShape
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  sal_Int32 nFeatures /* = SEF_DEFAULT */,
-                                 com::sun::star::awt::Point* pRefPoint /* = NULL */ )
+                                 com::sun::star::awt::Point* pRefPoint /* = NULL */,
+                                 SvXMLAttributeList* pAttrList /* = NULL */ )
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
@@ -683,7 +684,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         case XmlShapeTypeDrawChartShape:
         case XmlShapeTypePresChartShape:
         {
-            ImpExportChartShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportChartShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint, pAttrList );
             break;
         }
 
