@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-30 16:12:44 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-31 08:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,6 @@ void ScriptMetadataImporter::startElement(
     switch( m_state )
     {
         case SCRIPT:
-            m_ScriptData =  ScriptData();
             m_ScriptData.parcelURI = ms_parcelURI;
             m_ScriptData.language = xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii( "language" ));
@@ -401,9 +400,7 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
             break;
         case SCRIPT:
             mpv_ScriptDatas->push_back( m_ScriptData );
-            //Clear all templates used in preparation for next script
-            mv_filesetprops.clear();
-            mm_files.clear();
+            m_ScriptData =  ScriptData();
             break;
         case LOCALE:
             m_ScriptData.locales[ ms_localeLang ] = ::std::make_pair(
@@ -416,6 +413,8 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
             m_ScriptData.filesets[ ms_filesetname ] = ::std::make_pair(
                 mv_filesetprops, mm_files );
             mm_files.clear();
+            mv_filesetprops.clear();
+            break;
         case FILES:
             OSL_TRACE("adding files %s to files map",
                    ::rtl::OUStringToOString( ms_filename,

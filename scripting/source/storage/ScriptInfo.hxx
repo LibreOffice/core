@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-30 16:12:42 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-31 08:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getDescription()
         throw ( css::uno::RuntimeException ) ;
     virtual ::rtl::OUString SAL_CALL getLanguage() throw ( css::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getScriptLocation()
-        throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getFunctionName()
-        throw ( css::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getLocation()
         throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getParcelURI()
         throw ( css::uno::RuntimeException );

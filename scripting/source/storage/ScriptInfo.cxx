@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-30 16:12:40 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-31 08:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,14 +316,6 @@ OUString SAL_CALL ScriptInfo::getLanguage(  ) throw ( RuntimeException )
 }
 
 //*************************************************************************
-OUString SAL_CALL ScriptInfo::getScriptLocation()
-    throw ( RuntimeException )
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return OUString::createFromAscii( "Not done at the moment" );
-}
-
-//*************************************************************************
 OUString SAL_CALL ScriptInfo::getFunctionName(  ) throw ( RuntimeException )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
@@ -331,13 +323,6 @@ OUString SAL_CALL ScriptInfo::getFunctionName(  ) throw ( RuntimeException )
     return m_scriptData.functionname;
 }
 
-//*************************************************************************
-OUString SAL_CALL ScriptInfo::getLocation(  ) throw ( RuntimeException )
-{
-    OUString location = OUString::createFromAscii( "need to be done" );
-
-    return location;
-}
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getParcelURI(  ) throw ( RuntimeException )
 {
@@ -415,7 +400,7 @@ throw ( css::uno::RuntimeException )
     strpairvec_map files = fsm_it->second.second;
     strpairvec_map::iterator spvm_it = files.begin();
     strpairvec_map::iterator spvm_itend = files.end();
-    if( spvm_it != spvm_itend )
+    if( spvm_it == spvm_itend )
     {
         OSL_TRACE( "ScriptInfo::getFilesInFileSet: no files in fileset %s",
             ::rtl::OUStringToOString( fileSetName,
@@ -425,11 +410,11 @@ throw ( css::uno::RuntimeException )
     results.realloc( files.size() );
     for( sal_Int32 count = 0; spvm_it != spvm_itend ; ++spvm_it )
     {
-        OUString fileName = fsm_it->first;
+        OUString fileName = spvm_it->first;
         OSL_TRACE( "ScriptInfo::getFilesInFileSet: adding file %s",
             ::rtl::OUStringToOString( fileName,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        results[ count++ ] = fileSetName;
+        results[ count++ ] = fileName;
     }
     return results;
 }
