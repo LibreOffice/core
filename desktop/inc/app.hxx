@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-22 15:14:00 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 09:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef _DESK_APP_HXX
-#define _DESK_APP_HXX
+#ifndef _DESKTOP_APP_HXX_
+#define _DESKTOP_APP_HXX_
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -72,11 +76,17 @@
 #include <unotools/bootstrap.hxx>
 #endif
 
+namespace desktop
+{
+
 /*--------------------------------------------------------------------
     Description:    Application-class
  --------------------------------------------------------------------*/
 class IntroWindow_Impl;
-class Desktop : public Application //public SfxApplicationClass
+class OOfficeAcceptorThread;
+class PluginAcceptThread;
+class CommandLineArgs;
+class Desktop : public Application
 {
     public:
         enum BootstrapError
@@ -87,64 +97,83 @@ class Desktop : public Application //public SfxApplicationClass
             BE_PATHINFO_MISSING
         };
 
-                            Desktop();
-        virtual void        Main( );
-        virtual void        Init();
-        virtual void        DeInit();
-        virtual BOOL        QueryExit();
-        virtual USHORT      Exception(USHORT nError);
-        virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
-        virtual void        AppEvent( const ApplicationEvent& rAppEvent );
+                                Desktop();
+                                ~Desktop();
+        virtual void            Main( );
+        virtual void            Init();
+        virtual void            DeInit();
+        virtual BOOL            QueryExit();
+        virtual USHORT          Exception(USHORT nError);
+        virtual void            SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
+        virtual void            AppEvent( const ApplicationEvent& rAppEvent );
 
         DECL_LINK(          OpenClients_Impl, void* );
 
-        static void         OpenClients();
-        static void         OpenDefault();
-        static void         HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*      GetDesktopResManager();
+        static void             OpenClients();
+        static void             OpenDefault();
+        static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
+        static ResMgr*          GetDesktopResManager();
+        static CommandLineArgs* GetCommandLineArgs();
 
-        void                HandleBootstrapErrors( BootstrapError );
-        void                SetBootstrapError( BootstrapError nError )
+        void                    HandleBootstrapErrors( BootstrapError );
+        void                    SetBootstrapError( BootstrapError nError )
         {
             if ( m_aBootstrapError == BE_OK )
                 m_aBootstrapError = nError;
         }
 
     private:
-#ifndef BUILD_SOSL
-        sal_Bool            TabRegDialog(String);
-#endif BUILD_SOSL
-        void                HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
-        void                StartSetup( const ::rtl::OUString& aParameters );
+        // Bootstrap methods
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
+
+        void                    RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
+        void                    DeregisterServices();
+
+        void                    DestroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
+
+        void                    CreateTemporaryDirectory();
+        void                    RemoveTemporaryDirectory();
+
+        sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
+        sal_Bool                InitializeConfiguration();
+        sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
+        sal_Bool                InitializePluginMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
+
+        void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
+        void                    StartSetup( const ::rtl::OUString& aParameters );
 
         // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
-        ::rtl::OUString     GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
+        ::rtl::OUString         GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
 
         // Create a error message depending on bootstrap failure code and an optional file url
-        ::rtl::OUString     CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
-                                                  const ::rtl::OUString& aFileURL );
+        ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
+                                                      const ::rtl::OUString& aFileURL );
 
-        void                OpenStartupScreen();
-        void                CloseStartupScreen();
-        void                EnableOleAutomation();
+        void                    OpenStartupScreen();
+        void                    CloseStartupScreen();
+        void                    EnableOleAutomation();
         DECL_LINK(          AsyncInitFirstRun, void* );
 
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
             respective flag in the configuration is reset.</p>
         */
-        void                CheckFirstRun( );
+        void                    CheckFirstRun( );
 
         /// does initializations which are necessary for the first run of the office
-        void                DoFirstRunInitializations();
+        void                    DoFirstRunInitializations();
 
-        sal_Bool            m_bMinimized;
-        sal_Bool            m_bInvisible;
-        USHORT              m_nAppEvents;
-        IntroWindow_Impl*   m_pIntro;
-        BootstrapError      m_aBootstrapError;
+        sal_Bool                        m_bMinimized;
+        sal_Bool                        m_bInvisible;
+        USHORT                          m_nAppEvents;
+        IntroWindow_Impl*               m_pIntro;
+        BootstrapError                  m_aBootstrapError;
 
-        static ResMgr*      pResMgr;
+        static ResMgr*                  pResMgr;
+        static PluginAcceptThread*      pPluginAcceptThread;
+        static OOfficeAcceptorThread*   pOfficeAcceptThread;
 };
 
-#endif // DESK_APP_HXX_
+}
+
+#endif // _DESKTOP_APP_HXX_
