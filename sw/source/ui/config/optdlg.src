@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 18:16:23 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2577,7 +2577,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ΠΠΑΠµΔΈόΈΔΦ»»αΣ°Ομµ½Φ±½ΣΑ¬½ΣµΔΗψΣς΅£";
         Text[ russian ] = "Θημενενθÿ ρςπξκθ θλθ κξλξνκθ οξβλθÿώς ςξλόκξ νΰ νεοξρπεδρςβεννϋυ ρξρεδει";
         Text[ polish ] = "Zmiany wiersza lub kolumny wywierajΉ wp³yw tylko na obszary przyleg³e";
-        Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚π¤—ΧΪ”ΝΝ‚Ζ‚ΜΦW‚Μ‚έ‚Ε’²ί‚µ‚ά‚·";
+        Text[ japanese ] = "sE—ρ‚Μ»²½ή•ΟX‚πA—ΧΪ”ΝΝ‚Ζ‚ΜΦW‚Μ‚έ‚Ε’²ί‚µ‚ά‚·";
         Text[ chinese_traditional ] = "Δζ¦CªΊΕά§σ¶Θ·|ΌvΕT¨μª½±µ³sµ²ªΊ°Ο°μ΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΗαγδΨήΙ ΗαγΜΗζΡΙ έήΨ";
         Text[ greek ] = "Οι αλλαγές μιας στήλης ή γραμμής επηρεάζουν μόνο την άμεσα γειτονική περιοχή";
@@ -2630,7 +2630,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ΠΠΑΠµΔΈόΈΔ»αΣ°Ομµ½ΥϋΈφ±νΈρ΅£";
         Text[ russian ] = "Θημενενθÿ ρςπξκθ θλθ κξλξνκθ οξβλθÿώς νΰ βρώ ςΰαλθφσ";
         Text[ polish ] = "Zmiany wiersza lub kolumny wywierajΉ wp³yw na ca³Ή tabelκ";
-        Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚Ν¤•\\“ΰ‘S‘Μ‚Ιμ—p‚µ‚ά‚·";
+        Text[ japanese ] = "sE—ρ‚Μ»²½ή•ΟX‚ΝA•\\“ΰ‘S‘Μ‚Ιμ—p‚µ‚ά‚·";
         Text[ chinese_traditional ] = "Δζ¦CªΊΕά§σ·|ΌvΕT¨μΎγ­Σªν®ζ΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΗαΜΟζα ΘΓΛΡε";
         Text[ greek ] = "Οι αλλαγές μιας γραμμής ή στήλης επηρεάζουν ολόκληρο τον πίνακα";
@@ -2683,7 +2683,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "Ò»ΠΠΊΝΑΠµΔΈόΈΔ»αΣ°Ομ±νΈρµΔ΄σΠ΅΅£";
         Text[ russian ] = "Θημενενθÿ ρςπξκθ θλθ κξλξνκθ οξβλθÿώς νΰ πΰημεπ ςΰαλθφϋ";
         Text[ polish ] = "Zmiany wiersza lub kolumny wywierajΉ wp³yw na rozmiar tabeli";
-        Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚Ν¤•\\‚Μ»²½ή‚Ιμ—p‚µ‚ά‚·";
+        Text[ japanese ] = "sE—ρ‚Μ»²½ή•ΟX‚ΝA•\\‚Μ»²½ή‚Ιμ—p‚µ‚ά‚·";
         Text[ chinese_traditional ] = "¤@­ΣΔζ¦CªΊΕά§σ·|ΌvΕTªν®ζªΊ¤j¤p΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΝΜγ ΗαΜΟζα";
         Text[ greek ] = "Οι αλλαγές μιας γραμμής ή στήλης επηρεάζουν το μέγεθος του πίνακα";
@@ -2811,7 +2811,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_traditional ] = "ª`ΈΡ(~C)";
         Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
-        Text[ korean ] = "ΑΦ";
+        Text[ korean ] = "ΑΦΌ®";
         Text[ turkish ] = "Aηύklama";
         Text[ language_user1 ] = " ";
     };
@@ -2918,7 +2918,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "Φ±½Σ¶¨Ξ»Ήβ±κ";
         Text[ russian ] = "Ρβξαξδνϋι κσπρξπ";
         Text[ polish ] = "Kursor bezporedni";
-        Text[ japanese ] = "ΐή²ΪΈΔ ¶°ΏΩ";
+        Text[ japanese ] = "ΐή²ΪΈΔ¶°ΏΩ";
         Text[ chinese_traditional ] = "ª½±µ©w¦μ¥ϊΌΠ";
         Text[ arabic ] = "γΔΤΡ γΘΗΤΡ";
         Text[ greek ] = "Άμεσος δρομέας";
@@ -2946,7 +2946,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "Φ±½Σ¶¨Ξ»Ήβ±κ(~D)";
         Text[ russian ] = "Ρβξαξδνϋι κσπρξπ";
         Text[ polish ] = "Kursor bezporedni";
-        Text[ japanese ] = "ΐή²ΪΈΔ ¶°ΏΩ(~D)";
+        Text[ japanese ] = "ΐή²ΪΈΔ¶°ΏΩ(~D)";
         Text[ chinese_traditional ] = "ª½±µ©w¦μ¥ϊΌΠ(~D)";
         Text[ arabic ] = "γΔΤΡ γΘΗΤΡ";
         Text[ greek ] = "Άμεσος δρομέας";
