@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:16:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,14 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#include "XMLNumberStylesImport.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLSTYLE_HXX
+#include "xmlstyle.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
@@ -112,6 +120,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::makeAny;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -184,10 +193,73 @@ void SdXMLGenericPageContext::EndElement()
 {
     GetImport().GetShapeImport()->popGroupAndSort();
 
-#ifndef SVX_LIGHT
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->endPage();
-#endif
+
+    if( maUseHeaderDeclName.getLength() || maUseFooterDeclName.getLength() || maUseDateTimeDeclName.getLength() )
+    {
+        try
+        {
+            Reference <beans::XPropertySet> xSet(mxShapes, uno::UNO_QUERY_THROW );
+            Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
+
+            if( maUseHeaderDeclName.getLength() )
+            {
+                const OUString aStrHeaderTextProp( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) );
+                if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
+                    xSet->setPropertyValue( aStrHeaderTextProp,
+                                            makeAny( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
+            }
+
+            if( maUseFooterDeclName.getLength() )
+            {
+                const OUString aStrFooterTextProp( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) );
+                if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
+                    xSet->setPropertyValue( aStrFooterTextProp,
+                                        makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
+            }
+
+            if( maUseDateTimeDeclName.getLength() )
+            {
+                const OUString aStrDateTimeTextProp( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) );
+                if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
+                {
+                    sal_Bool bFixed;
+                    OUString aDateTimeFormat;
+                    const OUString aText( GetSdImport().GetDateTimeDecl( maUseDateTimeDeclName, bFixed, aDateTimeFormat ) );
+
+                    xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsDateTimeFixed") ),
+                                        makeAny( bFixed ) );
+
+                    if( bFixed )
+                    {
+                        xSet->setPropertyValue( aStrDateTimeTextProp,
+                                            makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
+                    }
+                    else if( aDateTimeFormat.getLength() )
+                    {
+                        const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetStylesContext() );
+                        if( pStyles )
+                        {
+                            const SdXMLNumberFormatImportContext* pSdNumStyle =
+                                dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, aDateTimeFormat, sal_True ) );
+
+                            if( pSdNumStyle )
+                            {
+                                xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DateTimeFormat") ),
+                                                                    makeAny( pSdNumStyle->GetDrawKey() ) );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch( uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
+        }
+    }
 }
 
 void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
