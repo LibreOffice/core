@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2000-12-14 15:19:00 $
+ *  last change: $Author: mfe $ $Date: 2000-12-14 17:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
         nAddr = htonl(nAddr);
     }
 
-    pAddr = malloc (sizeof(struct sockaddr_in));
+    pAddr = (struct sockaddr_in*) malloc (sizeof(struct sockaddr_in));
     if (pAddr)
     {
         pAddr->sin_family      = FAMILY_TO_NATIVE(osl_Socket_FamilyInet);
@@ -806,6 +806,7 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
     if (pipe (p) == 0)
     {
         pid_t pid;
+        int nStatus;
 
         pid = fork();
         if (pid == 0)
@@ -844,7 +845,8 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
             close (p[0]);
             close (p[1]);
         }
-        wait (NULL);
+
+        waitpid (pid, &nStatus, 0);
     }
     return (result);
 }
@@ -1426,7 +1428,9 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
 
             if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != NULL)
             {
+#if 0  /* OBSOLETE */
                 sal_Char* pChr;
+#endif /* OBSOLETE */
                 strcpy(LocalHostname, pStr);
 
 #if 0  /* OBSOLETE */
