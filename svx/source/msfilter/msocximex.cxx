@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-17 15:21:23 $
+ *  last change: $Author: cmc $ $Date: 2000-12-20 10:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
     *xContents << rSize.Width;
     *xContents << rSize.Height;
 
-    nFixedAreaLen = xContents->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(xContents->Tell());
 
     bRet = aFontData.Export(xContents,rPropSet);
 
@@ -1614,7 +1614,7 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
 
     Align(xContents,4,TRUE);
 
-    nFixedAreaLen = xContents->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(xContents->Tell());
 
     bRet = aFontData.Export(xContents,rPropSet);
 
@@ -1831,7 +1831,7 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
 
     Align(xContents,4,TRUE);
 
-    nFixedAreaLen = xContents->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(xContents->Tell());
 
     bRet = aFontData.Export(xContents,rPropSet);
 
@@ -2388,7 +2388,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
     Align(xContents,4,TRUE);
     *xContents << rSize.Width;
     *xContents << rSize.Height;
-    nFixedAreaLen = xContents->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(xContents->Tell());
 
     bRet = aFontData.Export(xContents,rPropSet);
 
@@ -2570,6 +2570,45 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
     }
     return bRet;
 }
+
+
+sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
+    SvStorageStreamRef& rSrc1, uno::Reference < drawing::XShape > *
+    pShapeRef,BOOL bFloatingCtrl)
+{
+    sal_Bool bRet=sal_False;
+    /*Get Class Id of this object, see if it is one of the types
+     *that this importer can handle, call the appropiate handler
+     to read that control, and call the appropiate handler to
+     insert that control
+     */
+    /*The Excel Kludge is to concatenate a class id with a contents
+     * stream, and then concatenate all the controls together,
+     * This means that you should have the cnts stream wound to the
+     * correct location before passing the control stream in here*/
+    OCX_Control *pObj=NULL;
+    SvStream *pSt = rSrc1;
+    pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    SvGlobalName aTest;
+    *pSt >> aTest;
+//  aTest << *pSt;
+    if (pObj = OCX_Factory(aTest.GetHexName()))
+    {
+
+        com::sun::star::awt::Size aSz;
+        uno::Reference< form::XFormComponent >  xFComp;
+        const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
+            GetServiceFactory();
+        if(!rServiceFactory.is())
+            return(sal_False);
+        if(bRet = pObj->FullRead(rSrc1))
+            if (pObj->Import(rServiceFactory,xFComp,aSz))
+                bRet = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
+        delete pObj;
+    }
+    return bRet;
+}
+
 
 sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
     const uno::Reference< awt::XControlModel > &rControlModel,
@@ -2803,7 +2842,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
         xContents->Write(sByte.GetBuffer(),sByte.Len());
 
     Align(xContents,4,TRUE);
-    nFixedAreaLen = xContents->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(xContents->Tell());
     bRet = aFontData.Export(xContents,rPropSet);
     nFixedAreaLen-=4;
     xContents->Seek(0);
@@ -2901,7 +2940,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     const uno::Reference< beans::XPropertySet > &rPropSet)
 {
     sal_uInt8 nFlags=0x00;
-    nFixedAreaLen = rContent->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell());
     rContent->SeekRel(8);
     ByteString sByte;
     uno::Any aTmp;
@@ -2961,7 +3000,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     Align(rContent,4,TRUE);
 
     UINT32 nOldPos = nFixedAreaLen;
-    nFixedAreaLen = rContent->Tell()-nFixedAreaLen;
+    nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell()-nFixedAreaLen);
     nFixedAreaLen -= 4;
     rContent->Seek(nOldPos);
     *rContent << nStandardId;
@@ -3072,7 +3111,7 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     *xContents << rSize.Height;
 
     Align(xContents,4,TRUE);
-    nFixedAreaLen = xContents->Tell();
+    nFixedAreaLen = static_cast<sal_uInt16>(xContents->Tell());
 
     nFixedAreaLen-=4;
     xContents->Seek(0);
