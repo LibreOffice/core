@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:43:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,24 +136,20 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 DBG_NAME( OCheckBoxModel )
 //------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_False, sal_True, sal_True )
+    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_True )
                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( OCheckBoxModel, NULL );
 
     m_nClassId = FormComponentType::CHECKBOX;
-    m_nDefaultChecked = CB_NOCHECK;
     initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
 }
 
 //------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
-    :OBoundControlModel( _pOriginal, _rxFactory )
+    :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OCheckBoxModel, NULL );
-
-    m_nDefaultChecked = _pOriginal->m_nDefaultChecked;
-    m_sReferenceValue = _pOriginal->m_sReferenceValue;
 }
 
 //------------------------------------------------------------------------------
@@ -169,7 +165,7 @@ IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
@@ -190,60 +186,6 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
 }
 
 //------------------------------------------------------------------------------
-void OCheckBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
-{
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_REFVALUE: _rValue <<= m_sReferenceValue; break;
-        case PROPERTY_ID_DEFAULTCHECKED : _rValue <<= m_nDefaultChecked; break;
-        default:
-            OBoundControlModel::getFastPropertyValue(_rValue, _nHandle);
-    }
-}
-
-//------------------------------------------------------------------------------
-void OCheckBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
-{
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_REFVALUE :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
-            _rValue >>= m_sReferenceValue;
-            break;
-
-        case PROPERTY_ID_DEFAULTCHECKED :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_SHORT, "OCheckBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
-            _rValue >>= m_nDefaultChecked;
-            resetNoBroadcast();
-            break;
-
-        default:
-            OBoundControlModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
-    }
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OCheckBoxModel::convertFastPropertyValue(
-            Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-            throw (IllegalArgumentException)
-{
-    sal_Bool bModified(sal_False);
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_REFVALUE :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_sReferenceValue);
-            break;
-        case PROPERTY_ID_DEFAULTCHECKED :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_nDefaultChecked);
-            break;
-        default:
-            bModified = OBoundControlModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
-            break;
-    }
-    return bModified;
-}
-
-//------------------------------------------------------------------------------
 Reference<XPropertySetInfo> SAL_CALL OCheckBoxModel::getPropertySetInfo() throw(RuntimeException)
 {
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -261,9 +203,7 @@ void OCheckBoxModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 3, OBoundControlModel )
-        DECL_PROP1(REFVALUE,        ::rtl::OUString,    BOUND);
-        DECL_PROP1(DEFAULTCHECKED,  sal_Int16,          BOUND);
+    BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
 }
@@ -278,13 +218,13 @@ void OCheckBoxModel::fillProperties(
 void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
     throw(stario::IOException, RuntimeException)
 {
-    OBoundControlModel::write(_rxOutStream);
+    OReferenceValueComponent::write(_rxOutStream);
 
     // Version
     _rxOutStream->writeShort(0x0003);
     // Properties
-    _rxOutStream << m_sReferenceValue;
-    _rxOutStream << (sal_Int16)m_nDefaultChecked;
+    _rxOutStream << getReferenceValue();
+    _rxOutStream << (sal_Int16)getDefaultChecked();
     writeHelpTextCompatibly(_rxOutStream);
     // from version 0x0003 : common properties
     writeCommonProperties(_rxOutStream);
@@ -293,44 +233,43 @@ void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>
 //------------------------------------------------------------------------------
 void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
-    OBoundControlModel::read(_rxInStream);
+    OReferenceValueComponent::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);
 
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();
 
-    switch (nVersion)
+    ::rtl::OUString sReferenceValue;
+    sal_Int16       nDefaultChecked( 0 );
+    switch ( nVersion )
     {
-        case 0x0001 : _rxInStream >> m_sReferenceValue; m_nDefaultChecked = _rxInStream->readShort(); break;
-        case 0x0002 :
-            _rxInStream >> m_sReferenceValue;
-            _rxInStream >> m_nDefaultChecked;
-            readHelpTextCompatibly(_rxInStream);
+        case 0x0001:
+            _rxInStream >> sReferenceValue;
+            nDefaultChecked = _rxInStream->readShort();
             break;
-        case 0x0003 :
-            _rxInStream >> m_sReferenceValue;
-            _rxInStream >> m_nDefaultChecked;
+        case 0x0002:
+            _rxInStream >> sReferenceValue;
+            _rxInStream >> nDefaultChecked;
+            readHelpTextCompatibly( _rxInStream );
+            break;
+        case 0x0003:
+            _rxInStream >> sReferenceValue;
+            _rxInStream >> nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             readCommonProperties(_rxInStream);
             break;
-        default :
+        default:
             DBG_ERROR("OCheckBoxModel::read : unknown version !");
-            m_sReferenceValue = ::rtl::OUString();
-            m_nDefaultChecked = 0;
             defaultCommonProperties();
             break;
     }
+    setReferenceValue( sReferenceValue );
+    setDefaultChecked( nDefaultChecked );
 
     // Nach dem Lesen die Defaultwerte anzeigen
-    if (m_aControlSource.getLength())
+    if ( getControlSource().getLength() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
-}
-
-//------------------------------------------------------------------------------
-void OCheckBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
-{
-    OBoundControlModel::onConnectedDbColumn( _rxForm );
 }
 
 //------------------------------------------------------------------------------
@@ -346,18 +285,12 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         sal_Bool bTriState = sal_True;
         if ( m_xAggregateSet.is() )
             m_xAggregateSet->getPropertyValue( PROPERTY_TRISTATE ) >>= bTriState;
-        aValue <<= (sal_Int16)( bTriState ? CB_DONTKNOW : m_nDefaultChecked );
+        aValue <<= (sal_Int16)( bTriState ? STATE_DONTKNOW : getDefaultChecked() );
     }
     else
-        aValue <<= ( bValue ? (sal_Int16)CB_CHECK : (sal_Int16)CB_NOCHECK );
+        aValue <<= ( bValue ? (sal_Int16)STATE_CHECK : (sal_Int16)STATE_NOCHECK );
 
     return aValue;
-}
-
-//------------------------------------------------------------------------------
-Any OCheckBoxModel::getDefaultForReset() const
-{
-    return makeAny( (sal_Int16)m_nDefaultChecked );
 }
 
 //-----------------------------------------------------------------------------
@@ -369,17 +302,17 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
         try
         {
-            sal_Int16 nValue = CB_DONTKNOW;
+            sal_Int16 nValue = STATE_DONTKNOW;
             aControlValue >>= nValue;
             switch (nValue)
             {
-                case CB_DONTKNOW:
+                case STATE_DONTKNOW:
                     m_xColumnUpdate->updateNull();
                     break;
-                case CB_CHECK:
+                case STATE_CHECK:
                     m_xColumnUpdate->updateBoolean( sal_True );
                     break;
-                case CB_NOCHECK:
+                case STATE_NOCHECK:
                     m_xColumnUpdate->updateBoolean( sal_False );
                     break;
                 default:
@@ -392,65 +325,6 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         }
     }
     return sal_True;
-}
-
-//-----------------------------------------------------------------------------
-sal_Bool OCheckBoxModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
-{
-    OSL_PRECOND( _rxBinding.is(), "OCheckBoxModel::approveValueBinding: invalid binding!" );
-
-    // only strings are accepted for simplicity
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
-}
-
-//-----------------------------------------------------------------------------
-Any OCheckBoxModel::translateExternalValueToControlValue( )
-{
-    OSL_PRECOND( m_xExternalBinding.is(), "OCheckBoxModel::commitControlValueToExternalBinding: no active binding!" );
-
-    sal_Int16 nState = CB_DONTKNOW;
-    if ( m_xExternalBinding.is() )
-    {
-        Any aExternalValue;
-        try
-        {
-            aExternalValue = m_xExternalBinding->getValue( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
-        }
-        catch( const IncompatibleTypesException& )
-        {
-            OSL_ENSURE( sal_False, "OCheckBoxModel::translateExternalValueToControlValue: caught an exception!" );
-        }
-
-        sal_Bool bState = sal_False;
-        if ( aExternalValue >>= bState )
-            nState = bState ? CB_CHECK : CB_NOCHECK;
-    }
-
-    return makeAny( nState );
-}
-
-//-----------------------------------------------------------------------------
-Any OCheckBoxModel::translateControlValueToExternalValue( )
-{
-    // translate the control value into a value appropriate for the external binding
-    // Basically, this means translating the INT16-State into a boolean
-    Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
-    Any aExternalValue;
-
-    sal_Int16 nControlValue = CB_DONTKNOW;
-    aControlValue >>= nControlValue;
-
-    switch( nControlValue )
-    {
-        case CB_CHECK:
-            aExternalValue <<= (sal_Bool)sal_True;
-            break;
-        case CB_NOCHECK:
-            aExternalValue <<= (sal_Bool)sal_False;
-            break;
-    }
-    return aExternalValue;
 }
 
 //.........................................................................
