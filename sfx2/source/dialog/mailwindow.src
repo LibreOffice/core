@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 08:51:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #include "dialog.hrc"
 #include "helpid.hrc"
-#include "mailwindow.hrc"
-
+/*#include "mailwindow.hrc"*/
+/*
 Window RID_MAIL_WINDOW
 {
     HelpId = SID_MAIL_CHILDWIN ;
@@ -207,7 +207,7 @@ Window RID_MAIL_WINDOW
         MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
     };
 };
-
+*/
 // RID_ERRBOX_MAIL_CONFIG ---------------------------------------------------
 
 ErrorBox RID_ERRBOX_MAIL_CONFIG
