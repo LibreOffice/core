@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Settings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:47:03 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,13 @@ service Settings
         <type>PrinterIndependentLayout</type>.</p>
      */
     [optional, property] short PrinterIndependentLayout;
+
+    // Writer, maybe later other applications, too
+    //-------------------------------------------------------------------------
+    /** layout engine should add value of a Font's 'external leading'
+     * attribute to the line spacing.
+     */
+    [optional, property] boolean AddExternalLeading;
 
 };
 
