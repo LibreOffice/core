@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-20 13:02:03 $
+ *  last change: $Author: cl $ $Date: 2001-06-21 09:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
+#include <com/sun/star/container/XIdentifierContainer.hpp>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -2770,18 +2774,18 @@ void SdrPowerPointImport::SolveSolver( const PptSolverContainer& rSolver )
                     Reference< XShape > aXShape( pO->getUnoShape(), UNO_QUERY );
                     Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
                     Reference< XGluePointsSupplier > aXGluePointsSupplier;
-                    Reference< XIndexContainer > aXGluePointContainer;
+                    Reference< XIdentifierContainer > aXGluePointContainer;
                     try
                     {
                         if ( aXShape.is() && aXConnector.is() )
                         {
                             aXGluePointsSupplier = Reference< XGluePointsSupplier >( aXShape, UNO_QUERY );
                             if ( aXGluePointsSupplier.is() )
-                                aXGluePointContainer = aXGluePointsSupplier->getGluePoints();
+                                aXGluePointContainer = Reference< XIdentifierContainer >::query( aXGluePointsSupplier->getGluePoints() );
                         }
                         if ( aXGluePointContainer.is() )
                         {
-                            sal_Int32 nIndex = aXGluePointContainer->getCount();
+                            sal_Int32 nIndex = 4;
                             sal_Bool bValidGluePoint = sal_False;
                             UINT32 nInventor = pO->GetObjInventor();
                             if( nInventor == SdrInventor )
@@ -2932,7 +2936,7 @@ void SdrPowerPointImport::SolveSolver( const PptSolverContainer& rSolver )
                                     }
                                     break;
                                 }
-                                if ( bValidGluePoint && ( nIndex <= aXGluePointContainer->getCount() ) )
+                                if ( bValidGluePoint )
                                 {
                                     Reference< XPropertySet > xPropSet( aXConnector, UNO_QUERY );
                                     if ( xPropSet.is() )
@@ -2940,7 +2944,7 @@ void SdrPowerPointImport::SolveSolver( const PptSolverContainer& rSolver )
                                         if ( nIndex > 3 )
                                         {
                                             aAny <<= aGluePoint;
-                                            aXGluePointContainer->insertByIndex( nIndex, aAny );
+                                            nIndex = aXGluePointContainer->insert( aAny );
                                         }
                                         if ( nN )
                                         {
