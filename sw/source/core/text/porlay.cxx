@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-12 12:42:30 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 16:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,81 +571,71 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
         if ( CHARCOMPRESS_NONE != aCompEnum &&
              i18n::ScriptType::ASIAN == nScript )
         {
+            USHORT ePrevState = NONE;
+            USHORT eState;
+            USHORT nPrevChg = nLastChg;
+
             while ( nLastChg < nChg )
             {
-                // skip wrong characters
                 xub_Unicode cChar = rTxt.GetChar( nLastChg );
-                while ( ( 0x3008 > cChar || 0x3011 < cChar ) &&
-                        ( 0x3014 > cChar || 0x301B < cChar ) &&
-                        ( 0x301D > cChar || 0x301F < cChar ) &&
-                        ( 0x3040 > cChar || 0x30FF < cChar ) &&
-                          0x3001 != cChar && 0x3002 != cChar &&
-                          nLastChg < nChg )
-                    cChar = rTxt.GetChar( ++nLastChg );
 
-                if ( nLastChg >= nChg )
-                    break;
-
-                // find end of range
-                USHORT nStart = nLastChg;
-
-                // Kanas found (Hiragana / Katakana)
-                if ( 0x3040 <= cChar && 0x3100 > cChar )
+                // examine current character
+                switch ( cChar )
                 {
-                    do
-                        cChar = rTxt.GetChar( ++nLastChg );
-                    while ( 0x3040 <= cChar && 0x3100 > cChar );
-
-                    // insert start and type
-                    if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum )
-                    {
-                        aCompChg.Insert( nStart, nCntComp );
-                        aCompType.Insert( KANA, nCntComp );
-                    }
-                    else
-                        continue;
-                }
                 // Left punctuation found
-                else if ( 0x3008 == cChar || 0x300A == cChar || 0x300C == cChar ||
-                          0x300E == cChar || 0x3010 == cChar || 0x3014 == cChar ||
-                          0x3016 == cChar || 0x3018 == cChar || 0x301A == cChar ||
-                          0x301D == cChar )
-                {
-                    do
-                        cChar = rTxt.GetChar( ++nLastChg );
-                    while ( 0x3008 == cChar || 0x300A == cChar || 0x300C == cChar ||
-                            0x300E == cChar || 0x3010 == cChar || 0x3014 == cChar ||
-                            0x3016 == cChar || 0x3018 == cChar || 0x301A == cChar ||
-                            0x301D == cChar );
-
-                    // insert start and type
-                    aCompChg.Insert( nStart, nCntComp );
-                    aCompType.Insert( SPECIAL_LEFT, nCntComp );
-                }
+                case 0x3008: case 0x300A: case 0x300C: case 0x300E:
+                case 0x3010: case 0x3014: case 0x3016: case 0x3018:
+                case 0x301A: case 0x301D:
+                    eState = SPECIAL_LEFT;
+                    break;
                 // Right punctuation found
-                else if ( 0x3001 == cChar || 0x3002 == cChar || 0x3009 == cChar ||
-                          0x300B == cChar || 0x300D == cChar || 0x300F == cChar ||
-                          0x3011 == cChar || 0x3015 == cChar || 0x3017 == cChar ||
-                          0x3019 == cChar || 0x301B == cChar || 0x301E == cChar ||
-                          0x301F == cChar )
-                {
-                    do
-                        cChar = rTxt.GetChar( ++nLastChg );
-                    while ( 0x3001 == cChar || 0x3002 == cChar || 0x3009 == cChar ||
-                            0x300B == cChar || 0x300D == cChar || 0x300F == cChar ||
-                            0x3011 == cChar || 0x3015 == cChar || 0x3017 == cChar ||
-                            0x3019 == cChar || 0x301B == cChar || 0x301E == cChar ||
-                            0x301F == cChar );
-
-                    // insert start and type
-                    aCompChg.Insert( nStart, nCntComp );
-                    aCompType.Insert( SPECIAL_RIGHT, nCntComp );
+                case 0x3001: case 0x3002: case 0x3009: case 0x300B:
+                case 0x300D: case 0x300F: case 0x3011: case 0x3015:
+                case 0x3017: case 0x3019: case 0x301B: case 0x301E:
+                case 0x301F:
+                    eState = SPECIAL_RIGHT;
+                    break;
+                default:
+                    eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ?
+                               KANA :
+                               NONE;
                 }
-                else
-                    ASSERT( 0, "mysterious character found!" );
 
-                // insert len
-                aCompLen.Insert( nLastChg - nStart, nCntComp++ );
+                // insert range of compressable characters
+                if( ePrevState != eState )
+                {
+                    if ( ePrevState != NONE )
+                    {
+                        // insert start and type
+                        if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
+                             ePrevState != KANA )
+                        {
+                            aCompChg.Insert( nPrevChg, nCntComp );
+                            USHORT nTmpType = ePrevState;
+                            aCompType.Insert( nTmpType, nCntComp );
+                            aCompLen.Insert( nLastChg - nPrevChg, nCntComp++ );
+                        }
+                    }
+
+                    ePrevState = eState;
+                    nPrevChg = nLastChg;
+                }
+
+                nLastChg++;
+            }
+
+            // we still have to examine last entry
+            if ( ePrevState != NONE )
+            {
+                // insert start and type
+                if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
+                     ePrevState != KANA )
+                {
+                    aCompChg.Insert( nPrevChg, nCntComp );
+                    USHORT nTmpType = ePrevState;
+                    aCompType.Insert( nTmpType, nCntComp );
+                    aCompLen.Insert( nLastChg - nPrevChg, nCntComp++ );
+                }
             }
         }
 
