@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-19 11:17:05 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,12 +499,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_VIEW_ID, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sViewId;
-            pValue[nItems++].Value <<= ( (sal_uInt16) ((SfxUInt16Item*)pItem)->GetValue() );
+            pValue[nItems++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_PLUGIN_MODE, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sPluginMode;
-            pValue[nItems++].Value <<= ( (sal_uInt16) ((SfxUInt16Item*)pItem)->GetValue() );
+            pValue[nItems++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
         {
