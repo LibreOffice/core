@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:03:08 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,8 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         ::rtl::OUString sControlType;
         sal_Int32 nControlPos = -1;
         Sequence< ::com::sun::star::beans::PropertyValue> aControlProps;
-        for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArguments)
+        sal_uInt16 i;
+        for ( i = 0; i < aArgs.getLength(); ++i, ++pArguments )
         {
             if (pArguments->Name.equals(::rtl::OUString::createFromAscii("ColumnType")))
             {
