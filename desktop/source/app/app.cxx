@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 15:38:09 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 14:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include "configinit.hxx"
 #include "javainteractionhandler.hxx"
 #include "lockfile.hxx"
+#include "oempreload.hxx"
+#include "testtool.hxx"
+#include "checkinstall.hxx"
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -287,7 +290,6 @@
 
 using namespace vos;
 using namespace rtl;
-using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -301,151 +303,27 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
 
-static SalMainPipeExchangeSignalHandler*    pSignalHandler = 0;
-static CommandLineArgs *                    pArgs = 0;
+ResMgr*                 desktop::Desktop::pResMgr = 0;
 
-OOfficeAcceptorThread*      pOfficeAcceptThread = 0;
-ResMgr*                     Desktop::pResMgr    = 0;
-static PluginAcceptThread*  pPluginAcceptThread = 0;
-static oslModule            aTestToolModule     = 0;
+namespace desktop
+{
+
+static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
+
+PluginAcceptThread*     Desktop::pPluginAcceptThread = 0;
+OOfficeAcceptorThread*  Desktop::pOfficeAcceptThread = 0;
+static CommandLineArgs* pArgs = 0;
 
 // ----------------------------------------------------------------------------
 
-char const INSTALLER_INITFILENAME[] = "initialize.ini";
 char const INSTALLMODE_STANDALONE[] = "STANDALONE";
 char const INSTALLMODE_NETWORK[]    = "NETWORK";
 char const INSTALLMODE_ALLUSERS[]   = "ALL_USERS";
-#ifndef BUILD_SOSL
 
 // include strings for copyright notice
 #include "copyright_ascii.txt"
 
-char const OEM_PRELOAD_SECTION[]    = "Bootstrap";
-char const OEM_PRELOAD[]            = "Preload";
-#endif
-
 // ----------------------------------------------------------------------------
-
-#ifndef BUILD_SOSL
-sal_Bool IsOEMPreload()
-{
-    if ( !Application::IsRemoteServer() )
-    {
-        OUString aSofficeIniFileURL;
-
-        Bootstrap().getIniName( aSofficeIniFileURL );
-        if ( aSofficeIniFileURL.getLength() > 0 )
-        {
-            OProfile aProfile( aSofficeIniFileURL );
-            sal_Bool bResult = aProfile.readBool( OEM_PRELOAD_SECTION, OEM_PRELOAD, sal_False );
-            aProfile.close();
-
-            return bResult;
-        }
-    }
-
-    return sal_False;
-}
-
-// reset preload flag in soffice.ini/sofficerc file
-void ResetOEMPreload()
-{
-    OUString aSofficeIniFileURL;
-
-    Bootstrap().getIniName( aSofficeIniFileURL );
-    if ( aSofficeIniFileURL.getLength() > 0 )
-    {
-        OProfile aProfile( aSofficeIniFileURL );
-        aProfile.writeBool( OEM_PRELOAD_SECTION, OEM_PRELOAD, sal_False );
-        aProfile.flush();
-        aProfile.close();
-    }
-}
-
-// check OEM preload
-sal_Bool CheckOEMPreload()
-{
-    try
-    {
-        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-
-        // create OEM preload service
-        Reference < com::sun::star::ui::dialogs::XExecutableDialog > xDialog( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.preload.OEMPreloadWizard" ) ) ), UNO_QUERY );
-
-        if ( xDialog.is() )
-        {
-            // execute OEM preload dialog and check return value
-            sal_Int16 nResult = xDialog->execute();
-            if ( nResult != com::sun::star::ui::dialogs::ExecutableDialogResults::OK )
-                return sal_False;
-            else
-                ResetOEMPreload();
-        }
-    }
-    catch ( RuntimeException& )
-    {
-    }
-
-    return sal_True;
-}
-
-#endif
-
-// ----------------------------------------------------------------------------
-
-void InitTestToolLib()
-{
-#ifndef BUILD_SOSL
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::InitTestToolLib" );
-
-    OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
-    OUString    aModulePath;
-
-    ::vos::OStartupInfo().getExecutableFile( aModulePath );
-    sal_uInt32  lastIndex = aModulePath.lastIndexOf('/');
-    if ( lastIndex > 0 )
-        aModulePath = aModulePath.copy( 0, lastIndex+1 );
-
-    aModulePath += OUString::createFromAscii( SVLIBRARY( "sts" ) );
-
-    // Shortcut for Performance: We expect that the test tool library is not installed
-    // (only for testing purpose). It should be located beside our executable.
-    // We don't want to pay for searching through LD_LIBRARY_PATH so we check for
-    // existence only in our executable path!!
-    osl::DirectoryItem  aItem;
-    osl::FileBase::RC   nResult = osl::DirectoryItem::get( aModulePath, aItem );
-
-    if ( nResult == osl::FileBase::E_None )
-    {
-        aTestToolModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
-        DBG_ASSERT( aTestToolModule, "Could not load sts library for testtool" );
-        if ( aTestToolModule )
-        {
-            void* pInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
-            DBG_ASSERT( pInitFunc, "Could not find 'CreateRemoteControl' in sts library to initialize testtool" );
-            if ( pInitFunc )
-                (*(pfunc_CreateRemoteControl)pInitFunc)();
-        }
-    }
-#endif
-}
-
-void DeInitTestToolLib()
-{
-#ifndef BUILD_SOSL
-    if ( aTestToolModule )
-    {
-        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
-
-        void* pDeInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
-        if ( pDeInitFunc )
-            (*(pfunc_DestroyRemoteControl)pDeInitFunc)();
-
-        osl_unloadModule( aTestToolModule );
-    }
-#endif
-}
 
 ResMgr* Desktop::GetDesktopResManager()
 {
@@ -531,7 +409,7 @@ void FatalErrorExit(OUString const & aMessage)
     _exit( 333 );
 }
 
-CommandLineArgs* GetCommandLineArgs()
+CommandLineArgs* Desktop::GetCommandLineArgs()
 {
     if ( !pArgs )
     {
@@ -551,43 +429,6 @@ void SetCommandLineArgs( const OUString & inIPCThreadCommandLine )
         delete pArgs;
     }
     pArgs = new CommandLineArgs( inIPCThreadCommandLine );
-}
-
-BOOL InitializeInstallation( const UniString& rAppFilename )
-{
-    UniString aAppPath( rAppFilename );
-    rtl::OUString aFinishInstallation;
-    osl::FileBase::getFileURLFromSystemPath( aAppPath, aFinishInstallation );
-    aAppPath = UniString( aFinishInstallation );
-
-    xub_StrLen nPos = aAppPath.SearchBackward( '/' );
-    aAppPath.Erase( nPos );
-    aAppPath += '/';
-    aAppPath += DEFINE_CONST_UNICODE( INSTALLER_INITFILENAME );
-
-    osl::DirectoryItem aDI;
-    if( osl::DirectoryItem::get( aAppPath, aDI ) == osl_File_E_None )
-    {
-        // Load initialization code only on demand. This is done if the the 'initialize.ini'
-        // is written next to the executable. After initialization this file is removed.
-        // The implementation disposes the old service manager and creates an new one so we
-        // cannot use a service for InitializeInstallation!!
-        OUString aFuncName( RTL_CONSTASCII_USTRINGPARAM( INSTALLER_INITIALIZEINSTALLATION_CFUNCNAME ));
-        OUString aModulePath = OUString::createFromAscii( SVLIBRARY( "set" ) );
-
-        oslModule aSetupModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
-        if ( aSetupModule )
-        {
-            void* pInitFunc = osl_getSymbol( aSetupModule, aFuncName.pData );
-            if ( pInitFunc )
-                (*(pfunc_InstallerInitializeInstallation)pInitFunc)( rAppFilename.GetBuffer() );
-            osl_unloadModule( aSetupModule );
-        }
-
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 Desktop aDesktop;
@@ -683,11 +524,15 @@ Desktop::Desktop() : m_pIntro( 0 ), m_aBootstrapError( BE_OK )
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
 
+Desktop::~Desktop()
+{
+}
+
 void Desktop::Init()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
 
-    Reference < XMultiServiceFactory > rSMgr = createApplicationServiceManager();
+    Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( ! rSMgr.is() )
     {
         SetBootstrapError( BE_UNO_SERVICEMANAGER );
@@ -704,7 +549,7 @@ void Desktop::Init()
 void Desktop::DeInit()
 {
     Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-    destroyApplicationServiceManager( xXMultiServiceFactory );
+    DestroyApplicationServiceManager( xXMultiServiceFactory );
     // nobody should get a reference to the destroyed factory
     ::comphelper::setProcessServiceFactory(NULL);
 
@@ -1303,9 +1148,11 @@ void Desktop::Main()
     if ( m_aBootstrapError != BE_OK )
     {
         HandleBootstrapErrors( m_aBootstrapError );
+        return;
     }
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
@@ -1333,103 +1180,14 @@ void Desktop::Main()
     //  Initialise Single Signon
     sal_Bool bCanceled = ! InitSSO();
 
-
-    //  Read the common configuration items for optimization purpose
-    //  do not do it if terminate flag was specified, to avoid exception
     sal_Bool bTerminate = bCanceled || pCmdLineArgs->IsTerminateAfterInit();
     if( !bTerminate )
     {
-        try
-        {
-            bCanceled = ! InitConfiguration();
-        }
-        catch( ::com::sun::star::lang::ServiceNotRegisteredException& )
-        {
-            this->HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
-        }
-        catch( ::com::sun::star::configuration::MissingBootstrapFileException& e )
-        {
-            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::MISSING_BOOTSTRAP_FILE,
-                                                    e.BootstrapFileURL ));
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, aMsg );
-        }
-        catch( ::com::sun::star::configuration::InvalidBootstrapFileException& e )
-        {
-            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY,
-                                                    e.BootstrapFileURL ));
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
-        }
-        catch( ::com::sun::star::configuration::InstallationIncompleteException& )
-        {
-            OUString aVersionFileURL;
-            OUString aMsg;
-
-            utl::Bootstrap::PathStatus aPathStatus = utl::Bootstrap::locateVersionFile( aVersionFileURL );
-            if ( aPathStatus == utl::Bootstrap::PATH_EXISTS )
-                aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE_ENTRY, aVersionFileURL );
-            else
-                aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE, aVersionFileURL );
-
-            HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
-        }
-        catch ( drafts::com::sun::star::configuration::backend::BackendAccessException& exception)
-        {
-            // [cm122549] It is assumed in this case that the message
-            // coming from InitConfiguration (in fact CreateApplicationConf...)
-            // is suitable for display directly.
-            FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
-        }
-        catch ( drafts::com::sun::star::configuration::backend::BackendSetupException& exception)
-        {
-            // [cm122549] It is assumed in this case that the message
-            // coming from InitConfiguration (in fact CreateApplicationConf...)
-            // is suitable for display directly.
-            FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
-        }
-        catch ( ::com::sun::star::configuration::CannotLoadConfigurationException& )
-        {
-            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
-                                                 OUString() ));
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
-        }
-        catch( ::com::sun::star::uno::Exception& )
-        {
-            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
-                                                 OUString() ));
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
-        }
-        /*
-        catch( ... )
-        {
-            OUString aMsg( CreateErrorMsgString(, OUString))
-            HandleBootstrapErrors(, aMsg);
-        }
-        */
+        //  Read the common configuration items for optimization purpose
+        //  do not do it if terminate flag was specified, to avoid exception
+        if ( !InitializeConfiguration() )
+            return;
     }
-
-    if (bCanceled)
-        return;
-
-    LanguageType aLanguageType;
-    String aMgrName = String::CreateFromAscii( "iso" );
-    aMgrName += String::CreateFromInt32(SUPD); // current build version
-    ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
-    String aTitle = String( ResId( RID_APPTITLE, pLabelResMgr ) );
-    delete pLabelResMgr;
-
-#ifndef BUILD_SOSL
-    if( TabRegDialog(aTitle) ) return;
-#endif
-
-#ifndef PRODUCT
-    ::rtl::OUString aDefault;
-    aTitle += DEFINE_CONST_UNICODE(" [");
-    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-    aTitle += aVerId;
-    aTitle += 0x005D ; // 5Dh ^= ']'
-#endif
-
-    SetDisplayName( aTitle );
 
     //  The only step that should be done if terminate flag was specified
     //  Typically called by the plugin only
@@ -1440,9 +1198,34 @@ void Desktop::Main()
 
     if( !bTerminate )
     {
-        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+        sal_Bool    bCheckOk = sal_False;
+        LanguageType aLanguageType;
+        String aMgrName = String::CreateFromAscii( "iso" );
+        aMgrName += String::CreateFromInt32(SUPD); // current build version
+        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+        String aTitle = String( ResId( RID_APPTITLE, pLabelResMgr ) );
+        delete pLabelResMgr;
+
+        // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
+        OUString aTitleString( aTitle );
+        bCheckOk = CheckInstallation( aTitleString );
+        if ( !bCheckOk )
+            return;
+        else
+            aTitle = aTitleString;
+
+#ifndef PRODUCT
+        ::rtl::OUString aDefault;
+        aTitle += DEFINE_CONST_UNICODE(" [");
+        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+        aTitle += aVerId;
+        aTitle += 0x005D ; // 5Dh ^= ']'
+#endif
+
+        SetDisplayName( aTitle );
+
         // register sevices before we do anything else
-        registerServices( xSMgr );
+        RegisterServices( xSMgr );
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         SvtPathOptions* pPathOptions = new SvtPathOptions;
@@ -1466,26 +1249,8 @@ void Desktop::Main()
 
         sal_Bool bTerminateRequested = sal_False;
 
-#ifndef BUILD_SOSL
-        // preload function depends on an initialized sfx application!
-        if ( IsOEMPreload() )
-        {
-            if ( !CheckOEMPreload() )
-            {
-                try
-                {
-                    bTerminateRequested = sal_True;
-                    Reference< XDesktop > xDesktop( xSMgr->createInstance(
-                                                                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))),
-                                                                UNO_QUERY );
-                    xDesktop->terminate();
-                }
-                catch( ::com::sun::star::uno::Exception& )
-                {
-                }
-            }
-        }
-#endif
+        // Preload function depends on an initialized sfx application!
+        bTerminateRequested = OEMPreloadProcess();
 
         {
             sal_Bool bUseSystemFileDialog;
@@ -1504,56 +1269,11 @@ void Desktop::Main()
 
             InitTestToolLib();
 
-            if ( !bTerminateRequested &&
-                 !pCmdLineArgs->IsInvisible() )
-            {
-                try
-                {
-                    // the shutdown icon sits in the systray and allows the user to keep
-                    // the office instance running for quicker restart
-                    // this will only be activated if -quickstart was specified on cmdline
-                    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
-
-                    sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
-                    Sequence< Any > aSeq( 1 );
-                    aSeq[0] <<= bQuickstart;
-
-                    // Try to instanciate quickstart service. This service is not mandatory, so
-                    // do nothing if service is not available.
-                    Reference < XComponent > xQuickstart( xSMgr->createInstanceWithArguments(
-                                                            DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
-                                                          UNO_QUERY );
-                }
-                catch( ::com::sun::star::uno::Exception& )
-                {
-                }
-            }
+            if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
+                InitializeQuickstartMode( xSMgr );
 
             if ( pCmdLineArgs->IsPlugin() )
-            {
-                RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (cd100003) create PluginAcceptThread" );
-
-                OSecurity   aSecurity;
-                OUString    aUserIdent;
-                OUString    aVersionStr;
-
-                aSecurity.getUserIdent( aUserIdent );
-
-                OSL_ENSURE( pCmdLineArgs->GetVersionString( aVersionStr ), "No plugin version is specified!\n" );
-
-                OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
-                aAcceptString += aVersionStr;
-                aAcceptString += aUserIdent;
-
-                pPluginAcceptThread = new PluginAcceptThread(   xSMgr,
-                                                                new OInstanceProvider( xSMgr ),
-                                                                aAcceptString );
-
-                // We have to acquire the plugin accept thread object to be sure
-                // that the instance is still alive after an exception was thrown
-                pPluginAcceptThread->acquire();
-                pPluginAcceptThread->create();
-            }
+                InitializePluginMode( xSMgr );
 
             if ( !Application::IsRemoteServer() )
             {
@@ -1595,22 +1315,15 @@ void Desktop::Main()
                 SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
 
             // remove temp directory
-            removeTemporaryDirectory();
+            RemoveTemporaryDirectory();
 
-            if( pOfficeAcceptThread )
-            {
-                pOfficeAcceptThread->stopAccepting();
-#ifndef LINUX
-                pOfficeAcceptThread->join();
-                delete pOfficeAcceptThread;
-#endif
-                pOfficeAcceptThread = 0;
-            }
+            DeregisterServices();
 
             if ( pPluginAcceptThread )
             {
                 pPluginAcceptThread->terminate();
                 pPluginAcceptThread->release();
+                pPluginAcceptThread = 0;
             }
 
             DeInitTestToolLib();
@@ -1629,115 +1342,129 @@ void Desktop::Main()
     utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 }
 
-#ifndef BUILD_SOSL
-sal_Bool Desktop::TabRegDialog(String aTitle)
+sal_Bool Desktop::InitializeConfiguration()
 {
-    // get the tabreg service for an evaluation version
-    // without this service office shouldn't run at all
-    String aEval;
-    sal_Bool bExpired = sal_True;
-    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-    Reference < XMaterialHolder > xHolder( xSMgr->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
-    if ( xHolder.is() )
+    sal_Bool bOk = sal_False;
+
+    try
     {
-        // get a sequence of strings for the defined locales
-        // a registered version doesn't provide data
-        bExpired = sal_False;
-        Any aData = xHolder->getMaterial();
-        Sequence < NamedValue > aSeq;
-        if ( aData >>= aSeq )
-        {
-            // this is an evaluation version, because it provides "material"
-            bExpired = sal_True;
+        bOk = InitConfiguration();
+    }
+    catch( ::com::sun::star::lang::ServiceNotRegisteredException& )
+    {
+        this->HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
+    }
+    catch( ::com::sun::star::configuration::MissingBootstrapFileException& e )
+    {
+        OUString aMsg( CreateErrorMsgString( utl::Bootstrap::MISSING_BOOTSTRAP_FILE,
+                                                e.BootstrapFileURL ));
+        HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, aMsg );
+    }
+    catch( ::com::sun::star::configuration::InvalidBootstrapFileException& e )
+    {
+        OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY,
+                                                e.BootstrapFileURL ));
+        HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
+    }
+    catch( ::com::sun::star::configuration::InstallationIncompleteException& )
+    {
+        OUString aVersionFileURL;
+        OUString aMsg;
 
-            // determine current locale
-            ::rtl::OUString aLocale;
-            ::rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-            aRet >>= aLocale;
+        utl::Bootstrap::PathStatus aPathStatus = utl::Bootstrap::locateVersionFile( aVersionFileURL );
+        if ( aPathStatus == utl::Bootstrap::PATH_EXISTS )
+            aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE_ENTRY, aVersionFileURL );
+        else
+            aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE, aVersionFileURL );
 
-            sal_Int32 nCount = aSeq.getLength();
-            if ( nCount )
-            {
-                // first entry is for expiry
-                const NamedValue& rValue = aSeq[0];
-                if ( rValue.Name.equalsAscii("expired") )
-                    rValue.Value >>= bExpired;
-            }
-
-            // find string for matching locale
-            sal_Int32 n;
-            for ( n=0; n<nCount; n++ )
-            {
-                const NamedValue& rValue = aSeq[n];
-                if ( rValue.Name == aLocale )
-                {
-                    rValue.Value >>= aTmp;
-                    aEval = aTmp;
-                    break;
-                }
-            }
-
-            if ( n == nCount )
-            {
-                // try matching only first part of locale, if tab service provides it
-                ::rtl::OUString aShortLocale;
-                sal_Int32 nPos = aLocale.indexOf('_');
-                if ( nPos > 0 )
-                {
-                    aShortLocale = aLocale.copy( 0, nPos );
-                    for ( n=0; n<nCount; n++ )
-                    {
-                        const NamedValue& rValue = aSeq[n];
-                        if ( rValue.Name == aShortLocale )
-                        {
-                            rValue.Value >>= aTmp;
-                            aEval = aTmp;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if ( n == nCount )
-            {
-                // current locale is unknown for service, use default english
-                sal_Int32 nCount = aSeq.getLength();
-                for ( n=0; n<nCount; n++ )
-                {
-                    const NamedValue& rValue = aSeq[n];
-                    if ( rValue.Name.equalsAscii("en") )
-                    {
-                        rValue.Value >>= aTmp;
-                        aEval = aTmp;
-                        break;
-                    }
-                }
-
-                if ( n == nCount )
-                    // strange version, no english string
-                    bExpired = sal_True;
-            }
-        }
+        HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
+    }
+    catch ( drafts::com::sun::star::configuration::backend::BackendAccessException& exception)
+    {
+        // [cm122549] It is assumed in this case that the message
+        // coming from InitConfiguration (in fact CreateApplicationConf...)
+        // is suitable for display directly.
+        FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
+    }
+    catch ( drafts::com::sun::star::configuration::backend::BackendSetupException& exception)
+    {
+        // [cm122549] It is assumed in this case that the message
+        // coming from InitConfiguration (in fact CreateApplicationConf...)
+        // is suitable for display directly.
+        FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
+    }
+    catch ( ::com::sun::star::configuration::CannotLoadConfigurationException& )
+    {
+        OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
+                                                OUString() ));
+        HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
+                                                OUString() ));
+        HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
 
-    if ( aEval.Len() )
-    {
-        if ( aTitle.GetChar(aTitle.Len()-1) != ' ' )
-            aTitle += ' ';
-        aTitle += aEval;
-    }
-
-    if ( bExpired )
-    {
-        InfoBox aBox( NULL, aTitle );
-        aBox.Execute();
-    }
-    return bExpired;
-
+    return bOk;
 }
-#endif
+
+sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& rSMgr )
+{
+    try
+    {
+        // the shutdown icon sits in the systray and allows the user to keep
+        // the office instance running for quicker restart
+        // this will only be activated if -quickstart was specified on cmdline
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
+
+        sal_Bool bQuickstart = GetCommandLineArgs()->IsQuickstart();
+        Sequence< Any > aSeq( 1 );
+        aSeq[0] <<= bQuickstart;
+
+        // Try to instanciate quickstart service. This service is not mandatory, so
+        // do nothing if service is not available.
+        Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
+                                                DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
+                                                UNO_QUERY );
+        return sal_True;
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        return sal_False;
+    }
+}
+
+sal_Bool Desktop::InitializePluginMode( Reference< XMultiServiceFactory >& rSMgr )
+{
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) create PluginAcceptThread" );
+
+    OSecurity   aSecurity;
+    OUString    aUserIdent;
+    OUString    aVersionStr;
+
+    aSecurity.getUserIdent( aUserIdent );
+
+    OSL_ENSURE( GetCommandLineArgs()->GetVersionString( aVersionStr ), "No plugin version is specified!\n" );
+
+    OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
+    aAcceptString += aVersionStr;
+    aAcceptString += aUserIdent;
+
+    if ( !pPluginAcceptThread )
+    {
+        pPluginAcceptThread = new PluginAcceptThread(   rSMgr,
+                                                        new OInstanceProvider( rSMgr ),
+                                                        aAcceptString );
+
+        // We have to acquire the plugin accept thread object to be sure
+        // that the instance is still alive after an exception was thrown
+        pPluginAcceptThread->acquire();
+        pPluginAcceptThread->create();
+    }
+
+    return sal_True;
+}
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
@@ -2392,3 +2119,5 @@ void Desktop::CheckFirstRun( )
     // commit the changes
     aCommonMisc.commit();
 }
+
+} // namespace desktop

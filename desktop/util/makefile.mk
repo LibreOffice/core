@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-24 15:44:21 $
+#   last change: $Author: cd $ $Date: 2002-11-01 14:46:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,10 @@ APP1OBJS= \
             $(OBJ)$/ssoinit.obj				\
             $(OBJ)$/configinit.obj			\
             $(OBJ)$/officeipcmanager.obj	\
-            $(OBJ)$/javainteractionhandler.obj
+            $(OBJ)$/javainteractionhandler.obj	\
+            $(OBJ)$/oempreload.obj			\
+            $(OBJ)$/testtool.obj			\
+            $(OBJ)$/checkinstall.obj
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
@@ -244,7 +247,10 @@ SLOFILES =	\
     $(SLO)$/ssoinit.obj			\
     $(SLO)$/configinit.obj			\
     $(SLO)$/officeipcmanager.obj	\
-    $(SLO)$/javainteractionhandler.obj
+    $(SLO)$/javainteractionhandler.obj	\
+    $(SLO)$/oempreload.obj			\
+    $(SLO)$/testtool.obj			\
+    $(SLO)$/checkinstall.obj
 
 SHL1OBJS=	$(SLOFILES)
 SHL1TARGET=	dsk$(UPD)$(DLLPOSTFIX)

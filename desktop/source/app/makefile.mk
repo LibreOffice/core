@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-23 15:24:48 $
+#   last change: $Author: cd $ $Date: 2002-11-01 14:49:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,10 @@ OBJFILES = \
          $(OBJ)$/ssoinit.obj				\
         $(OBJ)$/configinit.obj		    \
         $(OBJ)$/officeipcmanager.obj	\
-        $(OBJ)$/javainteractionhandler.obj		
+        $(OBJ)$/javainteractionhandler.obj	\
+        $(OBJ)$/oempreload.obj			\
+        $(OBJ)$/testtool.obj			\
+        $(OBJ)$/checkinstall.obj
 
 .IF "$(OS)" == "SOLARIS"
 
@@ -122,7 +125,10 @@ SLOFILES = \
         $(SLO)$/configinit.obj			\
         $(SLO)$/officeipcmanager.obj	\
         $(SLO)$/javainteractionhandler.obj \
-        $(SLO)$/lockfile.obj
+        $(SLO)$/lockfile.obj			\
+        $(SLO)$/oempreload.obj			\
+        $(SLO)$/testtool.obj			\
+        $(SLO)$/checkinstall.obj
 
 .ENDIF
 
