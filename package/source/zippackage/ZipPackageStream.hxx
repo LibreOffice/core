@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 14:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,25 +94,32 @@ public:
     inline sal_Bool IsToBeCompressed () { return bToBeCompressed;}
     inline sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
     inline sal_Bool IsPackageMember ()  { return bPackageMember;}
-    const com::sun::star::uno::Sequence < sal_Int8 >& getEncryptionKey ();
     const vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
-    const com::sun::star::uno::Sequence < sal_Int8 >& getInitialisationVector ()
+    const com::sun::star::uno::Sequence < sal_Int8 >& getKey ()
+    { return xEncryptionData->aKey;}
+    const com::sun::star::uno::Sequence < sal_uInt8 >& getInitialisationVector ()
     { return xEncryptionData->aInitVector;}
-    const com::sun::star::uno::Sequence < sal_Int8 >& getSalt ()
+    const com::sun::star::uno::Sequence < sal_uInt8 >& getSalt ()
     { return xEncryptionData->aSalt;}
-    const sal_Int64 getIterationCount ()
+    const sal_Int32 getIterationCount ()
     { return xEncryptionData->nIterationCount;}
+    const sal_Int32 getSize ()
+    { return aEntry.nSize;}
 
     inline void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
     inline void SetToBeEncrypted (sal_Bool bNewValue)  { bToBeEncrypted  = bNewValue;}
     inline void SetPackageMember (sal_Bool bNewValue)  { bPackageMember  = bNewValue;}
-    inline void setInitialisationVector (const com::sun::star::uno::Sequence < sal_Int8 >& rNewVector )
+    inline void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
+    { xEncryptionData->aKey = rNewKey;}
+    inline void setInitialisationVector (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewVector )
     { xEncryptionData->aInitVector = rNewVector;}
-    inline void setSalt (const com::sun::star::uno::Sequence < sal_Int8 >& rNewSalt )
+    inline void setSalt (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewSalt )
     { xEncryptionData->aSalt = rNewSalt;}
-    inline void setIterationCount (const sal_Int64 nNewCount)
+    inline void setIterationCount (const sal_Int32 nNewCount)
     { xEncryptionData->nIterationCount = nNewCount;}
+    inline void setSize (const sal_Int32 nNewSize)
+    { aEntry.nSize = nNewSize;}
 
     ZipPackageStream (ZipPackage & rNewPackage);
     virtual ~ZipPackageStream( void );
