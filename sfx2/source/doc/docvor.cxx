@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-05 14:01:54 $
+ *  last change: $Author: pb $ $Date: 2001-06-18 09:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,10 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX //autogen
 #include <vcl/drag.hxx>
+#endif
 #endif
 #ifndef _SV_PRINT_HXX //autogen
 #include <vcl/print.hxx>
@@ -104,9 +106,6 @@
 #include "sfxtypes.hxx"
 #include "app.hxx"
 #include "dispatch.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "sfxresid.hxx"
 #include "iodlg.hxx"
 #include "doc.hrc"
@@ -122,7 +121,7 @@
 #endif
 
 static const char cDelim = ':';
-BOOL SfxOrganizeListBox_Impl::bDropMoveOk=TRUE;
+BOOL SfxOrganizeListBox_Impl::bDropMoveOk = TRUE;
 
 //=========================================================================
 
@@ -419,7 +418,7 @@ Path::Path(SvLBox *pBox, SvLBoxEntry *pEntry) :
         return;
     SvLBoxEntry *pParent = pBox->GetParent(pEntry);
     do {
-        pData->aUS.Insert(pBox->GetModel()->GetRelPos(pEntry), 0);
+        pData->aUS.Insert((USHORT)pBox->GetModel()->GetRelPos(pEntry), 0);
         if(0 == pParent)
             break;
         pEntry = pParent;
@@ -449,67 +448,6 @@ void SfxOrganizeListBox_Impl::Command( const CommandEvent& rCEvt )
     }
     else
         SvTreeListBox::Command(rCEvt);
-}
-
-BOOL SfxOrganizeListBox_Impl::NotifyQueryDrop(SvLBoxEntry *pEntry)
-
-/* [Beschreibung]
-
-    QueryDrop-Handler (SV); Funktionsweise kann der Wahrheits,
-    tabelle unten entnommen werden.
-
-
-                    B       D       C1      C2      C3
-
-        Quelle      0       1       2       3       4
-    Ziel
-     0              -       +***    -       -       -
-     1              -       +***    [-]*    +       -
-     2              -       -       [-]     p=p +** -
-     3              -       -       -       p=p +** p=p && pp=pp +
-     4              -       -       -       -       p=p && pp=pp +
-    ----
-    *   Problem Move; logische Bereiche koennen nicht geloescht werden
-    **  p = Parent -> p=p: identische Parents
-        pp = ParentParent
-    *** geht bei Vorlagen
-*/
-{
-    if(!pEntry)
-        return FALSE;
-    SvLBox *pSource = GetSourceView();
-    SvLBoxEntry *pSourceEntry = pSource->FirstSelected();
-    if(pEntry == pSourceEntry)
-        return FALSE;
-    USHORT nSourceLevel = pSource->GetModel()->GetDepth(pSourceEntry);
-    if(VIEW_FILES == ((SfxOrganizeListBox_Impl *)pSource)->GetViewType())
-        ++nSourceLevel;
-    USHORT nTargetLevel = GetModel()->GetDepth(pEntry);
-    if(VIEW_FILES == GetViewType())
-        ++nTargetLevel;
-    Path aSource(pSource, pSourceEntry);
-    Path aTarget(this, pEntry);
-    const USHORT SL = ((SfxOrganizeListBox_Impl *)pSource)->GetDocLevel();
-    const USHORT TL = GetDocLevel();
-
-    return( (nSourceLevel == 1 && nTargetLevel == 0 &&
-            VIEW_TEMPLATES ==
-            ((SfxOrganizeListBox_Impl *)pSource)->GetViewType()) ||
-           (nSourceLevel == 1 && nTargetLevel == 1 &&
-            VIEW_TEMPLATES ==
-            ((SfxOrganizeListBox_Impl *)pSource)->GetViewType() &&
-            VIEW_TEMPLATES == GetViewType()) ||
-           (nSourceLevel == 3 && nTargetLevel == 1) ||
-           (nSourceLevel == 3 && nTargetLevel == 2 &&
-            aSource[1+SL] == aTarget[1+TL]) ||
-           (nSourceLevel == 3 && nTargetLevel == 3 &&
-            aSource[1+SL] == aTarget[1+TL]) ||
-           (nSourceLevel == 4 && nTargetLevel == 3 &&
-            aSource[1+SL] == aTarget[1+TL] &&
-            aSource[2+SL] == aTarget[2+TL]) ||
-           (nSourceLevel == 4 && nTargetLevel == 4 &&
-            aSource[1+SL] == aTarget[1+TL] &&
-            aSource[2+SL] == aTarget[2+TL]));
 }
 
 //-------------------------------------------------------------------------
@@ -571,29 +509,6 @@ BOOL SfxOrganizeListBox_Impl::Select( SvLBoxEntry* pEntry, BOOL bSelect )
     GetObjectShell(aPath)->TriggerHelpPI(
         aPath[nLevel+1], aPath[nLevel+2], aPath[nLevel+3]);
     return SvTreeListBox::Select(pEntry,bSelect);
-}
-
-DragDropMode SfxOrganizeListBox_Impl::NotifyBeginDrag(SvLBoxEntry *pSourceEntry)
-/*  [Beschreibung]
-
-    Was fuer DragActions sind an dieser Stelle erlaubt.
-    Fuer Dokumentinhalte darf nur kopiert, nicht verschoben werden.
-*/
-{
-    USHORT nSourceLevel = GetModel()->GetDepth(pSourceEntry);
-    if(VIEW_FILES == GetViewType())
-        ++nSourceLevel;
-    if(nSourceLevel>=2)
-    {
-        bDropMoveOk=FALSE;
-        return GetDragDropMode();
-    }
-    else
-    {
-        bDropMoveOk=TRUE;
-        return GetDragDropMode();
-    }
-
 }
 
 //-------------------------------------------------------------------------
@@ -1037,6 +952,124 @@ BOOL SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rTe
 
 //-------------------------------------------------------------------------
 
+#ifndef TF_SVDATA
+
+DragDropMode SfxOrganizeListBox_Impl::NotifyBeginDrag(SvLBoxEntry *pSourceEntry)
+/*  [Beschreibung]
+
+    Was fuer DragActions sind an dieser Stelle erlaubt.
+    Fuer Dokumentinhalte darf nur kopiert, nicht verschoben werden.
+*/
+{
+    USHORT nSourceLevel = GetModel()->GetDepth(pSourceEntry);
+    if(VIEW_FILES == GetViewType())
+        ++nSourceLevel;
+    if(nSourceLevel>=2)
+    {
+        bDropMoveOk=FALSE;
+        return GetDragDropMode();
+    }
+    else
+    {
+        bDropMoveOk=TRUE;
+        return GetDragDropMode();
+    }
+
+}
+
+//-------------------------------------------------------------------------
+
+BOOL SfxOrganizeListBox_Impl::NotifyQueryDrop(SvLBoxEntry *pEntry)
+
+/* [Beschreibung]
+
+    QueryDrop-Handler (SV); Funktionsweise kann der Wahrheits,
+    tabelle unten entnommen werden.
+
+
+                    B       D       C1      C2      C3
+
+        Quelle      0       1       2       3       4
+    Ziel
+     0              -       +***    -       -       -
+     1              -       +***    [-]*    +       -
+     2              -       -       [-]     p=p +** -
+     3              -       -       -       p=p +** p=p && pp=pp +
+     4              -       -       -       -       p=p && pp=pp +
+    ----
+    *   Problem Move; logische Bereiche koennen nicht geloescht werden
+    **  p = Parent -> p=p: identische Parents
+        pp = ParentParent
+    *** geht bei Vorlagen
+*/
+{
+    if(!pEntry)
+        return FALSE;
+    SvLBox *pSource = GetSourceView();
+    SvLBoxEntry *pSourceEntry = pSource->FirstSelected();
+    if(pEntry == pSourceEntry)
+        return FALSE;
+    USHORT nSourceLevel = pSource->GetModel()->GetDepth(pSourceEntry);
+    if(VIEW_FILES == ((SfxOrganizeListBox_Impl *)pSource)->GetViewType())
+        ++nSourceLevel;
+    USHORT nTargetLevel = GetModel()->GetDepth(pEntry);
+    if(VIEW_FILES == GetViewType())
+        ++nTargetLevel;
+    Path aSource(pSource, pSourceEntry);
+    Path aTarget(this, pEntry);
+    const USHORT SL = ((SfxOrganizeListBox_Impl *)pSource)->GetDocLevel();
+    const USHORT TL = GetDocLevel();
+
+    return( (nSourceLevel == 1 && nTargetLevel == 0 &&
+            VIEW_TEMPLATES ==
+            ((SfxOrganizeListBox_Impl *)pSource)->GetViewType()) ||
+           (nSourceLevel == 1 && nTargetLevel == 1 &&
+            VIEW_TEMPLATES ==
+            ((SfxOrganizeListBox_Impl *)pSource)->GetViewType() &&
+            VIEW_TEMPLATES == GetViewType()) ||
+           (nSourceLevel == 3 && nTargetLevel == 1) ||
+           (nSourceLevel == 3 && nTargetLevel == 2 &&
+            aSource[1+SL] == aTarget[1+TL]) ||
+           (nSourceLevel == 3 && nTargetLevel == 3 &&
+            aSource[1+SL] == aTarget[1+TL]) ||
+           (nSourceLevel == 4 && nTargetLevel == 3 &&
+            aSource[1+SL] == aTarget[1+TL] &&
+            aSource[2+SL] == aTarget[2+TL]) ||
+           (nSourceLevel == 4 && nTargetLevel == 4 &&
+            aSource[1+SL] == aTarget[1+TL] &&
+            aSource[2+SL] == aTarget[2+TL]));
+}
+
+//-------------------------------------------------------------------------
+
+BOOL SfxOrganizeListBox_Impl::QueryDrop( DropEvent& rEvt )
+
+/*  [Beschreibung]
+
+    QueryDrop Handler; wird verwendet, um in der Dokumentenansicht weitere
+    Dokumente per Drag&Drop hinzuf"ugen zu k"onnen
+    (SV-Handler)
+
+    [Returnwert]
+
+    BOOL                Erfolg oder Mi"serfolg
+
+    [Querverweise]
+    <SfxOrganizeListBox_Impl::Drop(DropEvent& rEvt)>
+*/
+
+{
+
+/*  if(rEvt.GetAction()==DROP_MOVE && !bDropMoveOk)
+        return FALSE;*/
+    if( rEvt.IsDefaultAction() )
+        rEvt.SetAction( DROP_COPY );
+    return eViewType == VIEW_FILES && DragServer::HasFormat(0, FORMAT_FILE)
+        ? TRUE : SvTreeListBox::QueryDrop(rEvt);
+}
+
+//-------------------------------------------------------------------------
+
 BOOL SfxOrganizeListBox_Impl::Drop( const DropEvent& rEvt )
 
 /*  [Beschreibung]
@@ -1070,31 +1103,96 @@ BOOL SfxOrganizeListBox_Impl::Drop( const DropEvent& rEvt )
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeListBox_Impl::QueryDrop( DropEvent& rEvt )
+#else // TF_SVDATA
 
-/*  [Beschreibung]
-
-    QueryDrop Handler; wird verwendet, um in der Dokumentenansicht weitere
-    Dokumente per Drag&Drop hinzuf"ugen zu k"onnen
-    (SV-Handler)
-
-    [Returnwert]
-
-    BOOL                Erfolg oder Mi"serfolg
-
-    [Querverweise]
-    <SfxOrganizeListBox_Impl::Drop(DropEvent& rEvt)>
-*/
-
+DragDropMode SfxOrganizeListBox_Impl::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
 {
+    USHORT nSourceLevel = GetModel()->GetDepth( pEntry );
+    if ( VIEW_FILES == GetViewType() )
+        ++nSourceLevel;
+    if ( nSourceLevel >= 2 )
+        bDropMoveOk = FALSE;
+    else
+        bDropMoveOk = TRUE;
 
-/*  if(rEvt.GetAction()==DROP_MOVE && !bDropMoveOk)
-        return FALSE;*/
-    if( rEvt.IsDefaultAction() )
-        rEvt.SetAction( DROP_COPY );
-    return eViewType == VIEW_FILES && DragServer::HasFormat(0, FORMAT_FILE)
-        ? TRUE : SvTreeListBox::QueryDrop(rEvt);
+    return GetDragDropMode();
 }
+
+//-------------------------------------------------------------------------
+
+BOOL SfxOrganizeListBox_Impl::NotifyAcceptDrop( SvLBoxEntry* pEntry )
+{
+    if(!pEntry)
+        return FALSE;
+    SvLBox *pSource = GetSourceView();
+    SvLBoxEntry *pSourceEntry = pSource->FirstSelected();
+    if(pEntry == pSourceEntry)
+        return FALSE;
+    USHORT nSourceLevel = pSource->GetModel()->GetDepth(pSourceEntry);
+    if(VIEW_FILES == ((SfxOrganizeListBox_Impl *)pSource)->GetViewType())
+        ++nSourceLevel;
+    USHORT nTargetLevel = GetModel()->GetDepth(pEntry);
+    if(VIEW_FILES == GetViewType())
+        ++nTargetLevel;
+    Path aSource(pSource, pSourceEntry);
+    Path aTarget(this, pEntry);
+    const USHORT SL = ((SfxOrganizeListBox_Impl *)pSource)->GetDocLevel();
+    const USHORT TL = GetDocLevel();
+
+    return( (nSourceLevel == 1 && nTargetLevel == 0 &&
+            VIEW_TEMPLATES ==
+            ((SfxOrganizeListBox_Impl *)pSource)->GetViewType()) ||
+           (nSourceLevel == 1 && nTargetLevel == 1 &&
+            VIEW_TEMPLATES ==
+            ((SfxOrganizeListBox_Impl *)pSource)->GetViewType() &&
+            VIEW_TEMPLATES == GetViewType()) ||
+           (nSourceLevel == 3 && nTargetLevel == 1) ||
+           (nSourceLevel == 3 && nTargetLevel == 2 &&
+            aSource[1+SL] == aTarget[1+TL]) ||
+           (nSourceLevel == 3 && nTargetLevel == 3 &&
+            aSource[1+SL] == aTarget[1+TL]) ||
+           (nSourceLevel == 4 && nTargetLevel == 3 &&
+            aSource[1+SL] == aTarget[1+TL] &&
+            aSource[2+SL] == aTarget[2+TL]) ||
+           (nSourceLevel == 4 && nTargetLevel == 4 &&
+            aSource[1+SL] == aTarget[1+TL] &&
+            aSource[2+SL] == aTarget[2+TL]));
+}
+
+//-------------------------------------------------------------------------
+
+sal_Int8 SfxOrganizeListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    sal_Bool bAccept = ( eViewType == VIEW_FILES && IsDropFormatSupported( SOT_FORMAT_FILE ) );
+    if ( bAccept )
+        return rEvt.mnAction;
+    else
+        return SvTreeListBox::AcceptDrop( rEvt );
+}
+
+//-------------------------------------------------------------------------
+
+sal_Int8 SfxOrganizeListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    TransferableDataHelper aHelper( rEvt.maDropEvent.Transferable );
+    sal_uInt32 nFormatCount = aHelper.GetFormatCount();
+    BOOL bSuccess = FALSE;
+    for ( sal_uInt32 i = 0; i < nFormatCount; ++i )
+    {
+        String aFileName;
+        SotFormatStringId nId = aHelper.GetFormat(i);
+
+        if ( SOT_FORMAT_FILE == nId && aHelper.GetString( nId, aFileName ) )
+        {
+            INetURLObject aObj( aFileName, INET_PROT_FILE );
+            bSuccess |= pMgr->InsertFile( this, aObj.GetMainURL() );
+        }
+    }
+    bDropMoveOk = TRUE;
+    return bSuccess ? rEvt.mnAction : SvTreeListBox::ExecuteDrop( rEvt );
+}
+
+#endif // TF_SVDATA
 
 //-------------------------------------------------------------------------
 
@@ -1315,7 +1413,9 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl(
 //  SetDragOptions(DROP_COPY);
     SetEntryHeight( 16 );
     SetSelectionMode(SINGLE_SELECTION);
+#ifndef TF_SVDATA
     EnableDrop();
+#endif
     GetModel()->SetSortMode(SortNone);      // Bug in SvTools 303
 }
 

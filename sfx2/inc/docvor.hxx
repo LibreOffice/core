@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 14:58:49 $
+ *  last change: $Author: pb $ $Date: 2001-06-18 09:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ friend class SfxOrganizeDlg_Impl;
 protected:
     virtual BOOL EditingEntry( SvLBoxEntry* pEntry, Selection & );
     virtual BOOL EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
-    virtual BOOL NotifyQueryDrop(SvLBoxEntry *);
     virtual BOOL NotifyMoving(SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent, ULONG &);
@@ -106,11 +105,22 @@ protected:
                             SvLBoxEntry *&pNewParent, ULONG &);
     virtual void RequestingChilds( SvLBoxEntry* pParent );
     virtual long ExpandingHdl();
-    virtual BOOL Drop( const DropEvent& rEvt );
-    virtual BOOL QueryDrop( DropEvent& rEvt );
-    virtual DragDropMode NotifyBeginDrag(SvLBoxEntry *);
     virtual BOOL Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
     virtual void Command( const CommandEvent& rCEvt );
+
+#ifndef TF_SVDATA
+    // old d&d
+    virtual DragDropMode    NotifyBeginDrag(SvLBoxEntry *);
+    virtual BOOL            NotifyQueryDrop(SvLBoxEntry *);
+    virtual BOOL            QueryDrop( DropEvent& rEvt );
+    virtual BOOL            Drop( const DropEvent& rEvt );
+#else
+    // new d&d
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
+    virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* );
+    virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
+#endif
 
 public:
     enum DataEnum {
