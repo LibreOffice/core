@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-12-03 12:39:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
-#ifndef _INC_MEMORY
-//#include <memory.h>
-#endif
 
 using namespace connectivity;
 //**************************************************************
@@ -74,9 +71,15 @@ using namespace connectivity;
 //**************************************************************
 
 jclass java_io_InputStream::theClass = 0;
-
+java_io_InputStream::java_io_InputStream( JNIEnv * pEnv, jobject myObj )
+    : java_lang_Object( pEnv, myObj )
+{
+    SDBThreadAttach::addRef();
+}
 java_io_InputStream::~java_io_InputStream()
-{}
+{
+    SDBThreadAttach::releaseRef();
+}
 
 jclass java_io_InputStream::getMyClass()
 {
@@ -111,10 +114,12 @@ void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::c
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
-        char * cSignature = "(I)I";
-        char * cMethodName = "skip";
+        static char * cSignature = "(I)I";
+        static char * cMethodName = "skip";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallIntMethod( object, mID,nBytesToSkip);
@@ -129,10 +134,12 @@ sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
-        char * cSignature = "()Z";
-        char * cMethodName = "available";
+        static char * cSignature = "()Z";
+        static char * cMethodName = "available";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallBooleanMethod( object, mID);
@@ -146,10 +153,12 @@ void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::No
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
-        char * cSignature = "()V";
-        char * cMethodName = "close";
+        static char * cSignature = "()V";
+        static char * cMethodName = "close";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             t.pEnv->CallVoidMethod( object, mID);
@@ -167,10 +176,12 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
     if( t.pEnv )
     {
         jbyteArray pByteArray = t.pEnv->NewByteArray(nBytesToRead);
-        char * cSignature = "([BII)I";
-        char * cMethodName = "read";
+        static char * cSignature = "([BII)I";
+        static char * cMethodName = "read";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             while(!(out = t.pEnv->CallIntMethod( object, mID,pByteArray,0,nBytesToRead)))
