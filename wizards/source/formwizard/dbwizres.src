@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:11:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2764,7 +2764,7 @@ String RID_FAXWIZARDSALUTATION_START + 1
 String RID_FAXWIZARDSALUTATION_START + 2
 {
     Text [ de ] = "Liebe Kollegen,";
-    Text [ en-US] = "Dir Sir or Madam,";
+    Text [ en-US] = "Dear Sir or Madam,";
 };
 
 String RID_FAXWIZARDSALUTATION_START + 3
