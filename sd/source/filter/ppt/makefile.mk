@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 19:51:01 $
+#   last change: $Author: rt $ $Date: 2005-03-29 14:18:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ CDEFS+= -DDBG_ANIM_LOG
 
 SLOFILES =	\
         $(SLO)$/pptinanimations.obj\
-        $(SLO)$/pptatom.obj
+        $(SLO)$/pptatom.obj\
+        $(SLO)$/ppt97animations.obj
 
 # --- Targets --------------------------------------------------------------
 
