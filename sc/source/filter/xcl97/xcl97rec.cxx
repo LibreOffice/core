@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:58:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,20 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
 {
     if(pCaption)
     {
+        // Excel has one alignment per NoteObject while Calc supports
+        // one alignment per paragraph - use the first paragraph
+        // alignment (if set) as our overall alignment.
+        String aParaText( rEditObj.GetText( 0 ) );
+        if( aParaText.Len() )
+        {
+            SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
+            const SfxPoolItem* pItem = NULL;
+            if (aSet.GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
+            {
+                SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem).GetAdjust();
+                pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST));
+            }
+        }
         const SfxItemSet& rItemSet = pCaption->GetMergedItemSet();
 
         // horizontal alignment
