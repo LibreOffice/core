@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-27 18:20:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"           // ScRange, ScAddress
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _SVX_UNOTEXT_HXX
