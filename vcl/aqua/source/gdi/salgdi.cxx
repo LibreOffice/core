@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.39 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-05 03:02:45 $
+ *  $Revision: 1.40 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-05 03:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1887,6 +1887,7 @@ ULONG SalGraphics::GetKernPairs( ULONG              nPairs,
 void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
     ImplFontData *pFontData = new ImplFontData;
+
     pFontData->mnWidth = 10;
     pFontData->mnHeight = 10;
     pList->Add( pFontData );
@@ -1914,7 +1915,10 @@ void SalGraphics::DrawText( long                nX,
     {
         if ( ( pStr != NULL ) && ( nLen > 0 ) )
         {
-            ByteString   aByteString( pStr, nLen, gsl_getSystemTextEncoding() );
+            ByteString   aByteString( pStr,
+                                      nLen,
+                                      gsl_getSystemTextEncoding()
+                                    );
 
             const char  *pTextBuffer = aByteString.GetBuffer();
 
