@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errhdl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-25 09:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,51 +69,38 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 extern BOOL bAssert;                // TRUE, wenn eine ASSERT-Box hochkam
+
 
 // -----------------------------------------------------------------------
 // Ausgabe einer Fehlermeldung inkl. Dateiname und Zeilennummer
 // wo der Fehler auftrat.
 // Die Funktion darf nicht direkt benutzt werden!
 // -----------------------------------------------------------------------
-extern void AssertFail( const sal_Char*, const sal_Char*, USHORT );
-extern void AssertFail( USHORT, const sal_Char*, USHORT );
+SW_DLLPUBLIC void AssertFail( const sal_Char*, const sal_Char*, USHORT );
+SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 
-#ifdef WIN
-//MSC (7.0) machts nur mit static, ZTC in inlines nur ohne...
-#define ASSERT( cond, message ) \
-    if( !(cond) ) { \
-        static const char __FAR_DATA _pErrorText[] = #message; \
-        static const char __FAR_DATA _pFileName[]  = __FILE__; \
-       ::AssertFail( _pErrorText, _pFileName, __LINE__ ); \
-    }
-#else
 #define ASSERT( cond, message ) \
     if( !(cond) ) { \
         const char   *_pErrorText = #message; \
         const char   *_pFileName  = __FILE__; \
        ::AssertFail( _pErrorText, _pFileName, __LINE__ ); \
     }
-#endif
 
 // -----------------------------------------------------------------------
 // Prueft ob die angegebene Bedingung wahr ist, wenn nicht wird eine
 // Fehlermeldung die ueber die ID Identifiziert wird, ausgegeben.
 // -----------------------------------------------------------------------
-#ifdef WIN
-//MSC (7.0) machts nur mit static, ZTC in inlines nur ohne...
-#define ASSERT_ID( cond, id )   \
-    if( !(cond) ) { \
-        static const char __FAR_DATA _pFileName[]  = __FILE__;  \
-       ::AssertFail( (USHORT)id, _pFileName, __LINE__ );    \
-    }
-#else
 #define ASSERT_ID( cond, id ) \
     if( !(cond) ) { \
         const char   *_pFileName  = __FILE__; \
        ::AssertFail( (USHORT)id, _pFileName, __LINE__ ); \
     }
-#endif
 
 // -----------------------------------------------------------------------
 // Beim Bilden der Produktversion werden alle Debug-Utilities automatisch
