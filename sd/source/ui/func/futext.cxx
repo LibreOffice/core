@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: af $ $Date: 2002-10-17 15:07:54 $
+ *  last change: $Author: aw $ $Date: 2002-11-15 14:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,16 @@
 
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
+#endif
+
+// #104122#
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+
+// #104122#
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #include "sdresid.hxx"
@@ -855,10 +865,26 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    const SdrTextHorzAdjust eHA = ( ( pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ) ?
-                                                    SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_LEFT );
+                    // #104122# This is for Format/Page settings. Since this also leads
+                    // to the object defaults to be changed, i think this code can be
+                    // removed. CL. wanted to take a look before adding this.
+                    //const SdrTextHorzAdjust eHA = ( ( pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ) ?
+                    //                                SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_LEFT );
+                    //aSet.Put( SdrTextHorzAdjustItem( eHA ) );
 
-                    aSet.Put( SdrTextHorzAdjustItem( eHA ) );
+                    // #104122# Look in the object defaults if left-to-right is wanted. If
+                    // yes, set text anchoring to right to let the box grow to left.
+                    const SfxItemSet& rSet = pView->GetDefaultAttr();
+                    SvxFrameDirection eDirection = (SvxFrameDirection)((SvxFrameDirectionItem&)rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
+
+                    if(FRMDIR_HORI_RIGHT_TOP == eDirection)
+                    {
+                        aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                    }
+                    else
+                    {
+                        aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
+                    }
                 }
 
                 pTextObj->SetItemSet(aSet);
