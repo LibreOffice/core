@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 10:05:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+
+#include <functional>
 
 #define SYNC_DELAY                      200
 #define DROP_ACTION_TIMER_INITIAL_TICKS     10
@@ -1929,9 +1931,9 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         ::std::vector<FmFilterItem*> aItemList;
         if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
         {
-            ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> aGetEntry = ::std::mem_fun1(&FmFilterNavigator::getNextEntry);
+            ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> aGetEntry = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
             if ( rKeyCode.GetCode() == KEY_UP )
-                aGetEntry = ::std::mem_fun1(&FmFilterNavigator::getPrevEntry);
+                aGetEntry = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
 
             SvLBoxEntry* pTarget = aGetEntry(this,NULL);
 
