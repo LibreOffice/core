@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:31:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,14 +258,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     {
         DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
-    }
-
-    // append our frame
-    Reference < XFramesSupplier > xSup( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(),UNO_QUERY);
-    if ( xSup.is() )
-    {
-        Reference < XFrames > xFrames = xSup->getFrames();
-        xFrames->append( m_xMeAsFrame );
     }
 
     if (m_xMeAsFrame.is())
