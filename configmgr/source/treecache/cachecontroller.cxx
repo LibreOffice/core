@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace configmgr
 OTreeDisposeScheduler* CacheController::createDisposer()
 {
     // TODO: parameterize the delays
-#ifndef _DEBUG
+#if OSL_DEBUG_LEVEL == 0
     const sal_uInt32 minute         = 60; // units are seconds
     // for initial debugging: use seconds instead of minutes
 #else
