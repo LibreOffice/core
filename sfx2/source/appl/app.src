@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:18:36 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message[ korean ] = "¹®¼­´Â¡¡·ÎµåµÇ¾ú°í¡¡È°¼ºÈ­µÇ¾ú½À´Ï´Ù.";
     Message[ turkish ] = "Belge zaten yüklü ve açýk.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El documento ya está cargado y activado.";
 };
 
 ErrorBox RID_CANTLOADDOC_DLG
@@ -121,6 +122,7 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message[ korean ] = "¹®¼­¸¦ ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Belge yüklenemiyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No es posible cargar el documento.";
 };
 
 ErrorBox MSG_ERR_READ_CFG
@@ -152,6 +154,7 @@ ErrorBox MSG_ERR_READ_CFG
     Message[ korean ] = "±¸¼º ÆÄÀÏ ÀÐ±â½Ã¿¡ ¿À·ù.";
     Message[ turkish ] = "Konfigürasyon dosyasý okunurken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al leer el archivo de configuración.";
 };
 
 ErrorBox MSG_ERR_WRITE_CFG
@@ -183,6 +186,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message[ korean ] = "±¸¼º ÆÄÀÏ ¾²±â½Ã¿¡¡¡¿À·ù.";
     Message[ turkish ] = "Konfigürasyon dosyasýna yazýlýrken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al escribir el archivo de configuración.";
 };
 
 ErrorBox MSG_ERR_OPEN_CFG
@@ -214,6 +218,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message[ korean ] = "ÄÁÇÇ±Ô·¹ÀÌ¼Ç ¿­±â½Ã¿¡ ¿À·ù.";
     Message[ turkish ] = "Konfigürasyon dosyasý açýlýrken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al abrir el archivo de configuración.";
 };
 
 ErrorBox MSG_ERR_FILETYPE_CFG
@@ -245,6 +250,7 @@ ErrorBox MSG_ERR_FILETYPE_CFG
     Message[ korean ] = "±¸¼º ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
     Message[ turkish ] = "Dosya, konfigürasyon dosyasý deðil.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El archivo no es un archivo de configuración.";
 };
 
 ErrorBox MSG_ERR_VERSION_CFG
@@ -276,6 +282,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ korean ] = "±¸¼º ÆÄÀÏÀÇ ¹öÀüÀÌ¡¡Æ²¸³´Ï´Ù.";
     Message[ turkish ] = "Konfigürasyon dosyasýnýn sürümü yanlýþ.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El archivo de configuración tiene una versión falsa.";
 };
 
 ErrorBox MSG_ERR_WRITE_SBL
@@ -307,6 +314,7 @@ ErrorBox MSG_ERR_WRITE_SBL
     Message[ korean ] = "BASIC ¶óÀÌºê·¯¸®\n'@'¿¡ ¾²±â½Ã¿¡ ¿À·ù .";
     Message[ turkish ] = "BASIC kitaplýðý, \n'@' içine kaydedilirken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al escribir la biblioteca BASIC en\n'@'.";
 };
 
 ErrorBox MSG_SIGNAL
@@ -336,6 +344,7 @@ ErrorBox MSG_SIGNAL
     Message[ korean ] = "¿¹±âÄ¡ ¾ÊÀº ÀÀ¿ëÇÁ·Î±×·¥ ¿À·ù°¡ ¹ß»ýÇß½À´Ï´Ù.\n\nÁö±Ý »ç¿ëÀÚÀÇ¡¡Ã¥ÀÓÇÏ¿¡¡¡¿­¸° ¸ðµç¡¡¹®¼­ÀÇ ÀúÀåÀ» ½ÃµµÇØ º¼ ¼ö ÀÖ½À´Ï´Ù. ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÏ±â Àü¿¡ ÀÛ¾÷ÇÑ °ÍÀÇ ÀúÀåÀ» ½ÃµµÇØ º¸½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Beklenmeyen bir program hatasý oluþtu!\nÞu an açýk olan tüm belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapatýlmadan önce belgeleriniz kaydedilmeye çalýþýlsýn mý?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "¡Se ha producido un error inesperado de la aplicación!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n¿Desea guardar su trabajo antes de cerrar la aplicación?";
 };
 
 Resource SID_UNKNOWN
@@ -434,6 +443,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ korean ] = "Á¦°ÅÇÒ ¼ö ¾ø´Â ¿À·ù°¡ ¹ß»ýÇß½À´Ï´Ù.\n\n ÇÏÁö¸¸ º¯°æµÈ  ¸ðµç ÆÄÀÏÀº \nÀúÀåµÇ¾úÀ¸¹Ç·Î,  ´ÙÀ½ \nÇÁ·Î±×·¥ ½ÃÀÛ½Ã¿¡´Â º¹±¸µÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
     Message[ turkish ] = "Düzeltilemeyen bir hata oluþtu.\n\nDeðiþtirilen tüm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden baþlatýldýðýnda\nkurtarýlabilecek.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa.";
 };
 
 WarningBox RID_WARN_POST_MAILTO
@@ -463,6 +473,7 @@ WarningBox RID_WARN_POST_MAILTO
     Message[ korean ] = "¾ç½ÄÀº  E-Mail·Î º¸³»Áú°Í ÀÔ´Ï´Ù .\n Áï ¹Þ´Â »ç¶÷¿¡°Ô ±ÍÇÏÀÇ £Å£­£í£á£é£ì ÁÖ¼Ò°¡ ¾Ë·ÁÁö°ÔµË´Ï´Ù.";
     Message[ turkish ] = "E-posta ile form gönderilecek.\nBu þekilde alýcý e-posta adresinizi de görecektir.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Se debe enviar un formulario por correo electrónico.\nCon ello se dará a conocer al destinatario su dirección electrónica.";
 };
 
 String STR_RECOVER_TITLE
@@ -490,6 +501,7 @@ String STR_RECOVER_TITLE
     Text[ korean ] = "ÆÄÀÏ º¹±¸";
     Text[ turkish ] = "Dosya kurtarma";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Recuperar archivo";
 };
 
 String STR_RECOVER_QUERY
@@ -517,6 +529,7 @@ String STR_RECOVER_QUERY
     Text[ korean ] = "ÆÄÀÏ \"$1\"À»£¨¸¦£© º¹±¸ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$1\" dosyasý geri getirilsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea restaurar el archivo \"$1\"?";
 };
 
 String GID_INTERN
@@ -546,6 +559,7 @@ String GID_INTERN
     Text[ korean ] = "³»ºÎÀÇ";
     Text[ turkish ] = "Ýç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Interno";
 };
 
 String GID_APPLICATION
@@ -575,6 +589,7 @@ String GID_APPLICATION
     Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥";
     Text[ turkish ] = "Uygulama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Aplicación";
 };
 
 String GID_VIEW
@@ -604,6 +619,7 @@ String GID_VIEW
     Text[ korean ] = "º¸±â";
     Text[ turkish ] = "Görünüm";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ver";
 };
 
 String GID_DOCUMENT
@@ -633,6 +649,7 @@ String GID_DOCUMENT
     Text[ korean ] = "¹®¼­";
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Documentos";
 };
 
 String GID_EDIT
@@ -662,6 +679,7 @@ String GID_EDIT
     Text[ korean ] = "ÆíÁý";
     Text[ turkish ] = "Düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar";
 };
 
 String GID_MACRO
@@ -689,6 +707,7 @@ String GID_MACRO
     Text[ korean ] = "BASIC";
     Text[ turkish ] = "BASIC";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "BASIC";
 };
 
 String GID_OPTIONS
@@ -718,6 +737,7 @@ String GID_OPTIONS
     Text[ korean ] = "µµ±¸";
     Text[ turkish ] = "Araçlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones";
 };
 
 String GID_MATH
@@ -747,6 +767,7 @@ String GID_MATH
     Text[ korean ] = "Math";
     Text[ turkish ] = "Math";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Math";
 };
 
 String GID_NAVIGATOR
@@ -774,6 +795,7 @@ String GID_NAVIGATOR
     Text[ korean ] = "Å½»ö";
     Text[ turkish ] = "Dolaþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegar";
 };
 
 String GID_INSERT
@@ -801,6 +823,7 @@ String GID_INSERT
     Text[ korean ] = "»ðÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar";
 };
 
 String GID_FORMAT
@@ -828,6 +851,7 @@ String GID_FORMAT
     Text[ korean ] = "Æ÷¸Ë";
     Text[ turkish ] = "Format";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato";
 };
 
 String GID_TEMPLATE
@@ -855,6 +879,7 @@ String GID_TEMPLATE
     Text[ korean ] = "ÅÛÇÃ¸´";
     Text[ turkish ] = "Þablon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantillas";
 };
 
 String GID_TEXT
@@ -882,6 +907,7 @@ String GID_TEXT
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 
 String GID_FRAME
@@ -909,6 +935,7 @@ String GID_FRAME
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco";
 };
 
 String GID_GRAPHIC
@@ -936,6 +963,7 @@ String GID_GRAPHIC
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen";
 };
 
 String GID_TABLE
@@ -963,6 +991,7 @@ String GID_TABLE
     Text[ korean ] = "Ç¥";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla";
 };
 
 String GID_ENUMERATION
@@ -990,6 +1019,7 @@ String GID_ENUMERATION
     Text[ korean ] = "¹øÈ£";
     Text[ turkish ] = "Numaralama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Numeración";
 };
 
 String GID_DATA
@@ -1017,6 +1047,7 @@ String GID_DATA
     Text[ korean ] = "µ¥ÀÌÅÍ";
     Text[ turkish ] = "Veri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Datos";
 };
 
 String GID_SPECIAL
@@ -1044,6 +1075,7 @@ String GID_SPECIAL
     Text[ korean ] = "Æ¯¼ö ÇÔ¼ö";
     Text[ turkish ] = "Özel iþlevler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Funciones especiales";
 };
 
 String GID_IMAGE
@@ -1071,6 +1103,7 @@ String GID_IMAGE
     Text[ korean ] = "ÀÌ¹ÌÁö";
     Text[ turkish ] = "Resim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen";
 };
 
 String GID_CHART
@@ -1098,6 +1131,7 @@ String GID_CHART
     Text[ korean ] = "Â÷Æ®";
     Text[ turkish ] = "Þema";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Diagrama";
 };
 
 String GID_EXPLORER
@@ -1125,6 +1159,7 @@ String GID_EXPLORER
     Text[ greek ] = "ÅîåñåõíçôÞò";
     Text[ korean ] = "ÀÍ½ºÇÃ·Î·¯";
     Text[ turkish ] = "Explorer";
+    Text[ catalan ] = "Explorador";
 };
 
 String GID_CONNECTOR
@@ -1152,6 +1187,7 @@ String GID_CONNECTOR
     Text[ korean ] = "Ä¿³ØÅÍ";
     Text[ turkish ] = "Baðlayýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector";
 };
 
 String GID_MODIFY
@@ -1179,6 +1215,7 @@ String GID_MODIFY
     Text[ korean ] = "¼öÁ¤";
     Text[ turkish ] = "Deðiþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar";
 };
 
 String GID_DRAWING
@@ -1206,6 +1243,7 @@ String GID_DRAWING
     Text[ korean ] = "±×¸®±â";
     Text[ turkish ] = "Çizim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Dibujar";
 };
 
 String GID_CONTROLS
@@ -1233,6 +1271,7 @@ String GID_CONTROLS
     Text[ korean ] = "ÄÁÆ®·Ñ";
     Text[ turkish ] = "Kumanda öðeleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elementos de control";
 };
 
 TabDialog SID_OPTIONS
@@ -1291,6 +1330,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "ÀÏ¹Ý";
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "General";
             };
             PageItem
             {
@@ -1321,6 +1361,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "ÀúÀå";
                 Text[ turkish ] = "Kaydet";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Guardar";
             };
             PageItem
             {
@@ -1351,6 +1392,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "°æ·Î";
                 Text[ turkish ] = "Veri yolu";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Rutas";
             };
             PageItem
             {
@@ -1381,6 +1423,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "¸ÂÃã¹ý°Ë»ç";
                 Text[ turkish ] = "Yazým denetimi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Revisión ortográfica";
             };
         };
     };
@@ -1396,6 +1439,7 @@ TabDialog SID_OPTIONS
     Text[ korean ] = "¿É¼Ç";
     Text[ turkish ] = "Seçenekler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones";
 };
 
 InfoBox MSG_CANT_QUIT
@@ -1425,6 +1469,7 @@ InfoBox MSG_CANT_QUIT
     Message[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» ÇöÀç Á¾·áÇÒ ¼ö ¾ø½À´Ï´Ù.\nÀÎ¼â ÀÛ¾÷ÀÌ ¸ðµÎ ³¡³¯ ¶§±îÁö ±×¸®°í/¶Ç´Â \nOLE°¡ È°¼ºÈ­µÉ ¶§±îÁö ±â´Ù·È´Ù°¡ ¸ðµç ´ëÈ­»óÀÚ¸¦ ´ÝÀ¸½Ê½Ã¿À.";
     Message[ turkish ] = "Þu an uygulamadan çýkýlamýyor.\nTüm yazdýrma iþlerinin ve/veya\nOLE iþlemlerinin bitmesini bekleyip tüm pencereleri kapatýn.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La aplicación no se puede cerrar por el momento. \nPor favor espere hasta que finalice la impresión de\n todos los documentos y/o activaciones OLE\ny cierre todos los diálogos.";
 };
 
 QueryBox MSG_IS_SERVER
@@ -1456,6 +1501,7 @@ QueryBox MSG_IS_SERVER
     Message[ korean ] = "°³Ã¼¶Ç´Â ÇÁ¸°ÅÍ ¼­¹ö·Î¼­ ÀÌ ÀÀ¿ëÇÁ·Î±×·¥Àº È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.\n±×·¡µµ¡¡´ÝÀ¸½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Uygulama þu an nesne ya da yazdýrma sunucusu olarak çalýþýyor.\nYine de kapatýlsýn mý?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Esta aplicación está aún activa como servidor de objeto o de impresión.\n¿Desea finalizarla?";
 };
 
 String STR_NODOUBLE
@@ -1483,6 +1529,7 @@ String STR_NODOUBLE
     Text[ korean ] = "%PRODUCTNAMEÀº£¨´Â£© ÇÑ¹ø¡¡ÀÌ»ó ½ÃÀÛµÇÁö ¾Ê½À´Ï´Ù .";
     Text[ turkish ] = "%PRODUCTNAME için birden fazla oturum açýlamaz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME no se puede iniciar más de una vez.";
 };
 
 String STR_NOPRINTER
@@ -1510,6 +1557,7 @@ String STR_NOPRINTER
     Text[ korean ] = "ÀÏºÎ  %PRODUCTNAME ±â´ÉÀº ÇÁ¸°ÅÍ µå¶óÀÌ¹ö ¾øÀÌ´Â  Á¤È®ÇÏ°Ô ÀÛµ¿ÇÏÁö ¾Ê½À´Ï´Ù.\nÇÁ¸°ÅÍ µå¶óÀÌ¹ö¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bazý %PRODUCTNAME iþlevleri yazýcý sürücüsü olmadan doðru çalýþamaz.\nBir yazýcý sürücüsü kurun.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Algunas funciones de %PRODUCTNAME no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno.";
 };
 
 String STR_ISMODIFIED
@@ -1539,6 +1587,7 @@ String STR_ISMODIFIED
     TEXT[ greek ] = "ÈÝëåôå íá áðïèçêåõôïýí ïé áëëáãÝò óôï %1;";
     TEXT[ korean ] = "%1ÀÇ º¯°æ»çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     TEXT[ turkish ] = "%1 içinde yapýlan deðiþiklikler kaydedilsin mi?";
+    TEXT[ catalan ] = "¿Desea guardar las modificaciones en %1?";
 };
 
 String STR_AUTOSAVE
@@ -1568,6 +1617,7 @@ String STR_AUTOSAVE
     TEXT[ korean ] = "ÀÚµ¿ ÀúÀå";
     TEXT[ turkish ] = "Otomatik kayýt";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Guardar automáticamente";
 };
 
 String STR_RESWARNING
@@ -1597,6 +1647,7 @@ String STR_RESWARNING
     TEXT[ korean ] = "½Ã½ºÅÛ ÀÚ¿øÀÌ ºÎÁ·ÇÕ´Ï´Ù .°è¼Ó ÇÏ½Ã±âÀü¿¡ ´Ù¸¥ ÀÀ¿ëÇÁ·Î±×·¥À» ÁßÁöÇÏ°Å³ª ¿­·ÁÀÖ´Â Ã¢À» ´ÝÀ¸½Ê½Ã¿À.";
     TEXT[ turkish ] = "Sistem kaynaklarý azalýyor. Çalýþmaya devam etmeden önce diðer uygulamalarý ya da bir kaç pencere kapatýn.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No hay suficientes recursos del sistema. Por favor, elimine otras aplicaciones o cierre algunas ventanas antes de continuar.";
 };
 String STR_RESEXCEPTION
 {
@@ -1625,6 +1676,7 @@ String STR_RESEXCEPTION
     TEXT[ korean ] = "Áß¿äÇÑ¡¡ÇÁ·Î±×·¥ºÎºÐÀ»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù. ¼³Á¤À» °Ë»çÇÏ½Ê½Ã¿À.";
     TEXT[ turkish ] = "Önemli program öðeleri bulunamadý. Kurulumunuzu kontrol edin.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No se encuentran archivos importantes del programa. Compruebe la instalación.";
 };
 
 String STR_DOUBLEEXCEPTION
@@ -1652,6 +1704,7 @@ String STR_DOUBLEEXCEPTION
     TEXT[ korean ] = "¾Ë¶÷µ¥ÀÌÅÍ ÀúÀå½Ã¿¡ ´Ù¸¥ ½Ã½ºÅÛ¿À·ù°¡ ¹ß»ýÇß½À´Ï´Ù.\n µ¥ÀÌÅÍ°¡ ¿ÏÀüÈ÷ ÀúÀåµÇÁö ¾Ê¾ÒÀ»¡¡¼ö¡¡ÀÖ½À´Ï´Ù.";
     TEXT[ turkish ] = "Alarm verileri kaydý sýrasýnda baþka bir sistem hatasý oluþtu.\nVeriler tam olarak kaydedilmemiþ olabilir.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ha ocurrido otro error en el sistema mientras se guardaban los datos.\nEs posible que no se hayan guardado completamente.";
 };
 
 String STR_SYSRESEXCEPTION
@@ -1679,6 +1732,7 @@ String STR_SYSRESEXCEPTION
     Text[ korean ] = "½Ã½ºÅÛ ÀÚ¿øÀÌ ¼Ò¸ðµÇ¾ú½À´Ï´Ù. ÀÀ¿ëÇÁ·Î±×·¥À» ´Ù½Ã ½ÃÀÛ ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Sistem kaynaklarý tükendi. Uygulamayý yeniden baþlatýnýz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Los recursos del sistema se han acabado. Por favor reinicie la aplicación.";
 };
 
 ErrorBox MSG_ERR_SOINIT
@@ -1708,6 +1762,7 @@ ErrorBox MSG_ERR_SOINIT
     Message[ korean ] = "°³Ã¼ ½Ã½ºÅÛ ÃÊ±âÈ­½Ã¿¡  ¿À·ù.";
     Message[ turkish ] = "Nesne sistemi baþlatýlýrken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al inicializar el sistema objeto.";
 };
 
 String MSG_IOERR_FILE_NOT_FOUND
@@ -1737,6 +1792,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text[ korean ] = "ÆÄÀÏ $(FILE)Àº£¨´Â£© Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyasý mevcut deðil.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No existe el archivo $(FILE).";
 };
 
 String MSG_IOERR_PATH_NOT_FOUND
@@ -1766,6 +1822,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text[ korean ] = "ÆÄÀÏ $(FILE)ÀÇ °æ·Î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyasýnýn veri yolu mevcut deðil.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No existe la ruta de acceso al archivo $(FILE).";
 };
 
 String MSG_IOERR_TOO_MANY_OPEN_FILES
@@ -1795,6 +1852,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ korean ] = "ÇöÀç ³Ê¹« ¸¹Àº ÆÄÀÏÀÌ ¿­·Á ÀÖ±â ¶§¹®¿¡ \nÆÄÀÏ$(FILE)À» ¿­Áö ¸øÇß½À´Ï´Ù. \nÀÏºÎ ÆÄÀÏÀ» ´Ý°í »õ·Î ½ÃµµÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "$(FILE) dosyasý, þu an çok fazla dosya açýk olduðu\niçin açýlamýyor.\nBirkaç dosyayý kapatýp yeniden deneyin.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo abrir el archivo $(FILE)\nya que hay muchos archivos abiertos.\nCierre algunos archivos e inténtelo otra vez.";
 };
 
 String MSG_IOERR_ACCESS_DENIED
@@ -1824,6 +1882,7 @@ String MSG_IOERR_ACCESS_DENIED
     Text[ korean ] = "Á¢±Ù ±ÇÇÑÀÌ¡¡¾ø¾î¼­ ÆÄÀÏ $(FILE)À» ¿­Áö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyasý, eriþim haklarýnýn olmamasý nedeniyle açýlamadý.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo se abrir el archivo $(FILE) por falta de derechos.";
 };
 
 String MSG_IOERR_INVALID_ACCESS
@@ -1853,6 +1912,7 @@ String MSG_IOERR_INVALID_ACCESS
     Text[ korean ] = "ÆÄÀÏ $(FILE) ¿¡ Á¢±ÙÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyasýna eriþilemedi.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo acceder al archivo $(FILE).";
 };
 
 String MSG_IOERR_INVALID_HANDLE
@@ -1882,6 +1942,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº  ÆÄÀÏ ÇÚµé·Î ÀÎÇØ, ÆÄÀÏ $(FILE) À»(¸¦) ¿­Áö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyasý geçersiz bir dosya tutamacý nedeniyle açýlamadý.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo abrir el archivo $(FILE) debido a un controlador de archivos no válido.";
 };
 
 String MSG_IOERR_CANNOT_MAKE
@@ -1911,6 +1972,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text[ korean ] = "ÆÄÀÏ $(FILE) À»£¨¸¦£©¸¸µéÁö¡¡¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyasý oluþturulamadý.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo crear el archivo $(FILE).";
 };
 
 String MSG_IOERR_SHARING
@@ -1940,6 +2002,7 @@ String MSG_IOERR_SHARING
     Text[ korean ] = "$(FILE)¿¡ °øÀ¯ Á¢±Ù½Ã¿¡ ¿À·ù .";
     Text[ turkish ] = "$(FILE) dosyasýna paylaþýlan eriþimde hata oluþtu.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error durante el acceso compartido al archivo $(FILE).";
 };
 
 String MSG_IOERR_INVALID_PARAMETER
@@ -1988,6 +2051,7 @@ String MSG_IOERR_GENERAL
     Text[ korean ] = "ÆÄÀÏ $(FILE)¿¡ Á¢±Ù½Ã¿¡ ÀÏ¹Ý ÀÔ£¯Ãâ·Â ¿À·ù .";
     Text[ turkish ] = "$(FILE) dosyasýna eriþimde genel girdi/çýktý hatasý oluþtu..";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error general de entrada/salida al acceder a $(FILE).";
 };
 
 String RID_FULLSCREENTOOLBOX
@@ -2105,6 +2169,7 @@ String STR_EVENT_NEWMESSAGE
     Text[ korean ] = "¸Þ½ÃÁö°¡ ¼ö½ÅµÇ¾ú½À´Ï´Ù.";
     Text[ turkish ] = "Ýleti alýndý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mensaje recibido";
 };
 
 String STR_EVENT_STARTAPP
@@ -2134,6 +2199,7 @@ String STR_EVENT_STARTAPP
     Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ ½ÃÀÛ";
     Text[ turkish ] = "Programý çalýþtýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Iniciar aplicación";
 };
 
 String STR_EVENT_ONERROR
@@ -2161,6 +2227,7 @@ String STR_EVENT_ONERROR
     Text[ korean ] = "JavaScript  ·± Å¸ÀÓ ¿À·ù";
     Text[ turkish ] = "Javascript yürütüm süresi hatasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error de ejecución Javascript";
 };
 
 String STR_EVENT_CLOSEAPP
@@ -2190,6 +2257,7 @@ String STR_EVENT_CLOSEAPP
     Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ ³¡";
     Text[ turkish ] = "Programdan çýkýþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cerrar aplicación";
 };
 
 String STR_EVENT_CREATEDOC
@@ -2219,6 +2287,7 @@ String STR_EVENT_CREATEDOC
     Text[ korean ] = "¹®¼­ ¸¸µé±â";
     Text[ turkish ] = "Belge oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear documento";
 };
 
 String STR_EVENT_CLOSEDOC
@@ -2246,6 +2315,7 @@ String STR_EVENT_CLOSEDOC
     Text[ korean ] = "¹®¼­ ´Ý±â";
     Text[ turkish ] = "Belgeyi kapat";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El documento se va a cerrar";
 };
 
 String STR_EVENT_PREPARECLOSEDOC
@@ -2275,6 +2345,7 @@ String STR_EVENT_PREPARECLOSEDOC
     Text[ korean ] = "¹®¼­ ´Ý±â";
     Text[ turkish ] = "Belgeyi kapat";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cerrar documento";
 };
 
 String STR_EVENT_OPENDOC
@@ -2304,6 +2375,7 @@ String STR_EVENT_OPENDOC
     Text[ korean ] = "¹®¼­ ¿­±â";
     Text[ turkish ] = "Belge aç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Abrir documento";
 };
 
 String STR_EVENT_SAVEDOC
@@ -2333,6 +2405,7 @@ String STR_EVENT_SAVEDOC
     Text[ korean ] = "¹®¼­ ÀúÀå";
     Text[ turkish ] = "Belgeyi kaydet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar documento";
 };
 
 String STR_EVENT_SAVEASDOC
@@ -2362,6 +2435,7 @@ String STR_EVENT_SAVEASDOC
     Text[ korean ] = "¹®¼­¸¦ ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
     Text[ turkish ] = "Belgeyi farklý kaydet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar documento como";
 };
 
 String STR_EVENT_SAVEDOCDONE
@@ -2387,6 +2461,7 @@ String STR_EVENT_SAVEDOCDONE
     Text[ arabic ] = "Êã ÍÝÙ ÇáãÓÊäÏ";
     Text[ turkish ] = "Belge kaydedildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El documento se guardó";
 };
 
 String STR_EVENT_SAVEASDOCDONE
@@ -2412,6 +2487,7 @@ String STR_EVENT_SAVEASDOCDONE
     Text[ arabic ] = "Êã ÍÝÙ ÇáãÓÊäÏ ßÜ";
     Text[ turkish ] = "Belge farklý kaydedildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El documento se guardó como";
 };
 
 String STR_EVENT_ACTIVATEDOC
@@ -2441,6 +2517,7 @@ String STR_EVENT_ACTIVATEDOC
     Text[ korean ] = "¹®¼­ È°¼ºÈ­";
     Text[ turkish ] = "Belgeyi etkinleþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Activar documento";
 };
 
 String STR_EVENT_DEACTIVATEDOC
@@ -2470,6 +2547,7 @@ String STR_EVENT_DEACTIVATEDOC
     Text[ korean ] = "¹®¼­ ºñÈ°¼ºÈ­";
     Text[ turkish ] = "Belgeyi  devreden çýkart";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desactivar documento";
 };
 
 String STR_EVENT_PRINTDOC
@@ -2497,6 +2575,7 @@ String STR_EVENT_PRINTDOC
     Text[ korean ] = "¹®¼­ ÀÎ¼â";
     Text[ turkish ] = "Belgeyi yazdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimir documento";
 };
 
 
@@ -2525,6 +2604,7 @@ String STR_ERR_NOTEMPLATE
     Text[ korean ] = "ÅÛÇÃ¸´Àº Æ÷¸ËÀÌ¡¡Æ²¸³´Ï´Ù";
     Text[ turkish ] = "Seçilen þablonun formatý yanlýþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La plantilla tiene un formato incorrecto";
 };
 
 String STR_ERR_NOFILE
@@ -2552,6 +2632,7 @@ String STR_ERR_NOFILE
     Text[ korean ] = "ÆÄÀÏ $À»£¨¸¦£© ¿­¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "$ dosyasý açýlamýyor.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El archivo $ no se puede abrir.";
 };
 
 
@@ -2580,6 +2661,7 @@ String STR_QUITAPP
     Text[ korean ] = "Á¾·á(~X)";
     Text[ turkish ] = "~Çýkýþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Terminar";
 };
 
 String STR_EXITANDRETURN
@@ -2607,6 +2689,7 @@ String STR_EXITANDRETURN
     Text[ korean ] = "³¡³»±â & µ¹¾Æ°¡±â (~X)";
     Text[ turkish ] = "~Çýk ve dön: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Terminar y regresar a  ";
 };
 
 String STR_EXTHELPSTATUS
@@ -2634,6 +2717,7 @@ String STR_EXTHELPSTATUS
     Text[ korean ] = "¸í·É¾î¸¦ ¼±ÅÃÇÏ°Å³ª ÁÖÁ¦¸¦¡¡¼±ÅÃÇÏ±âÀ§ÇØ¡¡Å¬¸¯ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bir komut seçin ya da bir konu seçmek için týklayýn.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccione un comando o pulse para seleccionar un tema.";
 };
 
 String STR_MAIL
@@ -2663,6 +2747,7 @@ String STR_MAIL
     Text[ korean ] = "¸ÞÀÏ";
     Text[ turkish ] = "Posta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Correo";
 };
 
 String STR_ADDRESS_NAME
@@ -2690,6 +2775,7 @@ String STR_ADDRESS_NAME
     Text[ korean ] = "ÁÖ¼Ò";
     Text[ turkish ] = "Adres";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Direcciones";
 };
 
 String RID_STR_HELP
@@ -2717,6 +2803,7 @@ String RID_STR_HELP
     Text[ korean ] = "µµ¿ò¸»";
     Text[ turkish ] = "Yardým";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ayuda";
 };
 
 String RID_STR_NOAUTOSTARTHELPAGENT
@@ -2744,6 +2831,7 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text[ korean ] = "'XX'¿¡¼­´Â ÀÚµ¿ ½ÃÀÛ¡¡¾ÊÀ½.";
     Text[ turkish ] = "'XX' olduðunda otomatik baþlatma yapýlmasýn";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No iniciar automáticamente con 'XX'";
 };
 
 String RID_STR_NOWELCOMESCREEN
@@ -2771,6 +2859,7 @@ String RID_STR_NOWELCOMESCREEN
     Text[ korean ] = "Á¶¾ðÀ» ´õÀÌ»ó¡¡Ç¥½ÃÇÏÁö ¾ÊÀ½";
     Text[ turkish ] = "Öneri görüntüleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No mostrar más las sugerencias";
 };
 
 String RID_HELPBAR
@@ -2798,6 +2887,7 @@ String RID_HELPBAR
     Text[ korean ] = "µµ¿ò¸» ¸ðÀ½";
     Text[ turkish ] = "Yardým çubuðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de ayuda";
 };
 
 ToolBox RID_HELPBAR
@@ -2880,6 +2970,7 @@ String RID_STR_HLPFILENOTEXIST
     Text[ korean ] = "ÀÌ ÁÖÁ¦¿¡¡¡´ëÇÑ µµ¿ò¸»ÀÌ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     Text[ turkish ] = "Bu konu ile ilgili yardým kurulmadý.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El archivo de ayuda para este tema no ha sido instalado.";
 };
 
 String RID_STR_HLPAPPNOTSTARTED
@@ -2907,6 +2998,7 @@ String RID_STR_HLPAPPNOTSTARTED
     Text[ korean ] = "µµ¿ò¸» ÀÀ¿ëÇÁ·Î±×·¥À»¡¡½ÃÀÛÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Yardým uygulamasý baþlatýlamadý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo iniciar la aplicación de ayuda.";
 };
 
  //----------------------------------------------------------------------------
@@ -2936,6 +3028,7 @@ String RID_ENVTOOLBOX
     Text[ korean ] = "±â´É ¸ðÀ½";
     Text[ turkish ] = "Ýþlev çubuðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de funciones";
 };
 
 ToolBox RID_ENVTOOLBOX
@@ -3204,6 +3297,7 @@ String RID_SPECIALCONFIG_ERROR
     Text[ greek ] = "ÐáñïõóéÜóôçêå óöÜëìá óôçí åéäéêÞ äéáìüñöùóç.\nÐáñáêáëþ áðåõèõíèåßôå óôïí äéá÷åéñéóôÞ ôïõ äéêôýïõ!";
     Text[ korean ] = "Æ¯¼ö ÄÁÇÇ±Ô·¹ÀÌ¼Ç¿¡¼­ ¿À·ù°¡ ¹ß»ýÇÏ¿´½À´Ï´Ù.°ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇÏ½Ê½Ã¿À !";
     Text[ turkish ] = "Özel konfigürasyonda bir hata bulundu.\nLütfen sistem yöneticinize baþvurun!";
+    Text[ catalan ] = "En la configuración especial se ha detectado un error.\nPóngase por favor en contacto con su administrador.";
 };
 
 
@@ -3247,6 +3341,7 @@ String RID_PLUGIN
     Text[ korean ] = "ÇÃ·¯±× ÀÎ È°¼ºÈ­";
     Text[ turkish ] = "Plug-In'leri etkinleþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Activar Plug-in";
 };
 
 String STR_EDITOBJECT
@@ -3274,6 +3369,7 @@ String STR_EDITOBJECT
     Text[ korean ] = "ÆíÁý(~E)";
     Text[ turkish ] = "~Düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Editar";
 };
 
 String STR_OPENOBJECT
@@ -3301,6 +3397,7 @@ String STR_OPENOBJECT
     Text[ korean ] = "¿­±â(~O)";
     Text[ turkish ] = "~Aç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Abrir";
 };
 
 String STR_CORRUPT_INSTALLATION
@@ -3325,6 +3422,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ chinese_traditional ] = "µLªk¥¿ÚÌªì©l¤Æ­«­nªºµ{¦¡³¡¥ó¡C½Ð±z±Ò°Ê¦w¸Ëµ{¦¡¡A°õ¦æ­×Î`¿ï¶µ¡C";
     Text[ arabic ] = "ÊÚÐÑ ÊËÈíÊ ÈÚÖ ÚäÇÕÑ ÇáÈÑäÇãÌ ÇáåÇãÉ ÈÔßá ÕÍíÍ.\nÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ ÈÇáÎíÇÑ /repair.";
     Text[ turkish ] = "Önemli program öðeleri doðru bir þekilde baþlatýlamadý.\nKurulumu /repair seçeneði ile baþlatýn.";
+    Text[ catalan ] = "Algunos componentes importantes del programa no se pudieron instalar.\nInicie por favor el programa de instalación con la opción /repair.";
 };
 
 String IDS_SBERR_STOREREF
@@ -3351,6 +3449,7 @@ String IDS_SBERR_STOREREF
     Text[ greek ] = "Ç áíáöïñÜ äåí èá áðïèçêåõôåß: ";
     Text[ korean ] = "ÂüÁ¶°¡ ÀúÀåµÇÁö ¾ÊÀ»°Í ÀÔ´Ï´Ù: ";
     Text[ turkish ] = "Referans kaydedilmeyecek: ";
+    Text[ catalan ] = "No se guardará la referencia:  ";
 };
 
 String STR_KEY_CONFIG_DIR
@@ -3380,6 +3479,7 @@ String STR_KEY_CONFIG_DIR
     Text[ korean ] = "ÄÁÇÇ±Ô·¹ÀÌ¼Ç";
     Text[ turkish ] = "Konfigürasyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Configuración";
 };
 String STR_KEY_WORK_PATH
 {
@@ -3408,6 +3508,7 @@ String STR_KEY_WORK_PATH
     Text[ korean ] = "ÀÛ¾÷ µð·ºÅä¸®";
     Text[ turkish ] = "Çalýþma dizini";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Directorio de trabajo";
 };
 String STR_KEY_GRAPHICS_PATH
 {
@@ -3436,6 +3537,7 @@ String STR_KEY_GRAPHICS_PATH
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imágenes";
 };
 String STR_KEY_BITMAP_PATH
 {
@@ -3462,6 +3564,7 @@ String STR_KEY_BITMAP_PATH
     Text[ korean ] = "±âÈ£";
     Text[ language_user1 ] = "BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"";
     Text[ turkish ] = "Simgeler";
+    Text[ catalan ] = "Símbolos";
 };
 String STR_KEY_BASIC_PATH
 {
@@ -3496,6 +3599,7 @@ String STR_KEY_DATABASE_PATH
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÁúÀÇ";
     Text[ turkish ] = "Veritabaný sorgularý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Consultas de base de datos";
 };
 #endif
 
@@ -3526,6 +3630,7 @@ String STR_KEY_PALETTE_PATH
     Text[ korean ] = "ÆÈ·¹Æ®";
     Text[ turkish ] = "Paletler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Paletas";
 };
 String STR_KEY_BACKUP_PATH
 {
@@ -3554,6 +3659,7 @@ String STR_KEY_BACKUP_PATH
     Text[ korean ] = "¹é¾÷ º¹»ç";
     Text[ turkish ] = "Yedekleme kopyalarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Copias de seguridad";
 };
 String STR_KEY_MODULES_PATH
 {
@@ -3582,6 +3688,7 @@ String STR_KEY_MODULES_PATH
     Text[ korean ] = "¸ðµâ";
     Text[ turkish ] = "Modüller";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Módulos";
 };
 String STR_KEY_TEMPLATE_PATH
 {
@@ -3610,6 +3717,7 @@ String STR_KEY_TEMPLATE_PATH
     Text[ korean ] = "¹®¼­ ¼­½Ä";
     Text[ turkish ] = "Belge þablonlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantillas de documento";
 };
 String STR_KEY_GLOSSARY_PATH
 {
@@ -3633,6 +3741,7 @@ String STR_KEY_GLOSSARY_PATH
     Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°";
     Text[ turkish ] = "AutoText";
     Text[ arabic ] = "äÕ ÊáÞÇÆí";
+    Text[ catalan ] = "AutoTexto";
 };
 String STR_KEY_DICTIONARY_PATH
 {
@@ -3661,6 +3770,7 @@ String STR_KEY_DICTIONARY_PATH
     Text[ korean ] = "»çÀü";
     Text[ turkish ] = "Sözlükler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Diccionarios";
 };
 String STR_KEY_HELP_DIR
 {
@@ -3687,6 +3797,7 @@ String STR_KEY_HELP_DIR
     Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ";
     Text[ turkish ] = "Yardým dosyalarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Archivos de ayuda";
 };
 String STR_KEY_GALLERY_DIR
 {
@@ -3713,6 +3824,7 @@ String STR_KEY_GALLERY_DIR
     Text[ korean ] = "°¶·¯¸®";
     Text[ turkish ] = "Galeri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Gallery";
 };
 String STR_KEY_NEW_DIR
 {
@@ -3739,6 +3851,7 @@ String STR_KEY_NEW_DIR
     Text[ korean ] = "±âº» ÅÛÇÃ¸´";
     Text[ turkish ] = "Standart þablonlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantillas predeterminadas";
 };
 
 #if (SUPD <= 614)
@@ -3767,6 +3880,7 @@ String STR_KEY_TRASH_DIR
     Text[ korean ] = "ÈÞÁöÅë";
     Text[ turkish ] = "Çöp kutusu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Papelera";
 };
 #endif
 
@@ -3795,6 +3909,7 @@ String STR_KEY_STORAGE_DIR
     Text[ korean ] = "¸Þ½ÃÁö  ÀúÀåÀå¼Ò";
     Text[ turkish ] = "Ýleti depolama alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Memoria de mensajes";
 };
 String STR_KEY_TEMP_PATH
 {
@@ -3826,6 +3941,7 @@ String STR_KEY_AUTOPILOT_DIR
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ";
     Text[ turkish ] = "Otopilot";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AutoPilotos";
 };
 String STR_KEY_PLUGINS_PATH
 {
@@ -3851,6 +3967,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ greek ] = "ÊáôÜëïãïò óõíäåüìåíùí õðïìïíÜäùí (Plug-Ins)";
     Text[ korean ] = "ÇÃ·¯±×ÀÎ-µð·ºÅä¸®";
     Text[ turkish ] = "Plug-In dizini";
+    Text[ catalan ] = "Directorio de Plug-ins";
 };
 String STR_KEY_FAVORITES_DIR
 {
@@ -3875,6 +3992,7 @@ String STR_KEY_FAVORITES_DIR
     Text[ chinese_traditional ] = "¸ê®Æ§¨®ÑÅÒ";
     Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ áãÌáÏÇÊ";
     Text[ turkish ] = "Yer iþareti klasörü";
+    Text[ catalan ] = "Marcadores de carpetas";
 };
 String STR_KEY_FILTER_PATH
 {
@@ -3899,6 +4017,7 @@ String STR_KEY_FILTER_PATH
     Text[ arabic ] = "ÝáÊÑ";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtros";
 };
 String STR_KEY_ADDINS_PATH
 {
@@ -3922,6 +4041,7 @@ String STR_KEY_ADDINS_PATH
     Text[ chinese_traditional ] = "AddIns";
     Text[ arabic ] = "Add-Ins";
     Text[ turkish ] = "Add-In";
+    Text[ catalan ] = "AddIns";
 };
 String STR_KEY_USERCONFIG_PATH
 {
@@ -3946,6 +4066,7 @@ String STR_KEY_USERCONFIG_PATH
     Text[ arabic ] = "Êßæíä ÇáãÓÊÎÏã";
     Text[ turkish ] = "Kullanýcý konfigürasyonu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Configuración de usuario";
 };
 String STR_KEY_USERDICTIONARY_DIR
 {
@@ -3969,6 +4090,7 @@ String STR_KEY_USERDICTIONARY_DIR
     Text[ chinese_traditional ] = "¦Û­q¦r¨å";
     Text[ arabic ] = "ÞæÇãíÓ ÇáãÓÊÎÏã";
     Text[ turkish ] = "Kullanýcý sözlükleri";
+    Text[ catalan ] = "Diccionarios de usuario";
 };
 String STR_KEY_AUTOCORRECT_DIR
 {
@@ -3992,6 +4114,7 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ chinese_traditional ] = "¦Û°Ê§ó¥¿";
     Text[ arabic ] = "ÊÕÍíÍ ÊáÞÇÆí";
     Text[ turkish ] = "Otomatik düzeltme";
+    Text[ catalan ] = "AutoCorrección";
 };
 #if defined STR_KEY_LINGUISTIC_DIR
 String STR_KEY_LINGUISTIC_DIR
@@ -4016,6 +4139,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ chinese_traditional ] = "»y¨¥³W«h";
     Text[ arabic ] = "ÇááÛÉ";
     Text[ turkish ] = "Dil";
+    Text[ catalan ] = "Lingüística";
 };
 #endif // STR_KEY_LINGUISTIC_DIR
 
