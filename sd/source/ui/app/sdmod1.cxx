@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:11:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#include "TaskPaneViewShell.hxx"
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
@@ -306,6 +307,18 @@ void SdModule::Execute(SfxRequest& rReq)
                         else
                             SFX_APP()->CreateViewFrame( *pNewDocSh );
                     }
+
+                    // Make the layout menu visible in the tool pane.
+                    SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+                    SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
+                        ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
+                    GetDispatcher()->Execute (
+                        SID_TASK_PANE,
+                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                        &aMakeToolPaneVisible,
+                        &aPanelId,
+                        NULL);
+
                     break;
                 }
 
@@ -631,6 +644,17 @@ void SdModule::Execute(SfxRequest& rReq)
 
                     }
                 }
+
+                // Make the layout menu visible in the tool pane.
+                SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+                SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
+                    ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
+                GetDispatcher()->Execute (
+                    SID_TASK_PANE,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    &aMakeToolPaneVisible,
+                    &aPanelId,
+                    NULL);
             }
         }
         break;
@@ -908,12 +932,16 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
 
         // Take the change mode of the template page as indication of the
         // document's kiosk mode.
-        pSummaryPage->SetFadeSpeed (pTemplatePage->GetFadeSpeed());
-        pSummaryPage->SetFadeEffect (pTemplatePage->GetFadeEffect());
-        pSummaryPage->SetPresChange (pTemplatePage->GetPresChange());
-        pSummaryPage->SetTime (pTemplatePage->GetTime());
-        pSummaryPage->SetSound (pTemplatePage->IsSoundOn());
-        pSummaryPage->SetSoundFile (pTemplatePage->GetSoundFile());
+        pSummaryPage->setTransitionDuration(pTemplatePage->getTransitionDuration());
+        pSummaryPage->SetPresChange(pTemplatePage->GetPresChange());
+        pSummaryPage->SetTime(pTemplatePage->GetTime());
+        pSummaryPage->SetSound(pTemplatePage->IsSoundOn());
+        pSummaryPage->SetSoundFile(pTemplatePage->GetSoundFile());
+        pSummaryPage->setTransitionType(pTemplatePage->getTransitionType());
+        pSummaryPage->setTransitionSubtype(pTemplatePage->getTransitionSubtype());
+        pSummaryPage->setTransitionDirection(pTemplatePage->getTransitionDirection());
+        pSummaryPage->setTransitionFadeColor(pTemplatePage->getTransitionFadeColor());
+        pSummaryPage->setTransitionDuration(pTemplatePage->getTransitionDuration());
     }
 }
 
