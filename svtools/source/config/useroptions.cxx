@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-06 07:51:48 $
+ *  last change: $Author: pb $ $Date: 2000-10-06 07:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ const String& SvtUserOptions::GetCustomerNumber() const
 
 // -----------------------------------------------------------------------
 
-String SvtUserOptions::GetUserFullName() const
+String SvtUserOptions::GetFullName() const
 {
     String aFullName = pImp->GetFirstName();
     aFullName.EraseLeadingAndTrailingChars();
