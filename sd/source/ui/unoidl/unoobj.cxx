@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:02:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,17 +565,21 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_PLAYFULL:
                     pInfo->bPlayFull = ::cppu::any2bool(aValue);
                     break;
+*/
                 case WID_SOUNDFILE:
                 {
                     OUString aString;
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
                     pInfo->aSoundFile = aString;
+                    updateOldSoundEffect(pInfo);
                     break;
                 }
                 case WID_SOUNDON:
                     pInfo->bSoundOn = ::cppu::any2bool(aValue);
+                    updateOldSoundEffect(pInfo);
                     break;
+/*
                 case WID_BLUESCREEN:
                 {
                     sal_Int32 nColor;
@@ -1862,9 +1866,9 @@ struct deprecated_AnimationEffect_conversion_table_entry
 deprecated_AnimationEffect_conversion_table[] =
 {
     { AnimationEffect_FADE_FROM_LEFT, "ooo-entrance-wipe","from-left" },
-    { AnimationEffect_FADE_FROM_TOP, "ooo-entrance-wipe","from-top" },
+    { AnimationEffect_FADE_FROM_TOP, "ooo-entrance-wipe","from-bottom" },
     { AnimationEffect_FADE_FROM_RIGHT, "ooo-entrance-wipe","from-right" },
-    { AnimationEffect_FADE_FROM_BOTTOM, "ooo-entrance-wipe","from-bottom" },
+    { AnimationEffect_FADE_FROM_BOTTOM, "ooo-entrance-wipe","from-top" },
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-box","in" },
     { AnimationEffect_FADE_FROM_CENTER, "ooo-entrance-box","out" },
     { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-fly-in","from-left" },
@@ -1873,8 +1877,8 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-fly-in","from-bottom" },
     { AnimationEffect_VERTICAL_STRIPES, "ooo-entrance-venetian-blinds","horizontal" },
     { AnimationEffect_HORIZONTAL_STRIPES, "ooo-entrance-venetian-blinds","vertical" },
-    { AnimationEffect_CLOCKWISE, "ooo-entrance-checkerboard","downward" },
-    { AnimationEffect_COUNTERCLOCKWISE, "ooo-entrance-checkerboard","across" },
+    { AnimationEffect_CLOCKWISE, "ooo-entrance-clock-wipe","clockwise" },
+    { AnimationEffect_COUNTERCLOCKWISE, "ooo-entrance-clock-wipe","counter-clockwise" },
     { AnimationEffect_FADE_FROM_UPPERLEFT, "ooo-entrance-diagonal-squares","right-to-bottom" },
     { AnimationEffect_FADE_FROM_UPPERRIGHT, "ooo-entrance-diagonal-squares","left-to-bottom" },
     { AnimationEffect_FADE_FROM_LOWERLEFT, "ooo-entrance-diagonal-squares","right-to-top" },
@@ -1888,15 +1892,15 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_MOVE_TO_TOP, "ooo-entrance-random",0 },
     { AnimationEffect_MOVE_TO_RIGHT, "ooo-entrance-random",0 },
     { AnimationEffect_MOVE_TO_BOTTOM, "ooo-entrance-random",0 },
-    { AnimationEffect_SPIRALIN_LEFT, "ooo-entrance-spiral-in",0 },
-    { AnimationEffect_SPIRALIN_RIGHT, "ooo-entrance-spiral-in",0 },
-    { AnimationEffect_SPIRALOUT_LEFT, "ooo-entrance-spiral-in",0 },
-    { AnimationEffect_SPIRALOUT_RIGHT, "ooo-entrance-spiral-in",0 },
+    { AnimationEffect_SPIRALIN_LEFT, "ooo-entrance-spiral-wipe", "from-top-left-clockwise" },
+    { AnimationEffect_SPIRALIN_RIGHT, "ooo-entrance-spiral-wipe", "from-top-right-counter-clockwise" },
+    { AnimationEffect_SPIRALOUT_LEFT, "ooo-entrance-spiral-wipe", "from-center-clockwise" },
+    { AnimationEffect_SPIRALOUT_RIGHT, "ooo-entrance-spiral-wipe", "from-center-counter-clockwise" },
     { AnimationEffect_DISSOLVE, "ooo-entrance-dissolve-in",0 },
-    { AnimationEffect_WAVYLINE_FROM_LEFT, "ooo-entrance-wipe","from-left" },
-    { AnimationEffect_WAVYLINE_FROM_TOP, "ooo-entrance-wipe","from-top" },
-    { AnimationEffect_WAVYLINE_FROM_RIGHT, "ooo-entrance-wipe","from-right" },
-    { AnimationEffect_WAVYLINE_FROM_BOTTOM, "ooo-entrance-wipe","from-bottom" },
+    { AnimationEffect_WAVYLINE_FROM_LEFT, "ooo-entrance-snake-wipe","from-top-left-vertical" },
+    { AnimationEffect_WAVYLINE_FROM_TOP, "ooo-entrance-snake-wipe","from-top-left-horizontal" },
+    { AnimationEffect_WAVYLINE_FROM_RIGHT, "ooo-entrance-snake-wipe","from-bottom-right-vertical" },
+    { AnimationEffect_WAVYLINE_FROM_BOTTOM, "ooo-entrance-snake-wipe","from-bottom-right-horizontal" },
     { AnimationEffect_RANDOM, "ooo-entrance-random",0 },
     { AnimationEffect_VERTICAL_LINES, "ooo-entrance-random-bars","horizontal" },
     { AnimationEffect_HORIZONTAL_LINES, "ooo-entrance-random-bars","vertical" },
@@ -1909,7 +1913,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_LASER_FROM_LOWERLEFT, "ooo-entrance-fly-in","from-bottom-left" },
     { AnimationEffect_LASER_FROM_LOWERRIGHT, "ooo-entrance-fly-in","from-bottom-right" },
     { AnimationEffect_APPEAR, "ooo-entrance-appear",0 },
-    { AnimationEffect_HIDE, "ooo-entrance-random",0 },
+    { AnimationEffect_HIDE, "ooo-exit-disappear",0 },
     { AnimationEffect_MOVE_FROM_UPPERLEFT, "ooo-entrance-fly-in","from-top-left" },
     { AnimationEffect_MOVE_FROM_UPPERRIGHT, "ooo-entrance-fly-in","from-top-right" },
     { AnimationEffect_MOVE_FROM_LOWERRIGHT, "ooo-entrance-fly-in","from-bottom-right" },
@@ -1937,17 +1941,17 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_VERTICAL_CHECKERBOARD, "ooo-entrance-checkerboard","downward" },
     { AnimationEffect_HORIZONTAL_CHECKERBOARD, "ooo-entrance-checkerboard","across" },
     { AnimationEffect_HORIZONTAL_ROTATE, "ooo-entrance-swivel","vertical" },
-    { AnimationEffect_VERTICAL_ROTATE, "ooo-entrance-swivel","vertical" },
+    { AnimationEffect_VERTICAL_ROTATE, "ooo-entrance-swivel","horizontal" },
     { AnimationEffect_HORIZONTAL_STRETCH, "ooo-entrance-stretchy","across" },
-    { AnimationEffect_VERTICAL_STRETCH, "ooo-entrance-stretchy","across" },
+    { AnimationEffect_VERTICAL_STRETCH, "ooo-entrance-stretchy","downward" },
     { AnimationEffect_STRETCH_FROM_LEFT, "ooo-entrance-stretchy","from-left" },
-    { AnimationEffect_STRETCH_FROM_UPPERLEFT, "ooo-entrance-stretchy","from-left" },
+    { AnimationEffect_STRETCH_FROM_UPPERLEFT, "ooo-entrance-stretchy","from-top-left" },
     { AnimationEffect_STRETCH_FROM_TOP, "ooo-entrance-stretchy","from-top" },
-    { AnimationEffect_STRETCH_FROM_UPPERRIGHT, "ooo-entrance-stretchy","from-top" },
+    { AnimationEffect_STRETCH_FROM_UPPERRIGHT, "ooo-entrance-stretchy","from-top-right" },
     { AnimationEffect_STRETCH_FROM_RIGHT, "ooo-entrance-stretchy","from-right" },
-    { AnimationEffect_STRETCH_FROM_LOWERRIGHT, "ooo-entrance-stretchy","from-right" },
+    { AnimationEffect_STRETCH_FROM_LOWERRIGHT, "ooo-entrance-stretchy","from-bottom-right" },
     { AnimationEffect_STRETCH_FROM_BOTTOM, "ooo-entrance-stretchy","from-bottom" },
-    { AnimationEffect_STRETCH_FROM_LOWERLEFT, "ooo-entrance-stretchy","from-bottom" },
+    { AnimationEffect_STRETCH_FROM_LOWERLEFT, "ooo-entrance-stretchy","from-bottom-left" },
     { AnimationEffect_ZOOM_IN, "ooo-entrance-zoom","in" },
     { AnimationEffect_ZOOM_IN_SMALL, "ooo-entrance-zoom","in-slightly" },
     { AnimationEffect_ZOOM_IN_SPIRAL, "ooo-entrance-zoom","in-slightly" },
@@ -2115,6 +2119,13 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
     if( !p->mpPresetId )
         throw lang::IllegalArgumentException();
 
+    SdrObject* pObj = mpShape->GetSdrObject();
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+
+    // ignore old text effects on shape without text
+    if( (pTextObj == 0) || (!pTextObj->HasText()) )
+        return;
+
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
 
     // create an effect from this preset
@@ -2122,7 +2133,6 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
     const OUString aPresetSubType( OUString::createFromAscii( p->mpPresetSubType ) );
     CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( aPresetId ) );
 
-    SdrObject* pObj = mpShape->GetSdrObject();
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     if( pPreset.get() && pMainSequence.get() )
@@ -2142,11 +2152,11 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
                 pGroup = pMainSequence->findGroup( nGroupId );
         }
 
+        CustomAnimationEffectPtr pShapeEffect;
+
         // if there is not yet a group, create it
         if( pGroup.get() == 0 )
         {
-            CustomAnimationEffectPtr pShapeEffect;
-
             EffectSequence::iterator aIterOnlyBackground( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_BACKGROUND ) );
             if( aIterOnlyBackground != aEnd )
             {
@@ -2204,7 +2214,7 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
                     if( bLaserEffect )
                     {
                         (*aIter)->setIterateType( TextAnimationType::BY_LETTER );
-                        (*aIter)->setIterateInterval( 20.0 );// TODO:
+                        (*aIter)->setIterateInterval( 0.5 );// TODO:
                                                              // Determine
                                                              // interval
                                                              // according
@@ -2216,6 +2226,10 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
                 }
             }
         }
+
+        if( pShapeEffect.get() )
+            pShapeEffect->setDuration( 0.1 );
+
         pMainSequence->rebuild();
     }
 }
@@ -2249,7 +2263,8 @@ void SdXShape::setOldSpeed( const com::sun::star::uno::Any& aValue )
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
         {
-            pEffect->setDuration( fDuration );
+            if( pEffect->getDuration() != 0.1 )
+                pEffect->setDuration( fDuration );
             bNeedRebuild = true;
         }
     }
@@ -2439,5 +2454,43 @@ void SdXShape::setOldPresOrder( const com::sun::star::uno::Any& aValue )
                 rSequence.insert( aPos, (*aTempIter++) );
             }
         }
+    }
+}
+
+void SdXShape::updateOldSoundEffect( SdAnimationInfo* pInfo )
+{
+    if( pInfo )
+    {
+        SdrObject* pObj = mpShape->GetSdrObject();
+        sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+        const Reference< XShape > xShape( mpShape );
+
+        EffectSequence::iterator aIter;
+        bool bNeedRebuild = false;
+
+        OUString aSoundFile;
+        if( pInfo->bSoundOn )
+            aSoundFile = pInfo->aSoundFile;
+
+        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+        {
+            CustomAnimationEffectPtr pEffect( (*aIter) );
+            if( pEffect->getTargetShape() == xShape )
+            {
+                if( aSoundFile.getLength() )
+                {
+                    pEffect->createAudio( makeAny( aSoundFile ) );
+                }
+                else
+                {
+                    pEffect->removeAudio();
+                }
+                bNeedRebuild = true;
+            }
+        }
+
+        if( bNeedRebuild )
+            pMainSequence->rebuild();
     }
 }
