@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
+ *  last change: $Author: nn $ $Date: 2001-04-11 14:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,11 +225,16 @@ void __EXPORT ScServerObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
 {
     BOOL bDataChanged = FALSE;
 
-    if (rBC.ISA(ScDocShell))
+    //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
+    if ( &rBC == pDocSh )
     {
         //  from DocShell, only SFX_HINT_DYING is interesting
         if ( rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-            Clear();
+        {
+            pDocSh = NULL;
+            EndListening(*SFX_APP());
+            //  don't access DocShell anymore for EndListening etc.
+        }
     }
     else if (rBC.ISA(SfxApplication))
     {
