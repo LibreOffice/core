@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-18 13:51:05 $
+ *  last change: $Author: pb $ $Date: 2002-10-23 07:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ namespace sfx2
         ::rtl::OUString             maPath;
         ::rtl::OUString             maCurFilter;
         ::rtl::OUString             maSelectFilter;
+        ::rtl::OUString             maButtonLabel;
 
         Timer                       maPreViewTimer;
         Graphic                     maGraphic;
@@ -160,6 +161,7 @@ namespace sfx2
         void                    addGraphicFilter();
         void                    enablePasswordBox( sal_Bool bInit );
         void                    updateFilterOptionsBox();
+        void                    updateExportButton();
         void                    updateSelectionBox();
         void                    updateVersions();
         void                    updatePreviewState( sal_Bool _bUpdatePreviewWindow = sal_True );
