@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:29:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2327,8 +2327,7 @@ BOOL OutlineViewShell::UpdateTitleObject( SdPage*   pPage, Paragraph* pPara )
 
         // als Praesentationsobjekt anmelden
         pTO->SetUserCall( pPage );
-        List* pPresObjList = pPage->GetPresObjList();
-        pPresObjList->Insert( pTO, LIST_APPEND );
+        pPage->InsertPresObj( pTO, PRESOBJ_TITLE );
 
         pPage->InsertObject( pTO );
                     // TRUE: DontRemoveHardAttr
@@ -2403,8 +2402,7 @@ BOOL OutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
 
         // als Praesentationsobjekt anmelden
         pTO->SetUserCall( pPage );
-        List* pPresObjList = pPage->GetPresObjList();
-        pPresObjList->Insert( pTO, LIST_APPEND );
+        pPage->InsertPresObj( pTO, PRESOBJ_OUTLINE );
 
         pPage->InsertObject( pTO );
         pOPO->SetOutlinerMode( eOutlinerMode );
