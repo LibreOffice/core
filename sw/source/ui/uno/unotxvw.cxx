@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-04-19 11:33:18 $
+ *  last change: $Author: os $ $Date: 2002-04-22 09:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,8 +756,6 @@ void SwXTextView::addSelectionChangeListener(
                                     throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-
     Reference< view::XSelectionChangeListener > * pInsert = new Reference< view::XSelectionChangeListener > ;
     *pInsert = rxListener;
     aSelChangedListeners.Insert(pInsert, aSelChangedListeners.Count());
@@ -770,7 +768,6 @@ void SwXTextView::removeSelectionChangeListener(
                                         throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Bool bRemoved = sal_False;
     view::XSelectionChangeListener* pLeft = rxListener.get();
     for(sal_uInt16 i = 0; i < aSelChangedListeners.Count(); i++)
     {
@@ -779,12 +776,10 @@ void SwXTextView::removeSelectionChangeListener(
         if(pLeft == pRight)
         {
             aSelChangedListeners.Remove(i);
-            bRemoved = sal_True;
             delete pElem;
+            break;
         }
     }
-    if(!bRemoved)
-        throw uno::RuntimeException();
 }
 /* -----------------------------01.06.01 14:41--------------------------------
 
