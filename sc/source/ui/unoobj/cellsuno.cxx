@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:43:20 $
+ *  last change: $Author: sab $ $Date: 2001-07-18 08:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5530,7 +5530,7 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
                 if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                 {
                     double fDummy;
-                    if ( pFormatter->IsNumberFormat(aVal, nNumFmt, fDummy) )
+                    if ( pDoc->GetEnglishFormatTable()->IsNumberFormat(aVal, nNumFmt, fDummy) )
                         aVal.Insert('\'',0);
                     else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
                     {
