@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:05:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #ifndef _SVX_SELCTRL_HXX //autogen
 #include <svx/selctrl.hxx>
 #endif
+#include <svx/xmlsecctrl.hxx>
 #ifndef _NAVICFG_HXX
 #include <navicfg.hxx>
 #endif
@@ -1084,6 +1085,10 @@ void SwModule::FillStatusBar( StatusBar& rStatusBar )
     rStatusBar.InsertItem( SID_DOC_MODIFIED, rStatusBar.GetTextWidth(
                                                                 C2S("*")));
     rStatusBar.SetHelpId(SID_DOC_MODIFIED, SID_DOC_MODIFIED);
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
 
     // den aktuellen Context anzeigen Uhrzeit / FrmPos / TabellenInfo
     aTmp.Fill( 25, sal_Unicode('X') );
