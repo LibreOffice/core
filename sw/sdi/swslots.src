@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 10:32:50 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 20:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
     SlotName = "AutoFormatBeiEingabe";
     SlotName [ english ] =  "AutoFormatWhileTyping";
-    SlotName[ english_us ] = "AutoFormatWhileTyping";
+    SlotName[ english_us ] = "AutoFormat";
     SlotName[ portuguese ] = "AutoFormato";
     SlotName[ russian ] = "Автоформат";
     SlotName[ dutch ] = "AutoOpmaak";
@@ -910,7 +910,7 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ russian ] = "Поле";
     SlotName[ dutch ] = "Veldopdracht";
     SlotName[ french ] = "Champ";
-    SlotName[ spanish ] = "Cуdigo de campo";
+    SlotName[ spanish ] = "Campos";
     SlotName[ italian ] = "Comando di campo";
     SlotName[ danish ] = "Felt";
     SlotName[ swedish ] = "Fдltkommando";
@@ -1050,7 +1050,7 @@ SfxSlotInfo FN_EDIT_REGION
     SlotName[ russian ] = "Разделы";
     SlotName[ dutch ] = "Bereiken";
     SlotName[ french ] = "Sections";
-    SlotName[ spanish ] = "Areas";
+    SlotName[ spanish ] = "Бreas";
     SlotName[ italian ] = "Sezioni";
     SlotName[ danish ] = "Omrеder";
     SlotName[ swedish ] = "Omrеden";
@@ -2534,7 +2534,7 @@ SfxSlotInfo FN_FRAME_UP
     SlotName[ russian ] = "Вперед";
     SlotName[ dutch ] = "Naar voren";
     SlotName[ french ] = "Vers l'avant";
-    SlotName[ spanish ] = "Hacia adelante";
+    SlotName[ spanish ] = "Hacia delante";
     SlotName[ italian ] = "In avanti";
     SlotName[ danish ] = "Flyt fremad";
     SlotName[ swedish ] = "Framеt";
@@ -3397,7 +3397,7 @@ SfxSlotInfo FN_INSERT_FIELD
 {
     SlotName = "Feldbefehldialog";
     SlotName [ english ] =  "Insert fields dialog";
-    SlotName[ english_us ] = "Insert fields dialog";
+    SlotName[ english_us ] = "Insert Fields";
     SlotName[ portuguese ] = "Inserir cуdigo de campo";
     SlotName[ russian ] = "Вставить поле";
     SlotName[ dutch ] = "Veldopdracht invoegen";
@@ -5497,7 +5497,7 @@ SfxSlotInfo FN_NUMBER_STANDARD
     SlotName[ russian ] = "Числовой формат : стандарт";
     SlotName[ dutch ] = "Getalnotatie: standaard";
     SlotName[ french ] = "Format numйrique : standard";
-    SlotName[ spanish ] = "Formato numйrico: Estбndar";
+    SlotName[ spanish ] = "Formato numйrico: Predeterminado";
     SlotName[ italian ] = "Formato numero: standard";
     SlotName[ danish ] = "Talformat: standard";
     SlotName[ swedish ] = "Talformat: standard";
@@ -6193,7 +6193,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName [ english ] =  "Druckoptionen Seitenansicht";
     SlotName[ english_us ] = "Print options page view";
     SlotName[ portuguese ] = "Opзхes de impressгo";
-    SlotName[ russian ] = "Параметры печати";
+    SlotName[ russian ] = "Параметры печати: вид страницы";
     SlotName[ dutch ] = "Printopties afdrukvoorbeeld";
     SlotName[ french ] = "Options d'impression : aperзu";
     SlotName[ spanish ] = "Opciones de impresiуn Vista preliminar";
@@ -8423,7 +8423,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
     SlotName = "Als Zeichen verankern";
     SlotName [ english ] =  "Anchor as character";
-    SlotName[ english_us ] = "Anchor as character";
+    SlotName[ english_us ] = "Anchor to Character";
     SlotName[ portuguese ] = "Вncora no carбcter";
     SlotName[ russian ] = "Привязать к знаку";
     SlotName[ dutch ] = "Aan teken verankeren";
@@ -9286,7 +9286,7 @@ SfxSlotInfo SID_TEMPLATE_LOAD
     SlotName [ english ] =  "Vorlagen laden";
     SlotName[ english_us ] = "Load Styles & Templates";
     SlotName[ portuguese ] = "Carregar estilos";
-    SlotName[ russian ] = "Загрузить шаблоны";
+    SlotName[ russian ] = "Загрузка шаблонов и стилей";
     SlotName[ dutch ] = "Opmaakprofielen laden";
     SlotName[ french ] = "Charger les styles";
     SlotName[ spanish ] = "Cargar estilos";
@@ -9492,6 +9492,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiд";
 };
+
 
 
 
