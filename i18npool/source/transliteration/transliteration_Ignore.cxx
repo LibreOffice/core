@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:06:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,9 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
         const sal_Unicode * p1 = s1.getStr();
         const sal_Unicode * p2 = s2.getStr();
         sal_Int32 length = Min(s1.getLength(), s2.getLength());
+        sal_Int32 nmatch;
 
-        for (sal_Int32 nmatch = 0; nmatch < length; nmatch++)
+        for ( nmatch = 0; nmatch < length; nmatch++)
             if (*p1++ != *p2++)
                 break;
 
