@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:30:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 14:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,12 +457,12 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ spanish ] = "La protecciσn de celdas es efectiva solamente si la hoja activa estα protegida.\n\nSeleccione en 'Herramientas' la instrucciσn 'Proteger documento' y luego 'Hoja'." ;
         Text [ english_us ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
         Text[ chinese_simplified ] = "Φ»ΣΠΤΪΚΉΣΓ±£»¤Ή¤Χχ±νΊσ£¬µ¥ΤªΈρ²Ε»αΚάµ½±£»¤΅£\n\nΗλµγ»χ²Λµ¥ΓόΑξ΅°Ή¤Ύί΅±£¬΅°±£»¤ΞΔµµ΅±£¬΅°Ή¤Χχ±ν΅±΅£";
-        Text[ russian ] = "Ηΰωθςΰ ÿχεικθ δειρςβσες ςξλόκξ οξρλε σρςΰνξβλενθÿ ηΰωθςϋ ςεκσωεγξ λθρςΰ.\n\nΔλÿ ηΰωθςϋ λθρςΰ βϋαεπθςε β μενώ 'Ρεπβθρ' κξμΰνδσ 'Ηΰωθςΰ δξκσμ";
+        Text[ russian ] = "Ηΰωθςΰ ÿχεικθ δειρςβσες ςξλόκξ οξρλε σρςΰνξβλενθÿ ηΰωθςϋ ςεκσωεγξ λθρςΰ.\n\nΔλÿ ηΰωθςϋ λθρςΰ βϋαεπθςε β μενώ 'Ρεπβθρ' κξμΰνδσ 'Ηΰωθςΰ δξκσμενςΰ', ΰ ηΰςεμ κξμΰνδσ 'Λθρς'.";
         Text[ polish ] = "Ochrona komσrek aktywna bκdzie dopiero po zabezpieczeniu aktualnego arkusza.\n\nNaleΏy wybraζ w tym celu z menu 'Narzκdzia' polecenie 'Chroρ dokument', a nastκpnie polecenie 'Arkusz'.";
         Text[ japanese ] = "ΎΩ‚Μ•Ϋμ‚Ν»έ‚Μ•\\‚ª•Ϋμ‚³‚κ‚Δ‚Ά‚ι‚Μ‚έ—Lψ‚Ε‚·B\n\n•\\‚π•Ϋμ‚·‚ι‚Ι‚ΝAÒΖ­°‚ΕΒ°Ω¨Δή·­ÒέΔ‚Μ•Ϋμ¨•\\‚π‘I‘π‚µ‚ά‚·B";
         Text[ chinese_traditional ] = "¥u¦³¦b±z±Ò°Κ«OΕ@¤u§@ªν«α΅Aΐx¦s®ζ¤~·|¨ό¨μ«OΕ@΅C\n\n½Π±z«φ¤@¤U³o­Σ¥\\―ΰªν«ό¥O΅G\"«OΕ@¤ε¥σ\"΅A\"¤u§@ªν\"΅C";
-        Text[ arabic ] = "αΗ ΚΥΘΝ ΝγΗνΙ ΗαΞαΗνΗ έΪψΗαΙ΅ ΕαΗ ΪδΟγΗ νίζδ ΗαΜΟζα ΗαΝΗαν γΝγν.\n\nαΚδένΠ Παί ΗαΡΜΗΑ ΗΞΚνΗΡ ΗαΓγΡ 'ΝγΗνΙ ΗαγΣΚδΟ' γδ ΗαήΗΖγΙ 'ΓΟζΗΚ'΅ Λγ ΗαΓ";
-        Text[ greek ] = "Η προστασία κελιών ισχύει μόνο στην περίπτωση που υπάρχει προστασία για τον τρέχων πίνακα.\n\nΓια να γίνει αυτό επιλέξτε στο μενού 'Εργαλεί";
+        Text[ arabic ] = "αΗ ΚΥΘΝ ΝγΗνΙ ΗαΞαΗνΗ έΪψΗαΙ΅ ΕαΗ ΪδΟγΗ νίζδ ΗαΜΟζα ΗαΝΗαν γΝγν.\n\nαΚδένΠ Παί ΗαΡΜΗΑ ΗΞΚνΗΡ ΗαΓγΡ 'ΝγΗνΙ ΗαγΣΚδΟ' γδ ΗαήΗΖγΙ 'ΓΟζΗΚ'΅ Λγ ΗαΓγ?";
+        Text[ greek ] = "Η προστασία κελιών ισχύει μόνο στην περίπτωση που υπάρχει προστασία για τον τρέχων πίνακα.\n\nΓια να γίνει αυτό επιλέξτε στο μενού 'Εργαλεία' την εντολή 'Προστασία εγγράφου' και στη συνέχεια την εντολή 'Πίνακας'.";
         Text[ korean ] = "ΌΏ ΊΈΘ£΄Β ΗφΐηΐΗ ½ΓΖ®°΅ ΊΈΘ£µΗΎϊΐ»¶§ΈΈ ΐ―ΘΏΗΥ΄Ο΄Ω.  \n\n'µµ±Έ'Έή΄ΊΏ΅Ό­ 'Ή®Ό­ΊΈΘ£'Έ¦ Ό±ΕΓΗΡ ΄Ωΐ½, '½ΓΖ®'Έ¦ ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "Hόcre korumasύ, yalnύzca aktif tablo da korunmuώsa etkindir.\n\nBunun iηin 'Araηlar' mφnόsόnden φnce 'belgeyi koru' sonra 'Tablo' komutunu seηin.";
         Text[ language_user1 ] = " ";
@@ -587,6 +587,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ catalan ] = "Impresiσn";
     };
 };
+
 
 
 
