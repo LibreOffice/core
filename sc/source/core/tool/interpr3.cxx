@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-27 21:11:04 $
+ *  last change: $Author: er $ $Date: 2001-04-27 22:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,11 +1479,9 @@ void ScInterpreter::ScZTest()
             ScMatrix* pMat = PopMatrix();
             if (pMat)
             {
-                USHORT nC, nR;
-                pMat->GetDimensions(nC, nR);
+                ULONG nCount = pMat->GetElementCount();
                 if (pMat->IsNumeric())
                 {
-                    ULONG nCount = (ULONG) nC * nR;
                     for ( ULONG i = 0; i < nCount; i++ )
                     {
                         fVal= pMat->GetDouble(i);
@@ -1494,15 +1492,14 @@ void ScInterpreter::ScZTest()
                 }
                 else
                 {
-                    for (USHORT i = 0; i < nC; i++)
-                        for (USHORT j = 0; j < nR; j++)
-                            if (!pMat->IsString(i,j))
-                            {
-                                fVal= pMat->GetDouble(i,j);
-                                fSum += fVal;
-                                fSumSqr += fVal * fVal;
-                                rValCount++;
-                            }
+                    for (ULONG i = 0; i < nCount; i++)
+                        if (!pMat->IsString(i))
+                        {
+                            fVal= pMat->GetDouble(i);
+                            fSum += fVal;
+                            fSumSqr += fVal * fVal;
+                            rValCount++;
+                        }
                 }
             }
         }
@@ -1913,30 +1910,27 @@ void ScInterpreter::ScKurt()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
+                        for (ULONG i = 0; i < nCount; i++)
+                        {
+                            fVal = pMat->GetDouble(i);
+                            fSum += fVal;
+                            fSumSqr += fVal*fVal;
+                            fCount++;
+                        }
+                    }
+                    else
+                    {
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
                             {
-                                fVal = pMat->GetDouble(i,j);
+                                fVal = pMat->GetDouble(i);
                                 fSum += fVal;
                                 fSumSqr += fVal*fVal;
                                 fCount++;
                             }
-                    }
-                    else
-                    {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                {
-                                    fVal = pMat->GetDouble(i,j);
-                                    fSum += fVal;
-                                    fSumSqr += fVal*fVal;
-                                    fCount++;
-                                }
                     }
                 }
             }
@@ -1991,20 +1985,17 @@ void ScInterpreter::ScKurt()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                fSum += pow(pMat->GetDouble(i,j) - fMean, fPow);
+                        for (ULONG i = 0; i < nCount; i++)
+                            fSum += pow(pMat->GetDouble(i) - fMean, fPow);
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                    fSum += pow(pMat->GetDouble(i,j) - fMean, fPow);
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                                fSum += pow(pMat->GetDouble(i) - fMean, fPow);
                     }
                 }
             }
@@ -2092,14 +2083,27 @@ void ScInterpreter::ScHarMean()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
+                        for (ULONG i = 0; i < nCount; i++)
+                        {
+                            double x = pMat->GetDouble(i);
+                            if (x > 0.0)
                             {
-                                double x = pMat->GetDouble(i,j);
+                                nVal += 1.0/x;
+                                nCount++;
+                            }
+                            else
+                                SetIllegalArgument();
+                        }
+                    }
+                    else
+                    {
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                            {
+                                double x = pMat->GetDouble(i);
                                 if (x > 0.0)
                                 {
                                     nVal += 1.0/x;
@@ -2108,22 +2112,6 @@ void ScInterpreter::ScHarMean()
                                 else
                                     SetIllegalArgument();
                             }
-                    }
-                    else
-                    {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                {
-                                    double x = pMat->GetDouble(i,j);
-                                    if (x > 0.0)
-                                    {
-                                        nVal += 1.0/x;
-                                        nCount++;
-                                    }
-                                    else
-                                        SetIllegalArgument();
-                                }
                     }
                 }
             }
@@ -2210,14 +2198,27 @@ void ScInterpreter::ScGeoMean()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
+                        for (ULONG i = 0; i < nCount; i++)
+                        {
+                            double x = pMat->GetDouble(i);
+                            if (x > 0.0)
                             {
-                                double x = pMat->GetDouble(i,j);
+                                nVal += log(x);
+                                nCount++;
+                            }
+                            else
+                                SetIllegalArgument();
+                        }
+                    }
+                    else
+                    {
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                            {
+                                double x = pMat->GetDouble(i);
                                 if (x > 0.0)
                                 {
                                     nVal += log(x);
@@ -2226,22 +2227,6 @@ void ScInterpreter::ScGeoMean()
                                 else
                                     SetIllegalArgument();
                             }
-                    }
-                    else
-                    {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                {
-                                    double x = pMat->GetDouble(i,j);
-                                    if (x > 0.0)
-                                    {
-                                        nVal += log(x);
-                                        nCount++;
-                                    }
-                                    else
-                                        SetIllegalArgument();
-                                }
                     }
                 }
             }
@@ -2331,30 +2316,27 @@ void ScInterpreter::ScSkew()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
+                        for (ULONG i = 0; i < nCount; i++)
+                        {
+                            fVal = pMat->GetDouble(i);
+                            fSum += fVal;
+                            fSumSqr += fVal*fVal;
+                            fCount++;
+                        }
+                    }
+                    else
+                    {
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
                             {
-                                fVal = pMat->GetDouble(i,j);
+                                fVal = pMat->GetDouble(i);
                                 fSum += fVal;
                                 fSumSqr += fVal*fVal;
                                 fCount++;
                             }
-                    }
-                    else
-                    {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                {
-                                    fVal = pMat->GetDouble(i,j);
-                                    fSum += fVal;
-                                    fSumSqr += fVal*fVal;
-                                    fCount++;
-                                }
                     }
                 }
             }
@@ -2407,20 +2389,17 @@ void ScInterpreter::ScSkew()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                fSum += pow(pMat->GetDouble(i,j) - fMean, fPow);
+                        for (ULONG i = 0; i < nCount; i++)
+                            fSum += pow(pMat->GetDouble(i) - fMean, fPow);
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                    fSum += pow(pMat->GetDouble(i,j) - fMean, fPow);
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                                fSum += pow(pMat->GetDouble(i) - fMean, fPow);
                     }
                 }
             }
@@ -2890,7 +2869,7 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& 
         switch (GetStackType())
         {
             case svDouble :
-                Pop();
+                PopDouble();
                 rValCount++;
             break;
             case svSingleRef :
@@ -2922,20 +2901,14 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& 
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
-                    {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                rValCount++;
-                    }
+                        rValCount += nCount;
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                    rValCount++;
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                                rValCount++;
                     }
                 }
             }
@@ -3012,24 +2985,21 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& 
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                            {
-                                pSArray[nIndex] = pMat->GetDouble(i,j);
-                                nIndex++;
-                            }
+                        for (ULONG i = 0; i < nCount; i++)
+                        {
+                            pSArray[nIndex] = pMat->GetDouble(i);
+                            nIndex++;
+                        }
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
                             {
-                                pSArray[nIndex] = pMat->GetDouble(i,j);
+                                pSArray[nIndex] = pMat->GetDouble(i);
                                 nIndex++;
                             }
                     }
@@ -3178,34 +3148,31 @@ void ScInterpreter::ScRank()
             double fVal = GetDouble();
             if (pMat)
             {
-                USHORT nC, nR;
-                pMat->GetDimensions(nC, nR);
+                ULONG nCount = pMat->GetElementCount();
                 if (pMat->IsNumeric())
                 {
-                    for (USHORT i = 0; i < nC; i++)
-                        for (USHORT j = 0; j < nR; j++)
-                        {
-                            double x = pMat->GetDouble(i,j);
-                            if (x == fVal)
-                                bValid = TRUE;
-                            else if ((!bDescending && x > fVal) ||
-                                     (bDescending && x < fVal) )
-                                fCount++;
-                        }
+                    for (ULONG i = 0; i < nCount; i++)
+                    {
+                        double x = pMat->GetDouble(i);
+                        if (x == fVal)
+                            bValid = TRUE;
+                        else if ((!bDescending && x > fVal) ||
+                                    (bDescending && x < fVal) )
+                            fCount++;
+                    }
                 }
                 else
                 {
-                    for (USHORT i = 0; i < nC; i++)
-                        for (USHORT j = 0; j < nR; j++)
-                            if (!pMat->IsString(i,j))
-                            {
-                                double x = pMat->GetDouble(i,j);
-                                if (x == fVal)
-                                    bValid = TRUE;
-                                else if ((!bDescending && x > fVal) ||
-                                         (bDescending && x < fVal) )
-                                    fCount++;
-                            }
+                    for (ULONG i = 0; i < nCount; i++)
+                        if (!pMat->IsString(i))
+                        {
+                            double x = pMat->GetDouble(i);
+                            if (x == fVal)
+                                bValid = TRUE;
+                            else if ((!bDescending && x > fVal) ||
+                                        (bDescending && x < fVal) )
+                                fCount++;
+                        }
                 }
             }
         }
@@ -3274,26 +3241,23 @@ void ScInterpreter::ScAveDev()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                            {
-                                rVal += pMat->GetDouble(i,j);
-                                rValCount++;
-                            }
+                        for (ULONG i = 0; i < nCount; i++)
+                        {
+                            rVal += pMat->GetDouble(i);
+                            rValCount++;
+                        }
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                {
-                                    rVal += pMat->GetDouble(i,j);
-                                    rValCount++;
-                                }
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                            {
+                                rVal += pMat->GetDouble(i);
+                                rValCount++;
+                            }
                     }
                 }
             }
@@ -3345,20 +3309,17 @@ void ScInterpreter::ScAveDev()
                 ScMatrix* pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
-                    pMat->GetDimensions(nC, nR);
+                    ULONG nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                rVal += fabs(pMat->GetDouble(i,j) - nMiddle);
+                        for (ULONG i = 0; i < nCount; i++)
+                            rVal += fabs(pMat->GetDouble(i) - nMiddle);
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
-                                if (!pMat->IsString(i,j))
-                                    rVal += fabs(pMat->GetDouble(i,j) - nMiddle);
+                        for (ULONG i = 0; i < nCount; i++)
+                            if (!pMat->IsString(i))
+                                rVal += fabs(pMat->GetDouble(i) - nMiddle);
                     }
                 }
             }

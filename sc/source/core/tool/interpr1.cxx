@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 20:25:02 $
+ *  last change: $Author: er $ $Date: 2001-04-27 22:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4839,10 +4839,10 @@ void ScInterpreter::ScIndex()
                         for (USHORT i = 0; i < nR; i++)
                             if (!pMat->IsString(nRowMinus1, i))
                                 pResMat->PutDouble(pMat->GetDouble(nRowMinus1,
-                                    i), 0, i);
+                                    i), i);
                             else
                                 pResMat->PutString(pMat->GetString(nRowMinus1,
-                                    i), 0, i);
+                                    i), i);
                         PushMatrix(pResMat);
                         nRetMat = nMatInd;
                     }

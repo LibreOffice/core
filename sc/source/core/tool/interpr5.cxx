@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 20:25:02 $
+ *  last change: $Author: er $ $Date: 2001-04-27 22:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,16 +556,16 @@ ScMatrix* ScInterpreter::GetMatrix(USHORT& nMatInd)
                 if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                 {
                     if (HasCellValueData(pCell))
-                        pMat->PutDouble(GetCellValue(aAdr, pCell), 0, 0);
+                        pMat->PutDouble(GetCellValue(aAdr, pCell), 0);
                     else
                     {
                         String aStr;
                         GetCellString(aStr, pCell);
-                        pMat->PutString(aStr, 0, 0);
+                        pMat->PutString(aStr, 0);
                     }
                 }
                 else
-                    pMat->PutEmpty( 0, 0 );
+                    pMat->PutEmpty( 0 );
             }
             else
                 SetError(errCodeOverflow);
@@ -2121,7 +2121,7 @@ void ScInterpreter::ScSumProduct()
     ScMatrix* pMat1 = NULL;
     ScMatrix* pMat2 = NULL;
     ScMatrix* pMat  = NULL;
-    USHORT nMatInd1, nMatInd2, i, j;
+    USHORT nMatInd1, nMatInd2;
     pMat2 = GetMatrix(nMatInd2);
     if (!pMat2)
     {
@@ -2131,7 +2131,7 @@ void ScInterpreter::ScSumProduct()
     USHORT nC, nR, nC1, nR1;
     pMat2->GetDimensions(nC, nR);
     pMat = pMat2;
-    for (i = 1; i < nParamCount; i++)
+    for (USHORT i = 1; i < nParamCount; i++)
     {
         pMat1 = GetMatrix(nMatInd1);
         if (!pMat1)
@@ -2155,10 +2155,10 @@ void ScInterpreter::ScSumProduct()
             pMat = pResMat;
     }
     double fSum = 0.0;
-    for (i = 0; i < nC; i++)
-        for (j = 0; j < nR; j++)
-            if (!pMat->IsString(i,j))
-                fSum += pMat->GetDouble(i,j);
+    ULONG nCount = pMat->GetElementCount();
+    for (ULONG j = 0; j < nCount; j++)
+        if (!pMat->IsString(j))
+            fSum += pMat->GetDouble(j);
     PushDouble(fSum);
 }
 
@@ -2241,7 +2241,7 @@ void ScInterpreter::ScSumXMY2()
 
     ScMatrix* pMat1 = NULL;
     ScMatrix* pMat2 = NULL;
-    USHORT nMatInd1, nMatInd2, i, j;
+    USHORT nMatInd1, nMatInd2;
     pMat2 = GetMatrix(nMatInd2);
     pMat1 = GetMatrix(nMatInd1);
     if (!pMat2 || !pMat1)
@@ -2266,13 +2266,13 @@ void ScInterpreter::ScSumXMY2()
     else
     {
         double fVal, fSum = 0.0;
-        for (i = 0; i < nC1; i++)
-            for (j = 0; j < nR1; j++)
-                if (!pResMat->IsString(i,j))
-                {
-                    fVal = pResMat->GetDouble(i,j);
-                    fSum += fVal * fVal;
-                }
+        ULONG nCount = pResMat->GetElementCount();
+        for (ULONG i = 0; i < nCount; i++)
+            if (!pResMat->IsString(i))
+            {
+                fVal = pResMat->GetDouble(i);
+                fSum += fVal * fVal;
+            }
         PushDouble(fSum);
     }
 }
@@ -2322,9 +2322,9 @@ void ScInterpreter::ScFrequency()
             nCount++;
             i++;
         }
-        pResMat->PutDouble((double) nCount, 0, j);
+        pResMat->PutDouble((double) nCount, j);
     }
-    pResMat->PutDouble((double) (nSize2-i), 0, j);
+    pResMat->PutDouble((double) (nSize2-i), j);
     if (pSortArray1)
         delete pSortArray1;
     if (pSortArray2)
