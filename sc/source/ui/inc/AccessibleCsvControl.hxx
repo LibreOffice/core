@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,14 @@
 #ifndef _SC_ACCESSIBLECSVCONTROL_HXX
 #define _SC_ACCESSIBLECSVCONTROL_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleText.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
+#include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
 #ifndef _SV_GEN_HXX
@@ -108,11 +108,11 @@ class ScAccessibleCsvControl : public ScAccessibleContextBase
 {
 protected:
     typedef ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > XAccessibleRef;
+        ::com::sun::star::accessibility::XAccessible > XAccessibleRef;
     typedef ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > XAccessibleRelationSetRef;
+        ::com::sun::star::accessibility::XAccessibleRelationSet > XAccessibleRelationSetRef;
     typedef ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet > XAccessibleStateSetRef;
+        ::com::sun::star::accessibility::XAccessibleStateSet > XAccessibleStateSetRef;
 
     typedef ::com::sun::star::awt::Point        AwtPoint;
     typedef ::com::sun::star::awt::Size         AwtSize;
@@ -132,7 +132,7 @@ public:
     // XAccessibleComponent ---------------------------------------------------
 
     /** Returns the child at the specified point (cell returns NULL). */
-    virtual XAccessibleRef SAL_CALL getAccessibleAt( const AwtPoint& rPoint )
+    virtual XAccessibleRef SAL_CALL getAccessibleAtPoint( const AwtPoint& rPoint )
         throw( ::com::sun::star::uno::RuntimeException );
 
     /** Returns true, if the control is visible. */
@@ -198,7 +198,7 @@ protected:
 class ScCsvRuler;
 
 typedef ::cppu::ImplHelper1<
-        ::drafts::com::sun::star::accessibility::XAccessibleText >
+        ::com::sun::star::accessibility::XAccessibleText >
     ScAccessibleCsvRulerImpl;
 
 /** Accessible class representing the CSV ruler control. */
@@ -255,7 +255,7 @@ public:
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the attributes of the specified character. */
-    virtual PropertyValueSeq SAL_CALL getCharacterAttributes( sal_Int32 nIndex )
+    virtual PropertyValueSeq SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the screen coordinates of the specified character. */
@@ -373,8 +373,8 @@ private:
 class ScCsvGrid;
 
 typedef ::cppu::ImplHelper2<
-        ::drafts::com::sun::star::accessibility::XAccessibleTable,
-        ::drafts::com::sun::star::accessibility::XAccessibleSelection >
+        ::com::sun::star::accessibility::XAccessibleTable,
+        ::com::sun::star::accessibility::XAccessibleSelection >
     ScAccessibleCsvGridImpl;
 
 /** Accessible class representing the CSV grid control. */
@@ -382,7 +382,7 @@ class ScAccessibleCsvGrid : public ScAccessibleCsvControl, public ScAccessibleCs
 {
 protected:
     typedef ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleTable > XAccessibleTableRef;
+        ::com::sun::star::accessibility::XAccessibleTable > XAccessibleTableRef;
 
 public:
     explicit                    ScAccessibleCsvGrid( ScCsvGrid& rGrid );
@@ -391,7 +391,7 @@ public:
     // XAccessibleComponent ---------------------------------------------------
 
     /** Returns the cell at the specified point. */
-    virtual XAccessibleRef SAL_CALL getAccessibleAt( const AwtPoint& rPoint )
+    virtual XAccessibleRef SAL_CALL getAccessibleAtPoint( const AwtPoint& rPoint )
         throw( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Int32 SAL_CALL getForeground(  )
@@ -527,7 +527,7 @@ public:
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Deselects the child with the specified index in all selected children. */
-    virtual void SAL_CALL deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+    virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     // XInterface -------------------------------------------------------------
