@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-13 16:41:04 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <xmloff/xmlkywd.hxx>
 #endif
 
+#include <svx/svdobj.hxx>
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
 #endif
@@ -100,6 +101,32 @@
 #endif
 #ifndef _XMLTEXTE_HXX
 #include "xmltexte.hxx"
+#endif
+
+#ifndef _APPLET_HXX //autogen
+#include <so3/applet.hxx>
+#endif
+#ifndef _PLUGIN_HXX //autogen
+#include <so3/plugin.hxx>
+#endif
+
+#ifndef _FRAMEOBJ_HXX //autogen
+#include <sfx2/frameobj.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
+#ifndef _SW_APPLET_IMPL_HXX
+#include <SwAppletImpl.hxx>
+#endif
+
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
+
+#ifndef _SFX_FRMDESCRHXX
+#include <sfx2/frmdescr.hxx>
 #endif
 
 using namespace ::rtl;
@@ -257,5 +284,163 @@ void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
         SvGlobalName aClassName( pInfo->GetClassName() );
         if( !SvFactory::IsIntern( aClassName, 0 ) )
             rClassId = aClassName.GetHexName();
+    }
+}
+
+void SwXMLTextParagraphExport::_exportTextEmbedded(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
+    SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
+    SvPlugInObjectRef pPlugin ( rOLEObj.GetOleRef() );
+    SvAppletObjectRef pApplet ( rOLEObj.GetOleRef() );
+    SfxFrameObjectRef pFrame  ( rOLEObj.GetOleRef() );
+
+    // First the stuff common to each of Applet/Plugin/Floating Frame
+    OUString sStyle;
+    Any aAny;
+    if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+    {
+        aAny = rPropSet->getPropertyValue( sFrameStyleName );
+        aAny >>= sStyle;
+    }
+
+    OUString sAutoStyle( sStyle );
+    sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+    if( sAutoStyle.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
+                                  sAutoStyle );
+    addTextFrameAttributes( rPropSet, sal_False );
+
+    if ( pApplet.Is() )
+    {
+        // It's an applet!
+
+        const XubString & rURL = pApplet->GetCodeBase();
+        if (rURL.Len() )
+        {
+            String sCodeBase( INetURLObject::AbsToRel(rURL,
+                                    INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DECODE_UNAMBIGUOUS) );
+            if( sCodeBase.Len() )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sCodeBase );
+                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+                GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+            }
+        }
+        const String &rName = pApplet->GetName();
+        if (rName.Len())
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name, rName );
+
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_code, pApplet->GetClass() );
+
+        const SvCommandList& rCommands = pApplet->GetCommandList();
+        SvULongs aParams;
+
+        ULONG i = rCommands.Count();
+        while ( i > 0 )
+        {
+            const SvCommand& rCommand = rCommands [ --i ];
+            const String &rName = rCommand.GetCommand();
+            USHORT nType = SwApplet_Impl::GetOptionType( rName, TRUE );
+            if ( nType == SWHTML_OPTTYPE_TAG)
+                GetExport().AddAttribute( XML_NAMESPACE_DRAW, rName, rCommand.GetArgument());
+            else if (SWHTML_OPTTYPE_PARAM == nType )
+                aParams.Insert( i, aParams.Count() );
+        }
+
+        if ( pApplet->IsMayScript ( ) )
+            GetExport().AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_may_script, sXML_true );
+        else
+            GetExport().AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_may_script, sXML_false );
+
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, sXML_applet, sal_False, sal_True );
+
+        USHORT ii = aParams.Count();
+        while ( ii > 0 )
+        {
+            const SvCommand& rCommand = rCommands [ aParams [ --ii] ];
+
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name, rCommand.GetCommand() );
+            GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_value, rCommand.GetArgument() );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, sXML_param, sal_False, sal_True );
+        }
+        exportEvents( rPropSet );
+        //exportAlternativeText( rPropSet, rPropSetInfo );
+        //if (pOLENd->GetAlternateText())
+        {
+            SvXMLElementExport aDescription (GetExport(), XML_NAMESPACE_SVG, sXML_desc, sal_True, sal_False );
+            GetExport().GetDocHandler()->characters( pOLENd->GetAlternateText());
+        }
+        exportContour( rPropSet, rPropSetInfo );
+    }
+    else if ( pPlugin.Is() )
+    {
+        // It's a plugin!
+        String sURL( INetURLObject::AbsToRel(pPlugin->GetURL()->GetMainURL(),
+                                    INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DECODE_UNAMBIGUOUS) );
+        if (sURL.Len())
+        {
+            GetExport().AddAttribute     ( XML_NAMESPACE_XLINK, sXML_href, sURL );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+        }
+
+        const String &rType = pPlugin->GetMimeType();
+        if (rType.Len())
+            GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_mime_type, rType );
+
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, sXML_plugin, sal_False, sal_True );
+
+        const SvCommandList& rCommands = pPlugin->GetCommandList();
+        ULONG nCommands = rCommands.Count();
+        for ( ULONG i = 0; i < nCommands; i++)
+        {
+            const SvCommand& rCommand = rCommands [ i ];
+            const String& rName = rCommand.GetCommand();
+            if (SwApplet_Impl::GetOptionType( rName, FALSE ) == SWHTML_OPTTYPE_TAG )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name, rCommand.GetCommand() );
+                GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_value, rCommand.GetArgument() );
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, sXML_param, sal_False, sal_True );
+            }
+        }
+
+        exportEvents( rPropSet );
+        exportAlternativeText( rPropSet, rPropSetInfo );
+        exportContour( rPropSet, rPropSetInfo );
+    }
+    else if ( pFrame.Is() )
+    {
+        // It's a floating frame!
+        const SfxFrameDescriptor *pDescriptor = pFrame->GetFrameDescriptor();
+
+        String sURL( INetURLObject::AbsToRel(pDescriptor->GetURL().GetMainURL(),
+                                    INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DECODE_UNAMBIGUOUS) );
+        if (sURL.Len())
+        {
+            GetExport().AddAttribute     ( XML_NAMESPACE_XLINK, sXML_href, sURL );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+        }
+        const String&rName = pDescriptor->GetName();
+        if (rName.Len())
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name, rName );
+
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, sXML_floating_frame, sal_False, sal_True );
+        exportEvents( rPropSet );
+        exportAlternativeText( rPropSet, rPropSetInfo );
+        exportContour( rPropSet, rPropSetInfo );
+    }
+    else
+    {
+        // Just what the hell are you, some kinda _freak_ ?!
     }
 }
