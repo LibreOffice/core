@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 14:52:20 $
+ *  last change: $Author: af $ $Date: 2002-11-04 14:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,295 +427,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERTPAGE:
         case SID_INSERTPAGE_QUICK:
         case SID_DUPLICATE_PAGE:
-        {
-            if (ePageKind == PK_STANDARD && eEditMode!=EM_MASTERPAGE)
-            {
-                if ( pDrView->IsTextEdit() )
-                {
-                    pDrView->EndTextEdit();
-                }
-
-                USHORT nPageCount = pDoc->GetSdPageCount(ePageKind);
-                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                USHORT nPos = 0;
-                SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(nPos);
-
-                USHORT nStandardPageNum;
-                USHORT nNotesPageNum;
-                SdPage* pPreviousStandardPage;
-                SdPage* pPreviousNotesPage;
-                String aStandardPageName;
-                String aNotesPageName;
-                AutoLayout eStandardLayout;
-                AutoLayout eNotesLayout;
-                BOOL bIsPageBack;
-                BOOL bIsPageObj;
-
-                const SfxItemSet* pArgs = rReq.GetArgs();
-
-                if (! pArgs)
-                {
-                    SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
-                    String aStr;
-                    aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aStr ) );
-                    aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
-                                               aVisibleLayers.IsSet(aBckgrnd) ) );
-                    aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
-                                               aVisibleLayers.IsSet(aBckgrndObj) ) );
-
-                    AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
-
-                    if (eAutoLayout == AUTOLAYOUT_TITLE && pActualPage->GetPageNum() == 1)
-                    {
-                        // 1.Seite ist TitelDia
-                        eAutoLayout = AUTOLAYOUT_ENUM;
-                    }
-
-                    aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
-                                                  eAutoLayout ) );
-
-                    SdNewFoilDlg* pDlg = NULL;
-
-                    if (nSId == SID_INSERTPAGE && !this->ISA( SdGraphicViewShell ))
-                        pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, pDocSh, FALSE);
-
-                    if (pDlg && pDlg->Execute () != RET_OK)
-                    {
-                        Cancel();
-
-                        if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-                        delete pDlg;
-                        rReq.Ignore ();
-                        break;
-                    }
-                    else
-                    {
-                        // AutoLayouts muessen fertig sein
-                        pDoc->StopWorkStartupDelay();
-
-                        if (pDlg)
-                        {
-                            pDlg->GetAttr( aAttrSet );
-                        }
-
-                        if (ePageKind == PK_NOTES)
-                        {
-                            aNotesPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                            eNotesLayout   = (AutoLayout) ((const SfxAllEnumItem &)
-                                                 aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-                        }
-                        else
-                        {
-                            aStandardPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                            eStandardLayout   = (AutoLayout) ((const SfxAllEnumItem &)
-                                                    aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-                        }
-
-                        bIsPageBack = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
-                        bIsPageObj  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue();
-
-                        pDoc->SetChanged(TRUE);
-                    }
-
-                    delete pDlg;
-                }
-                else if (pArgs->Count () != 4)
-                {
-                    Cancel();
-
-                    if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                        GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-                    StarBASIC::FatalError (SbERR_WRONG_ARGS);
-                    rReq.Ignore ();
-                    break;
-                }
-                else
-                {
-                    // AutoLayouts muessen fertig sein
-                    pDoc->StopWorkStartupDelay();
-
-                    SFX_REQUEST_ARG (rReq, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
-                    SFX_REQUEST_ARG (rReq, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                    SFX_REQUEST_ARG (rReq, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
-                    SFX_REQUEST_ARG (rReq, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
-
-                    if (CHECK_RANGE (AUTOLAYOUT_TITLE, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_HANDOUT6))
-                    {
-                        if (ePageKind == PK_NOTES)
-                        {
-                            aNotesPageName = pPageName->GetValue ();
-                            eNotesLayout   = (AutoLayout) pLayout->GetValue ();
-                        }
-                        else
-                        {
-                            aStandardPageName = pPageName->GetValue ();
-                            eStandardLayout   = (AutoLayout) pLayout->GetValue ();
-                        }
-
-                        bIsPageBack = pIsPageBack->GetValue ();
-                        bIsPageObj  = pIsPageObj->GetValue ();
-                    }
-                    else
-                    {
-                        Cancel();
-
-                        if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-                        StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-                        rReq.Ignore ();
-                        break;
-                    }
-                }
-
-                /**************************************************************
-                * Es wird stets zuerst eine Standardseite und dann eine
-                * Notizseite erzeugt. Es ist sichergestellt, dass auf eine
-                * Standardseite stets die zugehoerige Notizseite folgt.
-                **************************************************************/
-                if (ePageKind == PK_NOTES)
-                {
-                    pPreviousNotesPage = pActualPage;
-                    nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
-                    pPreviousStandardPage = (SdPage*) pDoc->GetPage(nNotesPageNum - 3);
-                    nStandardPageNum = nNotesPageNum - 1;
-                    eStandardLayout = pPreviousStandardPage->GetAutoLayout();
-                }
-                else
-                {
-                    pPreviousStandardPage = pActualPage;
-                    nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
-                    pPreviousNotesPage = (SdPage*) pDoc->GetPage(nStandardPageNum - 1);
-                    nNotesPageNum = nStandardPageNum + 1;
-                    aNotesPageName = aStandardPageName;
-                    eNotesLayout = pPreviousNotesPage->GetAutoLayout();
-                }
-
-                pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
-
-                /**************************************************************
-                * Standardseite
-                **************************************************************/
-                SdPage* pStandardPage = NULL;
-
-                if (nSId == SID_DUPLICATE_PAGE)
-                {
-                    pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
-                }
-                else
-                {
-                    pStandardPage = (SdPage*) pDoc->AllocPage(FALSE);
-                }
-
-                pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
-                pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
-                                          pPreviousStandardPage->GetUppBorder(),
-                                          pPreviousStandardPage->GetRgtBorder(),
-                                          pPreviousStandardPage->GetLwrBorder() );
-
-                pStandardPage->SetName(aStandardPageName);
-
-                // Seite hinter aktueller Seite einfuegen
-                pDoc->InsertPage(pStandardPage, nStandardPageNum);
-                pDrView->AddUndo(new SdrUndoNewPage(*pStandardPage));
-
-                if (nSId != SID_DUPLICATE_PAGE)
-                {
-                    // MasterPage der aktuellen Seite verwenden
-                    USHORT nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
-                    pStandardPage->InsertMasterPage(nPgNum);
-                    pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-                    pStandardPage->SetAutoLayout(eStandardLayout, TRUE);
-                }
-
-                aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                aVisibleLayers.Set(aBckgrnd, bIsPageBack);
-                aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
-                pStandardPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos=0);
-
-                /**************************************************************
-                * Notizseite
-                **************************************************************/
-                SdPage* pNotesPage = NULL;
-
-                if (nSId == SID_DUPLICATE_PAGE)
-                {
-                    pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
-                }
-                else
-                {
-                    pNotesPage = (SdPage*) pDoc->AllocPage(FALSE);
-                }
-
-                pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
-                pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
-                                       pPreviousNotesPage->GetUppBorder(),
-                                       pPreviousNotesPage->GetRgtBorder(),
-                                       pPreviousNotesPage->GetLwrBorder() );
-                pNotesPage->SetName(aNotesPageName);
-                pNotesPage->SetPageKind(PK_NOTES);
-
-                // Seite hinter aktueller Seite einfuegen
-                pDoc->InsertPage(pNotesPage, nNotesPageNum);
-                pDrView->AddUndo(new SdrUndoNewPage(*pNotesPage));
-
-                if (nSId != SID_DUPLICATE_PAGE)
-                {
-                    // MasterPage der aktuellen Seite verwenden
-                    USHORT nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
-                    pNotesPage->InsertMasterPage(nPgNum);
-                    pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-                    pNotesPage->SetAutoLayout(eNotesLayout, TRUE);
-                }
-
-                aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                aVisibleLayers.Set(aBckgrnd, bIsPageBack);
-                aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
-                pNotesPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos=0);
-
-                pDrView->EndUndo();
-
-                // Update fuer TabControl
-                aTabControl.Clear();
-
-                SdPage* pPage;
-                USHORT nActualPageNum;
-                String aPageName;
-                USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
-
-                for (USHORT i = 0; i < nPageCnt; i++)
-                {
-                    pPage = pDoc->GetSdPage(i, ePageKind);
-
-                    aPageName = pPage->GetName();
-                    aTabControl.InsertPage(i + 1, aPageName);
-
-                    if (ePageKind==PK_STANDARD && pPage==pStandardPage ||
-                        ePageKind==PK_NOTES    && pPage==pNotesPage )
-                    {
-                        nActualPageNum = i;
-                    }
-                }
-
-                aTabControl.SetCurPageId(nActualPageNum + 1);
-
-                GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-            }
-
-            Cancel();
-
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-            rReq.Done ();
-        }
+            CreateOrDuplicatePage (rReq);
         break;
 
         case SID_MODIFYPAGE:
@@ -1393,3 +1105,202 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 }
 
 
+
+
+/** This method consists basically of three parts:
+    1. Process the arguments of the SFX request.
+    2. Use the model to create a new page or duplicate an existing one.
+    3. Update the tab control and switch to the new page.
+*/
+void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
+{
+    USHORT nSId = rReq.GetSlot();
+    if (ePageKind == PK_STANDARD && eEditMode != EM_MASTERPAGE)
+    {
+        if ( pDrView->IsTextEdit() )
+        {
+            pDrView->EndTextEdit();
+        }
+
+        USHORT nPageCount = pDoc->GetSdPageCount(ePageKind);
+        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+        BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+        BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+        USHORT nPos = 0;
+        SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(nPos);
+
+        String aStandardPageName;
+        String aNotesPageName;
+        AutoLayout eStandardLayout;
+        AutoLayout eNotesLayout;
+        BOOL bIsPageBack;
+        BOOL bIsPageObj;
+
+        // 1. Process the arguments.
+        const SfxItemSet* pArgs = rReq.GetArgs();
+        if (! pArgs)
+        {
+            SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
+            String aStr;
+            aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aStr ) );
+            aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
+                              aVisibleLayers.IsSet(aBckgrnd) ) );
+            aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
+                              aVisibleLayers.IsSet(aBckgrndObj) ) );
+
+            AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
+
+            if (eAutoLayout == AUTOLAYOUT_TITLE && pActualPage->GetPageNum() == 1)
+            {
+                // 1.Seite ist TitelDia
+                eAutoLayout = AUTOLAYOUT_ENUM;
+            }
+
+            aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
+                                                  eAutoLayout ) );
+
+            SdNewFoilDlg* pDlg = NULL;
+
+            if (nSId == SID_INSERTPAGE && !this->ISA( SdGraphicViewShell ))
+                pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, pDocSh, FALSE);
+
+            if (pDlg && pDlg->Execute () != RET_OK)
+            {
+                Cancel();
+
+                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+                delete pDlg;
+                rReq.Ignore ();
+                return;
+            }
+            else
+            {
+                // AutoLayouts muessen fertig sein
+                pDoc->StopWorkStartupDelay();
+
+                if (pDlg)
+                {
+                    pDlg->GetAttr( aAttrSet );
+                }
+
+                if (ePageKind == PK_NOTES)
+                {
+                    aNotesPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
+                    eNotesLayout   = (AutoLayout) ((const SfxAllEnumItem &)
+                        aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
+                }
+                else
+                {
+                    aStandardPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
+                    eStandardLayout   = (AutoLayout) ((const SfxAllEnumItem &)
+                        aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
+                }
+
+                bIsPageBack = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
+                bIsPageObj  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue();
+
+                pDoc->SetChanged(TRUE);
+            }
+
+            delete pDlg;
+        }
+        else if (pArgs->Count () != 4)
+        {
+            Cancel();
+
+            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+            StarBASIC::FatalError (SbERR_WRONG_ARGS);
+            rReq.Ignore ();
+            return;
+        }
+        else
+        {
+            // AutoLayouts muessen fertig sein
+            pDoc->StopWorkStartupDelay();
+
+            SFX_REQUEST_ARG (rReq, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
+            SFX_REQUEST_ARG (rReq, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+            SFX_REQUEST_ARG (rReq, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
+            SFX_REQUEST_ARG (rReq, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
+
+            if (CHECK_RANGE (AUTOLAYOUT_TITLE, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_HANDOUT6))
+            {
+                if (ePageKind == PK_NOTES)
+                {
+                    aNotesPageName = pPageName->GetValue ();
+                    eNotesLayout   = (AutoLayout) pLayout->GetValue ();
+                }
+                else
+                {
+                    aStandardPageName = pPageName->GetValue ();
+                    eStandardLayout   = (AutoLayout) pLayout->GetValue ();
+                }
+
+                bIsPageBack = pIsPageBack->GetValue ();
+                bIsPageObj  = pIsPageObj->GetValue ();
+            }
+            else
+            {
+                Cancel();
+
+                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+                StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+                rReq.Ignore ();
+                return;
+            }
+        }
+
+        // 2. Create a new page or duplicate an existing one.
+        pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
+
+        USHORT nNewPageIndex;
+        if ((nSId == SID_INSERTPAGE) || (nSId == SID_INSERTPAGE_QUICK))
+            nNewPageIndex = pDoc->CreatePage (pActualPage, ePageKind,
+                aStandardPageName, aNotesPageName,
+                eStandardLayout, eNotesLayout,
+                bIsPageBack, bIsPageObj);
+        else
+            nNewPageIndex = pDoc->DuplicatePage (pActualPage, ePageKind,
+                aStandardPageName, aNotesPageName,
+                eStandardLayout, eNotesLayout,
+                bIsPageBack, bIsPageObj);
+
+        pDrView->AddUndo (new SdrUndoNewPage (*pDoc->GetSdPage (nNewPageIndex, PK_STANDARD)));
+        pDrView->AddUndo (new SdrUndoNewPage (*pDoc->GetSdPage (nNewPageIndex, PK_NOTES)));
+
+        pDrView->EndUndo();
+
+        // 3. Update the tab control.
+        aTabControl.Clear();
+
+        SdPage* pPage;
+        String aPageName;
+        USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+
+        for (USHORT i = 0; i < nPageCnt; i++)
+        {
+            pPage = pDoc->GetSdPage(i, ePageKind);
+
+            aPageName = pPage->GetName();
+            aTabControl.InsertPage(i + 1, aPageName);
+        }
+
+        aTabControl.SetCurPageId (nNewPageIndex + 1);
+
+        GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
+            (rReq.IsSynchronCall() ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON)
+            | SFX_CALLMODE_RECORD);
+    }
+
+    Cancel();
+
+    if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+        GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+    rReq.Done ();
+}
