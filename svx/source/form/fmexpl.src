@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 12:21:24 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ polish ] = "Automatyczne ognisko kontrolne";
             Text[ portuguese_brazilian ] = "Automatic control focus";
             Text[ japanese ] = "µ°ÄºÝÄÛ°ÙÌ«°¶½";
-            Text[ korean ] = "Automatic control focus";
+            Text[ korean ] = "ÀÚµ¿ Æ÷Ä¿½º ÄÁÆ®·Ñ";
             Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆ";
             Text[ chinese_traditional ] = "¦Û°Ê¹ï­ã±±¨î¶µ";
             Text[ turkish ] = "Automatic control focus";
