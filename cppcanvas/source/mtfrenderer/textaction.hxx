@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:30:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,16 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
-#include <drafts/com/sun/star/rendering/StringContext.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
+#include <com/sun/star/rendering/StringContext.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
-#include <drafts/com/sun/star/rendering/TextDirection.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
+#include <com/sun/star/rendering/TextDirection.hpp>
 #endif
 
 #ifndef _COMPHELPER_OPTIONALVALUE_HXX
@@ -90,11 +90,11 @@
 
 class Point;
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvasFont;
     class  XTextLayout;
-} } } } }
+} } } }
 
 /* Definition of internal::LineAction class */
 
@@ -142,13 +142,13 @@ namespace cppcanvas
             // for the translation.
 
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XCanvasFont >  mxFont;
+                ::com::sun::star::rendering::XCanvasFont >  mxFont;
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XTextLayout >  mxTextLayout;
-            ::drafts::com::sun::star::rendering::StringContext      maStringContext;
+                ::com::sun::star::rendering::XTextLayout >  mxTextLayout;
+            ::com::sun::star::rendering::StringContext      maStringContext;
             ::com::sun::star::uno::Sequence< double >               maOffsets;
             CanvasSharedPtr                                         mpCanvas;
-            ::drafts::com::sun::star::rendering::RenderState        maState;
+            ::com::sun::star::rendering::RenderState        maState;
             sal_Int8                                                maTextDirection;
         };
     }
