@@ -133,7 +133,9 @@ while (<>) {
 
         # if $productfilename != "openoffice, add it to the list
         # of applications.
-        if ( /user_level/ ) {
+        if ( /user_level=$/ ) {
+            $_ = $_ . $productfilename;
+        } elsif ( /user_level/ ) {
             s/$productfilename,//;
             s/user_level=/user_level=$productfilename,/
         }
