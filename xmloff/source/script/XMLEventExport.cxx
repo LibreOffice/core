@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 14:51:35 $
+ *  last change: $Author: dvo $ $Date: 2002-05-29 13:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,8 @@ void XMLEventExport::ExportEvent(
             OUString sType;
             pValues[nVal].Value >>= sType;
 
-            if (aHandlerMap.count(sType))
+            HandlerMap::iterator aIter = aHandlerMap.find(sType);
+            if (aIter != aHandlerMap.end())
             {
                 if (! rExported)
                 {
@@ -280,8 +281,8 @@ void XMLEventExport::ExportEvent(
                 }
 
                 // delegate to proper ExportEventHandler
-                aHandlerMap[sType]->Export(rExport, rXmlName,
-                                           rEventValues, bUseWhitespace);
+                aIter->second->Export(rExport, rXmlName,
+                                      rEventValues, bUseWhitespace);
             }
             else
             {
