@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:50:49 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3292,7 +3292,7 @@ String HtmlExport::InsertSound( const String& rSoundFile )
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    aStr += aURL.getName();
+    aStr += String(aURL.getName());
     aStr.AppendAscii( "\" hidden=\"true\" autostart=\"true\">" );
 
     CopyFile( rSoundFile, m_aExportPath );
