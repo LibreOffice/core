@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:35:12 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,8 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         else if( 0 != (sFileName =
                         SwNavigationPI::CreateDropFileName( aData )).Len())
         {
-            GraphicDescriptor aDesc( sFileName );
+            INetURLObject aTemp(sFileName);
+            GraphicDescriptor aDesc(aTemp);
             if( !aDesc.Detect() )   // keine Grafiken annehmen
             {
                 nRet = rEvt.mnAction;
@@ -930,8 +931,9 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
         {
             String sFileName(pFileNames[nFile - 1]);
             INetURLObject aFileUrl(sFileName);
-            String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).
-                                                 GetToken(0, sfx2::cTokenSeperator));
+            String sSectionName(String(aFileUrl.GetLastName(
+                INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
+                sfx2::cTokenSeperator));
             USHORT nSectCount = rSh.GetSectionFmtCount();
             String sTempSectionName(sSectionName);
             USHORT nAddNumber = 0;
@@ -1443,7 +1445,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     while( !bFound && pCurr )
     {
         if(pCurr->GetMedium() &&
-            pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI) == sFileName)
+            String(pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI)) == sFileName)
         {
             bFound = TRUE;
             SwGlobalTree::SetShowShell(pCurr);
