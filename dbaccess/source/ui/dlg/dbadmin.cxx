@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-23 12:56:50 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ ODatasourceMap::Iterator ODatasourceMap::endDeleted()
 }
 
 //-------------------------------------------------------------------------
-void ODatasourceMap::update(const ::rtl::OUString& _rName, const SfxItemSet& _rSet)
+void ODatasourceMap::update(const ::rtl::OUString& _rName, SfxItemSet& _rSet)
 {
     DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
     DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::update: invalid name!!");
@@ -208,6 +208,9 @@ void ODatasourceMap::update(const ::rtl::OUString& _rName, const SfxItemSet& _rS
         aPos->second.pModifications->Put(SfxStringItem(DSID_ORIGINALNAME, _rName));
         aPos->second.pModifications->Put(SfxBoolItem(DSID_NEWDATASOURCE, sal_False));
         aPos->second.pModifications->Put(SfxBoolItem(DSID_DELETEDDATASOURCE, sal_False));
+
+        // and reset the original name in the source set, it may contain an old one
+        _rSet.Put(SfxStringItem(DSID_ORIGINALNAME, _rName));
     }
 }
 
@@ -919,7 +922,7 @@ IMPL_LINK(ODbAdminDialog, OnDatasourceSelected, ListBox*, _pBox)
         // remember the settings for this data source
         ODatasourceMap::ODatasourceInfo aPreviouslySelected = m_aDatasources[m_sCurrentDatasource];
         if (aPreviouslySelected.isModified())
-            m_aDatasources.update(m_sCurrentDatasource, *GetExampleSet());
+            m_aDatasources.update(m_sCurrentDatasource, *pExampleSet);
         // (The modified flag is set as soon as any UI element has any change (e.g. a single new character in a edit line).
         // But when this flag is set, and other changes occur, no items are transfered.
         // That's why the above statement "if (isModified()) update()" makes sense, though it may not seem so :)
@@ -965,7 +968,7 @@ IMPL_LINK(ODbAdminDialog, OnDatasourceModifed, SfxTabPage*, _pTabPage)
 
     // no -> mark the item as modified
     m_aSelector.modified(sCurrentlySelected);
-    m_aDatasources.update(sCurrentlySelected, *GetExampleSet());
+    m_aDatasources.update(sCurrentlySelected, *pExampleSet);
 
     // enable the apply button
     GetApplyButton()->Enable(sal_True);
@@ -997,7 +1000,7 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
         {   // (we could do it all the time here, but as this link is called every time a single character
             // of the name changes, this maybe would be too expensive.)
             m_aSelector.modified(sSelected);
-            m_aDatasources.update(sSelected, *GetExampleSet());
+            m_aDatasources.update(sSelected, *pExampleSet);
         }
 
         // enable the apply button
@@ -1556,7 +1559,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
         ::rtl::OUString sCurrentlySelected = m_aSelector.getSelected();
         if (m_aDatasources[sCurrentlySelected]->isModified())
         {
-            m_aDatasources.update(sCurrentlySelected, *GetExampleSet());
+            m_aDatasources.update(sCurrentlySelected, *pExampleSet);
             String sNewName = m_aDatasources.adjustRealName(sCurrentlySelected);
             String sOldName = sCurrentlySelected;
             // the data source has not only been modified, but renamed, too
@@ -1721,11 +1724,6 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
                         m_aDatasources.clearModifiedFlag(sName);
                         // and tell the selector the new state
                         m_aSelector.flushed(sName);
-
-//                      if (aLoop->isRenamed() && m_sCurrentlySelected.Equals(sName))
-//                      {   // tell the selector the new name
-//                          m_aSelected.renamed(sName);
-//                      }
 
                         continue;
     //  | <------------ continue with the next data source
@@ -2129,6 +2127,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/10/23 12:56:50  fs
+ *  added apply functionality
+ *
  *  Revision 1.6  2000/10/20 09:53:17  fs
  *  handling for the SuppresVersionColumns property of a data source
  *
