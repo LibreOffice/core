@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 11:19:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/ik_ce.hxx>
+#include <adc_cl.hxx>
 #include <adc_msg.hxx>
 #include "hi_linkhelper.hxx"
 
@@ -361,6 +362,16 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
                                  E_Existence          i_ceExists,
                                  ary::idl::Type_id    i_nTemplateType ) const
 {
+    if (i_ceExists == exists_no)
+    {
+        if ( is_ExternLink(i_module) )
+        {
+            produce_ExternLink(i_module,i_ce,i_member,i_sequenceCount,i_nTemplateType);
+            return;
+        }
+        errorOut_UnresolvedLink(i_module, i_ce, i_member);
+    }
+
     output::Node &
         rCeNode = Env().OutputTree().Provide_Node(i_module);
     output::Position
@@ -380,11 +391,6 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
                        AND i_ceExists == exists_yes;
     bool
         bHasCeOrName = NOT i_ce.empty();
-
-    if (i_ceExists == exists_no)
-    {
-        errorOut_UnresolvedLink(i_module, i_ce, i_member);
-    }
 
     if (i_sequenceCount > 0)
         start_Sequence(i_sequenceCount);
@@ -643,12 +649,6 @@ HF_IdlTypeText::errorOut_UnresolvedLink( const char *        i_name ) const
     TheMessages().Out_UnresolvedLink( i_name,
                                       slFile().c_str(),
                                       0 );
-
-//    Cerr() << "\nWarning: Unresolved Link \""
-//           << i_name
-//           << "\" in "
-//           << Env().CurPageCe_AsText()
-//           << Endl();
 }
 
 void
@@ -695,5 +695,100 @@ HF_IdlTypeText::errorOut_UnresolvedLink( const String &      i_module,
     errorOut_UnresolvedLink(slName().c_str());
 }
 
+bool
+HF_IdlTypeText::is_ExternLink( const StringVector & i_module ) const
+{
+    const autodoc::CommandLine &
+        rCmdLine = autodoc::CommandLine::Get_();
+    uintt nExtNspLength = rCmdLine.ExternNamespace().length();
+    if (nExtNspLength == 0)
+        return false;
+
+    StreamStr s(1000);
+    s << "::";
+    s.operator_join( i_module.begin(),
+                     i_module.end(),
+                     "::" );
+
+    if (s.length() < nExtNspLength)
+        return false;
+    return ( strncmp( rCmdLine.ExternNamespace().c_str(),
+                      s.c_str(),
+                      nExtNspLength ) == 0 );
+}
+
+void
+HF_IdlTypeText::produce_ExternLink( const StringVector & i_module,
+                                    const String &       i_ce,
+                                    const String &       i_member,
+                                    int                  i_sequenceCount,
+                                    ary::idl::Type_id    i_nTemplateType ) const
+{
+    // KORR
+    // Look again at this code and take some time.
+
+    StreamLock  aLink(1000);
+    StreamStr & rLink = aLink();
+
+    rLink << autodoc::CommandLine::Get_().ExternRoot();
+    rLink.operator_join( i_module.begin(),
+                         i_module.end(),
+                         "/" );
+    rLink << '/'
+          << i_ce
+          << ".html";
+    if (i_member.length() > 0)
+        rLink << "/#" << i_member;
+
+    if (i_sequenceCount > 0)
+        start_Sequence(i_sequenceCount);
+
+    // module
+    int nMax = i_module.size();
+    int nCount = 0;
+    StringVector::const_iterator
+        itm = i_module.begin();
+    for ( ;
+          nCount < nMax;
+          ++itm, ++nCount )
+    {
+        CurOut() << "::" << *itm;
+    }
+    CurOut() << "::";
 
 
+    // CodeEntity
+    if (i_member.length() == 0)
+    {
+        CurOut()
+           >> *new Html::Link(rLink.c_str())
+              << i_ce;
+    }
+    else
+    {
+        CurOut()
+            << i_ce;
+    }
+
+    if (i_nTemplateType.IsValid())
+    {
+        CurOut() << "< ";
+
+        HF_IdlTypeText
+            aTemplateParamWriter(Env(), CurOut(), true, pReferingCe);
+        aTemplateParamWriter.Produce_byData(i_nTemplateType);
+
+        CurOut() << " >";
+    }
+
+    // Member
+    if (i_member.length() > 0)
+    {
+        CurOut()
+            >> *new Html::Link(rLink.c_str())
+                << i_member;
+    }
+
+    if (i_sequenceCount > 0)
+        finish_Sequence(i_sequenceCount);
+}
