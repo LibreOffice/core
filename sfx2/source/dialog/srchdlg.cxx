@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:03:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ void SearchDialog::LoadConfig()
             m_aSearchEdit.SelectEntryPos(0);
         }
     }
+    else
+        m_aWrapAroundBox.Check( TRUE );
 }
 
 void SearchDialog::SaveConfig()
@@ -176,7 +178,12 @@ void SearchDialog::SaveConfig()
 
 IMPL_LINK( SearchDialog, FindHdl, PushButton*, EMPTYARG )
 {
-    m_aSearchEdit.InsertEntry( GetSearchText(), 0 );
+    String sSrchTxt = m_aSearchEdit.GetText();
+    USHORT nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
+    if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
+        m_aSearchEdit.RemoveEntry( nPos );
+    if ( nPos > 0 )
+        m_aSearchEdit.InsertEntry( sSrchTxt, 0 );
     m_aFindHdl.Call( this );
     return 0;
 }
