@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 #ifndef __com_sun_star_document_OfficeDocument_idl__
 #define __com_sun_star_document_OfficeDocument_idl__
 
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+
+#ifndef __com_sun_star_util_XModifiable_idl__
+#include <com/sun/star/util/XModifiable.idl>
+#endif
+
 #ifndef __com_sun_star_frame_XStorable_idl__
 #include <com/sun/star/frame/XStorable.idl>
 #endif
@@ -69,52 +77,143 @@
 #include <com/sun/star/view/XPrintable.idl>
 #endif
 
+#ifndef __com_sun_star_document_XEventBroadcaster_idl__
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#endif
+
 #ifndef __com_sun_star_document_XEventSupplier_idl__
 #include <com/sun/star/document/XEventsSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_document_XDocumentInfoSupplier_idl__
+#include <com/sun/star/document/XDocumentInfoSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_document_XViewDataSupplier_idl__
+#include <com/sun/star/document/XViewDataSupplier.idl>
+#endif
 
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
+/** abstract service which specifies a storable and printable document
 
-// DocMerge: from xml
+    <p>
+    All major document-like components should support this service
+    instead of simple components which supports a <type scope="com::sun::star::frame">Controller</type>
+    or pure <type scope="com::sun::star::awt">XWindow</type> only.
+    </p>
 
-// DocMerge from xml: service com::sun::star::document::OfficeDocument
-/** This abstract service specifies a storable and printable document.
-
-
-
-    <p>All major document-like components should support this service.</p>
+    @see com::sun::star::frame::Controller
  */
 service OfficeDocument
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+    /** represents a component which is created from an URL and arguments
+
+        <p>
+        It is a representation of a resource in the sense that it was
+        created/loaded from the resource. The arguments are passed to the loader
+        to modify its behavior.
+        </p>
+     */
+    interface com::sun::star::frame::XModel;
+
+    //-------------------------------------------------------------------------
+    /** a storable document should provide information about his modify state
+
+        <p>
+        With this interface it's possible too, to reset the modify state.
+        That can be neccessary to prevent code against problem during closing
+        of the document without saving any changes.
+        </p>
+     */
+    interface com::sun::star::util::XModifiable;
+
+    //-------------------------------------------------------------------------
+    /** offers a simple way to store a component to an URL
+
+        <p>
+        This interface supports functionality
+        <ul>
+            <li>to make a copy of current component by saving it to another location</li>
+            <li>to commit made changes</li>
+            <li>to convert it by saving it by using suitable filter name.</li>
+        </ul>
+        </p>
+     */
     interface com::sun::star::frame::XStorable;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+    /** offers a way to print a component
+
+        <p>
+        It's possible to specify wich printer should be used and of course
+        print the document on it.
+        </p>
+     */
     interface com::sun::star::view::XPrintable;
 
-      /** access to bound event handlers.
+    //-------------------------------------------------------------------------
+    /** makes it possible to register listeners which are called whenever
+        a document event occurs
+
+        @optional
+     */
+    [optional] interface XEventBroadcaster;
+
+    //-------------------------------------------------------------------------
+    /** access to bound event handlers
 
         @optional
      */
     [optional] interface XEventsSupplier;
 
+    //-------------------------------------------------------------------------
+    /** document can provide a <type>DocumentInfo</type>
+
+        <p>
+        Instead of the <type>StandaloneDocumentInfo</type> service the <type>DocumentInfo</type>
+        will be available on an already opened document only.
+        </p>
+
+        @optional
+     */
+    [optional] interface XDocumentInfoSupplier;
+
+    //-------------------------------------------------------------------------
+    /** access to some properties describing all open views to a document
+
+        @optional
+     */
+    [optional] interface XViewDataSupplier;
+
+    //-------------------------------------------------------------------------
     /** controls the focus behaviour of the form controls in the document
-        <p>If this flag is set to <TRUE/>, any view belonging to the document should focus the
-        first control in the document.</p>
-        <p>With this, you may control if your document works primarily as a form document.</p>
+
+        <p>
+        If this flag is set to <TRUE/>, any view belonging to the document
+        should focus the first control in the document. With this, you may
+        control if your document works primarily as a form document.
+        </p>
+
+        @optional
     */
     [property, optional] boolean AutomaticControlFocus;
 
+    //-------------------------------------------------------------------------
     /** controls the initial (on-load) behavior of the form controls in the document
-        <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br>
+
+        <p>
+        If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br>
         If set to <FALSE/>, they will be alive (i.e., connected to the data source specified for the form
-        they belong to).</p>
-        <p>With this, you may control if your document works primarily as a form document.</p>
+        they belong to).<br>
+        With this, you may control if your document works primarily as a form document.
+        </p>
+
+        @optional
     */
     [property, optional] boolean ApplyFormDesignMode;
 };
@@ -123,36 +222,4 @@ service OfficeDocument
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/19 12:50:25  fs
-    #83970# +AutomaticControlFocus / +ApplyFormDesignMode
-
-    Revision 1.5  2001/02/05 15:03:45  kz
-    XEventSupplier -> XEventsSupplier
-
-    Revision 1.4  2001/01/23 10:08:08  mi
-    optional interfaces now marked as [optional] instead of just a prosa description of this fact
-
-    Revision 1.3  2000/11/08 12:42:40  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:10  hjs
-    initial import
-
-    Revision 1.7  2000/09/15 15:11:10  mi
-    new interface XEventSupplier
-
-    Revision 1.6  2000/09/11 11:52:18  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/08/04 15:18:44  mi
-    #76800# document events
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferable.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 module com { module sun { module star { module datatransfer {
 
 //=============================================================================
-/** Interface to be implemented by objects used to provide data for a transfer
-    operation.
+/** Interface to be implemented by objects used to provide data for a data
+    transfer operation.
 
     @see com::sun::star::datatransfer::DataFlavor
 */
@@ -95,38 +95,44 @@ interface XTransferable: com::sun::star::uno::XInterface
     /** Called by a data consumer to obtain data from the source in a specified
         format.
 
+        @param aFlavor
+        Describes the requested data format
+
         @returns
-        the data in the specified data flavor.
+        The data in the specified <type>DataFlavor</type>.
 
         @throws com::sun::star::io::IOException
         if the data is no longer available in the requested flavor.
 
-        @throws UnsupportedFlavorException
-        if the requested data flavor is not supported.
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+        if the requested <type>DataFlavor</type> is not supported.
     */
     any getTransferData( [in] DataFlavor aFlavor )
         raises ( UnsupportedFlavorException, com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
-    /** Returns the list of supported data flavors.
+    /** Returns a sequence of supported <type>DataFlavor</type>.
 
         @returns
-        the list of supported data flavors.
+        The sequence of supported <type>DataFlavor</type>.
+
+        @see com::sun::star::datatransfer::DataFlavor
     */
     sequence < DataFlavor > getTransferDataFlavors();
 
     //-------------------------------------------------------------------------
     /** Checks if the data object supports the specified data flavor.
 
+        @param aFlavor
+        Describes the format that should be checked
+
         @returns
-        <TRUE/> if the data flavor is supported by the transfer source,
-        <FALSE/> otherwise.
+        A value of <TRUE/> if the <type>DataFlavor</type> is supported by the transfer source.
+        <p>A value of <FALSE/> if the <type>DataFlavor</type> is unsupported by the transfer source.</p>
 
-        @remarks
-        This method is only for analogy with the JAVA Clipboard interface. To
-        avoid many calls, the caller should instead use getTransferDataFlavors.
-
-        @see com::sun::star::datatransfer::XTransferable::getTransferDataFlavors
+        <br/><br/><p><strong>Note: </strong>This method is only for analogy with the JAVA Clipboard interface. To
+        avoid many calls, the caller should instead use
+        <member scope="com::sun::star::datatransfer">XTransferable::getTransferDataFlavors()</member>.
     */
     boolean isDataFlavorSupported( [in] DataFlavor aFlavor );
 };

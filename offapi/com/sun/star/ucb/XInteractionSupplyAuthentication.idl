@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionSupplyAuthentication.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,11 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'realm' value to hand back.
 
-        <p> This method should be called before select(), and should only
-        be called if canSetRealm() returned true. </p>
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetRealm</member> returned
+        <true/>.</p>
     */
     void setRealm( [in] string Realm );
 
@@ -103,8 +106,11 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'user name' value to hand back.
 
-        <p>This method should be called before select(), and should only
-        be called if canSetUserName() returned true. </p>
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetUserName</member>
+        returned <true/>.</p>
     */
     void setUserName( [in] string UserName );
 
@@ -116,31 +122,39 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'password' value to hand back.
 
-        <p>This method should be called before select(), and should only
-        be called if canSetPassword() returned true. </p>
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetPassword</member>
+        returned <true/>.</p>
     */
     void setPassword( [in] string Password );
 
     //-------------------------------------------------------------------------
     /** Specifies the available modes of how long to remember the password.
 
-        @param Default  Returns the default mode (to be initially displayed to
-        the user).
+        @param Default
+        Returns the default mode (to be initially displayed to the user).
 
-        @returns  A sequence of available modes to hand back.  Each individual
-        mode should appear at most once in the sequence.  If the sequence is
-        empty, a new mode cannot be handed back.
+        @returns
+        A sequence of available modes to hand back.  Each individual mode
+        should appear at most once in the sequence.  If the sequence is empty,
+        a new mode cannot be handed back.
     */
     sequence<com::sun::star::ucb::RememberAuthentication> getRememberPasswordModes( [out] com::sun::star::ucb::RememberAuthentication Default );
 
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the password.
 
-        <p> This method should be called before select(), and should only
-        be called if setPassword() is also called. </p>
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::setPassword</member>
+        is also called.</p>
 
-        @param Remember  The mode to hand back, should be contained in the
-        sequence returned by getRememberPasswordModes.
+        @param Remember
+        The mode to hand back, should be contained in the sequence returned by
+        <member>XInteractionSupplyAuthentication::getRememberPasswordModes</member>.
     */
     void setRememberPassword( [in] com::sun::star::ucb::RememberAuthentication Remember );
 
@@ -152,8 +166,12 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'account' value to hand back.
 
-        <p> This method should be called before select(), and should only
-        be called if canSetAccount() returned true. </p>
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetAccount</member>
+        returned <true/>.</p>
+
     */
     void setAccount( [in] string Account );
 
@@ -172,11 +190,15 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the account.
 
-        <p> This method should be called before select(), and should only
-        be called if setAccount() is also called. </p>
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::setAccount</member>
+        is also called.</p>
 
         @param Remember  The mode to hand back, should be contained in the
-        sequence returned by getRememberAccountModes.
+        sequence returned by
+        <member>XInteractionSupplyAuthentication::getRememberAccountModes</member>.
     */
     void setRememberAccount( [in] com::sun::star::ucb::RememberAuthentication Remember );
 

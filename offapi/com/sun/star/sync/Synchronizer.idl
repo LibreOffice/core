@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Synchronizer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,32 +68,16 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sync {
+module com {  module sun {  module star {  module sync {
 
-// DocMerge: empty anyway
+/// @deprecated
 service Synchronizer
 {
-    // DocMerge: empty anyway
     interface com::sun::star::sync::XSynchronizer;
 };
 
 //=============================================================================
 
 }; }; }; };
-
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/01/10 08:47:41  ka
-    #71663#: initial revision
-
-
-=============================================================================*/
 
 #endif

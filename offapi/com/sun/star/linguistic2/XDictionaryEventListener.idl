@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryEventListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 16:08:31 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ module com { module sun { module star { module linguistic2 {
     listeners about
     <type scope="com::sun::star::linguistic2">DictionaryEvent</type>s.</P>
 
-    @see    com::sun::star::linguistic2::XDictionary
-    @see    com::sun::star::lang::XEventListener
+    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    @see    <type scope="com::sun::star::lang">XEventListener</type>
 */
 interface XDictionaryEventListener : com::sun::star::lang::XEventListener
 {
@@ -92,7 +92,7 @@ interface XDictionaryEventListener : com::sun::star::lang::XEventListener
         @param  aDicEvent
             the event to be notified of.
 
-         @see   com::sun::star::linguistic2::DictionaryEvent
+    @see    <type scope="com::sun::star::lang">DictionaryEvent</type>
     */
     void processDictionaryEvent(
             [in] com::sun::star::linguistic2::DictionaryEvent aDicEvent );

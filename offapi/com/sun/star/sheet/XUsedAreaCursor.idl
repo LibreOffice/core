@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUsedAreaCursor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XUsedAreaCursor_idl__
 #define __com_sun_star_sheet_XUsedAreaCursor_idl__
 
@@ -65,30 +66,39 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to find the used area of the entire sheet.
 
-//=============================================================================
+    <p>The used area is the smallest cell range that contains all cells
+    of the spreadsheet with any contents (values, text, formulas) or
+    visible formatting (borders and background color).</p>
 
-// DocMerge from xml: interface com::sun::star::sheet::XUsedAreaCursor
-/** represents a cursor which can move to the start
-    or end of the used area of a sheet.@see com::sun::star::sheet::SheetCellCursor
+    @see com::sun::star::sheet::SheetCellCursor
  */
 interface XUsedAreaCursor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XUsedAreaCursor::gotoStartOfUsedArea
     /** points the cursor to the start of the used area.
+
+        @param bExpand
+            <TRUE/> = expands the current cursor range,
+            <FALSE/> = sets size of the cursor to a single cell.
      */
     void gotoStartOfUsedArea( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XUsedAreaCursor::gotoEndOfUsedArea
     /** points the cursor to the end of the used area.
+
+        @param bExpand
+            <TRUE/> = expands the current cursor range,
+            <FALSE/> = sets size of the cursor to a single cell.
      */
     void gotoEndOfUsedArea( [in] boolean bExpand );
 
@@ -98,27 +108,5 @@ interface XUsedAreaCursor: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

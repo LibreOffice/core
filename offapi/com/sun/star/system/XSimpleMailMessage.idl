@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleMailMessage.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:57:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,108 +79,114 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** specifies a simple mail messaging interface.
-<!-- Editor: Missing summary -->
-
-    @author     tra
-    @version    0.1
+/** This interface lets a client set or get the information of a simple mail
+    message.
 */
 
 
 interface XSimpleMailMessage: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**
+    /** To set the recipient of the simple mail message.
         @param aRecipient
-        the email address of a recipient. The method doesn't check if
-        the given address is valid.
+        The email address of a recipient. The method doesn't check if
+        the given email address is valid.
     */
     void setRecipient( [in] string aRecipient );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To get the recipient of the simple mail message.
         @returns
-        the specified email address of a recipient
+        The specified email address of a recipient
         if any has been specified or an empty string.
     */
     string getRecipient( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To set the cc recipients of a simple mail message.
+
         @param aCcRecipient
-        sets a sequence with the email addresses of one or more cc recipients.
-        The method does not check if the given addresses are valid.
+        Sets a sequence with the email addresses of one or more cc recipients.
+        <p>The method does not check if the given addresses are valid. An empty
+        sequence means there are no cc recipients.</p>
     */
     void setCcRecipient( [in] sequence< string > aCcRecipient );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To get the cc recipients of a simple mail message.
         @returns
-        a sequence with the email addresses of one or more cc recipients
-        or an empty sequence if no cc recipients have been specified.
+        A sequence with the email addresses of one or more cc recipients.
+        <p>If no cc recipients have been specified an empty sequence will be returned.</p>
     */
     sequence< string > getCcRecipient( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To set the bcc recipient of a simple mail message.
         @param aBccRecipient
-        sets a sequence with the email addresses of one or more bcc recipients.
+        A sequence with the email addresses of one or more bcc recipients. An empty
+        sequence means there are no bcc recipients.</p>
     */
     void setBccRecipient( [in] sequence< string > aBccRecipient );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To get the bcc recipients of a simple mail message.
         @returns
-        a sequence with the email addresses of one or more bcc recipients or an
-        empty sequence if no bcc recipients have been specified.    */
+        A sequence with the email addresses of one or more bcc recipients.
+        <p>If no bcc recipients have been specified an empty sequence will be returned.</p>
+    */
     sequence< string > getBccRecipient( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To set the email address of the originator of a simple mail message.
         @param aOriginator
-        sets the email address of the originator of the mail.   */
+        Sets the email address of the originator of the mail.
+    */
     void setOriginator( [in] string aOriginator );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To get the email address of the originator of a simple mail message.
         @returns
-        the email address of the originator of the mail, if any has been specified.
+        The email address of the originator of the mail.
+        <p>If no originator has been specified an empty string will be returned.</p>
     */
     string getOriginator( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To set the subject of a simple mail message.
         @param aSubject
-        sets the subject of the mail.
+        Sets the subject of the simple mail message.
     */
     void setSubject( [in] string aSubject );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To get the subject of a simple mail message.
         @returns
-        the subject of the mail if any has been specified.
+        The subject of the simple mail message.
+        <p>If no subject has been specified an empty string will be returned.</p>
     */
     string getSubject( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To set an attachment of a simple mail message.
         @param aAttachement
-        sets a sequence of File-URL specifying the files that should be
-        attached to the mail. The method does not check if the specified
-        file or files really exist.
+        Sets a sequence of file URLs specifying the files that should be
+        attached to the mail. The given file URLs must be conform to
+        <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+        The method does not check if the specified file or files really exist.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-        if at least one of the given File-URLs is invalid.
+        if at least one of the given file URLs is invalid (doesn't conform to
+        <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>).
     */
     void setAttachement( [in] sequence< string > aAttachement )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /**
+    /** To get the attachment of a simple mail message.
         @returns
-        a sequence of File-URLs specifying the files that should be attached to
+        A sequence of file URLs specifying the files that should be attached to
         the mail or an empty sequence if no attachments have been specified.
-<!-- jrh: Note: Attachement is spelled attachment. Doesn't matter in methods. -->
+        The returned file URLs are conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
     */
     sequence< string > getAttachement( );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:21:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::FormattedField
-/** This service specifies the ControlModel of an edit field for
-    single/multi-line text.
+/** This service specifies the control model of an edit field for entering text which can be
+    (nearly) arbirtrarily formatted.
+
+    @see com::sun::star::util::XNumberFormatsSupplier
  */
 service FormattedField
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlFormattedFieldModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
-    // DocMerge: empty anyway
+    /** can be used to reset the control to it's default state.
+
+        @see com::sun::star::awt::UnoControlFormattedFieldModel::EffectiveValue
+        @see com::sun::star::awt::UnoControlFormattedFieldModel::EffectiveDefault
+    */
     interface com::sun::star::form::XReset;
 };
 
@@ -103,6 +106,18 @@ service FormattedField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2.16.3  2002/07/26 09:49:15  fs
+    IDL review form layer
+
+    Revision 1.2.16.2  2002/02/18 15:24:23  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.2.16.1  2002/02/18 14:56:15  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.2  2001/03/19 06:21:09  fs
+    removed DefaultText (copy'n'paste error)
+
     Revision 1.1  2001/02/20 14:05:34  fs
     initial checkin - service description for a formatted field
 

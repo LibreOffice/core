@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XController.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,101 +73,87 @@ interface XFrame;
 interface XModel;
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XController
 /** With this interface, components viewed in a <type>Frame</type> can serve
-    events (by supplying dispatches).   @see XModel
-        @see XFrame
-        @see com::sun::star::awt::XWindow
+    events (by supplying dispatches).
+
+    @see XFrame
+    @see com::sun::star::awt::XWindow
+    @see XModel
  */
 interface XController: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XController::attachFrame
     /** is called to attach the controller with its managing frame.
+
+        @param Frame
+            the new owner frame of this controller
      */
-    void attachFrame( [in] XFrame xFrame );
+    void attachFrame( [in] XFrame Frame );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XController::attachModel
     /** is called to attach the controller to a new model.
+
+        @param Model
+            the new model for this controller
+
+        @return
+            <TRUE/>if attach was successfully
+            <br>
+            <FALSE/>otherwise
      */
-    boolean attachModel( [in] XModel xModel );
+    boolean attachModel( [in] XModel Model );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XController::suspend
     /** is called to prepare the controller for closing the view
+
+        @param Suspend
+            <TRUE/>force the controller to suspend his work
+            <FALSE/>try to reactivate the controller
+
+        @return
+            <TRUE/>if request was accepted and of course successfully finished
+            <br>
+            <FALSE/>otherwise
      */
-    boolean suspend( [in] boolean bSuspend );
+    boolean suspend( [in] boolean Suspend );
 
     //-------------------------------------------------------------------------
+    /** provides access to current view status
 
-    // DocMerge from idl: method com::sun::star::frame::XController::getViewData
-    /** @returns
-                data that can be used to restore the current view status.
+        @returns
+            set of data that can be used to restore the current view status
+            at later time by using <member>XController::restoreViewData()</member>
      */
     any getViewData();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XController::restoreViewData
     /** restores the view status using the data gotten from a previous call to
-        <member>XController::getViewData</member>.
+        <member>XController::getViewData()</member>.
+
+        @param Data
+            set of data to restore it
      */
     void restoreViewData( [in] any Data );
 
     //-------------------------------------------------------------------------
+    /** provides access to currently attached model
 
-    // DocMerge from idl: method com::sun::star::frame::XController::getModel
-    /** @returns
-                the currently attached model.
+        @returns
+            the currently attached model.
      */
     XModel getModel();
 
     //-------------------------------------------------------------------------
+    /** provides access to owner frame of this controller
 
-    // DocMerge from idl: method com::sun::star::frame::XController::getFrame
-    /** @returns
-                the frame containing this controller.
+        @returns
+            the frame containing this controller.
      */
     XFrame getFrame();
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:56  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/11/18 11:49:56  mi
-    XComponent now in module lang
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoaderFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,44 +69,73 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+#ifndef __com_sun_star_container_XContainerQuery_idl__
+#include <com/sun/star/container/XContainerQuery.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module frame {
 
 //=============================================================================
-
 /** factory to create frame loader
+
+    <p>
+    With this factory it's possible to
+    <ul>
+        <li>have access on configuration of set of registered frame laoder objects</li>
+        <li>create a frame laoder by his internal name</li>
+        <li>query for a frame laoder by using special query or property description.</li>
+    </ul>
+    </p>
  */
 service FrameLoaderFactory
 {
     //-------------------------------------------------------------------------
-    /**interface to create the loader
-        <p>
-        After a <type>TypeDetection</type> you can use these interfaces to create the right loader to
-        load the document into a frame. Give it an internal type name and it creates a suitable
-        <type>XSynchronousFrameLoader</type>    or <type>XFrameLoader</type> and returns it by calling
-        XMultiServiceFactory::createInstance...()
-         - casted to XInterface! Please check returned object for his supported interface!
+    /** interface to create loader objects by using his internal name
 
-        @attention  Method XMultiServiceFactory::getAvailableServiceNames() isn't supported!
-        Please use XNameAcces of these service for access on loader configuration.
+        <p>
+        Returned objects must support the service specification of a <type>FrameLoader</type>
+        or <type>SynchronousFrameLoader</type>. (Note: last one will be prefered if both ones
+        are available)
+        They can be created by using of his internal name, which must be unambigous everytime, only.
+        To get this name use further specified interfaces of this factory for access on
+        the flat configuration.
         </p>
     */
     interface com::sun::star::lang::XMultiServiceFactory;
 
     //-------------------------------------------------------------------------
-    /**readonly access to loader configuration
+    /** provides access to the whole frame loader configuration
 
         <p>
-        These interface support a readonly access to our internal configuration of all accessible loader.
-        The return value of XNameAccess::getByName() is a sequence<PropertyValue> packed in an Any!</p>
-<pre>
-Supported properties are:
-<property name    value type of property     description/>
-"Types"         [sequence< string > ]      loader is registered for these types
-"UIName"        [string            ]      localized name of loader to show it at UI
-</pre>  */
+        This interface supports an access to the internal configuration of all accessible loader objects.
+        The return value of <member>XNameAccess::getByName()</member> is a property sequence packed in an any.
+        </p>
+        <table border=1>
+            <tr>
+                <td><b>Types<b></td>
+                <td>[string]</td>
+                <td>file types which loader is registered for</td>
+            </tr>
+            <tr>
+                <td><b>UIName<b></td>
+                <td>[string]</td>
+                <td>UI representable and localized name</td>
+            </tr>
+        </table>
+    */
     interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** supports query mode for configuration access
+
+        <p>
+        This interface can be used to get sub sets of current configuration entries
+        which represent given search parameters.
+        </p>
+     */
+    interface com::sun::star::container::XContainerQuery;
 };
 
 //=============================================================================

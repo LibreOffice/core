@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchResultEvent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:49:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,19 +75,29 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** contains the result of the dispatch action, if State is set to SUCCESS
 
+    <p>
+    The type of the result is dispatch action dependend. The member State
+    can be set to one of the values defined in <type>DispatchResultState</type>.
+    If State is set to <const>DispatchResultState::FAILURE</const>, Result may
+    specify the reason (or is empty). The type is also dispatch action dependend.
+    If State is set to <const>DispatchResultState::DONTKNOW</const>, Result is empty.
+    </p>
+
+    @see DispatchResultState
+*/
 struct DispatchResultEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-        /**Contains the result of the dispatch action, if State is set to SUCCESS.
-                The type of the result is dispatch action dependend.<BR>
-                The member State can be set to one of the values defined in <type>DispatchResultState</type>.<BR>
-                If State is set to FAILURE, Result may specify the reason (or is empty).
-                The type is also dispatch action dependend.<BR>
-                If State is set to DONTKNOW, Result is empty.<BR>
-    */
-        short State;
-        any Result;
+    /** describes state of dispatch
+     */
+    short State;
+
+    //-------------------------------------------------------------------------
+    /** describes result for given <var>State</var>
+     */
+    any Result;
 };
 
 //=============================================================================

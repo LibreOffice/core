@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormControlModel.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,32 +84,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::FormControlModel
 /** specifies a control model within a form.
 
-
-
-    <p>In general, a control in a form consists of a model, which is
-    loaded and stored and which contains the data, and the control,
-    which contains the view and user interaction.</p>
+    <p>Note that the model-view-paradigm is used for form controls, too.</p>
  */
 service FormControlModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormComponent;
 
-
-    // DocMerge from xml: service com::sun::star::form::FormControlModel: interface com::sun::star::beans::XFastPropertySet
     /** This optional interface gives an efficient access to all
                 properties at once or an ability to set more than one property at once.
      */
     [optional] interface com::sun::star::beans::XFastPropertySet;
 
 
-    // DocMerge from xml: service com::sun::star::form::FormControlModel: interface com::sun::star::beans::XPropertyState
     /** This optional interface gives access to the state of the
                 properties, e.g. whether a default value
                 is to be used or not for a certain property.
@@ -118,27 +108,30 @@ service FormControlModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::FormControlModel::ClassId
-    /** specifies the ID for classification of the component.@see FormComponentType
+    /** specifies the ID for classification of the component.
+        @see FormComponentType
      */
     [readonly, property] short ClassId;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::FormControlModel::TabIndex
-    /** determines the taborder; default is -1 used for auto order.
+    /** determines the relative taborder of the control associated with the model.
 
-
+        <p>The default -1 is used to indicate that the tab-order of this control should be
+        determined automatically.</p>
 
         <p>Each component which supports a tabstop must provide a
-        <type>FormControlModel::TabIndex</type>.</p>
+        <type>FormControlModel::TabIndex</type> property.</p>
+
+        <p>Normally, a <type>FormController</type> instance is evaluating this property.</p>
      */
     [optional, property] short TabIndex;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::FormControlModel::Tag
     /** used for additional information.
+        <p>No semantics is given for this property, it will usually be used by the creator of a document
+        containing form controls.</p>
      */
     [property] string Tag;
 
@@ -151,6 +144,12 @@ service FormControlModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/07/26 09:59:57  fs
+    IDL review form layer
+
+    Revision 1.4  2001/01/23 10:08:21  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

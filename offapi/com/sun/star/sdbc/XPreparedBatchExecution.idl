@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPreparedBatchExecution.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,29 @@
 /** is used for batch execution on PreparedStatements.
 
 
-    <p>A PreparedStatement uses one precompiled SQL Statement. In batch execution
+    <p>
+    A
+    <type scope="com::sun::star::sdbc">PreparedStatement</type>
+    uses one precompiled SQL Statement. In batch execution
     it is possible to set collection of parameter settings, which are executed in
-    one batch job.</p>
+    one batch job.
+    </p>
  */
 interface XPreparedBatchExecution: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XPreparedBatchExecution::addBatch
     /** adds a set of parameters to the batch.
+        @throws SQLException
+            if a database access error occurs.
      */
     void addBatch() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XPreparedBatchExecution::clearBatch
     /** makes the set of commands in the current batch empty.
+        @throws SQLException
+            if a database access error occurs.
      */
     void clearBatch() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -113,6 +121,12 @@ interface XPreparedBatchExecution: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 09:00:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

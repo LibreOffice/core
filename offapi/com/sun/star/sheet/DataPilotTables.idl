@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotTables.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,27 +58,48 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotTables_idl__
 #define __com_sun_star_sheet_DataPilotTables_idl__
 
 #ifndef __com_sun_star_sheet_XDataPilotTables_idl__
 #include <com/sun/star/sheet/XDataPilotTables.idl>
 #endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module sheet {
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::DataPilotTables
-/** a collection of data pilot tables.
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a collection of data pilot tables.
  */
 service DataPilotTables
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the data pilot objects in this collection.
+     */
     interface com::sun::star::sheet::XDataPilotTables;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all data pilot tables.
+
+        @see com::sun::star::sheet::DataPilotTablesEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the contained data pilot tables by index.
+
+        @see com::sun::star::sheet::DataPilotTable
+     */
+    interface com::sun::star::container::XIndexAccess;
 
 };
 
@@ -86,18 +107,5 @@ service DataPilotTables
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

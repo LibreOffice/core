@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubTotalDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_SubTotalDescriptor_idl__
 #define __com_sun_star_sheet_SubTotalDescriptor_idl__
 
@@ -68,83 +69,108 @@
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
-
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::SubTotalDescriptor
-/** This is a description of how subtotals are created.
+/** represents a description of how subtotals are created.
+
+    <p>The descriptor contains properties and a collection of subtotal fields
+    which control the behaviour of operation.</p>
  */
 service SubTotalDescriptor
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of subtotal fields.
+     */
     interface com::sun::star::sheet::XSubTotalDescriptor;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all sub total fields.
+
+        @see com::sun::star::sheet::SubTotalFieldsEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SubTotalDescriptor::InsertPageBreaks
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::InsertPageBreaks
+    /** provides access to the sub total fields in the collection via index.
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** procides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
     /** specifies if page breaks are inserted after each group change.
      */
     [property] boolean InsertPageBreaks;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SubTotalDescriptor::IsCaseSensitive
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::IsCaseSensitive
     /** specifies if the case of letters is important when comparing entries.
      */
     [property] boolean IsCaseSensitive;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SubTotalDescriptor::EnableUserSortList
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::EnableUserSortList
     /** specifies if a user defined sorting list is used.
      */
     [property] boolean EnableUserSortList;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SubTotalDescriptor::UserSortListIndex
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::UserSortListIndex
     /** specifies which user defined sorting list is used.
 
-
-
-        <p>This is only used if <member>SubTotalDescriptor::EnableUserSortList</member>
+        <p>This property is only used if
+        <member>SubTotalDescriptor::EnableUserSortList</member>
         is <TRUE/>.</p>
      */
     [property] long UserSortListIndex;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SubTotalDescriptor::BindFormatsToContent
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::BindFormatsToContent
-    /** specifies if cell formats are moved with the contents
-        they belong to.
+    /** specifies if cell formats are moved with the contents they belong to.
      */
     [property] boolean BindFormatsToContent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::SortAscending
-    /** specifies the sorting order if Sort is set to <TRUE/>.
+    /** specifies if the contents of the fields will be sorted to groups
+        while performing a subtotal operation.
+     */
+    [property] boolean EnableSort;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the sorting order if
+        <member>SubTotalDescriptor::EnableSort</member> is set to <TRUE/>.
      */
     [property] boolean SortAscending;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SubTotalDescriptor::MaxFieldCount
-    /** returns the maximum number of subtotal fields
-        the descriptor can hold.
+    /** returns the maximum number of subtotal fields the descriptor can
+        hold.
+
+        <p>This read-only property indicates the maximum count of fields the
+        current implementation supports.</p>
      */
     [readonly, property] long MaxFieldCount;
 
@@ -154,27 +180,5 @@ service SubTotalDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

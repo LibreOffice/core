@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseDocument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,21 +79,22 @@ interface XRename;
 // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::DatabaseDocument
 /** specifies documents which belong to a database access bean.
 
-
-
-    <p>These documents typically process information from a connected
-    data source. A <type>DatabaseDocument</type> could be a form
-    or a report.</p>
+    <p>
+    These documents typically process information from a connected
+    data source. A
+    <type scope="com::sun::star::sdb">DatabaseDocument</type>
+    could be a form or a report.
+    </p>
  */
 service DatabaseDocument
 {
-    // DocMerge: empty anyway
+    // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
-    // DocMerge: empty anyway
+    // allows to create new DatabaseDocument objects
     interface com::sun::star::sdbcx::XDataDescriptorFactory;
 
-    // DocMerge: empty anyway
+    // allows to rename the object.
     interface com::sun::star::sdbcx::XRename;
 
     // DocMerge from xml: property com::sun::star::sdbcx::com::sun::star::sdb::DatabaseDocument::Name
@@ -114,6 +115,15 @@ service DatabaseDocument
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.2  2002/02/18 12:53:58  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.3.24.1  2002/02/18 10:21:53  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.2  2000/10/17 08:42:32  fs
     removed the obsolete chaos::XDataStreamSupplier
 

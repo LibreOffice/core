@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGridFieldDataSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,37 +76,47 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XGridFieldDataSupplier
-/** provides access to the data of a GridControl.
+/** provides access to the data of a GridControl
 
+    <p>You can retrieve the data type information and the data in a row.</p>
 
+    <p>This interface allows to retrieve data even for rows which are not current, which is quite usefull,
+    as normally, you can't affect the current row in a grid control without moving the cursor of the underlying
+    <type scope="com::sun::star::form::component">DataForm</type>.</p>
 
-    <p> You can retrieve the data type information and the data in a row.
-
-    </p>
-
-
-
-
-
-
-
-
+    @see XGrid
+    @see com::sun::star::form::control::GridControl
+    @see com::sun::star::form::component::GridControl
 
     @deprecated
  */
 interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XGridFieldDataSupplier::queryFieldDataType
+    /** checks whether or not the content of the grid's columns can be retrieved in the requested format.
 
-    // DocMerge: empty anyway
+        <p>Not every cell content can be retrieved in every representation. For example, in a text column,
+        you usually won't be able to retrieve the content as double.<br/>
+        To check if the type you need is supported by the columns, use this method.</p>
+
+        @return
+            A sequence of boolean flags. Each flag corresponds to the respective column, and <TRUE/> indicates
+            that the column content can be retrieved in the requested format, <FALSE/> denies this.
+
+        @see XGridColumnFactory
+        @see DataAwareControlModel
+        @see XGridFieldDataSupplier::queryFieldData
+    */
     sequence<boolean> queryFieldDataType( [in] type xType );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XGridFieldDataSupplier::queryFieldData
+    /** retrieves the actual column data for the given row
 
-    // DocMerge: empty anyway
+        <p>If a column does not support the requested type, <NULL/> is returned at the respective
+        position.</p>
+
+        @see XGridFieldDataSupplier::queryFieldDataType
+    */
     sequence<any> queryFieldData( [in] long nRow,
              [in] type xType );
 };
@@ -118,6 +128,12 @@ interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.1  2002/07/26 10:00:10  fs
+    IDL review form layer
+
+    Revision 1.5  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2001/01/31 09:57:00  mi
     TYPE_XIDLCLASS is now 'type'
 

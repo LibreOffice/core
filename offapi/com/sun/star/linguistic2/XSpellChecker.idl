@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpellChecker.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ module com { module sun { module star { module linguistic2 {
     is correct or additionally, if it was misspelled, some proposals
     how it might be correctly written.</P>
 
-    @see    com::sun::star::linguistic2::XSupportedLocales
+    @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
 */
 interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
 {
@@ -120,8 +120,7 @@ interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
             It is usually empty in order to use the default values supplied with
             the property set.
 
-        @see    com::sun::star::linguistic2::XSupportedLocales
-        @see    com::sun::star::lang::Locale
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     boolean isValid(
             [in] string aWord,
@@ -153,9 +152,8 @@ interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
             the property set.
         exception is raised.</P>
 
-        @see    com::sun::star::linguistic2::XSupportedLocales
-        @see    com::sun::star::linguistic2::XSpellAlternatives
-        @see    com::sun::star::lang::Locale
+        @see    <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     com::sun::star::linguistic2::XSpellAlternatives spell(
             [in] string aWord,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginContext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:24:08 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,52 +92,71 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::plugin::XPluginContext
-/** implements the calls a plugin library can make on its browser.
-
-    <p>A default context can be created by a <type>XPluginManager</type>.
-
-    </p>@see XPluginManager
- */
+/** Interface receiving calls from a plugin library.
+    A default context can be created using the <type>PluginManager</type>.
+*/
 interface XPluginContext: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XPluginContext::getValue
+    /** Requests global application parameters like display connection
+        on UNIX systems.
 
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getValue
-    /** requests global application parameters like display connection on UNIX systems
-     */
+        @param xPlugin
+               plugin
+        @param aVariable
+               variable
+        @return value
+    */
     string getValue( [in] com::sun::star::plugin::XPlugin xPlugin,
              [in] com::sun::star::plugin::PluginVariable aVariable )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
+    /** Requests a notification of completion of the operation on an URL.
 
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getURLNotify
-    /** requests a notification of completion of the operation on an URL.
-     */
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+        @param listener
+               event listener
+    */
     void getURLNotify( [in] com::sun::star::plugin::XPlugin plugin,
              [in] string url,
              [in] string target,
              [in] com::sun::star::lang::XEventListener listener )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
+    /** Requests an URL to be loaded into the frame target.
 
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getURL
-    /** requests an URL to be loaded into the frame target.
-     */
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+    */
     void getURL( [in] com::sun::star::plugin::XPlugin plugin,
              [in] string url,
              [in] string target )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::postURLNotify
-    /** posts data from a buffer or file to an URL and receives a
+    /** Posts data from a buffer or file to an URL and receives a
         notification upon completion.
-     */
+
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+        @param buf
+               data
+        @param file
+               whether data is from file
+        @param listener
+               event listener
+    */
     void postURLNotify( [in] com::sun::star::plugin::XPlugin plugin,
              [in] string url,
              [in] string target,
@@ -146,11 +165,19 @@ interface XPluginContext: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::XEventListener listener )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
+    /** Posts data from a buffer or file to an URL.
 
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::postURL
-    /** posts data from a buffer or file to an URL.
-     */
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+        @param buf
+               data
+        @param file
+               whether data is from file
+    */
     void postURL( [in] com::sun::star::plugin::XPlugin plugin,
              [in] string url,
              [in] string target,
@@ -158,67 +185,48 @@ interface XPluginContext: com::sun::star::uno::XInterface
              [in] boolean file )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::newStream
-    /** requests a new stream that is created by the plugin and consumed
+    /** Requests a new stream that is created by the plugin and consumed
         by the browser.
-     */
+
+        @param plugin
+               plugin
+        @param mimetype
+               mime type
+        @param target
+               target frame
+        @param aSource
+               data source
+    */
     void newStream( [in] com::sun::star::plugin::XPlugin plugin,
              [in] string mimetype,
              [in] string target,
              [in] com::sun::star::io::XActiveDataSource aSource )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
+    /** Displays a message in the browser status line.
 
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::displayStatusText
-    /** displays a message in the browser status line.
-     */
+        @param plugin
+               plugin
+        @param message
+               message
+    */
     void displayStatusText( [in] com::sun::star::plugin::XPlugin plugin,
              [in] string message )
             raises( com::sun::star::plugin::PluginException );
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XPluginContext::getUserAgent
+    /** Returns an application dependent identification string.
+        This is the same string that is transmitted by a browser to an http server.
 
-    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getUserAgent
-    /** returns an application dependent identification string. This is
-        the same string that is transmitted by a browser to an http server.
-     */
+        @param plugin
+               plugin
+        @return id
+    */
     string getUserAgent( [in] com::sun::star::plugin::XPlugin plugin )
             raises( com::sun::star::plugin::PluginException );
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/16 16:41:31  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:43:27  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:29  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:35  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/17 13:15:29  pl
-    #74035# documentation
-
-    Revision 1.2  2000/02/07 11:24:42  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
-    new
-
-
-=============================================================================*/
 #endif

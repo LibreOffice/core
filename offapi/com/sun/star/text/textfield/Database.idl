@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Database.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:33:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define __com_sun_star_text_textfield_Database_idl_
 
 #include <com/sun/star/text/TextField.idl>
+#include <com/sun/star/text/DependentTextField.idl>
 
 //=============================================================================
 
@@ -74,8 +75,9 @@ module com { module sun { module star { module text { module textfield {
 */
 service Database
 {
-    service  com::sun::star::text::TextField;
-    /** contains the database content that was merged in at the last database merge action.
+    service  com::sun::star::text::DependentTextField;
+
+    /** contains the database content that was merged in the last database merge action.
      Initially it contains the colum name in parenthesis (<>).
      */
     [property]string Content;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dim3DDiagram.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,21 +72,23 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::Dim3DDiagram
-/** a helper service which supports properties of 3 dimensional chart
-    types.
+/** is a service for diagrams that support the capability to render
+    themselves as three-dimensional diagrams as well as
+    two-dimensional ones.
  */
 service Dim3DDiagram
 {
-    // DocMerge: empty anyway
+    /** gives access to the properties of the wall and floor objects
+        of the three-dimensional cuboid that contains the actual
+        diagram.
+     */
     interface com::sun::star::chart::X3DDisplay;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::Dim3DDiagram::Dim3D
-    /** determines if the chart is 3 dimensional or 2
-        dimensional.
-     */
+    /** If set to <TRUE/>, the chart becomes a three-dimensional
+        chart.  Otherwise it is two-dimensional.
+    */
     [property] boolean Dim3D;
 
 };
@@ -98,6 +100,12 @@ service Dim3DDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFormatTranslator.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,18 @@ module com { module sun { module star { module datatransfer {
 interface XDataFormatTranslator;
 
 //=============================================================================
-/** manages a list of data flavors.
+/** Different platforms use different types to describe data formats available
+    during data exchange operations like clipboard or drag&drop.
+    Implementations of this service do convert system dependent data types to a
+    <type>DataFlavor</type> and vice versa.
 
-    @see com::sun::star::datatransfer::XDTransFormatTranslator
+    @see com::sun::star::datatransfer::XDataFormatTranslator
+    @see com::sun::star::datatransfer::DataFlavor
 */
 service DataFormatTranslator
 {
     //-------------------------------------------------------------------------
-    /** converts data flavors to system data types and vice versa.
+    /** Converts a <type>DataFlavor</type> to system data types and vice versa.
     */
     interface XDataFormatTranslator;
 

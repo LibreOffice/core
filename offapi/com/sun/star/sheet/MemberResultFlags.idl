@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MemberResultFlags.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,39 +58,34 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_MemberResultFlags_idl__
 #define __com_sun_star_sheet_MemberResultFlags_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from idl: constants com::sun::star::sheet::MemberResultFlags
-/** These constants give information about elements in
-        data pilot member results.
+/** used to give information about elements in data pilot member results.
  */
 constants MemberResultFlags
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::MemberResultFlags::HASMEMBER
     /** The element contains a member.
      */
     const long HASMEMBER = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::MemberResultFlags::SUBTOTAL
     /** The element contains a subtotal.
      */
     const long SUBTOTAL = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::MemberResultFlags::CONTINUE
     /** The element is a continuation of the previous one.
      */
     const long CONTINUE = 4;
@@ -101,18 +96,5 @@ constants MemberResultFlags
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

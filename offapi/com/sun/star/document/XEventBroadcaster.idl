@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventBroadcaster.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-06-25 15:51:19 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,50 +65,39 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_lang_ArrayIndexOutOfBoundsException_idl__
-#include <com/sun/star/lang/ArrayIndexOutOfBoundsException.idl>
+#ifndef __com_sun_star_document_XEventListener_idl__
+#include <com/sun/star/document/XEventListener.idl>
 #endif
 
-
 //=============================================================================
 
- module com {   module sun {   module star {   module document {
-
-interface XEventListener;
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
-
 /** makes it possible to register listeners which are called whenever
-    a document event (see <type>EventObject</type>) occurs.
+    a document event (see <type>EventObject</type>) occurs
  */
 interface XEventBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+    /** registers the given listener
 
-    /** registers the given <type>XEventListener</type>.
+        @param Listener
+            listener which is interested on such events
      */
-    [oneway] void addEventListener( [in] XEventListener xListener );
+    [oneway] void addEventListener( [in] XEventListener Listener );
 
     //-------------------------------------------------------------------------
+    /** unregisters the given listener
 
-    /** unregisters the given <type>XEventListener</type>.
+        @param Listener
+            listener which isn't interested on such events any longer
      */
-    [oneway] void removeEventListener( [in] XEventListener xListener );
+    [oneway] void removeEventListener( [in] XEventListener Listener );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/03/16 16:41:20  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.1  2001/01/24 13:30:25  mi
-    stored document events and runtime document events structurally unified
-
-
-=============================================================================*/
 #endif

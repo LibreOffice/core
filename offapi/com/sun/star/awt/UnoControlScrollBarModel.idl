@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlScrollBarModel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 13:42:00 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,26 +72,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlScrollBarModel
-/** specifies the standard model of an <type>UnoScrollBarControl</type>.
+/** specifies the standard model of an <type>UnoControlScrollBar</type>.
  */
 service UnoControlScrollBarModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::BlockIncrement
     /** specifies the increment for a block move.
      */
     [property] long BlockIncrement;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::Border
     /** specifies the border style of the control.
-
 
         <pre>
         0: No border
@@ -103,15 +98,7 @@ service UnoControlScrollBarModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::DefaultControl
-    /** specifies the service name of the default control for this model.
-     */
-    [property] string DefaultControl;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
@@ -123,51 +110,46 @@ service UnoControlScrollBarModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::LineIncrement
     /** specifies the increment for a single line move.
      */
     [property] long LineIncrement;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::Orientation
     /** specifies the <type>ScrollBarOrientation</type> of the control.
      */
     [property] long Orientation;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::Printable
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::ScrollValue
     /** specifies the scroll value of the control.
      */
     [property] long ScrollValue;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::ScrollValueMax
     /** specifies the maximum scroll value of the control.
      */
     [property] long ScrollValueMax;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlScrollBarModel::VisibleSize
-    /** specifies the visible size of the scrollbar.
+    /** specifies the visible size of the scroll bar.
      */
     [property] long VisibleSize;
+
 };
 
 //=============================================================================

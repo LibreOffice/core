@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellFailure.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 15:30:16 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,12 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** these define the various return types for spellchecking to fail verification.
 
-    <P>A value of this type may be obtained as part of the
+    <P>A value of this type is part of the
     <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
-    interface that is the return type for an unsuccessfull
+    interface which is the return type for an unsuccessfull
     spelling attempt.</P>
 
-    @see    com::sun::star::linguistic2::XSpellChecker
+    @see    <type scope="com::sun::star::linguistic2">XSpellChecker</type>
 */
 constants SpellFailure
 {
@@ -84,7 +84,7 @@ constants SpellFailure
     const short IS_NEGATIVE_WORD = 2;
 
     //-------------------------------------------------------------------------
-    /** The caption of the word is wrong.
+    /** The capitalization of the word is wrong.
     */
     const short CAPTION_ERROR = 3;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProtocolHandlerCheck.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 15:56:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module installation {
+module com {  module sun {  module star {  module installation {
 
 //=============================================================================
 
-// DocMerge: empty anyway
+/// @deprecated
 interface XProtocolHandlerCheck: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -125,6 +125,12 @@ interface XProtocolHandlerCheck: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/07/29 09:53:12  mi
+    review -> module is deprecated
+
+    Revision 1.5  2001/11/15 15:56:10  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:27  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

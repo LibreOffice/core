@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSource.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSource_idl__
 #define __com_sun_star_sheet_DataPilotSource_idl__
 
@@ -77,40 +78,54 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a data pilot source.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSource
-/** a data pilot source.
+    <p>A component that implements this service can be used as data source
+    for a data pilot table in a spreadsheet document.</p>
  */
 service DataPilotSource
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of the dimensions of the data
+        pilot source.
+     */
     interface com::sun::star::sheet::XDimensionsSupplier;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::sheet::XDataPilotResults;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::util::XRefreshable;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSource::ColumnGrand
+    /** gives access to the results of the data pilot table.
+     */
+    interface com::sun::star::sheet::XDataPilotResults;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to refresh the data pilot table, that means to
+        read the data again from the data pilot source.
+     */
+    interface com::sun::star::util::XRefreshable;
+
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
     /** specifies if grand totals for the columns are inserted.
      */
     [property] boolean ColumnGrand;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSource::RowGrand
     /** specifies if grand totals for the rows are inserted.
      */
     [property] boolean RowGrand;
@@ -121,18 +136,5 @@ service DataPilotSource
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

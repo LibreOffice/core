@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartArea.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,22 +80,15 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartArea
 /** Specifies the area elements of a chart, e.g. the
     background area, the diagram wall, and the diagram floor of
    three-dimensional charts.
  */
 service ChartArea
 {
-    // DocMerge: empty anyway
     service com::sun::star::drawing::FillProperties;
-
-    // DocMerge: empty anyway
     service com::sun::star::drawing::LineProperties;
-
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
-
 };
 
 //=============================================================================
@@ -105,6 +98,12 @@ service ChartArea
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.5  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.4  2001/03/07 13:57:13  cl
     cleanup of shape services
 

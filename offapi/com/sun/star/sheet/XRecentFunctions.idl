@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRecentFunctions.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XRecentFunctions_idl__
 #define __com_sun_star_sheet_XRecentFunctions_idl__
 
@@ -65,42 +66,44 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to a list of recently used functions.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XRecentFunctions
-/** represents a list of recently used functions.@see com::sun::star::sheet::RecentFunctions
+    @see com::sun::star::sheet::RecentFunctions
  */
 interface XRecentFunctions: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XRecentFunctions::getRecentFunctionIds
 
-    // DocMerge from idl: method com::sun::star::sheet::XRecentFunctions::getRecentFunctionIds
-    /** returns a sequence of those functions that were
-                most recently used.
+    /** returns a sequence of those functions that were most recently used.
 
-                <P>The functions are represented by their identifiers.</P>
+        <P>The functions are represented by their identifiers.</P>
+
+        @returns
+            the sequence of function identifiers most recently used.
      */
-    sequence<long> getRecentFunctionIds();
+    sequence< long > getRecentFunctionIds();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XRecentFunctions::setRecentFunctionIds
     /** sets the list of those functions that were most recently used.
 
         <p>The functions are represented by their identifiers.</p>
+
+        @param aRecentFunctionIds
+            the sequence of function identifiers most recently used.
      */
-    void setRecentFunctionIds( [in] sequence<long> aRecentFunctionIds );
+    void setRecentFunctionIds( [in] sequence< long > aRecentFunctionIds );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XRecentFunctions::getMaxRecentFunctions
-    /** returns the maximum number of entries that will be stored as recent functions.
+    /** returns the maximum number of entries that will be stored as
+        recently used functions.
      */
     long getMaxRecentFunctions();
 
@@ -110,33 +113,5 @@ interface XRecentFunctions: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

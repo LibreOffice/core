@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,54 +69,155 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+#ifndef __com_sun_star_container_XContainerQuery_idl__
+#include <com/sun/star/container/XContainerQuery.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module document {
 
 //=============================================================================
+/** factory to create filter objects or search on filter configuration
 
-/** factory to create filter objects
+    <p>
+    After a generic <type>TypeDetection</type> an internal type name
+    will be well known (or may not if it failed to detect requested document).
+    For such internal type names filters will be registered. If there are more then
+    ones any of them can use the default flag to be preferred.
+    This factory can be used to the follow then:
+    <ul>
+        <li>search on filter configuration (includes searching for suitable filter for
+            a given internal type name too)
+        </li>
+        <li>create the filter object
+        </li>
+        <li>get/set properties of any registered filter.
+            (means in configuration, not on the filter)
+        </li>
+    </ul>
+    </p>
  */
 service FilterFactory
 {
     //-------------------------------------------------------------------------
-    /** search suitable filter for given internal type name and additional arguments
-        and create it
+    /** provides search on flat filter configuration
 
         <p>
-        After a <type>TypDetection</type> you have an internal name of a type which presents
-         your document. Call createInstance() or createInstanceWithArguments() with these
-        informations and we create a suitable filter for you.
-        There exist two types of filters: <type>ImportFilter</type> and <type>ExportFilter</type>.
-        A combination of both services in one implementation is also possible.
-        You can regulate search for filter by giving correct arguments - like flags for import/export ...
+        After a <type>TypDetection</type> an internal name of a type which presents
+        the requested document will be well known. With this interface it's possible
+        to find out which filter(s) are registered for that. It's possible to use
+        implementation dependend query commands (strings) or sets of properties which
+        must supported by searched filter(s). Returned enumerations contains a reference
+        to sub sets of filter(s) (means to her flat data structures represented as
+        <type scope="com::sun::star::beans" dim="[]">NamedValue</type>) which can be used
+        for further steps then; e.g, to create the filter(s).
+        (see list of properties below on <member>FilterFactory::XNameAccess</member>)
+        </p>
 
-        @attention  Don't use getAvailableServiceNames()!
-                    Please use XNameAccess to get informations about our configuration of accessible filters.
-         </p>
+        <p>
+        Same functionality (for searching) will be provided by the follow interface
+        <member>FilterFactory::XNameAccess</member> - but that willn't be very comfortable
+        to do so.
+        </p>
      */
-    interface com::sun::star::lang::XMultiServiceFactory;
+    interface com::sun::star::container::XContainerQuery;
 
     //-------------------------------------------------------------------------
-    /** readonly access to filter configuration
+    /** provides simple access on flat filter configuration
 
+        <p
+        Every filter (<type>ExportFilter</type>/<type>ImportFilter</type>) is specified by
+        some properties wich are represented as <type scope="com::sun::star::beans" dim="[]">NamedValue</type>.
+        This interface provides pure access (read/write) on these data.
+        A name for the calling methods must the internal filter name be used only.
+        Returned any capsulate the flat property lists then. May this interface will be neccessary
+        to extend missing funtionality of <member>FilterFactory::XContainerQuery</member> or for
+        changing the configuration (if implementation of this service allow that! may they will be readonly).
+        Query interface before provides readonly access only.
+        </p>
         <p>
-        These interfaces support a readonly access to our internal configuration of all accessible filters.
-        The return value of XNameAccess::getByName() is a sequence<PropertyValue> packed in an Any!
-
-        Supported properties are:
-            name of property            value type of property      description
-            "Type"                      [string ]                   filter is registered for this type
-            "UIName"                    [string ]                   localized name of filter to show at the UI
-            "DocumentService"           [string ]                   service name which presents the document
-            "FilterService"             [string ]                   service name of filter implementation
-            "Flags"                     [integer]                   flags to describe the filter
-            "UserData"                  [string ]                   additional information with private structure!
-            "FileFormatVersion"         [integer]                   version number of file format
-            "TemplateName"              [string ]                   name of suitable template
-         </p>
+        Follow properties are supported by a filter:
+        <table border=1>
+            <tr>
+                <td><strong>property name</strong></td>
+                <td><strong>value type</strong></td>
+                <td><strong>description</strong></td>
+            </tr>
+            <tr>
+                <td><em>Type<em></td>
+                <td>[string]</td>
+                <td>filter is registered for this internal type name<br>
+                    (see <type>TypeDetection</type> for further informations)</td>
+            </tr>
+            <tr>
+                <td><em>UIName<em></td>
+                <td>[string]</td>
+                <td>localized name of filter to show at the UI</td>
+            </tr>
+            <tr>
+                <td><em>DocumentService<em></td>
+                <td>[string]</td>
+                <td>service name which presents the document type<br>
+                    (e.g. <type scope="com::sun::star::text">TextDocument</type>)</td>
+            </tr>
+            <tr>
+                <td><em>FilterService<em></td>
+                <td>[string]</td>
+                <td>service name of filter implementation<br>
+                    Note: It means the implementation name of the service realy.
+                    Because it's not possible to distinguish between
+                    more then one filters otherwise.</td>
+            </tr>
+            <tr>
+                <td><em>Flags<em></td>
+                <td>[integer]</td>
+                <td>describe the filter more specific<br>
+                    (e.g. for import/export or as default)</td>
+            </tr>
+            <tr>
+                <td><em>UserData<em></td>
+                <td>[string]</td>
+                <td>contains filter specific configuration formated as string
+                    for historical reasons</td>
+            </tr>
+            <tr>
+                <td><em>FileFormatVersion<em></td>
+                <td>[integer]</td>
+                <td>specifies supported format version if there exist more then ones</td>
+            </tr>
+            <tr>
+                <td><em>TemplateName<em></td>
+                <td>[string]</td>
+                <td>name of suitable template</td>
+            </tr>
+        </table>
+        </p>
      */
     interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** factory to create filter objects
+
+        <p>
+        After using the interfaces before (or if it was already clear) an internal
+        filter name should be well known. This can be used at this interface to create
+        the real filter object for using. It's possible to use optional arguments
+        for initializing too.
+        If created filter supports the interface <type scope="com::sun::star::lang">XInitialization</type>
+        this factory will pass his own configuration data and the may given optional
+        arguments to it. (see <member>ExportFilter::XInitialization</member> or
+        <member>ImportFilter::XInitialization</member> for further informations about that)
+        If it doesn't support it nothing will be done then. The filter will be returned
+        uninitialized then and must get his configuration by another way himself.
+        But he should supports the interface <type scope="com::sun::star::container">XNamed</type>
+        to privide his own internal name. Any user of it can use this information
+        to get more information about it on this FilterFactory service.
+        Note: Return value can be <NULL/> if unknown filter was requested or
+        coudln't be created successfully.
+        </p>
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
 };
 
 //=============================================================================

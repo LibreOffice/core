@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragSourceDragEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-20 20:34:24 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,25 +71,30 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** The DragSourceDragEvent is delivered from the DragSourceContext to the
-    currently registered DragSourceListener.
+/** The <type>DragSourceDragEvent</type> is delivered from an object that
+    implements the <type>XDragSourceContext</type> to the
+    currently registered drag source listener.
 
     <p>It contains state regarding the current state of the operation to enable
     the operations initiator to provide the end user with the appropriate drag
     over feedback.</p>
 
-    <!-- Editor: Please reword "It contains state" -->
+    @see com::sun::star::datatransfer::dnd::XDragSourceListener
 */
 
 struct DragSourceDragEvent: com::sun::star::datatransfer::dnd::DragSourceEvent
 {
     //-------------------------------------------------------------------------
-    /** the drag action selected by the current drop target.
+    /** The drag action selected by the current drop target.
+
+        @see com::sun::star::datatransfer::dnd::DNDConstants
      */
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** the user's currently selected drop action.
+    /** The user's currently selected drop action.
+
+        @see com::sun::star::datatransfer::dnd::DNDConstants
      */
     byte UserAction;
 };

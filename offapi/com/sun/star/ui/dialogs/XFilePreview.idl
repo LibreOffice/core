@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePreview.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:21:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/**
-
+/** FilePicker that support the preview of various file formats should implement
+    this interface.
 */
 
 interface XFilePreview: com::sun::star::uno::XInterface
@@ -85,9 +85,9 @@ interface XFilePreview: com::sun::star::uno::XInterface
     /** The method returns all image formats that the preview supports.
 
         @returns
-            a sequence of all supported preview formats
+        A sequence of all supported preview formats
 
-        @see ::com::sun::star::ui::dialogs::PreviewImageFormats
+        @see com::sun::star::ui::dialogs::FilePreviewImageFormats
     */
     sequence< short > getSupportedImageFormats( );
 
@@ -95,7 +95,7 @@ interface XFilePreview: com::sun::star::uno::XInterface
     /** The method returns the supported color depth of the target device.
 
         @returns
-            the color depth in bit, e.g. 8 bit, 16 bit, 32 bit
+        The color depth in bit, e.g. 8 bit, 16 bit, 32 bit.
     */
     long getTargetColorDepth( );
 
@@ -106,7 +106,7 @@ interface XFilePreview: com::sun::star::uno::XInterface
         0 will be returned.
 
         @returns
-            the width of the preview window in pixel
+        The width of the preview window in pixel.
     */
     long getAvailableWidth( );
 
@@ -116,8 +116,8 @@ interface XFilePreview: com::sun::star::uno::XInterface
         If a service implementation doesn't support a file preview
         0 will be returned.
 
-        @param
-            the heigth of the preview window in pixel
+        @returns
+        The heigth of the preview window in pixel.
     */
     long getAvailableHeight( );
 
@@ -126,17 +126,17 @@ interface XFilePreview: com::sun::star::uno::XInterface
         image will be ignored. An empty any will clear the preview window.
 
         @param aImageFormat
-            specifies the format of the data that will be delivered
+        Specifies the format of the data that will be delivered
 
         @param aImage
-            the image data, the image format defines how
-            the image data have to be delivered
+        The image data, the image format defines how
+        the image data have to be delivered
 
-        @throws ::com::sun::star::lang::IllegalArgumentException
-            if the specified image format is invalid or not
-            supported by the preview implementation
+        @throws com::sun::star::lang::IllegalArgumentException
+        If the specified image format is invalid or not
+        supported by the preview implementation
 
-        @see ::com::sun::star::ui::dialogs::PreviewImageFormats
+        @see com::sun::star::ui::dialogs::FilePreviewImageFormats
     */
     void setImage( [in] short aImageFormat, [in] any aImage )
         raises( ::com::sun::star::lang::IllegalArgumentException );
@@ -146,13 +146,13 @@ interface XFilePreview: com::sun::star::uno::XInterface
         that the preview implementation doesn't support hiding the preview.
 
         @param bShowState
-            True shows the preview window.
-            False hides the preview window.
+        A value of <TRUE/> shows the preview window.
+        <p>A value of <FALSE/> hides the preview window.</p>
 
         @returns
-            True on success.
-            False if the operation fails for any reason or the preview
-            implementation doesn't support hiding the preview.
+        A value of <TRUE/> on success.
+        <p>A vaue of <FALSE/> if the operation fails for any reason or the preview
+        implementation doesn't support hiding the preview.</p>
     */
     boolean setShowState( [in] boolean bShowState );
 
@@ -160,8 +160,8 @@ interface XFilePreview: com::sun::star::uno::XInterface
     /** Returns the current show state of the preview.
 
         @returns
-            True if the preview window is visible.
-            False if the preview window is invisible.
+        A value of <TRUE/> if the preview window is visible.
+        <p>A value of <FALSE/> if the preview window is invisible.</p>
     */
     boolean getShowState( );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Months.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-05-21 21:52:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,20 +68,35 @@ module com { module sun { module star { module i18n {
 
 //=============================================================================
 
-/// constants for months.
+/**
+    Constants for month names used in calls to <member>XCalendar::getDisplayName()</member>.
+ */
+
 constants Months
 {
+    /// January
     const short JANUARY     = 0;
+    /// February
     const short FEBURARY    = 1;
+    /// March
     const short MARCH       = 2;
+    /// April
     const short APRIL       = 3;
+    /// May
     const short MAY         = 4;
+    /// June
     const short JUNE        = 5;
+    /// July
     const short JULY        = 6;
+    /// August
     const short AUGUST      = 7;
+    /// September
     const short SEPTEMBER   = 8;
+    /// October
     const short OCTOBER     = 9;
+    /// November
     const short NOVEMBER    = 10;
+    /// December
     const short DECEMBER    = 11;
 };
 

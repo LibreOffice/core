@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragGestureEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-17 16:07:26 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,46 +73,49 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDragSource;
 
 //=============================================================================
-/** A DragGestureEvent is passed to DragGestureListener's dragGestureRecognized()
-     method when a particular DragGestureRecognizer detects that a platform
-     dependent drag initiating gesture has occurred on the Component that it is
+/** A DragGestureEvent is passed to the method <member>XDragGestureListener::dragGestureRecognized()</member>
+     when a particular <type>XDragGestureRecognizer</type> detects that a platform
+     dependent drag initiating gesture has occurred on the component that it is
      tracking.
-
-    <!-- Editor: Should Component be capitalized? -->
 */
 
 struct DragGestureEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    /** the action selected by the user.
+    /** The action selected by the user.
+        <p>Different constants may be combined using a logical OR.</p>
+        It's further possible to combine the ACTION_DEFAULT with one of the other
+        actions defined in <type scope="com::sun::star::datatransfer::dnd">DNDConstants</type>.
+        This means the user did not press any key during the Drag and Drop operation
+        and the action that was combined with ACTION_DEFAULT is the system default action.</p>
+
+        @see com::sun::star::datatransfer::dnd::DNDConstants
      */
 
     byte DragAction;
 
     //-------------------------------------------------------------------------
-    /** the x coordinate where the drag originated in Component coords.
-
-    <!-- Editor: Is "coords" an actual term or the abbreviation of coordinates? -->
+    /** The x coordinate where the drag originated in component coordinates.
      */
 
     long DragOriginX;
 
     //-------------------------------------------------------------------------
-    /** the y coordinate where the drag originated in Component coords.
+    /** The y coordinate where the drag originated in component coordinates.
      */
 
     long DragOriginY;
 
     //-------------------------------------------------------------------------
-    /** the DragSource associated with this drag action.
+    /** The DragSource associated with this drag action.
      */
 
     XDragSource DragSource;
 
     //-------------------------------------------------------------------------
-    /** the last event comprising the gesture.
+    /** The last event comprising the gesture.
 
-    <p> The initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
+    <p>The initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
     If it is not, the implementation should either react accordingly or
     presume that the left mouse button was clicked. </p>
     */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFilterField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_TableFilterField_idl__
 #define __com_sun_star_sheet_TableFilterField_idl__
 
@@ -69,56 +70,51 @@
 #include <com/sun/star/sheet/FilterOperator.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: struct com::sun::star::sheet::TableFilterField
 /** describes a single condition in a filter descriptor.
+
+    @see com::sun::star::sheet::SheetFilterDescriptor
  */
 struct TableFilterField
 {
-    // DocMerge from xml: field com::sun::star::sheet::TableFilterField::Connection
-    /** specifies how the condition is connected to the previous
-        condition.
+    //-------------------------------------------------------------------------
+
+    /** specifies how the condition is connected to the previous condition.
      */
     com::sun::star::sheet::FilterConnection Connection;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::TableFilterField::Field
     /** specifies which field (column) is used for the condition.
      */
     long Field;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::TableFilterField::Operator
     /** specifies the type of the condition.
      */
     com::sun::star::sheet::FilterOperator Operator;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::TableFilterField::IsNumeric
-    /** selects whether the <member>TableFilterField::NumericValue</member> or the
-        <member>TableFilterField::StringValue</member> is used.
+    /** selects whether the <member>TableFilterField::NumericValue</member>
+        or the <member>TableFilterField::StringValue</member> is used.
      */
     boolean IsNumeric;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::TableFilterField::NumericValue
     /** specifies a numeric value for the condition.
      */
     double NumericValue;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::TableFilterField::StringValue
     /** specifies a string value for the condition.
      */
     string StringValue;
@@ -129,24 +125,5 @@ struct TableFilterField
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:09  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

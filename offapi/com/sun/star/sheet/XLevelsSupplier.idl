@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLevelsSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XLevelsSupplier_idl__
 #define __com_sun_star_sheet_XLevelsSupplier_idl__
 
@@ -69,22 +70,25 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the collection of levels of a data pilot source
+    hierarchy.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XLevelsSupplier
-/** gives access to levels.
+    @see com::sun::star::sheet::DataPilotSourceHierarchy
+    @see com::sun::star::sheet::DataPilotSource
  */
 interface XLevelsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XLevelsSupplier::getLevels
-    /** returns the levels.
+    /** returns the collection of levels.
+
+        @see com::sun::star::sheet::DataPilotSourceLevels
      */
     com::sun::star::container::XNameAccess getLevels();
 
@@ -94,21 +98,5 @@ interface XLevelsSupplier: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintableBroadcaster.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,23 +71,24 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module view {
+module com {  module sun {  module star {  module view {
 
-/** allows for getting information about a print job
+//-----------------------------------------------------------------------------
+/** allows for getting information about a print job.
 
-    <p><type>XPrintableBroadcaster</type> can be implemented by classes by
-    implementing <type>XPrintable</type>. It allows for <type>XPrintableListener</type>
-    to be set, so a user can be informed about the print progress.</p>
+    <p><type>XPrintableBroadcaster</type> can be implemented by classes which
+    implement <type>XPrintable</type>. It allows a <type>XPrintableListener</type>
+    to be registered, thus a client object will learn about the print progress.</p>
 
     @see XPrintableListener
  */
 interface XPrintableBroadcaster : com::sun::star::uno::XInterface
 {
-    /** adds an <type>XPrintableListener</type> to be informed about print progress
+    /** adds an <type>XPrintableListener</type> to be notified about print progress.
      */
     [oneway] void addPrintableListener( [in] XPrintableListener xListener );
 
-    /** removes an <type>XPrintableListener</type>
+    /** removes an <type>XPrintableListener</type>.
      */
     [oneway] void removePrintableListener( [in] XPrintableListener xListener );
 };

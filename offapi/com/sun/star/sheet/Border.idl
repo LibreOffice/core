@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Border.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,46 +58,41 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_Border_idl__
 #define __com_sun_star_sheet_Border_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: enum com::sun::star::sheet::Border
-/** selects one of the four borders of a cell range.
+/** is used to select one of the four borders of a cell range.
  */
 enum Border
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::Border::TOP
-    /** The top border.
+    /** selects the top border.
      */
     TOP,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::Border::BOTTOM
-    /** The bottom border.
+    /** selects the bottom border.
      */
     BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::Border::RIGHT
-    /** The right border.
+    /** selects the right border.
      */
     RIGHT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::Border::LEFT
-    /** The left border.
+    /** selects the left border.
      */
     LEFT
 
@@ -107,18 +102,5 @@ enum Border
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:47  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

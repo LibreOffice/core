@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSubTotalCalculatable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSubTotalCalculatable_idl__
 #define __com_sun_star_sheet_XSubTotalCalculatable_idl__
 
@@ -69,38 +70,52 @@
 #include <com/sun/star/sheet/XSubTotalDescriptor.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** contains methods to handle a subtotal descriptor.
 
-//=============================================================================
+    <p>The subtotal descriptor provides properties to set up the subtotal
+    function.</p>
 
-// DocMerge from xml: interface com::sun::star::sheet::XSubTotalCalculatable
-/** The interface contains methods to handle a SubTotaldescriptor.
-    The SubTotaldescriptor provides properties to set up the SubTotal function.
+    @see com::sun::star::sheet::SheetCellRange
+    @see com::sun::star::sheet::SubTotalDescriptor
  */
 interface XSubTotalCalculatable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalCalculatable::createSubTotalDescriptor
     /** creates a subtotal descriptor.
+
+        @param bEmpty
+            if set to <TRUE/>, creates an empty descriptor. If set to
+            <FALSE/>, fills the descriptor with previous settings of the
+            current object (i.e. a database range).
      */
-    com::sun::star::sheet::XSubTotalDescriptor createSubTotalDescriptor( [in] boolean bEmpty );
+    com::sun::star::sheet::XSubTotalDescriptor createSubTotalDescriptor(
+            [in] boolean bEmpty );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalCalculatable::applySubTotals
-    /** creates subtotals.
+    /** creates subtotals using the settings of the passed descriptor.
+
+        @param xDescriptor
+            the subtotal descriptor with the settings used for the subtotal
+            operation.
+
+        @param bReplace
+            if set to <TRUE/>, replaces previous subtotal results.
      */
-    void applySubTotals( [in] com::sun::star::sheet::XSubTotalDescriptor xDescriptor,
-             [in] boolean bReplace );
+    void applySubTotals(
+            [in] com::sun::star::sheet::XSubTotalDescriptor xDescriptor,
+            [in] boolean bReplace );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalCalculatable::removeSubTotals
-    /** removes the subtotals.
+    /** removes the subtotals from the current object.
      */
     void removeSubTotals();
 
@@ -110,21 +125,5 @@ interface XSubTotalCalculatable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Toolkit.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-23 12:29:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 module com {  module sun {  module star {  module awt {
 
 interface XDataTransferProviderAccess;
+interface XSystemChildFactory;
 
 //=============================================================================
 
@@ -87,10 +88,12 @@ interface XDataTransferProviderAccess;
 service Toolkit
 {
     // DocMerge: empty anyway
-    interface com::sun::star::awt::XToolkit;
+    interface XToolkit;
 
     // interface for clipbaord access and drag-and-drop protocol
-    [optional] interface com::sun::star::awt::XDataTransferProviderAccess;
+    [optional] interface XDataTransferProviderAccess;
+
+    [optional] interface XSystemChildFactory;
 };
 
 //=============================================================================
@@ -100,6 +103,12 @@ service Toolkit
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.1  2002/06/19 13:25:55  mi
+    XSystemChildFactory added, was always implemented
+
+    Revision 1.5  2001/03/23 12:29:21  obr
+    XDataTransfer renamed to XDataTransferProviderAccess
+
     Revision 1.4  2001/02/19 11:04:22  obr
     XDataTransfer added
 

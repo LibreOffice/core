@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableValidation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_TableValidation_idl__
 #define __com_sun_star_sheet_TableValidation_idl__
 
@@ -77,113 +78,97 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::TableValidation
-/** the validation settings for a cell or cell range.
+/** represents the data validation settings for a cell or cell range.
  */
 service TableValidation
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::sheet::XSheetCondition;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+//! service PropertySet
+    /** provides access to the properties.
+     */
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::Type
+    /** provides access to the settings of the condition.
+     */
+    interface com::sun::star::sheet::XSheetCondition;
+
+    //=========================================================================
+
     /** specifies the type of validation.
      */
     [property] com::sun::star::sheet::ValidationType Type;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::ShowInputMessage
-    /** specifies if an input message is shown when
-        the cursor is in a cell with these validation settings.
+    /** specifies if an input message is shown when the cursor is in a
+        cell with these validation settings.
      */
     [property] boolean ShowInputMessage;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::InputTitle
-    /** specifies the title of the window showing
-        the input message.
-
-
+    /** specifies the title of the window showing the input message.
 
         <p>This is only used if <member>TableValidation::ShowInputMessage</member>
-        is <TRUE/>.</p>
+        is set to <TRUE/>.</p>
      */
     [property] string InputTitle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::InputMessage
     /** specifies the text of the input message.
 
-
-
         <p>This is only used if <member>TableValidation::ShowInputMessage</member>
-        is <TRUE/>.</p>
+        is set to <TRUE/>.</p>
      */
     [property] string InputMessage;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::ShowErrorMessage
-    /** specifies if an error message is displayed
-        when invalid data is entered.
+    /** specifies if an error message is displayed when invalid data
+        is entered.
      */
     [property] boolean ShowErrorMessage;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::ErrorTitle
-    /** specifies the title of the window showing the
-        error message.
-
-
+    /** specifies the title of the window showing the error message.
 
         <p>This is only used if <member>TableValidation::ShowErrorMessage</member>
-        is <TRUE/>.</p>
+        is set to <TRUE/>.</p>
      */
     [property] string ErrorTitle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::ErrorMessage
     /** specifies the text of the error message.
 
-
-
         <p>This is only used if <member>TableValidation::ShowErrorMessage</member>
-        is <TRUE/>.</p>
+        is set to <TRUE/>.</p>
      */
     [property] string ErrorMessage;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::IgnoreBlankCells
     /** specifies if blank cells should be allowed.
      */
     [property] boolean IgnoreBlankCells;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::TableValidation::ErrorAlertStyle
     /** specifies the style of the error message.
 
-
-
         <p>This is used only if <member>TableValidation::ShowErrorMessage</member>
-        is <TRUE/>.</p>
+        is set to <TRUE/>.</p>
      */
     [property] com::sun::star::sheet::ValidationAlertStyle ErrorAlertStyle;
 
@@ -193,27 +178,5 @@ service TableValidation
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:09  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActionListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XActionListener
-/** makes it possible to receive action events from a component.
+/** makes it possible to receive action events.
  */
 interface XActionListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XActionListener::actionPerformed
-    /** is called when an action is performed.
+    /** is invoked when an action is performed.
      */
     [oneway] void actionPerformed( [in] com::sun::star::awt::ActionEvent rEvent );
 
@@ -94,24 +92,4 @@ interface XActionListener: com::sun::star::lang::XEventListener
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:51  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:07  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/05/16 12:19:52  mi
-    documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

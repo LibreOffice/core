@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWindowListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,45 +80,36 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XWindowListener
 /** makes it possible to receive window events.
-
-
 
     <p>Component events are provided <strong>only</strong> for
     notification purposes.  Moves and resizes will be handled
     interally by the window component, so that GUI layout works properly
-    regardless of whether a program registers such a listener or not.
-
-    </p>
+    regardless of whether a program registers such a listener or not.</p>
  */
 interface XWindowListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowListener::windowResized
-    /** gets invoked when the window has been resized.
+    /** is invoked when the window has been resized.
      */
     [oneway] void windowResized( [in] com::sun::star::awt::WindowEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowListener::windowMoved
-    /** gets invoked when the window has been moved.
+    /** is invoked when the window has been moved.
      */
     [oneway] void windowMoved( [in] com::sun::star::awt::WindowEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowListener::windowShown
-    /** gets invoked when the window has been shown.
+    /** is invoked when the window has been shown.
      */
     [oneway] void windowShown( [in] com::sun::star::lang::EventObject e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowListener::windowHidden
-    /** gets invoked when the window has been hidden.
+    /** is invoked when the window has been hidden.
      */
     [oneway] void windowHidden( [in] com::sun::star::lang::EventObject e );
 
@@ -128,21 +119,4 @@ interface XWindowListener: com::sun::star::lang::XEventListener
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:10  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

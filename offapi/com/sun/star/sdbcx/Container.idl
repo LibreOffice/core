@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Container.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,34 +83,38 @@ interface XDrop;
     container must support access to its elements by the element's name or
     by the element's position.
 
-    <p>Simple enumeration must be supported as well.
+    <p>
+    Simple enumeration must be supported as well.
     </p>
-    <p>To reflect the changes with the underlying database, a refresh mechanism
+    <p>
+    To reflect the changes with the underlying database, a refresh mechanism
     needs to be supported.
     </p>
-    <p>A container may support the possibility to add new elements or to drop
+    <p>
+    A container may support the possibility to add new elements or to drop
     existing elements. Additions are always done by descriptors which define the
-    properties of the new element.</p>
+    properties of the new element.
+    </p>
  */
 service Container
 {
-    // DocMerge: empty anyway
+    // gives access to the elements by name.
     interface com::sun::star::container::XNameAccess;
 
-    // DocMerge: empty anyway
+    // gives access to the elements by index.
     interface com::sun::star::container::XIndexAccess;
 
-    // DocMerge: empty anyway
+    // used to create an enumeration of the elements.
     interface com::sun::star::container::XEnumerationAccess;
 
 
     // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container: interface com::sun::star::util::XRefreshable
-    /** is optional for implementation
+    /** is optional for implementation. Used to reflect changes.
      */
     [optional] interface com::sun::star::util::XRefreshable;
 
     // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container: interface com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::XDataDescriptorFactory
-    /** optional for implementation.
+    /** optional for implementation. Allows to create descriptor elements which then could be used to append new elements.
      */
     [optional] interface XDataDescriptorFactory;
 
@@ -133,6 +137,15 @@ service Container
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/02/18 12:57:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 09:37:12  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:32  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

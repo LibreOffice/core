@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAlterQuery.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,19 @@
  module com {  module sun {  module star {  module sdb {
 
 // DocMerge from xml: interface com::sun::star::sdb::XAlterQuery
-/** is used for creating and appending new objects to a specific container.
+/** is used to alter the command of a query.
  */
 interface XAlterQuery: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XAlterQuery::alterCommand
     /** is intended to alter the command of a query object.
+        @param command
+            the SQL statement
+        @param useEscapeProcessing
+            <TRUE/> when escape processing should be used
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void alterCommand([in]string command, [in]boolean useEscapeProcessing)
         raises (com::sun::star::sdbc::SQLException);
@@ -90,6 +96,12 @@ interface XAlterQuery: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 10:24:54  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

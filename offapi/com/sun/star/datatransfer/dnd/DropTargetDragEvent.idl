@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDragEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-27 18:38:27 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,44 +73,52 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTargetDragContext;
 
 //=============================================================================
-/** The DropTargetDragEvent is delivered from the DropTarget to the currently
-     registered DropTargetListener.
+/** The <type>DropTargetDragEvent</type> is delivered from the drop target
+    to the currently registered drop target listener.
 
-    <p>It contains state regarding the current state of the operation to enable
+    <p>It contains information regarding the current state of the operation to enable
     the operations initiator to provide the end user with the appropriate drag
     over feedback.</p>
 
-    <!-- Editor: Please reword, "It contains state regarding the current state" -->
+    @see com::sun::star::datatransfer::dnd::XDropTargetListener
 */
 
 struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
 {
     //-------------------------------------------------------------------------
-    /** the DropTargetContext of the current drag operation.
+    /** The drop target context of the current drag operation.
+
+        @see com::sun::star::datatransfer::dnd::XDropTargetDragContext
      */
 
     XDropTargetDragContext Context;
 
     //-------------------------------------------------------------------------
-    /** this value represents the currently selected drop action.
+    /** This value represents the currently selected drop action.
+
+        @see com::sun::star::datatransfer::dnd::DNDConstants
      */
 
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** the cursor's current x location within the window's coordinates.
+    /** The cursor's current x location within the window's coordinates.
      */
 
     long LocationX;
 
     //-------------------------------------------------------------------------
-    /** the cursor's current y location within the window's coordinates.
+    /** The cursor's current y location within the window's coordinates.
      */
 
     long LocationY;
 
     //-------------------------------------------------------------------------
-    /** this value represents the action or actions supported by the source.
+    /** This value represents the action or actions supported by the source.
+        This may be a combination of arbitrary source actions except ACTION_DEFAULT.
+        <p>To combine different actions use a logical OR.</p>
+
+        @see com::sun::star::datatransfer::dnd::DNDConstants
      */
 
     byte SourceActions;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTimeRange.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,107 +64,79 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::DateTimeRange
 /** represents a range of date+time values.
  */
 struct DateTimeRange
 {
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartHundredthSeconds
     /** contains the start hundredth seconds (0-99) for the range.
      */
     unsigned short StartHundredthSeconds;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartSeconds
     /** contains the start seconds (0-59) for the range.
      */
     unsigned short StartSeconds;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartMinutes
     /** contains the start minutes (0-59) for the range.
      */
     unsigned short StartMinutes;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartHours
     /** contains the start hour (0-23) for the range.
      */
     unsigned short StartHours;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartDay
     /** contains the start day of month (1-31 or 0 for a void date) for the range.
      */
     unsigned short StartDay;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartMonth
     /** contains the start month of year (1-12 or 0 for a void date) for the range.
      */
     unsigned short StartMonth;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::StartYear
     /** contains the start year for the range.
      */
     unsigned short StartYear;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndHundredthSeconds
     /** contains the end hundredth seconds (0-99) for the range.
      */
     unsigned short EndHundredthSeconds;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndSeconds
     /** contains the end seconds (0-59) for the range.
      */
     unsigned short EndSeconds;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndMinutes
     /** contains the end minutes (0-59) for the range.
      */
     unsigned short EndMinutes;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndHours
     /** contains the end hour (0-23) for the range.
      */
     unsigned short EndHours;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndDay
     /** contains the end day of month (1-31 or 0 for a void date) for the range.
      */
     unsigned short EndDay;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndMonth
     /** contains the end month of year (1-12 or 0 for a void date) for the range.
      */
     unsigned short EndMonth;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::DateTimeRange::EndYear
     /** contains the end year for the range.
      */
     unsigned short EndYear;
@@ -175,18 +147,4 @@ struct DateTimeRange
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:04  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuProxy.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,10 @@
 //=============================================================================
 
 
-// DocMerge: empty anyway
+// DocMerge from idl: service com::sun::star::mozilla::MenuProxy
+/** Allows to execute dispatch for a menu item
+    and handles listeners for changes in menu items.
+ */
 service MenuProxy
 {
     //-------------------------------------------------------------------------

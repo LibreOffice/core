@@ -8,6 +8,10 @@
  module com {  module sun {  module star {  module text {
 
 //=============================================================================
+
+/** provides access to language dependent numbering types and supports
+    formatting of those numberings.
+ */
 service DefaultNumberingProvider
 {
         interface com::sun::star::text::XDefaultNumberingProvider;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetFilterDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_SheetFilterDescriptor_idl__
 #define __com_sun_star_sheet_SheetFilterDescriptor_idl__
 
@@ -77,102 +78,97 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a description of how a cell range is to be filtered.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::SheetFilterDescriptor
-/** a description of how a cell range is to be filtered.
+    <p>The descriptor contains properties and a collection of filter
+    conditions (filter fields) which control the behaviour of a filter
+    operation.</p>
  */
 service SheetFilterDescriptor
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of filter fields.
+     */
     interface com::sun::star::sheet::XSheetFilterDescriptor;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetFilterDescriptor::IsCaseSensitive
+    //=========================================================================
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::IsCaseSensitive
     /** specifies if the case of letters is important when comparing entries.
      */
     [property] boolean IsCaseSensitive;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetFilterDescriptor::SkipDuplicates
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::SkipDuplicates
     /** specifies if duplicate entries are left out of the result.
      */
     [property] boolean SkipDuplicates;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetFilterDescriptor::UseRegularExpressions
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::UseRegularExpressions
     /** specifies if the <member>TableFilterField::StringValue</member>
         strings are interpreted as regular expressions.
      */
     [property] boolean UseRegularExpressions;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetFilterDescriptor::SaveOutputPosition
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::SaveOutputPosition
-    /** specifies if the <member>SheetFilterDescriptor::OutputPosition</member> position is saved
-        for future calls.
+    /** specifies if the <member>SheetFilterDescriptor::OutputPosition</member>
+        position is saved for future calls.
 
-
-
-        <p>This is only used if <member>SheetFilterDescriptor::CopyOutputData</member> is <TRUE/>.</p>
+        <p>This is only used if
+        <member>SheetFilterDescriptor::CopyOutputData</member> is <TRUE/>.</p>
      */
     [property] boolean SaveOutputPosition;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::Orientation
     /** specifies if columns or rows are filtered.
      */
     [property] com::sun::star::table::TableOrientation Orientation;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::ContainsHeader
-    /** specifies if the first row (or column)
-        contains headers which should not be filtered.
+    /** specifies if the first row (or column) contains headers which should
+        not be filtered.
      */
     [property] boolean ContainsHeader;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::CopyOutputData
-    /** specifies if the filtered data should
-        be copied to another position in the document.
+    /** specifies if the filtered data should be copied to another position
+        in the document.
      */
     [property] boolean CopyOutputData;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::OutputPosition
-    /** specifies the position where filtered data
-        are to be copied.
+    /** specifies the position where filtered data are to be copied.
 
-
-
-        <p>This is only used if <member>SheetFilterDescriptor::CopyOutputData</member> is <TRUE/>.</p>
+        <p>This is only used if
+        <member>SheetFilterDescriptor::CopyOutputData</member> is <TRUE/>.</p>
      */
     [property] com::sun::star::table::CellAddress OutputPosition;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetFilterDescriptor::MaxFieldCount
-    /** returns the maximum number of filter fields
-        in the descriptor.
+    /** returns the maximum number of filter fields in the descriptor.
+
+        <p>This read-only property indicates the maximum count of fields the
+        current implementation supports.</p>
      */
     [readonly, property] long MaxFieldCount;
 
@@ -182,27 +178,5 @@ service SheetFilterDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UpdateRootElement.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,8 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides update control for a (by name) hierarchy
+/** provides update control for a hierarchy of configuration items
  and information about the hierarchy as a whole as well as its root.
-
- <!-- Dennis: "by name" ??? -->
- <!-- Developer: See the description in GroupAccess,GroupElement, HierarchyAccess. -->
 
  <p>Extends <type>AccessRootElement</type> by adding support for
  collecting changes and applying them to a backend store as a single batch.
@@ -100,7 +97,7 @@ module com { module sun { module star { module configuration {
  <p>The accumulated changes within this hierarchy can be managed using
  <type scope="com::sun::star::util">XChangesBatch</type>. Pending changes
  will become persistent and visible from other overlapping hierarchies
- only when <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
+ only when <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
  is called. If the hierarchy is disposed or discarded without committing
  changes, the changes will be lost.
  </p>
@@ -118,19 +115,19 @@ service UpdateRootElement
 
 /** allows managing changes within the hierarchy.
 
- <p><member scope="com::sun::star::util">XChangesBatch::getPendingChanges</member>
+ <p><member scope="com::sun::star::util">XChangesBatch::getPendingChanges()</member>
  reports all changes within the hierarchy that are done through (direct or
  indirect) descendants of this element. The same set of changes is committed
  to persistent storage and/or made visible to other objects accessing the same
  data set, when
- <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
+ <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
  is invoked.
  </p>
 
  <p>If the implementation supports
- <member scope="com::sun::star::lang">XLocalizable::setLocale</member>, changes
+ <member scope="com::sun::star::lang">XLocalizable::setLocale()</member>, changes
  will be considered to apply to the locale that is set when
- <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
+ <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
  is invoked.
  </p>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,14 @@ interface XKeysSupplier;
 /** is used to define a table of a database. A table is described by its
     name and one or more columns and the keys for semantic rules.
 
-    <p>In addition, it may contain indexes to improve the performance in
-    retrieving the tables data and keys, and to define semantic rules for the table.
-
-    </p>@see com::sun::star::sdbcx::Table
+    <p>
+    In addition, it may contain keys, and to define semantic rules for the table.
+    <b>
+    Note:
+    </b>
+    Indexes can only be appended when the table is already appended at the database.
+    </p>
+    @see com::sun::star::sdbcx::Table
  */
 service TableDescriptor
 {
@@ -122,6 +126,12 @@ service TableDescriptor
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 09:37:12  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:34  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

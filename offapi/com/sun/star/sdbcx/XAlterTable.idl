@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAlterTable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,18 @@ interface XAlterTable: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XAlterTable::alterColumnByName
     /** is intended to alter an existing column identified by its name.
-        This operation must be atomar.
-
-<!-- JRH: My apologies, but what is 'atomar'? Please add, ", i.e., xxx xx  xxxx". -->*/
+        This operation must be atomar. Atomar means that the operation must be done inone step.
+        <b>
+        Note:
+        </b>
+        Atomar is nower days the wrong word, because we know that there exists smaller elements than atoms.
+        @param colName
+            the column name which to alter
+        @param descriptor
+            the new descriptor for the new column
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+    */
     void alterColumnByName([in]string colName,
         [in]com::sun::star::beans::XPropertySet descriptor)
         raises (com::sun::star::sdbc::SQLException,
@@ -103,8 +112,13 @@ interface XAlterTable: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XAlterTable::alterColumnByIndex
     /** is intended to alter an existing column identified by its position.
         This operation must be atomar.
-
-<!-- JRH: atomar? -->    */
+        @param index
+            the position of the column to alter
+        @param descriptor
+            the new descriptor for the new column
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+    */
     void alterColumnByIndex([in]long index,
         [in]com::sun::star::beans::XPropertySet descriptor) raises
         (com::sun::star::sdbc::SQLException,
@@ -117,6 +131,12 @@ interface XAlterTable: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:00:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:36  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxySettings.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 13:34:58 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ interface XProxySettings;
 
 //=============================================================================
 /** Specifies a service for reading the proxy settings from an old office
-    installation.
+    installation or a central system database.
 
     @see com::sun::star::system::XProxySettings
 */
@@ -88,19 +88,17 @@ interface XProxySettings;
 service ProxySettings
 {
     //-------------------------------------------------------------------------
-    /** Provides access to a XProxySettings interface.
-
-        @see com::sun::star::system::XProxySettings
+    /** Provides access to a <type>XProxySettings</type> interface.
     */
     interface XProxySettings;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

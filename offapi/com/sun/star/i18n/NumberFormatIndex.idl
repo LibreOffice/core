@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatIndex.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-10-31 15:28:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,29 +73,69 @@ module com { module sun { module star { module i18n {
 //! Number formatter internals must match these values!
 
 /**
-    Number format indexes to be passed as the index argument to
+    Number format indices to be passed as the index argument to
+    <member>XNumberFormatCode::getFormatCode()</member>
+    or
+    <member scope="::com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>.
 
-<member>XNumberFormatCode::getFormatCode()</member>    or
+    <p> Each locale can support up to about 5000 arbitrary format
+    codes. But for backward compatiblity reasons, each locale
+    <b>MUST</b> support some predefined format codes. These predefined
+    format codes are accessed through indices as the following, and
+    the locale data format code definitions in
+    i18npool/source/localedata/data/*.xml <b>MUST</b> have matching
+    entries in the form <br/>
 
-<member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>.
+    <code>&lt;FormatElement formatindex="0"&gt;</code> <br/>
 
-    <p> Format codes supported by each locale can be of any number. But for
-    backward compatiblity reasons, each locale must support some predefined
-     format codes. These predefined format codes are accessed through indexes
-     as the following. The values are also used to define the
-     <code>enum NfIndexTableOffset</code> in file svtools/inc/zforlist.hxx </p>
+    (see also <member>FormatElement::formatIndex</member>).
 
-    <!-- Dennis: What is meant by "Format codes can be of any number"? -->
-    <!-- Dennis: What is "through indexes are the following" referring to? -->
+    The index values are also used to define the <code>enum
+    NfIndexTableOffset</code> in file svtools/inc/zforlist.hxx </p>
 
-    <p> Note: This index has <bold>nothing</bold> to do with the index key
-    used internally by the number formatter. </p>
-*/
+    <p> Note: This index has <b>nothing</b> to do with the index key
+    used internally by the number formatter. </p> <br/>
+
+    <p> Date formats may have a comment of DIN/EN/ISO, meaning
+        <ul>
+            <li> DIN 5008 (Deutsche Industrie Norm) </li>
+            <li> EN 28601 (European Norm) </li>
+            <li> ISO 8601 (International Standards Organisation) </li>
+        </ul>
+    </p>
+
+    <p> Some names of date format constants indicate a special
+    behavior of those formats in StarOffice 5.2 or older. Those are:
+
+    <dl>
+    <dt> <a name="SYSTEM"> DATE_SYSTEM_... </a> </dt>
+        <dd> On Windows platforms these formats were entirely
+        retrieved from the system's Regional Settings. OpenOffice.org
+        / StarOffice 6 don't use those Windows settings anymore in
+        order to provide the same functionality and document layout on
+        every platform. Like all other formats these formats are now
+        defined in the i18n framework locale data files under
+        i18npool/source/localedata/data/*.xml </dd>
+
+    <dt> <a name="SYS"> DATE_SYS_... </a> </dt>
+        <dd> On Windows platforms these formats used separators and
+        YMD order retrieved from the Regional Settings, but appearance
+        of short/long days/months/years was defined by the
+        application. </dd>
+
+    <dt> <a name="DEF"> DATE_DEF_... </a> </dt>
+        <dd> The format code was hard defined, only the date separator
+        was taken from the Windows Regional Settings, but not the YMD
+        order. </dd>
+
+    </dl>
+    </p>
+ */
 constants NumberFormatIndex
 {
-    /// Number formats.
+    /// Start of simple numerical formats (first format)
     const short NUMBER_START                = 0;
-    /// General
+    /// The "General" format
     const short NUMBER_STANDARD             = NUMBER_START;
     /// 0
     const short NUMBER_INT                  = NUMBER_START+1;
@@ -105,39 +145,43 @@ constants NumberFormatIndex
     const short NUMBER_1000INT              = NUMBER_START+3;
     /// #,##0.00
     const short NUMBER_1000DEC2             = NUMBER_START+4;
-    /// #,##0.00 or whatever is the locale default.
+    /// #,##0.00    <br/> In SO5/Win this format was retrieved from the Regional Settings
     const short NUMBER_SYSTEM               = NUMBER_START+5;
+    /// End of simple numerical formats (last format)
     const short NUMBER_END                  = NUMBER_SYSTEM ;
 
 
-    /// Scientific formats.
+    /// Start of Scientific formats (first format)
     const short SCIENTIFIC_START            = NUMBER_END+1;
     /// 0.00E+000
     const short SCIENTIFIC_000E000          = SCIENTIFIC_START;
     /// 0.00E+00
     const short SCIENTIFIC_000E00           = SCIENTIFIC_START+1;
+    /// End of Scientific formats (last format)
     const short SCIENTIFIC_END              = SCIENTIFIC_000E00;
 
 
-    /// Percent formats.
+    /// Start of Percent formats (first format)
     const short PERCENT_START               = SCIENTIFIC_END+1;
     /// 0%
     const short PERCENT_INT                 = PERCENT_START;
     /// 0.00%
     const short PERCENT_DEC2                = PERCENT_START+1;
+    /// End of Percent formats (last format)
     const short PERCENT_END                 = PERCENT_DEC2;
 
 
-    /// Fraction formats.
+    /// Start of Fraction formats (first format)
     const short FRACTION_START              = PERCENT_END+1;
     /// # ?/?
     const short FRACTION_1                  = FRACTION_START;
     /// # ??/??
     const short FRACTION_2                  = FRACTION_START+1;
+    /// End of Fraction formats (last format)
     const short FRACTION_END                = FRACTION_2;
 
 
-    /// Currency formats.
+    /// Start of Currency formats (first format)
     const short CURRENCY_START              = FRACTION_END+1;
     /// #,##0 DM
     const short CURRENCY_1000INT            = CURRENCY_START;
@@ -151,57 +195,61 @@ constants NumberFormatIndex
     const short CURRENCY_1000DEC2_CCC       = CURRENCY_START+4;
     /// #,##0.-- DM
     const short CURRENCY_1000DEC2_DASHED    = CURRENCY_START+5;
+    /// End of Currency formats (last format)
     const short CURRENCY_END                = CURRENCY_1000DEC2_DASHED;
 
 
-    /// Date formats
+    /// Start of Date formats (first format)
     const short DATE_START                  = CURRENCY_END+1;
-    /// 08.10.97   short as default for locale.
+    /// 08.10.97        <br/> see also DATE_SYSTEM_... <a href="#SYSTEM">explanation</a>
     const short DATE_SYSTEM_SHORT           = DATE_START;
-    /// Wednesday, 8. October 1997   long as default for locale.
+    /// Wednesday, 8. October 1997  <br/> see also DATE_SYSTEM_... <a href="#SYSTEM">explanation</a>
     const short DATE_SYSTEM_LONG            = DATE_START+1;
-    /// 08.10.97   defined
+    /// 08.10.97        <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_DDMMYY             = DATE_START+2;
-    /// 08.10.1997
+    /** 08.10.1997      <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+        <br/><b>Note:</b> When editing already existing date data this
+        format is forced in order to always edit the full century.  */
     const short DATE_SYS_DDMMYYYY           = DATE_START+3;
-    /// 8. Oct 97
+    /// 8. Oct 97       <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_DMMMYY             = DATE_START+4;
-    /// 8. Oct 1997
+    /// 8. Oct 1997     <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_DMMMYYYY           = DATE_START+5;
-    /// 8. Oct. 1997      DIN (Deutsche Industrie Norm) and EN (European Norm)
+    /// 8. Oct. 1997    <br/> DIN/EN
     const short DATE_DIN_DMMMYYYY           = DATE_START+6;
-    /// 8. October 1997
+    /// 8. October 1997 <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_DMMMMYYYY          = DATE_START+7;
-    /// 8. October 1997   DIN/EN
+    /// 8. October 1997 <br/> DIN/EN
     const short DATE_DIN_DMMMMYYYY          = DATE_START+8;
-    /// Wed, 8. Oct 97
+    /// Wed, 8. Oct 97  <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_NNDMMMYY           = DATE_START+9;
-    /// Wed 08.Oct 97
+    /// Wed 08.Oct 97   <br/> see also DATE_DEF_... <a href="#DEF">explanation</a>
     const short DATE_DEF_NNDDMMMYY          = DATE_START+10;
-    /// Wed, 8. October 1997
+    /// Wed, 8. October 1997    <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_NNDMMMMYYYY        = DATE_START+11;
     /// Wednesday, 8. October 1997
     const short DATE_SYS_NNNNDMMMMYYYY      = DATE_START+12;
-    /// 10-08             DIN/EN
+    /// 10-08           <br/> DIN/EN
     const short DATE_DIN_MMDD               = DATE_START+13;
-    /// 97-10-08          DIN/EN
+    /// 97-10-08        <br/> DIN/EN/ISO
     const short DATE_DIN_YYMMDD             = DATE_START+14;
-    /// 1997-10-08        DIN/EN
+    /// 1997-10-08      <br/> DIN/EN/ISO
     const short DATE_DIN_YYYYMMDD           = DATE_START+15;
-    /// 10.97
+    /// 10.97           <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_MMYY               = DATE_START+16;
-    /// 08.Oct
+    /// 08.Oct          <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
     const short DATE_SYS_DDMMM              = DATE_START+17;
     /// October
     const short DATE_MMMM                   = DATE_START+18;
-    /// 4. Quarer 97
+    /// 4th quarter 97
     const short DATE_QQJJ                   = DATE_START+19;
     /// week of year
     const short DATE_WW                     = DATE_START+20;
+    /// End of Date formats (last format)
     const short DATE_END                    = DATE_WW;
 
 
-    /// Time formats
+    /// Start of Time formats (first format)
     const short TIME_START                  = DATE_END+1;
     /// HH:MM
     const short TIME_HHMM                   = TIME_START;
@@ -217,15 +265,19 @@ constants NumberFormatIndex
     const short TIME_MMSS00                 = TIME_START+5;
     /// [HH]:MM:SS,00
     const short TIME_HH_MMSS00              = TIME_START+6;
+    /// End of Time formats (last format)
     const short TIME_END                    = TIME_HH_MMSS00;
 
 
-    /// DateTime formats
+    /// Start of DateTime formats (first format)
     const short DATETIME_START              = TIME_END + 1;
     /// 08.10.97 01:23
     const short DATETIME_SYSTEM_SHORT_HHMM  = DATETIME_START;
-    /// 08.10.1997 01:23:45
+    /** 08.10.1997 01:23:45
+        <br/><b>Note:</b> When editing already existing date/time data this
+        format is forced in order to always edit the full century.  */
     const short DATETIME_SYS_DDMMYYYY_HHMMSS= DATETIME_START+1;
+    /// End of DateTime formats (last format)
     const short DATETIME_END                = DATETIME_SYS_DDMMYYYY_HHMMSS;
 
 

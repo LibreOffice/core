@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataPointProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,66 +87,68 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartDataPointProperties
 /** specifies all the properties for the graphic object of
     a data point (e.g., a single bar in a bar chart).
 
+    <p>Text properties correlate to the data description of the data
+    point.  There is a similar service for a group of graphic elements
+    called <type>ChartDataRowProperties</type> for the properties of
+    whole data rows.</p>
 
-
-    <p>Text properties correlate to the data description of the data point.
-    There is a similar service for a group of graphic elements called
-    <type>ChartDataRowProperties</type> for the properties of whole data rows.
-
-    </p>@see ChartDataRowProperties
+    @see ChartDataRowProperties
  */
 service ChartDataPointProperties
 {
-    // DocMerge: empty anyway
-    service com::sun::star::drawing::FillProperties;
+    /** This service has to be supported for data points that can be
+        filled.
+     */
+    [optional] service com::sun::star::drawing::FillProperties;
 
-    // DocMerge: empty anyway
     service com::sun::star::drawing::LineProperties;
 
-    // DocMerge: empty anyway
+    /** These properties affect the characters of data captions if
+        those are displayed.
+     */
     service com::sun::star::style::CharacterProperties;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: service com::sun::star::chart::ChartDataPointProperties: service com::sun::star::chart::Chart3DBarProperties
     /** is only available if the chart is of type
-                <type>BarDiagram</type> and <type>Dim3DDiagram</type>
-                and the property <member>Dim3D</member> is set to <TRUE/>.
+        <type>BarDiagram</type> and <type>Dim3DDiagram</type> and the
+        property <member>ChartDataPointProperties::Dim3D</member> is
+        set to <TRUE/>.
 
-                @see BarDiagram
-                @see Dim3DDiagram@see BarDiagram
-                @see Dim3DDiagram
+        @see BarDiagram
+        @see Dim3DDiagram@see BarDiagram
+        @see Dim3DDiagram
      */
-    service com::sun::star::chart::Chart3DBarProperties;
+    [optional] service com::sun::star::chart::Chart3DBarProperties;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDataPointProperties::DataCaption
     /** specifies how the captions of data points are displayed.@see ChartDataCaption
      */
     [property] long DataCaption;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDataPointProperties::SymbolType
-    /** specifies the type of symbol.
+    /** specifies the type of symbols if the current chart type
+        supports the usage of symbols.
 
-        @optional
         @see ChartSymbolType
      */
     [optional, property] long SymbolType;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the type of symbol.
+    /** In charts that support symbols, you can set this property to
+        any valid URL that points to a graphic file.  This graphic is
+        then used as symbol for each data point.
 
-        @optional
+        <p>When you query this value you get an internal URL of the
+        embedded graphic.</p>
+
         @see ChartSymbolType
      */
     [optional, property] string SymbolBitmapURL;
@@ -159,6 +161,15 @@ service ChartDataPointProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8.2.2  2002/01/29 15:58:52  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.8.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.8  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.7  2001/03/07 13:57:13  cl
     cleanup of shape services
 

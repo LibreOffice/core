@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatasourceAdministrationDialog.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2002-07-09 10:30:14 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,14 @@ module com {  module sun {  module star {  module sdb {
 
 
 /** provides a user interface for administrating the system wide registered data sources.
-    <p>Here, <em>system wide registered</em> means registered on the (one and only) instance
-    of the <service>DatabaseContext</service> service.</p>
+    <p>
+    Here, <em>system wide registered</em> means registered on the (one and only) instance
+    of the
+    <service scope="com::sun::star::sdb">
+    DatabaseContext
+    </service>
+    service.
+    </p>
 */
 service DatasourceAdministrationDialog
 {
@@ -94,7 +100,9 @@ service DatasourceAdministrationDialog
     [property] string Title;
 
     /** parent window to use for the administration dialog
-        <p>This property can't be set while the dialog is being displayed.</p>
+        <p>
+        This property can't be set while the dialog is being displayed.
+        </p>
     */
     [property] com::sun::star::awt::XWindow ParentWindow;
 
@@ -107,27 +115,40 @@ service DatasourceAdministrationDialog
     interface com::sun::star::ui::dialogs::XExecutableDialog;
 
     /** allows initializing the dialog
-        <p>You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
-        method of your <type scope="com::sun::star::lang">XMultiServiceFactory</type>.</p>
+        <p>
+        You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
+        method of your
+        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+        .
+        </p>
 
-        <p>You specify a parameter by passing one (or more) <type scope="com::sun::star::beans">PropertyValue</type>
+        <p>
+        You specify a parameter by passing one (or more)
+        <type scope="com::sun::star::beans">PropertyValue</type>
         object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
         you want to affect, and the <em>Value</em> field containing a value.
-        <br>
-        Imagine the initialization values as if you use setPropertyValue of the <type scope="com::sun::star::beans">XPropertySet</type>
+        <br/>
+        Imagine the initialization values as if you use setPropertyValue of the
+        <type scope="com::sun::star::beans">XPropertySet</type>
         interface ...
-        <br>
+        <br/>
         allowed parameters are
         <ul>
             <li><b>Title</b><br/>
-                String describing the initial title of the dialog. If not specified, a default title is used.
+                String describing the initial title of the dialog.
+                If not specified, a default title is used.
             </li>
             <li><b>ParentWindow</b><br/>
-                <type scope="com::sun::star::awt">XWindow</type> describing the parent window to use for the dialog.
+                <type scope="com::sun::star::awt">XWindow</type>
+                describing the parent window to use for the dialog.
             </li>
             <li><b>InitialSelection</b><br/>
-                String describing which data source should be selected initially. This name must be known to the
-                <service>DatabaseContext</service>.
+                String describing which data source should be selected initially.
+                This name must be known to the
+                <service scope="com::sun::star::sdb">
+                DatabaseContext
+                </service>
+                .
             </li>
         </ul>
         </p>
@@ -138,32 +159,5 @@ service DatasourceAdministrationDialog
 //=============================================================================
 
 }; }; }; };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2001/10/25 15:00:32  mi
- *  proofreading and corrections from Richard Holt
- *
- *  Revision 1.6  2001/07/03 09:00:57  tra
- *  must change com/sun/star/ui -> com/sun/star/ui/dialogs/
- *
- *  Revision 1.5  2001/03/16 16:41:32  jsc
- *  remove interfaceheader with uik and remove [const] in method definitions
- *
- *  Revision 1.4  2001/02/20 14:32:12  fs
- *  syntax
- *
- *  Revision 1.3  2000/11/08 12:43:31  mi
- *  moved from api
- *
- *  Revision 1.1  2000/11/01 17:00:53  fs
- *  initial checkin - the service for an user interface for administrating data sources
- *
- *
- *  Revision 1.0 01.11.00 17:37:14  fs
- ************************************************************************/
-
-// __com_sun_star_sdb_DatasourceAdministrationDialog_idl__
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlProgressBarModel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 13:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,26 +72,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlProgressBarModel
-/** specifies the standard model of an <type>UnoProgressBarControl</type>.
+/** specifies the standard model of an <type>UnoControlProgressBar</type>.
  */
 service UnoControlProgressBarModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::BackgroundColor
     /** specifies the background color (RGB) of the control.
      */
     [property] long BackgroundColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::Border
     /** specifies the border style of the control.
-
 
         <pre>
         0: No border
@@ -103,21 +98,12 @@ service UnoControlProgressBarModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::DefaultControl
-    /** specifies the service name of the default control for this model.
-     */
-    [property] string DefaultControl;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::FillColor
     /** specifies the fill color (RGB) of the control.
      */
     [property] long FillColor;
@@ -130,37 +116,34 @@ service UnoControlProgressBarModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::Printable
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::ProgressValue
     /** specifies the progress value of the control.
      */
     [property] long ProgressValue;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::ProgressValueMax
     /** specifies the maximum progress value of the control.
      */
     [property] long ProgressValueMax;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlProgressBarModel::ProgressValueMin
     /** specifies the minimum progress value of the control.
      */
     [property] long ProgressValueMin;
+
 };
 
 //=============================================================================

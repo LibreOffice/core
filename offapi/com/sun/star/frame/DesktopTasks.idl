@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DesktopTasks.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,50 +65,20 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: service com::sun::star::frame::DesktopTasks
-/** specifies a collection of tasks.
-
-
-
-    <p>One important instance of this service is available from the
-    <type>Desktop</type> object via the <type>XDesktop</type> interface.
-
-    </p>@see DesktopTask
-        @see XDesktop
+/** @deprecated
  */
 service DesktopTasks
 {
-    // DocMerge: empty anyway
     interface com::sun::star::container::XEnumerationAccess;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:27  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompletedExecution.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@ interface XCompletedExecution: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdb::XCompletedExecution::executeWithCompletion
     /** completes necessary information before execution, for example parameter values.
+        @param handler
+            will be asked when more information is needed
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void executeWithCompletion([in]com::sun::star::task::XInteractionHandler handler)
          raises (com::sun::star::sdbc::SQLException);
@@ -92,6 +96,12 @@ interface XCompletedExecution: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:24:46  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

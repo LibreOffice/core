@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalizedName.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-19 19:52:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_LocalizedName_idl__
 #define __com_sun_star_sheet_LocalizedName_idl__
 
@@ -65,21 +66,28 @@
 #include <com/sun/star/lang/Locale.idl>
 #endif
 
-
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
 /** A name that is valid for a specified locale.
+
+    @see com::sun::star::sheet::XCompatibilityNames
  */
 struct LocalizedName
 {
-    /// The locale for which this name is valid.
+    // ------------------------------------------------------------------------
+
+    /** The locale for which this name is valid.
+     */
     ::com::sun::star::lang::Locale  Locale;
 
-    /// The name itself.
+    // ------------------------------------------------------------------------
+
+    /** The name itself.
+     */
     string  Name;
 };
 

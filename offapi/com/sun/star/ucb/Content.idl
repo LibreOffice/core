@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-19 16:15:01 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,7 @@ service Content
     /** enables the caller to let the content execute commands.
 
         <p>It is strongly recommended that any implementation supports the
-        improved <type>com::sun::star::ucb::XCommandProcessor2</type>
-        interface.</p>
+        improved <type>XCommandProcessor2</type> interface.</p>
 
         <p>Typical commands are "open", "delete", "getPropertyValues" and
         "setPropertyValues". Each content must support a set of standard
@@ -286,7 +285,7 @@ service Content
         // when "updating" a POP3-Inbox, the content for that box will get
         // and store all new objects on the appropriate server. The inserted
         // contents will be notified by calling
-        // <member>XContent::contentEvent</member>.
+        // <member>XContentEventListener::contentEvent</member>.
         void
             <B>update</B>
                 <type>OpenCommandArgument2</type> aOpenCommandArg
@@ -683,7 +682,7 @@ service Content
         the interface
         <type scope="com::sun::star::beans">XPropertyContainer</type>. )
      */
-    interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
+    [optional] interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** can be used to notify commands removed from or added to the
@@ -721,7 +720,7 @@ service Content
         <p>This interface must be implemented by a content which is a (logical)
         child of a content.
      */
-    interface com::sun::star::container::XChild;
+    [optional] interface com::sun::star::container::XChild;
 };
 
 //=============================================================================

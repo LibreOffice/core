@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePickerListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:20:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 
 //=============================================================================
-/** Interface to be implemented by all FilePicker service clients.
+/** Interface to be implemented by a FilePicker listener.
 
     <p> The <type>XFilePickerListener</type> interface must be implemented by
     the clients of the FilePicker service which need to be informed about
@@ -91,21 +91,21 @@ interface XFilePickerListener: com::sun::star::lang::XEventListener
         FilePicker service dialog changes.
 
         @param aEvent
-            of type <type>FilePickerEvent</type> that describes the event
+        of type <type>FilePickerEvent</type> that describes the event
 
-        @see FilePickerEvent
+        @see com::sun::star::ui::dialogs::FilePickerEvent
     */
     void fileSelectionChanged( [in] FilePickerEvent aEvent );
 
 
     //-------------------------------------------------------------------------
     /** A client receives this event if the directory selection within the
-        FilePicker service dialog changes.
+        FilePicker dialog changes.
 
         @param aEvent
-            Of type <type>FilePickerEvent</type> that describes the event.
+        Of type <type>FilePickerEvent</type> that describes the event.
 
-        @see FilePickerEvent
+        @see com::sun::star::ui::dialogs::FilePickerEvent
     */
     void directoryChanged( [in] FilePickerEvent aEvent );
 
@@ -114,16 +114,16 @@ interface XFilePickerListener: com::sun::star::lang::XEventListener
         pressed.
 
         @param aEvent
-            of type <type>FilePickerEvent</type> that describes the event
+        of type <type>FilePickerEvent</type> that describes the event
 
         @returns
-            A help string which the FilePicker dialog should display
-            in a tooltip window. If the returned string is empty it is
-            undefined how the FilePicker implementation will behave.
-            It may show a message 'no help available' or may show no
-            tooltip window at all etc.
+        A help string which the FilePicker dialog should use to display
+        a help for a specific control. If the returned string is empty it is
+        undefined how the FilePicker implementation will behave.
+        It may show a message 'no help available' or may show no
+        help at all.
 
-        @see FilePickerEvent
+        @see com::sun::star::ui::dialogs::FilePickerEvent
     */
     string helpRequested( [in] FilePickerEvent aEvent );
 
@@ -132,9 +132,9 @@ interface XFilePickerListener: com::sun::star::lang::XEventListener
         FilePicker service dialog changes.
 
         @param aEvent
-            of type <type>FilePickerEvent</type> that describes the event.
+        of type <type>FilePickerEvent</type> that describes the event.
 
-        @see FilePickerEvent
+        @see com::sun::star::ui::dialogs::FilePickerEvent
     */
     void controlStateChanged( [in] FilePickerEvent aEvent );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSubTotalDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSubTotalDescriptor_idl__
 #define __com_sun_star_sheet_XSubTotalDescriptor_idl__
 
@@ -69,30 +70,36 @@
 #include <com/sun/star/sheet/SubTotalColumn.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the collection of subtotal fields in a subtotal
+    descriptor.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSubTotalDescriptor
-/** represents a description of how subtotals are
-    to be inserted.@see com::sun::star::sheet::SubTotalDescriptor
+    @see com::sun::star::sheet::SubTotalDescriptor
  */
 interface XSubTotalDescriptor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalDescriptor::addNew
     /** adds a subtotal field definition to the descriptor.
+
+        @param aSubTotalColumns
+            a sequence of all columns used to calculate subtotal values.
+
+        @param nGroupColumn
+            specifies which column of the source range is used to group the
+            contents of the source data.
      */
-    void addNew( [in] sequence<com::sun::star::sheet::SubTotalColumn> aSubTotalColumns,
-             [in] long nGroupColumn );
+    void addNew(
+        [in] sequence< com::sun::star::sheet::SubTotalColumn > aSubTotalColumns,
+        [in] long nGroupColumn );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalDescriptor::clear
     /** removes all subtotal field definitions from the descriptor.
      */
     void clear();
@@ -103,27 +110,5 @@ interface XSubTotalDescriptor: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

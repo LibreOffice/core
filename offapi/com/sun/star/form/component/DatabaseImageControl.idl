@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseImageControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 16:05:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,27 +80,70 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::DatabaseImageControl
-/** returns control for displaying images stored in a database.
+/** specifies the model of a control used for displaying images stored in a database.
+
+    <p>As every <type scope="com::sun::star::form">DataAwareControlModel</type>, an image control
+    can be bound to a database field. This means that for instance with every record change, the content
+    of the database field is taken, interpreted as image, and displayed in the control.<br/>
+    Unlike other more text-based controls, it does not interpret the content of the field as text or double,
+    but as binary stream (see <member scope="com::sun::star::sdb">XColumn::getBinaryStream</member>).</p>
+
+    <p>Usually, an image control model can be bound to binary columns only, namely
+    <member scope="com::sun::star::sdbc">DataType::BINARY</member>,
+    <member scope="com::sun::star::sdbc">DataType::VARBINARY</member>,
+    <member scope="com::sun::star::sdbc">DataType::LONGVARBINARY</member>,
+    <member scope="com::sun::star::sdbc">DataType::OTHER</member>,
+    <member scope="com::sun::star::sdbc">DataType::LONGVARCHAR</member></p>
+
+    <p/>
+
+    <p>Note that besides taking the image to be displayed from the bound field, there is another option. The
+    <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member> property specifies
+    the URL of an image to be displayed. If this property is changed from outside, the respective file
+    is loaded and set as image source.</p>
+
+    <p>In a usual data form, the scenario will be as follows:
+        <ul><li>There is a DatabaseImageControl as part of the document model, which acts as
+                control model for an <type scope="com::sun::star::form::control">ImageControl</type>.</li>
+
+            <li>The control is an <type scope="com::sun::star::awt">XImageConsumer</type> for the
+                <type scope="com::sun::star::awt">XImageProducer</type> supplied by the model.</li>
+
+            <li>Whenever the form's cursor is positioned on a new record, the column the control
+                model is bound to is examined for a binary data stream. This stream is set as source
+                at the image producer, which notifies it's consumers, which leads to the control
+                displaying the image.</li>
+
+            <li>When the user by some interaction tells the control to contain a new image, this is
+                exchanged by URL. For example, implementations of the control service may allow the user
+                to browse for image. After this, the URL of the image is set as
+                <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+                property at the model.<br/>
+                Now the control loads the image determined by the property value, and starts producing
+                a new data stream, which is displayed by the control (which is a consumer for this stream).<br/>
+                From now on, the control and thus the database record counts as modified. If the cursor of the
+                form is moved further, the modified record is saved, means the content of the image pointed to
+                by <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+                is saved into the column.</li>
+        </ul>
+    </p>
  */
 service DatabaseImageControl
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlImageControlModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::DataAwareControlModel;
 
+    /** supplies the caller with an <type scope="com::sun::star::awt">XImageProducer</type>.
 
-    // DocMerge from xml: service com::sun::star::form::component::DatabaseImageControl: interface com::sun::star::form::XImageProducerSupplier
-    /** is necessary for displaying images.
+        <p>Other components can register as <type scope="com::sun::star::awt">XImageConsumer</type>
+        at this producer. Then they will be notified of any change in the image to be displayed.</p>
      */
     interface com::sun::star::form::XImageProducerSupplier;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::DatabaseImageControl::IsReadOnly
-    /** Is it possible to set new images?
+    /** indicates if it is possible to change the image being displayed.
      */
     [property] boolean ReadOnly;
 
@@ -113,6 +156,12 @@ service DatabaseImageControl
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/07/26 09:49:11  fs
+    IDL review form layer
+
+    Revision 1.4  2001/01/23 16:05:23  fs
+    #82676# corrected the property name for readonly
+
     Revision 1.3  2000/11/08 12:43:10  mi
     moved from api
 

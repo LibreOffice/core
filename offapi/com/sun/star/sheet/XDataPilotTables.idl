@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataPilotTables.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XDataPilotTables_idl__
 #define __com_sun_star_sheet_XDataPilotTables_idl__
 
@@ -73,39 +74,59 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the data pilot tables via name and inserting and
+    removing data pilot tables.
 
-//=============================================================================
+    <p>This interface extends the interface
+    <type scope="com::sun::star::container">XNameAccess</type> which provides
+    access to existing data pilot tables in the collection.</p>
 
-// DocMerge from xml: interface com::sun::star::sheet::XDataPilotTables
-/** represents a collection of data pilot tables.@see com::sun::star::sheet::DataPilotTables
+    @see com::sun::star::sheet::DataPilotTables
+    @see com::sun::star::sheet::DataPilotTable
  */
 interface XDataPilotTables: com::sun::star::container::XNameAccess
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotTables::createDataPilotDescriptor
-    /** creates a data pilot descriptor which can
-        be used with addTable().
+    /** creates a data pilot descriptor.
+
+        <p>This descriptor can be used with
+        <member>XDataPilotTables::addTable</member>.</p>
+
+        @see com::sun::star::sheet::DataPilotTableDescriptor
      */
     com::sun::star::sheet::XDataPilotDescriptor createDataPilotDescriptor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotTables::insertNewByName
     /** creates a new data pilot table and adds it to the collection.
+
+        @param aName
+            the name of the data pilot table used in the collection.
+
+        @param aAoutputAddress
+            the top left cell of the location of the data pilot table in
+            the spreadsheet document.
+
+        @param xDescriptor
+            the descriptor containing the settings of the data pilot table.
+
+        @see com::sun::star::sheet::DataPilotTableDescriptor
      */
-    void insertNewByName( [in] string aName,
-             [in] com::sun::star::table::CellAddress aOutputAddress,
-             [in] com::sun::star::sheet::XDataPilotDescriptor xDescriptor );
+    void insertNewByName(
+            [in] string aName,
+            [in] com::sun::star::table::CellAddress aOutputAddress,
+            [in] com::sun::star::sheet::XDataPilotDescriptor xDescriptor );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotTables::removeByName
-    /** deletes a data pilot table.
+    /** deletes a data pilot table from the collection.
      */
     void removeByName( [in] string aName );
 
@@ -115,27 +136,5 @@ interface XDataPilotTables: com::sun::star::container::XNameAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

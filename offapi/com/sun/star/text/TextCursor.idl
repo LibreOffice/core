@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextCursor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-08 10:49:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/text/TextRange.idl>
 #endif
 
+#ifndef __com_sun_star_text_XTextCursor_idl__
+#include <com/sun/star/text/XTextCursor.idl>
+#endif
+
 #ifndef __com_sun_star_text_XWordCursor_idl__
 #include <com/sun/star/text/XWordCursor.idl>
 #endif
@@ -113,6 +117,8 @@ service TextCursor
     // DocMerge: empty anyway
     service com::sun::star::text::TextRange;
 
+    interface com::sun::star::text::XTextCursor;
+
     // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XWordCursor;
 
@@ -160,6 +166,12 @@ service TextCursor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8.4.1  2002/08/27 12:55:50  tl
+    #101301# interface XTextCursor added to service description
+
+    Revision 1.8  2001/11/08 10:49:07  obo
+    #65293# header include missing
+
     Revision 1.7  2001/11/05 18:10:41  mtg
     #92662# admit that the TextCursor now supports XMultiPropertyStates
 

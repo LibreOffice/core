@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrinterDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,11 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module view {
+module com {  module sun {  module star {  module view {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::view::PrinterDescriptor
-/** describes a printer by specifying the queue name and
-    some settings.
+/** describes a printer by specifying the queue name and some settings.
 
     <p>This service may be represented by a <type dim="[]">PropertyValue</type>.
 
@@ -91,67 +89,56 @@
 service PrinterDescriptor
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::Name
     /** specifies the name of the printer queue to be used.
+
+        <p>Which printer queues are available, can be figured out with the
+        system library of the used programming language/environment.
      */
     [property] string Name;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::PaperOrientation
     /** specifies the orientation of the paper.
      */
     [property] com::sun::star::view::PaperOrientation PaperOrientation;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::PaperFormat
     /** specifies a predefined paper size or if the paper size
         is a user-defined size.
 
-
-
-        <p>Setting this property may change the value of "PaperSize".</p>
+        <p>Setting this property may change the value of
+        <member>PrinterDescriptor</member>PaperSize</member.</p>
      */
     [property] com::sun::star::view::PaperFormat PaperFormat;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::PaperSize
     /** specifies the size of the paper in 100th mm.
 
-
-
-        <p>Setting this property may change the value of "PaperFormat".</p>
+        <p>Setting this property may change the value of
+        <member>PrinterDescriptor</member>PaperFormat</member.</p>
      */
     [property] com::sun::star::awt::Size PaperSize;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::IsBusy
-    /** indicates if the printer is busy.
+    /** indicates, whether the printer is busy or not.
      */
     [readonly, property] boolean IsBusy;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::CanSetPaperOrientation
-    /** indicates if the printer allows changes to PaperOrientation.
+    /** indicates, whether the printer allows changes to
+        <member>PrinterDescriptor::PaperOrientation</member>.
      */
     [readonly, property] boolean CanSetPaperOrientation;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::CanSetPaperFormat
-    /** indicates if the printer allows changes to PaperFormat.
+    /** indicates, whether the printer allows changes to
+        <member>PrinterDescriptor::PaperFormat</member>.
      */
     [readonly, property] boolean CanSetPaperFormat;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::view::PrinterDescriptor::CanSetPaperSize
-    /** indicates if the printer allows changes to PaperSize.
+    /** indicates if the printer allows changes to
+        <member>PrinterDescriptor::PaperSize</member>.
      */
     [readonly, property] boolean CanSetPaperSize;
 
@@ -161,33 +148,4 @@ service PrinterDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:28  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:45:34  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:25:03  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:07  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:17  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:25:06  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,31 +68,24 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
-
-// DocMerge from xml: struct com::sun::star::util::SortField
 /** describes a single field in a sort descriptor.
  */
 struct SortField
 {
-    // DocMerge from xml: field com::sun::star::util::SortField::Field
-    /** index of the field in the table.
+    /** index of the field in the table; 0-based.
      */
     long Field;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::SortField::SortAscending
-    /** if data are sorted in ascending order,
+    /** <TRUE/> if data are sorted in ascending order,
         <FALSE/> if in descending order.
      */
     boolean SortAscending;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::SortField::FieldType
     /** type of contents in the field.
      */
     com::sun::star::util::SortFieldType FieldType;
@@ -103,21 +96,4 @@ struct SortField
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

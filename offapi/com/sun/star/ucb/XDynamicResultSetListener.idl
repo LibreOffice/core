@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSetListener.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,13 @@ interface XDynamicResultSetListener: com::sun::star::lang::XEventListener
     /** A method used to propagate changes of a resultset.
 
         <p>In the first notify-call the listener gets two(!)
-        <type>XResultSet</type>s and has to hold them. The
-        <type>XResultSet</type>s are implementations of the service
-        <type>ContentResultSet</type>.
+        <type scope="com::sun::star::sdbc">XResultSet</type>s and has to hold
+        them. The <type scope="com::sun::star::sdbc">XResultSet</type>s are
+        implementations of the service <type>ContentResultSet</type>.
 
-        <p>The notified new <type>XResultSet</type> will stay valid after
-        returning from this method. The old one will become invalid after
+        <p>The notified new
+        <type scope="com::sun::star::sdbc">XResultSet</type> will stay valid
+        after returning from this method. The old one will become invalid after
         returning.
 
         <p>While in notify-call the listener is allowed to read from old and

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Table.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,20 @@ interface XAlterTable;
 /** used to specify a table in a database. A table is described by its
     name and one or more columns.
 
-    <p>In addition, it may contain indexes to improve the performance in
+    <p>
+    In addition, it may contain indexes to improve the performance in
     the retrieval of the table's data and keys, and to define semantic rules for the table.
-    </p><p>
-    <b>Note:</b> All properties and columns of a table could by modified before
+    </p>
+    <p>
+    <b>
+    Note:
+    </b>
+    All properties and columns of a table could by modified before
     it is appended to a database. In that case, the service is in fact a
     descriptor. On existing tables, a user might alter columns, add or delete
     columns, indexes, and keys depending on the capabilities of the database and on
-    the user's privileges.</p>
+    the user's privileges.
+    </p>
 
     @see com::sun::star::sdbc::XDatabaseMetaData
     @see com::sun::star::sdbcx::Privilege
@@ -95,7 +101,7 @@ service Table
 {
 
     // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XDataDescriptorFactory
-    /** optional, could be used to copy an index.
+    /** optional, could be used to copy an table.
      */
     [optional] interface XDataDescriptorFactory;
 
@@ -129,7 +135,7 @@ service Table
      */
     [optional] interface XAlterTable;
 
-    // DocMerge: empty anyway
+    // gives access to the properties
     interface com::sun::star::beans::XPropertySet;
 
 
@@ -173,6 +179,15 @@ service Table
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/02/18 12:57:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 09:37:12  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:34  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

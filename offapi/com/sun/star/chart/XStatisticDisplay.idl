@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStatisticDisplay.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:16 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,46 +76,51 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::chart::XStatisticDisplay
 /** gives access to statistical elements for the chart.
 
+    <p>Statistical elements are used by a
+    <type>StockDiagram</type>.</p>
 
-
-    <p>Statistical elements are used by <type>StockDiagram</type>.
-
-    </p>@see        XChartDocument
+    @see XChartDocument
+    @see StockDiagram
  */
 interface XStatisticDisplay: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XStatisticDisplay::getUpBar
     /** @returns
-                the properties of the up bars of a stock chart
-                which has <member>UpDown</member> set to <TRUE/>.
+            the properties of the up bars of a stock chart which has
+            <member>StockDiagram::UpDown</member> set to <TRUE/>.
 
-                @see ChartArea
+        <p>The <em>UpBar</em> is the box that is drawn between the
+        open and close value of a stock, when the closing value is
+        above the opening value, i.e., the stock price rose.</p>
+
+        @see ChartArea
      */
     com::sun::star::beans::XPropertySet getUpBar();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XStatisticDisplay::getDownBar
     /** @returns
-                the properties of the down bars of a stock chart
-                which has <member>UpDown</member> set to <TRUE/>.
+            the properties of the down bars of a stock chart which has
+            <member>StockDiagram::UpDown</member> set to <TRUE/>.
 
-                @see ChartArea
+        <p>The <em>DownBar</em> is the box that is drawn between the
+        open and close value of a stock, when the closing value is
+        below the opening value, i.e., the stock price fell.</p>
+
+        @see ChartArea
      */
     com::sun::star::beans::XPropertySet getDownBar();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XStatisticDisplay::getMinMaxLine
     /** @returns
-                the properties of MinMax lines of a stock chart.
+            the properties of the lines that are drawn between the
+            lowest and highest stock value during a day.
 
-                @see ChartLine
+        @see ChartLine
      */
     com::sun::star::beans::XPropertySet getMinMaxLine();
 
@@ -128,6 +133,15 @@ interface XStatisticDisplay: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.2  2002/01/29 14:23:17  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.5.16.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.5  2001/03/16 16:41:16  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/21 08:35:01  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

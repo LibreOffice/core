@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleMailClientFlags.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-16 23:24:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module system {
 constants SimpleMailClientFlags
 {
     //---------------------------------------------------------------------
-    /** Uses the default settings when sending a mail, for example,
+    /** Uses the default settings when sending a mail, e.g.
         launches the current configured system mail client.
     */
     const long DEFAULTS             = 0;
@@ -82,10 +82,9 @@ constants SimpleMailClientFlags
     /** Does not show the current configured system mail client, but sends
         the mail without any further user interaction.
         If this flag is specified, a recipient address must have been
-        specified for the given ::com::sun::star::system::XMail object
-        given to the sendMail method.
-
-        @see ::som::sun::star::system::XSimpleMailClient
+        specified for the given <type>XSimpleMailMessage</type>
+        object given to the method
+        <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>.
      */
     const long NO_USER_INTERFACE    = 1;
 
@@ -93,9 +92,9 @@ constants SimpleMailClientFlags
     /** No logon dialog should be displayed to prompt the user for logon
         information if necessary.
         When this flag is specified and the user needs to logon in order
-        to send the mail via the method sendMail of
-        ::com::sun::star::system::XSimpleMailClient, an Exception  will
-        be thrown.
+        to send a simple mail message via the method
+        <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>,
+        an Exception will be thrown.
     */
     const long NO_LOGON_DIALOG      = 2;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 interface XClipboard;
 
 //=============================================================================
-/** should be implemented by a clipboard factory that simplifies the creation of
+/** Should be implemented by a clipboard factory that simplifies the creation of
     multiple clipboard instances.
 
     @see com::sun::star::datatransfer::clipboard::XClipboard
@@ -86,15 +86,17 @@ interface XClipboard;
 interface XClipboardFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-        a newly created instance of a <type>GenericClipboard</type>
+    /** Creates a new named clipboard instance.
+
+        @returns
+        A newly created instance of a <type>GenericClipboard</type>
         implementation.
 
         @param aName
-        the name the clipboard should have.
+        The name the clipboard should have.
 
         @throws com::sun::star::lang::IllegalArgumentException
-        if an empty string is passed.
+        If an empty string is passed as clipboard name.
     */
     XClipboard createClipboard( [in] string aName )
         raises ( com::sun::star::lang::IllegalArgumentException );

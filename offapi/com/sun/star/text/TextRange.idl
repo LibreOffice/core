@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextRange.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 09:57:16 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,49 +92,40 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextRange
 /** points to a sequence of characters within a <type>Text</type>.
-
-
 
     <p>The service provides access to the string content and the properties
     of this range of text and the <type>TextContent</type> instances which
-    are bound to this text range.
+    are bound to this text range.  </p>
 
-    </p>
     <p>A <type>TextRange</type> is also used for a <i>text portion</i> which is
     returned by the <type scope="com::sun::star::container">XEnumeration</type>
     for a single paragraph. Because this is the mechanism to use to export
     data, all formatting attributes and contents bound to this range have
-    to be available from implementations of this service.
+    to be available from implementations of this service. </p>
 
-    </p>@see Text
+    @see Text
  */
 service TextRange
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XTextRange;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertyState;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::container::XContentEnumerationAccess;
 
-    // DocMerge: empty anyway
     service com::sun::star::style::CharacterProperties;
 
     [optional] service com::sun::star::style::CharacterPropertiesAsian;
 
     [optional] service com::sun::star::style::CharacterPropertiesComplex;
-    // DocMerge: empty anyway
+
     service com::sun::star::style::ParagraphProperties;
 
 };
@@ -146,6 +137,12 @@ service TextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.14.1  2002/05/03 10:25:52  mi
+    autodoc warnings elimitanted, part of review procss
+
+    Revision 1.6  2001/04/23 09:57:16  os
+    #83551# cjk services added
+
     Revision 1.5  2000/12/21 08:35:21  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

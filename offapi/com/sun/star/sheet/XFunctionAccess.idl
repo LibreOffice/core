@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFunctionAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XFunctionAccess_idl__
 #define __com_sun_star_sheet_XFunctionAccess_idl__
 
@@ -73,18 +74,20 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
 /** allows generic access to all spreadsheet functions.
+
+    @see com::sun::star::sheet::FunctionAccess
  */
 interface XFunctionAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+
     /** calls a function and returns the result of the call.
 
         @param aName
@@ -93,47 +96,57 @@ interface XFunctionAccess: com::sun::star::uno::XInterface
         @param aArguments
         the arguments for the function call.
         <p>Each element must be of one of the following types:</p>
+
         <dl>
         <dt><atom>long</atom> or <atom>double</atom></dt>
         <dd>for a numeric value.</dd>
+
         <dt><atom>string</atom></dt>
         <dd>for a textual value.</dd>
-        <dt><atom">long[][]</atom> or
-            <atom">double[][]</atom></dt>
+
+        <dt><atom>long[][]</atom> or <atom>double[][]</atom></dt>
         <dd>for an array of numeric values.</dd>
+
         <dt><atom>string[][]</atom></dt>
         <dd>for an array of textual values.</dd>
+
         <dt><atom>any[][]</atom></dt>
         <dd>for a mixed array, where each element must be of <void/>,
-            <atom>long</atom>, <atom>double</atom> or
-            <atom>string</atom> type.</dd>
+        <atom>long</atom>, <atom>double</atom> or <atom>string</atom>
+        type.</dd>
+
         <dt><type scope="com::sun::star::table">XCellRange</type></dt>
-        <dd>for a <type>SheetCellRange</type> object
-            that contains the data.
+        <dd>for a <type>SheetCellRange</type> object that contains the
+        data.</dd>
         </dl>
 
         @returns
-        the result of the function call.
-        <p>Possible types for the result are:</p>
-        <dl>
-        <dt><void/></dt>
-        <dd>if no result is available.</dd>
-        <dt><atom>double</atom></dt>
-        <dd>for a numeric result.</dd>
-        <dt><atom>string</atom></dt>
-        <dd>for a textual result.</dd>
-        <dt><atom>any[][]</atom></dt>
-        <dd>for an array result, containing <atom>double</atom> and
+            the result of the function call.
+
+            <p>Possible types for the result are:</p>
+
+            <dl>
+            <dt><void/></dt>
+            <dd>if no result is available.</dd>
+
+            <dt><atom>double</atom></dt>
+            <dd>for a numeric result.</dd>
+
+            <dt><atom>string</atom></dt>
+            <dd>for a textual result.</dd>
+
+            <dt><atom>any[][]</atom></dt>
+            <dd>for an array result, containing <atom>double</atom> and
             <atom>string</atom> values.</dd>
-        </dl>
+            </dl>
 
-        @throws NoSuchElementException
-        if the named function does not exist.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            if the named function does not exist.
 
-        @throws IllegalArgumentException
-        if the function can not be called with these arguments.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            if the function can not be called with these arguments.
      */
-    any callFunction( [in] string aName, [in] sequence<any> aArguments )
+    any callFunction( [in] string aName, [in] sequence< any > aArguments )
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::IllegalArgumentException );
 };
@@ -142,7 +155,5 @@ interface XFunctionAccess: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-
 #endif
-
 

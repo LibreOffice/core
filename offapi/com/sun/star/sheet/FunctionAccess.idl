@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FunctionAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,21 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_FunctionAccess_idl__
 #define __com_sun_star_sheet_FunctionAccess_idl__
+
+#ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
+#include <com/sun/star/sheet/SpreadsheetDocumentSettings.idl>
+#endif
 
 #ifndef __com_sun_star_sheet_XFunctionAccess_idl__
 #include <com/sun/star/sheet/XFunctionAccess.idl>
 #endif
 
-
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
@@ -76,7 +80,19 @@
  */
 service FunctionAccess
 {
+    //-------------------------------------------------------------------------
+
+    /** contributes properties to control the behaviour of some functions
+        (i.e. NullDate, IgnoreCase, RegularExpressions).
+     */
+    service com::sun::star::sheet::SpreadsheetDocumentSettings;
+
+    //-------------------------------------------------------------------------
+
+    /** provides calculating the result of a spreadsheet function.
+     */
     interface com::sun::star::sheet::XFunctionAccess;
+
 };
 
 //=============================================================================

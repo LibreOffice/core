@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::ViewDescriptor
-/** is used to define a new view for a database.@see com::sun::star::sdbcx::View
+/** is used to define a new view for a database.
+    @see com::sun::star::sdbcx::View
  */
 service ViewDescriptor
 {
@@ -98,7 +99,8 @@ service ViewDescriptor
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::ViewDescriptor::CheckOption
-    /** indicates if a check option should be used for the view.@see com::sun::star::sdbcx::CheckOption
+    /** indicates if a check option should be used for the view.
+        @see com::sun::star::sdbcx::CheckOption
      */
     [property] long CheckOption;
 };
@@ -109,6 +111,12 @@ service ViewDescriptor
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/02/18 10:00:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:39  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:44  hjs
     initial import
 

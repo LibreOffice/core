@@ -1,0 +1,555 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PageStyle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_style_PageStyle_idl__
+#define __com_sun_star_style_PageStyle_idl__
+
+#ifndef __com_sun_star_style_Style_idl__
+#include <com/sun/star/style/Style.idl>
+#endif
+
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+
+#ifndef __com_sun_star_style_PageStyleLayout_idl__
+#include <com/sun/star/style/PageStyleLayout.idl>
+#endif
+
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+/** contributes common properties of page styles.
+
+    @see com::sun::star::text::TextPageStyle
+    @see com::sun::star::sheet::TablePageStyle
+ */
+service PageStyle
+{
+    //-------------------------------------------------------------------------
+
+    /** provides common functionality for styles.
+     */
+    service com::sun::star::style::Style;
+
+    //=========================================================================
+
+    /** contains the background color of the page.
+      */
+    [property] long BackColor;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the background color is transparent.
+
+        <p>If this property is set to <TRUE/>,
+        <member>PageStyle::BackColor</member> will not be used.</p>
+      */
+    [property] boolean BackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the URL of the background graphic.
+      */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the filter name of the background graphic.
+      */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the location of the background graphic.
+      */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the left margin of the page (in 1/100 mm).
+      */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the right margin of the page (in 1/100 mm).
+      */
+    [property] long RightMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the top margin of the page (in 1/100 mm).
+      */
+    [property] long TopMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the bottom margin of the page (in 1/100 mm).
+      */
+    [property] long BottomMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the left border line of the page.
+      */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the right border line of the page.
+      */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the top border line of the page.
+      */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the bottom border line of the page.
+      */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the left border distance of the page (in 1/100 mm).
+      */
+    [property] long LeftBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the right border distance of the page (in 1/100 mm).
+      */
+    [property] long RightBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the top border distance of the page (in 1/100 mm).
+      */
+    [property] long TopBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the bottom border distance of the page (in 1/100 mm).
+      */
+    [property] long BottomBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the distance of all borders of the page (in 1/100 mm).
+      */
+    [property] long BorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the shadow of the page.
+      */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the page format is landscape.
+      */
+    [property] boolean IsLandscape;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the default numbering type for this page.
+      */
+    [property] short NumberingType;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the layout of the page.
+      */
+    [property] com::sun::star::style::PageStyleLayout PageStyleLayout;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the name of a paper tray of the selected printer.
+      */
+    [property] string PrinterPaperTray;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the paper size of the page.
+      */
+    [property] com::sun::star::awt::Size Size;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the width of the page (in 1/100 mm).
+      */
+    [property] long Width;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the height of the page (in 1/100 mm).
+      */
+    [property] long Height;
+
+    //-------------------------------------------------------------------------
+
+    /** contains user defined attributes.
+      */
+    [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the color of the background of the header.
+      */
+    [property] long HeaderBackColor;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the header background color is transparent.
+
+        <p>If this property is set to <TRUE/>,
+        <member>PageStyle::HeaderBackColor</member> will not be used.</p>
+      */
+    [property] boolean HeaderBackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the URL of the background graphic of the header.
+      */
+    [property] string HeaderBackGraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the filter name of the background graphic of the header.
+      */
+    [property] string HeaderBackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the location of the background graphic of the header.
+     */
+    [property] com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the left margin of the header (in 1/100 mm).
+      */
+    [property] long HeaderLeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the right margin of the header (in 1/100 mm).
+     */
+    [property] long HeaderRightMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the left border line of the header.
+      */
+    [property] com::sun::star::table::BorderLine HeaderLeftBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the right border line of the header.
+      */
+    [property] com::sun::star::table::BorderLine HeaderRightBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the top border line of the header.
+      */
+    [property] com::sun::star::table::BorderLine HeaderTopBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the style of the bottom border line of the header.
+      */
+    [property] com::sun::star::table::BorderLine HeaderBottomBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the left border distance of the header (in 1/100 mm).
+      */
+    [property] long HeaderLeftBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the right border distance of the header (in 1/100 mm).
+      */
+    [property] long HeaderRightBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the top border distance of the header (in 1/100 mm).
+      */
+    [property] long HeaderTopBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the bottom border distance of the header (in 1/100 mm).
+      */
+    [property] long HeaderBottomBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the distance of all borders of the header (in 1/100 mm).
+      */
+    [property] long HeaderBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the distance between the header and the body text area
+        (in 1/100 mm).
+      */
+    [property] long HeaderBodyDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the shadow of the header.
+      */
+    [property] com::sun::star::table::ShadowFormat HeaderShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the height of the header (in 1/100 mm).
+      */
+    [property] long HeaderHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the height of the header depends on the content.
+      */
+    [property] boolean HeaderIsDynamicHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the header content on left and right pages
+        is the same.
+      */
+    [property] boolean HeaderIsShared;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether a header is used on the page.
+      */
+    [property] boolean HeaderIsOn;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the color of the background of the footer.
+     */
+    [property] long FooterBackColor;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the background is transparent.
+      */
+    [property] boolean FooterBackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the URL of the background graphic in the footer.
+     */
+    [property] string FooterBackGraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the filter name of the background graphic in the footer.
+      */
+    [property] string FooterBackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the location of the background graphic in the footer.
+      */
+    [property] com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the left margin of the footer (in 1/100 mm).
+      */
+    [property] long FooterLeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the right margin of the footer (in 1/100 mm).
+      */
+    [property] long FooterRightMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the style of the left border line of the footer.
+      */
+    [property] com::sun::star::table::BorderLine FooterLeftBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the style of the right border line of the footer.
+      */
+    [property] com::sun::star::table::BorderLine FooterRightBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the style of the top border line of the footer.
+      */
+    [property] com::sun::star::table::BorderLine FooterTopBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the style of the bottom border line of the footer.
+      */
+    [property] com::sun::star::table::BorderLine FooterBottomBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the left border distance of the footer (in 1/100 mm).
+      */
+    [property] long FooterLeftBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the right border distance of the footer (in 1/100 mm).
+      */
+    [property] long FooterRightBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the top border distance of the footer (in 1/100 mm).
+      */
+    [property] long FooterTopBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the bottom border distance of the footer (in 1/100 mm).
+      */
+    [property] long FooterBottomBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the distance of all borders of the footer (in 1/100 mm).
+      */
+    [property] long FooterBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the distance between the footer and the body text area
+        (in 1/100 mm).
+      */
+    [property] long FooterBodyDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the shadow of the footer.
+      */
+    [property] com::sun::star::table::ShadowFormat FooterShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the height of the footer (in 1/100 mm).
+      */
+    [property] long FooterHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the height of the footer depends on the content.
+     */
+    [property] boolean FooterIsDynamicHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the footer content on left and right pages
+        is the same.
+      */
+    [property] boolean FooterIsShared;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether a footer is used on the page.
+     */
+    [property] boolean FooterIsOn;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

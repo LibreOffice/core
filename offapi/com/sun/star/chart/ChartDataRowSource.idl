@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataRowSource.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::chart::ChartDataRowSource
 /** specifies if the data rows (aka data series) displayed in the
     chart, take their values from the row or the column in the underlying
     data source (<type>ChartDataArray</type>).
@@ -77,14 +76,12 @@ enum ChartDataRowSource
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartDataRowSource::ROWS
     /** values displayed as data rows are taken from the rows of the data source.
      */
     ROWS,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartDataRowSource::COLUMNS
     /** values displayed as data rows are taken from the columns of the data source.
      */
     COLUMNS
@@ -98,6 +95,12 @@ enum ChartDataRowSource
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.4  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

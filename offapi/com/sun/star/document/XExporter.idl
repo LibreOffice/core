@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExporter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-16 21:52:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,22 +74,33 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** makes it possible to connect a document with an <type>Exporter</type>.
+/** makes it possible to connect a document with an <type>ExportFilter</type>
+
+    <p>
+    An <type>ExportFilter</type> must know the source of his filter operation.
+    To set this on a filter is part of this interface.
+    Same mechanism exist for import too.
+    </p>
+
+    @see ExportFilter
+    @see ImportFilter
+    @see XImporter
  */
 interface XExporter: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** sets the source document for the exporter.
+    /** sets the source document for the exporter
+
+        @param Document
+            the source document
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if <var>xDoc</var> does not support any service which is
-            supported by this exporter.
-
-    <!-- Dennis: Is there some missing markup around com::sun::star::lang::IllegalArgumentException -->
-
+            if <var>Document</var> does not support any service which is
+            supported by this exporter
      */
-    void setSourceDocument( [in] com::sun::star::lang::XComponent xDoc )
-        raises( com::sun::star::lang::IllegalArgumentException );
+    void setSourceDocument(
+        [in] com::sun::star::lang::XComponent Document )
+            raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================

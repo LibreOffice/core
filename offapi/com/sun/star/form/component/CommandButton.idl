@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandButton.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,48 +88,48 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::CommandButton
-/** This service specifies the ControlModel for a clickable button which
-    may be represented by an image.
+/** specifies the a control model for a clickable button which is part of a form
+    component hierarchy.
+
+    @see ImageButton
  */
 service CommandButton
 {
-    // DocMerge: empty anyway
-    service com::sun::star::form::FormControlModel;
-
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlButtonModel;
 
+    service com::sun::star::form::FormControlModel;
 
-    // DocMerge from xml: service com::sun::star::form::component::CommandButton: interface com::sun::star::form::XImageProducerSupplier
-    /** is necessary if you want to display images
-                on a button.
+    /** supplies the image producer when the button is to display an image.
+
+        <p>If the <member scope="com::sun::star::awt">UnoButtonControlModel::ImageURL</member> points to the location of an
+        image to be displayed on the button, this interface can be used to retrieve an image
+        producer, which itself will supply the image.</p>
+
+        <p>Usually, a control belonging to the model will use this interface to obtain the
+        image to be painted</p>
      */
     interface com::sun::star::form::XImageProducerSupplier;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::CommandButton::ButtonType
-    /** The ButtonType describes the default action executed by the button.
+    /** describes the action to be executed by the button when pressed.
      */
     [property] com::sun::star::form::FormButtonType ButtonType;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR CommmandButton::TargetFrame
-
-    // DocMerge from xml: property com::sun::star::form::component::CommandButton::TargetFrame
     /** describes the frame, where to open the document specified by the TargetURL.
+
+        <p>This property is evaluated if the button is of type URL.</p>
+
+        <p>As always, there is a number of target names which have a special meaning, and force
+        a special <type scope="com::sun::star::frame">Frame</type> to be used.</p>
      */
     [property] string TargetFrame;
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR CommmandButton::TargetURL
 
-    // DocMerge from xml: property com::sun::star::form::component::CommandButton::TargetURL
     /** specifies the URL, which should be opened if the button was clicked.
 
+        <p>This property is evaluated if the button is of type URL.</p>
 
-        <p> This property is evaluated if the button is of type URL.
-        </p>@see com::sun::star::form::FormButtonType
+        @see com::sun::star::form::FormButtonType
      */
     [property] string TargetURL;
 };
@@ -141,6 +141,12 @@ service CommandButton
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/07/26 09:49:07  fs
+    IDL review form layer
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:18  hjs
     initial import
 

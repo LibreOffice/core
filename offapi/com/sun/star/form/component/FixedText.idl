@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,17 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::FixedText
-/** This service specifies the ControlModel of a text which can be
-    displayed but not edited by the user.
+/** This service specifies the control model for a text which can be
+    displayed, but not edited by the user.
+
+    <p>These kind of controls is usually used to label other controls.</p>
+
+    @see com::sun::star::form::DataAwareControlModel::LabelControl
  */
 service FixedText
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlFixedTextModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
 };
@@ -97,6 +98,12 @@ service FixedText
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/07/26 09:49:15  fs
+    IDL review form layer
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:19  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAtomServer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ interface XAtomServer : com::sun::star::uno::XInterface
             the strings for the requested atoms
     */
     sequence< string > getAtomDescriptions( [in] sequence< AtomClassRequest > atoms );
+
+    //-----------------------------------------------------------------------
     /** returns the atoms that have been registered to a class after an
         already known atom
 
@@ -148,6 +150,8 @@ interface XAtomServer : com::sun::star::uno::XInterface
             <code>atomClass</code> after <code>atom</code>
     */
     sequence< AtomDescription > getRecentAtoms( [in] long atomClass, [in] long atom );
+
+    //-----------------------------------------------------------------------
     /** registers or searches for a string
 
         @param atomClass

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderAcceptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2001-03-20 13:31:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,13 @@ interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
         @param DoneListener  If not null, the implementation of this interface
         can---through this callback---tell the calling side that the
         implementation no longer needs the remote content provider.  (And the
-        calling side should call <member>removeRemoteContentProvider</member>
+        calling side should call
+        <member>XRemoteContentProviderAcceptor::removeRemoteContentProvider</member>
         then.)
 
         To enable connection control, it is recommended that this argument
         also implements the interface
-        <type scope="com::sun::star::ucb">XRemoteContentProviderConnectionControl</type>.
+        <type>XRemoteContentProviderConnectionControl</type>.
 
         @return  true if the remote content provider has successfully been
         added.

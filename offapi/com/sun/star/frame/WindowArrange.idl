@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowArrange.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,84 +61,48 @@
 #ifndef __com_sun_star_frame_WindowArrange_idl__
 #define __com_sun_star_frame_WindowArrange_idl__
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from idl: constants com::sun::star::frame::WindowArrange
-/** These constants are used to specify a style of window arrangement.
+/** these constants are used to specify a style of window arrangement
  */
 constants WindowArrange
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::WindowArrange::TILE
-    /** arranges the windows in tiles.
+    /** arranges the windows in tiles
      */
     const short TILE = 1;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::WindowArrange::VERTICAL
-    /** arranges the windows vertically.
+    /** arranges the windows vertically
      */
     const short VERTICAL = 2;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::WindowArrange::HORIZONTAL
-    /** arranges the windows horizontally.
+    /** arranges the windows horizontally
      */
     const short HORIZONTAL = 3;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::WindowArrange::CASCADE
-    /** cascades the windows.
+    /** cascades the windows
      */
     const short CASCADE = 4;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::WindowArrange::MAXIMIZE
-    /** maximizes all windows.
+    /** maximizes all windows
      */
     const short MAXIMIZE = 5;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::WindowArrange::MINIMIZE
-    /** minimizes all windows.
+    /** minimizes all windows
      */
     const short MINIMIZE = 6;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 14:49:55  mi
-    missing documentations
-
-    Revision 1.2  2000/01/31 09:44:58  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

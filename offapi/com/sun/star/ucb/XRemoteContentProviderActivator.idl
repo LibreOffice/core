@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderActivator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-14 10:39:37 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,29 +72,30 @@ interface XContentProviderManager;
 
 //============================================================================
 /** This interface should be implemented together with
-    <type scope="com::sun::star::ucb">XRemoteContentProviderAcceptor</type>
-    and allows for a lazy implementation of
-    <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>.
+    <type>XRemoteContentProviderAcceptor</type> and allows for a lazy
+    implementation of
+    <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>.
 
-    @deprecated
     The way this works might change, therefore this interface is marked as
     deprectated.
+
+    @deprecated
  */
 interface XRemoteContentProviderActivator: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** Activate (i.e., register at the broker) the remote content providers
         that until now have only been remembered by
-        <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>, but not registered.
+        <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>,
+        but not registered.
 
         <p>This allows for
-        <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>
+        <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>
         to be implemented in a layz fashion (remember the remote content
         providers, but do not register them right away), which can increase
         performance in certain situations.  But it is not required that an
-        implementation of
-        <type scope"com::sun::star::ucb">XRemoteContentProviderAcceptor</type>
-        uses this lazy strategy (and thus also implements this interface).
+        implementation of <type>XRemoteContentProviderAcceptor</type> uses this
+        lazy strategy (and thus also implements this interface).
 
         @return
         the broker at which the remote content providers have been registered.

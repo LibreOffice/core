@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLOutput.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,89 +102,146 @@ interface XSQLData;
     by a programmer.
 
 
-    <p>When an object of a class implementing interface <code>XSQLData</code> is
-    passed as an argument to a SQL statement, the JDBC driver calls
-    <code>SQLData.getSQLType</code> to determine the kind of SQL datum being
-    passed to the database.
-    <br>The driver then creates an instance of <code>XSQLOutput</code> and
-    passes it to the method <code>SQLData.writeSQL</code>.
-    The method <code>writeSQL</code> in turn calls the
-    appropriate <code>SQLOutput.writeXXX</code> methods
-    to write data from the <code>SQLData</code> object to
-    the <code>SQLOutput</code> output stream as the
-    representation of a SQL user-defined type.</p>
+    <p>
+    When an object of a class implementing interface
+    <type scope="com::sun::star::sdbc">XSQLData</type>
+    is passed as an argument to a SQL statement, the JDBC driver calls
+    <member scope="com::sun::star::sdbc">SQLData::getSQLType()</member>
+    to determine the kind of SQL datum being passed to the database.
+    <br/>
+    The driver then creates an instance of
+    <code>XSQLOutput</code>
+    and passes it to the method
+    <member scope="com::sun::star::sdbc">XSQLData::writeSQL()</member>
+    . The method
+    <code>writeSQL</code>
+    in turn calls the appropriate
+    <code>XSQLOutput.writeXXX</code>
+    methods to write data from the
+    <type scope="com::sun::star::sdbc">XSQLData</type>
+    object to the
+    <code>XSQLOutput</code>
+    output stream as the representation of a SQL user-defined type.</p>
  */
 interface XSQLOutput: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeString
     /** writes the next attribute to the stream as a string.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeString([in]string x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBoolean
     /** writes the next attribute to the stream as boolean.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeBoolean([in]boolean x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeByte
     /** writes the next attribute to the stream as byte.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeByte([in]byte x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeShort
     /** writes the next attribute to the stream as short.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeShort([in]short x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeInt
     /** writes the next attribute to the stream as long.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeInt([in]long x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeLong
     /** writes the next attribute to the stream as hyper.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeLong([in]hyper x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeFloat
     /** writes the next attribute to the stream as float.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeFloat([in]float x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeDouble
     /** writes the next attribute to the stream as double.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeDouble([in]double x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBytes
     /** writes the next attribute to the stream as byte sequence.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeBytes([in]sequence<byte> x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeDate
     /** writes the next attribute to the stream as a date.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeDate([in]com::sun::star::util::Date x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeTime
     /** writes the next attribute to the stream as a time.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeTime([in]com::sun::star::util::Time x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeTimestamp
     /** writes the next attribute to the stream as a datetime.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeTimestamp([in]com::sun::star::util::DateTime x)
         raises (SQLException);
@@ -193,6 +250,10 @@ interface XSQLOutput: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBinaryStream
     /** writes the next attribute to the stream as a stream of uninterpreted
         bytes.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeBinaryStream([in]com::sun::star::io::XInputStream x)
         raises (SQLException);
@@ -200,6 +261,10 @@ interface XSQLOutput: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeCharacterStream
     /** writes the next attribute to the stream as a stream of unicode string.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeCharacterStream([in]com::sun::star::io::XInputStream x)
         raises (SQLException);
@@ -210,49 +275,83 @@ interface XSQLOutput: com::sun::star::uno::XInterface
         <code>XSQLData</code> object.
 
 
-        <p>When the <code>XSQLData</code> object is <NULL/>, this
-        method writes an SQL NULL to the stream.
-        Otherwise, it calls the <code>SQLData.writeSQL</code>
+        <p
+        >When the
+        <code>XSQLData</code>
+        object is
+        <NULL/>
+        , this method writes an SQL NULL to the stream.
+        Otherwise, it calls the
+        <member scope="com::sun::star::sdbc">XSQLData::writeSQL()</member>
         method of the given object, which
         writes the object's attributes to the stream.
-        The implementation of the method <code>XSQLData.writeSQL</code>
-        calls the appropriate <code>XSQLOutput.writeXXX</code> method(s)
-        for writing each of the object's attributes in order.
-        <br>The attributes must be read from an <code>XSQLInput</code>
-        input stream and written to an <code>XSQLOutput</code>
+        The implementation of the method
+        <code>XSQLData::writeSQL()</code>
+        calls the appropriate
+        <code>XSQLOutput.writeXXX</code>
+        method(s) for writing each of the object's attributes in order.
+        <br/>
+        The attributes must be read from an
+        <type scope="com::sun::star::sdbc">XSQLInput</type>
+        input stream and written to an
+        <code>XSQLOutput</code>
         output stream in the same order in which they were
         listed in the SQL definition of the user-defined type.
         </p>
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeObject([in]XSQLData x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeRef
     /** writes a REF(&amp;lt;structured-type&amp;gt;) to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeRef([in]XRef x) raises (SQLException);
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBlob
     /** writes a BLOB to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeBlob([in]XBlob x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeClob
     /** writes a CLOB to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeClob([in]XClob x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeStruct
     /** writes a structured-type to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeStruct([in]XStruct x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeArray
     /** writes an array to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
      */
     void writeArray([in]XArray x) raises (SQLException);
 };
@@ -263,6 +362,12 @@ interface XSQLOutput: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/19 13:46:04  mi
     syntax errors in documentation fixed
 

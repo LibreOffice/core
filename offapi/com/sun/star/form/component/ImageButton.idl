@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,46 +88,57 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::ImageButton
-/** This service specifies the ControlModel for a clickable button which
+/** This service specifies the control model for a clickable button which
     is represented by an image.
- */
+
+     <p>The image to be displayed is determined by <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+    property specifies the URL of an image to be displayed.</p>
+
+    @see CommandButton
+*/
 service ImageButton
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlImageControlModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
 
-    // DocMerge from xml: service com::sun::star::form::component::ImageButton: interface com::sun::star::form::XImageProducerSupplier
-    /** is necessary if you want to display images on a button.
+    /** supplies the caller with an <type scope="com::sun::star::awt">XImageProducer</type>.
+
+        <p>Other components can register as <type scope="com::sun::star::awt">XImageConsumer</type>
+        at this producer. Then they will be notified of any change in the image to be displayed.</p>
+
+        <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+        property is changed, the model loads the specified image, and sets it as image source
+        at its <type scope="com::sun::star::awt">XImageProducer</type>. Then, all
+        <type scope="com::sun::star::awt">XImageConsumers</type> are notified and supplied with
+        the binary data of the image.<br/>
+        Usually, controls acting for an <type>ImageButton</type> model are consumers, and use the
+        data stream to display the image</p>
      */
     interface com::sun::star::form::XImageProducerSupplier;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::form::component::ImageButton::ButtonType
-    /** The ButtonType describes the default action executed by the button.
+    /** describes the action to be executed by the button when pressed.
      */
     [property] com::sun::star::form::FormButtonType ButtonType;
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ImageButton::TargetFrame
 
-    // DocMerge from xml: property com::sun::star::form::component::ImageButton::TargetFrame
+    //-------------------------------------------------------------------------
     /** describes the frame, where to open the document specified by the TargetURL.
+
+        <p>This property is evaluated if the button is of type URL.</p>
+
+        <p>As always, there is a number of target names which have a special meaning, and force
+        a special <type scope="com::sun::star::frame">Frame</type> to be used.</p>
      */
     [property] string TargetFrame;
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ImageButton::TargetURL
 
-    // DocMerge from xml: property com::sun::star::form::component::ImageButton::TargetURL
+    //-------------------------------------------------------------------------
     /** specifies the URL, which should be opened if the button was clicked.
 
+        <p>This property is evaluated if the button is of type URL.</p>
 
-        <p> This property is evaluated if the button is of type URL.
-        </p>@see com::sun::star::form::FormButtonType
+        @see com::sun::star::form::FormButtonType
      */
     [property] string TargetURL;
 };
@@ -139,6 +150,12 @@ service ImageButton
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/07/26 09:49:18  fs
+    IDL review form layer
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:19  hjs
     initial import
 

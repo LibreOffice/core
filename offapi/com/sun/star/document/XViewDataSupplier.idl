@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewDataSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-22 16:13:58 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,26 +70,37 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** Gives access to some properties describing all open views to a document.
-    Each view is described by a sequence < ::com::sun::star::beans::PropertyValue >.
+/** gives access to some properties describing all open views to a document
+
+    <p>
+    Each view is described by a sequence< ::com::sun::star::beans::PropertyValue >.
     Through this interface the state of all open views can be retrieved and restored
     later. These states can also be made persistent so that a document loader can create
     all views of the correct types and restore their state to the state when the document was
     saved.
-*/
-
+    </p>
+ */
 interface XViewDataSupplier: com::sun::star::uno::XInterface
 {
-    /** @returns
-                a < ::com::sun::star::container::XIndexAccess >, that gives
-                access to a sequence < ::com::sun::star::beans::PropertyValue >
-                for every open view
-     */
-        ::com::sun::star::container::XIndexAccess getViewData();
+    //-------------------------------------------------------------------------
+    /** retrieve informations about currently opened view to restore it later
 
-        /**
+        @returns
+            a <type scope="com::sun::star::container">XIndexAccess</type>,
+            that gives access to a list of <type scope="com::sun::star::beans">PropertyValue</type>
+            for every open view. May <NULL/> if no view is currently available.
      */
-        void setViewData( [in] ::com::sun::star::container::XIndexAccess aData );
+    ::com::sun::star::container::XIndexAccess getViewData();
+
+    //-------------------------------------------------------------------------
+    /** restore all views which will be represented by given data argument
+
+        @param Data
+            a list of <type scope="com::sun::star::beans">PropertyValue</type>s
+            with information about last opened views to restore it
+            <NULL/> isn't allowed here.
+     */
+    void setViewData( [in] com::sun::star::container::XIndexAccess Data );
 };
 
 //=============================================================================

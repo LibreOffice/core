@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilterManager.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:21:15 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/** Specifies a filter manager interface for a file picker
+/** Specifies a filter manager interface for a FilePicker
 */
 
 interface XFilterManager: com::sun::star::uno::XInterface
@@ -85,16 +85,16 @@ interface XFilterManager: com::sun::star::uno::XInterface
     /** Adds a filter identified by a title.
 
         @param aTitle
-            Specifies the name of the filter as shown in the filter box of the
-            FilePicker dialog.
+        Specifies the name of the filter as shown in the filter box of the
+        FilePicker dialog.
 
         @param aFilter
-            Specifies the extensions of the filter. Multiple filters should be
-            semicolon separated. The semicolon may not be used as character in
-            a filter expresion. A typical filter is for instance '*.txt'.
+        Specifies the extensions of the filter. Multiple filters should be
+        semicolon separated. The semicolon may not be used as character in
+        a filter expresion. A typical filter is for instance '*.txt'.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            If a filter with the specified title already exists.
+        If a filter with the specified title already exists.
 
     */
     void appendFilter( [in] string aTitle, [in] string aFilter )
@@ -104,10 +104,10 @@ interface XFilterManager: com::sun::star::uno::XInterface
     /** Sets the current filter.
 
         @param aTitle
-            Specifies the name of the filter to be set.
+        Specifies the name of the filter to be set.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            If the specified filter was not found.
+        If the specified filter was not found.
     */
     void setCurrentFilter( [in] string aTitle )
         raises( ::com::sun::star::lang::IllegalArgumentException );
@@ -116,8 +116,8 @@ interface XFilterManager: com::sun::star::uno::XInterface
     /** Returns the currently selected filter.
 
         @returns
-            The the name of the selected filter or an empty string if
-            there is no filter or no filter is currently selected.
+        The the name of the selected filter or an empty string if
+        there is no filter or no filter is currently selected.
     */
     string getCurrentFilter( );
 };
@@ -129,6 +129,12 @@ interface XFilterManager: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.6.1  2002/01/30 11:44:29  tra
+    #97073#reviewd
+
+    Revision 1.1  2001/08/30 10:21:15  tra
+    #88584#moved from drafts
+
     Revision 1.2  2001/07/06 13:03:20  tra
     documentation update
 

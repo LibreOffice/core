@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ interface XCompletedConnection;
  */
 service DatabaseAccess
 {
-    // DocMerge: empty anyway
+    // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
 
@@ -155,17 +155,16 @@ service DatabaseAccess
 
     // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::TableFilter
     /** defines a list of tables, on which the bean should have it's focus.
-             If empty, all the tables of the are used.
-
-<!-- JRH: second sentence is incomplete -->*/
+        If empty, all tables are rejected.
+    */
     [optional, property] sequence<string> TableFilter;
 
 
     // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::TableTypeFilter
     /** defines a list of table types, on which the bean should have it's focus.
-             If empty, all the tables types of the are used.
+         If empty, all tables types are rejected.
 
-<!-- JRH: second sentence is incomplete -->  */
+     */
     [optional, property] sequence<string> TableTypeFilter;
 };
 
@@ -175,6 +174,15 @@ service DatabaseAccess
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/02/18 12:53:58  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 10:24:40  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:25  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceMember.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSourceMember_idl__
 #define __com_sun_star_sheet_DataPilotSourceMember_idl__
 
@@ -69,35 +70,48 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a member in a data pilot source level.
 
-//=============================================================================
+    <p>Members are the data items that will appear in a data pilot table
+    as row headers and column headers of the data range (if used in
+    row or column dimensions), or to calculate the values of the
+    data range (if used in data dimensions).</p>
 
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSourceMember
-/** a field in a data pilot source.
+    @see com::sun::star::sheet::DataPilotSourceLevel
+    @see com::sun::star::sheet::DataPilotSource
  */
 service DataPilotSourceMember
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNamed;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
+    /** provides access to the name of the member.
+
+        <p>This may be the textual representation of a numerical value.</p>
+     */
+    interface com::sun::star::container::XNamed;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceMember::IsVisible
-    /** specifies if the member is visible.
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** specifies whether the member is visible.
      */
     [property] boolean IsVisible;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceMember::ShowDetails
-    /** specifies if details for the member are shown.
+    /** specifies whether details for the member are shown.
      */
     [property] boolean ShowDetails;
 
@@ -107,18 +121,5 @@ service DataPilotSourceMember
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

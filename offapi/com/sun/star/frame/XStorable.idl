@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorable.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,174 +79,117 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XStorable
 /** offers a simple way to store a component to an URL.
 
-
-
-    <p>It is usually only useful for two cases:
-
+    <p>
+    It is usually only useful for two cases:
     </p>
     <ol>
-    <li>Large components which are wrapped with <em>StarOne</em> interfaces
-    and for which distinct filters are not available separately as
-    components.
-
-    </li>
-    <li>Very small components for which only one or very few hard
-    coded file format filters make sense or even exist.
-    </li>
+        <li>
+            Large components which are wrapped with <em>StarOne</em> interfaces
+            and for which distinct filters are not available separately as
+            components.
+        </li>
+        <li>
+            Very small components for which only one or very few hard
+            coded file format filters make sense or even exist.
+        </li>
     </ol>
  */
 interface XStorable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+    /** The object may know the location because it was loaded from there,
+        or because it is stored there.
 
-    // DocMerge from idl: method com::sun::star::frame::XStorable::hasLocation
-    /** @returns
-                <TRUE/> if the object knows a location where it is persistent.
-
-                <p>The object may know the location because it was loaded from there,
-                or because it is stored there.
+        @returns
+            <TRUE/> if the object knows a location where it is persistent
+            <FALSE/> otherwise
      */
     boolean hasLocation();
 
     //-------------------------------------------------------------------------
+    /** After <member>XStorable::storeAsURL()</member> it returns the
+        URL the object was stored to.
 
-    // DocMerge from idl: method com::sun::star::frame::XStorable::getLocation
-    /** @returns
-                    the URL of the resource which is represented by this object.
-
-                <p>After <member>XStorable::storeAsURL</member> it returns the
-                URL the object was stored to.
+        @returns
+            the URL of the resource which is represented by this object.
      */
     string getLocation();
 
     //-------------------------------------------------------------------------
+    /** It is not possible to call <member>XStorable::store()</member> successfully
+        when the data store is read-only.
 
-    // DocMerge from idl: method com::sun::star::frame::XStorable::isReadonly
-    /** @returns
-                <TRUE/> if the data store is readonly or opened readonly.
-
-                <p>It is not possible to call store() successfully when the data
-                store is read-only.
+        @returns
+            <TRUE/> if the data store is readonly or opened readonly
+            <FALSE/> otherwise
      */
     boolean isReadonly();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XStorable::store
     /** stores the data to the URL from which it was loaded.
 
-
-
         <p>Only objects which know their locations can be stored.</p>
+
+        @throws com::sun::star::io::IOException
+            if an IO error occured during save operation
+            (may the location is unknown)
+
+        @see XStorable::storeAsURL
+        @see XStorable::storeToURL
      */
     void store()
             raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XStorable::storeAsURL
     /** stores the object's persistent data to a URL and
         lets the object become the representation of this new URL.
 
+        <p>This is the normal behavior for UI's "save-as" feature.</p>
 
+        @param sURL
+            specifies the new location of this component
 
-        <p>This is the normal behavior for UI's "save-as" feature.
+        @param lArguments
+            optional parameters for saving
+            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
 
-        </p>
-        <p>The arguments depend on the object itself. Commonly used are:
-        <dl>
-        <dt>string FilterName
-        </dt>
-        <dd>    The programmatic name of the file format filter to be used.
+        @throws com::sun::star::io::IOException
+            if an IO error occured during save operation
+            (may the location is unknown)
 
-        </dd>
-        <dt>string FilterFlags
-        </dt>
-        <dd>    This string contains flags which depend on the filter.
-        They describe how the data is to be stored. (E.g., the
-        field delimitors for text database formats or the
-        character set.)
-
-        </dd>
-        <dt>boolean Overwrite
-        </dt>
-        <dd>    Overwrites the target file if it exists. Otherwise the
-        call would result in an exception if the file exists.
-
-        </dd>
-        <dt>string Password
-        </dt>
-        <dd>    This argument specifies the password to be used to
-        encrypt the document.
-        </dd>
-        </dl>
-
-        </p>
-
-        @see storeTo
-        @see com::sun::star::document::MediaDescriptor
-            for more information on values for <var>aArgs</var>.
+        @see XStorable::store
+        @see XStorable::storeToURL
+        @see MediaDescriptor
      */
-    void storeAsURL( [in] string aURL,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
-            raises( com::sun::star::io::IOException );
+    void storeAsURL(
+        [in] string sURL,
+        [in] sequence<com::sun::star::beans::PropertyValue> lArguments )
+        raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XStorable::storeToURL
     /** stores the object's persistent data to a URL and
         continues to be a representation of the old URL.
 
-        <p>This is the normal behavior for UI's export feature.  </p>
+        <p>This is the normal behavior for UI's export feature.</p>
 
-        @see storeAs
-        @see com::sun::star::document::MediaDescriptor
-            for more information on values for <var>aArgs</var>.
+        @throws com::sun::star::io::IOException
+            if an IO error occured during save operation
+            (may the location is unknown)
+
+        @see XStorable::store
+        @see XStorable::storeAsURL
+        @see MediaDescriptor
      */
-    void storeToURL( [in] string aURL,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
-            raises( com::sun::star::io::IOException );
-
+    void storeToURL(
+        [in] string sURL,
+        [in] sequence<com::sun::star::beans::PropertyValue> lArguments )
+        raises( com::sun::star::io::IOException );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/22 17:27:25  mi
-    #77161# arguments of XStorable::storeAs/To
-
-    Revision 1.5  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/19 16:03:30  mi
-    documentations syntax errors fixed
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 14:49:56  mi
-    missing documentations
-
-    Revision 1.2  2000/01/31 09:44:59  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

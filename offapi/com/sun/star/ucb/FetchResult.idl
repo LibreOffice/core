@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetchResult.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** containes data of several rows of a <type>ContentResultSet</type>.
+/** contains data of several rows of a <type>ContentResultSet</type>.
 
     <p>This struct is returned from <member>XFetchProvider::fetch</member>,
     for example.
@@ -75,7 +75,7 @@ module com { module sun { module star { module ucb {
 struct FetchResult
 {
     //-------------------------------------------------------------------------
-    /** containes the demanded data.
+    /** contains the demanded data.
 
         <p>One any contains the data of one whole row. Those methods which
         use this struct have to specify, what the any has to contain.
@@ -83,24 +83,24 @@ struct FetchResult
     sequence< any > Rows;
 
     //-------------------------------------------------------------------------
-    /** indicates the index of the first in <member>Rows</member> contained
-        row in the original resultset. So if <member>StartIndex</member>
-        equals <code>3</code>, the first element in the sequence
-        <member>Rows</member> containes the data of the index <code>3</code>
-        in the original resultset.
+    /** indicates the index of the first row contained in
+        <member>FetchResult::Rows</member> in the original resultset. So if
+        <member>FetchResult::StartIndex</member> equals <code>3</code>, the
+        first element in the sequence <member>FetchResult::Rows</member>
+        contains the data of the index <code>3</code> in the original resultset.
 
         <p>The following rows are one after the other, but the direction
-        depends on the value of <member>Direction</member>
+        depends on the value of <member>FetchResult::Direction</member>
     */
     long StartIndex;
 
     //-------------------------------------------------------------------------
     /** indicates the orientation in which the rows are fetched and set into
-        the sequence <member>Rows</member>.
+        the sequence <member>FetchResult::Rows</member>.
 
-        <p>When <member>Orientation</member> equals <TRUE/>, the rows in
-        <member>Rows</member> are ordered in the same way as in the original
-        resultset.
+        <p>When <member>FetchResult::Orientation</member> equals <TRUE/>, the
+        rows in <member>FetchResult::Rows</member> are ordered in the same way
+        as in the original resultset.
     */
     boolean Orientation;
 

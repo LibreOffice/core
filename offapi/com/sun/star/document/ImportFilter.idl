@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImportFilter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-16 21:39:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,20 @@
 #ifndef __com_sun_star_document_ImportFilter_idl__
 #define __com_sun_star_document_ImportFilter_idl__
 
-#ifndef __com_sun_star_document_XFilter_idl__
-#include <com/sun/star/document/XFilter.idl>
-#endif
-
 #ifndef __com_sun_star_document_XImporter_idl__
 #include <com/sun/star/document/XImporter.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
+#ifndef __com_sun_star_document_XFilter_idl__
+#include <com/sun/star/document/XFilter.idl>
 #endif
 
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
 #endif
 
 //=============================================================================
@@ -82,75 +82,108 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
+/** filter for imports
 
-/** filter for imports.
+    <p>
+    Such filters can be used for importing a content.
+    Of course it's possible to combine it with the service <type>ExportFilter</type>
+    if export functionality should be available at same implementation too.
+    </p>
+
+    @see ExportFilter
  */
 service ImportFilter
 {
     //-------------------------------------------------------------------------
-    /** filter interface.
+    /** set target(!) document for this filter
 
         <p>
-        This interface is used to filter a document at loading time.
-         </p>
-     */
-    interface com::sun::star::document::XFilter;
-
-    //-------------------------------------------------------------------------
-    /** set document for this filter.
-
-        <p>
-        The document can be used as source of filter input.
+        The document must be used as the target of the filter.
+        Any external content will be written there.
         </p>
      */
-    interface com::sun::star::document::XImporter;
+    interface XImporter;
 
     //-------------------------------------------------------------------------
-    /** support initialization of filter with its own configuration.
+    /** filter interface
+
         <p>
-        A filter must support a readonly access to its own configuration.
-        but readonly properties could not be set.
-        That is the reason for this interface.
-        All Anys of given sequence are from Type <type>PropertyValue</type>.
+        It's used to filter a document at loading time.
+        The target document should be already setted by using another interface
+        <member>ImportFilter::XImporter</member> which is supported by this service too.
         </p>
-     */
-    interface com::sun::star::lang::XInitialization;
-
-    //-------------------------------------------------------------------------
-    /** readonly access to filter configuration.
 
         <p>
-        This interface supports readonly access to our internal configuration of this filter.
-        The filter gets its configuration about <type>XInitialization</type> at creation by using
-        the <type>FilterFactory</type>.
+        Tip:<br>
+        If same implementation provides the service <type>ExportFilter</type> too,
+        code must distinguish between filtering into a target document (for import) or
+        filtering from a source document (for export). This can be recognized by saving
+        state of used interfaces <type>XExporter</type> or <type>XImporter</type>!
+        Otherwise it's not clear which action is required here.
          </p>
      */
-    interface com::sun::star::beans::XPropertySet;
+    interface XFilter;
 
-    /// filter is registered for this type.
-    [property, readonly]    string  Type;
+    //-------------------------------------------------------------------------
+    /** support initialization of filter with its own configuration
 
-    /// localized name of filter to show at UI elements.
-    [property, readonly]    string  UIName;
+        <p>
+        A filter object must be created by global service <type>FilterFactory</type>.
+        If filter supports this optional interface, he will be initialized by the factory directly
+        after creation. The factory will pass follow informations to this new instance:
+            <ul>
+                <li>first item will be a set of configuration data of the filter</li>
+                <li>after that will follow may given optional parameters of call
+                    <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+                    of service <type>FilterFactory</type>.
+                </li>
+            </ul>
+        See description of service <member>FilterFactory::XNameAccess</member> for a description of
+        possible configuration data too.
+        </p>
 
-    /// service name which presents the document.
-    [property, readonly]    string  DocumentService;
+        <p>
+        Java Example:
+            <listing>
+            void XInitialization::initialize( java.lang.Object[] lData )
+            {
+                // Config part exist every time - it's guaranted by FilterFactory!
+                int i=0;
+                com.sun.star.beans.NamedValue[] lConfig = lData[i];
+                for( y=0; y&lt;lConfig.length(); ++y )
+                {
+                    // ... work with this config data
+                }
+                // Arguments of call createInstanceWithArguments() are optional ones.
+                // They mustn't exist.
+                // Note: i starts with
+                for( ; i&lt;lData.length(); ++i )
+                {
+                    // ... work with this optional data
+                }
+            }
+            </listing>
+        </p>
+     */
+    [optional] interface com::sun::star::lang::XInitialization;
 
-    /// service name of this filter implementation.
-    [property, readonly]    string  FilterService;
+    //-------------------------------------------------------------------------
+    /** provides access to the internal name of this filter
 
-    /// flags to describe the filter.
-    [property, readonly]    string  Flags;
-
-    /// additional information with private structure.
-    [property, readonly]    string  UserData;
-
-    /// version number of file format.
-    [property, readonly]    string  FileFormatVersion;
-
-    /// name of suitable template.
-    [property, readonly]    string  TemplateName;
-
+        <p>
+        This internal filter name can be used on service <type>FilterFactory</type>
+        to get further informations about it (e.g. his registration for mime types or extensions etc.)
+        It's important that returned string is the "internal name" of the filter which must be
+        unambigous against all other registered filter in current instalation.
+        </p>
+        <p>
+        <strong>Attention!</strong><br>
+        Supported method setName() sould be ignored or forwarded to the FilterFactory.
+        It's not allowed to set it directly to the configuration. Because it depends
+        from real implementation of the FilterFactory if it will be allowed or not!
+         </p>
+     */
+    [optional] interface com::sun::star::container::XNamed;
 };
 
 //=============================================================================

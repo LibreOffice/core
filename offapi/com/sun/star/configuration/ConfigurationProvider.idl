@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,15 @@ module com { module sun { module star { module configuration {
  factory for objects that provide access to a subset of the configuration.
 
  <p>An implementation is usually obtained from a
- <type scope="com::sun::star::lang">ServiceManager</type>. The default
- <code>com.sun.star.configuration.ConfigurationProvider</code> object, that is
- instantiated without using extra arguments, is a one instance service.
+ <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
+ <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
+ select the configuration data source. Missing parameters may also be taken
+ from the context or the environment. If an instance already exists for the
+ given set of arguments, the existing instance may be reused.
+ In particular, instantiating a provider without explicit arguments to access
+ the default configuration data will always yield the same
+ <code>com.sun.star.configuration.ConfigurationProvider</code> object.
  </p>
-
- <!-- Dennis: Why is "global" in ()? -->
- <!-- Dennis: The <code> tag is doing nothing. -->
- <!-- Developer: IMHO it should select a fixed width font (like with <pre>).
-      It does in the generated output. Maybe a preview problem ?
-      The quotes were wrong, though. -->
  */
 service ConfigurationProvider
 {
@@ -101,43 +100,33 @@ service ConfigurationProvider
  <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
  </p>
 
- <!-- Dennis: the <code> is doing nothing -->
- <!-- Developer: It does in the generated output. -->
-
- <p>Using the first of these requests a read-only view of the configuration.
+ <p>Using the first of these service specifiers requests a read-only view of
+ the configuration.
  The object that is created implements service <type>ConfigurationAccess</type>.
  To reflect its <em>element role</em> as root of the view, it implements
  service <type>AccessRootElement</type>.
  </p>
-
- <!-- Dennis: The first sentence of the previous para appears to have a missing verb -->
- <!-- Developer: The verb is 'requests'. -->
 
  <p>Using the second form requests an updatable view of the configuration.
  The object that is created should implement service
  <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
  which includes controlling updates for the whole view, it implements
  service <type>UpdateRootElement</type>.
- <BR>If the root element of the view is marked read-only (as indicated
+ <BR />If the root element of the view is marked read-only (as indicated
  by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
  the implementation may either raise an exception or return a (read-only)
  <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
  </p>
-
- <!-- Dennis: <BR/> is doing nothing in the HTML -->
- <!-- Developer: Missing space before the closing slash -->
 
  <p>The arguments passed to
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
  in parameter <var>aArguments</var> specify the view of the configuration that
  should be created. That is, they determine the subset of elements that can be
  accessed starting from the returned object. Each element of the argument
- sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>,
+ sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>
+ or a <type scope="com::sun::star::beans">NamedValue</type>,
  so that the parameters can be identified by name rather than by position.
  </p>
-
- <!-- Dennis: Is the member suppose to have a formatting effect on the HTML? -->
- <!-- Developer: Should create a hyperlink ! Preview problem or syntax ? -->
 
  <p>What combinations of arguments are supported depends on the service name.
  </p>
@@ -176,11 +165,8 @@ service ConfigurationProvider
          </dd>
        </dl>
 
- <!-- Dennis: <dt> and <dd> tags are being generated out of order -->
- <!-- Developer: I had them wrong  -->
-
        <p><strong>Example:</strong> In the hierarchy
-<BR><pre>
+<BR /><pre>
  A - B1 - C1
    |
    - B2 - C2 (localized: de, en, fr, ..)
@@ -200,10 +186,10 @@ service ConfigurationProvider
    - B4 - C6 - D4 - E3
 
 </pre>
-         <BR>selecting a view with <code>nodepath = "/A/B2"</code>,
+         <BR />selecting a view with <code>nodepath = "/A/B2"</code>,
          <code>depth = 2</code> and <code>locale = &lt;Locale for en_US&gt;</code>
          would result in the tree fragment
-<BR><pre>
+<BR /><pre>
 (A-) B2 - C2 (en)
         |
         - C3 - D1
@@ -233,16 +219,12 @@ service ConfigurationProvider
           returns.
          </dd>
 
- <!-- Dennis: the data in the member is not being displayed. -->
- <!-- Developer: added missing parentheses - does this fix it ? Now seen in the generated HTML.
-        BTW: It seems that <dt> and <dd> tags were in the wrong order here again -->
-
          <dt><code>"nocache"</code> : <atom>boolean</atom></dt>
          <dd>specifies that data for the view is not taken from the cache, but
-          read directly from storage. This may entail future changes that
+          read directly from storage. This may entail that future changes that
           become visible in the cache are not reflected in this view and that
           changes done through this view are not reflected in the cache.
-          <BR><strong>Use with caution !</strong>
+          <BR /><strong>Use with caution !</strong>
          </dd>
        </dl>
     </li>
@@ -262,7 +244,7 @@ service ConfigurationProvider
 /** allows controlling or observing the lifetime of the configuration.
 
  <p>The owner of the provider may dispose of this object
- using <member scope="com::sun::star::lang">XComponent::dispose</member>.
+ using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
  Note that the default provider is owned by the
  <type scope="com::sun::star::lang">ServiceManager</type> and should not be
  disposed of by user code.
@@ -284,4 +266,5 @@ service ConfigurationProvider
 }; }; }; };
 
 #endif
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUser.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@ interface XUser: XAuthorizable
 
     // DocMerge from xml: method com::sun::star::sdbcx::XUser::changePassword
     /** allows modifying a user password.
+        @param oldPassword
+            the old password to be reset
+        @param newPassword
+            the new password
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void changePassword([in]string oldPassword, [in]string newPassword)
         raises (com::sun::star::sdbc::SQLException);
@@ -86,6 +92,12 @@ interface XUser: XAuthorizable
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:00:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:36  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

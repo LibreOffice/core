@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-07 15:10:53 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_form_component_CheckBox_idl__
 #define __com_sun_star_form_component_CheckBox_idl__
 
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
-#include <com/sun/star/form/DataAwareControlModel.idl>
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
 #endif
 
 #ifndef __com_sun_star_awt_UnoControlCheckBoxModel_idl__
@@ -80,33 +80,41 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::CheckBox
-/** specifies a check box extended by the required properties for HTML.
+/** specifies the model of a check box control
+
+    <p>The model supports the properties required for HTML, thus you can build up
+    <type>HTMLForm</type>s with it</p>
  */
 service CheckBox
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlCheckBoxModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
-    // DocMerge: empty anyway
+    /** can be used to reset the control to it's default state.
+
+        @see CheckBox::DefaultState
+    */
     interface com::sun::star::form::XReset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::CheckBox::DefaultState
-    /** contains a default value for the check box.
+    /** contains a default value for the control.
+
+        <p>This value is used when the control is initially displayed, and for resetting it.</p>
+
+        @see com::sun::star::awt::UnoControlCheckBoxModel::State
+        @see com::sun::star::form::XReset
      */
     [property] short DefaultState;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR CheckBox::RefValue
 
-    // DocMerge from xml: property com::sun::star::form::component::CheckBox::RefValue
     /** contains a reference value which is used for submission in a HTML
-        form, if the checkbox is checked.
+        form
+
+        <p>When submitting a <type>HTMLForm</type> which contains a check box,
+        which is checked, the RefValue is used for submission.
      */
     [property] string RefValue;
 
@@ -119,6 +127,18 @@ service CheckBox
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.3  2002/07/26 09:49:06  fs
+    IDL review form layer
+
+    Revision 1.4.2.2  2002/02/18 15:23:21  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4.2.1  2002/02/18 14:55:47  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/11/07 15:10:53  fs
+    the CheckBox is no DataAwareControlModel, but a FormControlModel
+
 
 =============================================================================*/
 #endif

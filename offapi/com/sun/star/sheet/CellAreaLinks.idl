@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellAreaLinks.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,27 +58,54 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_CellAreaLinks_idl__
 #define __com_sun_star_sheet_CellAreaLinks_idl__
 
 #ifndef __com_sun_star_sheet_XAreaLinks_idl__
 #include <com/sun/star/sheet/XAreaLinks.idl>
 #endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module sheet {
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::CellAreaLinks
-/** a collection of area links.
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a collection of area links.
+
+    @see com::sun::star::sheet::CellAreaLink
+    @see com::sun::star::sheet::SpreadsheetDocument
  */
 service CellAreaLinks
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access via index to a collection of area links and inserting
+        and removing area links.
+     */
     interface com::sun::star::sheet::XAreaLinks;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the area links via index.
+
+        @see com::sun::star::sheet::CellAreaLink
+
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all area links.
+
+        @see com::sun::star::sheet::CellAreaLinksEnumeration
+
+     */
+    interface com::sun::star::container::XEnumerationAccess;
 
 };
 
@@ -86,18 +113,5 @@ service CellAreaLinks
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:47  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

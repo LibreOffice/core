@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultSetMetaDataSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,24 @@ interface XResultSetMetaData;
 /** provides access to the meta data of a result set.
 
 
-    <p>The number, types, and properties of a ResultSet's columns are
-    provided by the ResultSetMetaData object returned by the getMetaData
-    method.</p>
+    <p>
+    The number, types, and properties of a ResultSet's columns are
+    provided by the
+    <type scope="com::sun::star::sdbc">ResultSetMetaData</type>
+    object returned by the
+    <member scope="com::sun::star::sdbc">XResultSetMetaDataSupplier::getMetaData()</member>
+    method.
+    </p>
  */
 interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaDataSupplier::getMetaData
     /** retrieves the number, types, and properties of a ResultSet's columns.
+        @returns
+            the meta data of the ResultSet.
+        @throws SQLException
+            if a database access error occurs.
      */
     XResultSetMetaData getMetaData() raises (SQLException);
 };
@@ -97,6 +106,12 @@ interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:35  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

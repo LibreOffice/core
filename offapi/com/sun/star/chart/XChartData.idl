@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChartData.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,47 +76,68 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::chart::XChartData
-/** manages the data of the chart.@see        XChartDocument
+/** manages the data of the chart.
+
+    @see XChartDocument
  */
 interface XChartData: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::chart::XChartData::addChartDataChangeEventListener
-    /** allows the registration of an event which is
-        broadcast when the data changes.
+    /** allows a component supporting the
+        <type>XChartDataChangeEventListener</type> interface to
+        register as listener.  The component will be notified with a
+        <type>ChartDataChangeEvent</type> every time the chart's data
+        changes.</p>
+
+        @param aListener
+            the component that is to be added as listener
+
+        @see XChartDataChangeEventListener
+        @see ChartDataChangeEvent
      */
     void addChartDataChangeEventListener( [in] com::sun::star::chart::XChartDataChangeEventListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::chart::XChartData::removeChartDataChangeEventListener
-    /** allows you to deregister from the data changed event.
+    /** removes a previously registered listener.
+
+        @param aListener
+            the component that is to be removed
      */
     void removeChartDataChangeEventListener( [in] com::sun::star::chart::XChartDataChangeEventListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartData::getNotANumber
     /** @returns
-                the value which is to be used as an indicator for a non-available data point.
+            the value which is to be used as an indicator for a
+            missing value in the data.
 
-                <p>In IEEE arithmetic format it is one of the NAN values, so
-                there are no conflicts with existing numeric values.
+        <p>In IEEE arithmetic format it is one of the NaN values, so
+        there are no conflicts with existing numeric values.</p>
      */
     double getNotANumber();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::chart::XChartData::isNotANumber
-    /** checks whether the value is to be used as an
-        indicator for an unavailable data point.
+    /** checks whether the value given is equal to the indicator value
+        for a missing value.
 
-
-
-        <p>In IEEE arithmetic format it is one of the NAN values, so
+        <p>In IEEE arithmetic format it is one of the NaN values, so
         there are no conflicts with existing numeric values.</p>
+
+        <p>Always use this method to check, if a value is <em>not a
+        number</em>.  If you compare the value returned by
+        <member>XChartData::getNotANumber</member> to another double
+        value using the = operator, you may not get the desired
+        result!</p>
+
+        @returns
+            <TRUE/> if the number given is interpreted by the chart as
+            a missing value.
+
+        @param nNumber
+            the number that you want to check for validity.
      */
     boolean isNotANumber( [in] double nNumber );
 
@@ -129,6 +150,15 @@ interface XChartData: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/01/29 14:23:17  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.5.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.5  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.4  2001/03/16 16:41:16  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

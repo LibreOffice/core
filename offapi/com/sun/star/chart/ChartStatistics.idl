@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartStatistics.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,79 +84,106 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartStatistics
-/** offers statistical properties for the data in
-    the chart. It is available for a single data row and for the whole diagram.
+/** offers statistical properties for the data in the chart. It is
+    available for a single data row and for the whole diagram.
  */
 service ChartStatistics
 {
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::ConstantErrorLow
     /** specifies the lower limit of the error range of a
-        data row.@see ConstantErrorHigh
-                @see ErrorCategory
+        data row.
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::CONSTANT_VALUE</member>.</p>
+
+        @see ConstantErrorHigh
+        @see ErrorCategory
      */
     [property] double ConstantErrorLow;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::ConstantErrorHigh
     /** specifies the upper limit of the error range of a
-        data row.@see ConstantErrorLow
-                @see ErrorCategory
+        data row.
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::CONSTANT_VALUE</member>.</p>
+
+        @see ConstantErrorLow
+        @see ErrorCategory
      */
     [property] double ConstantErrorHigh;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::MeanValue
     /** determines if the mean value for a data row is
-        displayed.
+        displayed as a line.
      */
     [property] boolean MeanValue;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::ErrorCategory
-    /** determines the type of error to indicate.@see ChartErrorCategory
-                @see PercentageError
-                @see ErrorMargin
-                @see ConstantErrorLow
-                @see ConstantErrorHigh
-                @see ErrorIndicator
+    /** determines the type of error to indicate.
+
+        @see ChartErrorCategory
+        @see PercentageError
+        @see ErrorMargin
+        @see ConstantErrorLow
+        @see ConstantErrorHigh
+        @see ErrorIndicator
      */
     [property] com::sun::star::chart::ChartErrorCategory ErrorCategory;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::PercentageError
-    /** specifies the percent error for the data row.@see ErrorCategory
+    /** specifies the percentage that is used to display error bars.
+
+        <p>The length of the error indicators is calculated for each
+        data point by taking the given percentatge of its value.</p>
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::PERCENT</member>.</p>
+
+        @see ErrorCategory
      */
     [property] double PercentageError;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::ErrorMargin
-    /** specifies the margin of errors for the data row.@see ErrorCategory
+    /** specifies the percentage for the margin of errors.
+
+        <p>The length of the error indicators is calculated by taking
+        the percentage given of the largest data point value.</p>
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::ERROR_MARGIN</member>.</p>
+
+        @see ErrorCategory
      */
     [property] double ErrorMargin;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::ErrorIndicator
-    /** determines how the error is indicated.@see ErrorCategory
+    /** determines how the error is indicated.
+
+        <p>You can enable indicators pointing up, down or both.</p>
+
+        @see ErrorCategory
      */
     [property] com::sun::star::chart::ChartErrorIndicatorType ErrorIndicator;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartStatistics::RegressionCurves
-    /** determines a type of regression for the
-        data row values.
+    /** determines a type of regression for the data row values.
+
+        @see ChartRegressionCurveType
      */
     [property] com::sun::star::chart::ChartRegressionCurveType RegressionCurves;
 
@@ -169,6 +196,12 @@ service ChartStatistics
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetConditionalEntries.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetConditionalEntries_idl__
 #define __com_sun_star_sheet_XSheetConditionalEntries_idl__
 
@@ -69,36 +70,56 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to add and remove conditions of a conditional format.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSheetConditionalEntries
-/** the conditions of a conditional format are managed.@see com::sun::star::sheet::TableConditionalFormat
+    @see com::sun::star::sheet::TableConditionalFormat
+    @see com::sun::star::sheet::TableConditionalEntry
  */
 interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetConditionalEntries::addNew
-    /** adds a conditional entry to the format.@see com::sun::star::sheet::TableConditionalFormat
+    /** adds a conditional entry to the format.
+
+        <p>Supported properties are:</p>
+
+        <dl>
+        <dt><type>ConditionOperator</type> Operator</dt>
+        <dd>contains the operation to perform for this condition.</dd>
+
+        <dt><atom>string</atom> Formula1</dt>
+        <dd>contains the value or formula for the operation.</dd>
+
+        <dt><atom>string</atom> Formula2</dt>
+        <dd>contains the second value or formula for the operation (used with
+        <const>ConditionOperator::BETWEEN</const> or
+        <const>ConditionOperator::NOT_BERWEEN</const> operations).</dd>
+
+        <dt><type scope="com::sun::star::table">CellAddress</type>
+        SourcePosition</dt>
+        <dd>contains the base address for relative cell references in formulas.
+        </dd>
+        </dl>
+
+        @see com::sun::star::sheet::TableConditionalFormat
      */
-    void addNew( [in] sequence<com::sun::star::beans::PropertyValue> aConditionalEntry );
+    void addNew( [in] sequence< com::sun::star::beans::PropertyValue > aConditionalEntry );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetConditionalEntries::removeByIndex
     /** removes a conditional entry from the format.
      */
     void removeByIndex( [in] long nIndex );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetConditionalEntries::clear
-    /** clears the format.
+    /** clears all condition entries.
      */
     void clear();
 
@@ -108,30 +129,5 @@ interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/16 16:41:38  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

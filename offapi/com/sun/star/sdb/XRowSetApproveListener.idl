@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowSetApproveListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,18 @@ interface XRowSetApproveListener: com::sun::star::lang::XEventListener
 
     // DocMerge from xml: method com::sun::star::sdb::XRowSetApproveListener::approveCursorMove
     /** is called before a rowset's cursor is moved.
+        @param event
+            the event which happend
+        @returns <TRUE/> when moving is allowed, otherwise <FALSE/>
      */
     boolean approveCursorMove([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdb::XRowSetApproveListener::approveRowChange
     /** is called before a row is inserted, updated, or deleted.
+        @param event
+            the event which happend
+        @returns <TRUE/> when changing is allowed, otherwise <FALSE/>
      */
     boolean approveRowChange([in]RowChangeEvent event);
     //-------------------------------------------------------------------------
@@ -93,8 +99,10 @@ interface XRowSetApproveListener: com::sun::star::lang::XEventListener
     // DocMerge from xml: method com::sun::star::sdb::XRowSetApproveListener::approveRowSetChange
     /** is called before a rowset is changed, or in other words
         before a rowset is reexecuted.
-
-<!-- JRH: check that sense is correct. -->*/
+        @param event
+            the event which happend
+        @returns <TRUE/> when changing is allowed, otherwise <FALSE/>
+    */
     boolean approveRowSetChange([in]com::sun::star::lang::EventObject event);
 };
 
@@ -104,6 +112,12 @@ interface XRowSetApproveListener: com::sun::star::lang::XEventListener
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:27:43  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

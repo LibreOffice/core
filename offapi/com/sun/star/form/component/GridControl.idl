@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/form/XGridColumnFactory.idl>
 #endif
 
+#ifndef __com_sun_star_form_FormComponents_idl__
+#include <com/sun/star/form/FormComponents.idl>
+#endif
+
 #ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
 #endif
@@ -108,43 +112,70 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::GridControl
-/** This service specifies a ControlModel to represent data in a table.
+/** specifies a model for a control which can display form data in a table-like way.
+
+    <p>In opposite to other <type>FormControl</type>s, grid controls do not only
+    display the single current value of a column they are bound to. Moreover, they do
+    display not only the current row of the form, but all rows (at least potentially, limited
+    by the control size, of course).</p>
+
+    <p>The table rows in a grid control correspond to the rows in the <type>DataForm</type>
+    the control belongs to, and the columns correspond to single columns of the form's row set.</p>
+
+    <p>Columns of a grid control are modeled by own objects, too. They are very similar to usual
+    <type>DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
+    as own services. Instead, they need to be created using the <type>XGridColumnFactory</type> interface.</p>
  */
 service GridControl
 {
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
-    // DocMerge: empty anyway
+    /** provides basic functionality of a container of <type scope="com::sun::star::form">FormComponent</type>s.
+
+        <p>All the container-related methods of this service related to control models,
+        this is what are the container elements for a <type>GridControl</type>.</p>
+
+        <p>As the <type scope="com::sun::star::form">FormComponents</type> service also specifies
+        the <type scope"com::sun::star::script">XEventAttacherManager</type> service, grid control models
+        also provide a scripting environment for their columns.</p>
+    */
+    service com::sun::star::form::FormComponents;
+
+    /** allows to create column models to be inserted into the control model.
+
+        <p>Note that the object returned by the <member>XGridColumnFactory::createColumn</member>
+        method is not part of the grid control, yet. It needs to be inserted using any of the
+        container interfaces.</p>
+
+        <p>You always need to use this interface for creating columns for the grid control.
+        Column models not created this way will not be accepted when inserted later on.</p>
+    */
     interface com::sun::star::form::XGridColumnFactory;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XContainer;
+    /** gives access to the currently selection.
 
-    // DocMerge: empty anyway
+        <p>In a grid control, single columns can be selected (at most one at a time).<br/>
+        For various unfortunate reaons, this selection is an aspect of the model, not of the
+        control as you would expect.</p>
+
+        <p>This interface is deprecated, new implementations should not use it anymore, as it is to
+        be superseeded by a solution which is bound to the control, not the model.</p>
+
+        @deprecated
+    */
     interface com::sun::star::view::XSelectionSupplier;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNameContainer;
+    /** resets the control.
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XIndexContainer;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XEnumerationAccess;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::script::XEventAttacherManager;
-
-    // DocMerge: empty anyway
+        <p>The reset of the control is forwarded to all it's elements, means to all the column models.
+        As grid columns are very much like data-aware stand-alone controls, you can find a description
+        of the reset functionality in <member scope="com::sun::star::form">DataAwareControlModel::XReset</member>.
+    */
     interface com::sun::star::form::XReset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::GridControl::Border
     /** returns the border style of the control.
-
 
         <pre>
         0: No border
@@ -156,35 +187,35 @@ service GridControl
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::GridControl::Enabled
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::GridControl::FontDescriptor
     /** contains the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::GridControl::RowHeight
     /** specifies the height of a row of the grid.
+
+        <p>If the value is set to <NULL/>, the height is determined automatically according
+        to the current font used.</p>
+
+        @see GridControl::FontDescriptor
      */
     [property] long RowHeight;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::GridControl::Tabstop
     /** determines whether the control can be reached by the tabulator key.
      */
     [property] boolean Tabstop;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::GridControl::TextColor
     /** specifies the text color (RGB) of the control.
      */
     [property] long TextColor;
@@ -198,6 +229,18 @@ service GridControl
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.3  2002/07/26 09:49:16  fs
+    IDL review form layer
+
+    Revision 1.3.24.2  2002/02/18 15:24:14  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3.24.1  2002/02/18 14:56:21  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:19  hjs
     initial import
 

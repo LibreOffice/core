@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartSolidType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,37 +68,32 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::chart::ChartSolidType
 /** These values specify the type of solid shapes for data points of
-        3D bar charts.
+    3D bar charts.
  */
 constants ChartSolidType
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID
-    /** extruded rectangle
+    /** extruded rectangle, i.e., a cuboid
      */
     const long RECTANGULAR_SOLID = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSolidType::CYLINDER
-    /** cylindric
+    /** cylinder with a circle as base
      */
     const long CYLINDER = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSolidType::CONE
-    /** conic
+    /** cone with a circle as base
      */
     const long CONE = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSolidType::PYRAMID
-    /** pyramidial
+    /** pyramidial with a square as base
      */
     const long PYRAMID = 3;
 
@@ -111,6 +106,12 @@ constants ChartSolidType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

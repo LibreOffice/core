@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultColumn.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ service ResultColumn
 
     // DocMerge from xml: property com::sun::star::sdb::ResultColumn::ServiceName
     /** returns the fully-qualified name of the service whose instances
-        are manufactured if the method <code>ResultSet.getObject</code>
+        are manufactured if the method
+        <method scope="com::sun::star::sdbc">XRow::getObject)=</method>
         is called to retrieve a value from the column.
      */
     [readonly, property] string ServiceName;
@@ -168,6 +169,12 @@ service ResultColumn
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.1  2002/02/18 10:24:23  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellAreaLink.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:01:48 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_CellAreaLink_idl__
 #define __com_sun_star_sheet_CellAreaLink_idl__
 
@@ -73,54 +74,62 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a linked cell range.
 
-//=============================================================================
+    <p>A linked cell range is a range which is linked to an equal-sized
+    range in an external document. The contents of the external range is
+    copied into the range of this document.</p>
 
-// DocMerge from xml: service com::sun::star::sheet::CellAreaLink
-/** a linked cell range.
+    @see com::sun::star::sheet::CellAreaLinks
  */
 service CellAreaLink
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to change the settings of the linked cell range.
+     */
     interface com::sun::star::sheet::XAreaLink;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::util::XRefreshable;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::CellAreaLink::Url
+    /** provides methods to reload the external data.
+     */
+    interface com::sun::star::util::XRefreshable;
+
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+     //========================================================================
+
     /** specifies the URL of the source document.
      */
     [property] string Url;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::CellAreaLink::Filter
-    /** specifies the name of the filter needed
-        to load the source document.
+    /** specifies the name of the filter used to load the source document.
      */
     [property] string Filter;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::CellAreaLink::FilterOptions
-    /** specifies the filter options needed
-        to load the source document.
+    /** specifies the filter options needed to load the source document.
      */
     [property] string FilterOptions;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the delay time between
-        two refresh actions in seconds.
+    /** specifies the delay time between two refresh actions in seconds.
      */
     [property] long RefreshDelay;
 
@@ -130,27 +139,5 @@ service CellAreaLink
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:45  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:47  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:07  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:53  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

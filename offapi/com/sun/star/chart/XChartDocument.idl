@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChartDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,91 +88,102 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::chart::XChartDocument
-/** manages the chart document.@see        XDiagram
-        @see        XChartData
+/** manages the chart document.
+
+    @see XDiagram
+    @see XChartData
  */
 interface XChartDocument: com::sun::star::frame::XModel
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartDocument::getTitle
     /** @returns
-                the shape of the main title of the chart document.
+            the shape of the main title of the chart document.
 
-                @see ChartTitle
+        @see ChartTitle
      */
     com::sun::star::drawing::XShape getTitle();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartDocument::getSubTitle
     /** @returns
-                the shape of the subtitle of the chart document.
+            the shape of the subtitle of the chart document.
 
-                @see ChartTitle
+       <p>Usually the subtitle is smaller than the main title by
+       default.  And it is most commonly placed below the main title
+       by default.</p>
+
+        @see ChartTitle
      */
     com::sun::star::drawing::XShape getSubTitle();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartDocument::getLegend
     /** @returns
-                the shape of the legend of the chart document.
+            the shape of the legend of the chart document.
 
-                @see ChartLegend
+        @see ChartLegend
      */
     com::sun::star::drawing::XShape getLegend();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartDocument::getArea
     /** @returns
-                the properties of the background area of the chart document.
+            the properties of the background area of the chart document.
 
-                @see ChartArea
+        <p>The area's extent is equal to the document size.  If you
+        want to access properties of the background area of the
+        diagram, in which the actual data is represented, you have to
+        change the chart wall which you get from the
+        <type>X3DDisplay</type>.</p>
+
+        @see ChartArea
+        @see X3DDisplay
      */
     com::sun::star::beans::XPropertySet getArea();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartDocument::getDiagram
     /** @returns
-                the diagram of the chart document.
+            the diagram of the chart document.
 
-                @see Diagram
+        @see Diagram
      */
     com::sun::star::chart::XDiagram getDiagram();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::chart::XChartDocument::setDiagram
     /** sets the diagram for the chart document.
 
+        <p>Setting a new diagram implicitly disposes the previous
+        diagram.</p>
 
-        <p>The diagram component itself is created by
-        <type scope="com::sun::star::lang">XMultiServiceFactory</type>,
-        which is supplied by the <type>ChartDocument</type>.
-
-        </p>
-        <p>Setting a new diagram implicitly disposes the previous diagram.</p>
+        @param xDiagram
+            the new diagram that should be set for the chart.  To
+            create such a diagram component, you can use the
+            <type scope="com::sun::star::lang">XMultiServiceFactory</type>,
+            which should be implemented by an
+            <type>XChartDocument</type>.
      */
     void setDiagram( [in] com::sun::star::chart::XDiagram xDiagram );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XChartDocument::getData
     /** @returns
-                the data source of the chart.
+            the data source of the chart.
 
-                @see ChartData
+        @see ChartData
      */
     com::sun::star::chart::XChartData getData();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::chart::XChartDocument::attachData
-    /** attaches an external data source to the chart.@see ChartData
+    /** attaches an external data source to the chart.
+
+        @see ChartData
+
+        @param xData
+            the component that provides the new data.
      */
     void attachData( [in] com::sun::star::chart::XChartData xData );
 
@@ -185,6 +196,15 @@ interface XChartDocument: com::sun::star::frame::XModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.2.2  2002/01/29 14:23:17  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.6.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.6  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.5  2001/03/16 16:41:16  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

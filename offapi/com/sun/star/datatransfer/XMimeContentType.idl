@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeContentType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,44 +73,71 @@
 
 module com { module sun { module star { module datatransfer {
 
+//-------------------------------------------------------------------------
+/** An implementation of this interface represents a MIME content-type that
+    is conform to <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
+    <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
+    Instances that implement this interface could be created using the
+    interface <type>XMimeContentTypeFactory</type>.
+*/
+
 interface XMimeContentType : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-        the media type of the content-type.
+    /** To get the media type of the MIME content-type.
+
+        @returns
+        The media type of the MIME content-type.
     */
     string getMediaType( );
 
     //-------------------------------------------------------------------------
-    /** @returns
-        the media subtype of the content-type
+    /** To get the media subtype of the MIME content-type.
+
+        @returns
+        The media subtype of the MIME content-type.
     */
     string getMediaSubtype( );
 
     //-------------------------------------------------------------------------
-    /** @returns
-        the full media type of the content-type (type/subtype)
+    /** To get the full media/submedia type of the MIME content-type.
+
+        @returns
+        The full media/submedia type of the MIME content-type.
     */
     string getFullMediaType( );
 
     //-------------------------------------------------------------------------
-    /** @returns
-        a list of the names of all parameters of the content-type
+    /** To get a list of parameters that the MIME content-type contains.
+
+        @returns
+        A list of the names of all parameters of the MIME content-type.
     */
     sequence< string > getParameters( );
 
     //-------------------------------------------------------------------------
-    /** @returns
-        <true/> if the content-type has the specified parameter
+    /** To query if a specific parameter is supported.
+
+        @param aName
+        The name of the parameter to query for.
+
+        @returns
+        A value of <TRUE/> if the MIME content-type has the specified parameter.
+        <p>A value of <FALSE/> if the MIME content-type has not the specified parameter.</p>
     */
     boolean hasParameter( [in] string aName );
 
     //-------------------------------------------------------------------------
-    /** @returns
-        the value of the parameter
+    /** To get the value of a specified parameter.
 
-        @param
-        the name of the parameter
+        @param aName
+        The name of the parameter for which the value is requested.
+
+        @returns
+        The value of the specified parameter.
+
+        @throws com::sun::star::container::NoSuchElementException
+        if the specified parameter doesn't exist.
     */
     string getParameterValue( [in] string aName )
         raises ( com::sun::star::container::NoSuchElementException );

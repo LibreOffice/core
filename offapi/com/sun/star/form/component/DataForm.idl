@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataForm.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 08:37:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,20 @@
 #include <com/sun/star/form/XLoadable.idl>
 #endif
 
+#ifndef __com_sun_star_sdb_XCompletedExecution_idl__
+#include <com/sun/star/sdb/XCompletedExecution.idl>
+#endif
 
+#ifndef __com_sun_star_awt_TabControllerModel_idl__
+#include <com/sun/star/awt/TabControllerModel.idl>
+#endif
 
 //=============================================================================
 
 module com { module sun { module star { module form {
 
 interface XReset;
+interface XDatabaseParameterBroadcaster;
 
 module component {
 //=============================================================================
@@ -97,30 +104,62 @@ module component {
 
     <p>A database form is a special kind of enhanced database row set
     which provides all information for displaying the data and has more
-    possibilities for configuring the data manipulation.
+    possibilities for configuring the data manipulation.</p>
 
 */
 service DataForm
 {
-    service com::sun::star::form::component::Form;
     service com::sun::star::sdb::RowSet;
+    service com::sun::star::form::component::Form;
+
     /** is used to initialize a data row which should be inserted.
+
+        TODO: define the conditions under which forms and controls are (or should be) reset
     */
     interface com::sun::star::form::XReset;
 
     /** used to load/unload the form
         <p>Loading a form is basically the same as executing the underlying row set. In fact, all the
         functionality of this interface could be simulated by using setting some properties manually,
-        <method scope="com.sun.star.sdbc">XRowSet::execute</method>, moving the row set cursor and so on.</p>
+        <method scope="com::sun::star::sdbc">XRowSet::execute</method>, moving the row set cursor and so on.</p>
 
-        <p>One main difference between <method>XLoadable::load</method> and <method scope="com.sun.star.sdbc">XRowSet::execute</method>
+        <p>One main difference between <method>XLoadable::load</method> and <method scope="com::sun::star::sdbc">XRowSet::execute</method>
         is that if you use the former, the row set is positioned on the first record, while in the latter case
         it is position <em>before</em> the it.</p>
     */
     interface com::sun::star::form::XLoadable;
 
+    /** can be used to allow an interaction handler to supply missing data during a load process.
+
+        <p>If data is needed during loading a form, then this is usually obtained via broadcaster-listener
+        mechanisms. An example for this (and currently the only one) are parameter values.</p>
+        <p>However, if you use this method, you can pass an interaction handler which should supply these
+        additional data.</p>
+
+        @see com::sun::star::sdb::InteractionHandler
+    */
+    interface com::sun::star::sdb::XCompletedExecution;
+
+    /** can be used for filling parameters.
+
+        <p>You can add your component as
+        <type scope="com::sun::star::form">XDatabaseParameterListener</type>
+        to a form to get notified whenever the form needs parameter values to be filled in<br/>
+        In a first approach, the form tries to fill any parameters from it's master-detail relation
+        (if any). All values which can't be filled are then passed to all listeners, which can
+        fill them by their own choice.</p>
+
+        <p>This is sligtly changed if the form is loaded using the
+        <member>XCompletedExecution::connectWithCompletion</member> method. In this case, the parameters
+        are obtained from the interaction handler, not from the listeners</p>
+
+        @see XCompletedExecution
+        @see MasterFields
+        @see DetailFields
+    */
+    interface com::sun::star::form::XDatabaseParameterBroadcaster;
+
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR DatabaseForm::MasterFields
     /**is used for subforms and contains the names of columns of the parent form.
        <p> These columns are typically the foreign key fields of the parent form.
        The values of theses columns are used to identify the data for the subform.
@@ -130,7 +169,6 @@ service DataForm
     [property] sequence<string> MasterFields;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR DatabaseForm::DetailFields
     /**is used for subforms and contains the names of the columns of the subform
        which are related to the master fields of the parent form.
        <p> These columns represent typically a part of the primary key fields or their aliases
@@ -145,22 +183,37 @@ service DataForm
     [property] com::sun::star::form::TabulatorCycle Cycle;
 
     //-------------------------------------------------------------------------
-    /** How to use a NavigationBar?
+    /** determines how an navigation bar for this form should act.
     */
     [property] com::sun::star::form::NavigationBarMode NavigationBarMode;
 
     //-------------------------------------------------------------------------
-    /** Are insertions of new records allowed?
+    /** determines if insertions into the form's row set are allowed.
+
+        <p>Note that this is a recommendation for user interface components displaying the
+        form. Form implementations may decide to allow for insertions done via the API, even
+        if the property is set to <FALSE/>, but the user interface should respect the property
+        value.</p>
     */
     [property] boolean AllowInserts;
 
     //-------------------------------------------------------------------------
-    /** Are modifications of the current record allowed?
+    /** determines if modifications of the current record of the form are allowed.
+
+        <p>Note that this is a recommendation for user interface components displaying the
+        form. Form implementations may decide to allow for updates done via the API, even
+        if the property is set to <FALSE/>, but the user interface should respect the property
+        value.</p>
     */
     [property] boolean AllowUpdates;
 
     //-------------------------------------------------------------------------
-    /** Are deletions of records allowed?
+    /** determines if deletions of records of the form are allowed.
+
+        <p>Note that this is a recommendation for user interface components displaying the
+        form. Form implementations may decide to allow for deletions done via the API, even
+        if the property is set to <FALSE/>, but the user interface should respect the property
+        value.</p>
     */
     [property] boolean AllowDeletes;
 };

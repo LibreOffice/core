@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAsyncJob.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-30 12:49:12 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,48 +74,52 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-//.............................................................................
+//=============================================================================
+
 module com {  module sun {  module star {  module task {
-//.............................................................................
 
 interface XJobListener;
 
-/** specifies a job which is to be executed asynchronously.
+//=============================================================================
+/** specifies a job which is to be executed asynchronously
+
+    <p>
+    Instead of <type>XJob</type> the implementation of this interface
+    must make shure that execution will be real asynchronous (e.g. by using
+    threads). Because it's not part of the generic <type>JobExecutor</type>,
+    the asynchronous mode must be guaranteed by the implementation of THIS
+    interface.
+    </p>
+
+    @see XJob
 */
 interface XAsyncJob : com::sun::star::uno::XInterface
 {
+    //------------------------------------------------------------------------
     /** executes the job asynchronously
-    @param lArgs
-        are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
-        a concrete implementation of a job specifies in its service descriptions which parameters are allowed
-        (or expected).
-    @param xListener
-        specifies a listener which should be notified on events. May be <NULL/>.
+
+        @param Arguments
+            are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
+            a concrete implementation of a job specifies in its service descriptions which parameters are allowed
+            (or expected). This values are persistent by the configuration of the <type>JobExecutor</type>
+            which use this asynchronous job. It's possible to write it back by called listener
+            function <member>XJobListener::jobFinished()</member> which must be the executor himself.
+
+        @param Listener
+            specifies a listener which should be notified on events. May be <NULL/>.
+            If it's not <NULL/> it must be the <type>JobExecutor</type> which force this action.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if some of given arguments doesn't fill out the service specification or
+            was corrupt so the service couldn't work correctly
     */
-    void executeAsync( [in] sequence< com::sun::star::beans::NamedValue > lArgs     ,
-                       [in] XJobListener                                  xListener ) raises( com::sun::star::lang::IllegalArgumentException );
+   void executeAsync(
+        [in] sequence< com::sun::star::beans::NamedValue > Arguments,
+        [in] XJobListener Listener)
+            raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//.............................................................................
 }; }; }; };
-//.............................................................................
 
 #endif
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/12/05 13:18:25  as
- *  #91062# simple revision of job execution interfaces
- *
- *
- *  Revision 1.2  2001/11/20 14:28:26  as
- *  #91062# make interface more simple!
- *
- *  Revision 1.1  2001/09/14 09:48:03  fs
- *  initial checkin - specification for a job to be executed asynchronously
- *
- *
- *  Revision 1.0 13.09.01 17:03:45  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryList.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ module com { module sun { module star { module linguistic2 {
     of dictionaries and additional information to be used for
     those purposes.</P>
 
-    @see    com::sun::star::linguistic2::XDictionary
-    @see    com::sun::star::uno::XInterface
+    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    @see    <type scope="com::sun::star::uno">XInterface</type>
 */
 interface XDictionaryList : com::sun::star::uno::XInterface
 {
@@ -103,7 +103,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
              a sequence with an entry for every dictionary
             in the list.
 
-        @see    com::sun::star::linguistic2::XDictionary
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
     */
     sequence<com::sun::star::linguistic2::XDictionary> getDictionaries();
 
@@ -117,7 +117,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @param  aDictionaryName
             specifies the name of the dictionary to look for.
 
-        @see    com::sun::star::linguistic2::XDictionary
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
     */
     com::sun::star::linguistic2::XDictionary getDictionaryByName(
             [in] string aDictionaryName );
@@ -135,8 +135,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @param  xDictionary
             the dictionary to be added.
 
-        @see    removeDictionary
-        @see    com::sun::star::linguistic2::XDictionary
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
     */
     boolean addDictionary(
             [in] com::sun::star::linguistic2::XDictionary xDictionary );
@@ -155,8 +154,7 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @param  xDictionary
             dictionary to be removed from the list of dictionaries.
 
-        @see    addDictionary
-        @see    com::sun::star::linguistic2::XDictionary
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
     */
     boolean removeDictionary(
             [in] com::sun::star::linguistic2::XDictionary xDictionary );
@@ -166,14 +164,12 @@ interface XDictionaryList : com::sun::star::uno::XInterface
 
         <P>On dictionary-list events, each entry in the listener list will
          be notified via a call to
-         <member scope="com::sun::star::linguistic2">
-         XDictionaryListEventListener::processDictionaryListEvent</member>.</P>
+        <member scope="com::sun::star::linguistic2">XDictionaryListEventListener::processDictionaryListEvent</member>.</P>
 
         @returns
             <TRUE/> if the entry was made, <FALSE/> otherwise.
-            If <member scope="com::sun::star::lang">
-            XEventListener::disposing</member> was called before,
-              it will always fail.
+            If <member scope="com::sun::star::lang">XEventListener::disposing</member>
+            was called before, it will always fail.
 
         @param  xListener
             the object to be notified of dictionary-list events.
@@ -182,9 +178,8 @@ interface XDictionaryList : com::sun::star::uno::XInterface
             </TRUE> if the listener requires more detailed event
             notification than usual.
 
-        @see    removeDictionaryListEventListener
-        @see    com::sun::star::linguistic2::XDictionaryListEventListener
-        @see    com::sun::star::linguistic2::XDictionaryListEvent
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
     */
     boolean addDictionaryListEventListener(
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener,
@@ -200,8 +195,8 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @param  xListener
             the object to be removed from the listener list.
 
-        @see    addDictionaryListEventListener
-        @see    com::sun::star::linguistic2::XDictionaryListEventListener
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
     */
     boolean removeDictionaryListEventListener(
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener );
@@ -217,9 +212,10 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @returns
              the current request level for event buffering.
 
-        @see    com::sun::star::linguistic2::XDictionaryListEvent
-        @see    com::sun::star::linguistic2::XDictionaryListEventListener
-        @see    flushEvents
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::endCollectEvents</member>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::flushEvents</member>
     */
     short beginCollectEvents();
 
@@ -235,9 +231,10 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @returns
              the current request level for event buffering.
 
-        @see    com::sun::star::linguistic2::XDictionaryListEvent
-        @see    com::sun::star::linguistic2::XDictionaryListEventListener
-        @see    flushEvents
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::beginCollectEvents</member>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::flushEvents</member>
     */
     short endCollectEvents();
 
@@ -248,8 +245,10 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @returns
              the current request level for event buffering.
 
-        @see    com::sun::star::linguistic2::XDictionaryListEvent
-        @see    com::sun::star::linguistic2::XDictionaryListEventListener
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::beginCollectEvents</member>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::endCollectEvents</member>
     */
     short flushEvents();
 
@@ -276,9 +275,9 @@ interface XDictionaryList : com::sun::star::uno::XInterface
             if the XStorable interface is supported.
             It may be empty, which means the dictionary will not be persistent.
 
-        @see    com::sun::star::linguistic2::XDictionary
-        @see    com::sun::star::lang::Locale
-        @see    com::sun::star::linguistic2::DictionaryType
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
     */
     com::sun::star::linguistic2::XDictionary createDictionary(
             [in] string aName,

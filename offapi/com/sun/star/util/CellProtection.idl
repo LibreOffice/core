@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProtection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,37 +64,29 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::CellProtection
 /** describes the kind of protection for a protectable cell.
  */
 struct CellProtection
 {
-    // DocMerge from xml: field com::sun::star::util::CellProtection::IsLocked
     /** specifies if the cell is locked from modifications by the user.
      */
     boolean IsLocked;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::CellProtection::IsFormulaHidden
     /** specifies if the formula is hidden from the user.
      */
     boolean IsFormulaHidden;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::CellProtection::IsHidden
     /** specifies if the cell is hidden from the user.
      */
     boolean IsHidden;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::CellProtection::IsPrintHidden
     /** specifies if the cell is hidden on printouts.
      */
     boolean IsPrintHidden;
@@ -105,27 +97,4 @@ struct CellProtection
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:18  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:04  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/09 15:25:09  mi
-    #70728# missing documentation
-
-    Revision 1.2  2000/01/27 16:13:34  mi
-    #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

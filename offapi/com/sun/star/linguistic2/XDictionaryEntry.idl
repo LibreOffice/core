@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryEntry.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@ module com { module sun { module star { module linguistic2 {
      to be equal. Also a '.' at the end of the word will make no
      difference.</P>
 
-    @see    com::sun::star::linguistic2::XDictionary
-    @see    com::sun::star::uno::XInterface
+    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    @see    <type scope="com::sun::star::uno">XInterface</type>
 */
 interface XDictionaryEntry : com::sun::star::uno::XInterface
 {
@@ -108,8 +108,6 @@ interface XDictionaryEntry : com::sun::star::uno::XInterface
         @returns
             <TRUE/> if the word (entry) is a negative one and should not be
              used, <FALSE/> otherwise.
-
-        @see    getReplacementText
     */
     boolean isNegative();
 
@@ -121,8 +119,6 @@ interface XDictionaryEntry : com::sun::star::uno::XInterface
          @returns
              the replacement text for a negative entry.
              An empty string indicates that no replacement text is provided.
-
-         @see   isNegative
      */
     string getReplacementText();
 

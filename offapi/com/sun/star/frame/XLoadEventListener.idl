@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLoadEventListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,47 +72,31 @@
 interface XFrameLoader;
 
 //=============================================================================
+/** is used to receive callbacks from an asynchronous frame loader.
 
-// DocMerge from xml: interface com::sun::star::frame::XLoadEventListener
-/** is used to receive callbacks from a frame loader.
+    @see XFrameLoader
  */
 interface XLoadEventListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
+    /** is called when a new component is loaded into a frame successfully.
 
-    // DocMerge from xml: method com::sun::star::frame::XLoadEventListener::loadFinished
-    /** is called when a new control is loaded into a frame.
+        @param Loader
+            the source of this event
      */
-    [oneway] void loadFinished( [in] XFrameLoader aLoader );
+    [oneway] void loadFinished( [in] XFrameLoader Loader );
 
     //-------------------------------------------------------------------------
+    /** is called when a frame load is cancelled or failed.
 
-    // DocMerge from xml: method com::sun::star::frame::XLoadEventListener::loadCancelled
-    /** is called when a frame load is cancelled.
+        @param Loader
+            the source of this event
      */
-    [oneway] void loadCancelled( [in] XFrameLoader aLoader );
-
+    [oneway] void loadCancelled( [in] XFrameLoader Loader );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

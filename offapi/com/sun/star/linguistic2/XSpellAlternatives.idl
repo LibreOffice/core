@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpellAlternatives.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 17:21:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module linguistic2 {
     a failure-type that may specifiy why the word was not correct.
     </P>
 
-    @see    com::sun::star::linguistic2::SpellFailure
+    @see    <tyoe scope="com::sun::star::linguistic2">SpellFailure</type>
 */
 interface XSpellAlternatives : com::sun::star::uno::XInterface
 {
@@ -107,7 +107,7 @@ interface XSpellAlternatives : com::sun::star::uno::XInterface
         @returns
             the type (reason) for spellchecking to have failed verification.
 
-        @see    com::sun::star::linguistic2::SpellFailure
+    @see    <tyoe scope="com::sun::star::linguistic2">SpellFailure</type>
     */
     short getFailureType();
 

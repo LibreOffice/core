@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocument.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,7 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartDocument
-/** the service for a chart document.
-
-
+/** is the service for a chart document.
 
     <p>A chart document consists of a reference to the data source,
     the diagram and some additional elements like a main title, a
@@ -92,29 +89,23 @@
  */
 service ChartDocument
 {
-    // DocMerge: empty anyway
     interface com::sun::star::chart::XChartDocument;
-
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDocument::HasMainTitle
     /** determines if the main title is shown or hidden.
      */
     [property] boolean HasMainTitle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDocument::HasSubTitle
     /** determines if the subtitle is shown or hidden.
      */
     [property] boolean HasSubTitle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDocument::HasLegend
     /** determines if the legend is shown or hidden.
      */
     [property] boolean HasLegend;
@@ -128,6 +119,12 @@ service ChartDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.4  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

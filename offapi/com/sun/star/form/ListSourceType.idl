@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListSourceType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,52 +68,46 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::form::ListSourceType
-/** describes the kind of data source used
-    to fill the list data of a listbox or a combobox.
+/** describes the kind of data source used to fill the list data of a listbox or a combobox control.
+    @see com::sun::star::form::component::ListBox
+    @see com::sun::star::form::component::ComboBox
  */
 enum ListSourceType
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::ListSourceType::VALUELIST
-    /** filled with a stringlist of values.
+    /** The control should be filled with a list of string values.
      */
     VALUELIST,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::ListSourceType::TABLE
-    /** filled with the data of a table.
+    /** The control should be filled with the data of a table.
      */
     TABLE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::ListSourceType::QUERY
-    /** filled with the results of a database query.
+    /** The control should be filled with the results of a database query.
      */
     QUERY,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::ListSourceType::SQL
-    /** filled with the results of a database statement.
+    /** The control should be filled with the results of a database statement.
      */
     SQL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::ListSourceType::SQLPASSTHROUGH
-    /** filled with the results of a database statement,
+    /** The control should be filled with the results of a database statement,
         which is not evaluated by the database engine.
      */
     SQLPASSTHROUGH,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::ListSourceType::TABLEFIELDS
-    /** filled with the field names of a database table.
+    /** The control should be filled with the field names of a database table.
      */
     TABLEFIELDS
 
@@ -126,6 +120,12 @@ enum ListSourceType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/07/26 09:59:59  fs
+    IDL review form layer
+
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:16  hjs
     initial import
 

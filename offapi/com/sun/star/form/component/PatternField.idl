@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PatternField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,27 +80,26 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::PatternField
-/** This service specifies the ControlModel of an edit field for
-    strings which match a specified pattern.
+/** specifies a component which allows the input of text which matches a specific pattern.
  */
 service PatternField
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlPatternFieldModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
-    // DocMerge: empty anyway
+    /** can be used to reset the control to it's default text.
+
+        @see PatternField::DefaultText
+    */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR PatternField::DefaultText
+    /** contains a default value for the control.
 
-    // DocMerge from xml: property com::sun::star::form::component::PatternField::DefaultText
-    /** specifies the default text for the component, which is initially displayed
-        or used to reset the component.
+        <p>This value is used when the control is initially displayed, and for resetting it.</p>
+
+        @see com::sun::star::awt::UnoControlPatternFieldModel::Text
+        @see com::sun::star::form::XReset
      */
     [property] string DefaultText;
 
@@ -113,6 +112,18 @@ service PatternField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.3  2002/07/26 09:49:19  fs
+    IDL review form layer
+
+    Revision 1.3.24.2  2002/02/18 15:20:30  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3.24.1  2002/02/18 14:54:18  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:19  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IOErrorCode.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 09:50:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,10 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** Types of input/output errors.
 
-    <P>See <type>com::sun::star::task::InteractionHandler</type> for a
+    <P>See <type scope="com::sun::star::task">InteractionHandler</type> for a
     description of what kinds of arguments
-    <type>com::sun::star::ucb::InteractiveAugmentedIOException</type> should
-    use with each of these error codes.</P>
+    <type>InteractiveAugmentedIOException</type> should use with each of these
+    error codes.</P>
 */
 enum IOErrorCode
 {

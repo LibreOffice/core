@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionGridControl.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 11:51:55 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,27 +79,28 @@
 */
 service InteractionGridControl
 {
-    /** provides the basic functionallity of the control
-    */
     service com::sun::star::form::control::GridControl;
 
     /** allows access to the UI features of the control
+
         <p>Though concret implementations of the service may offer different sets of aspects which can be customized,
         the following commands have, if supported, a defined meaning:
-        <ul>
-            <li><em>.uno:GridSlots/BrowserAttribs</em>: (interactively) customize the overall appearance of the grid (font etc.)</li>
-            <li><em>.uno:GridSlots/RowHeight</em>: (interactively) customize the row height appearance of the grid</li>
-            <li><em>.uno:GridSlots/ColumnAttribs</em>: (interactively) customize the format of a given column</li>
-            <li><em>.uno:GridSlots/ColumnWidth</em>: (interactively) customize the width of a given column</li>
-        </ul>
-        The following parameters may occur when dispatching the commands above (as before, concrete implementations
+        <dl>
+            <dt>.uno:GridSlots/BrowserAttribs</dt><dd> (interactively) customize the overall appearance of the grid (font etc.)</dd>
+            <dt>.uno:GridSlots/RowHeight</dt><dd> (interactively) customize the row height appearance of the grid</dd>
+            <dt>.uno:GridSlots/ColumnAttribs</dt><dd> (interactively) customize the format of a given column</dd>
+            <dt>.uno:GridSlots/ColumnWidth</dt><dd> (interactively) customize the width of a given column</dd>
+        </dl>
+        </p>
+
+        <p>The following parameters may be passed when dispatching the commands above (as before, concrete implementations
         may extend this list):
-        <ul>
-            <li><em>ColumnId</em>: the id of the column in question, if the command is executed for a column</li>
-            <li><em>ColumnModelPos</em>: the model position of the column in question, if the command is executed for a column</li>
-            <li><em>ColumnViewPos</em>: the view position of the column in question, if the command is executed for a column. The
-            view position may differ from the model position, as in a grid control, columns can be hidden.</li>
-        </ul>
+        <dl>
+            <dt>ColumnId</dt><dd> the id of the column in question, if the command is executed for a column</dd>
+            <dt>ColumnModelPos</dt><dd> the model position of the column in question, if the command is executed for a column</dd>
+            <dt>ColumnViewPos</dt><dd> the view position of the column in question, if the command is executed for a column. The
+            view position may differ from the model position, as in a grid control, columns can be hidden.</dd>
+        </dl>
         </p>
     */
     interface com::sun::star::frame::XDispatch;
@@ -112,6 +113,12 @@ service InteractionGridControl
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.14.1  2002/07/26 11:03:17  fs
+    IDL review form layer
+
+    Revision 1.1  2001/04/19 11:51:55  fs
+    initial checkin
+
 
 =============================================================================*/
 
@@ -120,6 +127,12 @@ service InteractionGridControl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.14.1  2002/07/26 11:03:17  fs
+ *  IDL review form layer
+ *
+ *  Revision 1.1  2001/04/19 11:51:55  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 19.04.01 09:21:55  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormButtonType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,36 +68,34 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::form::FormButtonType
-/** specify the default actions of a button.
+/** specifies the action to execute when a button is pressed.
+    @see com::sun::star::form::component::CommandButton
  */
 enum FormButtonType
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::FormButtonType::PUSH
-    /** acts like a common push button.
+    /** requires the button to act like a common push button, means no special action is triggered.
      */
     PUSH,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::FormButtonType::SUBMIT
-    /** performs a submit on its containing form if the button is clicked.
+    /** When the button is clicked, it performs a submit on its containing form.
      */
     SUBMIT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::FormButtonType::RESET
-    /** performs a reset on its containing form if the button is clicked.
+    /** When the button is clicked, it performs a reset on its containing form.
      */
     RESET,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::form::FormButtonType::URL
-    /** opens an URL set for the button if the button is clicked.
+    /** When the button is clicked, an URL set for the button is opened.
+        @see com::sun::star::form::component::CommandButton::TargetURL
+        @see com::sun::star::form::component::CommandButton::TargetFrame
      */
     URL
 
@@ -110,6 +108,12 @@ enum FormButtonType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/07/26 09:59:54  fs
+    IDL review form layer
+
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:16  hjs
     initial import
 

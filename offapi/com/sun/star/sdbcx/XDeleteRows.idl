@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDeleteRows.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ interface XDeleteRows: com::sun::star::uno::XInterface
                 an array of update counts containing one element for each
                  row. The array is ordered according to the order in
                 which bookmarks were given.
-             @throws SQLException
+             @throws com::sun::star::sdbc::SQLException
                 if a fatal error occurs, for intance, the connection gets lost if bookmarks
                 are used which do not belong to the according result set.
      */
@@ -100,6 +100,12 @@ interface XDeleteRows: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:00:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:36  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

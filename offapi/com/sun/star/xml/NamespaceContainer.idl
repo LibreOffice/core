@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamespaceContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:45:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,9 @@
 module com { module sun { module star { module xml {
 
 //=============================================================================
-/** This service describes a container for XML namespaces. Each namespace is
-    accessed with its prefix and the URL is stored as a string.
+/** This service describes a container for XML namespaces.
+
+    <p>Each namespace is accessed with its prefix and the URL is stored as a string.
 */
 service NamespaceContainer
 {

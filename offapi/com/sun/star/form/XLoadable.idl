@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLoadable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 12:37:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,52 +75,56 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XLoadable
-/** interface provides functionality to implement objects which may be loaded.
+/** provides functionality to implement objects which may be loaded.
+
+    <p>The object is typically implemented by high-level objects which can connect to a data source.</p>
+
+    @see XLoadListener
  */
 interface XLoadable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XLoadable::load
-    /** starts the data processing.@see XLoadListener
+    /** loads the data.
      */
     [oneway] void load();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XLoadable::unload
-    /** stops the data processing.@see XLoadListener
+    /** unloads the data.
      */
     [oneway] void unload();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XLoadable::reload
-    /** does a smart refresh of the object. The final state will be the same as if
-        unload and load were called, but reload is the more efficient way to do the same.
-        If the object isn't loaded, nothing happens.@see XLoadListener
+    /** does a smart refresh of the object.
+
+        <p>The final state will be the same as if unload and load were called, but reload
+        is the more efficient way to do the same. If the object isn't loaded, nothing happens.</p>
      */
     [oneway] void reload();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XLoadable::isLoaded
-    /** returns if the object is in loaded state.@see XLoadListener
+    /** returns if the object is in loaded state.
      */
     boolean isLoaded();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XLoadable::addLoadListener
-    /** adds the specified listener to receive events "loaded" and "unloaded."
+    /** adds the specified listener to receive load-related events
+
+        @param aListener
+            the listener to add.
      */
     [oneway] void addLoadListener( [in] com::sun::star::form::XLoadListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XLoadable::removeLoadListener
     /** removes the specified listener.
+
+        @param aListener
+            the listener to remove.
      */
     [oneway] void removeLoadListener( [in] com::sun::star::form::XLoadListener aListener );
 };
@@ -132,6 +136,15 @@ interface XLoadable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.14.2  2002/07/26 10:00:12  fs
+    IDL review form layer
+
+    Revision 1.5.14.1  2002/02/18 14:48:51  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.5  2001/05/18 12:37:30  fs
+    #65293# corrected the include protection
+
     Revision 1.4  2001/03/16 16:41:23  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

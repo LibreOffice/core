@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,8 @@ module com { module sun { module star { module ucb {
     about changes on a <type>ContentResultSet</type> and have an
     listener-controlled update from one version to the next version. Two
     <type>ContentResultSet</type> implementations were given to the listener in
-    the first notification as interface <type>XResultSet</type>.
+    the first notification as interface
+    <type scope="com::sun::star::sdbc">XResultSet</type>.
     </p>
 
     <p>
@@ -130,7 +131,7 @@ module com { module sun { module star { module ucb {
     </p>
 
     <ol>
-      <li> The listener is allowed to access both ContentResultSets,
+      <li> The listener is allowed to access both <type>ContentResultSet</type>s,
          they must be both valid.</li>
       <li> It is not allowed to start a second notify-call.</li>
       <li> All addditional things we want to send as notification are to be
@@ -143,10 +144,11 @@ module com { module sun { module star { module ucb {
     </p>
 
     <ol>
-    <li> The listener is allowed to access the new ContentResultSet.
-         The new one is first assigned in the WELCOME-event and than
-         the ResultSets are always swapped.</li>
-    <li> The listener is not allowed to access the old ContentResultSet.</li>
+    <li> The listener is allowed to access the new
+         <type>ContentResultSet</type>. The new one is first assigned in the
+         WELCOME-event and than the ResultSets are always swapped.</li>
+    <li> The listener is not allowed to access the old
+         <type>ContentResultSet</type>.</li>
     </ol>
 */
 
@@ -156,8 +158,9 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
     /** Call this, if you don't care about any changes.
 
         @returns
-        an <type>XResultSet</type> that is implemented as
-        <type>ContentResultSet</type>. Its content will never change.
+        an <type scope="com::sun::star::sdbc">XResultSet</type> that is
+        implemented as <type>ContentResultSet</type>. Its content will never
+        change.
 
         @trows ListenerAlreadySetException
         if someone already has registered as listener via

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Annotation.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:32:53 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ service Annotation
     /** contains the annotation's content
      */
     [property]string Content;
-    /** contains the creation data.
+    /** contains the creation date.
      */
     [property]com::sun::star::util::Date Date;
 };

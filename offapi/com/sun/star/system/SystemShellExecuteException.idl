@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemShellExecuteException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-16 23:29:42 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,17 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** SystemExecuteException
-    the inherited member of ::com::sun::star::uno::Exception may contain a
+/** May be thrown in cases of errors executing a command using the <type>SystemShellExecute</type> service.
+    <member scope="com::sun::star::uno">Exception::Message</member> may contain a
     system error message, but it is not mandatory.
     The member PosixError specifies a POSIX conforming error code or -1 for
     unknown errors.
  */
 exception SystemShellExecuteException: com::sun::star::uno::Exception
 {
+    //=========================================================================
+    /** A Posix conforming error code or -1 for unknown errors.
+    */
     long PosixError;
 };
 

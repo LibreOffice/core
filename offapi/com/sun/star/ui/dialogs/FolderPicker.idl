@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FolderPicker.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-03 13:36:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,6 @@ interface XControlAccess;
 
 //=============================================================================
 /** A FolderPicker service.
-
-    @see XFolderPicker
 */
 
 service FolderPicker
@@ -103,17 +101,18 @@ service FolderPicker
     interface XFolderPicker;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 
     //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
+        <p>This may be usefull for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellFlags.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,87 +58,77 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_CellFlags_idl__
 #define __com_sun_star_sheet_CellFlags_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from idl: constants com::sun::star::sheet::CellFlags
 /** These constants select different types of cell contents.
 
-        <P>The values can be combined.
-        They are used to insert, copy, or delete contents.</P>
+    <P>The values can be combined. They are used to insert, copy, or
+    delete contents.</P>
  */
 constants CellFlags
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::VALUE
-    /** This value selects constant numeric values that are not formatted
-                as dates or times.
+    /** selects constant numeric values that are not formatted
+        as dates or times.
      */
     const long VALUE = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::DATETIME
-    /** This value selects constant numeric values that have a date or time
-                number format.
+    /** selects constant numeric values that have a date or time
+        number format.
      */
     const long DATETIME = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::STRING
-    /** This value selects constant strings.
+    /** selects constant strings.
      */
     const long STRING = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::ANNOTATION
-    /** This value selects cell annotations.
+    /** selects cell annotations.
      */
     const long ANNOTATION = 8;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::FORMULA
-    /** This value selects formulas.
+    /** selects formulas.
      */
     const long FORMULA = 16;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::HARDATTR
-    /** This value selects all explicit formatting, but not the
-                formatting which is applied implicitly through style sheets.
+    /** selects all explicit formatting, but not the formatting which is
+        applied implicitly through style sheets.
      */
     const long HARDATTR = 32;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::STYLES
-    /** This value selects cell styles.
+    /** selects cell styles.
      */
     const long STYLES = 64;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::OBJECTS
-    /** This value selects drawing objects.
+    /** selects drawing objects.
      */
     const long OBJECTS = 128;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::CellFlags::EDITATTR
-    /** This value selects formatting within parts of the cell contents.
+    /** selects formatting within parts of the cell contents.
      */
     const long EDITATTR = 256;
 
@@ -148,21 +138,5 @@ constants CellFlags
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:45  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:47  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

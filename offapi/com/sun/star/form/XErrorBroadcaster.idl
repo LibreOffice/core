@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XErrorBroadcaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,10 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XErrorBroadcaster
-/** provides the possibility of reviving database error events.
+/** provides the possibility of receiving database error events.
 
-
-
-
-
-
-
-
-
-
-
+    <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
+    by <type scope="com::sun::star::sdb">XSQLErrorBroadcaster</type>.</p>
 
     @deprecated
  */
@@ -96,14 +87,12 @@ interface XErrorBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XErrorBroadcaster::addErrorListener
-    /** adds the specified listener to receive the event "errorOccured."
+    /** adds the specified listener to be notified of errors.
      */
     [oneway] void addErrorListener( [in] com::sun::star::form::XErrorListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XErrorBroadcaster::removeErrorListener
     /** removes the specified listener.
      */
     [oneway] void removeErrorListener( [in] com::sun::star::form::XErrorListener aListener );
@@ -117,6 +106,12 @@ interface XErrorBroadcaster: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/07/26 10:00:06  fs
+    IDL review form layer
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultSetAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,19 @@ interface XResultSet;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::com::sun::star::sdb::XResultSetAccess
-/** is the interface to create a ResultSet based on the object providing the interface.
+/** is the interface to create a
+    <type scope="com::sun::star::sdbc">ResultSet</type>
+    based on the object providing the interface.
  */
 interface XResultSetAccess: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdb::XResultSetAccess::createResultSet
-    /** returns a new ResultSet based on the object.
+    /** returns a new
+        <type scope="com::sun::star::sdbc">ResultSet</type>
+        based on the object.
+        @returns
+            the new created ResultSet object
      */
     com::sun::star::sdbc::XResultSet createResultSet() raises (com::sun::star::sdbc::SQLException);
 };
@@ -97,6 +103,12 @@ interface XResultSetAccess: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:27:50  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 09:52:00 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,67 +72,76 @@ module com { module sun { module star { module task {
 //============================================================================
 /** An interaction request handler that lets the user handle a number of well
     known requests via GUI dialogs (and the
-    <type>com::sun::star::task::PasswordContainer</type> service).
+    <type scope="com::sun::star::task">PasswordContainer</type> service).
 
     <P>The well known requests handled by this service include
-    <type>com::sun::star::java::WrongJavaVersionException</type>*,
-    <type>com::sun::star::sync2::BadPartnershipException</type>*,
-    <type>com::sun::star::task::PasswordRequest</type>,
-    <type>com::sun::star::ucb::AuthenticationRequest</type>,
-    <type>com::sun::star::ucb::HandleCookiesRequest</type>,
-    <type>com::sun::star::ucb::InteractiveAugmentedIOException</type>*,
-    <type>com::sun::star::ucb::InteractiveCHAOSException</type>*,
-    <type>com::sun::star::ucb::InteractiveFileIOException</type>*,
-    <type>com::sun::star::ucb::InteractiveIOException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkConnectException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkGeneralException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkOffLineException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkReadException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkResolveNameException</type>*,
-    <type>com::sun::star::ucb::InteractiveNetworkWriteException</type>*, and
-    <type>com::sun::star::ucb::InteractiveWrongMediumException</type>*.  The
-    requests marked with an asterisk are only handled if (a) their
+    <UL>
+        <LI><type scope="com::sun::star::ucb">AuthenticationRequest</type></LI>
+        <LI><type scope="com::sun::star::sync2">BadPartnershipException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">HandleCookiesRequest</type></LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveCHAOSException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveFileIOException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveIOException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkConnectException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkGeneralException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkOffLineException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkReadException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkResolveNameException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkWriteException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveWrongMediumException</type>*</LI>
+        <LI><type scope="com::sun::star::task">PasswordRequest</type></LI>
+        <LI><type scope="com::sun::star::java">WrongJavaVersionException</type>*</LI>
+    </UL>
+    The requests marked with an asterisk are only handled if (a) their
     continuations match certain restrictions (see below), and (b) the
     necessary resource strings are available (this can be exploited by
     applications that carry only a subset of all resource files with
     them).</P>
 
-    <P>The continuation restrictions are as follows:  Let C be the subset of
-    the provided continuations that are of type
-    <type>com::sun::star::task::XInteractionApprove</type>,
-    <type>com::star::task::XInteractionDisapprove</type>,
-    <type>com::star::task::XInteractionRetry</type>, or
-    <type>com::star::task::XInteractionAbort</type> (or of a derived type).
-    All other continuations are ignored for these requests.  The request is
-    only handled if the set C is any of the following:
+    <P>The continuation restrictions are as follows:  Let <VAR>C</VAR> be the
+    subset of the provided continuations that are of type
+    <type scope="com::sun::star::task">XInteractionApprove</type>,
+    <type scope="com::sun::star::task">XInteractionDisapprove</type>,
+    <type scope="com::sun::star::task">XInteractionRetry</type>, or
+    <type scope="com::sun::star::task">XInteractionAbort</type> (or of a
+    derived type).  All other continuations are ignored for these requests.
+    The request is only handled if the set <VAR>C</VAR> is any of the
+    following:
     <UL>
-        <IL>Abort</IL>
-        <IL>Retry, Abort</IL>
-        <IL>Approve</IL>
-        <IL>Approve, Abort</IL>
-        <IL>Approve, Disapprove</IL>
-        <IL>Approve, Disapprove, Abort</IL>
+        <LI>Abort</LI>
+        <LI>Retry, Abort</LI>
+        <LI>Approve</LI>
+        <LI>Approve, Abort</LI>
+        <LI>Approve, Disapprove</LI>
+        <LI>Approve, Disapprove, Abort</LI>
     </UL></P>
 
-    <P>A <type>com::sun::star::ucb::InteractiveAugmentedIOException</type>
+    <P>An
+    <type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>
     carries with it a sequence of arguments, which should be
-    <type>com::sun::star::beans::PropertyValue</type>s.  The following details
-    which properties are interpreted by the interaction handler, depending on
-    the request's <type>com::sun::star::ucb::IOErrorCode</type>:
+    <type scope="com::sun::star::beans">PropertyValue</type>s.  The following
+    details which properties are interpreted by the interaction handler,
+    depending on the request's
+    <type scope="com::sun::star::ucb">IOErrorCode</type>:
     <DL>
         <DT><code>"Uri"</code></DT>
-        <DD>All error codes except <const>DIFFERENT_DEVICES</const>.  The URI
-        of the involved resource (a <atom>string</atom>).</DD>
+        <DD>All error codes except
+        <const scope="com::sun::star::ucb">IOErrorCode::DIFFERENT_DEVICES</const>.
+        The URI of the involved resource (a <atom>string</atom>).</DD>
 
         <DT><code>"ResourceName"</code></DT>
-        <DD>All error codes except <const>DIFFERENT_DEVICES</const>.  A name
-        for the involved resource (a <atom>string</atom>) that might be more
-        meaningful to the user than the URI.  For example, a
+        <DD>All error codes except
+        <const scope="com::sun::star::ucb">IOErrorCode::DIFFERENT_DEVICES</const>.
+        A name for the involved resource (a <atom>string</atom>) that might be
+        more meaningful to the user than the URI.  For example, a
         (platform-dependent) path notation for file system resources.</DD>
 
         <DT><code>"ResourceType"</code></DT>
-        <DD><const>DEVICE_NOT_READY</const> and <const>NOT_EXISTING</const>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::DEVICE_NOT_READY</const>
+        and
+        <const scope="com::sun::star::ucb">IOErrorCode::NOT_EXISTING</const>
         only.  An identifier for the type of resource involved (a
         <atom>string</atom>).  Currently understood values are
         <code>"volume"</code> (e.g., a file system volume) and
@@ -140,17 +149,19 @@ module com { module sun { module star { module task {
         resources).</DD>
 
         <DT><code>"Removable"</code></DT>
-        <DD><const>NOT_EXISTING</const> only.  A flag indicating whether the
-        resource resides on a storage medium that can be removed by the user
-        (a <atom>boolean</atom>).</DD>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::NOT_EXISTING</const>
+        only.  A flag indicating whether the resource resides on a storage
+        medium that can be removed by the user (a <atom>boolean</atom>).</DD>
 
         <DT><code>"Folder"</code></DT>
-        <DD><const>CANT_CREATE</const>only.  The name of the foler in which a
-        resource cannot be created (a <atom>string</atom>).</DD>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::CANT_CREATE</const>
+        only.  The name of the foler in which a resource cannot be created (a
+        <atom>string</atom>).</DD>
 
         <DT><code>"Volume"</code> and <code>"OtherVolume"</code></DT>
-        <DD><const>DIFFERENT_DEVICES</const> only.  The names of the two
-        volumes involved (two <atom>string</atom>s).</DD>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::DIFFERENT_DEVICES</const>
+        only.  The names of the two volumes involved (two
+        <atom>string</atom>s).</DD>
     </DL></P>
  */
 service InteractionHandler
@@ -163,18 +174,18 @@ service InteractionHandler
     //------------------------------------------------------------------------
     /** Initialize the interaction handler.
 
-        <p>The arguments must be a sequence of
-        <type>com::sun::star::beans::PropertyValue</type>s.  The currently
-        supported properties are:
-        <ul>
-        <li><code>"Parent"</code> of type
-            <type>com::sun::star::awt::XWindow</type> denotes the parent
-            window for any GUI dialogs the interaction handler pops up; it is
-            strongly recommended that this property is supplied;</li>
-        <li><code>"Context"</code> of type <atom>string</atom> is a textual
-            description of the current context (used, e.g., as a first line of
-            text in error boxes); this property is optional.</li>
-        </ul></p>
+        <P>The arguments must be a sequence of
+        <type scope="com::sun::star::beans">PropertyValue</type>s.  The
+        currently supported properties are:
+        <UL>
+            <LI><code>"Parent"</code> of type
+            <type scope="com::sun::star::awt">XWindow</type> denotes the
+            parent window for any GUI dialogs the interaction handler pops up;
+            it is strongly recommended that this property is supplied;</LI>
+            <LI><code>"Context"</code> of type <atom>string</atom> is a
+            textual description of the current context (used, e.g., as a first
+            line of text in error boxes); this property is optional.</LI>
+        </UL></P>
      */
     interface com::sun::star::lang::XInitialization;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSetAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ service SimpleSetAccess
 /** is the basic service for accessing child and descendent nodes.
 
  <p>External names from foreign namespaces should be normalized using
- <member scope="com::sun::star::util">XStringEscape::escapeString</member>,
+ <member scope="com::sun::star::util">XStringEscape::escapeString()</member>,
  if available, before using them as element names.
  </p>
 */

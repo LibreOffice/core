@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormats.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,23 +84,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XNumberFormats
 /** provides access to multiple <type>NumberFormat</type>s.
  */
 interface XNumberFormats: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::util::XNumberFormats::getByKey
     /** @returns
                     a readonly <type>NumberFormatProperties</type>.
      */
     com::sun::star::beans::XPropertySet getByKey( [in] long nKey );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNumberFormats::queryKeys
 
-    // DocMerge from idl: method com::sun::star::util::XNumberFormats::queryKeys
     /** @returns
                     a sequence of the keys of all number formats with the specified type and language.
 
@@ -121,7 +117,6 @@ interface XNumberFormats: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormats::queryKey
     /** finds a number format by its format string and returns its key.
      */
     long queryKey( [in] string aFormat,
@@ -130,7 +125,6 @@ interface XNumberFormats: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormats::addNew
     /** adds a new number format to the list, using a format string.
      */
     long addNew( [in] string aFormat,
@@ -139,7 +133,6 @@ interface XNumberFormats: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormats::addNewConverted
     /** adds a new number format to the list, using a format
         string in a different locale than the desired locale of the
         resulting number format.
@@ -151,15 +144,12 @@ interface XNumberFormats: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormats::removeByKey
     /** removes a number format from the list.
      */
     void removeByKey( [in] long nKey );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNumberFormats::generateFormat
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormats::generateFormat
     /** generates a format string from several parameters without
         creating an actual number format.
      */
@@ -176,39 +166,5 @@ interface XNumberFormats: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.9  2000/09/11 11:53:06  mi
-    documentation merged from XML
-
-    Revision 1.7  2000/03/24 13:17:00  nn
-    #74032# documentation added
-
-    Revision 1.6  2000/01/28 15:24:59  mi
-    #72210# Locale instead of Language in NumberFormatter
-
-    Revision 1.5  2000/01/28 15:01:52  mi
-    #72210# Locale instead of Language in NumberFormatter
-
-    Revision 1.4  2000/01/27 16:13:34  mi
-    #70728# missing documentation marked
-
-    Revision 1.3  2000/01/07 13:22:26  nn
-    #71543# Numberformat really as XPropertySet
-
-    Revision 1.2  2000/01/06 11:06:40  mi
-    #71543# Numberformat as XPropertySet
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

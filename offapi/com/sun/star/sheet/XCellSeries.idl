@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellSeries.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XCellSeries_idl__
 #define __com_sun_star_sheet_XCellSeries_idl__
 
@@ -77,38 +78,61 @@
 #include <com/sun/star/sheet/FillDateMode.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to fill out a cell range automatically with values
+    based on a start value, step count and fill mode.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XCellSeries
-/** represents a cell range that can be filled with a
-    series.
+    @see com::sun::star::sheet::SheetCellRange
  */
 interface XCellSeries: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellSeries::fillSeries
-    /** fills the cells in the range.
+    /** fills all cells in the range based on the specified settings.
+
+        @param nFillDirection
+            specifies the direction to fill the rows/columns of the range.
+
+        @param nFillMode
+             specifies the type of the series.
+
+        @param nFillDateMode
+             specifies the calculation mode for date values.
+
+        @param fStep
+            contains the value used to increase/decrease the series values.
+
+        @param fEndValue
+            contains the threshold value on which the calculation of the
+            current series stops.
      */
-    void fillSeries( [in] com::sun::star::sheet::FillDirection nFillDirection,
-             [in] com::sun::star::sheet::FillMode nFillMode,
-             [in] com::sun::star::sheet::FillDateMode nFillDateMode,
-             [in] double fStep,
-             [in] double fEndValue );
+    void fillSeries(
+            [in] com::sun::star::sheet::FillDirection nFillDirection,
+            [in] com::sun::star::sheet::FillMode nFillMode,
+            [in] com::sun::star::sheet::FillDateMode nFillDateMode,
+            [in] double fStep,
+            [in] double fEndValue );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellSeries::fillAuto
-    /** fills the cells in the range in a way that is specified by
-        the first cells in the range.
+    /** fills all cells in the range in a way that is specified by the
+        first cell(s) in the range.
+
+        @param nFillDirection
+            specifies the direction to fill the rows/columns of the range.
+
+        @param nSourceCount
+            contains the number of cells in each row/column used to
+            constitute the fill algorithm.
      */
-    void fillAuto( [in] com::sun::star::sheet::FillDirection nFillDirection,
-             [in] long nSourceCount );
+    void fillAuto(
+            [in] com::sun::star::sheet::FillDirection nFillDirection,
+            [in] long nSourceCount );
 
 };
 
@@ -116,21 +140,5 @@ interface XCellSeries: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

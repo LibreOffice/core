@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardOwner.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,23 +76,26 @@ module com { module sun { module star { module datatransfer { module clipboard {
 interface XClipboard;
 
 //=============================================================================
-/** The owner of a transferable object must pass this interface to the
+/** The owner of a transferable object may pass this interface to the
     clipboard instance.
 
-    @see com::sun::star::datatransfer::XClipboard
+    @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
 interface XClipboardOwner: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** notifies the tranferable object source that it is no longer the owner of
+    /** Notifies the tranferable object source that it is no longer the owner of
         the clipboard.
 
         @param xClipboard
-        the clipboard for which the ownership was lost.
+        The clipboard for which the ownership was lost.
 
         @param xTrans
-        the transferable object that has been the contents of the clipboard.
+        The transferable object that has been the contents of the clipboard.
+
+        @see com::sun::star::datatransfer::clipboard::XClipboard
+        @see com::sun::star::datatransfer::XTransferable
     */
     [oneway] void lostOwnership( [in] XClipboard xClipboard, [in] XTransferable xTrans );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatMapper.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-04-30 19:54:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,14 @@ module com { module sun { module star { module i18n {
 
 //=============================================================================
 
-/// Map locale data number format codes to index values used by the number formatter
+/** Access locale data number format codes to use with the
+    number formatter
+*/
+
 service NumberFormatMapper
 {
     interface com::sun::star::i18n::XNumberFormatCode;
-        interface com::sun::star::lang::XServiceInfo;
+    interface com::sun::star::lang::XServiceInfo;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionary.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@ module com { module sun { module star { module linguistic2 {
     spellcheck. An entry in a negative dictionary may supply a
     proposal for a word to be used instead of the one being used.</P>
 
-    @see    com::sun::star::linguistic2::XDictionaryEvent
-    @see    com::sun::star::container::XNamed
+    @see    <type scope="com::sun::star::linguistic2">XDictionaryEvent</type>
+    @see    <type scope="com::sun::star::container">XNamed</type>
 */
 interface XDictionary : com::sun::star::container::XNamed
 {
@@ -112,7 +112,7 @@ interface XDictionary : com::sun::star::container::XNamed
         @returns
             the type of the dictionary.
 
-        @see    com::sun::star::linguistic2::DictionaryType
+        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
     */
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
@@ -120,7 +120,7 @@ interface XDictionary : com::sun::star::container::XNamed
     /** specifies whether the dictionary should be used or not .
 
         @param  bAcvtivate
-        <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
+            <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
 
     */
     void setActive( [in] boolean bActivate );
@@ -144,7 +144,7 @@ interface XDictionary : com::sun::star::container::XNamed
          @returns
              the language of the dictionary.
 
-        @see    com::sun::star::lang::Locale
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     com::sun::star::lang::Locale getLocale();
 
@@ -154,7 +154,7 @@ interface XDictionary : com::sun::star::container::XNamed
          @param aLocale
             the new language of the dictionary.
 
-        @see    com::sun::star::lang::Locale
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     void setLocale( [in] com::sun::star::lang::Locale aLocale );
 
@@ -168,7 +168,7 @@ interface XDictionary : com::sun::star::container::XNamed
         @param  aWord
             the word to be looked for.
 
-        @see    com::sun::star::linguistic2::XDictionaryEntry
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
     */
     com::sun::star::linguistic2::XDictionaryEntry getEntry( [in] string aWord );
 
@@ -187,11 +187,8 @@ interface XDictionary : com::sun::star::container::XNamed
         @returns
             <TRUE/> if the entry was successfully added <FALSE/> otherwise.
 
-         @see   add
-        @see    remove
-        @see    isFull
-        @see    com::sun::star::linguistic2::XDictionaryEntry
-        @see    com::sun::star::linguistic2::DictionaryType
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
+        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
     */
     boolean addEntry(
         [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
@@ -218,10 +215,7 @@ interface XDictionary : com::sun::star::container::XNamed
         @returns
             <TRUE/> if the entry was successfully added, <FALSE/> otherwise.
 
-         @see   addEntry
-        @see    remove
-        @see    isFull
-        @see    com::sun::star::linguistic2::DictionaryType
+        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
     */
     boolean add(
             [in] string aWord,
@@ -237,9 +231,6 @@ interface XDictionary : com::sun::star::container::XNamed
         @returns
             <TRUE/> if the entry was successfully removed, <FALSE/>
             otherwise (especially if the entry was not found).
-
-         @see   addEntry
-        @see    add
     */
     boolean remove( [in] string aWord );
 
@@ -248,9 +239,6 @@ interface XDictionary : com::sun::star::container::XNamed
         @returns
              <TRUE/> if the dictionary is full and no further
             entry can be made, <FALSE/> otherwise.
-
-         @see   addEntry
-        @see    add
     */
     boolean isFull();
 
@@ -259,7 +247,7 @@ interface XDictionary : com::sun::star::container::XNamed
          @returns
              a sequence with all the entries of the dictionary.
 
-        @see    com::sun::star::linguistic2::XDictionaryEntry
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
     */
 
     sequence<com::sun::star::linguistic2::XDictionaryEntry> getEntries();
@@ -274,20 +262,18 @@ interface XDictionary : com::sun::star::container::XNamed
 
         <P>On dictionary events, each entry in the listener list will
          be notified via a call to
-         <member scope="com::sun::star::linguistic2">
-         XDictionaryEventListener::processDictionaryEvent</member>.</P>
+        <member scope="com::sun::star::linguistic2">XDictionaryEventListener::processDictionaryEvent</member>.</P>
 
         @param  xListener
             the entry to be made, that is, the object that wants notifications.
 
         @returns
             <TRUE/> if the entry was successfully made, <FALSE/> otherwise.
-            If <member scope="com::sun::star::lang">
-            XEventListener::disposing</member> was called before,
-              it will always fail.
+            If <member scope="com::sun::star::lang">XEventListener::disposing</member> was called before,
+            it will always fail.
 
-        @see    removeDictionaryEventListener
-         @see   com::sun::star::linguistic2::XDictionaryEventListener
+        @see    <member scope="com::sun::star::linguistic2">XDictionary::removeDictionaryEventListener</member>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
     */
     boolean addDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
@@ -302,8 +288,8 @@ interface XDictionary : com::sun::star::container::XNamed
             <TRUE/> if the object to be removed was found and removed,
             <FALSE/> if the object was not found in the list.
 
-        @see    addDictionaryEventListener
-         @see   com::sun::star::linguistic2::XDictionaryEventListener
+        @see    <member scope="com::sun::star::linguistic2">XDictionary::addDictionaryEventListener</member>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
     */
     boolean removeDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );

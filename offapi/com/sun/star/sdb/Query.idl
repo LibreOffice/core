@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Query.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,11 @@ interface XRename;
 // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query
 /** is a stored definition of a SQL query.
 
-    <p>It can be used if there is a need to execute SQL statements more than once, or
+    <p>
+    It can be used if there is a need to execute SQL statements more than once, or
     if you want to format the query result fields differently from the
-    underlying table definitions.</p>
+    underlying table definitions.
+    </p>
  */
 service Query
 {
@@ -109,7 +111,7 @@ service Query
      */
     interface com::sun::star::sdbcx::XDataDescriptorFactory;
 
-    // DocMerge: empty anyway
+    // allows to rename the object.
     interface com::sun::star::sdbcx::XRename;
 
 
@@ -125,6 +127,15 @@ service Query
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.2  2002/02/18 12:53:58  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4.2.1  2002/02/18 10:25:59  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XArrayFormulaRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XArrayFormulaRange_idl__
 #define __com_sun_star_sheet_XArrayFormulaRange_idl__
 
@@ -65,40 +66,30 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XArrayFormulaRange
-/** represents something (such as a cell range) that
-    can contain an array formula.
+/** provides handling of array formulas in a cell range.
  */
 interface XArrayFormulaRange: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XArrayFormulaRange::getArrayFormula
 
-    // DocMerge from xml: method com::sun::star::sheet::XArrayFormulaRange::getArrayFormula
-    /** returns the array formula of the range.
-
-
-
-        <p>If the range does not contain an array formula,
-        an empty string is returned.</p>
+    /** returns the array formula of the range or an empty string, if the
+        range does not contain an array formula.
      */
     string getArrayFormula();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XArrayFormulaRange::setArrayFormula
-    /** sets the array formula of the range.
+    /** applies the array formula to the entire cell range.
 
-
-
-        <p>Setting this to an empty string erases the array formula.</p>
+        @param aFormula
+            the formula that will be applied as array formula. Passing an
+            empty string erases an existing array formula.
      */
     void setArrayFormula( [in] string aFormula );
 
@@ -108,27 +99,5 @@ interface XArrayFormulaRange: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

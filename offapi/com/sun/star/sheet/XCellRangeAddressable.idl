@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeAddressable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XCellRangeAddressable_idl__
 #define __com_sun_star_sheet_XCellRangeAddressable_idl__
 
@@ -69,25 +70,20 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XCellRangeAddressable
-/** represents a cell range which can be addressed with
-    a CellRangeAddress.
+/** represents a cell which can be addressed with a
+    <type scope="com::sun::star::table">CellRangeAddress</type>.
  */
 interface XCellRangeAddressable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangeAddressable::getRangeAddress
-    /** returns the address of the range.
-
-
+    /** returns the address of the cell range in the spreadsheet document.
 
         <p>The <type scope="com::sun::star::table">CellRangeAddress</type>
         can be used to address the range within its document.</p>
@@ -100,21 +96,5 @@ interface XCellRangeAddressable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

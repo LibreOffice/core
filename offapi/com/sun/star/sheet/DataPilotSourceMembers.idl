@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceMembers.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSourceMembers_idl__
 #define __com_sun_star_sheet_DataPilotSourceMembers_idl__
 
@@ -65,19 +66,25 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents the collection of members in a data pilot source level.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSourceMembers
-/** the collection of fields in a data pilot source level.
+    @see com::sun::star::sheet::DataPilotSourceLevel
+    @see com::sun::star::sheet::DataPilotSource
  */
 service DataPilotSourceMembers
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access by name to the members in the collection.
+
+        @see com::sun::star::sheet::DataPilotSourceMember
+     */
     interface com::sun::star::container::XNameAccess;
 
 };
@@ -86,18 +93,5 @@ service DataPilotSourceMembers
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

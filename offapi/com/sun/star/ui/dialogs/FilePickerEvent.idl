@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePickerEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:19:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,16 +73,17 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 
 //=============================================================================
-/** Context information in case of a FilePicker event
-
-    @see com::sun::star::lang::EventObject
+/** Context information in case of a FilePicker event.
 */
 struct FilePickerEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /**
         @param ElementId
-            identifies the affected element
+        Identifies the affected element
+
+        @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
+        @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
     */
     short ElementId;
 };

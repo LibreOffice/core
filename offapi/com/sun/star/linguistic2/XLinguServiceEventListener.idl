@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinguServiceEventListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 16:52:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module linguistic2 {
     <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s.
     </P>
 
-    @see    com::sun::star::linguistic2::XLinguServiceManager
+    @see    <type scope="com::sun::star::linguistic2">XLinguServiceManager</type>
 */
 interface XLinguServiceEventListener : com::sun::star::lang::XEventListener
 {

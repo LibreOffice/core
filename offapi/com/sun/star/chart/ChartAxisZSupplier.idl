@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxisZSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,24 +72,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartAxisZSupplier
 /** A helper service for chart documents which supply a z-axis.
  */
 service ChartAxisZSupplier
 {
-    // DocMerge: empty anyway
+    /** offers access to the axis object, the title, and the grids
+     */
     interface com::sun::star::chart::XAxisZSupplier;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxisZSupplier::HasZAxis
     /** Determines if the z-axis is shown or hidden.@see ChartAxis
      */
     [property] boolean HasZAxis;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxisZSupplier::HasZAxisDescription
     /** Determines if the description of the z-axis
         is shown or hidden.
      */
@@ -97,7 +95,6 @@ service ChartAxisZSupplier
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxisZSupplier::HasZAxisGrid
     /** Determines if the major grid of the z-axis
         is shown or hidden.@see ChartGrid
      */
@@ -105,7 +102,6 @@ service ChartAxisZSupplier
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxisZSupplier::HasZAxisHelpGrid
     /** Determines if the minor grid of the z-axis is shown
         or hidden.@see ChartGrid
      */
@@ -113,12 +109,10 @@ service ChartAxisZSupplier
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxisZSupplier::HasZAxisTitle
     /** Determines if the title of the z-axis is shown
         or hidden.@see ChartTitle
      */
     [property] boolean HasZAxisTitle;
-
 };
 
 //=============================================================================
@@ -128,6 +122,12 @@ service ChartAxisZSupplier
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.5  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.4  2000/12/21 08:35:01  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,30 +64,26 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::Date
 /** represents a date value.
  */
 struct Date
 {
-    // DocMerge from xml: field com::sun::star::util::Date::Day
     /** contains the day of month (1-31 or 0 for a void date).
      */
     unsigned short Day;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::util::Date::Month
     /** contains the month of year (1-12 or 0 for a void date).
      */
     unsigned short Month;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::util::Date::Year
     /** contains the year.
      */
     unsigned short Year;
@@ -98,18 +94,4 @@ struct Date
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:04  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComboBox.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XComboBox
 /** gives access to the items of a combo box and makes it possible to
     register item and action event listeners.
  */
@@ -88,89 +87,73 @@ interface XComboBox: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::addItemListener
     /** registers a listener for item events.
      */
     [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::removeItemListener
     /** unregisters a listener for item events.
      */
     [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::addActionListener
     /** registers a listener for action events.
      */
     [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::removeActionListener
     /** unregisters a listener for action events.
      */
     [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::addItem
-    /** adds a new item to the combo box.
+    /** adds an item at the specified position.
      */
     [oneway] void addItem( [in] string aItem, [in] short nPos );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::addItems
-    /** adds multiple items to the combo box.
+    /** adds multiple items at the specified position.
      */
     [oneway] void addItems( [in] sequence<string> aItems, [in] short nPos );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::removeItems
-    /** removes multiple items to the combo box.
+    /** removes a number of items at the specified position.
      */
     [oneway] void removeItems( [in] short nPos, [in] short nCount );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XComboBox::getItemCount
-    /** @returns
-                    the number of items in this combo box.
+    /** returns the number of items in the combo box.
      */
     short getItemCount();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XComboBox::getItem
-    /** @returns
-                    the item at the position <var>nPos</var>.
+    /** returns the item at the specified position.
      */
     string getItem( [in] short nPos );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XComboBox::getItems
-    /** @returns
-                    all items of this combo box.
+    /** returns all items of the combo box.
      */
     sequence<string> getItems();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XComboBox::getDropDownLineCount
-    /** @returns
-                    the number of lines which are visible in the drop down area.
+    /** returns the number of visible lines in the drop down mode.
      */
     short getDropDownLineCount();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XComboBox::setDropDownLineCount
-    /** sets the number of lines which are visible in the drop down area.
+    /** sets the number of visible lines for drop down mode.
      */
     [oneway] void setDropDownLineCount( [in] short nLines );
 
@@ -180,27 +163,4 @@ interface XComboBox: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:52  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:08  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:52  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:15  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

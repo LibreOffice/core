@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrameLoader.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,53 +83,61 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** load components into a frame
 
-// DocMerge: empty anyway
+    <p>
+    It's an asynchronous loading. For synchronous processes use <type>XSynchronousFrameLoader</type>
+    instead of this one. The generic load algorithm of the office supports both ones - but prefered
+    the synchronous interface.
+    </p>
+
+    @see XFrame
+ */
 interface XFrameLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XFrameLoader::load
     /** starts the loading of the specified resource into the specified <type>Frame</type>.
+
+        @param Frame
+            specifies the loading target
+
+        @param URL
+            describes the ressource of loading component
+            Support of special protocols are implementation details
+            and depends from the environment.
+
+        @param Arguments
+            optional arguments for loading
+            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further informations)
+
+        @param Listener
+            this listener will be informed about success
+
+        @see XLoadEventListener
      */
-    [oneway] void load( [in] com::sun::star::frame::XFrame aFrame,
-             [in] string aURL,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs,
-             [in] com::sun::star::frame::XLoadEventListener xListener );
+    [oneway] void load(
+        [in] XFrame Frame,
+        [in] string URL,
+        [in] sequence< com::sun::star::beans::PropertyValue > Arguments,
+        [in] XLoadEventListener Listener);
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XFrameLoader::cancel
     /** cancels the loading process.
 
-
-
-        <p>After returning from this call, neither the frame nor the
-        load-event-listener specified in "load" may be called back.</p>
+        <p>
+        After returning from this call, neither the frame nor the
+        load-event-listener specified in <member>XFrameLoader::load()</member> may be called back.
+        Because only the owner of this process who called load method
+        before can cancel this process. And he doesn't need any notification about that.
+        On the other hand - nobody then this owner himself can be registered as an
+        <type>XLoadEventListener</type> here.
+        </p>
      */
     [oneway] void cancel();
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

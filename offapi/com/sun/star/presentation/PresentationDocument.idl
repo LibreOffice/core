@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationDocument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,35 +84,40 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::presentation::PresentationDocument
 /** This is the service provided by a presentation document.
  */
 service PresentationDocument
 {
-
-
-    // DocMerge from xml: service com::sun::star::presentation::PresentationDocument: service com::sun::star::drawing::DrawingDocument
     /** This is a basic service for a drawing document.
+
+        <p>The following services are available at the <type>com.sun.star.lang.XMultiServiceFactory</type>
+        only in a presentation application
+
+        <ul>
+            <li><type>TitleTextShape</type></li>
+            <li><type>OutlinerShape</type></li>
+            <li><type>SubtitleShape</type></li>
+            <li><type>GraphicObjectShape</type></li>
+            <li><type>PageShape</type></li>
+            <li><type>OLE2Shape</type></li>
+            <li><type>ChartShape</type></li>
+            <li><type>NotesShape</type></li>
+            <li><type>HandoutShape</type></li>
+        </ul>
      */
     service com::sun::star::drawing::DrawingDocument;
 
-
-    // DocMerge from xml: service com::sun::star::presentation::PresentationDocument: interface com::sun::star::presentation::XPresentationSupplier
     /** lets you access the presentation of this document.
      */
     interface com::sun::star::presentation::XPresentationSupplier;
 
-
-    // DocMerge from xml: service com::sun::star::presentation::PresentationDocument: interface com::sun::star::presentation::XCustomPresentationSupplier
     /** lets you access the custom presentations of this
-                document.
+        document.
      */
     interface com::sun::star::presentation::XCustomPresentationSupplier;
 
-
-    // DocMerge from xml: service com::sun::star::presentation::PresentationDocument: interface com::sun::star::document::XLinkTargetSupplier
     /** gives you access to the first link hierarchy inside
-                a document, the pages.
+        a document, the pages.
      */
     interface com::sun::star::document::XLinkTargetSupplier;
 
@@ -125,6 +130,12 @@ service PresentationDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/02/07 07:53:10  cl
+    idl review
+
+    Revision 1.3  2000/11/08 12:43:28  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:30  hjs
     initial import
 

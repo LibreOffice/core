@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XDatabaseRange_idl__
 #define __com_sun_star_sheet_XDatabaseRange_idl__
 
@@ -81,81 +82,72 @@
 #include <com/sun/star/sheet/XSubTotalDescriptor.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the settings and options of a database range.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XDatabaseRange
-/** represents a cell range for which data operations are defined.@see com::sun::star::sheet::DatabaseRange
+    @see com::sun::star::sheet::DatabaseRange
  */
 interface XDatabaseRange: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDatabaseRange::getDataArea
-    /** returns the data area of the database range.
+    /** returns the data area of the database range in the
+        spreadsheet document.
      */
     com::sun::star::table::CellRangeAddress getDataArea();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDatabaseRange::setDataArea
     /** sets the data area of the database range.
      */
     void setDataArea( [in] com::sun::star::table::CellRangeAddress aDataArea );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XDatabaseRange::getSortDescriptor
 
-    // DocMerge from idl: method com::sun::star::sheet::XDatabaseRange::getSortDescriptor
-    /** returns the sort descriptor stored with the
-                database range.
+    /** returns the sort descriptor stored with the database range.
+
+        @see com::sun::star::sheet::SheetSortDescriptor
      */
-    sequence<com::sun::star::beans::PropertyValue> getSortDescriptor();
+    sequence< com::sun::star::beans::PropertyValue > getSortDescriptor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDatabaseRange::getFilterDescriptor
-    /** returns the filter descriptor stored with the
-        database range.
+    /** returns the filter descriptor stored with the database range.
 
-
-
-        <p>If the filter descriptor is modified, the new filtering
-        is carried out when <member>XDatabaseRange::refresh()</member>
-        is called.</p>
+        <p>If the filter descriptor is modified, the new filtering is
+        carried out when <member>XDatabaseRange::refresh()</member> is
+        called.</p>
      */
     com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDatabaseRange::getSubTotalDescriptor
     /** returns the subtotal descriptor stored with the database range.
 
-
-        <p>If the subtotal descriptor is modified, the new subtotals
-        are inserted when <member>XDatabaseRange::refresh()</member>
-        is called.</p>
+        <p>If the subtotal descriptor is modified, the new subtotals are
+        inserted when <member>XDatabaseRange::refresh()</member> is
+        called.</p>
      */
     com::sun::star::sheet::XSubTotalDescriptor getSubTotalDescriptor();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XDatabaseRange::getImportDescriptor
 
-    // DocMerge from idl: method com::sun::star::sheet::XDatabaseRange::getImportDescriptor
-    /** returns the <type>DatabaseImportDescriptor</type> stored with this
-        database range.
+    /** returns the database import descriptor stored with this database
+        range.
+
+        @see com::sun::star::sheet::DatabaseImportDescriptor
      */
-    sequence<com::sun::star::beans::PropertyValue> getImportDescriptor();
+    sequence< com::sun::star::beans::PropertyValue > getImportDescriptor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDatabaseRange::refresh
-    /** executes the stored import, filter, sorting,
-        and subtotals descriptors again.
+    /** executes the stored import, filter, sorting, and subtotals
+        descriptors again.
      */
     void refresh();
 
@@ -165,36 +157,5 @@ interface XDatabaseRange: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.3  2000/10/10 09:03:09  mi
-    returned service specified
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

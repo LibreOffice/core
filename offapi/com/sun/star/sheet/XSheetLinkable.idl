@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetLinkable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetLinkable_idl__
 #define __com_sun_star_sheet_XSheetLinkable_idl__
 
@@ -69,27 +70,21 @@
 #include <com/sun/star/sheet/SheetLinkMode.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSheetLinkable
 /** enables a sheet to refer to another sheet in a different document.
 
+    <p>To insert a sheet link, the sheet used as linked sheet has to exist
+    already. The method <member>XSheetLinkable::link</member> creates a
+    <type>SheetLink</type> object in the document's <type>SheetLinks</type>
+    collection and links the sheet to the specified external sheet.</p>
 
-
-
-
-
-
-
-
-
-
-
+    @see com::sun::star::sheet::SheetLinks
+    @see com::sun::star::sheet::SheetLink
 
     @deprecated
  */
@@ -97,76 +92,65 @@ interface XSheetLinkable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::getLinkMode
-    /** enables the linking of the sheet and controls
-        if formulas are copied.
+    /** returns the link mode of the spreadsheet.
 
-
-
-        <p>If this is <const>SheetLinkMode::NORMAL</const>, formulas
-        are copied. With <const>SheetLinkMode::VALUE</const>, only
-        results of formulas are used.</p>
+        <p>If the returned value is <const>SheetLinkMode::NORMAL</const>,
+        formulas are copied. With <const>SheetLinkMode::VALUE</const>,
+        only results of formulas are used.</p>
      */
     com::sun::star::sheet::SheetLinkMode getLinkMode();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::setLinkMode
-    /** enables the linking of the sheet and controls
-        if formulas are copied.
+    /** enables the linking of the sheet and controls whether formulas
+        are copied.
 
+        @param nLinkMode
+            the value specifying the link mode for this spreadsheet.
 
-
-        <p>If this is <const>SheetLinkMode::NORMAL</const>, formulas
-        are copied.  With <const>SheetLinkMode::VALUE</const>, only
-        results of formulas are used.</p>
+            <p>If the value is <const>SheetLinkMode::NORMAL</const>,
+            formulas are copied.  With <const>SheetLinkMode::VALUE</const>,
+            only results of formulas are used.</p>
      */
     void setLinkMode( [in] com::sun::star::sheet::SheetLinkMode nLinkMode );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSheetLinkable::getLinkUrl
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::getLinkUrl
     /** returns the target URL of the link.
      */
     string getLinkUrl();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::setLinkUrl
     /** sets the target URL of the link.
 
-
-
-        <p>A Sheet Link with the same file name must exist
-        or the link will not work.</p>
+        <p>A <type>SheetLink</type> object with the same file name must
+        exist already or the link will not work.</p>
      */
     void setLinkUrl( [in] string aLinkUrl );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSheetLinkable::getLinkSheetName
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::getLinkSheetName
-    /** returns the sheet in the source URL.
+    /** returns the sheet name of the sheet in the source document.
      */
     string getLinkSheetName();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::setLinkSheetName
-    /** sets the sheet in the source URL.
+    /** sets the name of the linked sheet in the source document.
+
+        <p>This method sets the sheet name in the <type>SheetLink</type>
+        object, it does not modify the sheet name in the source document.</p>
      */
     void setLinkSheetName( [in] string aLinkSheetName );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetLinkable::link
     /** links the sheet to another sheet in another document.
 
-
-
-        <p>A sheet link is created if it does not exist, and the
-        LinkMode, LinkFileName and LinkSheetName attributes are set.</p>
+        <p>A <type>SheetLink</type> object is created if it does not exist,
+        and the link mode, the URL of the linked document and the linked
+        sheet name are set.</p>
      */
     void link( [in] string aUrl,
              [in] string aSheetName,
@@ -180,27 +164,5 @@ interface XSheetLinkable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:24  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:56  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Spreadsheet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_Spreadsheet_idl__
 #define __com_sun_star_sheet_Spreadsheet_idl__
 
@@ -73,20 +74,8 @@
 #include <com/sun/star/container/XNamed.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetPageBreak_idl__
-#include <com/sun/star/sheet/XSheetPageBreak.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeMovement_idl__
-#include <com/sun/star/sheet/XCellRangeMovement.idl>
-#endif
-
-#ifndef __com_sun_star_table_XTableChartsSupplier_idl__
-#include <com/sun/star/table/XTableChartsSupplier.idl>
+#ifndef __com_sun_star_util_XProtectable_idl__
+#include <com/sun/star/util/XProtectable.idl>
 #endif
 
 #ifndef __com_sun_star_sheet_XDataPilotTablesSupplier_idl__
@@ -101,58 +90,162 @@
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_drawing_XDrawPageSupplier_idl__
+#include <com/sun/star/drawing/XDrawPageSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_table_XTableChartsSupplier_idl__
+#include <com/sun/star/table/XTableChartsSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XCellRangeMovement_idl__
+#include <com/sun/star/sheet/XCellRangeMovement.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XPrintAreas_idl__
+#include <com/sun/star/sheet/XPrintAreas.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XSheetPageBreak_idl__
+#include <com/sun/star/sheet/XSheetPageBreak.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XScenario_idl__
+#include <com/sun/star/sheet/XScenario.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XSheetOutline_idl__
+#include <com/sun/star/sheet/XSheetOutline.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XSheetAuditing_idl__
+#include <com/sun/star/sheet/XSheetAuditing.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XSheetLinkable_idl__
+#include <com/sun/star/sheet/XSheetLinkable.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::Spreadsheet
-/** a 2-dimensional sheet of cells.
+/** represents a complete spreadsheet in a spreadsheet document.
+
+    <p>This service extents the service SheetCellRange. A spreadsheet is
+    nothing else than a cell range with extended functionality.</p>
+
+    @see com::sun::star::sheet::SpreadsheetDocument
  */
 service Spreadsheet
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides functionality for cell range handling.
+     */
     service com::sun::star::sheet::SheetCellRange;
 
-    // DocMerge: empty anyway
+    //=========================================================================
+
+    /** provides methods to create a cell cursor.
+     */
     interface com::sun::star::sheet::XSpreadsheet;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides accessing the spreadsheet name.
+     */
     interface com::sun::star::container::XNamed;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
-    interface com::sun::star::sheet::XSheetPageBreak;
+    /** provides methods to protect and unprotect the sheet contents.
+     */
+    interface com::sun::star::util::XProtectable;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::sheet::XCellRangeMovement;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
-    interface com::sun::star::table::XTableChartsSupplier;
-
-    // DocMerge: empty anyway
+    /** provides access to the collection of DataPilot tables.
+     */
     interface com::sun::star::sheet::XDataPilotTablesSupplier;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of scenarios.
+     */
     interface com::sun::star::sheet::XScenariosSupplier;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of annotations.
+     */
     interface com::sun::star::sheet::XSheetAnnotationsSupplier;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::Spreadsheet::IsVisible
+    /** provides access to the draw page of this spreadsheet.
+     */
+    interface com::sun::star::drawing::XDrawPageSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of chart objects.
+     */
+    interface com::sun::star::table::XTableChartsSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to move cell ranges inside the spreadsheet or to
+        other spreadsheets in this document.
+     */
+    interface com::sun::star::sheet::XCellRangeMovement;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the print area settings of this sheet.
+     */
+    interface com::sun::star::sheet::XPrintAreas;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the page breaks of this sheet.
+     */
+    interface com::sun::star::sheet::XSheetPageBreak;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods for a scenario sheet.
+     */
+    interface com::sun::star::sheet::XScenario;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to row and column outline settings.
+     */
+    interface com::sun::star::sheet::XSheetOutline;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the auditing (detective) functionality.
+     */
+    interface com::sun::star::sheet::XSheetAuditing;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods for a linked sheet.
+     */
+    interface com::sun::star::sheet::XSheetLinkable;
+
+    //=========================================================================
+
     /** specifies if the sheet is visible.
      */
     [readonly, property] boolean IsVisible;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::Spreadsheet::PageStyle
     /** specifies the page style of the sheet.
      */
     [readonly, property] string PageStyle;
@@ -163,24 +256,5 @@ service Spreadsheet
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:08  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

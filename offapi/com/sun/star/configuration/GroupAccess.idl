@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,7 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides access to a predefined heterogeneous group of values and nested
- trees as part of a (by name) hierarchy.
-
- <!-- Dennis: Could this also read as "...as part of an alphabetical hierarchy." ? -->
- <!-- Developer: No. The 'by name' refers to the fact that children are accessed by name
-      (e.g. using XNameContainer) rather than by index, by enumeration or by other criteria.
-      It corresponds to method names like getByName, replaceByName, insertByName.
-      BTW: Same as in GroupElement. -->
+ trees as part of a hierarchy.
 
  <p>Provides access to, and information about, its children and descendants
  viewed either as properties or as contained elements.
@@ -146,9 +140,6 @@ service GroupAccess
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const> set,
  and attempts to change property values will fail.
  </p>
-
- <!-- Dennis: <const> issue again -->
- <!-- Developer: Surely a preview problem (not seen here) -->
 */
     service PropertyHierarchy;
 
@@ -177,8 +168,7 @@ service GroupAccess
  an implementation. [optional]
 
  <p>This interface may be missing if the hierarchy (or a hierarchy fragment
- that contains this implementation as element) does not support default values,
- or if the implementation does not support recursive defaults (see below).
+ that contains this implementation as element) does not support default values.
  </p>
 
  <p>If elements that are not simple values, but objects themselves, support

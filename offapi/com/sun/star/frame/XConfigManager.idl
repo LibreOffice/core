@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConfigManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,47 +77,71 @@
     module frame {
 
 //============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XConfigManager
 /** @deprecated
  */
 interface XConfigManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DocMerge from xml: method com::sun::star::frame::XConfigManager::addPropertyChangeListener
-    /** add a listener to notify changes on "sKeyName"
-
-        <p> If <var>sKeyName</var> specifies a group of keys, the listener gets one notify for each subkey.</p>
-    */
-    [oneway] void addPropertyChangeListener( [in] string sKeyName, [in] com::sun::star::beans::XPropertyChangeListener xListener ) ;
-
-    //-------------------------------------------------------------------------
-
-
-    // DocMerge from xml: method com::sun::star::frame::XConfigManager::removePropertyChangeListener
-    /** remove a listener
-     */
-    [oneway] void removePropertyChangeListener( [in] string sKeyName, [in] com::sun::star::beans::XPropertyChangeListener xListener ) ;
-
-    //-------------------------------------------------------------------------
-
-
-    // DocMerge from xml: method com::sun::star::frame::XConfigManager::substituteVariables
-    /** substitute variables in "sText"
-
+    /** add a listener to notify changes on well known variables
+        inside the real implementation
 
         <p>
-        The value of "sText" is NOT changed.</p>
-     */
-    string substituteVariables( [in] string sText ) ;
+        Listener can update his text values by calling <member>XConfigManager::substituteVariables()</member>
+        again. If <var>KeyName</var> specifies a group of keys, the listener gets one notify for each subkey.
+        </p>
+
+        @param KeyName
+            specifies variable about listener will be informed on changes
+
+        @param Listener
+            listener which will be informed
+
+        @see XConfigManager::removePropertyChangeListener()
+
+        @deprecated
+    */
+    [oneway] void addPropertyChangeListener(
+        [in] string KeyName,
+        [in] com::sun::star::beans::XPropertyChangeListener Listener );
 
     //-------------------------------------------------------------------------
+    /** remove a registered listener
 
+        @param KeyName
+            specifies variable on which listener was registered
 
-    // DocMerge from xml: method com::sun::star::frame::XConfigManager::flush
-    /** write data of INI-file to disk
+        @param Listener
+            listener which will be deregistered
+
+        @see XConfigManager::addPropertyChangeListener()
+
+        @deprecated
      */
-    [oneway] void flush() ;
+    [oneway] void removePropertyChangeListener(
+        [in] string KeyName,
+        [in] com::sun::star::beans::XPropertyChangeListener Listener);
+
+    //-------------------------------------------------------------------------
+    /** substitute variables (place holder) inside given parameter <var>Text</var>
+
+        <p>
+        The value of <var>Text</var> is NOT changed.
+        </p>
+
+        @param Text
+            original value including variables
+
+        @return
+            changed copy of <var>Text</var> without any variables
+     */
+    string substituteVariables( [in] string Text );
+
+    //-------------------------------------------------------------------------
+    /** was designed for additional functionality for interface <type scope="com::sun::star::registry">XSimpleRegistry</type>
+        and make no sense without that
+        @deprecated
+     */
+    [oneway] void flush();
 
 }; //XConfigManager
 }; //frame

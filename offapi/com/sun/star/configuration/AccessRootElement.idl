@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessRootElement.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides information about the root element of a hierarchy, by name,
- and about the hierarchy as a whole.
+/** provides information about the root element of a hierarchy and
+    about the hierarchy as a whole.
 
  <p>Provides information about the element and the whole hierarchy.
  Allows controlling the lifetime of the hierarchy.
@@ -101,25 +101,14 @@ module com { module sun { module star { module configuration {
  and that is accessible starting from this element.</em>
  </p>
 
-<!-- Dennis: Why is hierarchy in quotes? -->
-<!-- Developer: The quoted one refers to the word 'hierarchy', not to the thing that word designates. -->
-
- <p>Generally it is not possible to navigate the 'surroundings', if any, of this
- element, so <type scope="com::sun::star::container">XChild</type> is not
- supported.
+ <p>Generally it is not possible to navigate the parent or siblings, if any,
+ of this element, so <type scope="com::sun::star::container">XChild</type> is
+ not supported.
  </p>
-
-<!-- Dennis: Why is surroundings in quotes? -->
-<!-- Developer: For no really good reason. I'm not sure if 'surroundings' is the best word here.
-     We just never use this term in our documentation. 'context' is an alternative, but it also
-     is not exactly what I mean. The intent is:
-     "You cannot navigate to ancestors or siblings of this node in the real (full) hierarchy
-      (if they exist at all - which you can't determine given just this object)."
--->
 
  @see com::sun::star::configuration::UpdateRootElement
     Implementations that support modifying data in the hierarchy
-    generally implement service UpdateRootElement.
+    implement service UpdateRootElement.
 
  @see com::sun::star::configuration::SetElement
     A complementary service, for children of a dynamic homogeneous container.
@@ -140,7 +129,7 @@ service AccessRootElement
 /** allows controlling or observing the lifetime of the whole hierarchy.
 
  <p>The owner of the hierarchy may dispose of this object
- using <member scope="com::sun::star::lang">XComponent::dispose</member>.
+ using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
  As this object owns its child elements and, recursively, the whole hierarchy,
  any descendant elements obtained, directly or indirectly, from this object
  will also be disposed. Disposing of the object does not affect a persistent
@@ -177,14 +166,14 @@ service AccessRootElement
  </p>
 
  <p>
- If <member scope="com::sun::star::beans">XMultiPropertySet::setPropertyValues</member>
- or <member scope="com::sun::star::beans">XMultiHierarchicalPropertySet::setHierarchicalPropertyValues</member>
+ If <member scope="com::sun::star::beans">XMultiPropertySet::setPropertyValues()</member>
+ or <member scope="com::sun::star::beans">XMultiHierarchicalPropertySet::setHierarchicalPropertyValues()</member>
  is used on an element of the hierarchy to change multiple values within
  the hierarchy, all changes will be notified with a single event.
  </p>
 
  <p>If an outside source uses
- <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
+ <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
  on an overlapping hierarchy access, all relevant changes will be notified
  with a single event.
  </p>
@@ -205,7 +194,7 @@ service AccessRootElement
  <p><em>Changing the locale is generally not supported.</em> If it is supported,
  there is no guarantee that values already loaded into the hierarchy, or an
  application cache, are refreshed to reflect the new locale. Use of
- <member scope="com::sun::star::lang">XLocalizable::setLocale</member>
+ <member scope="com::sun::star::lang">XLocalizable::setLocale()</member>
  is therefore not recommended.
  </p>
 */

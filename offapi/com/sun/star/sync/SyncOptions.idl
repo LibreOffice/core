@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SyncOptions.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:45:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,31 +64,26 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sync {
+module com {  module sun {  module star {  module sync {
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::sync::SyncOptions
 /** contains a synchronization element
+
+    @deprecated
  */
 constants SyncOptions
 {
-    // DocMerge: empty anyway
     const unsigned long NONE            = 0x00000000;
 
-    // DocMerge: empty anyway
     const unsigned long DONT_COPY       = 0x00000001;
 
-    // DocMerge: empty anyway
     const unsigned long DONT_REMOVE     = 0x00000002;
 
-    // DocMerge: empty anyway
     const unsigned long SERVER_WINS     = 0x00000100;
 
-    // DocMerge: empty anyway
     const unsigned long CLIENT_WINS     = 0x00000200;
 
-    // DocMerge: empty anyway
     const unsigned long CREATE_BACKUP   = 0x00010000;
 };
 
@@ -96,21 +91,4 @@ constants SyncOptions
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:44:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/01/10 08:47:42  ka
-    #71663#: initial revision
-
-
-=============================================================================*/
 #endif

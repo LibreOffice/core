@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 10:56:41 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,24 @@
 
 //=============================================================================
 
-/** describes a radio button usually used together with a
-    <type scope="com.sun.star.form.component">FormattedField</type> model.
+/** describes a control which can be used for inputting values with a arbitrary formatting, and
+    can (but not necessarily has to) be bound to a database field.
+
+    <p>The model of the control has to support the <type scope="com::sun::star::form::component">FormattedField</type>
+    service.</p>
 
     <p>In addition, this control can be used in HTML forms. It triggers the
-    <method scope="com.sun.star.form">XSubmit::submit</method> method of the form it belongs to if
-    the <em>enter</em> is pressed while it has the focus.</p>
+    <method scope="com::sun::star::form">XSubmit::submit</method> method of the form it belongs to if
+    the <em>enter</em> key is pressed while it has the focus.</p>
+
+    @see com::sun::star::awt::UnoControl
+    @see com::sun::star::awt::UnoControlModel
+    @see com::sun::star::util::XNumberFormatsSupplier
 */
 service FormattedField
 {
-    /** provides the basic functionallity of the control
-    */
     service com::sun::star::awt::UnoControlFormattedField;
 
-    /** allows locking of the input of the control
-    */
     interface com::sun::star::form::XBoundControl;
 };
 
@@ -101,6 +104,15 @@ service FormattedField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2.14.2  2002/07/26 11:03:14  fs
+    IDL review form layer
+
+    Revision 1.2.14.1  2002/02/19 08:12:16  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.2  2001/04/19 10:56:41  fs
+    corrected the include protection
+
     Revision 1.1  2001/04/19 08:45:10  fs
     initial checkin - service description for form related controls
 
@@ -112,6 +124,15 @@ service FormattedField
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2.14.2  2002/07/26 11:03:14  fs
+ *  IDL review form layer
+ *
+ *  Revision 1.2.14.1  2002/02/19 08:12:16  oj
+ *  #96946# parameter,return value and exception description
+ *
+ *  Revision 1.2  2001/04/19 10:56:41  fs
+ *  corrected the include protection
+ *
  *  Revision 1.1  2001/04/19 08:45:10  fs
  *  initial checkin - service description for form related controls
  *

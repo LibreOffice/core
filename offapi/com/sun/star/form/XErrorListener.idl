@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XErrorListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,30 +76,24 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XErrorListener
-/** This is the listener interface for receiving "errorOccured" events
-    posted by a database form.
-
-
+/** used to be notified when errors in a <type scope="com::sun::star::component">DatabaseForm</type> happen.
 
     <p>Each time an exception is triggered by a database form, the error
     event is posted to the error listeners. This event may be used to
-    configure the error handling of a database form.  </p>
+    configure the error handling of a database form.</p>
 
+    <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
+    by <type scope="com::sun::star::sdb">XSQLErrorListener</type>.</p>
 
-
-
-
-
-    @deprecated@see com::sun::star::form::component::DatabaseForm
+    @deprecated
  */
 interface XErrorListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XErrorListener::errorOccured
     /** is invoked when a database action performed by a database form raises
-        an exception.@see XDatabaseForm
+        an exception.
+        @see XDatabaseForm
      */
     void errorOccured( [in] com::sun::star::form::ErrorEvent aEvent );
 
@@ -112,6 +106,15 @@ interface XErrorListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.2  2002/07/26 10:00:07  fs
+    IDL review form layer
+
+    Revision 1.5.16.1  2002/02/18 15:24:52  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.5  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/21 08:35:08  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

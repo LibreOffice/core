@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDragEnterEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,19 +75,22 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** The DropTargetDragEnterEvent is delivered from the DropTarget to the
-    currently registered DropTargetListeners whenever the logical cursor
+/** The <type>DropTargetDragEnterEvent</type> is delivered from the drop target to the
+    currently registered drop target listeners whenever the logical cursor
     associated with a Drag and Drop operation enters the visible geometry
-    of a window associated with a DropTarget.
+    of a window associated with a drop target.
 
-    <p>It contains the dataflavors supported by the transferable object of
-    the current Drag and Drop operation. </p>
+    <p>It contains the <type scope="com::sun::star::datatransfer">DataFlavor</type>
+    types supported by the transferable object of the current Drag and Drop operation. </p>
+
+    @see com::sun::star::datatransfer::XTransferable
 */
 
 struct DropTargetDragEnterEvent: DropTargetDragEvent
 {
     //-------------------------------------------------------------------------
-    /** The dataflavors supported by the transferable object.
+    /** A sequence of supported <type scope="com::sun::star::datatransfer">DataFlavor</type> types.
+
      */
 
     sequence< DataFlavor > SupportedDataFlavors;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceLevel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSourceLevel_idl__
 #define __com_sun_star_sheet_DataPilotSourceLevel_idl__
 
@@ -81,42 +82,55 @@
 #include <com/sun/star/sheet/GeneralFunction.idl>
 #endif
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSourceLevel
-/** a level in a data pilot source.
+/** represents a level in a data pilot source hierarchy.
+
+    @see com::sun::star::sheet::DataPilotSourceHierarchy
+    @see com::sun::star::sheet::DataPilotSource
  */
 service DataPilotSourceLevel
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the level, i.e. used in collections.
+     */
     interface com::sun::star::container::XNamed;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of members of this level.
+     */
     interface com::sun::star::sheet::XMembersSupplier;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to a sequence of results of this level.
+     */
     interface com::sun::star::sheet::XDataPilotMemberResults;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR DataPilotSourceLevel::SubTotals
+    //=========================================================================
 
-    // DocMerge from idl: property com::sun::star::sheet::DataPilotSourceLevel::SubTotals
     /** specifies the subtotals that are inserted for the level.
+
+        <p>The subtotals are calculated with the members of this level.</p>
      */
-    [property] sequence<com::sun::star::sheet::GeneralFunction> SubTotals;
+    [property] sequence< com::sun::star::sheet::GeneralFunction > SubTotals;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceLevel::ShowEmpty
-    /** specifies if empty members are shown.
+    /** specifies whether empty members are shown.
      */
     [property] boolean ShowEmpty;
 
@@ -126,24 +140,5 @@ service DataPilotSourceLevel
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:53  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

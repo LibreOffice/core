@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameSearchFlag.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,99 +67,98 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** these types describe the algorithm to be used to search a frame
 
-// DocMerge from idl: constants com::sun::star::frame::FrameSearchFlag
-/** These types describe the algorithm to be used to search a frame.
+    <p>
+    Such flags will be used on methods <type>XFrame::findFrame()</type>,
+    <type>XDispatchProvider::queryDispatch()</type> or
+    <type>XComponentLoader::loadComponentFromURL()</type> if no special target
+    frame name (e.g. "_blank", "_self") is used.
+    </p>
+
+    @see XFrame::findFrame()
+    @see XDispatchProvider::queryDispatch()
+    @see XComponentLoader::loadComponentFromURL()
  */
 constants FrameSearchFlag
 {
     //-------------------------------------------------------------------------
+    /** no longer supported
 
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::AUTO
-    /** SELF+CHILDREN
+        <p>
+        Using of this flag will do nothing. Use right combination of other flags
+        instead of this one.
+        </p>
+
+        @deprecated
      */
     const long AUTO = 0;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::PARENT
-    /** includes the parent frame
+    /** allows search on the parent frames
      */
     const long PARENT = 1;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::SELF
-    /** includes the start frame
+    /** includes the start frame himself
      */
     const long SELF = 2;
 
     //-------------------------------------------------------------------------
+        /** includes all child frames of the start frame
 
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::CHILDREN
-    /** includes the child frames of the start frame
-     */
+            <p>
+            Note: That means all direct children and of course her childrens too.
+                  Search doesn't stop at the next level inside the tree!
+            </p>
+         */
     const long CHILDREN = 4;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::CREATE
     /** frame will be created if not found
      */
     const long CREATE = 8;
 
     //-------------------------------------------------------------------------
+        /** includes the direct siblings of the start frame
 
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::SIBLINGS
-    /** includes the other child frames of the parent of the start frame
+            <p>
+            Normaly it's interpreted as search on the direct childs of the parent
+            only. But in combination with e.g. the CHILDREN flag it can include all
+            children of it too.
+            </p>
      */
     const long SIBLINGS = 16;
 
     //-------------------------------------------------------------------------
+        /** allow the search outside the current sub task tree of the whole possible frame tree
 
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::TASKS
-    /** includes all frames in all tasks in the current frames hierarchy
+        <p>
+        If this flag isn't present, any search from bottom to top has to stop, if a top frame
+        will be reached. It doesn't influence a search from top to bottom.
+        But it can be used at the root of the frame tree to search on direct childrens of it only.
+        Because the direct children of the root node are the root's of the task sub trees, which
+        are top frames too. Instead of using the CHILDREN flag there, it's possible so to supress
+        a deeper search so.
+        </p>
      */
     const long TASKS = 32;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::ALL
-    /** includes all frames except frames in other tasks
+        /** includes all frames except frames in other tasks sub trees
+        but doesn't create any new frame
      */
     const long ALL = 23;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::frame::FrameSearchFlag::GLOBAL
-    /** searches in the whole hierarchy of frames.
+    /** searches in the whole hierarchy of frames
+        but doesn't create any new frame
      */
     const long GLOBAL = 55;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 14:49:55  mi
-    missing documentations
-
-    Revision 1.2  2000/01/31 09:44:58  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

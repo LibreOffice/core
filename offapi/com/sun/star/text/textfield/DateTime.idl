@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTime.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 09:49:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,13 @@ service DateTime
      */
     [optional, property] boolean IsFixed;
 
-    /** If this flag is set to <TRUE/> this field represents,
+    /** If this flag is set to <TRUE/> this field represents
         a date with an optional time. If it is set to <FALSE/>
         only the time is used here.
      */
     [property] boolean IsDate;
 
-    /** the is the content of this field
+    /** the is the content of this field.
     */
     [optional, property] com::sun::star::util::DateTime DateTimeValue;
 
@@ -100,12 +100,12 @@ service DateTime
     /** this is the display format for this field.
         Depending on <member>IsDate</member>, this
         is either a
-        <const scope="com::sun::star">text::DateDisplayFormat</const> or
-        <const scope="com::sun::star">text::TimeDisplayFormat</const>.
+        <type scope="com::sun::star::text">DateDisplayFormat</type> or
+        <type scope="com::sun::star::text">TimeDisplayFormat</type>.
 
         This property is deprecated and is here only
         for components that do not support a
-        <type scope="com::sun::star">util::NumberFormatter</type>.
+        <type scope="com::sun::star::util">NumberFormatter</type>.
 
         @see com::sun::star::text::DateDisplayFormat
         @see com::sun::star::text::TimeDisplayFormat

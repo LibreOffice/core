@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceDimension.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:46:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSourceDimension_idl__
 #define __com_sun_star_sheet_DataPilotSourceDimension_idl__
 
@@ -89,41 +90,69 @@
 #include <com/sun/star/sheet/TableFilterField.idl>
 #endif
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSourceDimension
-/** a dimension in a data pilot source.
+/** represents a dimension in a data pilot source.
+
+    <p>A dimension is equivalent to a column of a cell range in a spreadsheet
+    used for a data pilot field.</p>
+
+    <p>In more complex data sources, a dimension may contain several
+    hierarchies, which consolidate items of a complex data type, called
+    levels.</p>
+
+    <p>Example: In a database, a column contains date values. This column
+    will be a dimension of the data pilot source. One hierarchy may contain
+    the 3 levels year, month, day. Another hierarchy may contain the 2 levels
+    year and week number.</p>
+
+    @see com::sun::star::sheet::DataPilotSource
+    @see com::sun::star::sheet::DataPilotTable
  */
 service DataPilotSourceDimension
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the dimension, i.e. used in
+        collections.
+     */
     interface com::sun::star::container::XNamed;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::sheet::XHierarchiesSupplier;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::util::XCloneable;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::Original
-    /** returns the dimension from which this dimension was cloned,
-        or <NULL/> if it was not cloned.
+    /** provides access to the collection of hierarchies of this dimension.
+     */
+    interface com::sun::star::sheet::XHierarchiesSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** supports duplicating the dimension.
+
+        <p>A dimension may be used several times in a data pilot table,
+        i.e. as row field and data field.</p>
+     */
+    interface com::sun::star::util::XCloneable;
+
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** returns the name of the dimension from which this dimension was
+        cloned, or <NULL/> if it was not cloned.
      */
     [readonly, property] com::sun::star::container::XNamed Original;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::IsDataLayoutDimension
     /** contains <TRUE/> if this is the dimension used to layout the
         different data dimensions.
      */
@@ -131,39 +160,35 @@ service DataPilotSourceDimension
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::Orientation
     /** specifies where the dimension is used.
      */
     [property] com::sun::star::sheet::DataPilotFieldOrientation Orientation;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::Position
     /** specifies the position of the dimension within its orientation.
      */
     [property] long Position;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::Function
     /** specifies how data are aggregated.
      */
     [property] com::sun::star::sheet::GeneralFunction Function;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::UsedHierarchy
     /** specifies which hierarchy of the dimension is used.
+
+        @see com::sun::star::sheet::DataPilotSourceHierarchies
      */
     [property] long UsedHierarchy;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR DataPilotSourceDimension::Filter
 
-    // DocMerge from idl: property com::sun::star::sheet::DataPilotSourceDimension::Filter
     /** specifies which values are used.
      */
-    [property] sequence<com::sun::star::sheet::TableFilterField> Filter;
+    [property] sequence< com::sun::star::sheet::TableFilterField > Filter;
 
 };
 
@@ -171,30 +196,5 @@ service DataPilotSourceDimension
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/14 12:53:40  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:45  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:53  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompatibilityNames.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XCompatibilityNames_idl__
 #define __com_sun_star_sheet_XCompatibilityNames_idl__
 
@@ -65,33 +66,46 @@
 #include <com/sun/star/sheet/LocalizedName.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-/** gives access to an AddIn's compatibility names.
+/** gives access to the sequence of compatibility names for an Addin
+    function.
  */
 interface XCompatibilityNames: com::sun::star::uno::XInterface
 {
-    /** returns the compatibility names of the function.
+    /** returns the compatibility names of the specified function.
 
-        <p>The compatibility names are used for import and export to other
-        applications. They may be locale-dependent.
-        The default name for each locale must be the first for that locale.
-        The first entry in the sequence must be for the default
-        locale (used for a locale that is not in the list).
-        If a function doesn't have any compatibility names,
-        the returned sequence is empty.</p>
+        <p>Compatibility names are localized names of AddIn functions that
+        are used to import files from other applications.</p>
 
-<!-- JRH: Needs rewriting to clarify. -->
-<!-- Editor:    The sentence "The default name for each locale must be the first
-                for that locale" is confusing -->
-<!-- Editor:  Maybe an example would help. -->
+        <p>If on import a localized function name is read, this list of
+        compatibility names is used to find the internal name of the
+        function. The current locale may differ from the locale used in
+        the imported file, so the method
+        <member>XAddIn::getProgrammaticFuntionName</member> cannot be used
+        here.</p>
+
+        <p>The order inside the sequence of compatibility names is used to
+        prioritize the names. Initially the first compatibility name of
+        each function is compared to the imported name (each function may
+        provide a sequence of compatibility names - the first entry of all
+        sequences is used). If no entry is equal, the second entry of each
+        sequence is used and so on.</p>
+
+        <p>If a locale is not present in the sequence of compatibility names,
+        the first entry of the sequence is used. So the method should return
+        a sequence which contains first the entry representing the current
+        locale.<TRUE/></p>
+
+        @param aProgrammaticName
+            is the exact name of a method within its interface.
      */
-    sequence<LocalizedName> getCompatibilityNames( [in] string aProgrammaticName );
+    sequence< com::sun::star::sheet::LocalizedName >
+        getCompatibilityNames( [in] string aProgrammaticName );
 };
 
 //=============================================================================

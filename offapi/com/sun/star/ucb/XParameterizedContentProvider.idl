@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XParameterizedContentProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,9 @@ interface XParameterizedContentProvider: com::sun::star::uno::XInterface
 
         @param Arguments  Any supplementary arguments required by this
         <type>XContentProvider</type>, represented as a single string.  If the
-        input is malformed, an <type>IllegalArgumentException</type> may be
-        raised.
+        input is malformed, an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        may be raised.
 
         @param ReplaceExisting  If true, and if the given Template conflicts
         with an already registered instance, the old registration is replaced
@@ -127,8 +128,9 @@ interface XParameterizedContentProvider: com::sun::star::uno::XInterface
 
         @param Arguments  Any supplementary arguments required by this
         <type>XContentProvider</type>, represented as a single string.  If the
-        input is malformed, an <type>IllegalArgumentException</type> may be
-        raised.
+        input is malformed, an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        may be raised.
 
         @return  Either this <type>XContentProvider</type>, or another,
         specially adjusted version of this <type>XContentProvider</type> (this

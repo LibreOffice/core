@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceContext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-17 15:48:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,56 +73,62 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDragSourceListener;
 
 //=============================================================================
-/** The DragSourceContext class is responsible for managing the initiator side
+/** The drag source context class is responsible for managing the initiator side
     of the Drag and Drop protocol.
 
     <p>In particular, it is responsible for managing event notifications to the
     DragSourceListener and providing the Transferable state to enable the data
     transfer. </p>
 
-    <p>An instance of this class is created as a result of a DragSource's
-    startDrag() method being successfully invoked. This instance is responsible
-    for tracking the state of the operation on behalf of the DragSource and
-    dispatching state changes to the DragSourceListener. </p>
+    <p>An instance of this class is created as a result of the method <member>XDragSource::startDrag()</member>
+    being successfully invoked. This instance is responsible
+    for tracking the state of the operation on behalf of the drag source and
+    dispatching state changes to the drag source listener. </p>
+
+    @see com::sun::star::datatransfer::dnd::XDragSourceContext
+    @see com::sun::star::datatransfer::dnd::XDragSourceListener
 */
 
 interface XDragSourceContext: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-    the currently selected drag cursor.
+    /** Get the identifier of the currently used cursor.
+
+        @returns
+        The currently selected drag cursor.
     */
 
     long getCurrentCursor();
 
     //-------------------------------------------------------------------------
-    /** this method sets the current drag Cursor.
-
-    <!-- Editor: Should Cursor have a leading capital? -->
+    /** This method sets the current drag cursor.
 
         <p>This method should only be called to set another cursor than the
-        default one for drag action currently selected by the user.
-        Invalid cursor Ids will be ignored.</p>
+        default one for drag action currently selected by the user.</p>
+        <p>Invalid cursor identifiers will be ignored.</p>
 
         @param cursorId
-        the id the drag source returned when registering the cursor.
+        The identifier the drag source returned when registering the cursor.
     */
 
     [oneway] void setCursor( [in] long cursorId );
 
     //-------------------------------------------------------------------------
-    /** this method sets the current drag Image.
+    /** This method sets the current drag image.
 
         @param dragImage
-        the id the drag source returned when registering the image (0 = none).
-        Invalid Ids will be ignored.
+        The identifier the drag source returned when registering the image (0 = none).
+        Invalid identifier will be ignored.
     */
 
     [oneway] void setImage( [in] long imageId );
 
     //-------------------------------------------------------------------------
-    /** this method notifies the context that the Transferable's DataFlavors
-        have changed.
+    /** This method notifies the context that the
+        <type scope="com::sun::star::datatransfer">DataFlavor</type> types
+        of the transferable object have changed.
+
+        @see com::sun::star::datatransfer::XTransferable
     */
 
     [oneway] void transferablesFlavorsChanged();

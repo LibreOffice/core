@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeData.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-29 10:09:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-
 //=============================================================================
-
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
 /** allows to get and set an array of data from a cell range.
- *
- * <p>The outer sequence represents the rows and the inner sequence
- * the columns of the array.</p>
+    <p>The outer sequence represents the rows and the inner sequence
+    the columns of the array.</p>
  */
 
 interface XCellRangeData: com::sun::star::uno::XInterface
@@ -89,22 +86,18 @@ interface XCellRangeData: com::sun::star::uno::XInterface
 
     /** fills the cell range with values from an array.
 
-        <p>The size of the array must be the same as the size of
-        the cell range.
-        Each element of the array must contain a <atom>double</atom>
+        <p>The size of the array must be the same as the size of the cell
+        range. Each element of the array must contain a <atom>double</atom>
         or a <atom>string</atom>.</p>
 
-        <p>If the size of the array is different from the current
-        size a <type scope="com::sun::star::uno">RuntimeException</type>
-        is thrown.</p>
+        @throws <type scope="com::sun::star::uno">RuntimeException</type>
+            If the size of the array is different from the current size.
      */
     void setDataArray( [in] sequence< sequence< any > > aArray );
 };
 
 //=============================================================================
-
 }; }; }; };
-
 
 #endif
 

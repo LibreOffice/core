@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRedlinesSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
 
@@ -76,7 +76,8 @@
 interface XRedlinesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** returns an enumeration access that provides access to the redline objects of the document.
+    /** @returns
+        an enumeration access that provides access to the redline objects of the document.
      */
     com::sun::star::container::XEnumerationAccess getRedlines();
 };

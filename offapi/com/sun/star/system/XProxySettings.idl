@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProxySettings.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:57:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,95 +75,95 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/**
-    @author     tra
-    @version    0.1
+/** Enables access to different proxy settings. If particular settings are not
+    available an empty string will be returned.
 */
 
 interface XProxySettings: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Ftp proxy address.
         @returns
-        the address of the ftp proxy server, if any has been specified
+        The address of the ftp proxy server, if any has been specified.
     */
     string getFtpProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Ftp proxy port.
         @returns
-        the port of the ftp proxy server, if any has been specified
+        The port of the ftp proxy server, if any has been specified.
     */
     string getFtpProxyPort( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Gopher proxy address.
         @returns
-        the address of the gopher proxy server, if any has been specified
+        The address of the gopher proxy server, if any has been specified.
     */
     string getGopherProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Gopher proxy port.
         @returns
-        the port of the gopher proxy server, if any has been specified
+        The port of the gopher proxy server, if any has been specified.
     */
     string getGopherProxyPort( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Http proxy address.
         @returns
-        the address of the http proxy server, if any has been specified
+        The address of the http proxy server, if any has been specified.
     */
     string getHttpProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Http proxy port.
         @returns
-        the port of the http proxy server, if any has been specified
+        The port of the http proxy server, if any has been specified.
     */
     string getHttpProxyPort( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Https proxy address.
         @returns
-        the address of the https proxy server, if any has been specified
+        The address of the https proxy server, if any has been specified.
     */
     string getHttpsProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Https proxy port.
         @returns
-        the port of the https proxy server, if any has been specified
+        The port of the https proxy server, if any has been specified.
     */
     string getHttpsProxyPort( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Socks proxy address.
         @returns
-        the address of the socks proxy server, if any has been specified
+        The address of the socks proxy server, if any has been specified.
     */
     string getSocksProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Socks proxy port.
         @returns
-        the port of the socks proxy server, if any has been specified
+        The port of the socks proxy server, if any has been specified.
     */
     string getSocksProxyPort( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Access to the Proxy-Bypass address.
         @returns
-        a string of ';' separated addresses for which no proxy server
-        should be used
+        A string of ';' separated addresses for which no proxy server
+        should be used.
     */
     string getProxyBypassAddress( );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Either a proxy is enabled or not.
         @returns
-        if the proxy is enabled or disabled
+        A value of <TRUE/> if a proxy is enabled.
+        <p>A value of <FALSE/> if a proxy is disabled.</p>
     */
     boolean isProxyEnabled( );
 };

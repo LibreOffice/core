@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 16:00:16 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,6 @@ service Shape
         AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
      */
     [property] com::sun::star::text::XTextFrame AnchorFrame;
-    //-------------------------------------------------------------------------
-    /** determines if the text of the paragraph in which the object
-        is anchored, wraps around the object.
-     */
-    [property] boolean SurroundAnchorOnly;
     //-------------------------------------------------------------------------
     /** specifies how the text content is attached to its surrounding
         <type scope="com::sun::star::drawing">Text</type>.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SAXException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:43 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,30 +68,26 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module xml {  module sax {
+module com {  module sun {  module star {  module xml {  module sax {
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::xml::sax::SAXException
 /** encapsulates the details of an XML parse error or warning.
 
-
-
     <p>This structure is a replacement for the Java class
-    <em>org.xml.sax.SAXException</em>.
+    <em>org.xml.sax.SAXException</em>. </p>
 
-    Some abbreviations : <br>
-
-    SAX = Simple API for XML <br>
-    URI = Uniform Resource Identifier <br>
-    DTD = document type definition <br> </p>
+    <p>Some abbreviations: </p>
+    <ul>
+        <li>SAX = Simple API for XML </li>
+        <li>URI = Uniform Resource Identifier </li>
+        <li>DTD = document type definition </li>
  */
 exception SAXException: com::sun::star::uno::Exception
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::xml::sax::SAXException::WrappedException
-    /** This field may contain a  wrapped exception
+    /** This field may contain a  wrapped exception.
      */
     any WrappedException;
 
@@ -101,21 +97,4 @@ exception SAXException: com::sun::star::uno::Exception
 
 }; }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:22  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:53:08  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/23 11:41:19  mi
-    results from proofreading in layouted version
-
-    Revision 1.1.1.1  1999/11/11 09:48:47  jsc
-    new
-
-
-=============================================================================*/
 #endif

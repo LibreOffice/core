@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Components.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,54 +65,31 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
-
 //=============================================================================
 
- module com {  module sun {  module star {  module frame {
+module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** specifies a collection of components
 
-// DocMerge from xml: service com::sun::star::frame::Components
-/** specifies a collection of components.
+    <p>
+    One important instance of this service is available from the
+    <type>Desktop</type> object via the <type>XDesktop</type> interface.
+    </p>
 
-
-    <p>One important instance of this service is available from the
-    <type>Desktop</type> object via the <type>XDesktop</type> interface. </p>
- @see com::sun::star::lang::XComponent
- @see XDesktop
+    @see com::sun::star::lang::XComponent
+    @see XDesktop
  */
 service Components
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+    /** use it to get snapshot of current avaliable components as an enumeration
+     */
     interface com::sun::star::container::XEnumerationAccess;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:56  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:27  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

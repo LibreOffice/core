@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TransliterationModulesNew.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_TransliterationModulesNew_idl__
+#define __com_sun_star_i18n_TransliterationModulesNew_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/** New transliteration module enumeration to use with
+    <member>XTransliteration::loadModuleNew()</member>
+ */
+
+enum TransliterationModulesNew
+{
+    UPPERCASE_LOWERCASE            = 1,
+    LOWERCASE_UPPERCASE            = 2,
+    HALFWIDTH_FULLWIDTH            = 3,
+    FULLWIDTH_HALFWIDTH            = 4,
+    KATAKANA_HIRAGANA              = 5,
+    HIRAGANA_KATAKANA              = 6,
+    IGNORE_CASE                    = 7,
+    IGNORE_KANA                    = 8,  // ja_JP
+    IGNORE_WIDTH                   = 9,  // ja_JP
+    ignoreTraditionalKanji_ja_JP   = 10,
+    ignoreTraditionalKana_ja_JP    = 11,
+    ignoreMinusSign_ja_JP          = 12,
+    ignoreIterationMark_ja_JP      = 13,
+    ignoreSeparator_ja_JP          = 14,
+    ignoreZiZu_ja_JP               = 15,
+    ignoreBaFa_ja_JP               = 16,
+    ignoreTiJi_ja_JP               = 17,
+    ignoreHyuByu_ja_JP             = 18,
+    ignoreSeZe_ja_JP               = 19,
+    ignoreIandEfollowedByYa_ja_JP  = 20,
+    ignoreKiKuFollowedBySa_ja_JP   = 21,
+    ignoreSize_ja_JP               = 22,
+    ignoreProlongedSoundMark_ja_JP = 23,
+    ignoreMiddleDot_ja_JP          = 24,
+    ignoreSpace_ja_JP              = 25,
+    smallToLarge_ja_JP             = 26,
+    largeToSmall_ja_JP             = 27,
+    NumToTextLower_zh_CN           = 28,
+    NumToTextUpper_zh_CN           = 29,
+    NumToTextLower_zh_TW           = 30,
+    NumToTextUpper_zh_TW           = 31,
+    NumToTextFormalHangul_ko       = 32,
+    NumToTextFormalLower_ko        = 33,
+    NumToTextFormalUpper_ko        = 34,
+    NumToTextInformalHangul_ko     = 35,
+    NumToTextInformalLower_ko      = 36,
+    NumToTextInformalUpper_ko      = 37,
+    NumToCharLower_zh_CN           = 38,
+    NumToCharUpper_zh_CN           = 39,
+    NumToCharLower_zh_TW           = 40,
+    NumToCharUpper_zh_TW           = 41,
+    NumToCharHangul_ko             = 42,
+    NumToCharLower_ko              = 43,
+    NumToCharUpper_ko              = 44,
+    NumToCharFullwidth             = 45,
+    NumToCharKanjiShort_ja_JP      = 46,
+    TextToNumLower_zh_CN           = 47,
+    TextToNumUpper_zh_CN           = 48,
+    TextToNumLower_zh_TW           = 49,
+    TextToNumUpper_zh_TW           = 50,
+    TextToNumFormalHangul_ko       = 51,
+    TextToNumFormalLower_ko        = 52,
+    TextToNumFormalUpper_ko        = 53,
+    TextToNumInformalHangul_ko     = 54,
+    TextToNumInformalLower_ko      = 55,
+    TextToNumInformalUpper_ko      = 56,
+    // 2 Spaces for Japanese TextToNum
+    CharToNumLower_zh_CN           = 59,
+    CharToNumUpper_zh_CN           = 60,
+    CharToNumLower_zh_TW           = 61,
+    CharToNumUpper_zh_TW           = 62,
+    CharToNumHangul_ko             = 63,
+    CharToNumLower_ko              = 64,
+    CharToNumUpper_ko              = 65,
+    END_OF_MODULE                  = 0
+};
+
+//=============================================================================
+}; }; }; };
+//=============================================================================
+#endif

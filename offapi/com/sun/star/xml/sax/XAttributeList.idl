@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAttributeList.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,13 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module xml {  module sax {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::xml::sax::XAttributeList
 /** specifies an element's attributes.
-
-
 
     <p>This interface describes a name-type-value triple which describes a
     single attribute of a tag. Implementors are encouraged to implement the
@@ -90,7 +86,6 @@ interface XAttributeList: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XAttributeList::getLength
     /** @returns
                     the number of attributes in this list.
      */
@@ -98,7 +93,6 @@ interface XAttributeList: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XAttributeList::getNameByIndex
     /** @returns
                     the name of an attribute in this list (by position).
      */
@@ -106,7 +100,6 @@ interface XAttributeList: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XAttributeList::getTypeByIndex
     /** @returns
                     the type of an attribute in the list (by position).
                     Non-validating parsers may return CDATA only.
@@ -115,7 +108,6 @@ interface XAttributeList: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XAttributeList::getTypeByName
     /** @returns
                     the type of an attribute in the list (by name).
                     Non-validating parsers may return CDATA only.
@@ -124,7 +116,6 @@ interface XAttributeList: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XAttributeList::getValueByIndex
     /** @returns
                     the value of an attribute in the list (by position).
      */
@@ -132,7 +123,6 @@ interface XAttributeList: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XAttributeList::getValueByName
     /** @returns
                     the value of an attribute in the list (by name).
      */
@@ -143,27 +133,4 @@ interface XAttributeList: com::sun::star::uno::XInterface
 
 }; }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:43  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:22  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:08  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 11:41:19  mi
-    results from proofreading in layouted version
-
-    Revision 1.2  2000/02/07 11:25:06  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:47  jsc
-    new
-
-
-=============================================================================*/
 #endif

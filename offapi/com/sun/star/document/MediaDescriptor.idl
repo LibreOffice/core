@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-07-23 13:36:15 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,10 +446,12 @@ service MediaDescriptor
     [property] string TemplateName;
 
     //-------------------------------------------------------------------------
-    /** name of the region of the template
+    /** name of the template instead of the URL
 
         <p>
-        Use always in conjunction with <member>MediaDescriptor::TemplateName</member>.
+        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</type>
+        property it can be used instead of the URL of the template. Use always in conjunction with
+        <member>MediaDescriptor::TemplateRegionName</member>.
         </p>
      */
     [property] string TemplateRegionName;
@@ -488,7 +490,6 @@ service MediaDescriptor
 
     //-------------------------------------------------------------------------
     /** set special view state
-
         <p>
         Data to set a special view state after loading. The type depends on
         the component and is usually retrieved from a <type scope="com::sun::star::frame">Controller</type>

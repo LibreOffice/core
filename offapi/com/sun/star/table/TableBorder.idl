@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableBorder.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:57:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_TableBorder_idl__
 #define __com_sun_star_table_TableBorder_idl__
 
@@ -65,119 +66,115 @@
 #include <com/sun/star/table/BorderLine.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** contains the style settings of the border lines of all cells in a cell
+    range.
 
-//=============================================================================
-
-// DocMerge from xml: struct com::sun::star::table::TableBorder
-/** structure contains the values of the border lines of all boxes in a table.
-    <p>
-    In a queried structure, the flags in
+    <p>In a queried structure, the flags in
     <member>TableBorder::Is...LineValid</member> indicate that not all
-    lines of the boxes have the same values.
+    lines of the boxes have the same values.</p>
 
-    </p>
     <p>In a structure which is used for setting, these flags determine
-    if the corresponding line should be set or if the old value should be kept.</p>
+    if the corresponding line should be set or if the old value should
+    be kept.</p>
  */
 struct TableBorder
 {
-    // DocMerge from xml: field com::sun::star::table::TableBorder::TopLine
-    /** line at the top edge.
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the top edge.
      */
     com::sun::star::table::BorderLine TopLine;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsTopLineValid
-    /** specifies whether the value of <member>TableBorder::TopLine</member> is used.
+    /** specifies whether the value of <member>TableBorder::TopLine</member>
+        is used.
      */
     boolean IsTopLineValid;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::BottomLine
-    /** line at the bottom edge.
+    /** determines the line style at the bottom edge.
      */
     com::sun::star::table::BorderLine BottomLine;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsBottomLineValid
-    /** specifies whether the value of <member>TableBorder::BottomLine</member> is used.
+    /** specifies whether the value of
+        <member>TableBorder::BottomLine</member> is used.
      */
     boolean IsBottomLineValid;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::LeftLine
-    /** line at the left edge.
+    /** determines the line style at the left edge.
      */
     com::sun::star::table::BorderLine LeftLine;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsLeftLineValid
-    /** specifies whether the value of <member>TableBorder::LeftLine</member> is used.
+    /** specifies whether the value of <member>TableBorder::LeftLine</member>
+        is used.
      */
     boolean IsLeftLineValid;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::RightLine
-    /** line at the right edge.
+    /** determines the line style at the right edge.
      */
     com::sun::star::table::BorderLine RightLine;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsRightLineValid
-    /** specifies whether the value of <member>TableBorder::RightLine</member> is used.
+    /** specifies whether the value of <member>TableBorder::RightLine</member>
+        is used.
      */
     boolean IsRightLineValid;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::HorizontalLine
-    /** specifies the horizontal lines for the inner part of a table.
+    /** determines the line style of horizontal lines for the inner part
+        of a cell range.
      */
     com::sun::star::table::BorderLine HorizontalLine;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsHorizontalLineValid
-    /** specifies whether the value of <member>TableBorder::HorizontalLine</member> is used.
+    /** specifies whether the value of
+        <member>TableBorder::HorizontalLine</member> is used.
      */
     boolean IsHorizontalLineValid;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::VerticalLine
-    /** vertical lines for the inner part of a table.
+    /** determines the line style of vertical lines for the inner part
+        of a cell range.
      */
     com::sun::star::table::BorderLine VerticalLine;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsVerticalLineValid
-    /** specifies whether the value of <member>TableBorder::VerticalLine</member> is used.
+    /** specifies whether the value of
+        <member>TableBorder::VerticalLine</member> is used.
      */
     boolean IsVerticalLineValid;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::Distance
-    /** distance between the lines and other contents.
+    /** contains the distance between the lines and other contents.
      */
     short Distance;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::TableBorder::IsDistanceValid
-    /** specifies whether the value of <member>TableBorder::Distance</member> is used.
+    /** specifies whether the value of <member>TableBorder::Distance</member>
+        is used.
      */
     boolean IsDistanceValid;
 
@@ -187,21 +184,5 @@ struct TableBorder
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:44:19  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyContentProvider.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,10 @@ service HierarchyContentProvider
 
         <ul>
         <li>
-        vnd.sun.star.hier:/ ( The URL of the HCP Root Folder )
+        vnd.sun.star.hier:/ (The URL of the HCP Root Folder)
         </li>
         <li>
-        vnd.sun.star.hier:/Bookmarks/Sun%20Microssystems%20Home%20Page
+        vnd.sun.star.hier:/Bookmarks/Sun%20Microsystems%20Home%20Page
         </li>
         <li>
         vnd.sun.star.hier:/Workplace/Printers

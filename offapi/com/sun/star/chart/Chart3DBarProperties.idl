@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Chart3DBarProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,15 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::Chart3DBarProperties
 /** Specifies all the properties for the graphic object of a data point in a
     three-dimensional bar diagram.@see BarDiagram
  */
 service Chart3DBarProperties
 {
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::Chart3DBarProperties::SolidType
     /** Specifies the solid shape of a data point.@see ChartSolidType
      */
     [property] long SolidType;
@@ -96,6 +93,12 @@ service Chart3DBarProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.4  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

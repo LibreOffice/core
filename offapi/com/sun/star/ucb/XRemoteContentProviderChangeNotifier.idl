@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderChangeNotifier.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-21 16:45:44 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,7 @@ module com { module sun { module star { module ucb {
 module com { module sun { module star { module ucb {
 
 //============================================================================
-/** Notify about changes to a
-    <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>.
+/** Notify about changes to a <type>XRemoteContentProviderSupplier</type>.
 
     @version 1.0
     @author Stephan Bergmann
@@ -97,7 +96,7 @@ interface XRemoteContentProviderChangeNotifier:
 
         @param Listener.
         Some listener previously added via
-        <method>addRemoteContentProviderChangeListener</method>.
+        <member>XRemoteContentProviderChangeNotifier::addRemoteContentProviderChangeListener</member>.
      */
     void
     removeRemoteContentProviderChangeListener(

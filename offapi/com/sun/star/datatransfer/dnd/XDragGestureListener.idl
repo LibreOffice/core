@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragGestureListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-17 16:02:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,23 +75,23 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** This interface is sourced from a DragGestureRecognizer and is invoked when
-    an object of that (sub)class detects a drag initiating gesture.
+/** This interface will be used by a <type>XDragGestureRecognizer</type>
+    when it detects a drag initiating gesture.
 
-    <p> The implementor of this interface is responsible for starting the drag
-    as a result of receiving such notification. </p>
+    <p>The implementor of this interface is responsible for starting the drag
+    as a result of receiving such notification.</p>
 
 */
 
 interface XDragGestureListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** A DragGestureRecognizer has detected a platform-dependent drag initiating
-        gesture and is notifying this listener in order for it to initiate the
-        action for the user.
+    /** A <type>XDragGestureRecognizer</type> has detected a platform-dependent
+        drag initiating gesture and is notifying this listener in order
+        for it to initiate the action for the user.
 
         @param dge
-        the DragGestureEvent describing the gesture that has just occurred.
+        The DragGestureEvent describing the gesture that has just occurred.
 
     */
     [oneway] void dragGestureRecognized( [in] DragGestureEvent dge );

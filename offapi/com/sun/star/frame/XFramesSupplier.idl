@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFramesSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,100 +72,69 @@
 interface XFrames;
 
 //=============================================================================
+/** provides access to sub frames of current one
 
-// DocMerge: empty anyway
+    @see XFrames
+ */
 interface XFramesSupplier: XFrame
 {
     //-------------------------------------------------------------------------
+    /** provides access to this container and to all other <type>XFramesSupplier</type>
+        which are available from this node of frame tree
 
-    // DocMerge from idl: method com::sun::star::frame::XFramesSupplier::getFrames
-    /** @returns
-                the collection of (sub-) frames which is represented by
-                a <type>FramesContainer</type>.
+        @returns
+            the collection of frames which is represented by
+            a <type>FramesContainer</type>.
      */
     XFrames getFrames();
 
     //-------------------------------------------------------------------------
+    /** gets the current active frame of this container
+        (not of any other available supplier)
 
-    // DocMerge from idl: method com::sun::star::frame::XFramesSupplier::getActiveFrame
-    /** @returns
-                the sub-<type>Frame</type> which is active within this frame.
+        <p>
+        This may be the frame itself. The active frame is defined as
+        the frame which contains (recursively) the window with the focus.
+        If no window within the frame contains the focus, this method
+        returns the last frame which had the focus. If no containing
+        window ever had the focus, the first frame within this frame is
+        returned.
+        </p>
 
-                <p>This may be the frame itself. The active frame is defined as
-                the frame which contains (recursively) the window with the focus.
-                If no window within the frame contains the focus, this method
-                returns the last frame which had the focus. If no containing
-                window ever had the focus, the first frame within this frame is
-                returned.
+        @returns
+            the <type>Frame</type> which is active within this frame.
      */
     XFrame getActiveFrame();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XFramesSupplier::setActiveFrame
     /** is called on activation of a direct sub-frame.
 
-
-
-        <p>This method is only allowed to be called by a sub-frame according to
-
-
-
-
-
-        or
-
-
-
-
-
-        . After this call
-
-
-
-
-
-        will return the
-        frame specified by <var>xFrame</var>.
-
+        <p>
+        This method is only allowed to be called by a sub-frame according to
+        <member>XFrame::activate()</member> or <member>XFramesSupplier::setActiveFrame()</member>.
+        After this call <member>XFramesSupplier::getActiveFrame()</member> will return the
+        frame specified by <var>Frame</var>.
         </p>
-        <p>In general this method first calls the method
 
+        <p>
+        In general this method first calls the method <member>XFramesSupplier::setActiveFrame()</member>
+        at the creator frame with <var>this</var> as the current argument. Then it broadcasts
+        the <type>FrameActionEvent</type> <const>FrameAction::FRAME_ACTIVATED</const>.
+        </p>
 
+        <p>
+        Note: Given parameter <var>Frame</var> must already exist inside the container
+        (e.g., inserted by using <member>XFrames::append()</member>)
+        </p>
 
-
-
-        at the creator frame
-        with <var>this</var> as the current argument. Then it broadcasts
-        the <type>FrameActionEvent</type> <const>FrameAction::FRAME_ACTIVATED</const>.</p>
-
-<!-- JRH: Something seems to be missing from here? Or maybe there are pictures? -->   */
-    void setActiveFrame( [in] XFrame xFrame );
-
+        @param Frame
+            the new active child frame inside this container
+    */
+    void setActiveFrame( [in] XFrame Frame );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bibliography.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:20:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 #ifndef __com_sun_star_text_textfield_Bibliography_idl__
 #define __com_sun_star_text_textfield_Bibliography_idl_
 
-#include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/text/TextField.idl>
+#include <com/sun/star/text/DependentTextField.idl>
 
 //=============================================================================
 
@@ -75,7 +76,8 @@ module com { module sun { module star { module text { module textfield {
 */
 service Bibliography
 {
-    service  com::sun::star::text::TextField;
+    service  com::sun::star::text::DependentTextField;
+
     /** contains the bibliography fields of the text field.
      */
     [property] sequence <com::sun::star::beans::PropertyValue> Fields;

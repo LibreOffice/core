@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTask.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,76 +71,37 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XTask
-/** This is the main interface of a task within the desktop.
-
-
-
-
-
-
-
-    @deprecated@see XDesktopTask
-        for substitute.
-
-        @see XWindowArranger
-        for substitute.
+/** use <type>XFrame</type> instead of this one
+    @deprecated
  */
-interface XTask: com::sun::star::frame::XFrame
+interface XTask: XFrame
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XTask::close
-    /** tries to close all windows within the task and the task by itself.
+    /** use <type scope="com::sun::star::util">XClosable</type> or
+        <member scope="com::sun::star::lang">XComponent::dispose()</member>
+        at a <type>Frame</type> instead of this one
+        @deprecated
      */
     boolean close();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XTask::tileWindows
-    /** arranges the windows within the task in tiles.
+    /** @deprecated
      */
     [oneway] void tileWindows();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XTask::arrangeWindowsVertical
-    /** arranges the windows within the task vertically.
+    /** @deprecated
      */
     [oneway] void arrangeWindowsVertical();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XTask::arrangeWindowsHorizontal
-    /** arranges the windows within the task horizontally.
+    /** @deprecated
      */
     [oneway] void arrangeWindowsHorizontal();
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/11/25 16:03:32  mi
-    welforming HTML for XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

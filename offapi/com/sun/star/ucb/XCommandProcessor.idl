@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-06-21 12:43:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ module com { module sun { module star { module ucb {
     @version  1.0
     @author   Kai Sommerfeld
 
-    @deprecated
     @see com::sun::star::ucb::XCommandProcessor2
     for the improved version of this interface.
 
@@ -110,11 +109,11 @@ interface XCommandProcessor : com::sun::star::uno::XInterface
         only should get one identifier per thread and assign it to every
         command executed by that thread.</p>
 
-        <p>Also, after a call to <method>abort</method>, an identifier should
-        not be used any longer (and instead be released by a call to
-        <member>XCommandProcessor2::releaseCommandIdentifier</member>),
+        <p>Also, after a call to <member>XCommandProcessor::abort</member>, an
+        identifier should not be used any longer (and instead be released by a
+        call to <member>XCommandProcessor2::releaseCommandIdentifier</member>),
         because it may well abort <em>all</em> further calls to
-        <method>execute</method>.</p>
+        <member>XCommandProcessor::execute</member>.</p>
 
         <p>To avoid ever-increasing resource consumption, the identifier
         should be released via

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChangesSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 module com { module sun { module star { module util {
 
 //=============================================================================
-/** This is a type that describes a set of changes occurring as a batch transaction.
+/** describes a set of changes occurring as a batch transaction.
 
     @see XChangesBatch
     @see XChangesSet

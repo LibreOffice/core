@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJobListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-30 12:49:12 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,48 +66,42 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #endif
 
-//.............................................................................
+//=============================================================================
+
 module com {  module sun {  module star {  module task {
-//.............................................................................
 
 interface XAsyncJob;
 
+//=============================================================================
+/** listener on finish states of asynchronous job execution
+ */
 interface XJobListener : com::sun::star::lang::XEventListener
 {
-    /** indicates that the job is done.
-        aResult should be the same like for the synchronous mode on XJob::execute()
-        and depends from service specification.
+    //------------------------------------------------------------------------
+    /** indicates that the job is done
+
+        @param Job
+            identifies the asynchronous job so the <type>JobExecutor</type>
+            can differ between more then ones.
+
+        @param Result
+            should be the same like for the synchronous mode on <member>XJob::execute()</member>.
+            It provides information about success or failure of job execution. It's possible too,
+            to use special protocol (which depends from real implementation) between
+            <type>JobExecutor</type> and a real job. So it can be possible to:
+
+            <ul>
+                <li>deregister the job</li>
+                <li>let him registered although execution was successfully(!)</li>
+                <li>make some job specific data persistent inside the job configuration which
+                    is provided by the executor.</li>
+            </ul>
     */
-    void jobFinished( [in] XAsyncJob xJob    ,
-                      [in] any       aResult );
+    void jobFinished(
+        [in] XAsyncJob Job,
+        [in] any Result);
 };
 
-//.............................................................................
 }; }; }; };
-//.............................................................................
 
 #endif
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/12/05 13:18:25  as
- *  #91062# simple revision of job execution interfaces
- *
- *
- *  Revision 1.4  2001/11/20 14:30     as
- *  #91062# make it more simple!
- *
- *  Revision 1.3  2001/09/26 16:16:17  fs
- *  #91062# corrected a comment
- *
- *  Revision 1.2  2001/09/25 14:15:44  fs
- *  #91062# jobCancelled renamed to jobAborted / jobDone gets a new param (the result)
- *
- *  Revision 1.1  2001/09/14 09:48:16  fs
- *  initial checkin - specification for a listener to an asynchronous job
- *
- *
- *  Revision 1.0 13.09.01 17:03:45  fs
- ************************************************************************/
-

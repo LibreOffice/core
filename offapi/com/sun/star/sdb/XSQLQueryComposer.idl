@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLQueryComposer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,17 +80,20 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::sdb::XSQLQueryComposer
-/** should be provided by a tool which simplifies the handling with SQL SELECT statements.
+/** should be provided by a tool which simplifies the handling with SQL select statements.
 
-
-    <p>The interface can be used for composing SELECT statements without knowing the
-    structure of the used query.</p>
+    <p>
+    The interface can be used for composing SELECT statements without knowing the
+    structure of the used query.
+    </p>
  */
 interface XSQLQueryComposer: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getQuery
     /** returns the query used for composing.
+        @returns
+            the query
      */
     string getQuery();
     //-------------------------------------------------------------------------
@@ -98,6 +101,10 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::setQuery
     /** sets a new query for the composer, which may be expanded by filters
         and sort criteria.
+        @param command
+            the command to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void setQuery([in] string command )
             raises (com::sun::star::sdbc::SQLException);
@@ -105,6 +112,8 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getComposedQuery
     /** returns the query composed with filters and sort criterias.
+        @returns
+            the composed query
      */
     string getComposedQuery();
     //-------------------------------------------------------------------------
@@ -112,19 +121,26 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getFilter
     /** returns the currently used filter.
 
-
-        <p>The filter criteria returned is part of the where condition of the
-        select command, but it does not contain the where token.</p>
+        <p>
+        The filter criteria returned is part of the where condition of the
+        select command, but it does not contain the where token.
+        </p>
+        @returns
+            the filter
      */
     string getFilter();
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::sdb::XSQLQueryComposer::getStructuredFilter
     /** returns the currently used filter.
-             <p>The filter criteria is split into levels. Each level represents the
-             OR criterias. Within each level, the Filters are provided as an AND criteria
+             <p>
+             The filter criteria is split into levels. Each level represents the
+             OR criterias. Within each level, the filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
              is of type string.
+             </p>
+        @returns
+            the structured filter
      */
     sequence< sequence<com::sun::star::beans::PropertyValue> >
         getStructuredFilter();
@@ -134,15 +150,24 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
     /** returns the currently used sort order.
 
 
-        <p>The order criteria returned is part of the ORDER BY clause of the
-        select command, but it does not contain the ORDER BY keyword .</p>
+        <p>
+        The order criteria returned is part of the ORDER BY clause of the
+        select command, but it does not contain the ORDER BY keyword .
+        </p>
+        @returns
+            the order
      */
     string getOrder();
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::appendFilterByColumn
-    /** appends a new filter condition by a <type>DataColumn</type> providing
-        the name and the value for the filter.
+    /** appends a new filter condition by a
+        <type scope="com::sun::star::sdb">DataColumn</type>
+        providing the name and the value for the filter.
+        @param column
+            the column which is used to create a filter
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column)
             raises (com::sun::star::sdbc::SQLException);
@@ -151,6 +176,12 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::appendOrderByColumn
     /** appends an additional part to the sort order criteria of the select
         statement.
+        @param column
+            the column which is used to create a order part
+        @param  ascending
+            <TRUE/> when the order should be ascending, otherwise <FALSE/>
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
                               [in] boolean ascending)
@@ -159,6 +190,10 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::setFilter
     /** makes it possible to set a filter condition for the query.
+        @param filter
+            the filter to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void setFilter([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
@@ -166,6 +201,10 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::setOrder
     /** makes it possibile to set a sort condition for the query.
+        @param order
+            the order part to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     void setOrder([in] string order)
             raises (com::sun::star::sdbc::SQLException);
@@ -178,6 +217,12 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:26:19  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

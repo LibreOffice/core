@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DesktopTask.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-13 20:38:58 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,112 +89,31 @@
 #include <com/sun/star/awt/Size.idl>
 #endif
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: service com::sun::star::frame::DesktopTask
-/** specifies a separate task within a desktop environment.@see DesktopTasks
+/** @deprecated
  */
 service DesktopTask
 {
-    // DocMerge: empty anyway
     interface com::sun::star::frame::XDesktopTask;
-
-    // DocMerge: empty anyway
     interface com::sun::star::frame::XFrame;
-
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
-
-    // DocMerge: empty anyway
     interface com::sun::star::frame::XWindowArranger;
-
-    // DocMerge: empty anyway
     interface com::sun::star::frame::XFramesSupplier;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::Title
-    /** contains the title of the component which is active within the task.
-     */
     [readonly, property] string Title;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::IsDesktop
-    /** determines if the task is the desktop task.
-     */
     [readonly, property] boolean IsDesktop;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::IsVisible
-    /** determines if the task is visible or not.
-     */
     [property] boolean IsVisible;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::IsFloating
-    /** determines if the task is floating or not.
-     */
     [property] boolean IsFloating;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::IsAlwaysVisible
-    /** determines if the task is always visible or only when active.
-     */
     [property] boolean IsAlwaysVisible;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::Position
-    /** contains the position in pixels relative to the desktop window.
-     */
     [property] com::sun::star::awt::Point Position;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::DesktopTask::Size
-    /** contains the size in pixel.
-     */
     [property] com::sun::star::awt::Size Size;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:27  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:01  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/01/31 09:44:58  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

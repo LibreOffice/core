@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetExpression.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 11:38:50 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ module com { module sun { module star { module text { module FieldMaster {
 service SetExpression
 {
     service  com::sun::star::text::TextFieldMaster;
+
     //------------------------------------------------------------------------
     /** determins the number of the chapter. This values is used if the field master
      is set as number sequence.

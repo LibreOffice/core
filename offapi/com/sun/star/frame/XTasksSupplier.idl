@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTasksSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,65 +79,26 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XTasksSupplier
-/** provides access to the tasks of a desktop environment.
-
-
-
-    <p>Note: Not all desktop environments support tasks at all.
-
-    </p>@see Desktop
+/** use <type>XFramesSupplier</type> instead of that
+    @deprecated
  */
 interface XTasksSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::frame::XTasksSupplier::getTasks
-    /** @returns
-                a collection of all tasks currently running in the desktop.
-
-                <p>The service <type>Tasks</type> contained in this attribute is
-                a collection object of all tasks of the desktop.
-
-                @see Tasks
+    /** use <member>XFramesSupplier::getFrames()</member> instead of this one
+        @depreacted
      */
     com::sun::star::container::XEnumerationAccess getTasks();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::frame::XTasksSupplier::getActiveTask
-    /** @returns
-                the task of the currently active component within this desktop enviroment.
-
-                <p>Even if an active component exists, there may be no active task.
+    /** use <member>XFramesSupplier::getActiveFrame()</member> instead of this one
+        @depreacted
      */
-    com::sun::star::frame::XTask getActiveTask();
-
+    XTask getActiveTask();
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellCursor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_SheetCellCursor_idl__
 #define __com_sun_star_sheet_SheetCellCursor_idl__
 
@@ -77,28 +78,42 @@
 #include <com/sun/star/sheet/XUsedAreaCursor.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a cursor in a spreadsheet.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::SheetCellCursor
-/** a cursor in a spreadsheet.
+    <p>A cursor is a cell range which provides additional methods to move
+    through the table (i.e. to find specific cell ranges).</p>
  */
 service SheetCellCursor
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides common methods to control the position of the cursor.
+     */
     service com::sun::star::table::CellCursor;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides the complete functionality of a cell range in a spreadsheet
+        document.
+     */
     service com::sun::star::sheet::SheetCellRange;
 
-    // DocMerge: empty anyway
+    //=========================================================================
+
+    /** provides advanced methods to control the position of the cursor.
+     */
     interface com::sun::star::sheet::XSheetCellCursor;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to find the used area of the entire sheet.
+     */
     interface com::sun::star::sheet::XUsedAreaCursor;
 
 };
@@ -107,18 +122,5 @@ service SheetCellCursor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

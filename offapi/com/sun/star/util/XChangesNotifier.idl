@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChangesNotifier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,27 +67,24 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XChangesNotifier
-/** broadcasts events about multiple changes that occur in bulk.@see XChangesListener
-        @see XChangesBatch
-        @see ChangesEvent
+/** broadcasts events about multiple changes that occur in bulk.
+
+    @see XChangesListener
+    @see XChangesBatch
+    @see ChangesEvent
  */
 interface XChangesNotifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XChangesNotifier::addChangesListener
-    /** adds the specified listener to receive events when "changesOccurred".
+    /** adds the specified listener to receive events when changes occured.
      */
     [oneway] void addChangesListener( [in] com::sun::star::util::XChangesListener aListener );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XChangesNotifier::removeChangesListener
     /** removes the specified listener.
      */
     [oneway] void removeChangesListener( [in] com::sun::star::util::XChangesListener aListener );
@@ -98,25 +95,4 @@ interface XChangesNotifier: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/07/14 13:02:10  jb
-    Removed wrong base class XEventListener
-
-    Revision 1.1  2000/06/15 16:00:08  jb
-    Add Interfaces to support batch changes
-
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConditionalEntry.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_TableConditionalEntry_idl__
 #define __com_sun_star_sheet_TableConditionalEntry_idl__
 
@@ -69,22 +70,28 @@
 #include <com/sun/star/sheet/XSheetConditionalEntry.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a single condition in a conditional format.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::TableConditionalEntry
-/** a single entry in a TableConditionalFormat object.
+    @see com::sun::star::sheet::TableConditionalFormat
  */
 service TableConditionalEntry
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the settings of this condition.
+     */
     interface com::sun::star::sheet::XSheetCondition;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the cell style name for this condition.
+     */
     interface com::sun::star::sheet::XSheetConditionalEntry;
 
 };
@@ -93,18 +100,5 @@ service TableConditionalEntry
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

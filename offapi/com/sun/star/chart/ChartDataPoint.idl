@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataPoint.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 module com { module sun { module star { module chart {
 
 //=============================================================================
-/**
+/** @deprecated
 */
 typedef sequence<ChartDataValue> ChartDataPoint;
 

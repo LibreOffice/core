@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPagePrintable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ interface XPagePrintable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPagePrintable::printPages
-    /** prints the pages according to the <type scope="com::sun::star::view">PrintSettings</type>.@see com::sun::star::view::PrintOptions
+    /** prints the pages according to the <type scope="com::sun::star::view">PagePrintSettings</type>.@see com::sun::star::view::PrintOptions
      */
     void printPages( [in] sequence<com::sun::star::beans::PropertyValue> xOptions )
             raises( com::sun::star::lang::IllegalArgumentException );
@@ -130,6 +130,12 @@ interface XPagePrintable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.1  2002/04/12 08:10:50  os
+    service name of properties corrected
+
+    Revision 1.5  2001/03/16 16:41:46  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/21 08:35:21  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

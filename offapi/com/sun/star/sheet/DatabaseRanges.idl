@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRanges.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,34 +58,54 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DatabaseRanges_idl__
 #define __com_sun_star_sheet_DatabaseRanges_idl__
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
-#endif
 
 #ifndef __com_sun_star_sheet_XDatabaseRanges_idl__
 #include <com/sun/star/sheet/XDatabaseRanges.idl>
 #endif
-
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::DatabaseRanges
-/** a collection of database ranges.
+/** represents a collection of database ranges in a spreadsheet document.
+
+    @see com::sun::star::sheet::SpreadsheetDocument
  */
 service DatabaseRanges
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNameAccess;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+    /** provides access to the database ranges and to insert and remove them.
+     */
     interface com::sun::star::sheet::XDatabaseRanges;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all database ranges.
+
+        @see com::sun::star::sheet::DatabaseRangesEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the database ranges in the collection via index.
+
+        @see com::sun::star::sheet::DatabaseRange
+
+     */
+    interface com::sun::star::container::XIndexAccess;
 
 };
 
@@ -93,18 +113,5 @@ service DatabaseRanges
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

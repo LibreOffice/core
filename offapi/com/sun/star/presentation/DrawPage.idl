@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawPage.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,27 +84,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::presentation::DrawPage
 /** This is the service provided by a <type scope="com::sun::star::drawing">DrawPage</type> inside a
-    <type>PresentationDocument</type>.@see PresentationDocument
+    <type>PresentationDocument</type>.
+
+    @see PresentationDocument
  */
 service DrawPage
 {
-    // DocMerge: empty anyway
     service com::sun::star::drawing::DrawPage;
 
-
-    // DocMerge from xml: service com::sun::star::presentation::DrawPage: service com::sun::star::document::LinkTarget
     /** Every page is a link target inside the document object model.
      */
     service com::sun::star::document::LinkTarget;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::DrawPage::Change
     /** specifies how the page change is triggered.
-
-
 
         <p>If this is 0, the user must click to start each object animation
         and to change the page.  If set to 1, the page is
@@ -115,7 +110,6 @@ service DrawPage
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::DrawPage::Duration
     /** If the property <member scope="com::sun::star::drawing">DrawPage::Change</member> is set to 1,
         this is the time in seconds this page is shown before switching
         to the next page.
@@ -124,14 +118,12 @@ service DrawPage
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::DrawPage::Effect
     /** This is the effect that is used to fade in this page.
      */
     [property] com::sun::star::presentation::FadeEffect Effect;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::DrawPage::Layout
     /** If this property is not ZERO, this number specifies a presentation
         layout for this page.
      */
@@ -139,11 +131,9 @@ service DrawPage
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::DrawPage::Speed
     /** defines the speed of the fade-in effect of this page.
      */
     [property] com::sun::star::presentation::AnimationSpeed Speed;
-
 };
 
 //=============================================================================
@@ -153,6 +143,12 @@ service DrawPage
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/02/07 07:53:10  cl
+    idl review
+
+    Revision 1.3  2000/11/08 12:43:28  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:30  hjs
     initial import
 

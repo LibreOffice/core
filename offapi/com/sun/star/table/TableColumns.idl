@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableColumns.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:42 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_TableColumns_idl__
 #define __com_sun_star_table_TableColumns_idl__
 
@@ -65,36 +66,46 @@
 #include <com/sun/star/table/XTableColumns.idl>
 #endif
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
-#include <com/sun/star/container/XIndexAccess.idl>
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
 #ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** represents a collection of all columns of a table or spreadsheet.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::table::TableColumns
-/** collection of all columns of a table or spreadsheet.@see TableColumn
+    @see com::sun::star::table::TableColumn
  */
 service TableColumns
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to insert and remove columns.
+     */
     interface com::sun::star::table::XTableColumns;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XIndexAccess;
+    //-------------------------------------------------------------------------
 
+    /** creates an enumeration of all contained columns.
 
-    // DocMerge from xml: service com::sun::star::table::TableColumns: interface com::sun::star::container::XNameAccess
-    /** This optional interface is for accessing the columns via
-                their names.
+        @see com::sun::star::table::TableColumnsEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the columns via their names.
+
+        <p>The names of the columns are always absolute even if the current
+        cell range is a sub-range of a spreadsheet.</p>
      */
     [optional] interface com::sun::star::container::XNameAccess;
 
@@ -104,21 +115,5 @@ service TableColumns
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:44:19  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpreadsheet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSpreadsheet_idl__
 #define __com_sun_star_sheet_XSpreadsheet_idl__
 
@@ -67,29 +68,37 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
 
 interface XSheetCellCursor;
 
 //=============================================================================
 
-// DocMerge: empty anyway
-interface XSpreadsheet: XSheetCellRange
+/** provides methods to create a cell range cursor.
+ */
+interface XSpreadsheet: com::sun::star::sheet::XSheetCellRange
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSpreadsheet::createCursor
-    /** creates a cell cursor.@see com::sun::star::sheet::Spreadsheet
+    /** creates a cell cursor including the whole spreadsheet.
+
+        @see com::sun::star::sheet::SheetCellCursor
      */
-    XSheetCellCursor createCursor();
+    com::sun::star::sheet::XSheetCellCursor createCursor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSpreadsheet::createCursorByRange
-    /** creates a cell cursor to travel in
-        the given range context.@see com::sun::star::sheet::Spreadsheet
+    /** creates a cell cursor to travel in the given range context.
+
+        @param aRange
+            the cell range for the cursor.
+
+        @see com::sun::star::sheet::SheetCellCursor
      */
-    XSheetCellCursor createCursorByRange( [in] XSheetCellRange aRange );
+    com::sun::star::sheet::XSheetCellCursor createCursorByRange(
+            [in] com::sun::star::sheet::XSheetCellRange aRange );
 
 };
 
@@ -97,27 +106,5 @@ interface XSpreadsheet: XSheetCellRange
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

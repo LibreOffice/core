@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataEditor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,32 +71,33 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
-// DocMerge from xml: interface com::sun::star::util::XDataEditor
 /** connects to a model and broadcasts status change events.
  */
 interface XDataEditor: com::sun::star::uno::XInterface
 {
-    // DocMerge from xml: method com::sun::star::util::XDataEditor::show
     /** makes the data editor visible to the user.
      */
     void show();
 
-    // DocMerge from xml: method com::sun::star::util::XDataEditor::setModel
+    //--------------------------------------------------------------------------
     /** connects the data editor to a data model.
      */
     void setModel( [in] com::sun::star::uno::XInterface model );
 
-    // DocMerge: empty anyway
+    //--------------------------------------------------------------------------
+    /** @returns
+            the data model which was set by <method>XDataEditor::setModel</method>.
+     */
     com::sun::star::uno::XInterface getModel();
 
-    // DocMerge from xml: method com::sun::star::util::XDataEditor::addDataEditorListener
+    //--------------------------------------------------------------------------
     /** registers a listener to receive <type>DataEditorEvent</type>s.
      */
     void addDataEditorListener( [in] XDataEditorListener listener );
 
-    // DocMerge from xml: method com::sun::star::util::XDataEditor::removeDataEditorListener
+    //--------------------------------------------------------------------------
     /** unregisters a listener which received <type>DataEditorEvent</type>s.
      */
     void removeDataEditorListener( [in] XDataEditorListener listener );
@@ -106,21 +107,4 @@ interface XDataEditor: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1  1999/11/22 17:51:45  tlx
-    DataEditor + UniqIDs
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEntityResolver.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,12 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module xml {  module sax {
+module com {  module sun {  module star {  module xml {  module sax {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::xml::sax::XEntityResolver
 /** makes it possible to modify the behaviour of resolving external
     preferences.
-
-
 
     <p>Usually, the parser has a default behaviour of resolving external
     references (See documentation of the parser implementation).
@@ -90,13 +87,12 @@ interface XEntityResolver: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::xml::sax::XEntityResolver::resolveEntity
     /** @returns
                     <type>InputSource</type> for the external entity.
 
-                <p>If <var>aInputStream</var> is a valid reference to an input stream,
-                the parser uses this <type>InputSource</type>. Otherwise the
-                parser seeks for the entity using its default behaviour.
+        <p>If <var>aInputStream</var> is a valid reference to an input stream,
+        the parser uses this <type>InputSource</type>. Otherwise the
+        parser seeks for the entity using its default behaviour.
      */
     InputSource resolveEntity( [in] string sPublicId, [in] string sSystemId );
 
@@ -106,24 +102,4 @@ interface XEntityResolver: com::sun::star::uno::XInterface
 
 }; }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:43  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:22  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:53:08  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/23 11:41:19  mi
-    results from proofreading in layouted version
-
-    Revision 1.1.1.1  1999/11/11 09:48:47  jsc
-    new
-
-
-=============================================================================*/
 #endif

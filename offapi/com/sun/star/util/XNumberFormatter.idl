@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,18 +84,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XNumberFormatter
 /** represents a number formatter.
  */
 interface XNumberFormatter: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::attachNumberFormatsSupplier
     /** attaches an <type>XNumberFormatsSupplier</type> to this
         <type>NumberFormatter</type>.
-
-
 
         <p>This <type>NumberFormatter</type> will only use the <type>NumberFormats</type>
         specified in the attached <type>XNumberFormatsSupplier</type>. Without an attached
@@ -105,7 +101,6 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::util::XNumberFormatter::getNumberFormatsSupplier
     /** @returns
                 the attached <type>NumberFormatsSupplier</type>.
      */
@@ -113,7 +108,6 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::detectNumberFormat
     /** detects the number format in a string which contains a formatted number.
      */
     long detectNumberFormat( [in] long nKey,
@@ -122,10 +116,7 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::convertStringToNumber
     /** converts a string which contains a formatted number into a number.
-
-
 
         <p>If this is a text format, the string will not be converted.</p>
      */
@@ -134,9 +125,7 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
             raises( com::sun::star::util::NotNumericException );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNumberFormatter::convertNumberToString
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::convertNumberToString
     /** converts a number into a string.
      */
     string convertNumberToString( [in] long nKey,
@@ -144,7 +133,6 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::util::XNumberFormatter::queryColorForNumber
     /** @returns
                 the color which is specified for the given value in the number format,
                 which is otherwise the value of <var>aDefaultColor</var>.
@@ -154,9 +142,7 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
              [in] com::sun::star::util::color aDefaultColor );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNumberFormatter::formatString
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::formatString
     /** converts a string into another string.
      */
     string formatString( [in] long nKey,
@@ -164,7 +150,6 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::util::XNumberFormatter::queryColorForString
     /** @returns
                 the color which is specified for the given string in the number format,
                 which is otherwise the value of <var>aDefaultColor</var>.
@@ -174,16 +159,11 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
              [in] com::sun::star::util::color aDefaultColor );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNumberFormatter::getInputString
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::getInputString
     /** converts a number into a string with the specified format.
-
-
 
         <p>This string can always be converted back to a number using the same
         format.
-
         </p>
      */
     string getInputString( [in] long nKey,
@@ -195,27 +175,5 @@ interface XNumberFormatter: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:06  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 13:17:55  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/01/27 16:13:35  mi
-    #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InstallEnvironment.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ok $ $Date: 2000-11-27 10:03:26 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 #include <com/sun/star/setup/ModuleState.idl>
 #include <com/sun/star/setup/InstallType.idl>
 
- module com {  module sun {  module star {  module setup {
+module com {  module sun {  module star {  module setup {
 
-// DocMerge: empty anyway
+/// @deprecated
 struct InstallEnvironment
 {
     // DocMerge: empty anyway

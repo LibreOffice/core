@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceHierarchies.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSourceHierarchies_idl__
 #define __com_sun_star_sheet_DataPilotSourceHierarchies_idl__
 
@@ -65,19 +66,26 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents the collection of hierarchies in a data pilot source
+    dimension.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSourceHierarchies
-/** the collection of hierarchies in a data pilot source dimension.
+    @see com::sun::star::sheet::DataPilotSourceDimension
+    @see com::sun::star::sheet::DataPilotSource
  */
 service DataPilotSourceHierarchies
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access by name to the hierarchies in the collection.
+
+        @see com::sun::star::sheet::DataPilotSourceHierarchy
+     */
     interface com::sun::star::container::XNameAccess;
 
 };
@@ -86,24 +94,5 @@ service DataPilotSourceHierarchies
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/03/24 18:01:01  nn
-    #74032# include-defines
-
-    Revision 1.1  2000/03/24 17:56:47  nn
-    #74032# Spelling error in file names corrected
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

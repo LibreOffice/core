@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceHierarchy.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotSourceHierarchy_idl__
 #define __com_sun_star_sheet_DataPilotSourceHierarchy_idl__
 
@@ -69,22 +70,30 @@
 #include <com/sun/star/sheet/XLevelsSupplier.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a hierarchy in a data pilot source dimension.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DataPilotSourceHierarchy
-/** a hierarchy in a data pilot source.
+    @see com::sun::star::sheet::DataPilotSourceDimension
+    @see com::sun::star::sheet::DataPilotSource
  */
 service DataPilotSourceHierarchy
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the hierarchy, i.e. used in
+        collections.
+     */
     interface com::sun::star::container::XNamed;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of levels of this hierarchy.
+     */
     interface com::sun::star::sheet::XLevelsSupplier;
 
 };
@@ -93,24 +102,5 @@ service DataPilotSourceHierarchy
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/03/24 18:01:01  nn
-    #74032# include-defines
-
-    Revision 1.1  2000/03/24 17:57:03  nn
-    #74032# Spelling error in file names corrected
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

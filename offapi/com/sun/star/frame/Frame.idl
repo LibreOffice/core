@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,14 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #endif
 
+#ifndef __com_sun_star_frame_XDispatchRecorderSupplier_idl__
+#include <com/sun/star/frame/XDispatchRecorderSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
+#include <com/sun/star/frame/XDispatchProviderInterception.idl>
+#endif
+
 #ifndef __com_sun_star_frame_XFramesSupplier_idl__
 #include <com/sun/star/frame/XFramesSupplier.idl>
 #endif
@@ -77,94 +85,127 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
 
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** represents the environment for a desktop component
 
-// DocMerge from xml: service com::sun::star::frame::Frame
-/** represents the environment for a desktop component.
+    <p>
+    Frames are the anchors for the office components and they are the components' link
+    to the outside world. They create a skeleton for the whole office api infrastructure
+    by building frame hierarchys. These hierarchies contains all currently loaded
+    documents and make it possible to walk during these trees.
+    A special service <type>Desktop</type> can(!) combine different of such trees
+    to a global one which life time will be controlled by it.
+    </p>
+
+    @see Desktop
  */
 service Frame
 {
-
-
-    // DocMerge from xml: service com::sun::star::frame::Frame: interface com::sun::star::frame::XFrame
+    //-------------------------------------------------------------------------
     /** allows the component to be loaded and accessed
-                within the frame; it is the main connection to the
-                environment of the component.
+        within the frame; it is the main connection to the
+        environment of the component.
      */
-    interface com::sun::star::frame::XFrame;
+    interface XFrame;
 
+    //-------------------------------------------------------------------------
     /** provides access to dispatchers for the frame.
 
-        <p>What kind of URLs a frame accepts in the calls to <method>XDispatchProvider::queryDispatch</method>,
+        <p>
+        What kind of URLs a frame accepts in the calls to <member>XDispatchProvider::queryDispatch()</member>,
         and how the returned dispatcher handles dispatches is completely implementation dependent
-        (though of course the restrictions of <type>XDispatchProvider</type> must be met).</p>
-
-        <p>Frame implementations may (optionally) support special targets in the call to
-        <method>XDispatchProvider::queryDispatch</method>.</p>
-
-        <p>Such special targets are passed as target frame name. They may, in addition,
+        (though of course the restrictions of <type>XDispatchProvider</type> must be met).
+        Frame implementations may (optionally) support special targets in the call to
+        <member>XDispatchProvider::queryDispatch()</member>.
+        Such special targets are passed as target frame name. They may, in addition,
         require special frame search flags (see <type>FrameSearchFlag</type>), or,
         in opposite, limit the set of allowed flags.<br>
         Common special targets include:
         <ul>
             <li><b>_blank</b> is used to create a new frame when dispatching the URL.</li>
-            <li><b>_self</b> forces the frame to dispatch the URL into itself.</li>
+            <li><b>_default</b> is used to recycle empty or create a new frame when dispatching the URL.</li>
+            <li><b>_self</b> forces the frame to dispatch the URL into itself. ("" means the same)</li>
             <li><b>_parent</b> dispatches the URL into the parent frame.</li>
             <li><b>_top</b> dispatches the URL into the top level frame, the frame where this is invoked belongs to.</li>
-            <li><b>_helpagent</b> dispatches the URL into the help agent window belonging to the frame.</li>
         </ul>
         </p>
 
         @see XDispatch
+        @see XFrame::findFrame()
     */
-    interface com::sun::star::frame::XDispatchProvider;
+    interface XDispatchProvider;
 
+    //-------------------------------------------------------------------------
+    /** supports interception mechanism for dispatched URLs
 
-    // DocMerge from xml: service com::sun::star::frame::Frame: interface com::sun::star::frame::XFramesSupplier
-    /** This optional interface is used to access sub-frames within this
-                Frame.
+        <p>
+        Registered objects can intercept, supress or deroute dispatched URLs.
+        If they support another interface too (<type>XInterceptorInfo</type>)
+        it's possible to perform it by directly calling of right interceptor without
+        using list of all registered ones.
+        </p>
      */
-    [optional] interface com::sun::star::frame::XFramesSupplier;
+    interface XDispatchProviderInterception;
 
+    //-------------------------------------------------------------------------
+    /** provides access to sub frames within this frame
+     */
+    interface XFramesSupplier;
 
-    // DocMerge from xml: service com::sun::star::frame::Frame: interface com::sun::star::task::XStatusIndicatorFactory
-    /** This optional interface supplies access to <type>XStatusIndicator</type>s
-                for the component within the frame.
+    //-------------------------------------------------------------------------
+    /** supplies access to <type scope="com::sun::star::task">XStatusIndicator</type> objects
+        for the component within the frame to show progresses
      */
     [optional] interface com::sun::star::task::XStatusIndicatorFactory;
 
+    //-------------------------------------------------------------------------
+    /** if possible it sets/gets the UI title on/from the frame container window
+
+        <p>
+        It depends from the type of the frame container window. If it is a system
+        task window all will be OK. Otherwise the title can't be set.
+        Setting/getting of the pure value of this property must be possible in every
+        case. Only showing on the UI can be fail.
+        </p>
+     */
+    [property] string Title;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the dispatch recorder of the frame
+
+        <p>
+        Such recorder can be used to record dispatch requests.
+        The supplier contains a dispatch recorder and provide the functionality
+        to use it for any dispatch object from outside which supports the interface
+        <type>XDispatch</type>. A supplier is available only, if recording was enabled.
+        That means: if somewhere whish to enable recoding on a frame he must set
+        a supplier with a recorder object inside of it. Every user of dispatches
+        has to check then if such supplier is available at this frame property.
+        If value of this property is <NULL/> he must call <member>XDispatch::dispatch()</member>
+        on the original dispatch object. If it's a valid value he must use the supplier
+        by calling his method <member>XDispatchRecordeSupplier::dispatchAndRecord()</member>
+        with the original dispatch object as argument.
+        </p>
+
+        <p>
+        Note:<br>
+        It's not recommended to cache an already getted supplier. Because there exist
+        no possibility to check for enabled/disabled recording then.
+        </p>
+     */
+    [property] XDispatchRecorderSupplier RecorderSupplier;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/05/11 12:09:47  fs
-    added a rudimentary documentation to the XDispatchProvider interface (mainlyfor mentioning the _helpagent target)
-
-    Revision 1.4  2001/01/23 10:08:25  mi
-    optional interfaces now marked as [optional] instead of just a prosa description of this fact
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:27  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

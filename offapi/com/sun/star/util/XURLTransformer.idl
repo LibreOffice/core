@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XURLTransformer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,89 +72,109 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XURLTransformer
-/** supports parsing and assembling of URLs.@see URL
+/** supports parsing and assembling of URLs
+
+    @see URL
+    @see URLTransformer
  */
 interface XURLTransformer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XURLTransformer::parseStrict
-    /** parses the string in <member>URL::Complete</member> which must contain
+    /** parses the string in <member>URL::Complete</member> which should contain
         a syntactically complete URL.
 
+        <p>
+        The implementation is allowed to correct minor failures in <member>URL::Complete</member>
+        if the meaning of the URL remain unchanged. Parts of the URL are stored in the other
+        fields of <var>aURL</var>.
+        </p>
 
+        @param aURL
+                the URL which include the complete string notation and will contain
+                all parsed parts of it after finishing this call. <member>URL::Complete</member>
+                can be overwritten if the implementation corrected minor failures.
 
-        <p>Parts of the URL are stored in the other fields of aURL.</p>
+        @returns
+            <TRUE/> if parsing was successfully (means if given URL was syntactically correct)
+            or <FALSE/> otherwhise.
      */
     boolean parseStrict( [inout] com::sun::star::util::URL aURL );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XURLTransformer::parseSmart
     /** parses the string in <member>URL::Complete</member>, which may contain
-        a syntactically complete URL or is completed by the specified
-        protocol.
+        a syntactically complete URL or is specified by the provided protocol
 
+        <p>
+        The implementation can use smart functions to correct or interpret
+        <member>URL::Complete</member> if it is not a syntactically complete URL.
+        The parts of the URL are stored in the other fields of <var>aURL</var>.
+        </p>
 
+        @param aURL
+                the URL which include the string notation and will contain
+                all parsed parts of it after finishing this call. This includes
+                <member>URL::Complete</member>.
 
-        <p>The parts of the URL are stored in the other fields of aURL.</p>
+        @param sSmartProtocol
+                optional information which protocol specification should be used to parse
+                member<member>URL::Complete</member>. If empty the implementation can use a
+                protocol which fit best.
+
+        @returns
+                <TRUE/> if parsing was successful (means if <member>URL::Complete</member> could
+                be syntactically correct) or <FALSE/> otherwise.
      */
-    boolean parseSmart( [inout] com::sun::star::util::URL aURL,
-             [in] string aSmartProt );
+    boolean parseSmart(
+        [inout] com::sun::star::util::URL aURL,
+        [in] string sSmartProtocol );
 
     //-------------------------------------------------------------------------
+    /** assembles the parts of the URL specified by <var>aURL</var> and
+        stores it into <member>URL::Complete</member>
 
-    // DocMerge from xml: method com::sun::star::util::XURLTransformer::assemble
-    /** assembles the parts of the URL specified by aURL and
-        stores it into <member>URL::Complete</member>.
+        @param aURL
+                the URL which contains alls neccessary information in a structured form. The
+                member <member>URL::Complete</member> contains the URL in string notation after
+                the operation finished successfully. Otherwise the content of <member>URL::complete</member>
+                is not defined.
+
+        @returns
+            <TRUE/> if assembling was successfully or <FALSE/> otherwise.
      */
     boolean assemble( [inout] com::sun::star::util::URL aURL );
 
     //-------------------------------------------------------------------------
+    /** returns a representation of the URL for UI purposes only
 
-    // DocMerge from idl: method com::sun::star::util::XURLTransformer::getPresentation
-    /** @returns
-                    a presentation of the URL which can be used at the user
-                    interface.
+        <p>
+        Sometimes it can be usefull to show an URL on an user interface
+        in a more "human readable" form. Such URL can't be used on any API
+        call, but make it easier for the user to understand it.
+        </p>
+
+        @param aURL
+                URL in structured form which should be shown at the UI
+
+        @param bWithPassword
+                specifies whether the password will be included in the encoding
+                or not. Usually passwords should never be shown at the user
+                interface.
+
+        @returns
+                a string representing the <var>aURL</var> if it is syntactically correct. A empty string if <var>aURL</var>
+                is not syntactically correct.
      */
-    string getPresentation( [in] com::sun::star::util::URL aURL,
-             [in] boolean bWithPass );
-
+    string getPresentation(
+        [in] com::sun::star::util::URL aURL,
+        [in] boolean bWithPassword );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:27  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:07  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/09 15:25:12  mi
-    #70728# missing documentation
-
-    Revision 1.2  2000/01/27 16:13:35  mi
-    #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

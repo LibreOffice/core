@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetUpdate.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides write access to a dynamic homogeneous set of values or nested
- trees within a (by name) hierarchy.
+ trees within a hierarchy.
 
  <p>Allows adding and removing elements.
  Helps creates new elements to be added.
@@ -89,9 +89,6 @@ module com { module sun { module star { module configuration {
  unless they represent a read-only tree element (as indicated by
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>).
  </p>
-
- <!-- Dennis: "again"? -->
- <!-- Developer: As in GroupUpdate -->
 */
 service SetUpdate
 {
@@ -120,12 +117,12 @@ service SetUpdate
  <p>Implementations that support insertion of objects that weren't obtained
  from within the hierarchy must reject elements that don't have the correct
  structure as described by the template, even if the object returns the
- correct template name from <member>XTemplateInstance::getTemplateName</member>.
+ correct template name from <member>XTemplateInstance::getTemplateName()</member>.
  </p>
 
  <p>Other ways in which an element may be moved among or within compatible sets
- include <member scope="com::sun::star::container">XChild::setParent</member>
- and <member scope="com::sun::star::container">XNamed::setName</member>, if
+ include <member scope="com::sun::star::container">XChild::setParent()</member>
+ and <member scope="com::sun::star::container">XNamed::setName()</member>, if
  the element implements them.
  </p>
 

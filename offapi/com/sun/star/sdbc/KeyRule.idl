@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyRule.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,79 +71,154 @@ constants KeyRule
 {
 
     // DocMerge from idl: value com::sun::star::sdbc::KeyRule::CASCADE
-    /** a possible value for the column's <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code> in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
-             <P>For the column <code>UPDATE_RULE</code>,
+    /** a possible value for the column's
+            <code>UPDATE_RULE</code>
+            and
+            <code>DELETE_RULE</code>
+            in the
+            <type scope="com::sun::star::sdbc">XResultSet</type>
+             objects returned by the methods
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             ,
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             ,
+             and
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             .
+             <P>
+             For the column
+             <code>UPDATE_RULE</code>
+             ,
              it indicates that
              when the primary key is updated, the foreign key (imported key)
              is changed to agree with it.
-             <P>For the column <code>DELETE_RULE</code>,
+             </P>
+             <P>
+             For the column
+             <code>DELETE_RULE</code>
+            ,
              it indicates that
              when the primary key is deleted, rows that imported that key
              are deleted.
+             </P>
      */
     const long CASCADE  = 0;
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdbc::KeyRule::RESTRICT
-    /** a possible value for the column's <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code> in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
-             <P>For the column <code>UPDATE_RULE</code>, it indicates that
+    /** a possible value for the column's
+             <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+            in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             objects returned by the methods
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             ,
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             ,
+             and
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             .
+             <P>
+             For the column
+             <code>UPDATE_RULE</code>
+            , it indicates that
              a primary key may not be updated if it has been imported by
              another table as a foreign key.
-             <P>For the column <code>DELETE_RULE</code>, it indicates that
+             </P>
+             <P>
+             For the column
+             <code>DELETE_RULE</code>
+            , it indicates that
              a primary key may not be deleted if it has been imported by
              another table as a foreign key.
+             </P>
      */
     const long RESTRICT = 1;
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdbc::KeyRule::SET_NULL
-    /** a possible value for the column's <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code> in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
-             <P>For the columns <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code>,
+    /** a possible value for the column's
+             <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+            in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+              objects returned by the methods
+            <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             ,
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             ,
+             and
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             .
+             <P>
+             For the columns
+             <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+            ,
              it indicates that
              when the primary key is updated or deleted, the foreign key (imported key)
              is changed to <code>NULL</code>.
+             </P>
      */
     const long SET_NULL  = 2;
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdbc::KeyRule::NO_ACTION
-    /** a possible value for the column's <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code> in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
-             <P>For the columns <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code>,
-             it indicates that
-             if the primary key has been imported, it cannot be updated or deleted.
+    /** a possible value for the column's
+            <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+             in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             objects returned by the methods
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             ,
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             ,
+             and
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             .
+             <P>
+             For the columns
+             <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+            ,
+             it indicates that if the primary key has been imported, it cannot be updated or deleted.
+             </P>
      */
     const long NO_ACTION = 3;
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdbc::KeyRule::SET_DEFAULT
-    /** a possible value for the column's <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code> in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
-             <P>For the columns <code>UPDATE_RULE</code>
-             and <code>DELETE_RULE</code>,
+    /** a possible value for the column's
+            <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+            in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             objects returned by the methods
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             ,
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             ,
+             and
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             .
+             <P>
+             For the columns
+             <code>UPDATE_RULE</code>
+             and
+             <code>DELETE_RULE</code>
+            ,
              it indicates that
              if the primary key is updated or deleted, the foreign key (imported key)
              is set to the default value.
+             </P>
      */
     const long SET_DEFAULT  = 4;
 };
@@ -154,6 +229,12 @@ constants KeyRule
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.1  2002/02/18 08:54:13  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/11/01 16:46:45  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

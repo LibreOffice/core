@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SynchronousFrameLoader.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-09 09:22:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_SynchronousFrame_idl__
-#define __com_sun_star_frame_SynchronousFrame_idl__
+#ifndef __com_sun_star_frame_SynchronousFrameLoader_idl__
+#define __com_sun_star_frame_SynchronousFrameLoader_idl__
 
 #ifndef __com_sun_star_frame_XSynchronousFrameLoader_idl__
 #include <com/sun/star/frame/XSynchronousFrameLoader.idl>
@@ -69,8 +69,8 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
 #endif
 
 //=============================================================================
@@ -78,75 +78,56 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** derivations of this abstract service are used to load components
+    into <type>Frame</type>s of the environment
 
-// DocMerge from xml: service com::sun::star::frame::SynchronousFrameLoader
-/** Derivations of this abstract service are used to load components
-    into <type>Frame</type>s of the environment.
-
-    <p>Concrete implementations of this service register, for example,
+    <p>
+    Concrete implementations of this service register, for example,
     for file name extensions or MIME types to load appropriate
-    components. The components loaded are at least <type>Controller</type>.</p>
+    components. The components loaded are at least <type>Controller</type>.
+    Instead of service <type>FrameLoader</type> this one use synchronous
+    processes to load the component.
+    </p>
+
+    @see FrameLoader
  */
 service SynchronousFrameLoader
 {
     //-------------------------------------------------------------------------
-    /**support synchron loading
+    /** support synchronous loading of component
      */
-    interface com::sun::star::frame::XSynchronousFrameLoader;
+    interface XSynchronousFrameLoader;
 
     //-------------------------------------------------------------------------
     /** support initialization of loader with its own configuration!
+
         <p>
-        A loader can support a readonly access to its own configuration.
-        But readonly properties couldn't be set ...
-        That's the reason for these interface!
-        All Anys of given sequence are from Type <type>PropertyValue</type>.
+        Concrete implementations should use it to get her own configuration data
+        directly after creation by the <type>FrameLoaderFactory</type>.
+        Otherwhise they must use normal configuration api to do so.
         </p>
      */
     [optional] interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /**readonly(!) access to loader configuration
+    /** provides access to the internal name of this frame loader
+
         <p>
-        These interfaces support readonly access to our internal configuration of THIS loader.
-        The loader itself gets its configuration about <type>XInitialization</type> at creation by using
-        the <type>FrameLoaderFactory</type>!
-         </p>
+        The internal name is a part of his configuration and will be passed by
+        the <type>FrameLoaderFactory</type> after creation
+        if optional interface <type scope="com::sun::star::lang">XInitialization</type>
+        is supported. Value of function <member>XNamed::getName()</member> can be
+        used on service <type>FrameLoaderFactory</type> to get further informations about this loader.
+        Setting of this name by calling <member>XNamed::setName()</member> must be
+        forwarded to same factory service. He should decide, if it's allowed or not.
+        The reason: prevent code against name ambigities.
+        </p>
      */
-    [optional] interface com::sun::star::beans::XPropertySet;
-
-    /// loader is registered for these types
-    [optional, property, readonly]  sequence< string >  Types       ;
-
-    /// localized name of loader to show it at UI elements
-    [optional, property, readonly]  string              UIName      ;
+     [optional] interface com::sun::star::container::XNamed;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/11/01 10:29:29  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.1  2000/11/20 10:06:11  as
-    new interfaces for filter and type detection
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/05/25 10:26:18  mi
-    Doku
-
-
-=============================================================================*/
 #endif

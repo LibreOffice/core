@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseImportDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DatabaseImportDescriptor_idl__
 #define __com_sun_star_sheet_DatabaseImportDescriptor_idl__
 
@@ -65,42 +66,35 @@
 #include <com/sun/star/sheet/DataImportMode.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DatabaseImportDescriptor
-/** a description of how data from an external database is
+/** represents a description of how data from an external database is
     imported.
+
+    @see com::sun::star::sheet::XDatabaseRange
  */
 service DatabaseImportDescriptor
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseImportDescriptor::SourceType
-    /** this attribute enables importing and specifies from what
-        type of source data is imported.
+    /** enables importing and specifies from what type of source data is
+        imported.
      */
     [property] com::sun::star::sheet::DataImportMode SourceType;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseImportDescriptor::DatabaseName
-    /** this attribute specifies the name of the database from which
-        data is imported.
+    /** specifies the name of the database from which data is imported.
      */
     [property] string DatabaseName;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseImportDescriptor::SourceObject
-    /** this attribute specifies the table, query, or statement from
-        which data is imported.
-
-
+    /** specifies the table, query, or statement from which data is imported.
 
         <p>The meaning of this is determined by the
         <member>DatabaseImportDescriptor::SourceType</member> attribute.</p>
@@ -113,24 +107,5 @@ service DatabaseImportDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:07  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:53  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

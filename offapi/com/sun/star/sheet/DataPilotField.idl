@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotField_idl__
 #define __com_sun_star_sheet_DataPilotField_idl__
 
@@ -77,42 +78,47 @@
 #include <com/sun/star/sheet/GeneralFunction.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a single field in a data pilot table.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DataPilotField
-/** a single field in a DataPilotDescriptor.
+    <p>If the data pilot table is based on a spreadsheet cell range, a
+    field is representred by a column of the range and is named using
+    the topmost cell of the column.</p>
  */
 service DataPilotField
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNamed;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
+    /** provides access to the name of the data pilot field.
+     */
+    interface com::sun::star::container::XNamed;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotField::Orientation
-    /** this attribute specifies the orientation of the field.
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** specifies the orientation of the field.
      */
     [property] com::sun::star::sheet::DataPilotFieldOrientation Orientation;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::DataPilotField::Function
-    /** this attribute specifies the function of the field.
-
-
+    /** specifies the function used to calculate results for this field.
 
         <p>For column and row fields, this is the function for subtotals
-        (<const>GeneralFunction::NONE</const> = no subtotals).
-        For data fields, this is the function
-        shown in the data pilot table.</p>
+        (<const>GeneralFunction::NONE</const> means no subtotals).
+        For data fields, this is the function shown in the data pilot
+        table.</p>
      */
     [property] com::sun::star::sheet::GeneralFunction Function;
 
@@ -122,18 +128,5 @@ service DataPilotField
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

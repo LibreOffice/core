@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIndexEntrySupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,43 +65,48 @@
 #include <com/sun/star/lang/Locale.idl>
 #endif
 
+//============================================================================
+
 module com { module sun { module star { module i18n {
+
+//============================================================================
 
 /**
     supplies information on index entries to generate a "table of
-    alphabetical index", to a given locale information.
-    <p></p>
-    @see Locale
-    @version    1.0
-    @author     <a href="mailto:juergen.pingel@germany.sun.com">Juergen Pingel</a>
+    alphabetical index" for a given locale.
 */
- interface XIndexEntrySupplier : com::sun::star::uno::XInterface
+
+interface XIndexEntrySupplier : com::sun::star::uno::XInterface
 {
+    //------------------------------------------------------------------------
     /**
         returns the capital index key for sorting a table of indexes, to
-        a given index entry, to
-        a given <type scope="com::sun::star::lang">Locale</type> and
-        to a given sort algorithm.
-        <p>For example, in english locale it returns<br>
-       "K"   for "keyboard"
-*/
-    string getIndexCharacter( [in]string IndexEntry,
-                              [in]com::sun::star::lang::Locale aLocale,
-                              [in]string SortAlgorithm );
+        a given index entry, to a given <type
+        scope="com::sun::star::lang">Locale</type> and to a given sort
+        algorithm.
+
+        <p> For example, in English locale it returns <b>"K"</b> for
+        "keyboard"
+     */
+    string getIndexCharacter( [in] string aIndexEntry, [in]
+    com::sun::star::lang::Locale aLocale, [in] string aSortAlgorithm );
+
+    //------------------------------------------------------------------------
     /**
-        returns the pagenumber word of an index entry, where one page
-        or more pages are combined to one pagenumber entry, to
-        a given <type scope="com::sun::star::lang">Locale</type>.
-        <p>For example, in english locale it returns
-        <br>   "p."   for MorePages = false
-        <br>   "pp."  for MorePages = true
+        returns the page number word of an index entry, where one page
+        or more pages are combined to one page number entry, for a given
+        <type scope="com::sun::star::lang">Locale</type>.
+
+        <p> For example, in English locale it returns <br/>
+        <b>"p."</b>  for <em>bMorePages</em> == <FALSE/> <br/>
+        <b>"pp."</b> for <em>bMorePages</em> == <TRUE/> </p>
     */
-    string getIndexFollowPageWord( [in]boolean MorePages,
-                                     [in]com::sun::star::lang::Locale aLocale );
+    string getIndexFollowPageWord( [in] boolean bMorePages,
+                                   [in] com::sun::star::lang::Locale aLocale );
 };
+
+//============================================================================
 };};};};
-
+//============================================================================
 #endif
-
-
 

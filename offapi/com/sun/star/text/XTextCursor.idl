@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextCursor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@
 
 //=============================================================================
 
-// DocMerge: empty anyway
+/** extends a text range by method to modify its position.
+ */
 interface XTextCursor: com::sun::star::text::XTextRange
 {
     //-------------------------------------------------------------------------
@@ -143,6 +144,15 @@ interface XTextCursor: com::sun::star::text::XTextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.2  2002/08/27 12:02:55  tl
+    #97433# documentation added
+
+    Revision 1.4.16.1  2002/08/27 12:01:55  tl
+    #97435# documentation added
+
+    Revision 1.4  2001/03/16 16:41:46  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLData.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ interface XSQLOutput;
     registered in a type mapping.  It is expected that this interface
     will normally be implemented by a tool. The methods in this interface
     are called by the driver and are never called by a programmer
-    directly.</p>
+    directly.
+    </p>
  */
 interface XSQLData: com::sun::star::uno::XInterface
 {
@@ -94,9 +95,14 @@ interface XSQLData: com::sun::star::uno::XInterface
         that this object represents.
 
 
-        <p>This method is called by the SDBC driver to get the name of the
+        <p>
+        This method is called by the SDBC driver to get the name of the
         UDT instance that is being mapped to this instance of SQLData.
         </p>
+        @returns
+            the name of the SQL type.
+        @throws SQLException
+            if a database access error occurs.
      */
     string getSQLTypeName() raises (SQLException);
 
@@ -106,23 +112,39 @@ interface XSQLData: com::sun::star::uno::XInterface
     /** populates this object with data read from the database.
 
 
-        <p>The implementation of the method must follow this protocol:<br>
+        <p>
+        The implementation of the method must follow this protocol:
+        <br/>
         It must read each of the attributes or elements of the SQL
         type from the given input stream. This is done
         by calling a method of the input stream to read each
         item, in the order that they appear in the SQL definition
-        of the type. The method <code>readSQL</code> then
-        assigns the data to appropriate fields or elements (of this
-        or other objects).<br>
-        Specifically, it must call the appropriate <code>XSQLInput.readXXX</code>
+        of the type. The method
+        <code>readSQL</code>
+        then assigns the data to appropriate fields or elements (of this
+        or other objects).
+        <br/>
+        Specifically, it must call the appropriate
+        <code>XSQLInput.readXXX</code>
         method(s) to do the following:
         for a Distinct Type, read its single data element;
         for a Structured Type, read a value for each attribute of the SQL type.
         </p>
-        <p> The SDBC driver initializes the input stream with a type map
+        <p>
+        The SDBC driver initializes the input stream with a type map
         before calling this method, which is used by the appropriate
-        <code>SQLInput.readXXX</code> method on the stream.
-        </p>@see com::sun::star::sdbc::XSQLInput
+        <code>SQLInput.readXXX</code>
+        method on the stream.
+        </p>
+
+        @param stream
+            the input SQL data stream
+        @param typeName
+            the SQL type of the value on the data stream
+        @throws SQLException
+            if a database access error occurs.
+
+        @see com::sun::star::sdbc::XSQLInput
      */
     void readSQL([in]XSQLInput stream, [in]string typeName)
         raises (SQLException);
@@ -132,15 +154,23 @@ interface XSQLData: com::sun::star::uno::XInterface
     /** writes this object to the given SQL data stream.
 
 
-        <p>The implementation of the method must follow this protocol:<br>
+        <p>
+        The implementation of the method must follow this protocol:
+        <br/>
         It must write each of the attributes of the SQL type to the given output
         stream. This is done by calling a method of the output stream to write
         each item, in the order that they appear in the SQL definition of the type.
-        Specifically, it must call the appropriate <code>XSQLOutput.writeXXX</code>
+        Specifically, it must call the appropriate
+        <code>XSQLOutput.writeXXX</code>
         method(s) to do the following:<br>
         for a Distinct Type, write its single data element;
         for a Structured Type, write a value for each attribute of the SQL type.
-        </p>@see com::sun::star::sdbc::XSQLOutput
+        </p>
+        @param stream
+            the output SQL data stream
+        @throws SQLException
+            if a database access error occurs.
+        @see com::sun::star::sdbc::XSQLOutput
      */
     void writeSQL([in]XSQLOutput stream) raises (SQLException);
 };
@@ -151,6 +181,12 @@ interface XSQLData: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

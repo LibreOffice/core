@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverPropertyInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,11 @@
 /** describes the driver properties for making a connection.
 
 
-    <p>The DriverPropertyInfo is of interest only to advanced programmers
+    <p>
+    The DriverPropertyInfo is of interest only to advanced programmers
     who need to interact with a driver to discover and supply properties
-    for connections.</p>
+    for connections.
+    </p>
  */
 struct DriverPropertyInfo
 {
@@ -87,8 +89,14 @@ struct DriverPropertyInfo
 
 
     // DocMerge from xml: field com::sun::star::sdbc::DriverPropertyInfo::IsRequired
-    /** is <TRUE/> if a value must be supplied for this property
-        during <code>Driver.connect</code> and <FALSE/> otherwise.
+    /** is
+        <TRUE/>
+        if a value must be supplied for this property
+        during
+        <code>Driver.connect</code>
+        and
+        <FALSE/>
+        otherwise.
      */
     boolean IsRequired;
 
@@ -103,8 +111,9 @@ struct DriverPropertyInfo
 
     // DocMerge from idl: field com::sun::star::sdbc::DriverPropertyInfo::Choices
     /** contains a sequence of possible values if the value for the field
-             <code>DriverPropertyInfo.value</code> may be selected
-             from a particular set of values; otherwise empty.
+            <code>DriverPropertyInfo.value</code>
+            may be selected
+            from a particular set of values; otherwise empty.
      */
     sequence<string> Choices;
 };
@@ -115,6 +124,12 @@ struct DriverPropertyInfo
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/02/18 09:00:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2000/12/14 12:53:39  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

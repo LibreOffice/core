@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNDConstants.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-27 15:04:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,46 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 constants DNDConstants
 {
+    //=============================================================================
+    /** No action.
+    */
+
     const byte ACTION_NONE = 0x00;
+
+    //=============================================================================
+    /** Action copy.
+    */
+
     const byte ACTION_COPY = 0x01;
+
+    //=============================================================================
+    /** Action move.
+    */
+
     const byte ACTION_MOVE = 0x02;
-     const byte ACTION_COPY_OR_MOVE = 0x03;
+
+    //=============================================================================
+    /** Action copy or move.
+    */
+
+    const byte ACTION_COPY_OR_MOVE = 0x03;
+
+    //=============================================================================
+    /** Action link.
+    */
+
     const byte ACTION_LINK = 0x04;
+
+    //=============================================================================
+    /** Action reference.
+    */
+
     const byte ACTION_REFERENCE = 0x04;
+
+    //=============================================================================
+    /** Action default.
+    */
+
     const byte ACTION_DEFAULT = 0x80;
 };
 

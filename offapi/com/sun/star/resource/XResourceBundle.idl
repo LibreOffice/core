@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResourceBundle.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:33:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,11 +129,10 @@ module com { module sun { module star { module resource {
     When your program needs a locale-specific object, it loads
 
     the <code>XResourceBundle</code> implementation using the
-    <code>com.sun.star.resource.XResourceBundleLoader</code> service:
+    <type>XResourceBundleLoader</type> service:
 
     <listing>
-    XResourceBundle myResources =
-    xLoader->getBundle("MyResources", currentLocale);
+    XResourceBundle myResources = xLoader.getBundle("MyResources", currentLocale);
     </listing>
 
     <p>The first argument specifies the family name of the resource
@@ -182,14 +181,14 @@ module com { module sun { module star { module resource {
     <listing>
     class MyResource extends com.sun.star.resource.XResourceBundle
     {
-    // some queryInterface stuff
-    // ...
-    public final Object getDirectElement(String key)
-    {
-    if (key.equals("okKey")) return "Ok";
-    if (key.equals("cancelKey")) return "Cancel";
-    return null;
-    }
+        // some queryInterface stuff
+        // ...
+        public final Object getDirectElement(String key)
+        {
+            if (key.equals("okKey")) return "Ok";
+            if (key.equals("cancelKey")) return "Cancel";
+            return null;
+        }
     }
     </listing>
 
@@ -210,7 +209,7 @@ module com { module sun { module star { module resource {
 
     <p>The get methods all require the key as an argument and return
     the object if found. If the object is not found, the get methods
-    throw a <code>NoSuchElementException</code>.
+    throw a <type scope="com:sun:star:container">NoSuchElementException</type>.
 
     <P> <STRONG>NOTE:</STRONG> You should always supply a base service
     with no suffixes. This will be the class of "last resort" if a
@@ -263,6 +262,9 @@ interface XResourceBundle: com::sun::star::container::XNameAccess
         exists.
 
         <p>It does not look in the parents.
+
+        @param key
+            specifies the element.
     */
     any getDirectElement( [in] string key );
 

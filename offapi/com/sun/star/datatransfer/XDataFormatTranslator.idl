@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataFormatTranslator.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 15:37:03 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,32 +74,40 @@
 module com { module sun { module star { module datatransfer {
 
 //=============================================================================
-/** Interface to be implemented by objects used to translate DataFlavors to
-    system dependent data transfer types and vice versa.
+/** Interface to be implemented by objects used to translate a <type>DataFlavor</type> to
+    a system dependent data transfer type and vice versa.
 
-    <p>Different platforms
-    use different data transfer types to describe date during data exchange
-     operations like clipboard or drag&drop, for example, Windows uses interger values,
-     Unix uses atoms, other platforms may use strings.</p>
-
-     <p>Under Windows, a data type of format int32 will be interpreted as a
-     clipboard format value, whereas a string will be interpreted as a format name
-     which has to be registered in order to get a valid clipboard format value.</p>
+    <p>Different platforms use different types to describe data formats available
+    during data exchange operations like clipboard or drag&drop. Windows for instance
+    uses integer values to describe an available clipboard or drag&drop format, Unix
+    X11 uses so called Atoms etc.</p>
 */
 
 interface XDataFormatTranslator : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**
+    /** Converts a <type>DataFlavor</type> to system dependend data type.
+
+        @param aDataFlavor
+        Describes the format for which a system dependent data types is requested.
+
         @returns
-        a DataFlavor for the given system data type.
+        A system dependent data transfer type for the given <type>DataFlavor</type>
+        if there is one available.
+        <p>If the is no system dependent data type for a given <type>DataFlavor</type>
+        the returned any is empty.</p>
     */
     any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Converts a system dependent data type to a <type>DataFlavor</type>.
+
+        @param aSysDataType
+        A system dependent data type. If aSysDataType is empty so is the returned <type>DataFlavor</type>.
+
         @returns
-        a system data type for the given DataFlavor.
+        A <type>DataFlavor</type> for the given system dependent data transfer type.
+        <p>If there is no appropriate mapping for a sytem dependent data type, the returned <type>DataFlavor</type> will be empty.</p>
     */
     DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableChart.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:19 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_TableChart_idl__
 #define __com_sun_star_table_TableChart_idl__
 
@@ -73,25 +74,37 @@
 #include <com/sun/star/container/XNamed.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** represents a chart based on data in a table or spreadsheet.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::table::TableChart
-/** chart based on the data in a table.
+    <p>This service does not represent the chart document model itself,
+    but the object in the table that contains this chart document.<p/>
  */
 service TableChart
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the settings of this chart.
+     */
     interface com::sun::star::table::XTableChart;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the chart document model.
+
+        @see com::sun::star::chart::ChartDocument
+     */
     interface com::sun::star::document::XEmbeddedObjectSupplier;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the name of the chart.
+     */
     interface com::sun::star::container::XNamed;
 
 };
@@ -100,18 +113,5 @@ service TableChart
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

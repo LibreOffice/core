@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilterGroupManager.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-14 09:51:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,33 +71,35 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-//.............................................................................
 module com {  module sun {  module star {  module ui { module dialogs {
-//.............................................................................
 
-/** specifies an interface which allows manipulation of groups of filters for the <service>FilePicker</service>
-    service.
+//=============================================================================
+/** Specifies an interface which allows manipulation of groups of filters
+    for the <service>FilePicker</service> service.
 */
 interface XFilterGroupManager : com::sun::star::uno::XInterface
 {
-    /** appends a group of filters to the current filter list
+    /** Appends a group of filters to the current filter list.
 
         <p>It is implementation dependent how the filter groups are presented to the user.<br/>
         It is not even guaranteed that the groups are visualized: implementations are free to simply
         append all the filters separately, with ignoring the group title.</p>
 
     @param sGroupTitle
-        the title of the filter group. Usually, the caller should localize this title, as it is to be presented to
+        The title of the filter group. Usually, the caller should localize this title, as it is to be presented to
         the user.
 
     @param aFilters
-        the filters which form a group. Every filter consists of two strings, where the first one is a display name
+        The filters which form a group. Every filter consists of two strings, where the first one is a display name
         (as for <arg>sGroupTitle</arg>, it holds that these strings should be localized), and the second one the
         semicolon separated list of wildcard expressions for the filter.<br/>
         Usually, the expressions are simply extensions (e.g. "*.txt"), but this must no necessarily be the case.
 
-    @see XFilterManager
-    @see FilePicker
+    @throws com::sun::star::lang::IllegalArgumentException
+    if one or more filters in the given filter list already exist.
+
+    @see com::sun::star::ui::dialogs::XFilterManager
+    @see com::sun::star::ui::dialogs::FilePicker
     */
     void appendFilterGroup(
         [in] string sGroupTitle,
@@ -113,6 +115,12 @@ interface XFilterGroupManager : com::sun::star::uno::XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.6.1  2002/01/30 11:44:29  tra
+ *  #97073#reviewd
+ *
+ *  Revision 1.1  2001/09/14 09:51:18  fs
+ *  initial checkin - specification of an interface for adding filter _groups_ to a file picker component
+ *
  *
  *  Revision 1.0 13.09.01 17:36:43  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormat.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,87 +68,86 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::util::NumberFormat
-/** These constants are used to specify the type of a number format.
+/** contains constants that are used to specify the type of a number format.
  */
 constants NumberFormat
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::0
 
-    // DocMerge: empty anyway
+    /** selects all number formats.
+     */
     const short ALL = 0;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::1
 
-    // DocMerge: empty anyway
+    /** selects only user-defined number formats.
+     */
     const short DEFINED = 1;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::2
 
-    // DocMerge: empty anyway
+    /** selects date formats.
+     */
     const short DATE = 2;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::4
 
-    // DocMerge: empty anyway
+    /** selects time formats.
+     */
     const short TIME = 4;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::8
 
-    // DocMerge: empty anyway
+    /** selects currency formats.
+     */
     const short CURRENCY = 8;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::16
 
-    // DocMerge: empty anyway
+    /** selects decimal number formats.
+     */
     const short NUMBER = 16;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::32
 
-    // DocMerge: empty anyway
+    /** selects scientific number formats.
+     */
     const short SCIENTIFIC = 32;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::64
 
-    // DocMerge: empty anyway
+    /** selects number formats for fractions.
+     */
     const short FRACTION = 64;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::128
 
-    // DocMerge: empty anyway
+    /** selects percentage number formats.
+     */
     const short PERCENT = 128;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::256
 
-    // DocMerge: empty anyway
+    /** selects text number formats.
+     */
     const short TEXT = 256;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::6
 
-    // DocMerge: empty anyway
+    /** selects number formats which contain date and time.
+     */
     const short DATETIME = 6;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::1024
 
-    // DocMerge: empty anyway
+    /** selects boolean number formats.
+     */
     const short LOGICAL = 1024;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR constants::2048
 
-    // DocMerge: empty anyway
+    /** is used as a return value if no format exists.
+     */
     const short UNDEFINED = 2048;
 
 };
@@ -157,21 +156,5 @@ constants NumberFormat
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/01/27 16:13:34  mi
-    #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

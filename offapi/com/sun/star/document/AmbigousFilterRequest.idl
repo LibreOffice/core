@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AmbigousFilterRequest.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:06:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,28 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 /** should be used for interaction to handle states of ambigous filter detection
-    to ask user of operation for his decision
+
+    <p>
+    This exception indicates, that generic filter detection can't decide which of
+    two filters is the right one. In this case an interaction will be made.
+    Given URL can be used to decide between given two filters.
+    Decision can be made e.g. by a dialog, on which the user must select one
+    of these filters.
+    A possible continuation of type <type>XInteractionFilterSelect</type>
+    transport this decision back to source of started interaction.
+    </p>
+
+    @see XInteractionFilterSelect
 */
 exception AmbigousFilterRequest : ::com::sun::star::uno::Exception
 {
+    //-------------------------------------------------------------------------
     /** transport URL which couldn't be detected right
      */
     string URL;
 
-    /** two filters as possible result of user decision
+    //-------------------------------------------------------------------------
+    /** two filters as possible result
      */
     string SelectedFilter;
     string DetectedFilter;

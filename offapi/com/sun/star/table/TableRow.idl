@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-23 08:59:44 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_TableRow_idl__
 #define __com_sun_star_table_TableRow_idl__
 
@@ -65,62 +66,61 @@
 #include <com/sun/star/table/XCellRange.idl>
 #endif
 
-#ifndef __com_sun_star_container_XNamed_idl__
-#include <com/sun/star/container/XNamed.idl>
-#endif
-
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
-
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::table::TableRow
-/** cell range containing all cells of a
-    single specific row in a table or spreadsheet.
+/** represents a special cell range containing all cells of a single
+    specific row in a table or spreadsheet.
  */
 service TableRow
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::table::XCellRange;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
+    /** provides access to the cells of this row.
+
+        @see com::sun::star::table::CellRange
+     */
+    interface com::sun::star::table::XCellRange;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::TableRow::Height
-    /** height of the row.
+//! service PropertySet
+    /** provides access to the cell properties of all cells of this row.
+     */
+    interface com::sun::star::beans::XPropertySet;
 
-        <p>When hidden, it returns the height which the row would have, if
-        it were visible. </p>
+    //=========================================================================
+
+    /** contains the height of the row (in 1/100 mm).
+
+        <p>When hidden, it returns the height which the row would have,
+        if it were visible. </p>
      */
     [property] long Height;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::TableRow::OptimalHeight
-    /** If this property is set, the row always keeps its optimal height.
+    /** is <TRUE/>, if the row always keeps its optimal height.
      */
     [property] boolean OptimalHeight;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::TableRow::IsVisible
-    /** This property is <TRUE/> if the row is visible.
+    /** is <TRUE/>, if the row is visible.
      */
     [property] boolean IsVisible;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::TableRow::IsStartOfNewPage
-    /** if there is a manual vertical
-        page break attached to the row.
+    /** is <TRUE/>, if there is a manual vertical page break attached
+        to the row.
      */
     [property] boolean IsStartOfNewPage;
 
@@ -130,27 +130,5 @@ service TableRow
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/02/09 09:27:11  mi
-    #74964 no XNamed anymore (why ever it was in there again)
-
-    Revision 1.4  2000/12/14 12:53:43  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:44:19  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

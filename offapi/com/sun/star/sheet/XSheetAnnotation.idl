@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetAnnotation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetAnnotation_idl__
 #define __com_sun_star_sheet_XSheetAnnotation_idl__
 
@@ -69,56 +70,48 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to query data of the annotation and to show and
+    hide it.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSheetAnnotation
-/** represents an annotation on a sheet.@see com::sun::star::sheet::CellAnnotation
+    @see com::sun::star::sheet::CellAnnotation
  */
 interface XSheetAnnotation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sheet::XSheetAnnotation::getPosition
-    /** @returns
-                the position of the annotation in the document.
+    /** returns the position of cell in the spreadsheet document that
+        contains this annotation.
      */
     com::sun::star::table::CellAddress getPosition();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSheetAnnotation::getAuthor
 
-    // DocMerge from idl: method com::sun::star::sheet::XSheetAnnotation::getAuthor
-    /** @returns
-                the name of the user who last changed the annotation.
+    /** returns the name of the user who last changed the annotation.
      */
     string getAuthor();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSheetAnnotation::getDate
 
-    // DocMerge from idl: method com::sun::star::sheet::XSheetAnnotation::getDate
-    /** @returns
-                a formatted string for the date when the annotation was last changed.
+    /** returns a formatted string representing the date when the
+        annotation was last changed.
      */
     string getDate();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sheet::XSheetAnnotation::getIsVisible
-    /** @returns
-                whether the annotation is permanently visible or not.
+    /** returns, whether the annotation is permanently visible.
      */
     boolean getIsVisible();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetAnnotation::setIsVisible
-    /** specifies if the annotation is permanently visible.
+    /** specifies whether the annotation is permanently visible.
      */
     void setIsVisible( [in] boolean bIsVisible );
 
@@ -128,33 +121,5 @@ interface XSheetAnnotation: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:24  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

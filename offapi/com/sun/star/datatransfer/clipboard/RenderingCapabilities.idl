@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RenderingCapabilities.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 18:51:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,21 +67,21 @@
 module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
-/** this flags describe the capabilities a system clipboard has to transfer
+/** These flags describe the capabilities a system clipboard has to transfer
     data to other applications via the OS.
 
-    @see SystemClipboard
+    @see com::sun::star::datatransfer::clipboard::SystemClipboard
 */
 constants RenderingCapabilities
 {
     //-------------------------------------------------------------------------
-    /** the implementation supports delayed rendering.
+    /** The implementation supports delayed rendering.
     */
     const byte Delayed = 1;
 
     //-------------------------------------------------------------------------
-    /** the implementation is able to store the data persistant in the system
-        so that it does not get lost when the datasource exits.
+    /** The implementation is able to store the data persistant in the system
+        so that it does not get lost when the source application no longer exist.
     */
     const byte Persistant = 2;
 };

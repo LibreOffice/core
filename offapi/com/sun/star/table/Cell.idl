@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Cell.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_Cell_idl__
 #define __com_sun_star_table_Cell_idl__
 
@@ -73,25 +74,32 @@
 #include <com/sun/star/text/XText.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
-
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::table::Cell
-/** range of 1 row and 1 column.
+/** represents a singe cell within a table.
  */
 service Cell
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** contains the properties of the table cell.
+       */
     service com::sun::star::table::CellProperties;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the cell contents.
+     */
     interface com::sun::star::table::XCell;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to formatted and unformatted text contents.
+     */
     interface com::sun::star::text::XText;
 
 };
@@ -100,18 +108,5 @@ service Cell
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

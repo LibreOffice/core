@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFixedLineModel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 10:56:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,34 +76,37 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlFixedLineModel
-/** specifies the standard model of an <type>UnoFixedLineControl</type>.
+/** specifies the standard model of an <type>UnoControlFixedLine</type>.
  */
 service UnoControlFixedLineModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::DefaultControl
-    /** specifies the service name of the default control for this model.
-     */
-    [property] string DefaultControl;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::FontDescriptor
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
+     */
+    [property] short FontEmphasisMark;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
+     */
+    [property] short FontRelief;
 
     //-------------------------------------------------------------------------
 
@@ -113,22 +116,19 @@ service UnoControlFixedLineModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::Label
     /** specifies the label of the control.
      */
     [property] string Label;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::Orientation
     /** specifies the orientation of the control.
-
 
         <pre>
         0: horizontal
@@ -139,17 +139,22 @@ service UnoControlFixedLineModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::Printable
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlFixedLineModel::TextColor
     /** specifies the text color (RGB) of the control.
      */
     [property] long TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] long TextLineColor;
+
 };
 
 //=============================================================================

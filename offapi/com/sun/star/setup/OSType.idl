@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ok $ $Date: 2000-12-18 15:34:26 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 #ifndef __com_sun_star_setup_OSType_idl__
 #define __com_sun_star_setup_OSType_idl__
 
- module com {  module sun {  module star {  module setup {
+module com {  module sun {  module star {  module setup {
 
-// DocMerge: empty anyway
+/// @deprecated
 enum OSType
 {
     // DocMerge: empty anyway

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MissingResourceException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,13 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module resource {
+module com {  module sun {  module star {  module resource {
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::resource::MissingResourceException
-/** is used to signal that a resource is missing.@see XResourceBundle
+/** is used to signal that a resource is missing.
+
+    @see XResourceBundle
  */
 exception MissingResourceException: com::sun::star::uno::RuntimeException
 {
@@ -83,21 +84,4 @@ exception MissingResourceException: com::sun::star::uno::RuntimeException
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:32  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:37  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/04/20 14:08:25  mi
-    documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
-    new
-
-
-=============================================================================*/
 #endif

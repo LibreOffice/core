@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AtomDescription.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,7 @@ module star
 module util
 {
 
-/** <type scope="com::sun::star::util">AtomDescription</type> contains
-    a string and the corresponding registered atom
+/** contains a string and the corresponding registered atom .
 
     @see com::sun:star::util::XAtomServer
 */
@@ -80,6 +79,7 @@ struct AtomDescription
     /** the atom itself
      */
     long        atom;
+
     /** the string it stands for
      */
     string      description;

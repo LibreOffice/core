@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-20 14:40:00 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,30 +106,28 @@ interface XControlAccess;
 service FilePicker
 {
     //-------------------------------------------------------------------------
-    /** allows to associate a help URL with the file picker instance.
+    /** Allows to associate a help URL with the file picker instance.
     */
     [optional, property] string HelpURL;
 
     //-------------------------------------------------------------------------
     /** Provides access to the basic FilePicker functionality.
-
-        @see XFilePicker
     */
     interface XFilePicker;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to request notifications about changes.
+    /** Provides the ability to request notifications about changes.
     */
     interface XFilePickerNotifier;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to add different filter, query for the current
+    /** Provides the ability to add different filter, query for the current
         filters and set a current filter
     */
     interface XFilterManager;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to show a preview of a selected file
+    /** Provides the ability to show a preview of a selected file
     */
     [optional] interface XFilePreview;
 
@@ -150,28 +148,32 @@ service FilePicker
     [optional] interface XFilePickerControlAccess;
 
     //-------------------------------------------------------------------------
-    /** an interface which allows manipulation of groups of filters
+    /** An interface which allows manipulation of groups of filters
     */
     [optional] interface XFilterGroupManager;
 
     //-------------------------------------------------------------------------
-    /** Provides the ability to choose between different custom templates for
-        the FileOpen dialog. Implementers may omit this interface if the FileOpen
+    /** Provides the ability to choose between different custom templates that
+        do extend the subset of common controls a FilePicker usually supports.
+        Implementers may omit this interface if the FileOpen
         dialog doesn't support custom templates. In this case a createInstance
-        will create an ordinary FileOpen dialog without any custom elements.
+        will create an ordinary FileOpen dialog with only the common FilePicker
+        elements.
         The client has to provide one of the specified constants in
         TemplateDescription.
+        <br/><br/>
+        <p><strong>Notes for the implementation of a FileSave dialog:</strong>
+        The implementation of a FileSave dialog should automatically check
+        for existens of a file and issue a warning if a file with the same
+        name already exist.</p>
 
-        <p>Notes for the implementation of a FileSave dialog: The implementation
-        of a FileSave dialog should automatically check for existens of a file
-        and issue a warning if a file with the same name already exist.</p>
-
-        @see TemplateDescription
+        @see com::sun::star::ui::dialogs::TemplateDescription
     */
     [optional] interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
+        <p>This may be usefull for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 
@@ -362,17 +364,17 @@ service FilePicker
     [optional] interface com::sun::star::ui::dialogs::XControlAccess;
 
     //-------------------------------------------------------------------------
-    /** for shutdown and listener support.
+    /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:08 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,22 @@
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 #endif
 
+#ifndef __com_sun_star_form_XConfirmDeleteBroadcaster_idl__
+#include <com/sun/star/form/XConfirmDeleteBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_sdb_XSQLErrorBroadcaster_idl__
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_sdb_XRowSetApproveBroadcaster_idl__
+#include <com/sun/star/sdb/XRowSetApproveBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_form_XDatabaseParameterBroadcaster_idl__
+#include <com/sun/star/form/XDatabaseParameterBroadcaster.idl>
+#endif
+
 
 //=============================================================================
 
@@ -92,67 +108,82 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::FormController
-/** specifies the view representation of a form.
+/** specifies a component controlling the interaction between the user and form functionality.
 
+    <p>As soon as a form (containing controls) is to be presented to the user,
+    there is a need for an instance controlling the user interaction.<br/>
+    Such a <type>FormController</type> is responsible for dialog processing,
+    like controlling the tab order and the grouping of controls.</p>
 
-
-    <p>Like controls, forms are divided into two parts. One is the model, which
-    contains the information about the structure of the form and its components,
-    and the other part is the <type>FormController</type>, which contains all
-    controls (the view representation) related to the form.
-    The <type>FormController</type> is responsible for dialog processing,
-    like controlling the tab order and the grouping of controls.
-
-    </p>
     <p>As a form may contain one or many subforms, a <type>FormController</type> may
-    contain one or many <type>FormController</type>s, so the model structure or hierarchy
-    is reflected by the structure of <type>FormController</type>s. </p>@see com::sun::star::form::component:Form
-        @see com::sun::star::awt::XTabController
+    contain one or more other <type>FormController</type>s, so the form model structure or hierarchy
+    is reflected in the structure of <type>FormController</type>s.</p>
+
+    @see com::sun::star::form::component:Form
+    @see com::sun::star::awt::XTabController
  */
 service FormController
 {
-
-
-    // DocMerge from xml: service com::sun::star::form::FormController: interface com::sun::star::form::XFormController
-    /** is used for notifying the (de)activation of
-                the controller.
+    /** is used for notifying the (de)activation of the controller.
      */
     interface com::sun::star::form::XFormController;
 
 
-    // DocMerge from xml: service com::sun::star::form::FormController: interface com::sun::star::awt::XTabController
-    /** is used for tab controlling and grouping of
-                the controls.
+    /** is used for tab controlling and grouping of the controls.
      */
     interface com::sun::star::awt::XTabController;
 
 
-    // DocMerge from xml: service com::sun::star::form::FormController: interface com::sun::star::container::XChild
-    /** A FormController may have a parent controller, such as when the
-                related form is a subform.
+    /** A FormController may have a parent controller, such as when the related form is a subform.
      */
     interface com::sun::star::container::XChild;
 
 
-    // DocMerge from xml: service com::sun::star::form::FormController: interface com::sun::star::lang::XComponent
     /** A FormController must be disposable.
      */
     interface com::sun::star::lang::XComponent;
 
 
-    // DocMerge from xml: service com::sun::star::form::FormController: interface com::sun::star::container::XEnumerationAccess
     /** A FormController must provide access to its sub controllers.
      */
     interface com::sun::star::container::XEnumerationAccess;
 
 
-    // DocMerge from xml: service com::sun::star::form::FormController: interface com::sun::star::util::XModifyBroadcaster
-    /** A FormController must communicate if any of its children or contained
-                controls have been modified.
+    /** A FormController must communicate if any of its children (means sub controllers) or contained
+        controls have been modified.
      */
     interface com::sun::star::util::XModifyBroadcaster;
 
+    /** used to notify deletions of data in the form before they happen.
+
+        <p>A form controller listens for deletion events at the form it is responsible for.<br/>
+        If and only if no <type>XConfirmDeleteListener</type> is registered at
+        the controller, it uses an own dialog to ask the user for confirmation.</p>
+
+        <p>You may use this interface to integrate your own confirmation dialogs.</p>
+    */
+    interface com::sun::star::form::XConfirmDeleteBroadcaster;
+
+    /** used to notify errors which happen in the form the controller is responsible for.
+
+        <p>A form controller listens for error events at the form it is responsible for.<br/>
+        If and only if no <type>XSQLErrorListener</type> is registered at the controller, it
+        uses an own dialog to notify the user of the error.</p>
+
+    */
+    interface com::sun::star::sdb::XSQLErrorBroadcaster;
+
+    /** is used for multiplexing row set events happening on the form which the controller is responsible for.
+    */
+    interface com::sun::star::sdb::XRowSetApproveBroadcaster;
+
+    /** is used broadcasting parameter events in the form.
+
+        <p>A form controller listens for parameter events at the form it is responsible for.<br/>
+        If and only if no <type>XDatabaseParameterListener</type> is registered at the controller, it
+        uses an own dialog to ask the user for parameter values.</p>
+    */
+    interface com::sun::star::form::XDatabaseParameterBroadcaster;
 };
 
 //=============================================================================
@@ -162,6 +193,12 @@ service FormController
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/07/15 11:07:12  fs
+    -m reviewed
+
+    Revision 1.4  2000/12/21 08:35:08  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

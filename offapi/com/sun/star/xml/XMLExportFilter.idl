@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportFilter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:45:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,16 +72,17 @@
 module com { module sun { module star { module xml {
 
 //=============================================================================
-/** describes an export filter for XML-based file formats.  It is an
-    extension of <type scope="com::sun::star::document">ExportFilter</type> and differs
-    from it only in that an
+/** describes an export filter for XML-based file formats.
+
+    <p>It is an extension of <type scope="com::sun::star::document">ExportFilter</type>
+    and differs from it only in that an
     <type scope="com::sun::star::xml::sax">XDocumentHandler</type> needs to
     be passed through the XInitialization interface. This
     XDocumentHandler will then be used to export the XML data stream.  */
 service XMLExportFilter
 {
     /** An com.sun.star.xml.sax.XDocumentHandler needs to be passed to
-       the XInitialization::initialize() call.
+       the <method scope="com::sun::star::lang">XInitialization::initialize</method> call.
     */
     service com::sun::star::document::ExportFilter;
 };

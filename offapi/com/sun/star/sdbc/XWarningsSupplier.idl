@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWarningsSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@
 
 // DocMerge from xml: interface com::sun::star::sdbc::XWarningsSupplier
 /** should be implemented of objects which may report warnings or non critical
-    errors .@see com::sun::star::sdbc::SQLWarning
+    errors.
+    @see com::sun::star::sdbc::SQLWarning
  */
 interface XWarningsSupplier: com::sun::star::uno::XInterface
 {
@@ -84,13 +85,15 @@ interface XWarningsSupplier: com::sun::star::uno::XInterface
     /** returns the first warning reported by calls on an object that supports
         the usage of warnings.
 
-
-
         <p>
         <b>Note:</b> Subsequent warnings will be chained to this
-        SQLWarning.
-
+        <type scope="com::sun::star::sdbc">SQLWarning</type>
+        .
         </p>
+        @returns
+            the warnings
+        @throws SQLException
+                if a database access error occurs.
      */
     any getWarnings() raises (SQLException);
 
@@ -98,9 +101,13 @@ interface XWarningsSupplier: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XWarningsSupplier::clearWarnings
     /** clears all warnings reported for the object implementing the interface.
-        After a call to this method, the method <code>getWarnings</code>
-        returns <void/> until a new warning is
-        reported for the object.
+        After a call to this method, the method
+        <member scope="com::sun::star::sdbc">XWarningsSupplier::getWarnings()</member>
+        returns
+        <void/>
+        until a new warning is reported for the object.
+        @throws SQLException
+                if a database access error occurs.
      */
     void clearWarnings() raises (SQLException);
 };
@@ -111,6 +118,12 @@ interface XWarningsSupplier: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6.2.1  2002/02/18 09:00:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.6  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.5  2001/03/16 16:41:35  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

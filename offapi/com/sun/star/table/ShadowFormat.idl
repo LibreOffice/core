@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShadowFormat.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:43 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_ShadowFormat_idl__
 #define __com_sun_star_table_ShadowFormat_idl__
 
@@ -65,41 +66,37 @@
 #include <com/sun/star/table/ShadowLocation.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
-
-//=============================================================================
-
-// DocMerge from xml: struct com::sun::star::table::ShadowFormat
-/** describes a shadow.
+/** describes the settings of a cell shadow.
  */
 struct ShadowFormat
 {
-    // DocMerge from xml: field com::sun::star::table::ShadowFormat::Location
-    /** location of the shadow.
+    //-------------------------------------------------------------------------
+
+    /** contains the location of the shadow.
      */
     com::sun::star::table::ShadowLocation Location;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::ShadowFormat::ShadowWidth
-    /** size of the shadow.
+    /** contains the size of the shadow.
      */
     short ShadowWidth;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::ShadowFormat::IsTransparent
-    /** shadow is transparent if this is <TRUE/>.
+    /** is <TRUE/>, if shadow is transparent.
      */
     boolean IsTransparent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::table::ShadowFormat::Color
-    /** color of the shadow.
+    /** contains the color value of the shadow.
      */
     long Color;
 
@@ -109,21 +106,5 @@ struct ShadowFormat
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:44:18  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

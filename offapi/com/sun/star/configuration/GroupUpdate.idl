@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupUpdate.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,7 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides write access to a predefined heterogeneous group of values
- and nested trees as part of a (by name) hierarchy.
-
- <!-- Dennis: alphabetical hierarchy? -->
- <!-- Developer: No. See the description in GroupAccess,GroupElement. -->
-
- <p>Allows replacing values with new values.
- </p>
+ and nested trees as part of a hierarchy.
 
  <p>This service extends <type>GroupAccess</type> to support
  modifying values.
@@ -96,9 +90,6 @@ service GroupUpdate
  unless they represent a read-only tree element as indicated by
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>.
  </p>
-
- <!-- Dennis: What is meant by "shall again"? -->
- <!-- Developer: "must/will ... as well" -->
 */
     service GroupAccess;
 
@@ -120,8 +111,8 @@ service GroupUpdate
 
  <p>Elements of this group may be replaced only if they are of simple type.
  The type returned by
- <member scope="com::sun::star::container">XElementAccess::getElementType</member>
- is not an interface type. Replacing whole subtrees is not supported.
+ <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ must not be an interface type. Replacing whole subtrees is not supported.
  </p>
 */
     interface com::sun::star::container::XNameReplace;

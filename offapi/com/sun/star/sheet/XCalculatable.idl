@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCalculatable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XCalculatable_idl__
 #define __com_sun_star_sheet_XCalculatable_idl__
 
@@ -65,24 +66,19 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XCalculatable
 /** represents something that can recalculate.
  */
 interface XCalculatable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCalculatable::calculate
     /** recalculates all dirty cells.
-
-
 
         <p>This calculates all formula cells which have not yet been
         calculated after their precedents have changed.</p>
@@ -91,36 +87,35 @@ interface XCalculatable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCalculatable::calculateAll
     /** recalculates all cells.
      */
     void calculateAll();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCalculatable::isAutomaticCalculationEnabled
-    /** returns <TRUE/> if automatic calculation is enabled.
+    /** returns whether automatic calculation is enabled.
 
+        <p>With automatic calculation, each formula cell is recalculated
+        whenever its value is needed after its precedents have changed.
+        The value is needed if the cell is displayed or used in another
+        calculation.</p>
 
-
-        <p>With automatic calculation, each formula cell is
-        recalculated whenever its value is needed after its
-        precedents have changed. The value is needed if the
-        cell is displayed or used in another calculation.</p>
+        @returns
+            <TRUE/>, if automatic calculation is enabled.
      */
     boolean isAutomaticCalculationEnabled();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCalculatable::enableAutomaticCalculation
     /** enables automatic calculation.
 
+        <p>With automatic calculation, each formula cell is recalculated
+        whenever its value is needed after its precedents have changed.
+        The value is needed if the cell is displayed or used in another
+        calculation.</p>
 
-
-        <p>With automatic calculation, each formula cell is
-        recalculated whenever its value is needed after its
-        precedents have changed. The value is needed if the
-        cell is displayed or used in another calculation.</p>
+        @param bEnabled
+            <TRUE/> to enable automatic calculation, <FALSE/> to disable.
      */
     [oneway] void enableAutomaticCalculation( [in] boolean bEnabled );
 
@@ -130,24 +125,5 @@ interface XCalculatable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/14 12:53:40  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

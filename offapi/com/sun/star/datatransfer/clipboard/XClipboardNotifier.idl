@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardNotifier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@
 module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
-/** provides the ability to request notifiations on clipboard content changes.
+/** Provides the ability to request notifiations on clipboard content changes.
+
     @see com::sun::star::datatransfer::clipboard::XClipboardListener
 */
 
@@ -80,18 +81,18 @@ interface XClipboardListener;
 interface XClipboardNotifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** requests notifications on clipboard content changes.
+    /** Requests notifications on clipboard content changes.
 
         @param listener
-        the object receiving the notifications.
+        The object receiving the notifications.
     */
     [oneway] void addClipboardListener( [in] XClipboardListener listener );
 
     //-------------------------------------------------------------------------
-    /** removes listener from notification list.
+    /** Removes listener from notification list.
 
         @param listener
-        the object to remove from notification list.
+        The object to remove from notification list.
     */
     [oneway] void removeClipboardListener( [in] XClipboardListener listener );
 };

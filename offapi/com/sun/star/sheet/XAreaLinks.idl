@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAreaLinks.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XAreaLinks_idl__
 #define __com_sun_star_sheet_XAreaLinks_idl__
 
@@ -69,22 +70,42 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access via index to a collection of area links and inserting
+    and removing area links.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XAreaLinks
-/** represents a collection of area links.@see com::sun::star::sheet::CellAreaLinks
+    @see com::sun::star::sheet::CellAreaLinks
+    @see com::sun::star::sheet::CellAreaLink
  */
 interface XAreaLinks: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XAreaLinks::insertAtPosition
     /** creates an area link and adds it to the collection.
+
+        @param aDestPos
+            the address of the first cell of the range inside the current
+            document.
+
+        @param aFileName
+            the URL of the source document.
+
+        @param aSourceArea
+            the name of the range in the source document.
+
+            <p>This can be the address of a cell or range in the form
+            "Sheet1.A1:C5", or the name of a named range or database range.</p>
+
+        @param aFilter
+            the name of the filter used to load the source document.
+
+        @param aFilterOptions
+            optional filter options for the specified filter.
      */
     void insertAtPosition( [in] com::sun::star::table::CellAddress aDestPos,
              [in] string aFileName,
@@ -94,7 +115,6 @@ interface XAreaLinks: com::sun::star::container::XIndexAccess
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XAreaLinks::removeByIndex
     /** removes an area link from the collection.
      */
     void removeByIndex( [in] long nIndex );
@@ -105,27 +125,5 @@ interface XAreaLinks: com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

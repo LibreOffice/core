@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintableState.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,36 +64,43 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module view {
+module com {  module sun {  module star {  module view {
 
 //=============================================================================
 
-/** specifies the print progress of an <type>XPrintable</type>
+/** specifies the print progress of an <type>XPrintable</type>.
 
-    <p>printing consists of two abstract phases: collecting the raw
-    data to send to the printer and then sending them (spooling).
+    <p>Printing consists of two abstract phases: rendering the document
+    for the printer and then sending it to the printer (spooling).
     <type>PrintableState</type> describes which phase is currently
     progressing or has failed.</p>
+
+    @see PrintableStateEvent
  */
 enum PrintableState
 {
-    /** printing (that is, collecting the data to send to the printer) has begun
+    /** printing (rendering the document) has begun
      */
     JOB_STARTED,
-    /** printing has finished, spooling has begun
+
+    /** printing (rendering the document) has finished, spooling has begun
      */
     JOB_COMPLETED,
+
     /** spooling has finished successfully. This is the only state
         that can be considered as "success" for a print job.
     */
     JOB_SPOOLED,
-    /** printing was aborted (e.g., by the user) while either printing or spooling
+
+    /** printing was aborted (e.g., by the user) while either printing or spooling.
      */
     JOB_ABORTED,
-    /** printing ran into an error
+
+    /** printing ran into an error.
      */
     JOB_FAILED,
-    /** the document could be printed but not spooled
+
+    /** the document could be printed but not spooled.
      */
     JOB_SPOOLING_FAILED
 };

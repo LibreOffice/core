@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataTruncation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,13 @@
 /** reports a DataTruncation warning, on reads, or is thrown as a DataTruncation exception,
     on writes, when a data value is unexpectedly truncated.
 
-
-
-    <p>The SQLstate for a <code>DataTruncation</code> is <code>01004</code>.</p>
+    <p>
+    The SQL state for a
+    <code>DataTruncation</code>
+    is
+    <code>01004</code>
+    .
+    </p>
  */
 exception DataTruncation: SQLWarning
 {
@@ -86,13 +90,17 @@ exception DataTruncation: SQLWarning
 
 
     // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::IsParameter
-    /** is <TRUE/> if a parameter value is truncated.
+    /** is
+        <TRUE/>
+        if a parameter value is truncated.
      */
     boolean IsParameter;
 
 
     // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::DuringRead
-    /** is <TRUE/> if a read was truncated.
+    /** is
+        <TRUE/>
+        if a read was truncated.
      */
     boolean DuringRead;
 
@@ -100,14 +108,18 @@ exception DataTruncation: SQLWarning
     // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::DataSize
     /** contains the number of bytes of data that should have been transferred.
         This number may be approximate if data conversions were being
-        performed. The value may be <code>-1</code> if the size is unknown.
+        performed. The value may be
+        <code>-1</code>
+        if the size is unknown.
      */
     long DataSize;
 
 
     // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::TransferSize
     /** contains the number of bytes of data actually transferred.
-        The value may be <code>-1</code> if the size is unknown.
+        The value may be
+        <code>-1</code>
+        if the size is unknown.
      */
     long TransferSize;
 };
@@ -117,6 +129,12 @@ exception DataTruncation: SQLWarning
 }; }; }; };
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/02/18 08:54:13  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2000/12/14 12:53:39  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataEditorListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,13 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
-// DocMerge from xml: interface com::sun::star::util::XDataEditorListener
 /** makes it possible to receive status change events from an
     <type>XDataEditor</type>.
  */
 interface XDataEditorListener: com::sun::star::uno::XInterface
 {
-    // DocMerge from xml: method com::sun::star::util::XDataEditorListener::updateDataEditorState
     /** is called when the state of a connected <type>XDataEditor</type> changes.
      */
     void updateDataEditorState( [in] DataEditorEvent event );
@@ -89,21 +87,4 @@ interface XDataEditorListener: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1  1999/11/22 17:51:45  tlx
-    DataEditor + UniqIDs
-
-
-=============================================================================*/
 #endif

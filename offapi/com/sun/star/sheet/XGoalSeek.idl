@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGoalSeek.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XGoalSeek_idl__
 #define __com_sun_star_sheet_XGoalSeek_idl__
 
@@ -73,27 +74,38 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XGoalSeek
-/** makes it possible to seek a goal for a cell.
+/** provides seeking a goal value for a cell.
  */
 interface XGoalSeek: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XGoalSeek::seekGoal
-    /** calculates a value which gives a specified result
-        in a formula.
+    /** calculates a value which gives a specified result in a formula.
+
+        @param aFormulaPosition
+            is the address of the formula cell used for the calculation.
+
+        @param aVariablePosition
+            is the address of the cell that is used in the formula as
+            variable.
+
+        @param aGoalValue
+            is the value which should be reached during the goal seek.
+
+        @returns
+            the result of the goal seek, including the value that results
+            in the specified goal, using the specified formula.
      */
-    com::sun::star::sheet::GoalResult seekGoal( [in] com::sun::star::table::CellAddress aFormulaPosition,
-             [in] com::sun::star::table::CellAddress aVariablePosition,
-             [in] string aGoalValue );
+    com::sun::star::sheet::GoalResult seekGoal(
+            [in] com::sun::star::table::CellAddress aFormulaPosition,
+            [in] com::sun::star::table::CellAddress aVariablePosition,
+            [in] string aGoalValue );
 
 };
 
@@ -101,21 +113,5 @@ interface XGoalSeek: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamedRanges.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_NamedRanges_idl__
 #define __com_sun_star_sheet_NamedRanges_idl__
 
@@ -68,24 +69,51 @@
 #ifndef __com_sun_star_sheet_XNamedRanges_idl__
 #include <com/sun/star/sheet/XNamedRanges.idl>
 #endif
-
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::NamedRanges
-/** a collection of named ranges.
+/** represents a collection of named ranges in a spreadsheet document.
+
+    <p>In fact a named range is a named formula expression. A cell range
+    address is one possible content of a named range.</p>
+
+    @see com::sun::star::sheet::SpreadsheetDocument
  */
 service NamedRanges
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNameAccess;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+    /** provides access to the named ranges and to insert and remove them.
+     */
     interface com::sun::star::sheet::XNamedRanges;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the named ranges via index.
+
+        @see com::sun::star::sheet::NamedRange
+
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all named ranges.
+
+        @see com::sun::star::sheet::NamedRangesEnumeration
+
+     */
+    interface com::sun::star::container::XEnumerationAccess;
 
 };
 
@@ -93,18 +121,5 @@ service NamedRanges
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

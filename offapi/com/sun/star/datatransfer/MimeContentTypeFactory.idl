@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MimeContentTypeFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 15:37:03 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,22 @@ module com { module sun { module star { module datatransfer {
 interface XMimeContentTypeFactory;
 
 //=============================================================================
-/** the MimeContentType service creates instances of MIME content-type
+/** Used to create an instance that implement the interface
+    <type>XMimeContentType</type> from a string
+    representation of such a MIME content-type that is conform to
+    <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
+    <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
 
     @see com::sun::star::datatransfer::XMimeContentTypeFactory
 */
 service MimeContentTypeFactory
 {
     //-------------------------------------------------------------------------
-    /** creates mime content types from strings.
+    /** Creates an instance that implement the interface
+        <type>XMimeContentType</type> from the string
+        representation of such a MIME content-types that is conform to
+        <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a>,
+        <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
     */
     interface XMimeContentTypeFactory;
 

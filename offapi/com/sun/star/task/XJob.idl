@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJob.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-30 12:49:12 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,49 +74,59 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-//.............................................................................
-module com {  module sun {  module star {  module task {
-//.............................................................................
+//============================================================================
 
-/** specifies a simply synchronous job
+module com {  module sun {  module star {  module task {
+
+//=============================================================================
+/** specifies a job which is to be executed synchronously
+
+    <p>
+    Instead of <type>XAsyncJob</type> the implementation of this interface
+    must be a real synchronous one. For example: UI relevant service MUST
+    do so. It's not allowed to make such things asynchronously - because
+    showing of any e.g. dialogs if may some other dialogs come up
+    can produce errors.
+    </p>
+
+    @see XAsyncJob
 */
 interface XJob : com::sun::star::uno::XInterface
 {
-    /** executes the job
-    @param lArgs
-        are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
-        a concrete implementation of a job specifies in its service descriptions which parameters are allowed
-        (or expected).
-    @return
-        the result of the job. The concrete semantics is service-dependent.
+    //------------------------------------------------------------------------
+    /** executes the job synchronously
+
+        @param Arguments
+            are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
+            a concrete implementation of a job specifies in its service descriptions which parameters are allowed
+            (or expected). This values are persistent by the configuration of the <type>JobExecutor</type>
+            which use this synchronous job. It's possible to write it back by use special protocol
+            in return value.
+
+        @return
+            the result of the job. The concrete semantics is service-dependent.
+            But it should be possible to
+            <ul>
+                <li>deregister the job</li>
+                <li>let him registered although execution was successfully(!)</li>
+                <li>make some job specific data persistent inside the job configuration which
+                    is provided by the executor.</li>
+            </ul>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if some of given arguments doesn't fill out the service specification or
+            was corrupt so the service couldn't work correctly
+
+        @throws com::sun::star::uno::Exception
+            to notify the excutor about faild operation; otherwise the return value
+            indicates a successfull finishing.
     */
-    any execute( [in] sequence< com::sun::star::beans::NamedValue > lArgs ) raises( com::sun::star::lang::IllegalArgumentException ,
-                                                                                    com::sun::star::uno::Exception                 );
+    any execute(
+        [in] sequence< com::sun::star::beans::NamedValue > Arguments )
+            raises( com::sun::star::lang::IllegalArgumentException ,
+                    com::sun::star::uno::Exception                 );
 };
 
-//.............................................................................
 }; }; }; };
-//.............................................................................
 
 #endif
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/12/05 13:18:25  as
- *  #91062# simple revision of job execution interfaces
- *
- *
- *  Revision 1.3  2001/11/20 14:24:11  as
- *  #91062# make interface more simple!
- *
- *  Revision 1.2  2001/09/25 14:14:45  fs
- *  #91062# introduce a result (return value of execute) / allow to throw any exceptions
- *
- *  Revision 1.1  2001/09/14 09:47:49  fs
- *  initial checkin - specification for a simple executable job
- *
- *
- *  Revision 1.0 13.09.01 17:03:45  fs
- ************************************************************************/
-

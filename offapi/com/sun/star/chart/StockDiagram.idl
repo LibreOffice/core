@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StockDiagram.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,49 +88,91 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::StockDiagram
 /** specifies a diagram which can be used for presenting stock quotes.
- */
+
+    <p>Note that the data must have a specific structure for stock
+    diagrams.  Let us assume that data is interpreted, such that
+    series are taken from columns (see property
+    <member>Diagram::DataRowSource</member>).  Then you need tables of
+    the following structures for different types:</p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <FALSE/><br>
+     <member>StockDiagram::UpDown</member> is <FALSE/>
+    </strong>
+    <table border>
+     <tr><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <TRUE/><br>
+     <member>StockDiagram::UpDown</member> is <FALSE/>
+    </strong>
+    <table border>
+     <tr><td><strong>Volume</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <FALSE/><br>
+     <member>StockDiagram::UpDown</member> is <TRUE/>
+    </strong>
+    <table border>
+     <tr><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <TRUE/><br>
+     <member>StockDiagram::UpDown</member> is <TRUE/>
+    </strong>
+    <table border>
+     <tr><td><strong>Volume</strong></td><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+*/
 service StockDiagram
 {
-    // DocMerge: empty anyway
     interface com::sun::star::chart::XStatisticDisplay;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartStatistics;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::Diagram;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartAxisXSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartTwoAxisYSupplier;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::StockDiagram::Volume
-    /** indicates if a stock chart contains volume data.
+    /** indicates if a stock chart contains data representing the
+        volume of stocks.
 
+        <p>The values of the volume are represented as columns like
+        those of a <type>BarDiagram</type>.</p>
 
-
-        <p>It will be displayed as a bar chart in the stock chart
-        background.</p>
+        <p>If this property is set to <TRUE/>, the values of the first
+        series of the chart data are interpreted as volume.</p>
      */
     [property] boolean Volume;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::StockDiagram::UpDown
-    /** indicates if a stock chart contains closed and
-        open data.
-
-
+    /** indicates if a stock chart contains data representing the
+        value of stocks on the opening and closing date.
 
         <p>The difference will be indicated by bars.  The color
         of the bar will be significant for positive or negative
         differences between open and closed data.</p>
+
+        <p>If this property is <FALSE/>, the values of the first
+        series (or second if <member>StockDiagram::Volume</member> is
+        <TRUE/>) of the chart data are interpreted as the day's lowest
+        value.  The next series is interpreted as the day's highest
+        value, and the last series is interpreted as the closing
+        value.</p>
+
+        <p>If this property is set to <TRUE/>, one additional series
+        is needed with the opening value of the stocks.  It is assumed
+        as the series before the series with the day's lowest
+        value.</p>
      */
     [property] boolean UpDown;
 
@@ -143,6 +185,18 @@ service StockDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.3  2002/01/29 15:58:23  bm
+    #96984# Some more information about data interpretation in service description
+
+    Revision 1.3.24.2  2002/01/29 14:23:17  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:03  hjs
     initial import
 

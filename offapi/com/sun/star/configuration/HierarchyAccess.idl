@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,26 +82,19 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides access to a (by name) hierarchy of descendant elements.
+/** provides access to a hierarchy of descendant elements.
 
- <!-- Dennis: alphabetical? -->
- <!-- Developer: No. See the description in GroupAccess,GroupElement. -->
-
- <p>Values that are direct or indirect descendants of this tree node can be
- retrieved. Non-value subnodes can be navigated using container interfaces.
+ <p>Subnodes are accessed by their name. Values that are direct or indirect
+ descendants of this tree node can be retrieved. Non-value subnodes can be
+ navigated using container interfaces.
  Other interfaces provide access to information about this node.
  Changes to values in the subtree can be monitored by event listeners.
  </p>
 
- <p>Elements of this (by name) container that are not simple values
+ <p>Elements of this container that are not simple values
  are similar containers themselves, thus (recursively) forming a
  hierarchical tree.
  </p>
-
- <!-- Dennis: "(by name)" ?? -->
- <!-- Developer: Rather than by index, by language or by phase of the moon.
-      As in XNameAccess vs. XIndexAccess vs  XWhateverAccess (container interfaces)
-      having methods getByName(), getByIndex(), getByWhatever() -->
 
  <p>Implementations of this service usually also implement
  service <type>HierarchyElement</type>, which concerns the complementary role
@@ -112,26 +105,19 @@ service HierarchyAccess
 {
 /** allows access to immediate children of this node.
 
- <p><member scope="com::sun::star::container">XNameAccess::getByName</member>
+ <p><member scope="com::sun::star::container">XNameAccess::getByName()</member>
  returns an <atom>any</atom> holding either a simple value or an interface
  on another HierarchyAccess if the child is not a simple value.
  </p>
-
- <!-- Dennis: I don't understand the phrase "returns an Any holding" -->
- <!-- Developer: Added missing <atom>. 'any' is a builtin variant type,
-  which can contain ('hold') values of any other type
-  (e.g., a ('simple') integer or interface -->*/
+*/
     interface com::sun::star::container::XNameAccess;
 
 /** allows access to all descendants of this node
 
- <p><member scope="com::sun::star::container">XHierarchicalNameAccess::getByHierarchicalName</member>
+ <p><member scope="com::sun::star::container">XHierarchicalNameAccess::getByHierarchicalName()</member>
  returns an <atom>any</atom> holding either a simple value or an interface
  on another HierarchyAccess if the descendant is not a simple value.
  </p>
-
- <!-- Dennis: I don't understand the phrase "returns an Any holding" -->
- <!-- Developer: Same as above. -->
 */
     interface com::sun::star::container::XHierarchicalNameAccess;
 
@@ -143,22 +129,13 @@ service HierarchyAccess
  <p>Exact names can be obtained for simple or hierarchical names for use in
  <type scope="com::sun::star::container">XNameAccess</type>,
  <type scope="com::sun::star::container">XHierarchicalNameAccess</type>,
- <type scope="com::sun::star::beans">XPropertySet</type>, etc.
+ <type scope="com::sun::star::beans">XPropertySet</type> or
+ any other interfaces that allow access to or manipulation of subnodes
+ selected by name or hierarchical name.
  </p>
-
- <!-- Dennis: What constitutes "etc"? -->
- <!-- Developer: Any other interfaces from any other services this object implements,
-  where there are methods that take a string parameter that is a child or descendant name.
-  Examples include (but are not necessarily limited to):
-      com::sun::star::beans::XMultiPropertySet
-      com::sun::star::beans::XHierarchicalPropertySet
-      com::sun::star::beans::XMultiHierarchicalPropertySet
-      com::sun::star::beans::XPropertySetInfo
-      com::sun::star::beans::XHierarchicalPropertySetInfo
-      com::sun::star::container::XNameReplace
-      com::sun::star::container::XNameContainer
-      com::sun::star::container::XHierarchicalName
- -->
+ <p>If an inexact name could be matched to either a simple or a hierachical
+ name, the simple (immediate child) name is preferred.
+ </p>
 */
     interface com::sun::star::beans::XExactName;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCellRangeContainer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetCellRangeContainer_idl__
 #define __com_sun_star_sheet_XSheetCellRangeContainer_idl__
 
@@ -69,53 +70,86 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #endif
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
-#include <com/sun/star/uno/RuntimeException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
 #ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
 #endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** represents multiple cell ranges.@see com::sun::star::sheet::SheetCellRanges
+/** provides methods to access cell ranges in a collection via index and
+    to add and remove cell ranges.
+
+    @see com::sun::star::sheet::SheetCellRanges
  */
 interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellRanges
 {
-    /** add the given range to the cell ranges.
+    //-------------------------------------------------------------------------
+
+    /** adds the given range to the collection of cell ranges.
+
+        @param aCellRangeAddress
+            contains the address of the new range.
+
         @param bMergeRanges
-        With the second parameter is it possible to define how the range
-        should be added. To merge the ranges takes more time, but the memory
-        usage is lower.
+            defines how the range should be added. To merge the ranges
+            takes more time, but the memory usage is lower.
      */
-    void addRangeAddress( [in] com::sun::star::table::CellRangeAddress aCellRangeAddress, [in] boolean bMergeRanges );
+    void addRangeAddress(
+            [in] com::sun::star::table::CellRangeAddress aCellRangeAddress,
+            [in] boolean bMergeRanges );
 
-    /** remove the given range from the cell ranges
+    //-------------------------------------------------------------------------
+
+    /** removes the given range from the collection of cell ranges.
+
+        @param aCellRangeAddress
+            contains the address of the range to be removed.
+
+            <p>The specified range must fit exactly to an element of the
+            collection. The method does not try to shorten a range.</p>
+
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            if the collection does not contain the specified range.
      */
-    void removeRangeAddress( [in] com::sun::star::table::CellRangeAddress aCellRangeAddress )
-            raises( com::sun::star::container::NoSuchElementException );
+    void removeRangeAddress(
+            [in] com::sun::star::table::CellRangeAddress aCellRangeAddress )
+        raises( com::sun::star::container::NoSuchElementException );
 
-    /** add the given ranges to the cell ranges.
+    //-------------------------------------------------------------------------
+
+    /** adds the given ranges to the collection of cell ranges.
+
+        @param aCellRangeAddresses
+            contains a sequence of addresses of all new ranges.
+
         @param bMergeRanges
-        With the second parameter is it possible to define how the ranges
-        should be added. To merge the ranges takes more time, but the memory
-        usage is lower.
+            defines how the ranges should be added. To merge the ranges
+            takes more time, but the memory usage is lower.
      */
-    void addRangeAddresses( [in] sequence<com::sun::star::table::CellRangeAddress> aCellRangeAddresses, [in] boolean bMergeRanges );
+    void addRangeAddresses(
+            [in] sequence<com::sun::star::table::CellRangeAddress> aCellRangeAddresses,
+            [in] boolean bMergeRanges );
 
-    /** remove the given ranges from the cell ranges.
+    //-------------------------------------------------------------------------
+
+    /** removes the given ranges from the collection of cell ranges.
+
+        @param aCellRangeAddresses
+            contains a sequence of addresses of all ranges to be removed.
+
+            <p>All specified ranges must fit exactly to elements of the
+            collection. The method does not try to shorten ranges.</p>
+
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            if the collection does not contain any of the specified ranges.
      */
-    void removeRangeAddresses( [in] sequence<com::sun::star::table::CellRangeAddress> aCellRangeAddresses )
-            raises( com::sun::star::container::NoSuchElementException);
+    void removeRangeAddresses(
+            [in] sequence<com::sun::star::table::CellRangeAddress> aCellRangeAddresses )
+        raises( com::sun::star::container::NoSuchElementException);
 
 };
 
@@ -124,3 +158,4 @@ interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellRanges
 }; }; }; };
 
 #endif
+

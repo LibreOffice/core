@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCell.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:57:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_XCell_idl__
 #define __com_sun_star_table_XCell_idl__
 
@@ -69,52 +70,45 @@
 #include <com/sun/star/table/CellContentType.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** provides methods to access the contents of a cell in a table.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::table::XCell
-/** represents a cell in a table.@see com::sun::star::table::Cell
+    @see com::sun::star::table::Cell
  */
 interface XCell: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XCell::getFormula
 
-    // DocMerge from xml: method com::sun::star::table::XCell::getFormula
-    /** returns the formula of a cell.
-        <p>
-        Even if the cell does not contain a formula, an
-        assignment of this attribute's value to another cell's
-        formula attribute would create the same cell content.
-        This is because this attribute contains the original
-        text value of a string cell. The value of a <em>value cell</em>
-        will be formatted using the number format's default format
-        or the formula string, including "=", of a formula
+    /** returns the formula string of a cell.
+
+        <p>Even if the cell does not contain a formula, an assignment of
+        this attribute's value to another cell's formula attribute would
+        create the same cell content. This is because this attribute contains
+        the original text value of a string cell. The value of a
+        <em>value cell</em> will be formatted using the number format's
+        default format or the formula string, including "=", of a formula
         cell.</p>
      */
     string getFormula();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::table::XCell::setFormula
     /** sets a formula into the cell.
-        <p>
-        When assigned, the string will be interpreted and
-        a value, text or formula cell is created, depending
-        on the text and the number format.</p>
+
+        <p>When assigned, the string will be interpreted and a value, text
+        or formula cell is created, depending on the text and the number
+        format.</p>
      */
     void setFormula( [in] string aFormula );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::table::XCell::getValue
     /** returns the floating point value of the cell.
-
-
 
         <p>For a <em>value cell</em> the value is returnd, for a
         <em>string cell</em> zero is returned and for a <em>formula cell</em>
@@ -124,31 +118,25 @@ interface XCell: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::table::XCell::setValue
     /** sets a floating point value into the cell.
 
-
-
         <p>After a call to this method the type of the cell is
-        <const>CellContentType::VALUE</const>.</p>
+        <member>CellContentType::VALUE</member>.</p>
      */
     void setValue( [in] double nValue );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::table::XCell::getType
     /** returns the type of the cell.
      */
     com::sun::star::table::CellContentType getType();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::table::XCell::getError
-    /** @returns
-                the error value of the cell.
+    /** returns the error value of the cell.
 
-                <P>If the cell does not contain a formula, the error
-                is always zero.
+        <P>If the cell does not contain a formula, the error is always
+        zero.</p>
      */
     long getError();
 
@@ -158,36 +146,5 @@ interface XCell: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/16 16:41:44  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/21 08:35:19  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:44:19  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:25:01  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:58  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 13:19:37  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:59  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

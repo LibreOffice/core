@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFunctionDescriptions.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XFunctionDescriptions_idl__
 #define __com_sun_star_sheet_XFunctionDescriptions_idl__
 
@@ -73,30 +74,38 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the property sequence of a function description
+    via function index or identifier.
 
-//=============================================================================
+    <p>The container access methods return a sequence of
+    <type scope="com::sun::star::beans">PropertyValue</type> structs.
+    The properties contained in the sequence are collected in the service
+    <type>FunctionDescription</type>.</p>
 
-// DocMerge from xml: interface com::sun::star::sheet::XFunctionDescriptions
-/** manages the list of descriptions of functions.@see com::sun::star::sheet::FunctionDescriptions
+    @see com::sun::star::sheet::FunctionDescriptions
  */
 interface XFunctionDescriptions: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
-    // DocMerge from idl: method com::sun::star::sheet::XFunctionDescriptions::getById
-    /** finds a function description by its identifier.
 
-            @returns
-                    the <type>FunctionDescription</type>.
+    /** finds a function description by the identifier of the function.
 
-            @param  nId
-                    This is the identifier of the function description.
+        @param nId
+            is the identifier of the function description (the same that
+            is used in the service <type>RecentFunctions</type>.</p>
+
+        @returns
+            the sequence of property values (described in
+            <type>FunctionDescription</type>).
      */
-    sequence<com::sun::star::beans::PropertyValue> getById( [in] long nId )
-            raises( com::sun::star::lang::IllegalArgumentException );
+    sequence< com::sun::star::beans::PropertyValue > getById( [in] long nId )
+        raises( com::sun::star::lang::IllegalArgumentException );
 
 };
 
@@ -104,36 +113,5 @@ interface XFunctionDescriptions: com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.3  2000/10/10 09:03:09  mi
-    returned service specified
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

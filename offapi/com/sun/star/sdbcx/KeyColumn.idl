@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyColumn.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@ service KeyColumn
 {
     service Column;
 
-    /** is the name of a reference column out of the referenced table. */
+    /** is the name of a reference column out of the referenced table.
+    */
     [readonly, property] string RelatedColumn;
 };
 

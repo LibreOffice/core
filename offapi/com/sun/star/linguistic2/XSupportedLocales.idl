@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSupportedLocales.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ module com { module sun { module star { module linguistic2 {
     can use.
     </P>
 
-    @see    com::sun::star::lang::Locale
-    @see    com::sun::star::uno::XInterface
+    @see    <type scope="com::sun::star::lang">Locale</type>
+    @see    <type scope="com::sun::star::uno">XInterface</type>
 */
 interface XSupportedLocales : com::sun::star::uno::XInterface
 {
@@ -97,8 +97,6 @@ interface XSupportedLocales : com::sun::star::uno::XInterface
     /**
          @returns
              the sequence of all supported languages.
-
-        @see com::sun::star::lang::Locale
     */
     sequence<com::sun::star::lang::Locale> getLocales();
 
@@ -110,8 +108,6 @@ interface XSupportedLocales : com::sun::star::uno::XInterface
 
          @returns
              <TRUE/> if the language is supported, otherwise <FALSE/>.
-
-        @see com::sun::star::lang::Locale
     */
     boolean hasLocale( [in] com::sun::star::lang::Locale aLocale );
 };

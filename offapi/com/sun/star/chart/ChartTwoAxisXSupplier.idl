@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTwoAxisXSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,28 +76,27 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartTwoAxisXSupplier
 /** a helper service for chart documents which supply
     primary and secondary x-axes.
  */
 service ChartTwoAxisXSupplier
 {
-    // DocMerge: empty anyway
+    /** offers access to the axis object
+     */
     interface com::sun::star::chart::XTwoAxisXSupplier;
 
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartAxisXSupplier;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartTwoAxisXSupplier::HasSecondaryXAxis
-    /** determines if the secondary x-axis is shown or hidden.@see ChartAxis
+    /** determines if the secondary x-axis is shown or hidden.
+
+        @see ChartAxis
      */
     [property] boolean HasSecondaryXAxis;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartTwoAxisXSupplier::HasSecondaryXAxisDescription
     /** determines if the description of the secondary x-axis
         is shown or hidden.
      */
@@ -112,6 +111,12 @@ service ChartTwoAxisXSupplier
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.4  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

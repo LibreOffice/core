@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCellCursor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetCellCursor_idl__
 #define __com_sun_star_sheet_XSheetCellCursor_idl__
 
@@ -65,25 +66,23 @@
 #include <com/sun/star/sheet/XSheetCellRange.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides advanced methods to control the position of a cursor in a
+    spreadsheet.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSheetCellCursor
-/** represents a cursor which can select a cell range.@see com::sun::star::sheet::SheetCellCursor
+    @see com::sun::star::sheet::SheetCellCursor
  */
 interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCellCursor::collapseToCurrentRegion
-    /** collapses the cursor into the region containing the cells
-        to which it currently points.
-
-
+    /** expands the cursor into the region containing the cells to which
+        it currently points.
 
         <p>A region is a cell range bounded by empty cells.</p>
      */
@@ -91,52 +90,52 @@ interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCellCursor::collapseToCurrentArray
     /** collapses the cursor into the range of the array formula to which
         it is currently pointing.
 
-
-
-        <p>If the cursor does not point to a range with an array formula, it
-        is left unchanged.</p>
+        <p>To get the correct result, the top left cell of the original
+        cursor must point to any cell containing an array formula.
+        If not, the cursor is left unchanged.</p>
      */
     void collapseToCurrentArray();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCellCursor::collapseToMergedArea
-    /** collapses the cursor into the range of merged cells.
+    /** expands the cursor to merged cell ranges.
 
-
-
-        <p>If the cursor does not point to a range with merged cells, it
+        <p>Expands the current cursor range in a way so that all merged
+        cell ranges intersecting the current range will fit completely.
+        If the cursor does not point to any range with merged cells, it
         is left unchanged.</p>
      */
     void collapseToMergedArea();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCellCursor::expandToEntireColumns
-    /** expands the cursor to include the columns of
-        the cells to which it is currently pointing.
+    /** expands the cursor to include the entire columns of the cells
+        to which it is currently pointing.
      */
     void expandToEntireColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCellCursor::expandToEntireRows
-    /** expands the cursor to include the rows of
-        the cells to which it is currently pointing.
+    /** expands the cursor to include the entire rows of the cells to
+        which it is currently pointing.
      */
     void expandToEntireRows();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCellCursor::collapseToSize
     /** changes the size of a cursor range.
+
+        <p>The top left cell of the cursor keeps unmodified. </p>
+
+        @param nColumns
+            the number of columns of the new cursor range.
+        @param nRows
+            the number of rows of the new cursor range.
      */
-    void collapseToSize( [in] long nColumns,
-             [in] long nRows );
+    void collapseToSize( [in] long nColumns, [in] long nRows );
 
 };
 
@@ -144,27 +143,5 @@ interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

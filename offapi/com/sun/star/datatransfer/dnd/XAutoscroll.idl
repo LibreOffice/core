@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAutoscroll.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-30 11:26:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,39 +71,47 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** interface for autoscroll support.
+/** Interface for autoscroll support.
 
-    <p>During DnD operations it is possible that a user may wish to drop the
+    <p>During Drag and Drop operations it is possible that a user may wish to drop the
     subject of the operation on a region of a scrollable GUI control that is
-    not currently visible to the user. </p>
+    not currently visible to the user.</p>
 
     <p>In such situations it is desirable that the GUI control detect this and
     institute a scroll operation in order to make obscured region(s) visible to
-    the user. This feature is known as autoscrolling. </p>
+    the user. This feature is known as autoscrolling.</p>
 
     <p>If a GUI control is both an active DropTarget and is also scrollable,
     it can receive notifications of autoscrolling gestures by the user from
-    the DnD system by implementing this interface. </p>
+    the Drag and Drop system by implementing this interface.</p>
 
     <p>An autoscrolling gesture is initiated by the user by keeping the drag
     cursor motionless with a border region of the Component, referred to as
     the "autoscrolling region", for a predefined period of time, this will
     result in repeated scroll requests to the Component until the drag Cursor
     resumes its motion. </p>
-
 */
 
 interface XAutoscroll: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** notify the Component to autoscroll.
+    /** Notify the component to autoscroll.
+
+        @param cursorLocationX
+        X location of the cursor in pixel.
+
+        @param cursorLocationY
+        Y location of the cursor in pixel.
     */
 
     [oneway] void autoscroll( [in] long cursorLocationX, [in] long cursorLocationY );
 
     //-------------------------------------------------------------------------
-    /** @returns the regions describing the autoscrolling region or border
-        relative to the geometry of the implementing Component.
+    /** Returns the regions describing the autoscrolling region.
+
+        @returns
+        The regions describing the autoscrolling region or border
+        relative to the geometry of the implementing component.
     */
 
     any getAutoscrollRegion();

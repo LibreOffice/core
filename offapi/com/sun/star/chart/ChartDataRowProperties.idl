@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataRowProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,64 +80,64 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartDataRowProperties
-/** specifies the properties for a group of graphic elements
-    which belong to a data row.
-
-
+/** specifies the properties for a group of graphic elements which
+    belong to a data row (also known as data series).
 
     <p>For this service, the properties supported by
-    <type>ChartDataPointProperties</type> are applied to all data point
-    elements contained in this group.
+    <type>ChartDataPointProperties</type> are applied to all data
+    point elements contained in this group.  They serve as a template;
+    thus, when changing a data point property afterwards</p>
 
-    </p>
-    <p>Note: Statistical properties are not available for all types of
-    diagrams.
-
-    </p>@see ChartDataPointProperties
+    @see ChartDataPointProperties
  */
 service ChartDataRowProperties
 {
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartDataPointProperties;
-
-    // DocMerge: empty anyway
-    service com::sun::star::chart::ChartStatistics;
-
-    // DocMerge: empty anyway
+    /** Statistical properties are not available for all types of
+        diagrams.
+    */
+    [optional] service com::sun::star::chart::ChartStatistics;
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::Axis
-    /** determines to which axis the row is assigned.
+    /** determines to which axis the data row is assigned.
 
+        <p>The axis must be a primary or secondary y-axis</p>
 
-
-        <p>It must be a y-axis (primary or secondary y-axis)
-
-        </p>@see ChartAxisAssign
+        @see ChartAxisAssign
+        @see ChartAxisYSupplier
+        @see ChartTwoAxisYSupplier
      */
     [property] long Axis;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::DataRegressionProperties
-    /** holds the properties of the regression line.@see ChartLine
+    /** holds the properties of the regression line, if such one is
+        enabled.
+
+        @see ChartLine
+        @see ChartStatistics
      */
     [optional, readonly, property] com::sun::star::beans::XPropertySet DataRegressionProperties;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::DataErrorProperties
-    /** holds the properties of the error markers.@see ChartLine
+    /** holds the properties of the error markers, if those are
+        enabled.
+
+        @see ChartLine
+        @see ChartStatistics
      */
     [optional, readonly, property] com::sun::star::beans::XPropertySet DataErrorProperties;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::DataMeanValueProperties
-    /** holds the properties of the average line.@see ChartLine
+    /** holds the properties of the average line, if such one is
+        enabled.
+
+        @see ChartLine
+        @see ChartStatistics
      */
     [optional, readonly, property] com::sun::star::beans::XPropertySet DataMeanValueProperties;
 };
@@ -149,6 +149,15 @@ service ChartDataRowProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.2  2002/01/29 15:58:52  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.4.20.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.4  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

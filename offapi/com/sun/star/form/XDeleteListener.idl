@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDeleteListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,25 +76,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XDeleteListener
 /** This is the listener interface for receiving "approveDelete" and
     "deleted" events posted by a database form.
 
-
-
     <p> "approveDelete" may be used to abort a deletion of the current data
-    record. The events are posted in the following order:<br>
-    aForm.deleteRecord() -&amp;gt; approveDelete -&amp;gt; "do Delete" -&amp;gt; deleted
+    record.</p>
 
-    </p>
-
-
-
-
-
-
-
-
+    <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
+    by <type scope="com::sun::star::form">XConfirmDeleteListener</type>.</p>
 
     @deprecated
  */
@@ -102,16 +91,16 @@ interface XDeleteListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XDeleteListener::approveDelete
-    /** is invoked when the current record of the database form will be deleted.@see XDatabaseForm
+    /** is invoked when the current record of the database form will be deleted.
+        @see XDatabaseForm
      */
     boolean approveDelete( [in] com::sun::star::lang::EventObject aEvent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XDeleteListener::deleted
     /** is invoked when a database form has finished the delete processing and
-        the data has been successfully deleted from the datasource.@see XDatabaseForm
+        the data has been successfully deleted from the datasource.
+        @see XDatabaseForm
      */
     void deleted( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -124,6 +113,15 @@ interface XDeleteListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.2  2002/07/26 10:00:06  fs
+    IDL review form layer
+
+    Revision 1.4.16.1  2002/02/18 15:22:28  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

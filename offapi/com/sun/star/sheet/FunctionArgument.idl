@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FunctionArgument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,38 +58,38 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_FunctionArgument_idl__
 #define __com_sun_star_sheet_FunctionArgument_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** contains the description of a single argument within a spreadsheet
+    function.
 
-//=============================================================================
-
-// DocMerge from xml: struct com::sun::star::sheet::FunctionArgument
-/** contains the description of a single argument within a
-    <type>FunctionDescription</type>.
+    @see com::sun::star::sheet::FunctionDescription
  */
 struct FunctionArgument
 {
-    // DocMerge from xml: field com::sun::star::sheet::FunctionArgument::Name
+    //-------------------------------------------------------------------------
+
     /** the name of the argument.
      */
     string Name;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::FunctionArgument::Description
     /** a description of the argument.
      */
     string Description;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::FunctionArgument::IsOptional
-    /** if the argument is optional.
+    /** determines whether the argument is optional.
      */
     boolean IsOptional;
 
@@ -99,24 +99,5 @@ struct FunctionArgument
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:07  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:53  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

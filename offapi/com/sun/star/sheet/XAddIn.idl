@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAddIn.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XAddIn_idl__
 #define __com_sun_star_sheet_XAddIn_idl__
 
@@ -65,162 +66,179 @@
 #include <com/sun/star/lang/XLocalizable.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XAddIn
 /** gives access to function descriptions and user-visible names.
  */
 interface XAddIn: com::sun::star::lang::XLocalizable
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getProgrammaticFuntionName
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getProgrammaticFuntionName
-    /** returns the programmatic name for a specified user-visible function
-        name.
+    /** returns the internal function name for an user-visible name.
 
+        <p>The user-visible name of a function is the name shown to the
+        user. It may be translated to the current language of the AddIn,
+        so it is never stored in files. It should be a single word and is
+        used when entering or displaying formulas.</p>
 
+        <p>Attention: The method name contains a spelling error. Due to
+        compatibility reasons the name cannot be changed.</p>
 
-        <p>The programmatic name must be the exact name of the method within
-        its interface.</p>
+        @param aDisplayName
+            the user-visible name of a function.
+
+        @returns
+            the exact name of the method within its interface.
+
      */
     string getProgrammaticFuntionName( [in] string aDisplayName );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getDisplayFunctionName
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getDisplayFunctionName
-    /** returns the user-visible name of the function.
+    /** returns the user-visible function name for an internal name.
 
+        <p>The user-visible name of a function is the name shown to the
+        user. It may be translated to the current language of the AddIn,
+        so it is never stored in files. It should be a single word and is
+        used when entering or displaying formulas.</p>
 
+        @param aProgrammaticName
+            is the exact name of a method within its interface.
 
-        <p>This is the name for the function that is shown to the user.
-        It may be translated to the current language of the AddIn, so it
-        is never stored in files. It should be a single word and is used
-        when entering or displaying formulas.</p>
+        @returns
+            the user-visible name of the specified function.
      */
     string getDisplayFunctionName( [in] string aProgrammaticName );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getFunctionDescription
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getFunctionDescription
-    /** returns the description of the function.
-
-
+    /** returns the description of a function.
 
         <p>The description is shown to the user when selecting functions.
         It may be translated to the current language of the AddIn.</p>
+
+        @param aProgrammaticName
+            is the exact name of a method within its interface.
+
+        @returns
+            the description of the specified function.
      */
     string getFunctionDescription( [in] string aProgrammaticName );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getDisplayArgumentName
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getDisplayArgumentName
     /** returns the user-visible name of the specified argument.
-
-
 
         <p>The argument name is shown to the user when prompting for
         arguments. It should be a single word and may be translated
         to the current language of the AddIn.</p>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @param nArgument
+            the index of the argument (0-based).
+
+        @returns
+            the user-visible name of the specified argument.
      */
-    string getDisplayArgumentName( [in] string aProgrammaticFunctionName,
-             [in] long nArgument );
+    string getDisplayArgumentName(
+            [in] string aProgrammaticFunctionName,
+            [in] long nArgument );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getArgumentDescription
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getArgumentDescription
     /** returns the description of the specified argument.
-
-
 
         <p>The argument description is shown to the user when prompting
         for arguments. It may be translated to the current language of
         the AddIn.</p>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @param nArgument
+            the index of the argument (0-based).
+
+        @returns
+            the description of the specified argument.
      */
-    string getArgumentDescription( [in] string aProgrammaticFunctionName,
-             [in] long nArgument );
+    string getArgumentDescription(
+            [in] string aProgrammaticFunctionName,
+            [in] long nArgument );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getProgrammaticCategoryName
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getProgrammaticCategoryName
-    /** returns the programmatic name of the category the function belongs to.
-
-
+    /** returns the programmatic name of the category the function
+        belongs to.
 
         <p>The category name is used to group similar functions together.
         The programmatic category name should always be in English, it is
         never shown to the user.
         It should be one of the following names if the function falls into
         the corresponding category.</p>
+
         <dl>
-        <dt>Database
-        </dt>
-        <dd>for functions that operate with data organized in tabular
-        form like databases.
-        </dd>
-        <dt>Date&amp;amp;Time
-        </dt>
-        <dd>for functions that deal with date or time values.
-        </dd>
-        <dt>Financial
-        </dt>
-        <dd>for functions that solve financial problems.
-        </dd>
-        <dt>Information
-        </dt>
-        <dd>for functions that provide information about cells.
-        </dd>
-        <dt>Logical
-        </dt>
-        <dd>for functions that deal with logical expressions.
-        </dd>
-        <dt>Mathematical
-        </dt>
-        <dd>for mathematical functions.
-        </dd>
-        <dt>Matrix
-        </dt>
-        <dd>for matrix functions.
-        </dd>
-        <dt>Statistical
-        </dt>
-        <dd>for statistical functions.
-        </dd>
-        <dt>Spreadsheet
-        </dt>
-        <dd>for functions that deal with cell ranges.
-        </dd>
-        <dt>Text
-        </dt>
-        <dd>for functions that deal with text strings.
-        </dd>
-        <dt>Add-In
-        </dt>
-        <dd>for additional functions.
-        </dd>
+        <dt>Database</dt>
+        <dd>for functions that operate with data organized in tabular form
+        like databases.</dd>
+
+        <dt>Date&amp;Time</dt>
+        <dd>for functions that deal with date or time values.</dd>
+
+        <dt>Financial</dt>
+        <dd>for functions that solve financial problems.</dd>
+
+        <dt>Information</dt>
+        <dd>for functions that provide information about cells.</dd>
+
+        <dt>Logical</dt>
+        <dd>for functions that deal with logical expressions.</dd>
+
+        <dt>Mathematical</dt>
+        <dd>for mathematical functions.</dd>
+
+        <dt>Matrix</dt>
+        <dd>for matrix functions.</dd>
+
+        <dt>Statistical</dt>
+        <dd>for statistical functions.</dd>
+
+        <dt>Spreadsheet</dt>
+        <dd>for functions that deal with cell ranges.</dd>
+
+        <dt>Text</dt>
+        <dd>for functions that deal with text strings.</dd>
+
+        <dt>Add-In</dt>
+        <dd>for additional functions.</dd>
         </dl>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @returns
+            the category name the specified function belongs to.
      */
     string getProgrammaticCategoryName( [in] string aProgrammaticFunctionName );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XAddIn::getDisplayCategoryName
 
-    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getDisplayCategoryName
-    /** returns the user-visible name of the category the function belongs to.
-
-
+    /** returns the user-visible name of the category the function
+        belongs to.
 
         <p>This is used when category names are shown to the user.</p>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @returns
+            the user-visible category name the specified function
+            belongs to.
      */
     string getDisplayCategoryName( [in] string aProgrammaticFunctionName );
 
@@ -230,30 +248,5 @@ interface XAddIn: com::sun::star::lang::XLocalizable
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.3  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.2  1999/12/14 11:30:35  nn
-    #70786# derive from XLocalizable
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

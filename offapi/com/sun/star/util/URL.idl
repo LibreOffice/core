@@ -2,9 +2,9 @@
  *
  *  $RCSfile: URL.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,98 +64,94 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::URL
-/** represents the original and the parsed structure of a
-    Uniform Resource Locator.
+/** represents the structure of an Uniform Resource Locator.
 
-
-
-    <p>It is not necessary to set all of the fields; either <member>URL::Complete</member>
+    <p>
+    If the structure represents a valid URL or not depends on prior usage of
+    the functions of <type>XURLTransformer</type>. Only after one of the functions
+    returned </TRUE> this can be assumed.</br>
+    It is not necessary to set all of the fields; either <member>URL::Complete</member>
     or (some of) the others are set. Additionally, most of the other
-    fields, like <member>URL::User</member>, <member>URL::Password</member>,
+    fields, like <member>URL::Host</member>, <member>URL::Port</member>,
+    <member>URL::User</member>, <member>URL::Password</member>,
     or <member>URL::Mark</member>, are optional.
+
+    @see XURLTransformer
 
     </p>
  */
 struct URL
 {
-    // DocMerge from xml: field com::sun::star::util::URL::Complete
-    /** contains the unparsed original URL, for example,
-        http://me:pass@www.sun.de:8080/pub/test/foo.txt?a=b#xyz
+    /** contains the string representation of the complete URL, for example,
+        http://www.sun.de:8080/pub/test/foo.txt?a=b#xyz
+
+        <p>
+        It is used as a central input/output or input parameter for the interfaces of
+        <type>XURLTransformer</type>. The usage of one of the <type>XURLTransformer</type>
+        function is mandatory to validate the URL. It cannot be assumed that
+        <member>URL::Complete</member> represents always a valid URL!
+        </p>
      */
     string Complete;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Main
     /** contains the URL without a mark and without arguments, for example,
-        http://me:pass@www.sun.de:8080/pub/test/foo.txt
+        http://www.sun.de:8080/pub/test/foo.txt
      */
     string Main;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Protocol
     /** contains the protocol (scheme) of the URL, for example, "http"
      */
     string Protocol;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::User
     /** contains the user-identifier of the URL, for example, "me"
      */
     string User;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Password
     /** contains the users password of the URL, for example, "pass"
      */
     string Password;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Server
     /** contains the server part of the URL, for example, "www.sun.de"
      */
     string Server;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Port
     /** contains the port at the server of the URL, for example, "8080"
      */
     short Port;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Path
-    /** contains the path part of the URL without the filename, for example, "/pub/test"
+    /** contains all segments but the last one of the hierarchical path of the URL, for example, "/pub/test/"
      */
     string Path;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Name
-    /** contains the filename part of the URL, for example, "foo.txt"
+    /** contains the last segment of the hierarchical path of the URL, for the above example, "foo.txt"
+        <p>
+        <strong>Attention:</strong>A service implementing the <type>XURLTransformer</type> interface
+        will normally not detect if the last segment is a folder or a file. So it is possible that
+        the last segment describes a folder. If you want to be sure that a file URL that references
+        a folder will be correctly put into the URL fields you should append a '/' at the end of the
+        hierarchical path.
+        </p>
      */
     string Name;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Arguments
     /** contains the arguments part of the URL, for example, "a=b"
      */
     string Arguments;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::URL::Mark
     /** contains the mark part of the URL, for example, "xyz"
      */
     string Mark;
@@ -166,33 +162,4 @@ struct URL
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/12 14:06:16  mi
-    #78715# stardiv references removed
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/02/21 16:18:16  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.3  2000/01/27 16:13:34  mi
-    #70728# missing documentation marked
-
-    Revision 1.2  2000/01/03 12:03:24  mi
-    reference manual
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

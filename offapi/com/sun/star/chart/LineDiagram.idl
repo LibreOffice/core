@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineDiagram.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,100 +99,85 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::LineDiagram
 /** specifies line, spline and symbol diagrams.
  */
 service LineDiagram
 {
-    // DocMerge: empty anyway
     service com::sun::star::chart::Diagram;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartStatistics;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartAxisXSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartTwoAxisYSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartAxisZSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::Dim3DDiagram;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::StackableDiagram;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::LineDiagram::SymbolType
     /** determines which type of symbols are displayed.
 
+        <p>In this interface, only the two values
+        <member>ChartSymbolType::NONE</member> and
+        <member>ChartSymbolType::AUTO</member> are supported. Later
+        versions may support the selection of the symbols shape.</p>
 
-        <p>In this interface, only the two values <type>ChartSymbolType</type>::NONE
-        and <type>ChartSymbolType</type>::AUTO are supported. Later versions may support
-        the selection of the symbols shape. You can change the symbol shape only
-        in the services <type>ChartDataPointProperties</type> and <type>ChartDataRowProperties</type>.
-        </p>
+        <p>If you set this property to
+        <member>ChartSymbolType::AUTO</member>, you can change the
+        symbol shape for objects supporting the service
+        <type>ChartDataPointProperties</type> or
+        <type>ChartDataRowProperties</type>.</p>
 
-        <p>In this Interface, only the absence of symbols
-        (SymbolTypeType=ChartSymbol_NONE) or default symbols
-        (SymbolTypeType=ChartSymbol_AUTO) are supported.
-
-        </p>
-        <p>Currently, before you can change the shape in these
-        interfaces, you have to set "SymbolType" to
-        "ChartSymbolType_AUTO" in this interface in order to get a
-        chart which supports symbols.
-
-        </p>@see ChartDataPoint
-                @see ChartDataRow
+        @see ChartDataPointProperties
+        @see ChartDataRowProperties
      */
     [property] long SymbolType;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the size of symbols.
-
-        @optional
+    /** specifies the size of symbols in 1/100th of a millimeter.
      */
     [optional, property] com::sun::star::awt::Size SymbolSize;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the type of symbol.
+    /** Set this property to any valid URL that points to a graphic
+        file.  This graphic is then used as symbol for all series.
 
-        @optional
+        <p>When you query this value you get an internal URL of the
+        embedded graphic.</p>
+
+        @deprecated
         @see ChartSymbolType
      */
     [optional, property] string SymbolBitmapURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::LineDiagram::Lines
-    /** determines if the chart type has lines connecting
-        the data points or contains just symbols.
-
-        <p>It may only be used for line- and xy-charts.</p>
+    /** determines if the chart type has lines connecting the data
+        points or contains just symbols.
      */
     [property] boolean Lines;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::LineDiagram::SplineType
-    /** determines if the chart is a spline-chart type
-        and specifies the type of splines, which can be cubic or
-        bicubic.
+    /** determines if the chart is a spline-chart type and specifies
+        the type of splines.
+
+        <p>You can set the following values:
+        <table border>
+        <tr><td>0</td><td>lines are used instead of splines</td></tr>
+        <tr><td>1</td><td>use cubic splines</td></tr>
+        <tr><td>2</td><td>use B-splines</td></tr>
+        </table>
+        </p>
      */
     [property] long SplineType;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the power of the polynomials used for spline calculation
+    /** specifies the power of the polynomials used for spline
+        calculation
 
-        This property is only valid for b-splines
+        This property is only valid for B-splines
      */
     [optional, property] long SplineOrder;
 
@@ -210,6 +195,15 @@ service LineDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8.2.2  2002/01/29 15:58:52  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.8.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.8  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.7  2001/08/27 14:35:34  bm
     #91579# +properties SplineOrder, SplineResolution
 

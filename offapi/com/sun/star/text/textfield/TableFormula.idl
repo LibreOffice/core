@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFormula.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:58:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ service TableFormula
     /** determins whether the formula displayed as text or evaluated.
     */
     [property] boolean IsShowFormula;
-    /** this is the number format for this field
-        @see <type>scope="com::sun::star::util">NumberFormatter</type>
+    /** this is the number format for this field.
+        @see com::sun::star::util::NumberFormatter
     */
     [property] short NumberFormat;
 };

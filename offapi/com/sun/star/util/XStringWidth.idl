@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStringWidth.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-08 14:04:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,20 +76,20 @@ module com { module sun { module star { module util {
 interface XStringWidth: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
-    /** Compute the width of a given string.
+    /** compute the width of a given string.
 
         <p>Depending on the implementation of this interface, the width of a
         string can be rather different things, like the number of characters
         in the string, or the width in pixel when displayed with a specific
         font.</p>
 
-        @param String
+        @param aString
         The string that is to be measured.
 
         @returns
         the string's width.
      */
-    long queryStringWidth([in] string String);
+    long queryStringWidth([in] string aString);
 };
 
 }; }; }; };

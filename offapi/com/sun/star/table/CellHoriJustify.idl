@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellHoriJustify.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,60 +58,52 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_CellHoriJustify_idl__
 #define __com_sun_star_table_CellHoriJustify_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
-
-//=============================================================================
-
-// DocMerge from xml: enum com::sun::star::table::CellHoriJustify
-/** enumeration used to specify how cell contents are
-    aligned horizontally.
+/** specifies how cell contents are aligned horizontally.
  */
 enum CellHoriJustify
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::table::CellHoriJustify::STANDARD
     /** default alignment is used (left for numbers, right for text).
      */
     STANDARD,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::table::CellHoriJustify::LEFT
-    /** contents are aligned with the left edge of the cell.
+    /** contents are aligned to the left edge of the cell.
      */
     LEFT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::table::CellHoriJustify::CENTER
     /** contents are horizontally centered.
      */
     CENTER,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::table::CellHoriJustify::RIGHT
     /** contents are aligned to the right edge of the cell.
      */
     RIGHT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::table::CellHoriJustify::BLOCK
-    /** contents are justified in the cell.
+    /** contents are justified to the cell width.
      */
     BLOCK,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::table::CellHoriJustify::REPEAT
     /** contents are repeated to fill the cell.
      */
     REPEAT
@@ -122,18 +114,5 @@ enum CellHoriJustify
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

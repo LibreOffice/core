@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintAreas.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XPrintAreas_idl__
 #define __com_sun_star_sheet_XPrintAreas_idl__
 
@@ -69,139 +70,124 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XPrintAreas
 /** represents a sheet which has print areas.
-
-
-
-
-
-
-
-
-
-
-
-
 
     @deprecated
  */
 interface XPrintAreas: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XPrintAreas::getPrintAreas
 
-    // DocMerge from idl: method com::sun::star::sheet::XPrintAreas::getPrintAreas
-    /** returns the print areas of the sheet.
+    /** returns a sequence containing all print areas of the sheet.
      */
-    sequence<com::sun::star::table::CellRangeAddress> getPrintAreas();
+    sequence< com::sun::star::table::CellRangeAddress > getPrintAreas();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::setPrintAreas
     /** sets the print areas of the sheet.
 
-
-
         <p>If none of the sheets in a document have print areas,
-        the whole sheets are printed.</p>
+        the whole sheets are printed. If any sheet contains print areas,
+        other sheets without print areas are not printed.</p>
+
+        @param aPrintAreas
+            a sequence containing all print areas for this sheet.
      */
-    void setPrintAreas( [in] sequence<com::sun::star::table::CellRangeAddress> aPrintAreas );
+    void setPrintAreas( [in] sequence< com::sun::star::table::CellRangeAddress > aPrintAreas );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::getPrintTitleColumns
-    /** returns <TRUE/> if the title columns are repeated on
-        all subsequent print pages to the right.
+    /** returns, whether the title columns are repeated on all subsequent
+        print pages to the right.
      */
     boolean getPrintTitleColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::setPrintTitleColumns
-    /** specifies if the title columns are repeated on
-        all subsequent print pages to the right.
+    /** specifies whether the title columns are repeated on all subsequent
+        print pages to the right.
+
+        @param bPrintTitleColumns
+            if <TRUE/>, title columns are repeated on each page.
      */
     void setPrintTitleColumns( [in] boolean bPrintTitleColumns );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::getTitleColumns
-    /** returns the range of columns which are marked as
-        title columns.
-
-
+    /** returns the range that is specified as title columns range.
 
         <p>Title columns can be automatically repeated on all subsequent
-        print pages to the right.</p>
+        print pages to the right, using
+        <member>XPrintAreas::setPrintTitleColumns</member>.</p>
+
+        @returns
+            the range of columns that is specified as title columns range.
      */
     com::sun::star::table::CellRangeAddress getTitleColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::setTitleColumns
-    /** sets the range of columns marked as title columns.
+    /** specifies a range of columns as title columns range.
 
-
-
-        <p>The rows of the
-        <type scope="com::sun::star::table">CellRangeAddress</type>
-        are ignored.</p>
+        <p>The rows of the passed range are ignored.</p>
 
         <p>Title columns can be automatically repeated on all subsequent
-        print pages to the right.</p>
+        print pages to the right, using
+        <member>XPrintAreas::setPrintTitleColumns</member>.</p>
+
+        @param aTitleColumns
+            the title columns range.
      */
     void setTitleColumns( [in] com::sun::star::table::CellRangeAddress aTitleColumns );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::getPrintTitleRows
-    /** returns <TRUE/> if the title rows are repeated on
-        all subsequent print pages to the bottom.
+    /** returns, whether the title rows are repeated on all subsequent
+        print pages to the bottom.
      */
     boolean getPrintTitleRows();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::setPrintTitleRows
-    /** specifies if the title rows are repeated on
-        all subsequent print pages to the bottom.
+    /** specifies whether the title rows are repeated on all subsequent
+        print pages to the bottom.
+
+        @param bPrintTitleRows
+            if <TRUE/>, title rows are repeated on each page.
      */
     void setPrintTitleRows( [in] boolean bPrintTitleRows );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::getTitleRows
-    /** returns the range of rows which are marked as
-        title rows.
-
-
+    /** returns the range that is specified as title rows range.
 
         <p>Title rows can be automatically repeated on all subsequent
-        print pages to the bottom.</p>
+        print pages to the bootom, using
+        <member>XPrintAreas::setPrintTitleRows</member>.</p>
+
+        @returns
+            the range of rows that is specified as title rows range.
      */
     com::sun::star::table::CellRangeAddress getTitleRows();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XPrintAreas::setTitleRows
-    /** sets the range of rows marked as title rows.
+    /** specifies a range of rows as title rows range.
 
-
-
-        <p>The columns of the
-        <type scope="com::sun::star::table">CellRangeAddress</type>
-        are ignored.</p>
+        <p>The columns of the passed range are ignored.</p>
 
         <p>Title rows can be automatically repeated on all subsequent
-        print pages to the bottom.</p>
+        print pages to the bottom, using
+        <member>XPrintAreas::setPrintTitleRows</member>.</p>
+
+        @param aTitleRows
+            the title rows range.
      */
     void setTitleRows( [in] com::sun::star::table::CellRangeAddress aTitleRows );
 
@@ -211,30 +197,5 @@ interface XPrintAreas: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/14 12:53:40  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

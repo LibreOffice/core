@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,60 +79,63 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** This interface must be implemented by any <type>DragGestureRecognizer</type>
-    implementation that a <type>DragSource</type> supports.
+/** This interface must be implemented by any drag gesture recognizer
+    implementation that a drag source supports.
+
+    @see com::sun::star::datatransfer::dnd::XDragGestureRecognizer
+    @see com::sun::star::datatransfer::dnd::XDragSource
 */
 
 interface XDragSourceListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** this method is invoked to signify that the Drag and Drop operation is
+    /** This method is invoked to signify that the Drag and Drop operation is
         complete.
 
         @param dsde
-        the DragSourceDropEvent
+        The <type>DragSourceDropEvent</type>
     */
 
     [oneway] void dragDropEnd( [in] DragSourceDropEvent dsde );
 
       //-------------------------------------------------------------------------
-    /** called as the hotspot enters a platform dependent drop site.
+    /** Called as the hotspot enters a platform dependent drop site.
 
-        <p>NOTE: currently this notification can not be ensured by all
+        <p><strong>NOTE:</strong> currently this notification can not be ensured by all
         implementations. Do not rely on it ! </p>
 
         @param dsde
-        the DragSourceDragEvent
+        The <type>DragSourceDragEvent</type>.
     */
 
     [oneway] void dragEnter( [in] DragSourceDragEvent dsde );
 
       //-------------------------------------------------------------------------
-    /** called as the hotspot exits a platform dependent drop site.
+    /** Called as the hotspot exits a platform dependent drop site.
 
-        <p>NOTE: currently this notification can not be ensured by all
+        <p><strong>NOTE:</strong> Currently this notification can not be ensured by all
         implementations. Do not rely on it ! </p>
 
         @param dse
-        the DragSourceEvent
+        The <type>DragSourceEvent</type>.
     */
 
     [oneway] void dragExit( [in] DragSourceEvent dse );
 
       //-------------------------------------------------------------------------
-    /** called as the hotspot moves over a platform dependent drop site.
+    /** Called as the hotspot moves over a platform dependent drop site.
 
         @param dsde
-        the DragSourceEvent
+        The <type>DragSourceEvent</type>
     */
 
     [oneway] void dragOver( [in] DragSourceDragEvent dsde );
 
       //-------------------------------------------------------------------------
-    /** called when the user has modified the drop gesture.
+    /** Called when the user has modified the drop gesture.
 
         @param dsde
-        the DragSourceEvent
+        The <type>DragSourceEvent</type>.
     */
 
     [oneway] void dropActionChanged( [in] DragSourceDragEvent dsde );

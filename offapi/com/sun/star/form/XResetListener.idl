@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResetListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,49 +76,40 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XResetListener
-/** XResetListener" is the listener interface for
-    receiving "approveReset" and "resetted" events.
-
-
+/** is the interface for receiving notificaions about reset events.
 
     <p>The listener is called if a component implementing the
-    <type>XReset</type> interface performs a reset. Before the
-    component performs the reset, "approveReset" is called from
-    the listener. Within "approveReset" you may check conditions
-    to prove if the reset should be executed or not, so you may
-    cancel the action.
-
+    <type>XReset</type> interface performs a reset.</br>
+    Order of events:
+    <ul><li>a reset is triggered on a component</li>
+        <li>the component calls <member>XReset::approveReset</member> on all its listeners</li>
+        <li>if all listeners approve the reset operation, the data is reset</li>
+        <li>the component calls <member>XReset::resetted</member> on all its listeners</li>
+    </ul>
     </p>
-    <p>The events occur in the following order:
 
-    </p>
-    <pre>
-    reset -&amp;gt; "approveReset -&amp;gt; "perform reset" -&amp;gt; "resetted"
-    <pre>
-
-    </pre>
-    </pre>@see      XReset
+    @see      XReset
  */
 interface XResetListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XResetListener::approveReset
-    /** is invoked before resetting a component.
+    /** is invoked before a component is reset.
 
+        @param rEvent
+            the event happend.
 
-
-        <p>This action may be cancelled.
-
-        </p>
+        @returns
+            <TRUE/> when reset was approved, <FALSE/> when the reset operation should be cancelled.
      */
     boolean approveReset( [in] com::sun::star::lang::EventObject rEvent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XResetListener::resetted
-    /** is invoked when a component is reset.
+    /** is invoked when a component has been reset.
+
+        @param rEvent
+            the event happend.
      */
     [oneway] void resetted( [in] com::sun::star::lang::EventObject rEvent );
 
@@ -131,6 +122,15 @@ interface XResetListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.2  2002/07/26 10:00:13  fs
+    IDL review form layer
+
+    Revision 1.4.16.1  2002/02/18 14:50:23  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:53  mi
     moved from api
 

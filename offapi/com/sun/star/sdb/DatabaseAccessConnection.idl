@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccessConnection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,21 +86,26 @@ interface XSQLQueryComposerFactory;
     to a certain database connection, such as, DatabaseQueries, FormDocuments, and ReportDocuments.
     Objects for data definition are supplied as well, for instance, Tables, Views, etc.
 
-    <p>Implements the service <type scope="com::sun::star::sdbc">Connection</type>.
-    It is possible to open more than one connection at the same time, but the
-    method <member>DatabaseAccessConnection::dispose</member> will close
-    only one of these connections. You have to close all connections in order
-    to close the connection to the database.</p>
+    <p>
+    Implements the service
+    <type scope="com::sun::star::sdbc">Connection</type>
+    .
+    It is possible to open more than one connection at the same time, but the method
+    <member scope="com::sun::star::sdb">DatabaseAccessConnection::dispose()</member>
+    will close only one of these connections. You have to close all connections in order
+    to close the connection to the database.
+    </p>
 */
 service DatabaseAccessConnection
 {
 
     // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection: service com::sun::star::sdbc::Connection
     /** supporting of the base connection service.
-             <p><B>Note:</B><br>
-             Don't use the "dispose" method of the XComponent interface, as the DataAccess
-             uses a more sophisticated interface for closing a connection.
-             @see XDatabaseAccess@see XDatabaseAccess
+             <p><B>Note:</B><br/>
+                 Don't use the "dispose" method of the XComponent interface, as the DataAccess
+                 uses a more sophisticated interface for closing a connection.
+                 @see XDatabaseAccess
+             </p>
      */
     service com::sun::star::sdbc::Connection;
 
@@ -122,7 +127,8 @@ service DatabaseAccessConnection
      */
     interface XSQLQueryComposerFactory;
 
-    // DocMerge: empty anyway
+    /** provides access to the queries.
+    */
     interface XQueriesSupplier;
 };
 
@@ -132,6 +138,15 @@ service DatabaseAccessConnection
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.2  2002/02/18 12:53:58  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4.2.1  2002/02/18 10:23:26  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

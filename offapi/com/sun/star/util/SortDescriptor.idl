@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,32 +75,26 @@ module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::util::SortDescriptor
 /** specifies the properties which can be used to describe
-    a sort order applied to an XSortable.@see XSortable
+    a sort order applied to an XSortable.
+
+    @see XSortable
  */
 service SortDescriptor
 {
      interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetSortDescriptor::IsCaseSensitive
-
-    // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::IsCaseSensitive
     /** specifies if the case of letters is important when comparing entries.
      */
     [property] boolean IsCaseSensitive;
 
      //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetSortDescriptor::SortAscending
-
-    // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::SortAscending
     /** specifies the sorting order.
      */
     [property] boolean SortAscending;
 
      //-------------------------------------------------------------------------
-    // DocMerge from xml: property com::sun::star::util::SortDescriptor::SortColumns
     /** specifies if the columns are sorted.
 
         <dl>
@@ -136,30 +130,4 @@ service SortDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/14 16:31:44  mi
-    collation properties added / all global props now in util::SortDescriptor
-
-    Revision 1.5  2000/12/21 08:35:27  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.4  2000/12/14 12:53:46  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClob.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,28 +77,62 @@ interface XInputStream;
 
 
 // DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XClob
-/** is the mapping for the SQL <code>CLOB</code> type.
+/** is the mapping for the SQL
+    <code>CLOB</code>
+    type.
 
 
-    <p>A SQL <code>CLOB</code> is a built-in type
+    <p>
+    A SQL
+    <code>CLOB</code>
+    is a built-in type
     that stores a Character Large Object as a column value in a row of
     a database table.
-    The driver implements a <code>Clob</code> object using a SQL
-    <code>locator(CLOB)</code>, which means that a <code>Clob</code> object
-    contains a logical pointer to the SQL <code>CLOB</code> data rather than
-    the data itself. A <code>Clob</code> object is valid for the duration
+    The driver implements a
+    <code>Clob</code>
+    object using a SQL
+    <code>locator(CLOB)</code>
+    , which means that a
+    <code>Clob</code>
+    object
+    contains a logical pointer to the SQL
+    <code>CLOB</code>
+    data rather than
+    the data itself. A
+    <code>Clob</code>
+    object is valid for the duration
     of the transaction in which it was created.
     </p>
-    <p>The <code>Clob</code> interface provides methods for getting the
-    length of a SQL <code>CLOB</code> (Character Large Object) value,
-    for materializing a <code>CLOB</code> value on the client, and for
-    searching for a substring or <code>CLOB</code> object within a
-    <code>CLOB</code> value.
+    <p>
+    The
+    <code>Clob</code>
+    interface provides methods for getting the
+    length of a SQL
+    <code>CLOB</code>
+    (Character Large Object) value,
+    for materializing a
+    <code>CLOB</code>
+    value on the client, and for
+    searching for a substring or
+    <code>CLOB</code>
+    object within a
+    <code>CLOB</code>
+    value.
     </p>
-    <p>Methods in the interfaces <type scope="com::sun::star::sdbc">XResultSet</type>,
-    and <type scope="com::sun::star::sdbc">XPreparedStatement</type>, such as
-    <code>getClob</code> and <code>setClob</code> allow a programmer to
-    access the SQL <code>CLOB</code>.<br>
+    <p>
+    Methods in the interfaces
+    <type scope="com::sun::star::sdbc">XResultSet</type>
+    ,
+    and
+    <type scope="com::sun::star::sdbc">XPreparedStatement</type>
+    , such as
+    <code>getClob</code>
+    and
+    <code>setClob</code>
+    allow a programmer to
+    access the SQL
+    <code>CLOB</code>
+    .
     </p>
  */
 interface XClob: com::sun::star::uno::XInterface
@@ -106,28 +140,57 @@ interface XClob: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::length
-    /** returns the number of characters in the <code>CLOB</code> value
-        designated by this <code>Clob</code> object.
+    /** returns the number of characters in the
+        <code>CLOB</code>
+        value
+        designated by this
+        <code>Clob</code>
+        object.
+        @returns
+            the length of the CLOB object
+        @throws SQLException
+            if a database access error occurs.
      */
     hyper length() raises (SQLException);
 
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::getSubString
-    /** returns a copy of the specified substring in the <code>CLOB</code> value
-        designated by this <code>Clob</code> object.
+    /** returns a copy of the specified substring in the
+        <code>Clob</code>
+        value
+        designated by this
+        <code>Clob</code>
+        object.
 
 
-        <p>The substring begins at position <code>pos</code> and has up
-        to <code>length</code> consecutive characters.
+        <p>
+        The substring begins at position <code>pos</code> and has up
+        to
+        <code>length</code>
+        consecutive characters.
         </p>
+        @param pos
+            the starting position
+        @param length
+            the length of the substring
+        @returns
+            the substring
+        @throws SQLException
+            if a database access error occurs.
      */
     string getSubString([in]hyper pos, [in]long length) raises (SQLException);
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::getCharacterStream
-    /** gets the <code>Clob</code> contents as a stream.
+    /** gets the
+        <code>Clob</code>
+        contents as a stream.
+        @returns
+            the stream
+        @throws SQLException
+            if a database access error occurs.
      */
     com::sun::star::io::XInputStream getCharacterStream() raises (SQLException);
 
@@ -135,8 +198,20 @@ interface XClob: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::position
     /** determines the character position at which the specified substring
-        <code>searchstr</code> appears in the <code>CLOB</code>.  The search
-        begins at position <code>start</code>.
+        <code>searchstr</code>
+        appears in the
+        <code>Clob</code>
+        . The search begins at position
+        <code>start</code>
+        .
+        @param searchstr
+            the string to search
+        @param start
+            the starting position
+        @returns
+            the length of the CLOB object
+        @throws SQLException
+            if a database access error occurs.
      */
     hyper position([in]string searchstr, [in]long start)
         raises (SQLException);
@@ -144,10 +219,23 @@ interface XClob: com::sun::star::uno::XInterface
       //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::positionOfClob
-    /** determines the character position at which the specified
-        <code>Clob</code> object <code>searchstr</code> appears in this
-        <code>Clob</code> object.  The search begins at position
-        <code>start</code>.
+    /** determines the position at which the specified
+        <code>Clob</code>
+        object
+        <code>pattern</code>
+        appears in this
+        <code>Clob</code>
+        object. The search begins at position
+        <code>start</code>
+        .
+        @param pattern
+            the CLOB to search
+        @param start
+            the starting position
+        @returns
+            the position of the CLOB inside
+        @throws SQLException
+            if a database access error occurs.
      */
     hyper positionOfClob([in]XClob pattern, [in]hyper start)
         raises (SQLException);
@@ -159,6 +247,12 @@ interface XClob: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseDefinition.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,23 @@ interface XGroupsSupplier;
     databases, and to control the access rights on database objects.
 
 
-    <p>It may be implemented by a database driver provider, to encapsulate the
+    <p>
+    It may be implemented by a database driver provider, to encapsulate the
     complexity of data definition, and to give a common way for data definition as
     the DDL of most DBMS's differs.
     </p>
-    <p>At least, the access to the tables of a database should be implemented.
+    <p>
+    At least, the access to the tables of a database should be implemented.
     The implementation of other known database objects like views is optional.
     </p>
-    <p>To control the access rights of users, there is the possibility to
-    implement objects like users and groups.</p>
+    <p>
+    To control the access rights of users, there is the possibility to
+    implement objects like users and groups.
+    </p>
  */
 service DatabaseDefinition
 {
-    // DocMerge: empty anyway
+    // gives access to the tables.
     interface XTablesSupplier;
 
     // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XViewsSupplier
@@ -111,6 +115,15 @@ service DatabaseDefinition
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/02/18 12:57:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 09:37:12  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:33  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationRegistry.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,24 +75,27 @@ module com { module sun { module star { module configuration {
 //=============================================================================
 
 
-/*  provides access to a configuration tree as a registry. Using the
-    <type scope="com::sun::star::registry">XSimpleRegistry</type> interface, the
-    service can be bound to a subtree within the configuration tree, as provided
-    by an <service scope="com.sun.star.configuration">ConfigurationProvider</service>
+/*  provides access to a configuration tree as a registry.
+
+    <p> Using the <type scope="com::sun::star::registry">XSimpleRegistry</type>
+    interface, the service can be bound to a subtree within the
+    configuration tree, as provided by an
+    <type scope="com.sun.star.configuration">ConfigurationProvider</type>
     service, which must be accessible from the service factory you use for the
     creation of this service.
-    <BR>
-    There are some restrictions when accessing a configuration tree using a registry.
+    </p>
+    <p> There are some restrictions when accessing a configuration tree using a registry.
     Most of them are implications of the fact that a configuration tree is very static in
     it's structure. Removal and addition of sub nodes is allowed only for special
     nodes, and even then the new elements have to comply to a given scheme (which is some
     kind of attribute of the container node). So for instance the
-    <member scope="com.sun.star.registry">XRegistryKey::createKey</member> method is not allowed
+    <member scope="com.sun.star.registry">XRegistryKey::createKey()</member> method is not allowed
     for some nodes.
-    <BR>
+    </p><p>
     Thus anybody using this service is strongly advised to read and understand the specification
-    of an configuration provider (<service scope="com.sun.star.configuration">ConfigurationProvider</service>)
+    of an configuration provider (<type scope="com.sun.star.configuration">ConfigurationProvider</type>)
     and all of it's aspects.
+    </p>
 
     @author Frank Schoenheit
     @version 1.0 2000/07/06
@@ -101,17 +104,26 @@ module com { module sun { module star { module configuration {
 service ConfigurationRegistry
 {
     /** controls the binding of the object to a configuration sub tree.
-        <member scope="com::sun::star::registry">XSimpleRegistry::open</member> is used to
-        open a special subtree within the configuration tree.<BR>
-        The parameters of this method control the location of the root of the to-be-opened
+        <p><member scope="com::sun::star::registry">XSimpleRegistry::open()</member>
+        is used to open a special subtree within the configuration tree.
+        </p>
+        <p>The parameters of this method control the location of the root of the to-be-opened
         configuration node and the access mode (read only or updatable).
+        </p>
     */
     interface com::sun::star::registry::XSimpleRegistry;
 
-    /** as specified for the <service scope="com.sun.star.configuration">ConfigurationProvider</service>
-        service, all changes made to an configuration subtree have to be commited before they become
-        persistent. The <interface scope="com.sun.star.util">XFlushable</interface> is used to control
-        this behavior for a configuration accessed as a registry.
+    /** is used to commit changes to the configuration.
+        <p>As specified for the
+        <type scope="com.sun.star.configuration">ConfigurationUpdateAccess</type>
+        service, all changes made to an configuration subtree have to be commited
+        before they become persistent.
+        To do this for a configuration accessed as a registry, call
+        <member scope="com.sun.star.util">XFlushable::flush()</member>.
+        </p>
+        <p><strong>Warning:</strong><em>Changes that are not flushed will be
+        lost.</em>
+        </p>
     */
     interface com::sun::star::util::XFlushable;
 };

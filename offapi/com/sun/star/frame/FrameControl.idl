@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,77 +69,46 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
-
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** contains a frame with a desktop component
 
-// DocMerge from xml: service com::sun::star::frame::FrameControl
-/** contains a frame with a desktop component.
-
-    <p>If the control is visible and has a valid (loadable) component URL,
-    then the <member>FrameControl::Frame</member> property is set.</p>
+    <p>
+    If the control is visible and has a valid (loadable) component URL,
+    then the <member>FrameControl::Frame</member> property is set.
+    Normaly this control can be used for preview functionality inside
+    any UI.
+    </p>
  */
 service FrameControl
 {
-
-
-    // DocMerge from xml: service com::sun::star::frame::FrameControl: service com::sun::star::awt::UnoControl
-    /** The base service of all controls.
+    //-------------------------------------------------------------------------
+    /** the base service of all controls
      */
     service com::sun::star::awt::UnoControl;
 
-
-    // DocMerge from xml: service com::sun::star::frame::FrameControl: interface com::sun::star::beans::XPropertySet
-    /** provides access to the properties of this service.
-     */
-    interface com::sun::star::beans::XPropertySet;
-
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::frame::FrameControl::ComponentUrl
     /** contains the type of the component which is loaded into the frame,
-        or the document which implicitly specifies the type.
+        or the document which implicitly specifies the type
      */
     [property] string ComponentUrl;
 
     //-------------------------------------------------------------------------
+    /** the frame held by this control
 
-    // DocMerge from xml: property com::sun::star::frame::FrameControl::Frame
-    /** The frame held by this control. The <type>Frame</type> is created if the control
-        is shown and the component's URL is set.
+        <p>
+        The <type>Frame</type> is created if the control
+        is shown and the <member>ComponentUrl</member> is set.
+        </p>
      */
-    [readonly, property] string Frame;
-
+    [property, readonly] string Frame;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:01  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/01/31 09:44:58  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

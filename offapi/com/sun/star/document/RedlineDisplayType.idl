@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RedlineDisplayType.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-16 13:13:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,9 @@
 
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
-
 
 /** specifies which changes in a document are displayed.
  */
@@ -75,17 +74,21 @@ constants RedlineDisplayType
     /** no changes are displayed.
      */
     const short NONE = 0;
+
     /** only inserted parts are displayed and attributed.
      */
     const short INSERTED = 1;
+
     /** only inserted parts are displayed and attributed.
      */
     const short INSERTED_AND_REMOVED = 2;
+
     /** only removed parts are displayed and attributed.
      */
     const short REMOVED = 3;
 };
-  };};};};
+
+};};};};
 #endif
 
 

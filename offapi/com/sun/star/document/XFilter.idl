@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,24 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module document {
+module com {  module sun {  module star {  module document {
 
 //=============================================================================
+/** interface to filter documents
 
-/** interface to filter documents.
+    <p>
+    This interface will be used by service <type>ImportFilter</type> or
+    <type>ExportFilter</type> to supports loading/saving of documents with
+    different formats. The target/source of such filter operations must
+    well known BEFORE filtering will be started.
+    (see <type>XImporter</type> and <type>XExporter</type> too)
+    Otherwise this interface can't work right.
+    <p>
+
+    @see ImportFilter
+    @see ExportFilter
+    @see XImporter
+    @see XExporter
  */
 interface XFilter: com::sun::star::uno::XInterface
 {
@@ -86,13 +99,9 @@ interface XFilter: com::sun::star::uno::XInterface
         The given <type>MediaDescriptor</type> holds all neccessary information
         about the document.
 
-        @attention  Don't hold hard references to these descriptors. You must copy needed informations!
-                    Otherwise we couldn't destroy (for example) an existing input stream!
+        Don't hold hard references to these descriptors. You must copy needed informations!
+        Otherwise we couldn't destroy (for example) an existing input stream!
         </p>
-
-    <!-- Dennis: The HTML output of @attention does not appear correct -->
-
-
      */
     boolean filter( [in] sequence< com::sun::star::beans::PropertyValue > aDescriptor );
 

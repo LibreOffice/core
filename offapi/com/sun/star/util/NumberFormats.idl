@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormats.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,16 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::util::NumberFormats
 /** specifies a container of number formats.
  */
 service NumberFormats
 {
-    // DocMerge: empty anyway
+    /** is used to access or create individual formats.
+     */
     interface com::sun::star::util::XNumberFormats;
 
-    // DocMerge: empty anyway
+    /** is used to get specific, predefined number formats.
+     */
     interface com::sun::star::util::XNumberFormatTypes;
 
 };
@@ -93,18 +94,5 @@ service NumberFormats
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDetection.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,33 +74,81 @@
 module com { module sun { module star { module document {
 
 //============================================================================
+/** support "flat" and "deep" type detection of a given document
 
-/** support "flat" and "deep" type detection of a given document.
+    <p>
+    A "flat" detection means specifying the document format by using
+    the URL and some configuration data only. That will perform but produce
+    may invalid results if e.g., the extension of the document is wrong.
+    A "deep" detection means looking into the document stream to be right
+    which format it supports. Of course that includes a "flat" detection before.
+    The combination of both ones should produce stable results everytime.
+    </p>
+
+    @see TypeDetection
  */
 interface XTypeDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** return internal type name which is suitable to given URL
+    /** make a "flat" detection by using the URL of the document
 
         <p>
-        We make a "flat" type detection only.
+        It use given URL in combination with the internal configuration of well known
+        types only to specify the format of given document.
         </p>
+
+        @param URL
+            specify the document by name
+
+        @returns
+            an internal type name which represent the detected format
+            <br>
+            or an empty value for unknown ones
      */
-    string queryTypeByURL( [in] string sURL );
+    string queryTypeByURL( [in] string URL );
 
     //-------------------------------------------------------------------------
-    /** return internal type name which is suitable to given document properties
-         by a <type>MediaDescriptor</type>
+    /** make a "deep" detection or optional a "flat" detection by using a
+        <type>MediaDescriptor</type>
 
         <p>
-        These do the same as "queryTypeByURL()" before.
-        As an additional feature, you can specify more document properties
-        and select the detection mode. Available modes are "flat" (bDeep=FALSE)
-         and "deep" (bDeep=TRUE) detection.
+        Instead of <member>XTypeDetection::queryTypeByURL()</member> this function
+        use a <type>MediaDescriptor</type> to specify the document for detection.
+        Such descriptor hold different informations about the document.
+        He will be passed to any part of made detection process and every part
+        can change it to actualize it.
+        The property <member>MediaDescriptor::URL</member> should be set on
+        this descriptor as minimum. It specifies the location of the document.
+        If this parameter is missing another one is required: <member>MediaDescriptor::InputStream</member>.
+        This can be usefull to prevent operaton against multiple opening of the stream
+        and perform the operation. If this stream isn't already included the detection
+        will open it (if allowed!) and add it to the descriptor so it will be available for
+        all following parts.
+        A combination of both parameters can be usefull to perform the operation
+        and make results more stable; but only one of them is required.
+        Of course its possible to specify more document properties (e.g.
+        <member>MediaDescriptor::ReadOnly</member>).
+        <br>
+        As an additional feature it's possible to suppress "deep" detection by using argument
+        <var>AllowDeep</var>.
         </p>
+
+        @param Descriptor
+            means the <type>MediaDescriptor</type> which specify the ressource for detection
+
+        @param AllowDeep
+            if it is set to <TRUE/> a "deep" detection will be follow a "flat" detection
+            <br>
+            if it is set to <FALSE/> a "flat" detection will be made only
+
+        @returns
+            an internal type name which represent the detected format
+            <br>
+            or an empty value for unknown ones
      */
-    string queryTypeByDescriptor(   [inout] sequence< com::sun::star::beans::PropertyValue >    aDescriptor ,
-                                    [in]    boolean                                             bDeep       );
+    string queryTypeByDescriptor(
+        [inout] sequence< com::sun::star::beans::PropertyValue > Descriptor,
+        [in] boolean AllowDeep );
 };
 
 //============================================================================

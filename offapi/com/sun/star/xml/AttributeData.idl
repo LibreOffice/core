@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttributeData.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:41 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,27 +68,25 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::xml::AttributeData
 /** store the type and value of an XML attribute
     inside a XNameContainer
  */
 struct AttributeData
 {
-    // DocMerge from xml: field com::sun::star::xml::AttributeData::Namespace
-    /** the namespace of this XML attribute, This string can be empty if you are
-        not using namespaces
+    /** the namespace of this XML attribute.
+
+        <p>This string can be empty if you are not using namespaces.
      */
     string Namespace;
 
 
-    // DocMerge from xml: field com::sun::star::xml::AttributeData::Type
-    /** the type of this XML attribute. For non validating parsers this must
-        be CDATA
+    /** the type of this XML attribute.
+
+        <p>For non validating parsers this must be CDATA.
      */
     string Type;
 
 
-    // DocMerge from xml: field com::sun::star::xml::AttributeData::Value
     /** the string value of this XML attribute.
      */
     string Value;
@@ -98,22 +96,4 @@ struct AttributeData
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:22  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:53:08  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/01/26 14:49:33  cl
-    #70258# AttributeData now also contains the namespace
-
-    Revision 1.1  2000/01/21 15:53:02  cl
-    #70258# added Interfaces/Services for xml container item
-
-
-
-=============================================================================*/
 #endif

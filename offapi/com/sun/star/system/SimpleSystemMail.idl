@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSystemMail.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-16 23:31:24 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,19 +89,17 @@ interface XSimpleMailClientSupplier;
 service SimpleSystemMail
 {
     //-------------------------------------------------------------------------
-    /** Provides access to an XSimpleMailClientSupplier interface.
-
-        @see com::sun::star::system::XSimpleMailClientSupplier
+    /** Provides access to a <type>XSimpleMailClientSupplier</type> interface.
     */
     interface XSimpleMailClientSupplier;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

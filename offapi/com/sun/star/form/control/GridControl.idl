@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 15:15:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,12 @@
 //=============================================================================
 
 /** describes a table-like control for displaying data.
-    <p>The control is usually used together with a model implementing the
-    <service scope="com.sun.star.form.component">GridControl</service> service.</p>
+
+    <p>The model of the control has to support the <type scope="com::sun::star::form::component">GridControl</type>
+    service.</p>
+
+    @see com::sun::star::awt::UnoControl
+    @see com::sun::star::awt::UnoControlModel
 */
 service GridControl
 {
@@ -125,6 +129,7 @@ service GridControl
     interface com::sun::star::form::XBoundComponent;
 
     /** allows access to the active cell within the grid.
+
         <p>Only the column position can be modified using this interface, as the row position within
         a table control bound to a data source is given implicitly (by the cursor position of the data source).</p>
     */
@@ -146,38 +151,41 @@ service GridControl
     */
     interface com::sun::star::container::XEnumerationAccess;
 
-    interface com::sun::star::container::XContainer;
-
     /** is used to switch the operating modes of the control.
+
         <p>Besides the normal opreration mode (which is used to display the database form's data) the control may
         for instance support a filter mode.</p>
     */
     [optional] interface com::sun::star::util::XModeSelector;
 
     /** used to control the selection of rows in the grid control.
-        <p>The selection used with the methods <method scope="com.sun.star.view">XSelectionSupplier::getSelection</method>
-        and <method scope="com.sun.star.view">XSelectionSupplier::select</method> is a sequence of Any's.<br/>
-        Here the elements of the Sequence are the bookmarks (in the <service scope="com.sun.star.sdb">RowSet</service>)
+
+        <p>The selection used with the methods <method scope="com::sun::star::view">XSelectionSupplier::getSelection</method>
+        and <method scope="com::sun::star::view">XSelectionSupplier::select</method> is a sequence of Any's.<br/>
+        Here the elements of the Sequence are the bookmarks (in the <service scope="com::sun::star::sdb">RowSet</service>)
         of the (to-be-) selected rows.</p>
     */
     [optional] interface com::sun::star::view::XSelectionSupplier;
 
     /** allows external components to register dispatchers for some common form actions.
+
         <p>A grid control can contain own UI elements for traveling within the database form it belongs to (This
         concept seems to make sense, as a grid control - in opposite to other data aware controls - displayes
         not only one record at a time, but a larger number of records of the database form.)<br/>
         With the help of this interface, external components which wish to handle such travelings themself can
         register interceptors for the actions in question.</p>
+
         <p>Usual URLs to use include
-            <ul>
-                <li><em>.uno:FormSlots/moveToFirst</em>: move the cursor to the first record</li>
-                <li><em>.uno:FormSlots/moveToPrev</em>: move the cursor to the previous record</li>
-                <li><em>.uno:FormSlots/moveToNext</em>: move the cursor to the next record</li>
-                <li><em>.uno:FormSlots/moveToLast</em>: move the cursor to the last record</li>
-                <li><em>.uno:FormSlots/moveToNew</em>: move the cursor to the (one and only) <em>new</em> record</li>
-                <li><em>.uno:FormSlots/undoRecord</em>: undo the changes done so far in the current record</li>
-            </ul>
+            <dl>
+                <dt>.uno:FormSlots/moveToFirst</dt><dd> move the cursor to the first record</dd>
+                <dt>.uno:FormSlots/moveToPrev</dt><dd> move the cursor to the previous record</dd>
+                <dt>.uno:FormSlots/moveToNext</dt><dd> move the cursor to the next record</dd>
+                <dt>.uno:FormSlots/moveToLast</dt><dd> move the cursor to the last record</dd>
+                <dt>.uno:FormSlots/moveToNew</dt><dd> move the cursor to the (one and only) <em>new</em> record</dd>
+                <dt>.uno:FormSlots/undoRecord</dt><dd> undo the changes done so far in the current record</dd>
+            </dl>
         </p>
+
         <p>A concrete implementation of this service may offer more or less URLs, but if it offers some of the URLs
         above, it must stick to the meanings defined above.</p>
     */
@@ -191,6 +199,21 @@ service GridControl
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2.14.4  2002/08/29 15:00:41  fs
+    corrected references
+
+    Revision 1.2.14.3  2002/07/26 11:03:15  fs
+    IDL review form layer
+
+    Revision 1.2.14.2  2002/05/23 15:38:15  fs
+    #99490# removed the XContainer interface - the same functionality can be obtained from the model (the control itself does not even allow container actions, it _always_ reacts on model container actions)
+
+    Revision 1.2.14.1  2002/02/19 08:13:16  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.2  2001/05/16 15:15:33  fs
+    #84686# added the XSelectionSupplier to the GridControl service
+
     Revision 1.1  2001/04/19 10:53:59  fs
     initial checkin
 

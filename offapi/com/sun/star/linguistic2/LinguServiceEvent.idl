@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguServiceEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@ module com { module sun { module star { module linguistic2 {
     and/or the spelling of previously incorrect or correct words
     should be checked again.</P>
 
-    @see    com::sun::star::linguistic2::XLinguServiceEventBroadcaster
-    @see    com::sun::star::linguistic2::XLinguServiceEventListener
-    @see    com::sun::star::linguistic2::SpellChecker
-    @see    com::sun::star::linguistic2::Hyphenator
-    @see    com::sun::star::lang::EventObject
+    @see    <type scope="com::sun::star::linguistic2">XLinguServiceEventBroadcaster</type>
+    @see    <type scope="com::sun::star::linguistic2">XLinguServiceEventListener</type>
+    @see    <type scope="com::sun::star::linguistic2">SpellChecker</type>
+    @see    <type scope="com::sun::star::linguistic2">Hyphenator</type>
+    @see    <type scope="com::sun::star::lang">EventObject</type>
 */
 struct LinguServiceEvent : com::sun::star::lang::EventObject
 {
@@ -91,8 +91,7 @@ struct LinguServiceEvent : com::sun::star::lang::EventObject
     /** The type of event.
 
          <p>The value may be combined via logical OR from those values
-         defined in <type scope="com::sun::star::linguistic2">
-         LinguServiceEventFlags</type></p>
+        defined in <type scope="com::sun::star::linguistic2">LinguServiceEventFlags</type></p>
     */
     short nEvent;
 

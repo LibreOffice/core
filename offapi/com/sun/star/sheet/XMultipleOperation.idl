@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultipleOperation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XMultipleOperation_idl__
 #define __com_sun_star_sheet_XMultipleOperation_idl__
 
@@ -77,33 +78,53 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XMultipleOperation
-/** represents something in which a table of operations can be created.
+/** provides a method to apply a Multiple Operations Table to the
+    cell range.
  */
 interface XMultipleOperation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XMultipleOperation::setTableOperation
-    /** creates a table of formulas.
+    /** creates a table of formulas (a "Multiple Operations Table").
 
+        <p>The specified formulas are repeated, with references to the
+        specified cells replaced by references to values in the first
+        column and/or row of the range.</p>
 
+        @param aFormulaRange
+            the range that contains formula cells (modes
+            <const>TableOperationMode::ROW</const> or
+            <const>TableOperationMode::COLUMN</const>) or a single formula
+            cell (mode <const>TableOperationMode::BOTH</const>).
 
-        <p>The specified formulas are repeated, with references
-        to the specified cells replaced by references to values
-        in the first column and/or row of the range.</p>
+        @param nMode
+            specifies the calculation mode to fill the cells.
+
+        @param aColumnCell
+            contains the address of the cell that is referenced by
+            formulas in a row (mode <const>TableOperationMode::ROW</const>)
+            or by the formula cell used for two value series (mode
+            <const>TableOperationMode::BOTH</const>). This parameter is not
+            used if mode is <const>TableOperationMode::COLUMN</const>.
+
+        @param aRowCell
+            contains the address of the cell that is referenced by
+            formulas in a column (mode <const>TableOperationMode::COLUMN</const>)
+            or by the formula cell used for two value series (mode
+            <const>TableOperationMode::BOTH</const>). This parameter is not
+            used if mode is <const>TableOperationMode::ROW</const>.
      */
-    void setTableOperation( [in] com::sun::star::table::CellRangeAddress aFormulaRange,
-             [in] com::sun::star::sheet::TableOperationMode nMode,
-             [in] com::sun::star::table::CellAddress aColumnCell,
-             [in] com::sun::star::table::CellAddress aRowCell );
+    void setTableOperation(
+            [in] com::sun::star::table::CellRangeAddress aFormulaRange,
+            [in] com::sun::star::sheet::TableOperationMode nMode,
+            [in] com::sun::star::table::CellAddress aColumnCell,
+            [in] com::sun::star::table::CellAddress aRowCell );
 
 };
 
@@ -111,21 +132,5 @@ interface XMultipleOperation: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

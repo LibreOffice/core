@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGrid.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,36 +72,31 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XGrid
 /** provides the possibility of setting and retrieving the position
-    of the current cell.
+    of the current cell in a grid control.
 
+    <p>Note that a grid control does not allow free control over the current row:
+    In such a control, every line represents a row of data of the underlying
+    <type scope="com::sun::star::form::component">DataForm</type>. Thus, the <em>current
+    row</em> of the grid control always equals the current row of the
+    <type scope="com::sun::star::form::component">DataForm</type>, and can be affected only
+    by changing the latter.<br/>
+    The current column of a grid control, whoever, can be freely controlled.</p>
 
-
-
-
-
-
-
-
-
-
-
-
+    @see com::sun::star::form::component::GridControl
+    @see com::sun::star::form::control::GridControl
     @deprecated
  */
 interface XGrid: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XGrid::getCurrentColumnPosition
     /** retrieves the current column position.
      */
     short getCurrentColumnPosition();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XGrid::setCurrentColumnPosition
     /** sets the current column position.
      */
     [oneway] void setCurrentColumnPosition( [in] short nPos );
@@ -115,6 +110,12 @@ interface XGrid: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/07/26 10:00:09  fs
+    IDL review form layer
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

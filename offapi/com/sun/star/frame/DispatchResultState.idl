@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchResultState.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:49:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,24 @@
 module com { module sun { module star { module frame {
 
 //=============================================================================
-/**
+/** possible values for <type>DispatchResultEvent</type>
  */
-
 constants DispatchResultState
 {
-        const short FAILURE        = 0;
+    //-------------------------------------------------------------------------
+    /** indicates: dispatch failed
+     */
+    const short FAILURE = 0;
 
-        const short SUCCESS        = 1;
+    //-------------------------------------------------------------------------
+    /** indicates: dispatch was successfully
+     */
+    const short SUCCESS = 1;
 
-        const short DONTKNOW       = 2;
+    //-------------------------------------------------------------------------
+    /** indicates: result isn't defined
+     */
+    const short DONTKNOW = 2;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::hasConnections
     /** indicates that connections already exist.
+        @returns
+            <TRUE/> if so
      */
     boolean hasConnections();
     //-------------------------------------------------------------------------
@@ -102,6 +104,15 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::getIsolatedConnection
     /** attempts to establish a database connection, that can not be shared with
         other components. This should be used for transaction processing.
+        @param user
+            the user name
+        @param password
+            the password
+        @returns
+            an isolated connection object
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+        @see com::sun::star::sdb::XConnection
      */
     XConnection getIsolatedConnection([in]string user, [in]string password)
       raises (com::sun::star::sdbc::SQLException);
@@ -110,6 +121,8 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::suspendConnections
     /** closes the all connections to database. This request could be aborted by
         listeners of the component.
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     boolean suspendConnections() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
@@ -117,12 +130,18 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::addDatabaseAccessListener
     /** adds the specified listener to receive the events "connectionChanged",
         "approveConnectionClose", and "connectionClosing".
+        @param  listener
+            the listener to append
+        @see com::sun::star::sdb::XDatabaseAccessListener
      */
     [oneway] void addDatabaseAccessListener([in]XDatabaseAccessListener listener);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::removeDatabaseAccessListener
     /** removes the specified listener.
+        @param  listener
+            the listener to append
+        @see com::sun::star::sdb::XDatabaseAccessListener
      */
     [oneway] void removeDatabaseAccessListener(
             [in]XDatabaseAccessListener listener);
@@ -135,6 +154,12 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:24:28  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

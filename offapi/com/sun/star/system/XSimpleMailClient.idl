@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleMailClient.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-17 15:40:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,42 +87,45 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** specifies an interface.
-
-    @author     tra
-    @version    0.1
+/** Specifies an interface for creating and sending email messages.
 */
 
 interface XSimpleMailClient: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**
+    /** Create a simple mail message object that implements the interface
+        <type>XSimpleMailMessage</type>.
         @returns
-        an object that implements the ::com::sun::star::system::XSimpleMailMessage interface.
+        An object that implements the <type>XSimpleMailMessage</type> interface.
     */
     XSimpleMailMessage createSimpleMailMessage( );
 
     //-------------------------------------------------------------------------
-    /** sends the given mail object.
+    /** Sends a given simple mail message object that implements the interface
+        <type>XSimpleMailMessage</type>.
 
         @param xSimpleMailMessage
-        specifies a configured mail object to be sent.
+        Specifies a configured mail object to be sent.
 
         @param aFlag
-        specifies different flags that control the send process
+        Specifies different flags that control the send process
         if the flag NO_USER_INTERFACE is specified. A recipient
         address must have been specified for the given xMailMessage object.
 
-        @throws ::com::sun::star::lang::IllegalArgumentException
-        if invalid or excluding flags have been specified or if the
-        flag NO_USER_INTERFACE is specified and no recipient
-        address has been specified for the given xMailMessage object.
+        @throws com::sun::star::lang::IllegalArgumentException
+        <ul>
+            <li>If invalid or excluding flags have been specified.</li>
+            <li>The flag NO_USER_INTERFACE is specified and no recipient
+            address has been specified for the given xSimpleMailMessage object.</li>
+            <li>The parameter xSimpleMailMessage is NULL.</li>
+        </ul>
 
-        @throws ::com::sun::star::uno::Exception
-        if an error occurs while sending the mail. The Message
-        member of the exception may contain an error description.
+        @throws com::sun::star::uno::Exception
+        if an error occurs while sending the mail.
+        <p>The Message member of the exception may contain an error description.</p>
 
-        @see ::com::sun::star::system::SimpleMailClientFlags
+        @see com::sun::star::system::XSimpleMailMessage
+        @see com::sun::star::system::SimpleMailClientFlags
     */
     void sendSimpleMailMessage( [in] XSimpleMailMessage xSimpleMailMessage, [in] long aFlag )
         raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception );

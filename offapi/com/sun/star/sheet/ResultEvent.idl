@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_ResultEvent_idl__
 #define __com_sun_star_sheet_ResultEvent_idl__
 
@@ -65,24 +66,21 @@
 #include <com/sun/star/lang/EventObject.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** contains the new value of a volatile function result.
 
-//=============================================================================
-
-// DocMerge from xml: struct com::sun::star::sheet::ResultEvent
-/** contains the new value of a volatile result.
+    @see com::sun::star::sheet::XVolatileResult
  */
 struct ResultEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::sheet::ResultEvent::Value
     /** contains the value.
-
-
 
         <p>This can be any of the possible return types described for the
         <type>AddIn</type> service, except <type>XVolatileResult</type>.</p>
@@ -95,18 +93,5 @@ struct ResultEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

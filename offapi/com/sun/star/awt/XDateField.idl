@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDateField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,127 +72,108 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XDateField
-/** makes it possible to set the limits and the value of a date field.
+/** gives access to the value and settings of a date field.
  */
 interface XDateField: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setDate
-    /** sets the date value to display in the date field.
+    /** sets the date value which is displayed in the date field.
+
+        <p>The date value must be specified in the format
+        YYYYMMDD.</p>
      */
     [oneway] void setDate( [in] long Date );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::getDate
-    /** @returns
-                    the date value which is currently displayed in the date field.
+    /** returns the date value which is currently displayed in the date field.
      */
     long getDate();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setMin
-    /** sets the minimum value to accept by the user.
+    /** sets the minimum date value that can be entered by the user.
      */
     [oneway] void setMin( [in] long Date );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::getMin
-    /** @returns
-                    the currently set minimum value accepted by the user.
+    /** returns the currently set minimum date value that can be entered by
+        the user.
      */
     long getMin();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setMax
-    /** sets the maximum value to accept by the user.
+    /** sets the maximum date value that can be entered by the user.
      */
     [oneway] void setMax( [in] long Date );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::getMax
-    /** @returns
-                    the currently set maximum value accepted by the user.
+    /** returns the currently set maximum date value that can be entered by
+        the user.
      */
     long getMax();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setFirst
-    /** sets the first value to set on 'Pos1' key.
+    /** sets the first value to be set on POS1 key.
      */
     [oneway] void setFirst( [in] long Date );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::getFirst
-    /** @returns
-                    the currently set first value which is set on 'Pos1' key.
+    /** returns the currently set first value which is set on POS1 key.
      */
     long getFirst();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setLast
-    /** sets the last value to set on 'End' key.
+    /** sets the last value to be set on END key.
      */
     [oneway] void setLast( [in] long Date );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::getLast
-    /** @returns
-                    the currently set last value which is set on 'End' key.
+    /** returns the currently set last value which is set on END key.
      */
     long getLast();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setLongFormat
     /** determines if the long date format is to be used.
      */
     [oneway] void setLongFormat( [in] boolean bLong );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::isLongFormat
     /** determines if the long date format is currently used.
      */
     boolean isLongFormat();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setEmpty
-    /** sets the empty value for the date.
+    /** sets an empty value for the date.
      */
     void setEmpty();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::isEmpty
-    /** @returns
-                    whether currently the empty value is set for the date.
+    /** returns whether currently an empty value is set for the date.
      */
     boolean isEmpty();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDateField::setStrictFormat
-    /** determines if the format is checked, even during editing.
+    /** determines if the format is checked during user input.
      */
     [oneway] void setStrictFormat( [in] boolean bStrict );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDateField::isStrictFormat
-    /** @returns
-                    whether the format is currently checked even during editing.
+    /** returns whether the format is currently checked during user input.
      */
     boolean isStrictFormat();
 
@@ -202,27 +183,4 @@ interface XDateField: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:52  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:08  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:52  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:15  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocalizedAliases.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,18 +78,16 @@
 #endif
 
 //=============================================================================
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XLocalizedAliases
 /** is the interface for binding programmatic names to aliases. Aliases
     can be provided in several locales for the same programmatic name.
  */
 interface XLocalizedAliases: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::bindAlias
     /** registers an alias for a programmatic name.
      */
     void bindAlias([in]string programmaticName,
@@ -97,39 +95,29 @@ interface XLocalizedAliases: com::sun::star::uno::XInterface
                     [in]string alias)
         raises (com::sun::star::container::ElementExistException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::unbindAlias
     /** revokes an alias for a programmatic name.
      */
     void unbindAlias([in]com::sun::star::lang::Locale locale,
                      [in]string alias)
         raises (com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::lookupAlias
     /** retrieves a registered porgrammatic name identified by an alias.
      */
     string lookupAlias([in]com::sun::star::lang::Locale locale,
                          [in]string Alias)
         raises (com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::lookupProgrammatic
     /** retrieves a given alias for a programmatic name.
      */
     string lookupProgrammatic([in]com::sun::star::lang::Locale locale,
                                 [in]string programmatic)
         raises (com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::unbindAliases
     /** removes all aliases for a programmatic name.
      */
     void unbindAliases([in]string programmaticName)
         raises (com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::rebindAliases
     /** rebinds all aliases registered to a given URL to a new one.
      */
     void rebindAliases([in]string currentProgrammatic,
@@ -137,8 +125,6 @@ interface XLocalizedAliases: com::sun::star::uno::XInterface
         raises (com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XLocalizedAliases::renameAlias
     /** renames an alias for a programmatic name.
      */
     void renameAlias([in]com::sun::star::lang::Locale locale,
@@ -147,13 +133,13 @@ interface XLocalizedAliases: com::sun::star::uno::XInterface
         raises (com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException);
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::util::XLocalizedAliases::listAliases
     /** retrieves a list of all registered aliases for a certain language.
-             @param locale
-                is the locale scope.
-             @returns
-                a sequence of registered pair of alias and programmatic name.
+
+         @param locale
+            specifies the locale scope.
+
+         @returns
+            a sequence of registered pair of alias and programmatic name.
      */
     sequence<AliasProgrammaticPair> listAliases([in]com::sun::star::lang::Locale locale);
 };
@@ -162,21 +148,4 @@ interface XLocalizedAliases: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:06  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/01/27 07:50:24  dg
-    #71571# new files
-
-
-=============================================================================*/
 #endif

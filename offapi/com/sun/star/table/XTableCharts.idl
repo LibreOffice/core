@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTableCharts.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:44 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_XTableCharts_idl__
 #define __com_sun_star_table_XTableCharts_idl__
 
@@ -73,31 +74,55 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** provides methods to access charts via name and to insert and remove
+    charts.
 
-//=============================================================================
-
-// DocMerge: empty anyway
+    @see com::sun::star::table::TableCharts
+ */
 interface XTableCharts: com::sun::star::container::XNameAccess
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::table::XTableCharts::addNewByName
     /** creates a chart and adds it to the collection.
+
+        @param aName
+            is the name of the chart. This name is used to reference the
+            chart in the collection.
+
+        @param aRect
+            contains the rectangular location of the chart within the table
+            (in 1/100th mm).
+
+        @param aRanges
+            all cell ranges containing the source data of the chart.
+
+        @param bColumnHeaders
+            if set to <TRUE/>, the topmost row of the source data will be
+            used to set labels for the category axis or the legend.
+
+        @param bRowHeaders
+            if set to <TRUE/>, the leftmost column of the source data will
+            be used to set labels for the category axis or the legend.
      */
-    void addNewByName( [in] string aName,
-             [in] com::sun::star::awt::Rectangle aRect,
-             [in] sequence<com::sun::star::table::CellRangeAddress> aRanges,
-             [in] boolean bColumnHeaders,
-             [in] boolean bRowHeaders );
+    void addNewByName(
+            [in] string aName,
+            [in] com::sun::star::awt::Rectangle aRect,
+            [in] sequence<com::sun::star::table::CellRangeAddress> aRanges,
+            [in] boolean bColumnHeaders,
+            [in] boolean bRowHeaders );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::table::XTableCharts::removeByName
     /** removes a chart from the collection.
+
+        @param aName
+            is the name of the chart to remove.
      */
     void removeByName( [in] string aName );
 
@@ -107,24 +132,5 @@ interface XTableCharts: com::sun::star::container::XNameAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:44:19  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:56  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:58  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/01/31 10:54:22  mi
-    #72484# UIKs were not unique
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

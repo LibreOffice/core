@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDropEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-27 18:31:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTargetDropContext;
 
 //=============================================================================
-/** The DropTargetDropEvent is delivered from the DropTarget to its currently
-    registered DropTargetListener's dragDropEnd() method.
+/** The <type>DropTargetDropEvent</type> is delivered from the drop target to
+    its currently registered drop target listener.
 
     <p>It contains sufficient information for the originator of the operation to
     provide appropriate feedback to the end user when the operation completes.</p>
@@ -87,41 +87,47 @@ interface XDropTargetDropContext;
 struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
 {
     //-------------------------------------------------------------------------
-    /** the DropTargetContext of the current drag operation.
+    /** The drop target context of the current drag operation.
+
+        @see com::sun::star::datatransfer::dnd::XDropTargetDropContext
      */
 
     XDropTargetDropContext Context;
 
     //-------------------------------------------------------------------------
-    /** this value represents the action or actions selected by the user at the time of
-        the drop.
+    /** This value represents the action or actions selected by the user at
+        the time of the drop.
 
-        <p>If more than one action is specified, the <type>DropTargetListener</type>
+        <p>If more than one action is specified, the <type>XDropTargetListener</type>
          should raise a dialog to ask the user which action to use.</p>
+
+         @see com::sun::star::datatransfer::dnd::DNDConstants
      */
 
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** the cursor's current x location within the windows' coordinates.
+    /** The cursor's current x location within the windows' coordinates.
      */
 
     long LocationX;
 
     //-------------------------------------------------------------------------
-    /** the cursor's current y location within the windows' coordinates.
+    /** The cursor's current y location within the windows' coordinates.
      */
 
     long LocationY;
 
     //-------------------------------------------------------------------------
-    /** this value represents the action or actions supported by the source.
+    /** This value represents the action or actions supported by the source.
      */
 
     byte SourceActions;
 
     //-------------------------------------------------------------------------
-    /** the transferable object associated with the drop.
+    /** The transferable object associated with the drop.
+
+        @see com::sun::star::datatransfer::XTransferable
      */
 
     com::sun::star::datatransfer::XTransferable Transferable;

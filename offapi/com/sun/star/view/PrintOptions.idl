@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintOptions.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,47 +64,42 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module view {
+module com {  module sun {  module star {  module view {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::view::PrintOptions
 /** describes the options for print jobs.
+
+    <p>These options are only valid for a single print job. They do not
+    change layout or formatting of the document.
  */
 service PrintOptions
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrintOptions::CopyCount
     /** specifies the number of copies to print.
      */
     [property] short CopyCount;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrintOptions::FileName
     /** if set, specifies the name of a file to print to.
      */
     [property] string FileName;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrintOptions::Collate
     /** advises the printer to collate the pages of the copies.
      */
     [property] boolean Collate;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrintOptions::Sort
     /** advises the printer to sort the pages of the copies.
      */
     [property] boolean Sort;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::view::PrintOptions::Pages
     /** specifies which pages to print.
+
+        <p>This range is given as at the user interface. For example: "1-4;10"
+        to print the pages 1 to 4 and 10. </p>
      */
     [property] string Pages;
 
@@ -114,24 +109,4 @@ service PrintOptions
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:07  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/09 16:58:22  mi
-    #70728# missing documentation
-
-    Revision 1.2  2000/02/07 11:25:06  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

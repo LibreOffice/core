@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAxisXSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:16 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,48 +80,53 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::chart::XAxisXSupplier
-/** gives access to the x-axis of a chart.@see        XChartDocument
+/** gives access to the <i>x</i>-axis of a chart.
+
+    <p>Note that not all diagrams are capable of displaying an
+    <i>x</i>-axis, e.g., the <type>PieDiagram</type>.</p>
+
+    @see XDiagram
  */
 interface XAxisXSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XAxisXSupplier::getXAxisTitle
     /** @returns
-                the properties of the shape of the x-axis title.
+            the <i>x</i>-axis title shape.
 
-                @see ChartTitle
+        @see ChartTitle
      */
     com::sun::star::drawing::XShape getXAxisTitle();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XAxisXSupplier::getXAxis
     /** @returns
-                the properties of the y-axis of the diagram.
+            the properties of the <i>x</i>-axis of the diagram.
 
-                @see ChartAxis
+        <p>The returned property set contains scaling properties as
+        well as formatting properties.</p>
+
+        @see ChartAxis
      */
     com::sun::star::beans::XPropertySet getXAxis();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XAxisXSupplier::getXMainGrid
     /** @returns
-                the properties of the main grid of the x-axis of the diagram.
+            the properties of the main grid (major grid) of the
+            <i>x</i>-axis of the diagram.
 
-                @see ChartGrid
+        @see ChartGrid
      */
     com::sun::star::beans::XPropertySet getXMainGrid();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::chart::XAxisXSupplier::getXHelpGrid
     /** @returns
-                the properties of the help grid of the x-axis of the diagram.
+            the properties of the help grid (minor grid) of the
+            <i>x</i>-axis of the diagram.
 
-                @see ChartGrid
+        @see ChartGrid
      */
     com::sun::star::beans::XPropertySet getXHelpGrid();
 
@@ -131,24 +136,4 @@ interface XAxisXSupplier: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:01  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:35  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:03  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:16  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
-    new
-
-
-=============================================================================*/
 #endif

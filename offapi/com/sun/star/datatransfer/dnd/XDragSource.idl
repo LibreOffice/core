@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSource.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-27 18:13:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,78 +86,82 @@ interface XDragSourceListener;
 
 //=============================================================================
 /** This interface is implemented by a view or window that supports drag
-    operations and can be received through a dragGestureRecognized() call
-    when imlpementing <type>XDragGestureListener</type>.
+    operations and will be received as part of a <type>DragGestureEvent</type>
+    through a <member scope="com::sun::star::datatransfer::dnd">XDragGestureListener::dragGestureRecognized()</member>
+    callback.
 
-    <p>Different to Java, the association between view and interface is fixed
-    and can not be changed. Otherwise, the awt messaging would have to be
-    implemented for any window supporting Drag and Drop operations, what would
+    <p>Differently to Java, the association between view and interface is fixed
+    and can not be changed. Otherwise, the AWT messaging would have to be
+    implemented for any window supporting Drag and Drop operations, which would
     be a real performance issue.</p>
-
-    <!-- Editor: Do you mean Java does it differently? -->
-
-    <!-- Editor: Can the last phrase read: which would be a performance issue. -->
 */
 
 interface XDragSource: com::sun::star::uno::XInterface
 {
 
     //-------------------------------------------------------------------------
-    /** @returns
-    a boolean indicating whether or not drag Image support is
+    /** In order to query if drag image support is available.
+
+        @returns
+        A boolean indicating whether or not drag image support is
         available on the underlying platform.
     */
 
     boolean isDragImageSupported();
 
     //-------------------------------------------------------------------------
-    /** @returns
-    the default drag cursor for the specified drag action.
+    /** To get the default cursor for a specified drag action.
 
         @param dragAction
-        a drag action.
+        A drag action as specified in <type>DNDConstants</type>.
+
+        @returns
+        The default drag cursor for the specified drag action.
+        <p>The returned value may be used as parameter for the method
+        <member scope="com::sun::star::datatransfer::dnd">XDragSourceContext::setCursor()</member>.</p>
     */
 
     long getDefaultCursor( [in] byte dragAction )
         raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /** starts the drag operation.
+    /** Starts the drag operation.
 
         <p>Note: this call does <em>not</em> block until the drag and drop
         operation ends. If the Drag and Drop system is unable to initiate
         a drag operation or if the user attempts to start a drag while an
         existing drag operation is still executing, the action fails immediately.
-        This is indicated by calling endDragDrop on the listener parameter with
-        a DragSourceDragEvent showing failure.
-        </p>
-
-    <!-- Editor: Is "block" the right word in the previous paragraph? -->
+        This is indicated by calling
+        <member scope="com::sun::star::datatransfer::dnd">XDragSourceListener::dragDropEnd()</member>
+        on the parameter listener with a DragSourceDragEvent showing a failure.</p>
 
         @param trigger
-        the <type>DragGestureEvent</type> that initiated the drag.
+        The <type>DragGestureEvent</type> that initiated the drag.
 
         @param sourceActions
-        the action or actions supported for this transferable.
+        The action or actions supported for this transferable as defined
+        in <type>DNDConstants</type>.
 
         @param cursor
-        the initial drag cursor id or 0 for defaults.
+        The initial drag cursor id or 0 as default.
 
         @param image
-        the initial drag image id or 0 for defaults.
+        The initial drag image id or 0 as default.
 
         @param trans
-        the transferable object dragged.
+        The transferable object dragged.
 
         @param listener
-        the <type>XDragSourceListener</type>.
+        The <type>XDragSourceListener</type>.
 
+        @see com::sun::star::datatransfer::XTransferable
     */
 
     [oneway] void startDrag(
         [in] DragGestureEvent trigger,
         [in] byte sourceActions,
-        [in] long cursor, [in] long image,
+        [in] long cursor,
+        [in] long image,
         [in] com::sun::star::datatransfer::XTransferable trans,
         [in] XDragSourceListener listener );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndex.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 14:04:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,59 +70,59 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::DocumentIndex
 /** specifies service of content indexes within a document.@see com::sun::star::text::BaseIndex
  */
 service DocumentIndex
 {
-    // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
 
-    /* determins if alphabetical separators are genererated.
+    /** determins if alphabetical separators are genererated.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean UseAlphabeticalSeparators;
-    /* determins if a index entry is generated for each primary/secondary key.
+
+    /** determins if a index entry is generated for each primary/secondary key.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean UseKeyAsEntry;
-    /* determins if same entries on different pages are combined into one index entry.
+
+    /** determins if same entries on different pages are combined into one index entry.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean UseCombinedEntries;
-    /* determins if the similarity of index entries is checked case sensitively.
+
+    /** determins if the similarity of index entries is checked case sensitively.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean IsCaseSensitive;
-    /* determins if following page numbers are displayed using a 'pp.'.
+
+    /** determins if following page numbers are displayed using a 'pp.'.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean UsePP;
-    /* determins if if following page numbers are displayed using a dash.
+
+    /** determins if if following page numbers are displayed using a dash.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean UseDash;
-    /* determins if all entries start with a capital letter.
+
+    /** determins if all entries start with a capital letter.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean UseUpperCase;
-    /* determins the name of the character style that is applied to the number
+
+    /** determins the name of the character style that is applied to the number
      of a page where main index entry is located.
      */
-    // DocMerge: empty anyway
     [optional, property] string MainEntryCharacterStyleName;
+
     /**
      contains all index marks that are related to this index.
      */
     [readonly, property] sequence <com::sun::star::text::XDocumentIndexMark> DocumentIndexMarks;
+
     //------------------------------------------------------------------------
     /** contains the locale of the index.
      */
     [property] com::sun::star::lang::Locale  Locale;
+
     //------------------------------------------------------------------------
     /** contains the name of the sort algorithm that is used to sort the entries.
      */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NoMasterException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-26 13:26:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,12 @@
 module com { module sun { module star { module task {
 
 //=============================================================================
+/** is thrown when a master password is needed but not available/correct.
+ */
 exception NoMasterException: com::sun::star::uno::RuntimeException
 {
     //-------------------------------------------------------------------------
-    /** Specifies the mode in which password should be asked
+    /** specifies the mode in which password should be queried.
     */
     PasswordRequestMode Mode;
 

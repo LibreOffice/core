@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputUser.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:50 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,18 @@ module com { module sun { module star { module text { module textfield {
 //=============================================================================
 /** specifies service of an input field that is used to change the content of a corresponding
      field master of a user defined text field.
+
     @see com::sun::star::text::TextField
 */
-service Input
+service InputUser
 {
     service  com::sun::star::text::TextField;
 
-    /* contains the name of the corresponding field master.
+    /** contains the name of the corresponding field master.
      */
     [optional, property] string Content;
-    /* contains a hint text.
+
+    /** contains a hint text.
      <p> This hint may be used as help tip or as headline of a corresponding
          dialog to edit the field content.</p>
      */

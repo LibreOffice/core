@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PosSize.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,51 +68,50 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::PosSize
-/** @deprecated
+/** These constants are used to flag the parameters of a rectangle.
  */
 constants PosSize
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::X
 
-    // DocMerge: empty anyway
+    /** flags the x-coordinate.
+     */
     const short X = 1;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::Y
 
-    // DocMerge: empty anyway
+    /** flags the y-coordinate.
+     */
     const short Y = 2;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::WIDTH
 
-    // DocMerge: empty anyway
+    /** flags the width.
+     */
     const short WIDTH = 4;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::HEIGHT
 
-    // DocMerge: empty anyway
+    /** flags the height.
+     */
     const short HEIGHT = 8;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::POS
 
-    // DocMerge: empty anyway
+    /** flags the x- and y-coordinate.
+     */
     const short POS = 3;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::12
 
-    // DocMerge: empty anyway
+    /** flags the width and height.
+     */
     const short SIZE = 12;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR PosSize::15
 
-    // DocMerge: empty anyway
+    /** flags the x- and y-coordinate, width and height.
+     */
     const short POSSIZE = 15;
 
 };
@@ -121,24 +120,4 @@ constants PosSize
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:05  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:51  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:13  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartSymbolType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,23 +68,39 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::chart::ChartSymbolType
 /** These values specify the type of the symbol used for data points.
- */
+
+    <p>This only applies to diagrams that use symbols like line
+    diagrams.</p>
+
+    <p>The default symbols are currently:
+     <table border >
+      <tr><td>Symbol 0</td><td>a square</td></tr>
+      <tr><td>Symbol 1</td><td>a diamond</td></tr>
+      <tr><td>Symbol 2</td><td>a triangle pointing down</td></tr>
+      <tr><td>Symbol 3</td><td>a triangle pointing up</td></tr>
+      <tr><td>Symbol 4</td><td>a triangle pointing right</td></tr>
+      <tr><td>Symbol 5</td><td>a triangle pointing left</td></tr>
+      <tr><td>Symbol 6</td><td>a bow tie</td></tr>
+      <tr><td>Symbol 7</td><td>a rotated bow tie</td></tr>
+     </table>
+    </p>
+
+    @see LineDiagram
+    @see ChartDataPointProperties
+*/
 constants ChartSymbolType
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::NONE
     /** No symbol is used.
      */
     const long NONE = -3;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::AUTO
-    /** The symbol is selected automatically. The size of symbol will be dynamic and the
-                type depends on the data row number.
+    /** The symbol is selected automatically.  The size of symbol will
+        be dynamic and the type depends on the data row number.
      */
     const long AUTO = -2;
 
@@ -92,8 +108,9 @@ constants ChartSymbolType
 
     /** Take a Bitmap from a URL and use this as symbol.
 
-        The bitmap given by the URL set in the property <type>SymbolBitmapURL</type>
-        is copied so that the graphic is embedded.
+        <p>The bitmap given by the URL set in the property
+        <member>ChartDataPointProperties::SymbolBitmapURL</member> is
+        copied so that the graphic is embedded.</p>
 
         @see ChartDataPointProperties
      */
@@ -101,56 +118,48 @@ constants ChartSymbolType
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL0
     /** The default symbol for row 0 is used.
      */
     const long SYMBOL0 = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL1
     /** The default symbol for row 1 is used.
      */
     const long SYMBOL1 = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL2
     /** The default symbol for row 2 is used.
      */
     const long SYMBOL2 = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL3
     /** The default symbol for row 3 is used.
      */
     const long SYMBOL3 = 3;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL4
     /** The default symbol for row 4 is used.
      */
     const long SYMBOL4 = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL5
     /** The default symbol for row 5 is used.
      */
     const long SYMBOL5 = 5;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL6
     /** The default symbol for row 6 is used.
      */
     const long SYMBOL6 = 6;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartSymbolType::SYMBOL7
     /** The default symbol for row 7 is used.
      */
     const long SYMBOL7 = 7;
@@ -164,6 +173,15 @@ constants ChartSymbolType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.20.2  2002/01/29 14:23:17  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.5.20.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.5  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/11/20 14:41:52  bm
     const value -1 was missing. It is now set to bitmap corresponding to the core value
 

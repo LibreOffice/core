@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WebDAVContentProvider.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ module com { module sun { module star { module ucb {
     for the <type>UniversalContentBroker</type> (UCB).
 
     <p>It provides access to WebDAV and standard HTTP servers. The DCP
-    communicates with the server using the <a href="www.webdav.org">WebDAV</a>
-    protocol which is an extention to the HTTP protocol or using the plain HTTP
-    protocol in case the server is not WebDAV enabled.
+    communicates with the server using the WebDAV protocol which is an
+    extention to the HTTP protocol or using the plain HTTP protocol in case
+    the server  is not WebDAV enabled.
 
     @see com::sun::star::ucb::Content
 */

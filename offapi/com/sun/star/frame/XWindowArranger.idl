@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWindowArranger.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,53 +71,23 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XWindowArranger
-/** makes it possible to arrange the sub-windows within this component.
+/** @deprecated
  */
 interface XWindowArranger: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::frame::XWindowArranger::hasArrangeCommand
-    /** @returns
-                <TRUE/> if the specified arrangement style is supported.
-
-                @see WindowArrange
+    /** @deprecated
      */
     boolean hasArrangeCommand( [in] short nCommand );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XWindowArranger::arrange
-    /** arranges the window according to the specified style.@see WindowArrange
+    /** @deprecated
      */
     [oneway] void arrange( [in] short nCommand );
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

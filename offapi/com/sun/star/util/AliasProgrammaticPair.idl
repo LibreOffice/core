@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AliasProgrammaticPair.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,23 +62,25 @@
 #define __com_sun_star_util_AliasProgrammaticPair_idl__
 
 //=============================================================================
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::AliasProgrammaticPair
-/** represents an entry from a component which implements the <type>LocalizedAliases</type>.@see com::sun::star::util::XLocalizedAliases
+/** represents an entry from a component which implements the
+    <type>LocalizedAliases</type>.
+
+    @see com::sun::star::util::XLocalizedAliases
  */
 struct AliasProgrammaticPair
 {
-    // DocMerge from xml: field com::sun::star::util::AliasProgrammaticPair::Alias
     /** determines the name which is registered as an alias for a programmatic name.
      */
     string Alias;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::util::AliasProgrammaticPair::ProgrammaticName
-    /** determines which programmatic name belongs to the alias. @see com::sun::star::util::XLocalizedAliases
+    /** determines which programmatic name belongs to the alias.
+
+        @see com::sun::star::util::XLocalizedAliases
      */
     string ProgrammaticName;
 };
@@ -87,21 +89,4 @@ struct AliasProgrammaticPair
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:18  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:04  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/01/27 07:50:23  dg
-    #71571# new files
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:44 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,54 +61,39 @@
 #ifndef __com_sun_star_setup_ActionType_idl__
 #define __com_sun_star_setup_ActionType_idl__
 
- module com {  module sun {  module star {  module setup {
+module com {  module sun {  module star {  module setup {
 
-// DocMerge: empty anyway
+/// @deprecated
 enum ActionType
 {
-    // DocMerge: empty anyway
     INVALID,
 
-    // DocMerge: empty anyway
     DOWNLOAD,
 
-    // DocMerge: empty anyway
     MAKEDIR,
 
-    // DocMerge: empty anyway
     DELETEDIR,
 
-    // DocMerge: empty anyway
     COPYFILE,
 
-    // DocMerge: empty anyway
     UNZIPFILE,
 
-    // DocMerge: empty anyway
     DELETEFILE,
 
-    // DocMerge: empty anyway
     MAKEFOLDER,
 
-    // DocMerge: empty anyway
     MAKEFOLDERITEM,
 
-    // DocMerge: empty anyway
     DELETEFOLDER,
 
-    // DocMerge: empty anyway
     DELETEFOLDERITEM,
 
-    // DocMerge: empty anyway
     PROFILEITEM,
 
-    // DocMerge: empty anyway
     FONT,
 
-    // DocMerge: empty anyway
     CREATESHORTCUT,
 
-    // DocMerge: empty anyway
     WINREGISTRY
     };
 }; }; }; };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpreadsheets.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSpreadsheets_idl__
 #define __com_sun_star_sheet_XSpreadsheets_idl__
 
@@ -65,42 +66,56 @@
 #include <com/sun/star/container/XNameContainer.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to access the spreadsheets by name and to insert,
+    copy, remove and rearrange spreadsheets.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSpreadsheets
-/** represents the collection of sheets in a document.@see com::sun::star::sheet::Spreadsheets
+    @see com::sun::star::sheet::Spreadsheets
  */
 interface XSpreadsheets: com::sun::star::container::XNameContainer
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSpreadsheets::insertNewByName
     /** inserts a new sheet into the collection.
+
+        @param aName
+            the name of the new spreadsheet.
+        @param nPosition
+            the index of the new spreadsheet in the collection.
      */
-    void insertNewByName( [in] string aName,
-             [in] short nPosition );
+    void insertNewByName( [in] string aName, [in] short nPosition );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSpreadsheets::moveByName
     /** moves a sheet within the collection.
+
+        @param aName
+            the name of the spreadsheet to move.
+        @param nDestination
+            the new index of the spreadsheet in the collection.
      */
-    void moveByName( [in] string aName,
-             [in] short nDestination );
+    void moveByName( [in] string aName, [in] short nDestination );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSpreadsheets::copyByName
     /** copies a sheet within the collection.
+
+        @param aName
+            the name of the spreadsheet to copy.
+        @param aCopy
+            the name of the copy of the spreadsheet.
+        @param nDestination
+            the index of the copy in the collection.
      */
-    void copyByName( [in] string aName,
-             [in] string aCopy,
-             [in] short nDestination );
+    void copyByName(
+            [in] string aName,
+            [in] string aCopy,
+            [in] short nDestination );
 
 };
 
@@ -108,27 +123,5 @@ interface XSpreadsheets: com::sun::star::container::XNameContainer
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

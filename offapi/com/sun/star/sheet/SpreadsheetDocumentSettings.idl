@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocumentSettings.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:53:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
 #define __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
 
@@ -73,139 +74,158 @@
 #include <com/sun/star/i18n/XForbiddenCharacters.idl>
 #endif
 
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::SpreadsheetDocumentSettings
-/** keep the configuration
-    which is global for all views of a spreadsheet document.
+/** contributes properties to control the configuration which is global
+    for all views of a spreadsheet document.
+
+    @see com::sun::star::sheet::SpreadsheetDocument
  */
 service SpreadsheetDocumentSettings
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
-
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IsIterationEnabled
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
     /** enables iterated calculation of circular references.
      */
     [property] boolean IsIterationEnabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IterationCount
-    /** specifies how many iterations are carried out if
-        iteration is enabled.
+    /** specifies how many iterations are carried out.
+
+        <p>This setting is only used, if iteration is enabled using
+        <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
      */
     [property] long IterationCount;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IterationEpsilon
-    /** if iteration is enabled, this property specifies the point at
-        which a change in results will stop the iteration.
-
-
+    /** specifies the point at which a change in results will stop
+        the iteration.
 
         <p>More exactly it specifies a difference in the change of the
         result between two iterations. If the result difference
         is less than or equal to this epsilon-value, the iteration
-        is stopped.
+        is stopped.</p>
 
-        </p>
-        <p>only applied when iteration is enabled by
+        <p>This setting is only used, if iteration is enabled using
         <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
      */
     [property] double IterationEpsilon;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::StandardDecimals
-    /** specifies the number of decimals in the default
-        number format.
+    /** specifies the number of decimals in the default number format.
      */
     [property] short StandardDecimals;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::NullDate
-    /** specifies the date that is represented by the value
-        zero.
+    /** specifies the date that is represented by the value zero.
      */
     [property] com::sun::star::util::Date NullDate;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::DefaultTabStop
     /** specifies the width of default tabulators.
      */
     [property] short DefaultTabStop;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IgnoreCase
-    /** specifies if upper and lower cases are treated as equal
+    /** specifies whether upper and lower cases are treated as equal
         when comparing cells.
      */
     [property] boolean IgnoreCase;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::CalcAsShown
-    /** if this property is set, calculations are performed with the rounded
-        values displayed in cells instead of the internal values.
+    /** specifies whether calculations are performed with the rounded
+        values displayed in cells (set to <TRUE/>) instead of the
+        internal values (set to <FALSE/>).
      */
     [property] boolean CalcAsShown;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::MatchWholeCell
-    /** if this property is set, filter criteria must match entire cell
-        contents.
+    /** specifies whether filter criteria must match entire cell contents.
      */
     [property] boolean MatchWholeCell;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::SpellOnline
     /** enables online spell checking.
      */
     [property] boolean SpellOnline;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::LookUpLabels
-    /** if this property is set, column or row labels are looked up from
+    /** specifies whether column or row labels are looked up from
         anywhere on the sheet.
+
+        <p>Explicitly defined label ranges are used even if this property
+        is set to <FALSE/>.</p>
+
+        @see com::sun::star::sheet::LabelRanges
      */
     [property] boolean LookUpLabels;
 
     //-------------------------------------------------------------------------
 
-    /** if this property is set, regular expressions in formulas are enabled,
+    /** specifies whether regular expressions in formulas are enabled,
         e.g., for functions which look up spreadsheet contents.
      */
     [property] boolean RegularExpressions;
 
     //-------------------------------------------------------------------------
 
-    /** This property gives the XForbiddenCharacters.
+    /** contains the interface XForbiddenCharacters.
      */
-    [readonly, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
+    [readonly, optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
 
     //-------------------------------------------------------------------------
 
-    /** If this property is set the document has DrawPages. Use this property
-        to find out, whether the document has DrawPages or not, because the
-        getDrawPage method on the XDrawPageSupplier and the getDrawPages method
-        on the XDrawPagesSupplier always creates the DrawPages
-        if there are none; and this is very slow and needs more memory.
+    /** If this property is set the document has DrawPages. Use this
+        property to find out, whether the document has DrawPages or not,
+        because the getDrawPage method on the XDrawPageSupplier and the
+        getDrawPages method on the XDrawPagesSupplier always creates the
+        DrawPages if there are none; and this is very slow and needs more
+        memory.
      */
-    [readonly, property] boolean HasDrawPages;
+    [readonly, optional, property] boolean HasDrawPages;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the standard document language for Western text.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocale;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the standard document language for Asian text.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocaleAsian;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the standard document language for Complex text.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocaleComplex;
 
 };
 
@@ -213,27 +233,5 @@ service SpreadsheetDocumentSettings
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/07/26 07:01:04  sab
-    #90139#; property HasDrawPages and ForbiddenCharacters added
-
-    Revision 1.4  2001/05/15 18:09:59  er
-    #78323# new document settings property RegularExpressions
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

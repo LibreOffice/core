@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-27 19:48:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,9 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** This interface is the callback interface used by the DropTarget class to
-    provide notification of DnD operations that involve the subject DropTarget.
+/** This interface is the callback interface used by the drop target object to
+    provide notification of Drag and Drop operations that involve the subject
+    drop target.
 
     <p>Methods of this interface may be implemented to provide "drag under"
     visual feedback to the user throughout the Drag and Drop operation.</p>
@@ -89,55 +90,54 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTargetListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** the drag operation has terminated with a drop on this DropTarget.
+    /** The drag operation has terminated with a drop on this drop target.
 
-        <p> NOTE: This method should not be one-way. The implentation
-        has to wait until dropComplete on the <type>XDropTargetDropContext</type>
+        <p><strong>NOTE:</strong> This method should not be oneway. The implentation
+        has to wait until the method <type>XDropTargetDropContext::dropComplete()</type>
         is called before releasing the data for the drop operation. This
         should occur before returning from drop in a normal flow of operation.
-        Also, the implementor of XDropTargetListener should not assume
+        Also, the implementor of <type>XDropTargetListener</type> should not assume
         the <type>DropTargetDropEvent</type> to be meaningful after returning
-        from the <member>XDropTargetListener::drop</member> method.
-        </p>
+        from the <member>XDropTargetListener::drop()</member> method.</p>
 
         @param dtde
-        the DropTargetDropEvent
+        The <type>DropTargetDropEvent</type>.
     */
 
     void drop( [in] DropTargetDropEvent dtde );
 
       //-------------------------------------------------------------------------
-    /** called when a drag operation has encountered the DropTarget.
+    /** Called when a drag operation has encountered the drop target.
 
         @param dtde
-        the DropTargetDragEvent
+        The <type>DropTargetDragEvent</type>.
     */
 
     [oneway] void dragEnter( [in] DropTargetDragEnterEvent dtdee );
 
       //-------------------------------------------------------------------------
-    /** the drag operation has departed the DropTarget without dropping.
+    /** The drag operation has departed the drop target without dropping.
 
         @param dte
-        the DropTargetEvent
+        The <type>DropTargetEvent</type>.
     */
 
     [oneway] void dragExit( [in] DropTargetEvent dte );
 
       //-------------------------------------------------------------------------
-    /** called when a drag operation is ongoing on the DropTarget.
+    /** Called when a drag operation is ongoing on the drop target.
 
         @param dtde
-        the DropTargetEvent
+        The <type>DropTargetEvent</type>.
     */
 
     [oneway] void dragOver( [in] DropTargetDragEvent dtde );
 
       //-------------------------------------------------------------------------
-    /** called when the user has modified the drop gesture.
+    /** Called when the user has modified the drop gesture.
 
         @param dtde
-        the DropTargetEvent
+        The <type>DropTargetEvent</type>.
     */
 
     [oneway] void dropActionChanged( [in] DropTargetDragEvent dtde );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRefreshable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,32 +72,25 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XRefreshable
 /** is supported by objects with data that can be refreshed from a data source.
  */
 interface XRefreshable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XRefreshable::refresh
     /** refreshes the data of the object from the connected data source.
      */
     void refresh();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XRefreshable::addRefreshListener
     /** adds the specified listener to receive the event "refreshed."
      */
     [oneway] void addRefreshListener( [in] com::sun::star::util::XRefreshListener l );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XRefreshable::removeRefreshListener
     /** removes the specified listener.
      */
     [oneway] void removeRefreshListener( [in] com::sun::star::util::XRefreshListener l );
@@ -108,24 +101,4 @@ interface XRefreshable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/16 16:41:51  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:06  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

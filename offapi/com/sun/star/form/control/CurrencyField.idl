@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CurrencyField.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 10:56:41 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,19 @@
 
 //=============================================================================
 
-/** describes a radio button usually used together with a
-    <type scope="com.sun.star.form.component">CurrencyField</type> model.
+/** describes a control which can be used for inputting currency values, and
+    which can (but not necessarily has to) be bound to a database field.
+
+    <p>The model of the control has to support the <type scope="com::sun::star::form::component">CurrencyField</type>
+    service.</p>
+
+    @see com::sun::star::awt::UnoControl
+    @see com::sun::star::awt::UnoControlModel
 */
 service CurrencyField
 {
-    /** provides the basic functionallity of the control
-    */
     service com::sun::star::awt::UnoControlCurrencyField;
 
-    /** allows locking of the input of the control
-    */
     interface com::sun::star::form::XBoundControl;
 };
 
@@ -97,6 +99,15 @@ service CurrencyField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2.14.2  2002/07/26 11:03:13  fs
+    IDL review form layer
+
+    Revision 1.2.14.1  2002/02/19 08:12:03  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.2  2001/04/19 10:56:41  fs
+    corrected the include protection
+
     Revision 1.1  2001/04/19 08:44:56  fs
     initial checkin - service description for form related controls
 
@@ -108,6 +119,15 @@ service CurrencyField
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2.14.2  2002/07/26 11:03:13  fs
+ *  IDL review form layer
+ *
+ *  Revision 1.2.14.1  2002/02/19 08:12:03  oj
+ *  #96946# parameter,return value and exception description
+ *
+ *  Revision 1.2  2001/04/19 10:56:41  fs
+ *  corrected the include protection
+ *
  *  Revision 1.1  2001/04/19 08:44:56  fs
  *  initial checkin - service description for form related controls
  *

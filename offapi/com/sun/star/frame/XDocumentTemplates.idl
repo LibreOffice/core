@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentTemplates.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,76 +74,176 @@
 module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** provides a high level api to organize document templates
 
-// DocMerge from xml: interface com::sun::star::frame::XDocumentTemplates
-/** makes it possible to receive events when the state of a feature changes.
+    <p>
+    Template informations are saved as links to the original content
+    and organized in groups. This data should be persistent and can be
+    updated by calling special method <member>XDocumentTemplates::update()</member>.
+    A real implementation of this interface can do that on top of
+    an ucb content provider. Method <member>XDocumentTemplates::getContent()</member>
+    force that.
+    </p>
  */
 interface XDocumentTemplates:  com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-//  [attribute] sequence<string>    Directories;
+    /** privides access to the root of internal used hierarchy
 
-    /** returns a content, which can be used for accessing the groups.
-     */
-    com::sun::star::ucb::XContent   getContent();
-
-    /** creates the template with the given name in the given group using the
-        data from the storable.
-     */
-    boolean                         storeTemplate( [in] string GroupName, [in] string TemplateName,
-                                                   [in] com::sun::star::frame::XStorable Storable );
-//                                      raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
-    /** is called when the status of the feature changes.
-     */
-    boolean                         addTemplate( [in] string GroupName, [in] string TemplateName,
-                                                 [in] string SourceURL );
-    /** is called when the status of the feature changes.
-     */
-    boolean                         removeTemplate( [in] string GroupName, [in] string TemplateName );
-
-    /** is called when the status of the feature changes.
-     */
-    boolean                         renameTemplate( [in] string GroupName, [in] string OldTemplateName,
-                                                    [in] string NewTemplateName );
-
-    /** Creates a new Group
-
-        @param GroupName
-        the name of the group to be created
+        <p>
+        This content can be used for accessing the groups directly.
+        </p>
 
         @return
-        true, if the group could be created, false otherwise
+            the ucb content for template configuration
+     */
+    com::sun::star::ucb::XContent getContent();
+
+    //-------------------------------------------------------------------------
+    /** creates the template with the given name in the given group using the
+        data from the storable
+
+        @param GroupName
+            specifies the group
+
+        @param TemplateName
+            specifies the template
+
+        @param Storable
+            specifies the target
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
+
+        @see XDocumentTemplates::addTemplate()
+     */
+    boolean storeTemplate(
+        [in] string GroupName,
+        [in] string TemplateName,
+        [in] XStorable Storable);
+
+    //-------------------------------------------------------------------------
+    /** creates the template with the given name in the given group using the
+        given URL
+
+        @param GroupName
+            specifies the group
+
+        @param TemplateName
+            specifies the template
+
+        @param SourceURL
+            specifies the position of template
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
+
+        @see XDocumentTemplates::storeTemplate()
+     */
+    boolean addTemplate(
+        [in] string GroupName,
+        [in] string TemplateName,
+        [in] string SourceURL);
+
+    //-------------------------------------------------------------------------
+    /** remove a template from specified group
+
+        @param GroupName
+            specifies the group which include the template
+
+        @param TemplateName
+            specifies the template for delete
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean removeTemplate(
+        [in] string GroupName,
+        [in] string TemplateName);
+
+    //-------------------------------------------------------------------------
+    /** rename a template inside specified group
+
+        @param GroupName
+            specifies the group which include the template
+
+        @param TemplateName
+            specifies the template for renaming
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean renameTemplate(
+        [in] string GroupName,
+        [in] string OldTemplateName,
+        [in] string NewTemplateName);
+
+    //-------------------------------------------------------------------------
+    /** creates a new group
+
+        @param GroupName
+            the name of the group to be created
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
     */
-    boolean                         addGroup( [in] string GroupName );
-    /** is called when the status of the feature changes.
-     */
-    boolean                         removeGroup( [in] string GroupName );
+    boolean addGroup( [in] string GroupName );
 
-    /** is called when the status of the feature changes.
-     */
-    boolean                         renameGroup( [in] string OldGroupName, [in] string NewGroupName );
+    //-------------------------------------------------------------------------
+    /** remove an existing group
 
-    /** is called when the status of the feature changes.
+        @param GroupName
+            the name of the group to be removed
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
      */
-    [oneway] void                   update();
+    boolean removeGroup( [in] string GroupName );
+
+    //-------------------------------------------------------------------------
+    /** rename an existing group
+
+        @param OldGroupName
+            the old name of the group
+
+        @param NewGroupName
+            the new name of the group
+
+        @return
+            <TRUE/> if operation was sucessfully
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean renameGroup(
+        [in] string OldGroupName,
+        [in] string NewGroupName);
+
+    //-------------------------------------------------------------------------
+    /** force an update for internal structures
+
+        <p>
+        Because the templates are well known by links and not as direct content
+        they can be outdated. An update force actualization of that to find
+        wrong links.
+        </p>
+     */
+    [oneway] void update();
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/03/23 14:45:09  dv
-    added renameTemplate and renameGroup
-
-    Revision 1.2  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.1  2001/03/09 15:06:21  dv
-    First checkin
-
-
-=============================================================================*/
 #endif

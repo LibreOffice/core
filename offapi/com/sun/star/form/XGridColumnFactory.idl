@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGridColumnFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,40 +80,39 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XGridColumnFactory
-/** provides the functionality of creating columns for a grid component.
+/** allows to create columns to be added into a grid control model.
 
+    <p>Grid columns (more precise: models of grid columns) are direct children of
+    the grid control model they belong to. Grid columns can't be created on a global
+    service factory, instead, you need to create them on the grid, where you want to
+    insert them later on.</p>
 
-
-    <p> With
-
-
-
-
-    it is possible
-    to inspect all possible column types which may be instanciated using
-
-
-
-
-
-    .</p>
+    @see com::sun::star::form::component::GridControl
  */
 interface XGridColumnFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XGridColumnFactory::createColumn
-    /** creates a new column object.
+    /** creates a new column object
+
+        @param aColumnType
+            the type of column to be created
+
+        @returns
+            the new column object
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if <arg>aColumnType</arg> is not available.
      */
     com::sun::star::beans::XPropertySet createColumn( [in] string aColumnType )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XGridColumnFactory::getColumnTypes
 
-    // DocMerge from idl: method com::sun::star::form::XGridColumnFactory::getColumnTypes
     /** returns a list of available column types.
+
+        @returns
+            a list of column types.
      */
     sequence<string> getColumnTypes();
 };
@@ -125,6 +124,18 @@ interface XGridColumnFactory: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.3  2002/07/26 10:00:09  fs
+    IDL review form layer
+
+    Revision 1.4.16.2  2002/02/19 08:11:36  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4.16.1  2002/02/18 14:48:42  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

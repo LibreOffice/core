@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangesQuery.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XCellRangesQuery_idl__
 #define __com_sun_star_sheet_XCellRangesQuery_idl__
 
@@ -77,108 +78,123 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to query for cell ranges with specific contents.
 
-//=============================================================================
+    <p>All methods return a collection of cell ranges.</p>
 
-// DocMerge from xml: interface com::sun::star::sheet::XCellRangesQuery
-/** provides methods to invoke queries on cells.@see com::sun::star::sheet::SheetRangesQuery
+    @see com::sun::star::sheet::SheetRangesQuery
+    @see com::sun::star::sheet::SheetCellRanges
  */
 interface XCellRangesQuery: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryVisibleCells
-    /** points the cursor to only the visible (not hidden)
-        cells of those to which it currently points.
+    /** queries all visible cells.
+
+        @returns
+            the visible (not hidden) cells of the current cell range(s).
      */
     com::sun::star::sheet::XSheetCellRanges queryVisibleCells();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryEmptyCells
-    /** collapses the cursor to the empty cells within the range to which it is currently pointing.
+    /** queries all empty cells.
 
-
-
-        <p>After this operation the cursor only contains the empty cells
-        out of those which it pointed before.</p>
+        @returns
+            the empty cells of the current cell range(s).
      */
     com::sun::star::sheet::XSheetCellRanges queryEmptyCells();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryContentCells
-    /** collapses the cursor to the cells with the specified content type
-        within the range to which it is currently pointing.
+    /** queries all cells with the specified content type(s).
 
+        @param nContentFlags
+            a combination of <type>CellFlags</type> flags.
 
+            <p>Attention: Despite the <type>CellFlags</type> flags are
+            <atom>long</atom> values, this method expects a <atom>short</atom>
+            parameter.
 
-        <p>After this operation, the cursor only contains cells with the specified
-        content type out of those which it pointed before.
-
-        </p>
+        @returns
+            all cells of the current cell range(s) with the specified
+            content type(s).
      */
-    com::sun::star::sheet::XSheetCellRanges queryContentCells( [in] short nContentFlags );
+    com::sun::star::sheet::XSheetCellRanges queryContentCells(
+            [in] short nContentFlags );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryFormulaCells
-    /** queries all cells with a specified result type.
+    /** queries all formula cells with the specified result type.
 
+        @param nResultFlags
+            a combination of <type>FormulaResult</type> flags.
 
-
-        <p>The set of cells to which the cursor is currently pointing
-        will be collapsed into a subset. This subset is specified by the
-        formula cells containing results of a specified type</p>.
+        @returns
+            all formula cells of the current cell range(s) with the
+            specified result type(s).
      */
-    com::sun::star::sheet::XSheetCellRanges queryFormulaCells( [in] long nResultFlags );
+    com::sun::star::sheet::XSheetCellRanges queryFormulaCells(
+            [in] long nResultFlags );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryColumnDifferences
-    /** queries all cells which have a different value in
-        a specified row.
+    /** queries all cells with different values in a specified row.
 
+        <p>This method takes each column of the current cell range(s) and
+        compares all cells with the cell in the specified row. All cells
+        which are different to this comparison cell will be returned.</p>
 
+        @param aCompare
+            contains a cell address with the row index used for comparison.
+            Only this row index is of interest.
 
-        <p>The set of cells to which the cursor is currently pointing
-        will be collapsed into a subset. This subset is specified by all
-        cells which have a different value in the same column of the
-        specified row.</p>
+        @returns
+            all cells of the current cell range(s) which are different
+            to the comparison cell of each column.
      */
-    com::sun::star::sheet::XSheetCellRanges queryColumnDifferences( [in] com::sun::star::table::CellAddress aCompare );
+    com::sun::star::sheet::XSheetCellRanges queryColumnDifferences(
+            [in] com::sun::star::table::CellAddress aCompare );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryRowDifferences
-    /** queries all cells which have a different value in
-        a specified column.
+    /** queries all cells with different values in a specified column.
 
+        <p>This method takes each row of the current cell range(s) and
+        compares all cells with the cell in the specified column. All cells
+        which are different to this comparison cell will be returned.</p>
 
+        @param aCompare
+            contains a cell address with the column index used for
+            comparison. Only this column index is of interest.
 
-        <p>The set of cells to which the cursor is currently pointing
-        will be collapsed into a subset. This subset is specified by all
-        cells which have a different value in the same row of the
-        specified column.</p>
+        @returns
+            all cells of the current cell range(s) which are different
+            to the comparison cell of each row.
      */
-    com::sun::star::sheet::XSheetCellRanges queryRowDifferences( [in] com::sun::star::table::CellAddress aCompare );
+    com::sun::star::sheet::XSheetCellRanges queryRowDifferences(
+            [in] com::sun::star::table::CellAddress aCompare );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangesQuery::queryIntersection
-    /** intersects the cursor with the specified cell range.
+    /** intersects the current cell range(s) with the specified cell range.
 
+        @param aRange
+            contains the cell range for intersection.
 
+        @return
+            all cells of the current cell range(s) which are contained
+            in the passed cell range.
 
-        <p>The set of cells to which the cursor is currently pointing
-        will be collapsed into a subset. This subset is specified by all
-        cells which are also in the specified range.</p>
      */
-    com::sun::star::sheet::XSheetCellRanges queryIntersection( [in] com::sun::star::table::CellRangeAddress aRange );
+    com::sun::star::sheet::XSheetCellRanges queryIntersection(
+            [in] com::sun::star::table::CellRangeAddress aRange );
 
 };
 
@@ -186,30 +202,5 @@ interface XCellRangesQuery: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/11/25 16:03:33  mi
-    welforming HTML for XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

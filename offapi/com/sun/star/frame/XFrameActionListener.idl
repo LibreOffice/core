@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrameActionListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,50 +75,30 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from idl: interface com::sun::star::frame::XFrameActionListener
 /** has to be provided if an object wants to receive events
-        when several things happen to components within frames of the desktop.
+    when several things happen to components within frames of the desktop frame tree.
 
-        <p>E.g., you can receive events of instantiation/destruction and
-        activation/deactivation of components.
+    <p>
+    E.g., you can receive events of instantiation/destruction and
+    activation/deactivation of components.
+    </p>
 
-        @see XDesktop::addFrameActionListener
-        @see XDesktop::removeFrameActionListener
+    @see XFrame::addFrameActionListener()
+    @see XFrame::removeFrameActionListener()
  */
 interface XFrameActionListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XFrameActionListener::frameAction
     /** is called whenever any action occurs to a component within a frame.
-     */
-    [oneway] void frameAction( [in] com::sun::star::frame::FrameActionEvent aEvent );
 
+        @param Action
+            describes the detected frame action for which the listener can react
+     */
+    [oneway] void frameAction( [in] FrameActionEvent Action );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataCaption.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:12:55 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,43 +68,46 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::chart::ChartDataCaption
-/** These values specify how the caption of data points is displayed.
+/** These values specify how the captions of data points are displayed.
  */
 constants ChartDataCaption
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::NONE
-    /** No caption for data points is displayed.
+    /** No captions are displayed.
      */
     const long NONE = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::VALUE
-    /** The value of the data points is displayed as caption.
+    /** The caption contains the value of the data point in the number
+        format of the axis that is attached to the respective data
+        series.
      */
     const long VALUE = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::PERCENT
-    /** The percent value of the data points is displayed as caption.
+    /** The caption contains the value of the data point in percent of
+        all data points of one category.
+
+        <p>That means, if a data point is the first one of a series,
+        the percentage is calculated by using the first data points of
+        all available series.</p>
      */
     const long PERCENT = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::TEXT
-    /** The title of the column/row of the data point is displayed as caption.
+    /** The caption contains the category name of the category to
+        which a data point belongs.
      */
     const long TEXT = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::FORMAT
-    /** The number formatter is used for displaying the value.
+    /** The number formatter is always used for displaying the value
+        as value.  So this setting is deprecated.
 
         @deprecated
      */
@@ -112,11 +115,9 @@ constants ChartDataCaption
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::SYMBOL
     /** The symbol of data column/row is additionally displayed in the caption.
      */
     const long SYMBOL = 16;
-
 };
 
 //=============================================================================
@@ -126,6 +127,12 @@ constants ChartDataCaption
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.12.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.4  2001/05/17 15:12:55  bm
+    #87095# FORMAT is deprecated
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

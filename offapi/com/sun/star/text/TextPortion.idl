@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextPortion.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 14:24:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XTextPortion_idl__
-#define __com_sun_star_text_XTextPortion_idl__
+#ifndef __com_sun_star_text_TextPortion_idl__
+#define __com_sun_star_text_TextPortion_idl__
 
 
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
@@ -76,6 +76,9 @@
 
 #ifndef __com_sun_star_text_TextRange_idl__
 #include <com/sun/star/text/TextRange.idl>
+#endif
+#ifndef __com_sun_star_text_XTextContent_idl__
+#include <com/sun/star/text/XTextContent.idl>
 #endif
 
 //=============================================================================
@@ -110,6 +113,9 @@ service TextPortion
         <LI><P>ControlCharacter - a control character</P>
         <LI><P>ReferenceMark - a reference mark </P>
         <LI><P>DocumentIndexMark - a document index mark</P>
+        <LI><P>Bookmark - a bookmark</P>
+        <LI><P>Redline - a redline portion which is a result of the change tracking feature.</P>
+        <LI><P>Ruby - a ruby attribute which is used in Asian text.</P>
     </UL>
     <p>The text portions for reference marks and document index marks are generated twice for
          each mark since they may include string content.</p>
@@ -117,6 +123,13 @@ service TextPortion
     [readonly, property] string TextPortionType;
     /** returns the control character if the text portion contains a ControlCharacter*/
     [readonly, property] short ControlCharacter;
+    /** contains the bookmark if the portion is of the type */
+    [optional, property] com::sun::star::text::XTextContent Bookmark;
+    /** determines whether the portion is a point only.*/
+    [optional, property] boolean IsCollapsed;
+    /** determines whether the portion is a start portion if two portions are needed to include an
+     object (i.e. DocmentIndexMark)*/
+    [optional, property] boolean IsStart;
 };
 
 //=============================================================================

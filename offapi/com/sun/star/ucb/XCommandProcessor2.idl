@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor2.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-20 15:30:43 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,20 +77,23 @@ interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
 {
     //------------------------------------------------------------------------
     /** releases a command identifier obtainded through
-        <method>createCommandIdentifier</method> when it is no longer used.
+        <member>XCommandProcessor::createCommandIdentifier</member> when it is
+        no longer used.
 
         <p>After this call the command identifier cannot be used any longer in
-        calls to <method>execute</method> and <method>abort</method>.  (But it
-        can happen that a call to <method>createCommandIdentifier</method>
+        calls to <member>XCommandProcessor::execute</member> and
+        <member>XCommandProcessor::abort</member>.  (But it can happen that a
+        call to <member>XCommandProcessor::createCommandIdentifier</member>
         reuses this identifier.)</p>
 
         @param CommandId
         A command identifier obtained through
-        <method>createCommandIdentifier</method>.  If the identifier is zero,
-        the request is silently ignored; but if the identifier is invalid (not
-        obtained via <method>createCommandIdentifier</method> or already
-        handed to <method>releaseCommandIdentifier</method> before), the
-        behaviour is undefined.
+        <member>XCommandProcessor::createCommandIdentifier</member>.  If the
+        identifier is zero, the request is silently ignored; but if the
+        identifier is invalid (not obtained via
+        <member>XCommandProcessor::createCommandIdentifier</method> or already
+        handed to <member>XCommandProcessor2::releaseCommandIdentifier</member>
+        before), the behaviour is undefined.
      */
     [oneway] void releaseCommandIdentifier([in] long CommandId);
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef __com_sun_star_sdbc_ResultSet_idl__
 #include <com/sun/star/sdbc/ResultSet.idl>
 #endif
+#ifndef __com_sun_star_sdbc_XColumnLocate_idl__
+#include <com/sun/star/sdbc/XColumnLocate.idl>
+#endif
 
  module com {  module sun {  module star {  module container {
 interface XNameAccess;
@@ -76,32 +79,43 @@ interface XParameters;
 
 
 // DocMerge from xml: service com::sun::star::container::com::sun::star::sdbc::RowSet
-/** is a client side ResultSet, which combines the characteristics of a Statement
-    and a ResultSet.
+/** is a client side ResultSet, which combines the characteristics of a
+    <type scope="sun::com::star::sdbc">Statement</type>
+    and a
+    <type scope="sun::com::star::sdbc">ResultSet</type>
+    .
 
 
-    <p> It acts like a typical bean. Before you use the RowSet, you have to specify a
+    <p>
+    It acts like a typical bean. Before you use the RowSet, you have to specify a
     set of properties like a DataSource and a Command and other properties known of
-    Statement.<br>
+    Statement.
+    <br/>
     Afterwards, you can populate the RowSet by its execute method to fill the set
     with data.
     </p>
-    <p>On the one hand, a RowSet can be used as a short cut to retrieve the data of a DataSource.
+    <p>
+    On the one hand, a RowSet can be used as a short cut to retrieve the data of a DataSource.
     You don't have to establish a connection, create a Statement, and then create
     a ResultSet. On the other hand, a rowset can be used to implement capabilties for
     a result set, which are not supported by a driver result set, like caching
-    strategies or update capabilities.</p>
+    strategies or update capabilities.
+    </p>
  */
 service RowSet
 {
     // DocMerge: empty anyway
     service com::sun::star::sdbc::ResultSet;
 
-    // DocMerge: empty anyway
+    // used to execute and to add/remove listeners.
     interface XRowSet;
 
-    // DocMerge: empty anyway
+    // used to set parameters.
     interface XParameters;
+
+    /** allows locating columns which's name is known only.
+    */
+    interface XColumnLocate;
 
     // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::DataSourceName
     /** is the name of a named datasource to use.@see com::sun::star::sdbc:XDataSource
@@ -146,7 +160,9 @@ service RowSet
 
     // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::QueryTimeOut
     /** retrieves the number of seconds the driver will wait for a Statement
-        to execute. If the limit is exceeded, a SQLException is thrown.
+        to execute. If the limit is exceeded, a
+        <type scope="sun::com::star::sdbc">SQLException</type>
+        is thrown.
         There is no limitation, if set to zero.
      */
     [property] long QueryTimeOut;
@@ -155,12 +171,26 @@ service RowSet
     // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::MaxFieldSize
     /** returns the maximum number of bytes allowed for any column value.
 
-
-        <p>This limit is the maximum number of bytes that can be returned
-        for any column value. The limit applies only to BINARY,
-        VARBINARY, LONGVARBINARY, CHAR, VARCHAR, and LONGVARCHAR columns.
+        <p>
+        This limit is the maximum number of bytes that can be returned
+        for any column value. The limit applies only to
+        <member scope= "com::sun::star::sdbc">DataType::BINARY</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::VARBINARY</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::LONGVARBINARY</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::CHAR</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::VARCHAR</member>
+              ,
+              and
+              <member scope= "com::sun::star::sdbc">DataType::LONGVARCHAR</member>
+              columns.
         If the limit is exceeded, the excess data is silently discarded.
-        <br>There is no limitation, if set to zero.</p>
+        <br/>
+        There is no limitation, if set to zero.
+        </p>
      */
     [property] long MaxFieldSize;
 
@@ -168,7 +198,8 @@ service RowSet
     // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::MaxRows
     /** retrieves the maximum number of rows that a ResultSet can contain.
         If the limit is exceeded, the excess rows are silently dropped.
-        <br>There is no limitation, if set to zero.
+        <br/>
+        There is no limitation, if set to zero.
      */
     [property] long MaxRows;
 
@@ -197,6 +228,18 @@ service RowSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.3  2002/06/07 09:47:05  fs
+    added XColumnLocate
+
+    Revision 1.5.2.2  2002/02/18 12:55:23  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/02/20 13:30:07  fs
     #82875# removed XClearParameters - this interface is obsolete, the functionality is covered by XParameters
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetAnnotationsSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetAnnotationsSupplier_idl__
 #define __com_sun_star_sheet_XSheetAnnotationsSupplier_idl__
 
@@ -69,22 +70,21 @@
 #include <com/sun/star/sheet/XSheetAnnotations.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSheetAnnotationsSupplier
-/** enables access to a collection of annotations.
+/** provides access to a collection of cell annotations.
  */
 interface XSheetAnnotationsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetAnnotationsSupplier::getAnnotations
-    /** returns the collection of annotations.
+    /** returns the collection of cell annotations.
+
+        @see com::sun::star::sheet::CellAnnotations
      */
     com::sun::star::sheet::XSheetAnnotations getAnnotations();
 
@@ -94,21 +94,5 @@ interface XSheetAnnotationsSupplier: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

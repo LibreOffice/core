@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChangesEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,34 +75,30 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::ChangesEvent
-/** This event is fired when a set of changes becomes effective on the source of the event.@see XChangesSet
-        @see XChangesBatch
-        @see XChangesListener
-        @see XChangesNotifier
-        @see com::sun::star::container::ContainerEvent
-        @see ElementChange
+/** This event is fired when a set of changes becomes effective on the source of the event.
+
+    @see XChangesSet
+    @see XChangesBatch
+    @see XChangesListener
+    @see XChangesNotifier
+    @see com::sun::star::container::ContainerEvent
+    @see ElementChange
  */
 struct ChangesEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
+    /** contains the accessor to the common root of the changed elements.
 
-    // DocMerge from xml: field com::sun::star::util::ChangesEvent::Base
-    /** This contains the accessor to the common root of the changed elements
-
-
-        <p>The type and the value of the accessor depends on the service.</p>
+        <p>Type and value of the accessor depend on the service.</p>
      */
     any Base;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::ChangesEvent::Changes
-    /** This contains the changes that occurred.
+    /** contains the changes which occurred.
      */
     ChangesSet Changes;
 
@@ -112,19 +108,4 @@ struct ChangesEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:18  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:04  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/06/15 15:58:12  jb
-    Add event class for batch changes
-
-
-
-=============================================================================*/
 #endif

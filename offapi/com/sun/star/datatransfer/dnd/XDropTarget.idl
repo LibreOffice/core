@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTarget.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-27 18:26:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ interface XDropTargetListener;
 /** This interface is implemented by a view or window that supports drop
     operations.
 
-    <p>Different to Java, the association between view and interface is fixed
-    and cannot be changed. Otherwise, the awt messaging would have to be
+    <p>Differently to Java, the association between view and interface is fixed
+    and cannot be changed. Otherwise, the AWT messaging would have to be
     implemented for any window supporting Drag and Drop operations, which would
     be a performance issue.</p>
 */
@@ -89,69 +89,70 @@ interface XDropTargetListener;
 interface XDropTarget: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** add a DropTargetListener.
+    /** Add a DropTargetListener.
 
-        <p>The listener will be querried for the <type>XAutoscroll</type> interface
+        <p>The listener will be queried for the <type>XAutoscroll</type> interface
         to see if it supports autoscrolling.</p>
 
         @param dtl
-        the listener to add to the notification list.
+        The listener to add to the notification list.
     */
 
     [oneway] void addDropTargetListener( [in] XDropTargetListener dtl );
 
     //-------------------------------------------------------------------------
-    /** remove a DropTargetListener.
+    /** Remove a drop target listener.
 
         @param dtl
-        the listener to remove from notification list.
+        The listener to remove from notification list.
     */
 
     [oneway] void removeDropTargetListener( [in] XDropTargetListener dtl );
 
     //-------------------------------------------------------------------------
-    /** @returns
-     a boolean indicating whether or not this DropTarget is
+    /** Indicates either a drop target object is active or not.
+
+        @returns
+        A boolean indicating whether or not this drop target object is
         currently active, that is ready to accept drops.
     */
 
     boolean isActive();
 
     //-------------------------------------------------------------------------
-    /** sets the DropTarget active if <TRUE/>, inactive if <FALSE/>.
+    /** Sets the drop target object active or inactive.
 
         @param active
-        see describtion above.
-
-    <!-- Editor: Should the first sentence be an @return ? -->
+        A value of <TRUE/> sets the drop target object active.
+        <p>A value of <FALSE/> sets the drop target object inactive.
     */
 
     void setActive( [in] boolean active );
 
     //-------------------------------------------------------------------------
-    /** @returns
-    the current action or actions supported by this DropTarget.
+    /** Determine the actions supported by a drop target.
+
+        @returns
+        The current action or actions supported by this drop target.
 
         <p>By default this will include all drag and drop actions.</p>
 
-        @see DNDConstants
+        @see com::sun::star::datatransfer::dnd::DNDConstants
     */
 
     byte getDefaultActions();
 
     //-------------------------------------------------------------------------
-    /** sets the default acceptable actions for this DropTarget.
+    /** Sets the default acceptable actions for this drop target.
 
-        <p>This method is a way to reduce the number of drag and drop events
+        <p>This method is a way to reduce the number of Drag and Drop events
         by blocking events for actions not supported by this target.</p>
-
         <p>By default the listener will receive notifications for all actions.</p>
 
-
         @param actions
-        the actions.
+        The actions.
 
-        @see DNDConstants
+        @see com::sun::star::datatransfer::dnd::DNDConstants
     */
     [oneway] void setDefaultActions( [in] byte actions );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Author.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-01-09 07:44:06 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,14 @@ service Author
         @see com::sun::star::text::AuthorDisplayFormat
     */
     [optional, property] short AuthorFormat;
+    /** contains the current content of the text field.
+        <p> This property is escpecially usefull for import/export purposes. </p>
+     */
+    [optional, property]string CurrentPresentation;
+    /** determines whether the full name of the author is displayed rather than
+     the initials.
+     */
+    [optional, property]boolean FullName;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,21 +79,13 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides access to a dynamic, homogeneous set of values or nested
- trees within a (by name) hierarchy.
-
- <!-- Dennis: (by name) ??? -->
- <!-- Developer: See the description in GroupAccess,GroupElement, HierarchyAccess. -->
+ trees within a hierarchy.
 
  <p>Also provides information about the template for elements.
  Allows normalizing externally generated names.
  </p>
 
- <p><em>Sets</em> here are dynamic containers within the hierarchy.</p>
-
- <!-- Dennis: is the word "here" necessary because "Sets" elsewhere are not dynamic containers -->
- <!-- Developer: sets are always containers, probably dynamic ones. They are not necessarily
-      parts of a hierarchy. In the configuration package 'set' has a very specific somewhat
-      peculiar meaning. The 'here' is supposed to emphasize that there is such a special meaning.  -->
+ <p><em>Sets</em> are dynamic containers within the hierarchy.</p>
 
  <p>The number and names of contained elements are not fixed in advance,
  but all elements have to be of one predetermined type.
@@ -102,9 +94,9 @@ module com { module sun { module star { module configuration {
  @see com::sun::star::configuration::SetElement
     Child objects of this service generally implement <type>SetElement</type>.
     The template name returned by the child from
-    <member>XTemplateInstance::getTemplateName</member>
+    <member>XTemplateInstance::getTemplateName()</member>
     corresponds to the name returned by the set from
-    <member>XTemplateContainer::getElementTemplateName</member>.
+    <member>XTemplateContainer::getElementTemplateName()</member>.
 
  @see com::sun::star::configuration::GroupAccess
     A complementary service that provides for static heterogeneous groups of
@@ -116,7 +108,7 @@ service SetAccess
 /** is the basic service for accessing child and descendent nodes in a hierarchy.
 
  <p>External names (from foreign namespaces) should be normalized using
- <member scope="com::sun::star::util">XStringEscape::escapeString</member>
+ <member scope="com::sun::star::util">XStringEscape::escapeString()</member>
  (if available) before using them as element names.
  </p>
 */
@@ -128,12 +120,6 @@ service SetAccess
  <p>Interface <type scope="com::sun::star::configuration">XTemplateContainer</type>,
  which is optional in <type>SimpleSetAccess</type> must always be implemented
  in this service, if the elements are of object type.  </p>
-
- <p> If an implementation handles naming restrictions transparently, it must
- also handle the case of element names embedded in hierarchical names - passed
- to any object in the hierarchy. Otherwise, the implementation should implement
- <type scope="com::sun::star::util">XStringEscape</type>, in which case,
- the client is responsible for constructing correct hierarchical names.  </p>
 */
     service SimpleSetAccess;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseParameterListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XDatabaseParameterListener
-/** this event is posted if an execution of a parameterized SQL statement needs
-    the values for the parameters.@see com::sun::star::form::component::DatabaseForm
+/** allows to intercept value request for parametrized SQL statements.
  */
 interface XDatabaseParameterListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XDatabaseParameterListener::approveParameter
-    /** is invoked before execution of a parameterized SQL statement.@see XDatabaseForm
+    /** is invoked when there is a need for parameter values
+
+        @param aEvent
+            the event describing the parameter value request.
+
+        @returns
+            <TRUE/> when the execution of the parametrized statement should continue, <FALSE/> otherwise.
+
+        @see com::sun::star::form::DatabaseParameterEvent
      */
     boolean approveParameter( [in] com::sun::star::form::DatabaseParameterEvent aEvent );
 
@@ -98,6 +103,15 @@ interface XDatabaseParameterListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.2  2002/07/26 10:00:06  fs
+    IDL review form layer
+
+    Revision 1.5.16.1  2002/02/18 14:49:04  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.5  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/21 08:35:08  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

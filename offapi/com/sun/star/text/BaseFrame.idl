@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrame.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 12:40:26 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef __com_sun_star_text_BaseFrame_idl__
 #define __com_sun_star_text_BaseFrame_idl__
 
+#ifndef __com_sun_star_text_BaseFrameProperties_idl__
+#include <com/sun/star/text/BaseFrameProperties.idl>
+#endif
+
 #ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
 #endif
@@ -99,6 +103,7 @@
  */
 service BaseFrame
 {
+    service BaseFrameProperties;
     service TextContent;
     //-------------------------------------------------------------------------
     /** This interface specifies the access to the shape data (position
@@ -134,283 +139,10 @@ service BaseFrame
      */
     interface com::sun::star::container::XNamed;
     //-------------------------------------------------------------------------
-    /** contains the number of the page where the objects are anchored.
-        <p> The value is valid only if the
-        AnchorType is
-        <const>TextContentAnchorType::AT_PAGE</const>.</p>
-     */
-    [property] short AnchorPageNo;
-    //-------------------------------------------------------------------------
-    /** contains the text frame the current frame is anchored to.
-        <p> The value is valid only if the
-        AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
-     */
-    [property] com::sun::star::text::XTextFrame AnchorFrame;
-    //-------------------------------------------------------------------------
-    /** contains the color of the background of the object.
-     */
-    [property] long BackColor;
-    //-------------------------------------------------------------------------
-    /** contains the URL for the background graphic.
-     */
-    [property] string BackGraphicURL;
-
-    //-------------------------------------------------------------------------
-    /** contains the name of the file filter for the background graphic.
-     */
-    [property] string BackGraphicFilter;
-
-    //-------------------------------------------------------------------------
-    /** determines the position of the background graphic.
-     */
-    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
-
-    //-------------------------------------------------------------------------
-    /** contains the left border of the object.
-
-        @see BaseFrame::com::sun::star::table::BorderLine
-     */
-    [property] com::sun::star::table::BorderLine LeftBorder;
-
-    //-------------------------------------------------------------------------
-    /** contains the right border of the object.
-
-        @see BaseFrame::com::sun::star::table::BorderLine
-     */
-    [property] com::sun::star::table::BorderLine RightBorder;
-
-    //-------------------------------------------------------------------------
-    /** contains the top border of the object.
-
-        @see BaseFrame::com::sun::star::table::BorderLine
-     */
-    [property] com::sun::star::table::BorderLine TopBorder;
-
-    //-------------------------------------------------------------------------
-    /** contains the bottom border of the object.
-
-        @see BaseFrame::com::sun::star::table::BorderLine
-     */
-    [property] com::sun::star::table::BorderLine BottomBorder;
-
-    //-------------------------------------------------------------------------
-    /** contains the distance from the border to the object.
-     */
-    [property] long BorderDistance;
-
-    //-------------------------------------------------------------------------
-    /** contains the distance from the left border to the object.
-     */
-    [property] long LeftBorderDistance;
-
-    //-------------------------------------------------------------------------
-    /** contains the distance from the right border to the object.
-     */
-    [property] long RightBorderDistance;
-
-    //-------------------------------------------------------------------------
-    /** contains the distance from the top border to the object.
-     */
-    [property] long TopBorderDistance;
-
-    //-------------------------------------------------------------------------
-    /** contains the distance from the bottom border to the object.
-     */
-    [property] long BottomBorderDistance;
-
-    //-------------------------------------------------------------------------
-    /** If TRUE, the "BackColor" is ignored.
-     */
-    [property] boolean BackTransparent;
-
-    //-------------------------------------------------------------------------
-
-    /** determines if the content is protected.
-     */
-    [property] boolean ContentProtected;
-    //-------------------------------------------------------------------------
     /** contains the name of the frame style that is applied to this object.
      */
     [property] string FrameStyleName;
 
-    //-------------------------------------------------------------------------
-    /** contains the left margin of the object.
-     */
-    [property] long LeftMargin;
-
-    //-------------------------------------------------------------------------
-    /** contains the right margin of the object.
-     */
-    [property] long RightMargin;
-
-    //-------------------------------------------------------------------------
-
-    /** contains the top margin of the object.
-     */
-    [property] long TopMargin;
-
-    //-------------------------------------------------------------------------
-    /** contains the bottom margin of the object.
-     */
-    [property] long BottomMargin;
-
-    //-------------------------------------------------------------------------
-    /** contains the height of the object (1/100 mm).
-        <p>It is only valid if <member>TextEmbeddedObject::RelativeHeight</member> is zero.</p>
-     */
-    [property] long Height;
-
-    //-------------------------------------------------------------------------
-    /** contains the width of the object (1/100 mm).
-        <p>It is only valid if <member>TextEmbeddedObject::RelativeWidth</member> is zero.</p>
-     */
-    [property] long Width;
-    //-------------------------------------------------------------------------
-    /** contains the relative height of the object.
-        <p> It is only valid if it is greater than zero.</p>
-     */
-    [property] short RelativeHeight;
-
-    //-------------------------------------------------------------------------
-    /** contains the relative width of the object.
-        <p> It is only valid if it is greater than zero. </p>
-     */
-    [property] short RelativeWidth;
-    //-------------------------------------------------------------------------
-    /** determins whether the width follows the height.
-     */
-    [property] boolean IsSyncWidthToHeight;
-    //-------------------------------------------------------------------------
-    /** determins whether the height follows the width.
-     */
-    [property] boolean IsSyncHeightToWidth;
-    //-------------------------------------------------------------------------
-    /** determines the horizontal orientation of the object.
-
-        @see BaseFrame::HoriOrientation
-     */
-    [property] short HoriOrient;
-    //-------------------------------------------------------------------------
-    /** contains the horizontal position of the object (1/100 mm).
-        <p> It is only valid if "HoriOrient" is HoriOrientation_NONE.</p>
-     */
-    [property] long HoriOrientPosition;
-
-    //-------------------------------------------------------------------------
-    /** determines the environment of the object to which the orientation
-        is related.
-
-        @see BaseFrame::RelOrientation
-     */
-    [property] short HoriOrientRelation;
-
-    //-------------------------------------------------------------------------
-    /** determines the vertical orientation of the object.
-
-        @see BaseFrame::VertOrientation
-     */
-    [property] short VertOrient;
-
-    //-------------------------------------------------------------------------
-    /** contains the vertical position of the object (1/100 mm).
-
-        It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
-        <const>VertOrientation::NONE</const>.
-     */
-    [property] long VertOrientPosition;
-
-    //-------------------------------------------------------------------------
-
-    /** determines the environment of the object to which the orientation is related.
-
-        @see BaseFrame::RelOrientation
-     */
-    [property] short VertOrientRelation;
-
-    //-------------------------------------------------------------------------
-    /** contains the URL of a hyperlink that is set at the object.
-     */
-    [property] string HyperLinkURL;
-
-    //-------------------------------------------------------------------------
-    /** contains the name of the target for a hyperlink that is set at the object.
-     */
-    [property] string HyperLinkTarget;
-
-    //-------------------------------------------------------------------------
-    /** contains the name of the hyperlink that is set at the object.
-     */
-    [property] string HyperLinkName;
-
-    //-------------------------------------------------------------------------
-    /** determines if the object is opaque or transparent for text.
-     */
-    [property] boolean Opaque;
-
-    //-------------------------------------------------------------------------
-    /** determines if the object is mirrored on even pages.
-     */
-    [property] boolean PageToggle;
-
-    //-------------------------------------------------------------------------
-    /** determines if the position is protected.
-     */
-    [property] boolean PositionProtected;
-
-    //-------------------------------------------------------------------------
-    /** determines if the object is included in printing.
-     */
-    [property] boolean Print;
-
-    //-------------------------------------------------------------------------
-    /** contains the type of the shadow of the object.
-     */
-    [property] com::sun::star::table::ShadowFormat ShadowFormat;
-
-    //-------------------------------------------------------------------------
-    /** determines if the object gets an image map from a server.
-     */
-    [property] boolean ServerMap;
-
-    //-------------------------------------------------------------------------
-    /** contains the size of the object.
-
-        @see BaseFrame::Height
-        @see BaseFrame::Width
-     */
-    [property] com::sun::star::awt::Size Size;
-
-    //-------------------------------------------------------------------------
-    /** determines if the size is protected.
-     */
-    [property] boolean SizeProtected;
-    //-------------------------------------------------------------------------
-    /** determines the type of the surrounding text.
-
-        @deprecated
-     */
-    [property] com::sun::star::text::WrapTextMode Surround;
-
-    //-------------------------------------------------------------------------
-    /** determines if the text of the paragraph in which the object
-        is anchored, wraps around the object.
-     */
-    [property] boolean SurroundAnchorOnly;
-    //-------------------------------------------------------------------------
-    /** contains the transparency of the background color as percentage value.
-        The properties "BackTransparent" and "BackColorTransparency"
-        are overwriting each other.
-     */
-    [optional, property]byte BackColorTransparency;
-    //-------------------------------------------------------------------------
-    /** contains the color of the background. In contrast to the property "BackColor"
-     it doesn't contain a transparency value.
-     */
-    [optional, property]long BackColorRGB;
-    //-------------------------------------------------------------------------
-    /** contains the transparency of the background graphic as percentage value.
-     */
-    [optional, property]byte BackGraphicTransparency;
 };
 
 //=============================================================================

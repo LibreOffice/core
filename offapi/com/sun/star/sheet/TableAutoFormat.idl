@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableAutoFormat.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,16 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_TableAutoFormat_idl__
 #define __com_sun_star_sheet_TableAutoFormat_idl__
 
 #ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
 #ifndef __com_sun_star_container_XNamed_idl__
@@ -73,75 +78,90 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents an AutoFormat, containing exactly 16 AutoFormat fields.
 
-//=============================================================================
+    <p>Each of the 16 fields contain formatting properties for a table
+    cell at a specific position in the AutoFormat range. The rows of the
+    range are divided into a header row, a footer row and 2 data rows
+    (repeated in turn between header and footer row). The columns are
+    divided similar. This results in 16 different types of cells in the
+    range. The AutoFormats are numbered row by row, then column by column.</p>
 
-// DocMerge from xml: service com::sun::star::sheet::TableAutoFormat
-/** an autoformat for tables.
+    @see com::sun::star::sheet::TableAutoFormatField
  */
 service TableAutoFormat
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XIndexAccess;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNamed;
-
-    // DocMerge: empty anyway
+//! service com::sun::star::beans::PropertySet;
+    /** provides access to the properties.
+     */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR TableAutoFormat::IncludeFont
+    //=========================================================================
 
-    // DocMerge from xml: property com::sun::star::sheet::TableAutoFormat::IncludeFont
-    /** specifies if the font settings from the fields should be used.
+    /** provides methods to access the AutoFormat fields via index.
+
+        @see com::sun::star::sheet::TableAutoFormatField
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all 16 AutoFormat fields.
+
+        @see com::sun::star::sheet::TableAutoFormatEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the name of the AutoFormat.
+     */
+    interface com::sun::star::container::XNamed;
+
+    //=========================================================================
+
+    /** specifies whether the font settings from the fields are used.
      */
     [property] boolean IncludeFont;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR TableAutoFormat::IncludeJustify
 
-    // DocMerge from xml: property com::sun::star::sheet::TableAutoFormat::IncludeJustify
-    /** specifies if the justification settings from the fields
-        should be used.
+    /** specifies whether the justification settings from the fields
+        are used.
      */
     [property] boolean IncludeJustify;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR TableAutoFormat::IncludeBorder
 
-    // DocMerge from xml: property com::sun::star::sheet::TableAutoFormat::IncludeBorder
-    /** specifies if the border settings from the fields should be used.
+    /** specifies whether the border settings from the fields are used.
      */
     [property] boolean IncludeBorder;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR TableAutoFormat::IncludeBackground
 
-    // DocMerge from xml: property com::sun::star::sheet::TableAutoFormat::IncludeBackground
-    /** specifies if the background settings from the fields should be used.
+    /** specifies whether the background settings from the fields are used.
      */
     [property] boolean IncludeBackground;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR TableAutoFormat::IncludeNumberFormat
 
-    // DocMerge from xml: property com::sun::star::sheet::TableAutoFormat::IncludeNumberFormat
-    /** specifies if the number format settings from the fields
-        should be used.
+    /** specifies whether the number format settings from the fields
+        are used.
      */
     [property] boolean IncludeNumberFormat;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR TableAutoFormat::IncludeWidthAndHeight
 
-    // DocMerge from xml: property com::sun::star::sheet::TableAutoFormat::IncludeWidthAndHeight
-    /** specifies if the column widths and row heights should be updated
-        after applying the format.
+    /** specifies whether the column widths and row heights should be
+        updated after applying the format.
      */
     [property] boolean IncludeWidthAndHeight;
 
@@ -151,24 +171,5 @@ service TableAutoFormat
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

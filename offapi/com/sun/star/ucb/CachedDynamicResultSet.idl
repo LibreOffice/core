@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,10 @@ service CachedDynamicResultSet
     /** Provides remote optimized read access to a static or a dynamically
         changing <type>ContentResultSet</type>.
 
-        <p>The <type>XResultSet</type>s given to the listener in the first
-        notification in the <type>WelcomeDynamicResultSetStruct</type> are
-        implementations of the <type>CachedContentResultSet</type> service.
+        <p>The <type scope="com::sun::star::sdbc">XResultSet</type>s given to
+        the listener in the first notification in the
+        <type>WelcomeDynamicResultSetStruct</type> are implementations of the
+        <type>CachedContentResultSet</type> service.
 
         <p>This interface is required.
      */

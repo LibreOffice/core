@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Presentation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:52:05 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,40 +76,34 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::presentation::Presentation
 /** This service is a presentation that is available from a
-    <code>PresentationDocument</code> via the
-    <code>XPresentationSupplier</code> interface.
+    <type>PresentationDocument</type> via the
+    <type>XPresentationSupplier</type> interface.
  */
 service Presentation
 {
-
-
-    // DocMerge from xml: service com::sun::star::presentation::Presentation: interface com::sun::star::presentation::XPresentation
     /** lets you start and stop a presentation.
 
-                <p>It also gives you access to the more advanced features, like
-                rehearse timing and the live modes.
+        <p>It also gives you access to the more advanced features, like
+        rehearse timing and the live modes.
      */
     interface com::sun::star::presentation::XPresentation;
 
+    //-------------------------------------------------------------------------
 
-    // DocMerge from xml: service com::sun::star::presentation::Presentation: interface com::sun::star::beans::XPropertySet
     /** This is the standard interface for access to the properties from this
-                service.
+        service.
      */
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::AllowAnimations
     /** enables/disables the shape animations.
      */
     [property] boolean AllowAnimations;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::CustomShow
     /** If this string is not empty, it contains the name of a customized
         show that is used for the presentation.
      */
@@ -117,7 +111,6 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::FirstPage
     /** If this string is not empty, it contains the name of the page where
         the presentation is started.
      */
@@ -125,7 +118,6 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::IsAlwaysOnTop
     /** If this property is set to <TRUE/>, the window of the presentation is
         always on top of all other windows.
      */
@@ -133,10 +125,7 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::IsAutomatic
     /** If this property is <TRUE/>, all pages are changed automatically.
-
-
 
         <p>This overrides the properties of the pages.</p>
      */
@@ -144,7 +133,6 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::IsEndless
     /** If this property is set to <TRUE/>, the presentation is repeated
         endlessly.
      */
@@ -152,7 +140,6 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::IsFullScreen
     /** If this property is set to <TRUE/>, the presentation runs in
         full-screen mode.
      */
@@ -160,14 +147,12 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::IsLivePresentation
     /** With this property, you can set the presentation to live mode.
      */
     [property] boolean IsLivePresentation;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::IsMouseVisible
     /** If this property is <TRUE/>, the mouse is visible during the
         presentation.
      */
@@ -175,11 +160,8 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::Pause
     /** is the duration of the black screen after the
         presentation has finished.
-
-
 
         <p>If this is set to <literal>0</literal>, no black screen is shown.</p>
      */
@@ -187,7 +169,6 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::StartWithNavigator
     /** If this is set to <TRUE/>, the Navigator is opened at the start of the
         presentation.
      */
@@ -195,10 +176,7 @@ service Presentation
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Presentation::UsePen
     /** If this is <TRUE/>, a pen is shown during presentation.
-
-
 
         <p>You can draw on the presentation with this pen.</p>
      */
@@ -213,6 +191,12 @@ service Presentation
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/07 07:53:10  cl
+    idl review
+
+    Revision 1.5  2001/11/01 14:52:05  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2000/12/14 12:53:38  mi
     <true></true> -> <TRUE/> and same with FALSE
 

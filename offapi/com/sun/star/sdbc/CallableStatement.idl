@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallableStatement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,8 @@ interface XOutParameters;
 /** is used to execute SQL stored procedures.
 
 
-    <p>SDBC provides a stored procedure SQL escape that allows stored procedures
+    <p>
+    SDBC provides a stored procedure SQL escape that allows stored procedures
     to be called in a standard way for all RDBMSs. This escape syntax has one
     form that includes a result parameter and one that does not. If used, the
     result parameter must be registered as an OUT parameter. The other parameters
@@ -83,24 +84,42 @@ interface XOutParameters;
     by number. The first parameter is 1.
     </p>
     <p>
-    <code>
-    {?= call &amp;lt;procedure-name&amp;gt;[&amp;lt;arg1&amp;gt;,&amp;lt;arg2&amp;gt;, ...]}
-    {call &amp;lt;procedure-name&amp;gt;[&amp;lt;arg1&amp;gt;,&amp;lt;arg2&amp;gt;, ...]}
+    <code>{?=call&amp;lt;procedure-name&amp;gt;[&amp;lt;arg1&amp;gt;,&amp;lt;arg2&amp;gt;,...]}<br/>{call&amp;lt;procedure-name&amp;gt;[&amp;lt;arg1&amp;gt;,&amp;lt;arg2&amp;gt;,...]}
     </code>
     </p>
-    <p>IN parameter values are set using the set methods inherited from
-    <type scope="com::sun::star::sdbc">PreparedStatement</type>. The type of all
+    <p>
+    IN parameter values are set using the set methods inherited from
+    <type scope="com::sun::star::sdbc">PreparedStatement</type>
+    . The type of all
     OUT parameters must be registered prior to executing the stored procedure;
-    their values are retrieved after execution via the <code>get</code> methods
-    provided by the <type scope="com::sun::star::sdbc">XRow</type>.</p>
-    <p>A <code>CallableStatement</code> can return one
-    <type scope="com::sun::star::sdbc">XResultSet</type> or multiple
-    <code>ResultSet</code> objects. Multiple <code>ResultSet</code> objects are
+    their values are retrieved after execution via the
+    <code>get</code>
+    methods
+    provided by the
+    <type scope="com::sun::star::sdbc">XRow</type>
+    .
+    </p>
+    <p>
+    A
+    <code>CallableStatement</code>
+    can return one
+    <type scope="com::sun::star::sdbc">XResultSet</type>
+    or multiple
+    <type scope="com::sun::star::sdbc">ResultSet</type>
+    objects. Multiple
+    <code>ResultSet</code>
+    objects are
     handled using operations inherited from
-    <type scope="com::sun::star::sdbc">XPreparedStatement</type>.</p>
-    <p>For maximum portability, a call's <code>ResultSet</code> objects and
+    <type scope="com::sun::star::sdbc">XPreparedStatement</type>
+    .
+    </p>
+    <p>
+    For maximum portability, a call's
+    <type scope="com::sun::star::sdbc">ResultSet</type>
+    objects and
     update counts should be processed prior to getting the values of output
-    parameters.</p>
+    parameters.
+    </p>
 */
 service CallableStatement
 {
@@ -126,6 +145,12 @@ service CallableStatement
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.1  2002/02/18 08:54:13  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/11/01 16:46:45  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

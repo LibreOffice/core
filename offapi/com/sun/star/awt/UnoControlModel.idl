@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:11 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #define __com_sun_star_awt_UnoControlModel_idl__
 
+#ifndef __com_sun_star_awt_UnoControlDialogElement_idl__
+#include <com/sun/star/awt/UnoControlDialogElement.idl>
+#endif
+
 #ifndef __com_sun_star_awt_XControlModel_idl__
 #include <com/sun/star/awt/XControlModel.idl>
 #endif
@@ -81,6 +85,10 @@
 #include <com/sun/star/io/XPersistObject.idl>
 #endif
 
+#ifndef __com_sun_star_util_XCloneable_idl__
+#include <com/sun/star/util/XCloneable.idl>
+#endif
+
 
 //=============================================================================
 
@@ -88,7 +96,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlModel
 /** specifies the standard model of an <type>UnoControl</type>
     in the <em>Smalltalk model view controller design</em>.
 
@@ -102,24 +109,30 @@
  */
 service UnoControlModel
 {
-
-
-    // DocMerge from xml: service com::sun::star::awt::UnoControlModel: interface com::sun::star::awt::XControlModel
-    /** The control must implement these interfaces.
+    /** This service is present when the control model is embedded in an
+        <type>UnoControlDialogModel</type>.
      */
+    [optional] service com::sun::star::awt::UnoControlDialogElement;
+
     interface com::sun::star::awt::XControlModel;
 
-    // DocMerge: empty anyway
     interface com::sun::star::lang::XComponent;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XMultiPropertySet;
 
-    // DocMerge: empty anyway
     interface com::sun::star::io::XPersistObject;
+
+        interface com::sun::star::util::XCloneable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the service name of the default control for this model.
+     */
+    [property] string DefaultControl;
+
+    //-------------------------------------------------------------------------
 
 };
 
@@ -127,24 +140,4 @@ service UnoControlModel
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:06  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/07 11:24:14  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.2  1999/11/18 11:49:54  mi
-    XComponent now in module lang
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

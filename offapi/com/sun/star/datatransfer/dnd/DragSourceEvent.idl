@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragSourceEvent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-29 10:38:15 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ interface XDragSource;
 interface XDragSourceContext;
 
 //=============================================================================
-/** This class is the base class for DragSourceDragEvent and DragSourceDropEvent.
+/** This class is the base class for <type>DragSourceDragEvent</type> and <type>DragSourceDropEvent</type>.
 
     <p>To access the <type>XDragSource</type> that originated this event, use the
     <member scope="com::sun::star::lang">EventObject::Source</member> member of
@@ -84,13 +84,17 @@ interface XDragSourceContext;
 struct DragSourceEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    /** the DragSourceContext of the current drag operation.
+    /** The drag source context of the current drag operation.
+
+        @see com::sun::star::datatransfer::dnd::XDragSourceContext
      */
 
     XDragSourceContext DragSourceContext;
 
     //-------------------------------------------------------------------------
-    /** the DragSource on which the drag and drop operation was initiated.
+    /** The drag source on which the Drag and Drop operation was initiated.
+
+        @see com::sun::star::datatransfer::dnd::XDragSource
      */
 
     XDragSource DragSource;

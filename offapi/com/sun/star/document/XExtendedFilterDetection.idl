@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,34 +71,46 @@
 
 //============================================================================
 
- module com {
-  module sun {
-   module star {
-    module document {
+module com { module sun { module star { module document {
 
 //============================================================================
+/** provides a "deep" filter detection
 
-/** extended filter detection.
+    <p>
+    A "deep" filter detection means looking into the document stream to detect
+    the format of it. Services of type <type>DetectService</type> must support this
+    interface to be called from generic load mechanism of the office for that.
+    </p>
+
+    @see DetectService
+    @see TypeDetection
+    @see FilterFactory
  */
-
 interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** controls agreement of a type detection with given URL or arguments.
+    /** controls agreement of a "flat" <type>TypeDetection</type>
+        with given URL or arguments
 
         <p>
-        Register services which support this interface for diferent mime types in configuration.
-        A service which implements this interfare will be created to make a deep content detection.
-        Add the collected information about detected documents in given <type>MediaDescriptor</type>.
-        You need an internal type name as a return value.
+        Registerd services in configuration, which support this interface for different mime types,
+        will be called automaticly to look into the document stream and cdecide wich format it represent.
+        Add the collected information about detected documents in given <type>MediaDescriptor</type>
+        <var>Descriptor</var>. The decision must be returned as any valid type name (which specifies
+        the detected format) or an empty value for unknown formats.
         </p>
-     */
-    string detect( [inout] sequence< com::sun::star::beans::PropertyValue > seqDescriptor );
 
-    }; // XExtendedFilterDetection
-   }; // document
-  }; // star
- }; // sun
-}; // com
+        @param Descriptor
+            represent a <type>MediaDescriptor</type> which can be used to get/set informations
+            about the detected document
+
+        @returns
+            an internal type name if format was detected successfully
+            <br>
+            or an empty value for an unknown document format.
+     */
+    string detect( [inout] sequence< com::sun::star::beans::PropertyValue > Descriptor );
+
+}; }; }; }; };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDimensionsSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XDimensionsSupplier_idl__
 #define __com_sun_star_sheet_XDimensionsSupplier_idl__
 
@@ -69,22 +70,23 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the collection of dimensions of a data pilot source.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XDimensionsSupplier
-/** gives access to dimensions.
+    @see com::sun::star::sheet::DataPilotSource
  */
 interface XDimensionsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDimensionsSupplier::getDimensions
-    /** returns the dimensions.
+    /** returns the collection of dimensions.
+
+        @see com::sun::star::sheet::DataPilotSourceDimensions
      */
     com::sun::star::container::XNameAccess getDimensions();
 
@@ -94,21 +96,5 @@ interface XDimensionsSupplier: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

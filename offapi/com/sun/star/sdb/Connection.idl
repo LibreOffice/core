@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,9 @@ interface XCommandPreparation;
 
 
 // DocMerge from xml: service com::sun::star::sdb::Connection
-/** extends the connection of SDBC by providing the data definitions
-    of a connected database.
+/** extends the
+    <type scope="com::sun::star::sdbc">connection</type>
+    of SDBC by providing the data definitions of a connected database.
  */
 service Connection
 {
@@ -97,7 +98,7 @@ service Connection
 
 
     // DocMerge from xml: service com::sun::star::sdb::Connection: interface com::sun::star::sdb::XCommandPreparation
-    /** interface for complex command execution
+    /** interface for complex command execution.
      */
     interface XCommandPreparation;
 
@@ -126,6 +127,12 @@ service Connection
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/02/18 10:23:31  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:30  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

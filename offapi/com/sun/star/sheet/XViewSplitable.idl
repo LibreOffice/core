@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewSplitable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,7 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::sheet::XViewSplitable
 /** enables a <type>SpreadsheetView</type> to split the view.
-
-
-
-
-
-
-
-
-
-
-
-
 
     @deprecated
  */
@@ -93,11 +80,8 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getIsWindowSplit
     /** returns <TRUE/> if the view is split
         into individual panes.
-
-
 
         <p>Only one of
         <member>XViewSplitable::getIsWindowSplit()</member> and
@@ -108,7 +92,6 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getSplitHorizontal
     /** returns the horizontal position in pixels where
         the view is split.
      */
@@ -116,7 +99,6 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getSplitVertical
     /** returns the vertical position in pixels where
         the view is split.
      */
@@ -124,24 +106,19 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getSplitColumn
     /** returns the column before which the view is split.
      */
     long getSplitColumn();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getSplitRow
     /** returns the row before which the view is split.
      */
     long getSplitRow();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::splitAtPosition
     /** splits the view at the specified position.
-
-
 
         <p>To split only horizontally, specify <var>nPixelY</var> as 0.
         To split only vertically, specify <var>nPixelX</var> as 0.</p>
@@ -155,24 +132,5 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/14 12:53:40  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,104 +92,82 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XControl
-/** Implementations of this interface are abstract windows.
+/** identifies a control.
 
-    The main reason to instanciate this implementation is to show it
-    on a screen. A control has a context.  Set the context with the
-    "set context" method.<br>
+    <p>Implementations of this interface are abstract windows.
+    The main reason to instantiate this implementation is to show the window
+    on the screen. Before the window appears on the screen, the
+    <member>XControl::createPeer</member> method must be called.</p>
 
-    Before the window appears on a screen, the createPeer(...) must
-    be called.<br>
-
-    If the implementation of the control does not distinguish
-    between model, view or controller, then it must allow you to set
-    a new XGraphics in the view so you can print the control.
+    <p>If the implementation of the control does not distinguish
+    between model, view and controller, it must allow to set
+    a new XGraphics in the view, so that the control can be printed.</p>
  */
 interface XControl: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::setContext
-    /** sets the context for the control.
+    /** sets the context of the control.
      */
     [oneway] void setContext( [in] com::sun::star::uno::XInterface Context );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::getContext
-    /** gets the context which was previously set with
-        setContext.
+    /** gets the context of the control.
      */
     com::sun::star::uno::XInterface getContext();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::createPeer
-    /** creates a "child" window on the screen. If the
-        parent is NULL, then the desktop window of the toolkit
-        is the parent.
+    /** creates a "child" window on the screen.
+
+        <p>If the parent is NULL, then the desktop window of the toolkit
+        is the parent.</p>
      */
     [oneway] void createPeer( [in] com::sun::star::awt::XToolkit Toolkit,
              [in] com::sun::star::awt::XWindowPeer Parent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::getPeer
     /** returns the peer which was previously created or set.
      */
     com::sun::star::awt::XWindowPeer getPeer();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::setModel
-    /** sets a model for the control. The control gets
-        the persistent data from this interface and sets update
-        links to the model data. The main interface to the
-        model is the XPropertySet.
+    /** sets a model for the control.
      */
     boolean setModel( [in] com::sun::star::awt::XControlModel Model );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::getModel
-    /** returns the model for this control. The model
-        allows access to data like "test," "font," etc. for the
-        control. If there is no extra model, this method must
-        return the "com::sun::star::uno::XInterface" from the control.
+    /** returns the model for this control.
      */
     com::sun::star::awt::XControlModel getModel();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::getView
     /** returns the view of this control.
      */
     com::sun::star::awt::XView getView();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XControl::setDesignMode
     /** sets the design mode for use in a design editor.
-        Normally the control will be painted directly without a peer.
+
+        <p>Normally the control will be painted directly without a peer.</p>
      */
     [oneway] void setDesignMode( [in] boolean bOn );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XControl::isDesignMode
-    /** @returns
-                    <true/> if the control is in design mode,
-                    <false/> otherwise.
+    /** returns <true/> if the control is in design mode, <false/> otherwise.
      */
     boolean isDesignMode();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XControl::isTransparent
-    /** @returns
-                    <true/> if the control is transparent,
-                    <false/> otherwise.
+    /** returns <true/> if the control is transparent, <false/> otherwise.
      */
     boolean isTransparent();
 
@@ -199,33 +177,4 @@ interface XControl: com::sun::star::lang::XComponent
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:53  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:34:52  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:08  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/05/16 12:19:52  mi
-    documentation
-
-    Revision 1.3  2000/02/07 11:24:15  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.2  1999/11/18 11:49:54  mi
-    XComponent now in module lang
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

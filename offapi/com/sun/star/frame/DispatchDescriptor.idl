@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-13 20:42:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,59 +71,57 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: struct com::sun::star::frame::DispatchDescriptor
 /** describes a feature to be retrieved by a URL that
-    has to be loaded into a specified frame.
+    has to be loaded into a specified frame
+
+    <p>
+    For a normal dispatch calls all needed parameters are seperated.
+    For optimized remote functionality <member>XDispatch::queryDispatches()</member>
+    it's neccessary to pack these parameters in a flat structure wich can be used
+    in a simple manner.
+    </p>
+
+    @see XDispatchProvider::queryDispatches()
  */
 struct DispatchDescriptor
 {
-    // DocMerge from xml: field com::sun::star::frame::DispatchDescriptor::FeatureURL
-    /** Specifies the URL of the resource/function.
+    //-------------------------------------------------------------------------
+    /** specifies the URL of the resource/function
+
+        <p>
+        Must be a full parsed URL. Use service <type scope="com::sun::star::util">URLTransformer</type>
+        for that.
+        </p>
+
+        @see com::sun::star::util::URLTransformer
      */
     com::sun::star::util::URL FeatureURL;
 
     //-------------------------------------------------------------------------
+    /** name of the target frame
 
-    // DocMerge from xml: field com::sun::star::frame::DispatchDescriptor::FrameName
-    /** Name of the target frame.
+        <p>
+        Special targets (e.g. "_blank", "_self") can be used.
+        </p>
+
+        @see XDispatchProvider::queryDispatch()
      */
     string FrameName;
 
     //-------------------------------------------------------------------------
+    /** describes how the target frame is to be searched
 
-    // DocMerge from xml: field com::sun::star::frame::DispatchDescriptor::SearchFlags
-    /** How the target frame is to be searched.
+        <p>
+        This optional parameter is used if <var>FrameName</var> isn't a special target only.
+        </p>
+
+        @see FrameSearchFlag
      */
     long SearchFlags;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:27  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:01  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/01/31 09:44:58  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

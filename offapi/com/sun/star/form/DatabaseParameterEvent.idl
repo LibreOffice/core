@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseParameterEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,20 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::form::DatabaseParameterEvent
 /** is fired if values for parameters are needed.
  */
 struct DatabaseParameterEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR DatabaseParameterEvent::Parameters
+    /** specifies the list of parameters which are required for opening a result set.
 
-    // DocMerge from xml: field com::sun::star::form::DatabaseParameterEvent::Parameters
-    /** specifies the list of parameters. Each parameter contains a complete
-        description of the value and the value itself.@see com::sun::star::sdb::Column
+        <p>Usually, a <type scope="com::sun::star::form::component">DataForm</type> fires this
+        event when loading the form requires parameters to be filled in.</p>
+
+        <p>Every parameter object supports the <type scope="com::sun::star::beans">XPropertySet</type>
+        interface, and at least the properties <em>Name</em> and <em>Value</em></p>
+
+        @see com::sun::star::sdb::RowSet
+        @see com::sun::star::form::component::DataForm
      */
     com::sun::star::container::XIndexAccess Parameters;
 };
@@ -98,6 +101,12 @@ struct DatabaseParameterEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/07/26 09:59:53  fs
+    IDL review form layer
+
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:16  hjs
     initial import
 

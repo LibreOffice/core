@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUniqueCellFormatRangesSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:47:31 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XUniqueCellFormatRangesSupplier_idl__
 #define __com_sun_star_sheet_XUniqueCellFormatRangesSupplier_idl__
 
@@ -71,17 +72,33 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** provides a collection of cell formats.
+/** provides access to a collection of collections of equal-formatted
+    cell ranges.
+
+    @see com::sun::star::sheet::SheetCellRange
+    @see com::sun::star::sheet::SheetCellRanges
  */
 interface XUniqueCellFormatRangesSupplier: com::sun::star::uno::XInterface
 {
-    /** returns the collection of cell formats.
-        <p>Every different cell format is represented by a
-        <type scope="com::sun::star::sheet">SheetCellRanges</type> object.</p>
+    /** returns a collection of equal-formatted cell range collections.
+
+        <p>Each cell of the original range is contained in one of the
+        ranges (even unformatted cells). If there is a non-rectangular
+        equal-formatted cell area, it will be split into several
+        rectangular ranges.</p>
+
+        <p>All equal-formatted ranges are consolidated into one collection.
+        These collections are the members contained in a
+        <type>UniqueCellFormatRanges</type> collection.</p>
+
+        @returns
+            the collection of equal-formatted cell range collections.
+
+        @see com::sun::star::sheet::UniqueCellFormatRanges
      */
     com::sun::star::container::XIndexAccess getUniqueCellFormatRanges();
 };
@@ -91,3 +108,4 @@ interface XUniqueCellFormatRangesSupplier: com::sun::star::uno::XInterface
 }; }; }; };
 
 #endif
+

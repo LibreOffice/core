@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDriverAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,21 @@ interface XDriver;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XDriverAccess
-/** provides the access of sdbc driver components@see com::sun::star::sdbc::XDriverManager
-        @see com::sun::star::sdbc::XDriver
+/** provides the access of sdbc driver components
+    @see com::sun::star::sdbc::XDriverManager
+    @see com::sun::star::sdbc::XDriver
  */
 interface XDriverAccess: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XDriverAccess::getDriverByURL
-    /** get a driver which accepts a given url.@see XDriver::acceptsURL
+    /** get a driver which accepts a given url.@see com::sun::star::sdbc::XDriver::acceptsURL
+        @param url
+            a database url of the form sdbc:subprotocol:subname
+        @returns
+            a Driver that can connect to the URL
+        @throws SQLException
+                if a database access error occurs.
      */
     XDriver     getDriverByURL([in]string url);
 };
@@ -90,6 +97,12 @@ interface XDriverAccess: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 09:00:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

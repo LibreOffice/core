@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStandaloneDocumentInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,98 +69,69 @@
 #include <com/sun/star/io/IOException.idl>
 #endif
 
-
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
-
-// DocMerge: from xml
-
-// DocMerge from xml: interface com::sun::star::document::XStandaloneDocumentInfo
 /** makes it possible to load document information from
     a resource specified by a URL and to store it into a resource also
-    specified by a URL.
+    specified by a URL
 
+    <p>
+    Only the document information part of the resource is transferred.
+    Instead of <type>DocumentInfo</type> not the whole document will be opened.
+    Note: Without specifying the source or target of this info (the document)
+    nothing can work and will be handled as void (for reading) or ignored (for writing).
+    After specigiying the source/target by using this interface,
+    the interface <type>XDocumentInfo</type> (which must be implemented on same
+    object then this one!) provides access to the info properties.
+    </p>
 
-
-    <p>Only the document information part of the resource is transferred. </p>@see DocumentInfo
-            @see XDocumentInfo
-            @see com::sun::star::beans::XPropertySet
-            @see com::sun::star::beans::XFastPropertySet
+    @see DocumentInfo
+    @see StandaloneDocumentInfo
+    @see XDocumentInfo
  */
-interface XStandaloneDocumentInfo: com::sun::star::document::XDocumentInfo
+interface XStandaloneDocumentInfo: XDocumentInfo
 {
     //-------------------------------------------------------------------------
+    /** loads the document information from a file referred by an URL
 
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XStandaloneDocumentInfo::loadFromURL
-    /** This method loads the document information from a file referred by a URL.
-
-
-
-        <p>After an unsuccessful call the contents of the document
-        information are undefined.
-
+        <p>
+        After an unsuccessful call the contents of the document
+        information are undefined (void).
+        This method only works for storage file formats.
         </p>
-        <p>This method only works for storage file formats.
 
-        </p>
+        @param URL
+            specifies the source of information
+
+        @throws com::sun::star::io::IOException
+            if storage couldn't be found or opened
      */
-    void loadFromURL( [in] string aURL )
-            raises( com::sun::star::io::IOException );
+    void loadFromURL( [in] string URL )
+        raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
+    /** stores the document information into a file referred by a URL
 
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XStandaloneDocumentInfo::storeIntoURL
-    /** This method stores the document information into a file referred by a URL.
-
-
-
-        <p>Only the document information part of the document is overwritten.
-
+        <p>
+        Only the document information part of the document is overwritten.
+        This method only works for storage file formats.
         </p>
-        <p>This method only works for storage file formats.
 
-        </p>
+        @param URL
+            specifies the target for saving
+
+        @throws com::sun::star::io::IOException
+            if storage couldn't be found or opened
      */
-    void storeIntoURL( [in] string aURL )
-            raises( com::sun::star::io::IOException );
-
+    void storeIntoURL( [in] string URL )
+        raises( com::sun::star::io::IOException );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:05  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:40  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:55  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:11  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:19  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/08/04 15:18:45  mi
-    #76800# document events
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImporter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,33 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** makes it possible to connect a document with an <type>Importer</type>.
+/** makes it possible to connect a document with an <type>ImportFilter</type>
+
+    <p>
+    An <type>ImportFilter</type> must know the target of his filter operation.
+    To set this on a filter is part of this interface.
+    Same mechanism exist for export too.
+    </p>
+
+    @see ExportFilter
+    @see ImportFilter
+    @see XExporter
  */
 interface XImporter: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** sets the target document for the importer.
+    /** sets the target document for the importer
+
+        @param Document
+            the target document
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if <var>xDoc</var> does not support any service which is
-            supported by this importer.
+            if <var>Document</var> does not support any service which is
+            supported by this importer
      */
-    void setTargetDocument( [in] com::sun::star::lang::XComponent xDoc )
-        raises( com::sun::star::lang::IllegalArgumentException );
+    void setTargetDocument(
+        [in] com::sun::star::lang::XComponent Document )
+            raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================

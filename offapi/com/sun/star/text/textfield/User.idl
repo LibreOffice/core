@@ -2,9 +2,9 @@
  *
  *  $RCSfile: User.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 10:26:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define __com_sun_star_text_textfield_User_idl__
 
 #include <com/sun/star/text/TextField.idl>
+#include <com/sun/star/text/DependentTextField.idl>
 #include <com/sun/star/text/XDependentTextField.idl>
 
 //=============================================================================
@@ -75,15 +76,16 @@ module com { module sun { module star { module text { module textfield {
 */
 service User
 {
-    service  com::sun::star::text::TextField;
+    service  com::sun::star::text::DependentTextField;
 
-    interface ::com::sun::star::text::XDependentTextField;
-    /* determins if the content is shown as text rather than as value.
+    /** determins if the content is shown as text rather than as value.
      */
     [optional, property] boolean IsShowFormula;
-    /* determins if the field is visible.
+
+    /** determins if the field is visible.
      */
     [optional, property] boolean IsVisible;
+
     /** this is the number format for this field.
         @see com::sun::star::util::NumberFormatter
     */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenuProxyListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:04:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 //=============================================================================
 
 
-// DocMerge: empty anyway
+// DocMerge from xml: interface com::sun::star::mozilla::XMenuProxyListener
+/** Listens for changes in menu items.
+ */
 interface XMenuProxyListener: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

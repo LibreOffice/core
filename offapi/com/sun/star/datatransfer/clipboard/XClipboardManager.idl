@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,13 @@ interface XClipboard;
 interface XClipboardManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-        the clipboard object with the specified name.
+    /** Get a clipboard instance by name.
+
+        @returns
+        The clipboard object with the specified name.
 
         @param aName
-        the name of clipboard to return. To retrieve the default (system)
+        The name of clipboard to return. To retrieve the default (system)
         clipboard, pass an empty string.
 
         @throws com::sun::star::container::NoSuchElementException
@@ -107,10 +109,10 @@ interface XClipboardManager: com::sun::star::uno::XInterface
         raises ( com::sun::star::container::NoSuchElementException );
 
     //-------------------------------------------------------------------------
-    /** add a clipboard instance to the manager's list.
+    /** Add a clipboard instance to the manager's list.
 
         @param xClipboard
-        the clipboard to add.
+        The clipboard to add.
 
         @throws com::sun::star::IllegalArgumentException
         if xClipboard is not a valid clipboard.
@@ -123,16 +125,18 @@ interface XClipboardManager: com::sun::star::uno::XInterface
                  com::sun::star::container::ElementExistException );
 
     //-------------------------------------------------------------------------
-    /** removes the clipboard with the specified name from the list.
+    /** Removes the clipboard with the specified name from the list.
 
         @param aName
-        the name of the clipboard to remove.
+        The name of the clipboard to remove.
     */
     void removeClipboard( [in] string aName );
 
     //-------------------------------------------------------------------------
-    /** @returns
-        a list of all clipboard names.
+    /** Get a list of a managed clipboards.
+
+        @returns
+        A sequence of the names of all available clipboards.
      */
     sequence < string > listClipboardNames();
 };

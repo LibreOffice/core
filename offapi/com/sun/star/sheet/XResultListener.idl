@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XResultListener_idl__
 #define __com_sun_star_sheet_XResultListener_idl__
 
@@ -69,21 +70,20 @@
 #include <com/sun/star/sheet/ResultEvent.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** allows notification when a new volatile function result is available.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XResultListener
-/** allows notification when new values are available.
+    @see com::sun::star::sheet::XVolatileResult
  */
 interface XResultListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XResultListener::modified
     /** is called when a new value is available.
      */
     void modified( [in] com::sun::star::sheet::ResultEvent aEvent );
@@ -94,21 +94,5 @@ interface XResultListener: com::sun::star::lang::XEventListener
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

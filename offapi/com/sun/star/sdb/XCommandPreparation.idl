@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandPreparation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,21 +75,34 @@ interface XPreparedStatement;
 // DocMerge from xml: interface com::sun::star::sdbc::com::sun::star::sdb::XCommandPreparation
 /** is used for preparation of commands.
 
-    <p> A command could be a table, query, or any kind of SQLstatement
-    prepared by the user.</p>
+    <p>
+    A command could be a table, query, or any kind of SQL statement
+    prepared by the user.
+    </p>
  */
 interface XCommandPreparation: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdb::XCommandPreparation::prepareCommand
-    /** creates a <code>PreparedStatement</code> object for sending
-        parameterized SQL statements to the database.
+    /** creates a
+        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        object for sending parameterized SQL statements to the database.
 
-        <p>A SQL statement with or without IN parameters can be
+        <p>
+        A SQL statement with or without IN parameters can be
         pre-compiled and stored in a PreparedStatement object. This
         object can then be used to efficiently execute this statement
         multiple times.
         </p>
+        @param command
+            the command to be prepared. Any SQL statement.
+        @param commandType
+            kind of the command
+            <type scope="com::sun::star::sdb">CommandType</type>
+        @returns
+            the PreparedStatement object
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::sdbc::XPreparedStatement prepareCommand([in]string command, [in] long commandType)
          raises (com::sun::star::sdbc::SQLException);
@@ -101,6 +114,12 @@ interface XCommandPreparation: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:25:48  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

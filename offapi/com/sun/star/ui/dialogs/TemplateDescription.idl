@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateDescription.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:20:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,11 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/**
+/** The implementation of a FilePicker service may support the usage of
+    different templates. The following constants define the currently
+    specified templates.
+
+    @see com::sun::star::ui::dialogs::FilePicker
  */
 
 constants TemplateDescription
@@ -82,69 +86,85 @@ constants TemplateDescription
     const short FILESAVE_SIMPLE                                = 1;
 
     //---------------------------------------------------------------------
-    /** A FileSave dialog with:
-        1. A checkbox "Auto Extension"
-        2. A checkbox "Password"
+    /** A FileSave dialog with additional controls.
+        <ul>
+            <li>A checkbox "Auto Extension"</li>
+            <li>A checkbox "Password"</li>
+        </ul>
     */
     const short FILESAVE_AUTOEXTENSION_PASSWORD                = 2;
 
     //---------------------------------------------------------------------
-    /** A FileSave dialog with:
-        1. A checkbox "Auto Extension"
-        2. A checkbox "Password"
-        3. A checkbox "Filter Options"
+    /** A FileSave dialog with additional controls.
+        <ul>
+            <li>A checkbox "Auto Extension"</li>
+            <li>A checkbox "Password"</li>
+            <li>A checkbox "Filter Options"</li>
+        </ul>
     */
     const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS  = 3;
 
     //---------------------------------------------------------------------
-    /** A FileSave dialog with:
-        1. A checkbox "Auto Extension"
-        2. A checkbox "Selection"
+    /** A FileSave dialog with additional controls.
+        <ul>
+            <li>A checkbox "Auto Extension"</li>
+            <li>A checkbox "Selection"</li>
+        </ul>
     */
     const short FILESAVE_AUTOEXTENSION_SELECTION               = 4;
 
     //---------------------------------------------------------------------
-    /** A FileSave dialog with:
-        1. A checkbox "Auto Extension"
-        2. A listbox "Template" for selecting different templates
+    /** A FileSave dialog with additional controls.
+        <ul>
+            <li>A checkbox "Auto Extension"</li>
+            <li>A listbox "Template" for selecting different templates</li>
+        </ul>
     */
     const short FILESAVE_AUTOEXTENSION_TEMPLATE                = 5;
 
     //---------------------------------------------------------------------
-    /** A FileOpen dialog with:
-        1. A checkbox "Insert as link"
-        2. A checkbox "Show Preview"
-        3. A listbox  "Image Template" for inserting an image with
-           different styles.
-        4. A window for displaying a file preview
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Insert as link"
+            <li>A checkbox "Show Preview"
+            <li>A listbox  "Image Template" for inserting an image with different styles.</li>
+            <li>A window for displaying a file preview</li>
+        </ul>
     */
     const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE           = 6;
 
     //---------------------------------------------------------------------
-    /** A FileOpen dialog with:
-        1. A push button "Play"
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A push button "Play"</li>
+        </ul>
     */
     const short FILEOPEN_PLAY                                  = 7;
 
     //---------------------------------------------------------------------
-    /** A FileOpen dialog with:
-        1. A checkbox "Read only"
-        2. A listbox "Version" for selecting a document version
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Read only"</li>
+            <li>A listbox "Version" for selecting a document version</li>
+        <ul>
     */
     const short FILEOPEN_READONLY_VERSION                      = 8;
 
     //---------------------------------------------------------------------
-    /**
-        A FileOpen dialog with:
-        1. A checkbox "Insert as link"
-        2. A checkbox "Show Preview"
-        3. A window for displaying a file preview
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Insert as link"</li>
+            <li>A checkbox "Show Preview"</li>
+            <li>A window for displaying a file preview</li>
+        </ul>
     */
     const short FILEOPEN_LINK_PREVIEW                          = 9;
 
     //---------------------------------------------------------------------
-    /** A FileSave dialog with:
-        1. A checkbox "Auto Extension"
+    /** A FileSave dialog with additional controls.
+        <ul>
+            <li>A checkbox "Auto Extension"</li>
+        </ul>
     */
     const short FILESAVE_AUTOEXTENSION                         = 10;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleItem.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,49 +69,59 @@ module com {  module sun {  module star {  module i18n {
 //=============================================================================
 
 /**
+    @deprecated internal
     Constant values identifying specific locale data items.
+
+    <p> These are not used with the API but with an OOo internal wrapper class
+    that caches the contents of an instance of <type>LocaleDataItem</type> and
+    uses these values to access it's members for faster access. </p>
+
+    <p> Whenever locale data items were added these values and the wrapper
+    class would have to be adjusted to give the application an easier access.
+    </p>
  */
+
 constants LocaleItem
 {
-    /// date separator,  <b> / </b>
+    /// @see ::com::sun::star::i18n::LocaleDataItem::dateSeparator
     const short DATE_SEPARATOR          = 0;
-    /// group and thousand separator,  <b>","</b>.
+    /// @see com::sun::star::i18n::LocaleDataItem::thousandSeparator
     const short THOUSAND_SEPARATOR      = 1;
-    /// decimal separator,  <b>"."</b> .
+    /// @see com::sun::star::i18n::LocaleDataItem::decimalSeparator
     const short DECIMAL_SEPARATOR       = 2;
-    /// time separator,  <b>":"</b> .
+    /// @see com::sun::star::i18n::LocaleDataItem::timeSeparator
     const short TIME_SEPARATOR          = 3;
-    /// time 100th seconds separator,  <b>","</b> .
+    /// @see com::sun::star::i18n::LocaleDataItem::time100SecSeparator
     const short TIME_100SEC_SEPARATOR   = 4;
-    /// list separator,  <b>";"</b> .
+    /// @see com::sun::star::i18n::LocaleDataItem::listSeparator
     const short LIST_SEPARATOR          = 5;
-    /// single quotation mark start.
+    /// @see com::sun::star::i18n::LocaleDataItem::quotationStart
     const short SINGLE_QUOTATION_START  = 6;
-    /// single quotation mark end.
+    /// @see com::sun::star::i18n::LocaleDataItem::quotationEnd
     const short SINGLE_QUOTATION_END    = 7;
-    /// double quotation mark start.
+    /// @see com::sun::star::i18n::LocaleDataItem::doubleQuotationStart
     const short DOUBLE_QUOTATION_START  = 8;
-    /// double quotation mark end.
+    /// @see com::sun::star::i18n::LocaleDataItem::doubleQuotationEnd
     const short DOUBLE_QUOTATION_END    = 9;
-    /// measurement system, for example, <b>"metric"</b> or <b>"us"</b>.
+    /// @see com::sun::star::i18n::LocaleDataItem::timeAM
     const short MEASUREMENT_SYSTEM      = 10;
-    /// time AM symbol, for example, <b>"AM"</b> or <b>"am"</b>.
+    /// @see com::sun::star::i18n::LocaleDataItem::timePM
     const short TIME_AM                 = 11;
-    /// time PM symbol, for example, <b>"PM"</b> or <b>"pm"</b>.
+    /// @see com::sun::star::i18n::LocaleDataItem::measurementSystem
     const short TIME_PM                 = 12;
-    /// long date day of week separator,  <b>", "</b>
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateDayOfWeekSeparator
     const short LONG_DATE_DAY_OF_WEEK_SEPARATOR = 13;
-    /// long date day separator, <b>", "</b>
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateDaySeparator
     const short LONG_DATE_DAY_SEPARATOR = 14;
-    /// long date month separator, <b>" "</b>
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateMonthSeparator
     const short LONG_DATE_MONTH_SEPARATOR   = 15;
-    /// long date year separator,  <b>" "</b>
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateYearSeparator
     const short LONG_DATE_YEAR_SEPARATOR    = 16;
 
     //! New values may be inserted here if locale data provides them.
     //! Do not forget to adjust the COUNT value.
 
-    /// count of items available.
+    /// count of items available
     const short COUNT                   = 17;
 };
 

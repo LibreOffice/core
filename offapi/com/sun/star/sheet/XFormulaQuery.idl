@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFormulaQuery.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XFormulaQuery_idl__
 #define __com_sun_star_sheet_XFormulaQuery_idl__
 
@@ -69,44 +70,59 @@
 #include <com/sun/star/sheet/XSheetCellRanges.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XFormulaQuery
 /** provides methods to query cells for dependencies
-    in formulas.@see com::sun::star::sheet::SheetRangesQuery
+    in formulas.
+
+    <p>All methods return a collection of cell ranges.</p>
+
+    @see com::sun::star::sheet::SheetRangesQuery
+    @see com::sun::star::sheet::SheetCellRanges
  */
 interface XFormulaQuery: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XFormulaQuery::queryDependents
-    /** points the cursor to the cells which are dependent on
-        the cells to which it is currently pointing.
+    /** queries all dependent formula cells.
 
+        <p>Dependent cells are cells containing formulas with references to
+        the original cell.</p>
 
+        @param bRecursive
+            <FALSE/> = queries cells dependent from the original range(s),
+            <TRUE/> = repeates query with all found cells
+            (finds dependents of dependents, and so on).
 
-        <p>Dependent cells are cells containing formulas with
-        references to the original cells.</p>
+        @return
+            all dependent cells of any formula cell of the current
+            cell range(s).
      */
-    com::sun::star::sheet::XSheetCellRanges queryDependents( [in] boolean bRecursive );
+    com::sun::star::sheet::XSheetCellRanges queryDependents(
+            [in] boolean bRecursive );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XFormulaQuery::queryPrecedents
-    /** points the cursor to the cells which are precedent
-        to the cells to which it is currently pointing.
+    /** queries all precedent cells.
 
+        <p>Precedent cells are cells which are referenced from a formula
+        cell.</p>
 
+        @param bRecursive
+            <FALSE/> = queries precedent cells of the original range(s),
+            <TRUE/> = repeates query with all found cells
+            (finds precedents of precedents, and so on).
 
-        <p>Precedent cells are cells which are used in formulas as
-        references in the original cells.</p>
+        @return
+            all precedent cells of any formula cell of the current cell
+            range(s).
      */
-    com::sun::star::sheet::XSheetCellRanges queryPrecedents( [in] boolean bRecursive );
+    com::sun::star::sheet::XSheetCellRanges queryPrecedents(
+            [in] boolean bRecursive );
 
 };
 
@@ -114,27 +130,5 @@ interface XFormulaQuery: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamedRange.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_NamedRange_idl__
 #define __com_sun_star_sheet_NamedRange_idl__
 
@@ -73,25 +74,34 @@
 #include <com/sun/star/sheet/XCellRangeReferrer.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a named range in a spreadsheet document.
 
-//=============================================================================
+    <p>In fact a named range is a named formula expression. A cell range
+    address is one possible content of a named range.</p>
 
-// DocMerge from xml: service com::sun::star::sheet::NamedRange
-/** a range which can be addressed by a name.
+    @see com::sun::star::sheet::NamedRanges
  */
 service NamedRange
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the settings of the named range.
+     */
     interface com::sun::star::sheet::XNamedRange;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNamed;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+    /** provides access to the cell range object referred by this named range.
+
+        <p>This works only, if the named range contains a single cell range
+        address.</p>
+     */
     interface com::sun::star::sheet::XCellRangeReferrer;
 
 };
@@ -100,18 +110,5 @@ service NamedRange
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,24 +80,23 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::presentation::Shape
-/** This is the service for a shape inside a presentation document.
- */
+/** this service is supported from all shapes inside a <type>PresentationDocument</type>.
+
+
+    This usually enahnces objects of type <type>com::sun::star::drawing::Shape</type> with
+    presentation properties.
+*/
 service Shape
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::Bookmark
     /** is a generic URL for the property OnClick.
      */
     [property] string Bookmark;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::DimColor
     /** This is the color for dimming this shape.
-
-
 
         <p>This color is used if the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
         is <TRUE/> and <member scope="com::sun::star::drawing">Shape::DimHide</member> is <FALSE/>.</p>
@@ -106,7 +105,6 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::DimHide
     /** If this property and the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
         are both <TRUE/>, the shape is hidden instead of dimmed to a color.
      */
@@ -114,7 +112,6 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::DimPrevious
     /** If this property is <TRUE/>, this shape is dimmed to the color of
         property <member scope="com::sun::star::drawing">Shape::DimColor</member> after executing its
         animation effect.
@@ -123,26 +120,20 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::Effect
     /** selects the animation effect of this shape.
      */
     [property] com::sun::star::presentation::AnimationEffect Effect;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::IsEmptyPresentationObject
     /** If this is a default presentation object and if it is empty,
         this property is <TRUE/>.
      */
-    [readonly, property] boolean IsEmptyPresentationObject;
+    [property] boolean IsEmptyPresentationObject;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::IsPresentationObject
     /** If this is a presentation object, this property is <TRUE/>.
-
-
-
         <p>Presentation objects are objects like TitleTextShape and
         OutlinerShape.</p>
      */
@@ -150,7 +141,6 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::OnClick
     /** selects an action performed after the user clicks
         on this shape.
      */
@@ -158,11 +148,8 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::PlayFull
     /** If this property is <TRUE/>, the sound of this shape is played in
         full.
-
-
 
         <p>The default behavior is to stop the sound after completing the
         animation effect.</p>
@@ -171,11 +158,8 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::PresentationOrder
     /** This is the position of this shape in the order of the shapes which
         can be animated on its page.
-
-
 
         <p>The animations are executed in this order, starting at the shape
         with the PresentationOrder "one."  You can change the order by
@@ -186,7 +170,6 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::Sound
     /** This is the URL to a soundfile that is played while the animation
         effect of this shape is running.
      */
@@ -194,7 +177,6 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::SoundOn
     /** If this property is set to <TRUE/>, a sound is played while the
         animation effect is executed.
      */
@@ -202,21 +184,18 @@ service Shape
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::Speed
     /** This is the speed of the animation effect.
      */
     [property] com::sun::star::presentation::AnimationSpeed Speed;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::TextEffect
     /** This is the animation effect for the text inside this shape.
      */
     [property] com::sun::star::presentation::AnimationEffect TextEffect;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::presentation::Shape::Verb
     /** specifies an "ole2" verb for the ClickAction VERB in
         the property <member scope="com::sun::star::drawing">Shape::OnClick</member>.
      */
@@ -231,6 +210,15 @@ service Shape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.20.2  2002/09/06 08:38:47  cl
+    #102051# fixed IsEmptyPresentationObject
+
+    Revision 1.4.20.1  2002/02/07 07:53:10  cl
+    idl review
+
+    Revision 1.4  2000/12/14 12:53:38  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:28  mi
     moved from api
 

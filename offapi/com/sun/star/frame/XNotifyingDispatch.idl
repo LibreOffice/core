@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNotifyingDispatch.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 16:20:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,31 @@
 module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** dispatch with guaranteed notify (instead of <type>XDispatch</type>)
 
-interface XNotifyingDispatch: com::sun::star::frame::XDispatch
+    @see XDispatch
+    @see XStatusListener
+ */
+interface XNotifyingDispatch: XDispatch
 {
-        [oneway] void dispatchWithNotification( [in] com::sun::star::util::URL aURL,
-                         [in] sequence<com::sun::star::beans::PropertyValue> aArgs,
-                         [in] com::sun::star::frame::XDispatchResultListener Listener );
+    //-------------------------------------------------------------------------
+    /** Do the same like <member>XDispatch::dispatch()</member> but notifies
+        listener in every case. Should be used if result must be known.
+
+        @param URL
+            full parsed URL describes the feature which should be dispatched (executed)
+
+        @param Arguments
+            optional arguments for this request
+            (see <type scope="com::sun::star::document">MediaDescriptor</type>)
+
+        @param Listener
+            optional listener for guaranteed notifications of this request
+    */
+    [oneway] void dispatchWithNotification(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments,
+        [in] XDispatchResultListener Listener);
 };
 
 //=============================================================================

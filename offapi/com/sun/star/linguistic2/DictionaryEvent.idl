@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,9 @@ module com { module sun { module star { module linguistic2 {
     It consists of an event type and may supply an affected
     dictionary entry.</P>
 
-    @see    com::sun::star::linguistic2::XDictionary
-    @see    com::sun::star::linguistic2::XDictionaryEventListener
-    @see    com::sun::star::lang::EventObject
+    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    @see    <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
+    @see    <type scope="com::sun::star::lang">EventObject</type>
 */
 struct DictionaryEvent : com::sun::star::lang::EventObject
 {
@@ -94,17 +94,17 @@ struct DictionaryEvent : com::sun::star::lang::EventObject
          <p>This must be the value of a single flag. No combinations are
          allowed.</p>
 
-        @see    com::sun::star::linguistic2::DictionaryEventFlags
+        @see    <type scope="com::sun::star::linguistic2">DictionaryEventFlags</type>
     */
     short nEvent;
 
     //-------------------------------------------------------------------------
-    /**     is the affected dictionary entry (if any).
+    /** is the affected dictionary entry (if any).
 
          <p>It must be set if an entry was
          added or deleted, otherwise it should be empty.</p>
 
-        @see    com::sun::star::linguistic2::XDictionaryEntry
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
     */
     com::sun::star::linguistic2::XDictionaryEntry xDictionaryEntry;
 

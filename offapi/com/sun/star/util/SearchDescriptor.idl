@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SearchDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,63 +72,46 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::util::SearchDescriptor
 /** describes what and how to search within a container.
  */
 service SearchDescriptor
 {
-    // DocMerge: empty anyway
     interface com::sun::star::util::XSearchDescriptor;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchBackwards
     /** If <TRUE/>, the search is done backwards in the document.
      */
     [property] boolean SearchBackwards;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchCaseSensitive
     /** If <TRUE/>, the case of the letters is important for the match.
      */
     [property] boolean SearchCaseSensitive;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchWords
     /** If <TRUE/>, only complete words will be found.
      */
     [property] boolean SearchWords;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchRegularExpression
     /** If <TRUE/>, the search string is evaluated as a regular expression.
      */
     [property] boolean SearchRegularExpression;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchStyles
     /** If <TRUE/>, it is searched for positions where the paragraph style with
         the name of the search pattern is applied.
      */
     [property] boolean SearchStyles;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarity
     /** If <TRUE/>, a "similarity search" is performed.
-
-
 
         <p>In the case of a similarity search, the following properties
         specify the kind of similarity:
@@ -147,11 +130,7 @@ service SearchDescriptor
     [property] boolean SearchSimilarity;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarityRelax
     /** If <TRUE/>, all similarity rules are applied together.
-
-
 
         <p>In the case of a relaxed similarity search, the following
         properties are applied together:
@@ -169,24 +148,18 @@ service SearchDescriptor
     [property] boolean SearchSimilarityRelax;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarityRemove
     /** This property specifies the number of characters that may be
         ignored to match the search pattern.
      */
     [property] short SearchSimilarityRemove;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarityAdd
     /** specifies the number of characters that must be
         added to match the search pattern.
      */
     [property] short SearchSimilarityAdd;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::util::SearchDescriptor::SearchSimilarityExchange
     /** This property specifies the number of characters that must
         be replaced to match the search pattern.
      */
@@ -198,24 +171,4 @@ service SearchDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/14 12:53:46  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

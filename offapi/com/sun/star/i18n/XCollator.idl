@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCollator.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,161 +64,140 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/Locale.idl>
-#include <com/sun/star/i18n/XTransliteration.idl>
 //=============================================================================
 
 module com { module sun { module star { module i18n {
 
-/* collator options */
-constants CollatorOptions {
-  const short CollatorOptions_IGNORE_CASE   = 1;
-  const short CollatorOptions_IGNORE_KANA   = 2;
-  const short CollatorOptions_IGNORE_WIDTH  = 4;
-};
-
-
-/** Interface for Collator Objects
-
+/** Interface for collation algorithms used in sorting.
 */
 interface XCollator: com::sun::star::uno::XInterface
 {
-    /** compares 2 sub-strings
+    //-------------------------------------------------------------------------
+    /** Compare 2 substrings.
 
-        @param s1
-            first String
+        @param aStr1
+            First string.
 
-        @param off1
-            offset (from 0) of the first substring
+        @param nOff1
+            Offset (from 0) of the first substring.
 
-        @param len1
-            length (from offset) of the first substring
+        @param nLen1
+            Length (from offset) of the first substring.
 
-        @param s2
-            second String
+        @param aStr2
+            Second string
 
-        @param off2
-            offset (from 0) of the second substring
+        @param nOff2
+            Offset (from 0) of the second substring.
 
-        @param len2
-            length (from offset) of the second substring
-
-        @returns
-            1 if the first string is more than second string
-            0 if the first string is equals to second string
-            -1 if the first string is less than second string
-    */
-    long compareSubstring([in] string s1, [in] long off1, [in] long len1, [in] string s2, [in] long off2, [in] long len2);
-
-    /** compares 2 strings
-
-        @param s1
-            first String
-
-        @param s2
-            second String
+        @param nLen2
+            Length (from offset) of the second substring.
 
         @returns
-            1 if the first string is more than second string
-            0 if the first string is equals to second string
-            -1 if the first string is less than second string
+            1 if the first string is greater than the second string <br/>
+            0 if the first string is equal to the second string <br/>
+            -1 if the first string is less than the second string
     */
-    long compareString([in] string s1, [in] string s2);
+    long compareSubstring(  [in] string aStr1, [in] long nOff1, [in] long nLen1,
+                            [in] string aStr2, [in] long nOff2, [in] long nLen2 );
 
-    /** loads the Default Collator Implementation
+    //-------------------------------------------------------------------------
+    /** Compare 2 strings.
 
-        @param rLocale
-            the locale for this Collator
+        @param aStr1
+            First string.
 
-                @param collatorOptions
-                        collator options
+        @param aStr2
+            Second string.
 
         @returns
-            TODO
+            1 if the first string is greater than the second string <br/>
+            0 if the first string is equal to the second string <br/>
+            -1 if the first string is less than the second string
     */
-    long loadDefaultCollator([in] ::com::sun::star::lang::Locale rLocale,
-                                 [in] long collatorOptions);
+    long compareString( [in] string aStr1, [in] string aStr2 );
 
-    /** loads a particular Collator Algorithm
+    //-------------------------------------------------------------------------
+    /** Load the default collator.
 
-        @param impl
-            the implementation name to load
+        @param aLocale
+            The locale for this collator.
 
-                @param rLocale
-                        the locale for this Collator
-
-                @param collatorOptions
-                        collator options
+        @param nCollatorOptions
+            A mask of <type>CollatorOptions</type>.
 
         @returns
             TODO
     */
-    long loadCollatorAlgorithm([in] string impl,
-                                   [in] ::com::sun::star::lang::Locale rLocale,
-                                   [in] long collatorOptions);
+    long loadDefaultCollator(   [in] ::com::sun::star::lang::Locale aLocale,
+                                [in] long nCollatorOptions );
 
-    /** list all collator Algorithms
+    //-------------------------------------------------------------------------
+    /** Load a particular collator algorithm.
 
-        @param rLocale
-            the locale for this Collator
+        @param aAlgorithmName
+            Fhe algorithm to load.
+
+        @param aLocale
+            The locale for this collator.
+
+        @param nCollatorOptions
+            A mask of <type>CollatorOptions</type>.
 
         @returns
-            an array of algorithms (string)
+            TODO
     */
-    sequence <string> listCollatorAlgorithms([in] ::com::sun::star::lang::Locale rLocale);
+    long loadCollatorAlgorithm( [in] string aAlgorithmName,
+                                [in] ::com::sun::star::lang::Locale aLocale,
+                                [in] long nCollatorOptions );
 
+    //-------------------------------------------------------------------------
+    /** List all collator algorithms for a given locale.
 
-        /** loads Collator Algorithm with options chosen by end users
+        @param aLocale
+            The locale for which to list algorithms.
 
-                @param impl
-                        the implementation name to load
+        @returns
+            A sequence of algorithm names.
+    */
+    sequence <string> listCollatorAlgorithms(
+                                [in] ::com::sun::star::lang::Locale aLocale );
 
-                @param rLocale
-                        the locale for this Collator
+    //-------------------------------------------------------------------------
+    /** Load a collator algorithm with options chosen by end user.
 
-                @param collatorOptions
-                        an array of collator options (long)
+        @param aAlgorithmName
+            The algorithm name to load.
 
-                @returns
-                        VOID
-        */
-        void loadCollatorAlgorithmWithEndUserOption([in] string impl,
-                                                    [in] ::com::sun::star::lang::Locale rLocale,
-                                                    [in] sequence<long> collatorOptions);
+        @param aLocale
+            The locale for this collator.
 
-        /** list all collator options
+        @param aCollatorOptions
+            A sequence of end user collator options like those returned
+            by <member>XCollator::listCollatorOptions()</member>.
+    */
+    void loadCollatorAlgorithmWithEndUserOption(
+                                [in] string aAlgorithmName,
+                                [in] ::com::sun::star::lang::Locale aLocale,
+                                [in] sequence<long> aCollatorOptions );
 
-                @param collatorAlgorithmName
-                        the algorithm name for this Collator
+    //-------------------------------------------------------------------------
+    /** List all end user collator options for a given algorithm.
 
-                @returns
-                        an array of options (long)
+        @param aAlgorithmName
+            The algorithm name for this collator.
 
-        */
-        sequence <long> listCollatorOptions([in] string collatorAlgorithmName);
+        @returns
+            An array of end user options available for the algorithm.
+    */
+    sequence <long> listCollatorOptions( [in] string aAlgorithmName );
+
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
+//=============================================================================
 
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/02/08 21:13:07  bustamam
-    add collator options constants - Joe Xu
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.2  2000/09/12 22:09:21  gmu
-    Change name of methods and put comments
-
-    Revision 1.1  2000/09/08 01:21:10  gmu
-    Change classname and method
-
-    Revision 1.1  2000/08/23 19:32:52  gmu
-    Add new IDL: XCollator.idl
-
-
-=============================================================================*/
 #endif

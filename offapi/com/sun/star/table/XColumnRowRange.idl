@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumnRowRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:44 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_XColumnRowRange_idl__
 #define __com_sun_star_table_XColumnRowRange_idl__
 
@@ -73,32 +74,32 @@
 #include <com/sun/star/table/XTableRows.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** provides methods to access the collections of columns and rows
+    of a cell range.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::table::XColumnRowRange
-/** enables accessing the columns and rows of
-    a cell range.@see com::sun::star::table::CellRange
+    @see com::sun::star::table::CellRange
  */
 interface XColumnRowRange: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::table::XColumnRowRange::getColumns
-    /** This attribute returns the collection of columns
-                in the range.
+    /** returns the collection of columns in the range.
+
+        @see com::sun::star::table::TableColumns
      */
     com::sun::star::table::XTableColumns getColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::table::XColumnRowRange::getRows
-    /** This attribute returns the collection of rows
-                in the range.
+    /** returns the collection of rows in the range.
+
+        @see com::sun::star::table::TableRows
      */
     com::sun::star::table::XTableRows getRows();
 
@@ -108,27 +109,5 @@ interface XColumnRowRange: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:19  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:44:19  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:25:01  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:56  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:58  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetLink.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_SheetLink_idl__
 #define __com_sun_star_sheet_SheetLink_idl__
 
@@ -73,47 +74,62 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a sheet link.
 
-//=============================================================================
+    <p>A sheet link contains the source data of linked sheets, i.e. the
+    URL and sheet name of the external document.</p>
 
-// DocMerge from xml: service com::sun::star::sheet::SheetLink
-/** a sheet link.
+    <p>To create a linked sheet, the sheet which will be used as linked
+    sheet has to exist already. The method
+    <member>XSheetLinkable::link</member> creates a <type>SheetLink</type>
+    object in the document's <type>SheetLinks</type> collection and links
+    the sheet to the specified external sheet.</p>
  */
 service SheetLink
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the linked document.
+
+        <p>This name is equal to the <const>Url</const> property.</p>
+     */
     interface com::sun::star::container::XNamed;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::util::XRefreshable;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetLink::Url
+    /** provides methods to reload the external data.
+     */
+    interface com::sun::star::util::XRefreshable;
+
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
     /** specifies the URL of the source document.
      */
     [property] string Url;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetLink::Filter
-    /** specifies the name of the filter needed
-        to load the source document.
+    /** specifies the name of the filter needed to load the source
+        document.
      */
     [property] string Filter;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::sheet::SheetLink::FilterOptions
-    /** specifies the filter options needed
-        to load the source document.
+    /** specifies the filter options needed to load the source document.
      */
     [property] string FilterOptions;
 
@@ -123,24 +139,5 @@ service SheetLink
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:08  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:54  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

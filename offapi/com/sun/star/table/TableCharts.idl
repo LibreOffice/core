@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableCharts.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:19 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_TableCharts_idl__
 #define __com_sun_star_table_TableCharts_idl__
 
@@ -69,30 +70,41 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #endif
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+/** represents a collection of all charts based on data in a table.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::table::TableCharts
-/** collection of charts based on data in tables.
+    @see com::sun::star::table::TableChart
  */
 service TableCharts
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to insert and remove charts.
+     */
     interface com::sun::star::table::XTableCharts;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the charts via index.
+     */
     interface com::sun::star::container::XIndexAccess;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNameAccess;
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all contained charts.
+
+        @see com::sun::star::table::TableChartsEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
 
 };
 
@@ -100,18 +112,5 @@ service TableCharts
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Spreadsheets.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_Spreadsheets_idl__
 #define __com_sun_star_sheet_Spreadsheets_idl__
 
@@ -69,30 +70,46 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #endif
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents the collection of spreadsheets in a spreadsheet document.
 
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::Spreadsheets
-/** the collection of spreadsheets in a spreadsheet document.
+    @see com::sun::star::sheet::SpreadsheetDocument
  */
 service Spreadsheets
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the spreadsheets by name and to insert,
+        copy, remove and rearrange spreadsheets.
+
+        @see com::sun::star::sheet::Spreadsheet
+     */
     interface com::sun::star::sheet::XSpreadsheets;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to access the spreadsheets by index.
+
+        @see com::sun::star::sheet::Spreadsheet
+     */
     interface com::sun::star::container::XIndexAccess;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNameAccess;
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all spreadsheets.
+
+        @see com::sun::star::sheet::SpreadsheetsEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
 
 };
 
@@ -100,18 +117,5 @@ service Spreadsheets
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

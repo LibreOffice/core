@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatchProviderInterception.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,56 +75,50 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XDispatchProviderInterception
 /** makes it possible to register an <type>XDispatchProvider</type> which
     intercepts all requests of <type>XDispatch</type> to this instance.
+
+    <p>
+    Note: Nobody can guarantee order of used interceptor objects if more then ones exist.
+    Later registered ones will be used at first. But it's possible to increase the chance
+    for that by providing the optional interface <type>XInterceptorInfo</type>.
+    </p>
+
+    @see XDispatchProvider
+    @see XDispatch
+    @see XInterceptorInfo
  */
 interface XDispatchProviderInterception: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDispatchProviderInterception::registerDispatchProviderInterceptor
     /** registers an <type>XDispatchProviderInterceptor</type>, which will become
         the first interceptor in the chain of registered interceptors.
+
+        @param Interceptor
+            the interceptor which whish to be registered
+
+        @see XDispatchProviderInterception::releaseDispatchProviderInterceptor()
      */
-    void registerDispatchProviderInterceptor( [in] com::sun::star::frame::XDispatchProviderInterceptor xInterceptor );
+    void registerDispatchProviderInterceptor( [in] XDispatchProviderInterceptor Interceptor );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDispatchProviderInterception::releaseDispatchProviderInterceptor
     /** removes an <type>XDispatchProviderInterceptor</type> which was previously registered
-        using <member>XDispatchProviderInterception::registerDispatchProviderInterceptor</member>.
 
-        <p>The order of removals is arbitrary. It is not necessary to remove the last
-        registered interceptor first.</p>
+        <p>
+        The order of removals is arbitrary. It is not necessary to remove the last
+        registered interceptor first.
+        </p>
+
+        @param Interceptor
+            the interceptor which whish to be unregistered
+
+        @see XDispatchProviderInterception::registerDispatchProviderInterceptor()
      */
-    void releaseDispatchProviderInterceptor( [in] com::sun::star::frame::XDispatchProviderInterceptor xInterceptor );
-
+    void releaseDispatchProviderInterceptor( [in] XDispatchProviderInterceptor Interceptor );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/11 17:11:00  mi
-    broken member-link fixed
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

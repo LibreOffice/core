@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClipboardManager.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,18 +86,17 @@ interface XClipboardManager;
 /** The clipboard manager is a one-instance service that holds a list of all
     known clipboard instances.
 
-
     @see XClipboardManager
 */
 service ClipboardManager
 {
     //-------------------------------------------------------------------------
-    /** manages internal and external clipboard implementations.
+    /** Manages internal and external clipboard implementations.
     */
     interface XClipboardManager;
 
     //-------------------------------------------------------------------------
-    /** for shutdown and listener support.
+    /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-05 07:38:37 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,13 @@ service DataSource
 
 
     /** provides the access to DataSource related queries.
-        <p>The object returned by the <method>XQueryDefinitionsSupplier::getQueryDefinitions</method> supports the
-        <service>DefinitionContainer</service> service.</p>
+        <p>
+        The object returned by the
+        <method scope="com::sun::star::sdb">XQueryDefinitionsSupplier::getQueryDefinitions()</method>
+        supports the
+        <service scope="com::sun::star::sdb">DefinitionContainer</service>
+        service.
+        </p>
      */
     interface XQueryDefinitionsSupplier;
 
@@ -134,8 +139,13 @@ service DataSource
     interface com::sun::star::sdbc::XDataSource;
 
     /** provides access to bookmarks to documents associated with the data source
-        <p>The object returned by the <method>XBookmarksSupplier::getBookmarks</method> supports the
-        <service>DefinitionContainer</service> service.</p>
+        <p>
+        The object returned by the
+        <method scope="com::sun::star::sdb">XBookmarksSupplier::getBookmarks()</method>
+        supports the
+        <service scope="com::sun::star::sdb">DefinitionContainer</service>
+        service.
+        </p>
      */
     [optional] interface XBookmarksSupplier;
 
@@ -145,8 +155,9 @@ service DataSource
 
 
     /** indicates a database url of the form <br>
-        <code> jdbc:<em>subprotocol</em>:<em>subname</em></code> or
-        <code> sdbc:<em>subprotocol</em>:<em>subname</em></code>
+        <code> jdbc:<em>subprotocol</em>:<em>subname</em></code>
+        or
+        <code>sdbc:<em>subprotocol</em>:<em>subname</em></code>
      */
     [property] string URL;
 
@@ -174,7 +185,7 @@ service DataSource
 
 
     /** indicates that components displaying data obtained from this
- data source should suppress columns used for versioning.
+        data source should suppress columns used for versioning.
      */
     [property] boolean SuppressVersionColumns;
 
@@ -191,16 +202,16 @@ service DataSource
 
 
     /** defines a list of tables, on which the DataSource should have it's focus.
-             If empty, all the tables of the are used.
+        If empty, all tables are rejected.
 
-<!-- JRH: the second line is incomplete --> */
+    */
     [property] sequence<string> TableFilter;
 
 
     /** defines a list of table types, on which the DataSource should have it's focus.
-             If empty, all the table types of the are used.
+             If empty, all table types are rejected.
 
-<!-- JRH: the second line is incomplete -->      */
+    */
     [property] sequence<string> TableTypeFilter;
 };
 
@@ -208,61 +219,4 @@ service DataSource
 
 }; }; }; };
 
-/*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2002/07/08 15:21:26  obo
-    #100000#
-
-    Revision 1.8  2002/06/17 07:01:55  oj
-    interface XDataSource was missing.
-
-    Revision 1.7.2.2  2002/06/17 07:00:12  oj
-    interface XDataSource was missing.
-
-    Revision 1.7.2.1  2002/02/18 10:23:09  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.7  2001/10/25 15:00:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.6  2001/04/26 09:13:56  fs
-    added (optional) interface XBookmarksSupplier
-
-    Revision 1.5  2001/02/07 11:11:30  fs
-    a new missing detail ...
-
-    Revision 1.4  2001/02/06 07:56:02  fs
-    removed XFormDocumentsSupplier / XReportDocumentsSupplier from the service description - they're obsolete
-
-    Revision 1.3  2000/11/08 12:43:30  mi
-    moved from api
-
-    Revision 1.2  2000/10/20 09:42:58  fs
-    new property SuppressVersionColumns
-
-    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
-    initial import
-
-    Revision 1.8  2000/09/11 11:52:39  mi
-    documentation merged from XML
-
-    Revision 1.6  2000/07/05 17:12:07  os
-    wrong property name corrected: NumberFormats -> NumberFormatsSupplier
-
-    Revision 1.5  2000/06/27 06:57:50  dg
-    CommandPreparation new
-
-    Revision 1.4  2000/06/08 08:31:08  dg
-    XDatabaseAccess is no longer part of the DataSource
-
-    Revision 1.3  2000/06/05 13:35:37  dg
-    services changed
-
-    Revision 1.2  2000/06/05 13:20:27  dg
-    services changed
-
-    Revision 1.1  1999/11/24 08:39:00  dg
-    new Star Data Beans
-
-===========================================================================*/
 #endif

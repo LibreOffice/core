@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFixedLine.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 09:51:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,11 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoFixedLineControl
-/** specifies a FixedLine control.
+/** specifies a fixed line control.
  */
 service UnoControlFixedLine
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControl;
-
 };
 
 //=============================================================================

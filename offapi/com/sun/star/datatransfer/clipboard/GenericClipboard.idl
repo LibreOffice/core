@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericClipboard.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-10 07:32:11 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,38 +89,36 @@ interface XClipboardNotifier;
 
 //=============================================================================
 /** A generic clipboard service is a simple container for transferable objects.
-
-    @see XClipboard
 */
 service GenericClipboard
 {
     //-------------------------------------------------------------------------
-    /** provides access to the clipboard content.
+    /** Provides access to the clipboard content.
     */
     interface XClipboardEx;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to request notifications on content changes.
+    /** Provides the ability to request notifications on content changes.
     */
     interface XClipboardNotifier;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to initially set the name of the clipboard.
+    /** Provides the ability to initially set the name of the clipboard.
     */
     interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** for shutdown and listener support.
+    /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
     //-------------------------------------------------------------------------
-    /** a service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** a service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

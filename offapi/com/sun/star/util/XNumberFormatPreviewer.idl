@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatPreviewer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,18 +84,37 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XNumberFormatPreviewer
-/** represents a number formatter, which can preview number
-    formats without inserting them.@see NumberFormatter
+/** represents a number formatter which can preview number
+    formats without inserting them.
+
+    @see NumberFormatter
  */
 interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNumberFormatPreviewer::convertNumberToPreviewString
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatPreviewer::convertNumberToPreviewString
     /** formats a value using a format string, without inserting a
         number format into the list.
+
+        @param aFormat
+            is the format string that is used for formatting.
+
+        @param fValue
+            is the value that is formatted.
+
+        @param nLocale
+            is the locale that is used to interpret the format string.
+
+        @param bAllowEnglish
+            specifies if English language number format strings are accepted
+            in addition to those from the selected locale.
+
+        @returns
+            the formatted string.
+
+        @throws com::sun::star::util::MalformedNumberFormatException
+            if the format string is invalid.
+
      */
     string convertNumberToPreviewString( [in] string aFormat,
              [in] double fValue,
@@ -105,8 +124,31 @@ interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::util::XNumberFormatPreviewer::queryPreviewColorForNumber
     /** returns the color which is to be used for a number.
+
+        @param aFormat
+            is the format string that is used for formatting.
+
+        @param fValue
+            is the value that is formatted.
+
+        @param nLocale
+            is the locale that is used to interpret the format string.
+
+        @param bAllowEnglish
+            specifies if English language number format strings are accepted
+            in addition to those from the selected locale.
+
+        @param aDefaultColor
+            is the color that should be returned if no color is set by
+            the number format.
+
+        @returns
+            the color that should used to output the formatted string.
+
+        @throws com::sun::star::util::MalformedNumberFormatException
+            if the format string is invalid.
+
      */
     com::sun::star::util::color queryPreviewColorForNumber( [in] string aFormat,
              [in] double fValue,
@@ -121,36 +163,5 @@ interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:27  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:53:06  mi
-    documentation merged from XML
-
-    Revision 1.5  2000/03/24 13:13:40  nn
-    #74032# documentation added
-
-    Revision 1.4  2000/01/28 15:24:56  mi
-    #72210# Locale instead of Language in NumberFormatter
-
-    Revision 1.3  2000/01/28 15:01:52  mi
-    #72210# Locale instead of Language in NumberFormatter
-
-    Revision 1.2  2000/01/27 16:13:34  mi
-    #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BarDiagram.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,65 +96,47 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::BarDiagram
-/**This is a service for bar diagrams.
+/**This is a service for bar and column diagrams.
  */
 service BarDiagram
 {
-    // DocMerge: empty anyway
     service com::sun::star::chart::Diagram;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartStatistics;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartAxisXSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartTwoAxisYSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::ChartAxisZSupplier;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::Dim3DDiagram;
-
-    // DocMerge: empty anyway
     service com::sun::star::chart::StackableDiagram;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::BarDiagram::Vertical
-    /** Determines if a chart is drawn vertically or
-        horizontally.
+    /** Determines if the bars of a chart are drawn vertically or
+        horizontally.  Default is vertical.
+
+        <p>If Vertical is <FALSE/> you get a column chart rather than
+        a bar chart.</p>
      */
     [property] boolean Vertical;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::BarDiagram::Deep
-    /** Determines if a 3-dimensional bar chart is displayed
-        as a deep chart with a z-axis (real 3D chart) or as a
-        2-dimensional xy chart with 3-dimensional graphics.
-
-        @optional
+    /** If <TRUE/>, determines that in a three-dimensional bar chart
+        the bars of each series are arranged behind each other in the
+        z-direction.  If <FALSE/> the arrangement of bars is like in
+        two-dimensional bar charts.
      */
     [optional, property] boolean Deep;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::BarDiagram::StackedBarsConnected
-    /** Determines if there are connecting lines between
-        stacked bar charts. Currently, vertical bar charts do not support
-        this property.
-
-        @optional
+    /** determines if, in a stacked chart, there are connecting lines
+        between corresponding bars. Currently, bar charts with
+        horizontal bars do not support this property.
      */
     [optional, property] boolean StackedBarsConnected;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::BarDiagram::NumberOfLines
     /** Determines how many data rows are displayed as lines rather than
         bars.
 
@@ -174,6 +156,15 @@ service BarDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/01/29 15:58:52  bm
+    #96984# IDL Review -- second check
+
+    Revision 1.5.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.5  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.4  2001/01/23 10:08:02  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

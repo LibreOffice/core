@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseEnvironment.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ interface XDatabaseAccess;
 /** specifies the root of the data access beans. It provides the possiblity
     to open a data access bean, which contains tables, queries, forms, and
     report documents, or to open a connection to a database.
+
+    @deprecated
  */
 interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 {
@@ -101,6 +103,10 @@ interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
         <p>Database Access beans are always shared, so if there's a second request
         for the same bean, the same instance of the bean will be returned, if it is still alive.
         </p>
+        @param URL
+            a database url of the form sdbc:subprotocol:subname
+        @returns
+            the database access object for this url
      */
     XDatabaseAccess getDatabaseAccess([in]string URL)
         raises (com::sun::star::sdbc::SQLException);
@@ -108,6 +114,12 @@ interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 
     // DocMerge from xml: method com::sun::star::sdb::XDatabaseEnvironment::createDatabaseAccess
     /** creates a new DatabaseAccess bean specified by it's URL.
+        @param URL
+            a database url of the form sdbc:subprotocol:subname
+        @param title
+            the title of the database access
+        @returns
+            the new created database access object for this url
      */
     XDatabaseAccess createDatabaseAccess([in]string URL, [in]string title)
         raises (com::sun::star::sdbc::SQLException);
@@ -120,6 +132,12 @@ interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:22:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

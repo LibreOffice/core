@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxis.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::chart::ChartAxis
 /** Specifies the axes in a diagram.
 
     <p>Note: The text properties correlate to all axis description
@@ -94,54 +93,49 @@ service ChartAxis
 {
 
 
-    /** Contains all the drawing and text properties.
+    /** set the properties for the entire axis line as well as for the
+        tick marks.
      */
     service com::sun::star::drawing::LineProperties;
 
-    // DocMerge: empty anyway
+    /** set the properties for all text labels of the axis
+     */
     service com::sun::star::style::CharacterProperties;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Max
     /** Contains the maximum value for the axis scale.
      */
     [optional, property] double Max;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Min
     /** Contains the minimum value for the axis scale.
      */
     [optional, property] double Min;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Origin
     /** Contains the origin of the axis scale.
      */
     [optional, property] double Origin;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::StepMain
     /** Contains the distance between the main tick marks.
      */
     [optional, property] double StepMain;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::StepHelp
     /** Contains the distance between the help tick marks.
  */
     [optional, property] double StepHelp;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoMax
     /** The maximium value of the axis scale is calculated by the chart if
         this property is <TRUE/>.
      */
@@ -149,7 +143,6 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoMin
     /** The minimum value of the axis scale is calculated by the chart if
         this property is <TRUE/>.
      */
@@ -157,22 +150,12 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoOrigin
-    /** The origin is calculated by the chart if this property is .
-<!--- JRH: Please insert <TRUE/> or <FALSE/>  --->*/
+    /** The origin is calculated by the chart if this property is <TRUE/>.
+     */
     [optional, property] boolean AutoOrigin;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoStepHelp
-    /** The distance between the help tick marks is calculated by the
-        chart if this property is .
-<!--- JRH: Please insert <TRUE/> or <FALSE/>  --->*/
-    [optional, property] boolean AutoStepHelp;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoStepMain
     /** The distance between the main tick marks is calculated by the chart
         if this property is <TRUE/>.
      */
@@ -180,7 +163,14 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Logarithmic
+    /** The distance between the help tick marks is calculated by the
+        chart if this property is <TRUE/>.
+    */
+    [optional, property] boolean AutoStepHelp;
+
+
+    //-------------------------------------------------------------------------
+
     /** Determines if the axis is scaled logarithmically or
         not (linear).
      */
@@ -188,14 +178,12 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: property com::sun::star::chart::ChartAxis::DisplayLabels
     /** Determines whether to display text at the axis or not.
      */
     [property] boolean DisplayLabels;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::TextRotation
     /** Determines the rotation of the text elements
         (axis description) in 100th degrees.
      */
@@ -203,21 +191,18 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Marks
     /** Determines the position of the marks.@see ChartAxisMarks
      */
     [property] long Marks;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::HelpMarks
     /** Determines the position of the help marks.@see ChartAxisMarks
      */
     [property] long HelpMarks;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Overlap
     /** Determines the overlap of the bars in a bar-type chart.
 
         <p>The value is given in percent of the width of the bars. The
@@ -228,7 +213,6 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::GapWidth
     /** Specifies the width of the gaps between each set of data points
         in a bar chart.
 
@@ -239,7 +223,6 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::ArrangeOrder
     /** The axis description may be arranged in a special order for a
         better placement.
      */
@@ -247,7 +230,6 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::TextBreak
     /** Determines if long text is broken into multiple lines.
      */
     [property] boolean TextBreak;
@@ -261,8 +243,9 @@ service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::chart::ChartAxis::NumberFormat
-    /** Contains the type id for the number formatter of the axis.@see com::sun::star::util::XNumberFormatter
+    /** Contains the type id for the number formatter of the axis.
+
+        @see com::sun::star::util::XNumberFormatter
      */
     [property] long NumberFormat;
 
@@ -275,6 +258,12 @@ service ChartAxis
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7.2.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.7  2001/10/24 14:54:57  mi
+    proofreading and corrections by Richard Holt
+
     Revision 1.6  2001/03/07 14:19:25  cl
     cleanup of shape services
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormulaResult.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,39 +58,35 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_FormulaResult_idl__
 #define __com_sun_star_sheet_FormulaResult_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from idl: constants com::sun::star::sheet::FormulaResult
-/** These constants select different result types of cell formulas.
+/** used to select different result types of cell formulas.
  */
 constants FormulaResult
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::FormulaResult::VALUE
-    /** This selects numeric results.
+    /** selects numeric results.
      */
     const long VALUE = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::FormulaResult::STRING
-    /** This selects non-numeric results.
+    /** selects non-numeric results.
      */
     const long STRING = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sheet::FormulaResult::ERROR
-    /** This selects errors.
+    /** selects errors.
      */
     const long ERROR = 4;
 
@@ -100,18 +96,5 @@ constants FormulaResult
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

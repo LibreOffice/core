@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateInstance.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-16 21:24:36 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@
 
 //=============================================================================
 
-/** implemented by objects that are instances of a named template.
+/** is implemented by objects that are instances of a named template to provide
+    information about the template.
 
     <p> Template names are similar to service names, but apply to structure and
         content, rather than to type.
@@ -87,7 +88,9 @@ interface XTemplateInstance: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    /** @returns
+    /** retrieves the name of the template
+
+        @returns
             the name of the template this object was built from or conforms to.
      */
     string getTemplateName();
@@ -101,6 +104,12 @@ interface XTemplateInstance: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.14.1  2002/06/20 15:36:10  jb
+    reviewed
+
+    Revision 1.6  2001/04/16 21:24:36  arellano
+    grammar changes
+
     Revision 1.5  2001/03/16 16:41:17  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

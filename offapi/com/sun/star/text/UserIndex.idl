@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserIndex.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-01-07 16:14:52 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,28 +76,33 @@ service UserIndex
 {
     service  com::sun::star::text::BaseIndex;
 
-    /*
-    returns the interface to access the paragraph style names that are included
+    /** contains the interface to access the paragraph style names that are included
      in this index.
      @see DocumentIndexParagraphStyles
      */
     [optional, property] com::sun::star::container::XIndexReplace LevelParagraphStyles;
-    /* determins if the document index marks are included in this index.
+
+    /** determins if the document index marks are included in this index.
      */
     [optional, property] boolean CreateFromMarks;
-    /* determins if the outline level of the location of the indexed object is
+
+    /** determins if the outline level of the location of the indexed object is
      used as index level of the index entry.*/
     [optional, property] boolean UseLevelFromSource;
-    /* determins if tables are included in the index.
+
+    /** determins if tables are included in the index.
      */
     [optional, property] boolean CreateFromTables;
-    /* determins if text frames are included in the index.
+
+    /** determins if text frames are included in the index.
      */
     [optional, property] boolean CreateFromTextFrames;
-    /* determins if graphic objects are included in the index.
+
+    /** determins if graphic objects are included in the index.
      */
     [optional, property] boolean CreateFromGraphicObjects;
-    /* determins if embedded objects are included in the index.
+
+    /** determins if embedded objects are included in the index.
      */
     [optional, property] boolean CreateFromEmbeddedObjects;
     /** contains the name of the user index.

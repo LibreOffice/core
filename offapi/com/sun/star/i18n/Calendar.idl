@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Calendar.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-05-21 20:50:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,13 @@ module com { module sun { module star { module i18n {
 //=============================================================================
 
 /**
-    A calendar as loaded from locale data.
+    A calendar as returned in a sequence by
+    <member>XLocaleData::getAllCalendars()</member>.
 
-    <p>A sequence of Calendars is returned by calls to
-     <member>XLocaleData::getAllCalendars()</member>.
+    @see XLocaleData
+        for links to DTD of XML locale data files.
  */
+
 struct Calendar
 {
     /// the days of the week, see also <type>CalendarItem</type>.
@@ -90,7 +92,7 @@ struct Calendar
     short                       MinimumNumberOfDaysForFirstWeek;
     /// if this is the default calendar for a given locale.
     boolean                     Default;
-    /// the name of the calendar, for example, <bold>gregorian</bold>.
+    /// the name of the calendar, for example, <b>gregorian</b>.
     string                      Name;
 };
 

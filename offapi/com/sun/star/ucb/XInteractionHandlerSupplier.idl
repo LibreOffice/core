@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionHandlerSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,20 +71,23 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** This interface should be implemented by an interbnal XCommandEnvironment
-    that can not supply an <type>XInteractionHandler</type>, but instead wants
-    interaction requests to be handled by other internal error handling
+/** This interface should be implemented by an internal
+    <type>XCommandEnvironment</type> that can not supply an
+    <type scope="com::sun::star::task">XInteractionHandler</type>, but instead
+    wants interaction requests to be handled by other internal error handling
     mechanism.
-
-    @see XCommandEnvironment.
 */
 interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Returns whether an <type>XInteractionHandler</type> can be supplied.
+    /** Returns whether an
+        <type scope="com::sun::star::task">XInteractionHandler</type> can be
+        supplied.
 
         @returns
-        <TRUE/>, if an XInteractionHandler can be supplied, <FALSE/> otherwise.
+        <TRUE/>, if an
+        <type scope="com::sun::star::task">XInteractionHandler</type> can be
+        supplied, <FALSE/> otherwise.
     */
     boolean hasInteractionHandler();
 };

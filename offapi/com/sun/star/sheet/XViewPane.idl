@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewPane.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,42 +76,38 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::sheet::XViewPane
-/** represents a pane in a view of a spreadsheet document.@see com::sun::star::sheet::SpreadsheetViewPane
+/** represents a pane in a view of a spreadsheet document.
+
+    @see com::sun::star::sheet::SpreadsheetViewPane
  */
 interface XViewPane: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewPane::getFirstVisibleColumn
     /** returns the first column that is visible in the pane.
      */
     long getFirstVisibleColumn();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewPane::setFirstVisibleColumn
     /** sets the first column that is visible in the pane.
      */
     void setFirstVisibleColumn( [in] long nFirstVisibleColumn );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewPane::getFirstVisibleRow
     /** returns the first row that is visible in the pane.
      */
     long getFirstVisibleRow();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewPane::setFirstVisibleRow
     /** sets the first row that is visible in the pane.
      */
     void setFirstVisibleRow( [in] long nFirstVisibleRow );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewPane::getVisibleRange
     /** returns the address of the cell range that consists of
         the cells which are visible in the pane.
      */
@@ -123,27 +119,5 @@ interface XViewPane: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

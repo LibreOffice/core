@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemClipboard.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-25 12:28:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <com/sun/star/lang/XTypeProvider.idl>
 #endif
 
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
@@ -88,47 +92,51 @@ interface XFlushableClipboard;
 /** The system clipboard service builds a bridge to the OS specific clipboard
     interfaces.
 
-    Notes: The Unix implementation needs to be instantiated with 2 Arguments:
+    <br/><br/><p><strong>Notes:</strong> The Unix implementation needs to be instantiated with 2 Arguments:
     <ul>
-        <li>a <type scope="com::sun::star::awt">XDisplayConnection</type> that provides the
+        <li>A <type scope="com::sun::star::awt">XDisplayConnection</type> that provides the
         display to be used.</li>
-        <li>a string that names the selection to be used</li>
+        <li>A string that names the selection to be used</li>
     </ul>
-    It is possible to use clipboards for different selections simultaneously.
-
-    @see XClipboard
+    It is possible to use clipboards for different selections simultaneously.</p>
 */
 service SystemClipboard
 {
     //-------------------------------------------------------------------------
-    /** provides access to the clipboard content.
+    /** Provides access to the clipboard content.
     */
     interface XClipboardEx;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to request notifications on content changes.
+    /** Provides the ability to request notifications on content changes.
     */
     interface XClipboardNotifier;
 
     //-------------------------------------------------------------------------
-    /** provides the ability to render the complete clipboard content. this
-        interface is only available if the method getRenderingCapabilities of
-        the interface XClipboardEx returns Persistant
+    /** Provides the ability to render the complete clipboard content. This
+        interface is only available if the method
+        <member scope="com::sun::star::datatransfer::clipboard">XClipboardEx::getRenderingCapabilities()</member>
+        returns Persistant
     */
     [optional] interface XFlushableClipboard;
 
     //-------------------------------------------------------------------------
-    /** for shutdown and listener support.
+    /** Provides the ability to initialize the clipboard
+    */
+    [optional] interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

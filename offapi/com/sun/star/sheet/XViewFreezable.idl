@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewFreezable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::sheet::XViewFreezable
 /** enables a <type>SpreadsheetView</type> to freeze
     columns and rows of the view.
  */
@@ -80,10 +79,7 @@ interface XViewFreezable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewFreezable::hasFrozenPanes
     /** returns <TRUE/> if the view has frozen panes.
-
-
 
         <p>Only one of
         <member>XViewSplitable::getIsWindowSplit()</member> and
@@ -94,11 +90,8 @@ interface XViewFreezable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XViewFreezable::freezeAtPosition
     /** freezes panes with the specified number of
         columns and rows.
-
-
 
         <p>To freeze only horizontally, specify nRows as 0.
         To freeze only vertically, specify nColumns as 0.</p>
@@ -112,24 +105,5 @@ interface XViewFreezable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/14 12:53:40  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePreviewImageFormats.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:20:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/** These constants are used to specify supported image formats of a
-    FilePreview implementation.
+/** These constants are used to specify image formats supported by an implementation
+    of the interface <type scope="com::sun::star::ui::dialogs">XFilePreview</type>.
  */
 
 constants FilePreviewImageFormats

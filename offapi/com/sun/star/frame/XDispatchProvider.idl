@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatchProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,70 +83,61 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XDispatchProvider
 /** provides <type>XDispatch</type> interfaces for certain functions which
     are useful at the UI.
+
+    @see XDispatch
  */
 interface XDispatchProvider: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDispatchProvider::queryDispatch
     /** searches for an <type>XDispatch</type> for the specified URL within
-        the specified target frame.@see XFrame::findFrame
-                @see queryDispatches
+        the specified target frame.
+
+        @param URL
+            describe the feature which should be supported by returned dispatch object
+
+        @param TargetFrameName
+            specify the frame which should be the target for this request
+
+        @param SearchFlags
+            optional search parameter for finding the frame if no special
+            <var>TargetFrameName</var> was used
+
+        @return
+            the dispatch object which provides queried functionality
+            <br>
+            or <NULL/> if no dispatch object is available
+
+        @see XFrame::findFrame()
+        @see XDispatchProvider::queryDispatches()
      */
-    com::sun::star::frame::XDispatch queryDispatch( [in] com::sun::star::util::URL aURL,
-             [in] string aTargetFrameName,
-             [in] long nSearchFlags );
+    XDispatch queryDispatch(
+        [in] com::sun::star::util::URL URL,
+        [in] string TargetFrameName,
+        [in] long SearchFlags );
 
     //-------------------------------------------------------------------------
+    /** actually this method is redundant to <member>XDispatchProvider::queryDispatch()</member>
+        to avoid multiple remote calls.
 
-    // DocMerge from idl: method com::sun::star::frame::XDispatchProvider::queryDispatches
-    /** @returns
-                multiple dispatch interfaces for the specified descriptors at once.
+        @param Requests
+            list of dispatch requests
 
-                <p>Actually this method is redundant to
-                <member>XDispatchProvider::queryDispatch</member> to avoid multiple
-                remote calls.
+        @returns
+            multiple dispatch interfaces for the specified descriptors at once
+
+            <p>
+            It's not allowed to pack it - because every request must match
+            to his real result. Means: don't delete <NULL/> entries inside this list.
+            </p>
      */
-    sequence<com::sun::star::frame::XDispatch> queryDispatches(
-        [in] sequence<com::sun::star::frame::DispatchDescriptor> aDescripts );
-
+    sequence< XDispatch > queryDispatches(
+        [in] sequence<DispatchDescriptor> Requests);
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/19 16:03:30  mi
-    documentations syntax errors fixed
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 14:49:56  mi
-    missing documentations
-
-    Revision 1.2  2000/01/31 09:44:58  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

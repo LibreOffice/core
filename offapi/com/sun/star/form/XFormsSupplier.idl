@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFormsSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,41 +76,54 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XFormsSupplier
-/** provides the access to a collection
-    of forms.
+/** provides the access to a collection of forms.
  */
 interface XFormsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XFormsSupplier::getForms
     /** accesses the forms.
 
+        @example StarBASIC
+        <listing>
+        REM  *****  BASIC  *****
 
+        Sub createColorSelectionBox
+            ' create a new shape
+            xShape = thisComponent.createInstance( "com.sun.star.drawing.ControlShape" )
+            Dim aPos as new com.sun.star.awt.Point
+            aPos.X = 200
+            aPos.Y = 100
+            xShape.Position = aPos
+            Erase aPos
+            Dim aSize as new com.sun.star.awt.Size
+            aSize.Width = 2500
+            aSize.Height = 5000
+            xShape.Size = aSize
+            Erase aSize
 
+            ' create a combo box model
+            xControlModel = thisComponent.createInstance( "com.sun.star.form.component.ComboBox" )
+            xControlModel.Name = "ColorSelection"
+            xControlModel.Text = "red"
 
+            ' marry the shape and the model
+            xShape.Control = xControlModel
 
-
-
-
-
-        @example <listing>
-        'creating a new combobox and inserting it into the Standard form.
-        xShape = xDoc.createInstance( "com::sun::star::drawing::ControlShape" )
-        xShape.Position = Point( 5, 80 )
-        xShape.Size = Size( 120, 16 )
-
-        xControlModel = xDoc.createInstance( "com::sun::star::form::component::ComboBox" )
-        xControlModel.Name = "ColorSelection"
-        xControlModel.Text = "red"
-        xControlModel.StringItemList = ...
-
-        xShape.ControlModel = xControlModel
-        xDoc.DrawPage.Forms.Standard.insertAtIndex( n%, xControlModel )
-        xDoc.Text.insertTextContent( xTextRange, xShape )
-
+            if ( 0 = thisComponent.DrawPage.Forms.getCount() ) Then
+                xForm = thisComponent.createInstance( "com.sun.star.form.component.DataForm" )
+                xForm.Name = "SampleForm"
+                thisComponent.DrawPage.Forms.insertByIndex( 0, xForm )
+            End If
+            ' insert the control model into the first form of the forms collection of the
+            ' draw page of the document
+            thisComponent.DrawPage.Forms.getByIndex(0).insertByIndex( 0, xControlModel )
+            thisComponent.DrawPage.add( xShape )
+        End Sub
         </listing>
+
+        @returns
+            the container of all the top-level forms belonging to the component.
      */
     com::sun::star::container::XNameContainer getForms();
 
@@ -123,6 +136,15 @@ interface XFormsSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.2  2002/07/26 10:00:09  fs
+    IDL review form layer
+
+    Revision 1.4.16.1  2002/02/18 14:50:49  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-24 10:53:02 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,9 @@
 
 // DocMerge from xml: service com::sun::star::sdbcx::ColumnDescriptor
 /** describes the common properties of a database column. Could be used for the creation
-    of a database column within a table.@see com::sun::star::sdbcx::Column
-     @see com::sun::star::sdbcx::Table
+    of a database columns within a table.
+    @see com::sun::star::sdbcx::Column
+    @see com::sun::star::sdbcx::Table
  */
 service ColumnDescriptor
 {
@@ -80,7 +81,9 @@ service ColumnDescriptor
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::ColumnDescriptor::Type
-    /** is the <type scope="com::sun::star::sdbc">DataType</type> of the column.
+    /** is the
+        <type scope="com::sun::star::sdbc">DataType</type>
+        of the column.
      */
     [property] long Type;
 
@@ -106,13 +109,15 @@ service ColumnDescriptor
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::ColumnDescriptor::IsNullable
-    /** indicates the nullability of values in the designated column.@see com::sun::star::sdbc::ColumnValue
+    /** indicates the nullability of values in the designated column.
+        @see com::sun::star::sdbc::ColumnValue
      */
     [property] long IsNullable;
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::ColumnDescriptor::IsAutoIncrement
-    /** indicates whether the column is automatically numbered, thus read-only.@see com::sun::star::sdbc::ColumnValue
+    /** indicates whether the column is automatically numbered, thus read-only.
+        @see com::sun::star::sdbc::ColumnValue
      */
     [property] boolean IsAutoIncrement;
 
@@ -144,20 +149,4 @@ service ColumnDescriptor
 
 }; }; }; };
 
-/*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:39  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:44  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/06/05 13:03:39  dg
-    new Services
-
-
-===========================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FunctionDescriptions.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_FunctionDescriptions_idl__
 #define __com_sun_star_sheet_FunctionDescriptions_idl__
 
@@ -68,24 +69,51 @@
 #ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module sheet {
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::FunctionDescriptions
-/** a list of function descriptions.
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a collection of function descriptions for all built-in
+    functions as well as add-in functions available in the spreadsheet
+    application.
+
+    <p>All container access methods return a sequence of
+    <type scope="com::sun::star::beans">PropertyValue</type> structs.
+    The properties contained in the sequence are collected in the
+    service <type>FunctionDescription</type>.</p>
  */
 service FunctionDescriptions
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the property sequence of a function description
+        via function index or identifier.
+     */
     interface com::sun::star::sheet::XFunctionDescriptions;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the property sequence of a function description
+        via function name.
+
+        <p>The localized uppercase name of the function has to be used
+        here.</p>
+     */
     interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all function descriptions.
+
+        @see com::sun::star::sheet::FunctionDescriptionEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
 
 };
 
@@ -93,18 +121,5 @@ service FunctionDescriptions
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

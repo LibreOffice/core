@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotTable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,9 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotTable_idl__
 #define __com_sun_star_sheet_DataPilotTable_idl__
-
-#ifndef __com_sun_star_container_XNamed_idl__
-#include <com/sun/star/container/XNamed.idl>
-#endif
 
 #ifndef __com_sun_star_sheet_XDataPilotDescriptor_idl__
 #include <com/sun/star/sheet/XDataPilotDescriptor.idl>
@@ -73,25 +70,26 @@
 #include <com/sun/star/sheet/XDataPilotTable.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::sheet::DataPilotTable
-/** a data pilot table on a spreadsheet.
+/** represents a data pilot table on a spreadsheet.
  */
 service DataPilotTable
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::container::XNamed;
+    //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+    /** provides access to the layout settings of the data pilot table.
+     */
     interface com::sun::star::sheet::XDataPilotDescriptor;
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides methods to control a data pilot table.
+     */
     interface com::sun::star::sheet::XDataPilotTable;
 
 };
@@ -100,18 +98,5 @@ service DataPilotTable
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

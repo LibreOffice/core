@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrames.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,59 +75,57 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XFrames
 /** manages and creates frames.
 
-
-
-    <p>Frames may contain other frames (by implementing an <type>XFrames</type>
+    <p>
+    Frames may contain other frames (by implementing an <type>XFrames</type>
     interface) and may be contained in other frames.
+    </p>
 
-    </p>@see XFrame
-        @see Frame
+    @see XFrame
+    @see Frame
  */
 interface XFrames: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XFrames::append
     /** appends the specified <type>Frame</type> to the list of sub-frames.
+
+        @param xFrame
+            new frame for inserting into this container
      */
-    void append( [in] com::sun::star::frame::XFrame xFrame );
+    void append( [in] XFrame xFrame );
 
     //-------------------------------------------------------------------------
+    /** provides access to the list of all currently existing
+        frames inside this container and her sub frames
 
-    // DocMerge from idl: method com::sun::star::frame::XFrames::queryFrames
-    /** @returns
-                    all child frames of the container which are intended to be visible
-                    to other objects.
+        @param nSearchFlags
+            use combinations of <type>FrameSearchFlag</type> to specify which
+            frames should be found
 
-                <P>The content of the sequence may be limited by the caller through
-                the <type>FrameSearchFlags</type>.</P>
+        @return
+            all frames of this container and all available frames of the whole frame tree
+            which match search parameter <var>SearchFlags</var>
      */
-    sequence<com::sun::star::frame::XFrame> queryFrames( [in] long nSearchFlags );
+    sequence< XFrame > queryFrames( [in] long nSearchFlags );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XFrames::remove
     /** removes the frame from its container.
 
-
-
-        <p>The method
-
-
-
-
-        is not called implicitly
-        by this method.
-
+        <p>
+        Note:
+        <ul>
+            <li>The method <method>XComponent::dispose()</method> is not called implicitly
+                by this method.</li>
+            <li>The creator attribute of the frame must be reset by the caller of
+                this method.</li>
+        </ul>
         </p>
-        <p>The creator attribute of the frame must be reset by the caller of
-        this method.</p>
-     */
-    void remove( [in] com::sun::star::frame::XFrame xFrame );
+
+        @param xFrame
+            frame which should be removed from this container
+    */
+    void remove( [in] XFrame xFrame );
 
 };
 
@@ -135,30 +133,4 @@ interface XFrames: com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:29  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 14:49:56  mi
-    missing documentations
-
-    Revision 1.2  2000/01/31 09:44:59  mi
-    XML syntax for documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

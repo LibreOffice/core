@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,23 +76,27 @@ interface XWarningsSupplier;
     database. Within the context of a Connection, SQL statements are
     executed and results are returned.
 
-
-
-    <p>A Connection's database is able to provide information
+    <p>
+    A Connection's database is able to provide information
     describing its tables, its supported SQL grammar, its stored
     procedures, and the capabilities of this connection. This
-    information is obtained with the <code>getMetaData</code> method.
-
+    information is obtained with the
+    <member scope="com::sun::star::sdbc">XConnection::getMetaData()</member>
+    method.
     </p>
     <p>
-    <b>Note:</b> By default the Connection automatically commits
+    <b>
+    Note:
+    </b>
+    By default the Connection automatically commits
     changes after executing each statement. If auto commit has been
     disabled, an explicit commit must be done or database changes will
     not be saved.
 
-    </p>@see com::sun::star::sdbc::XStatement
-     @see com::sun::star::sdbc::XResultSet
-     @see com::sun::star::sdbc::XDatabaseMetaData
+    </p>
+    @see com::sun::star::sdbc::XStatement
+    @see com::sun::star::sdbc::XResultSet
+    @see com::sun::star::sdbc::XDatabaseMetaData
  */
 service Connection
 {
@@ -123,6 +127,12 @@ service Connection
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/02/18 08:54:13  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:39  hjs
     initial import
 

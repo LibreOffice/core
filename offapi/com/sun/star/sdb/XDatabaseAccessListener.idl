@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccessListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,30 +73,42 @@
     "connectionClosing" events posted by a database access bean.
 
 
-    <p>A database access bean setting may be changed to connect to a different database.
+    <p>
+    A database access bean setting may be changed to connect to a different database.
     In that case, the connection of the bean must be closed and a new connection must
     be established. The could affect the current data processing on the bean, as it
     could be shared by a number of components. To prevent the bean from closing it's
-    connection, a DatabaseAccessListener could abort the closing.</p>
+    connection, a DatabaseAccessListener could abort the closing.
+    </p>
  */
 interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XDatabaseAccessListener::connectionChanged
     /** indicates that a new connection for the bean has been established.
+        @param evenet
+            the event happend
      */
     [oneway] void connectionChanged([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdb::XDatabaseAccessListener::approveConnectionClosing
     /** indicates that the connection of the bean will be closed. If there are pending
-        actions on the connection of the bean, "approveConnectionClosing" should return <FALSE/>.
+        actions on the connection of the bean, "approveConnectionClosing" should return
+        <FALSE/>.
+
+        @param evenet
+            the event happend
+        @returns
+            <TRUE/> when approved, otherwise <FALSE/>
      */
     boolean approveConnectionClosing([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdb::XDatabaseAccessListener::connectionClosing
     /** indicates that the connection will definitely be closed.
+        @param evenet
+            the event happend
      */
     [oneway] void connectionClosing([in]com::sun::star::lang::EventObject event);
 };
@@ -107,6 +119,12 @@ interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.16.1  2002/02/18 10:22:37  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/03/16 16:41:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/14 12:53:38  mi
     <true></true> -> <TRUE/> and same with FALSE
 

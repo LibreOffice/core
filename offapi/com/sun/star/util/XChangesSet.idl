@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChangesSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,31 +76,26 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::util::XChangesSet
 /** this interface enables inspecting a set of changes forming one batch transaction.
 
-
     <p>An object implementing this interface should implement more
-    container interfaces to access individual changes as well.
+    container interfaces to access individual changes as well.  </p>
 
-    </p>@see XChangesBatch
-        @see ChangesEvent
-        @see XChangesListener
-        @see XChangesNotifier
+    @see XChangesBatch
+    @see ChangesEvent
+    @see XChangesListener
+    @see XChangesNotifier
  */
 interface XChangesSet: com::sun::star::container::XElementAccess
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::util::XChangesSet::getAllChanges
     /** queries for all contained changes at once.
 
-            @returns an array of <type>ElementChange</type> holding information about each changes
-            that is part of this object.
+        @returns an array of <type>ElementChange</type> holding information about
+            each changes  that is part of this object.
      */
     sequence<ElementChange> getAllChanges();
 };
@@ -109,21 +104,4 @@ interface XChangesSet: com::sun::star::container::XElementAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/06/15 16:00:08  jb
-    Add Interfaces to support batch changes
-
-
-=============================================================================*/
 #endif

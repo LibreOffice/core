@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExecutableDialog.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-03 09:02:08 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/** Specifies an interface for a system dialog
-
-    @author     tra
-    @version    0.1
+/** Specifies an interface for an executable dialog.
 */
 
 
@@ -88,7 +85,9 @@ interface XExecutableDialog: com::sun::star::uno::XInterface
     /** Sets the title of the dialog.
 
         @param aTitle
-            set an abitrary title of the dialog, may be an empty string
+        Set an abitrary title for the dialog,
+        may be an empty string if the dialog should not
+        have a title.
     */
     void setTitle( [in] string aTitle );
 
@@ -96,12 +95,7 @@ interface XExecutableDialog: com::sun::star::uno::XInterface
     /** Executes (shows) the dialog.
 
         @returns
-            a status code of type ExecutableDialogResults
-
-        @see ExecutableDialogResults
-
-        @throws
-            a RuntimeException in the case of fatal errors
+        A status code of type <type>ExecutableDialogResults</type>.
     */
     short execute();
 };
@@ -113,6 +107,12 @@ interface XExecutableDialog: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.10.1  2002/01/30 11:44:29  tra
+    #97073#reviewd
+
+    Revision 1.1  2001/07/03 09:02:08  tra
+    moved from drafts
+
     Revision 1.1  2001/06/06 15:01:02  tra
     new dialogs interfaces
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AtomClassRequest.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,18 @@ module star
 module util
 {
 
-/** <type scope="com::sun::star::util">AtomCLassRequest</type> is used to
-    describe which atoms the user wants to know about
+/** is used to describe which atoms the user wants to know about.
 
     @see com::sun::star::util::XAtomServer
 */
 struct AtomClassRequest
 {
     /** the class of the atoms described in member
-        <member scope="com::sun::staer::util">AtomClassRequest::atoms</member>
+        <member>AtomClassRequest::atoms</member>.
      */
     long                atomClass;
-    /** the atoms requested from class
-        <member scope="com::sun::staer::util">AtomClassRequest::atomClass</member>
+
+    /** the atoms requested from class <member>AtomClassRequest::atomClass</member>.
     */
     sequence< long >    atoms;
 };

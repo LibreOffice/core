@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumn.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,56 +109,93 @@ interface XColumn: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::wasNull
     /** reports whether the last column read had a value of SQL NULL.
         Note that you must first call getXXX on a column to try to read
-        its value and then call wasNull() to see if the value read was
-        SQL NULL.
+        its value and then call
+        <code>wasNull()</code>
+        to see if the value read was SQL NULL.
+        @returns
+            <TRUE/> if so
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     boolean wasNull() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getString
     /** gets the value of a column in the current row as a String.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     string getString() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getBoolean
     /** gets the value of a column in the current row as boolean.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     boolean getBoolean() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getByte
     /** gets the value of a column in the current row as a byte.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     byte getByte() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getShort
     /** gets the value of a column in the current row as a short.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     short getShort() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getInt
     /** gets the value of a column in the current row as a long.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     long getInt() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getLong
     /** gets the value of a column in the current row as a hyper.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     hyper getLong() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getFloat
     /** gets the value of a column in the current row as a float.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     float getFloat() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getDouble
     /** gets the value of a column in the current row as a double.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     double getDouble() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
@@ -167,7 +204,7 @@ interface XColumn: com::sun::star::uno::XInterface
     /** gets the value of a column in the current row as a byte array.
              The bytes represent the raw values returned by the driver.
              @returns  the column value;
-if the value is SQL NULL, the result is empty.
+                if the value is SQL NULL, the result is empty.
              @throws com::sun::star::sdbc::SQLException
                 if a database access error occurs.
     */
@@ -176,6 +213,10 @@ if the value is SQL NULL, the result is empty.
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getDate
     /** gets the value of a column in the current row as a date object.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::util::Date getDate()
         raises (com::sun::star::sdbc::SQLException);
@@ -183,6 +224,10 @@ if the value is SQL NULL, the result is empty.
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getTime
     /** gets the value of a column in the current row as a time object.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::util::Time getTime()
         raises (com::sun::star::sdbc::SQLException);
@@ -190,6 +235,10 @@ if the value is SQL NULL, the result is empty.
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getTimestamp
     /** gets the value of a column in the current row as a datetime object.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::util::DateTime getTimestamp()
         raises (com::sun::star::sdbc::SQLException);
@@ -206,10 +255,14 @@ if the value is SQL NULL, the result is empty.
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
-        stream may return 0 when the method <code>available</code>
-        is called whether there is data
-        available or not.
+        stream may return 0 when the method
+        <member scope="com::sun::star::io">XInputStream::available()</member>
+        is called whether there is data available or not.
         </p>
+            @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::io::XInputStream getBinaryStream()
         raises (com::sun::star::sdbc::SQLException);
@@ -225,9 +278,14 @@ if the value is SQL NULL, the result is empty.
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
-        stream may return 0 when the method <code>available</code>
+        stream may return 0 when the method
+        <member scope="com::sun::star::io">XInputStream::available()</member>
         is called whether there is data available or not.
         </p>
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::io::XInputStream getCharacterStream()
         raises (com::sun::star::sdbc::SQLException);
@@ -235,9 +293,17 @@ if the value is SQL NULL, the result is empty.
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getObject
     /** @returns the value of a column in the current row as an object.
-        This method uses the given <code>Map</code> object
+        This method uses the given
+        <code>Map</code>
+        object
         for the custom mapping of the SQL structure or distinct type
         that is being retrieved.
+        @param typeMap
+            the type map is used to fetch the correct type
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     any getObject([in]com::sun::star::container::XNameAccess typeMap)
         raises (com::sun::star::sdbc::SQLException);
@@ -246,25 +312,40 @@ if the value is SQL NULL, the result is empty.
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getRef
     /** gets a REF(&lt;structured-type&gt) column value from the current row.
 
-<!-- JRH: html changed from "REF(&amp;lt;structured-type&amp;gt;)" -->
-*/
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+    */
     com::sun::star::sdbc::XRef getRef() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getBlob
     /** gets a BLOB (Binary Large OBject) value in the current row.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::sdbc::XBlob getBlob() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getClob
     /** gets a CLOB value in the current row of this <code>ResultSet</code> object.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::sdbc::XClob getClob() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getArray
     /** gets a SQL ARRAY value from the current row.
+        @returns
+            the column value
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
      */
     com::sun::star::sdbc::XArray getArray() raises (com::sun::star::sdbc::SQLException);
 };
@@ -275,6 +356,12 @@ if the value is SQL NULL, the result is empty.
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 10:21:46  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

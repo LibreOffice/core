@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuProxyListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 //=============================================================================
 
 
-// DocMerge: empty anyway
+// DocMerge from xml: service com::sun::star::mozilla::MenuProxyListener
+/** Listens for changes in menu items.
+ */
 service MenuProxyListener
 {
     //-------------------------------------------------------------------------

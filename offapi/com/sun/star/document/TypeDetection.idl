@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,35 +74,81 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
+/** capsulate a type detection service and supports access on taht configuration
 
-/** type detection of a specified resource (document)
+    <p>
+    It's possible to make a "flat" detection wich may use internal configuration
+    data only - or a "deep" detection which use special <type>DetectService</type>s
+    to look into the document to specify it unambigous. Last mode can be supressed
+    to perform.
+    </p>
  */
 service TypeDetection
 {
     //-------------------------------------------------------------------------
     /** detect resource
+
         <p>
-        Use XTypeDetection interface to get information about type of given document.
+        Use this interface to get information about type of given document.
+        Return value will be always an internal name of a registered document type.
+        It can be used may on other services (e.g. <type>FilterFactory</type>) for
+        further things (especialy to get the default filter for it).
          </p>
      */
-    interface com::sun::star::document::XTypeDetection;
+    interface XTypeDetection;
 
     //-------------------------------------------------------------------------
-    /** readonly access to complete type configuration list
+    /** provides access to complete type configuration
 
         <p>
-        These interface support a readonly access to our internal configuration of all accessible types.
-        The return value of XNameAccess::getByName() is a sequence<PropertyValue> packed in an Any!
-
-        Supported properties are:
-            name of property            value type of property      description
-            "UIName"                    [string]                    localized name of type to show at UI elements
-            "MediaType"                 [string]                    mime type
-            "ClipboardFormat"           [string]                    name of clipboard format
-            "URLPattern"                [sequence<string>]          a list of URL patterns which identify this type
-            "Extensions"                [sequence<string>]          a list of file extensions which identify this type
-            "DocumentIconID"            [integer]                   an ID which present the number of corresponding icon
+        This configuration is organized as a collection of flat data structures.
+        The representation of such data structures will pe represented by
+        the type sequence<com::sun::star::beans::PropertyValue>.
+        Follow properties will be supported:
+        <table border=1>
+            <tr>
+                <td><strong>property name</strong></td>
+                <td><strong>Value type</strong></td>
+                <td><strong>description</strong></td>
+            </tr>
+            <tr>
+                <td>UIName</td>
+                <td>[string]</td>
+                <td>localized name of type to show at UI elements</td>
+            </tr>
+            <tr>
+                <td>MediaType</td>
+                <td>[string]</td>
+                <td>MIME or content type</td>
+            </tr>
+            <tr>
+                <td>ClipboardFormat</td>
+                <td>[string]</td>
+                <td>name of supported clipboard format</td>
+            </tr>
+            <tr>
+                <td>URLPattern</td>
+                <td>[sequence< string >]</td>
+                <td>a list of URL patterns which identify this type</td>
+            </tr>
+            <tr>
+                <td>Extensions</td>
+                <td>[sequence< string >]</td>
+                <td>a list of file extensions which identify this type</td>
+            </tr>
+            <tr>
+                <td>DocumentIconID</td>
+                <td>[integer]</td>
+                <td>an ID which present the number of corresponding icon</td>
+            </tr>
+        </table>
          </p>
+
+        <p>
+        Note:<br>
+        All elements of this container will be adressed by his internal type name.
+        This must be an unambigous name.
+        </p>
      */
     interface com::sun::star::container::XNameAccess;
 };

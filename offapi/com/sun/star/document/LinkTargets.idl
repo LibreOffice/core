@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkTargets.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:40 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,19 @@
 
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
 
-// DocMerge: from xml
-
-// DocMerge from xml: service com::sun::star::document::LinkTargets
 /** This service gives access to a collection of names that are child links
     of the parent object that supplied this service.
 
-
-
     <p>The <type scope="com::sun::star::container">XNameAccess</type> returns elements
     of <type scope="com::sun::star::beans">XPropertySet</type> that implement
-    the service <type>LinkTarget</type>
-    </p>
+    the service <type>LinkTarget</type>.  </p>
  */
 service LinkTargets
 {
-    // DocMerge: empty anyway
-
-    // DocMerge: empty anyway
     interface com::sun::star::container::XNameAccess;
 
 };
@@ -98,24 +89,4 @@ service LinkTargets
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:10  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:18  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/08/04 15:18:44  mi
-    #76800# document events
-
-    Revision 1.2  2000/02/07 11:24:27  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,19 +75,19 @@
 module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
-/** interface to be implemented to receive notifications on clipboard content
+/** Interface to be implemented to receive notifications on clipboard content
     changes.
-    @see com::sun::star::datatransfer::clipboard::XClipboard
 */
-
 
 interface XClipboardListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** the contents of the clipboard have changed.
+    /** The content of the clipboard has changed.
 
         @param event
-        the event object containing the new contents.
+        The event object containing the new clipboard content.
+
+        @see com::sun::star::datatransfer::clipboard::ClipboardEvent
     */
     [oneway] void changedContents( [in] ClipboardEvent event );
 };

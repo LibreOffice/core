@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desktop.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,16 @@
 #include <com/sun/star/frame/Frame.idl>
 #endif
 
-#ifndef __com_sun_star_lang_Locale_idl__
-#include <com/sun/star/lang/Locale.idl>
+#ifndef __com_sun_star_frame_XDesktop_idl__
+#include <com/sun/star/frame/XDesktop.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XComponentLoader_idl__
+#include <com/sun/star/frame/XComponentLoader.idl>
+#endif
+
+#ifndef __com_sun_star_document_XEventBroadcaster_idl__
+#include <com/sun/star/document/XEventBroadcaster.idl>
 #endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
@@ -77,64 +85,48 @@
 
  module com {  module sun {  module star {  module frame {
 
-interface XDesktop;
-interface XComponentLoader;
-interface XTasksSupplier;
-
 //=============================================================================
+/** is the environment for components which can instantiate within frames
 
-// DocMerge from xml: service com::sun::star::frame::Desktop
-/** is the environment for components which can instantiate within frames.
-
-    <p>A desktop environment contains tasks with one or more frames
-    in which components can be loaded.</p>
+    <p>
+    A desktop environment contains tasks with one or more frames
+    in which components can be loaded. The term "task" or naming a frame as a
+    "task frame" is not in any way related to any additional implemented
+    interfaces, it's  just because these frames use task windows.
+    </p>
  */
 service Desktop
 {
+    //-------------------------------------------------------------------------
+    /** make it possible to be the global root of different seperated frame trees
+
+        <p>
+        It's not a must for a frame (neither a frame tree) to be a part of this
+        global tree. But such outstanding frames willn't be accessible by the normal
+        frame api.
+        </p>
+     */
     service Frame;
 
+    //-------------------------------------------------------------------------
+    /** regulate life time of desktop environment and support high level
+        access to components of sub frame tree
+     */
     interface XDesktop;
-    interface XComponentLoader;
-    interface XTasksSupplier;
-    interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
-    /** returns currently active child frame of desktop
+    /** supports simple api for loading components into the frame environment
      */
-    [property, readonly] com::sun::star::frame::XFrame ActiveFrame;
+    interface XComponentLoader;
+
+    //-------------------------------------------------------------------------
+    /** provides listener support for events on currently loaded documents
+     */
+    interface com::sun::star::document::XEventBroadcaster;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/09/26 09:57:05  as
-    #79395# actualize service description
-
-    Revision 1.4  2001/03/15 08:53:46  as
-    #80780# remove non supported property
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:27  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/09 15:45:28  mi
-    #72875# HasDesigner is now HasStylist
-
-    Revision 1.2  2000/02/09 10:39:35  as
-    #72208# new property ISOLocale
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

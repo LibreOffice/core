@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageStyleLayout.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,46 +58,41 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_style_PageStyleLayout_idl__
 #define __com_sun_star_style_PageStyleLayout_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module style {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module style {
-
-//=============================================================================
-
-// DocMerge from xml: enum com::sun::star::style::PageStyleLayout
-/** spefifies the pages for which a layout is valid.
+/** spefifies the pages for which a page layout is valid.
  */
 enum PageStyleLayout
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::style::PageStyleLayout::ALL
     /** The page style is identically used for left and right pages.
      */
     ALL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::style::PageStyleLayout::LEFT
     /** The page style is only used for left pages.
      */
     LEFT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::style::PageStyleLayout::RIGHT
     /** The page style is only used for right pages.
      */
     RIGHT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::style::PageStyleLayout::MIRRORED
-    /** The page style is used for left and right pages, but mirrored for
+    /** The page style is used unchanged for left pages and mirrored for
         right pages.
      */
     MIRRORED
@@ -108,18 +103,5 @@ enum PageStyleLayout
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:54  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:55  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

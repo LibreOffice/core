@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnSettings.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,12 @@ service ColumnSettings
         interface.
         </p>
         <p>
-        If the value is <void/>, a default numberformat should be used according
-        to the datatype of the column.</p>
+        If the value is
+        <void/>
+        , a default numberformat should be used according to the datatype of the column.
+        </p>
 
-<!-- JRH: orig: <type scope="com::sun::star::util">XNumberFormatter</type> -->*/
+    */
     [property] long FormatKey;
 
 
@@ -97,23 +99,34 @@ service ColumnSettings
         1: center
         2: right
         </pre>
-        <p> If the value is <void/>, a default alignment should be used according
-        to the datatype of the column.</p>
+        <p>
+        If the value is
+        <void/>
+        , a default alignment should be used according
+        to the datatype of the column.
+        </p>
      */
     [property] long Align;
 
 
     /** specifies the width of the column displayed in a grid, the unit is 10THMM.
 
-        <p> If the value is <void/>, a default width should be used according to the label
-        of the column.      </p>
+        <p>
+        If the value is
+        <void/>
+        , a default width should be used according to the label of the column.
+        </p>
      */
     [property] long Width;
 
 
     /** Position of the column within a grid.
 
-        <p> If the value is <void/>, the default position should be taken according.        </p>
+        <p>
+        If the value is
+        <void/>
+        , the default position should be taken according.
+        </p>
      */
     [property] long Position;
 
@@ -124,14 +137,26 @@ service ColumnSettings
 
 
     /** indicates a control model whichs defines the settings for layouting.
-        The default is <NULL/>.
+        The default is
+        <NULL/>
+        .
      */
     [optional, property] com::sun::star::beans::XPropertySet ControlModel;
 
     /** describes an optional help text which can be used by UI components
- when representing this column.
+        when representing this column.
+        The default is
+        <NULL/>
+        .
     */
     [optional, property] string HelpText;
+
+    /** describes the default value which should be displayed by a control when moving to a new row.
+        The default is
+        <NULL/>
+        .
+    */
+    [optional, property] string ControlDefault;
 };
 
 //=============================================================================
@@ -140,6 +165,12 @@ service ColumnSettings
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.8.2.1  2002/02/18 10:23:37  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.8  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.7  2001/09/24 11:21:17  fs
     #65293#
 

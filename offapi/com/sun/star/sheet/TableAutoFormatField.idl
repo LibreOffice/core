@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableAutoFormatField.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-14 15:11:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_TableAutoFormatField_idl__
 #define __com_sun_star_sheet_TableAutoFormatField_idl__
 
@@ -89,17 +90,22 @@
 #include <com/sun/star/table/CellOrientation.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-/** a single field in a TableAutoFormat.
+/** represents a field in an AutoFormat. A field contains all cell
+    properties for a specific position in an AutoFormat.
  */
 service TableAutoFormatField
 {
+    //-------------------------------------------------------------------------
+
+//! service com::sun::star::beans::PropertySet;
+    /** provides access to the properties.
+     */
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
@@ -252,8 +258,10 @@ service TableAutoFormatField
 
     //-------------------------------------------------------------------------
 
-    /** is <TRUE/> if the cell background is transparent
-        and the <member>TableAutoFormatField::CellBackColor</member> value is not used.
+    /** is <TRUE/> if the cell background is transparent.
+
+        <p>In this case the <member>TableAutoFormatField::CellBackColor</member>
+        value is not used.</p>
      */
     [property] boolean IsCellBackgroundTransparent;
 
@@ -283,7 +291,8 @@ service TableAutoFormatField
 
     //-------------------------------------------------------------------------
 
-    /** contains the orientation of the cell contents (i.e. top-to-bottom or stacked).
+    /** contains the orientation of the cell contents
+        (i.e. top-to-bottom or stacked).
      */
     [optional, property] com::sun::star::table::CellOrientation Orientation;
 
@@ -301,25 +310,29 @@ service TableAutoFormatField
 
     //-------------------------------------------------------------------------
 
-    /** contains the margin between cell contents and top border in 1/100 mm.
+    /** contains the margin between cell contents and top border
+        (in 1/100 mm).
      */
     [optional, property] long ParaTopMargin;
 
     //-------------------------------------------------------------------------
 
-    /** contains the margin between cell contents and bottom border in 1/100 mm.
+    /** contains the margin between cell contents and bottom border
+        (in 1/100 mm).
      */
     [optional, property] long ParaBottomMargin;
 
     //-------------------------------------------------------------------------
 
-    /** contains the margin between cell contents and left border in 1/100 mm.
+    /** contains the margin between cell contents and left border
+        (in 1/100 mm).
      */
     [optional, property] long ParaLeftMargin;
 
     //-------------------------------------------------------------------------
 
-    /** contains the margin between cell contents and right border in 1/100 mm.
+    /** contains the margin between cell contents and right border
+        (in 1/100 mm).
      */
     [optional, property] long ParaRightMargin;
 
@@ -332,3 +345,4 @@ service TableAutoFormatField
 //=============================================================================
 
 #endif
+

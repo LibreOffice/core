@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-12-10 17:42:31 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#endif
+
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
@@ -188,6 +192,8 @@ service TextDocument
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
+    //
+    interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharLocale
@@ -240,6 +246,12 @@ service TextDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6.2.1  2002/02/26 08:31:56  os
+    XNumberFormatsSupplier added
+
+    Revision 1.6  2001/12/10 17:42:31  mi
+    #94538# XStyleFamiliesSupplier added
+
     Revision 1.5  2001/05/15 10:29:08  kz
     add. some missing headers
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserDefinedIndex.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 12:41:22 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,50 +70,46 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::UserDefinedIndex
 /** specifies service of user defined indexes within a document.@see com::sun::star::text::BaseIndex
  */
 service UserDefinedIndex
 {
-    // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
 
-    /*
-    returns the interface to access the paragraph style names that are included
+    /** contains the interface to access the paragraph style names that are included
      in this index.
      @see DocumentIndexParagraphStyles
      */
-    // DocMerge: empty anyway
     [optional, property] com::sun::star::container::XIndexReplace LevelParagraphStyles;
-    /* determins if the document index marks are included in this index.
-     */
-    // DocMerge: empty anyway
-    [optional, property] boolean CreateFromMarks;
-    /* determins if the outline level of the location of the indexed object is
-     used as index level of the index entry.*/
 
-    // DocMerge: empty anyway
+    /** determins if the document index marks are included in this index.
+     */
+    [optional, property] boolean CreateFromMarks;
+
+    /** determins if the outline level of the location of the indexed object is
+     used as index level of the index entry.*/
     [optional, property] boolean UseLevelFromSource;
-    /* determins if tables are included in the index.
+
+    /** determins if tables are included in the index.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromTables;
-    /* determins if text frames are included in the index.
+
+    /** determins if text frames are included in the index.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromTextFrames;
-    /* determins if graphic objects are included in the index.
+
+    /** determins if graphic objects are included in the index.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromGraphicObjects;
-    /* determins if embedded objects are included in the index.
+
+    /** determins if embedded objects are included in the index.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromEmbeddedObjects;
+
     /**
      contains all index marks that are related to this index.
      */

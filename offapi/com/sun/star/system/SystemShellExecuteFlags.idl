@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemShellExecuteFlags.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-07-16 23:32:58 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,19 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** These constants are used to specify a mode of the ShellExecute-Service.
+/** Different settings for the <type>SystemShellExecute</type> service.
  */
 
 constants SystemShellExecuteFlags
 {
     //---------------------------------------------------------------------
-    /** Uses the default settings for the execute command.
+    /** Uses the default settings for executing commands.
     */
     const long DEFAULTS                = 0;
 
     //---------------------------------------------------------------------
     /** Prevents the display of system error message boxes if the
-        method execute of ::com::sun::star::sys::XSystemExecute fails.
+        method <member scope="com::sun::star::system">XSystemShellExecute::execute()</member> fails.
      */
     const long NO_SYSTEM_ERROR_MESSAGE = 1;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumnLocate.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,19 +78,27 @@ interface XResultSetMetaData;
 /** provides the possibility to find columns by their name.
 
 
-    <p>When several columns have the same name, then the value
+    <p>
+    When several columns have the same name, then the value
     of the first matching column will be returned. The column name option is
     designed to be used when column names are used in the SQL
     query. For columns that are NOT explicitly named in the query, it
     is best to use column numbers. If column names are used, there is
     no way for the programmer to guarantee that they actually refer to
-    the intended columns.</p>
+    the intended columns.
+    </p>
  */
 interface XColumnLocate: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XColumnLocate::findColumn
     /** maps the given Resultset column name to its ResultSet column index.
+        @param columnName
+            the name of the column
+        @returns
+            the position of the column
+        @throws SQLException
+                if a database access error occurs.
      */
     long findColumn([in]string columnName) raises (SQLException);
 };
@@ -101,6 +109,12 @@ interface XColumnLocate: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

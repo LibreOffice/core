@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentLoader.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-11-20 14:05:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,98 +87,140 @@
 module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** this is a simple interface to load components by an URL into a
+    frame environment
 
-// DocMerge from xml: interface com::sun::star::frame::XComponentLoader
-/** This is a simple interface to load components by an URL into a
-    frame environment.
-        @see Desktop
-        @see Frame
-        @see XFrame
+    @see Desktop
+    @see Frame
+    @see XFrame
  */
 interface XComponentLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XComponentLoader::loadComponentFromURL
     /** loads a component specified by an URL into the specified
         new or existing frame.
 
-        @param aURL
-            specifies the URL of the document to load. To create new documents,
-            use "private:factory/scalc", "private:factory/swriter", etc.
+        @param URL
+            specifies the URL of the document to load
 
-        @param aTargetFrameName
-            specifies the name of the frame to view the document in. If a frame
-            with the specified name already exists, it is used, otherwise it
-            is created. "_blank" always creates a new frame, "_self" means frame himself,
-            "_parent" address direct parent of frame, "_top" indicates top frame of
-            current path in tree.
+            <p>
+            To create new documents, use "private:factory/scalc", "private:factory/swriter", etc.
+            Other special protocols (e.g. "slot:", ".uno") are not allowed and raise
+            an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+            </p>
 
-        @param nSearchFlags
+        @param TargetFrameName
+            specifies the name of the frame to view the document in
+
+            <p>
+            If a frame with the specified name already exists, it is used, otherwise it
+            is created. There exist some special targets which never can be used
+            as real frame names:
+            <table border=1>
+                <tr>
+                    <td><strong>"_blank"</strong></td>
+                    <td>always creates a new frame</td>
+                </tr>
+                <tr>
+                    <td><strong>"_default"</strong></td>
+                    <td>recycle empty frame or create new one</td>
+                </tr>
+                <tr>
+                    <td><strong>"_self", ""(!)</strong></td>
+                    <td>means frame himself</td>
+                </tr>
+                <tr>
+                    <td><strong>"_parent"</strong></td>
+                    <td>address direct parent of frame</td>
+                </tr>
+                <tr>
+                    <td><strong>"_top"</strong></td>
+                    <td>indicates top frame of current path in tree</td>
+                </tr>
+                <tr>
+                    <td><strong>"_beamer"</strong></td>
+                    <td>means special sub frame</td>
+                </tr>
+            </table>
+
+        @param SearchFlags
             use the values of <type>FrameSearchFlag</type> to specify
-            how to find the specified <var>aTargetFrameName</var>.
-            Normally, simply use <code>0</code>.
+            how to find the specified <var>TargetFrameName</var>
 
-        @param aArgs
-            these arguments specify component or filter specific behavior.
+            <p>
+            Note: These flags are optional ones and will be used for non special
+            target names only.
+            </p>
+
+        @param Arguments
+            these arguments specify component or filter specific behavior
+
+            <p>
             For example, "ReadOnly" with a boolean value specifies whether
             the document is opened read-only. "FilterName" specifies the
             component type to create and the filter to use, for example:
-            "scalc: Text - csv". For more information see
+            "Text - CSV". For more information see
             <type scope="com::sun::star::document">MediaDescriptor</type>.
-     */
-    com::sun::star::lang::XComponent loadComponentFromURL( [in] string aURL,
-             [in] string aTargetFrameName,
-             [in] long nSearchFlags,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
-            raises( com::sun::star::io::IOException,
-                    com::sun::star::lang::IllegalArgumentException );
+            </p>
 
+        @return
+            a <type scope="com::sun::star::lang">XComponent</type> for successfully loaded
+            documents or
+            <br>
+            <NULL/>if it failed
+
+            <p>
+            This interface is a generic one and can be used to start further requests on
+            loaded document or control the lifetime of it (means dispose() it after using).
+            The real document service behind this interface can be one of follow three ones:
+            <ul>
+                <li>
+                    <type scope="com::sun::star::awt">XWindow</type> for simple components<br/>
+                    Should be used for viewable components only. It is not allowed to dispose
+                    it after use directly, because the frame containing the component is its owner.
+                    Because the frame object is not accessible through the interface too,
+                    only an interacting user can do this by closing the frames' window.
+                </li>
+                <li>
+                    <type>XController</type> for richer components<br/>
+                    Should be used for real editable components which doesn't need a model.
+                    It is not allowed to dispose it after use directly, because the frame
+                    containing the component is its owner. Here the object can be disposed
+                    by disposing the frame, that the <member>XController::getFrame()</member>
+                    method of the controller returns. But for visible components the controller
+                    should be asked for permission by calling <member>XController::suspend()</member> before.
+                </li>
+                <li>
+                    <type>XModel</type> for full featured components<br/>
+                    A model that in general can be shared between several view/controller pairs,
+                    does not have an explicit owner. Every view and also the component that
+                    loaded the document may consider itself as an owner.
+                    Simply calling <member>XComponent::dispose()</member> on this model may
+                    cause problems, if some members of the "owner community" are currently
+                    busy working on the model. These problems are handled by explicit closing
+                    negotiations through the interface <type scope="com::sun::star::util">XCloseable</type>.
+                    Direct dispose of the model is allowed only, if this special interface doesn't exist.
+                </li>
+            </ul>
+            </p>
+
+        @throws com::sun::star::io::IOException
+            when <var>URL</var> couldn't be found or was corrupt
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            when given parameters doesn't perform the specification
+     */
+    com::sun::star::lang::XComponent loadComponentFromURL(
+        [in] string URL,
+        [in] string TargetFrameName,
+        [in] long SearchFlags,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments)
+        raises( com::sun::star::io::IOException,
+                com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.10  2001/11/01 10:29:29  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.9  2001/03/22 17:25:56  mi
-    #77161# arguments of XComponentLoader::loadComponents
-
-    Revision 1.8  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.7  2000/12/21 15:04:54  mi
-    typo fixed: FrameSearchFlags now without s at the end
-
-    Revision 1.6  2000/12/21 15:03:56  mi
-    typo fixed: FrameSearchFlagsy now without y at the end
-
-    Revision 1.5  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.4  2000/12/12 12:27:50  mi
-    documentation for arguments added
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/11/18 11:49:56  mi
-    XComponent now in module lang
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

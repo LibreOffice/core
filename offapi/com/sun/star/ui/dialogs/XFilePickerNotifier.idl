@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePickerNotifier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:20:59 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,7 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 
 //=============================================================================
-/** Interface to be implemented by all FilePicker service clients.
-
-    <p> The <type>XFilePickerListener</type> interface must be implemented by
-    the clients of the FilePicker service which need to be notified about
-    events while the FilePicker service is displayed.
+/** Interface to be implemented in order to support listener management.
 */
 interface XFilePickerNotifier: com::sun::star::uno::XInterface
 {
@@ -89,10 +85,9 @@ interface XFilePickerNotifier: com::sun::star::uno::XInterface
     /** Interface for clients to register as XFilePickerListener
 
         @param xListener
-            the <type>XFilePickerListener</type> interface of the object that
-            wants to receive FilePickerEvents.
-
-        @see XFilePickerListener
+        The <type>XFilePickerListener</type> interface of the listener that
+        wants to receive events of type <type>FilePickerEvent</type>.
+        <p>Invalid interfaces or NULL values will be ignored.</p>
     */
     [oneway] void addFilePickerListener( [in] XFilePickerListener xListener );
 
@@ -100,10 +95,9 @@ interface XFilePickerNotifier: com::sun::star::uno::XInterface
     /** Interface for clients to unregister as XFilePickerListener.
 
         @param xListener
-            The <type>XFilePickerListener</type> interface of the object that
-            wants to receive FilePickerEvents.
-
-        @see XFilePickerListener
+        The <type>XFilePickerListener</type> interface of the listener that
+        wants to receive events of type <type>FilePickerEvent</type>.
+        <p>Invalid interfaces or NULL values will be ignored.</p>
     */
     [oneway] void removeFilePickerListener( [in] XFilePickerListener xListener );
 };

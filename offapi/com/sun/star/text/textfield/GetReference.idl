@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GetReference.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:50 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ service GetReference
      */
     [property] string CurrentPresentation;
     /** contains the source of the reference.
-        @see com.sun.star.text.ReferenceFieldSource
+        @see com::sun::star::text::ReferenceFieldSource
      */
     [property] short ReferenceFieldSource;
     /** contains the name of the source.
@@ -90,12 +90,12 @@ service GetReference
      */
     [property] string SourceName;
     /** contains the type of the reference.
-        @see com.sun.star.text.ReferenceFieldPart
+        @see com::sun::star::text::ReferenceFieldPart
      */
     [property] short ReferenceFieldPart;
     /** contains the sequence number of a set expression field that is used as sequence field
          or the value of the ReferenceId property of a footnote or endnote.
-        @see service com.sun.star.text.Footnote
+        @see com::sun::star::text::Footnote
      */
     [property] short SequenceNumber;
 };

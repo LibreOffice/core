@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseParameterBroadcaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,22 +76,32 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XDatabaseParameterBroadcaster
-/** provides the possibility of reveiving an event for configuration of parameters.
+/** provides the possibility of receiving an event for configuration of parameters.
+    <p>This interface is usually implemented by components which are to execute a statement,
+    and may need parameter information. For example, the
+    <type scope="com::sun::star::form::component">DataForm</type> is such a component. When it is
+    bound to a statement which contains parameters, or to a query which is based upon a parametrized
+    statement, it needs values to fill in the parameters with actual values when it is being loaded.
+    One method to gather these values is calling the <type>XDatabaseParameterListener</type> listeners, which
+    can fill them in.</p>
  */
 interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XDatabaseParameterBroadcaster::addParameterListener
-    /** adds the specified listener to receive the event "approveParameter."
+    /** adds the specified listener, to allow it to fill in necessary parameter values.
+        @param aListener
+            the listener to add.
+        @see com::sun::star::form::XDatabaseParameterListener
      */
     [oneway] void addParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XDatabaseParameterBroadcaster::removeParameterListener
     /** removes the specified listener.
+        @param aListener
+            the listener to remove.
+        @see com::sun::star::form::XDatabaseParameterListener
      */
     [oneway] void removeParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
 
@@ -104,6 +114,15 @@ interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.2  2002/07/26 10:00:05  fs
+    IDL review form layer
+
+    Revision 1.4.16.1  2002/02/18 14:50:29  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

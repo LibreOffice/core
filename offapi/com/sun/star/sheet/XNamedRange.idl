@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNamedRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XNamedRange_idl__
 #define __com_sun_star_sheet_XNamedRange_idl__
 
@@ -69,46 +70,39 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the settings of a named range in a spreadsheet
+    document.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XNamedRange
-/** represents a named range.@see com::sun::star::sheet::NamedRange
+    @see com::sun::star::sheet::NamedRange
  */
 interface XNamedRange: com::sun::star::container::XNamed
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XNamedRange::getContent
 
-    // DocMerge from xml: method com::sun::star::sheet::XNamedRange::getContent
     /** returns the content of the named range.
 
-
-
         <p>The content can be a reference to a cell or cell range
-        or any formula.</p>
+        or any formula expression.</p>
      */
     string getContent();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XNamedRange::setContent
     /** sets the content of the named range.
 
-
-
         <p>The content can be a reference to a cell or cell range
-        or any formula.</p>
+        or any formula expression.</p>
      */
     void setContent( [in] string aContent );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XNamedRange::getReferencePosition
     /** returns the position in the document which is used as a
         base for relative references in the content.
      */
@@ -116,29 +110,28 @@ interface XNamedRange: com::sun::star::container::XNamed
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XNamedRange::setReferencePosition
     /** sets the position in the document which is used as a
         base for relative references in the content.
      */
-    void setReferencePosition( [in] com::sun::star::table::CellAddress aReferencePosition );
+    void setReferencePosition(
+            [in] com::sun::star::table::CellAddress aReferencePosition );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XNamedRange::getType
     /** returns the type of the named range.
+
+        <p>This is a combination of flags as defined in
+        <type>NamedRangeFlags</type>.</p>
      */
     long getType();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XNamedRange::setType
     /** sets the type of the named range.
 
-
-
-        <p>The type must be <val>0</val> or a combination of the
-        <type>NamedRangeFlag</type> constants and controls if the named
-        range is listed in dialogs prompting for special ranges.</p>
+        @param nType
+            a combination of flags that specify the type of a named range,
+            as defined in <type>NamedRangeFlags</type>.
      */
     void setType( [in] long nType );
 
@@ -148,33 +141,5 @@ interface XNamedRange: com::sun::star::container::XNamed
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentLoader.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,11 @@ module com {  module sun {  module star {  module sdb {
 //=============================================================================
 /** implements a loader for various datasource-related user interface components.
 
-    <p>Usually, you don't deal with this loader directly. Instead it is registered for
+    <p>
+    Usually, you don't deal with this loader directly. Instead it is registered for
     a particular URL scheme, and you use the dispatch mechanism provided by the application
-    framework, dispatching URLs the loader is registered for.</p>
+    framework, dispatching URLs the loader is registered for.
+    </p>
 
     @see com::sun::star::frame::XDispatch
     @see com::sun::star::frame::XDispatchProvider
@@ -83,24 +85,46 @@ service ContentLoader
 {
     /** ensures the basic functionality.
 
-        <p>Supporting this service ensures that you can plug any of the components
-        the loader can create into an arbitrary frame.</p>
+        <p>
+        Supporting this service ensures that you can plug any of the components
+        the loader can create into an arbitrary frame.
+        </p>
 
-        The loader should be registered for the URL scheme <b>.component:DB/ *</b>,
-        the concrete URLs supported are:
+        The loader should be registered for the URL scheme
+        <b>
+        .component:DB/ *
+        </b>
+        , the concrete URLs supported are:
         <ul>
-            <li><b>.component:DB/DataSourceBrowser</b><br/>
-                Using this URL creates an instance of the <service>DataSourceBrowser</service> service
-                and plugs it into the frame passed to the loader.
+            <li>
+                <b>
+                    .component:DB/DataSourceBrowser
+                </b>
+                <br/>
+                Using this URL creates an instance of the
+                <service scope="com::sun::star::sdb">
+                    DataSourceBrowser
+                </service>
+                service and plugs it into the frame passed to the loader.
             </li>
-            <li><b>.component:DB/FormGridView</b><br/>
-                Using this URL creates an instance of the <service>ExternalSourceBrowser</service> service
-                and plugs   it into the frame passed to the loader.
+            <li>
+                <b>
+                    .component:DB/FormGridView
+                </b>
+                <br/>
+                Using this URL creates an instance of the
+                <service scope="com::sun::star::sdb">
+                    ExternalSourceBrowser
+                </service>
+                service and plugs it into the frame passed to the loader.
             </li>
         </ul>
 
-        The parameters passed to the <member scope="com::sun::star::frame">XFrameLoader::load</member> are forwarded
-        to the object beeing created, in particular to it's <type scope="com::sun::star::lang">XIntialization</type>
+        The parameters passed to the
+        <member scope="com::sun::star::frame">XFrameLoader::load()</member>
+        are forwarded to the object beeing created,
+        in particular to it's
+        <type scope="com::sun::star::lang">XIntialization</type>
         interface.
     **/
     service com::sun::star::frame::FrameLoader;

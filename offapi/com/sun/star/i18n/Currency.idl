@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,42 +62,53 @@
 #ifndef __com_sun_star_i18n_Currency_idl__
 #define __com_sun_star_i18n_Currency_idl__
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
+//============================================================================
 
 /**
-    Symbols and names of a specific currency.
+    Symbols, names, and attributes of a specific currency, returned in a
+    sequence by <member>XLocaleData::getAllCurrencies()</member>.
 
-    <p> Returned by <member>XLocaleData::getAllCurrencies()</member>.
+    @see XLocaleData
+        for links to DTD of XML locale data files.
  */
-struct Currency {
-    /// identifier, for example, <b>dollar</b>.
+
+struct Currency
+{
+    /** Identifier, for example, <b>dollar</b>. */
     string ID;
-    /// currency symbol, for example, <b>$</b>.
+
+    /** Currency symbol, for example, <b>$</b>. */
     string Symbol;
-    /// currency abbreviation used by banks and in money exchange, for example, <b>USD</b>.
+
+    /** Currency abbreviation used by banks and in money exchange, for
+        example, <b>USD</b>. */
     string BankSymbol;
-    /// name of the currency, for example, <b>US Dollar</b>.
+
+    /** Name of the currency, for example, <b>US Dollar</b>. */
     string Name;
-    /// if this currency is the default currency for a given locale.
+
+    /** If this currency is the default currency for a given locale. */
     boolean Default;
-    /** if this currency is the one used in compatible number format codes with
+
+    /** If this currency is the one used in compatible number format codes with
         <member>FormatElement::formatIndex</member> values in the range 12..17.
         Those format codes are used to generate some old style currency format
         codes for compatibility with StarOffice5 and StarOffice4.
+
+        @see com::sun::star::i18n::NumberFormatIndex
      */
     boolean UsedInCompatibleFormatCodes;
-    /** the number of decimal places, for example, <bold>2</bold> for US Dollar
-        or <bold>0</bold> for Italian Lira.
-     */
+
+    /** The number of decimal places, for example, <b>2</b> for US Dollar
+        or <b>0</b> for Italian Lira.  */
     short DecimalPlaces;
 };
 
-//=============================================================================
-
+//============================================================================
 }; }; }; };
-
+//============================================================================
 #endif

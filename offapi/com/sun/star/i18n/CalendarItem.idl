@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarItem.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-05-21 20:57:16 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,20 +70,23 @@ module com { module sun { module star { module i18n {
 
 
 /**
-    One entry in a calendar, for example, a day of week or a month or an era.
+    One entry in a calendar, for example, a day of week or a month or an
+    era.
 
-    <p>A sequence of CalendarItems is contained in the <type>Calendar</type>
-    fields <emp>Days</emp>, <emp>Months</emp> and <emp>Eras</emp>.
+    <p> A sequence of CalendarItems is contained in
+    <member>Calendar::Days</member>, <member>Calendar::Months</member>,
+    <member>Calendar::Eras</member> </p>
  */
+
 struct CalendarItem
 {
-    /// a unique ID for an entry of this type, usually the abbreviated English name.
+    /** A unique ID for an entry of this type, usually the lower case
+        abbreviated English name, for example, <b>"sun"</b> for Sunday.  */
     string ID;
-    /// the abbreviated name.
+    /// The abbreviated name, for example, <b>"Sun"</b>.
     string AbbrevName;
-    /// the full name.
-    string FullName;
-};
+    /// The full name, for example, <b>"Sunday"</b>.
+    string FullName; };
 
 //=============================================================================
 }; }; }; };

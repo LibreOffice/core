@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XApproveActionBroadcaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,31 +76,30 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XApproveActionBroadcaster
-/** XApproveActionBroadcaster" notifies the specific listeners before
-    an action on a component is performed.
+/** allows to probably veto actions to be performed on components.
 
-
-
-    <p> In general a component which supports the
+    <p> Usually, a component which supports the
     <type>XApproveActionBroadcaster</type> interface implements
-    the possibility of adding an
     <type scope="com::sun::star::awt">XActionListener</type> as well.</p>
  */
 interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XApproveActionBroadcaster::addApproveActionListener
-    /** addApproveActionListener" adds the specified listener to
-        receive the "approveAction" event.
+    /** adds the specified listener to receive the <member>XApproveActionListener::approveAction</member>
+        event.
+
+        @param aListener
+             the listener to be added
      */
     [oneway] void addApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XApproveActionBroadcaster::removeApproveActionListener
-    /** removes the specified listener.
+    /** removes the specified listener
+
+        @param aListener
+             the listener to be removed
      */
     [oneway] void removeApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
 
@@ -113,6 +112,18 @@ interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.3  2002/07/26 10:00:00  fs
+    IDL review form layer
+
+    Revision 1.4.16.2  2002/02/18 15:23:33  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4.16.1  2002/02/18 14:52:23  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

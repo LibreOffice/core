@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,30 +77,18 @@
     module frame {
 
 //============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XExtendedFilterDetection
-/** extended filter detection for frame loader factories.
-
-
-
-
-
+/** use <type scope="com::sun::star::document">XExtendedFilterDetection</type> instead of this
     @deprecated
  */
 interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-
-    // DocMerge from xml: method com::sun::star::frame::XExtendedFilterDetection::detect
-    /** control agreement of a frameloader with given URL or arguments
-
-        <p>
-        Implement it as an extra service for your frameloader to give information about
-        your responsibility for a given URL. If you can handle these documents return
-        a valid name for a filter or an empty string otherwise.</p>
+    /** use <member scope="com::sun::star::document">XExtendedFilterDetection::detect()</member> instead of this
+        @deprecated
      */
-    string detect( [in] string sURL, [in] sequence< com::sun::star::beans::PropertyValue > aArgumentlist );
+    string detect(
+        [in] string URL,
+        [in] sequence< com::sun::star::beans::PropertyValue > Argumentlist);
 
     }; // XExtendedFilterDetection
    }; // frame

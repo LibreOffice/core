@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowUpdate.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,66 +96,130 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateNull
     /** gives a nullable column a null value.
+        @param columnIndex
+            the position of the column
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateNull([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateBoolean
     /** updates a column with a boolean value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateBoolean([in]long columnIndex, [in]boolean x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateByte
     /** updates a column with a byte value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateByte([in]long columnIndex, [in]byte x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateShort
     /** updates a column with a short value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateShort([in]long columnIndex, [in]short x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateInt
     /** updates a column with an long value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateInt([in]long columnIndex, [in]long x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateLong
     /** updates a column with a hyper value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateLong([in]long columnIndex, [in]hyper x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateFloat
     /** updates a column with a float value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateFloat([in]long columnIndex, [in]float x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateDouble
     /** updates a column with a double value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateDouble([in]long columnIndex, [in]double x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateString
     /** updates a column with a string value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateString([in]long columnIndex, [in]string x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateBytes
     /** updates a column with a byte array value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateBytes([in]long columnIndex, [in]sequence<byte> x) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateDate
     /** updates a column with a date value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateDate([in]long columnIndex, [in]com::sun::star::util::Date x)
         raises (SQLException);
@@ -163,6 +227,12 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateTime
     /** updates a column with a time value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateTime([in]long columnIndex, [in]com::sun::star::util::Time x)
         raises (SQLException);
@@ -170,6 +240,12 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateTimestamp
     /** updates a column with a timestamp value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateTimestamp([in]long columnIndex,
                          [in]com::sun::star::util::DateTime x)
@@ -178,6 +254,14 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateBinaryStream
     /** updates a column with a stream value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @param length
+            how much data should be read out of the stream
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateBinaryStream([in]long columnIndex,
                              [in]com::sun::star::io::XInputStream x,
@@ -186,6 +270,14 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateCharacterStream
     /** updates a column with a stream value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @param length
+            how much data should be read out of the stream
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateCharacterStream([in]long columnIndex,
                                 [in]com::sun::star::io::XInputStream x,
@@ -194,6 +286,12 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateObject
     /** updates a column with an object value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateObject([in]long columnIndex, [in]any x)
       raises (SQLException);
@@ -201,6 +299,14 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XRowUpdate::updateNumericObject
     /** updates a column with an object value.
+        @param columnIndex
+            the position of the column
+        @param x
+            the new column value
+        @param scale
+            defines the scale which should be used to write the numeric value
+        @throws SQLException
+            if a database access error occurs.
      */
     void updateNumericObject([in]long columnIndex, [in]any x, [in]long scale)
       raises (SQLException);
@@ -212,6 +318,12 @@ interface XRowUpdate: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.1  2002/02/18 09:00:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/03/16 16:41:35  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

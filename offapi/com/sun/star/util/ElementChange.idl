@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ElementChange.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,15 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::ElementChange
 /** This structure describes a single change that is part of a batch of changes.
  */
 struct ElementChange
 {
-    // DocMerge from xml: field com::sun::star::util::ElementChange::Accessor
-    /** This contains the accessor to the element which changed
-
+    /** This contains the accessor to the element which changed.
 
         <p>The type and the value of the accessor depends on the service.</p>
      */
@@ -83,14 +80,12 @@ struct ElementChange
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::util::ElementChange::Element
     /** This contains the element that was inserted or changed.
      */
     any Element;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::util::ElementChange::ReplacedElement
     /** This contains the element that was replaced or removed.
      */
     any ReplacedElement;
@@ -101,21 +96,4 @@ struct ElementChange
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:04  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/06/15 15:58:13  jb
-    Add event class for batch changes
-
-    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
-    new
-
-
-=============================================================================*/
 #endif

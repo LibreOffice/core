@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnsupportedFlavorException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,11 @@
 module com { module sun { module star { module datatransfer {
 
 //=============================================================================
-/** exception thrown if a transfer data object is requested in a DataFlavor not
-    supported by the data source.
+/** Exception will be thrown if there is a request for data in a
+    <type>DataFlavor</type> that is not supported by a data source.
 
     @see com::sun::star::datatransfer::DataFlavor
+    @see com::sun::star::datatransfer::XTransferable
 */
 exception UnsupportedFlavorException: com::sun::star::uno::Exception
 {

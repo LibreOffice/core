@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,34 +80,31 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::ListBox
-/** This service specifies the ControlModel of a box which contains a
-    list of strings to select from.
+/** specifies a model for a control which allows to choose in a list of alternative values.
  */
 service ListBox
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlListBoxModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
-    // DocMerge: empty anyway
+    /** can be used to reset the control to it's default state.
+
+        @see ListBox::DefaultSelection
+    */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ListBox::DefaultSelection
+    /** contains the indexes of entries of the listbox, which should selected
+        by default.
 
-    // DocMerge from idl: property com::sun::star::form::component::ListBox::DefaultSelection
-    /** contains the indexes for entries of the listbox, which should selected
-             by default. These selection is used initially or for a reset.
+        <p>This selection is used initially or for a reset.</p>
+
+        @see com::sun::star::awt::UnoControlListBoxModel::Selection
+        @see com::sun::star::form::XReset
      */
     [property] sequence<short> DefaultSelection;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ListBox::ListSource
 
-    // DocMerge from idl: property com::sun::star::form::component::ListBox::ListSource
     /** contains the listbox entries.
      */
     [property] sequence<string> ListSource;
@@ -121,6 +118,18 @@ service ListBox
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.3  2002/07/26 09:49:18  fs
+    IDL review form layer
+
+    Revision 1.3.24.2  2002/02/18 15:23:49  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3.24.1  2002/02/18 14:54:23  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:19  hjs
     initial import
 

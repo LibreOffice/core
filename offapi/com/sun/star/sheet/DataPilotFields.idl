@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotFields.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,26 +58,54 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_DataPilotFields_idl__
 #define __com_sun_star_sheet_DataPilotFields_idl__
 
 #ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
-
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::DataPilotFields
-/** collection of fields in a DataPilotDescriptor.
+/** represents a collection of fields in a data pilot table.
+
+    <p>If the data pilot table is based on a spreadsheet cell range, the
+    fields are representred by the columns of the range and are named using
+    the first row of the range.</p>
+
+    @see com::sun::star::sheet::DataPilotTableDescriptor
  */
 service DataPilotFields
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the data pilot fields in the collection via index.
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** creates an enumeration of all data pilot fields.
+
+        @see com::sun::star::sheet::DataPilotFieldsEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the data pilot fields in the collection via name.
+     */
     interface com::sun::star::container::XNameAccess;
 
 };
@@ -86,18 +114,5 @@ service DataPilotFields
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoader.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,19 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_Frame_idl__
-#define __com_sun_star_frame_Frame_idl__
+#ifndef __com_sun_star_frame_FrameLoader_idl__
+#define __com_sun_star_frame_FrameLoader_idl__
 
 #ifndef __com_sun_star_frame_XFrameLoader_idl__
 #include <com/sun/star/frame/XFrameLoader.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
 #endif
 
 //=============================================================================
@@ -70,44 +78,56 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
+/** derivations of this abstract service are used to load components
+    into <type>Frame</type>s of the environment
 
-// DocMerge from xml: service com::sun::star::frame::FrameLoader
-/** Derivations of this abstract service are used to load components
-    into <type>Frame</type>s of the environment.
-
-    <p>Concrete implementations of this service register, for example,
+    <p>
+    Concrete implementations of this service register, for example,
     for file name extensions or MIME types to load appropriate
-    components. The components loaded are at least <type>Controller</type>.</p>
+    components. The components loaded are at least <type>Controller</type>.
+    Instead of <type>SynchronousFrameLoader</type> this one use asynchronous
+    processes to load the component.
+    </p>
 
-    <!-- Dennis: Please reword the above paragraph -->*/
+    @see SynchronousFrameLoader
+ */
 service FrameLoader
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::frame::XFrameLoader;
+    //-------------------------------------------------------------------------
+    /** support asynchronous loading of the component
+     */
+    interface XFrameLoader;
+
+    //-------------------------------------------------------------------------
+    /** support initialization of loader with its own configuration!
+
+        <p>
+        Concrete implementations should use it to get her own configuration data
+        directly after creation by the <type>FrameLoaderFactory</type>.
+        Otherwhise they must use normal configuration api to do so.
+        </p>
+     */
+    [optional] interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the internal name of this frame loader
+
+        <p>
+        The internal name is a part of his configuration and will be passed by
+        the <type>FrameLoaderFactory</type> after creation
+        if optional interface <type scope="com::sun::star::lang">XInitialization</type>
+        is supported. Value of function <member>XNamed::getName()</member> can be
+        used on service <type>FrameLoaderFactory</type> to get further informations about this loader.
+        Setting of this name by calling <member>XNamed::setName()</member> must be
+        forwarded to same factory service. He should decide, if it's allowed or not.
+        The reason: prevent code against name ambigities.
+        </p>
+     */
+     [optional] interface com::sun::star::container::XNamed;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/04/24 00:07:05  arellano
-    added comment
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/05/25 10:26:18  mi
-    Doku
-
-
-=============================================================================*/
 #endif

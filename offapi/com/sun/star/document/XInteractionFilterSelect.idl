@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionFilterSelect.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 11:55:11 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,41 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-interface XInteractionFilterSelect : ::com::sun::star::task::XInteractionContinuation
+/** continuation used by interaction mechanism at filter detection during
+    loading documents
+
+    <p>
+    If during loading time the filter can't be detected and wasn't given at calling time,
+    a possible <type scope="com::sun::star::task">InteractionHandler</type> will be used.
+    (it's a a part of used <type>MediaDescriptor</type>)
+    A <type>NoSuchFilterRequest</type> will be used then to start right interaction on that to
+    get a decision wich filter should be used for given URL. A possible continiuation
+    of that can be this XInteractionFilterSelect. It will transport the decision back to
+    generic filter detection and force using of it. Of course it's possible to abort
+    the loading process by use another continuation <type scope="com::sun::star::task">XInteractionAbort</type>.
+    </p>
+
+    @see MediaDescriptor
+    @see com::sun::star::task::InteractionHandler
+    @see NoSuchFilterRequest
+    @see com::sun::star::task::XInteractionAbort
+ */
+interface XInteractionFilterSelect : com::sun::star::task::XInteractionContinuation
 {
-    void   setFilter( [in] string sName );
-    string getFilter(                   );
+    //-------------------------------------------------------------------------
+    /** used by interaction to set selected filter
+
+        <p>
+        This value must be save till another one will be set
+        and must be provided on getFilter() for interest users.
+        </p>
+     */
+    void setFilter( [in] string Name );
+
+    //-------------------------------------------------------------------------
+    /** used by detection to get selected filter
+     */
+    string getFilter();
 };
 
 //=============================================================================

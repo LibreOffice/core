@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Controller.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-13 20:26:41 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,34 +73,70 @@
 #include <com/sun/star/awt/XWindow.idl>
 #endif
 
+#ifndef __com_sun_star_ui_XContextMenuInterception_idl__
+#include <com/sun/star/ui/XContextMenuInterception.idl>
+#endif
+
+#ifndef __com_sun_star_view_XSelectionSupplier_idl__
+#include <com/sun/star/view/XSelectionSupplier.idl>
+#endif
 
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: service com::sun::star::frame::Controller
 /** is an abstract service for a component which offers a deeper integration of
-    desktop components than a <type scope="com::sun::star::awt">UnoControl</type>
-    can offer.
+    desktop components than a <type scope="com::sun::star::awt">XWindow</type>
+    can offer
 
-  <!-- Dennis: Are the descriptions of XController and XDispatchProvider missing descriptions? -->*/
+    <p>
+    Such components can be loaded into a <type>Frame</type> inside a <type>Desktop</type>
+    environment. A controller is a recher component then a pure window, but full featured
+    components need a <type>XModel</type> interface too.
+    <br>
+    (see service <type scope="com::sun::star::document">OfficeDocument</type> for further information)
+    <p>
+
+    @see com::sun::star::document::OfficeDocument
+ */
 service Controller
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::frame::XController;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::frame::XDispatchProvider;
-
-
-    // DocMerge from xml: service com::sun::star::frame::Controller: interface com::sun::star::awt::XWindow
-    /** Possibly the controller and the main window of the component
-                are the same object.
+    //-------------------------------------------------------------------------
+    /** with this interface, components viewed in a <type>Frame</type> can serve
+        events (by supplying dispatches)
      */
-    interface com::sun::star::awt::XWindow;
+    interface XController;
 
+    //-------------------------------------------------------------------------
+    /** for certain functions which are useful at the UI
+
+        <p>
+        Mostly used by the <type>Frame</type> service, which contains this
+        controller object. There will be an interception mechanism for dispatches
+        available too.
+        </p>
+
+        @see XDispatch
+        @see XDispatchProviderInterception
+     */
+    interface XDispatchProvider;
+
+    //-------------------------------------------------------------------------
+    /** this interface enables the controller to get interceptors registered that
+        change context menue or prevent them from beeing executed
+
+        <p>
+        Don't mix it with <type>XDispatchProviderInterception</type> which
+        intercept calls of <member>XDispatch::dispatch()</member>.
+        </p>
+     */
+    [optional] interface com::sun::star::ui::XContextMenuInterception;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to access and change the selection in a view
+     */
+    [optional] interface com::sun::star::view::XSelectionSupplier;
 };
 
 //=============================================================================
@@ -110,6 +146,12 @@ service Controller
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.14.1  2002/06/17 08:44:10  as
+    odk review
+
+    Revision 1.4  2001/04/13 20:26:41  arellano
+    revised plural and added question
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

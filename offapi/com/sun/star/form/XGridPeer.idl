@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGridPeer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,31 +76,28 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::form::XGridPeer
 /** represents the window peer of a GridControl and allows you to set
     and retrieve the model data.
 
+    <p>Usually, the columns used are the columns as supplied by the grid control model.</p>
 
+    <p>You should use this interface only if you know exactly what you are doing. Tampering
+    with the columns of a grid control which is part of a complex form can really hurt ....</p>
 
-
-
-
-
-    @deprecated@see     com::sun::star::awt::XWindowPeer
+    @deprecated
+    @see com::sun::star::awt::XWindowPeer
+    @see com::sun::star::form::component::GridControl
  */
 interface XGridPeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XGridPeer::getColumns
-    /** retrieves the currently used column definitions
-        of the peer.
+    /** retrieves the currently used column definitions of the peer.
      */
     com::sun::star::container::XIndexContainer getColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::form::XGridPeer::setColumns
     /** sets the column definition for the peer.
      */
     [oneway] void setColumns( [in] com::sun::star::container::XIndexContainer aColumns );
@@ -114,6 +111,15 @@ interface XGridPeer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.2  2002/07/26 10:00:10  fs
+    IDL review form layer
+
+    Revision 1.4.16.1  2002/02/18 15:21:07  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:23  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:42:52  mi
     moved from api
 

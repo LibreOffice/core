@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DefinitionContainer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,23 +86,26 @@ interface XSingleServiceFactory;
     The container supports access to its elements by the elements name or
     by the elements position.
     </p>
-    <p>Simple enumeration must be supported as well.
+    <p>
+    Simple enumeration must be supported as well.
     </p>
-    <p>To reflect the changes with the underlying database, a refresh mechanism
-    needs to be supported. </p>
+    <p>
+    To reflect the changes with the underlying database, a refresh mechanism
+    needs to be supported.
+    </p>
  */
 service DefinitionContainer
 {
-    // DocMerge: empty anyway
+    // gives access to the elements by name.
     interface com::sun::star::container::XNameAccess;
 
-    // DocMerge: empty anyway
+    // allows to insert and remove by name.
     interface com::sun::star::container::XNameContainer;
 
-    // DocMerge: empty anyway
+    // gives access to the elements by index.
     interface com::sun::star::container::XIndexAccess;
 
-    // DocMerge: empty anyway
+    // allows to create an enumeration of the elements.
     interface com::sun::star::container::XEnumerationAccess;
 
 
@@ -112,9 +115,11 @@ service DefinitionContainer
     [optional] interface com::sun::star::util::XRefreshable;
 
     /** can be used to create container elements.
-        <p>If this interface is supported, the object created using it (e.g., the object returned by
-        <method scope="com.sun.star.lang">XSingleServiceFactory::createInstance</method>) can be used as
-        container elements.</p>
+        <p>
+        If this interface is supported, the object created using it (e.g., the object returned by
+        <method scope="com.sun.star.lang">XSingleServiceFactory::createInstance()</method>
+        ) can be used as container elements.
+        </p>
      */
     [optional] interface com::sun::star::lang::XSingleServiceFactory;
 };
@@ -125,6 +130,15 @@ service DefinitionContainer
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6.2.2  2002/02/18 12:53:58  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.6.2.1  2002/02/18 10:23:14  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.6  2001/10/25 15:00:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.5  2001/02/07 13:15:17  fs
     added an optional interface XSingleServiceFactory
 

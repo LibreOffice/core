@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragSourceDropEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,23 +71,27 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** The DragSourceDropEvent is delivered from the DragSourceContext to its
-    currently registered DragSourceListener's dragDropEnd() method.
+/** The <type>DragSourceDropEvent</type> is delivered from an object that implements
+    <type>XDragSourceContext</type> to its currently registered drag source listener's.
 
     <p>It contains sufficient information for the originator of the operation to
     provide appropriate feedback to the end user when the operation completes.</p>
+
+    @see com::sun::star::datatransfer::dnd::XDragSourceListener
 */
 
 struct DragSourceDropEvent: com::sun::star::datatransfer::dnd::DragSourceEvent
 {
     //-------------------------------------------------------------------------
-    /** the action performed by the target on the subject of the drop.
+    /** The action performed by the target on the subject of the drop.
+
+        @see com::sun::star::datatransfer::dnd::DNDConstants
      */
 
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** indicates if the drop was successful.
+    /** Indicates if the drop was successful.
      */
 
     boolean DropSuccess;

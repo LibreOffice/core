@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PasteOperation.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,53 +58,47 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_PasteOperation_idl__
 #define __com_sun_star_sheet_PasteOperation_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: enum com::sun::star::sheet::PasteOperation
-/** used to specify which operations are carried out when
-    pasting cell values into a cell range.
+/** used to specify which operations are carried out when pasting cell
+    values into a cell range.
  */
 enum PasteOperation
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::PasteOperation::NONE
     /** new values are used without changes.
      */
     NONE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::PasteOperation::ADD
     /** old and new values are added.
      */
     ADD,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::PasteOperation::SUBTRACT
     /** new values are subtracted from the old values.
      */
     SUBTRACT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::PasteOperation::MULTIPLY
     /** old and new values are multiplied.
      */
     MULTIPLY,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::PasteOperation::DIVIDE
     /** new values are divided by the new values.
      */
     DIVIDE
@@ -115,18 +109,5 @@ enum PasteOperation
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:49  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

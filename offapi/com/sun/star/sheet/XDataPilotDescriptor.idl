@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataPilotDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XDataPilotDescriptor_idl__
 #define __com_sun_star_sheet_XDataPilotDescriptor_idl__
 
@@ -77,106 +78,99 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the layout settings of a data pilot table.
 
-//=============================================================================
+    <p>This interface extends the interface
+    <type scope="com::sun::star::container">XNamed</type> which provides
+    access to the name of the data pilot table used i.e. in collections.</p>
 
-// DocMerge from xml: interface com::sun::star::sheet::XDataPilotDescriptor
-/** represents a description of a data pilot table.@see com::sun::star::sheet::DataPilotDescriptor
-        @see com::sun::star::sheet::DataPilotTable
+    @see com::sun::star::sheet::DataPilotDescriptor
+    @see com::sun::star::sheet::DataPilotTable
  */
 interface XDataPilotDescriptor: com::sun::star::container::XNamed
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XDataPilotDescriptor::getTag
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getTag
-    /** returns an additional string stored in the
-        data pilot table.
+    /** returns an additional string stored in the data pilot table.
      */
     string getTag();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::setTag
-    /** sets an additional string stored in the
-        data pilot table.
+    /** sets an additional string stored in the data pilot table.
      */
     void setTag( [in] string aTag );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getSourceRange
-    /** returns the cell range containing the data
-        for the data pilot table.
+    /** returns the cell range containing the data for the data pilot table.
      */
     com::sun::star::table::CellRangeAddress getSourceRange();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::setSourceRange
-    /** sets the cell range containing the
-        data for the data pilot table.
+    /** sets the cell range containing the data for the data pilot table.
      */
-    void setSourceRange( [in] com::sun::star::table::CellRangeAddress aSourceRange );
+    void setSourceRange(
+            [in] com::sun::star::table::CellRangeAddress aSourceRange );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getFilterDescriptor
-    /** returns the filter descriptor specifying
-        which data from the source cell range are used for the
-        data pilot table.
+    /** returns the filter descriptor specifying which data from the
+        source cell range are used for the data pilot table.
      */
     com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getDataPilotFields
-    /** returns the collection of all the data
-        pilot fields.
+    /** returns the collection of all the data pilot fields.
      */
     com::sun::star::container::XIndexAccess getDataPilotFields();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getColumnFields
-    /** returns the collection of the data pilot
-        fields used as column fields.
+    /** returns the collection of the data pilot fields used as column fields.
+
+        @see com::sun::star::sheet::DataPilotFields
      */
     com::sun::star::container::XIndexAccess getColumnFields();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getRowFields
-    /** returns the collection of the data pilot
-        fields used as row fields.
+    /** returns the collection of the data pilot fields used as row fields.
+
+        @see com::sun::star::sheet::DataPilotFields
      */
     com::sun::star::container::XIndexAccess getRowFields();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getPageFields
-    /** returns the collection of the data pilot
-        fields used as page fields.
+    /** returns the collection of the data pilot fields used as page fields.
+
+        @see com::sun::star::sheet::DataPilotFields
      */
     com::sun::star::container::XIndexAccess getPageFields();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getDataFields
-    /** returns the collection of the data pilot
-        fields used as data fields.
+    /** returns the collection of the data pilot fields used as data fields.
+
+        @see com::sun::star::sheet::DataPilotFields
      */
     com::sun::star::container::XIndexAccess getDataFields();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XDataPilotDescriptor::getHiddenFields
-    /** returns the collection of the data pilot
-        fields not used as column, row, page, or data fields.
+    /** returns the collection of the data pilot fields not used as
+        column, row, page, or data fields.
+
+        @see com::sun::star::sheet::DataPilotFields
      */
     com::sun::star::container::XIndexAccess getHiddenFields();
 
@@ -186,33 +180,5 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:23  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:55  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseComboBox.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,38 +80,45 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::DatabaseComboBox
-/** This service specifies a data-aware ComboBox.
+/** This service specifies a combo box which is data-aware, and can be bound to a database field.
+
+    <p>Like most other data aware controls, such a combo box will display the actual content
+    of the field it is bound to. In addition, as a combo box contains a list where the user
+    can choose items to fill into the control, this list can be filled with different data from
+    a database, too.</p>
  */
 service DatabaseComboBox
 {
-    // DocMerge: empty anyway
     service com::sun::star::form::component::ComboBox;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::DataAwareControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::DatabaseComboBox::ConvertEmptyToNull
-    /** determines if an empty text should be regarded as a NULL value.
+    /** determines if an empty text should be treated as a <NULL/> value.
+
+        <p>When the user enters text into a combo box, and after this, the control
+        content is to be committed into the database field the control is bound to,
+        a decision must be made how to deal with empty strings.<br/>
+        This is controlled by <member>ConvertEmptyToNull</member>.</p>
+
+        <p>If the property is set to <TRUE/>, and an empty text is to be commited, this is
+        converted into <NULL/>, else it is written as empty string.</p>
      */
     [property] boolean ConvertEmptyToNull;
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR DatabaseComboBox::ListSource
 
-    // DocMerge from xml: property com::sun::star::form::component::DatabaseComboBox::ListSource
-    /** describes the data for the ComboBox entries. This could be e.g. a
-        SQL-Statement.
+    /** describes the source of items in the combo box' list.
+
+        <p>The concrete meaning of this property depends on the value of <member>ListSourceType</member></p>
      */
     [property] string ListSource;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::form::component::DatabaseComboBox::ListSourceType
     /** specifies the kind of list source.
 
-
-        <p>A value list is not allowed for a combobox.</p>
+        <p>Note: A value of <member scope="com::sun::star::form">ListSourceType::VALUELIST</member>
+        is not valid for a combo box. It won't be rejected when setting it, but controls will usually ignore it
+        and leave the list empty.</p>
      */
     [property] com::sun::star::form::ListSourceType ListSourceType;
 };
@@ -123,6 +130,15 @@ service DatabaseComboBox
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.2  2002/07/26 09:49:08  fs
+    IDL review form layer
+
+    Revision 1.3.24.1  2002/02/19 08:46:48  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:18  hjs
     initial import
 

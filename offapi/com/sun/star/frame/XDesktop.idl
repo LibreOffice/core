@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDesktop.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,125 +87,113 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XDesktop
 /** This is the main interface of a desktop service.
 
-    <p>A desktop is an environment for components which can be viewed in
+    <p>
+    A desktop is an environment for components which can be viewed in
     frames. Frames are like frames in HTML framesets. This does not imply
     that a desktop can handle framesets; the frames may be top frames
     only.
+    </p>
 
-    </p>@see Desktop
+    @see Desktop
  */
 interface XDesktop: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDesktop::terminate
     /** tries to terminate the desktop.
 
-        <p>First, a vetoable queryTermination-event is broadcast. If no
-        TerminationVetoException was thrown, a notifyTermination-event is
-        broadcast and <TRUE/> will be returned; otherwise an
-        abortTermination-event is broadcast and <FALSE/> will be returned.
-        </p>@see com::sun::star::frame::TerminationVetoException
-                @see XTerminateListener
+        <p>
+        First, every terminate listener is called by his <member>XTerminateListener::queryTermination()</member> method.
+        Throwing of a <type>TerminationVetoException</type> can break the termination process and the listener how has
+        done that will be the new "controller" of the desktop lifetime. He should try to terminate it by himself after
+        his own processes will be finished.
+        If nobody disagree with the termination request, every listener will be called by his
+        <member>XTerminateListener::notifyTermination()</member> method.
+        </p>
+
+        @return
+            <TRUE/>if all listener agree with this request
+            <br>
+            <FALSE/>otherwise
+
+        @see XTerminateListener
+        @see TerminationVetoException
      */
     boolean terminate();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDesktop::addTerminateListener
     /** registers an event listener to the desktop, which is called
         when the desktop is queried to terminate, and when it really
         terminates.
+
+        @param Listener
+            listener for termination events
+
+        @see XDesktop::removeTerminateListener()
      */
-    [oneway] void addTerminateListener( [in] com::sun::star::frame::XTerminateListener xListener );
+    [oneway] void addTerminateListener( [in] XTerminateListener Listener );
 
     //-------------------------------------------------------------------------
+    /** unregisters an event listener for termination events.
 
-    // DocMerge from xml: method com::sun::star::frame::XDesktop::removeTerminateListener
-    /** unregisters an event listener which was registered with
-        <member>XDesktop::addTerminateListener</member>.
+        @param Listener
+            listener which wish to be deregistered
+
+        @see XDesktop::addTerminateListener()
      */
-    [oneway] void removeTerminateListener( [in] com::sun::star::frame::XTerminateListener xListener );
+    [oneway] void removeTerminateListener( [in] XTerminateListener Listener );
 
     //-------------------------------------------------------------------------
+    /** provides read access to collection of all currently loaded components
+        inside the frame tree
 
-    // DocMerge from idl: method com::sun::star::frame::XDesktop::getComponents
-    /** @returns
-                a collection of all components which are loaded into a frame.
+        <p>
+        The component is, by definition, the model of the control which
+        is loaded into a frame, or if no model exists, into the control
+        itself.
+        The service <type>Components</type> which is available from this
+        method is a collection of all components of the desktop which are open
+        within a frame of the desktop.
+        </p>
 
-                <p>The component is, by definition, the model of the control which
-                is loaded into a frame, or if no model exists, into the control
-                itself.
+        @returns
+            the collection of all components
 
-                <p>The service, <type>Components</type>, which is available from this
-                method is a collection of all components of the desktop which are open
-                within a frame of the desktop.
-
-                @see Components
+        @see Components
      */
     com::sun::star::container::XEnumerationAccess getComponents();
 
     //-------------------------------------------------------------------------
+    /** provides read access to the component inside the tree which has the UI focus
 
-    // DocMerge from idl: method com::sun::star::frame::XDesktop::getCurrentComponent
-    /** @returns
-                the component within the desktop environment which has the UI focus.
+        <p>
+        Normally, the component is the model part of the
+        active component. If no model exists it is the active controller
+        (view) itself.
+        </p>
 
-                <p>Normally, the component is the model part of the
-                active component. If no model exists it is the active controller
-                (view) itself.
+        @returns
+            the component within the desktop environment which has the UI focus.
+
+        @see XDesktop::getCurrentFrame()
      */
     com::sun::star::lang::XComponent getCurrentComponent();
 
     //-------------------------------------------------------------------------
+    /** provides read access to the frame wich contains the current component
 
-    // DocMerge from idl: method com::sun::star::frame::XDesktop::getCurrentFrame
-    /** @returns
-                the frame of the component which has the
-                UI focus within this desktop enviroment.
+        @returns
+            the frame of the component which has the
+            UI focus within this desktop enviroment
+
+        @see XDesktop::getCurrentComponent()
      */
-    com::sun::star::frame::XFrame getCurrentFrame();
-
+    XFrame getCurrentFrame();
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/21 08:35:10  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.4  2000/12/14 12:53:37  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:56  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/11/18 11:49:56  mi
-    XComponent now in module lang
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

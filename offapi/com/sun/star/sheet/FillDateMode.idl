@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillDateMode.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,48 +58,44 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_FillDateMode_idl__
 #define __com_sun_star_sheet_FillDateMode_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** used to specify how an arithmetic date series is calculated.
 
-//=============================================================================
-
-// DocMerge from xml: enum com::sun::star::sheet::FillDateMode
-/** are used to specify how an arithmetic date series is
-    calculated.
+    @see com::sun::star::sheet::FillMode
  */
 enum FillDateMode
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::FillDateMode::FILL_DATE_DAY
     /** for every new value a single day is added.
      */
     FILL_DATE_DAY,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::FillDateMode::FILL_DATE_WEEKDAY
-    /** for evey new value a single day is added, but Saturdays and Sundays
-        are skipped.
+    /** for evey new value a single day is added, but Saturdays and
+        Sundays are skipped.
      */
     FILL_DATE_WEEKDAY,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::FillDateMode::FILL_DATE_MONTH
-    /** for every new value one month is added.
+    /** for every new value one month is added (day keeps unchanged).
      */
     FILL_DATE_MONTH,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::FillDateMode::FILL_DATE_YEAR
-    /** for every new value one year is added.
+    /** for every new value one year is added (day and month keep unchanged).
      */
     FILL_DATE_YEAR
 
@@ -109,18 +105,5 @@ enum FillDateMode
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:47  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

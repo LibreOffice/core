@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Key.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,18 +88,19 @@ service Key
      */
     interface XColumnsSupplier;
 
-    // DocMerge: empty anyway
+    // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
 
     // DocMerge from idl: property com::sun::star::sdbcx::Key::Name
-    /** is the name of the column
+    /** is the name of the key
      */
     [readonly, property] string Name;
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Key::Type
-    /** indicates the type of the key.@see com::sun::star::sdbcx::KeyType
+    /** indicates the type of the key.
+        @see com::sun::star::sdbcx::KeyType
      */
     [readonly, property] long Type;
 
@@ -112,13 +113,15 @@ service Key
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Key::UpdateRule
-    /** is the rule which is applied for updates; only used for foreign keys.@see com::sun::star::sdbc::KeyRule;
+    /** is the rule which is applied for updates; only used for foreign keys.
+        @see com::sun::star::sdbc::KeyRule;
      */
     [readonly, property] long UpdateRule;
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Key::DeleteRule
-    /** is the rule which is applied for deletions; only used for foreign keys.@see com::sun::star::sdbc::KeyRule;
+    /** is the rule which is applied for deletions; only used for foreign keys.
+        @see com::sun::star::sdbc::KeyRule;
      */
     [readonly, property] long DeleteRule;
 };
@@ -129,6 +132,15 @@ service Key
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/02/18 12:57:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 09:37:12  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:33  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartSeriesAddress.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,34 +67,31 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::chart::ChartSeriesAddress
-/** This structure describes a single data row, specified by its name and
-    a sequence of data points.
+/** This structure describes a single data row, specified by its name
+    and a sequence of data points.
 
-    The cell addresses are in the format of the application that
-    contains this chart.
+    <p>The cell addresses are in the format of the application that
+    contains this chart.</p>
  */
 struct ChartSeriesAddress
 {
-    // DocMerge from xml: field com::sun::star::chart::ChartSeriesAddress::DataRangeAddress
     /** contains the cell range address of the data for this series.
      */
     string DataRangeAddress;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::chart::ChartSeriesAddress::LabelAddress
     /** contains the cell address of label (i.e. name) of this series.
      */
     string LabelAddress;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: field com::sun::star::chart::ChartSeriesAddress::DomainRangeAddresses
     /** contains cell addresses for each domain of this series.
 
-                 For XY (scatter) diagrams at least one series has a domain. Most
-                 of the other chart types use an empty sequence here.
+        <p>For XY (scatter) diagrams at least one series has a
+        domain. Most of the other chart types use an empty sequence
+        here.</p>
      */
     sequence< string > DomainRangeAddresses;
 };
@@ -106,6 +103,12 @@ struct ChartSeriesAddress
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

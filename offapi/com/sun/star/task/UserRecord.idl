@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserRecord.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-02 15:04:18 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,14 @@
 module com { module sun { module star { module task {
 
 //=============================================================================
-/* Users passwords list
+/* Specifies user/password entries for <type>UrlRecord</type>.
 */
 struct UserRecord
 {
+    /// specifies the user name.
     string           UserName;
+
+    /// specifies the passwords for the given user.
     sequence<string> Passwords;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartLegendPosition.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,46 +68,56 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::chart::ChartLegendPosition
-/** specifies where the legend is positioned.
+/** specifies one of the default positions of the legend in relation
+    to the diagram.
  */
 enum ChartLegendPosition
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartLegendPosition::NONE
     /** no chart legend is displayed.
+
+        <p>To disable the legend you should set the property
+        <member>ChartDocument::HasLegend</member> to <FALSE/> instead
+        of setting this value.</p>
      */
     NONE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartLegendPosition::LEFT
     /** displays the chart legend on the left side of the diagram.
+
+        <p>The second entry in the legend is placed below the first
+        one.</p>
      */
     LEFT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartLegendPosition::TOP
     /** displays the chart legend above the diagram.
+
+        <p>The second entry in the legend is placed an the right hand
+        side of the first one.</p>
      */
     TOP,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartLegendPosition::RIGHT
     /** displays the chart legend on the right side of the diagram.
+
+        <p>The second entry in the legend is placed below the first
+        one.</p>
      */
     RIGHT,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::chart::ChartLegendPosition::BOTTOM
     /** displays the chart legend beneath the diagram.
+
+        <p>The second entry in the legend is placed an the right hand
+        side of the first one.</p>
      */
     BOTTOM
-
 };
 
 //=============================================================================
@@ -117,6 +127,12 @@ enum ChartLegendPosition
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

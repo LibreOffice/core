@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-30 11:05:13 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,32 +130,26 @@
 
     </p>
 
-
-
-
-
     @example Create and insert a TextTable via a TextTableDescriptor:
 
     <listing>
-    xTableProvider = xTextDoc.queryServiceProvider( "com.sun.star.text.TextTable" )
-    xTableDescriptor = xTableProvider.createDescriptor
-    xTableDescriptor.Columns = 5
-    xTableDescriptor.Rows = 8
-    xTableDescriptor.LeftBorder = 2000
-    xTableDescriptor.RightBorder = 1500
-    xTextDoc.insertNewTextContent( xTextRange, xTableDescriptor )
+    xTable = xTextDoc.createInstance( "com.sun.star.text.TextTable" )
+    xTable.initialize(5, 8)
+    xTable.HoriOrient = 0 'com::sun::star::text::HoriOrientation::NONE
+    xTable.LeftMargin = 2000
+    xTable.RightMargin = 1500
+    xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
     </listing>
 
-    Create and insert a TextTable directly (may be flicker):
+    Create and insert a TextTable directly (may flicker):
 
     <listing>
-    xTableProvider = xTextDoc.queryServiceProvider( "com.sun.star.text.TextTable" )
-    xTable = xTableProvider.createInstance
-    xTable.Columns = 5
-    xTable.Rows = 8
-    xTable.LeftBorder = 2000
-    xTable.RightBorder = 1500
-    xTextDoc.insertTextContent( xTextRange, xTable )
+    xTable = xTextDoc.createInstance( "com.sun.star.text.TextTable" )
+    xTable.initialize(5, 8)
+    xTable.HoriOrient = 0 'com::sun::star::text::HoriOrientation::NONE
+    xTable.LeftMargin = 2000
+    xTable.RightMargin = 1500
+    xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
     </listing>
  */
 service TextTable
@@ -182,8 +176,6 @@ service TextTable
     interface com::sun::star::util::XSortable;
 
     [optional] interface com::sun::star::sheet::XCellRangeData;
-
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextTable::BreakType
     /** determins the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
@@ -351,36 +343,4 @@ service TextTable
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/06 15:45:57  os
-    #84509# useless property SizeRelative removed
-
-    Revision 1.4  2000/12/21 08:35:21  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:44:27  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:53:01  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/07/06 12:15:39  os
-    old docu removed
-
-    Revision 1.3  2000/06/30 12:14:43  os
-    #75739# service description updated
-
-    Revision 1.2  2000/06/16 11:42:16  os
-    #75622# BackGraphicLocation/URL/Filter added/changed
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

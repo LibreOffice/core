@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,22 +92,27 @@ interface XCloseable;
 
 
 
-    <p>A ResultSet maintains a cursor pointing to its current row of
+    <p>
+    A ResultSet maintains a cursor pointing to its current row of
     data. Initially the cursor is positioned before the first row.
     The 'next' method moves the cursor to the next row.
     </p>
-    <p>The getXXX methods retrieve column values for the current
+    <p>
+    The getXXX methods retrieve column values for the current
     row. You can retrieve values using either the index number of the
     column. Columns are numbered from 1.
     </p>
-    <p>For maximum portability, ResultSet columns within each row should be
+    <p>
+    For maximum portability, ResultSet columns within each row should be
     read in left-to-right order and each column should be read only once.
     </p>
-    <p>For the getXXX methods, the SDBC driver attempts to convert the
+    <p>
+    For the getXXX methods, the SDBC driver attempts to convert the
     underlying data to the specified type and returns a suitable
     value.
     </p>
-    <p>Column names used as input to the findColumn method are case
+    <p>
+    Column names used as input to the findColumn method are case
     insensitive. When several columns have the same name, then the value
     of the first matching column will be returned. The column name option is
     designed to be used when column names are used in the SQL
@@ -116,13 +121,16 @@ interface XCloseable;
     no way for the programmer to guarantee that they actually refer to
     the intended columns.
     </p>
-    <p>A ResultSet is automatically closed (disposed) by the Statement that
+    <p>
+    A ResultSet is automatically closed (disposed) by the Statement that
     generated it when that Statement is closed, re-executed, or used
     to retrieve the next result from a sequence of multiple results.
     </p>
-    <p>The number, types, and properties of a ResultSet's columns are
+    <p>
+    The number, types, and properties of a ResultSet's columns are
     provided by the ResultSetMetaData object returned by the getMetaData
-    method.</p>
+    method.
+    </p>
  */
 service ResultSet
 {
@@ -137,14 +145,18 @@ service ResultSet
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::sdbc::XCloseable
     /** freeing all resources of a result set.
 
-                <p>The creating statement will still be open after disposing.
+                <p>
+                The creating statement will still be open after disposing.
+                </p>
 
-                <p>This interface is mandatory only for JDBC conformance,
+                <p>
+                This interface is mandatory only for JDBC conformance,
                 otherwise it is optional.
+                </p>
      */
     [optional] interface XCloseable;
 
-    // DocMerge: empty anyway
+    // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
 
@@ -152,11 +164,13 @@ service ResultSet
     /** controls the chaining of warnings, which may occur on every call
                 to the connected database.
 
-                 <p>Chained warnings from previous calls will be
-                cleared before processing a new call.
+                 <p>
+                Chained warnings from previous calls will be cleared before processing a new call.
+                </p>
 
-                <p>This interface is mandatory only for JDBC conformance,
-                otherwise it is optional.
+                <p>
+                This interface is mandatory only for JDBC conformance, otherwise it is optional.
+                </p>
      */
     [optional] interface XWarningsSupplier;
 
@@ -176,7 +190,9 @@ service ResultSet
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::sdbc::XResultSetUpdate
     /** is the interface for updating row data to the database.
 
-                <p>The implementation is optional.
+                <p>
+                The implementation is optional.
+                </p>
      */
     [optional] interface XResultSetUpdate;
 
@@ -196,17 +212,21 @@ service ResultSet
     // DocMerge from xml: service com::sun::star::sdbc::ResultSet: interface com::sun::star::sdbc::XRowUpdate
     /** is the interface for updating the data of the current row.
 
-                <p>The implementation is optional.
+                <p>
+                The implementation is optional.
+                </p>
      */
     [optional] interface XRowUpdate;
 
 
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::CursorName
     /** defines the SQL cursor name that will be used by subsequent Statement
-        <code>execute</code> methods.
+        <code>execute</code>
+        methods.
 
 
-        <p>This name can then be used in SQL positioned update/delete statements to
+        <p>
+        This name can then be used in SQL positioned update/delete statements to
         identify the current row in the ResultSet generated by this statement. If
         the database doesn't support positioned update/delete, this property is
         a noop. To insure that a cursor has the proper isolation level to support
@@ -215,10 +235,14 @@ service ResultSet
         positioned updates may fail.
         </p>
         <p>
-        <b>Note:</b> By definition, positioned update/delete
+        <b>
+        Note:
+        </b>
+        By definition, positioned update/delete
         execution must be done by a different Statement than the one
         which generated the ResultSet being used for positioning. Also,
-        cursor names must be unique within a connection.</p>
+        cursor names must be unique within a connection.
+        </p>
 
         @optional
      */
@@ -240,7 +264,9 @@ service ResultSet
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::FetchDirection
     /** retrieves the direction for fetching rows from database tables
         that is the default for result sets generated from this
-        <code>Statement</code> object.<br>
+        <type scope="sun::com::star::sdbc">Statement</type>
+        object.
+        <br/>
         If this <code>Statement</code> object has not set a fetch direction,
         the return value is implementation-specific.
      */
@@ -249,8 +275,13 @@ service ResultSet
 
     // DocMerge from xml: property com::sun::star::sdbc::ResultSet::FetchSize
     /** retrieves the number of result set rows that is the default fetch size
-        for result sets generated from this <code>Statement</code> object.<br>
-        If this <code>Statement</code> object has not set a fetch size,
+        for result sets generated from this
+        <type scope="sun::com::star::sdbc">Statement</type>
+        object.
+        <br/>
+        If this
+        <type scope="sun::com::star::sdbc">Statement</type>
+        object has not set a fetch size,
         the return value is implementation-specific.
      */
     [property] long FetchSize;
@@ -262,6 +293,15 @@ service ResultSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5.2.2  2002/02/18 12:55:23  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5.2.1  2002/02/18 09:00:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.5  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.4  2001/01/23 10:08:29  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

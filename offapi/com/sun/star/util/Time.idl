@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,37 +64,29 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::util::Time
 /** represents a time value.
  */
 struct Time
 {
-    // DocMerge from xml: field com::sun::star::util::Time::HundredthSeconds
     /** contains the hundredth seconds (0-99).
      */
     unsigned short HundredthSeconds;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::Time::Seconds
     /** contains the seconds (0-59).
      */
     unsigned short Seconds;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::Time::Minutes
     /** contains the minutes (0-59).
      */
     unsigned short Minutes;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::util::Time::Hours
     /** contains the hour (0-23).
      */
     unsigned short Hours;
@@ -105,18 +97,4 @@ struct Time
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:19  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

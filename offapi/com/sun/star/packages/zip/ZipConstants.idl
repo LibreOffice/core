@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipConstants.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:09:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,101 +73,269 @@ module com {  module sun {  module star {   module packages {  module zip {
  */
 constants ZipConstants
 {
-    /*Compression method for the deflate algorithm (the only one currently
-      supported).
+    //-------------------------------------------------------------------------
+    /** Compression method for the deflate algorithm (the only one currently
+       supported).
      */
     const short DEFLATED = 8;
-    /* Compression level for no compression.
+
+    //-------------------------------------------------------------------------
+    /** Compression level for no compression.
      */
     const short NO_COMPRESSION = 0;
-    /* Compression level for fastest compression
+
+    //-------------------------------------------------------------------------
+    /** Compression level for fastest compression
      */
     const short BEST_SPEED = 1;
-    /* Compression level for best compression
+
+    //-------------------------------------------------------------------------
+    /** Compression level for best compression
      */
     const short BEST_COMPRESSION = 9;
-    /* Default compression level.
+
+    //-------------------------------------------------------------------------
+    /** Default compression level.
      */
     const short DEFAULT_COMPRESSION = -1;
-    /* Compression strategy best used for data consisting mostly of small
-       values with a somewhat random distribution. Forces more Huffman
-       coding and less string matching.
+
+    //-------------------------------------------------------------------------
+    /** Compression strategy best used for data consisting mostly of small
+      values with a somewhat random distribution. Forces more Huffman
+      coding and less string matching.
      */
     const short FILTERED = 1;
-    /* Compression strategy for Huffman coding only.
+
+    //-------------------------------------------------------------------------
+    /** Compression strategy for Huffman coding only.
      */
     const short HUFFMAN_ONLY = 2;
-    /* Default compression strategy
+
+    //-------------------------------------------------------------------------
+    /** Default compression strategy
      */
     const short DEFAULT_STRATEGY = 0;
-    /* entry is uncompressed
+
+    //-------------------------------------------------------------------------
+    /** entry is uncompressed
      */
     const short STORED = 0;
-    /* entry is uncompressed
+
+    //-------------------------------------------------------------------------
+    /** entry is uncompressed
      */
     const short DEF_MEM_LEVEL = 8;
 
-    /* Header Signatures
-    */
-
-     const long LOCSIG  = 0x04034b50;       // "PK\003\004"
-     const long EXTSIG  = 0x08074b50;       // "PK\007\008"
-     const long CENSIG  = 0x02014b50;       // "PK\001\002"
-     const long ENDSIG  = 0x06054b50;       // "PK\005\006"
-     const long SPANSIG = 0x08074b50;       // "PK\007\008"
-
-    /* Header sizes in bytes (including signatures)
+    //-------------------------------------------------------------------------
+    /** Header Signature: "PK\003\004"
      */
-     const short LOCHDR = 30;   // LOC header size
-     const short EXTHDR = 16;   // EXT header size
-     const short CENHDR = 46;   // CEN header size
-     const short ENDHDR = 22;   // END header size
+    const long LOCSIG  = 0x04034b50;
 
-    /* Local file (LOC) header field offsets
+    //-------------------------------------------------------------------------
+    /** Header Signature: "PK\007\008"
      */
-     const short LOCVER = 4;     // version needed to extract
-     const short LOCFLG = 6;     // general purpose bit flags
-     const short LOCHOW = 8;     // compression method
-     const short LOCTIM = 10;    // modification time
-     const short LOCCRC = 14;    // crc of uncompressed data
-     const short LOCSIZ = 18;    // compressed data size
-     const short LOCLEN = 22;    // uncompressed data size
-     const short LOCNAM = 26;    // filename length
-     const short LOCEXT = 28;    // extra field length
+    const long EXTSIG  = 0x08074b50;
 
-    /* Extra local (EXT) header field offsets
+    //-------------------------------------------------------------------------
+    /** Header Signature: "PK\001\002"
      */
-     const short EXTCRC = 4;     // crc of uncompressed data
-     const short EXTSIZ = 8;     // compressed size
-     const short EXTLEN = 12;    // uncompressed size
+    const long CENSIG  = 0x02014b50;
 
-    /* Central directory (CEN) header field offsets
+    //-------------------------------------------------------------------------
+    /** Header Signature: "PK\005\006"
      */
+    const long ENDSIG  = 0x06054b50;
 
-     const short CENVEM = 4;     // version made by
-     const short CENVER = 6;     // version needed to extract
-     const short CENFLG = 8;     // general purpose bit flags
-     const short CENHOW = 10;    // compression method
-     const short CENTIM = 12;    // modification time
-     const short CENDAT = 14;    // modification time
-     const short CENCRC = 16;    // crc of uncompressed data
-     const short CENSIZ = 20;    // compressed size
-     const short CENLEN = 24;    // uncompressed size
-     const short CENNAM = 28;    // length of filename
-     const short CENEXT = 30;    // length of extra field
-     const short CENCOM = 32;    // file comment length
-     const short CENDSK = 34;    // disk number start
-     const short CENATT = 36;    // internal file attributes
-     const short CENATX = 38;    // external file attributes
-     const short CENOFF = 42;    // offset of local header
-
-    /* End of central directory (END) header field offsets
+    //-------------------------------------------------------------------------
+    /** Header Signature: "PK\007\008"
      */
-     const short ENDSUB = 8;     // number of entries on this disk
-     const short ENDTOT = 10;    // total number of entries
-     const short ENDSIZ = 12;    // central directory size
-     const short ENDOFF = 16;    // central directory offset
-     const short ENDCOM = 20;    // size of zip file comment
+    const long SPANSIG = 0x08074b50;
+
+    //-------------------------------------------------------------------------
+    /** LOC header size in bytes (including signatures)
+     */
+    const short LOCHDR = 30;
+
+    //-------------------------------------------------------------------------
+    /** EXT header size in bytes (including signatures)
+     */
+    const short EXTHDR = 16;
+
+    //-------------------------------------------------------------------------
+    /** CEN header size in bytes (including signatures)
+     */
+    const short CENHDR = 46;
+
+    //-------------------------------------------------------------------------
+    /** END header size in bytes (including signatures)
+     */
+    const short ENDHDR = 22;
+
+    //-------------------------------------------------------------------------
+    /// LOC LOC LOC
+    /** LOC header field "version needed to extract" offset
+     */
+    const short LOCVER = 4;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "general purpose bit flags" offset
+     */
+    const short LOCFLG = 6;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "compression method" offset
+     */
+    const short LOCHOW = 8;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "modification time" offset
+     */
+    const short LOCTIM = 10;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "crc of uncompressed data" offset
+     */
+    const short LOCCRC = 14;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "compressed data size" offset
+     */
+    const short LOCSIZ = 18;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "uncompressed data size" offset
+     */
+    const short LOCLEN = 22;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "filename length" offset
+     */
+    const short LOCNAM = 26;
+
+    //-------------------------------------------------------------------------
+    /** LOC header field "extra field length" offset
+     */
+    const short LOCEXT = 28;
+
+    //-------------------------------------------------------------------------
+    /** EXT header field "crc of uncompressed data" offsets
+     */
+    const short EXTCRC = 4;
+
+    //-------------------------------------------------------------------------
+    /** EXT header field "compressed size" offsets
+     */
+    const short EXTSIZ = 8;
+
+    //-------------------------------------------------------------------------
+    /** EXT header field "uncompressed size" offsets
+     */
+    const short EXTLEN = 12;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "version made by" offset
+     */
+    const short CENVEM = 4;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "version needed to extract" offset
+     */
+    const short CENVER = 6;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "general purpose bit flags" offset
+     */
+    const short CENFLG = 8;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "compression method" offset
+     */
+    const short CENHOW = 10;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "modification time" offset
+     */
+    const short CENTIM = 12;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "modification time" offset
+     */
+    const short CENDAT = 14;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "crc of uncompressed data" offset
+     */
+    const short CENCRC = 16;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "compressed size" offset
+     */
+    const short CENSIZ = 20;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "uncompressed size" offset
+     */
+    const short CENLEN = 24;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "length of filename" offset
+     */
+    const short CENNAM = 28;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "length of extra field" offset
+     */
+    const short CENEXT = 30;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "file comment length" offset
+     */
+    const short CENCOM = 32;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "disk number start" offset
+     */
+    const short CENDSK = 34;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "internal file attributes" offset
+     */
+    const short CENATT = 36;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "external file attributes" offset
+     */
+    const short CENATX = 38;
+
+    //-------------------------------------------------------------------------
+    /** CEN header field "offset of local header" offset
+     */
+    const short CENOFF = 42;
+
+    //-------------------------------------------------------------------------
+    /** END header field "number of entries on this disk" offset
+     */
+    const short ENDSUB = 8;
+
+    //-------------------------------------------------------------------------
+    /** END header field "total number of entries" offset
+     */
+    const short ENDTOT = 10;
+
+    //-------------------------------------------------------------------------
+    /** END header field "central directory size" offset
+     */
+    const short ENDSIZ = 12;
+
+    //-------------------------------------------------------------------------
+    /** END header field "central directory offset" offset
+     */
+    const short ENDOFF = 16;
+
+    //-------------------------------------------------------------------------
+    /** END header field "size of zip file comment" offset
+     */
+    const short ENDCOM = 20;
 
 };
 //=============================================================================

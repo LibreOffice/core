@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeMovement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XCellRangeMovement_idl__
 #define __com_sun_star_sheet_XCellRangeMovement_idl__
 
@@ -81,53 +82,78 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XCellRangeMovement
-/** has functions for moving ranges of cells in a sheet.
+/** provides methods for moving ranges of cells in a sheet.
  */
 interface XCellRangeMovement: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangeMovement::insertCells
     /** inserts cells, moving other cells down or right.
 
-
-
         <p>Non-empty cells cannot be moved off the sheet.</p>
+
+        @param aRange
+            the cell range in which empty cells will be inserted.
+
+        @param nMode
+            describes how to move existing cells.
      */
-    void insertCells( [in] com::sun::star::table::CellRangeAddress aRange,
-             [in] com::sun::star::sheet::CellInsertMode nMode );
+    void insertCells(
+            [in] com::sun::star::table::CellRangeAddress aRange,
+            [in] com::sun::star::sheet::CellInsertMode nMode );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangeMovement::removeRange
     /** deletes cells, moving other cells up or left.
+
+        @param aRange
+            the cell range to remove.
+
+        @param nMode
+            describes how to move following cells.
      */
-    void removeRange( [in] com::sun::star::table::CellRangeAddress aRange,
-             [in] com::sun::star::sheet::CellDeleteMode nMode );
+    void removeRange(
+            [in] com::sun::star::table::CellRangeAddress aRange,
+            [in] com::sun::star::sheet::CellDeleteMode nMode );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangeMovement::moveRange
     /** moves a cell range to another position in the document.
+
+        <p>After copying the contents of the cell range, all cells
+        will be cleared.</p>
+
+        @param aDestination
+            the address of the top left cell of the destination range.
+
+        @param aSource
+            the cell range which will be copied.
      */
-    void moveRange( [in] com::sun::star::table::CellAddress aDestination,
-             [in] com::sun::star::table::CellRangeAddress aSource );
+    void moveRange(
+            [in] com::sun::star::table::CellAddress aDestination,
+            [in] com::sun::star::table::CellRangeAddress aSource );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XCellRangeMovement::copyRange
     /** copies a cell range to another position in the document.
+
+        <p>The source cell range keeps unchanged.</p>
+
+        @param aDestination
+            the address of the top left cell of the destination range.
+
+        @param aSource
+            the cell range which will be copied.
      */
-    void copyRange( [in] com::sun::star::table::CellAddress aDestination,
-             [in] com::sun::star::table::CellRangeAddress aSource );
+    void copyRange(
+            [in] com::sun::star::table::CellAddress aDestination,
+            [in] com::sun::star::table::CellRangeAddress aSource );
 
 };
 
@@ -135,21 +161,5 @@ interface XCellRangeMovement: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

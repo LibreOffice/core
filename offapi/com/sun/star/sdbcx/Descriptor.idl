@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Descriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,18 @@
 
     <p>
     A descriptor is commonly created by the container of a specific object, such as, tables or views.
-    After the the creation of the descriptor the properties have to be filled.
+    After the creation of the descriptor the properties have to be filled.
     Afterwards, you append the descriptor to the container and the container creates a new object based
-    on the informations of the descriptor.
+    on the informations of the descriptor. The descriptor can be used to create serveral objects.
     </p>
-    <p>A descriptor containes at least the informations of the name of an object.
-
-    </p>@see com::sun::star::sdbcx::XAppend;
+    <p>
+    A descriptor containes at least the informations of the name of an object.
+    </p>
+    @see com::sun::star::sdbcx::XAppend;
  */
 service Descriptor
 {
-    // DocMerge: empty anyway
+    // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
 
@@ -99,6 +100,15 @@ service Descriptor
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.2.2  2002/02/18 12:57:56  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4.2.1  2002/02/18 09:37:12  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/10/25 15:35:32  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.3  2000/11/08 12:43:39  mi
     moved from api
 

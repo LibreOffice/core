@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCondition.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSheetCondition_idl__
 #define __com_sun_star_sheet_XSheetCondition_idl__
 
@@ -73,108 +74,87 @@
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides methods to access the settings of a condition in a
+    conditional format or data validation.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSheetCondition
-/** represents a condition in conditional formats or validation.@see com::sun::star::sheet::TableValidation
-        @see com::sun::star::sheet::TableConditionalEntry
+    @see com::sun::star::sheet::TableConditionalEntry
+    @see com::sun::star::sheet::TableValidation
  */
 interface XSheetCondition: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getOperator
     /** returns the operator in the condition.
      */
     com::sun::star::sheet::ConditionOperator getOperator();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setOperator
     /** sets the operator in the condition.
      */
-    void setOperator( [in] com::sun::star::sheet::ConditionOperator nOperator );
+    void setOperator(
+            [in] com::sun::star::sheet::ConditionOperator nOperator );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSheetCondition::getFormula1
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getFormula1
-    /** returns either the comparison value, which is used in
-        the condition, or the first value if two values are needed for
-        the operator.
+    /** returns either the comparison value, which is used in the condition,
+        or the first value if two values are needed for the operator.
 
-
-
-        <p>This can be a formula, a numeric constant, or a
-        string constant in quotes.</p>
+        @returns
+            a formula, a numeric constant, or a string constant in quotes.
      */
     string getFormula1();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setFormula1
-    /** sets either the comparison value, which is used in
-        the condition, or the first value if two values are needed for
-        the operator.
+    /** sets either the comparison value, which is used in the condition,
+        or the first value if two values are needed for the operator.
 
-
-
-        <p>This can be a formula, a numeric constant, or a
-        string constant in quotes.</p>
+        @param aFormula1
+            a formula, a numeric constant, or a string constant in quotes.
      */
     void setFormula1( [in] string aFormula1 );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSheetCondition::getFormula2
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getFormula2
     /** if two values are needed for the operator, this method returns
         the second one.
 
-
-
-        <p>this can be a formula, a numeric constant, or a string constant
-        in quotes.  The operators <const>ConditionOperator::BETWEEN</const>
-        and <const>ConditionOperator::NOT_BETWEEN</const> need two values
-        each.</p>
+        @returns
+            a formula, a numeric constant, or a string constant in quotes.
      */
     string getFormula2();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setFormula2
     /** if two values are needed for the operator, this method sets
         the second one.
 
-
-
-        <p>This can be a formula, a numeric constant, or a string constant
-        in quotes.  The operators <const>ConditionOperator::BETWEEN</const>
-        and <const>ConditionOperator::NOT_BETWEEN</const> need two values
-        each.</p>
+        @param aFormula2
+            a formula, a numeric constant, or a string constant in quotes.
      */
     void setFormula2( [in] string aFormula2 );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getSourcePosition
-    /** returns the position in the document which
-        is used as a base for relative references in the formulas.
+    /** returns the position in the document which is used as a base for
+        relative references in the formulas.
      */
     com::sun::star::table::CellAddress getSourcePosition();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setSourcePosition
-    /** sets the position in the document which is used
-        as a base for relative references in the formulas.
+    /** sets the position in the document which is used as a base for
+        relative references in the formulas.
      */
-    void setSourcePosition( [in] com::sun::star::table::CellAddress aSourcePosition );
+    void setSourcePosition(
+            [in] com::sun::star::table::CellAddress aSourcePosition );
 
 };
 
@@ -182,33 +162,5 @@ interface XSheetCondition: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:52  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:24  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:56  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

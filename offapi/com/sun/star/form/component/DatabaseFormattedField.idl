@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseFormattedField.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 13:35:26 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,22 +76,25 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::DatabaseFormattedField
-/** This service specifies a data-aware FormattedField.
+/** This service specifies a formatted field model which is data-aware, and can be bound to a database field.
  */
 service DatabaseFormattedField
 {
-    /** provides the basic functionality for a formatted field.
-    */
     service com::sun::star::form::component::FormattedField;
 
-    /** provides the functionality to bind the field to a database field.
-    */
     service com::sun::star::form::DataAwareControlModel;
 
     //-------------------------------------------------------------------------
 
-    /** determines if empty text should be regarded as a NULL value.
+    /** determines if an empty text should be treated as a <NULL/> value.
+
+        <p>When the user enters text into a formatted field control, and after this, the control
+        content is to be committed into the database field the control is bound to,
+        a decision must be made how to deal with empty strings.<br/>
+        This is controlled by <member>ConvertEmptyToNull</member>.</p>
+
+        <p>If the property is set to <TRUE/>, and an empty text is to be commited, this is
+        converted into <NULL/>, else it is written as empty string.</p>
      */
     [property] boolean ConvertEmptyToNull;
 
@@ -104,6 +107,15 @@ service DatabaseFormattedField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.18.2  2002/07/26 09:49:10  fs
+    IDL review form layer
+
+    Revision 1.1.18.1  2002/02/19 08:46:05  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.1  2001/02/20 13:35:26  fs
+    initial checkin - service description for a data aware formatted field
+
 
 =============================================================================*/
 #endif

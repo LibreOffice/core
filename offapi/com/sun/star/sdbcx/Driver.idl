@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Driver.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-25 11:07:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,14 @@ interface XDropCatalog;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::Driver
-/** extends the service <type scope="com::sun::star::sdbc">Driver</type> by
-    beans for data definition.
+/** extends the service
+    <type scope="com::sun::star::sdbc">Driver</type>
+    by beans for data definition.
 <p>
     This service is optional for each driver. Its purpose is to define
     a common way for database definition, as the DDL differs between most DBMS.
-</p><p>
+</p>
+<p>
     Definition and deletion of database catalogs can't be defined in a common
     manner for DBMS, but it should be possible to hide much of the complexity
     of creation and deletion of catalogs. Each driver could provide methods to
@@ -90,7 +92,9 @@ service Driver
     // DocMerge: empty anyway
     service com::sun::star::sdbc::Driver;
 
-    // DocMerge: empty anyway
+    /** used to get access to the catalog.
+        @see Catalog
+    */
     interface XDataDefinitionSupplier;
 
 
@@ -109,34 +113,4 @@ service Driver
 
 }; }; }; };
 
-/*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2002/09/24 12:42:32  oj
-    #103660# correct interface name XDatabaseDefinitionSupplier
-
-    Revision 1.5  2001/10/25 15:35:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.4  2001/01/23 10:08:33  mi
-    optional interfaces now marked as [optional] instead of just a prosa description of this fact
-
-    Revision 1.3  2000/11/08 12:43:39  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:44  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/24 11:07:47  dg
-    wrong interface in service definition used
-
-    Revision 1.2  1999/12/20 16:26:13  dg
-    #70278# new package name
-
-    Revision 1.1  1999/11/24 08:42:07  dg
-    new StarDataDefinitionBeans
-
-===========================================================================*/
 #endif

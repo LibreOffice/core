@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryEventFlags.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-03 18:39:11 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,10 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** flags used for the event type in dictionary events.
 
-    <P>These flags represent the types of event that a dictionary
+    <P>These flags represent the type of events that a dictionary
     may broadcast.</P>
 
-    @see    com::sun::star::linguistic2::DictionaryEvent
+    @see    <type scope="com::sun::star::linguistic2">DictionaryEvent</type>
 */
 constants DictionaryEventFlags
 {

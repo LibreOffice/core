@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryList.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-04 14:12:24 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,9 @@ interface XSearchableDictionaryList;
      <P>The active dictionaries of this list will be used for
      spellchecking and hyphenation.</P>
 
-     @see com::sun::star::linguistic2::XDictionary
-    @see com::sun::star::linguistic2::XDictionaryList;
-    @see com::sun::star::linguistic2::XSearchableDictionaryList;
+    @see <type scope="com::sun::star::linguistic2">XDictionary</type>
+    @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>
+    @see <type scope="com::sun::star::linguistic2">XSearchableDictionaryList</type>
 */
 service DictionaryList
 {

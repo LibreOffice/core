@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetElement.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,7 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides information about a dynamic element that can be inserted into a
- homogeneous set of elements within a (by name) hierarchy.
-
- <!-- Dennis: "(by name)" ??? -->
- <!-- Developer: See the description in GroupAccess,GroupElement, HierarchyAccess. -->
+ homogeneous set of elements within a hierarchy.
 
  <p>Provides information about the element.
  Provides access to its containing set object.
@@ -107,26 +104,26 @@ module com { module sun { module star { module configuration {
 
  <p>While an instance is not contained in a set object, it is owned by
  the client and can be disposed by calling
- <member scope="com::sun::star::lang">XComponent::dispose</member>. The name
+ <member scope="com::sun::star::lang">XComponent::dispose()</member>. The name
  of the object can freely be changed in that situation though without
  persistent effect.
  </p>
 
- <p>When the instance is inserted into a set which includes replacing an
- existing element, ownership is transferred to the container.
- While it is contained in the container, clients must not dispose of the
+ <p>When the instance is inserted into a set (this includes replacing an
+ existing element), ownership is transferred to the container.
+ While it is contained in the container, clients must not dispose the
  object. When inserted, the name of the object is fixed and is used to
- identify it within the container. An implementation should support
- <member scope="com::sun::star::container">XNamed::setName</member> even in
+ identify it within the container. An implementation may support
+ <member scope="com::sun::star::container">XNamed::setName()</member> even in
  this case. If it does, changing the name has the same effect of removing
  the object (under the old name) and then reinserting it into the same
  container (using the new name).
  </p>
 
- <p>When an instance is removed from a set (which includes being replaced by
+ <p>When an instance is removed from a set (this includes being replaced by
  a new element), ownership is transferred to the client again. It can then be
- disposed of or reinserted into a container. An instance can only be inserted
- into a container if it was obtained from the same hierarchy.
+ disposed or reinserted into a container. An instance can only be inserted
+ into a container, if it was obtained from the same hierarchy.
  </p>
 
  <p>When a set element is removed from its set from outside the hierarchy, the
@@ -160,12 +157,12 @@ service SetElement
 
  <p>In this service, this interface is mandatory</p>
 
- <p><member scope="com::sun::star::container">XChild::getParent</member>
+ <p><member scope="com::sun::star::container">XChild::getParent()</member>
  returns <NULL/>, if the object is currently not contained in a container.
  </p>
 
  <p>An implementation may also support
- <member scope="com::sun::star::container">XChild::setParent</member>.
+ <member scope="com::sun::star::container">XChild::setParent()</member>.
  If it does, changing the parent has the effect of first removing the object
  from its old parent (if any) and then inserting it into the new parent
  (unless that is <NULL/>) under the same name. The new parent must be part of
@@ -178,9 +175,9 @@ service SetElement
 /** allows controlling or observing the lifetime of the object.
 
  <p>Clients may dispose of the object using
- <member scope="com::sun::star::lang">XComponent::dispose</member>, only if
+ <member scope="com::sun::star::lang">XComponent::dispose()</member>, only if
  the object is currently not contained in a container (
- <member scope="com::sun::star::container">XChild::getParent</member>
+ <member scope="com::sun::star::container">XChild::getParent()</member>
  returns <NULL/>).
  </p>
 

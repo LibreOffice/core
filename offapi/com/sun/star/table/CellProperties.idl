@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-08 14:34:00 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_table_CellProperties_idl__
 #define __com_sun_star_table_CellProperties_idl__
 
@@ -89,90 +90,100 @@
 #include <com/sun/star/table/TableBorder.idl>
 #endif
 
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module table {
+module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::table::CellProperties
-/** service that holds all cell properties.@see Cell
+/** contains the properties of a table cell.
+
+    @see com::sun::star::table::Cell
+    @see com::sun::star::table::CellRange
  */
 service CellProperties
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+//! service PropertySet
+    /** provides access to the properties.
+     */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
+    //=========================================================================
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::CellStyle
     /** contains the name of the style of the cell.
      */
-    [property] string CellStyle;
+    [optional, property] string CellStyle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::CellBackColor
     /** contains the cell background color.
      */
     [property] long CellBackColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::IsCellBackgroundTransparent
-    /** If this property is <TRUE/>, the cell background is transparent,
-        and the <member>CellProperties::CellBackColor</member> value is not used.
+    /** is <TRUE/>, if the cell background is transparent.
+
+        <p>In this case the <member>CellProperties::CellBackColor</member>
+        value is not used.</p>
      */
     [property] boolean IsCellBackgroundTransparent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::NumberFormat
-    /** contains the index of the number format
-        that is used in the cells.
-
-        <p>The proper value can be determined by using the
-        <type scope="com::sun::star::util">NumberFormatter</type>
-        interface of the document.</p>
-     */
-    [property] long NumberFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::table::CellProperties::ShadowFormat
-    /** contains a description of the shadow.
-     */
-    [property] com::sun::star::table::ShadowFormat ShadowFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::table::CellProperties::HoriJustify
-    /** property containing the horizontal alignment of
-        text within the cells.
+    /** contains the horizontal alignment of the cell contents.
      */
     [property] com::sun::star::table::CellHoriJustify HoriJustify;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::VertJustify
-    /** property containing the vertical alignment of
-        text within the cells.
+    /** contains the vertical alignment of the cell contents.
      */
     [property] com::sun::star::table::CellVertJustify VertJustify;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::Orientation
-    /** property containing the orientation of text
-        within the cells.
+    /** is <TRUE/>, if text in the cells will be wrapped automatically
+        at the right border.
+     */
+    [property] boolean IsTextWrapped;
 
+    //-------------------------------------------------------------------------
 
+    /** defines the indentation of the cell contents (in 1/100 mm).
+     */
+    [property] short ParaIndent;
 
-        <p>If the <member>CellProperties::RotateAngle</member> property is non-zero,
-        this value is not used.</p>
+    //-------------------------------------------------------------------------
+
+    /** contains the orientation of the cell contents.
+
+        <p>If the <member>CellProperties::RotateAngle</member> property
+        is non-zero, this value is not used.</p>
      */
     [property] com::sun::star::table::CellOrientation Orientation;
+
+    //-------------------------------------------------------------------------
+
+    /** defines how much the content of cells is rotated (in 1/100 degrees).
+     */
+    [property] long RotateAngle;
+
+    //-------------------------------------------------------------------------
+
+    /** defines at which edge rotated cells are aligned.
+     */
+    [property] com::sun::star::table::CellVertJustify RotateReference;
 
     //-------------------------------------------------------------------------
 
@@ -189,91 +200,78 @@ service CellProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::CellProtection
-    /** contains a description of the cell
-        protection.
+    /** contains a description of the cell or cell range border.
 
-
-
-        <p>Cell protection is active only if the sheet is
-        protected.</p>
-     */
-    [property] com::sun::star::util::CellProtection CellProtection;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::table::CellProperties::TableBorder
-    /** property containing a description of the cell border.
-
-
-
-        <p>If used with a cell range, the top, left, right,
-        and bottom lines are at the edges of the entire range,
-        not at the edges of the individual cell.</p>
+        <p>If used with a cell range, the top, left, right, and bottom
+        lines are at the edges of the entire range, not at the edges of
+        the individual cell.</p>
      */
     [property] com::sun::star::table::TableBorder TableBorder;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::IsTextWrapped
-    /** property is <TRUE/> if text in the cells is wrapped.
+    /** contains a description of the top border line of each cell.
      */
-    [property] boolean IsTextWrapped;
+    [property] com::sun::star::table::BorderLine TopBorder;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::RotateAngle
-    /** defines how much the content of cells
-        is rotated (1/100th degrees).
-     */
-    [property] long RotateAngle;
+    /** contains a description of the bottom border line of each cell.
+    */
+    [property] com::sun::star::table::BorderLine BottomBorder;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::table::CellProperties::RotateReference
-    /** defines at which edge rotated cells are aligned.
+    /** contains a description of the left border line of each cell.
      */
-    [property] com::sun::star::table::CellVertJustify RotateReference;
+    [property] com::sun::star::table::BorderLine LeftBorder;
 
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the right border line of each cell.
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the index of the number format that is used in the cells.
+
+        <p>The proper value can be determined by using the
+        <type scope="com::sun::star::util">NumberFormatter</type>
+        interface of the document.</p>
+     */
+    [property] long NumberFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the shadow.
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the cell protection.
+
+        <p>Cell protection is active only if the sheet is protected.</p>
+     */
+    [property] com::sun::star::util::CellProtection CellProtection;
+
+    //-------------------------------------------------------------------------
+
+    /** stores additional attributes.
+
+        <p>This property is used i.e. by the XML filters to load and
+        restore unknown attributes.</p>
+        */
+    [optional, property] com::sun::star::container::XNameContainer
+        UserDefinedAttributes;
+
+    //-------------------------------------------------------------------------
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/10/25 15:57:04  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.5  2000/12/21 08:35:19  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.4  2000/12/14 12:53:43  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:44:18  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:57  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/08/02 10:28:59  mi
-    CharacterProperties and ParagraphProperties now in sheet/SheetCell...
-
-    Revision 1.3  2000/06/16 10:34:12  mi
-    #76027# CharacterProperties only at SheetCell now
-
-    Revision 1.2  2000/02/09 15:07:01  mi
-    #72869# get/setCellStyle moved to CellProperties
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RemoteContentProviderAcceptor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-12 09:35:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,13 @@ service RemoteContentProviderAcceptor
     interface XRemoteContentProviderAcceptor;
 
     //------------------------------------------------------------------------
-    /** This optional interface can be used to adopt a layz implement strategy
+    /** This optional interface can be used to adopt a lazy implement strategy
         for this service, which can improve performance in certain situations.
 
+        <p>The way this works might change, therefore this interface is marked
+        as deprectated.
+
         @deprecated
-        The way this works might change, therefore this interface is marked as
-        deprectated.
      */
     [optional] interface XRemoteContentProviderActivator;
 };

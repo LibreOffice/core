@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDesktopTask.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,53 +75,28 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XDesktopTask
-/** is used to initialize and close a desktop task.
+/** use <type>XFrame</type> instead of this
+    @deprecated
  */
 interface XDesktopTask: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDesktopTask::initialize
-    /** attaches a window to the task.
+    /** use <type scope="com::sun::star::lang">XInitialization</type> instead of this
+        @deprecated
      */
-    void initialize( [in] com::sun::star::awt::XWindow xTaskWindow );
+    void initialize( [in] com::sun::star::awt::XWindow TaskWindow );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDesktopTask::close
-    /** tries to close all windows within the task and the task by itself.
+    /** use <type scope="com::sun::star::util">XClosable</type>
+        or <member scope="com::sun::star::lang">XComponent::dispose()</member>
+        instead of this
+        @deprecated
      */
     boolean close();
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.3  1999/11/25 16:03:32  mi
-    welforming HTML for XML
-
-    Revision 1.2  1999/11/18 11:49:57  mi
-    XComponent now in module lang
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

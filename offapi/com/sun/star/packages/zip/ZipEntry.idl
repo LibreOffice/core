@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEntry.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:09:54 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,40 +89,62 @@ module com {  module sun {  module star {   module packages {  module zip {
 struct ZipEntry
 {
     //-------------------------------------------------------------------------
-    /* version needed to extract
+    /** version needed to extract
      */
     short nVersion;
-    /* bit flags
+
+    //-------------------------------------------------------------------------
+    /** bit flags
      */
     short nFlag;
-    /* compression method
+
+    //-------------------------------------------------------------------------
+    /** compression method
      */
     short nMethod;
-    /* modification time
+
+    //-------------------------------------------------------------------------
+    /** modification time
      */
     long nTime;
-    /* crc-32 of entry data
+
+    //-------------------------------------------------------------------------
+    /** crc-32 of entry data
      */
     long nCrc;
-    /* uncompressed size of entry data
+
+    //-------------------------------------------------------------------------
+    /** uncompressed size of entry data
      */
     long nCompressedSize;
-    /* uncompressed size of entry data
+
+    //-------------------------------------------------------------------------
+    /** uncompressed size of entry data
      */
     long nSize;
-    /* offset of LOC header
+
+    //-------------------------------------------------------------------------
+    /** offset of LOC header
      */
     long nOffset;
-    /* The number of the disk this entry is saved on
+
+    //-------------------------------------------------------------------------
+    /** The number of the disk this entry is saved on
      */
     short nDiskNumber;
-    /* the entry name
+
+    //-------------------------------------------------------------------------
+    /** the entry name
      */
     string sName;
-    /* optional extra field data for entry
+
+    //-------------------------------------------------------------------------
+    /** optional extra field data for entry
      */
     sequence<byte> extra;
-    /* optional comment
+
+    //-------------------------------------------------------------------------
+    /** optional comment
      */
     string sComment;
 };

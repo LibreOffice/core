@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinguServiceManager.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@ module com { module sun { module star { module linguistic2 {
     <P> For the thesaurus, the behavior is the same when no meaning was found.
     </P>
 
-    @see    com::sun::star::linguistic2::SpellChecker
-    @see    com::sun::star::linguistic2::Hyphenator
-    @see    com::sun::star::linguistic2::Thesaurus
+    @see    <type scope="com::sun::star::linguistic2">SpellChecker</type>
+    @see    <type scope="com::sun::star::linguistic2">Hyphenator</type>
+    @see    <type scope="com::sun::star::linguistic2">Thesaurus</type>
 */
 interface XLinguServiceManager : com::sun::star::uno::XInterface
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClipboardEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-10 07:16:41 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,14 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
 /** A clipboard uses this object to notify its listeners of content changes.
+
     @see com::sun::star::datatransfer::clipboard::XClipboardListener
 */
 
 struct ClipboardEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    /** The current contents of the clipboard.
+    /** The current content of the clipboard.
     */
     XTransferable Contents;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChainable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,18 +72,15 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XChainable
 /** enables the object to be a member of a chain.
  */
 interface XChainable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::util::XChainable::getPredecessor
     /** @returns
                 the previous object in this chain or NULL, if this is the first
                 object of this chain.
@@ -91,8 +88,6 @@ interface XChainable: com::sun::star::uno::XInterface
     com::sun::star::util::XChainable getPredecessor();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::util::XChainable::getSuccessor
     /** @returns
                 the next object in this chain or NULL, if this is the last
                 object in this chain.
@@ -100,23 +95,15 @@ interface XChainable: com::sun::star::uno::XInterface
     com::sun::star::util::XChainable getSuccessor();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XChainable::setSuccessor
     /** connects the specified object to this object as the successor in a chain.
 
-
-
         <p>This implies that this object will become the predecessor of
-        <var>xChainable</var>.
-
-        </p>
+        <var>xChainable</var>.  </p>
      */
     void setSuccessor( [in] com::sun::star::util::XChainable xChainable )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XChainable::isChainable
     /** checks if the specified object can be linked to this.
      */
     boolean isChainable( [in] com::sun::star::util::XChainable xChainable );
@@ -127,21 +114,4 @@ interface XChainable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:05  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

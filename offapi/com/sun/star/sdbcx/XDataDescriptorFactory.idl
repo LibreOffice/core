@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataDescriptorFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:36 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ interface XDataDescriptorFactory: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XDataDescriptorFactory::createDataDescriptor
     /** returns a descriptor of a definition object.
+        @returns
+            the descriptor for that kind of objects
+        @see com::sun::star::Container
      */
     com::sun::star::beans::XPropertySet createDataDescriptor();
 };
@@ -89,6 +92,12 @@ interface XDataDescriptorFactory: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4.16.1  2002/02/18 10:00:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.4  2001/03/16 16:41:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:40  mi
     moved from api
 

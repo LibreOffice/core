@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstance.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:04:57 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,10 @@
 //=============================================================================
 
 
-// DocMerge: empty anyway
-/// @missing
+// DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
+/** Allows to controll an office side plugin instance and to communicate with it.
+    This interface is oriented for communication with browsers plugins.
+ */
 interface XPluginInstance: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -178,6 +180,12 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8.2.1  2002/06/27 10:50:22  mav
+    fix comments
+
+    Revision 1.8  2001/11/15 16:04:57  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.7  2001/04/25 16:09:34  ssa
     #83025# documentation update
 

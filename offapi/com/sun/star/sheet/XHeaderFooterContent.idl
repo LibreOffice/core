@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHeaderFooterContent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XHeaderFooterContent_idl__
 #define __com_sun_star_sheet_XHeaderFooterContent_idl__
 
@@ -69,39 +70,43 @@
 #include <com/sun/star/text/XText.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the text contents of a header or footer on a page.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XHeaderFooterContent
-/** represents the contents of a header or footer on a page.@see com::sun::star::sheet::HeaderFooterContent
+    @see com::sun::star::sheet::HeaderFooterContent
+    @see com::sun::star::sheet::TablePageStyle
  */
 interface XHeaderFooterContent: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sheet::XHeaderFooterContent::getLeftText
-    /** @returns
-                the text which is printed in the left part of the header or footer.
+    /** returns the text which is printed in the left part of the
+        header or footer.
+
+        @see com::sun::star::text::Text
      */
     com::sun::star::text::XText getLeftText();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sheet::XHeaderFooterContent::getCenterText
-    /** @returns
-                the text which is printed in the center part of the header or footer.
+    /** returns the text which is printed in the center part of the
+        header or footer.
+
+        @see com::sun::star::text::Text
      */
     com::sun::star::text::XText getCenterText();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sheet::XHeaderFooterContent::getRightText
-    /** @returns
-                the text which is printed in the right part of the header or footer.
+    /** returns the text which is printed in the right part of the
+        header or footer.
+
+        @see com::sun::star::text::Text
      */
     com::sun::star::text::XText getRightText();
 
@@ -111,27 +116,5 @@ interface XHeaderFooterContent: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:50  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:51  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

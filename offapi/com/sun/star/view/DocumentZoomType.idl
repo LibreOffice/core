@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentZoomType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:43:49 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,37 +64,37 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module view {
+module com {  module sun {  module star {  module view {
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::view::DocumentZoomType
-/** These constants describe how the document content is zoomed into the document view.
+/** These constants specify how the document content is zoomed into the document view.
  */
 constants DocumentZoomType
 {
     //-------------------------------------------------------------------------
-    /** the page content width (excluding margins) at the current selection fits into the view
+    /** The page content width (excluding margins) at the current selection is fit into the view.
      */
     const short OPTIMAL = 0;
 
     //-------------------------------------------------------------------------
-    /** the page width at the current selection fits into the view
+    /** The page width at the current selection is fit into the view.
      */
     const short PAGE_WIDTH = 1;
 
     //-------------------------------------------------------------------------
-    /** a complete page of the document fits into the view
+    /** A complete page of the document is fit into the view.
      */
     const short ENTIRE_PAGE = 2;
 
     //-------------------------------------------------------------------------
-    /** the zoom is relative and is to be set via the property ZoomValue
+    /** The zoom is relative and is to be set via the property
+        <member>ViewSettigns::ZoomValue</member>.
      */
     const short BY_VALUE = 3;
     //-------------------------------------------------------------------------
-    /** the page width at the current selection fits into the view. The view ends
-        exactly at the end of the page.
+    /** The page width at the current selection is fit into the view,
+        with zhe view ends exactly at the end of the page.
      */
     const short PAGE_WIDTH_EXACT = 4;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubTotalField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_SubTotalField_idl__
 #define __com_sun_star_sheet_SubTotalField_idl__
 
@@ -65,19 +66,25 @@
 #include <com/sun/star/sheet/XSubTotalField.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** represents a single field in a subtotal descriptor.
 
-//=============================================================================
+    <p>A subtotal field contains all columns for which subtotal values
+    will be calculated and the column used to create subtotal groups.
 
-// DocMerge from xml: service com::sun::star::sheet::SubTotalField
-/** a single field in a SubTotalDescriptor.
+    @see com::sun::star::sheet::SubTotalDescriptor
  */
 service SubTotalField
 {
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+
+    /** provides access to the settings of the subtotal field.
+     */
     interface com::sun::star::sheet::XSubTotalField;
 
 };
@@ -86,18 +93,5 @@ service SubTotalField
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

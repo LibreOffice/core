@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TimeField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,26 +80,30 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::form::component::TimeField
-/** This service sepecifies the ControlModel of an edit field for a
-    time value.
+/** sepecifies the the control model for a field which can be used to input time values.
  */
 service TimeField
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlTimeFieldModel;
 
-    // DocMerge: empty anyway
     service com::sun::star::form::FormControlModel;
 
-    // DocMerge: empty anyway
+    /** resets the control.
+
+        <p>If you do not set a value for the <member>DefaultTime</member>, then resetting the control
+        will result in setting to to the current system time. This is for HTML compatibility.</p>
+    */
     interface com::sun::star::form::XReset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: property com::sun::star::form::component::TimeField::DefaultTime
-    /** returns the default time used by reset.
-     */
+    /** contains a default value for the control.
+
+        <p>This value is used when the control is initially displayed, and for resetting it.</p>
+
+        @see com::sun::star::awt::UnoControlTimeFieldModel::Time
+        @see com::sun::star::form::XReset
+    */
     [property] long DefaultTime;
 
 };
@@ -111,6 +115,18 @@ service TimeField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.3  2002/07/26 09:49:21  fs
+    IDL review form layer
+
+    Revision 1.3.24.2  2002/02/18 15:21:51  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3.24.1  2002/02/18 14:55:17  oj
+    #96946# parameter,return value and exception description
+
+    Revision 1.3  2000/11/08 12:43:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:19  hjs
     initial import
 

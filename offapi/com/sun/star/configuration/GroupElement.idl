@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupElement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,7 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides information about a predefined element contained in a
- heterogeneous group of elements within a (by name) hierarchy.
-
- <!-- Dennis: Can it be rewritten as "...within an alphabetical hierarchy."? -->
-  <!-- Developer: No. The 'by name' refers to the fact that children are accessed by name
-      (e.g. using XNameContainer) rather than by index, by enumeration or by other criteria.
-      It corresponds to method names like getByName, replaceByName, insertByName.
-      BTW: Same as in GroupElement. -->
+ heterogeneous group of elements within a hierarchy.
 
  <p>Provides information about the element.
  Provides access to its containing group object.
@@ -112,7 +106,7 @@ service GroupElement
 
  <p>In this service this interface is mandatory</p>
 
- <p><member scope="com::sun::star::container">XChild::getParent</member>
+ <p><member scope="com::sun::star::container">XChild::getParent()</member>
  shall not return NULL.
  </p>
 

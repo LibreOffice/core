@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActionLockable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,52 +68,34 @@
 
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
 
-// DocMerge: from xml
-
-// DocMerge from xml: interface com::sun::star::document::XActionLockable
-/** enables the object to lock actions.
+/** makes it possible to prevent object internal updates for a certain period
+    to be able to quickly change multiple parts of the objects, where the
+    updates would invalidate each other, anyway.
  */
 interface XActionLockable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XActionLockable::isActionLocked
-    /** determines if at least one lock exists.
+    /** @returns
+            <TRUE/> if at least one lock exists.
      */
     boolean isActionLocked();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XActionLockable::addActionLock
     /** increments the lock count of the object by one.
      */
     void addActionLock();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XActionLockable::removeActionLock
     /** decrements the lock count of the object by one.
      */
     void removeActionLock();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XActionLockable::setActionLocks
     /** sets the locking level.
-
-
 
         <p>This method is used for debugging purposes. The programming
         environment can restore the locking after a break of a debug
@@ -122,13 +104,7 @@ interface XActionLockable: com::sun::star::uno::XInterface
     void setActionLocks( [in] short nLock );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XActionLockable::resetActionLocks
     /** resets the locking level.
-
-
 
         <p>This method is used for debugging purposes. The debugging
         environment of a programming language can reset the locks
@@ -143,24 +119,4 @@ interface XActionLockable: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:40  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:10  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:19  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/08/04 15:18:44  mi
-    #76800# document events
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif

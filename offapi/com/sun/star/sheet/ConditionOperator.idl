@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConditionOperator.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,87 +58,76 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_ConditionOperator_idl__
 #define __com_sun_star_sheet_ConditionOperator_idl__
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-// DocMerge from xml: enum com::sun::star::sheet::ConditionOperator
 /** is used to specify the type of <type>XSheetCondition</type>.
  */
 enum ConditionOperator
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::NONE
     /** no condition is specified.
      */
     NONE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::EQUAL
     /** value has to be equal to the specified value.
      */
     EQUAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::NOT_EQUAL
     /** the value must not be equal to the specified value.
      */
     NOT_EQUAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::GREATER
     /** the value has to be greater than the specified value.
      */
     GREATER,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::GREATER_EQUAL
     /** the value has to be greater than or equal to the specified value.
      */
     GREATER_EQUAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::LESS
     /** the value has to be less than the specified value.
      */
     LESS,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::LESS_EQUAL
     /** the value has to be less than or equal to the specified value.
      */
     LESS_EQUAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::BETWEEN
     /** the value has to be between the two specified values.
      */
     BETWEEN,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::NOT_BETWEEN
     /** the value has to be outside of the two specified values.
      */
     NOT_BETWEEN,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::sheet::ConditionOperator::FORMULA
     /** the specified formula has to give a non-zero result.
      */
     FORMULA
@@ -149,18 +138,5 @@ enum ConditionOperator
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:48  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

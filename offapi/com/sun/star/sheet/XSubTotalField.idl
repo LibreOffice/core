@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSubTotalField.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_sheet_XSubTotalField_idl__
 #define __com_sun_star_sheet_XSubTotalField_idl__
 
@@ -69,48 +70,46 @@
 #include <com/sun/star/sheet/SubTotalColumn.idl>
 #endif
 
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+/** provides access to the settings of a field in a subtotal descriptor.
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::sheet::XSubTotalField
-/** represents a field in a subtotal descriptor.@see com::sun::star::sheet::SubTotalField
+    @see com::sun::star::sheet::SubTotalField
+    @see com::sun::star::sheet::SubTotalDescriptor
  */
 interface XSubTotalField: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalField::getGroupColumn
     /** returns the column by which entries are grouped.
      */
     long getGroupColumn();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalField::setGroupColumn
     /** sets the column by which entries are grouped.
      */
     void setGroupColumn( [in] long nGroupColumn );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XSubTotalField::getSubTotalColumns
 
-    // DocMerge from idl: method com::sun::star::sheet::XSubTotalField::getSubTotalColumns
-    /** returns the definitions of which columns should have
-                subtotals added to them.
+    /** returns the definitions of which columns should have subtotals
+        added to them.
      */
-    sequence<com::sun::star::sheet::SubTotalColumn> getSubTotalColumns();
+    sequence< com::sun::star::sheet::SubTotalColumn > getSubTotalColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sheet::XSubTotalField::setSubTotalColumns
-    /** sets the definitions of which columns should have
-        subtotals added to them.
+    /** sets the definitions of which columns should have subtotals
+        added to them.
      */
-    void setSubTotalColumns( [in] sequence<com::sun::star::sheet::SubTotalColumn> aSubTotalColumns );
+    void setSubTotalColumns(
+        [in] sequence< com::sun::star::sheet::SubTotalColumn >
+            aSubTotalColumns );
 
 };
 
@@ -118,33 +117,5 @@ interface XSubTotalField: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:12  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:43:47  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:58  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:52  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:53  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/24 17:35:24  nn
-    #74032# documentation added
-
-    Revision 1.2  2000/02/07 11:24:56  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

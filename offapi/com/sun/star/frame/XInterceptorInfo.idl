@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterceptorInfo.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,44 +71,37 @@
 
 //=============================================================================
 
-/** Makes it possible to get information about registered interceptor.
-    zB. get URL lists for interception
-    Use it as an additional interface to <type>XDispatchProviderInterceptor</type>.
+/** makes it possible to get information about a registered interceptor and is used by
+    frame interceptor mechanism to perform interception.
 
-    <!-- Dennis: What is the "zB"?  -->
-    <!-- Dennis: What "gets" the URL lists? -->
-<!-- JRH: Something still seems to be missing from here? -->*/
+    <p>
+    Frame can call right interceptor directly without calling all of registered ones.
+    Use it as an additional interface to <type>XDispatchProviderInterceptor</type>.
+    If any interceptor in list doesn't support this interface - these mechanism will be broken
+    and normal list of master-slave interceptor objects will be used from top to the bottom.
+    </p>
+
+    @see XDispatchProviderInterception
+    @see XDispatchProviderInterceptor
+ */
 interface XInterceptorInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
     /** returns the URL list for interception.
+
+        <p>
+        Wildcards inside the URL's are allowed to register the interceptor for
+        URL's too, which can have optional arguments (e.g. "..#.." or "..?..").
+        </p>
+
+        @return
+            a list of URL's wich are handled by this interceptor
      */
     sequence< string > getInterceptedURLs();
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/04/24 00:10:37  arellano
-    modified grammatical number, spelling
-
-    Revision 1.4  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1  2000/10/18 12:09:31  as
-    #79050# new interface support interception of selected URLs
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-=============================================================================*/
 #endif

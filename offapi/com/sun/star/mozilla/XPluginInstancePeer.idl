@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstancePeer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,10 @@ interface XPluginInstanceNotifySink;
 //=============================================================================
 
 
-// DocMerge: empty anyway
+// DocMerge from xml: interface com::sun::star::mozilla::XPluginInstancePeer
+/** Allows to communicate with a plugin from the office side.
+    This interface is oriented for communication with browsers plugins.
+ */
 interface XPluginInstancePeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -201,6 +204,12 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5.14.1  2002/06/27 10:50:23  mav
+    fix comments
+
+    Revision 1.5  2001/04/25 16:09:34  ssa
+    #83025# documentation update
+
     Revision 1.4  2001/03/16 16:41:29  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

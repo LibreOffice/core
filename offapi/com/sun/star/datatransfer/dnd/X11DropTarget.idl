@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11DropTarget.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 10:32:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTarget;
 
 //=============================================================================
-/** This service connects the java like UNO drag and drop protocol to the XDND
-    protocol used on X servers to transfer data between application via drag and
-    drop operations.
+/** This service connects the Java-like UNO Drag and Drop protocol to the
+    X Drag and Drop protocol used on X-Servers to transfer data between
+    application via Drag and Drop operations.
 
     @see XDragSource
     @see XDropTarget
@@ -98,30 +98,31 @@ interface XDropTarget;
 service X11DropTarget
 {
     //-------------------------------------------------------------------------
-    /** used to get data from other applications via XDND protocol.
+    /** Used to get data from other applications via X Drag and Drop protocol.
     */
     interface XDropTarget;
 
     //-------------------------------------------------------------------------
-    /** the service expects an instance of <type scope="com::sun::star::awt">XDisplayConnection</type>
-         as the first parameter. The second parameter must be a <type>long</type>
-        that contains an Xwindow <type>Window</type> which shall be registered
+    /** The service expects an instance of
+        <type scope="com::sun::star::awt">XDisplayConnection</type>
+         as the first parameter. The second parameter must be a long
+        that contains an XWindow window which shall be registered
         as drop target.
     */
     interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** for shutdown and listener support.
+    /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** service should always support this interface.
+    /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemTransferable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 15:37:03 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,7 @@ module com { module sun { module star { module datatransfer {
 
 //=============================================================================
 /** Interface to be implemented by  objects used to provide system dependent data
-    for a transfer operation. Those objects usually also implement
-    com::sun::star:datatransfer::XTransferable;
-
-    @see com::sun::star::datatransfer::XTransferable
-
+    for a transfer operation. Those objects usually also implement <type>XTransferable</type>.
 */
 
 interface XSystemTransferable: com::sun::star::uno::XInterface
@@ -86,21 +82,21 @@ interface XSystemTransferable: com::sun::star::uno::XInterface
         source.
         The data object is returned in an any. The contained type may differ on
         different platforms.
-        The argument aProcessId contains a process identifier of the caller's process.
-        The process ID can be obtained by the C function rtl_getGlobalProcessId
-        (rtl/process.h).
+
+        @param aProcessId
+        The argument aProcessId is a process identifier of the caller's process.
         The interface implementation must ensure that the system data object can be
         used in that process. If the data object is not valid in the caller process
         then the returned any must be empty.
 
-        Windows: The returned any contains an unsigned long which represents a pointer to
+        @returns
+        The system dependent data object.
+
+        <br/><br/><p><strong>Notes:</strong>Under Windows the returned any contains an unsigned long which represents a pointer to
         an IDataObject interface. The caller of getData has to release the data
         object (IDataObject::Release) if it is no longer needed.
-        The caller must make sure that the current thread has been initialized for
-        OLE ( OleInitialize).
-
-        @returns
-        the system dependent data object.
+        The caller must also make sure that the current thread has been initialized for
+        OLE (use OleInitialize).</p>
     */
     any getData( [in] sequence < byte > aProcessId);
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetView.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-10 11:26:17 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,16 @@
 #ifndef __com_sun_star_sheet_SpreadsheetView_idl__
 #define __com_sun_star_sheet_SpreadsheetView_idl__
 
+#ifndef __com_sun_star_frame_Controller_idl__
+#include <com/sun/star/frame/Controller.idl>
+#endif
+
 #ifndef __com_sun_star_sheet_SpreadsheetViewSettings_idl__
 #include <com/sun/star/sheet/SpreadsheetViewSettings.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_SpreadsheetViewPane_idl__
+#include <com/sun/star/sheet/SpreadsheetViewPane.idl>
 #endif
 
 #ifndef __com_sun_star_sheet_XSpreadsheetView_idl__
@@ -85,6 +93,13 @@
 #include <com/sun/star/sheet/XViewFreezable.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_XRangeSelection_idl__
+#include <com/sun/star/sheet/XRangeSelection.idl>
+#endif
+
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
 
 //=============================================================================
 
@@ -92,28 +107,59 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::sheet::SpreadsheetView
-/** a view of a spreadsheet document.
+/** represents a view of a spreadsheet document.
  */
 service SpreadsheetView
 {
-    // DocMerge: empty anyway
+    /** provides the integration into the framework.
+     */
+    service com::sun::star::frame::Controller;
+
+    /** provides the view's settings.
+     */
     service com::sun::star::sheet::SpreadsheetViewSettings;
 
-    // DocMerge: empty anyway
+    /** provides direct access to the view's active pane.
+     */
+    service com::sun::star::sheet::SpreadsheetViewPane;
+
+    /** provides access to the active sheet in the view.
+     */
     interface com::sun::star::sheet::XSpreadsheetView;
 
-    // DocMerge: empty anyway
+    /** provides access to the collection of view panes.
+     */
     interface com::sun::star::container::XIndexAccess;
 
-    // DocMerge: empty anyway
+    /** creates an enumeration of view panes.
+
+        @see com::sun::star::sheet::SpreadsheetViewPanesEnumeration
+
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** provides access to the view's selection.
+    <p>The selection in a spreadsheet view can be a
+        <type scope="com::sun::star::sheet">SheetCell</type>,
+        <type scope="com::sun::star::sheet">SheetCellRange</type>,
+        <type scope="com::sun::star::sheet">SheetCellRanges</type>,
+        <type scope="com::sun::star::drawing">Shape</type> or
+        <type scope="com::sun::star::drawing">Shapes</type> object.
+    </p>
+     */
     interface com::sun::star::view::XSelectionSupplier;
 
-    // DocMerge: empty anyway
+    /** allows to split the view.
+     */
     interface com::sun::star::sheet::XViewSplitable;
 
-    // DocMerge: empty anyway
+    /** allows to freeze columns and rows of the view.
+     */
     interface com::sun::star::sheet::XViewFreezable;
+
+    /** allows to let the user interactively select a cell range.
+     */
+    interface com::sun::star::sheet::XRangeSelection;
 
 };
 
@@ -121,21 +167,5 @@ service SpreadsheetView
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:50  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

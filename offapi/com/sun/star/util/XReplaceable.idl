@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XReplaceable.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,15 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::util::XReplaceable
 /** makes it possible to replace strings in a text described by a
     <type>SearchDescriptor</type>.
 
-
-    @example <listing>
+    @example
+    <listing>
     'replace all bold words "search for" by "look for"
     xReplaceDescr = xDocument.createReplaceDescriptor()
     xReplaceDescr.SearchString = "search for"
@@ -96,16 +95,12 @@
 interface XReplaceable: com::sun::star::util::XSearchable
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XReplaceable::createReplaceDescriptor
     /** creates a descriptor which contains properties that
         specify a search in this container.@see SearchDescriptor
      */
     com::sun::star::util::XReplaceDescriptor createReplaceDescriptor();
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::util::XReplaceable::replaceAll
     /** searches for all occurrences of whatever is specified.@see SearchDescriptor
      */
     long replaceAll( [in] com::sun::star::util::XSearchDescriptor xDesc );
@@ -116,27 +111,4 @@ interface XReplaceable: com::sun::star::util::XSearchable
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/03/16 16:41:51  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/21 08:35:27  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:45:17  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:06  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

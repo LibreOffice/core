@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHyphenator.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ module com { module sun { module star { module linguistic2 {
     fulfills all the restrictions implied by the properties
     MinLeading, MinTrailing and MinWordLength.</P>
 
-    @see    com::sun::star::linguistic2::LinguProperties
-    @see    com::sun::star::linguistic2::XSupportedLocales
+    @see    <type scope="com::sun::star::linguistic2">LinguProperties</type>
+    @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
 */
 interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
 {
@@ -149,8 +149,8 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
             It is usually empty in order to use the default values supplied
             with the property set.
 
-        @see    com::sun::star::linguistic2::XSupportedLocales
-        @see    com::sun::star::linguistic2::XHyphenatedWord
+        @see    <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     com::sun::star::linguistic2::XHyphenatedWord hyphenate(
             [in] string aWord,
@@ -197,8 +197,8 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
             It is usually empty in order to use the default values supplied
             with the property set.
 
-        @see    com::sun::star::linguistic2::XSupportedLocales
-        @see    com::sun::star::linguistic2::XHyphenatedWord
+        @see    <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     com::sun::star::linguistic2::XHyphenatedWord queryAlternativeSpelling(
             [in] string aWord,
@@ -230,8 +230,8 @@ interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
             It is usually empty in order to use the default values supplied
             with the property set.
 
-        @see    com::sun::star::linguistic2::XPossibleHyphens
-        @see    com::sun::star::lang::Locale
+        @see    <type scope="com::sun::star::linguistic2">XPossibleHyphens</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
     */
     com::sun::star::linguistic2::XPossibleHyphens createPossibleHyphens(
             [in] string aWord,

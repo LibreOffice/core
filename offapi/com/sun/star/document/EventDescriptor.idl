@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventDescriptor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-24 16:26:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,51 +58,45 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_document_DocumentEvent_idl__
-#define __com_sun_star_document_DocumentEvent_idl__
-
-#ifndef __com_sun_star_comtainer_XIndexReplace_idl__
-#include <com/sun/star/container/XIndexReplace.idl>
-#endif
+#ifndef __com_sun_star_document_EventDescriptor_idl__
+#define __com_sun_star_document_EventDescriptor_idl__
 
 //=============================================================================
 
 module com {   module sun {   module star {   module document {
 
 //=============================================================================
-
-/** specifies an event binding for a document or a document content.
+/** specifies an event binding for a document or a document content
 
     @see Events
     @see XEventsSupplier
  */
 service EventDescriptor
 {
-    /** specifies the type of the event handler.
+    //-------------------------------------------------------------------------
+    /** specifies the type of the event handler
 
-        <p>Usually this is one of the following:
-        "None", "StarBasic", "JavaScript", "Presentation".
-        This list is extensible. </p>
+        <p>
+        Usually this is one of the following:
+        <ul>
+            <lie>"None"</li>
+            <lie>"StarBasic"</li>
+            <lie>"JavaScript"</li>
+            <lie>"Presentation"</li>
+        </ul>
+        This list is extensible.
+        </p>
      */
     [property] string EventType;
 
-    /** specifies the script source code.
+    //-------------------------------------------------------------------------
+    /** specifies the script source code
      */
     [property] string Script;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1  2001/01/24 16:16:45  mi
-    stored document events and runtime document events structurally unified
-
-
-
-=============================================================================*/
 #endif

@@ -1,0 +1,225 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AdministrationProvider.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:38 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_ConfigurationProvider_idl__
+#define __com_sun_star_configuration_ConfigurationProvider_idl__
+
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** manages one, or more, complete sets of configuration data for
+ administrative puposes and serves as a factory for objects that
+ provide access to subsets of these shared configurations.
+
+ <p>Shared sets of configuration data usually serve to provide defaults,
+ which are used if no individual settings are present. Depending on the data
+ store multiple layers of defaults may be combined with a user-specific layer
+ to make up the final configuration.
+ </p>
+ <p>Many aspects of the supported behavior depend strongly on the underlying
+ data store and on the administrative structures it defines. With some data
+ stores this service also enables access to individual users' configuration
+ data by an administrator.
+ </p>
+ <p>On the other hand, in the simplest model there is only a single layer of
+ default data which is accessible through this service.
+ </p>
+ <p>An implementation is usually obtained from a
+ <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
+ <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
+ select the configuration data source. They may also define the scope of
+ administrable data or contain credentials to be used to authorize the
+ administrative access. Missing parameters may be filled in
+ from the context or the environment.
+ </p>
+
+ @see com::sun::star::configuration::ConfigurationProvider
+    Offers the same services and creates the same accessor objects as this
+    service, but accesses the personal configuration.
+
+    <p>A <type> ConfigurationProvider</type> provides access to the personal
+    layer of configuration data of the current user context. It should in
+    most cases be used when <em>using</em> the configuration data, although
+    for most contexts a <type>AdministrationProvider</type> can be used as
+    a drop-in replacement.
+    </p>
+ */
+service AdministrationProvider
+{
+/** allows creating access objects for specific views such as subsets and fragments
+ of the configuration.
+
+ <p>The parameter <var>aServiceSpecifier</var> passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ supports at least the service specifiers
+ <code>"com.sun.star.configuration.ConfigurationAccess"</code> and
+ <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
+ </p>
+
+ <p>Using the first of these service specifiers requests a read-only view of
+ the configuration.
+ The object that is created implements service <type>ConfigurationAccess</type>.
+ To reflect its <em>element role</em> as root of the view, it implements
+ service <type>AccessRootElement</type>.
+ </p>
+
+ <p>Using the second form requests an updatable view of the configuration.
+ The object that is created should implement service
+ <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
+ which includes controlling updates for the whole view, it implements
+ service <type>UpdateRootElement</type>.
+ <BR />If the root element of the view is marked read-only (as indicated
+ by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
+ the implementation may either raise an exception or return a (read-only)
+ <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
+ </p>
+
+ <p>The arguments passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ in parameter <var>aArguments</var> specify the administrative entity for which
+ data should be administered. In other words they determine the layer to which
+ changes will apply. They also specify the view of that configuration that
+ should be created. That is, they determine the subset of elements that can be
+ accessed starting from the returned object. Each element of the argument
+ sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>
+ or a <type scope="com::sun::star::beans">NamedValue</type>,
+ so that the parameters can be identified by name rather than by position.
+ </p>
+
+ <p>What combinations of arguments are supported depends on the service name
+ and on the data store being administered.
+ </p>
+
+ <p>With both of the standard service-specifiers above, an implementation must
+ accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
+ This argument must contain the absolute path to an element of the
+ configuration. The view that is selected consists of the named element and
+ all its decendants. The administrative entity is the default for the
+ <type>AdministrationProvider</type>. Usually this is the largest entity
+ encompassing all entities accessible from this instance. In other words this
+ can be used to influence as global a scope as possible.
+ </p>
+
+ <p>Other arguments can be used to select a more specific entity and to control
+ the behavior of the view. These are different for different implementations
+ and data stores. Whether and how they are used may also depend on properties
+ that were selected when the provider was created.
+ </p>
+
+ <p>An implementation may ignore unknown arguments.</p>
+
+ <p>Some parameters that are commonly supported are described for service
+ <type>ConfigurationProvider</type>.
+ </p>
+ <p>One notable difference exists for parameter <code>"locale"</code>. For a
+ <type>ConfigurationProvider</type> the default behavior usually is to select
+ the locale set up for the user. But this service by default gets data for all
+ locales for which data is present. Locale-dependent values in this case are
+ replaced by a <type>SetAccess</type> using the language names as accessors.
+ This also allows targetted setting of values for selected locales.
+ This behavior can be requested explicitly by specifing a special argument
+ value <code>locale = "*"</code>.
+ </p>
+
+ <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ may be unusable. Only an implementation that supports service names that can be
+ used with no further arguments support this method. It should return the
+ same result as if
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ had been called using an empty sequence of arguments.
+ </p>
+*/
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+
+/** allows controlling or observing the lifetime of the configuration.
+
+ <p>The owner of the provider may dispose of this object
+ using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ </p>
+
+ <p>Views created by the provider generally refer to data that is managed by
+  the provider. Therefore, disposing of the provider will cause all objects
+  belonging to these views to be disposed of as well. This does not apply to
+  <em>snapshot</em> views that have their own copy of the data, if available.
+ </p>
+
+*/
+    interface com::sun::star::lang::XComponent;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

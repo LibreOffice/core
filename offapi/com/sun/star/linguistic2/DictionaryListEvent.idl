@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryListEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,15 +81,16 @@ module com { module sun { module star { module linguistic2 {
     its listeners about certain events.
     Since the dictionary-list is able to collect several single
     events before broadcasting them to it's listeners the
-    integer argument may be a combination of several event types.
+    integer argument may be a combination (logical or) of several
+    event types.
     If more specific information about the events is requested by a
     listener, a sequence of all dictionary-list events since the
     last broadcasting will be supplied. Otherwise, that list will
     be empty.</P>
 
-     @see   com::sun::star::linguistic2::XDictionaryList
-    @see    com::sun::star::linguistic2::XDictionaryListEventListener
-    @see    com::sun::star::lang::EventObject
+    @see    <type scope="com::sun::star::linguistic2">DictionaryList</type>
+    @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+    @see    <type scope="com::sun::star::lang">EventObject</type>
 */
 struct DictionaryListEvent : com::sun::star::lang::EventObject
 {
@@ -100,7 +101,7 @@ struct DictionaryListEvent : com::sun::star::lang::EventObject
      <type scope="com::sun::star::linguistic2">DictionaryListEventFlags</type>
      by applying the logical OR to them.</p>
 
-    @see    com::sun::star::linguistic2::DictionaryListEventFlags
+    @see    <type scope="com::sun::star::linguistic2">DictionaryListEventFlags</type>
 
     <!-- Dennis: Does the <type> tag change the display of its contents -->
     <!-- Thomas: AFAIK it should translate into a hyperlink or so. -->
@@ -111,13 +112,11 @@ struct DictionaryListEvent : com::sun::star::lang::EventObject
     /** list of accumulated dictionary events.
 
          <p>It will be empty if all
-         <type scope="com::sun::star::linguistic2::">
-         XDictionaryListEventListener</type>
+        <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
          are satisfied with the the condensed representation of the
-         <member scope="com::sun::star::linguistic2">
-         DictionaryListEvent::nCondensedEvent</member>.</p>
+        <member scope="com::sun::star::linguistic2">DictionaryListEvent::nCondensedEvent</member>.</p>
 
-        @see    com::sun::star::linguistic2::DictionaryEvent
+        @see    <type scope="com::sun::star::linguistic2">DictionaryEvent</type>
     */
     sequence< com::sun::star::linguistic2::DictionaryEvent > aDictionaryEvents;
 

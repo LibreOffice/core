@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,119 +69,111 @@
 #include <com/sun/star/lang/ArrayIndexOutOfBoundsException.idl>
 #endif
 
-
 //=============================================================================
 
-  module com {   module sun {   module star {   module document {
+module com {   module sun {   module star {   module document {
 
 //=============================================================================
-
-// DocMerge: from xml
-
-// DocMerge from xml: interface com::sun::star::document::XDocumentInfo
 /** provides access to the user fields for the information regarding the
-    document.
+    document
 
+    <p>
+    These fields are special one of the set of available document properties.
+    Other ones are accessed as properties (by using the interface
+    <type scope="com::sun::star::beans">XPropertySet</type>) of service
+    <type>DocumentInfo</type>.
+    </p>
 
-
-    <p>Other fields are accessed as properties (interface XPropertySet and
-    interface XFastPropertySet).  </p>@see DocumentInfo
-            @see XStandaloneDocumentInfo
-            @see com::sun::star::beans::XPropertySet
-            @see com::sun::star::beans::XFastPropertySet
+    @see DocumentInfo
+    @see StandaloneDocumentInfo
+    @see com::sun::star::beans::XPropertySet
  */
 interface XDocumentInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+    /** provides information about count of available fields
 
-    // DocMerge: from idl
+        <p>
+        This count marks the top range of possible requests for get/set
+        any of these fields. Range = [0..count-1]
+        </p>
 
-    // DocMerge from idl: method com::sun::star::document::XDocumentInfo::getUserFieldCount
-    /** @returns
-                        the number of user fields available in the document information.
+        @returns
+            current count
      */
     short getUserFieldCount();
 
     //-------------------------------------------------------------------------
+    /** returns the name of an user field
 
-    // DocMerge: from idl
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
 
-    // DocMerge from idl: method com::sun::star::document::XDocumentInfo::getUserFieldName
-    /** @returns
-                            the name of the user field at the specified position.
+        @returns
+            the name of the requested field
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
      */
-    string getUserFieldName( [in] short nIndex )
+    string getUserFieldName( [in] short Index )
+        raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** returns the value of an user field
+
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
+
+        @returns
+            the value of the requested field
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
+     */
+    string getUserFieldValue( [in] short Index )
+        raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** changes the name of one of the user fields
+
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
+
+        @param Name
+            the new name for this field to be set
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
+     */
+    void setUserFieldName(
+        [in] short  Index ,
+        [in] string Name  )
             raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
 
     //-------------------------------------------------------------------------
+    /** changes the value of one of the user fields
 
-    // DocMerge: from idl
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
 
-    // DocMerge from idl: method com::sun::star::document::XDocumentInfo::getUserFieldValue
-    /** @returns
-                            the value of the user field at the specified position.
+        @param Value
+            the new value for this field to be set
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
      */
-    string getUserFieldValue( [in] short nIndex )
+    void setUserFieldValue(
+        [in] short  Index ,
+        [in] string Value )
             raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XDocumentInfo::setUserFieldName
-    /** changes the name of one of the user fields.
-     */
-    void setUserFieldName( [in] short nIndex,
-             [in] string aName )
-            raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge: from xml
-
-    // DocMerge from xml: method com::sun::star::document::XDocumentInfo::setUserFieldValue
-    /** changes the value of the <var>nIndex</var>th user field.
-     */
-    void setUserFieldValue( [in] short nIndex,
-             [in] string aValue )
-            raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:05  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:40  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:55  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:10  hjs
-    initial import
-
-    Revision 1.8  2000/09/11 11:52:19  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/08/04 15:18:44  mi
-    #76800# document events
-
-    Revision 1.3  2000/02/23 14:49:55  mi
-    missing documentations
-
-    Revision 1.2  2000/02/07 11:24:27  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif

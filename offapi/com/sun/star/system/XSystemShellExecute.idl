@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemShellExecute.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 16:57:04 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,7 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** specifies an interface for executing a system command.
-
-    @author     tra
-    @version    0.1
-
-    <!-- Editor: Do the @ tags belong here? -->
+/** Specifies an interface for executing a system command.
 */
 
 
@@ -98,27 +93,28 @@ interface XSystemShellExecute: com::sun::star::uno::XInterface
     /** Executes an abitrary system command.
 
         @param aCommand
-        specifies the command to execute. This may be an executable file or a
-        document which is registered with an application, etc.
+        Specifies the command to execute. This may be an executable file or a
+        document which is registered with an application on a specific platform,
+        so that the platform knows what application to launch for that document.
         If the command specifies a path to an executable, etc, this has to be
         a system specific path.
 
-    <!-- Editor: What is meant by etc. here? -->
-
         @param aParameter
-        specifies a list of space separated parameters. The method does not
-        validate the given parameter, but only passes it as a parameter to the
+        Specifies a list of space separated parameters. The method does not
+        validate the given parameters, but only passes it as a parameter to the
         specified command.
 
         @param nFlags
-        specifies different flags to control the execution of this method, for example,
+        Specifies different flags to control the execution of this method, for example,
         avoid showing system error messages, in case of failures, etc.
-        @see ::com::sun::star::sys::shell::SystemShellExecuteFlags
 
-        @throws
-            a ::com::sun::star::lang::IllegalArgumentException when the specified
-            flags are wrong or exclude each other.
-.           a ::com::sun::star::sys::SystemExecuteException in the case of errors.
+        @throws com::sun::star::lang::IllegalArgumentException
+        when the specified flags are wrong or exclude each other.
+.
+        @throws com::sun::star::sys::SystemExecuteException
+        in the case of errors when trying to executed the specified command.
+
+        @see com::sun::star::system::SystemShellExecuteFlags
     */
     void execute( [in] string aCommand, [in] string aParameter, [in] long nFlags )
         raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException );

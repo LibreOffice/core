@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventObject.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-24 16:26:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,17 +70,19 @@
 module com {   module sun {   module star {   module document {
 
 //=============================================================================
-
-/** is thrown on document and document content events.
+/** is thrown on document and document content events
 
     @see XEventListener
     @see XEventBroadcaster
  */
 struct EventObject: com::sun::star::lang::EventObject
 {
-    /** specifies the type of the event handler.
+    //-------------------------------------------------------------------------
+    /** specifies the type of the event handler
 
-        <p>For a list of possible event names see <type>Events</type>.
+        <p>
+        For a list of possible event names see <type>Events</type>.
+        </p>
      */
     string EventName;
 };
@@ -89,13 +91,4 @@ struct EventObject: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1  2001/01/24 13:21:26  mi
-    stored document events and runtime document events structurally unified
-
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatch.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,109 +83,114 @@
 module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-
-// DocMerge from xml: interface com::sun::star::frame::XDispatch
 /** serves state information of objects which can be connected to
     controllers (e.g., toolbox controllers).
 
-    <p>Each state change is to be broadcast to all registered
+    <p>
+    Each state change is to be broadcast to all registered
     status listeners. The first notification should be performed
-    synchronously from <member>XDispatch::addStatusListener</member>;
+    synchronously from <member>XDispatch::addStatusListener()</member>;
     if not, controllers may flicker. State listener must be aware of this
-    synchronous notification.</p>
+    synchronous notification.
+    </p>
 
-    <p>The state consists of enabled/disabled and a short descriptive text
+    <p>
+    The state consists of enabled/disabled and a short descriptive text
     of the function (e.g., "undo insert character"). It is to be broadcast
     whenever this state changes or the controller should re-get the value
     for the URL to which it is connected. Additionally, a context-switch-event
     is to be broadcast whenever the object may be out of scope,
-    to force the state listener to requery the <type>XDispatch</type>.</p>
+    to force the state listener to requery the <type>XDispatch</type>.
+    </p>
 
-    @see        StatusEvent
-    @see        Frame
-    @see        View
+    @see Frame
+    @see FeatureStateEvent
  */
 interface XDispatch: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDispatch::dispatch
     /** dispatches (executes) an URL asynchronously.
 
-        <p>It is only allowed to dispatch URLs for which this <type>XDispatch</type>
-        was explicitely queried. Additional arguments "'#..." or "?...") are allowed.</p>
+        <p>
+        It is only allowed to dispatch URLs for which this <type>XDispatch</type>
+        was explicitely queried. Additional arguments "'#..." or "?...") are allowed.
+        </p>
+
+        @param URL
+            full parsed URL wich describe the feature which should be dispatched (executed)
+
+        @param Arguments
+            optional arguments for this request
+            They depends from the real implementation of the dipsatch object.
 
         @example
-        <listing>
-        // some code for a click-handler of a hyperlink in a view
-        XFrame xTargetFrame = m_xFrame-&amp;gt;findFrame(
-        m_aHyperlink-&amp;gt;getTargetFrameName(), FRAME_SEARCH_STANDARD );
-        URL aURL;
-        aURL.Original = m_aHyperlink-&amp;gt;getURL();
-        XDispatch m_xFrame-&amp;gt;queryDispatch( aURL, sequence&amp;lt;PropertyValue&amp;gt;() );
-        xDispatch-&amp;gt;dispatch( aURL );
-        </listing>
+            <listing>
+            // some code for a click-handler
+            void <strong>myOnClick</strong>(<em>String</em> sURL,<em>String</em> sTargetFrame,<em>com.sun.star.beans.PropertyValue[]</em> lArguments)
+            {
+            com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
+            aURL[0] = new com.sun.star.util.URL();
+            aURL[0].Complete = sURL;
+
+            com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class, mxServiceManager.createInstance("com.sun.star.util.URLTransformer"));
+
+            xParser-&gt;parseStrict(aURL);
+
+            com.sun.star.frame.XDispatch xDispatcher = mxFrame.queryDispatch(aURL[0], sTargetFrame, com.sun.star.frame.FrameSearchFlag.GLOBAL);
+
+            if(xDispatcher!=null)
+                xDispatcher.dispatch(aURL[0], lArguments);
+            }
+            </listing>
      */
-    [oneway] void dispatch( [in] com::sun::star::util::URL aURL,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
+    [oneway] void dispatch(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDispatch::addStatusListener
     /** registers a listener of a controller for a specific URL
         to this object to receive status events.
 
-        <p>It is only allowed to register for URLs for which this <type>XDispatch</type>
-        was explicitely queried. Additional arguments ("#..." or "?...") will be ignored.</p>
+        <p>
+        It is only allowed to register for URLs for which this <type>XDispatch</type>
+        was explicitely queried. Additional arguments ("#..." or "?...") will be ignored.
+        Note: Notifications can't be guranteed! This will be a part of interface <type>XNotifyingDispatch</type>.
+        </p>
 
-        @see XDispatch::removeStatusListener
+        @param Control
+            listener which wish to be informed
+
+        @param URL
+            the URL (without additional arguments) for which the listener wish to be registered
+            So a listener can be registered for more then one URLs at the same time.
+
+        @see XStatusListener
+        @see XDispatch::removeStatusListener()
      */
-    [oneway] void addStatusListener( [in] com::sun::star::frame::XStatusListener xControl,
-             [in] com::sun::star::util::URL aURL );
+    [oneway] void addStatusListener(
+        [in] XStatusListener Control,
+        [in] com::sun::star::util::URL URL);
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::frame::XDispatch::removeStatusListener
     /** unregisters a listener of a controller.
 
-        @see Dispatch::addStatusListener
-     */
-    [oneway] void removeStatusListener( [in] com::sun::star::frame::XStatusListener xControl,
-             [in] com::sun::star::util::URL aURL );
+        @param Control
+            listener which wish to be unregistered
 
+        @param URL
+            the URL for which the listener was registered
+            Additional arguments ("#..." or "?...") will be ignored.
+
+        @see XStatusListener
+        @see XDispatch::addStatusListener()
+     */
+    [oneway] void removeStatusListener(
+        [in] XStatusListener Control,
+        [in] com::sun::star::util::URL URL);
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/16 16:41:25  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/19 16:03:30  mi
-    documentations syntax errors fixed
-
-    Revision 1.4  2000/12/19 13:37:15  mi
-    syntax errors in documentation fixed
-
-    Revision 1.3  2000/11/08 12:43:14  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:28  mi
-    documentation merged from XML
-
-    Revision 1.2  1999/11/25 16:03:32  mi
-    welforming HTML for XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
-    new
-
-
-=============================================================================*/
 #endif

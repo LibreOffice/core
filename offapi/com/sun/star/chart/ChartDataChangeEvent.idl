@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataChangeEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-03 13:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,42 +76,36 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::chart::ChartDataChangeEvent
 /** describes a change that was applied to the data.
  */
 struct ChartDataChangeEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::chart::ChartDataChangeEvent::Type
     /** specifies the type of change to the data.
      */
     com::sun::star::chart::ChartDataChangeType Type;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::chart::ChartDataChangeEvent::StartColumn
     /** specifies the column number in which the changes begin.
      */
     short StartColumn;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::chart::ChartDataChangeEvent::EndColumn
     /** specifies the column number in which the changes end.
      */
     short EndColumn;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::chart::ChartDataChangeEvent::StartRow
     /** specifies the row number in which the changes begin.
      */
     short StartRow;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::chart::ChartDataChangeEvent::EndRow
     /** specifies the row number in which the changes end.
      */
     short EndRow;
@@ -125,6 +119,12 @@ struct ChartDataChangeEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3.24.1  2002/01/28 17:02:24  bm
+    #96984# IDL Review
+
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:01  hjs
     initial import
 
