@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:31:21 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,10 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     const BOOL bTab = pStTab || (pCnt && pCnt->IsInTab()) ? TRUE : FALSE;
     BOOL bEnd = bTab ? FALSE : TRUE;
 
-    SWRECTFN( pStart )
+    const SwFrm* pVertRefFrm = pStart;
+    if ( bTblSel && pStTab )
+        pVertRefFrm = pStTab;
+    SWRECTFN( pVertRefFrm )
 
     SwTwips nX;
     if ( bTab )
