@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:38:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ class UICommandDescription :  public com::sun::star::lang::XTypeProvider    ,
 
     private:
         sal_Bool                                                                            m_bConfigRead;
+        rtl::OUString                                                                       m_aPrivateResourceURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;
         UICommandsHashMap                                                                   m_aUICommandsHashMap;
