@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdevt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 21:09:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,5 +132,5 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 CommandExtTextInputData::~CommandExtTextInputData()
 {
     if ( mpTextAttr )
-        delete mpTextAttr;
+        delete [] mpTextAttr;
 }
