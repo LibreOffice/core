@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinguServiceEventBroadcaster.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 16:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** is used to register as listener for LinguServiceEvents.
+/** is used to register a listener for LinguServiceEvents.
 
     <P>This interface may be used by spellchecker or hyphenator implementations
     to allow clients to be registered and informed about
@@ -84,9 +84,9 @@ module com { module sun { module star { module linguistic2 {
 
     <P>Note: The LinguServiceManager forwards the
     <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s
-    it receives (from spellcheckers or hyphenators) to it's own listeners.
-    Thus there should be no need to register
-    as listener for a specific implementation of those./P>
+    it receives (from spellcheckers or hyphenators) to its own listeners.
+    Thus, there should be no need to register
+    as a listener for a specific implementation./P>
 
     @see    com::sun::star::linguistic2::XLinguServiceManager
     @see    com::sun::star::linguistic2::XLinguServiceEventListener
@@ -96,8 +96,8 @@ interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
          @returns
-             </TRUE> if the listener was successfully added,
-            </FALSE> otherwise.
+             <TRUE/> if the listener was successfully added,
+            <FALSE/> otherwise.
 
         @param xLstnr
             the listener to be addded.
@@ -108,8 +108,8 @@ interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
          @returns
-             </TRUE> if the listener was successfully removed,
-            </FALSE> otherwise.
+             <TRUE/> if the listener was successfully removed,
+            <FALSE/> otherwise.
 
         @param xLstnr
             the listener to be removed.
