@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queries.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:09:40 $
+ *  last change: $Author: as $ $Date: 2001-06-15 12:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,15 @@ namespace framework{
                     They are used by our FilterFactory or ouer TypeDetection to return
                     subsets of our cached configuration.
 *//*-*************************************************************************************************************/
+#define FILTERQUERY_TEXTDOCUMENT                        DECLARE_ASCII("_filterquery_textdocument"                       )
+#define FILTERQUERY_WEBDOCUMENT                         DECLARE_ASCII("_filterquery_webdocument"                        )
+#define FILTERQUERY_GLOBALDOCUMENT                      DECLARE_ASCII("_filterquery_globaldocument"                     )
+#define FILTERQUERY_CHARTDOCUMENT                       DECLARE_ASCII("_filterquery_chartdocument"                      )
+#define FILTERQUERY_SPREADSHEETDOCUMENT                 DECLARE_ASCII("_filterquery_spreadsheetdocument"                )
+#define FILTERQUERY_PRESENTATIONDOCUMENT                DECLARE_ASCII("_filterquery_presentationdocument"               )
+#define FILTERQUERY_DRAWINGDOCUMENT                     DECLARE_ASCII("_filterquery_drawingdocument"                    )
+#define FILTERQUERY_FORMULARPROPERTIES                  DECLARE_ASCII("_filterquery_formulaproperties"                  )
+
 #define FILTERQUERY_TEXTDOCUMENT_WITHDEFAULT            DECLARE_ASCII("_filterquery_textdocument_withdefault"           )
 #define FILTERQUERY_WEBDOCUMENT_WITHDEFAULT             DECLARE_ASCII("_filterquery_webdocument_withdefault"            )
 #define FILTERQUERY_GLOBALDOCUMENT_WITHDEFAULT          DECLARE_ASCII("_filterquery_globaldocument_withdefault"         )
@@ -101,6 +110,7 @@ namespace framework{
 #define FILTERQUERY_PRESENTATIONDOCUMENT_WITHDEFAULT    DECLARE_ASCII("_filterquery_presentationdocument_withdefault"   )
 #define FILTERQUERY_DRAWINGDOCUMENT_WITHDEFAULT         DECLARE_ASCII("_filterquery_drawingdocument_withdefault"        )
 #define FILTERQUERY_FORMULARPROPERTIES_WITHDEFAULT      DECLARE_ASCII("_filterquery_formulaproperties_withdefault"      )
+
 #define FILTERQUERY_GRAPHICFILTERS                      DECLARE_ASCII("_filterquery_graphicfilters"                     )
 #define FILTERQUERY_DEFAULTFILTERS                      DECLARE_ASCII("_filterquery_defaultfilters"                     )
 
@@ -134,6 +144,14 @@ namespace framework{
 inline sal_Bool c_isQuery( const ::rtl::OUString& sQuery )
 {
     return  (
+                ( sQuery == FILTERQUERY_TEXTDOCUMENT                        )   ||
+                ( sQuery == FILTERQUERY_WEBDOCUMENT                         )   ||
+                ( sQuery == FILTERQUERY_GLOBALDOCUMENT                      )   ||
+                ( sQuery == FILTERQUERY_CHARTDOCUMENT                       )   ||
+                ( sQuery == FILTERQUERY_SPREADSHEETDOCUMENT                 )   ||
+                ( sQuery == FILTERQUERY_PRESENTATIONDOCUMENT                )   ||
+                ( sQuery == FILTERQUERY_DRAWINGDOCUMENT                     )   ||
+                ( sQuery == FILTERQUERY_FORMULARPROPERTIES                  )   ||
                 ( sQuery == FILTERQUERY_TEXTDOCUMENT_WITHDEFAULT            )   ||
                 ( sQuery == FILTERQUERY_WEBDOCUMENT_WITHDEFAULT             )   ||
                 ( sQuery == FILTERQUERY_GLOBALDOCUMENT_WITHDEFAULT          )   ||
