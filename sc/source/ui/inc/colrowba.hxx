@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ public:
     virtual USHORT      GetEntrySize( USHORT nEntryNo );
     virtual String      GetEntryText( USHORT nEntryNo );
 
+    virtual BOOL        IsLayoutRTL();                      // only for columns
+
     virtual void        SetEntrySize( USHORT nPos, USHORT nNewSize );
     virtual void        HideEntries( USHORT nStart, USHORT nEnd );
 
@@ -122,7 +124,8 @@ public:
     virtual USHORT      GetEntrySize( USHORT nEntryNo );
     virtual String      GetEntryText( USHORT nEntryNo );
 
-    virtual USHORT      GetHiddenCount( USHORT nEntryNo );  // nur fuer Zeilen
+    virtual BOOL        IsMirrored();                       // only for columns
+    virtual USHORT      GetHiddenCount( USHORT nEntryNo );  // only for columns
 
     virtual void        SetEntrySize( USHORT nPos, USHORT nNewSize );
     virtual void        HideEntries( USHORT nStart, USHORT nEnd );
