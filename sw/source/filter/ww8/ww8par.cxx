@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-26 14:00:29 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 13:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1645,7 +1645,7 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
     sal_Size nDestChars = rtl_convertTextToUnicode(hConverter, 0,
         &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
 
-    if (nInfo & RTL_TEXTTOUNICODE_INFO_UNDEFINED)
+    if (nInfo & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE)
     {
         rtl_TextToUnicodeConverter hCP1252Converter =
             rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
@@ -1680,7 +1680,8 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     if (!nLen)
         return true;
 
-    CharSet eSrcCharSet = GetCurrentCharSet();
+    const CharSet eSrcCharSet = bVer67 ? GetCurrentCharSet() :
+        RTL_TEXTENCODING_MS_1252;
 
     // (re)alloc UniString data
     String sPlainCharsBuf;
