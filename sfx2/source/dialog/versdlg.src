@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 11:09:01 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ ModalDialog DLG_VERSIONS
         Text = "Schließen" ;
         Text [ English ] = "Close" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Close" ;
+        Text [ english_us ] = "Close" ;
         Text [ portuguese_brazilian ] = "Schlie?en" ;
         Text [ swedish ] = "Stäng" ;
         Text [ danish ] = "Luk" ;
@@ -290,11 +290,11 @@ ModalDialog DLG_VERSIONS
         Text [ french ] = "Fermer" ;
         Text [ dutch ] = "Sluiten" ;
         Text [ portuguese ] = "Fechar" ;
-        Text[ chinese_simplified ] = "å…³é—­(~C)";
+        Text[ chinese_simplified ] = "å…³é—­";
         Text[ russian ] = "Çàêğûòü";
         Text[ polish ] = "Zamknij";
         Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
-        Text[ chinese_traditional ] = "é—œé–‰(~C)";
+        Text[ chinese_traditional ] = "é—œé–‰";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåßóéìï";
         Text[ korean ] = "ë‹«ê¸°(~C)";
