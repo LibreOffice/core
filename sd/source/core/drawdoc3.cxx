@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 08:29:07 $
+ *  last change: $Author: ka $ $Date: 2002-07-08 08:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1806,8 +1806,9 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         // Liste mit Seiten fuellen
         List* pPageList = new List;
 
-        pPageList->Insert(pMaster, LIST_APPEND);
-        pPageList->Insert(pNotesMaster, LIST_APPEND);
+//      #98456, this has to be removed according to CL (KA 07/08/2002)
+//      pPageList->Insert(pMaster, LIST_APPEND);
+//      pPageList->Insert(pNotesMaster, LIST_APPEND);
 
         if (bMaster || bLayoutReloaded)
         {
