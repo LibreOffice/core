@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2002-09-10 08:43:37 $
+ *  last change: $Author: os $ $Date: 2002-10-09 09:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SVX_HTMLMODE_HXX //autogen
+#include <svx/htmlmode.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
@@ -947,7 +950,18 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
         rSh.StartAllAction();
         if( bSet )
             rSh.SetFlyFrmAttr( aSet );
-        if( !bWeb  && FLY_IN_CNTNT != eAnchorId )
+        BOOL bSetPos = FLY_IN_CNTNT != eAnchorId;
+        if(bSetPos && bWeb)
+        {
+            if(FLY_PAGE != eAnchorId)
+                bSetPos = FALSE;
+            else
+            {
+                bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_FULL_ABS_POS) ?
+                    TRUE : FALSE;
+            }
+        }
+        if( bSetPos )
             rSh.SetFlyPos( aTmp.Pos() );
         rSh.EndAllAction();
     }
