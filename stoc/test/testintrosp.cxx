@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
+ *  last change: $Author: hr $ $Date: 2002-08-19 14:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,7 +1602,7 @@ int __cdecl main( int argc, char * argv[] )
         libName = OUString::createFromAscii("corefl.dll");
 #else
 #ifdef MACOSX
-        libName = OUString::createFromAscii("libcorefl.dylib.framework");
+        libName = OUString::createFromAscii("libcorefl.dylib");
 #else
         libName = OUString::createFromAscii("libcorefl.so");
 #endif
@@ -1620,7 +1620,7 @@ int __cdecl main( int argc, char * argv[] )
         libName = OUString::createFromAscii("insp.dll");
 #else
 #ifdef MACOSX
-        libName = OUString::createFromAscii("libinsp.dylib.framework");
+        libName = OUString::createFromAscii("libinsp.dylib");
 #else
         libName = OUString::createFromAscii("libinsp.so");
 #endif
