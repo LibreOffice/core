@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-08-14 10:21:43 $
+ *  last change: $Author: er $ $Date: 2001-08-14 11:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,12 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
     {
         for ( sal_Int32 j=0; j<nCount; j++ )
         {
-            InsertTextEncoding( rtl_TextEncoding( aEncs[j] ) );
+            rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
+            // CharsetMap offers a RTL_TEXTENCODING_DONTKNOW for internal use,
+            // makes no sense here and would result in an empty string as list
+            // entry.
+            if ( nEnc != RTL_TEXTENCODING_DONTKNOW )
+                InsertTextEncoding( nEnc );
         }
     }
 }
