@@ -57,10 +57,17 @@ privateSnippetExecutor:
 		
 	.globl privateSnippetExceptionHandler
 privateSnippetExceptionHandler:
-	movl	-12(%ebp), %ebx
+/	movl	-12(%ebp), %ebx
 	movl	-16(%ebp), %eax
 	movl	-20(%ebp), %ecx
 	movl	-24(%ebp), %esp
+	
+	/ DBO fix: set ebx to GOT
+	call	.L_GOT_END_3
+.L_GOT_END_3:
+	popl	%ebx
+	addl	$_GLOBAL_OFFSET_TABLE_+[.-.L_GOT_END_3],%ebx
+	
 	call	__1cG__CrunMex_rethrow_q6F_v_@PLT
 	ret
 	.type privateSnippetExceptionHandler, @function
