@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 11:37:42 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -453,7 +456,11 @@ void SvtFrameWindow_Impl::Resize()
 
 void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bAsTemplate )
 {
-    if ( rURL.Len() == 0 || !::utl::UCBContentHelper::IsFolder( rURL ) )
+    if ( rURL.Len() == 0 )
+    {
+        xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+    }
+    else if ( !::utl::UCBContentHelper::IsFolder( rURL ) )
     {
         URL aURL;
         aURL.Complete = rURL;
