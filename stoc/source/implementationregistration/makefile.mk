@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dbo $ $Date: 2001-09-11 09:27:11 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:08:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		impreg
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = implreg.uno
 ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC = TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = impreg
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ SLOFILES= \
         $(SLO)$/implreg.obj
 
 SHL1TARGET=	$(TARGET)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = impreg.map
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
