@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:25:41 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,9 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 
 
@@ -862,11 +865,11 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 |
 |*************************************************************************/
 
-BOOL SwFEShell::Paste( SwDoc* pClpDoc )
+BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 {
     SET_CURR_SHELL( this );
     ASSERT( pClpDoc, "kein Clipboard-Dokument"  );
-
+    const USHORT nStartPageNumber = GetPhyPageNum();
     // dann bis zum Ende vom Nodes Array
     SwNodeIndex aIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
     SwPaM aCpyPam( aIdx ); //DocStart
@@ -1090,8 +1093,49 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
                 // muessen die BoxAttribute aber entfernt werden.
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
+            //find out if the clipboard document starts with a table
+            bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
+            SwPosition aInsertPosition( rInsPos );
             pClpDoc->Copy( aCpyPam, rInsPos );
             SaveTblBoxCntnt( &rInsPos );
+            if(bIncludingPageFrames && bStartWithTable)
+            {
+                //remove the paragraph in front of the table
+                SwPaM aPara(aInsertPosition);
+                GetDoc()->DelFullPara(aPara);
+            }
+            //additionally copy page bound frames
+            if( bIncludingPageFrames && pClpDoc->GetSpzFrmFmts()->Count() )
+            {
+                // create a draw view if necessary
+                if( !Imp()->GetDrawView() )
+                    MakeDrawView();
+
+                // FME: removed for #105977#
+                // Size aSiz( 0, GetCharRect().Top() );
+                for ( USHORT i = 0; i < pClpDoc->GetSpzFrmFmts()->Count(); ++i )
+                {
+                    BOOL bInsWithFmt = TRUE;
+                    const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
+                    if( bInsWithFmt  )
+                    {
+                        SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+                        if( FLY_PAGE == aAnchor.GetAnchorId() )
+                        {
+                            aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
+                        }
+                        else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
+                        {
+                            Point aPt;
+                            lcl_SetAnchor( *PCURCRSR->GetPoint(), *PCURCRSR->GetNode(),
+                                            0, aPt, *this, aAnchor, aPt, FALSE );
+                        }
+                        else
+                            continue;
+                        SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor );
+                    }
+                }
+            }
         }
 
     FOREACHPAM_END()
@@ -1114,6 +1158,93 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
     EndAllAction();
 
     return bRet;
+}
+
+/*-- 14.06.2004 13:31:17---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage)
+{
+    if(!GotoPage(nStartPage))
+        return FALSE;
+    MovePage( fnPageCurr, fnPageStart );
+    SwPaM aCpyPam( *GetCrsr()->GetPoint() );
+    String sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
+    SwPageDesc* pDesc = rToFill.FindPageDescByName( sStartingPageDesc, TRUE );
+    if( pDesc )
+        rToFill.ChgCurPageDesc( *pDesc );
+
+    if(!GotoPage(nEndPage))
+        return FALSE;
+    //if the page starts with a table a paragraph has to be inserted before
+    SwNode* pTableNode = aCpyPam.GetNode()->FindTableNode();
+    if(pTableNode)
+    {
+        //insert a paragraph
+        StartUndo(UNDO_INSERT);
+        SwNodeIndex aTblIdx(  *pTableNode, -1 );
+        SwPosition aBefore(aTblIdx);
+        if(GetDoc()->AppendTxtNode( aBefore ))
+        {
+            SwPaM aTmp(aBefore);
+            aCpyPam = aTmp;
+        }
+        EndUndo(UNDO_INSERT);
+    }
+
+    MovePage( fnPageCurr, fnPageEnd );
+    aCpyPam.SetMark();
+    *aCpyPam.GetMark() = *GetCrsr()->GetPoint();
+
+    SET_CURR_SHELL( this );
+
+    StartAllAction();
+    GetDoc()->LockExpFlds();
+    Push();
+    SetSelection(aCpyPam);
+    // copy the text of the selection
+    SwEditShell::Copy(&rToFill);
+
+    if(pTableNode)
+    {
+        //remove the inserted paragraph
+        Undo();
+        //remove the paragraph in the second doc, too
+        SwNodeIndex aIdx( rToFill.GetDoc()->GetNodes().GetEndOfExtras(), 2 );
+        SwPaM aPara( aIdx ); //DocStart
+        rToFill.GetDoc()->DelFullPara(aPara);
+    }
+    // now the page bound objects
+    //additionally copy page bound frames
+    if( GetDoc()->GetSpzFrmFmts()->Count() )
+    {
+        // create a draw view if necessary
+        if( !rToFill.Imp()->GetDrawView() )
+            rToFill.MakeDrawView();
+
+        // FME: removed for #105977#
+        // Size aSiz( 0, GetCharRect().Top() );
+        for ( USHORT i = 0; i < GetDoc()->GetSpzFrmFmts()->Count(); ++i )
+        {
+            const SwFrmFmt& rCpyFmt = *(*GetDoc()->GetSpzFrmFmts())[i];
+            SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+            if( FLY_PAGE == aAnchor.GetAnchorId() &&
+                    aAnchor.GetPageNum() >= nStartPage && aAnchor.GetPageNum() <= nEndPage)
+            {
+                aAnchor.SetPageNum( aAnchor.GetPageNum() - nStartPage + 1);
+            }
+            else
+                continue;
+            SwFrmFmt * pNew = rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor );
+        }
+    }
+
+    Pop();
+    GetDoc()->UnlockExpFlds();
+    GetDoc()->UpdateFlds();
+    EndAllAction();
+
+    return TRUE;
 }
 
 BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
