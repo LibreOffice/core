@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:45:20 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 08:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,18 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ turkish ] = "A error occured. Would you like to continue the copying?";
     Text[ arabic ] = "A error occured. Would you like to continue the copying?";
     Text[ catalan ] = "A error occured. Would you like to continue the copying?";
+};
+
+String STR_DATASOURCE_GRIDCONTROL_NAME
+{
+    Text = "Datenquellen Tabellenansicht" ;
+    Text [ ENGLISH ] = "Datasource tableview" ;
+};
+
+String STR_DATASOURCE_GRIDCONTROL_DESC
+{
+    Text = "Zeigt die ausgewählte Tabelle/Abfrage an." ;
+    Text [ ENGLISH ] = "Shows the selected table/query." ;
 };
 
 
