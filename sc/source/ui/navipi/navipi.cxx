@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:26:23 $
+ *  last change: $Author: nn $ $Date: 2001-07-02 14:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,6 +734,7 @@ void __EXPORT ScNavigatorDialogWrapper::Resizing( Size& rSize )
 
 ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent ) :
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
+        rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aFtCol      ( this, ScResId( FT_COL ) ),
         aEdCol      ( this, ScResId( ED_COL ) ),
         aFtRow      ( this, ScResId( FT_ROW ) ),
@@ -748,7 +749,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         pContextWin ( pCW ),
         eListMode   ( NAV_LMODE_NONE ),
         nDropMode   ( SC_DROPMODE_URL ),
-        rBindings   ( *pB ),
         nListModeHeight( 0 ),
         nInitListHeight( 0 ),
         pViewData   ( NULL ),
