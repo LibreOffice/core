@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signaturecreatorimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 17:10:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ void SignatureCreatorImpl::startEngine( const cssu::Reference<
     cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;
     try
     {
-        xResultTemplate = m_xXMLSignature->generate(xSignatureTemplate, m_xXMLSecurityContext);
+        xResultTemplate = m_xXMLSignature->generate(xSignatureTemplate, m_xSecurityEnvironment);
         m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
@@ -283,7 +283,7 @@ void SAL_CALL SignatureCreatorImpl::initialize( const cssu::Sequence< cssu::Any 
     aArguments[1] >>= m_xSAXEventKeeper;
     aArguments[2] >>= ouTempString;
     m_nIdOfTemplateEC = ouTempString.toInt32();
-    aArguments[3] >>= m_xXMLSecurityContext;
+    aArguments[3] >>= m_xSecurityEnvironment;
     aArguments[4] >>= m_xXMLSignature;
 }
 
