@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:49:32 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -127,6 +130,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
@@ -397,10 +403,16 @@ BOOL SwOLENode::RestorePersistentData()
             p->DoInitNew( NULL );
         }
 
+        uno::Reference < container::XChild > xChild( aOLEObj.xOLERef.GetObject(), uno::UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( p->GetModel() );
+
         DBG_ASSERT( aOLEObj.aName.Len(), "No object name!" );
         ::rtl::OUString aObjName;
         if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( aOLEObj.xOLERef.GetObject(), aObjName ) )
         {
+            if ( xChild.is() )
+                xChild->setParent( 0 );
             DBG_ERROR( "InsertObject failed" );
         }
         else
@@ -422,6 +434,10 @@ BOOL SwOLENode::SavePersistentData()
         SfxObjectShell* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
         {
+            uno::Reference < container::XChild > xChild( aOLEObj.xOLERef.GetObject(), uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( 0 );
+
             p->GetEmbeddedObjectContainer().RemoveEmbeddedObject( aOLEObj.aName);
             aOLEObj.xOLERef.AssignToContainer( 0, aOLEObj.aName );
             try
@@ -450,6 +466,17 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
+
+    // set parent if XChild is supported
+    //!! needed to supply Math objects with a valid reference device
+    Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
+    if (xChild.is())
+    {
+        SwDocShell *pDocSh = GetDoc()->GetDocShell();
+        if (pDocSh)
+            xChild->setParent( pDocSh->GetModel() );
+    }
+
     return pNode;
 }
 
@@ -461,6 +488,17 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, rName, pGrfColl, pAutoAttr );
+
+    // set parent if XChild is supported
+    //!! needed to supply Math objects with a valid reference device
+    Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
+    if (xChild.is())
+    {
+        SwDocShell *pDocSh= GetDoc()->GetDocShell();
+        if (pDocSh)
+            xChild->setParent( pDocSh->GetModel() );
+    }
+
     return pNode;
 }
 
@@ -730,6 +768,10 @@ SwOLEObj::~SwOLEObj()
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
             if ( rCnt.HasEmbeddedObject( aName ) )
             {
+                uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
+                if ( xChild.is() )
+                    xChild->setParent( 0 );
+
                 // not already removed by deleting the object
                 xOLERef.AssignToContainer( 0, aName );
 
@@ -767,9 +809,15 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         }
 
         ::rtl::OUString aObjName;
+        uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
+        if ( xChild.is() && xChild->getParent() != p->GetModel() )
+            // it is possible that the parent was set already
+            xChild->setParent( p->GetModel() );
         if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( xOLERef.GetObject(), aObjName ) )
         {
             DBG_ERROR( "InsertObject failed" );
+        if ( xChild.is() )
+            xChild->setParent( 0 );
         }
         else
             xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
