@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 12:35:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 09:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1656,7 +1656,8 @@ XMLParaContext::XMLParaContext(
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     pHints( 0 ),
     bIgnoreLeadingSpace( sal_True ),
-    bHeading( bHead )
+    bHeading( bHead ),
+    bIsListHeader( false )
 #ifdef CONV_STAR_FONTS
     ,nStarFontsConvFlags( 0 )
 #endif
@@ -1698,6 +1699,15 @@ XMLParaContext::XMLParaContext(
                 }
             }
             break;
+        case XML_TOK_TEXT_P_IS_LIST_HEADER:
+            {
+                sal_Bool bBool;
+                if( SvXMLUnitConverter::convertBool( bBool, rValue ) )
+                {
+                    bIsListHeader = bBool;
+                }
+            }
+            break;
         case XML_TOK_TEXT_P_ID:
             sId = rValue;
             break;
@@ -1733,6 +1743,19 @@ XMLParaContext::~XMLParaContext()
 
     // set style and hard attributes at the previous paragraph
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
+
+    // handle list style header
+    if( bHeading && bIsListHeader )
+    {
+        Reference<XPropertySet> xPropSet( xAttrCursor, UNO_QUERY );
+        OUString sNumberingIsNumber(
+            RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber") );
+        if( xPropSet.is() &&
+            xPropSet->getPropertySetInfo()->hasPropertyByName( sNumberingIsNumber ) )
+        {
+            xPropSet->setPropertyValue( sNumberingIsNumber, makeAny( false ) );
+        }
+    }
 
     if( pHints && pHints->Count() )
     {
