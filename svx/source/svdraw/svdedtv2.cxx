@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-12-09 15:54:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,7 +1119,12 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
     // #105899# First, guarantee that all objects are converted to polyobjects,
     // especially for SdrGrafObj with bitmap filling this is necessary to not
     // loose the bitmap filling.
-    ConvertMarkedToPolyObj(TRUE);
+
+    // #i12392#
+    // ConvertMarkedToPolyObj was too strong here, it will loose quality and
+    // information when curve objects are combined. This can be replaced by
+    // using ConvertMarkedToPathObj without changing the previous fix.
+    ConvertMarkedToPathObj(sal_True);
 
     // continue as before
     bCombineError = FALSE;
