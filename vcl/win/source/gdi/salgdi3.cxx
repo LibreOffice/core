@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:22:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1615,7 +1615,11 @@ String ImplGetFontNameFromFile( SalData& rSalData, const String& rFontFileURL )
     char aResourceName[512];
     int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
     int nLen = ::GetTempPathA( nMaxLen, aResourceName );
+#if (_MSC_VER < 1300)
+    ::strncpy( aResourceName + nLen, aFileName, std::max( 0, nMaxLen - nLen ));
+#else
     ::strncpy( aResourceName + nLen, aFileName, max( 0, nMaxLen - nLen ));
+#endif
     ::DeleteFileA( aResourceName );
 
     // Create font resource file (typically with a .fot file name extension).
