@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-06 17:30:06 $
+#   last change: $Author: rt $ $Date: 2005-01-05 15:33:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -241,7 +241,7 @@ else {
 }
 
 $StandDir = $ENV{SOLARSRC} . $PathSeparator;
-$SHIP=$ENV{SHIPDRIVE} . $PathSeparator;
+$SHIP = defined $ENV{SHIPDRIVE} ? $ENV{SHIPDRIVE} . $PathSeparator : "shipdrive_not_set";
 $PORDUCT = "$SHIP$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator";
 $DATA="$ENV{DMAKE_WORK_DIR}$PathSeparator" . "data$PathSeparator";
 $WORK_STAMP_LC=$ENV{WORK_STAMP};
@@ -280,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.8 $ ';
+$id_str = ' $Revision: 1.9 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -510,9 +510,23 @@ sub doInstall {
                     print_error ("Installationset in $installsetpath is incomplete", 2);
         }
         foreach $file (@DirArray) {
-            $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+            if ($gui eq $cygwin) {
+                my $convertinstallset = ConvertCygwinToWin_Shell("$installsetpath$file");
+                my $convertdestdir = ConvertCygwinToWin_Shell($dest_installdir);
+                $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
+
+            }
+            else {
+                $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+            }
             if (!$is_oo) {
-                $Command .= " TRANSFORMS=$DATA" . "staroffice.mst";
+                if ($gui eq $cygwin) {
+                    my $convertdata = ConvertCygwinToWin_Shell($DATA);
+                    $Command .= " TRANSFORMS=$convertdata" . "staroffice.mst";
+                }
+                else {
+                    $Command .= " TRANSFORMS=$DATA" . "staroffice.mst";
+                }
             }
             execute_Command ($Command, $error_msiexec, $show_Message,  $command_normal);
         }
