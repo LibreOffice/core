@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:21:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PARAM_REGION_EDIT_IN_READONLY (FN_PARAM+28)
 
 #define FN_PARAM_INSERT_AFTER           (FN_PARAM+29)
-#define FN_PARAM_FILTER                 (FN_PARAM+30)
+//#define FN_PARAM_FILTER               (FN_PARAM+30) already defined in svx/svxids.hrc
 #define FN_PARAM_INDEX_NAME             (FN_PARAM+31)
 #define FN_PARAM_INDEX_OPTIONS          (FN_PARAM+32)
 #define FN_PARAM_INDEX_FORMAT           (FN_PARAM+33)
