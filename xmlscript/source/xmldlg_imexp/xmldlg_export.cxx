@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 17:24:02 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
+#include <com/sun/star/awt/VisualEffect.hpp>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -80,6 +81,11 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace xmlscript
 {
@@ -142,20 +148,52 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     {
         switch (_border)
         {
-        case 0:
-            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("none") ) );
+        case BORDER_NONE:
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":border"),
+                                  OUSTR("none") );
             break;
-        case 1:
-            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("3d") ) );
+        case BORDER_3D:
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":border"),
+                                  OUSTR("3d") );
             break;
-        case 2:
-            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("simple") ) );
+        case BORDER_SIMPLE:
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":border"),
+                                  OUSTR("simple") );
             break;
+        case BORDER_SIMPLE_COLOR: {
+            OUStringBuffer buf;
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+            buf.append( OUString::valueOf(
+                            (sal_Int64)(sal_uInt64)_borderColor, 16 ) );
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":border"),
+                                  buf.makeStringAndClear() );
+            break;
+        }
         default:
             OSL_ENSURE( 0, "### unexpected border value!" );
+            break;
+        }
+    }
+
+    // visual effect (look)
+    if (_set & 0x40)
+    {
+        switch (_visualEffect)
+        {
+        case awt::VisualEffect::NONE:
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":look"),
+                                  OUSTR("none") );
+            break;
+        case awt::VisualEffect::LOOK3D:
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":look"),
+                                  OUSTR("3d") );
+            break;
+        case awt::VisualEffect::FLAT:
+            pStyle->addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":look"),
+                                  OUSTR("simple") );
+            break;
+        default:
+            OSL_ENSURE( 0, "### unexpected visual effect value!" );
             break;
         }
     }
@@ -585,42 +623,23 @@ Any ElementDescriptor::readProp( OUString const & rPropName )
     }
     return Any();
 }
-//__________________________________________________________________________________________________
-void ElementDescriptor::readStringAttr( OUString const & rPropName, OUString const & rAttrName )
+
+//______________________________________________________________________________
+void ElementDescriptor::readStringAttr(
+    OUString const & rPropName, OUString const & rAttrName )
 {
-    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    if (beans::PropertyState_DEFAULT_VALUE !=
+        _xPropState->getPropertyState( rPropName ))
     {
         Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_STRING)
-        {
-            addAttribute( rAttrName, * reinterpret_cast< const OUString * >( a.getValue() ) );
-        }
+        OUString v;
+        if (a >>= v)
+            addAttribute( rAttrName, v );
+        else
+            OSL_ENSURE( 0, "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
-void ElementDescriptor::readDoubleAttr( OUString const & rPropName, OUString const & rAttrName )
-{
-    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
-    {
-        Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_DOUBLE)
-        {
-            addAttribute( rAttrName, OUString::valueOf( *(double const *)a.getValue() ) );
-        }
-    }
-}
-//__________________________________________________________________________________________________
-void ElementDescriptor::readLongAttr( OUString const & rPropName, OUString const & rAttrName )
-{
-    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
-    {
-        Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_LONG)
-        {
-            addAttribute( rAttrName, OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
-        }
-    }
-}
+
 //__________________________________________________________________________________________________
 void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString const & rAttrName )
 {
@@ -637,30 +656,7 @@ void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString co
         }
     }
 }
-//__________________________________________________________________________________________________
-void ElementDescriptor::readShortAttr( OUString const & rPropName, OUString const & rAttrName )
-{
-    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
-    {
-        Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_SHORT)
-        {
-            addAttribute( rAttrName, OUString::valueOf( (sal_Int32)*(sal_Int16 *)a.getValue() ) );
-        }
-    }
-}
-//__________________________________________________________________________________________________
-void ElementDescriptor::readBoolAttr( OUString const & rPropName, OUString const & rAttrName )
-{
-    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
-    {
-        Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_BOOLEAN)
-        {
-            addBoolAttr( rAttrName, * reinterpret_cast< const sal_Bool * >( a.getValue() ) );
-        }
-    }
-}
+
 //__________________________________________________________________________________________________
 void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName )
 {
@@ -957,8 +953,14 @@ void ElementDescriptor::readEvents()
                     if (! descr.AddListenerParam.getLength())
                     {
                         // detection of event-name
-                        OString listenerType( OUStringToOString( descr.ListenerType, RTL_TEXTENCODING_ASCII_US ) );
-                        OString eventMethod( OUStringToOString( descr.EventMethod, RTL_TEXTENCODING_ASCII_US ) );
+                        ::rtl::OString listenerType(
+                            ::rtl::OUStringToOString(
+                                descr.ListenerType,
+                                RTL_TEXTENCODING_ASCII_US ) );
+                        ::rtl::OString eventMethod(
+                            ::rtl::OUStringToOString(
+                                descr.EventMethod,
+                                RTL_TEXTENCODING_ASCII_US ) );
                         StringTriple const * p = g_pEventTranslations;
                         while (p->first)
                         {
@@ -1095,59 +1097,51 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             (rStyle._set & (pStyle->_all & ~pStyle->_set)) == 0)
         {
             short bset = rStyle._set & pStyle->_set;
-            if ((bset & 0x1) && rStyle._backgroundColor != pStyle->_backgroundColor)
-            {
+            if ((bset & 0x1) &&
+                rStyle._backgroundColor != pStyle->_backgroundColor)
                 continue;
-            }
-            if ((bset & 0x2) && rStyle._textColor != pStyle->_textColor)
-            {
+            if ((bset & 0x2) &&
+                rStyle._textColor != pStyle->_textColor)
                 continue;
-            }
-            if ((bset & 0x20) && rStyle._textLineColor != pStyle->_textLineColor)
-            {
+            if ((bset & 0x20) &&
+                rStyle._textLineColor != pStyle->_textLineColor)
                 continue;
-            }
-            if ((bset & 0x10) && rStyle._fillColor != pStyle->_fillColor)
-            {
+            if ((bset & 0x10) &&
+                rStyle._fillColor != pStyle->_fillColor)
                 continue;
-            }
-            if ((bset & 0x4) && rStyle._border != pStyle->_border)
-            {
+            if ((bset & 0x4) &&
+                (rStyle._border != pStyle->_border ||
+                 (rStyle._border == BORDER_SIMPLE_COLOR &&
+                  rStyle._borderColor != pStyle->_borderColor)))
                 continue;
-            }
-            if ((bset & 0x8) && !equalFont( rStyle, *pStyle ))
-            {
+            if ((bset & 0x8) &&
+                !equalFont( rStyle, *pStyle ))
                 continue;
-            }
+            if ((bset & 0x40) &&
+                rStyle._visualEffect != pStyle->_visualEffect)
+                continue;
 
             // merge in
             short bnset = rStyle._set & ~pStyle->_set;
             if (bnset & 0x1)
-            {
                 pStyle->_backgroundColor = rStyle._backgroundColor;
-            }
             if (bnset & 0x2)
-            {
                 pStyle->_textColor = rStyle._textColor;
-            }
             if (bnset & 0x20)
-            {
                 pStyle->_textLineColor = rStyle._textLineColor;
-            }
             if (bnset & 0x10)
-            {
                 pStyle->_fillColor = rStyle._fillColor;
-            }
-            if (bnset & 0x4)
-            {
+            if (bnset & 0x4) {
                 pStyle->_border = rStyle._border;
+                pStyle->_borderColor = rStyle._borderColor;
             }
-            if (bnset & 0x8)
-            {
+            if (bnset & 0x8) {
                 pStyle->_descr = rStyle._descr;
                 pStyle->_fontRelief = rStyle._fontRelief;
                 pStyle->_fontEmphasisMark = rStyle._fontEmphasisMark;
             }
+            if (bnset & 0x40)
+                pStyle->_visualEffect = rStyle._visualEffect;
 
             pStyle->_all |= rStyle._all;
             pStyle->_set |= rStyle._set;
@@ -1198,7 +1192,7 @@ void SAL_CALL exportDialogModel(
     SAL_THROW( (Exception) )
 {
     StyleBag all_styles;
-    vector< Reference< xml::sax::XAttributeList > > all_elements;
+    ::std::vector< Reference< xml::sax::XAttributeList > > all_elements;
 
     // read out all props
 
