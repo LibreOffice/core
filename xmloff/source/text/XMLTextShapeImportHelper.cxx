@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-23 07:37:30 $
+ *  last change: $Author: dvo $ $Date: 2001-08-16 10:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,12 @@ void XMLTextShapeImportHelper::addShape(
     switch( eAnchorType )
     {
     case TextContentAnchorType_AT_PAGE:
-        aAny <<= nPage;
-        xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+        // only set positive page numbers
+        if ( nPage > 0 )
+        {
+            aAny <<= nPage;
+            xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+        }
         break;
     case TextContentAnchorType_AS_CHARACTER:
         aAny <<= nY;
