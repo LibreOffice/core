@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:47:44 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text [ dutch ] = "AutoPiloot groepselement";
     Text [ french ] = "AutoPilote d'élément de groupe";
     Text [ spanish ] = "AutoPiloto - Elemento de grupo";
-    Text [ italian ] = "Pilota automatico - Elemento di gruppo ";
+    Text [ italian ] = "Pilota automatico - Elemento di gruppo";
     Text [ danish ] = "AutoPilot - gruppeelement";
     Text [ swedish ] = "AutoPilot för gruppelement";
     Text [ polish ] = "AutoPilot - Element grupowy";
@@ -113,24 +113,24 @@ ModalDialog RID_DLG_GRIDWIZARD
 
     Text = "AutoPilot Tabellenelement";
     Text [ english ] = "AutoPilot Table Control";
-    Text [ english_us ] = "AutoPilot Table Control";
+    Text [ english_us ] = "AutoPilot Table Element";
     Text [ portuguese ] = "AutoPiloto - Elemento de tabela";
     Text [ russian ] = "Àâòîïèëîò ıëåìåíòà òàáëèöû";
     Text [ dutch ] = "AutoPiloot Tabelelement";
     Text [ french ] = "AutoPilote d'élément de table";
     Text [ spanish ] = "AutoPiloto - Elemento de tabla";
-    Text [ italian ] = "Pilota automatico - Elemento tabella ";
+    Text [ italian ] = "Pilota automatico - Elemento tabella";
     Text [ danish ] = "AutoPilot - tabelelement";
-    Text [ swedish ] = "AutoPilot tabellelement";
+    Text [ swedish ] = "AutoPilot för tabellelement";
     Text [ polish ] = "AutoPilot - Element tabeli";
     Text [ portuguese_brazilian ] = "AutoPilot Tabellenelement";
-    Text [ japanese ] = "µ°ÄÊß²Û¯Ä •\\\\¬—v‘f";
+    Text [ japanese ] = "µ°ÄÊß²Û¯Ä Ã°ÌŞÙ‚Ì—v‘f";
     Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±í¸ñÔª¼ş";
     Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ªí®æ¤¸¥ó";
     Text [ arabic ] = "ÚäÕÑ ÌÏæá ÇáãÑÔÏ ÇáÂáí";
     Text [ dutch ] = "AutoPiloot Tabelelement";
     Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±í¸ñÔª¼ş";
-    Text [ greek ] = "Óôïé÷åßï ğßíáêá ôïõ AutoPilot";
+    Text [ greek ] = "Óôïé÷åßï ğßíáêá ôïõ ÁõôïĞéëüôïõ";
     Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ Ç¥ ¿ä¼Ò";
     Text [ turkish ] = "OtoPilot Tablo öğesi";
 };
@@ -139,24 +139,24 @@ String RID_STR_LISTWIZARD_TITLE
 {
     Text = "AutoPilot Listenfeld";
     Text [ english ] = "Auto Pilot List field";
-    Text [ english_us ] = "Auto Pilot List field";
+    Text [ english_us ] = "AutoPilot List Box";
     Text[ portuguese ] = "AutoPiloto- Caixa de listagem";
     Text[ russian ] = "Àâòîïèëîò ñïèñêà";
-    Text[ dutch ] = "AutPiloot Keuzelijst";
-    Text[ french ] = "AutoPilote Zone de liste";
+    Text[ dutch ] = "AutoPiloot Keuzelijst";
+    Text[ french ] = "AutoPilote de zone de liste";
     Text[ spanish ] = "AutoPiloto - Listado";
     Text[ italian ] = "Pilota automatico Casella di riepilogo";
     Text[ danish ] = "AutoPilot rulleliste";
-    Text[ swedish ] = "AutoPilot listruta";
+    Text[ swedish ] = "AutoPilot för listruta";
     Text[ polish ] = "AutoPilot - Pole listy";
     Text[ portuguese_brazilian ] = "Create group";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä Ø½ÄÌ¨°ÙÄŞ";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄµµÖúÀí ÁĞµ¥À¸";
     Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ²M³æÄæ¦ì";
-    Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí Ü ãÑÈÚ ŞÇÆãÉ";
-    Text[ dutch ] = "AutPiloot Keuzelijst";
+    Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ ÇáãÑÔÏ ÇáÂáí";
+    Text[ dutch ] = "AutoPiloot Keuzelijst";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄµµÖúÀí ÁĞµ¥À¸";
-    Text[ greek ] = "AutoPilot Ğåäßï ëßóôáò";
+    Text[ greek ] = "Ğåäßï ëßóôáò ôïõ ÁõôïĞéëüôïõ";
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¸ñ·Ï ÇÊµå";
     Text[ turkish ] = "OtoPilot Liste alanı";
 };
@@ -165,23 +165,23 @@ String RID_STR_COMBOWIZARD_TITLE
 {
     Text = "AutoPilot Kombinationsfeld";
     Text [ english_us ] = "AutoPilot Combo Box";
-    Text [ portuguese ] = "AutoPiloto Caixa de combinação";
+    Text [ portuguese ] = "AutoPiloto - Caixa de combinação";
     Text [ russian ] = "Àâòîïèëîò ïîëÿ ñî ñïèñêîì";
     Text [ dutch ] = "AutoPiloot Combinatieveld";
-    Text [ french ] = "AutoPilote Zone combinée";
+    Text [ french ] = "AutoPilote de zone combinée";
     Text [ spanish ] = "AutoPiloto - Campo combinado";
     Text [ italian ] = "Pilota automatico Casella combinata";
     Text [ danish ] = "AutoPilot kombinationsboks";
-    Text [ swedish ] = "AutoPilot kombinationsfält";
+    Text [ swedish ] = "AutoPilot för kombinationsfält";
     Text [ polish ] = "AutoPilot - Pole kombi";
     Text [ portuguese_brazilian ] = "Option Group AutoPilot";
     Text [ japanese ] = "µ°ÄÊß²Û¯Ä ºİÎŞÎŞ¯¸½";
     Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ×éºÏÀ¸";
     Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ²Õ¦XÄæ¦ì";
-    Text [ arabic ] = "ÇáãÑÔÏ ÇáÂáí Ü ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
+    Text [ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ ÇáãÑÔÏ ÇáÂáí";
     Text [ dutch ] = "AutoPiloot Combinatieveld";
     Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ×éºÏÀ¸";
-    Text [ greek ] = "Ğåäßï óõíäõáóìïı ôïõ AutoPilot";
+    Text [ greek ] = "Ğåäßï óõíäõáóìïı ôïõ ÁõôïĞéëüôïõ";
     Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ: ÄŞº¸¹Ú½º";
     Text [ turkish ] = "OtoPilot Kombinasyon alanı";
     Text [ language_user1 ] = " ";
@@ -191,29 +191,32 @@ String RID_STR_COULDNOTOPENTABLE
 {
     Text = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
     Text [ english ] = "The connection to the data source could not be established.";
-    Text [ english_us ] = "The connection to the data source could not be established.";
-    Text[ portuguese ] = "The connection to the data source could not be established.";
-    Text[ russian ] = "The connection to the data source could not be established.";
-    Text[ greek ] = "The connection to the data source could not be established.";
-    Text[ dutch ] = "The connection to the data source could not be established.";
-    Text[ french ] = "The connection to the data source could not be established.";
+    Text [ english_us ] = "The table connection to the data source could not be established.";
+    Text[ portuguese ] = "Foi impossível estabelecer a ligação da tabela à fonte de dados.";
+    Text[ russian ] = "Ñîåäèíèòüñÿ ñ èñòî÷íèêîì áàçû äàííûõ íå óäàåòñÿ.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ğñáãìáôïğïéçèåß ç óıíäåóç ìå ôçí ğñïİëåõóç ôùí äåäïìİíùí.";
+    Text[ dutch ] = "De verbinding met de gegevensbron kon niet tot stand worden gebracht.";
+    Text[ french ] = "Impossible de connecter la table à la source de données !";
     Text[ spanish ] = "No se pudo crear la tabla \"Conección a la fuente de datos\".";
-    Text[ italian ] = "The connection to the data source could not be established.";
+    Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.";
     Text[ danish ] = "The connection to the data source could not be established.";
-    Text[ swedish ] = "The connection to the data source could not be established.";
-    Text[ polish ] = "The connection to the data source could not be established.";
+    Text[ swedish ] = "Det gick inte att upprätta en förbindelse till datakällan.";
+    Text[ polish ] = "Ustanowienie po³¹czenia ze Ÿród³em bazy danych nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
-    Text[ japanese ] = "The connection to the data source could not be established.";
+    Text[ japanese ] = "ÃŞ°À¿°½‚Ö‚ÌÃ°ÌŞÙÚ‘±‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "The connection to the data source could not be established.";
-    Text[ chinese_simplified ] = "The connection to the data source could not be established.";
-    Text[ chinese_traditional ] = "The connection to the data source could not be established.";
+    Text[ chinese_simplified ] = "ÎŞ·¨ºÍÊı¾İÔ´½¨Á¢Á¬½Ó¡£";
+    Text[ chinese_traditional ] = "µLªk³s½u¨ì¸ê®Æ·½¡C";
     Text[ turkish ] = "The connection to the data source could not be established.";
-    Text[ arabic ] = "The connection to the data source could not be established.";
+    Text[ arabic ] = "ÊÚĞÑ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/09 20:47:44  kz
+ *  Merge SRC624: 09.03.01 - 21:47:53 (NoBranch)
+ *
  *  Revision 1.4  2001/03/05 14:53:13  fs
  *  finished the grid control wizard
  *
