@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:52:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,11 +410,19 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
             }
             else if( !bOutOutlineOnly )
             {
-                if( rNd.IsTableNode() )
+                if (rNd.IsTableNode())
                 {
-                    OutBreaks( ((SwTableNode&)rNd).GetTable().GetFrmFmt()
-                                ->GetAttrSet() );
-                    OutRTF_SwTblNode( *this, (SwTableNode&)rNd );
+                    bool bAllOk = false;
+                    if (const SwTableNode *pNd = rNd.GetTableNode())
+                    {
+                        if (const SwFrmFmt *pFmt = pNd->GetTable().GetFrmFmt())
+                        {
+                            OutBreaks(pFmt->GetAttrSet());
+                            bAllOk = true;
+                        }
+                        OutRTF_SwTblNode(*this, *pNd);
+                    }
+                    ASSERT(bAllOk, "Unexpected missing properties from tables");
                 }
                 else if( rNd.IsSectionNode() )
                 {
@@ -1090,8 +1098,14 @@ void SwRTFWriter::OutRTFStyleTab()
     bOutStyleTab = FALSE;
 }
 
+bool ExportAsInline(const SwFlyFrmFmt& rFlyFrmFmt)
+{
+    //if not an inline element (hack in our limitations here as to only
+    //graphics like this!!!!
+    return rFlyFrmFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
+}
 
-void SwRTFWriter::OutRTFFlyFrms( const SwFlyFrmFmt& rFlyFrmFmt )
+void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
 {
     // ein FlyFrame wurde erkannt, gebe erstmal den aus
 
@@ -1104,17 +1118,24 @@ void SwRTFWriter::OutRTFFlyFrms( const SwFlyFrmFmt& rFlyFrmFmt )
     if( nStt >= nEnd )      // kein Bereich, also kein gueltiger Node
         return;
 
-    Strm() << SwRTFWriter::sNewLine << sRTF_PARD << sRTF_PLAIN;
+    if (!ExportAsInline(rFlyFrmFmt))
+        Strm() << SwRTFWriter::sNewLine << sRTF_PARD << sRTF_PLAIN;
+    //If we are only exporting an inline graphic/object then we
+    //only need the its pFlyFmt for the duration of exporting it
+    //for floating objects its a little more complex at the moment
+    const SwFlyFrmFmt *pOldFlyFmt = pFlyFmt;
+    pFlyFmt = &rFlyFrmFmt;
 
     {
         RTFSaveData aSaveData( *this, nStt, nEnd );
-        pFlyFmt = (SwFlyFrmFmt*)&rFlyFrmFmt;
         Out_SwDoc( pCurPam );
     }
 
-    Strm() << sRTF_PARD << SwRTFWriter::sNewLine;
+    if (!ExportAsInline(rFlyFrmFmt))
+        Strm() << sRTF_PARD << SwRTFWriter::sNewLine;
+    else
+        pFlyFmt = pOldFlyFmt;
 }
-
 
 void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
 {
