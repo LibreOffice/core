@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 07:41:53 $
+#   last change: $Author: obo $ $Date: 2004-05-28 15:54:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -296,9 +296,16 @@ $(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
     +-strip $@    
 .ENDIF
 
+$(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
+    +-rm -f $@ >& $(NULLDEV)
+    $(GNUCOPY) $(BIN)$/$(@:f) $@
+.IF "$(GUI)"=="UNX"
+    +-strip $@    
+.ENDIF
+
 # special rule for special Java UNO native library
 # (used for all platforms but built only under windows)
-$(DESTDIRJAR)$/win$/unowinreg.dll : $(SOLARCOMMONBINDIR)$/unowinreg.dll
+$(DESTDIRJAR)$/win$/unowinreg.dll : $(PRJ)$/bin$/win$/unowinreg.dll
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $< $@
     
@@ -306,8 +313,9 @@ $(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(DLLOUT)$/$(@:f) $@
 
-$(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(SOLARBINDIR)$/juh_loader_classes.zip
-    +unzip -quod $(DESTDIRJAR) $<
+$(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(CLASSDIR)$/com$/sun$/star$/lib$/loader$/%.class
+    +-$(RM) $(@:db)*.class >& $(NULLDEV)
+    +$(COPY) $(<:db)*.class $(@:d)
     
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
