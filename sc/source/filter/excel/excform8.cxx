@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:17:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,8 +300,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 break;
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;        // und?
-                aString.Erase();
-                aIn.AppendUniString( aString, nLen ); // reads Grbit even if nLen==0
+                aString = aIn.ReadUniString( nLen );            // reads Grbit even if nLen==0
 
                 aStack << aPool.Store( aString );
                 break;
