@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalcHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:08:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -65,6 +65,7 @@ import com.sun.star.container.*;
 import com.sun.star.sheet.*;
 import com.sun.star.table.*;
 import com.sun.star.chart.*;
+import com.sun.star.text.XText;
 
 import com.sun.star.document.XEmbeddedObjectSupplier;
 import com.sun.star.frame.XModel;
@@ -308,6 +309,13 @@ public class CalcHelper
             double fFactor = 2.0 * java.lang.Math.PI / (double)(nRowCount - 1);
             String aFormula;
 
+            // set variable factor for cos formula
+            int nFactorCol = nColumnCount + 2;
+            (aSheet.getCellByPosition( nFactorCol - 1, 0 )).setValue( 0.2 );
+
+            XText xCellText = (XText) UnoRuntime.queryInterface( XText.class, aSheet.getCellByPosition( nFactorCol - 1, 1 ) );
+            xCellText.setString( "Change the factor above and\nwatch the changes in the chart" );
+
             for( nCol = 0; nCol < nColumnCount; nCol++ )
             {
                 for( nRow = 0; nRow < nRowCount; nRow++ )
@@ -325,7 +333,7 @@ public class CalcHelper
                             aFormula += "SIN";
                         else
                             aFormula += "COS";
-                        aFormula += "(INDIRECT(ADDRESS(" + (nRow + 1) + ";1)))+RAND()*0.2";
+                        aFormula += "(INDIRECT(ADDRESS(" + (nRow + 1) + ";1)))+RAND()*INDIRECT(ADDRESS(1;" + nFactorCol + "))";
                         (aSheet.getCellByPosition( nCol, nRow )).setFormula( aFormula );
                     }
                 }
