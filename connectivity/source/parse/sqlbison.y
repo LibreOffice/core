@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.50 2005-02-16 15:57:07 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.51 2005-02-17 10:15:54 vg Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2005-02-16 15:57:07 $ $Revision: 1.50 $
+//	$Author: vg $ $Date: 2005-02-17 10:15:54 $ $Revision: 1.51 $
 //
 // Description:
 //
@@ -242,12 +242,12 @@ using namespace connectivity;
 %type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct fold
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source 
-%type <pParseNode> value_exp_commalist3 string_function_3Argument value_exp_commalist4 string_function_4Argument value_exp_commalist2 string_function_1Argument string_function_2Argument
+%type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
 %type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument
 %type <pParseNode> all query_primary as sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
-%type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter
+%type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter function_args_commalist function_arg
 %type <pParseNode> catalog_name schema_name table_node numeric_function string_function function_name date_function
 %%
 
@@ -1731,7 +1731,7 @@ set_fct_spec:
 			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	function_name1 '(' value_exp ')'
+	|	function_name1 '(' function_arg ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1739,7 +1739,7 @@ set_fct_spec:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	function_name2 '(' value_exp_commalist2 ')'
+	|	function_name2 '(' function_arg_commalist2 ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1747,7 +1747,7 @@ set_fct_spec:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	function_name3 '(' value_exp_commalist3 ')'
+	|	function_name3 '(' function_arg_commalist3 ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1755,7 +1755,7 @@ set_fct_spec:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	string_function_4Argument '(' value_exp_commalist4 ')'
+	|	string_function_4Argument '(' function_arg_commalist4 ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1763,7 +1763,7 @@ set_fct_spec:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	function_name '(' value_exp_commalist ')'
+	|	function_name '(' function_args_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1771,7 +1771,7 @@ set_fct_spec:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	function_name12 '(' value_exp_commalist ')'
+	|	function_name12 '(' function_args_commalist ')'
 		{
 			if ( $3->count() == 1 || $3->count() == 2 )
 			{
@@ -1784,7 +1784,7 @@ set_fct_spec:
 			else
 				YYERROR;
 		}
-	|	function_name23 '(' value_exp_commalist ')'
+	|	function_name23 '(' function_args_commalist ')'
 		{
 			if ( $3->count() == 2 || $3->count() == 3)
 			{
@@ -2507,14 +2507,14 @@ interval_qualifier:
 		}
 	;
 */
-value_exp_commalist2:
-	    value_exp ',' value_exp
+function_arg_commalist2:
+	    function_arg ',' function_arg
 			{$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);
 			$$->append($3);}
 	;
-value_exp_commalist3:
-	    value_exp ',' value_exp ',' value_exp
+function_arg_commalist3:
+	    function_arg ',' function_arg ',' function_arg
 		{
 			$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);
@@ -2522,8 +2522,8 @@ value_exp_commalist3:
 			$$->append($5);
 		}
 	;
-value_exp_commalist4:
-	    value_exp ',' value_exp ',' value_exp ',' value_exp
+function_arg_commalist4:
+	    function_arg ',' function_arg ',' function_arg ',' function_arg
 		{
 			$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);
@@ -2551,6 +2551,36 @@ value_exp_commalist:
 				YYERROR;
 		}
 	;
+function_arg:
+		value_exp 
+	|	value_exp comparison value_exp
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	;
+function_args_commalist:
+		function_arg
+			{$$ = SQL_NEW_COMMALISTRULE;
+			$$->append($1);}
+	|   function_args_commalist ',' function_arg
+			{$1->append($3);
+			$$ = $1;}
+	/*	this rule is only valid if we check predicates */
+	|   function_args_commalist ';' function_arg
+		{
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			{
+				$1->append($3);
+				$$ = $1;
+			}
+			else
+				YYERROR;
+		}
+	;
+	
 value_exp:
 		num_value_exp /*[^')']*/
 	  | string_value_exp
