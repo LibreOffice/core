@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 10:29:32 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:14:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,6 @@ AUTOSEG=true
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 NO_HID_FILES=app.src
@@ -89,7 +88,8 @@ RSCUPDVER=$(RSCREVISION)SV$(UPD)$(UPDMINOR)
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         app.src 			\
         toolbox.src			\
         strings.src 		\
