@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-22 13:34:36 $
+ *  last change: $Author: abi $ $Date: 2001-11-01 16:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include <stdlib.h>
 #ifndef INCLUDED_STL_VECTOR
 #include <vector>
 #define INCLUDED_STL_VECTOR
@@ -210,58 +211,66 @@ namespace xmlsearch {
                     rtl::OUString::createFromAscii( "DictBlock::findID -> ID not found in block" ) );
             }
 
+
             void withPrefix( const BtreeDict* owner,
                              const rtl::OUString& prefix,
                              sal_Int32 prefLen,
                              std::vector<sal_Int32>& result) const
-                throw( xmlsearch::excep::XmlSearchException )
-            {
-                sal_Int8 buffer[ BtreeDict::MaxKeyLength ];
-                const int freeSpace = free();
-                int entryPtr = firstEntry();
-                if( isLeaf() )
-                    while (entryPtr < freeSpace)
-                    {
-                        if( restoreKey( entryPtr,buffer).compareTo( prefix,prefix.getLength() ) == 0 )
-                            result.push_back( entryID( entryPtr ) );
-                        entryPtr = nextEntry(entryPtr);
-                    }
-                else
-                {
-                    owner->lock( getNum() );
-                    sal_Int32 entryIndex  = 0;
-                    while( entryPtr < freeSpace )
-                    {
-                        rtl::OUString key = restoreKey( entryPtr,buffer );
+                throw( xmlsearch::excep::XmlSearchException );
 
-                        if( key.getLength() > prefLen )
-                            key = key.copy( 0,prefLen );
-                        sal_Int32 cmp = key.compareTo(prefix);
 
-                        if( cmp < 0 )
-                        {
-                            entryPtr = nextEntry( entryPtr );
-                            ++entryIndex;
-                        }
-                        else if( cmp == 0 )
-                        {
-                            result.push_back( entryID( entryPtr ) );
-                            owner->accessBlock( getChildIdx( entryIndex ) )->withPrefix( owner,prefix,prefLen,result );
-                            entryPtr = nextEntry( entryPtr );
-                            ++entryIndex;
-                        }
-                        else
-                        {
-                            owner->unlock( getNum() );
-                            owner->accessBlock( getChildIdx( entryIndex ) )->withPrefix( owner,prefix,prefLen,result );
-                            return;
-                        }
-                    }
+//              void withPrefix( const BtreeDict* owner,
+//                               const rtl::OUString& prefix,
+//                               sal_Int32 prefLen,
+//                               std::vector<sal_Int32>& result) const
+//                  throw( xmlsearch::excep::XmlSearchException )
+//              {
+//                  sal_Int8 buffer[ BtreeDict::MaxKeyLength ];
+//                  const int freeSpace = free();
+//                  int entryPtr = firstEntry();
+//                  if( isLeaf() )
+//                      while (entryPtr < freeSpace)
+//                      {
+//                          if( restoreKey( entryPtr,buffer).compareTo( prefix,prefix.getLength() ) == 0 )
+//                              result.push_back( entryID( entryPtr ) );
+//                          entryPtr = nextEntry(entryPtr);
+//                      }
+//                  else
+//                  {
+//                      owner->lock( getNum() );
+//                      sal_Int32 entryIndex  = 0;
+//                      while( entryPtr < freeSpace )
+//                      {
+//                          rtl::OUString key = restoreKey( entryPtr,buffer );
 
-                    owner->unlock( getNum() );
-                    owner->accessBlock( getChildIdx( numberOfEntries() ) )->withPrefix( owner,prefix,prefLen,result );
-                }
-            }
+//                          if( key.getLength() > prefLen )
+//                              key = key.copy( 0,prefLen );
+//                          sal_Int32 cmp = key.compareTo(prefix);
+
+//                          if( cmp < 0 )
+//                          {
+//                              entryPtr = nextEntry( entryPtr );
+//                              ++entryIndex;
+//                          }
+//                          else if( cmp == 0 )
+//                          {
+//                              result.push_back( entryID( entryPtr ) );
+//                              owner->accessBlock( getChildIdx( entryIndex ) )->withPrefix( owner,prefix,prefLen,result );
+//                              entryPtr = nextEntry( entryPtr );
+//                              ++entryIndex;
+//                          }
+//                          else
+//                          {
+//                              owner->unlock( getNum() );
+//                              owner->accessBlock( getChildIdx( entryIndex ) )->withPrefix( owner,prefix,prefLen,result );
+//                              return;
+//                          }
+//                      }
+
+//                      owner->unlock( getNum() );
+//                      owner->accessBlock( getChildIdx( numberOfEntries() ) )->withPrefix( owner,prefix,prefLen,result );
+//                  }
+//              }
 
 
             void setBlockNumbers( sal_Int32* blocks )
@@ -321,6 +330,53 @@ using namespace xmlsearch::db;
 using namespace xmlsearch::util;
 
 
+
+
+void DictBlock::withPrefix( const BtreeDict* owner,
+                            const rtl::OUString& prefix,
+                            sal_Int32 prefLen,
+                            std::vector<sal_Int32>& result) const
+    throw( xmlsearch::excep::XmlSearchException )
+{
+    sal_Int8 buffer[ BtreeDict::MaxKeyLength ];
+    const int freeSpace = free();
+    int entryPtr = firstEntry();
+    if( isLeaf() )
+        while( entryPtr < freeSpace )
+        {
+            rtl::OUString key = restoreKey( entryPtr,buffer);
+            if( key.indexOf( prefix ) != -1 )
+                result.push_back( entryID( entryPtr ) );
+            entryPtr = nextEntry(entryPtr);
+        }
+    else
+    {
+        owner->lock( getNum() );
+        sal_Int32 entryIndex  = 0;
+        while( entryPtr < freeSpace )
+        {
+            rtl::OUString key = restoreKey( entryPtr,buffer );
+
+            if( key.getLength() > prefLen )
+                key = key.copy( 0,prefLen );
+
+            sal_Int32 cmp = key.indexOf(prefix);
+
+            if( cmp != -1 )
+                result.push_back( entryID( entryPtr ) );
+            owner->accessBlock( getChildIdx( entryIndex ) )->withPrefix( owner,prefix,prefLen,result );
+            entryPtr = nextEntry( entryPtr );
+            ++entryIndex;
+        }
+
+        owner->unlock( getNum() );
+        owner->accessBlock( getChildIdx( numberOfEntries() ) )->withPrefix( owner,prefix,prefLen,result );
+    }
+}
+
+
+
+
 class BlockProcessorImpl
     : public BlockProcessor
 {
@@ -353,7 +409,7 @@ void BlockProcessorImpl::process( Block* block ) const
 }
 
 
-#include <stdlib.h>
+
 
 
 BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor ) throw( IOException )
@@ -468,55 +524,56 @@ std::vector< sal_Int32 > BtreeDict::withPrefix( const rtl::OUString& prefix ) co
     throw( excep::XmlSearchException )
 {
     std::vector< sal_Int32 > result;
-    accessBlock( root_ )->withPrefix( this,prefix,prefix.getLength(),result );
+    const DictBlock *bl = accessBlock( root_ );
+    bl->withPrefix( this,prefix,prefix.getLength(),result );
     return result;
 }
 
 
 
 sal_Int32 BtreeDict::find( const DictBlock* bl,
-               const sal_Int8* key,
-               sal_Int32 inputKeyLen ) const throw( excep::XmlSearchException )
+                           const sal_Int8* key,
+                           sal_Int32 inputKeyLen ) const throw( excep::XmlSearchException )
 {
-  sal_Int32 entryPtr    = bl->firstEntry();
-  sal_Int32 freeSpace   = bl->free();
-  sal_Int32 nCharsEqual = 0;
-  sal_Int32 compression = 0;
+    sal_Int32 entryPtr    = bl->firstEntry();
+    sal_Int32 freeSpace   = bl->free();
+    sal_Int32 nCharsEqual = 0;
+    sal_Int32 compression = 0;
 
-  for( sal_Int32 entryIdx = 0; ; )
+    for( sal_Int32 entryIdx = 0; ; )
     {
-      if( entryPtr == freeSpace )
-    return find( bl,
-             key,
-             inputKeyLen,
-             bl->numberOfEntries() );
+        if( entryPtr == freeSpace )
+            return find( bl,
+                         key,
+                         inputKeyLen,
+                         bl->numberOfEntries() );
 
-      else if( compression == nCharsEqual )
-    {
-      sal_Int32 keyLen = bl->entryKeyLength( entryPtr );
-      sal_Int32 keyPtr = bl->entryKey( entryPtr ), i;
-      for( i = 0; i < keyLen && key[ nCharsEqual ] == bl->getData()[keyPtr + i]; i++ )
-        ++nCharsEqual;
-      if( i == keyLen )
+        else if( compression == nCharsEqual )
         {
-          if( nCharsEqual == inputKeyLen )
-        return bl->entryID( entryPtr );
+            sal_Int32 keyLen = bl->entryKeyLength( entryPtr );
+            sal_Int32 keyPtr = bl->entryKey( entryPtr ), i;
+            for( i = 0; i < keyLen && key[ nCharsEqual ] == bl->getData()[keyPtr + i]; i++ )
+                ++nCharsEqual;
+            if( i == keyLen )
+            {
+                if( nCharsEqual == inputKeyLen )
+                    return bl->entryID( entryPtr );
+            }
+            else if( ( key[ nCharsEqual ] & 0xFF ) < ( bl->getData()[ keyPtr + i ] & 0xFF) )
+                return find( bl,key,inputKeyLen,entryIdx );
         }
-      else if( ( key[ nCharsEqual ] & 0xFF ) < ( bl->getData()[ keyPtr + i ] & 0xFF) )
-        return find( bl,key,inputKeyLen,entryIdx );
-    }
 
-      else if( compression < nCharsEqual ) // compression dropped
-    return find( bl,key,inputKeyLen,entryPtr == freeSpace ? bl->numberOfEntries() : entryIdx );
+        else if( compression < nCharsEqual ) // compression dropped
+            return find( bl,key,inputKeyLen,entryPtr == freeSpace ? bl->numberOfEntries() : entryIdx );
 
 
-      do
-    {
-      entryPtr = bl->nextEntry( entryPtr );
-      ++entryIdx;
-    } while( bl->entryCompression( entryPtr ) > nCharsEqual );
+        do
+        {
+            entryPtr = bl->nextEntry( entryPtr );
+            ++entryIdx;
+        } while( bl->entryCompression( entryPtr ) > nCharsEqual );
 
-      compression = bl->entryCompression( entryPtr );
+        compression = bl->entryCompression( entryPtr );
     }
 }
 
