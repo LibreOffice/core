@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:09:39 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:16:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,8 +100,7 @@ CFLAGSEXCEPTIONS=-fexceptions
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions 
 
-# -fpermissive should be removed as soon as possible 
-CFLAGSCXX= -pipe -fno-for-scope -fpermissive -frtti
+CFLAGSCXX= -pipe -frtti
 
 
 #Note: the build is not consistent in that it links static librtaries
