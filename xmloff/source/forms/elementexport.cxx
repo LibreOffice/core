@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 07:58:31 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 13:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,41 +927,100 @@ namespace xmloff
         // loop through both lists ('til the maximum of both lengths)
         const ::rtl::OUString* pItems = aItems.getConstArray();
         const ::rtl::OUString* pValues = aValues.getConstArray();
+
         sal_Int32 nItems = aItems.getLength();
         sal_Int32 nValues = aValues.getLength();
-        sal_Int32 nMaxLen = max(nItems, nValues);
-        for (sal_Int16 i=0; i<nMaxLen; ++i, ++pItems, ++pValues)
+
+        sal_Int16 nMaxLen = (sal_Int16)max(nItems, nValues);
+
+        for (sal_Int16 i=0; i<nMaxLen; ++i )
         {
             m_rContext.getGlobalContext().ClearAttrList();
             if (i < nItems)
+            {
                 // there is an item at this position
                 AddAttribute(
                     getCommonControlAttributeNamespace(CCA_LABEL),
                     getCommonControlAttributeName(CCA_LABEL),
                     *pItems);
+                ++pItems;
+            }
             if (i < nValues)
+            {
                 // there is an value at this position
                 AddAttribute(
                     getCommonControlAttributeNamespace(CCA_VALUE),
                     getCommonControlAttributeName(CCA_VALUE),
                     *pValues);
-            if (aSelection.end() != aSelection.find(i))
+                ++pValues;
+            }
+
+            Int16SetIterator aSelectedPos = aSelection.find(i);
+            if (aSelection.end() != aSelectedPos)
             {   // the item at this position is selected
                 AddAttribute(
                     getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
                     getCommonControlAttributeName(CCA_CURRENT_SELECTED),
                     sTrue
                     );
+                aSelection.erase(aSelectedPos);
             }
-            if (aDefaultSelection.end() != aDefaultSelection.find(i))
+
+            Int16SetIterator aDefaultSelectedPos = aDefaultSelection.find(i);
+            if (aDefaultSelection.end() != aDefaultSelectedPos)
             {   // the item at this position is selected as default
                 AddAttribute(
                     getCommonControlAttributeNamespace(CCA_SELECTED),
                     getCommonControlAttributeName(CCA_SELECTED),
                     sTrue
                     );
+                aDefaultSelection.erase(aDefaultSelectedPos);
             }
             SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", sal_True, sal_True);
+        }
+
+        // There may be more "selected" or "default-selected" items than there are in the lists in real,
+        // so we need to store some additional "form:option" items which have no name and no label, but
+        // one or both of the selected flags.
+        // 21.05.2001 - 85388 - frank.schoenheit@germany.sun.com
+
+        if (aSelection.size() || aDefaultSelection.size())
+        {
+            sal_Int16 nLastSelected = -1;
+            if (aSelection.size())
+                nLastSelected = *(--aSelection.end());
+
+            sal_Int16 nLastDefaultSelected = -1;
+            if (aDefaultSelection.size())
+                nLastDefaultSelected = *(--aDefaultSelection.end());
+
+            // the maximum element in both sets
+            sal_Int16 nLastReferredEntry = max(nLastSelected, nLastDefaultSelected);
+            OSL_ENSURE(nLastReferredEntry < nMaxLen, "OControlExport::exportListSourceAsElements: inconsistence!");
+                // if the maximum (selected or default selected) entry number is less than the maximum item count
+                // in both lists, the entry number should have been removed from the set
+
+            for (sal_Int16 i=nMaxLen; i<=nLastReferredEntry; ++i)
+            {
+                if (aSelection.end() != aSelection.find(i))
+                {   // the (not existent) item at this position is selected
+                    AddAttribute(
+                        getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
+                        getCommonControlAttributeName(CCA_CURRENT_SELECTED),
+                        sTrue
+                        );
+                }
+
+                if (aDefaultSelection.end() != aDefaultSelection.find(i))
+                {   // the (not existent) item at this position is selected as default
+                    AddAttribute(
+                        getCommonControlAttributeNamespace(CCA_SELECTED),
+                        getCommonControlAttributeName(CCA_SELECTED),
+                        sTrue
+                        );
+                }
+                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", sal_True, sal_True);
+            }
         }
     }
 
@@ -1466,6 +1525,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/04/17 07:58:31  fs
+ *  #85427# TabCycle has a void-default
+ *
  *  Revision 1.14  2001/03/29 12:19:43  fs
  *  #85097# changed the signature of exportBooleanPropertyAttribute
  *

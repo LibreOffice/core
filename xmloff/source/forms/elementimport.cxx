@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 12:40:01 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 13:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,6 +759,8 @@ namespace xmloff
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+        ,m_nEmptyListItems(0)
+        ,m_nEmptyValueItems(sal_False)
     {
         if (OControlElement::COMBOBOX == m_eElementType)
             enableTrackAttributes();
@@ -802,6 +804,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OListAndComboImport::EndElement()
     {
+        OSL_ENSURE((m_aListSource.getLength() + m_nEmptyListItems) == (m_aValueList.getLength() + m_nEmptyValueItems),
+            "OListAndComboImport::EndElement: inconsistence between labels and values!");
+
         // append the list source property the the properties sequence of our importer
         // the string item list
         PropertyValue aItemList;
@@ -853,31 +858,49 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OListAndComboImport::implPushBackLabel(const ::rtl::OUString& _rLabel)
     {
-        pushBackSequenceElement(m_aListSource, _rLabel);
+        OSL_ENSURE(!m_nEmptyListItems, "OListAndComboImport::implPushBackValue: label list is already done!");
+        if (!m_nEmptyListItems)
+            pushBackSequenceElement(m_aListSource, _rLabel);
     }
 
     //---------------------------------------------------------------------
     void OListAndComboImport::implPushBackValue(const ::rtl::OUString& _rValue)
     {
-        pushBackSequenceElement(m_aValueList, _rValue);
+        OSL_ENSURE(!m_nEmptyValueItems, "OListAndComboImport::implPushBackValue: value list is already done!");
+        if (!m_nEmptyValueItems)
+            pushBackSequenceElement(m_aValueList, _rValue);
+    }
+
+    //---------------------------------------------------------------------
+    void OListAndComboImport::implEmptyLabelFound()
+    {
+        ++m_nEmptyListItems;
+    }
+
+    //---------------------------------------------------------------------
+    void OListAndComboImport::implEmptyValueFound()
+    {
+        ++m_nEmptyValueItems;
     }
 
     //---------------------------------------------------------------------
     void OListAndComboImport::implSelectCurrentItem()
     {
-        OSL_ENSURE(m_aListSource.getLength() == m_aValueList.getLength(),
-            "OListAndComboImport::implSelectCurrentItem: ambiguous index!");
+        OSL_ENSURE((m_aListSource.getLength() + m_nEmptyListItems) == (m_aValueList.getLength() + m_nEmptyValueItems),
+            "OListAndComboImport::implSelectCurrentItem: inconsistence between labels and values!");
 
-        pushBackSequenceElement(m_aSelectedSeq, (sal_Int16)(m_aListSource.getLength() - 1));
+        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.getLength() - 1 + m_nEmptyListItems);
+        pushBackSequenceElement(m_aSelectedSeq, nItemNumber);
     }
 
     //---------------------------------------------------------------------
     void OListAndComboImport::implDefaultSelectCurrentItem()
     {
-        OSL_ENSURE(m_aListSource.getLength() == m_aValueList.getLength(),
-            "OListAndComboImport::implSelectCurrentItem: ambiguous index!");
+        OSL_ENSURE((m_aListSource.getLength() + m_nEmptyListItems) == (m_aValueList.getLength() + m_nEmptyValueItems),
+            "OListAndComboImport::implDefaultSelectCurrentItem: inconsistence between labels and values!");
 
-        pushBackSequenceElement(m_aDefaultSelectedSeq, (sal_Int16)(m_aListSource.getLength() - 1));
+        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.getLength() - 1 + m_nEmptyListItems);
+        pushBackSequenceElement(m_aDefaultSelectedSeq, nItemNumber);
     }
 
     //=====================================================================
@@ -900,8 +923,33 @@ namespace xmloff
         const ::rtl::OUString sValueAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
             GetPrefix(), ::rtl::OUString::createFromAscii("value"));
 
-        m_xListBoxImport->implPushBackLabel( _rxAttrList->getValueByName(sLabelAttribute) );
-        m_xListBoxImport->implPushBackValue( _rxAttrList->getValueByName(sValueAttribute) );
+        // -------------------
+        // the label attribute
+        ::rtl::OUString sValue = _rxAttrList->getValueByName(sLabelAttribute);
+        sal_Bool bNonexistentAttribute = sal_False;
+        if (!sValue.getLength())
+            if (0 == _rxAttrList->getTypeByName(sLabelAttribute).getLength())
+                // this attribute does not really exist
+                bNonexistentAttribute = sal_True;
+
+        if (bNonexistentAttribute)
+            m_xListBoxImport->implEmptyLabelFound();
+        else
+            m_xListBoxImport->implPushBackLabel( sValue );
+
+        // -------------------
+        // the value attribute
+        sValue = _rxAttrList->getValueByName(sValueAttribute);
+        bNonexistentAttribute = sal_False;
+        if (!sValue.getLength())
+            if (0 == _rxAttrList->getTypeByName(sLabelAttribute).getLength())
+                // this attribute does not really exist
+                bNonexistentAttribute = sal_True;
+
+        if (bNonexistentAttribute)
+            m_xListBoxImport->implEmptyValueFound();
+        else
+            m_xListBoxImport->implPushBackValue( sValue );
 
         // the current-selected and selected
         const ::rtl::OUString sSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
@@ -1216,66 +1264,8 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.20  2001/04/27 11:33:04  fs
- *  #86267# simulate EmptyIsNull only if appliable
- *
- *  Revision 1.19  2001/04/20 16:51:09  fs
- *  OFormImport: recognize tabbing-cycle 'til SRC630 (compatibility)
- *
- *  Revision 1.18  2001/03/29 09:45:16  fs
- *  #85386# +OTextLikeImport / handle attributes which's defaults differ from the property defaults
- *
- *  Revision 1.17  2001/03/28 14:00:56  fs
- *  #85371# +OButtonImport / for buttons and forms, correctly handle the target frame attribute
- *
- *  Revision 1.16  2001/03/28 12:27:19  fs
- *  #85391# correctly read the list source / list items of combo boxes
- *
- *  Revision 1.15  2001/03/20 08:07:11  fs
- *  #85115# for compatibility reason recognize the old 'detail-fiels' for a while ...
- *
- *  Revision 1.14  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.13  2001/02/28 16:12:31  fs
- *  #84315# office:events instead of script:events
- *
- *  Revision 1.12  2001/02/19 07:55:56  fs
- *  recognize text-area (instead of textarea) for compatibility reasons ('til 624)
- *
- *  Revision 1.11  2001/02/13 13:44:04  fs
- *  create an OPasswordImport if necessary
- *
- *  Revision 1.10  2001/02/13 09:09:32  fs
- *  #83529# introducing ORadioImport - need special handling for DefaultState / State
- *
- *  Revision 1.9  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.8  2001/01/24 09:37:58  fs
- *  OFormImport: call enter-/leaveEventContext when starting/ending the element
- *
- *  Revision 1.7  2001/01/03 16:25:34  fs
- *  file format change (extra wrapper element for controls, similar to columns)
- *
- *  Revision 1.6  2001/01/02 15:58:21  fs
- *  event ex- & import
- *
- *  Revision 1.5  2000/12/20 14:01:19  vg
- *  #65293# type (DEBUG instead of _DEBUG)
- *
- *  Revision 1.4  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.3  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.2  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.1  2000/12/06 17:31:03  fs
- *  initial checkin - implementations for formlayer import/export - still under construction
- *
+ *  Revision 1.21  2001/05/17 12:40:01  fs
+ *  #86895# #86825# implTranslateValueProperty: special handling for EffectiveValue and EffectiveDefault
  *
  *  Revision 1.0 05.12.00 11:09:36  fs
  ************************************************************************/
