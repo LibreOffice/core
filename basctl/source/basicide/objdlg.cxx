@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-26 12:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,9 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
 //  aOptionButton.SetClickHdl( LINK( this, ObjectCatalog, ButtonHdl ) );
 //  aLittleHelp.SetClickHdl( LINK( this, ObjectCatalog, ButtonHdl ) );
 
+    aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aToolBox.SetSizePixel( aToolBox.CalcWindowSizePixel() );
     aToolBox.SetSelectHdl( LINK( this, ObjectCatalog, ToolBoxHdl ) );
-
 
     aMacroTreeList.SetWindowBits( WB_HASLINES );
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
