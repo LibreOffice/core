@@ -8501,3 +8501,5 @@ component_writeInfo
 ?xBitmapFromBitmapEx@unotools@vcl@@YA?AV?$Reference@VXBitmap@rendering@star@sun@com@drafts@@@uno@star@sun@com@@ABV?$Reference@VXGraphicDevice@rendering@star@sun@com@drafts@@@4567@ABVBitmapEx@@@Z
 ?xPolyPolygonFromPolyPolygon@unotools@vcl@@YA?AV?$Reference@VXPolyPolygon2D@rendering@star@sun@com@drafts@@@uno@star@sun@com@@ABV?$Reference@VXGraphicDevice@rendering@star@sun@com@drafts@@@4567@ABVPolyPolygon@@@Z
 ?xPolyPolygonFromPolygon@unotools@vcl@@YA?AV?$Reference@VXPolyPolygon2D@rendering@star@sun@com@drafts@@@uno@star@sun@com@@ABV?$Reference@VXGraphicDevice@rendering@star@sun@com@drafts@@@4567@ABVPolygon@@@Z
+?bezierSequenceFromPolygon@?A0xb8f080a5@unotools@vcl@@YA?AV?$Sequence@URealBezierSegment2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
+?pointSequenceFromPolygon@?A0xb8f080a5@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
