@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:22:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,11 @@
  ************************************************************************/
 #include <stdlib.h>
 #include <time.h>
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
 #include <sal/types.h>
 #include <osl/file.hxx>
 #include <osl/socket.hxx>
@@ -69,9 +74,11 @@
 #include <tools/string.hxx>
 #include <tools/config.hxx>
 
+
 #include "desktopresid.hxx"
 #include "lockfile.hxx"
 #include "desktop.hrc"
+
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -114,8 +121,13 @@ namespace desktop {
 
         // generate date string
         char *tmpTime = ctime( &t );
-        tmpTime[24] = 0x00; // buffer is always 26 chars, remove '\n'
-        m_aDate = OUString::createFromAscii( tmpTime );
+        if (tmpTime != NULL) {
+            m_aDate = OUString::createFromAscii( tmpTime );
+            sal_Int32 i = m_aDate.indexOf('\n');
+            if (i > 0)
+                m_aDate = m_aDate.copy(0, i);
+        }
+
 
         // try to create file
         File aFile(m_aLockname);
@@ -166,8 +178,23 @@ namespace desktop {
         ByteString aUser  = aConfig.ReadKey( m_aUserkey );
         // lockfile from same host?
         oslSocketResult sRes;
-        ByteString myHost  = OUStringToOString(
+        ByteString myHost;
+#ifdef WNT
+        /*
+          prevent windows from connecting to the net to get it's own
+          hostname by using the netbios name
+        */
+        sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
+        char* szHost = new char[sz];
+        if (GetComputerName(szHost, (LPDWORD)&sz))
+            myHost = OString(szHost);
+        else
+            myHost = OString("UNKNOWN");
+        delete[] szHost;
+#else
+        myHost  = OUStringToOString(
             SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
+#endif
         if (aHost == myHost) {
             // lockfile by same UID
             OUString myUserName;
@@ -188,8 +215,23 @@ namespace desktop {
 
         // get information
         oslSocketResult sRes;
-        ByteString aHost  = OUStringToOString(
+        ByteString aHost;
+#ifdef WNT
+        /*
+          prevent windows from connecting to the net to get it's own
+          hostname by using the netbios name
+        */
+        sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
+        char* szHost = new char[sz];
+        if (GetComputerName(szHost, (LPDWORD)&sz))
+            aHost = OString(szHost);
+        else
+            aHost = OString("UNKNOWN");
+        delete[] szHost;
+#else
+        aHost  = OUStringToOString(
             SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
+#endif
         OUString aUserName;
         Security aSecurity;
         aSecurity.getUserName( aUserName );
@@ -247,3 +289,12 @@ namespace desktop {
             File::remove( m_aLockname );
     }
 }
+
+
+
+
+
+
+
+
+
