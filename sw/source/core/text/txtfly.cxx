@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:30:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         if( bForced )
         {
             pCurr->SetForcedLeftMargin( sal_True );
-            rInf.ForcedLeftMargin( aInter.Width() );
+            rInf.ForcedLeftMargin( (USHORT)aInter.Width() );
         }
 
         if( bFullLine )
@@ -737,7 +737,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = nStartX - nGridOrigin;
             const SwTwips nTmpWidth = rInf.Width() + nOfst;
 
-            const USHORT i = nTmpWidth / nGridWidth + 1;
+            const ULONG i = nTmpWidth / nGridWidth + 1;
 
             const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
             if ( nNewWidth > 0 )
@@ -850,7 +850,7 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
     pMaster = rTxtFly.pMaster;
     if( rTxtFly.pFlyList )
     {
-        pFlyList = new SwFlyList( rTxtFly.pFlyList->Count(), 10 );
+        pFlyList = new SwFlyList( (BYTE)rTxtFly.pFlyList->Count(), 10 );
         pFlyList->Insert( rTxtFly.pFlyList, 0 );
     }
     else
@@ -863,6 +863,8 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
 
 void SwTxtFly::CtorInit( const SwTxtFrm *pFrm )
 {
+    mbIgnoreCurrentFrame = sal_False;
+    mbIgnoreContour = sal_False;
     pPage = pFrm->FindPageFrm();
     const SwFlyFrm* pTmp = pFrm->FindFlyFrm();
     pCurrFly = pTmp ? pTmp->GetVirtDrawObj() : NULL;
@@ -1350,11 +1352,11 @@ SwFlyList *SwTxtFly::InitFlyList()
         const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
         const sal_Bool bFooter = pCurrFrm->IsInFtn();
+        const sal_Bool bR2L = pCurrFrm->IsRightToLeft();
 
         for( MSHORT i = 0; i < nCount; i++ )
         {
             SdrObject *pO = (*pSorted)[ i ];
-
             const SwRect aBound( GetBoundRect( pO ) );
 
             if( nRight < (aBound.*fnRect->fnGetLeft)() ||
@@ -1376,17 +1378,23 @@ SwFlyList *SwTxtFly::InitFlyList()
                 {
                     SdrObject* pTmpObj = (*pFlyList)[ --nPos ];
                     const SwRect aBoundRectOfTmpObj( GetBoundRect( pTmpObj ) );
-                    if ( (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() ==
-                         (aBound.*fnRect->fnGetLeft)()
-                       )
+                    if ( ( bR2L &&
+                           ( (aBoundRectOfTmpObj.*fnRect->fnGetRight)() ==
+                             (aBound.*fnRect->fnGetRight)() ) ) ||
+                         ( !bR2L &&
+                           ( (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() ==
+                             (aBound.*fnRect->fnGetLeft)() ) ) )
                     {
                         SwTwips nTopDiff =
                             (*fnRect->fnYDiff)( (aBound.*fnRect->fnGetTop)(),
                                                 (aBoundRectOfTmpObj.*fnRect->fnGetTop)() );
                         if ( nTopDiff == 0 &&
-                             ( (aBound.*fnRect->fnGetRight)() <
-                               (aBoundRectOfTmpObj.*fnRect->fnGetRight)() )
-                           )
+                             ( ( bR2L &&
+                                 ( (aBound.*fnRect->fnGetLeft)() >
+                                   (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() ) ) ||
+                               ( !bR2L &&
+                                 ( (aBound.*fnRect->fnGetRight)() <
+                                   (aBoundRectOfTmpObj.*fnRect->fnGetRight)() ) ) ) )
                         {
                             ++nPos;
                             break;
@@ -1397,9 +1405,12 @@ SwFlyList *SwTxtFly::InitFlyList()
                             break;
                         }
                     }
-                    else if ( (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() <
-                              (aBound.*fnRect->fnGetLeft)()
-                            )
+                    else if ( ( bR2L &&
+                                ( (aBoundRectOfTmpObj.*fnRect->fnGetRight)() >
+                                  (aBound.*fnRect->fnGetRight)() ) ) ||
+                              ( !bR2L &&
+                                ( (aBoundRectOfTmpObj.*fnRect->fnGetLeft)() <
+                                  (aBound.*fnRect->fnGetLeft)() ) ) )
                     {
                         ++nPos;
                         break;
@@ -1810,15 +1821,22 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                         || aRect.Top() == WEIT_WECH )
                         continue;
                 }
+
+                if ( mbIgnoreCurrentFrame && pCurrFrm == lcl_TheAnchor( pObj ) )
+                    continue;
+
                 if( pRect )
                 {
                     SwRect aFly = FlyToRect( pObj, rRect );
                     if( aFly.IsEmpty() || !aFly.IsOver( rRect ) )
                         continue;
-                    if( !bRet || (aFly.*fnRect->fnGetLeft)() <
-                                  (pRect->*fnRect->fnGetLeft)() ||
-                                  ( pCurrFrm->IsRightToLeft() &&
-                                  aFly.Right() > pRect->Right() ) )
+                    if( !bRet ||
+                        ( !pCurrFrm->IsRightToLeft() &&
+                          ( (aFly.*fnRect->fnGetLeft)() <
+                            (pRect->*fnRect->fnGetLeft)() ) ||
+                        ( pCurrFrm->IsRightToLeft() &&
+                          ( (aFly.*fnRect->fnGetRight)() >
+                            (pRect->*fnRect->fnGetRight)() ) ) ) )
                         *pRect = aFly;
                     if( rSur.IsContour() )
                     {
@@ -2035,7 +2053,9 @@ SwRect SwTxtFly::FlyToRect( const SdrObject *pObj, const SwRect &rLine ) const
                        rLine.Right() :
                        (rLine.*fnRect->fnGetLeft)();
 
-    SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine, pCurrFrm,
+    SwRect aFly = mbIgnoreContour ?
+                  GetBoundRect( pObj ) :
+                  SwContourCache::CalcBoundRect( pObj, rLine, pCurrFrm,
                                                  nXPos, ! pCurrFrm->IsRightToLeft() );
 
     if( !aFly.Width() )
