@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:07:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ void OFlatTable::fillColumns()
                     String aValue = aField2.GetToken(0,cDecimalDelimiter);
                     for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
                     {
-                        sal_Unicode c = aValue.GetChar(j);
+                        sal_Unicode c = aValue.GetChar(static_cast<sal_uInt16>(j));
                         // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                         if (c == cThousandDelimiter && j)
                             continue;
@@ -450,33 +450,46 @@ void OFlatTable::construct()
 // -------------------------------------------------------------------------
 String OFlatTable::getEntry()
 {
-    ::rtl::OUString aURL;
-    Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
-    Reference< XRow> xRow(xDir,UNO_QUERY);
-    ::rtl::OUString sName;
-    ::rtl::OUString sExt;
-    ::rtl::OUString sNeededExt(m_pConnection->getExtension());
-    sal_Int32 nExtLen = sNeededExt.getLength();
-    sal_Int32 nExtLenWithSep = nExtLen + 1;
-    xDir->beforeFirst();
-    while(xDir->next())
+    ::rtl::OUString sURL;
+    try
     {
-        sName = xRow->getString(1);
+        Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
+        Reference< XRow> xRow(xDir,UNO_QUERY);
+        ::rtl::OUString sName;
+        ::rtl::OUString sExt;
 
-        // cut the extension
-        sExt = sName.copy(sName.getLength() - nExtLen);
-        sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
-
-        // name and extension have to coincide
-        if ((sName == m_Name) && (m_pConnection->matchesExtension( sExt )))
+        INetURLObject aURL;
+        xDir->beforeFirst();
+        static const ::rtl::OUString s_sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        while(xDir->next())
         {
-            Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
-            aURL = xContentAccess->queryContentIdentifierString();
-            break;
+            sName = xRow->getString(1);
+            aURL.SetSmartProtocol(INET_PROT_FILE);
+            String sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
+            aURL.SetSmartURL( sUrl );
+
+            // cut the extension
+            sExt = aURL.getExtension();
+
+            // name and extension have to coincide
+            if ( m_pConnection->matchesExtension( sExt ) )
+            {
+                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
+                if ( sName == m_Name )
+                {
+                    Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
+                    sURL = xContentAccess->queryContentIdentifierString();
+                    break;
+                }
+            }
         }
+        xDir->beforeFirst(); // move back to before first record
     }
-    xDir->beforeFirst(); // move back to before first record
-    return aURL.getStr();
+    catch(Exception&)
+    {
+        OSL_ASSERT(0);
+    }
+    return sURL.getStr();
 }
 // -------------------------------------------------------------------------
 void OFlatTable::refreshColumns()
