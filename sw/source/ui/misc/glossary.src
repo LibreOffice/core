@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:58:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog DLG_GLOSSARY
         Text[ japanese ] = "ε…¥ε›δΈ­γ«γƒ†γ‚­γ‚Ήγƒγƒ–γƒ­γƒƒγ‚―εγ‚’γƒ’γƒ³γƒθ΅¨η¤Ίγ™γ‚‹(~D)";
         Text[ chinese_traditional ] = "θ‡ªε‹•ε®ζι΅―η¤Ί(~D)";
         Text[ arabic ] = "ΪΡΦ ΘήνΙ ΕΟΞΗα ΗαδΥ ΗαΚαήΗΖν ΓΛδΗΑ ΗαίΚΗΘΙ Ϊαμ Τία ΚαγνΝ";
-        Text[ greek ] = "Εμφάνιση του υπόλοιπου τμήματος του ονόματος ως συμβουλή κατά την εισαγωγή";
+        Text[ greek ] = "Εμφάνιση ~του υπόλοιπου ονόματος ως συμβουλή κατά την εισαγωγή";
         Text[ korean ] = "μ…λ ¥ μ‹ λ‚¨μ€ μ΄λ¦„μ„ μ μ• μ΄λ¦„μΌλ΅ ν‘μ‹(~D)";
         Text[ turkish ] = "~Giriώ sύrasύnda adύn geri kalanύnύ φneri olarak gφrόntόle";
         Text[ language_user1 ] = " ";
@@ -496,7 +496,7 @@ ModalDialog DLG_GLOSSARY
         Text[ japanese ] = "ε…¥ε›ζ”―ζ΄(~X)";
         Text[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†(~X)";
         Text[ arabic ] = "δΥ ΚαήΗΖν";
-        Text[ greek ] = "Αυτο~Κείμενο";
+        Text[ greek ] = "Αυτόματο ~Κείμενο";
         Text[ korean ] = "μλ™ ν…μ¤νΈ(~X)";
         Text[ turkish ] = "Otomatik me~tin";
         Text[ language_user1 ] = " ";
@@ -583,7 +583,7 @@ ModalDialog DLG_GLOSSARY
         Text[ english_us ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
         Text[ portuguese ] = "Os directσrios de 'AutoTexto' sγo sσ de leitura. Abrir a caixa de diαlogo dos atalhos?";
         Text[ russian ] = "Κΰςΰλξγ 'AutoText' οπεδνΰηνΰχεν ςξλόκξ δλÿ χςενθÿ. Βϋηβΰςό δθΰλξγ ηΰδΰνθÿ οσςθ?";
-        Text[ greek ] = "Δεν υπάρχουν δικαιώματα επεξεργασίας για τους καταλόγους του 'ΑυτοΚείμενο'. Θέλετε να καλέσετε τον διάλογο διαδρομής;";
+        Text[ greek ] = "Δεν υπάρχουν δικαιώματα επεξεργασίας για τους καταλόγους του 'Αυτόματου Κειμένου'. Θέλετε να καλέσετε τον διάλογο διαδρομής;";
         Text[ dutch ] = "Voor de directory's van 'AutoTekst' bestaan geen schrijfrechten. Wilt u het dialoogvenster voor het definiλren van het pad oproepen?";
         Text[ french ] = "Aucun droit d'ιcriture n'existe pour les rιpertoires 'AutoText'. Voulez-vous appeler la boξte de dialogue des chemins ?";
         Text[ spanish ] = "No existen derechos de escritura para los directorios de 'Texto automαtico'. ΏDesea abrir el diαlogo de rutas?";
@@ -965,7 +965,7 @@ ModalDialog DLG_GLOSSARY
     Text[ japanese ] = "ε…¥ε›ζ”―ζ΄";
     Text[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†";
     Text[ arabic ] = "δΥ ΚαήΗΖν";
-    Text[ greek ] = "ΑυτοΚείμενο";
+    Text[ greek ] = "Αυτόματο Κείμενο";
     Text[ korean ] = "μλ™ ν…μ¤νΈ";
     Text[ turkish ] = "Otomatik metin";
     Text[ language_user1 ] = " ";
@@ -1033,7 +1033,7 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE[ japanese ] = "ε…¥ε›ζ”―ζ΄γ‚’ε‰ι™¤γ—γΎγ™γ‹οΌ";
     MESSAGE[ chinese_traditional ] = "θ¦εªι™¤θ‡ªε‹•ε–ζ–‡ι›†?";
     MESSAGE[ arabic ] = "εα ΚΡνΟ ΝΠέ ΗαδΥ ΗαΚαήΗΖνΏ";
-    MESSAGE[ greek ] = "Διαγραφή ΑυτοΚειμένου;";
+    MESSAGE[ greek ] = "Διαγραφή Αυτόματου Κειμένου;";
     MESSAGE[ korean ] = "μλ™ ν…μ¤νΈλ¥Ό μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     MESSAGE[ turkish ] = "Otomatik metin silinsin mi?";
     MESSAGE[ language_user1 ] = " ";
@@ -1128,7 +1128,7 @@ String STR_GLOSSARY
     Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγƒ–γƒ­γƒƒγ‚―: ";
     Text[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†ζΆη›®οΌ";
     Text[ arabic ] = "ΪδΥΡ ΗαδΥ : ";
-    Text[ greek ] = "Τμήμα κειμένου : ";
+    Text[ greek ] = "Αυτόματο Κείμενο : ";
     Text[ korean ] = "μλ™ ν…μ¤νΈ : ";
     Text[ turkish ] = "Metin φπesi: ";
     Text[ language_user1 ] = " ";
@@ -1346,7 +1346,7 @@ ModalDialog DLG_RENAME_GLOS
     Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγƒ–γƒ­γƒƒγ‚―γ®εε‰γ®ε¤‰ζ›΄";
     Text[ chinese_traditional ] = "ι‡ζ–°ε‘½εθ‡ªε‹•ε–ζ–‡ι›†ζΆη›®";
     Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ ΓΝΟ γίζδΗΚ ΗαδΥ";
-    Text[ greek ] = "Μετονομασία τμήματος κειμένου";
+    Text[ greek ] = "Μετονομασία αυτόματου κειμένου";
     Text[ korean ] = "μλ™ ν…μ¤νΈ μ΄λ¦„ λ°”κΎΈκΈ°";
     Text[ turkish ] = "Otomatik Metin φπesini yeniden adlandύr";
     Text[ language_user1 ] = " ";
@@ -1377,7 +1377,7 @@ String STR_SAVE_GLOSSARY
     Text[ chinese_traditional ] = "ε„²ε­θ‡ªε‹•ε–ζ–‡ι›†ζΆη›®";
     Text[ arabic ] = "ΝέΩ ΪδΥΡ ΗαδΥ";
     Text [ English ] = "Save textblock" ;
-    Text[ greek ] = "Αποθήκευση τμήματος κειμένου";
+    Text[ greek ] = "Αποθήκευση αυτόματου κειμένου";
     Text[ korean ] = "μλ™ ν…μ¤νΈ μ €μ¥";
     Text[ turkish ] = "Otomatik Metin φπesini sakla";
     Text[ language_user1 ] = " ";
@@ -1396,7 +1396,7 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ english_us ] = "There is no AutoText in this file.";
     MESSAGE[ portuguese ] = "Este ficheiro nγo contιm mσdulos de texto.";
     MESSAGE[ russian ] = "έςξς τΰιλ νε ρξδεπζθς ΰβςξςεκρςΰ.";
-    MESSAGE[ greek ] = "Το αρχείο αυτό δεν περιέχει τμήματα κειμένου.";
+    MESSAGE[ greek ] = "Το αρχείο αυτό δεν περιέχει αυτόματο κείμενο.";
     MESSAGE[ dutch ] = "Dit bestand bevat geen tekstbouwstenen";
     MESSAGE[ french ] = "Ce fichier ne contient aucun AutoTexte.";
     MESSAGE[ spanish ] = "Este archivo no contiene mσdulos de texto.";
@@ -1419,6 +1419,7 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ hindi ] = "ΰ¤‡ΰ¤Έ ΰ¤«ΰ¤Ύΰ¤‡ΰ¤² ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤•ΰ¥‹ΰ¤ ΰ¤Έΰ¥ΰ¤µΰ¤ΰ¤Ύΰ¤²ΰ¤Ώΰ¤¤ ΰ¤ΰ¥‡ΰ¤•ΰ¥ΰ¤Έΰ¥ΰ¤ΰ¥ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤Ήΰ¥ ΰ¥¤";
     MESSAGE[ slovak ] = "V tomto sΓΊbore nie je ΕΎiadny automatickΓ½ text.";
 };
+
 
 
 
