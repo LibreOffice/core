@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 11:36:54 $
+ *  last change: $Author: fs $ $Date: 2002-06-11 12:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,7 @@ namespace dbaui
             {
                 // TODO: check if the data source is readonly
                 // check for the concrete type
-                if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),DataFlavorExVectorSlotPrec(eEntryType,sal_True)) != _rFlavors.end())
+                if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SupportedSotFunctor(eEntryType,sal_True)) != _rFlavors.end())
                     return DND_ACTION_COPY;
             }
         }
@@ -1349,6 +1349,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2002/05/29 11:36:54  oj
+ *  #96792# new methods for pasting tables
+ *
  *  Revision 1.46  2002/05/29 11:11:26  oj
  *  #96792# new methods for pasting tables
  *
