@@ -35,7 +35,7 @@ End Sub
 Sub CalChangeYear()
 	Dim ValNewYear&amp;
 	ValNewYear&amp; = Val(txtYear.Text)
-	If ((1583 &gt; ValNewYear&amp;) Or (9956 &lt; ValNewYear&amp;)) Then
+	If (1583 &gt; ValNewYear&amp;) Or (9956 &lt; ValNewYear&amp;) Then
 		Call CalRestoreOldValues()
 	End If          
 End Sub
@@ -151,15 +151,6 @@ Sub CalChangeGeneralMonth()
 	End If
 
 End Sub
-
-
-
-&apos;Sub CalChkForChangeInsertAccept
-&apos;       Aktualisiert die Label des Insert/Accept Buttons
-&apos;If (DataSelectedFromList=True) And (ButtonLabelIsInsert) Then
-&apos;	DlgCalModel.cmdInsert.Label = cSubChkForChangeInsertAccept_Accpet$
-&apos;	End If
-&apos;End Sub
 
 
 

@@ -19,11 +19,6 @@ Public Const cHolidayType_Full = 1
 Public Const cHolidayType_Half = 2
 Public Const cHolidayType_Own = 4
 
-&apos;Dlg_Control
-Public CalTWIPSPicHeight%, CalTWIPSPicWidth%, CalStartX%, CalStartY%
-
-Public CalPicWidth%, CalPicHeight%
-
 Public cCalSubcmdDeleteSelect_DeleteSelEntry$
 Public cCalSubcmdDeleteSelect_DeleteSelEntryTitle$
 Public cCalSubcmdSwitchOwnDataOrGeneral_Back$
@@ -79,7 +74,7 @@ Dim iThisMonth as Integer
 	&apos; HauptRoutine zur Erstellung des Kalenders
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
-
+	ToggleWindow(False)
 	sCurLangLocale = oDocument.CharLocale.Language
 	DlgCalendar = LoadDialog(&quot;Schedule&quot;, &quot;DlgCalendar&quot;)
 	DlgCalModel = DlgCalendar.Model
@@ -114,6 +109,7 @@ Dim iThisMonth as Integer
 	DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(0,True)
 
 &apos;	bCancelTask = False
+	ToggleWindow(True)
 	DlgCalendar.Execute()
 	DlgCalendar.Dispose()
 &apos;	Do
@@ -199,7 +195,7 @@ Dim SelYear as String
 		iMonth = DlgCalModel.lstMonth.SelectedItems(0) + 1
 		oSheets.RemovebyName(oSheets.GetbyIndex(1).Name)
 		oSheet = oSheets.GetbyIndex(0)
-		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames(iMonth)
+		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames(iMonth-1)
 &apos;		oDocument.AddActionLock
 		Call CalCreateMonthTable(iSelYear, iMonth)
 	End If

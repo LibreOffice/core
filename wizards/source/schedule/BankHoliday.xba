@@ -51,15 +51,15 @@ Dim iDay
 	iDay =(Month(CurDate)-1)*31 +Day(CurDate)
 
 	&apos;	Hoehere Prioritaet des Feiertagtyps
-	If (0 &lt;&gt; CalTypeOfBankHoliday(iDay)) Then
-		If (nBankholidayLevel &lt; CalTypeOfBankHoliday(iDay)) Then
+	If 0 &lt;&gt; CalTypeOfBankHoliday(iDay) Then
+		If iLevel &lt; CalTypeOfBankHoliday(iDay) Then
 			CalTypeOfBankHoliday(iDay) = iLevel
 		End If
 	Else
 		CalTypeOfBankHoliday(iDay) = iLevel
 	End If
 
-	If (CalBankHolidayName(iDay) = &quot;&quot;) Then
+	If CalBankHolidayName(iDay) = &quot;&quot; Then
 		CalBankHolidayName(iDay) = EventName
 	Else
 		CalBankHolidayName(iDay) = CalBankHolidayName(iDay) &amp; &quot; / &quot; &amp; EventName
