@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-15 11:13:59 $
+ *  last change: $Author: gt $ $Date: 2002-10-16 09:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2244,10 +2244,14 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
-                             String aPath )
+                             String aPath,
+                             ULONG nHelpId )
 {
     ErrCode nRet;
     FileDialogHelper aDialog( nFlags, rFact );
+
+    if( nHelpId )
+        aDialog.SetDialogHelpId( nHelpId );
 
     nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
 
