@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicimporthandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,12 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
-#include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
+#include <com/sun/star/configuration/backend/XBackend.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -78,9 +82,9 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
         using rtl::OUString;
-        namespace uno       = ::com::sun::star::uno;
-        namespace lang      = ::com::sun::star::lang;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace uno        = ::com::sun::star::uno;
+        namespace lang       = ::com::sun::star::lang;
+        namespace backenduno = ::com::sun::star::configuration::backend;
         using backenduno::MalformedDataException;
         using backenduno::TemplateIdentifier;
 // -----------------------------------------------------------------------------
@@ -98,11 +102,11 @@ namespace configmgr
         protected:
             virtual void SAL_CALL
                 startLayer(  )
-                    throw (MalformedDataException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endLayer(  )
-                    throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         protected:
             bool hasComponent() const { return m_aComponentName.getLength() != 0; }
