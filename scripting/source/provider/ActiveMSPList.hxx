@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:05:46 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _FRAMEWORK_SCRIPT_PROVIDER_OPENDOCUMENTLIST_HXX_
 #define _FRAMEWORK_SCRIPT_PROVIDER_OPENDOCUMENTLIST_HXX_
 
@@ -99,12 +98,11 @@ class ActiveMSPList : public ::cppu::WeakImplHelper1< css::lang::XEventListener 
 {
 
 public:
-    static ActiveMSPList& instance( const css::uno::Reference<
-        css::uno::XComponentContext >& xContext );
 
     ActiveMSPList(  const css::uno::Reference<
         css::uno::XComponentContext > & xContext  );
     ~ActiveMSPList();
+
     css::uno::Reference< css::script::provider::XScriptProvider >
         createMSP( const ::rtl::OUString& context )
             throw ( css::uno::RuntimeException );
