@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:38:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,15 +168,19 @@ public:
     virtual void        DragFinished( sal_Int8 );
 };
 
-class SfxSlotPool;
 class SvxConfigGroupListBox_Impl : public SvTreeListBox
 {
     SvxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;
-    SfxSlotPool*                    pSlotPool;
 
     SvxConfigFunctionListBox_Impl*  pFunctionListBox;
     ImageProvider*                  m_pImageProvider;
+
+    ::com::sun::star::uno::Reference
+        < ::com::sun::star::frame::XFrame > m_xFrame;
+
+    ::com::sun::star::uno::Reference
+        < ::com::sun::star::container::XNameAccess > m_xModuleCommands;
 
     // show Scripting Framework scripts?
     BOOL    bShowSF;
@@ -196,19 +200,22 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
     ::rtl::OUString m_sProdMacros;
     Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
-    ::rtl::OUString xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-    ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
+
 protected:
     virtual void    RequestingChilds( SvLBoxEntry *pEntry);
     virtual BOOL    Expand( SvLBoxEntry* pParent );
 
 public:
             SvxConfigGroupListBox_Impl (
-                Window* pParent, const ResId&, ULONG nConfigMode = 0 );
+                Window* pParent, const ResId&,
+                ULONG nConfigMode = 0,
+                const ::com::sun::star::uno::Reference
+                    < ::com::sun::star::frame::XFrame >& xFrame = 0
+            );
 
             ~SvxConfigGroupListBox_Impl();
 
-    void    Init( SvStringsDtor *pArr = 0, SfxSlotPool* pSlotPool = 0 );
+    void    Init( SvStringsDtor *pArr = 0 );
     void    Open( SvLBoxEntry*, BOOL );
     void    ClearAll();
     void    SelectMacro( const SfxMacroInfoItem* );
@@ -247,10 +254,20 @@ class SvxScriptSelectorDialog :
     void                                ResizeControls();
 
 public:
+
     SvxScriptSelectorDialog (
-        Window* pParent = NULL, BOOL bShowSlots = FALSE );
+        Window* pParent = NULL,
+        BOOL bShowSlots = FALSE,
+        const ::com::sun::star::uno::Reference
+            < ::com::sun::star::frame::XFrame >& xFrame = 0
+    );
 
     ~SvxScriptSelectorDialog ( );
+
+    static void GetDocTitle(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel>& xModel,
+        ::rtl::OUString& rTitle );
 
     void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
     const Link& GetAddHdl() const { return m_aAddHdl; }
