@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartFrameloader.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 16:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ private:
 private:
         sal_Bool impl_checkCancel();
     //no default constructor
-    ChartFrameLoader(){};
+    ChartFrameLoader(){}
 public:
     ChartFrameLoader(::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LifeTime.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 16:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ public:
 
 protected:
     virtual sal_Bool    impl_canStartApiCall();
-    virtual void        impl_apiCallCountReachedNull(){};
+    virtual void        impl_apiCallCountReachedNull(){}
 
     void        impl_registerApiCall(sal_Bool bLongLastingCall);
     void        impl_unregisterApiCall(sal_Bool bLongLastingCall);

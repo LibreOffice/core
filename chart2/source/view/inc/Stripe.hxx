@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Stripe.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 16:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,10 @@ public:
     ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
     ::com::sun::star::uno::Any      getNormalsPolyPolygonShape3D() const;
 
-    ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1;};
-    ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2;};
-    ::com::sun::star::drawing::Position3D GetPosition3() const { return m_aPoint3;};
-    ::com::sun::star::drawing::Position3D GetPosition4() const { return m_aPoint4;};
+    ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
+    ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }
+    ::com::sun::star::drawing::Position3D GetPosition3() const { return m_aPoint3; }
+    ::com::sun::star::drawing::Position3D GetPosition4() const { return m_aPoint4; }
 
     ::com::sun::star::drawing::Direction3D GetDirectionTo4() const;
 
