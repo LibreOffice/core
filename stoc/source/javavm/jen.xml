@@ -33,6 +33,7 @@ the existing vm given back.
         <type>  com.sun.star.uno.XAggregation                   </type>
         <type>  com.sun.star.uno.XWeak                          </type>
         <type>  com.sun.star.uno.TypeClass                      </type>
+    <type>  com.sun.star.beans.PropertyValue  </type>
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>
