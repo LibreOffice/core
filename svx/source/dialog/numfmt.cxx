@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-03-23 11:52:03 $
+ *  last change: $Author: er $ $Date: 2001-03-26 20:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 #ifndef PRODUCT
         if ( eLang == LANGUAGE_DONTKNOW )
         {
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: unknown locale: " ) );
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n" ) );
             aMsg += ByteString( String( xLoc[i].Language ), RTL_TEXTENCODING_UTF8  );
             if ( xLoc[i].Country.getLength() )
             {
@@ -440,7 +440,7 @@ void SvxNumberFormatTabPage::Init_Impl()
                     String( xLoc[i].Country ) != aCountry )
             {
 #ifndef PRODUCT
-                ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale\n" ) );
+                ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n" ) );
                 aMsg += ByteString( String( xLoc[i].Language ), RTL_TEXTENCODING_UTF8  );
                 if ( xLoc[i].Country.getLength() )
                 {
