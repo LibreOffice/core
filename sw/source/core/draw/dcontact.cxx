@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:19:51 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 12:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,17 +503,15 @@ void SwDrawContact::RemoveAllVirtObjs()
 
 // OD 16.05.2003 #108784# - overload <SwContact::SetMaster(..)> in order to
 // assert, if the 'master' drawing object is replaced.
+// OD 10.07.2003 #110742# - replace of master object correctly handled, if
+// handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus, assert
+// only, if a debug level is given.
 void SwDrawContact::SetMaster( SdrObject* pNew )
 {
-    if ( pNew )
-    {
-        ASSERT( false, "debug notification - master replaced!" );
-        SwContact::SetMaster( pNew );
-    }
-    else
-    {
-        SwContact::SetMaster( pNew );
-    }
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( !pNew, "debug notification - master replaced!" );
+#endif
+    SwContact::SetMaster( pNew );
 }
 
 // OD 19.06.2003 #108784# - get drawing object ('master' or 'virtual') by frame.
@@ -660,7 +658,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if( bNotify )
                     lcl_Notify( this, pOldBoundRect );
-                DisconnectFromLayout( FALSE );
+                DisconnectFromLayout( false );
                 SetMaster( NULL );
                 delete this;
                 break;
@@ -676,7 +674,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if( bNotify )
                     lcl_Notify( this, pOldBoundRect );
-                DisconnectFromLayout( FALSE );
+                DisconnectFromLayout( false );
                 break;
             }
         case SDRUSERCALL_MOVEONLY:
@@ -1279,20 +1277,34 @@ void SwDrawContact::ChkPage()
 |*  Letzte Aenderung    MA 20. Apr. 99
 |*
 |*************************************************************************/
-
+// OD 10.07.2003 #110742# - Important note:
+// method is called by method <SwDPage::ReplaceObject(..)>, which called its
+// corresponding superclass method <FmFormPage::ReplaceObject(..)>.
+// Note: 'master' drawing object *has* to be connected to layout (GetAnchor()
+//       returns a frame), if method is called.
 void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
 {
-    SwFrm *pAnch = GetAnchor();
-    DisconnectFromLayout( FALSE );
+    const SwFrm& rAnchorFrmOfMaster = *GetAnchor();
+
+    DisconnectFromLayout( false );
+    // OD 10.07.2003 #110742# - consider 'virtual' drawing objects
+    RemoveAllVirtObjs();
+
     GetMaster()->SetUserCall( 0 );
     SetMaster( pNewMaster );
     GetMaster()->SetUserCall( this );
 
-    Point aNewAnchor( pAnch->GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
+    Point aNewAnchor( rAnchorFrmOfMaster.GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
     GetMaster()->NbcSetRelativePos( GetMaster()->GetSnapRect().TopLeft() -
                                     aNewAnchor );
     GetMaster()->NbcSetAnchorPos( aNewAnchor );
 
+    // OD 10.07.2003 #110742# - connecting to layout not needed, because the
+    // connection to the layout has to be done by the caller.
+    // In current implementation this is <SwDPage::ReplaceObject(..)>, which
+    // causes an <SDRUSERCALL_INSERTED>. This takes care of the connection to
+    // layout.
+    /*
     //Hier wird der neue Master ggf. in die Page eingefuegt, was das Drawing
     //aber gar nicht gut haben kann. Deshalb nehmen wir das Objekt hinterher
     //gleich wieder aus der Seite heraus.
@@ -1301,6 +1313,7 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     if ( !bInserted && pNewMaster->IsInserted() )
         ((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
                                     RemoveObject( GetMaster()->GetOrdNum() );
+    */
 }
 
 // =============================================================================
