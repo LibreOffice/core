@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:04:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,9 @@
 #ifndef _SVDTRANS_HXX
 #include <svdtrans.hxx>
 #endif
-
+#ifndef _SXENDITM_HXX
+#include <sxenditm.hxx>
+#endif
 #ifndef _SDGLUITM_HXX
 #include <sdgluitm.hxx>
 #endif
@@ -2060,10 +2062,12 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         }
         else    // SYSCOLOR
         {
-            UINT16 nParameter = (BYTE)( nColorCode >> 16);
+//          UINT16 nParameter = (BYTE)( nColorCode >> 16);      // SJ: nice compiler optimization bug on windows, though downcasting
+            UINT16 nParameter = ( nColorCode >> 16 ) & 0x00ff;  // the HiByte of nParameter is not zero, an exclusive AND is helping :o
+
             UINT16 nFunctionBits = (UINT16)( ( nColorCode & 0x00000f00 ) >> 8 );
             UINT16 nAdditionalFlags = (UINT16)( ( nColorCode & 0x0000f000) >> 8 );
-            UINT16 nColorIndex = (BYTE)nColorCode;
+            UINT16 nColorIndex = nColorCode & 0x00ff;
             UINT32 nPropColor;
 
             sal_uInt16  nCProp = DFF_Prop_lineColor;
@@ -3175,6 +3179,10 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                                     aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
                                 break;
                             }
+                            aSet.Put( SdrEdgeNode1HorzDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode1VertDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode2HorzDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode2VertDistItem( 0 ) );
                         }
                     }
                     else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
