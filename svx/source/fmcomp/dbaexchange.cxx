@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 08:57:14 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 09:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ namespace svx
 
         // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
         // we are able to fake the drag information we are about to create.
-        if (bTryToParse)
+        if (bTryToParse && (CommandType::COMMAND == nCommandType))
         {
             try
             {
@@ -163,9 +163,9 @@ namespace svx
 
                 if (xComposer.is())
                 {
-                    ::rtl::OUString sActivaeCommand;
-                    _rxForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sActivaeCommand;
-                    xComposer->setQuery(sActivaeCommand);
+                    ::rtl::OUString sActiveCommand;
+                    _rxForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sActiveCommand;
+                    xComposer->setQuery(sActiveCommand);
                     Reference< XTablesSupplier > xSupTab(xComposer, UNO_QUERY);
                     if(xSupTab.is())
                     {
@@ -680,6 +680,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/07 08:57:14  fs
+ *  #90660# +addDataToContainer
+ *
  *  Revision 1.6  2001/08/02 15:23:27  fs
  *  #90525# +ODataAccessObjectTransferable
  *
