@@ -50,6 +50,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\image
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\installation
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ldap
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\linguistic2
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\mail
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\media
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\mozilla
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages
@@ -135,6 +136,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\installation\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\installation
 ..\com\sun\star\ldap\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ldap
 ..\com\sun\star\linguistic2\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\linguistic2
+..\com\sun\star\mail\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\mail
 ..\com\sun\star\media\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\media
 ..\com\sun\star\mozilla\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\mozilla
 ..\com\sun\star\packages\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\packages
