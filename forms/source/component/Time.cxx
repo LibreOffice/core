@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:55:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ Sequence<Type> OTimeModel::_getTypes()
 DBG_NAME( OTimeModel )
 //------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD, sal_False, sal_True )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
             ,OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
 {
