@@ -169,7 +169,12 @@ HRESULT CSOActiveX::Cleanup()
     if( mpDispFrame )
     {
         // mpDispFrame->dispose();
-        ExecuteFunc( mpDispFrame, L"dispose", NULL, 0, &dummyResult );
+
+        CComVariant aPropVar;
+        aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_TRUE;
+        if ( !SUCCEEDED( ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult ) ) )
+            ExecuteFunc( mpDispFrame, L"dispose", NULL, 0, &dummyResult );
+
         mpDispFrame = CComPtr< IDispatch >();
     }
 
