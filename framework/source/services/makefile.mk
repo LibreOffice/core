@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:33:34 $
+#   last change: $Author: rt $ $Date: 2005-02-02 13:55:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,8 @@ SLOFILES=			\
                     $(SLO)$/dispatchhelper.obj                      \
                     $(SLO)$/license.obj                      		\
                     $(SLO)$/modulemanager.obj                       \
-                    $(SLO)$/autorecovery.obj
+                    $(SLO)$/autorecovery.obj                        \
+                    $(SLO)$/sessionlistener.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=          \
