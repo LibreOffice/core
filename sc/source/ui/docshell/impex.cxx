@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-05-22 13:05:39 $
+ *  last change: $Author: er $ $Date: 2001-05-22 15:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,10 +1248,12 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
     while( bOk )
     {
         String aLine;
-        String aCell;
+        String aText;
         ByteString aByteLine;
         USHORT nCol = nStartCol;
         USHORT nRow = nStartRow;
+        USHORT nRefCol, nRefRow;
+        nRefCol = nRefRow = 1;
         rStrm.Seek( nOldPos );
         for( ;; )
         {
@@ -1285,7 +1287,14 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'Y':
                             nRow = String( p ).ToInt32() + nStartRow - 1;
                             break;
+                        case 'C':
+                            nRefCol = String( p ).ToInt32() + nStartCol - 1;
+                            break;
+                        case 'R':
+                            nRefRow = String( p ).ToInt32() + nStartRow - 1;
+                            break;
                         case 'K':
+                        {
                             if( cTag != 'C' )           // nur bei 'C'
                                 break;
                             if( !bSingle &&
@@ -1301,41 +1310,69 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                                     nEndCol = nCol;
                                 break;
                             }
+                            BOOL bText;
                             if( *p == '"' )
                             {
-                                String aText;
-                                p = lcl_ScanString( p, aText, '"', DQM_KEEP );
-                                pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aText );
+                                bText = TRUE;
+                                aText.Erase();
+                                p = lcl_ScanString( p, aText, '"', DQM_ESCAPE );
                             }
                             else
-                            {
-                                int nErr;
-                                double fVal = SolarMath::StringToDouble( p, cGrpSep, cDecSep, nErr );
-                                pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
+                                bText = FALSE;
+                            const sal_Unicode* q = p;
+                            while( *q && *q != ';' )
+                                q++;
+                            if ( !(*q == ';' && *(q+1) == 'I') )
+                            {   // don't ignore value
+                                if( bText )
+                                    pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aText );
+                                else
+                                {
+                                    int nErr;
+                                    double fVal = SolarMath::StringToDouble( p, cGrpSep, cDecSep, nErr );
+                                    pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
+                                }
                             }
-                            break;
+                        }
+                        break;
                         case 'E':
+                        case 'M':
+                        {
                             if( !bMyDoc || !bData )
                                 break;
+                            aText = '=';
                             if( *p == '"' )
+                                p = lcl_ScanString( p, aText, '"', DQM_ESCAPE );
+                            else
                             {
-                                String aText;
-                                p = lcl_ScanString( p, aText, '"', DQM_KEEP );
-                                aText.Insert( '=', 0 );
-                                pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aText );
+                                const sal_Unicode* q = p;
+                                while( *p && *p != ';' )
+                                    p++;
+                                aText.Append( q, p-q );
+                            }
+                            ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
+                            ScCompiler aComp( pDoc, aPos );
+                            aComp.SetCompileEnglish( TRUE );
+                            ScTokenArray* pCode = aComp.CompileString( aText );
+                            if ( ch == 'M' )
+                            {
+                                if ( nRefCol < nCol )
+                                    nRefCol = nCol;
+                                if ( nRefRow < nRow )
+                                    nRefRow = nRow;
+                                ScMarkData aMark;
+                                aMark.SelectTable( aPos.Tab(), TRUE );
+                                pDoc->InsertMatrixFormula( nCol, nRow, nRefCol,
+                                    nRefRow, aMark, EMPTY_STRING, pCode );
                             }
                             else
                             {
-                                sal_Unicode* q = (sal_Unicode*) p;
-                                while( *q && *q != ';' )
-                                    q++;
-                                *q = 0;
-                                String aText( '=' );
-                                aText += p;
-                                *q = ';'; p = q;
-                                pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aText );
+                                ScFormulaCell* pFCell = new ScFormulaCell( pDoc, aPos, pCode, 0 );
+                                pDoc->PutCell( aPos, pFCell );
                             }
-                            break;
+                            delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
+                        }
+                        break;
                     }
                     while( *p && *p != ';' )
                         p++;
