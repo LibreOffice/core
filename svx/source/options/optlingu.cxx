@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 12:41:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 14:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,12 +439,12 @@ public:
 
 enum EID_OPTIONS
 {
+    EID_SPELL_AUTO,
     EID_CAPITAL_WORDS,
     EID_WORDS_WITH_DIGITS,
     EID_CAPITALIZATION,
     EID_SPELL_SPECIAL,
     EID_ALL_LANGUAGES,
-    EID_SPELL_AUTO,
     EID_HIDE_MARKINGS,
     EID_OLD_GERMAN,
     EID_NUM_MIN_WORDLEN,
@@ -458,12 +458,12 @@ enum EID_OPTIONS
 //  It is used to get the respective property name.
 static const char * aEidToPropName[] =
 {
+    "IsSpellAuto",              // EID_SPELL_AUTO
     "IsSpellUpperCase",         // EID_CAPITAL_WORDS
     "IsSpellWithDigits",        // EID_WORDS_WITH_DIGITS
     "IsSpellCapitalization",    // EID_CAPITALIZATION
     "IsSpellSpecial",           // EID_SPELL_SPECIAL
     "IsSpellInAllLanguages",    // EID_ALL_LANGUAGES
-    "IsSpellAuto",              // EID_SPELL_AUTO
     "IsSpellHide",              // EID_HIDE_MARKINGS
     "IsGermanPreReform",        // EID_OLD_GERMAN
     "HyphMinWordLength",        // EID_NUM_MIN_WORDLEN,
