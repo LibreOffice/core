@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:17:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,12 +202,6 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
                 if (!xFrame.Is() || xFrame->GetError())
                     continue;
 
-                SvStorageStreamRef xContents = xForm->OpenSotStream(
-                    String( 'o' ), STREAM_STD_READ | STREAM_NOCREATE);
-
-                if (!xContents.Is() || xContents->GetError())
-                    continue;
-
                 SvStorageStreamRef xTypes = xForm->OpenSotStream(
                     String( 'f' ), STREAM_STD_READ | STREAM_NOCREATE);
 
@@ -224,12 +218,17 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
                 }
                 sData.ConvertLineEnd();
 
+                Reference<container::XNameContainer> xDialog(
+                    xSF->createInstance(
+                       OUString(RTL_CONSTASCII_USTRINGPARAM(
+                           "com.sun.star.awt.UnoControlDialogModel"))), uno::UNO_QUERY);
 
-                OCX_UserForm aForm(*aIter);
+                OCX_UserForm aForm(xVBAStg, *aIter, *aIter, xDialog, xSF );
+                aForm.pDocSh = &rDocSh;
                 sal_Bool bOk = aForm.Read(xTypes);
                 DBG_ASSERT(bOk, "Had unexpected content, not risking this module");
                 if (bOk)
-                    aForm.Import(xContents, xSF, xContext, xLib);
+                    aForm.Import(xLib);
             }
         }
     }
@@ -336,8 +335,6 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 ModuleType mType = aVBA.GetModuleType( sOrigVBAModName );
 
                 rtl::OUString sClassRem( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=" ) );
-                OSL_TRACE("Type for Module %s is %d",
-                    ::rtl::OUStringToOString( sOrigVBAModName, RTL_TEXTENCODING_ASCII_US ).pData->buffer, mType );
 
                 rtl::OUString modeTypeComment;
 
