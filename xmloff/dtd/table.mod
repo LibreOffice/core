@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Sascha Ballach (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.23 2001-02-07 08:53:11 sab Exp $
+	$Id: table.mod,v 1.24 2001-02-23 14:15:30 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -164,8 +164,8 @@
 <!ATTLIST table:table
 	table:name %string; #REQUIRED
 	table:style-name %styleName; #IMPLIED
-	table:use-cell-protection %boolean; "false"
-	table:cell-protection-key CDATA #IMPLIED
+	table:protected %boolean; "false"
+	table:protection-key CDATA #IMPLIED
 	table:print-ranges %cell-range-address-list; #IMPLIED
 >
 <!ELEMENT table:table-source EMPTY>
