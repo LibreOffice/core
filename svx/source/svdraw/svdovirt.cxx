@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:30:21 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
+{
+    return rRefObj.GetProperties();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1(SdrVirtObj,SdrObject);
 
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
@@ -109,7 +116,10 @@ void __EXPORT SdrVirtObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 {
     bClosedObj=rRefObj.IsClosedObj();
     SetRectsDirty(); // hier noch Optimieren.
-    SendRepaintBroadcast();
+
+    // Only a repaint here, rRefObj may have changed and broadcasts
+    ActionChanged();
+    // BroadcastObjectChange();
 }
 
 void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
@@ -145,16 +155,23 @@ SdrObjList* SdrVirtObj::GetSubList() const
     return rRefObj.GetSubList();
 }
 
-const Rectangle& SdrVirtObj::GetBoundRect() const
+const Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetBoundRect(); // Hier noch optimieren
+    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetCurrentBoundRect(); // Hier noch optimieren
+    ((SdrVirtObj*)this)->aOutRect+=aAnchor;
+    return aOutRect;
+}
+
+const Rectangle& SdrVirtObj::GetLastBoundRect() const
+{
+    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetLastBoundRect(); // Hier noch optimieren
     ((SdrVirtObj*)this)->aOutRect+=aAnchor;
     return aOutRect;
 }
 
 void SdrVirtObj::RecalcBoundRect()
 {
-    aOutRect=rRefObj.GetBoundRect();
+    aOutRect=rRefObj.GetCurrentBoundRect();
     aOutRect+=aAnchor;
 }
 
@@ -163,11 +180,11 @@ void SdrVirtObj::SetChanged()
     SdrObject::SetChanged();
 }
 
-FASTBOOL SdrVirtObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrVirtObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     Point aOfs(rOut.GetOffset());
     rOut.SetOffset(aOfs+aAnchor);
-    FASTBOOL bRet=rRefObj.Paint(rOut,rInfoRec);
+    sal_Bool bRet(rRefObj.DoPaintObject(rOut, rInfoRec));
     rOut.SetOffset(aOfs);
     return bRet;
 }
@@ -234,9 +251,10 @@ void SdrVirtObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
     rPoly.Move(aAnchor.X(),aAnchor.Y());
 }
 
-void SdrVirtObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrVirtObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -376,11 +394,11 @@ void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
 void SdrVirtObj::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         NbcMove(rSiz);
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
     }
 }
@@ -388,7 +406,7 @@ void SdrVirtObj::Move(const Size& rSiz)
 void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         rRefObj.Resize(rRef-aAnchor,xFact,yFact);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -398,7 +416,7 @@ void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction
 void SdrVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
 {
     if (nWink!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         rRefObj.Rotate(rRef-aAnchor,nWink,sn,cs);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -407,7 +425,7 @@ void SdrVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
 
 void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     rRefObj.Mirror(rRef1-aAnchor,rRef2-aAnchor);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -416,7 +434,7 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     if (nWink!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         rRefObj.Shear(rRef-aAnchor,nWink,tn,bVShear);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -441,7 +459,7 @@ const Rectangle& SdrVirtObj::GetSnapRect() const
 void SdrVirtObj::SetSnapRect(const Rectangle& rRect)
 {
     {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         Rectangle aR(rRect);
         aR-=aAnchor;
         rRefObj.SetSnapRect(aR);
@@ -469,7 +487,7 @@ const Rectangle& SdrVirtObj::GetLogicRect() const
 
 void SdrVirtObj::SetLogicRect(const Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     Rectangle aR(rRect);
     aR-=aAnchor;
     rRefObj.SetLogicRect(aR);
@@ -563,93 +581,10 @@ SdrObjGeoData* SdrVirtObj::GetGeoData() const
 
 void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     rRefObj.SetGeoData(rGeo);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-const SfxItemSet& SdrVirtObj::GetItemSet() const
-{
-    return rRefObj.GetItemSet();
-}
-
-SfxItemSet* SdrVirtObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    return rRefObj.CreateNewItemSet(rPool);
-}
-
-void SdrVirtObj::SetItem( const SfxPoolItem& rItem )
-{
-    rRefObj.SetItem(rItem);
-}
-
-void SdrVirtObj::ClearItem( const sal_uInt16 nWhich )
-{
-    rRefObj.ClearItem(nWhich);
-}
-
-void SdrVirtObj::SetItemSet( const SfxItemSet& rSet )
-{
-    rRefObj.SetItemSet(rSet);
-}
-
-void SdrVirtObj::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
-{
-    rRefObj.BroadcastItemChange(rChange);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-BOOL SdrVirtObj::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) const
-{
-    return rRefObj.AllowItemChange(nWhich, pNewItem);
-}
-
-void SdrVirtObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
-{
-    rRefObj.ItemChange(nWhich, pNewItem);
-}
-
-void SdrVirtObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    rRefObj.ItemSetChanged(rSet);
-}
-
-void SdrVirtObj::PostItemChange(const sal_uInt16 nWhich)
-{
-    rRefObj.PostItemChange(nWhich);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void SdrVirtObj::PreSave()
-{
-}
-
-void SdrVirtObj::PostSave()
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SfxStyleSheet* SdrVirtObj::GetStyleSheet() const
-{
-    return rRefObj.GetStyleSheet();
-}
-
-void SdrVirtObj::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    rRefObj.SetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
-}
-
-void SdrVirtObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    rRefObj.NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
