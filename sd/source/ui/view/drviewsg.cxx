@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 13:42:58 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 10:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,12 +209,7 @@ void SdDrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         // Raster- / Hilfslinien-Optionen
         case SID_GRID_VISIBLE: // noch nicht hier !
         {
-            svx::EditableColorConfig aConfig;
-            svx::ColorConfigValue aGridVisible( aConfig.GetColorValue( svx::DRAWGRID ) );
-
-            aGridVisible.bIsVisible = !aGridVisible.bIsVisible;
-            aConfig.SetColorValue( svx::DRAWGRID, aGridVisible );
-//          pDrView->SetGridVisible( aGridVisible.bIsVisible );
+            pOptions->SetGridVisible( !pDrView->IsGridVisible() );
         }
         break;
 
@@ -333,11 +328,7 @@ void SdDrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_LINE_DRAFT, pDrView->IsLineDraft() ) );
     rSet.Put( SfxBoolItem( SID_HANDLES_DRAFT, !pDrView->IsSolidMarkHdl() ) );
     rSet.Put( SfxBoolItem( SID_SOLID_CREATE, pDrView->IsSolidDragging() ) );
-
-    svx::ColorConfig aConfig;
-    svx::ColorConfigValue aValue = aConfig.GetColorValue( svx::DRAWGRID );
-
-    rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, aValue.bIsVisible ) );
+    rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, pDrView->IsGridVisible() ) );
     rSet.Put( SfxBoolItem( SID_GRID_USE, pDrView->IsGridSnap() ) );
     rSet.Put( SfxBoolItem( SID_HELPLINES_VISIBLE, pDrView->IsHlplVisible() ) );
     rSet.Put( SfxBoolItem( SID_HELPLINES_USE, pDrView->IsHlplSnap() ) );
