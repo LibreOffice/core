@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:27:47 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@ class SwWW8StyInf
     String      sWWStyleName;
     USHORT      nWWStyleId;
 public:
+    rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
+    rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding fuer den Font
+    rtl_TextEncoding eCJKFontSrcCharSet;    // rtl_TextEncoding fuer den Font
     SwFmt*      pFmt;
     WW8FlyPara* pWWFly;
     SwNumRule*  pOutlineNumrule;
@@ -175,7 +178,6 @@ public:
     USHORT      nBase;
     USHORT      nFollow;
     USHORT      nLFOIndex;
-    rtl_TextEncoding eFontSrcCharSet;   // rtl_TextEncoding fuer den Font
     BYTE        nListLevel;
     BYTE        nOutlineLevel;      // falls Gliederungs-Style
     BYTE        n81Flags;           // Fuer Bold, Italic, ...
@@ -196,6 +198,9 @@ public:
     SwWW8StyInf() :
         sWWStyleName( aEmptyStr ),
         nWWStyleId( 0 ),
+        eLTRFontSrcCharSet(0),
+        eRTLFontSrcCharSet(0),
+        eCJKFontSrcCharSet(0),
         pFmt( 0 ),
         pWWFly( 0 ),
         pOutlineNumrule( 0 ),
@@ -205,7 +210,6 @@ public:
         nBase( 0 ),
         nFollow( 0 ),
         nLFOIndex( USHRT_MAX ),
-        eFontSrcCharSet( 0 ),
         nListLevel(WW8ListManager::nMaxLevel),
         nOutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
@@ -235,6 +239,7 @@ public:
     {
         return sWWStyleName;
     }
+    CharSet GetCharSet() const;
 };
 
 
