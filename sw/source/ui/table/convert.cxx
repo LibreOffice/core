@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:08:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,12 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
     aKeepColumn     (this, SW_RES(CB_KEEPCOLUMN)),
     aHeaderCB       (this, SW_RES(CB_HEADER)),
     aRepeatHeaderCB (this, SW_RES(CB_REPEAT_HEADER)),
-    aRepeatHeaderFT (this, SW_RES(FT_REPEAT_HEADER)),
-    aRepeatHeaderNF (this, SW_RES(NF_REPEAT_HEADER)),
+    aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
+    aRepeatHeaderBeforeFT   (this),
+    aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER)),
+    aRepeatHeaderAfterFT    (this),
+    aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
+
     aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
     aBorderCB       (this, SW_RES(CB_BORDER)),
     aOptionsFL      (this, SW_RES(FL_OPTIONS)),
@@ -215,6 +219,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
         aAutoFmtBtn.Show();
         aKeepColumn.Show();
         aKeepColumn.Enable( aTabBtn.IsChecked() );
+        aRepeatHeaderCombo.Arrange( aRepeatHeaderFT );
     }
     else
     {
@@ -224,6 +229,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
         aDontSplitCB       .Show(FALSE);
         aBorderCB          .Show(FALSE);
         aOptionsFL         .Show(FALSE);
+        aRepeatHeaderCombo.Show(FALSE);
 
         //Groesse anpassen
         Size aSize(GetSizePixel());
@@ -305,8 +311,10 @@ IMPL_LINK(SwConvertTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 
 IMPL_LINK(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, void*, EMPTYARG)
 {
-    aRepeatHeaderFT.Enable(aHeaderCB.IsChecked() && aRepeatHeaderCB.IsChecked());
-    aRepeatHeaderNF.Enable(aHeaderCB.IsChecked() && aRepeatHeaderCB.IsChecked());
+    sal_Bool bEnable = aHeaderCB.IsChecked() && aRepeatHeaderCB.IsChecked();
+    aRepeatHeaderBeforeFT.Enable(bEnable);
+    aRepeatHeaderAfterFT.Enable(bEnable);
+    aRepeatHeaderNF.Enable(bEnable);
 
     return 0;
 }
