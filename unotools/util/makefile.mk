@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: patrick.luby $ $Date: 2000-09-28 15:45:56 $
+#   last change: $Author: hr $ $Date: 2000-10-05 12:29:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ LIB1FILES=\
         $(SLB)$/evtattmgr.lib \
         $(SLB)$/config.lib \
         $(SLB)$/container.lib \
+                $(SLB)$/ucbhelp.lib \
         $(SLB)$/procfact.lib
 
 # NETBSD: somewhere we have to instantiate the static data members.
