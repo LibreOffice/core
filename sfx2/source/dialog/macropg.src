@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:50:39 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,14 +95,14 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ danish ] = "Begivenhed" ;
         Text [ portuguese_brazilian ] = "Ereignis" ;
         Text [ portuguese ] = "Evento" ;
-        Text[ chinese_simplified ] = "ΚΒΌώ";
+        Text[ chinese_simplified ] = "δΊ‹δ»¶";
         Text[ russian ] = "Ρξαϋςθε";
         Text[ polish ] = "Wydarzenie";
-        Text[ japanese ] = "ΐs_‹@";
-        Text[ chinese_traditional ] = "°Κ§@";
+        Text[ japanese ] = "ε®θ΅ε¥‘ζ©";
+        Text[ chinese_traditional ] = "ε‹•δ½";
         Text[ arabic ] = "ΗαΝΟΛ";
         Text[ greek ] = "Γεγονός";
-        Text[ korean ] = "ΐΜΊ¥Ζ®";
+        Text[ korean ] = "μ΄λ²¤νΈ";
         Text[ turkish ] = "Olay";
         Text[ catalan ] = "Acontecimiento";
         Text[ finnish ] = "Event";
@@ -159,14 +159,14 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ danish ] = "Tildel" ;
         Text [ portuguese_brazilian ] = "Z~uweisen" ;
         Text [ portuguese ] = "~Atribuir" ;
-        Text[ chinese_simplified ] = "ΦΈ¶¨(~A)";
+        Text[ chinese_simplified ] = "ζ‡ε®(~A)";
         Text[ russian ] = "Νΰηνΰχθςό";
         Text[ polish ] = "P~rzypisz";
-        Text[ japanese ] = "„‚θ“–‚Δ(~A)";
-        Text[ chinese_traditional ] = "«ό©w(~A)";
+        Text[ japanese ] = "ε‰²γ‚ε½“γ¦(~A)";
+        Text[ chinese_traditional ] = "ζ‡ε®(~A)";
         Text[ arabic ] = "ΚΪννδ";
         Text[ greek ] = "Αντιστοίχιση";
-        Text[ korean ] = "ΑφΑ¤(~A)";
+        Text[ korean ] = "μ§€μ •(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Asignar";
         Text[ finnish ] = "~Mδδritδ";
@@ -188,14 +188,14 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ danish ] = "Oph~ζv" ;
         Text [ portuguese_brazilian ] = "~Aufheben" ;
         Text [ portuguese ] = "~Limpar" ;
-        Text[ chinese_simplified ] = "Θ΅Οϋ(~R)";
+        Text[ chinese_simplified ] = "ε–ζ¶(~R)";
         Text[ russian ] = "Ξςμενθςό";
         Text[ polish ] = "Usuρ";
-        Text[ japanese ] = "‰π(~R)";
-        Text[ chinese_traditional ] = "¨ϊ®ψ(~R)";
+        Text[ japanese ] = "θ§£ι™¤(~R)";
+        Text[ chinese_traditional ] = "ε–ζ¶(~R)";
         Text[ arabic ] = "ΕÒΗαΙ";
         Text[ greek ] = "Κατάργηση";
-        Text[ korean ] = "ΗΨΑ¦(~R)";
+        Text[ korean ] = "ν•΄μ (~R)";
         Text[ turkish ] = "~Kaldύr";
         Text[ catalan ] = "~Eliminar";
         Text[ finnish ] = "~Poista";
@@ -222,14 +222,14 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ danish ] = "Makroer" ;
         Text [ portuguese_brazilian ] = "Makros" ;
         Text [ portuguese ] = "Macros" ;
-        Text[ chinese_simplified ] = "Ίκ";
+        Text[ chinese_simplified ] = "ε®";
         Text[ russian ] = "Μΰκπξρϋ";
         Text[ polish ] = "Makra";
-        Text[ japanese ] = "ΟΈΫ";
-        Text[ chinese_traditional ] = "¥¨¶°";
+        Text[ japanese ] = "οΎο½ΈοΎ›";
+        Text[ chinese_traditional ] = "ε·¨ι›†";
         Text[ arabic ] = "ζΝΟΗΚ ΗαγΗίΡζ";
         Text[ greek ] = "Μακροεντολές";
-        Text[ korean ] = "ΈΕΕ©·Ξ";
+        Text[ korean ] = "λ§¤ν¬λ΅";
         Text[ turkish ] = "Makro";
         Text[ catalan ] = "Macros";
         Text[ finnish ] = "Makrot";
@@ -237,10 +237,10 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ russian ] = "Νΰηνΰχθςό μΰκπξρ";
     Text[ greek ] = "Αντιστοίχιση μακροεντολής";
     Text[ polish ] = "Przypisz makro";
-    Text[ japanese ] = "ΟΈΫ‚Μ„‚θ“–‚Δ";
-    Text[ korean ] = "ΈΕΕ©·Ξ ΑφΑ¤";
-    Text[ chinese_simplified ] = "ΦΈ¶¨Ίκ";
-    Text[ chinese_traditional ] = "«ό©w¥¨¶°";
+    Text[ japanese ] = "οΎο½ΈοΎ›γ®ε‰²γ‚ε½“γ¦";
+    Text[ korean ] = "λ§¤ν¬λ΅ μ§€μ •";
+    Text[ chinese_simplified ] = "ζ‡ε®ε®";
+    Text[ chinese_traditional ] = "ζ‡ε®ε·¨ι›†";
     Text[ turkish ] = "Makro ata";
     Text[ arabic ] = "ΚΪννδ ζΝΟΙ γΗίΡζ";
     Text[ catalan ] = "Asignar macro";
@@ -326,14 +326,14 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text [ danish ] = "Begivenhed" ;
         Text [ portuguese_brazilian ] = "Ereignis" ;
         Text [ portuguese ] = "Evento" ;
-        Text[ chinese_simplified ] = "ΚΒΌώ";
+        Text[ chinese_simplified ] = "δΊ‹δ»¶";
         Text[ russian ] = "Ρξαϋςθε";
         Text[ polish ] = "Wydarzenie";
-        Text[ japanese ] = "ΐs_‹@";
-        Text[ chinese_traditional ] = "°Κ§@";
+        Text[ japanese ] = "ε®θ΅ε¥‘ζ©";
+        Text[ chinese_traditional ] = "ε‹•δ½";
         Text[ arabic ] = "ΗαΝΟΛ";
         Text[ greek ] = "Γεγονός";
-        Text[ korean ] = "ΐΜΊ¥Ζ®";
+        Text[ korean ] = "μ΄λ²¤νΈ";
         Text[ turkish ] = "Olay";
         Text[ catalan ] = "Acontecimiento";
         Text[ finnish ] = "Event";
@@ -366,14 +366,14 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text [ danish ] = "Tildel" ;
         Text [ portuguese_brazilian ] = "Z~uweisen" ;
         Text [ portuguese ] = "~Atribuir" ;
-        Text[ chinese_simplified ] = "ΦΈ¶¨(~A)";
+        Text[ chinese_simplified ] = "ζ‡ε®(~A)";
         Text[ russian ] = "Νΰηνΰχθςό";
         Text[ polish ] = "P~rzypisz";
-        Text[ japanese ] = "„‚θ“–‚Δ(~A)";
-        Text[ chinese_traditional ] = "«ό©w(~A)";
+        Text[ japanese ] = "ε‰²γ‚ε½“γ¦(~A)";
+        Text[ chinese_traditional ] = "ζ‡ε®(~A)";
         Text[ arabic ] = "ΚΪννδ";
         Text[ greek ] = "Αντιστοίχιση";
-        Text[ korean ] = "ΑφΑ¤(~A)";
+        Text[ korean ] = "μ§€μ •(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Asignar";
         Text[ finnish ] = "~Mδδritδ";
@@ -395,14 +395,14 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text [ danish ] = "Oph~ζv" ;
         Text [ portuguese_brazilian ] = "~Aufheben" ;
         Text [ portuguese ] = "~Limpar" ;
-        Text[ chinese_simplified ] = "Θ΅Οϋ(~R)";
+        Text[ chinese_simplified ] = "ε–ζ¶(~R)";
         Text[ russian ] = "Ξςμενθςό";
         Text[ polish ] = "~Usuρ";
-        Text[ japanese ] = "‰π(~R)";
-        Text[ chinese_traditional ] = "¨ϊ®ψ(~R)";
+        Text[ japanese ] = "θ§£ι™¤(~R)";
+        Text[ chinese_traditional ] = "ε–ζ¶(~R)";
         Text[ arabic ] = "ΕÒΗαΙ";
         Text[ greek ] = "Κατάργηση";
-        Text[ korean ] = "ΗΨΑ¦(~R)";
+        Text[ korean ] = "ν•΄μ (~R)";
         Text[ turkish ] = "~Kaldύr";
         Text[ catalan ] = "~Eliminar";
         Text[ finnish ] = "~Poista";
@@ -453,14 +453,14 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text [ danish ] = "Makroer" ;
         Text [ portuguese_brazilian ] = "Makros" ;
         Text [ portuguese ] = "Macros" ;
-        Text[ chinese_simplified ] = "Ίκ";
+        Text[ chinese_simplified ] = "ε®";
         Text[ russian ] = "Μΰκπξρϋ";
         Text[ polish ] = "Makra";
-        Text[ japanese ] = "ΟΈΫ";
-        Text[ chinese_traditional ] = "¥¨¶°";
+        Text[ japanese ] = "οΎο½ΈοΎ›";
+        Text[ chinese_traditional ] = "ε·¨ι›†";
         Text[ arabic ] = "ζΝΟΗΚ ΗαγΗίΡζ";
         Text[ greek ] = "Μακροεντολές";
-        Text[ korean ] = "ΈΕΕ©·Ξ";
+        Text[ korean ] = "λ§¤ν¬λ΅";
         Text[ turkish ] = "Makro";
         Text[ catalan ] = "Macros";
         Text[ finnish ] = "Makrot";
@@ -468,10 +468,10 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text[ russian ] = "Νΰηνΰχθςό μΰκπξρ";
     Text[ greek ] = "Αντιστοίχιση μακροεντολής";
     Text[ polish ] = "Przypisz makro";
-    Text[ japanese ] = "ΟΈΫ‚Μ„‚θ“–‚Δ";
-    Text[ korean ] = "ΈΕΕ©·Ξ ΑφΑ¤";
-    Text[ chinese_simplified ] = "ΦΈ¶¨Ίκ";
-    Text[ chinese_traditional ] = "«ό©w¥¨¶°";
+    Text[ japanese ] = "οΎο½ΈοΎ›γ®ε‰²γ‚ε½“γ¦";
+    Text[ korean ] = "λ§¤ν¬λ΅ μ§€μ •";
+    Text[ chinese_simplified ] = "ζ‡ε®ε®";
+    Text[ chinese_traditional ] = "ζ‡ε®ε·¨ι›†";
     Text[ turkish ] = "Makro ata";
     Text[ arabic ] = "ΚΪννδ ζΝΟΙ γΗίΡζ";
     Text[ catalan ] = "Asignar macro";
@@ -524,6 +524,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text[ greek ] = "Αντιστοίχιση μακροεντολής";
     Text[ korean ] = "Assign Macro";
 };
+
 
 
 
