@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-05 12:23:15 $
+ *  last change: $Author: dr $ $Date: 2002-11-07 09:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,7 @@ void ImportExcel8::Name( void )
         ScfTools::ConvertName( aName );
 
     pFormConv->Reset();
-    if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
+    if( nOpt & (EXC_NAME_VB | EXC_NAME_PROC | EXC_NAME_BIG) )
         // function or command?
         pFormConv->GetDummy( pErgebnis );
     else if( bBuiltIn )

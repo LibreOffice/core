@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-07 07:10:51 $
+ *  last change: $Author: dr $ $Date: 2002-11-07 09:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1839,7 +1839,7 @@ void ImportExcel::Defrowheight345( void )
 
     nDef = ( UINT16 ) ( ( double ) nDef * pExcRoot->fRowScale );
 
-    if( nOpt && 0x0002 )
+    if( nOpt & 0x0002 )
         pColRowBuff->SetDefHeight( 0 );
     else
         pColRowBuff->SetDefHeight( nDef );
@@ -1912,9 +1912,7 @@ void ImportExcel::Window2_5( void )
     if( nOpt & EXC_WIN2_DISPLAYED )
         rExtOpt.SetActTab( nTab );
     pColRowBuff->SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
-
-    if( nOpt & EXC_WIN2_FROZEN )        // Frozen
-        pColRowBuff->SetFrozen( TRUE );
+    pColRowBuff->SetFrozen( TRUEBOOL( nOpt & EXC_WIN2_FROZEN ) );
 
     if( nTab == nFirstVisTab )     // import from first visible sheet
     {

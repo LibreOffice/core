@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-10 09:59:58 $
+ *  last change: $Author: dr $ $Date: 2002-11-07 09:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,6 +1372,7 @@ FltError ImportExcel8::Read( void )
                         switch( pExcRoot->eDateiTyp )
                         {
                             case Biff8:
+                            case Biff8M4:
                                 eAkt = Z_Biff8Pre;  // Shrfmla Prefetch, Row-Prefetch
                                 pColRowBuff->Reset();
                                 nBofLevel = 0;
