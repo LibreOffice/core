@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,16 +175,19 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ italian ] = "~Tabella";
         Text[ danish ] = "Ta~bel";
         Text[ swedish ] = "~Tabell";
-        Text[ polish ] = "Tabela";
-        Text[ portuguese_brazilian ] = "Tabelle:";
+        Text[ polish ] = "~Tabela";
+        Text[ portuguese_brazilian ] = "~Tabela";
         Text[ japanese ] = "テーブル(~T)";
         Text[ korean ] = "테이블(~T):";
         Text[ chinese_simplified ] = "表格(~T)";
         Text[ chinese_traditional ] = "表格(~T)";
-        Text[ turkish ] = "Tablo:";
+        Text[ turkish ] = "~Tablo";
         Text[ arabic ] = "����:";
         Text[ catalan ] = "~Taula:";
         Text[ thai ] = "~ตาราง";
+        Text[ czech ] = "Tabulka";
+        Text[ hebrew ] = "‮טבלה‬";
+        Text[ hindi ] = "~सारणी";
     };
     ComboBox CB_TABLES
     {
@@ -211,8 +214,8 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ italian ] = "Assegnazione";
         Text[ danish ] = "Tildeling";
         Text[ swedish ] = "Tilldelning";
-        Text[ polish ] = "Przydzia�";
-        Text[ portuguese_brazilian ] = "Assignment";
+        Text[ polish ] = "Przypisanie";
+        Text[ portuguese_brazilian ] = "Atribui��o";
         Text[ japanese ] = "適用";
         Text[ korean ] = "할당";
         Text[ chinese_simplified ] = "指定";
@@ -222,6 +225,9 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ catalan ] = "Asignaci�";
         Text[ finnish ] = "M��ritys";
         Text[ thai ] = "กำหนด";
+        Text[ czech ] = "Přiřazení";
+        Text[ hebrew ] = "‮השמה‬";
+        Text[ hindi ] = "निर्दिष्ट करना";
     };
     FixedText FT_TABLEINDEXES
     {
@@ -240,16 +246,19 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ italian ] = "Indici t~abella";
         Text[ danish ] = "T~abelindeks";
         Text[ swedish ] = "T~abellindex";
-        Text[ polish ] = "Indeksy tabeli";
-        Text[ portuguese_brazilian ] = "Tabellenindizes:";
+        Text[ polish ] = "Indeksy t~abeli";
+        Text[ portuguese_brazilian ] = "~�ndices de tabelas";
         Text[ japanese ] = "テーブルのインデックス(~A)";
         Text[ korean ] = "테이블 색인(~A):";
         Text[ chinese_simplified ] = "表格标志(~A)";
         Text[ chinese_traditional ] = "表格標誌(~A)";
-        Text[ turkish ] = "Tablo dizinleri:";
+        Text[ turkish ] = "T~ablo i�eri�i";
         Text[ arabic ] = "����� ����:";
         Text[ catalan ] = "�ndexs de la t~aula:";
         Text[ thai ] = "ดัชนี~ตาราง:";
+        Text[ czech ] = "Rejstříky tabulky";
+        Text[ hebrew ] = "‮מפתחות מטבלה‬";
+        Text[ hindi ] = "~सारणी अनुक्रमणी";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -276,16 +285,19 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ italian ] = "Indici li~beri";
         Text[ danish ] = "~Frit indeks";
         Text[ swedish ] = "~Fria index";
-        Text[ polish ] = "Wolne indeksy";
-        Text[ portuguese_brazilian ] = "Freie Indizes";
+        Text[ polish ] = "~Wolne indeksy";
+        Text[ portuguese_brazilian ] = "�ndices ~livres";
         Text[ japanese ] = "フリーインデックス(~F)";
         Text[ korean ] = "자유형 색인(~F)";
         Text[ chinese_simplified ] = "自由的标志(~F)";
         Text[ chinese_traditional ] = "自由標誌(~F)";
-        Text[ turkish ] = "Bo� dizinler:";
+        Text[ turkish ] = "~�ndeksleri temizle";
         Text[ arabic ] = "����� ���:";
         Text[ catalan ] = "�~ndexs lliures:";
         Text[ thai ] = "~ดัชนีว่าง:";
+        Text[ czech ] = "Volné rejstříky";
+        Text[ hebrew ] = "‮מפתחות חופשיים‬";
+        Text[ hindi ] = "~मुक्त अनुक्रमणी";
     };
     ListBox LB_FREEINDEXES
     {
@@ -372,7 +384,7 @@ ModalDialog DLG_DBASE_INDEXES
         };
     };
 
-    Text [ portuguese_brazilian ] = "Indizes" ;
+    Text [ portuguese_brazilian ] = "�ndices" ;
     Text [ swedish ] = "Index" ;
     Text [ danish ] = "Indeks" ;
     Text[ chinese_simplified ] = "标志";
@@ -383,15 +395,27 @@ ModalDialog DLG_DBASE_INDEXES
     Text[ arabic ] = "�����";
     Text[ greek ] = "���������";
     Text[ korean ] = "색인";
-    Text[ turkish ] = "Dizinler";
+    Text[ turkish ] = "Indeksler";
     Text[ catalan ] = "�ndexs";
     Text[ finnish ] = "Indeksit";
     Text[ thai ] = "ดัชนี";
+    Text[ czech ] = "Rejstříky";
+    Text[ hebrew ] = "Indizes";
+    Text[ hindi ] = "अनुक्रमणी";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26.8.2  2003/04/29 08:33:57  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.26.8.1  2003/04/14 15:03:55  gh
+ *  merging all languages
+ *
+ *  Revision 1.26  2003/03/19 17:52:22  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.25.2.3  2003/02/23 12:00:59  nf
  *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
  *
@@ -487,6 +511,16 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
 
 
 
