@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:28:47 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 11:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,12 +160,25 @@ public:
         const ::com::sun::star::uno::Sequence<sal_Int16>& rStateSet)
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Adds a state to the set.
+    */
     void    AddState(sal_Int16 aState)
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Removes a state from the set if the set contains the state, otherwise nothing is done.
+    */
     void    RemoveState(sal_Int16 aState)
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Compares the set with the set given by rComparativeValue and puts the results
+        into rOldStates and rNewStates.
+
+        rOldStates contains after call all states which are in the own set and
+        not in the comparative set.
+
+        rNewStates contains after call all states which are in the comparative
+         set and not in the own set.
+    */
     void    Compare(const AccessibleStateSetHelper& rComparativeValue,
                         AccessibleStateSetHelper& rOldStates,
                         AccessibleStateSetHelper& rNewStates)
