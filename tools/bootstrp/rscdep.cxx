@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:20:29 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ main( int argc, char **argv )
     return 0;
 }
 
-/* Heiner Rechtien: my very simple minded implementation of getopt()
+/* my very simple minded implementation of getopt()
  * it's too sad that getopt() is not available everywhere
  * note: this is not a full POSIX conforming getopt()
  */
@@ -348,9 +348,9 @@ simple_getopt(int argc, char *argv[], const char *optstring)
             arg = argv[++optind];
 
         if ( arg[0] == '-' && arg[1] != '\0' ) {
-            char *popt;
+            const char *popt;
             int c = arg[1];
-            if ( (popt = (char*)strchr(optstring, c)) == NULL ) {
+            if ( (popt = strchr(optstring, c)) == NULL ) {
                 optopt = c;
                 if ( opterr )
                     fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
