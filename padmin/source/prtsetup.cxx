@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-03 13:33:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,24 +131,20 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDKey* pKey )
 
 RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent ) :
         TabDialog(  pParent, PaResId( RID_RTS_RTSDIALOG ) ),
-        m_aTabControl( this, PaResId( RID_RTS_RTSDIALOG_TABCONTROL ) ),
-
         m_aJobData( rJobData ),
         m_aPrinter( rPrinter ),
+        m_aTabControl( this, PaResId( RID_RTS_RTSDIALOG_TABCONTROL ) ),
         m_aOKButton( this ),
         m_aCancelButton( this ),
-
-        m_aInvalidString( PaResId( RID_RTS_RTSDIALOG_INVALID_TXT ) ),
-        m_aFromDriverString( PaResId( RID_RTS_RTSDIALOG_FROMDRIVER_TXT ) ),
-
         m_pPaperPage( NULL ),
         m_pDevicePage( NULL ),
         m_pOtherPage( NULL ),
         m_pFontSubstPage( NULL ),
-        m_pCommandPage( NULL )
+        m_pCommandPage( NULL ),
+        m_aInvalidString( PaResId( RID_RTS_RTSDIALOG_INVALID_TXT ) ),
+        m_aFromDriverString( PaResId( RID_RTS_RTSDIALOG_FROMDRIVER_TXT ) )
 {
     FreeResource();
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     String aTitle( GetText() );
     aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), m_aJobData.m_aPrinterName );
@@ -158,6 +154,11 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
     {
         m_aTabControl.RemovePage( RID_RTS_OTHERPAGE );
         m_aTabControl.RemovePage( RID_RTS_FONTSUBSTPAGE );
+        m_aTabControl.RemovePage( RID_RTS_COMMANDPAGE );
+    }
+    else if( m_aJobData.m_aDriverName.compareToAscii( "CUPS:", 5 ) == 0 )
+    {
+        // command page makes no sense for CUPS printers
         m_aTabControl.RemovePage( RID_RTS_COMMANDPAGE );
     }
 
@@ -343,7 +344,7 @@ void RTSPaperPage::update()
         ? LSCAPE_STRING : PORTRAIT_STRING );
 
     // duplex
-    if( pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) ) )
+    if( (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
         m_pParent->insertAllPPDValues( m_aDuplexBox, pKey );
     else
     {
@@ -352,7 +353,7 @@ void RTSPaperPage::update()
     }
 
     // paper
-    if( pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) ) )
+    if( (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )) )
         m_pParent->insertAllPPDValues( m_aPaperBox, pKey );
     else
     {
@@ -361,7 +362,7 @@ void RTSPaperPage::update()
     }
 
     // input slots
-    if( pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) ) )
+    if( (pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) )) )
         m_pParent->insertAllPPDValues( m_aSlotBox, pKey );
     else
     {
@@ -529,17 +530,17 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
         TabPage( &pParent->m_aTabControl, PaResId( RID_RTS_OTHERPAGE ) ),
         m_pParent( pParent ),
-        m_aDefaultBtn( this, PaResId( RID_RTS_OTHER_DEFAULT_BTN ) ),
-        m_aLeftLB( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_BOX ) ),
-        m_aRightLB( this, PaResId( RID_RTS_OTHER_RIGHTMARGIN_BOX ) ),
-        m_aTopLB( this, PaResId( RID_RTS_OTHER_TOPMARGIN_BOX ) ),
-        m_aBottomLB( this, PaResId( RID_RTS_OTHER_BOTTOMMARGIN_BOX ) ),
         m_aLeftTxt( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_TXT ) ),
-        m_aRightTxt( this, PaResId( RID_RTS_OTHER_RIGHTMARGIN_TXT ) ),
+        m_aLeftLB( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_BOX ) ),
         m_aTopTxt( this, PaResId( RID_RTS_OTHER_TOPMARGIN_TXT ) ),
+        m_aTopLB( this, PaResId( RID_RTS_OTHER_TOPMARGIN_BOX ) ),
+        m_aRightTxt( this, PaResId( RID_RTS_OTHER_RIGHTMARGIN_TXT ) ),
+        m_aRightLB( this, PaResId( RID_RTS_OTHER_RIGHTMARGIN_BOX ) ),
         m_aBottomTxt( this, PaResId( RID_RTS_OTHER_BOTTOMMARGIN_TXT ) ),
+        m_aBottomLB( this, PaResId( RID_RTS_OTHER_BOTTOMMARGIN_BOX ) ),
         m_aCommentTxt( this, PaResId( RID_RTS_OTHER_COMMENT_TXT ) ),
-        m_aCommentEdt( this, PaResId( RID_RTS_OTHER_COMMENT_EDT ) )
+        m_aCommentEdt( this, PaResId( RID_RTS_OTHER_COMMENT_EDT ) ),
+        m_aDefaultBtn( this, PaResId( RID_RTS_OTHER_DEFAULT_BTN ) )
 {
     FreeResource();
 
@@ -766,6 +767,55 @@ IMPL_LINK( RTSFontSubstPage, ClickBtnHdl, Button*, pButton )
 }
 
 
+class RTSPWDialog : public ModalDialog
+{
+    FixedText       m_aText;
+    FixedText       m_aUserText;
+    Edit            m_aUserEdit;
+    FixedText       m_aPassText;
+    Edit            m_aPassEdit;
+
+    OKButton        m_aOKButton;
+    CancelButton    m_aCancelButton;
+public:
+    RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent );
+    ~RTSPWDialog();
+
+    OString getUserName() const;
+    OString getPassword() const;
+};
+
+RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent )
+        :
+        ModalDialog( pParent, PaResId( RID_RTS_PWDIALOG ) ),
+        m_aText( this, PaResId( RID_RTS_PWDIALOG_TXT ) ),
+        m_aUserText( this, PaResId( RID_RTS_PWDIALOG_USER_TXT ) ),
+        m_aUserEdit( this, PaResId( RID_RTS_PWDIALOG_USER_EDT ) ),
+        m_aPassText( this, PaResId( RID_RTS_PWDIALOG_PASS_TXT ) ),
+        m_aPassEdit( this, PaResId( RID_RTS_PWDIALOG_PASS_EDT ) ),
+        m_aOKButton( this, PaResId( RID_RTS_PWDIALOG_OK_BTN ) ),
+        m_aCancelButton( this, PaResId( RID_RTS_PWDIALOG_CANCEL_BTN ) )
+{
+    FreeResource();
+    String aText( m_aText.GetText() );
+    aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), OStringToOUString( rServer, osl_getThreadTextEncoding() ) );
+    m_aText.SetText( aText );
+    m_aUserEdit.SetText( OStringToOUString( rUserName, osl_getThreadTextEncoding() ) );
+}
+
+RTSPWDialog::~RTSPWDialog()
+{
+}
+
+OString RTSPWDialog::getUserName() const
+{
+    return rtl::OUStringToOString( m_aUserEdit.GetText(), osl_getThreadTextEncoding() );
+}
+
+OString RTSPWDialog::getPassword() const
+{
+    return rtl::OUStringToOString( m_aPassEdit.GetText(), osl_getThreadTextEncoding() );
+}
 
 extern "C" {
 
@@ -788,6 +838,20 @@ extern "C" {
         String aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
         QueryString aQuery( NULL, aTmpString, rNumber );
         return aQuery.Execute();
+    }
+
+    bool Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
+    {
+        bool bRet = false;
+
+        RTSPWDialog aDialog( rServer, rUserName, NULL );
+        if( aDialog.Execute() )
+        {
+            rUserName = aDialog.getUserName();
+            rPassword = aDialog.getPassword();
+            bRet = true;
+        }
+        return bRet;
     }
 
 } // extern "C"
