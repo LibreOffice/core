@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ swedish ] = "Visa objekt utan data";
         Text[ polish ] = "Poka¿ elementy bez danych";
         Text[ portuguese_brazilian ] = "Show elements without data";
-        Text[ japanese ] = "—v‘f‚ðÃÞ°À‚È‚µ‚Å•\\Ž¦(~E)";
+        Text[ japanese ] = "ÃÞ°À‚È‚µ‚Å—v‘f‚Ì•\\Ž¦(~E)";
         Text[ korean ] = "µ¥ÀÌÅÍ ¾øÀÌ ¿ä¼Ò º¸±â(~E)";
         Text[ chinese_simplified ] = "ÏÔÊ¾²»º¬Êý¾ÝµÄÌõÄ¿(~E)";
         Text[ chinese_traditional ] = "Åã¥ÜµL¼ÆÕuªº³æ¤¸(~E)";
