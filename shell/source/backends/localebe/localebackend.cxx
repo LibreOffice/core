@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 14:09:19 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,17 +96,34 @@ static rtl::OUString ImplGetLocale(int category)
     if( (locale == NULL) || ( locale[0] == 'C' && locale[1] == '\0' ) )
         return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
 
-    const char *uscore = strchr(locale, '_');
-    if( uscore != NULL )
+
+    const char *cp;
+    const char *uscore = NULL;
+
+    // locale string have the format lang[_ctry][.encoding][@modifier]
+    // we are only interested in the first two items, so we handle
+    // '.' and '@' as string end.
+    for (cp = locale; *cp; cp++)
     {
-        rtl::OUStringBuffer aLocaleBuffer;
-        aLocaleBuffer.appendAscii(locale, uscore - locale);
-        aLocaleBuffer.appendAscii("-");
-        aLocaleBuffer.appendAscii(uscore+1, 2);
-        return aLocaleBuffer.makeStringAndClear();
+        if (*cp == '_')
+            uscore = cp;
+        if (*cp == '.' || *cp == '@')
+            break;
     }
 
-    return rtl::OUString::createFromAscii( locale );
+    rtl::OUStringBuffer aLocaleBuffer;
+    if( uscore != NULL )
+    {
+        aLocaleBuffer.appendAscii(locale, uscore++ - locale);
+        aLocaleBuffer.appendAscii("-");
+        aLocaleBuffer.appendAscii(uscore, cp - uscore);
+    }
+    else
+    {
+        aLocaleBuffer.appendAscii(locale, cp - locale);
+    }
+
+    return aLocaleBuffer.makeStringAndClear();
 }
 
 #endif // UNX
@@ -192,23 +209,8 @@ rtl::OUString LocaleBackend::getUILocale(void)
 
 rtl::OUString LocaleBackend::createTimeStamp()
 {
-    //All newly created layers have timestamp 0
-    TimeValue aTimeValue = {0,0};
-
-    oslDateTime aLayerTS;
-    rtl::OUString aTimeStamp;
-
-    if (osl_getDateTimeFromTimeValue(&aTimeValue, &aLayerTS)) {
-        sal_Char asciiStamp [20] ;
-
-        snprintf(asciiStamp, sizeof(asciiStamp), "%04d%02d%02d%02d%02d%02dZ",
-            aLayerTS.Year, aLayerTS.Month, aLayerTS.Day,
-            aLayerTS.Hours, aLayerTS.Minutes, aLayerTS.Seconds) ;
-
-        aTimeStamp = rtl::OUString::createFromAscii(asciiStamp) ;
-    }
-
-    return aTimeStamp;
+    // the time stamp is free text, so just returning the values here.
+    return getLocale() + getUILocale();
 }
 
 //------------------------------------------------------------------------------
