@@ -82,6 +82,7 @@
         <pathelement location="${build.class}"/>
         <pathelement location="${solar.jar}/parser.jar"/>
         <pathelement location="${solar.jar}/jaxp.jar"/>
+        <pathelement location="${solar.jar}/xerces.jar"/>
         <pathelement location="${solar.jar}/jmc.jar"/>
     </path>
 

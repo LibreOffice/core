@@ -81,6 +81,7 @@
         <pathelement location="${build.class}"/>
         <pathelement location="${solar.jar}/parser.jar"/>
         <pathelement location="${solar.jar}/jaxp.jar"/>
+        <pathelement location="${solar.jar}/xerces.jar"/>
     </path>
 
     <!-- set whether we want to compile with or without deprecation -->

@@ -83,6 +83,7 @@
         <pathelement location="${solar.jar}/parser.jar"/>
         <pathelement location="${solar.jar}/jaxp.jar"/>
     <pathelement location="${solar.jar}/xalan.jar"/>
+        <pathelement location="${solar.jar}/xerces.jar"/>
         <pathelement location="${solar.jar}/jurt.jar"/>
         <pathelement location="${solar.jar}/unoil.jar"/>
         <pathelement location="${solar.jar}/ridl.jar"/>
