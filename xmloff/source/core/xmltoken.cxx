@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:52:06 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 13:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2281,6 +2281,8 @@ namespace xmloff { namespace token {
         TOKEN( "segments" ),                        // XML_SEGMENTS
         TOKEN( "word-wrap" ),                       // XML_WORD_WRAP
         TOKEN( "auto-grow-size" ),                  // XML_AUTO_GROW_SIZE
+        TOKEN( "selected-page" ),                   // XML_SELECTED_PAGE
+
 
         { 0, NULL, NULL }                       // XML_TOKEN_END
     };
