@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-11 17:28:23 $
+ *  last change: $Author: hdu $ $Date: 2002-11-12 10:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2633,7 +2633,9 @@ BOOL OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
          (eLang == LANGUAGE_CHINESE_SIMPLIFIED)     ||
          (eLang == LANGUAGE_CHINESE_HONGKONG)       ||
          (eLang == LANGUAGE_CHINESE_SINGAPORE)      ||
-         (eLang == LANGUAGE_CHINESE_MACAU) )
+         (eLang == LANGUAGE_CHINESE_MACAU)          ||
+         (eLang == LANGUAGE_KOREAN)                 ||
+         (eLang == LANGUAGE_KOREAN_JOHAB) )
         return FALSE;
     else
     {
@@ -2644,7 +2646,9 @@ BOOL OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
              (eLang == LANGUAGE_CHINESE_SIMPLIFIED)     ||
              (eLang == LANGUAGE_CHINESE_HONGKONG)       ||
              (eLang == LANGUAGE_CHINESE_SINGAPORE)      ||
-             (eLang == LANGUAGE_CHINESE_MACAU) )
+             (eLang == LANGUAGE_CHINESE_MACAU)          ||
+             (eLang == LANGUAGE_KOREAN)                 ||
+             (eLang == LANGUAGE_KOREAN_JOHAB) )
             return FALSE;
     }
 
@@ -6854,9 +6858,9 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
                     = static_cast< long >(aPixelRect.Bottom() * fFactor);
             }
 
-            Point aRotatedOfs = pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-            aRotatedOfs += Point( mnTextOffX, mnTextOffY );
-            aPixelRect -= aRotatedOfs;
+            Point aRotatedOfs( mnTextOffX, mnTextOffY );;
+            aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
+            aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
             if( mbMap )
                 rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
@@ -7040,8 +7044,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
 
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
-                Point aRotatedOfs = pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-                aRotatedOfs += Point( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
+                Point aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
+                aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
                 for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
                     aIt->Move( aRotatedOfs.X(), aRotatedOfs.Y() );
             }
