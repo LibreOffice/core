@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackage.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:50:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 #include <com/sun/star/awt/XBitmap.idl>
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
-#include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/beans/Optional.idl>
+#include <com/sun/star/beans/Ambiguous.idl>
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/ucb/CommandFailedException.idl>
 #include <com/sun/star/ucb/CommandAbortedException.idl>
@@ -100,9 +101,6 @@ interface XPackage
 
     /** determines whether the package is currently is registered, i.e.
         whether it is active.
-        This method throws an
-        <type scope="com::sun::star::beans">UnknownPropertyException</type>
-        if this status is unknown.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
@@ -110,16 +108,17 @@ interface XPackage
         @param xCmdEnv
                command environment for error and progress handling
         @return
-                status whether the package is registered (<TRUE/>) or not
-                (<FALSE/>)
+                status whether the package is registered (<TRUE/>, <FALSE/>) or
+                the status is ambiguous.  Additionally, a registration status
+                may not apply, e.g. in case of an empty package bundle.
     */
-    boolean isRegistered(
-        [in] com::sun::star::task::XAbortChannel xAbortChannel,
-        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+    com::sun::star::beans::Optional<
+        com::sun::star::beans::Ambiguous<boolean> > isRegistered(
+            [in] com::sun::star::task::XAbortChannel xAbortChannel,
+            [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
-                com::sun::star::ucb::CommandAbortedException,
-                com::sun::star::beans::UnknownPropertyException);
+                com::sun::star::ucb::CommandAbortedException);
 
     /** registers this <type>Package</type>, thus activating the package.
 
@@ -184,7 +183,7 @@ interface XPackage
 
         @return
                 name of the package
-     */
+    */
     string getName();
 
     /** returns the media type of the package, e.g.
@@ -217,7 +216,7 @@ interface XPackage
     */
     string getDescription();
 
-    /** returns a bitmap id for this package type.
+    /** returns icon for this package type.
 
         @param highContrast
                return high contrast icon
@@ -225,11 +224,29 @@ interface XPackage
                return a small icon (e.g. 16x16 pixel),
                else return a big one (e.g. 26x26 pixel)
         @return
-                unsigned short (resource id), string id or
-                <type scope="com::sun::star::awt">XBitmap</type>,
-                <VOID/> any if unknown
+                currently an unsigned short
+                (resource id for deploymentgui resource file),
+                <VOID/> any if none is available
     */
     any getIcon( [in] boolean highContrast, [in] boolean smallIcon );
+
+    /** exports package to given destination URL.
+
+        @param destFolderURL
+               package destination folder URL, must be UCB conform
+        @param newTitle
+               new package name
+        @param nameClashAction
+               one of <type scope="com::sun::star::ucb">NameClash</type>
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void exportTo( [in] string destFolderURL,
+                   [in] string newTitle,
+                   [in] long nameClashAction,
+                   [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException);
 };
 
 }; }; }; };
