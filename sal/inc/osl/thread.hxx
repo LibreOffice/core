@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:38 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ public:
            if (m_hThread)
             return sal_False;
 
-        if (m_hThread= osl_createSuspendedThread( threadFunc,
-                                             (void*)this))
+        m_hThread = osl_createSuspendedThread( threadFunc, (void*)this);
+        if ( m_hThread )
             osl_resumeThread(m_hThread);
 
         return m_hThread != 0;
