@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponentType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:09:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** These constants specify the class types used to identify a component.
  */
-constants FormComponentType
+published constants FormComponentType
 {
     //-------------------------------------------------------------------------
 
