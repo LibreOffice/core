@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:52:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                                &aRoot, &aChild,
                                &root_x, &root_y, &lx, &ly, &mask );
                 const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-                for( int i = 0; i < rScreens.size(); i++ )
+                for( unsigned int i = 0; i < rScreens.size(); i++ )
                     if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
                     {
                         x = rScreens[i].Left();
@@ -649,9 +649,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mbDeleteInputContext        = false;
     mbInputFocus                = False;
 
-    maResizeTimer.SetTimeoutHdl( LINK( this, X11SalFrame, HandleResizeTimer ) );
-    maResizeTimer.SetTimeout( 50 );
-
     maAlwaysOnTopRaiseTimer.SetTimeoutHdl( LINK( this, X11SalFrame, HandleAlwaysOnTopRaise ) );
     maAlwaysOnTopRaiseTimer.SetTimeout( 100 );
 
@@ -663,8 +660,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mbMaximizedHorz             = false;
     mbShaded                    = false;
     mbFullScreen                = false;
-    mbMoved                     = false;
-    mbSized                     = false;
 
     mnIconID                    = 0; // ICON_DEFAULT
 
@@ -680,8 +675,6 @@ void X11SalFrame::passOnSaveYourSelf()
 {
     if( this == s_pSaveYourselfFrame )
     {
-        SalData* pSalData = GetSalData();
-
         // pass on SaveYourself
         X11SalFrame* pFrame = NULL;
         const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
@@ -1232,7 +1225,7 @@ void X11SalFrame::Center( )
                            &x, &y,
                            &mask );
         const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-        for( int i = 0; i < rScreens.size(); i++ )
+        for( unsigned int i = 0; i < rScreens.size(); i++ )
             if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
             {
                 nScreenX            = rScreens[i].Left();
@@ -1535,12 +1528,6 @@ SalBitmap* X11SalFrame::SnapShot()
 
     // make sure the frame has been reparented and all paint timer have been
     // expired
-    maResizeTimer.Stop();
-    if ( mbMoved || mbSized )
-    {
-        HandleResizeTimer (&maResizeTimer);
-    }
-
     do
     {
         XSync(pDisplay, False);
@@ -2947,7 +2934,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     // width and height are extents, so they are of by one for rectangle
     maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
 
-    if( nCount || maResizeTimer.IsActive() )
+    if( nCount )
         // wait for last expose rectangle, do not wait for resize timer
         // if a completed graphics expose sequence is available
         return 1;
@@ -3086,17 +3073,23 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     nWidth_     = pEvent->width;
     nHeight_    = pEvent->height;
 
-    if( !mbMoved )
-        mbMoved = ( pEvent->x != maGeometry.nX || pEvent->y != maGeometry.nY );
-    if( !mbSized )
-        mbSized = ( pEvent->width != maGeometry.nWidth || pEvent->height != maGeometry.nHeight );
-
-    maResizeTimer.Start();
+    bool bMoved = ( pEvent->x != maGeometry.nX || pEvent->y != maGeometry.nY );
+    bool bSized = ( pEvent->width != (int)maGeometry.nWidth || pEvent->height != (int)maGeometry.nHeight );
 
     maGeometry.nX       = pEvent->x;
     maGeometry.nY       = pEvent->y;
     maGeometry.nWidth   = pEvent->width;
     maGeometry.nHeight  = pEvent->height;
+
+    // update children's position
+    RestackChildren();
+
+    if( bSized && ! bMoved )
+        CallCallback( SALEVENT_RESIZE, NULL );
+    else if( bMoved && ! bSized )
+        CallCallback( SALEVENT_MOVE, NULL );
+    else if( bMoved && bSized )
+        CallCallback( SALEVENT_MOVERESIZE, NULL );
 
     return 1;
 }
@@ -3105,36 +3098,6 @@ IMPL_LINK( X11SalFrame, HandleAlwaysOnTopRaise, void*, pDummy )
 {
     if( bMapped_ )
         ToTop( 0 );
-    return 0;
-}
-
-IMPL_LINK( X11SalFrame, HandleResizeTimer, void*, pDummy )
-{
-    // update children's position
-    RestackChildren();
-
-    if( mbSized && ! mbMoved )
-        CallCallback( SALEVENT_RESIZE, NULL );
-    else if( mbMoved && ! mbSized )
-        CallCallback( SALEVENT_MOVE, NULL );
-    else if( mbMoved && mbSized )
-        CallCallback( SALEVENT_MOVERESIZE, NULL );
-
-    mbMoved = mbSized = false;
-
-    SalPaintEvent aPEvt;
-
-    aPEvt.mnBoundX          = maPaintRegion.Left();
-    aPEvt.mnBoundY          = maPaintRegion.Top();
-    aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
-    aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
-
-    if( Application::GetSettings().GetLayoutRTL() )
-        aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
-
-    CallCallback( SALEVENT_PAINT, &aPEvt );
-    maPaintRegion = Rectangle();
-
     return 0;
 }
 
@@ -3559,15 +3522,22 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                         /*
                          *  With Exceed sometimes there does not seem to be
                          *  an Expose after the MapNotify.
-                         *  so start a paint via the timer here
-                         *  to avoid duplicate paints
+                         *  so start a delayed paint here
                          */
                         maPaintRegion.Union( Rectangle( Point( 0, 0 ), Size( maGeometry.nWidth, maGeometry.nHeight ) ) );
-                        if( ! maResizeTimer.IsActive() )
-                        {
-                            mbSized = mbMoved = true;
-                            maResizeTimer.Start();
-                        }
+                        XEvent aEvent;
+                        aEvent.xexpose.type     = Expose;
+                        aEvent.xexpose.display  = pDisplay_->GetDisplay();
+                        aEvent.xexpose.x        = 0;
+                        aEvent.xexpose.y        = 0;
+                        aEvent.xexpose.width    = maGeometry.nWidth;
+                        aEvent.xexpose.height   = maGeometry.nHeight;
+                        aEvent.xexpose.count    = 0;
+                        XSendEvent( pDisplay_->GetDisplay(),
+                                    GetWindow(),
+                                    True,
+                                    ExposureMask,
+                                    &aEvent );
                     }
 
                     /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
