@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:20:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "TimeField" ;
                         Text [ portuguese ] = "Campo horαrio" ;
                         Text [ english_us ] = "Time Field" ;
-                        Text [ portuguese_brazilian ] = "Campo da hora" ;
+                        Text [ portuguese_brazilian ] = "Campo de hora" ;
                         Text [ swedish ] = "Tidsfδlt" ;
                         Text [ danish ] = "Klokkeslζtsfelt" ;
                         Text [ italian ] = "Campo orario" ;
@@ -719,7 +719,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_simplified ] = "ζ›΄ε¤(~M)...";
                         Text[ chinese_traditional ] = "ζ›΄ε¤(~M)...";
                         Text[ arabic ] = "ΗαγÒνΟ ...";
-                        Text[ language_user1 ] = "(ΔΔ): ή Περισσότερα ή επιπρόσθετα; - - - -";
+                        Text[ language_user1 ] = "; (ΔΔ): ή Περισσότερα ή επιπρόσθετα; - - - -";
                         Text[ turkish ] = "Diπer...";
                         Text[ catalan ] = "~Mιs ...";
                         Text[ finnish ] = "~Lisδδ ...";
@@ -840,6 +840,7 @@ Menu RID_SVXMNU_CELL
         };
     };
 };
+
 
 
 
