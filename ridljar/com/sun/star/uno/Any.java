@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:55:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2004-06-04 02:55:25 $
- * @since       UDK1.0
+ * @version     $Revision: 1.7 $ $ $Date: 2004-11-03 08:51:11 $
  */
 public class Any {
     /**
