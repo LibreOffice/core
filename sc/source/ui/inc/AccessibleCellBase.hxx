@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-05 16:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,13 +122,6 @@ public:
         getAccessibleIndexInParent(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return the locale of the cell.
-    */
-    virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale(void)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
-
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
@@ -193,6 +186,7 @@ private:
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };
+
 
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:53:24 $
+ *  last change: $Author: sab $ $Date: 2002-03-05 16:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,13 +183,6 @@ sal_Int32
     return mnIndex;
 }
 
-lang::Locale SAL_CALL ScAccessibleCellBase::getLocale(void)
-        throw (uno::RuntimeException, IllegalAccessibleComponentStateException)
-{
-    lang::Locale aLocale;
-    return aLocale;
-}
-
 ::rtl::OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
@@ -328,4 +321,3 @@ sal_Bool ScAccessibleCellBase::IsEditable(
         bEditable = sal_True;
     return bEditable;
 }
-
