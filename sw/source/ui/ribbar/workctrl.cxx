@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
+ *  last change: $Author: os $ $Date: 2002-03-15 08:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,11 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
        !pView->GetWrtShell().HasReadonlySel() )
     {
         ToolBox& rBox = GetToolBox();
-        Point aPt(rBox.OutputToScreenPixel(rBox.GetPointerPosPixel()));
+
+        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
+        Point aPt(rBox.OutputToScreenPixel(aItemRect.TopLeft()));
+        aPt.X() += aItemRect.GetWidth()/2;
+        aPt.Y() += aItemRect.GetHeight()/2;
         if(pView)
         {
             Link aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
