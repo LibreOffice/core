@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:28 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,8 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_GROUP_PLUGIN        },
     { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_GROUP_FRAME         },
     { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_GROUP_APPLET        },
+
+    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,       XML_TOK_GROUP_CUSTOM_SHAPE  },
 
     XML_TOKEN_MAP_END
 };
@@ -902,6 +904,12 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             // draw:applet
             pContext = new SdXMLAppletShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_CUSTOM_SHAPE:
+        {
+            // draw:customshape
+            pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
         // add other shapes here...
