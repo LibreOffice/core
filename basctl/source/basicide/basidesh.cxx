@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:50:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/srchdlg.hxx>
+#include <svx/lboxctrl.hxx>
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
