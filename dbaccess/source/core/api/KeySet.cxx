@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,11 @@ void OKeySet::construct()
     xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
     xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
 
-    ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
-    if(m_xConnection->getMetaData()->supportsTableCorrelationNames())
+    if(xMetaData->supportsTableCorrelationNames())
     {
+        ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_False);
         // first we have to check if the composed tablename is in the select clause or if an alias is used
         Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
         Reference<XNameAccess> xSelectTables = xTabSup->getTables();
@@ -183,10 +184,15 @@ void OKeySet::construct()
         {
             if(!xSelectTables->hasByName(aComposedName))
             { // the composed name isn't used in the select clause so we have to find out which name is used instead
-                aComposedName = ::dbtools::quoteName( aQuote,m_sUpdateTableName);
+                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,aCatalog,aSchema,aTable);
+                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
             }
+            else
+                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
         }
     }
+    else
+        ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
 
     // create the where clause
     OColumnNamePos::const_iterator aIter;
@@ -972,8 +978,10 @@ sal_Bool OKeySet::fetchRow()
             case DataType::NUMERIC:
                 (*aIter) = m_xDriverRow->getString(aPosIter->second);
                 break;
-            case DataType::DOUBLE:
             case DataType::FLOAT:
+                (*aIter) = m_xDriverRow->getFloat(aPosIter->second);
+                break;
+            case DataType::DOUBLE:
             case DataType::REAL:
                 (*aIter) = m_xDriverRow->getDouble(aPosIter->second);
                 break;
@@ -1219,6 +1227,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.22  2001/07/19 09:29:22  oj
+    #86186# check parsetree for joins
+
     Revision 1.21  2001/07/09 07:00:18  oj
     #89364# provide the parameter row to the keyset
 

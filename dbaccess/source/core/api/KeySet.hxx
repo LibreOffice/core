@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace dbaccess
         OKeySetMatrix::iterator m_aKeyIter;
         OColumnNamePos          m_aKeyColumnNames;  // contains all key column names
         OColumnNamePos          m_aColumnNames;     // contains all column names
-        connectivity::ORowVector< ORowSetValue > m_aParameterRow; // conazins the parameters from rowset
+        connectivity::ORowVector< connectivity::ORowSetValue > m_aParameterRow; // conazins the parameters from rowset
 
         connectivity::OSQLTable m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
@@ -124,7 +124,7 @@ namespace dbaccess
         // late ctor which can throw exceptions
         void construct();
 
-        void setExternParameters(const connectivity::ORowVector< ORowSetValue >& _rParameterRow);
+        void setExternParameters(const connectivity::ORowVector< connectivity::ORowSetValue >& _rParameterRow);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -195,6 +195,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/07/19 09:29:22  oj
+    #86186# check parsetree for joins
+
     Revision 1.9  2001/07/09 07:00:18  oj
     #89364# provide the parameter row to the keyset
 

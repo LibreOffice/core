@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 06:01:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,53 +658,59 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         aSql = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
 
     //  ::rtl::OUString aSql = getTableAlias(column) + aName;
-
-    switch(nType)
+    if(aValue.hasValue())
     {
-        case DataType::VARCHAR:
-        case DataType::CHAR:
-        case DataType::LONGVARCHAR:
-            aSql += STR_LIKE;
-            aSql += ::rtl::OUString::createFromAscii("\'");
-            aSql += toString(aValue).getStr();
-            aSql += ::rtl::OUString::createFromAscii("\'");
-            break;
-        case DataType::VARBINARY:
-        case DataType::BINARY:
-        case DataType::LONGVARBINARY:
-            {
-                Sequence<sal_Int8> aSeq;
-                if(aValue >>= aSeq)
+
+        switch(nType)
+        {
+            case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::LONGVARCHAR:
+                aSql += STR_LIKE;
+                aSql += ::rtl::OUString::createFromAscii("\'");
+                aSql += toString(aValue).getStr();
+                aSql += ::rtl::OUString::createFromAscii("\'");
+                break;
+            case DataType::VARBINARY:
+            case DataType::BINARY:
+            case DataType::LONGVARBINARY:
                 {
-                    if(nSearchable == ColumnSearch::CHAR)
+                    Sequence<sal_Int8> aSeq;
+                    if(aValue >>= aSeq)
                     {
-                        aSql += STR_LIKE;
-                        aSql += ::rtl::OUString::createFromAscii("\'");
+                        if(nSearchable == ColumnSearch::CHAR)
+                        {
+                            aSql += STR_LIKE;
+                            aSql += ::rtl::OUString::createFromAscii("\'");
+                        }
+                        else
+                            aSql += STR_EQUAL;
+                        aSql += ::rtl::OUString::createFromAscii("0x");
+                        const sal_Int8* pBegin  = aSeq.getConstArray();
+                        const sal_Int8* pEnd    = pBegin + aSeq.getLength();
+                        for(;pBegin != pEnd;++pBegin)
+                        {
+                            aSql += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16).getStr();
+                        }
+                        if(nSearchable == ColumnSearch::NONE)
+                            aSql += ::rtl::OUString::createFromAscii("\'");
                     }
                     else
-                        aSql += STR_EQUAL;
-                    aSql += ::rtl::OUString::createFromAscii("0x");
-                    const sal_Int8* pBegin  = aSeq.getConstArray();
-                    const sal_Int8* pEnd    = pBegin + aSeq.getLength();
-                    for(;pBegin != pEnd;++pBegin)
-                    {
-                        aSql += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16).getStr();
-                    }
-                    if(nSearchable == ColumnSearch::NONE)
-                        aSql += ::rtl::OUString::createFromAscii("\'");
+                        throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
                 }
-                else
-                    throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
-            }
-            break;
-        default:
-            {
-                ::rtl::OUString aValueStr(toString(aValue));
-                aSql += STR_EQUAL;
-                aSql += ::rtl::OUString::createFromAscii(" ");
-                aSql += aValueStr.getStr();
-            }
+                break;
+            default:
+                {
+                    ::rtl::OUString aValueStr(toString(aValue));
+                    aSql += STR_EQUAL;
+                    aSql += ::rtl::OUString::createFromAscii(" ");
+                    aSql += aValueStr.getStr();
+                }
+        }
     }
+    else
+        aSql += ::rtl::OUString::createFromAscii(" IS NULL") ;
+
 
     // filter anhaengen
     // select ohne where und order by aufbauen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetRow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 11:48:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
-#ifndef DBACCESS_CORE_API_ROWSETVALUE_HXX
-#include "RowSetValue.hxx"
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include "connectivity/FValue.hxx"
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -76,7 +76,7 @@
 
 namespace dbaccess
 {
-    typedef ::vos::ORef< connectivity::ORowVector< ORowSetValue > >     ORowSetRow;
+    typedef ::vos::ORef< connectivity::ORowVector< connectivity::ORowSetValue > >       ORowSetRow;
     typedef ::std::vector< ORowSetRow >                                 ORowSetMatrix;
 
     class ORowSetValueCompare
@@ -108,6 +108,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/05/18 11:48:25  oj
+    #86528# size changes
+
     Revision 1.2  2000/10/11 11:18:11  fs
     replace unotools with comphelper
 

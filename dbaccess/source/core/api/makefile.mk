@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
+#   last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,6 @@ SLOFILES=	\
         $(SLO)$/StaticSet.obj			\
         $(SLO)$/CacheSet.obj			\
         $(SLO)$/RowSetCache.obj			\
-        $(SLO)$/RowSetValue.obj			\
         $(SLO)$/definitioncolumn.obj	\
         $(SLO)$/resultcolumn.obj		\
         $(SLO)$/datacolumn.obj			\

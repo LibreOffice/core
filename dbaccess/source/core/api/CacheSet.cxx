@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,8 +489,10 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::INTEGER:
                 _xParameter->setInt(nPos,_rValue);
                 break;
-            case DataType::DOUBLE:
             case DataType::FLOAT:
+                _xParameter->setFloat(nPos,_rValue);
+                break;
+            case DataType::DOUBLE:
             case DataType::REAL:
                 _xParameter->setDouble(nPos,_rValue);
                 break;
@@ -549,8 +551,10 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         case DataType::NUMERIC:
             (*aIter) = getString(i);
             break;
-        case DataType::DOUBLE:
         case DataType::FLOAT:
+            (*aIter) = getFloat(i);
+            break;
+        case DataType::DOUBLE:
         case DataType::REAL:
             (*aIter) = getDouble(i);
             break;
@@ -573,10 +577,10 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
             (*aIter) = getBoolean(i);
             break;
         case DataType::TINYINT:
-            (*aIter) = (sal_Int32)getByte(i);
+            (*aIter) = getByte(i);
             break;
         case DataType::SMALLINT:
-            (*aIter) = (sal_Int32)getShort(i);
+            (*aIter) = getShort(i);
             break;
         case DataType::INTEGER:
             (*aIter) = getInt(i);
@@ -593,87 +597,6 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 
     }
 }
-/*------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.23  2001/07/18 14:01:34  oj
-    #89837# check types
-
-    Revision 1.22  2001/05/22 13:08:22  oj
-    #87199# check column names
-
-    Revision 1.21  2001/05/18 11:48:25  oj
-    #86528# size changes
-
-    Revision 1.20  2001/05/03 07:15:56  oj
-    #86526# fetch decimal and numeric as string
-
-    Revision 1.19  2001/04/02 11:24:49  oj
-    changes for character stream
-
-    Revision 1.18  2001/03/15 08:19:18  fs
-    cppuhelper/extract -> comphelper/extract
-
-    Revision 1.17  2001/02/14 13:18:24  oj
-    impl sql stmt
-
-    Revision 1.16  2001/01/31 12:27:18  oj
-    use of qouteName
-
-    Revision 1.15  2001/01/24 09:50:49  oj
-    #82628# rowset modifications
-
-    Revision 1.14  2001/01/22 07:38:23  oj
-    #82632# change member
-
-    Revision 1.13  2000/12/12 12:15:41  oj
-    use paramter instead of member and set member to ull
-
-    Revision 1.12  2000/12/07 12:35:21  oj
-    #81424# valueof(bool) has no opposite conversion
-
-    Revision 1.11  2000/12/06 09:48:48  oj
-    #80219# check wasNull()
-
-    Revision 1.10  2000/12/01 13:04:36  oj
-    #80932# update and insert corrected
-
-    Revision 1.9  2000/11/30 15:58:20  oj
-    #80934# standarddate is no longer public
-
-    Revision 1.8  2000/11/29 10:23:32  oj
-    #80219# wrong use of keys
-
-    Revision 1.7  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.6  2000/11/03 14:32:31  oj
-    some problems with refcount resolved
-
-    Revision 1.5  2000/10/25 07:30:24  oj
-    make strings unique for lib's
-
-    Revision 1.4  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.3  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.2  2000/09/29 15:20:51  oj
-    rowset impl
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.3  2000/09/18 14:52:46  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.2  2000/09/05 13:36:15  rt
-    #65293# exception specification added, as in .hxx
-
-    Revision 1.1  2000/09/01 15:24:25  oj
-    rowset addon
-
-    Revision 1.0 27.07.2000 12:14:22  oj
-------------------------------------------------------------------------*/
 

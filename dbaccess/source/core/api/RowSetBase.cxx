@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 10:39:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,8 +922,10 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {
         m_aBookmark     = m_pCache->getBookmark();
+        OSL_ENSURE(m_aBookmark.hasValue(),"Bookamrk has no value!");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         m_aCurrentRow.setBookmark(m_aBookmark);
+        OSL_ENSURE((*(*m_aCurrentRow))[0].makeAny().hasValue(),"Bookamrk has no value!");
 
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
         OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");

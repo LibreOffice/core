@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 07:54:41 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1419,6 +1419,7 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
         throw SQLException();
 
     Any aBookmark = (*(*_rUpdateRow))[0].makeAny();
+    OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
     moveToBookmark(aBookmark);
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
     //  *(*m_aMatrixIter) = *(*_rUpdateRow);

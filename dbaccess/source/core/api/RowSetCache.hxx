@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,8 +200,8 @@ namespace dbaccess
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::com::sun::star::uno::Any& _rOldValue);
 
         void rotateCacheIterator(sal_Int16 _nDist);
-        void updateValue(sal_Int32 columnIndex,const ORowSetValue& x);
-        ORowSetValue getValue(sal_Int32 columnIndex);
+        void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
+        connectivity::ORowSetValue getValue(sal_Int32 columnIndex);
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
@@ -218,7 +218,7 @@ namespace dbaccess
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,
-                     const connectivity::ORowVector< ORowSetValue >& _rParameterRow,
+                     const connectivity::ORowVector< connectivity::ORowSetValue >& _rParameterRow,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew);
@@ -329,6 +329,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/07/19 09:29:22  oj
+    #86186# check parsetree for joins
+
     Revision 1.11  2001/07/12 07:56:32  oj
     #89437# positioning cache when standing on a row outside the cache
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace dbaccess
             }
         }
 
-        void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const ORowSetValue& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const connectivity::ORowSetValue& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     public:
         virtual ~OCacheSet();
@@ -360,6 +360,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/01/22 07:38:23  oj
+    #82632# change member
+
     Revision 1.6  2000/12/12 12:15:41  oj
     use paramter instead of member and set member to ull
 

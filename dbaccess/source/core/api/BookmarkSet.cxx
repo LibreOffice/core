@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,10 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                 case DataType::INTEGER:
                     _xParameter->updateInt(nPos,_rValue);
                     break;
-                case DataType::DOUBLE:
                 case DataType::FLOAT:
+                    _xParameter->updateFloat(nPos,_rValue);
+                    break;
+                case DataType::DOUBLE:
                 case DataType::REAL:
                     _xParameter->updateDouble(nPos,_rValue);
                     break;
@@ -207,6 +209,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/05/03 07:15:56  oj
+    #86526# fetch decimal and numeric as string
+
     Revision 1.4  2000/11/14 13:28:20  oj
     change for rowset when getRow returns 0
 

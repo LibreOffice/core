@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 11:24:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ sal_Bool OStaticSet::fetchRow()
     sal_Bool bRet;
     if(!m_bEnd && (bRet = m_xDriverSet->next()))
     {
-        m_aSet.push_back(new connectivity::ORowVector< ORowSetValue >(m_xSetMetaData->getColumnCount()));
+        m_aSet.push_back(new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount()));
         m_aSetIter = m_aSet.end() - 1;
         (*(*m_aSetIter))[0] = (sal_Int32)(m_aSet.size());
         OCacheSet::fillValueRow(*m_aSetIter,(*(*m_aSetIter))[0]);
@@ -162,7 +162,7 @@ void OStaticSet::fillAllRows()
     {
         while(m_xDriverSet->next())
         {
-            ORowSetRow pRow = new connectivity::ORowVector< ORowSetValue >(m_xSetMetaData->getColumnCount());
+            ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount());
             m_aSet.push_back(pRow);
             m_aSetIter = m_aSet.end() - 1;
             (*pRow)[0] = (sal_Int32)(m_aSet.size());
@@ -386,6 +386,9 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/05/21 11:24:49  oj
+    #87082# check if type need literals
+
     Revision 1.9  2001/05/18 12:02:50  oj
     #86528# size changes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ namespace dbaccess
         // postions the cache which the currently bookmark m_aBookmark
         void positionCache();
         // returns a value of a column of the current row
-        ORowSetValue getValue(sal_Int32 columnIndex);
+        connectivity::ORowSetValue getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
         void setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

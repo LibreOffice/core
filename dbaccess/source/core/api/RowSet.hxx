@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #ifndef _CPPUHELPER_COMPBASE9_HXX_
 #include <cppuhelper/compbase9.hxx>
 #endif
-#ifndef DBACCESS_CORE_API_ROWSETVALUE_HXX
-#include "RowSetValue.hxx"
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include "connectivity/FValue.hxx"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -146,8 +146,8 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
-        connectivity::OWeakRefArray                 m_aClones;
-        connectivity::ORowVector< ORowSetValue >    m_aParameterRow; // hold all parameters
+        connectivity::OWeakRefArray                             m_aClones;
+        connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // hold all parameters
 
         OTableContainer*                            m_pTables;
 
@@ -206,11 +206,11 @@ namespace dbaccess
         // inform the clones that we will delete some records
         void notifyClonesRowDelete(const ::com::sun::star::uno::Any& _rBookmark);
         void checkUpdateIterator();
-        ORowSetValue getInsertValue(sal_Int32 columnIndex);
-        void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
+        connectivity::ORowSetValue getInsertValue(sal_Int32 columnIndex);
+        void setParameter(sal_Int32 parameterIndex, const connectivity::ORowSetValue& x);
         // resizes the parameter vector if nescessary
         void checkAndResizeParameters(sal_Int32 parameterIndex);
-        void updateValue(sal_Int32 columnIndex,const ORowSetValue& x);
+        void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
         void checkUpdateConditions(sal_Int32 columnIndex);
 
     protected:
@@ -461,6 +461,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.23  2001/06/26 10:12:40  oj
+    #87808# setObject corrected and some more
+
     Revision 1.22  2001/05/07 11:11:15  oj
     #86483# set columns only null
 
