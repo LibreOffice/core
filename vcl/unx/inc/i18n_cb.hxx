@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: cp $ $Date: 2001-11-02 14:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ void SwitchIMCallback (XIC ix, XPointer client_data, XPointer call_data );
 // keep informed if kinput2 crashed again
 void IC_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data);
 void IM_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data);
+
+Bool IsControlCode(sal_Unicode nChar);
 
 #ifdef __cplusplus
 } /* extern "C" */

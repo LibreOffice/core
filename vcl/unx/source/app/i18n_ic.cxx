@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
+ *  last change: $Author: cp $ $Date: 2001-11-02 14:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,9 @@ SalI18N_InputContext::CommitStringCallback (sal_Unicode* pText, sal_Size nLength
 int
 SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
 {
+    if (nLength == 1 && IsControlCode(pText[0]))
+        return 0;
+
     if( maClientData.pFrame )
     {
         SalExtTextInputEvent aTextEvent;
