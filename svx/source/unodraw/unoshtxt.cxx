@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-17 16:08:44 $
+ *  last change: $Author: cl $ $Date: 2002-06-25 14:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,22 @@ void SvxTextEditSourceImpl::UpdateData()
             if( mpOutliner && mpObject && !mbDestroyed )
             {
                 if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                {
+                    if( mpOutliner->GetParagraphCount() > 1 )
+                    {
+                        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+                        if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT )
+                        {
+                            while( mpOutliner->GetParagraphCount() > 1 )
+                            {
+                                ESelection aSel( 0,mpOutliner->GetEditEngine().GetTextLen( 0 ), 1,0 );
+                                mpOutliner->QuickInsertLineBreak( aSel );
+                            }
+                        }
+                    }
+
                     mpObject->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
+                }
                 else
                     mpObject->SetOutlinerParaObject( NULL );
 
