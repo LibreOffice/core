@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-03 16:36:11 $
+#   last change: $Author: pluby $ $Date: 2000-12-03 16:44:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -475,10 +475,6 @@ product!=compact
 .ENDIF
 .ELSE
 dbgutil!=true
-.ENDIF
-
-.IF "$(dbgutil)"!=""
-product!=
 .ENDIF
 
 .IF "$(product)"==""
@@ -1266,12 +1262,14 @@ CDEFS+=-D_DEBUG
 .ENDIF
 
 .IF "$(product)"!=""
+.IF "$(dbgutil)"==""
 CDEFS+= -DPRODUCT -DNDEBUG
 HDEFS+= -D:PRODUCT
 RSCDEFS+= -DPRODUCT
 CDEFS+=-DPRODUCT_FULL
 HDEFS+=-D:PRODUCT_FULL
 RSCDEFS+= -DPRODUCT_FULL -DNDEBUG
+.ENDIF
 .ENDIF
 
 
