@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 15:15:10 $
+ *  last change: $Author: jb $ $Date: 2001-06-07 08:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ namespace configmgr
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
             :m_xConverter(_xConverter)
             ,m_nCacheID(0)
-            ,m_bLazyWrite(false)
+            ,m_bLazyWrite(true)
         {}
 
         OOptions(const OOptions& _rOptions)
