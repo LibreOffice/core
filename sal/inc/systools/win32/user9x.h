@@ -2,9 +2,9 @@
  *
  *  $RCSfile: user9x.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-11 15:56:25 $
+ *  last change: $Author: tra $ $Date: 2001-06-15 14:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ extern "C"{
 #undef SetWindowTextW
 #endif
 
+#ifdef GetWindowTextW
+#undef GetWindowTextW
+#endif
+
 #ifdef InsertMenuItemW
 #undef InsertMenuItemW
 #endif
@@ -162,6 +166,12 @@ USER9X_API BOOL ( WINAPI * lpfnSetWindowTextW ) (
     LPCWSTR lpString
 );
 
+USER9X_API int ( WINAPI * lpfnGetWindowTextW ) (
+    HWND hWnd,          // handle to the window or control
+    LPWSTR lpString,    // text buffer
+    int    nMaxCount        // length of text buffer
+);
+
 USER9X_API BOOL ( WINAPI * lpfnInsertMenuItemW ) (
     HMENU hMenu,            // handle to menu
     UINT uItem,             // identifier or position
@@ -181,6 +191,7 @@ USER9X_API BOOL ( WINAPI * lpfnInsertMenuItemW ) (
 #define RegisterClipboardFormatW    lpfnRegisterClipboardFormatW
 #define GetClipboardFormatNameW     lpfnGetClipboardFormatNameW
 #define SetWindowTextW              lpfnSetWindowTextW
+#define GetWindowTextW              lpfnGetWindowTextW
 #define InsertMenuItemW             lpfnInsertMenuItemW
 
 #ifdef __cplusplus
