@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-16 10:08:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 10:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,8 +1056,8 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 // Methoden fuer Piece-Table-Verwaltung
 //--------------------------------------------------------------------------
 
-WW8_WrPct::WW8_WrPct( WW8_FC nfcMin )
-    : nOldFc( nfcMin ), bIsUni( TRUE ), pPcts( new WW8_WrPcPtrs )
+WW8_WrPct::WW8_WrPct( WW8_FC nfcMin, BOOL bSaveUniCode )
+    : nOldFc( nfcMin ), bIsUni( bSaveUniCode ), pPcts( new WW8_WrPcPtrs )
 {
     AppendPc( nOldFc, bIsUni );
 }
@@ -2051,7 +2051,7 @@ ULONG SwWW8Writer::StoreDoc()
     pFldHFTxtBxs = new WW8_WrPlcFld( 2, TXT_HFTXTBOX );
 
     pGrf = new SwWW8WrGrf( *this );
-    pPiece = new WW8_WrPct( pFib->fcMin );
+    pPiece = new WW8_WrPct( pFib->fcMin, bWrtWW8 );
     pDop = new WW8Dop;
 
     USHORT nRedlineMode = pDoc->GetRedlineMode();
@@ -2262,11 +2262,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.11 2001-02-16 10:08:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.12 2001-03-14 10:24:04 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/16 10:08:12  cmc
+      Normalize japanese doptypography variable names
+
       Revision 1.10  2001/02/15 20:03:11  jp
       ExportDopTypography: better compare for the forbidden chars
 

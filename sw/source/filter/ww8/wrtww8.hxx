@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 10:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ class WW8_WrPct
     WW8_FC nOldFc;
     BOOL bIsUni : 1;
 public:
-    WW8_WrPct( WW8_FC nStartFc );
+    WW8_WrPct( WW8_FC nStartFc, BOOL bSaveUniCode );
     ~WW8_WrPct();
     void AppendPc( WW8_FC nStartFc, BOOL bIsUnicode );
     void WritePc( SwWW8Writer& rWrt );
