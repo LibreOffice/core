@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-26 19:51:18 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 08:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 12, 72 ) ;
-        Size = MAP_APPFONT ( 242, 10 ) ;
+        Size = MAP_APPFONT ( 121, 10 ) ;
         Text = "~Bitmaps reduzieren" ;
         Text [ ENGLISH ] = "Reduce ~bitmaps" ;
     };
@@ -251,10 +251,10 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_CONVERTTOGREYSCALES
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 136, 30 ) ;
+        Pos = MAP_APPFONT ( 136, 72 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
-        Text = "Transparente Ob~jekte einschließen" ;
-        Text [ ENGLISH ] = "Include transparent ob~jects" ;
+        Text = "Farben in Graustufen um~wandeln" ;
+        Text [ ENGLISH ] = "Con~vert colors to greyscales" ;
     };
 
     // -----------
@@ -345,5 +345,155 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text = "~Transparenz" ;
         Text [ ENGLISH ] = "~Transparency" ;
+    };
+};
+
+// --------------
+// - WarningBox -
+// --------------
+
+ModalDialog RID_WARN_PRINTTRANSPARENCY
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 195 , 85 ) ;
+    Text = "Warnung" ;
+    Text[ English ] = "Warning" ;
+    Text[ english_us ] = "Warning" ;
+    Text[ portuguese_brazilian ] = "Warnung" ;
+    Text[ swedish ] = "Varning" ;
+    Text[ danish ] = "Advarsel" ;
+    Text[ italian ] = "Avvertimento" ;
+    Text[ spanish ] = "Advertencia" ;
+    Text[ french ] = "Avertissement" ;
+    Text[ dutch ] = "Waarschuwing" ;
+    Text[ portuguese ] = "Aviso" ;
+    Text[ chinese_simplified ] = "¾¯¸æ";
+    Text[ russian ] = "Ïğåäóïğåæäåíèå";
+    Text[ polish ] = "Ostrze¿enie";
+    Text[ japanese ] = "Œx";
+    Text[ chinese_traditional ] = "Äµ§i";
+    Text[ arabic ] = "ÊÍĞíÑ";
+    Text[ greek ] = "Ğñïåéäïğïßçóç";
+    Text[ korean ] = "°æ°í";
+    Text[ turkish ] = "Uyarı";
+    Text[ language_user1 ] = "-";
+    Moveable = TRUE ;
+    FixedImage FI_PRINTTRANSWARN
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 20 , 20 ) ;
+    };
+    FixedText FT_PRINTTRANSWARN
+    {
+        Pos = MAP_APPFONT ( 29 , 6 ) ;
+        Size = MAP_APPFONT ( 163 , 36 ) ;
+        WordBreak = TRUE ;
+        Text = "Ihr Dokument enthält transparente Objekte.\nAuf vielen Druckern führt dies zu\nverlängerten Druckzeiten. Soll die Transparenz\nfür diesen Ausdruck ignoriert werden?";
+        Text [ english ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
+        Text [ english_us ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
+        Text[ russian ] = "Â äàííîì äîêóìåíòå ñîäåğæàòñÿ ïğîçğà÷íûå îáúåêòû.\nÏå÷àòü òàêèõ îáúåêòîâ ìîæåò çàíÿòü íåêîòîğîå\n âğåìÿ. Èãíîğèğîâàòü ıòè îáúåêòû â ïå÷àòè?";
+        Text[ greek ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ danish ] = "Dokumentet indeholder transparente objekter.\nPå nogle printere kan dette føre til længere\nudskrivningstider. Skal transparensinformationerne\nfor udskrivningen ignoreres?";
+        Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektórych drukarek wydruk tych obiektów\nmo¿e potrwaæ trochê d³u¿ej. Czy informacje\no przezroczystoœci maj¹ zostaæ zignorowane?";
+        Text[ portuguese_brazilian ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ japanese ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ korean ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ chinese_simplified ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ chinese_traditional ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ turkish ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ arabic ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
+        Text[ portuguese ] = "O documento inclui objectos transparentes.\nAlgumas impressoras poderão necessitar de mais\ntempo para a impressão. Ignorar as informações\nsobre transparência na impressão?";
+        Text[ dutch ] = "Uw document bevat transparante objecten.\nDit kan op sommige printers leiden tot traagheid.\nWilt u de transparantie negeren?";
+        Text[ french ] = "Le document contient des objets transparents.\nCeci peut entraîner une durée d'impression plus\nlongue sur certaines imprimantes. Ignorer\nles informations de transparence pour l'impression?";
+        Text[ spanish ] = "El documento contiene objetos transparentes.\nEsto puede causar demoras en algunas impresoras.\n¿Desea que se ignoren las informaciones\nde transparencia para la impresión?";
+        Text[ italian ] = "Il vostro documento contiene oggetti trasparenti.\nCon alcune stampanti il processo di stampa potrebbe\ndurare più a lungo del solito. Volete ignorare\nle informazioni di trasparenza per la stampa?";
+        Text[ swedish ] = "Dokumentet innehåller transparenta objekt.\nDet kan leda till längre väntetid på vissa skrivare.\nSka transparensinformation ignoreras för\nutskriften?";
+    };
+    OKButton BTN_PRINTTRANS_YES
+    {
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+        Text = "~Ja" ;
+        Text [ English ] = "~Yes" ;
+        Text [ portuguese ] = "~Sim" ;
+        Text [ english_us ] = "~Yes" ;
+        Text [ portuguese_brazilian ] = "~Ja" ;
+        Text [ swedish ] = "~Ja" ;
+        Text [ danish ] = "Ja" ;
+        Text [ italian ] = "~Sì" ;
+        Text [ spanish ] = "~Sí" ;
+        Text [ french ] = "~Oui" ;
+        Text [ dutch ] = "~Ja" ;
+        Text[ chinese_simplified ] = "ÊÇ(~Y)";
+        Text[ russian ] = "~Äà";
+        Text[ polish ] = "Tak";
+        Text[ japanese ] = "‚Í‚¢(~Y)";
+        Text[ chinese_traditional ] = "¬O(~Y)";
+        Text[ arabic ] = "äÚã";
+        Text[ greek ] = "Íáé";
+        Text[ korean ] = "¿¹(~Y)";
+        Text[ turkish ] = "~Evet";
+        Text[ language_user1 ] = "-";
+    };
+    PushButton BTN_PRINTTRANS_NO
+    {
+        Pos = MAP_APPFONT ( 68 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Nein" ;
+        Text [ English ] = "~No" ;
+        Text [ english_us ] = "~No" ;
+        Text [ portuguese_brazilian ] = "~Nein" ;
+        Text [ swedish ] = "~Nej" ;
+        Text [ danish ] = "Nej" ;
+        Text [ italian ] = "~No" ;
+        Text [ spanish ] = "~No" ;
+        Text [ french ] = "~Non" ;
+        Text [ dutch ] = "~Nee" ;
+        Text [ portuguese ] = "~Não" ;
+        Text[ chinese_simplified ] = "·ñ(~N)";
+        Text[ russian ] = "~Íåò";
+        Text[ polish ] = "Nie";
+        Text[ japanese ] = "‚¢‚¢‚¦(~N)";
+        Text[ chinese_traditional ] = "§_(~N)";
+        Text[ arabic ] = "áÇ";
+        Text[ greek ] = "¼÷é";
+        Text[ korean ] = "¾Æ´Ï¿À(~N)";
+        Text[ turkish ] = "~Hayır";
+        Text[ language_user1 ] = "-";
+    };
+    CancelButton BTN_PRINTTRANS_CANCEL
+    {
+        Pos = MAP_APPFONT ( 124 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Abbrechen" ;
+        Text [ English ] = "~Cancel" ;
+        Text [ english_us ] = "~Cancel" ;
+    };
+    CheckBox CBX_NOPRINTTRANSWARN
+    {
+        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text = "~Diese Warnung nicht mehr anzeigen" ;
+        Text [ English ] = "~Show this warning no more" ;
+        Text [ portuguese ] = "~Não mostrar mais este aviso" ;
+        Text [ english_us ] = "~Don't show warning again" ;
+        Text [ portuguese_brazilian ] = "~Diese Warnung nicht mehr anzeigen" ;
+        Text [ swedish ] = "Visa inte ~den här varningen igen" ;
+        Text [ danish ] = "Vis denne advarsel ikke igen" ;
+        Text [ italian ] = "~Non mostrare più questa avvertenza" ;
+        Text [ spanish ] = "~No mostrar más esta advertencia" ;
+        Text [ french ] = "~Ne plus afficher cet avertissement" ;
+        Text [ dutch ] = "~Deze waarschuwing niet meer weergeven" ;
+        Text[ chinese_simplified ] = "²»ÔÙÏÔÊ¾Õâ¸ö¾¯¸æ(~D)";
+        Text[ russian ] = "İòî ïğåäóïğåæäåíèå áîëüøå íå ïîêàçûâàòü";
+        Text[ polish ] = "Nie pokazuj wiêcej tego ostrze¿enia";
+        Text[ japanese ] = "‚±‚ÌŒx‚ğ‚à‚¤•\\¦‚µ‚È‚¢B(~D)";
+        Text[ chinese_traditional ] = "¤£¦AÅã¥Ü³o­ÓÄµ§i(~D)";
+        Text[ arabic ] = "ÚÏã ÅÙåÇÑ åĞÇ ÇáÊÍĞíÑ ãÑÉ ÃÎÑì";
+        Text[ greek ] = "Íá ìçí åìöáíéóôåß îáíÜ áõôŞ ç ğñïåé~äïğïßçóç";
+        Text[ korean ] = "ÀÌ °æ°í´Â ´õ ÀÌ»ó Ç¥½Ã¾Ê±â(~D)";
+        Text[ turkish ] = "~Bu uyarıyı bir daha gösterme";
+        Text[ language_user1 ] = "-";
     };
 };
