@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:27:11 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::form;
+using namespace ::com::sun::star::form::binding;
 
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
@@ -354,7 +354,7 @@ Sequence<Type> OEditModel::_getTypes()
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT, sal_True )
+             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
     ,m_bMaxTextLenModified(sal_False)
     ,m_nKeyType(NumberFormat::UNDEFINED)
@@ -424,12 +424,22 @@ void OEditModel::disposing()
 StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 3);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_DATABASE_TEXTFIELD;
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_TEXTFIELD;
-    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_TEXTFIELD;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 8 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_TEXTFIELD;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_TEXTFIELD;
+    *pStoreTo++ = BINDABLE_DATABASE_TEXT_FIELD;
+
     return aSupported;
 }
 
@@ -461,23 +471,16 @@ void OEditModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(12)
+    BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
         // Text auf transient setzen
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
 
-        DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
-        DECL_PROP2(CLASSID,             sal_Int16,              READONLY, TRANSIENT);
         DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
         DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
-        DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,           BOUND,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,           BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,      READONLY, TRANSIENT);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
