@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,27 +156,20 @@ DefRowXFs::DefRowXFs( void )
 }
 
 
-DefRowXFs::~DefRowXFs()
+BOOL DefRowXFs::ChangeXF( sal_uInt16 nRow, sal_uInt32& rnXFId )
 {
-}
+    XclExpDefRowXFVec::const_iterator aBegin = maXFList.begin(), aIter = aBegin, aEnd = maXFList.end();
+    if( nRow > nLastRow )
+        aIter += nLastList;
 
-
-//void DefRowXFs::ChangeXF( ExcRow& rRow )
-BOOL DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
-{
-    UINT32  nCnt;
-    UINT16  nR, nXF;
-
-    nCnt = ScfUInt32List::Count();
-    for( UINT32 n = ( nRowNum > nLastRow )? nLastList : 0 ; n < nCnt ; n++ )
+    for( ; aIter != aEnd; ++aIter )
     {
-        Get( ScfUInt32List::GetValue( n ), nR, nXF );
-        if( nRowNum == nR )
+        if( nRow == aIter->mnRow )
         {
-            rXF = nXF;
+            rnXFId = aIter->mnXFId;
 
-            nLastList = n;
-            nLastRow = nR;
+            nLastList = aIter - aBegin;
+            nLastRow = aIter->mnRow;
 
             return TRUE;
         }
@@ -242,12 +235,12 @@ void ExcTable::AddUsedRow( ExcRow*& rpRow )
 }
 
 
-void ExcTable::SetDefRowXF( UINT16 nXF, UINT16 n )
+void ExcTable::SetDefRowXF( sal_uInt16 nRow, sal_uInt32 nXFId )
 {
     if( !pDefRowXFs )
         pDefRowXFs = new DefRowXFs;
 
-    pDefRowXFs->Add( n, nXF );
+    pDefRowXFs->Append( nRow, nXFId );
 }
 
 
@@ -277,9 +270,6 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new ExcDummy_00 );
     else
     {
-        // first create style XFs
-        rRoot.GetXFBuffer().InsertUserStyles();
-
         Add( new ExcDummy8_00a );
         rR.pTabId = new XclExpChTrTabId( Max( nExcTabCount, nCodenames ) );
         Add( rR.pTabId );
@@ -621,15 +611,15 @@ void ExcTable::FillAsTable( void )
     Add( pExcDefColWidth );
 
     // COLINFO records
-    sal_uInt16 nColDefXF = rXFBuffer.Insert( rDoc.GetPattern( 0, MAXROW, nScTab ) );
-    ExcColinfo* pLastColInfo = new ExcColinfo( 0, nScTab, nColDefXF, rR, aExcOLCol );
+    sal_uInt32 nColDefXFId = rXFBuffer.Insert( rDoc.GetPattern( 0, MAXROW, nScTab ) );
+    ExcColinfo* pLastColInfo = new ExcColinfo( 0, nScTab, nColDefXFId, rR, aExcOLCol );
     ExcColinfo* pNewColInfo;
 
     Add( pLastColInfo );
     for( UINT16 iCol = 1; iCol <= MAXCOL; iCol++ )
     {
-        nColDefXF = rXFBuffer.Insert( rDoc.GetPattern( iCol, MAXROW, nScTab ) );
-        pNewColInfo = new ExcColinfo( iCol, nScTab, nColDefXF, rR, aExcOLCol );
+        nColDefXFId = rXFBuffer.Insert( rDoc.GetPattern( iCol, MAXROW, nScTab ) );
+        pNewColInfo = new ExcColinfo( iCol, nScTab, nColDefXFId, rR, aExcOLCol );
         pLastColInfo->Expand( pNewColInfo );
         if( pNewColInfo )
         {
@@ -894,11 +884,12 @@ void ExcTable::FillAsTable( void )
             ScMergeAttr& rItem = (ScMergeAttr&) pPatt->GetItem( ATTR_MERGE );
             if( rItem.IsMerged() )
             {
-                UINT16 nXF = (pAktExcCell ? pAktExcCell->GetXF() :
-                            (pLastBlank ? pLastBlank->GetXF() :
-                            (pLastRKMulRK ? pLastRKMulRK->GetXF() : 0)));
+                sal_uInt32 nXFId = (pAktExcCell ? pAktExcCell->GetXFId() :
+                            (pLastBlank ? pLastBlank->GetXFId() :
+                            (pLastRKMulRK ? pLastRKMulRK->GetXFId() :
+                            XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_DEFAULTCELL ))));
                 for( UINT16 iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
-                    rR.pCellMerging->Append( iCol, rItem.GetColMerge(), nRow, rItem.GetRowMerge(), nXF );
+                    rR.pCellMerging->Append( iCol, rItem.GetColMerge(), nRow, rItem.GetRowMerge(), nXFId );
             }
 
             // data validation
@@ -1109,10 +1100,10 @@ void ExcTable::NullTab( const String* pCodename )
 }
 
 
-BOOL ExcTable::ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF )
+BOOL ExcTable::ModifyToDefaultRowXF( sal_uInt16 nRow, sal_uInt32& rnXFId )
 {
     if( pDefRowXFs )
-        return pDefRowXFs->ChangeXF( nRowNum, rXF );
+        return pDefRowXFs->ChangeXF( nRow, rnXFId );
     return FALSE;
 }
 
@@ -1191,9 +1182,10 @@ void ExcDocument::Write( SvStream& rSvStrm )
         if ( GetBiff() >= xlBiff8 )
             mpRD->pEscher->GetStrm().Seek(0);   // ready for take off
 
-        GetPalette().ReduceColors();
+        GetPalette().Reduce();
+        GetXFBuffer().Reduce();
 
-        XclExpStream        aXclStrm( rSvStrm, *this );
+        XclExpStream        aXclStrm( rSvStrm, GetRoot() );
         ExcTable*           pTab = maTableList.First();
         ExcBundlesheetBase* pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
 
