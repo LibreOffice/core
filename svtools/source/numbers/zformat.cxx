@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2001-04-26 17:51:58 $
+ *  last change: $Author: er $ $Date: 2001-05-31 16:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3170,7 +3170,7 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
                 }                               // of case digi
                 break;
                 case NF_KEY_CCC:                // CCC-Waehrung
-                    sStr.Insert(rLoc().getCurrBankSymbol(), k);
+                    sStr.Insert(rScan.GetCurAbbrev(), k);
                 break;
                 case NF_KEY_GENERAL:            // Standard im String
                 {
@@ -3299,7 +3299,7 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
             }
             break;
             case NF_KEY_CCC:                        // CCC-Waehrung
-                sStr.Insert(rLoc().getCurrBankSymbol(), k);
+                sStr.Insert(rScan.GetCurAbbrev(), k);
             break;
             case NF_KEY_GENERAL:                    // Standard im String
             {
@@ -3404,7 +3404,7 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
             }                                   // of case digi
             break;
             case NF_KEY_CCC:                // CCC-Waehrung
-                sStr.Insert(rLoc().getCurrBankSymbol(), k);
+                sStr.Insert(rScan.GetCurAbbrev(), k);
             break;
             case NF_KEY_GENERAL:            // Standard im String
             {

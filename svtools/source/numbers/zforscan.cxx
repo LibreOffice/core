@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-04-26 17:51:58 $
+ *  last change: $Author: er $ $Date: 2001-05-31 16:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::i18n;
 
     const CharClass* pCharClass = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLocaleData = pFormatter->GetLocaleData();
@@ -168,7 +167,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     LanguageType eLang = ConvertIsoNamesToLanguage( aLoadedLocale.Language, aLoadedLocale.Country );
     NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), aLoadedLocale );
 
-    NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
+    i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
     sNameStandardFormat = aFormat.Code;
     sKeyword[NF_KEY_GENERAL] = pCharClass->upper( sNameStandardFormat );
 
@@ -381,8 +380,26 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
     }
 
-    // currency symbol
-    sCurString = pCharClass->upper( pLocaleData->getCurrSymbol() );
+    // currency symbol for old style ("automatic") compatibility format codes
+    Sequence< i18n::Currency > xCurrencies = pLocaleData->getAllCurrencies();
+    sal_Int32 nCurrencies = xCurrencies.getLength();
+    for ( sal_Int32 j=0; j < nCurrencies; ++j )
+    {
+        if ( xCurrencies[j].UsedInCompatibleFormatCodes )
+        {
+            sCurSymbol = xCurrencies[j].Symbol;
+            sCurAbbrev = xCurrencies[j].BankSymbol;
+            break;
+        }
+    }
+    if ( j >= nCurrencies )
+    {
+        DBG_ERRORFILE( "SetDependentKeywords: compatibility currency symbol?" );
+        sCurSymbol = pLocaleData->getCurrSymbol();
+        sCurAbbrev = pLocaleData->getCurrBankSymbol();
+    }
+    // currency symbol upper case
+    sCurString = pCharClass->upper( sCurSymbol );
 }
 
 
@@ -1340,7 +1357,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     String sOldThousandSep  = pLoc->getNumThousandSep();
     String sOldDateSep      = pLoc->getDateSep();
     String sOldTimeSep      = pLoc->getTimeSep();
-    String sOldCurrSymbol   = pLoc->getCurrSymbol();
+    String sOldCurSymbol    = sCurSymbol;
     String sOldCurString    = sCurString;
 
     // If the group separator is a Non-Breaking Space (French) continue with a
@@ -2337,16 +2354,16 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
             {
                 if ( bConvertSystemToSystem && eScannedType == NUMBERFORMAT_CURRENCY )
                 {   // don't stringize automatic currency, will be converted
-                    if ( sStrArray[i] == sOldCurrSymbol )
+                    if ( sStrArray[i] == sOldCurSymbol )
                         continue;   // for
                     // DM might be splitted into D and M
-                    if ( sStrArray[i].Len() < sOldCurrSymbol.Len() &&
+                    if ( sStrArray[i].Len() < sOldCurSymbol.Len() &&
                             pChrCls->toUpper( sStrArray[i], 0, 1 ).GetChar(0) ==
                             sOldCurString.GetChar(0) )
                     {
                         String aTmp( sStrArray[i] );
                         USHORT j = i + 1;
-                        while ( aTmp.Len() < sOldCurrSymbol.Len() &&
+                        while ( aTmp.Len() < sOldCurSymbol.Len() &&
                                 j < nAnzStrings &&
                                 nTypeArray[j] == SYMBOLTYPE_STRING )
                         {
@@ -2408,8 +2425,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             {
                                 const String& rCur =
                                     bConvertMode && bConvertSystemToSystem ?
-                                    pLoc->getCurrSymbol() :
-                                    sOldCurrSymbol;
+                                    sCurSymbol : sOldCurSymbol;
                                 sStrArray[iPos].Replace( nArrPos+nCPos,
                                     sOldCurString.Len(), rCur );
                                 rString.Replace( nStringPos+nCPos,
@@ -2442,8 +2458,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     {
                         const String& rCur =
                             bConvertMode && bConvertSystemToSystem ?
-                            pLoc->getCurrSymbol() :
-                            sOldCurrSymbol;
+                            sCurSymbol : sOldCurSymbol;
                         sStrArray[iPos].Replace( nArrPos+nCPos,
                             sOldCurString.Len(), rCur );
                         rString.Replace( nStringPos+nCPos,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-04-26 17:53:13 $
+ *  last change: $Author: er $ $Date: 2001-05-31 16:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,7 @@ USHORT LocaleDataWrapper::getCurrNegativeFormat() const
 USHORT LocaleDataWrapper::getCurrDigits() const
 {
     if ( nCurrDigits == nCurrFormatInvalid )
-        ((LocaleDataWrapper*)this)->getCurrFormatsImpl();
+        ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
     return nCurrDigits;
 }
 
@@ -692,11 +692,13 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
             aCurrSymbol.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "ShellsAndPebbles" ) );
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
+            nCurrDigits = 2;
             return ;
         }
     }
     aCurrSymbol = aCurrSeq[nElem].Symbol;
     aCurrBankSymbol = aCurrSeq[nElem].BankSymbol;
+    nCurrDigits = aCurrSeq[nElem].DecimalPlaces;
 }
 
 
@@ -736,24 +738,8 @@ void LocaleDataWrapper::scanCurrFormat( const String& rCode,
                 break;
                 case '0' :
                 case '#' :
-                    if ( !nInSection )
-                    {
-                        if ( nNum == STRING_NOTFOUND )
-                            nNum = p - pStr;
-                        if ( nCurrDigits == nCurrFormatInvalid )
-                        {
-                            if ( rCode.Equals( rDecSep, (p-pStr)+1, rDecSep.Len() ) )
-                            {
-                                nCurrDigits = 0;
-                                const sal_Unicode* pc = p + rDecSep.Len() + 1;
-                                while ( pc < pStop && (*pc == '0' || *pc == '#') )
-                                {
-                                    pc++;
-                                    nCurrDigits++;
-                                }
-                            }
-                        }
-                    }
+                    if ( !nInSection && nNum == STRING_NOTFOUND )
+                        nNum = p - pStr;
                 break;
                 case '[' :
                     nInSection++;
@@ -842,9 +828,6 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrPositiveFormat?" ) ) ).GetBuffer() );
     }
 #endif
-    //! we assume that the default format code contains the necessary decimal digits
-    if ( nCurrDigits == nCurrFormatInvalid )
-        nCurrDigits = 0;
     if ( nBlank == STRING_NOTFOUND )
     {
         if ( nSym < nNum )

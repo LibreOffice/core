@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-04-26 17:51:58 $
+ *  last change: $Author: er $ $Date: 2001-05-31 16:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ public:
     Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
                                                 // definierte Farben
 
+    // the compatibility currency abbreviation for CCC format code
+    const String& GetCurAbbrev() const      { return sCurAbbrev; }
+
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
             BOOL bSystemToSystem = FALSE )
     {
@@ -205,8 +208,10 @@ private:                            // ---- privater Teil
     BOOL bFrac;                                 // wird bei Lesen des / gesetzt
     BOOL bBlank;                                // wird bei ' '(Fraction) ges.
     BOOL bDecSep;                               // Wird beim ersten , gesetzt
-    String sCurString;                      // Das Waehrungssymbol in Upper
-    String sErrStr;                         // String fuer Fehlerausgaben
+    String sCurSymbol;                          // Currency symbol for compatibility format codes
+    String sCurString;                          // Currency symbol in upper case
+    String sCurAbbrev;                          // Currency abbreviation
+    String sErrStr;                             // String fuer Fehlerausgaben
 
     BOOL bConvertMode;                          // Wird im Convert-Mode gesetzt
                                                 // Land/Sprache, in die der

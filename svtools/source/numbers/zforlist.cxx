@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-05-09 15:06:10 $
+ *  last change: $Author: er $ $Date: 2001-05-31 16:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3226,10 +3226,9 @@ NfCurrencyEntry::NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr
     aSymbol         = rCurr.Symbol;
     aBankSymbol     = rCurr.BankSymbol;
     eLanguage       = eLang;
-//!TODO: shouldn't the format information be provided by the Currency itself?
     nPositiveFormat = rLocaleData.getCurrPositiveFormat();
     nNegativeFormat = rLocaleData.getCurrNegativeFormat();
-    nDigits         = rLocaleData.getCurrDigits();
+    nDigits         = rCurr.DecimalPlaces;
     cZeroChar       = rLocaleData.getCurrZeroChar();
 }
 
