@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-11-15 16:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,6 @@
 #include <svtools/itemiter.hxx>
 #endif
 
-#define NUM_OBJECTS (RES_TXTATR_END - RES_CHRATR_BEGIN + 1)
 #define STACK_INCREMENT 4
 
 /*************************************************************************
@@ -174,7 +173,7 @@
  * NUM_DEFAULT_VALUES.
  *************************************************************************/
 
-const BYTE StackPos[ NUM_OBJECTS ] = {
+const BYTE StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] = {
      0, //                                       //  0
      1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
      0, // RES_CHRATR_CHARSETCOLOR,              //  2
@@ -416,7 +415,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
         while( TRUE )
         {
             nWhich = pItem->Which();
-            if( RES_CHRATR_BEGIN <= nWhich && RES_TXTATR_END > nWhich )
+            if( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich )
             {
                 pDefaultArray[ StackPos[ nWhich ] ] = pItem;
                 FontChg( *pItem, rFnt, sal_True );
@@ -461,7 +460,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         if ( !pFmt )
             return;
 
-        for ( USHORT i = 0; i < NUM_OBJECTS; i++)
+        for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
             BOOL bRet = SFX_ITEM_SET ==
@@ -491,6 +490,13 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, SwFont& rFnt )
 {
+    ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END ||
+            RES_UNKNOWNATR_CONTAINER == rItem.Which() ,
+            "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
+
+    if ( RES_UNKNOWNATR_CONTAINER == rItem.Which() )
+        return sal_False;
+
     USHORT nStack = StackPos[ rItem.Which() ];
 
     // attributes originating from redlining have highest priority
@@ -527,7 +533,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         if ( !pFmt )
             return;
 
-        for ( USHORT i = 0; i < NUM_OBJECTS; i++)
+        for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
             BOOL bRet = SFX_ITEM_SET ==
@@ -545,7 +551,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     }
     // this is the usual case, we have a basic attribute, remove it from the
     // stack and reset the font
-    else
+    else if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() )
     {
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
         // reset font according to attribute on top of stack
@@ -562,7 +568,12 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
-    aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
+    ASSERT( rAttr.Which() < RES_TXTATR_WITHEND_END ||
+            RES_UNKNOWNATR_CONTAINER == rAttr.Which() ,
+            "I do not have this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
+
+    if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() )
+        aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
 }
 
 /*************************************************************************
@@ -570,6 +581,9 @@ void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
  *************************************************************************/
 void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
 {
+    ASSERT( nAttr < RES_TXTATR_WITHEND_END,
+            "I cannot activate this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
+
     const USHORT nStackPos = StackPos[ nAttr ];
     const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
     if ( pTopAt )
@@ -648,35 +662,6 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
 #endif
     }
 }
-
-/*************************************************************************
- *                      SwAttrHandler::ChangeScript()
- * when changing swfont so that is only uses one internal font, the
- * following code can be useful
- *************************************************************************/
-
-//void SwAttrHandler::ChangeScript( SwFont& rFnt, const BYTE nScr )
-//{
-//    USHORT i;
-
-//    switch ( nScr ) {
-//        case SW_LATIN :
-//            ActivateTop( rFnt, RES_CHRATR_FONT );
-//            ActivateTop( rFnt, RES_CHRATR_FONTSIZE );
-//            ActivateTop( rFnt, RES_CHRATR_LANGUAGE );
-//            ActivateTop( rFnt, RES_CHRATR_POSTURE );
-//            ActivateTop( rFnt, RES_CHRATR_WEIGHT );
-//            break;
-//        case SW_CJK :
-//            for ( i = RES_CHRATR_CJK_FONT; i <= RES_CHRATR_CJK_WEIGHT; i++ )
-//                ActivateTop( rFnt, i );
-//            break;
-//        case SW_CTL :
-//            for ( i = RES_CHRATR_CTL_FONT; i <= RES_CHRATR_CTL_WEIGHT; i++ )
-//                ActivateTop( rFnt, i );
-//            break;
-//    }
-//}
 
 /*************************************************************************
  *                      Font Changing Function
