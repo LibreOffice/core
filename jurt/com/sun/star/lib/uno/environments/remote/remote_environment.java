@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_environment.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:41:00 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,137 +61,46 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-
-import java.util.Enumeration;
-
-
-import com.sun.star.lib.util.WeakTable;
-
-import com.sun.star.uno.ITypeDescription;
-
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
 
-
-public class remote_environment implements IEnvironment {
-    public static final boolean DEBUG = false;
-
-    protected    String _name;
-    protected WeakTable _objects = new WeakTable();
-    protected    Object _context; // free context pointer, that can be used for specific classes of environments,
-
-    protected remote_environment(String name, Object context) {
-        if(DEBUG) System.err.println("#### AbstractEnvironment.<init>");
-
-        _name    = name;
-        _context = context;
-    }
-
+public final class remote_environment implements IEnvironment {
     public remote_environment(Object context) {
-        this("remote", context);
+        this.context = context;
     }
 
-    /**
-     * the context
-     */
     public Object getContext() {
-        return _context;
+        return context;
     }
 
-    /**
-     * a name for this environment
-     */
     public String getName() {
-        return _name;
+        return "remote";
     }
 
-    /**
-     * Tests if two environments are equal.
-     *<BR>
-     * @param environment       one environment
-     */
-    public boolean equals(Object object) {
-        return false;
+    public Object registerInterface(Object object, String[] oid, Type type) {
+        throw new UnsupportedOperationException(
+            "java_remote environment is not functional");
     }
 
-    /**
-     * You register internal and external interfaces via this method. Internal interfaces are
-     * proxies that are used in an environment. External interfaces are interfaces that are
-     * exported to another environment, thus providing an object identifier for this task.
-     * This can be called an external reference.
-     * Interfaces are held weakly at an environment; they demand a final revokeInterface()
-     * call for each interface that has been registered.
-     *<BR>
-     * @param object      inout parameter for the registered object
-     * @param oId[]       inout parameter for the corresponding object id
-     * @param xtypeDescr  type description of interface
-     */
-    public Object registerInterface(Object object, String oId[], Type type) {
-        if(oId[0] == null)
-            oId[0] = UnoRuntime.generateOid(object);
-
-        Object p_object = (Object)_objects.get(oId[0] + type.getTypeDescription(), type.getTypeDescription().getZClass());
-
-        if(DEBUG)
-            System.err.println("#### AbstractEnvironment.registerInterface:" + object + " " + UnoRuntime.generateOid(object) + " " + p_object);
-
-        if(p_object == null)
-            object = _objects.put(oId[0] + type.getTypeDescription(), object, type.getTypeDescription().getZClass());
-        else
-            object = p_object;
-
-        return object;
+    public void revokeInterface(String oid, Type type) {
+        throw new UnsupportedOperationException(
+            "java_remote environment is not functional");
     }
 
-    /**
-     * You have to revoke ANY interface that has been registered via this method.
-     *<BR>
-     * @param oId         object id of interface to be revoked
-     * @param xtypeDescr  type description of interface to be revoked
-     */
-    public void revokeInterface(String oId, Type type) {
-        _objects.remove(oId);
+    public Object getRegisteredInterface(String oid, Type type) {
+        throw new UnsupportedOperationException(
+            "java_remote environment is not functional");
     }
 
-    /**
-     * Retrieves an interface identified by its object id and type from this environment.
-     *<BR>
-     * @param oId        object id of interface to be retrieved
-     * @param xtypeDescr description of interface to be retrieved
-     */
-    public Object getRegisteredInterface(String oId, Type type)     {
-        Object object = _objects.get(oId + type.getTypeDescription(), type.getTypeDescription().getZClass());
-
-        if(DEBUG) System.err.println("#### AbstractEnvironment(" + getName() + ").getRegisteredInterface:>" + oId + "< " + type +" " + object);
-
-        return object;
-    }
-
-    /**
-     * Retrieves the object identifier for a registered interface from this environment.
-     *<BR>
-     * @param object      a registered interface
-     */
     public String getRegisteredObjectIdentifier(Object object) {
-        return UnoRuntime.generateOid(object);
+        throw new UnsupportedOperationException(
+            "java_remote environment is not functional");
     }
 
     public void list() {
-        System.err.println("#### AbstractEnvironment.list(" + getName() + " " + getContext() + "):");
-
-        Enumeration elements = _objects.keys();
-        while(elements.hasMoreElements()) {
-            System.err.println("#### key:" + (String)elements.nextElement());
-        }
+        throw new UnsupportedOperationException(
+            "java_remote environment is not functional");
     }
 
-    public void dispose() {
-        boolean result = _objects.reset();
-        if(!result)
-            System.err.println(getClass().getName() + ".reset - " + getName() + " " + result);
-
-//          return result;
-    }
+    private final Object context;
 }
-
