@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRectangleMembersHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@ sal_Bool XMLRectangleMembersHdl::exportXML(
             break;
         case XML_TYPE_RECTANGLE_HEIGHT :
             nValue = aRect.Height;
+            break;
+        default:
+            nValue = 0;  // TODO What value should this be?
             break;
     }
 
