@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:51:21 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #define _SV_UNITS_SRC
 
 #ifndef _SV_SVIDS_HRC
@@ -447,23 +446,23 @@ ItemList [ language_user1 ] =
     };
     ItemList [ chinese_simplified ] =
     {
-         < "mm" ; FUNIT_MM ; > ;
+         < "毫米" ; FUNIT_MM ; > ;
         < "厘米" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
-        < "km" ; FUNIT_KM ; > ;
+        < "米" ; FUNIT_M ; > ;
+        < "公里" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
-        < "in" ; FUNIT_INCH ; > ;
-        < "inch" ; FUNIT_INCH ; > ;
+        < "英寸" ; FUNIT_INCH ; > ;
+        < "英寸" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
-        < "ft" ; FUNIT_FOOT ; > ;
-        < "foot" ; FUNIT_FOOT ; > ;
-        < "feet" ; FUNIT_FOOT ; > ;
-        < "miles" ; FUNIT_MILE ; > ;
-        < "mile" ; FUNIT_MILE ; > ;
+        < "英尺" ; FUNIT_FOOT ; > ;
+        < "英尺" ; FUNIT_FOOT ; > ;
+        < "英尺" ; FUNIT_FOOT ; > ;
+        < "英里" ; FUNIT_MILE ; > ;
+        < "英里" ; FUNIT_MILE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
     ItemList [ chinese_traditional ] =
