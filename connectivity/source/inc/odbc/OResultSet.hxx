@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ namespace connectivity
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
 
-        typedef sal_Int64 TVoidPtr;
+        typedef ::std::pair<sal_Int64,sal_Int32> TVoidPtr;
         typedef ::std::allocator< TVoidPtr > TVoidAlloc;
         typedef ::std::vector<TVoidPtr> TVoidVector;
         //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
@@ -196,6 +196,7 @@ namespace connectivity
             TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::com::sun::star::uno::Sequence<sal_Int8>   m_aBookmark;
 
             TDataRow                                    m_aRow; // only used when SQLGetData can't be called in any order
             ORowSetValue                                m_aEmptyValue;  // needed for the getValue method when no prefetch is used
@@ -203,7 +204,7 @@ namespace connectivity
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
             OSkipDeletedSet*                            m_pSkipDeletedSet;
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
             rtl_TextEncoding                            m_nTextEncoding;
@@ -236,6 +237,7 @@ namespace connectivity
             void allocBuffer();
             void releaseBuffer();
             void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void fillNeededData(SQLRETURN _nRet);
             const ORowSetValue& getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize);
             sal_Bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
 
