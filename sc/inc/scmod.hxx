@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class EditView;
 class SfxErrorHandler;
 class SvxErrorHandler;
 class SvtAccessibilityOptions;
+class SvtCTLOptions;
 
 namespace svtools { class ColorConfig; }
 
@@ -171,6 +172,7 @@ class ScModule: public ScModuleDummy, public SfxListener
     ScNavipiCfg*        pNavipiCfg;
     svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessOptions;
+    SvtCTLOptions*      pCTLOptions;
     SfxErrorHandler*    pErrorHdl;
     SvxErrorHandler*    pSvxErrorHdl;
     ScFormEditData*     pFormEditData;
@@ -247,9 +249,12 @@ public:
     static void         SetHideAutoProperty( BOOL bSet );
     static BOOL         HasThesaurusLanguage( USHORT nLang );
 
+    USHORT              GetOptDigitLanguage();      // from CTL options
+
     ScNavipiCfg&        GetNavipiCfg();
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions& GetAccessOptions();
+    SvtCTLOptions&      GetCTLOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
