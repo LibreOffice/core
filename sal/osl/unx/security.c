@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2000-10-31 15:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
 
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
-    rtl_uString_newFromAscii(ustrIdent,pszIdent);
+    rtl_string2UString( ustrIdent, pszIdent, rtl_str_getLength( pszIdent ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
 
     return bRet;
 }
@@ -978,7 +978,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
 
-    rtl_uString_newFromAscii(ustrName,pszName);
+    rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
 
     return bRet;
 }
@@ -1011,8 +1011,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **ustrDirecto
         strcat(pszUncPath,pszDirectory);
     }
 
-    rtl_uString_newFromAscii(ustrDirectory,pszDirectory);
-
+    rtl_string2UString( ustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
     return bRet;
 }
 
@@ -1058,7 +1057,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **ustrDirec
         strcat(pszUncPath,pszDirectory);
     }
 
-    rtl_uString_newFromAscii(ustrDirectory,pszDirectory);
+    rtl_string2UString( ustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
 
     return bRet;
 }
@@ -1098,4 +1097,5 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 {
     return;
 }
+
 
