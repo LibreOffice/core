@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectorShape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 13:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,49 @@ service ConnectorShape
 
     //-------------------------------------------------------------------------
 
-    interface com::sun::star::drawing::XConnectorShape;
+    /** this property either holds the shape that the start point of this
+        connector is connected to or is empty when the start point of the
+        connector is not connected to a shape.
+    */
+    [property] com::sun::star::drawing::XShape StartShape;
+
+    //-------------------------------------------------------------------------
+
+    /** this property holds the index of the glue point the start point of
+        this connector is glued on.
+    */
+    [property] long StartGluePointIndex;
+
+    //-------------------------------------------------------------------------
+
+    /** this is the position of the connectors start point in 100th/mm. For
+        unconnected start points you can get and set the position. For
+        connected start points you can only get the position.
+    */
+    [property] com::sun::star::awt::Point StartPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** this property either holds the shape that the end point of this
+        connector is connected to or is empty when the end point of the
+        connector is not connected to a shape.
+    */
+    [property] com::sun::star::drawing::XShape EndShape;
+
+    //-------------------------------------------------------------------------
+
+    /** this property holds the index of the glue point the end point of
+        this connector is glued on.
+    */
+    [property] com::sun::star::awt::Point EndPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** this is the position of the connectors end point in 100th/mm. For
+        unconnected end points you can get and set the position. For
+        connected end points you can only get the position.
+    */
+    [property] long EndGluePointIndex;
 
     //-------------------------------------------------------------------------
 
