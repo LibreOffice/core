@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 08:10:35 $
+ *  last change: $Author: os $ $Date: 2001-07-10 13:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1587,7 +1587,8 @@ void    SwNewDBMgr::EndMerge()
 /* -----------------------------06.07.00 14:28--------------------------------
     checks if a desired data source table or query is open
  ---------------------------------------------------------------------------*/
-BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource, const String& rTableOrQuery) const
+BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
+            const String& rTableOrQuery, sal_Bool bMergeOnly)
 {
      if(pMergeData)
     {
@@ -1595,8 +1596,16 @@ BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource, const String& rT
                     rTableOrQuery == (String)pMergeData->sCommand &&
                     pMergeData->xResultSet.is();
     }
-    else
-        return FALSE;
+    else if(!bMergeOnly)
+    {
+        SwDBData aData;
+        aData.sDataSource = rDataSource;
+        aData.sCommand = rTableOrQuery;
+        aData.nCommandType = -1;
+        SwDSParam* pFound = FindDSData(aData, FALSE);
+        return (pFound && pFound->xResultSet.is());
+    }
+    return sal_False;
 }
 /* -----------------------------17.07.00 16:44--------------------------------
     read column data a a specified position
@@ -1607,27 +1616,36 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
                             String& rResult, double* pNumber)
 {
     BOOL bRet = FALSE;
+    SwDSParam* pFound = 0;
     //check if it's the merge data source
     if(pMergeData &&
         rSourceName == (String)pMergeData->sDataSource &&
         rTableName == (String)pMergeData->sCommand)
     {
-        if(!pMergeData->xResultSet.is())
-            return FALSE;
-        //keep the old index
-        sal_Int32 nOldRow = pMergeData->xResultSet->getRow();
+        pFound = pMergeData;
+    }
+    else
+    {
+        SwDBData aData;
+        aData.sDataSource = rSourceName;
+        aData.sCommand = rTableName;
+        aData.nCommandType = -1;
+        pFound = FindDSData(aData, FALSE);
+    }
+    if(pFound && pFound->xResultSet.is() && !pFound->bAfterSelection)
+    {
+        sal_Int32 nOldRow = pFound->xResultSet->getRow();
         //position to the desired index
-        BOOL bMove;
+        BOOL bMove = TRUE;
         if(nOldRow != nAbsRecordId)
-            bMove = lcl_MoveAbsolute(pMergeData, nAbsRecordId);
+            bMove = lcl_MoveAbsolute(pFound, nAbsRecordId);
         if(bMove)
         {
-            bRet = lcl_GetColumnCnt(pMergeData, rColumnName, nLanguage, rResult, pNumber);
+            bRet = lcl_GetColumnCnt(pFound, rColumnName, nLanguage, rResult, pNumber);
         }
         if(nOldRow != nAbsRecordId)
-            bMove = lcl_MoveAbsolute(pMergeData, nOldRow);
+            bMove = lcl_MoveAbsolute(pFound, nOldRow);
     }
-    //
     return bRet;
 }
 /* -----------------------------06.07.00 16:47--------------------------------
@@ -1650,31 +1668,60 @@ BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguag
  ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextMergeRecord()
 {
-    BOOL bRet = TRUE;
     DBG_ASSERT(pMergeData && pMergeData->xResultSet.is(), "no data source in merge")
-    if(!pMergeData || !pMergeData->xResultSet.is() || pMergeData->bEndOfDB)
+    return ToNextRecord(pMergeData);
+}
+/* -----------------------------10.07.01 14:28--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwNewDBMgr::ToNextRecord(
+    const String& rDataSource, const String& rCommand, sal_Int32 nCommandType)
+{
+    SwDSParam* pFound = 0;
+    BOOL bRet = TRUE;
+    if(pMergeData &&
+        rDataSource == (String)pMergeData->sDataSource &&
+        rCommand == (String)pMergeData->sCommand)
+        pFound = pMergeData;
+    else
     {
-        if(pMergeData)
-            pMergeData->CheckEndOfDB();
+        SwDBData aData;
+        aData.sDataSource = rDataSource;
+        aData.sCommand = rCommand;
+        aData.nCommandType = -1;
+        pFound = FindDSData(aData, FALSE);
+    }
+    return ToNextRecord(pFound);
+}
+/* -----------------------------10.07.01 14:38--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
+{
+    BOOL bRet = TRUE;
+    if(!pParam || !pParam->xResultSet.is() || pParam->bEndOfDB)
+    {
+        if(pParam)
+            pParam->CheckEndOfDB();
         return FALSE;
     }
     try
     {
-        if(pMergeData->aSelection.getLength())
+        if(pParam->aSelection.getLength())
         {
-            pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
-                    (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
-            pMergeData->CheckEndOfDB();
-            bRet = !pMergeData->bEndOfDB;
-            if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
-                pMergeData->bEndOfDB = TRUE;
+            pParam->bEndOfDB = !pParam->xResultSet->absolute(
+                    (ULONG)pParam->aSelection.getConstArray()[ pParam->nSelectionIndex++ ] );
+            pParam->CheckEndOfDB();
+            bRet = !pParam->bEndOfDB;
+            if(pParam->nSelectionIndex >= pParam->aSelection.getLength())
+                pParam->bEndOfDB = TRUE;
         }
         else
         {
-            pMergeData->bEndOfDB = !pMergeData->xResultSet->next();
-            pMergeData->CheckEndOfDB();
-            bRet = !pMergeData->bEndOfDB;
-            ++pMergeData->nSelectionIndex;
+            pParam->bEndOfDB = !pParam->xResultSet->next();
+            pParam->CheckEndOfDB();
+            bRet = !pParam->bEndOfDB;
+            ++pParam->nSelectionIndex;
         }
     }
     catch(Exception&)
@@ -1683,6 +1730,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
     }
     return bRet;
 }
+
 /* -----------------------------13.07.00 17:23--------------------------------
     synchronized labels contain a next record field at their end
     to assure that the next page can be created in mail merge
@@ -1774,6 +1822,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
 
             //after executeQuery the cursor must be positioned
             pFound->bEndOfDB = !pFound->xResultSet->next();
+            pFound->bAfterSelection = sal_False;
             pFound->CheckEndOfDB();
             ++pFound->nSelectionIndex;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 14:01:11 $
+ *  last change: $Author: os $ $Date: 2001-07-10 13:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1417,7 +1417,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
 
                 SwDBData aDBData(((SwDBField*)pFld)->GetDBData());
 
-            if( pMgr->IsDataSourceOpen(aDBData.sDataSource, aDBData.sCommand))
+            if( pMgr->IsDataSourceOpen(aDBData.sDataSource, aDBData.sCommand, sal_False))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand, aDBData.nCommandType));
 
             const String& rName = pFld->GetTyp()->GetName();

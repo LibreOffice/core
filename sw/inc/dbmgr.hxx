@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:42:08 $
+ *  last change: $Author: os $ $Date: 2001-07-10 13:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,8 @@ class SwNewDBMgr
     BOOL            MergeMailing(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann als Datei abspeichern
     BOOL            MergeMailFiles(SwWrtShell* pSh);
+    BOOL            ToNextRecord(SwDSParam* pParam);
+
 public:
     SwNewDBMgr();
     ~SwNewDBMgr();
@@ -285,8 +287,9 @@ public:
     void            InsertText(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
 
-    // check if a data source is open as merge source
-    BOOL            IsDataSourceOpen(const String& rDataSource, const String& rTableOrQuery)const;
+    // check if a data source is open
+    BOOL            IsDataSourceOpen(const String& rDataSource,
+                                    const String& rTableOrQuery, sal_Bool bMergeOnly);
 
     // add data source information to the data source array - was PreInitDBData
     void            AddDSData(const SwDBData& rData, long nSelStart, long nSelEnd);
@@ -310,6 +313,8 @@ public:
     BOOL            GetMergeColumnCnt(const String& rColumnName, USHORT nLanguage,
                                 String &rResult, double *pNumber, sal_uInt32 *pFormat);
     BOOL            ToNextMergeRecord();
+    BOOL            ToNextRecord(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
+
     BOOL            ExistsNextRecord()const;
     sal_uInt32      GetSelectedRecordId();
     sal_Bool        ToRecordId(sal_Int32 nSet);

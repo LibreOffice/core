@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: os $ $Date: 2001-07-10 13:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1467,7 +1467,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                     {
                         String sDataSource(sDBName.GetToken(0, DB_DELIM));
                         String sDataTableOrQuery(sDBName.GetToken(1, DB_DELIM));
-                        if(pMgr && pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery))
+                        if(pMgr && pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery, sal_False))
                         {
                             double fNumber;
                             sal_uInt32 nFormat;

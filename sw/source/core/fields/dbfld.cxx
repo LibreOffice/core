@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: os $ $Date: 2001-07-10 13:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ void SwDBField::Evaluate()
     double nValue = DBL_MAX;
     const SwDBData& aTmpData = GetDBData();
 
-    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand))
+    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
         return ;
 
     ULONG nFmt;
@@ -671,9 +671,9 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
     SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
     const SwDBData& rData = GetDBData();
     if( !bCondValid ||
-            !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand))
+            !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand, sal_False))
         return ;
-    pMgr->ToNextMergeRecord();
+    pMgr->ToNextRecord(rData.sDataSource, rData.sCommand);
 }
 
 /*--------------------------------------------------------------------
@@ -785,7 +785,7 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     const SwDBData& aTmpData = GetDBData();
 
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
-                        pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand))
+                        pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
     {   // Bedingug OK -> aktuellen Set einstellen
         pMgr->ToRecordId(Max((USHORT)aPar2.ToInt32(), USHORT(1))-1);
     }
@@ -972,7 +972,7 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
         return;
 
     const SwDBData& aTmpData = GetDBData();
-    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand))
+    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_False))
     {
         nNumber = 0;
         return ;
