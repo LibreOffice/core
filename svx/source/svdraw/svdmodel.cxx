@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:10:44 $
+ *  last change: $Author: dl $ $Date: 2000-11-28 07:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,24 +808,13 @@ void SdrModel::DisposeLoadedModels()
 
 void SdrModel::SetTextDefaults() const
 {
-    pItemPool->SetPoolDefaultItem( SvxFontItem(SdrEngineDefaults::GetFontFamily(),
-                                   SdrEngineDefaults::GetFontName(),
-                                   String(),
-                                   PITCH_DONTKNOW,
-                                   gsl_getSystemTextEncoding(),
-                                   EE_CHAR_FONTINFO ));
-    pItemPool->SetPoolDefaultItem( SvxFontItem(SdrEngineDefaults::GetFontFamily(),
-                                   UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MS Mincho" ) ),
-                                   String(),
-                                   PITCH_DONTKNOW,
-                                   gsl_getSystemTextEncoding(),
-                                   EE_CHAR_FONTINFO_CJK ));
-    pItemPool->SetPoolDefaultItem( SvxFontItem(SdrEngineDefaults::GetFontFamily(),
-                                   SdrEngineDefaults::GetFontName(),
-                                   String(),
-                                   PITCH_DONTKNOW,
-                                   gsl_getSystemTextEncoding(),
-                                   EE_CHAR_FONTINFO_CTL ));
+    SvxFontItem aSvxFontItem;
+    SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
+    SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
+    GetDefaultFonts( aSvxFontItem, aSvxFontItemCJK, aSvxFontItemCTL );
+    pItemPool->SetPoolDefaultItem( aSvxFontItem );
+    pItemPool->SetPoolDefaultItem( aSvxFontItemCJK );
+    pItemPool->SetPoolDefaultItem( aSvxFontItemCTL );
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT ) );
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
