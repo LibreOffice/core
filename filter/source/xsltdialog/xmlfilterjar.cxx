@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterjar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:33:42 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
 
         if( !aFileURL.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("file://") ) ) )
         {
-            aFileURL = URIHelper::SmartRel2Abs( String(sProgPath), String( aFileURL ), Link(), false );
+            aFileURL = URIHelper::SmartRel2Abs( sProgPath, aFileURL, Link(), false );
         }
 
         INetURLObject aURL( aFileURL );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:35:50 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,8 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
     }
     else if( rURL.getLength() )
     {
-        String aURL( rURL );
-        aURL = URIHelper::SmartRel2Abs( String(sInstPath), aURL, Link(), false );
+        rtl::OUString aURL( rURL );
+        aURL = URIHelper::SmartRel2Abs( sInstPath, aURL, Link(), false );
         osl::FileBase::getSystemPathFromFileURL( aURL, aPath );
 
         rURLBox.SetBaseURL( aURL );
