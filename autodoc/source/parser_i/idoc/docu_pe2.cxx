@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:43:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 // NOT FULLY DEFINED SERVICES
 #include <ary_i/codeinf2.hxx>
 #include <ary_i/d_token.hxx>
+#include <parser/parserinfo.hxx>
 #include <adc_cl.hxx>
+#include <adc_msg.hxx>
 #include <s2_dsapi/dsapitok.hxx>
 #include <s2_dsapi/tk_atag2.hxx>
 #include <s2_dsapi/tk_html.hxx>
@@ -90,9 +92,10 @@ const char *        AtTagTitle(
                         const Tok_AtTag &   i_rToken );
 
 
-SapiDocu_PE::SapiDocu_PE()
+SapiDocu_PE::SapiDocu_PE(ParserInfo & io_rPositionInfo)
     :   pDocu(0),
         eState(e_none),
+        pPositionInfo(&io_rPositionInfo),
         fCurTokenAddFunction(&SapiDocu_PE::AddDocuToken2Void),
         pCurAtTag(0)
 {
@@ -178,25 +181,37 @@ SapiDocu_PE::Process_HtmlTag( const Tok_HtmlTag & i_rToken )
     // Workaround special for some errors in API docu:
     if ( strnicmp("<true",i_rToken.Text(),5 ) == 0 )
     {
-        Cerr() << "Invalid const symbol: " << i_rToken.Text() << Endl();
+        if ( strcmp("<TRUE/>",i_rToken.Text()) != 0 )
+            TheMessages().Out_InvalidConstSymbol( i_rToken.Text(),
+                                              pPositionInfo->CurFile(),
+                                              pPositionInfo->CurLine() );
         (this->*fCurTokenAddFunction)( *new DT_TextToken("<b>true</b>") );
         return;
     }
     else if ( strnicmp("<false",i_rToken.Text(),6 ) == 0 )
     {
-        Cerr() << "Invalid const symbol: " << i_rToken.Text() << Endl();
+        if ( strcmp("<FALSE/>",i_rToken.Text()) != 0 )
+            TheMessages().Out_InvalidConstSymbol( i_rToken.Text(),
+                                              pPositionInfo->CurFile(),
+                                              pPositionInfo->CurLine() );
         (this->*fCurTokenAddFunction)( *new DT_TextToken("<b>false</b>") );
         return;
     }
     else if ( strnicmp("<NULL",i_rToken.Text(),5 ) == 0 )
     {
-        Cerr() << "Invalid const symbol: " << i_rToken.Text() << Endl();
+        if ( strcmp("<NULL/>",i_rToken.Text()) != 0 )
+            TheMessages().Out_InvalidConstSymbol( i_rToken.Text(),
+                                              pPositionInfo->CurFile(),
+                                              pPositionInfo->CurLine() );
         (this->*fCurTokenAddFunction)( *new DT_TextToken("<b>null</b>") );
         return;
     }
     else if ( strnicmp("<void",i_rToken.Text(),5 ) == 0 )
     {
-        Cerr() << "Invalid const symbol: " << i_rToken.Text() << Endl();
+        if ( strcmp("<void/>",i_rToken.Text()) != 0 )
+            TheMessages().Out_InvalidConstSymbol( i_rToken.Text(),
+                                              pPositionInfo->CurFile(),
+                                              pPositionInfo->CurLine() );
         (this->*fCurTokenAddFunction)( *new DT_TextToken("<b>void</b>") );
         return;
     }
