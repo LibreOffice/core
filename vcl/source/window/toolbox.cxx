@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-22 13:04:40 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 17:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3042,6 +3042,10 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
                     nTempOffY += (nBtnHeight-aTxtSize.Height())/2;
             }
         }
+
+        // draw selection only if not already draw during imgae output (see above)
+        if ( !bImage && (bHighlight || (pItem->meState == STATE_CHECK) ) )
+            ImplDrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE );
 
         USHORT nTextStyle = 0;
         if ( !pItem->mbEnabled )
