@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:07:23 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2257,6 +2257,13 @@ void Desktop::OpenDefault()
 
 String GetURL_Impl( const String& rName )
 {
+    // if rName is a vnd.sun.star.script URL do not attempt to parse it
+    // as INetURLObj does not handle handle there URLs
+    if (rName.CompareToAscii("vnd.sun.star.script" , 19) == COMPARE_EQUAL)
+    {
+        return rName;
+    }
+
     // if the filename is a physical name, it is the client file system, not the file system
     // of the machine where the office is running ( if this are different machines )
     // so in the remote case we can't handle relative filenames as arguments, because they
@@ -2355,7 +2362,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             if(
                 ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
                 ( aName.CompareToAscii( "slot:" , 5 ) == COMPARE_EQUAL )  ||
-                ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
+                ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )  ||
+                ( aName.CompareToAscii( "vnd.sun.star.script", 19 ) == COMPARE_EQUAL )
               )
             {
                 URL             aURL ;
