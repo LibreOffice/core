@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: sab $ $Date: 2000-11-21 16:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ XML_CONSTASCII_ACTION( sXML_contour_polygon, "contour-polygon" );
 XML_CONSTASCII_ACTION( sXML_contour_path, "contour-path" );
 XML_CONSTASCII_ACTION( sXML_contrast , "contrast" );
 XML_CONSTASCII_ACTION( sXML_control, "control" );
+XML_CONSTASCII_ACTION( sXML_conversion_mode, "conversion-mode" );
 XML_CONSTASCII_ACTION( sXML_copy_back, "copy-back" );
 XML_CONSTASCII_ACTION( sXML_copy_formulas, "copy-formulas" );
 XML_CONSTASCII_ACTION( sXML_copy_outline_levels, "copy-outline-levels" );
@@ -728,6 +729,7 @@ XML_CONSTASCII_ACTION( sXML_intersect, "intersect" );
 XML_CONSTASCII_ACTION( sXML_interval, "interval" );
 XML_CONSTASCII_ACTION( sXML_interval_major, "interval-major" );
 XML_CONSTASCII_ACTION( sXML_interval_minor, "interval-minor" );
+XML_CONSTASCII_ACTION( sXML_into_english_number, "into-english-number" );
 XML_CONSTASCII_ACTION( sXML_inverse, "inverse" );
 XML_CONSTASCII_ACTION( sXML_is_active, "is-active");
 XML_CONSTASCII_ACTION( sXML_is_data_layout_field, "is-data-layout-field");
@@ -764,6 +766,7 @@ XML_CONSTASCII_ACTION( sXML_leq, "leq" );
 XML_CONSTASCII_ACTION( sXML_letter_kerning, "letter-kerning" );
 XML_CONSTASCII_ACTION( sXML_letter_spacing, "letter-spacing" );
 XML_CONSTASCII_ACTION( sXML_letters, "letters" );
+XML_CONSTASCII_ACTION( sXML_let_text, "let-text" );
 XML_CONSTASCII_ACTION( sXML_level, "level" );
 XML_CONSTASCII_ACTION( sXML_limit, "limit" );
 XML_CONSTASCII_ACTION( sXML_line, "line" );
