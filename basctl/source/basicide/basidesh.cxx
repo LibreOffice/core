@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-30 09:35:47 $
+ *  last change: $Author: ab $ $Date: 2002-11-01 11:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,9 +307,12 @@ USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 
     if ( StarBASIC::IsRunning() )
     {
-        String aErrorStr( IDEResId( RID_STR_CANNOTCLOSE ) );
-        Window *pParent = &GetViewFrame()->GetWindow();
-        InfoBox( pParent, aErrorStr ).Execute();
+        if( bUI )
+        {
+            String aErrorStr( IDEResId( RID_STR_CANNOTCLOSE ) );
+            Window *pParent = &GetViewFrame()->GetWindow();
+            InfoBox( pParent, aErrorStr ).Execute();
+        }
         return FALSE;
     }
     else
@@ -955,7 +958,9 @@ void BasicIDEShell::SetCurBasic( StarBASIC* pBasic, BOOL bUpdateWindows )
 
     pTabBar->SetCurrentLib( pBasic );
 
-    BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if( pBindings )
+        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
 }
 
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
