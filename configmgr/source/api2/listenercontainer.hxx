@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:21:52 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ namespace configmgr
             bool bAlive = !m_aSpecialHelper.bInDispose;
             if (m_aSpecialHelper.bDisposed)
             {
-                throw lang::DisposedException(OUString(RTL_CONSTASCII_USTRINGPARAM("The object has already been disposed")),pObject);
+                throw lang::DisposedException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The object has already been disposed")),pObject);
             }
             return bAlive;
         }
