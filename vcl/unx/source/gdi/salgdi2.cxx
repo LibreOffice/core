@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
+ *  last change: $Author: svesik $ $Date: 2000-12-21 20:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,7 @@ final GC SalGraphicsData::SetMask( int           &nX,
 
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
 
+#if defined(USE_PSPRINT)
 class SalPrinterBmp : public psp::PrinterBmp
 {
     private:
@@ -708,6 +709,8 @@ final void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
 }
 
 // --------------------------------------------------------------------------
+
+#endif
 
 final void SalGraphics::CopyArea ( long nDestX,    long nDestY,
                                    long nSrcX,     long nSrcY,
