@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=formula
+Icon=oasis-formula
 Type=MimeType
-Patterns=*.oof
-MimeType=application/x-vnd.oasis.openoffice.formula
-Comment=Open Office Formula
+Patterns=*.odf
+MimeType=application/vnd.oasis.opendocument.formula
+Comment=OpenDocument Formula
