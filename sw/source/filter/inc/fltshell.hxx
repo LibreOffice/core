@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:39:48 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,11 +344,8 @@ protected:
 
     SwDoc& GetDoc()                 { return rDoc; }
     SfxItemSet* NewFlyDefaults();
-
-    SwFltOutBase(SwDoc& rDocu)
-        : rDoc(rDocu), eFlyAnchor(FLY_AT_CNTNT), bFlyAbsPos(FALSE)
-    {}
-
+    SwFltOutBase(SwDoc& rDocu);
+    virtual ~SwFltOutBase();
 public:
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem) = 0;
 
