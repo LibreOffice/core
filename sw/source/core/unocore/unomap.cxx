@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:42:49 $
+ *  last change: $Author: os $ $Date: 2000-11-09 10:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1702,6 +1702,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
+                    { SW_PROP_NAME(UNO_NAME_LEVEL_FORMAT                      ), WID_LEVEL_FORMAT                        ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PROPERTY_NONE,0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aBibliographyMap_Impl;
