@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:59:56 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ void GraphicObject::ImplAssignGraphicData()
     mnSizeBytes = maGraphic.GetSizeBytes();
     meType = maGraphic.GetType();
     mbTransparent = maGraphic.IsTransparent();
+    mbAlpha = maGraphic.IsAlpha();
     mbAnimated = maGraphic.IsAnimated();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 
