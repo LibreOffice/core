@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:47:19 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ String STR_DESCRIPTION_WORD_DOC
     Text [ chinese_simplified ] = "MS Word æ–‡æ¡£";
     Text [ russian ] = "Äîêóìåíò MS Word";
     Text [ polish ] = "MS Word - Dokument";
-    Text [ japanese ] = "MS Word ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text [ japanese ] = "Microsoft Word ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
     Text [ chinese_traditional ] = "MS Word æ–‡ä»¶";
     Text [ arabic ] = "MS Word ãÓÊäÏ";
     Text[ dutch ] = "MS Word document";
@@ -802,7 +802,7 @@ String STR_DESCRIPTION_EXCEL_DOC
     Text [ chinese_simplified ] = "MS Excel æ–‡æ¡£";
     Text [ russian ] = "Äîêóìåíò MS Excel";
     Text [ polish ] = "MS Excel - Dokument";
-    Text [ japanese ] = "MS Excel ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text [ japanese ] = "Microsoft Excel ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
     Text [ chinese_traditional ] = "MS Excel æ–‡ä»¶";
     Text [ arabic ] = "MS Excel ãÓÊäÏ";
     Text[ dutch ] = "MS Excel document";
@@ -829,7 +829,7 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text [ chinese_simplified ] = "MS Excel æ¨¡æ¿";
     Text [ russian ] = "Øàáëîí MS Excel";
     Text [ polish ] = "MS Excel - Szablon";
-    Text [ japanese ] = "MS Excel ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„";
+    Text [ japanese ] = "Microsoft Excel ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„";
     Text [ chinese_traditional ] = "MS Excel ç¯„æœ¬";
     Text [ arabic ] = "ŞÇáÈMS Excel ";
     Text[ dutch ] = "MS Excel sjabloon";
@@ -1191,6 +1191,7 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Textdocument Template";
 };
+
 
 
 
