@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:52:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@
 #include "svdoimp.hxx"
 #include "svdattr.hxx"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
@@ -110,7 +109,7 @@
 
 // #100127# Bracket filled output with a comment, if recording a Mtf
 ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
-                                const ExtOutputDevice&  rXOut,
+                                const XOutputDevice&    rXOut,
                                 const SfxItemSet&       rFillItemSet,
                                 bool                    bIsShadow       ) :
     mrObj( rObj ),
@@ -291,7 +290,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
                     aVDev.SetMapMode( aMap );
 
                     // setup XOutDev
-                    ExtOutputDevice aXOut( &aVDev );
+                    XOutputDevice aXOut( &aVDev );
                     aXOut.SetFillAttr( rFillItemSet );
 
                     // prepare ItemSet to avoid line drawing
@@ -347,7 +346,9 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             }
         }
 
-        SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
+//BFS09        SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
+        const ::basegfx::B2DPolyPolygon aCandidate(aPolyPoly.getB2DPolyPolygon());
+        SvtGraphicFill aFill( PolyPolygon(aCandidate),
                               ITEMVALUE( rFillItemSet, XATTR_FILLCOLOR, XFillColorItem ),
                               ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
