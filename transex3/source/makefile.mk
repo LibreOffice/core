@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-26 13:05:42 $
+#   last change: $Author: nf $ $Date: 2001-06-26 13:18:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,15 +76,15 @@ CDEFS+= -DYY_NEVER_INTERACTIVE=1
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=   			\
-    $(OBJ)$/export2.obj	
+OBJFILES=   				\
+    $(OBJ)$/utf8conv.obj	\
+    $(OBJ)$/export2.obj	   
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
 APP1OBJS=   				\
     $(OBJ)$/src_yy.obj 		\
-    $(OBJ)$/utf8conv.obj 	\
     $(OBJ)$/export.obj 		\
     $(OBJ)$/wrdtrans.obj	\
     $(OBJ)$/merge.obj		\
