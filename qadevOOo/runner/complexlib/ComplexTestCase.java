@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Date: 2005-02-02 13:55:31 $
+ *  last change: $Date: 2005-03-29 11:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package complexlib;
 
+import java.lang.Class;
 import java.lang.reflect.Method;
 import share.DescEntry;
 import lib.TestParameters;
@@ -112,8 +113,8 @@ public abstract class ComplexTestCase implements ComplexTest {
         // start with the before() method
         boolean beforeWorked = true;
         try {
-            Method before = this.getClass().getMethod("before",null);
-            before.invoke(this, null);
+            Method before = this.getClass().getMethod("before",new Class[]{});
+            before.invoke(this, new Object[]{});
         }
         catch(java.lang.NoSuchMethodException e) {
             // simply ignore
@@ -153,7 +154,7 @@ public abstract class ComplexTestCase implements ComplexTest {
             Method testMethod = null;
             try {
                  testMethod = this.getClass().getMethod(
-                                        subEntry.entryName,null);
+                                        subEntry.entryName, new Class[]{});
                  MethodThread th = new MethodThread(testMethod, this,
                                                     (java.io.PrintWriter)log);
                  log.println("Starting " + testMethod.getName());
@@ -235,8 +236,8 @@ public abstract class ComplexTestCase implements ComplexTest {
         if (beforeWorked) {
             // the after() method
             try {
-                Method after = this.getClass().getMethod("after",null);
-                after.invoke(this, null);
+                Method after = this.getClass().getMethod("after", new Class[]{});
+                after.invoke(this, new Object[]{});
             }
             catch(java.lang.NoSuchMethodException e) {
                 // simply ignore
