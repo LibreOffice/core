@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 16:39:59 $
+ *  last change: $Author: bm $ $Date: 2001-05-25 16:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1983,6 +1983,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "enable" ),                     // XML_ENABLE
         TOKEN( "use-regular-expressions" ),    // XML_USE_REGULAR_EXPRESSIONS
+        TOKEN( "data-source-has-labels" ),     // XML_DATA_SOURCE_HAS_LABELS
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
