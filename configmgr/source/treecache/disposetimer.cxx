@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dg $ $Date: 2001-05-03 16:09:46 $
+ *  last change: $Author: jb $ $Date: 2001-05-30 10:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,10 +316,40 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 static inline
 TimeStamp getExpirationTime( vos::OTimer const& aTimer )
 {
-    return TimeStamp::getCurrentTime() + TimeInterval( aTimer.getRemainingTime() );
+    OSL_ENSURE(aTimer.isTicking(), "Timer is already expired !");
+
+    // note: order ensures that result time may be earlier, but not later
+    TimeStamp       const now ( TimeStamp::getCurrentTime() );
+    TimeInterval    const left( aTimer.getRemainingTime() );
+    TimeStamp       const expires = now + left;
+
+    return expires;
 }
+
 // -------------------------------------------------------------------------
 
+#ifdef _DEBUG
+static
+void checkTimerStarted( vos::OTimer const& aTimer, TimeStamp const& _aLimit)
+{
+    const TimeInterval tolerance( vos::TTimeValue(1) ); // milliseconds
+    if (aTimer.isTicking())
+    {
+        TimeStamp   const    expires = getExpirationTime(aTimer);
+        TimeStamp   const    limit   = _aLimit + tolerance;
+
+        OSL_ENSURE(expires <= limit, "Timer does not expire within expected time (tolerance 1 ms) !");
+      //  OSL_ENSURE(expires <= _aLimit, "Timer does not expire within expected time !");
+        OSL_ENSURE(aTimer.isTicking(), "Timer just started already expired ?!");
+    }
+    else
+    {
+        OSL_ENSURE(false, "Timer just started is not ticking ?!");
+    }
+}
+#endif
+
+// -------------------------------------------------------------------------
 // should be called guarded only
 void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
 {
@@ -332,7 +362,7 @@ void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
 
             if (!m_xTimer->isTicking()) m_xTimer->start();
 
-            OSL_ASSERT( m_xTimer->isTicking() && getExpirationTime(*m_xTimer) <= _aTime );
+            OSL_DEBUG_ONLY( checkTimerStarted(*m_xTimer,_aTime) );
         }
         CFG_TRACE_INFO_NI("- Cleanup timer running - next execution in %d seconds", int (m_xTimer->getRemainingTime().Seconds) );
         CFG_TRACE_INFO_NI("- %d cleanup tasks are pending", int(m_aAgenda.size()) );
