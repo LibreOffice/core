@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obr $ $Date: 2002-05-10 06:50:26 $
+ *  last change: $Author: vg $ $Date: 2002-05-13 12:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,6 +773,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             // instanciate access bridge service
             if(!pSVData->mxAccessBridge.is())
             {
+                bool bDisable = false;
                 try
                 {
                     Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
@@ -781,10 +782,15 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                     {
                         pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >( xFactory->createInstance(
                             OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
+                        if( !pSVData->mxAccessBridge.is() )
+                            bDisable = true;
                     }
                 }
-
                 catch(::com::sun::star::uno::Exception exception)
+                {
+                    bDisable = true;
+                }
+                if( bDisable )
                 {
                     AllSettings aSettings = Application::GetSettings();
                     MiscSettings aMisc = aSettings.GetMiscSettings();
