@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:21:58 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 20:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,66 @@ namespace svt
         typedef sal_Int32 ItemIndex;
     };
 
+
     class RoadmapImpl;
+
+
+    class ORoadmapIDHyperLabel :  public FixedText
+    {
+    public:
+        ORoadmapIDHyperLabel( Window* _pParent, const ResId& _rId );
+        ORoadmapIDHyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
+        ~ORoadmapIDHyperLabel( );
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    };
+
+    class ORoadmapHyperLabel : public RoadmapTypes, public OutputDevice
+    {
+    private:
+        ORoadmapIDHyperLabel* mpIDLabel;
+        HyperLabel* mpDescHyperLabel;
+
+
+    public:
+
+        ORoadmapHyperLabel( Window* _pParent, const ResId& _rId );
+        ORoadmapHyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
+        ~ORoadmapHyperLabel( );
+
+        void                    SetID( sal_Int16 _ID );
+        sal_Int16               GetID() const;
+
+        void                    SetIndex( sal_Int32 _Index );
+        sal_Int32               GetIndex() const;
+
+        void                    SetLabel( ::rtl::OUString _rText );
+        ::rtl::OUString         GetLabel( );
+
+        void                    SetLabelAndSize( ItemIndex _RMIndex, ::rtl::OUString _rText, const Size& rNewSize);
+
+        void                    SetPosition( ORoadmapHyperLabel* OldHyperLabel );
+        Point                   GetLogicalPosition();
+
+        void                    ToggleBackgroundColor( const Color& _rGBColor );
+        void                    SetInteractive( sal_Bool _bInteractive );
+
+        void                    SetClickHdl( const Link& rLink );
+        const Link&             GetClickHdl() const;
+        void                    SetZOrder( ORoadmapHyperLabel* pRefRoadmapHyperLabel, USHORT nFlags );
+        void                    Enable( BOOL bEnable = TRUE);
+        BOOL                    IsEnabled() const;
+        void                    GrabFocus();
+
+        void                    SetIDLabel(ORoadmapIDHyperLabel* _pIDLabel){mpIDLabel = _pIDLabel;};
+        ORoadmapIDHyperLabel*   GetIDLabel() const { return mpIDLabel;};
+
+        HyperLabel*             GetDescriptionHyperLabel() const { return mpDescHyperLabel;};
+        void                    SetDescriptionHyperLabel(HyperLabel* _pDescriptionHyperLabel){mpDescHyperLabel = _pDescriptionHyperLabel;};
+
+    };
+
+
+
     //=====================================================================
     //= Roadmap
     //=====================================================================
@@ -133,6 +192,8 @@ namespace svt
 
         void            SetItemSelectHdl( const Link& _rHdl );
         Link            GetItemSelectHdl( ) const;
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
 
     protected:
         sal_Int32       PreNotify( NotifyEvent& rNEvt );
@@ -144,22 +205,22 @@ namespace svt
     private:
         DECL_LINK(ImplClickHdl, HyperLabel*);
 
-        HyperLabel*         GetByIndex( ItemIndex _nItemIndex );
-        const HyperLabel*   GetByIndex( ItemIndex _nItemIndex ) const;
+        ORoadmapHyperLabel*         GetByIndex( ItemIndex _nItemIndex );
+        const ORoadmapHyperLabel*   GetByIndex( ItemIndex _nItemIndex ) const;
 
-        HyperLabel*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
-        const HyperLabel*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
+        ORoadmapHyperLabel*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
+        const ORoadmapHyperLabel*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
+        ORoadmapHyperLabel*         GetPreviousHyperLabel( ItemIndex _Index);
 
-        void                DrawHeadline();
-        void                DeselectOldRoadmapItems();
-        ItemId              GetNextAvailableItemId( ItemIndex _NewIndex );
-        ItemId              GetPreviousAvailableItemId( ItemIndex _NewIndex );
-        HyperLabel*         GetByPointer(Window* pWindow);
-        void                InitializeHyperLabelSize();
-        HyperLabel*         InsertHyperLabel( ItemIndex _Index, ::rtl::OUString _aStr, ItemId _RMID, sal_Bool _bEnabled = sal_True  );
-        ::rtl::OUString     ConcatenateRMItemLabel( ItemIndex _RMIndex, ::rtl::OUString sLabel );
-        void                UpdatefollowingHyperLabels( ItemIndex _Index, sal_Int16 _nadd = 1);
-        void                SetRoadmapLabel(HyperLabel* CurHyperLabel, sal_Int32 _nPrefix, String _sDescription);
+        void                        DrawHeadline();
+        void                        DeselectOldRoadmapItems();
+        ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
+        ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
+        ORoadmapHyperLabel*         GetByPointer(Window* pWindow);
+        void                        InitializeHyperLabelSize();
+        ORoadmapHyperLabel*         InsertHyperLabel( ItemIndex _Index, ::rtl::OUString _aStr, ItemId _RMID, sal_Bool _bEnabled = sal_True  );
+        void                        UpdatefollowingHyperLabels( ItemIndex _Index, sal_Int16 _nadd = 1);
+        void                        SetRoadmapLabel(ORoadmapHyperLabel* CurHyperLabel, sal_Int32 _nPrefix, String _sDescription);
     };
 
 //.........................................................................
