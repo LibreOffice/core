@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:00:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
