@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/charclass.hxx>
 
 #include "eeimport.hxx"
 #include "global.hxx"
@@ -174,8 +176,8 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     BOOL bHasGraphics = FALSE;
     ScEEParseEntry* pE;
 
-    const sal_Char cDecSep = ScGlobal::pScInternational->GetNumDecimalSep();
-    const sal_Char cThoSep = ScGlobal::pScInternational->GetNumThousandSep();
+    const sal_Unicode cDecSep = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
+    const sal_Unicode cThoSep = ScGlobal::pLocaleData->getNumThousandSep().GetChar(0);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     ScDocumentPool* pDocPool = pDoc->GetPool();
     ScRangeName* pRangeNames = pDoc->GetRangeName();
@@ -332,34 +334,34 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                 else
                 {
                     String aStr( pEngine->GetText( pE->aSel.nStartPara ) );
-                    const sal_Char cDecSepEng = '.';
-                    const sal_Char cThoSepEng = ',';
+                    const sal_Unicode cDecSepEng = '.';
+                    const sal_Unicode cThoSepEng = ',';
                     if ( cDecSep != cDecSepEng
                       && aStr.GetTokenCount( cDecSepEng ) == 2 )
                     {   // evtl. englische Zahl wandeln und im Deutschen
                         // den Numberformatter kein Datum draus machen lassen..
                         xub_StrLen nInd = 0;
-                        ByteString aLeft( aStr.GetToken( 0, cDecSepEng, nInd ), RTL_TEXTENCODING_ASCII_US );
-                        ByteString aRight( aStr.GetToken( 0, cDecSepEng, nInd ), RTL_TEXTENCODING_ASCII_US );
+                        String aLeft( aStr.GetToken( 0, cDecSepEng, nInd ) );
+                        String aRight( aStr.GetToken( 0, cDecSepEng, nInd ) );
                         aRight.EraseTrailingChars();
-                        if ( aRight.IsNumericAscii() )
+                        if ( CharClass::isAsciiNumeric( aRight ) )
                         {
                             aLeft.EraseLeadingChars();
                             nInd = 0;
                             xub_StrLen n = aLeft.GetTokenCount( cThoSepEng );
                             for ( xub_StrLen j = 0; j < n; j++ )
                             {
-                                ByteString aT( aLeft.GetToken( 0, cThoSepEng, nInd ) );
+                                String aT( aLeft.GetToken( 0, cThoSepEng, nInd ) );
                                 if ( j > 0 && aT.Len() != 3 )
                                     break;  // Tausenderseparator heisst er
-                                if ( !aT.IsNumericAscii() )
+                                if ( !CharClass::isAsciiNumeric( aT ) )
                                     break;
                             }
                             if ( j == n )
                             {
                                 if ( n > 1 )
                                 {   // harter cast spart Zeit
-                                    sal_Char* p = (sal_Char*) aLeft.GetBuffer();
+                                    sal_Unicode* p = (sal_Unicode*) aLeft.GetBuffer();
                                     while ( *p )
                                     {
                                         if ( *p == cThoSepEng )
@@ -367,9 +369,9 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                                         p++;
                                     }
                                 }
-                                aLeft += cDecSep;
-                                aLeft += aRight;
-                                aStr = String( aLeft, RTL_TEXTENCODING_ASCII_US );
+                                aStr = aLeft;
+                                aStr += cDecSep;
+                                aStr += aRight;
                             }
                         }
                     }

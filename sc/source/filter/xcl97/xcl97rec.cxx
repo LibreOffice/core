@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 09:17:06 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2556,7 +2556,7 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
                     rDoc.GetValue( nCol, nRow, nTab, fVal );
                     sText.Erase();
                     SolarMath::DoubleToString( sText, fVal, 'A', INT_MAX,
-                        ScGlobal::pScInternational->GetNumDecimalSep(), TRUE );
+                        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
                 }
                 else
                     rDoc.GetString( nCol, nRow, nTab, sText );
