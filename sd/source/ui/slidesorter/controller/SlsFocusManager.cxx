@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFocusManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:59:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ bool FocusManager::IsFocusShowing (void) const
 
 void FocusManager::HideFocusIndicator (model::PageDescriptor* pDescriptor)
 {
-    if (pDescriptor != NULL)
+    if( pDescriptor )
     {
         pDescriptor->RemoveFocus();
         mrController.GetView().RequestRepaint (*pDescriptor);
