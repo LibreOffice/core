@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormControlTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:31:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 
 import com.sun.star.util.XCloseable;
+import com.sun.star.util.XURLTransformer;
 import com.sun.star.util.URL;
 
 import com.sun.star.sdb.CommandType;
@@ -749,6 +750,10 @@ public class FormControlTest extends ComplexTestCase
     {
         try
         {
+            if ( fieldName.equals( "f_time" ) )
+                // http://bugs.mysql.com/bug.php?id=5681
+                return true;
+
             int currentValue = ((Integer)getControlModel( fieldName ).getPropertyValue( propertyName )).intValue();
             if ( currentValue != requiredValue )
             {
@@ -911,10 +916,15 @@ public class FormControlTest extends ComplexTestCase
     private void executeSlot( String slotURL ) throws java.lang.Exception
     {
         XDispatch xDispatch = (XDispatch)m_document.getCurrentView().getDispatcher( slotURL );
+
+        URL[] url = new URL[] { new URL() };
+        url[0].Complete = slotURL;
+        XURLTransformer xTransformer = (XURLTransformer)UnoRuntime.queryInterface(
+                XURLTransformer.class, m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
+        xTransformer.parseStrict( url );
+
         PropertyValue[] aArgs = new PropertyValue[0];
-        URL url = new URL();
-        url.Complete = slotURL;
-        xDispatch.dispatch( url, aArgs );
+        xDispatch.dispatch( url[0], aArgs );
     }
 
     /* ------------------------------------------------------------------ */
@@ -1007,7 +1017,7 @@ public class FormControlTest extends ComplexTestCase
         {
             xProducer.addConsumer( compareImages );
             xProducer.startProduction();
-            wait();
+//            wait();
         }
         xProducer.removeConsumer( compareImages );
 
