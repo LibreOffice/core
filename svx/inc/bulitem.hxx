@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-31 16:48:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 // define ----------------------------------------------------------------
 
@@ -108,7 +112,7 @@
 
 // class SvxBulletItem ---------------------------------------------------
 
-class SvxBulletItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 {
     Font            aFont;
     GraphicObject*  pGraphicObject;
