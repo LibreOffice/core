@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>basprov</module-name>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.scripting.ScriptProviderForBasic</name>
+        <description>script provider for Basic</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="drafts"/>
+        <supported-service>drafts.com.sun.star.script.framework.provider.ScriptProviderForBasic</supported-service>
+        <type>com.sun.star.beans.XPropertySet</type>
+        <type>com.sun.star.frame.XModel</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.XInitialization</type>
+        <type>com.sun.star.lang.XServiceInfo</type>
+        <type>com.sun.star.reflection.InvocationTargetException</type>
+        <type>com.sun.star.script.CannotConvertException</type>
+        <type>com.sun.star.uno.Exception</type>
+        <type>com.sun.star.uno.RuntimeException</type>
+        <type>com.sun.star.uno.XComponentContext</type>
+        <type>drafts.com.sun.star.script.framework.provider.XScript</type>
+        <type>drafts.com.sun.star.script.framework.provider.XScriptProvider</type>
+    </component-description>
+
+    <project-build-dependency>sfx2</project-build-dependency>
+    <project-build-dependency>basic</project-build-dependency>
+    <project-build-dependency>svtools</project-build-dependency>
+    <project-build-dependency>tools</project-build-dependency>
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+
+    <runtime-module-dependency>sfx2</runtime-module-dependency>
+    <runtime-module-dependency>sb</runtime-module-dependency>
+    <runtime-module-dependency>svt</runtime-module-dependency>
+    <runtime-module-dependency>tl</runtime-module-dependency>
+    <runtime-module-dependency>cppuhelper3$(COM)</runtime-module-dependency>
+    <runtime-module-dependency>cppu3</runtime-module-dependency>
+    <runtime-module-dependency>sal3</runtime-module-dependency>
+
+</module-description>

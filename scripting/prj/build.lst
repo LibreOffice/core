@@ -1,7 +1,8 @@
-tc	scripting	:	bridges rdbmaker vcl NULL
+tc	scripting	:	bridges rdbmaker vcl basic sfx2 NULL
 tc	scripting									usr1	-	all	tc_mkout NULL
 tc	scripting\source\storage				nmake	-	all	tc_scriptingstorage NULL
 tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider tc_scriptingstorage NULL
+tc	scripting\source\basprov				nmake	-	all	tc_scriptingbasprov NULL
 tc	scripting\source\protocolhandler			nmake	-	all	tc_scriptingprotocolhandler tc_scriptingstorage tc_scriptingprovider NULL
 tc	scripting\java						nmake	-	all	tc_scriptingjava tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler NULL
 tc	scripting\examples\java				nmake	-	all	tc_scriptingexamplesjava tc_scriptingjava  NULL
