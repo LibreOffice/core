@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 19:57:36 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 17:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,14 @@
 #include "xmlprmap.hxx"
 #endif
 
+#ifndef _XIMP3DSCENE_HXX
+#include "ximp3dscene.hxx"
+#endif
+
+#ifndef _XIMP3DOBJECT_HXX
+#include "ximp3dobject.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -127,6 +135,10 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpControlShapeAttrTokenMap(0L),
     mpPageShapeAttrTokenMap(0L),
     mpGraphicObjectShapeAttrTokenMap(0L),
+    mp3DSceneShapeElemTokenMap(0L),
+    mp3DObjectAttrTokenMap(0L),
+    mp3DSceneShapeAttrTokenMap(0L),
+    mp3DLightAttrTokenMap(0L),
     mpSortContext(0L)
 {
     // prepare factory parts
@@ -202,6 +214,10 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     if(mpControlShapeAttrTokenMap) delete mpControlShapeAttrTokenMap;
     if(mpPageShapeAttrTokenMap) delete mpPageShapeAttrTokenMap;
     if(mpGraphicObjectShapeAttrTokenMap) delete mpGraphicObjectShapeAttrTokenMap;
+    if(mp3DSceneShapeElemTokenMap) delete mp3DSceneShapeElemTokenMap;
+    if(mp3DObjectAttrTokenMap) delete mp3DObjectAttrTokenMap;
+    if(mp3DSceneShapeAttrTokenMap) delete mp3DSceneShapeAttrTokenMap;
+    if(mp3DLightAttrTokenMap) delete mp3DLightAttrTokenMap;
 
     // Styles or AutoStyles context?
     if(mpStylesContext)
@@ -232,11 +248,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
 
     { XML_NAMESPACE_CHART,          sXML_chart,         XML_TOK_GROUP_CHART         },
     { XML_NAMESPACE_DRAW,           sXML_image,         XML_TOK_GROUP_IMAGE         },
-//  { XML_NAMESPACE_DRAW,           sXML_3DCube,        XML_TOK_GROUP_3D_CUBE       },
-//  { XML_NAMESPACE_DRAW,           sXML_3DSphere,      XML_TOK_GROUP_3D_SPHERE     },
-//  { XML_NAMESPACE_DRAW,           sXML_3DLathe,       XML_TOK_GROUP_3D_LATHE      },
-//  { XML_NAMESPACE_DRAW,           sXML_3DExtrude,     XML_TOK_GROUP_3D_EXTRUDE    },
-//  { XML_NAMESPACE_DRAW,           sXML_3DPolygon,     XML_TOK_GROUP_3D_POLYGON    },
+    { XML_NAMESPACE_DR3D,           sXML_3DScene,       XML_TOK_GROUP_3DSCENE       },
 
     XML_TOKEN_MAP_END
 };
@@ -246,6 +258,25 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
     if(!mpGroupShapeElemTokenMap)
         mpGroupShapeElemTokenMap = new SvXMLTokenMap(aGroupShapeElemTokenMap);
     return *mpGroupShapeElemTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeElemTokenMap[] =
+{
+    { XML_NAMESPACE_DR3D,           sXML_3DScene,       XML_TOK_3DSCENE_3DSCENE     },
+    { XML_NAMESPACE_DR3D,           sXML_3DCube,        XML_TOK_3DSCENE_3DCUBE      },
+    { XML_NAMESPACE_DR3D,           sXML_3DSphere,      XML_TOK_3DSCENE_3DSPHERE    },
+    { XML_NAMESPACE_DR3D,           sXML_3DLathe,       XML_TOK_3DSCENE_3DLATHE     },
+    { XML_NAMESPACE_DR3D,           sXML_3DExtrude,     XML_TOK_3DSCENE_3DEXTRUDE   },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
+{
+    if(!mp3DSceneShapeElemTokenMap)
+        mp3DSceneShapeElemTokenMap = new SvXMLTokenMap(a3DSceneShapeElemTokenMap);
+    return *mp3DSceneShapeElemTokenMap;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -267,6 +298,24 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetShapeAttrTokenMap()
     if(!mpShapeAttrTokenMap)
         mpShapeAttrTokenMap = new SvXMLTokenMap(aShapeAttrTokenMap);
     return *mpShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static __FAR_DATA SvXMLTokenMapEntry a3DObjectAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DRAW,           sXML_style_name,        XML_TOK_3DOBJECT_DRAWSTYLE_NAME     },
+    { XML_NAMESPACE_DR3D,           sXML_transform,         XML_TOK_3DOBJECT_TRANSFORM          },
+    { XML_NAMESPACE_SVG,            sXML_viewBox,           XML_TOK_3DOBJECT_VIEWBOX            },
+    { XML_NAMESPACE_SVG,            sXML_d,                 XML_TOK_3DOBJECT_D                  },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
+{
+    if(!mp3DObjectAttrTokenMap)
+        mp3DObjectAttrTokenMap = new SvXMLTokenMap(a3DObjectAttrTokenMap);
+    return *mp3DObjectAttrTokenMap;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -403,6 +452,50 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetControlShapeAttrTokenMap()
 
 //////////////////////////////////////////////////////////////////////////////
 
+static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_3DSCENESHAPE_X              },
+    { XML_NAMESPACE_SVG,    sXML_y,                 XML_TOK_3DSCENESHAPE_Y              },
+    { XML_NAMESPACE_SVG,    sXML_width,             XML_TOK_3DSCENESHAPE_WIDTH          },
+    { XML_NAMESPACE_SVG,    sXML_height,            XML_TOK_3DSCENESHAPE_HEIGHT         },
+    { XML_NAMESPACE_DR3D,   sXML_transform,         XML_TOK_3DSCENESHAPE_TRANSFORM      },
+    { XML_NAMESPACE_DR3D,   sXML_projection,        XML_TOK_3DSCENESHAPE_PROJECTION     },
+    { XML_NAMESPACE_DR3D,   sXML_distance,          XML_TOK_3DSCENESHAPE_DISTANCE       },
+    { XML_NAMESPACE_DR3D,   sXML_focal_length,      XML_TOK_3DSCENESHAPE_FOCAL_LENGTH   },
+    { XML_NAMESPACE_DR3D,   sXML_shadow_slant,      XML_TOK_3DSCENESHAPE_SHADOW_SLANT   },
+    { XML_NAMESPACE_DR3D,   sXML_shade_mode,        XML_TOK_3DSCENESHAPE_SHADE_MODE     },
+    { XML_NAMESPACE_DR3D,   sXML_ambient_color,     XML_TOK_3DSCENESHAPE_AMBIENT_COLOR  },
+    { XML_NAMESPACE_DR3D,   sXML_lighting_mode,     XML_TOK_3DSCENESHAPE_LIGHTING_MODE  },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeAttrTokenMap()
+{
+    if(!mp3DSceneShapeAttrTokenMap)
+        mp3DSceneShapeAttrTokenMap = new SvXMLTokenMap(a3DSceneShapeAttrTokenMap);
+    return *mp3DSceneShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static __FAR_DATA SvXMLTokenMapEntry a3DLightAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DR3D,   sXML_diffuse_color,     XML_TOK_3DLIGHT_DIFFUSE_COLOR       },
+    { XML_NAMESPACE_DR3D,   sXML_direction,         XML_TOK_3DLIGHT_DIRECTION           },
+    { XML_NAMESPACE_DR3D,   sXML_enabled,           XML_TOK_3DLIGHT_ENABLED             },
+    { XML_NAMESPACE_DR3D,   sXML_specular,          XML_TOK_3DLIGHT_SPECULAR            },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
+{
+    if(!mp3DLightAttrTokenMap)
+        mp3DLightAttrTokenMap = new SvXMLTokenMap(a3DLightAttrTokenMap);
+    return *mp3DLightAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 static __FAR_DATA SvXMLTokenMapEntry aPageShapeAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_PAGESHAPE_X             },
@@ -436,6 +529,86 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
     if(!mpGraphicObjectShapeAttrTokenMap)
         mpGraphicObjectShapeAttrTokenMap = new SvXMLTokenMap(aGraphicObjectShapeAttrTokenMap);
     return *mpGraphicObjectShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext* XMLShapeImportHelper::Create3DSceneChildContext(
+    SvXMLImport& rImport,
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
+    uno::Reference< drawing::XShapes >& rShapes)
+{
+    SvXMLImportContext *pContext = 0L;
+
+    if(rShapes.is())
+    {
+        const SvXMLTokenMap& rTokenMap = Get3DSceneShapeElemTokenMap();
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+
+        for(sal_Int16 a(0); a < nAttrCount; a++)
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex(a);
+            OUString aLocalName;
+            sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        }
+
+        switch(rTokenMap.Get(nPrefix, rLocalName))
+        {
+            case XML_TOK_3DSCENE_3DSCENE:
+            {
+                // dr3d:3dscene inside dr3d:3dscene context
+                // create new 3DScene shape and add it to rShapes, use it
+                // as base for the new 3DScene import
+                uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
+                if(xServiceFact.is())
+                {
+                    uno::Reference< drawing::XShape > xShape(
+                        xServiceFact->createInstance(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"))),
+                        uno::UNO_QUERY);
+                    if(xShape.is())
+                    {
+                        rShapes->add( xShape );
+
+                        uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
+                        if(xNewShapes.is())
+                        {
+                            pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
+                        }
+                    }
+                }
+                break;
+            }
+            case XML_TOK_3DSCENE_3DCUBE:
+            {
+                // dr3d:3dcube inside dr3d:3dscene context
+                pContext = new SdXML3DCubeObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
+                break;
+            }
+            case XML_TOK_3DSCENE_3DSPHERE:
+            {
+                // dr3d:3dsphere inside dr3d:3dscene context
+                pContext = new SdXML3DSphereObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
+                break;
+            }
+            case XML_TOK_3DSCENE_3DLATHE:
+            {
+                // dr3d:3dlathe inside dr3d:3dscene context
+                pContext = new SdXML3DLatheObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
+                break;
+            }
+            case XML_TOK_3DSCENE_3DEXTRUDE:
+            {
+                // dr3d:3dextrude inside dr3d:3dscene context
+                pContext = new SdXML3DExtrudeObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
+                break;
+            }
+        }
+    }
+
+    return pContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -490,6 +663,31 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
                     if(xNewShapes.is())
                     {
                         pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
+                    }
+                }
+            }
+            break;
+        }
+        case XML_TOK_GROUP_3DSCENE:
+        {
+            // dr3d:3dscene inside group context
+            // create new 3DScene shape and add it to rShapes, use it
+            // as base for the new 3DScene import
+            uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
+            if(xServiceFact.is())
+            {
+                uno::Reference< drawing::XShape > xShape(
+                    xServiceFact->createInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"))),
+                    uno::UNO_QUERY);
+                if(xShape.is())
+                {
+                    rShapes->add( xShape );
+
+                    uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
+                    if(xNewShapes.is())
+                    {
+                        pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
                     }
                 }
             }
