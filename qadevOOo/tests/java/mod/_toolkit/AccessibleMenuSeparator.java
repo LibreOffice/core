@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuSeparator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-05-27 13:59:03 $
+ *  last change: $Date: 2003-09-08 13:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -79,6 +69,18 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+
 
 /**
  * Test for object which is represented by accessible component
@@ -102,31 +104,29 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleMenuSeparator extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
+    XMultiServiceFactory msf = null;
 
     /**
      * Finds first accessible component with role <code>SEPARATOR</code>
      * and implementation name <code>AccessibleMenuSeparator</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         shortWait();
 
@@ -134,33 +134,50 @@ public class AccessibleMenuSeparator extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,atw);
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-//        at.printAccessibleTree(log, xRoot);
+        //        at.printAccessibleTree(log, xRoot);
+        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
+                                                                   AccessibleRole.MENU_BAR);
+        XAccessibleAction act = null;
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.SEPARATOR, "", "AccessibleMenuSeparator");
+        try {
+            //activate Edit-Menu
+            XAccessible Menu = MenuBar.getAccessibleChild(1);
+            act = (XAccessibleAction) UnoRuntime.queryInterface(
+                          XAccessibleAction.class, Menu);
+            act.doAccessibleAction(0);
+
+            shortWait();
+
+
+            //get a menue-separator
+            oObj = Menu.getAccessibleContext().getAccessibleChild(3);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
+        final XAccessibleAction aAct = act;
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    System.out.println("Grabbing focus ... ");
-                    acomp.grabFocus();
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    aAct.doAccessibleAction(0);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        });
 
         return tEnv;
-
     }
 
     /**
@@ -168,7 +185,9 @@ public class AccessibleMenuSeparator extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+            msf = (XMultiServiceFactory) Param.getMSF();
+
+            SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -178,7 +197,7 @@ public class AccessibleMenuSeparator extends TestCase {
     /**
      * Disposes document.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         xTextDoc.dispose();
     }
 
@@ -188,9 +207,9 @@ public class AccessibleMenuSeparator extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 }
