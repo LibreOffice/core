@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-20 20:07:28 $
+ *  last change: $Author: jl $ $Date: 2002-03-21 12:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
     pEnv->CallStaticObjectMethod(jcToolkit, jmToolkit_getDefaultToolkit);           testJavaException(pEnv);
 
     jclass jcMotifAppletViewer = pEnv->FindClass(
-                        "sun/plugin/navig/motif/MotifAppletViewer");                testJavaException(pEnv);
+                        "sun/plugin/navig/motif/MotifAppletViewer");
     if(pEnv->ExceptionOccurred())
     {
         pEnv->ExceptionClear();
