@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:43:06 $
+ *  last change: $Author: fme $ $Date: 2001-04-27 13:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,40 +290,6 @@ SwRedlineItr::~SwRedlineItr()
     delete pExt;
 }
 
-void SwRedlineItr::CalcStartEnd()
-{
-    const SwRedline* pTmp = rDoc.GetRedlineTbl()[ nAct ];
-    const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
-    if( pRStt->nNode < nNdIdx )
-    {
-        if( pREnd->nNode > nNdIdx )
-        {
-            nStart = 0;             // Absatz ist komplett enthalten
-            nEnd = STRING_LEN;
-        }
-        else
-        {
-            ASSERT( pREnd->nNode == nNdIdx,
-                "SwRedlineItr::Seek: GetRedlinePos Error" );
-            nStart = 0;             // Absatz wird vorne ueberlappt
-            nEnd = pREnd->nContent.GetIndex();
-        }
-    }
-    else if( pRStt->nNode == nNdIdx )
-    {
-        nStart = pRStt->nContent.GetIndex();
-        if( pREnd->nNode == nNdIdx )
-            nEnd = pREnd->nContent.GetIndex(); // Innerhalb des Absatzes
-        else
-            nEnd = STRING_LEN;      // Absatz wird hinten ueberlappt
-    }
-    else
-    {
-        nStart = STRING_LEN;
-        nEnd = STRING_LEN;
-    }
-}
-
 // Der Return-Wert von SwRedlineItr::Seek gibt an, ob der aktuelle Font
 // veraendert wurde durch Verlassen (-1) oder Betreten eines Bereichs (+1)
 
@@ -363,7 +329,8 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
 
         for( ; nAct < rDoc.GetRedlineTbl().Count() ; ++nAct )
         {
-            CalcStartEnd();
+            rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+
             if( nNew < nEnd )
             {
                 if( nNew >= nStart ) // der einzig moegliche Kandidat
@@ -468,7 +435,7 @@ xub_StrLen SwRedlineItr::_GetNextRedln( xub_StrLen nNext )
     if( MSHRT_MAX == nAct )
     {
         nAct = nFirst;
-        CalcStartEnd();
+        rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
     }
     if( bOn || !nStart )
     {
@@ -509,7 +476,7 @@ sal_Bool SwRedlineItr::CheckLine( xub_StrLen nChkStart, xub_StrLen nChkEnd )
 
     for( nAct = nFirst; nAct < rDoc.GetRedlineTbl().Count() ; ++nAct )
     {
-        CalcStartEnd();
+        rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
         if( nChkEnd < nStart )
             break;
         if( nChkStart <= nEnd && ( nChkEnd > nStart || STRING_LEN == nEnd ) )

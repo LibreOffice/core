@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-14 10:09:29 $
+ *  last change: $Author: fme $ $Date: 2001-04-27 13:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,12 @@
 #ifndef _TXATRITR_HXX
 #include <txatritr.hxx>
 #endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>      // SwRedline
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>       // SwRedlineTbl
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -181,12 +187,9 @@ using namespace ::com::sun::star::linguistic2;
 extern const SwTxtNode *pLinguNode;
 extern       SwTxtFrm  *pLinguFrm;
 
-
 /*
  * Ein Zeichen wurde eingefuegt.
  */
-
-
 
 SwTxtNode& SwTxtNode::Insert( xub_Unicode c, const SwIndex &rIdx )
 {
@@ -602,6 +605,28 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     xub_StrLen nBegin, nEnd;
 
+    // modify string according to redline information
+    const SwDoc* pDoc = GetDoc();
+    USHORT nAct = pDoc->GetRedlinePos( *this );
+    const XubString rOldTxt( aText );
+
+    for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
+    {
+        const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+
+        if ( pRed->Start()->nNode > GetIndex() )
+            break;
+
+        if( REDLINE_DELETE == pRed->GetType() )
+        {
+            USHORT nStart, nEnd;
+            pRed->CalcStartEnd( GetIndex(), nStart, nEnd );
+
+            while ( nStart < nEnd && nStart < aText.Len() )
+                aText.SetChar( nStart++, CH_TXTATR_INWORD );
+        }
+    }
+
     if ( pArgs->pStartNode != this )
         nBegin = 0;
     else
@@ -675,6 +700,9 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
         }
     }
 
+    // reset original text
+    aText = rOldTxt;
+
     return pArgs->xSpellAlt.is() ? 1 : 0;
 }
 
@@ -696,7 +724,30 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 
     LanguageType eFmtLang = pNode->GetSwAttrSet().GetLanguage().GetLanguage();
 
-    const XubString& rTxt = pNode->aText;
+    // modify string according to redline information
+    const SwDoc* pDoc = pNode->GetDoc();
+    USHORT nAct = pDoc->GetRedlinePos( *pNode );
+    const XubString rOldTxt( pNode->aText );
+
+    for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
+    {
+        const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+
+        if ( pRed->Start()->nNode > pNode->GetIndex() )
+            break;
+
+        if( REDLINE_DELETE == pRed->GetType() )
+        {
+            USHORT nStart, nEnd;
+            pRed->CalcStartEnd( pNode->GetIndex(), nStart, nEnd );
+
+            while ( nStart < nEnd && nStart < pNode->aText.Len() )
+                pNode->aText.SetChar( nStart++, CH_TXTATR_INWORD );
+        }
+    }
+
+    // a change of data indicates that at least one word has been modified
+    sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != rOldTxt.GetBuffer() );
 
     xub_StrLen nBegin;
     xub_StrLen nEnd;
@@ -786,7 +837,16 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     }
                 }
                 else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.Len() )
-                    rACW.InsertWord( rWord );
+                {
+                    if ( bRedlineChg )
+                    {
+                        XubString rNewWord( rWord );
+                        rNewWord.EraseAllChars( CH_TXTATR_INWORD );
+                        rACW.InsertWord( rNewWord );
+                    }
+                    else
+                        rACW.InsertWord( rWord );
+                }
             }
         }
     }
@@ -860,6 +920,9 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
     }
     else
         pNode->SetWrongDirty( FALSE );
+
+    // reset original text
+    pNode->aText = rOldTxt;
 
     if( bAddAutoCmpl )
         pNode->SetAutoCompleteWordDirty( FALSE );
@@ -1135,6 +1198,3 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
     SwInsTxt aHint( nPos, nLen );
     SwModify::Modify( 0, &aHint );
 }
-
-
-

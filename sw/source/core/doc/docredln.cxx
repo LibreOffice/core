@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-25 11:30:51 $
+ *  last change: $Author: fme $ $Date: 2001-04-27 13:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2784,6 +2784,45 @@ void SwRedline::InvalidateRange()       // das Layout anstossen
             aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
             ((SwTxtNode*)pNd)->Modify( &aHt, &aHt );
         }
+}
+
+/*************************************************************************
+ *                      SwRedline::CalcStartEnd()
+ * Calculates the start and end position of the intersection rTmp and
+ * text node nNdIdx
+ *************************************************************************/
+
+void SwRedline::CalcStartEnd( USHORT nNdIdx, USHORT& nStart, USHORT& nEnd ) const
+{
+    const SwPosition *pRStt = Start(), *pREnd = End();
+    if( pRStt->nNode < nNdIdx )
+    {
+        if( pREnd->nNode > nNdIdx )
+        {
+            nStart = 0;             // Absatz ist komplett enthalten
+            nEnd = STRING_LEN;
+        }
+        else
+        {
+            ASSERT( pREnd->nNode == nNdIdx,
+                "SwRedlineItr::Seek: GetRedlinePos Error" );
+            nStart = 0;             // Absatz wird vorne ueberlappt
+            nEnd = pREnd->nContent.GetIndex();
+        }
+    }
+    else if( pRStt->nNode == nNdIdx )
+    {
+        nStart = pRStt->nContent.GetIndex();
+        if( pREnd->nNode == nNdIdx )
+            nEnd = pREnd->nContent.GetIndex(); // Innerhalb des Absatzes
+        else
+            nEnd = STRING_LEN;      // Absatz wird hinten ueberlappt
+    }
+    else
+    {
+        nStart = STRING_LEN;
+        nEnd = STRING_LEN;
+    }
 }
 
 void SwRedline::MoveToSection()

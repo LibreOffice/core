@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:54:04 $
+ *  last change: $Author: fme $ $Date: 2001-04-27 13:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ class SwRedlineItr
     sal_Bool bShow;
 
     void _Clear( SwFont* pFnt );
-    void CalcStartEnd();
     sal_Bool _ChkSpecialUnderline() const;
     void FillHints( MSHORT nAuthor, SwRedlineType eType );
     short _Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld );

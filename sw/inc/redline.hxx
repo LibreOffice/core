@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: fme $ $Date: 2001-04-27 13:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,9 @@ public:
     void Hide( USHORT nLoop = 0 );
     void ShowOriginal( USHORT nLoop = 0 );
 
+    // calculates the intersection with text node number nNdIdx
+    void CalcStartEnd( USHORT nNdIdx, USHORT& nStart, USHORT& nEnd ) const;
+
     void InvalidateRange();     // das Layout anstossen
 
     BOOL IsOwnRedline( const SwRedline& rRedl ) const
@@ -304,9 +307,5 @@ public:
     int operator==( const SwRedline& ) const;
     int operator<( const SwRedline& ) const;
 };
-
-
-
-
 
 #endif
