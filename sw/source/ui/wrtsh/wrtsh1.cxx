@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:36:21 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,6 +1128,9 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 void SwWrtShell::NumOrBulletOn(BOOL bNum)
 {
     const SwNumRule* pCurRule = GetCurNumRule();
+
+    StartUndo(UNDO_NUMORNONUM);
+
     if( !pCurRule || !pCurRule->IsOutlineRule())
     {
         const SwNumRule * pNumRule =
@@ -1153,6 +1156,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
             }
 
+            SwTxtNode * pTxtNode =
+                GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+            USHORT nWidthOfTabs = pTxtNode->GetWidthOfLeadingTabs();
+            GetDoc()->RemoveLeadingChars(*GetCrsr()->GetPoint(), '\t');
+
             BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
             for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
             {
@@ -1172,6 +1180,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     aFmt.SetLSpace(720);
                     aFmt.SetAbsLSpace(nLvl * 720);
                 }
+                else if ( nWidthOfTabs > 0 )
+                {
+                    aFmt.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
+                }
+
                 aNumRule.Set( nLvl, aFmt );
             }
             SetCurNumRule( aNumRule );
@@ -1207,6 +1220,8 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             }
         }
     }
+
+    EndUndo(UNDO_NUMORNONUM);
 }
 
 void SwWrtShell::NumOn()
