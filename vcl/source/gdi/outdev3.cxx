@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:13:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1453,12 +1453,12 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
         nMatch += 120000;
 
     if( (rFSD.mePitch != PITCH_DONTKNOW) && (rFSD.mePitch == mePitch) )
-        nMatch += 60000;
+        nMatch += 20000;
 
     // prefer NORMAL font width
     // TODO: change when the upper layers can tell their preference
     if( meWidthType == WIDTH_NORMAL )
-        nMatch += 15000;
+        nMatch += 10000;
 
     // prefer NORMAL font weight
     // TODO: change when the upper layers can tell their preference
@@ -1524,15 +1524,17 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
         }
         else
         {
-            // for non-scalable fonts the size difference is important
+            // for non-scalable fonts the size difference is very important
             // prefer the smaller font face because of clipping/overlapping issues
-            int nHeightDiff = rFSD.mnHeight - mnHeight;
-            nHeightMatch = (nHeightDiff >= 0) ? 10000+nHeightDiff : -nHeightDiff;
+            int nHeightDiff = (rFSD.mnHeight - mnHeight) * 1000;
+            nHeightMatch = (nHeightDiff >= 0) ? -nHeightDiff : 100+nHeightDiff;
+            if( rFSD.mnHeight )
+                nHeightMatch /= rFSD.mnHeight;
 
             if( (rFSD.mnWidth != 0) && (mnWidth != 0) && (rFSD.mnWidth != mnWidth) )
             {
-                int nWidthDiff = rFSD.mnWidth - mnWidth;
-                nWidthMatch = (nWidthDiff >= 0) ? +nWidthDiff : -nWidthDiff;
+                int nWidthDiff = (rFSD.mnWidth - mnWidth) * 100;
+                nWidthMatch = (nWidthDiff >= 0) ? -nWidthDiff : +nWidthDiff;
             }
         }
     }
@@ -6156,11 +6158,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
                 break;
         }
 
-        if( pMultiSalLayout && pMultiSalLayout->LayoutText( aLayoutArgs ) )
-            pSalLayout = pMultiSalLayout;
-
         // restore orig font settings
         pSalLayout->InitFont();
+
+        if( pMultiSalLayout && pMultiSalLayout->LayoutText( aLayoutArgs ) )
+            pSalLayout = pMultiSalLayout;
     }
 
     if( pSalLayout )
