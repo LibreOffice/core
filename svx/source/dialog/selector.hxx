@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:28:21 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,21 +77,9 @@
 #include <svtools/svtreebx.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#endif
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #define _SVSTDARR_USHORTS
@@ -99,19 +87,10 @@
 #include <svtools/svstdarr.hxx>     // SvUShorts
 #include <sfx2/minarray.hxx>
 
-class SfxMacroInfoArr_Impl;
-class SfxMacroInfoItem;
-class SfxMacroInfo;
-
-#define SFX_CFGGROUP_FUNCTION 1
-#define SFX_CFGGROUP_BASICMGR 2
-#define SFX_CFGGROUP_DOCBASICMGR 3
-#define SFX_CFGGROUP_BASICLIB 4
-#define SFX_CFGGROUP_BASICMOD 5
-#define SFX_CFGFUNCTION_MACRO 6
-#define SFX_CFGFUNCTION_SLOT  7
-#define SFX_CFGGROUP_SCRIPTCONTAINER  8
-#define SFX_CFGFUNCTION_SCRIPT 9
+#define SVX_CFGGROUP_FUNCTION 1
+#define SVX_CFGFUNCTION_SLOT  2
+#define SVX_CFGGROUP_SCRIPTCONTAINER  3
+#define SVX_CFGFUNCTION_SCRIPT 4
 
 struct SvxGroupInfo_Impl
 {
@@ -156,7 +135,6 @@ public:
     USHORT                          GetCurId()
                                     { return GetId( FirstSelected() ); }
     SvLBoxEntry*                    GetLastSelectedEntry();
-    SfxMacroInfo*                   GetMacroInfo();
     void                            FunctionSelected();
 
     // drag n drop methods
@@ -184,9 +162,6 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
 
     // show Scripting Framework scripts?
     BOOL    bShowSF;
-
-    // show Basic scripts?
-    BOOL    bShowBasic;
 
     Image m_hdImage;
     Image m_hdImage_hc;
@@ -218,10 +193,7 @@ public:
     void    Init( SvStringsDtor *pArr = 0 );
     void    Open( SvLBoxEntry*, BOOL );
     void    ClearAll();
-    void    SelectMacro( const SfxMacroInfoItem* );
-    void    SelectMacro( const String&, const String& );
     void    GroupSelected();
-    String  GetGroup();
 
     void    SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
         { pFunctionListBox = pBox; }
@@ -280,6 +252,7 @@ public:
     String      GetSelectedDisplayName();
     String      GetSelectedHelpText();
     void        SetRunLabel();
+    void        SetDialogDescription(const String& rDescription);
 };
 
 #endif
