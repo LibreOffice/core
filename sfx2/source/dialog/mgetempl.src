@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:18:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage TP_MANAGE_STYLES
         Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ portuguese ] = "~Nome" ;
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text[ chinese_simplified ] = "名称(~N)";
@@ -102,6 +102,8 @@ TabPage TP_MANAGE_STYLES
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -119,7 +121,7 @@ TabPage TP_MANAGE_STYLES
         Text [ english_us ] = "~AutoUpdate" ;
         Text [ portuguese_brazilian ] = "Atualiza��o ~autom�tica" ;
         Text [ swedish ] = "~Autom. uppdatering" ;
-        Text [ danish ] = "Opdater automatisk" ;
+        Text [ danish ] = "~Opdater automatisk" ;
         Text [ italian ] = "Aggiorna automaticamente" ;
         Text [ spanish ] = "~Actualizaci�n autom�tica" ;
         Text [ french ] = "Actualisation ~automatique" ;
@@ -142,6 +144,8 @@ TabPage TP_MANAGE_STYLES
         Text[ hebrew ] = "‮עידכון אוטומטי‬";
         Text[ hindi ] = "~स्वचालित ढंग से अपडेट्";
         Text[ slovak ] = "~Automatická aktualizácia";
+        Text[ hungarian ] = "Auto~matikus frissítés";
+        Text[ slovenian ] = "S~amoposodobi";
     };
     FixedText FT_NEXT
     {
@@ -176,6 +180,8 @@ TabPage TP_MANAGE_STYLES
         Text[ hebrew ] = "‮סגנון הבא‬";
         Text[ hindi ] = "अग~ला शैली";
         Text[ slovak ] = "Ďa~lší štýl";
+        Text[ hungarian ] = "Kö~vetkező stílus";
+        Text[ slovenian ] = "N~aslednji slog";
     };
     ListBox LB_NEXT
     {
@@ -198,7 +204,7 @@ TabPage TP_MANAGE_STYLES
         Text [ portuguese_brazilian ] = "~Vinculado com" ;
         Text [ portuguese ] = "~Baseado em" ;
         Text [ finnish ] = "Perusta" ;
-        Text [ danish ] = "K�det med" ;
+        Text [ danish ] = "Sammenk�det med" ;
         Text [ french ] = "~Li� �" ;
         Text [ swedish ] = "~L�nkad med" ;
         Text [ dutch ] = "~Gebaseerd op" ;
@@ -220,6 +226,8 @@ TabPage TP_MANAGE_STYLES
         Text[ hebrew ] = "‮קשור ל‬";
         Text[ hindi ] = "के ~आधार पर";
         Text[ slovak ] = "Spojené s";
+        Text[ hungarian ] = "Ezen alapul:";
+        Text[ slovenian ] = "Povezano z";
     };
     ListBox LB_BASE
     {
@@ -240,7 +248,7 @@ TabPage TP_MANAGE_STYLES
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "~Luokka" ;
-        Text [ danish ] = "Omr�de" ;
+        Text [ danish ] = "~Kategori" ;
         Text [ french ] = "~Cat�gorie" ;
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Bereik" ;
@@ -262,6 +270,8 @@ TabPage TP_MANAGE_STYLES
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "K~ategórie";
+        Text[ hungarian ] = "~Kategória";
+        Text[ slovenian ] = "~Kategorija";
     };
     ListBox LB_REGION
     {
@@ -317,9 +327,12 @@ TabPage TP_MANAGE_STYLES
         Text[ hebrew ] = "‮מכיל‬";
         Text[ hindi ] = "सम्मिलित";
         Text[ slovak ] = "Obsahuje";
+        Text[ hungarian ] = "Tartalma:";
+        Text[ slovenian ] = "Vsebuje";
     };
 };
  // ********************************************************************** EOF
+
 
 
 
