@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 17:47:52 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 10:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,8 @@ DBG_NAME(FormattedField);
     ,m_dSpinFirst(-1000000)         \
     ,m_dSpinLast(1000000)           \
     ,m_bTreatAsNumber(TRUE)         \
-    ,m_pLastOutputColor(NULL)
+    ,m_pLastOutputColor(NULL)       \
+    ,m_bAutoColor(FALSE)
 
 //------------------------------------------------------------------------------
 FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, INT32 nFormatKey)
@@ -317,6 +318,14 @@ void FormattedField::Modify()
 void FormattedField::ImplSetText(const XubString& rNew, Selection* pNewSel)
 {
     DBG_CHKTHIS(FormattedField, NULL);
+
+    if (m_bAutoColor)
+    {
+        if (m_pLastOutputColor)
+            SetControlForeground(*m_pLastOutputColor);
+        else
+            SetControlForeground();
+    }
 
     if (pNewSel)
         SpinField::SetText(rNew, *pNewSel);
