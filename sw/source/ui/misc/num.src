@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:00:20 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "Ebene";
         Text[ hindi ] = "स्तर";
         Text[ slovak ] = "Úroveň";
+        Text[ hungarian ] = "Vázlatszint";
+        Text[ slovenian ] = "Raven";
     };
     MultiListBox LB_LEVEL
     {
@@ -155,6 +157,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "Position und Abstand";
         Text[ hindi ] = "स्थान और अंतर देना";
         Text[ slovak ] = "Umiestnenie a rozostupy";
+        Text[ hungarian ] = "Térköz és pozíció";
+        Text[ slovenian ] = "Položaj in razmik";
     };
     FixedText FT_BORDERDIST
     {
@@ -188,6 +192,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "‮שוליים‬";
         Text[ hindi ] = "इन्डेन्ट";
         Text[ slovak ] = "Odsadenie";
+        Text[ hungarian ] = "Behúzás";
+        Text[ slovenian ] = "Zamik";
     };
     CheckBox CB_RELATIVE
     {
@@ -199,7 +205,7 @@ TabPage TP_NUM_POSITION
         Text [ english_us ] = "Relati~ve" ;
         Text [ portuguese_brazilian ] = "~Relativo" ;
         Text [ swedish ] = "Relati~vt" ;
-        Text [ danish ] = "Relativ" ;
+        Text [ danish ] = "~Relativ" ;
         Text [ italian ] = "Relativo" ;
         Text [ spanish ] = "Relati~vo" ;
         Text [ french ] = "Relatif" ;
@@ -221,6 +227,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "Relati~v";
         Text[ hindi ] = "सम्बन्धि~त";
         Text[ slovak ] = "Relatí~vne";
+        Text[ hungarian ] = "~Viszonylagos";
+        Text[ slovenian ] = "Relati~vno";
     };
     MetricField MF_BORDERDIST
     {
@@ -272,6 +280,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "Abstand zum Te~xt";
         Text[ hindi ] = "~टेक्स्ट् केलिए अंतर";
         Text[ slovak ] = "Vzdialenosť k te~xtu";
+        Text[ hungarian ] = "~Függő behúzás";
+        Text[ slovenian ] = "Razmik do be~sedila";
     };
     MetricField MF_INDENT
     {
@@ -323,6 +333,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "~Mindestabstand Nummer <-> Text";
         Text[ hindi ] = "~न्यूनतम अंतर संख्या देना <-> टेक्स्ट्";
         Text[ slovak ] = "~Min. medzera číslovanie <-> text";
+        Text[ hungarian ] = "~Sorszám és szöveg minimális távolsága";
+        Text[ slovenian ] = "~Min. razmik oštevilčenje <-> besedilo";
     };
     MetricField MF_NUMDIST
     {
@@ -350,7 +362,7 @@ TabPage TP_NUM_POSITION
         Text [ ENGLISH ] = "Alignment of the numbering" ;
         Text [ english_us ] = "Numbering ~alignment" ;
         Text [ swedish ] = "~Placering av numrering" ;
-        Text [ danish ] = "Justering af nummerering" ;
+        Text [ danish ] = "Justering af n~ummerering" ;
         Text [ italian ] = "~Allineamento della numerazione" ;
         Text [ spanish ] = "~Alineaci�n de la numeraci�n" ;
         Text [ french ] = "~Alignement de la num�rotation" ;
@@ -374,6 +386,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "Ausri~chtung der Nummerierung";
         Text[ hindi ] = "संख्या का ~पंक्तिकरण";
         Text[ slovak ] = "Zarovn~anie číslovania";
+        Text[ hungarian ] = "Szám~ozás igazítása";
+        Text[ slovenian ] = "~Poravnava oštevilčenja";
     };
     ListBox LB_ALIGN
     {
@@ -549,6 +563,18 @@ TabPage TP_NUM_POSITION
         < "Na stred" ; > ;
         < "Vpravo" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balra" ; > ;
+        < "Középre igazított" ; > ;
+        < "Jobbra" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Levo" ; > ;
+        < "Na sredini" ; > ;
+        < "Desno" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -559,7 +585,7 @@ TabPage TP_NUM_POSITION
         Text [ english_us ] = "~Default" ;
         Text [ portuguese_brazilian ] = "~Padr�o" ;
         Text [ swedish ] = "~Standard" ;
-        Text [ danish ] = "Standard" ;
+        Text [ danish ] = "Standar~d" ;
         Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
         Text [ french ] = "Par d�faut" ;
@@ -582,6 +608,8 @@ TabPage TP_NUM_POSITION
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzie";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
     Window WIN_PREVIEW
     {
@@ -638,6 +666,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ hebrew ] = "Bullets";
                 Text[ hindi ] = "बुल्लेट्स";
                 Text[ slovak ] = "Odrážky";
+                Text[ hungarian ] = "Felsorolásjel";
+                Text[ slovenian ] = "Oznake";
             };
             PageItem
             {
@@ -670,6 +700,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ hebrew ] = "Nummerierungsart";
                 Text[ hindi ] = "संख्या देने का वर्ग";
                 Text[ slovak ] = "Typ číslovania";
+                Text[ hungarian ] = "Számozás típusa";
+                Text[ slovenian ] = "Vrsta oštevilčevanja";
             };
             PageItem
             {
@@ -702,6 +734,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ hebrew ] = "‮מסגרת‬";
                 Text[ hindi ] = "बाहरी रूपरेखा";
                 Text[ slovak ] = "Osnova";
+                Text[ hungarian ] = "Vázlatszintek";
+                Text[ slovenian ] = "Oris";
             };
             PageItem
             {
@@ -734,6 +768,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
                 Text[ slovak ] = "Obrázky";
+                Text[ hungarian ] = "Képes felsorolásjel";
+                Text[ slovenian ] = "Grafika";
             };
             PageItem
             {
@@ -766,6 +802,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
                 Text[ slovak ] = "Umiestnenie";
+                Text[ hungarian ] = "Pozíció";
+                Text[ slovenian ] = "Položaj";
             };
             PageItem
             {
@@ -799,6 +837,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
                 Text[ slovak ] = "Nastavenia";
+                Text[ hungarian ] = "Egyéni";
+                Text[ slovenian ] = "Možnosti";
             };
         };
         Text[ english_us ] = "Numbering/Bullets";
@@ -824,7 +864,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text [ portuguese_brazilian ] = "~Remover" ;
         Text [ portuguese ] = "~Remover" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Fjern" ;
+        Text [ danish ] = "~Fjern" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "T~a bort" ;
         Text [ dutch ] = "Ve~rwijderen" ;
@@ -846,15 +886,17 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
         Text[ slovak ] = "Odst~rániť";
+        Text[ hungarian ] = "~Eltávolítás";
+        Text[ slovenian ] = "Odst~rani";
     };
     Text [ english_us ] = "Numbering/Bullets" ;
     Text [ portuguese_brazilian ] = "Numera��o / Marcas" ;
     Text [ swedish ] = "Numrering/punktuppst�llning" ;
-    Text [ danish ] = "Nummerering/punkttegn" ;
+    Text [ danish ] = "Nummerering/punktopstilling" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
     Text [ spanish ] = "Numeraci�n y vi�etas" ;
     Text [ french ] = "Num�rotation/Puces" ;
-    Text [ dutch ] = "Nummering/opsomming" ;
+    Text [ dutch ] = "Nummering/opsommingstekens" ;
     Text [ portuguese ] = "Numera��o & Marcas" ;
     Text[ chinese_simplified ] = "编号/项目符号";
     Text[ russian ] = "���������/����������";
@@ -873,7 +915,11 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ hebrew ] = "‮תבליטים/מיספור‬";
     Text[ hindi ] = "संख्या देना/बुल्लेट्स";
     Text[ slovak ] = "Číslovanie/odrážky";
+    Text[ hungarian ] = "Számozás és felsorolás";
+    Text[ slovenian ] = "Oštevilčevanje/označevanje";
 };
+
+
 
 
 
