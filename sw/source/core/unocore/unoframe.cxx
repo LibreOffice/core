@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: os $ $Date: 2003-05-08 08:50:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1951,14 +1951,14 @@ void SwXFrame::dispose(void) throw( RuntimeException )
         if( pObj && pObj->IsInserted() )
         {
             if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
-                {
-                    const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
-                    SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                    const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                    pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
-                }
-                else
-                    pFmt->GetDoc()->DelLayoutFmt(pFmt);
+            {
+                const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
+                SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+                const xub_StrLen nIdx = rPos.nContent.GetIndex();
+                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+            }
+            else
+                pFmt->GetDoc()->DelLayoutFmt(pFmt);
         }
     }
 
