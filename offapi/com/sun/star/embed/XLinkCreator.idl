@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinkCreator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:55:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,29 +90,40 @@
  module com {  module sun {  module star {  module embed {
 
 //=============================================================================
-/** Allows to create and initialize a new link.
-Methods of this interface does not require specification of the object type,
-it will be detected.
+/** allows to create and initialize a new link.
+    <p>
+    Methods of this interface does not require specification of the object type,
+    it will be detected.
+    </p>
  */
 interface XLinkCreator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Creates a new object and initializes it as a link.
+    /** creates a new object based on
+        <type scope="com::sun::star::document">MediaDescriptor</type>
+        and initializes it as a link.
+
+        <p>
+        In case the entry exists already all it's contents will be ignored and
+        rewritten on storing of the object.
+        </p>
 
         @param xStorage
             a parent storage the entry should be created/opened in
 
-        @param sEntName
+        @param sEntryName
             a name for the entry
 
-        @param aMediaDescr
-            the media descriptor must contain URL the link will be based on
+        @param aArgs
+            <type scope="com::sun::star::document">MediaDescriptor</type>
+            the link will be based on
 
-        @param lObjArgs
-            optional parameters for the object persistence initialization
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+        @param aObjectArgs
+            optional parameters for the object persistence initialization,
+            see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             the argument is illegal
 
         @throws com::sun::star::io::IOException
@@ -121,10 +132,11 @@ interface XLinkCreator: com::sun::star::uno::XInterface
         @throws com::sun::star::uno::Exception
             in case of other problems
      */
-    ::com::sun::star::uno::XInterface createInstanceLink( [in] ::com::sun::star::embed::XStorage xStorage,
-                                 [in] string sEntName,
-                                 [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescr,
-                                [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs )
+    ::com::sun::star::uno::XInterface createInstanceLink(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+             [in] string sEntryName,
+             [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
