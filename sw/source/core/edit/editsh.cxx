@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:12:55 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 11:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,26 +957,16 @@ USHORT SwEditShell::GetLineCount( BOOL bActPos )
 long SwEditShell::CompareDoc( const SwDoc& rDoc )
 {
     StartAllAction();
-    GetDoc()->StartUndo();
-
     long nRet = GetDoc()->CompareDoc( rDoc );
-
-    GetDoc()->EndUndo();
     EndAllAction();
-
     return nRet;
 }
 
 long SwEditShell::MergeDoc( const SwDoc& rDoc )
 {
     StartAllAction();
-    GetDoc()->StartUndo();
-
     long nRet = GetDoc()->MergeDoc( rDoc );
-
-    GetDoc()->EndUndo();
     EndAllAction();
-
     return nRet;
 }
 
