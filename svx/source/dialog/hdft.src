@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:23:11 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
         Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
         Text[ polish ] = "Taka sama zawartoœæ na stronie parzystej/nieparzystej";
-        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
+        Text[ japanese ] = "¶‰EÍß°¼Ş“¯‚¶“à—e(~C)";
         Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
         Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
         Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
@@ -360,7 +360,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "Intestazione" ;
         Text [ portuguese_brazilian ] = "Cabeçalho" ;
         Text [ portuguese ] = "Cabeçalho" ;
-        Text [ finnish ] = "Kopfzeile" ;
+        Text [ finnish ] = "Yläotsikot" ;
         Text [ danish ] = "Sidehoved" ;
         Text [ french ] = "En-tête" ;
         Text [ swedish ] = "Sidhuvud" ;
@@ -493,7 +493,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
         Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
         Text[ polish ] = "Taka sama zawartoœæ na stronie parzystej/nieparzystej";
-        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
+        Text[ japanese ] = "¶‰EÍß°¼Ş“¯‚¶“à—e(~C)";
         Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
         Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
         Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
@@ -723,7 +723,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "Piè di pagina" ;
         Text [ portuguese_brazilian ] = "Rodapé" ;
         Text [ portuguese ] = "Rodapé" ;
-        Text [ finnish ] = "Fußzeile" ;
+        Text [ finnish ] = "Alaselite" ;
         Text [ danish ] = "Sidefod" ;
         Text [ french ] = "Pied de page" ;
         Text [ swedish ] = "Sidfot" ;
