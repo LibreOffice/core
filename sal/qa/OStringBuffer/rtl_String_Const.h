@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:23:10 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,7 +1276,7 @@ static const float  expValFloat[nFloatCount] =
             3.0f,3.1f,3.1415f,3.14159f,3.141592f,
             3.1415926f,3.14159265f,3.141592653589793238462643f,
             6.5822e-16f,9.1096e-31f,2.997925e8f,6.241e18f,
-            1.00e38,6.241e-37,6.241e37,3.1f,3.1f,-3.1f,
+            1.00e38f,6.241e-37f,6.241e37f,3.1f,3.1f,-3.1f,
             3.1f,0.0f,0.0f,0.0f
         };
 //------------------------------------------------------------------------
