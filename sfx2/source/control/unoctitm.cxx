@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:26:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,12 +581,15 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 pItem = pDispatcher->Execute( GetId(), nCall );
 
             // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
-            SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
-            if ( pAppDispat )
+            if ( SfxApplication::Is_Impl() )
             {
-                const SfxPoolItem* pState=0;
-                SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
-                StateChanged( GetId(), eState, pState );
+                SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
+                if ( pAppDispat )
+                {
+                    const SfxPoolItem* pState=0;
+                    SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
+                    StateChanged( GetId(), eState, pState );
+                }
             }
 
             bSuccess = (pItem != NULL);
