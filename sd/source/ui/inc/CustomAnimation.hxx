@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:11:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
