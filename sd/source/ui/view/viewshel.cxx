@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-27 15:08:05 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 15:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include "helpids.h"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-
 #include "viewshel.hxx"
 #include "sdview.hxx"
 #include "sdclient.hxx"
@@ -98,6 +97,8 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "zoomlist.hxx"
+#include "frmview.hxx"
+#include "optsitem.hxx"
 #include "grviewsh.hxx"
 #include "prevchld.hxx"
 #include "preview.hxx"
@@ -1374,8 +1375,7 @@ void SdViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// #96090#
+// -----------------------------------------------------------------------------
 
 SfxUndoManager* SdViewShell::ImpGetUndoManager() const
 {
@@ -1414,6 +1414,8 @@ void SdViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
     }
 }
 
+// -----------------------------------------------------------------------------
+
 void SdViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
@@ -1445,6 +1447,8 @@ void SdViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         }
     }
 }
+
+// -----------------------------------------------------------------------------
 
 void SdViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
 {
@@ -1492,6 +1496,8 @@ void SdViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
     rReq.Done();
 }
 
+// -----------------------------------------------------------------------------
+
 void SdViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
@@ -1531,3 +1537,59 @@ void SdViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
     rReq.Done();
 }
 
+// -----------------------------------------------------------------------------
+
+void SdViewShell::ExecReq( SfxRequest& rReq )
+{
+    switch( rReq.GetSlot() )
+    {
+        case SID_MAIL_SCROLLBODY_PAGEDOWN:
+        {
+            if( pFuActual )
+            {
+                pFuActual->ScrollStart();
+                ScrollLines( 0, -1 );
+                pFuActual->ScrollEnd();
+            }
+
+            rReq.Done();
+        }
+        break;
+
+        case SID_PREVIEW_QUALITY_COLOR:
+        case SID_PREVIEW_QUALITY_GRAYSCALE:
+        case SID_PREVIEW_QUALITY_BLACKWHITE:
+        case SID_PREVIEW_QUALITY_CONTRAST:
+        {
+            ULONG nMode = PREVIEW_DRAWMODE_COLOR;
+
+            switch( rReq.GetSlot() )
+            {
+                case SID_PREVIEW_QUALITY_COLOR: nMode = PREVIEW_DRAWMODE_COLOR; break;
+                case SID_PREVIEW_QUALITY_GRAYSCALE: nMode = PREVIEW_DRAWMODE_GRAYSCALE; break;
+                case SID_PREVIEW_QUALITY_BLACKWHITE: nMode = PREVIEW_DRAWMODE_BLACKWHITE; break;
+                case SID_PREVIEW_QUALITY_CONTRAST: nMode = PREVIEW_DRAWMODE_CONTRAST; break;
+            }
+
+            SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+            SdPreviewWin*   pPreviewWin = (SdPreviewWin*) ( pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
+            FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
+            SdShowWindow*   pShowWindow = const_cast< SdShowWindow* >( pShow ? pShow->GetShowWindow() : NULL );
+
+            if( pShowWindow )
+            {
+                pShowWindow->SetDrawMode( nMode );
+                pShow->Resize( pShowWindow->GetOutputSizePixel() );
+                pShowWindow->Invalidate();
+            }
+
+            pFrameView->SetPreviewDrawMode( nMode );
+            SdOptions* pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
+            pOptions->SetPreviewQuality( nMode );
+
+            Invalidate();
+            rReq.Done();
+        }
+        break;
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:05:48 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 15:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,11 @@ interface OutlineView : View
         StateMethod = GetCtrlState ;
     ]
     SID_PREVIEW_QUALITY_BLACKWHITE // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_PREVIEW_QUALITY_CONTRAST // ole : no, status : play rec
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
