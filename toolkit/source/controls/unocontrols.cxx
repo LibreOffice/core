@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 09:52:16 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 09:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,7 +2314,7 @@ void UnoFixedTextControl::setAlignment( short nAlign ) throw(uno::RuntimeExcepti
 {
     uno::Any aAny;
     aAny <<= (sal_Int16)nAlign;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, sal_True );
 }
 
 short UnoFixedTextControl::getAlignment() throw(uno::RuntimeException)
