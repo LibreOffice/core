@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-01 12:12:45 $
+ *  last change: $Author: ab $ $Date: 2002-11-06 16:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
     aNewLibButton.Hide();       // default
     aNewModButton.Hide();       // default
     aMacrosSaveInTxt.Hide();    // default
+
+    aMacrosInTxt.SetStyle( WB_NOMULTILINE | WB_PATHELLIPSIS );
 
     aMacroNameEdit.SetModifyHdl( LINK( this, MacroChooser, EditModifyHdl ) );
 
@@ -322,6 +324,41 @@ short __EXPORT MacroChooser::Execute()
 //          {
 //              aBasicBox.SetCurEntry( pFirstEntry );
 //          }
+        }
+    }
+
+    // #104198 Check if "wrong" document is active
+    SvLBoxEntry* pSelectedEntry = aBasicBox.GetCurEntry();
+    SbxItem aSbxItem = aBasicBox.GetSbxItem( pSelectedEntry );
+    SfxObjectShell* pSelectedShell = aSbxItem.GetShell();
+
+    // App Basic is always ok, so only check if shell was found
+    if( pSelectedShell )
+    {
+        SfxObjectShell* pCurShell = SfxObjectShell::Current();
+        if( pCurShell != pSelectedShell )
+        {
+            // Search for the right entry
+            ULONG nRootPos = 0;
+            SvLBoxEntry* pRootEntry = aBasicBox.GetEntry( nRootPos );
+            while( pRootEntry )
+            {
+                SbxItem aCmpSbxItem = aBasicBox.GetSbxItem( pRootEntry );
+                SfxObjectShell* pCmpShell = aCmpSbxItem.GetShell();
+                if( pCmpShell == pCurShell )
+                {
+                    SvLBoxEntry* pEntry = pRootEntry;
+                    SvLBoxEntry* pLastValid = pEntry;
+                    while ( pEntry )
+                    {
+                        pLastValid = pEntry;
+                        pEntry = aBasicBox.FirstChild( pEntry );
+                    }
+                    if( pLastValid )
+                        aBasicBox.SetCurEntry( pLastValid );
+                }
+                pRootEntry = aBasicBox.GetEntry( ++nRootPos );
+            }
         }
     }
 
