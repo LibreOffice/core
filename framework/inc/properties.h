@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,21 +78,21 @@ namespace framework{
 /** properties for "Frame" class */
 
 #define FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER   "DispatchRecorderSupplier"
-#define FRAME_PROPNAME_ASCII_ISBACKINGMODE              "IsBackingMode"
 #define FRAME_PROPNAME_ASCII_ISHIDDEN                   "IsHidden"
+#define FRAME_PROPNAME_ASCII_LAYOUTMANAGER              "LayoutManager"
 #define FRAME_PROPNAME_ASCII_TITLE                      "Title"
 
 #define FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER         DECLARE_ASCII(FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER)
-#define FRAME_PROPNAME_ISBACKINGMODE                    DECLARE_ASCII(FRAME_PROPNAME_ASCII_ISBACKINGMODE           )
 #define FRAME_PROPNAME_ISHIDDEN                         DECLARE_ASCII(FRAME_PROPNAME_ASCII_ISHIDDEN                )
+#define FRAME_PROPNAME_LAYOUTMANAGER                    DECLARE_ASCII(FRAME_PROPNAME_ASCII_LAYOUTMANAGER           )
 #define FRAME_PROPNAME_TITLE                            DECLARE_ASCII(FRAME_PROPNAME_ASCII_TITLE                   )
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
 // Don't forget updating of define FRAME_PROPCOUNT below!!!
 #define FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER       0
-#define FRAME_PROPHANDLE_ISBACKINGMODE                  1
-#define FRAME_PROPHANDLE_ISHIDDEN                       2
+#define FRAME_PROPHANDLE_ISHIDDEN                       1
+#define FRAME_PROPHANDLE_LAYOUTMANAGER                  2
 #define FRAME_PROPHANDLE_TITLE                          3
 
 #define FRAME_PROPCOUNT                                 4
@@ -205,6 +205,17 @@ namespace framework{
 #define PATHSETTINGS_PROPHANDLE_WORK                    23
 
 #define PATHSETTINGS_PROPCOUNT                          24
+
+//_______________________________________________
+/** properties for "LayoutManager" class */
+
+#define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER      "MenuBarCloser"
+
+#define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER )
+
+#define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
+
+#define LAYOUTMANAGER_PROPCOUNT                         1
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
