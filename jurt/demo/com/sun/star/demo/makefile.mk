@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-01-17 10:56:37 $
+#   last change: $Author: jbu $ $Date: 2001-02-26 14:34:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ RDB=$(SOLARBINDIR)$/applicat.rdb
 
 #Files --------------------------------------------------------
 
-JARFILES = sandbox.jar unoil.jar
+JARFILES = sandbox.jar unoil.jar ridl.jar
 
 GENJAVACLASSFILES = 
 
