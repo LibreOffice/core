@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:21:46 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:56:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ SLOFILES=           $(SLO)$/jobexecutor.obj     \
                     $(SLO)$/jobdata.obj         \
                     $(SLO)$/jobresult.obj       \
                     $(SLO)$/joburl.obj          \
+                    $(SLO)$/helponstartup.obj   \
                     $(SLO)$/configaccess.obj
 
 # --- Targets ------------------------------------------------------
