@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:00:41 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3289,13 +3289,6 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
     DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line! " );
 
     TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
-
-//    if ( bPreferPortionStart && ( nTextPortion < pLine->GetEndPortion() ) && ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) ) )
-//    {
-//        nTextPortion++;
-//        nTextPortionStart = nIndex;
-//        pPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
-//    }
 
     long nX = GetPortionXOffset( pParaPortion, pLine, nTextPortion );
 
