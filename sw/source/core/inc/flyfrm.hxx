@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:12 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,8 @@ protected:
                                         // invisible layer.
 
     friend class SwNoTxtFrm; // Darf NotifyBackground rufen
-    virtual void NotifyBackground( SwPageFrm *pPage,
-                                   const SwRect& rRect, PrepareHint eHint) = 0;
+//    virtual void NotifyBackground( SwPageFrm *pPage,
+//                                   const SwRect& rRect, PrepareHint eHint) = 0;
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
@@ -168,6 +168,15 @@ protected:
     SwTwips CalcAutoWidth() const;
 
     SwFlyFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+
+    /** method to assure that anchored object is registered at the correct
+        page frame
+
+        OD 2004-07-02 #i28701#
+
+        @author OD
+    */
+    virtual void RegisterAtCorrectPage();
 
 public:
     // OD 2004-03-23 #i26791#
@@ -241,8 +250,6 @@ public:
 
     SwFrm *FindLastLower();
 
-    SwRect AddSpacesToFrm() const;
-
     // OD 16.04.2003 #i13147# - add parameter <_bForPaint> to avoid load of
     // the graphic during paint. Default value: sal_False
     BOOL GetContour( PolyPolygon&   rContour,
@@ -296,5 +303,16 @@ public:
     virtual const SwRect GetObjRect() const;
     virtual void SetObjTop( const SwTwips _nTop );
     virtual void SetObjLeft( const SwTwips _nLeft );
+
+    /** method to determine, if a format on the Writer fly frame is possible
+
+        OD 2004-05-11 #i28701#
+        refine 'IsFormatPossible'-conditions of method
+        <SwAnchoredObject::IsFormatPossible()> by:
+        format isn't possible, if Writer fly frame is locked resp. col-locked.
+
+        @author OD
+    */
+    virtual bool IsFormatPossible() const;
 };
 #endif
