@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: sb $ $Date: 2001-03-20 13:17:39 $
+#   last change: $Author: kso $ $Date: 2001-03-26 15:23:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,10 +138,16 @@ IDLFILES=\
     InteractiveWrongMediumException.idl\
     InteractiveFileIOException.idl\
     IOErrorCode.idl\
+    Link.idl\
     ListAction.idl\
     ListActionType.idl\
     ListenerAlreadySetException.idl\
     ListEvent.idl\
+    Lock.idl\
+    LockDepth.idl\
+    LockEntry.idl\
+    LockScope.idl\
+    LockType.idl\
     NameClash.idl\
     NumberedSortingInfo.idl\
     OpenCommandArgument.idl\
@@ -176,6 +182,7 @@ IDLFILES=\
     SendInfo.idl\
     SendMediaTypes.idl\
     ServiceNotFoundException.idl\
+    SimpleFileAccess.idl\
     SortingInfo.idl\
     Store.idl\
     SynchronizePolicy.idl\
@@ -237,10 +244,9 @@ IDLFILES=\
     XRemoteContentProviderDistributor.idl\
     XRemoteContentProviderDoneListener.idl\
     XRemoteContentProviderSupplier.idl\
+    XSimpleFileAccess.idl\
     XSortedDynamicResultSetFactory.idl\
-    XSourceInitialization.idl\
-    XSimpleFileAccess.idl \
-    SimpleFileAccess.idl
+    XSourceInitialization.idl
 
 # ------------------------------------------------------------------
 
