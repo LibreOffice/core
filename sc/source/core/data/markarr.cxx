@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markarr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-11-05 19:15:51 $
+ *  last change: $Author: er $ $Date: 2002-01-18 12:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,20 +229,25 @@ void ScMarkArray::SetMarkArea( USHORT nStartRow, USHORT nEndRow, BOOL bMarked )
             USHORT nj = ni;     // stop position of range to replace
             while ( nj < nCount && pData[nj].nRow <= nEndRow )
                 nj++;
-            if ( !bSplit && nj < nCount && pData[nj].bMarked == bMarked )
-            {   // combine
-                if ( ni > 0 )
-                {
-                    if ( pData[ni-1].bMarked == bMarked )
-                    {   // adjacent entries
-                        pData[ni-1].nRow = pData[nj].nRow;
-                        nj++;
+            if ( !bSplit )
+            {
+                if ( nj < nCount && pData[nj].bMarked == bMarked )
+                {   // combine
+                    if ( ni > 0 )
+                    {
+                        if ( pData[ni-1].bMarked == bMarked )
+                        {   // adjacent entries
+                            pData[ni-1].nRow = pData[nj].nRow;
+                            nj++;
+                        }
+                        else if ( nj == nInsert && nj == ni )
+                            pData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
-                    else if ( nj == nInsert && nj == ni )
-                        pData[ni-1].nRow = nStartRow - 1;   // shrink
+                    nInsert = MAXROW+1;
+                    bCombined = TRUE;
                 }
-                nInsert = MAXROW+1;
-                bCombined = TRUE;
+                else if ( ni > 0 && ni == nInsert )
+                    pData[ni-1].nRow = nStartRow - 1;   // shrink
             }
             if ( ni < nj )
             {   // remove middle entries
