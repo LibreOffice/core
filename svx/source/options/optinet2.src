@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:53:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,10 +402,16 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
+
+    #define FT_PORT_WIDTH       37
+    #define ED_PORT_WIDTH       20
+    #define ED_PORT_COL         229
+
     FixedText FT_HTTP_PORT
     {
         Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 29 ) ;
-        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
+        Right = TRUE;
         Text = "~Port" ;
         Text [ English ] = "~Port" ;
         Text [ english_us ] = "~Port" ;
@@ -439,8 +445,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTP_PORT
     {
-        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 27 ) ;
-        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 27 ) ;
+        Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_FTP_PROXY
@@ -487,7 +493,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     FixedText FT_FTP_PORT
     {
         Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 45 ) ;
-        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
+        Right = TRUE;
         Text = "P~ort" ;
         Text [ English ] = "P~ort" ;
         Text [ english_us ] = "P~ort" ;
@@ -521,8 +528,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_FTP_PORT
     {
-        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 43 ) ;
-        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 43 ) ;
+        Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SOCKS_PROXY
@@ -569,7 +576,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     FixedText FT_SOCKS_PORT
     {
         Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 61 ) ;
-        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
+        Right = TRUE;
         Text = "Po~rt" ;
         Text [ English ] = "Po~rt" ;
         Text [ english_us ] = "Po~rt" ;
@@ -603,8 +611,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_SOCKS_PORT
     {
-        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 59 ) ;
-        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 59 ) ;
+        Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_NOPROXYFOR
@@ -943,12 +951,12 @@ TabPage RID_SVXPAGE_INET_SEARCH
     ListBox LB_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , GB_SEARCH_TOP + 11 ) ;
-        Size = MAP_APPFONT ( 50 , 120 ) ;
+        Size = MAP_APPFONT ( 44 , 120 ) ;
         Border = TRUE ;
         AutoHScroll = TRUE;
     };
-    #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 50 + 3)
-    #define LABEL_LEN 40
+    #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 44 + 3 )
+    #define LABEL_LEN 46
     #define EDIT_START_XPOS (LABEL_START_XPOS + LABEL_LEN + 3)
     FixedText FT_SEARCH_NAME
     {
