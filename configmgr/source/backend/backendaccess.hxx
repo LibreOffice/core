@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:53:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,8 @@ class BackendAccess : public IMergedDataProvider {
                                 bool bIncludeTemplates,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
                                 sal_Int32 nNumLayers,
-                                ITemplateDataProvider *aTemplateProvider)
+                                ITemplateDataProvider *aTemplateProvider,
+                                sal_Int32 * pLayersMerged = 0)
             CFG_UNO_THROW_ALL();
         /**
           Merges layers onto component data.
@@ -174,8 +175,22 @@ class BackendAccess : public IMergedDataProvider {
                 const uno::Reference<backenduno::XLayer> * pLayers,
                 sal_Int32 aNumLayers,
                 RequestOptions const & aOptions,
-                ITemplateDataProvider *aTemplateProvider)
+                ITemplateDataProvider *aTemplateProvider,
+                sal_Int32 * pLayersMerged = 0)
             CFG_UNO_THROW_ALL();
+    private :
+        /**
+          Decides if merging should be retried after an exception.
+
+          @throws com::sun::star::uno::Exception
+            if not approved
+          */
+        bool approveRecovery(
+                const uno::Any & aMergeException,
+                const uno::Reference<backenduno::XLayer>  & aBrokenLayer,
+                bool bUserLayerData)
+            CFG_UNO_THROW_ALL();
+
     private :
         /** Factory used for service invocation */
         uno::Reference<lang::XMultiServiceFactory> mFactory ;
