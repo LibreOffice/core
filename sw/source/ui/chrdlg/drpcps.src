@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:27:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ TabPage TP_DROPCAPS
         Text [ English ] = "D~istance" ;
         Text [ norwegian ] = "A~vstand" ;
         Text [ italian ] = "D~istanza dal testo" ;
-        Text [ portuguese_brazilian ] = "D~istância" ;
+        Text [ portuguese_brazilian ] = "D~ist?ncia" ;
         Text [ portuguese ] = "~Distância do texto" ;
         Text [ finnish ] = "Etäisyys tekstiin" ;
         Text [ danish ] = "Afstand til tekst" ;
@@ -334,7 +334,7 @@ TabPage TP_DROPCAPS
         Text [ English ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Impostazioni" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "Definições" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -483,7 +483,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese ] = "Conteúdo" ;
         Text[ chinese_simplified ] = "ÄÚÈÝ";
         Text[ russian ] = "Ñîäåðæèìîå";
-        Text[ polish ] = "Zawartoœæ";
+        Text[ polish ] = "Zawarto?æ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
