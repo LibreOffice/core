@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: hdu $ $Date: 2000-10-17 17:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,21 @@ ModalDialog RID_SVXDLG_CHARMAP
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
+    FixedText FT_SUBSET
+    {
+        Pos = MAP_APPFONT ( 150 , 8 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text = "~Bereich" ;
+        Text [ ENGLISH ] = "~Subset" ;
+    };
+    ListBox LB_SUBSET
+    {
+        Pos = MAP_APPFONT ( 180 , 6 ) ;
+        Size = MAP_APPFONT ( 104 , 68 ) ;
+        Sort = FALSE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
     FixedText FT_SYMBOLE
     {
         Pos = MAP_APPFONT ( 6 , 127 ) ;
@@ -231,4 +246,491 @@ ModalDialog RID_SVXDLG_CHARMAP
     Text[ turkish ] = "Özel karakter";
     Text[ language_user1 ] = " ";
 };
- // ********************************************************************** EOF
+
+/*
+ * strings for unicode range descriptions (used e.g. by charmap)
+ * (see the Unicode Standard & TrueType::OS2.ulUnicodeRange description)
+ */
+
+String RID_SVXSTR_BASIC_LATIN
+{
+    Text = "Basis Latein" ;
+    Text [ ENGLISH ] = "Basic Latin" ;
+};
+String RID_SVXSTR_LATIN_1
+{
+    Text = "Latein-1" ;
+    Text [ ENGLISH ] = "Latin-1" ;
+};
+String RID_SVXSTR_LATIN_EXTENDED_A
+{
+    Text = "Latein Erweitert-A" ;
+    Text [ ENGLISH ] = "Latin Extended-A" ;
+};
+String RID_SVXSTR_LATIN_EXTENDED_B
+{
+    Text = "Latein Erweitert-B" ;
+    Text [ ENGLISH ] = "Latin Extended-B" ;
+};
+String RID_SVXSTR_IPA_EXTENSIONS
+{
+    Text = "Lautschrift Erweiterungen" ;
+    Text [ ENGLISH ] = "IPA Extensions" ;
+};
+String RID_SVXSTR_SPACING_MODIFIERS
+{
+    Text = "Spacing Modifier Zeichen" ;
+    Text [ ENGLISH ] = "Spacing Modifier Letters" ;
+};
+String RID_SVXSTR_COMB_DIACRITICAL
+{
+    Text = "Kombinierende diakritische Zeichen" ;
+    Text [ ENGLISH ] = "Combining Diacritical Marks" ;
+};
+String RID_SVXSTR_BASIC_GREEK
+{
+    Text = "Basis Griechisch" ;
+    Text [ ENGLISH ] = "Basic Greek" ;
+};
+String RID_SVXSTR_GREEK_SYMS_COPTIC
+{
+    Text = "Griechische Symbole und Koptisch" ;
+    Text [ ENGLISH ] = "Greek Symbols And Coptic" ;
+};
+String RID_SVXSTR_CYRILLIC
+{
+    Text = "Kyrillisch" ;
+    Text [ ENGLISH ] = "Cyrillic" ;
+};
+String RID_SVXSTR_ARMENIAN
+{
+    Text = "Armenisch" ;
+    Text [ ENGLISH ] = "Armenian" ;
+};
+String RID_SVXSTR_HEBREW_EXTENDED
+{
+    Text = "Basis Hebräisch" ;
+    Text [ ENGLISH ] = "Basic Hebrew" ;
+};
+String RID_SVXSTR_BASIC_HEBREW
+{
+    Text = "Erweitertes Hebräisch" ;
+    Text [ ENGLISH ] = "Hebrew Extended" ;
+};
+String RID_SVXSTR_BASIC_ARABIC
+{
+    Text = "Basis Arabisch" ;
+    Text [ ENGLISH ] = "Basic Arabic" ;
+};
+String RID_SVXSTR_ARABIC_EXTENDED
+{
+    Text = "Erweitertes Arabisch" ;
+    Text [ ENGLISH ] = "Arabic Extended" ;
+};
+String RID_SVXSTR_DEVANAGARI
+{
+    Text = "Devanagari" ;
+    Text [ ENGLISH ] = "Devanagari" ;
+};
+String RID_SVXSTR_BENGALI
+{
+    Text = "Bengalisch" ;
+    Text [ ENGLISH ] = "Bengali" ;
+};
+String RID_SVXSTR_GURMUKHI
+{
+    Text = "Gurmukhi" ;
+    Text [ ENGLISH ] = "Gurmukhi" ;
+};
+String RID_SVXSTR_GUJARATI
+{
+    Text = "Gujarati" ;
+    Text [ ENGLISH ] = "Gujarati" ;
+};
+String RID_SVXSTR_ORIYA
+{
+    Text = "Oriya" ;
+    Text [ ENGLISH ] = "Oriya" ;
+};
+String RID_SVXSTR_TAMIL
+{
+    Text = "Tamil" ;
+    Text [ ENGLISH ] = "Tamil" ;
+};
+String RID_SVXSTR_TELUGU
+{
+    Text = "Telugu" ;
+    Text [ ENGLISH ] = "Telugu" ;
+};
+String RID_SVXSTR_KANNADA
+{
+    Text = "Kannada" ;
+    Text [ ENGLISH ] = "Kannada" ;
+};
+String RID_SVXSTR_MALAYALAM
+{
+    Text = "Malayisch" ;
+    Text [ ENGLISH ] = "Malayalam" ;
+};
+String RID_SVXSTR_THAI
+{
+    Text = "Thailändisch" ;
+    Text [ ENGLISH ] = "Thai" ;
+};
+String RID_SVXSTR_LAO
+{
+    Text = "Laotisch" ;
+    Text [ ENGLISH ] = "Lao" ;
+};
+String RID_SVXSTR_BASIC_GEORGIAN
+{
+    Text = "Basis Georgisch" ;
+    Text [ ENGLISH ] = "Basic Georgian" ;
+};
+String RID_SVXSTR_GEORGIAN_EXTENDED
+{
+    Text = "Erweitertes Georgisch" ;
+    Text [ ENGLISH ] = "Georgian Extended" ;
+};
+String RID_SVXSTR_HANGUL_JAMO
+{
+    Text = "Hangul Jamo" ;
+    Text [ ENGLISH ] = "Hangul Jamo" ;
+};
+String RID_SVXSTR_LATIN_EXTENDED_ADDS
+{
+    Text = "Latein Erweiterte Zufügungen" ;
+    Text [ ENGLISH ] = "Latin Extended Additional" ;
+};
+String RID_SVXSTR_GREEK_EXTENDED
+{
+    Text = "Erweitertes Griechisch" ;
+    Text [ ENGLISH ] = "Greek Extended" ;
+};
+String RID_SVXSTR_GENERAL_PUNCTUATION
+{
+    Text = "Allgemeine Punktuation" ;
+    Text [ ENGLISH ] = "General Punctuation" ;
+};
+String RID_SVXSTR_SUB_SUPER_SCRIPTS
+{
+    Text = "Hoch- und Tiefstellungen" ;
+    Text [ ENGLISH ] = "Superscripts And Subscripts" ;
+};
+String RID_SVXSTR_CURRENCY_SYMBOLS
+{
+    Text = "Währungssymbole" ;
+    Text [ ENGLISH ] = "Currency Symbols" ;
+};
+String RID_SVXSTR_COMB_DIACRITIC_SYMS
+{
+    Text = "Kombinierende diakritische Symbole" ;
+    Text [ ENGLISH ] = "Combining Diacritical Marks For Symbols" ;
+};
+String RID_SVXSTR_LETTERLIKE_SYMBOLS
+{
+    Text = "Buchstabenähnliche Symbole" ;
+    Text [ ENGLISH ] = "Letterlike Symbols" ;
+};
+String RID_SVXSTR_NUMBER_FORMS
+{
+    Text = "Zahlensymbole" ;
+    Text [ ENGLISH ] = "Number Forms" ;
+};
+String RID_SVXSTR_ARROWS
+{
+    Text = "Pfeilsymbole" ;
+    Text [ ENGLISH ] = "Arrows" ;
+};
+String RID_SVXSTR_MATH_OPERATORS
+{
+    Text = "Mathematische Operatoren" ;
+    Text [ ENGLISH ] = "Mathematical Operators" ;
+};
+String RID_SVXSTR_MISC_TECHNICAL
+{
+    Text = "Verschiedene Technische Zeichen" ;
+    Text [ ENGLISH ] = "Miscellaneous Technical" ;
+};
+String RID_SVXSTR_CONTROL_PICTURES
+{
+    Text = "Tastatursymbole" ;
+    Text [ ENGLISH ] = "Control Pictures" ;
+};
+String RID_SVXSTR_OPTICAL_CHAR_REC
+{
+    Text = "Maschinenlesbare Zeichen" ;
+    Text [ ENGLISH ] = "Optical Character Recognition" ;
+};
+String RID_SVXSTR_ENCLOSED_ALPHANUM
+{
+    Text = "Eingekreiste Zeichen" ;
+    Text [ ENGLISH ] = "Enclosed Alphanumerics" ;
+};
+String RID_SVXSTR_BOX_DRAWING
+{
+    Text = "Rahmungssymbole" ;
+    Text [ ENGLISH ] = "Box Drawing" ;
+};
+String RID_SVXSTR_BLOCK_ELEMENTS
+{
+    Text = "Blocksymbole" ;
+    Text [ ENGLISH ] = "Block Elements" ;
+};
+String RID_SVXSTR_GEOMETRIC_SHAPES
+{
+    Text = "Geometrische Symbole" ;
+    Text [ ENGLISH ] = "Geometric Shapes" ;
+};
+String RID_SVXSTR_MISC_DINGBATS
+{
+    Text = "Verschiedene Symbole" ;
+    Text [ ENGLISH ] = "Miscellaneous Symbols" ;
+};
+String RID_SVXSTR_DINGBATS
+{
+    Text = "Dingbats" ;
+    Text [ ENGLISH ] = "Dingbats" ;
+};
+String RID_SVXSTR_CJK_SYMS_PUNCTUATION
+{
+    Text = "CJK Symbole und Punktuation" ;
+    Text [ ENGLISH ] = "CJK Symbols And Punctuation" ;
+};
+String RID_SVXSTR_HIRAGANA
+{
+    Text = "Hiragana" ;
+    Text [ ENGLISH ] = "Hiragana" ;
+};
+String RID_SVXSTR_KATAKANA
+{
+    Text = "Katakana" ;
+    Text [ ENGLISH ] = "Katakana" ;
+};
+String RID_SVXSTR_BOPOMOFO
+{
+    Text = "Bopomofo" ;
+    Text [ ENGLISH ] = "Bopomofo" ;
+};
+String RID_SVXSTR_HANGUL_COMPAT_JAMO
+{
+    Text = "Hangul kompatibles Jamo" ;
+    Text [ ENGLISH ] = "Hangul Compatibility Jamo" ;
+};
+String RID_SVXSTR_CJK_MISC
+{
+    Text = "Verschiedene CJK Zeichen" ;
+    Text [ ENGLISH ] = "CJK Miscellaneous" ;
+};
+String RID_SVXSTR_ENCLOSED_CJK_LETTERS
+{
+    Text = "Eingekreiste CJK Zeichen und Monate" ;
+    Text [ ENGLISH ] = "Enclosed CJK Letters And Months" ;
+};
+String RID_SVXSTR_CJK_COMPATIBILITY
+{
+    Text = "CJK Kompatibilität" ;
+    Text [ ENGLISH ] = "CJK Compatibility" ;
+};
+String RID_SVXSTR_HANGUL
+{
+    Text = "Hangul" ;
+    Text [ ENGLISH ] = "Hangul" ;
+};
+String RID_SVXSTR_CJK_UNIFIED_IDGRAPH
+{
+    Text = "Vereinheitlichte CJK-Ideogramme" ;
+    Text [ ENGLISH ] = "CJK Unified Ideographs" ;
+};
+String RID_SVXSTR_CJK_UNIFIED_IDGRAPH_EXT_A
+{
+    Text = "Vereinheitlichte CJK-Ideogramm Erweiterung-A" ;
+    Text [ ENGLISH ] = "CJK Unified Ideographs Extension-A" ;
+};
+String RID_SVXSTR_PRIVATE_USE_AREA
+{
+    Text = "Zeichensatzspezifische Symbole" ;
+    Text [ ENGLISH ] = "Private Use Area" ;
+};
+String RID_SVXSTR_CJK_COMPAT_IDGRAPHS
+{
+    Text = "CJK Kompatible Ideogramme" ;
+    Text [ ENGLISH ] = "CJK Compatibility Ideographs" ;
+};
+String RID_SVXSTR_ALPHA_PRESENTATION
+{
+    Text = "Alphabetische Präsentations Formen" ;
+    Text [ ENGLISH ] = "Alphabetic Presentation Forms" ;
+};
+String RID_SVXSTR_ARABIC_PRESENT_A
+{
+    Text = "Arabische Präsentations Formen-A" ;
+    Text [ ENGLISH ] = "Arabic Presentation Forms-A" ;
+};
+String RID_SVXSTR_COMBINING_HALF_MARKS
+{
+    Text = "Kombinierende Halbmarken" ;
+    Text [ ENGLISH ] = "Combining Half Marks" ;
+};
+String RID_SVXSTR_CJK_COMPAT_FORMS
+{
+    Text = "CJK Kompatibilitäts-Formen" ;
+    Text [ ENGLISH ] = "CJK Compatibility Forms" ;
+};
+String RID_SVXSTR_SMALL_FORM_VARIANTS
+{
+    Text = "Kleine Form Varianten" ;
+    Text [ ENGLISH ] = "Small Form Variants" ;
+};
+String RID_SVXSTR_ARABIC_PRESENT_B
+{
+    Text = "Arabische Präsentationsformen-B" ;
+    Text [ ENGLISH ] = "Arabic Presentation Forms-B" ;
+};
+String RID_SVXSTR_HALFW_FULLW_FORMS
+{
+    Text = "Halbbreite und breite Formen" ;
+    Text [ ENGLISH ] = "Halfwidth And Fullwidth Forms" ;
+};
+String RID_SVXSTR_SPECIALS
+{
+    Text = "Spezielle Symbole" ;
+    Text [ ENGLISH ] = "Specials" ;
+};
+String RID_SVXSTR_HANGUL_GA
+{
+    Text = "Hangul Ga" ;
+    Text [ ENGLISH ] = "Hangul Ga";
+};
+String RID_SVXSTR_HANGUL_NA
+{
+    Text = "Hangul Na" ;
+    Text [ ENGLISH ] = "Hangul Na" ;
+};
+String RID_SVXSTR_HANGUL_DA
+{
+    Text = "Hangul Da" ;
+    Text [ ENGLISH ] = "Hangul Da" ;
+};
+String RID_SVXSTR_HANGUL_RA
+{
+    Text = "Hangul Ra" ;
+    Text [ ENGLISH ] = "Hangul Ra" ;
+};
+String RID_SVXSTR_HANGUL_MA
+{
+    Text = "Hangul Ma" ;
+    Text [ ENGLISH ] = "Hangul Ma" ;
+};
+String RID_SVXSTR_HANGUL_BA
+{
+    Text = "Hangul Ba" ;
+    Text [ ENGLISH ] = "Hangul Ba" ;
+};
+String RID_SVXSTR_HANGUL_SA
+{
+    Text = "Hangul Sa" ;
+    Text [ ENGLISH ] = "Hangul Sa" ;
+};
+String RID_SVXSTR_HANGUL_AH
+{
+    Text = "Hangul Ah" ;
+    Text [ ENGLISH ] = "Hangul Ah" ;
+};
+String RID_SVXSTR_HANGUL_JA
+{
+    Text = "Hangul Ja" ;
+    Text [ ENGLISH ] = "Hangul Ja" ;
+};
+String RID_SVXSTR_HANGUL_CHA
+{
+    Text = "Hangul Cha" ;
+    Text [ ENGLISH ] = "Hangul Cha" ;
+};
+String RID_SVXSTR_HANGUL_KA
+{
+    Text = "Hangul Ka" ;
+    Text [ ENGLISH ] = "Hangul Ka" ;
+};
+String RID_SVXSTR_HANGUL_TA
+{
+    Text = "Hangul Ta" ;
+    Text [ ENGLISH ] = "Hangul Ta" ;
+};
+String RID_SVXSTR_HANGUL_PA
+{
+    Text = "Hangul Pa" ;
+    Text [ ENGLISH ] = "Hangul Pa" ;
+};
+String RID_SVXSTR_HANGUL_HA
+{
+    Text = "Hangul Ha" ;
+    Text [ ENGLISH ] = "Hangul Ha" ;
+};
+String RID_SVXSTR_YI
+{
+    Text = "Yi" ;
+    Text [ ENGLISH ] = "Yi" ;
+};
+String RID_SVXSTR_SINHALA
+{
+    Text = "Sinhala" ;
+    Text [ ENGLISH ] = "Sinhala" ;
+};
+String RID_SVXSTR_TIBETAN
+{
+    Text = "Tibetisch" ;
+    Text [ ENGLISH ] = "Tibetan" ;
+};
+String RID_SVXSTR_MYANMAR
+{
+    Text = "Myanmar" ;
+    Text [ ENGLISH ] = "Myanmar" ;
+};
+String RID_SVXSTR_KHMER
+{
+    Text = "Khmer" ;
+    Text [ ENGLISH ] = "Khmer" ;
+};
+String RID_SVXSTR_OGHAM
+{
+    Text = "Ogham" ;
+    Text [ ENGLISH ] = "Ogham" ;
+};
+String RID_SVXSTR_RUNIC
+{
+    Text = "Runen" ;
+    Text [ ENGLISH ] = "Runic" ;
+};
+String RID_SVXSTR_SYRIAC
+{
+    Text = "Syrisch" ;
+    Text [ ENGLISH ] = "Syriac" ;
+};
+String RID_SVXSTR_THAANA
+{
+    Text = "Thaana" ;
+    Text [ ENGLISH ] = "Thaana" ;
+};
+String RID_SVXSTR_ETHIOPIC
+{
+    Text = "Äthiopisch" ;
+    Text [ ENGLISH ] = "Ethiopic" ;
+};
+String RID_SVXSTR_CHEROKEE
+{
+    Text = "Cherokee" ;
+    Text [ ENGLISH ] = "Cherokee" ;
+};
+String RID_SVXSTR_CANADIAN_ABORIGINAL
+{
+    Text = "Kanadische Aborigin Silben" ;
+    Text [ ENGLISH ] = "Canadian Aboriginal Syllables" ;
+};
+String RID_SVXSTR_MONGOLIAN
+{
+    Text = "Mongolisch" ;
+    Text [ ENGLISH ] = "Mongolian" ;
+};
+
+// ********************************************************************** EOF
