@@ -53,7 +53,7 @@ class SdUnoDrawView
 public:
     enum properties
     {
-        PROPERTY__BEGIN = DrawController::PROPERTY__BEGIN,
+        PROPERTY__BEGIN = DrawController::PROPERTY__END,
         PROPERTY_CURRENTPAGE = PROPERTY__BEGIN,
         PROPERTY_MASTERPAGEMODE,
         PROPERTY_LAYERMODE,
