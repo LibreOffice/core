@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:14:56 $
+ *  last change: $Author: tra $ $Date: 2001-04-05 10:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,12 +272,12 @@ HRESULT CMtaOleClipboard::flushClipboard( )
         postMessage( MSG_FLUSHCLIPBOARD,
                      static_cast< WPARAM >( 0 ),
                      reinterpret_cast< LPARAM >( &aMsgCtx ) );
-
+        /*
         TimeValue tv;
         tv.Seconds = MAX_OPCOMPLET_WAITTIME;
         tv.Nanosec = 0;
-
-        if ( aCondt.wait( &tv ) )
+        */
+        if ( aCondt.wait( /*&tv */) )
         {
             OSL_ENSURE( sal_False, "Operation timeout" );
             hr = E_FAIL;
@@ -322,11 +322,13 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
                      reinterpret_cast< WPARAM >( &lpStream ),
                      reinterpret_cast< LPARAM >( &aMsgCtx ) );
 
+        /*
         TimeValue tv;
         tv.Seconds = MAX_OPCOMPLET_WAITTIME;
         tv.Nanosec = 0;
+        */
 
-        if ( aCondt.wait( &tv ) )
+        if ( aCondt.wait( /*&tv*/ ) )
         {
             OSL_ENSURE( sal_False, "Operation timeout" );
             hr = E_FAIL;
@@ -368,11 +370,12 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
                      reinterpret_cast< WPARAM >( pIDataObject ),
                      reinterpret_cast< LPARAM >( &aMsgCtx ) );
 
+        /*
         TimeValue tv;
         tv.Seconds = MAX_OPCOMPLET_WAITTIME;
         tv.Nanosec = 0;
-
-        if ( aCondt.wait( &tv ) )
+        */
+        if ( aCondt.wait( /*&tv*/ ) )
         {
             OSL_ENSURE( sal_False, "Operation timeout" );
             hr = E_FAIL;
@@ -408,11 +411,12 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
                      reinterpret_cast<WPARAM>( pfncClipViewerCallback ),
                      reinterpret_cast<LPARAM>( &aMsgCtx ) );
 
+        /*
         TimeValue tv;
         tv.Seconds = MAX_OPCOMPLET_WAITTIME;
         tv.Nanosec = 0;
-
-        if ( aCondt.wait( &tv ) )
+        */
+        if ( aCondt.wait( /*&tv*/ ) )
         {
             OSL_ENSURE( sal_False, "Operation timeout" );
             hr = E_FAIL;
@@ -580,64 +584,71 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 {
     LRESULT lResult = 0;
 
-    // get a connection to the class-instance via the static member
-    CMtaOleClipboard* pImpl = CMtaOleClipboard::s_theMtaOleClipboardInst;
-    OSL_ASSERT( NULL != pImpl );
-
-    MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-
-    switch( uMsg )
+    __try
     {
-    case MSG_SETCLIPBOARD:
-        *aMsgCtx->hr = pImpl->onSetClipboard( reinterpret_cast< IDataObject* >(wParam) );
-        aMsgCtx->aCondition->set( );
-        break;
+        // get a connection to the class-instance via the static member
+        CMtaOleClipboard* pImpl = CMtaOleClipboard::s_theMtaOleClipboardInst;
+        OSL_ASSERT( NULL != pImpl );
 
-    case MSG_GETCLIPBOARD:
-        *aMsgCtx->hr = pImpl->onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
-        aMsgCtx->aCondition->set( );
-        break;
+        MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
 
-    case MSG_FLUSHCLIPBOARD:
-        *aMsgCtx->hr = pImpl->onFlushClipboard( );
-        aMsgCtx->aCondition->set( );
-        break;
+        switch( uMsg )
+        {
+        case MSG_SETCLIPBOARD:
+            *aMsgCtx->hr = pImpl->onSetClipboard( reinterpret_cast< IDataObject* >(wParam) );
+            aMsgCtx->aCondition->set( );
+            break;
 
-    case MSG_REGCLIPVIEWER:
-        pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
-        aMsgCtx->aCondition->set( );
-        break;
+        case MSG_GETCLIPBOARD:
+            *aMsgCtx->hr = pImpl->onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
+            aMsgCtx->aCondition->set( );
+            break;
 
-    case WM_CHANGECBCHAIN:
-        lResult = pImpl->onChangeCBChain(
-            reinterpret_cast< HWND >( wParam ), reinterpret_cast< HWND >( lParam ) );
-        break;
+        case MSG_FLUSHCLIPBOARD:
+            *aMsgCtx->hr = pImpl->onFlushClipboard( );
+            aMsgCtx->aCondition->set( );
+            break;
 
-    case WM_DRAWCLIPBOARD:
-        lResult = pImpl->onDrawClipboard( );
-        break;
+        case MSG_REGCLIPVIEWER:
+            pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
+            aMsgCtx->aCondition->set( );
+            break;
 
-    case MSG_SHUTDOWN:
-        DestroyWindow( pImpl->m_hwndMtaOleReqWnd );
-        break;
+        case WM_CHANGECBCHAIN:
+            lResult = pImpl->onChangeCBChain(
+                reinterpret_cast< HWND >( wParam ), reinterpret_cast< HWND >( lParam ) );
+            break;
 
-    // under windows 95/98 the creation of the
-    // hidden target request window fails if
-    // we don't handle this message ourself
-    // because the DefWindowProc returns 0 as
-    // a result of handling WM_NCCREATE what
-    // leads to a failure of CreateWindow[Ex]!!!
-    case WM_NCCREATE:
-        lResult = TRUE;
-        break;
+        case WM_DRAWCLIPBOARD:
+            lResult = pImpl->onDrawClipboard( );
+            break;
 
-    case WM_DESTROY:
-        PostQuitMessage( 0 );
-        break;
+        case MSG_SHUTDOWN:
+            DestroyWindow( pImpl->m_hwndMtaOleReqWnd );
+            break;
 
-    default:
-        lResult = DefWindowProc( hWnd, uMsg, wParam, lParam );
-        break;
+        // under windows 95/98 the creation of the
+        // hidden target request window fails if
+        // we don't handle this message ourself
+        // because the DefWindowProc returns 0 as
+        // a result of handling WM_NCCREATE what
+        // leads to a failure of CreateWindow[Ex]!!!
+        case WM_NCCREATE:
+            lResult = TRUE;
+            break;
+
+        case WM_DESTROY:
+            PostQuitMessage( 0 );
+            break;
+
+        default:
+            lResult = DefWindowProc( hWnd, uMsg, wParam, lParam );
+            break;
+        }
+    }
+    __except( EXCEPTION_EXECUTE_HANDLER )
+    {
+        OSL_ENSURE( sal_False, "Kernel exception in window-proc caught!" );
     }
 
     return lResult;
