@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:45:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,50 +192,11 @@ Dialog* GetSearchDialog()
     return SwView::GetSearchDialog();
 }
 
-
-
-void JavaScriptScrollMDI( SfxFrame* pFrame, INT32 nX, INT32 nY )
-{
-    SfxViewShell *pSfxVwSh = pFrame->GetCurrentViewFrame()->GetViewShell();
-    if( pSfxVwSh && pSfxVwSh->ISA( SwView ))
-    {
-        SwView* pView = (SwView *)pSfxVwSh;
-
-        Size aSz( nX, nY );
-        aSz = pView->GetEditWin().PixelToLogic( aSz );
-
-        Point aTopLeft( aSz.Width(), aSz.Height() );
-        if( aTopLeft.X() < DOCUMENTBORDER ) aTopLeft.X() = DOCUMENTBORDER;
-        if( aTopLeft.Y() < DOCUMENTBORDER ) aTopLeft.Y() = DOCUMENTBORDER;
-
-        const Size& rVisSize = pView->GetVisArea().GetSize();
-        Size aDocSize( pView->GetDocSz() );
-        aDocSize.Width() += DOCUMENTBORDER;
-        aDocSize.Height() += DOCUMENTBORDER;
-
-        if( aTopLeft.X() + rVisSize.Width() > aDocSize.Width() )
-            aTopLeft.X() = rVisSize.Width() > aDocSize.Width()
-                                ? DOCUMENTBORDER
-                                : aDocSize.Width() - rVisSize.Width();
-
-        if( aTopLeft.Y() + rVisSize.Height() > aDocSize.Height() )
-            aTopLeft.Y() = rVisSize.Height() > aDocSize.Height()
-                                ? DOCUMENTBORDER
-                                : aDocSize.Height() - rVisSize.Height();
-
-        pView->SetVisArea( aTopLeft );
-    }
-}
-
-
-
 USHORT GetTblChgDefaultMode()
 {
     SwModuleOptions* pOpt = SW_MOD()->GetModuleConfig();
     return pOpt ? pOpt->GetTblMode() : TBLVAR_CHGABS;
 }
-
-
 
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
 {
