@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:09:01 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 08:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,13 @@ Image IMG_SVT_SAMPLES
     MaskColor = MASK_COL
 };
 
-ToolBox 1001
+String STR_SVT_CATEGORY
+{
+    Text = "Kategorie";
+    Text [ english_us ] = "Category";
+};
+
+ToolBox TB_SVT_FILEVIEW
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 100 , 12 ) ;
@@ -207,7 +213,7 @@ ToolBox 1001
             Identifier = TI_DOCTEMPLATE_BACK;
             ItemBitmap = Bitmap { File = "back_small.bmp" ; };
             Text = "Zurück" ;
-            Text [ english_us ] = "Back" ;
+            Text [ english_us ] = "Backward" ;
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Back";
             Text[ russian ] = "Back";
@@ -232,8 +238,8 @@ ToolBox 1001
         {
             Identifier = TI_DOCTEMPLATE_PREV;
             ItemBitmap = Bitmap { File = "up_small.bmp" ; };
-            Text = "Eine Ebene höher" ;
-            Text [ english_us ] = "Higher" ;
+            Text = "Ein Verzeichnis hoch" ;
+            Text [ english_us ] = "Up One Level" ;
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Higher";
             Text[ russian ] = "Higher";

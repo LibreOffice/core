@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-08 14:00:56 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 08:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include "ivctrl.hxx"
 #include "fileview.hxx"
+#include "headbar.hxx"
 
 namespace com
 {
@@ -88,9 +89,13 @@ namespace com
 class SvtIconWindow_Impl : public Window
 {
 private:
+    HeaderBar           aHeaderBar;
     SvtIconChoiceCtrl   aIconCtrl;
+
     String              aTemplateRootURL;
     long                nMaxTextLength;
+
+    SvxIconChoiceCtrlEntry* GetEntry( const String& rURL ) const;
 
 public:
     SvtIconWindow_Impl( Window* pParent );
@@ -102,6 +107,8 @@ public:
     void                SetClickHdl( const Link& rLink ) { aIconCtrl.SetClickHdl( rLink ); }
 
     String              GetSelectedIconURL() const;
+    String              GetSelectedIconText() const;
+    String              GetIconText( const String& rURL ) const;
     String              GetTemplateRootURL() const { return aTemplateRootURL; }
 };
 
@@ -113,8 +120,12 @@ private:
     SvtFileView         aFileView;
     Link                aNewFolderLink;
     String              aCurrentRootURL;
+    String              aFolderURL;
 
     sal_Bool            bIsTemplateFolder;
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                        GetNewDocContents() const;
 
 public:
     SvtFileViewWindow_Impl( Window* pParent );
@@ -132,7 +143,9 @@ public:
     void                OpenFolder( const String& rURL );
     void                OpenRoot( const String& rRootURL )
                             { aCurrentRootURL = rRootURL; OpenFolder( rRootURL ); }
+    String              GetRootURL() const { return aCurrentRootURL; }
     sal_Bool            HasPreviousLevel( String& rURL ) const;
+    String              GetFolderTitle() const;
 };
 
 // class SvtFrameWindow_Impl ---------------------------------------------
@@ -167,9 +180,12 @@ private:
 
     Link                        aSelectHdl;
     Link                        aDoubleClickHdl;
+    Link                        aNewFolderHdl;
 
     Timer                       aSelectTimer;
     Timer                       aResetTimer;
+
+    String                      aFolderTitle;
 
     virtual void        Resize();
 
@@ -189,9 +205,11 @@ public:
 
     void                SetSelectHdl( const Link& rLink ) { aSelectHdl = rLink; }
     void                SetDoubleClickHdl( const Link& rLink ) { aDoubleClickHdl = rLink; }
+    void                SetNewFolderHdl( const Link& rLink ) { aNewFolderHdl = rLink; }
 
     sal_Bool            IsFileSelected() const;
     void                OpenFile( sal_Bool bNotAsTemplate );
+    String              GetFolderTitle() const;
 };
 
 #endif // _SVTOOLS_TEMPLWIN_HXX

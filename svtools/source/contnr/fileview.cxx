@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 13:10:04 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 08:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,19 +477,17 @@ void ViewTabListBox_Impl::ClearAll()
 
 // class SvtFileView -----------------------------------------------------
 
-void SvtFileView::OpenFolder()
+void SvtFileView::OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents )
 {
     mpView->ClearAll();
-    Sequence< ::rtl::OUString > aFileProperties =
-        GetFolderContentProperties_Impl( maViewURL, Application::GetSettings().GetLocale(), sal_True );
-    const ::rtl::OUString* pFileProperties  = aFileProperties.getConstArray();
-    UINT32 i, nCount = aFileProperties.getLength();
+    const ::rtl::OUString* pFileProperties  = aContents.getConstArray();
+    UINT32 i, nCount = aContents.getLength();
     sal_Bool bExecFilter = ( maCurrentFilter.Len() > 0 ) && ( maCurrentFilter != maAllFilter );
     for ( i = 0; i < nCount; ++i )
     {
         String aRow( pFileProperties[i] );
         // extract columns
-        String aTitle, aSize, aDate, aURL;
+        String aTitle, aSize, aDate, aURL, aImageURL;
         xub_StrLen nIdx = 0;
         aTitle = aRow.GetToken( 0, '\t', nIdx );
         aSize = aRow.GetToken( 0, '\t', nIdx );
@@ -497,6 +495,8 @@ void SvtFileView::OpenFolder()
         aURL = aRow.GetToken( 0, '\t', nIdx );
         sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
         sal_Bool bIsFolder = ( '1' == cFolder );
+        if ( nIdx != STRING_NOTFOUND )
+            aImageURL = aRow.GetToken( 0, '\t', nIdx );
 
         if ( mbOnlyFolder && !bIsFolder )
             continue;
@@ -504,7 +504,7 @@ void SvtFileView::OpenFolder()
         // build new row
         String aNewRow = aTitle;
         aNewRow += '\t';
-        if ( !bIsFolder )
+        if ( !bIsFolder && aSize.Len() > 0 )
         {
             // folder haven't a size
             BigInt nSize( aSize );
@@ -519,7 +519,7 @@ void SvtFileView::OpenFolder()
             aImage = maFolderImage;
         else
         {
-            INetURLObject aObj( aURL );
+            INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
             aImage = SvImageManager::GetImage( aObj, FALSE );
 
             if ( bExecFilter )
@@ -698,7 +698,19 @@ void SvtFileView::Initialize( const String& rURL, const String& rFilter )
     maViewURL = rURL;
     maCurrentFilter = rFilter;
     maCurrentFilter.ToLowerAscii();
-    OpenFolder();
+    Sequence< ::rtl::OUString > aFileProperties =
+        GetFolderContentProperties_Impl( maViewURL, Application::GetSettings().GetLocale(), sal_True );
+    OpenFolder( aFileProperties );
+    maOpenDoneLink.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void SvtFileView::Initialize( const String& rURL, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents )
+{
+    maViewURL = rURL;
+    maCurrentFilter = maAllFilter;
+    OpenFolder( aContents );
     maOpenDoneLink.Call( this );
 }
 
@@ -708,7 +720,9 @@ void SvtFileView::ExecuteFilter( const String& rFilter )
 {
     maCurrentFilter = rFilter;
     maCurrentFilter.ToLowerAscii();
-    OpenFolder();
+    Sequence< ::rtl::OUString > aFileProperties =
+        GetFolderContentProperties_Impl( maViewURL, Application::GetSettings().GetLocale(), sal_True );
+    OpenFolder( aFileProperties );
 }
 
 // -----------------------------------------------------------------------
