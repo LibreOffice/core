@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:33:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,20 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                         // is necessary, in order to let the text
                                         // flow into the FollowFlowLine
     BOOL bRemoveFollowFlowLinePending :1;
-    BOOL bDummy2 :1;
-    BOOL bDummy3 :1;
+    // --> OD 2004-10-04 #i26945#
+    BOOL bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
+                                           // are considered on the calculation
+                                           // for the minimal cell height.
+                                           // For splitting table rows algorithm
+                                           // it's needed not to consider floating
+                                           // screen object for the preparation
+                                           // of the re-calculation of the
+                                           // last table row.
+    // <--
+    // --> OD 2004-10-15 #i26945#
+    BOOL bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
+                          // indicates, if the floating screen objects fits
+    // <--
     BOOL bDummy4 :1;
 
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
@@ -193,6 +205,27 @@ public:
 
     BOOL IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
     void SetRemoveFollowFlowLinePending( BOOL bNew ) { bRemoveFollowFlowLinePending = bNew; }
+
+    // --> OD 2004-10-04 #i26945#
+    BOOL IsConsiderObjsForMinCellHeight() const
+    {
+        return bConsiderObjsForMinCellHeight;
+    }
+    void SetConsiderObjsForMinCellHeight( BOOL _bNewConsiderObjsForMinCellHeight )
+    {
+        bConsiderObjsForMinCellHeight = _bNewConsiderObjsForMinCellHeight;
+    }
+    // <--
+    // --> OD 2004-10-04 #i26945#
+    BOOL DoesObjsFit() const
+    {
+        return bObjsDoesFit;
+    }
+    void SetDoesObjsFit( BOOL _bNewObjsDoesFit )
+    {
+        bObjsDoesFit = _bNewObjsDoesFit;
+    }
+    // <--
 
     bool SwTabFrm::RemoveFollowFlowLine();
     //
