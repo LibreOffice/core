@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-09 16:00:32 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ class SfxDdeDocTopic_Impl : public DdeTopic
 public:
     SfxObjectShell* pSh;
     DdeData aData;
-    SvData aSvData;
+    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
 
     SfxDdeDocTopic_Impl( SfxObjectShell* pShell )
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
@@ -265,8 +265,9 @@ long SfxApplication::DdeExecute
 
 long SfxApplication::DdeGetData
 (
-    const String&   rItem,      // das anzusprechende Item
-    SvData&         rData       // in: Format, out: angeforderte Daten
+    const String&   rItem,                  // das anzusprechende Item
+    const String& rMimeType,                // in: Format
+    ::com::sun::star::uno::Any & rValue     // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -287,7 +288,8 @@ long SfxApplication::DdeGetData
 long SfxApplication::DdeSetData
 (
     const String&   rItem,      // das anzusprechende Item
-    const SvData&   rData       // Daten-Format und Daten selbst
+    const String& rMimeType,                // in: Format
+    const ::com::sun::star::uno::Any & rValue   // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -297,25 +299,6 @@ long SfxApplication::DdeSetData
     zu empfangen.
 
     Die Basisimplementierung nimmt keine Daten entgegen und liefert 0 zur"uck.
-*/
-
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-SvPseudoObject* SfxApplication::DdeCreateHotLink
-(
-    const String&   rItem      // das zu erzeugende Item
-)
-
-/*  [Beschreibung]
-
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seiner SfxApplication-Subklasse einen DDE-Hotlink einzurichten
-
-    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
 */
 
 {
@@ -374,8 +357,9 @@ long SfxObjectShell::DdeExecute
 
 long SfxObjectShell::DdeGetData
 (
-    const String&   rItem,      // das anzusprechende Item
-    SvData&         rData       // in: Format, out: angeforderte Daten
+    const String&   rItem,                      // das anzusprechende Item
+    const String& rMimeType,                    // in: Format
+    ::com::sun::star::uno::Any & rValue     // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -395,8 +379,9 @@ long SfxObjectShell::DdeGetData
 
 long SfxObjectShell::DdeSetData
 (
-    const String&   rItem,      // das anzusprechende Item
-    const SvData&   rData       // Daten-Format und Daten selbst
+    const String&   rItem,                      // das anzusprechende Item
+    const String& rMimeType,                    // in: Format
+    const ::com::sun::star::uno::Any & rValue   // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -414,26 +399,7 @@ long SfxObjectShell::DdeSetData
 
 //--------------------------------------------------------------------
 
-SvPseudoObject* SfxObjectShell::DdeCreateHotLink
-(
-    const String&   rItem      // das zu erzeugende Item
-)
-
-/*  [Beschreibung]
-
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seiner SfxObjectShell-Subklasse einen DDE-Hotlink einzurichten
-
-    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
-*/
-
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-so3::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
+::so3::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
 (
     const String&   rItem      // das zu erzeugende Item
 )
@@ -480,8 +446,9 @@ long SfxViewFrame::DdeExecute
 
 long SfxViewFrame::DdeGetData
 (
-    const String&   rItem,      // das anzusprechende Item
-    SvData&         rData       // in: Format, out: angeforderte Daten
+    const String&   rItem,                  // das anzusprechende Item
+    const String& rMimeType,                // in: Format
+    ::com::sun::star::uno::Any & rValue     // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -501,8 +468,9 @@ long SfxViewFrame::DdeGetData
 
 long SfxViewFrame::DdeSetData
 (
-    const String&   rItem,      // das anzusprechende Item
-    const SvData&   rData       // Daten-Format und Daten selbst
+    const String&   rItem,                      // das anzusprechende Item
+    const String& rMimeType,                    // in: Format
+    const ::com::sun::star::uno::Any & rValue   // out: angeforderte Daten
 )
 
 /*  [Beschreibung]
@@ -520,26 +488,7 @@ long SfxViewFrame::DdeSetData
 
 //--------------------------------------------------------------------
 
-SvPseudoObject* SfxViewFrame::DdeCreateHotLink
-(
-    const String&   rItem      // das zu erzeugende Item
-)
-
-/*  [Beschreibung]
-
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seiner SfxViewFrame-Subklasse einen DDE-Hotlink einzurichten
-
-    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
-*/
-
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-so3::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
+::so3::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
 (
     const String&   rItem      // das zu erzeugende Item
 )
@@ -752,28 +701,33 @@ BOOL SfxDdeTriggerTopic_Impl::Execute( const String* pStr )
 //--------------------------------------------------------------------
 DdeData* SfxDdeDocTopic_Impl::Get( ULONG nFormat )
 {
-    aSvData = SvData( nFormat );
-    long nRet = pSh->DdeGetData( GetCurItem(), aSvData );
-    if( nRet && aSvData.HasData() )
+    String sMimeType( SotExchange::GetFormatMimeType( nFormat ));
+    ::com::sun::star::uno::Any aValue;
+    long nRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
+    if( nRet && aValue.hasValue() && ( aValue >>= aSeq ) )
     {
-        const char * pGetData;
-        long nLen = aSvData.GetMemorySize();
-        aSvData.GetData( (void**)&pGetData, TRANSFER_REFERENCE );
-        aData = DdeData( pGetData, nLen, nFormat );
+        aData = DdeData( aSeq.getConstArray(), aSeq.getLength(), nFormat );
         return &aData;
     }
+    aSeq.realloc( 0 );
     return 0;
 }
 
 BOOL SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
-    aSvData = SvData( pData->GetFormat() );
-    aSvData.SetData( (void*)(const void*)*pData,
-                    (long)*pData, TRANSFER_REFERENCE );
-
-    long nRet = aSvData.HasData() ? pSh->DdeSetData( GetCurItem(), aSvData ) : 0;
-
-    return 0 != nRet;
+    aSeq = ::com::sun::star::uno::Sequence< sal_Int8 >(
+                            (sal_Int8*)(const void*)*pData, (long)*pData );
+    BOOL bRet;
+    if( aSeq.getLength() )
+    {
+        ::com::sun::star::uno::Any aValue;
+        aValue <<= aSeq;
+        String sMimeType( SotExchange::GetFormatMimeType( pData->GetFormat() ));
+        bRet = 0 != pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
+    }
+    else
+        bRet = FALSE;
+    return bRet;
 }
 
 BOOL SfxDdeDocTopic_Impl::Execute( const String* pStr )
@@ -790,29 +744,17 @@ BOOL SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
 
 BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
 {
-#ifndef TF_SVDATA
-    SvPseudoObject* pNewObj = pSh->DdeCreateHotLink( GetCurItem() );
-    if( !pNewObj )
-        return FALSE;
-
-    // dann richten wir auch einen entsprechenden SvBaseLink ein
-    String sNm, sTmp( Application::GetAppName() );
-    ::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
-    new SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
-    return TRUE;
-
-#else                                   // #ifndef TF_SVDATA
-
-    so3::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
-    if( !pNewObj )
-        return FALSE;
-
-    // dann richten wir auch einen entsprechenden SvBaseLink ein
-    String sNm, sTmp( Application::GetAppName() );
-    so3::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
-    new so3::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
-    return TRUE;
-#endif
+    BOOL bRet = FALSE;
+    ::so3::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
+    if( pNewObj )
+    {
+        // dann richten wir auch einen entsprechenden SvBaseLink ein
+        String sNm, sTmp( Application::GetAppName() );
+        so3::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
+        new so3::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
+        bRet = TRUE;
+    }
+    return bRet;
 }
 
 
