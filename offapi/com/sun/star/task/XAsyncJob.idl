@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAsyncJob.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,16 @@ module com {  module sun {  module star {  module task {
 interface XJobListener;
 
 //=============================================================================
-/** specifies a job which is to be executed asynchronously
+/** specifies a job which must be executed asynchronously
 
     <p>
     Instead of <type>XJob</type> the implementation of this interface
-    must make shure that execution will be real asynchronous (e.g. by using
-    threads). Because it's not part of the generic <type>JobExecutor</type>,
-    the asynchronous mode must be guaranteed by the implementation of THIS
-    interface.
+    must be aware, that execution can be made real asynchronous (e.g. by using
+    threads). Because the environment whish to have creation and using of threads
+    under control, it's not allowed for a real job implementation to use such mechanism
+    by itself. The outside code decide, if it's possible and how it can be made
+    asynchronous. In some special cases it can be, that asynchronous jobs will be executed
+    synchronously.
     </p>
 
     @see XJob
@@ -103,11 +105,10 @@ interface XAsyncJob : com::sun::star::uno::XInterface
             a concrete implementation of a job specifies in its service descriptions which parameters are allowed
             (or expected). This values are persistent by the configuration of the <type>JobExecutor</type>
             which use this asynchronous job. It's possible to write it back by called listener
-            function <member>XJobListener::jobFinished()</member> which must be the executor himself.
+            function <member>XJobListener::jobFinished()</member>.
 
         @param Listener
             specifies a listener which should be notified on events. May be <NULL/>.
-            If it's not <NULL/> it must be the <type>JobExecutor</type> which force this action.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if some of given arguments doesn't fill out the service specification or
