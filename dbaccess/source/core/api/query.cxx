@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:06:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 10:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OQuery::disposing( const EventObject& _rSource )
+void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
