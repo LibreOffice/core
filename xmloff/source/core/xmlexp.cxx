@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-05 11:47:18 $
+ *  last change: $Author: sab $ $Date: 2001-03-11 15:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 
 #ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
 #include "XMLStarBasicExportHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
+#include "SettingsExportHelper.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -526,8 +530,11 @@ void SvXMLExport::ImplExportSettings()
     CheckAttrList();
 
     {
-        _ExportViewSettings();
-        _ExportConfigurationSettings();
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_settings,
+                                sal_True, sal_True );
+        XMLSettingsExportHelper aSettingsExportHelper(*this);
+        _ExportViewSettings(aSettingsExportHelper);
+        _ExportConfigurationSettings(aSettingsExportHelper);
     }
 }
 
@@ -718,12 +725,20 @@ void SvXMLExport::_ExportMeta()
     aMeta.Export( GetNamespaceMap() );
 }
 
-void SvXMLExport::_ExportViewSettings()
+void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper)
 {
+    uno::Sequence<beans::PropertyValue> aProps;
+    GetViewSettings(aProps);
+    OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_view_settings));
+    rSettingsExportHelper.exportSettings(aProps, sViewSettings);
 }
 
-void SvXMLExport::_ExportConfigurationSettings()
+void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rSettingsExportHelper)
 {
+    uno::Sequence<beans::PropertyValue> aProps;
+    GetConfigurationSettings(aProps);
+    OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_configuration_settings));
+    rSettingsExportHelper.exportSettings(aProps, sViewSettings);
 }
 
 void SvXMLExport::_ExportScripts()
@@ -972,6 +987,14 @@ XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
 xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormExport()
 {
     return new xmloff::OFormLayerXMLExport(*this);
+}
+
+void SvXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& aProps)
+{
+}
+
+void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& aProps)
+{
 }
 
 OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
