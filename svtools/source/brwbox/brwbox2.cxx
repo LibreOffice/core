@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-02 08:51:24 $
+ *  last change: $Author: fs $ $Date: 2002-04-11 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,15 +406,12 @@ void BrowseBox::DrawCursor()
 {
     short nCursorHideCount = GetCursorHideCount();
     BOOL bHidden = bHideCursor || !bSelectionIsVisible ||
-                   !IsUpdateMode() || bScrolling || nCurRow < 0;
+                                 !IsUpdateMode() || bScrolling || nCurRow < 0;
 
     if (PaintCursorIfHiddenOnce())
         bHidden |= ( GetCursorHideCount() > 1 );
     else
         bHidden |= ( GetCursorHideCount() > 0 );
-//  bHidden |= ( GetCursorHideCount() > 0 ) && !( ( !m_bFocusOnlyCursor && GetCursorHideCount() == 1 ) && !HasFocus() );
-        // hidden if the hide count non-zero
-        // exception : we hided the cursor exactly once in LoseFocus and we have to show the cursor
 
     // keine Cursor auf Handle-Column
     if ( nCurColId == 0 )
@@ -1922,6 +1919,10 @@ void BrowseBox::Dispatch( USHORT nId )
 
     switch ( nId )
     {
+        case BROWSER_SELECTCOLUMN:
+            SelectColumnId( GetCurColumnId() );
+            break;
+
         case BROWSER_CURSORDOWN:
             if ( ( GetCurRow() + 1 ) < nRowCount )
                 bDone = GoToRow( GetCurRow() + 1, FALSE );
