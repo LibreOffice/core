@@ -13929,3 +13929,5 @@ WriteJPEG
 ?lower_bound@?$map@VOUString@rtl@@V12@UUStringLess@comphelper@@V?$allocator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@_STL@@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@2@@2@ABVOUString@rtl@@@Z
 ?_M_reserve_map_at_front@?$deque@JV?$allocator@J@_STL@@@_STL@@IAEXI@Z
 ??1NamedValue@beans@star@sun@com@@QAE@XZ
+?IsSelectionInReadonly@SvtAccessibilityOptions@@QBEEXZ
+?SetSelectionInReadonly@SvtAccessibilityOptions@@QAEXE@Z
