@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-17 11:40:57 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
+    ScDLL::Init();
     static uno::Reference< uno::XInterface > xInst = (::cppu::OWeakObject*) new ScAutoFormatsObj;
     return xInst;
 }
