@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,13 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Size = MAP_APPFONT ( 230 , 170 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "Schriften importieren" ;
-    Text [ English ] = "Import fonts" ;
+    Text = "Schriften hinzufügen" ;
+    Text [ English ] = "Add fonts" ;
 
-    MultiListBox RID_FIMP_BOX_NEWFONTS
+    ListBox RID_FIMP_BOX_NEWFONTS
     {
         Border = TRUE;
         Sort=TRUE;
-        SimpleMode = TRUE;
         AutoHScroll = TRUE;
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 160, 75 );
@@ -85,8 +84,8 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Pos = MAP_APPFONT( 5, 135 );
         Size = MAP_APPFONT( 220, 24 );
         WordBreak=TRUE;
-        Text = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Danach entfernen Sie bitte die Schriften, die nicht importiert werden sollen, mit Hilfe der Entfernen Schaltfläche und starten Sie dann den Import mit der OK-Schaltfläche.";
-        Text [ English ] = "Please choose the directory from which to import fonts. After that please remove the fonts you do not want to import with the Remove button. Start the import with the OK button.";
+        Text = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Starten Sie dann das Hinzufügen der selektierten Schriften mit der OK-Schaltfläche.";
+        Text [ English ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
     };
     GroupBox RID_FIMP_GRP_FROM
     {
@@ -131,7 +130,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     {
         Pos = MAP_APPFONT( 10, 115 );
         Size = MAP_APPFONT( 145, 10 );
-        Text = "Beim Import nur ~Softlinks anlegen";
+        Text = "Beim Hinzufügen nur ~Softlinks anlegen";
         Text [ English ] = "Create ~Softlinks only";
     };
     OKButton RID_FIMP_BTN_OK
@@ -145,37 +144,17 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Pos = MAP_APPFONT( 175, 29 );
         Size = MAP_APPFONT( 50, 14 );
     };
-    PushButton RID_FIMP_BTN_REMOVE
+    PushButton RID_FIMP_BTN_SELECTALL
     {
         Pos = MAP_APPFONT( 175, 48 );
         Size = MAP_APPFONT( 50, 14 );
-        Text = "Entfernen";
-        Text [ English ] = "Remove";
+        Text = "~Alle markieren";
+        Text [ English ] = "~Select all";
     };
     String RID_FIMP_STR_IMPORTOP
     {
-        Text = "Importiere Schriften";
-        Text[ English ] = "Importing fonts";
-        Text[ english_us ] = "Importing fonts";
-        Text[ portuguese ] = "Importar tipos de letra";
-        Text[ russian ] = "Èìïîğò øğèôòîâ";
-        Text[ greek ] = "ÅéóáãùãŞ ãñáììáôïóåéñşí";
-        Text[ dutch ] = "Lettertypen worden geïmporteerd";
-        Text[ french ] = "Import de polices";
-        Text[ spanish ] = "Fuentes importadas";
-        Text[ italian ] = "Importa font";
-        Text[ danish ] = "Importing fonts";
-        Text[ swedish ] = "Importerar teckensnitt";
-        Text[ polish ] = "Importuj czcionki";
-        Text[ portuguese_brazilian ] = "Importing fonts";
-        Text[ japanese ] = "Ì«İÄ‚ğ²İÎß°Ä‚µ‚Ü‚·";
-        Text[ korean ] = "±Û²Ã¡¡°¡Á®¿À±â";
-        Text[ chinese_simplified ] = "ÊäÈë×ÖÌå";
-        Text[ chinese_traditional ] = "¿é¤J¦r«¬";
-        Text[ turkish ] = "Importing fonts";
-        Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ";
-        Text[ finnish ] = "Importing fonts";
-        Text[ catalan ] = "Fuentes importadas";
+        Text = "Füge Schriften hinzu";
+        Text[ English ] = "Adding fonts";
     };
     String RID_FIMP_STR_QUERYOVERWRITE
     {
@@ -355,55 +334,9 @@ ModalDialog RID_FONTIMPORT_DIALOG
     };
     String RID_FIMP_STR_NUMBEROFFONTSIMPORTED
     {
-        Text = "Es wurden %d neue Schriften installiert.";
-        Text [ English ] = "%d new fonts were installed.";
-        Text[ english_us ] = "%d new fonts were installed.";
-        Text[ portuguese ] = "Instalados %d novos tipos de letra.";
-        Text[ russian ] = "Èíñòàëëèğîâàíî %d íîâûõ øğèôòà(îâ).";
-        Text[ greek ] = "¸÷ïõí åãêáôáóôáèåß %d íİåò ãñáììáôïóåéñİò.";
-        Text[ dutch ] = "Er werden %d nieuwe lettertypen geïnstalleerd.";
-        Text[ french ] = "%d nouvelles polices installées.";
-        Text[ spanish ] = "Se instalaron %d nuevas fuentes.";
-        Text[ italian ] = "Sono stati installati %d nuovi font.";
-        Text[ danish ] = "%d new fonts were installed.";
-        Text[ swedish ] = "%d nya teckensnitt har installerats.";
-        Text[ polish ] = "Zainstalowano %d nowych czionek.";
-        Text[ portuguese_brazilian ] = "%d new fonts were installed.";
-        Text[ japanese ] = "%d V‚µ‚¢Ì«İÄ‚ª²İ½Ä°Ù‚³‚ê‚Ü‚µ‚½B";
-        Text[ korean ] = "%d »õ¡¡±Û²ÃÀÌ¡¡¼³Ä¡µÇ¾ú½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÒÑ¾­°²×° %d ĞÂµÄ×ÖÌå¡£";
-        Text[ chinese_traditional ] = "¤w¸g¦w¸Ë·s¦r«¬ %d ¡C";
-        Text[ turkish ] = "%d new fonts were installed.";
-        Text[ arabic ] = "Êã ÊËÈíÊ %d ÎØÇó (ÎØæØ) ÌÏíÏÇğ (ÌÏíÏÉ).";
-        Text[ finnish ] = "%d new fonts were installed.";
-        Text[ catalan ] = "Se instalaron %d nuevas fuentes.";
+        Text = "Es wurden %d neue Schriften hinzugefügt.";
+        Text [ English ] = "%d new fonts were added.";
     };
-    Text[ english_us ] = "Import Fonts";
-    Text[ portuguese ] = "Importar tipos de letra";
-    Text[ russian ] = "Èìïîğò øğèôòîâ";
-    Text[ greek ] = "ÅéóáãùãŞ ãñáììáôïóåéñşí";
-    Text[ dutch ] = "Lettertypen importeren";
-    Text[ french ] = "Import de polices";
-    Text[ spanish ] = "Importar fuentes";
-    Text[ italian ] = "Importa font";
-    Text[ danish ] = "Import fonts";
-    Text[ swedish ] = "Importera teckensnitt";
-    Text[ polish ] = "Importuj czcionki";
-    Text[ portuguese_brazilian ] = "Import fonts";
-    Text[ japanese ] = "Ì«İÄ‚Ì²İÎß°Ä";
-    Text[ korean ] = "±Û²Ã¡¡°¡Á®¿À±â";
-    Text[ chinese_simplified ] = "ÊäÈë×ÖÌå";
-    Text[ chinese_traditional ] = "¿é¤J¦r«¬";
-    Text[ turkish ] = "Import fonts";
-    Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ";
-    Text[ finnish ] = "Import Fonts";
-    Text[ catalan ] = "Importar fuentes";
-};
-
-String RID_STR_REMOVE_MULTIPLE_FONTS
-{
-    Text = "Wenn Sie die Schrift\n\n   %s1\n\nentfernen werden auch folgende Scriften entfernt, da sie in derselben Datei enhalten sind:\n\n%s2\n\nWollen Sie das ?";
-    Text [ English ] = "If the font\n\n   %s1\nis removed the following fonts will also be removed because they are contained in the same file:\n\n%s2\n\nDo you want that ?";
 };
 
 ModalDialog RID_PADIALOG
@@ -770,33 +703,6 @@ ModalDialog RID_PADIALOG
         Text[ arabic ] = "ÎØæØ...";
         Text[ finnish ] = "Add\nFon~ts..";
         Text[ catalan ] = "Añadir\nfue~ntes...";
-    };
-    PushButton RID_PA_BTN_ADDFONTS
-    {
-        Pos = MAP_APPFONT( 125, 150 );
-        Size = MAP_APPFONT( 70, 15 );
-        Text = "Sc~hriftimport...";
-        Text [english] = "~Import fonts...";
-        Text[ english_us ] = "~Import Fonts...";
-        Text[ portuguese ] = "~Importar tipos de letra...";
-        Text[ russian ] = "~Èìïîğò øğèôòîâ...";
-        Text[ greek ] = "~Import fonts...";
-        Text[ dutch ] = "~Import lettertypen...";
-        Text[ french ] = "~Import de polices...";
-        Text[ spanish ] = "~Importar fuentes...";
-        Text[ italian ] = "~Importa fonts...";
-        Text[ danish ] = "~Import fonts...";
-        Text[ swedish ] = "~Import av teckensnitt...";
-        Text[ polish ] = "Import czcionek...";
-        Text[ portuguese_brazilian ] = "~Import fonts...";
-        Text[ japanese ] = "Ì«İÄ‚Ì²İÎß°Ä...";
-        Text[ korean ] = "~±Û²Ã µé¿©¿À±â...";
-        Text[ chinese_simplified ] = "ÊäÈë×ÖÌå...";
-        Text[ chinese_traditional ] = "¶×¤J¦r«¬...";
-        Text[ turkish ] = "~Import fonts...";
-        Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ...";
-        Text[ finnish ] = "Sc~hriftimport...";
-        Text[ catalan ] = "~Import fonts...";
     };
     PushButton RID_PA_BTN_ADD
     {
@@ -1233,13 +1139,14 @@ ModalDialog RID_FONTNAMEDIALOG
     {
         Pos = MAP_APPFONT ( 196 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Importieren...";
-        Text [ English ] = "Imp~ort...";
+        Text = "~Hinzufügen...";
+        Text [ English ] = "~Add...";
     };
     ListBox RID_FNTNM_LB_FONTS
     {
         Border = TRUE ;
         Sort = TRUE ;
+        AutoHScroll = TRUE;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 185 , 70 ) ;
     };
@@ -1248,8 +1155,8 @@ ModalDialog RID_FONTNAMEDIALOG
         Pos = MAP_APPFONT ( 6 , 81 ) ;
         Size = MAP_APPFONT ( 175 , 24 ) ;
         WordBreak = TRUE;
-        Text = "Hinweis: Sie können nur die für die Applikation lokal installierten Schriften verändern.";
-        Text [ English ] = "Hint: you can only modify the fonts installed for the application locally.";
+        Text = "Hinweis: Die Schriften sind nur für die Applikation verfügbar";
+        Text [ English ] = "Hint: the fonts are avalable for the application only.";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";
@@ -3175,4 +3082,112 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ finnish ] = "ein spezifischer Treiber, um die Formatierung einem anderen Drucker anzugleichen";
         Text[ catalan ] = "a specific driver to format identical to a certain printer";
     };
+};
+
+String RID_TXT_FONT_ITALIC
+{
+    Text = "Kursiv";
+    Text [ english ] = "Italic";
+};
+
+String RID_TXT_FONT_OBLIQUE
+{
+    Text = "Schräg";
+    Text [english] = "Oblique";
+};
+
+String RID_TXT_FONT_THIN
+{
+    Text = "Dünn";
+    Text [english] = "Thin";
+};
+
+String RID_TXT_FONT_ULTRALIGHT
+{
+    Text = "Ultralight";
+    Text [english] = "Ultralight";
+};
+
+String RID_TXT_FONT_SEMILIGHT
+{
+    Text = "Semilight";
+    Text [english] = "Semilight";
+};
+
+String RID_TXT_FONT_LIGHT
+{
+    Text = "Light";
+    Text [english] = "Light";
+};
+
+String RID_TXT_FONT_SEMIBOLD
+{
+    Text = "Halbfett";
+    Text [english] = "Semibold";
+};
+
+String RID_TXT_FONT_BOLD
+{
+    Text = "Fett";
+    Text [english] = "Bold";
+};
+
+String RID_TXT_FONT_ULTRABOLD
+{
+    Text = "Ultrafett";
+    Text [english] = "Ultrabold";
+};
+
+String RID_TXT_FONT_ULTRACONDENSED
+{
+    Text = "Ultragestraucht";
+    Text [english] = "Ultracondensed";
+};
+
+String RID_TXT_FONT_EXTRACONDENSED
+{
+    Text = "Extragestaucht";
+    Text [english] = "Extracondensed";
+};
+
+String RID_TXT_FONT_CONDENSED
+{
+    Text = "Gestaucht";
+    Text [english] = "Condensed";
+};
+
+String RID_TXT_FONT_SEMICONDENSED
+{
+    Text = "Halbgestaucht";
+    Text [english] = "Semicondensed";
+};
+
+String RID_TXT_FONT_SEMIEXPANDED
+{
+    Text = "Halbgestreckt";
+    Text [english] = "Semiexpanded";
+};
+
+String RID_TXT_FONT_EXPANDED
+{
+    Text = "Gestreckt";
+    Text [english] = "Expanded";
+};
+
+String RID_TXT_FONT_EXTRAEXPANDED
+{
+    Text = "Extragestreckt";
+    Text [english] = "Extraexpanded";
+};
+
+String RID_TXT_FONT_ULTRAEXPANDED
+{
+    Text = "Ultragestreckt";
+    Text [english] = "Ultraexpanded";
+};
+
+String RID_TXT_FONT_REGULAR
+{
+    Text = "Standard";
+    Text [english] = "Regular";
 };

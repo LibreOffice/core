@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ namespace padmin {
     {
         OKButton                            m_aOKBtn;
         CancelButton                        m_aCancelBtn;
-        PushButton                          m_aRemoveBtn;
-        DelMultiListBox                     m_aNewFontsBox;
+        PushButton                          m_aSelectAllBtn;
+        ListBox                             m_aNewFontsBox;
         GroupBox                            m_aFromBox;
         Edit                                m_aFromDirEdt;
         PushButton                          m_aFromBtn;
@@ -137,7 +137,6 @@ namespace padmin {
 
         DECL_LINK( ClickBtnHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
-        DECL_LINK( DelPressedHdl, ListBox* );
 
         // implement ImportFontCallback
         virtual void importFontsFailed( ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason );
@@ -176,7 +175,8 @@ namespace padmin {
         DECL_LINK( ClickBtnHdl, Button* );
         DECL_LINK( DelPressedHdl, ListBox* );
 
-        static String fillFontEntry( ::psp::FastPrintFontInfo& rInfo, const String& rFile );
+        static String fillFontEntry( ::psp::FastPrintFontInfo& rInfo, const String& rFile, bool bAddRegular );
+        static String fillFontEntry( const ::std::list< ::psp::FastPrintFontInfo >& rInfos, const String& rFile );
     };
 } // namespace
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _PAD_HELPER_HXX_
 #include <helper.hxx>
+#endif
+#ifndef _CONFIG_HXX_
+#include <tools/config.hxx>
 #endif
 
 #if 0
@@ -206,34 +209,90 @@ FontNameDlg::~FontNameDlg()
 {
 }
 
-String FontNameDlg::fillFontEntry( FastPrintFontInfo& rInfo, const String& rFile )
+String FontNameDlg::fillFontEntry( FastPrintFontInfo& rInfo, const String& rFile, bool bAddRegular )
 {
+    static String aThinTxt( PaResId( RID_TXT_FONT_THIN ) );
+    static String aUltraLightTxt( PaResId( RID_TXT_FONT_ULTRALIGHT ) );
+    static String aLightTxt( PaResId( RID_TXT_FONT_LIGHT ) );
+    static String aSemiLightTxt( PaResId( RID_TXT_FONT_SEMILIGHT ) );
+    static String aSemiBoldTxt( PaResId( RID_TXT_FONT_SEMIBOLD ) );
+    static String aBoldTxt( PaResId( RID_TXT_FONT_BOLD ) );
+    static String aUltraBoldTxt( PaResId( RID_TXT_FONT_ULTRABOLD ) );
+
+    static String aItalicTxt( PaResId( RID_TXT_FONT_ITALIC ) );
+    static String aObliqueTxt( PaResId( RID_TXT_FONT_OBLIQUE ) );
+
+    static String aUltraCondensedTxt( PaResId( RID_TXT_FONT_ULTRACONDENSED ) );
+    static String aExtraCondensedTxt( PaResId( RID_TXT_FONT_EXTRACONDENSED ) );
+    static String aCondensedTxt( PaResId( RID_TXT_FONT_CONDENSED ) );
+    static String aSemiCondensedTxt( PaResId( RID_TXT_FONT_SEMICONDENSED ) );
+    static String aSemiExpandedTxt( PaResId( RID_TXT_FONT_SEMIEXPANDED ) );
+    static String aExpandedTxt( PaResId( RID_TXT_FONT_EXPANDED ) );
+    static String aExtraExpandedTxt( PaResId( RID_TXT_FONT_EXTRAEXPANDED ) );
+    static String aUltraExpandedTxt( PaResId( RID_TXT_FONT_ULTRAEXPANDED ) );
+
+    static String aRegularTxt( PaResId( RID_TXT_FONT_REGULAR ) );
+
     String aEntry( rInfo.m_aFamilyName );
+    bool bWeight = true, bItalic = true, bWidth = true;
     switch( rInfo.m_eWeight )
     {
-        case weight::Thin:          aEntry.AppendAscii( ", Thin" );break;
-        case weight::UltraLight:    aEntry.AppendAscii( ", Ultralight" );break;
-        case weight::Light:         aEntry.AppendAscii( ", Light" );break;
-        case weight::SemiLight:     aEntry.AppendAscii( ", Semilight" );break;
-        case weight::SemiBold:      aEntry.AppendAscii( ", Semibold" );break;
-        case weight::Bold:          aEntry.AppendAscii( ", Bold" );break;
-        case weight::UltraBold:     aEntry.AppendAscii( ", Ultrabold" );break;
+        case weight::Thin:          aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
+        case weight::UltraLight:    aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
+        case weight::Light:         aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
+        case weight::SemiLight:     aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
+        case weight::SemiBold:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
+        case weight::Bold:          aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
+        case weight::UltraBold:     aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
+        default:
+            bWeight = false;
+            break;
     }
     switch( rInfo.m_eItalic )
     {
-        case italic::Oblique:       aEntry.AppendAscii( ", Oblique" );break;
-        case italic::Italic:        aEntry.AppendAscii( ", Italic" );break;
+        case italic::Oblique:       aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
+        case italic::Italic:        aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
+        default:
+            bItalic = false;
+            break;
     }
     switch( rInfo.m_eWidth )
     {
-        case width::UltraCondensed: aEntry.AppendAscii( ", Ultracondensed" );break;
-        case width::ExtraCondensed: aEntry.AppendAscii( ", Extracondensed" );break;
-        case width::Condensed:      aEntry.AppendAscii( ", Condensed" );break;
-        case width::SemiCondensed:  aEntry.AppendAscii( ", Semicondensed" );break;
-        case width::SemiExpanded:   aEntry.AppendAscii( ", Semiexpanded" );break;
-        case width::Expanded:       aEntry.AppendAscii( ", Expanded" );break;
-        case width::ExtraExpanded:  aEntry.AppendAscii( ", Extraexpanded" );break;
-        case width::UltraExpanded:  aEntry.AppendAscii( ", Ultraexpanded" );break;
+        case width::UltraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
+        case width::ExtraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
+        case width::Condensed:      aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
+        case width::SemiCondensed:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
+        case width::SemiExpanded:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
+        case width::Expanded:       aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
+        case width::ExtraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
+        case width::UltraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
+        default:
+            bWidth = false;
+            break;
+    }
+
+    if( bAddRegular && ! bItalic && ! bWidth && ! bWeight )
+    {
+        aEntry.AppendAscii( ", " );
+        aEntry.Append( aRegularTxt );
+    }
+
+    aEntry.AppendAscii( " (" );
+    aEntry.Append( rFile );
+    aEntry.AppendAscii( ")" );
+    return aEntry;
+}
+
+String FontNameDlg::fillFontEntry( const ::std::list< FastPrintFontInfo >& rInfos, const String& rFile )
+{
+    String aEntry;
+    bool bFirst = true;
+    for( ::std::list< FastPrintFontInfo >::const_iterator it = rInfos.begin(); it != rInfos.end(); ++it )
+    {
+        if( ! bFirst )
+            aEntry.AppendAscii( " & " );
+        aEntry.Append( String( it->m_aFamilyName ) );
+        bFirst = false;
     }
 
     aEntry.AppendAscii( " (" );
@@ -247,7 +306,21 @@ void FontNameDlg::init()
     ::std::list< fontID > aFonts;
     m_rFontManager.getFontList( aFonts );
     m_aFontBox.Clear();
-    for( ::std::list< fontID >::iterator font_it = aFonts.begin(); font_it != aFonts.end(); ++font_it )
+
+    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
+    ::std::list< fontID >::iterator font_it;
+    for( font_it = aFonts.begin(); font_it != aFonts.end(); ++font_it )
+    {
+        if( m_rFontManager.isPrivateFontFile( *font_it ) )
+        {
+            const OUString& rFamily( m_rFontManager.getFontFamily( *font_it ) );
+            if( aFamilies.find( rFamily ) == aFamilies.end() )
+                aFamilies[rFamily] = 0;
+            aFamilies[rFamily]++;
+        }
+    }
+
+    for( font_it = aFonts.begin(); font_it != aFonts.end(); ++font_it )
     {
         if( m_rFontManager.isPrivateFontFile( *font_it ) )
         {
@@ -258,7 +331,23 @@ void FontNameDlg::init()
 
             FastPrintFontInfo aInfo;
             m_rFontManager.getFontFastInfo( *font_it, aInfo );
-            String aEntry( fillFontEntry( aInfo, String( ByteString( aFile ), gsl_getSystemTextEncoding() ) ) );
+            ::std::list< fontID > aDups;
+            String aEntry;
+            if( m_rFontManager.getFileDuplicates( *font_it, aDups ) )
+            {
+                FastPrintFontInfo aDupInfo;
+                ::std::list< FastPrintFontInfo > aInfos;
+                aInfos.push_back( aInfo );
+                for( ::std::list< fontID >::iterator dup = aDups.begin(); dup != aDups.end(); ++dup )
+                {
+                    m_rFontManager.getFontFastInfo( *dup, aDupInfo );
+                    aInfos.push_back( aDupInfo );
+                    aFonts.remove( *dup );
+                }
+                aEntry = fillFontEntry( aInfos, String( ByteString( aFile ), osl_getThreadTextEncoding() ) );
+            }
+            else
+                aEntry = fillFontEntry( aInfo, String( ByteString( aFile ), osl_getThreadTextEncoding() ), aFamilies[ aInfo.m_aFamilyName ] > 1  );
             USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
             m_aFontBox.SetEntryData( nEntry, (void*)(*font_it) );
         }
@@ -274,13 +363,6 @@ IMPL_LINK( FontNameDlg, DelPressedHdl, ListBox*, pBox )
     return 0;
 }
 
-struct RemoveEntry
-{
-    int         nCount;
-    String      aSelectEntry;
-    fontID      nSelectFont;
-};
-
 IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
 {
 
@@ -292,47 +374,11 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
     }
     else if( pButton == &m_aRemoveButton && AreYouSure( this, RID_QUERY_REMOVEFONTFROMLIST ) )
     {
-        ::std::hash_map< OString, struct RemoveEntry, OStringHash > aRemoveList;
+        ::std::list< fontID > aRemoveIDs;
         for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
         {
             int nSelect = m_aFontBox.GetSelectEntryPos( i );
-            fontID nFont = (fontID)m_aFontBox.GetEntryData( nSelect );
-            OString aFile( m_rFontManager.getFontFileSysPath( nFont ) );
-            if( aRemoveList.find( aFile ) == aRemoveList.end() )
-            {
-                struct RemoveEntry aEntry;
-                aEntry.nCount       = 0;
-                aEntry.aSelectEntry = m_aFontBox.GetEntry( nSelect );
-                aEntry.nSelectFont  = (fontID)m_aFontBox.GetEntryData( nSelect );
-                aRemoveList[ aFile ] = aEntry;
-            }
-            aRemoveList[ aFile ].nCount++;
-        }
-        ::std::list< fontID > aRemoveIDs;
-        for( ::std::hash_map< OString, struct RemoveEntry, OStringHash >::iterator it = aRemoveList.begin(); it != aRemoveList.end(); ++it )
-        {
-            ::std::list< fontID > aDups;
-            bool bDuplicates = m_rFontManager.getFileDuplicates( it->second.nSelectFont, aDups );
-            if( bDuplicates && aDups.size()+1 != it->second.nCount )
-            {
-                String aMessage( PaResId( RID_STR_REMOVE_MULTIPLE_FONTS ) );
-                aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), it->second.aSelectEntry );
-                String aFonts;
-                String aFileName( OStringToOUString( it->first.copy( it->first.lastIndexOf( '/' )+1 ), osl_getThreadTextEncoding() ) );
-                for( ::std::list< fontID >::iterator dup = aDups.begin(); dup != aDups.end(); ++dup )
-                {
-                    FastPrintFontInfo aInfo;
-                    m_rFontManager.getFontFastInfo( *dup, aInfo );
-
-                    aFonts.Append( fillFontEntry( aInfo, aFileName ) );
-                    aFonts.Append( '\n' );
-                }
-                aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), aFonts );
-                QueryBox aQueryBox( this, WB_YES_NO | WB_DEF_NO, aMessage );
-                if( aQueryBox.Execute() == BUTTONID_NO )
-                    continue;
-            }
-            aRemoveIDs.push_back( it->second.nSelectFont );
+            aRemoveIDs.push_back( (fontID)m_aFontBox.GetEntryData( nSelect ) );
         }
         m_rFontManager.removeFonts( aRemoveIDs );
         init();
@@ -356,7 +402,7 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
         m_aFromDirEdt( this, PaResId( RID_FIMP_EDT_FROM ) ),
         m_aFromBtn( this, PaResId( RID_FIMP_BTN_FROM ) ),
         m_aLinkOnlyBox( this, PaResId( RID_FIMP_BOX_LINKONLY ) ),
-        m_aRemoveBtn( this, PaResId( RID_FIMP_BTN_REMOVE ) ),
+        m_aSelectAllBtn( this, PaResId( RID_FIMP_BTN_SELECTALL ) ),
         m_aNewFontsBox( this, PaResId( RID_FIMP_BOX_NEWFONTS ) ),
         m_aFixedText( this, PaResId( RID_FIMP_TXT_HELP ) ),
         m_bOverwriteAll( false ),
@@ -375,18 +421,27 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
 {
     FreeResource();
 
+    m_aNewFontsBox.EnableMultiSelection( TRUE );
+
     m_aOKBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
-    m_aRemoveBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
+    m_aSelectAllBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
     m_aFromBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
     m_aFromDirEdt.SetModifyHdl( LINK( this, FontImportDialog, ModifyHdl ) );
     m_aRefreshTimer.SetTimeoutHdl( LINK( this, FontImportDialog, RefreshTimeoutHdl ) );
     m_aRefreshTimer.SetTimeout( 2000 );
-    m_aNewFontsBox.setDelPressedLink( LINK( this, FontImportDialog, DelPressedHdl ) );
     m_aLinkOnlyBox.Check( FALSE );
+
+    Config& rPadminRC( getPadminRC() );
+    rPadminRC.SetGroup( "FontImport" );
+    m_aFromDirEdt.SetText( String( rPadminRC.ReadKey( "FromPath" ), RTL_TEXTENCODING_UTF8 ) );
+    RefreshTimeoutHdl( NULL );
 }
 
 FontImportDialog::~FontImportDialog()
 {
+    Config& rPadminRC( getPadminRC() );
+    rPadminRC.SetGroup( "FontImport" );
+    rPadminRC.WriteKey( "FromPath", ByteString( m_aFromDirEdt.GetText(), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void FontImportDialog::importFontsFailed( ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason )
@@ -492,24 +547,39 @@ void FontImportDialog::fillFontBox()
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     m_aNewFontsBox.Clear();
-    for( ::std::hash_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
+
+    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
+    ::std::hash_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
+    for( it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
+    {
+        const OUString& rFamily( it->second.front().m_aFamilyName );
+        if( aFamilies.find( rFamily ) == aFamilies.end() )
+                aFamilies[rFamily] = 0;
+            aFamilies[rFamily]++;
+    }
+
+    for( it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
     {
         OString aFileName( it->first.copy( it->first.lastIndexOf( '/' )+1 ) );
         OUString aFile( OStringToOUString( aFileName, aEncoding ) );
-        for( ::std::list< FastPrintFontInfo >::iterator font_it = it->second.begin(); font_it != it->second.end(); ++font_it )
-        {
-            String aEntry( FontNameDlg::fillFontEntry( *font_it, aFile ) );
-            USHORT nPos = m_aNewFontsBox.InsertEntry( aEntry );
-            m_aNewFontsBox.SetEntryData( nPos, (void*)&(it->first) );
-        }
+        String aEntry;
+        if( it->second.size() == 1 )
+            aEntry = FontNameDlg::fillFontEntry( it->second.front(), aFile, aFamilies[ it->second.front().m_aFamilyName ] > 1 );
+        else
+            aEntry = FontNameDlg::fillFontEntry( it->second, aFile );
+        USHORT nPos = m_aNewFontsBox.InsertEntry( aEntry );
+        m_aNewFontsBox.SetEntryData( nPos, (void*)&(it->first) );
     }
 }
 
 void FontImportDialog::copyFonts()
 {
     ::std::list< OString > aFiles;
-    for( ::std::hash_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
-        aFiles.push_back( it->first );
+    for( int i = 0; i < m_aNewFontsBox.GetSelectEntryCount(); i++ )
+    {
+        OString* pFile = (OString*)m_aNewFontsBox.GetEntryData( m_aNewFontsBox.GetSelectEntryPos( i ) );
+        aFiles.push_back( *pFile );
+    }
 
     int nSuccess = 0;
     if( aFiles.size() )
@@ -533,54 +603,6 @@ void FontImportDialog::copyFonts()
     aBox.Execute();
 }
 
-IMPL_LINK( FontImportDialog, DelPressedHdl, ListBox*, pBox )
-{
-    ::std::hash_map< OString, ::std::pair< OUString, int >, OStringHash > aRemoveFonts;
-    ::std::hash_map< OString, ::std::pair< OUString, int >, OStringHash >::iterator it;
-    for( int i = 0; i < m_aNewFontsBox.GetSelectEntryCount(); i++ )
-    {
-        int nSelect = m_aNewFontsBox.GetSelectEntryPos( i );
-        OString* pFile = (OString*)m_aNewFontsBox.GetEntryData( nSelect );
-        it = aRemoveFonts.find( *pFile );
-        if( it == aRemoveFonts.end() )
-        {
-            ::std::pair< OUString, int > aPair( m_aNewFontsBox.GetEntry( nSelect ), 0 );
-            aRemoveFonts[ *pFile ] = aPair;
-        }
-        aRemoveFonts[ *pFile ].second++;
-    }
-    for( it = aRemoveFonts.begin(); it != aRemoveFonts.end(); ++it )
-    {
-        if( it->second.second != m_aNewFonts[ it->first ].size() )
-        {
-            String aMessage( PaResId( RID_STR_REMOVE_MULTIPLE_FONTS ) );
-            aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), it->second.first );
-            OString* pFile = (OString*)m_aNewFontsBox.GetEntryData( m_aNewFontsBox.GetEntryPos( it->second.first ) );
-            String aFonts;
-            for( int n = 0; n != m_aNewFontsBox.GetEntryCount(); n++ )
-            {
-                if( pFile == m_aNewFontsBox.GetEntryData( n ) &&
-                    m_aNewFontsBox.GetEntry( n ) != String( it->second.first ) )
-                {
-                    aFonts.Append( m_aNewFontsBox.GetEntry( n ) );
-                    aFonts.Append( '\n' );
-                }
-            }
-            aMessage.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), aFonts );
-            QueryBox aQueryBox( this, WB_YES_NO | WB_DEF_NO, aMessage );
-            if( aQueryBox.Execute() == BUTTONID_NO )
-                it->second.second = 0;
-        }
-    }
-    for( it = aRemoveFonts.begin(); it != aRemoveFonts.end(); ++it )
-    {
-        if( it->second.second > 0 )
-            m_aNewFonts.erase( it->first );
-    }
-    fillFontBox();
-    return 0;
-}
-
 IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &m_aFromBtn )
@@ -597,9 +619,12 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
         copyFonts();
         EndDialog( 0 );
     }
-    else if( pButton == &m_aRemoveBtn )
+    else if( pButton == &m_aSelectAllBtn )
     {
-        DelPressedHdl( &m_aNewFontsBox );
+        m_aNewFontsBox.SetUpdateMode( FALSE );
+        for( int i = 0; i < m_aNewFontsBox.GetEntryCount(); i++ )
+            m_aNewFontsBox.SelectEntryPos( i, TRUE );
+        m_aNewFontsBox.SetUpdateMode( TRUE );
     }
     return 0;
 }
