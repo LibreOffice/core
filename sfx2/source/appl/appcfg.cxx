@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:47:47 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 13:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,11 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
     pTimer->Stop();
     SFX_APP()->Broadcast( aHint );
     if ( aHint.GetObjShell() )
+    {
+        SfxObjectShellRef xRef( aHint.GetObjShell() );
         aHint.GetObjShell()->Broadcast( aHint );
+    }
+
     delete this;
     return 0L;
 }
