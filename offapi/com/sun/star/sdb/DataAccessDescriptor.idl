@@ -1,0 +1,244 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DataAccessDescriptor.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:54:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_DataAccessDescriptor_idl__
+#define __com_sun_star_sdb_DataAccessDescriptor_idl__
+
+#ifndef __com_sun_star_sdbc_Connection_idl__
+#include <com/sun/star/sdbc/Connection.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_ResultSet_idl__
+#include <com/sun/star/sdbc/ResultSet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+module com {  module sun {  module star {  module sdb {
+
+/** descriptor for accessing basic data access objects.
+
+    <p>Various components interacting with the database access world require to specify (or provide themself) an object
+    such as a query, a table, a result set, a connection to a data source, a column within a table, and so on.</br>
+    All of these objects are usually not specified with a single property, but with a set of properties, and for
+    various objects, various (but not always different) properties are needed.<br/>
+    The <type>DataAccessDescriptor</type> describes the super set of the properties for the most common
+    data access objects.</p>
+
+    <p>Every component providing or requiring a <type>DataAccessDescriptor</type> for some functionality
+    is urged to specify which properties are mandatory, and which ones optional. Additionally,
+    it's free to specify any additional requirements about the relations of properties.</p>
+*/
+service DataAccessDescriptor
+{
+    /** specifies the name of the datasource to access.
+
+        <p>This data source is usually used to create a <type>Connection</type>. If no DataSourceName is given,
+        then an <member>ActiveConnection</member> is reuqired.</p>
+
+        @see com::sun::star::sdb::DatabaseContext
+        @see ActiveConnection
+     */
+    [optional, property] string DataSourceName;
+
+    /** is a connection to use.
+
+        <p>This object is guaranteed to be a <type scope="com::sun::star::sdbc">Connection</type>, but usually
+        it will be a <type>Connection</type> from the module com::sun::star::sdb.<br/>
+        Especially in the case where no <member>DataSourceName</member> is given, but
+        <member>CommandType</member> is <member>CommandType::QUERY</member>, the ActiveConnection needs
+        to fully support the <type>Connection</type> service, to actually retrieve the query specified by
+        <member>Command</member></p>
+
+        <p>If no ActiveConnection is given, then a <member>DataSourceName</member> is required.</p>
+
+        @see DataSourceName
+     */
+    [optional, property] com::sun::star::sdbc::XConnection ActiveConnection;
+
+    /** specifies the command to execute to retrieve a result set.
+
+        <p>This property is only meaningfull together with the <member>CommandType</member>
+        property, thus either <em>both</em> or <em>none</em> of them are present.</p>
+
+        @see CommandType
+     */
+    [optional, property] string Command;
+
+
+    /** specifies the type of the command to be executed to retrieve a result set.
+
+        <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
+
+        <p>This property is only meaningfull together with the <member>Command</member>
+        property, thus either <em>both</em> or <em>none</em> of them are present.</p>
+
+        @see com::sun::star::sdb::CommandType
+     */
+    [optional, property] long CommandType;
+
+    /** specifies an addtional filter to optinally use.
+
+        <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
+
+        <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
+        are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
+        row set are to be additionally filtered, the Filter property can be used.</p>
+
+        <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
+        in the DataAccessDescriptor.</p>
+
+        @see com::sun::star::sdb::RowSet
+        @see ResultSet
+    */
+    [optional, property] string Filter;
+
+    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+        to the database server.
+
+        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        backend-specific SQL statements, which are not standard SQL, to your database.</p>
+
+        <p>This property is usually present together with the <member>Command</member> and
+        <member>CommandType</member> properties, and is evaluated if and only if <member>CommandType</member>
+        equals <member>CommandType::COMMAND</member>.</p>
+    */
+    [optional, property] boolean EscapeProcessing;
+
+    /** specifies an already existent result set to use.
+
+        <p>Usually, you use the properties <member>DataSourceName</member> (alternatively
+        <member>ActiveConnection</member>), <member>Command</member> and <member>CommandType</member> to specify
+        how to <em>obtain</em> a result set. However, in scenarious where the provider of a DataAccessDescriptor
+        has access to an already existent result set, it can pass it along for reusage. This is encouraged
+        to increase performance.</p>
+
+        <p>The object will at least support the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
+
+        <p>Note that any superservices of <type scope="com::sun::star::sdbc">ResultSet</type>
+        are also allowed. Especially, this member can denote an instance of the
+        <type scope="com::sun::star::sdb">RowSet</type>, or an instance obtained
+        by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
+        on such a <type scope="com::sun::star::sdb">RowSet</type>. This becomes important in
+        conjunction with the <member>Selection</member> property.</p>
+
+        @see com::sun::star::sdb::XResultSetAccess
+    */
+    [optional, property] com::sun::star::sdbc::XResultSet ResultSet;
+
+    /** specifies a selection to confine the records in a result set.
+
+        <p>When you specify a result set either implicitly (<member>DataSourceName</member>, <member>Command</member>,
+        <member>CommandType</member>) or explicitly (<member>ResultSet</member>), the set of results can be
+        additionally refined with this property.</p>
+
+        <p>The single elements of the <member>Selection</member> are either record numbers (see
+        <member scope="com::sun::star::sdbc">XResultSet::getRow</member>), or bookmarks (see
+        <member scope="com::sun::star::sdbcx">XRowLocate::getBookmark</member>).<br/>
+        It is up to the component which provides or requires a DataAccessDescriptor to specify which of the
+        two alternatives it expects. If it does <em>not</em> specify this, then the property
+        <member>BookmarkSelection</member> becomes mandatory.</p>
+
+        <p>If the elements specify bookmarks, and a <member>ResultSet</member> has been specified, then
+        this result set is urged to support the <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
+    */
+    [optional, property] sequence< any > Selection;
+
+    /** specifies how to interpret <member>Selection</member>
+
+        <p>If present, <member>BookmarkSelection</member> specifies the semantics of <member>Selection</member>. If
+        not present, it's up to the implementing component to specify this semantics.</p>
+
+        <p>If <TRUE/>, then the single elements of the array specified by <member>Selection</member> are
+        bookmarks relative to the result set, if <FALSE/>, they're record numbers.</p>
+
+        @see com::sun::star::sdbcx::XRowLocate
+        @see com::sun::star::sdbc::XResultSet
+        @see com::sun::star::sdb::XResultSetAccess
+    */
+    [optional, property] boolean BookmarkSelection;
+
+    /** specifies a column name.
+
+        <p>This property is usually used together with the <member>Command</member> and
+        <member>CommandType</member> properties.</p>
+
+        @see Column
+    */
+    [optional, property] string ColumnName;
+
+    /** specifies a column object
+
+        <p>For reasons of performance and saving resources, a supplier of an DataAccessDescriptor which is
+        used to describe a column object can pass this object directly, instead of specifying it only implicitly
+        with the <member>ColumnName</member> property.</p>
+
+        <p>The object will at least support the <type scope="com::sun::star::sdbcx">Column</type> service, but more
+        often it will even be a <type>Column</type> from the com::sun::star::sdb module.</p>
+    */
+    [optional, property] com::sun::star::beans::XPropertySet Column;
+};
+
+}; }; }; };
+
+#endif
