@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-29 09:37:04 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:36:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,7 +140,6 @@ SHL1STDLIBS+= \
     $(XMLOFFLIB) \
     $(BASICLIB) \
     $(GOODIESLIB) \
-    $(SO2LIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
     $(VCLLIB) \
@@ -228,7 +227,8 @@ SHL3STDLIBS= \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\
             $(CPPULIB) \
-            $(SALLIB)
+            $(SALLIB) \
+            $(SOTLIB)
             
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib
