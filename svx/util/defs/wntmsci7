@@ -21348,3 +21348,15 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?IsValid@SvxTextEditSource@@UBEEXZ
 ?LogicToPixel@SvxTextEditSource@@UBE?AVPoint@@ABV2@@Z
 ?PixelToLogic@SvxTextEditSource@@UBE?AVPoint@@ABV2@@Z
+??1EFieldInfo@@QAE@XZ
+?FindDocPosition@EditEngine@@QBE?AUEPosition@@ABVPoint@@@Z
+?GetCharacterBounds@EditEngine@@QBE?AVRectangle@@ABUEPosition@@@Z
+?GetFieldCount@EditEngine@@QBEGG@Z
+?GetFieldInfo@EditEngine@@QBE?AUEFieldInfo@@GG@Z
+?GetBulletInfo@Outliner@@QAE?AUEBulletInfo@@G@Z
+?LinkStubModifyHdl@SvxNameDialog@@CAJPAX0@Z
+?ModifyHdl@SvxNameDialog@@AAEJPAVEdit@@@Z
+?EENotification2Hint@SvxEditSourceHintTranslator@@SA?AVSfxHint@@PAUEENotify@@@Z
+??0?$pair@PBV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@PAV1@@_STL@@QAE@ABQBV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@ABQAV2@@Z
+?copy@_STL@@YAPAV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@PBV2@0PAV2@@Z
+?erase@?$vector@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@V?$allocator@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@@_STL@@@_STL@@QAEPAV?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VSvxAccessibleEditableTextPara@@@@PAV3@0@Z
