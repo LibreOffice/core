@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formtoolbars.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:23:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ namespace svxform
         const sal_Char* pToolBarName = NULL;
         switch ( m_eDocumentType )
         {
-        case ::svxform::eElectronicForm:
+        case ::svxform::eEnhancedForm:
             pToolBarName = ( _nSlotId == SID_FM_MORE_CONTROLS ) ? "morexformcontrols" : "xformdesign";
             break;
 
