@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 11:42:07 $
+ *  last change: $Author: aw $ $Date: 2001-05-14 14:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,11 @@ sal_Bool SdXMLFilter::Export()
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
         {
+            // #82003#
+            { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+
             { MAP_LEN( "PageLayoutNames" ), 0, SEQTYPE(::getCppuType((const OUString*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -510,15 +515,28 @@ sal_Bool SdXMLFilter::Export()
 
                 pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
                 xGrfResolver = pGraphicHelper;
-
             }
 
-            if( mbShowProgress )
+            // #82003#
+            if(mbShowProgress)
             {
                 CreateStatusIndicator();
+                if(mxStatusIndicator.is())
+                {
+                    sal_Int32 nProgressRange(1000000);
+                    sal_Int32 nProgressCurrent(0);
+                    mxStatusIndicator->start(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XML Export")), nProgressRange);
 
-                if( mxStatusIndicator.is() )
-                    mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Export" ), 100 );
+                    // set ProgressRange
+                    uno::Any aProgRange;
+                    aProgRange <<= nProgressRange;
+                    xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+
+                    // set ProgressCurrent
+                    uno::Any aProgCurrent;
+                    aProgCurrent <<= nProgressCurrent;
+                    xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressCurrent")), aProgCurrent);
+                }
             }
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
@@ -611,6 +629,13 @@ sal_Bool SdXMLFilter::Export()
                 pServices++;
             }
             while( bDocRet && pServices->mpService );
+
+            // #82003#
+            if(mbShowProgress)
+            {
+                if(mxStatusIndicator.is())
+                    mxStatusIndicator->end();
+            }
         }
     }
     catch(uno::Exception e)
