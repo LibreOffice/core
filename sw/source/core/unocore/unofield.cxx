@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 09:58:56 $
+ *  last change: $Author: os $ $Date: 2000-11-09 10:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,6 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
         }
         break;
         case SW_SERVICE_FIELDTYPE_DUMMY_0 :
-        case SW_SERVICE_FIELDTYPE_DUMMY_1:
         case SW_SERVICE_FIELDTYPE_DUMMY_2:
         case SW_SERVICE_FIELDTYPE_DUMMY_3:
         case SW_SERVICE_FIELDTYPE_DUMMY_4:
@@ -817,6 +816,15 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             pRet = aStandardFieldMasterMap;
         }
         break;
+        case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
+        {
+            static SfxItemPropertyMap aBibliographyFieldMap[] =
+            {
+                {0,0,0,0}
+            };
+            pRet = aBibliographyFieldMap;
+        }
+        break;
     }
     DBG_ASSERT(pRet, "illegal service id")
     return pRet;
@@ -899,6 +907,7 @@ const ServiceIdResId aServiceToRes[] =
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_TITLE           },
     {RES_INPUTFLD,      SW_SERVICE_FIELDTYPE_INPUT_USER                  },
     {RES_HIDDENTXTFLD,  SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                 },
+    {RES_AUTHORITY,     SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY                },
     {USHRT_MAX,         USHRT_MAX                                        }
 };
 //-----------------------------------------------------------------
@@ -2236,6 +2245,7 @@ uno::Reference< XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
             case  RES_DATETIMEFLD   :
             case  RES_FIXDATEFLD    :
             case  RES_FIXTIMEFLD    : nPos = SW_SERVICE_FIELDTYPE_DATETIME; break;
+            case  RES_AUTHORITY:      nPos = SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY; break;
     //      case  RES_FIELDS_END    : nPos = ;break;
         }
     }
