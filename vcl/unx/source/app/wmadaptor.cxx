@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:25:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2160,6 +2160,42 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         {
             // window not mapped yet, set _NET_WM_STATE directly
             setNetWMState( pFrame );
+        }
+        // #i42750# guess size before resize event shows up
+        if( bFullScreen )
+        {
+            if( m_pSalDisplay->IsXinerama() )
+            {
+                XLIB_Window aRoot, aChild;
+                int root_x = 0, root_y = 0, lx, ly;
+                unsigned int mask;
+                XQueryPointer( m_pDisplay,
+                m_pSalDisplay->GetRootWindow(),
+                &aRoot, &aChild,
+                &root_x, &root_y, &lx, &ly, &mask );
+                const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
+                Point aMousePoint( root_x, root_y );
+                for( unsigned int i = 0; i < rScreens.size(); i++ )
+                {
+                    if( rScreens[i].IsInside( aMousePoint ) )
+                    {
+                        pFrame->maGeometry.nX       = rScreens[i].Left();
+                        pFrame->maGeometry.nY       = rScreens[i].Top();
+                        pFrame->maGeometry.nWidth   = rScreens[i].GetWidth();
+                        pFrame->maGeometry.nHeight  = rScreens[i].GetHeight();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Size aSize = m_pSalDisplay->GetScreenSize();
+                pFrame->maGeometry.nX       = 0;
+                pFrame->maGeometry.nY       = 0;
+                pFrame->maGeometry.nWidth   = aSize.Width();
+                pFrame->maGeometry.nHeight  = aSize.Height();
+            }
+            pFrame->CallCallback( SALEVENT_MOVERESIZE, NULL );
         }
     }
     else WMAdaptor::showFullScreen( pFrame, bFullScreen );
