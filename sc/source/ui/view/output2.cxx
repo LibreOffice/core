@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:06:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,13 +1031,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
             ++nCompRow;
         }
     }
-    while ( nCellY < nCompRow )
-    {
-        --nCompRow;
-        USHORT nDocHeight = pDoc->GetRowHeight( nCompRow, nTab );
-        if ( nDocHeight )
-            nCellPosY -= (long) ( nDocHeight * nPPTY );
-    }
+    nCellPosY -= (long) pDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, nPPTY );
 
     const ScMergeAttr* pMerge = (const ScMergeAttr*)&rPattern.GetItem( ATTR_MERGE );
     BOOL bMerged = pMerge->IsMerged();
@@ -1065,11 +1059,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         nMergeSizeY += rThisRowInfo.nHeight;
         nDirect = 1;        // skip in loop
     }
-    for ( i=nDirect; i<nMergeRows; i++ )
-    {
-        // following rows always from document
-        nMergeSizeY += (long) ( pDoc->GetRowHeight( nCellY+static_cast<SCROW>(i), nTab ) * nPPTY );
-    }
+    // following rows always from document
+    nMergeSizeY += (long) pDoc->GetScaledRowHeight( nCellY+nDirect, nCellY+nMergeRows-1, nTab, nPPTY);
 
     --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
 
@@ -1696,8 +1687,7 @@ Size lcl_GetVertPaperSize( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab 
     if ( rMerge.GetRowMerge() > 1 )
     {
         SCROW nCountY = rMerge.GetRowMerge();
-        for (SCROW i=1; i<nCountY; i++)
-            nCellY += (long) ( pDoc->GetRowHeight(nRow+i,nTab) * nPPTY );
+        nCellY += (long) pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
     }
 
     //  only top/bottom margin are interesting
@@ -2897,8 +2887,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 for (SCCOL i=1; i<nCountX; i++)
                                     nOutWidth += (long) ( pDoc->GetColWidth(nX+i,nTab) * nPPTX );
                                 SCROW nCountY = pMerge->GetRowMerge();
-                                for (SCROW j=1; j<nCountY; j++)
-                                    nOutHeight += (long) ( pDoc->GetRowHeight(nY+j,nTab) * nPPTY );
+                                nOutHeight += (long) pDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, nPPTY);
                             }
 
                             SvxCellVerJustify eVerJust = (SvxCellVerJustify)((const SvxVerJustifyItem&)
