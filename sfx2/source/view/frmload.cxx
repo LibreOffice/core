@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:24:11 $
+ *  last change: $Author: as $ $Date: 2001-07-16 09:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
 
     // Extract URL from given descriptor.
     String rURL;
-    rtl::OUString aTypeName;
-    String aPreselectedFilterName;
+    String aTypeName;
 
     sal_uInt32 nPropertyCount = rArgs.getLength();
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -194,23 +193,27 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
         {
             ::rtl::OUString sTemp;
             rArgs[nProperty].Value >>= sTemp;
-
-            // Convert new type name to filter name in old format ( always gives the name of the preferred filter )
-            aFilterName = SfxFilterContainer::ConvertToOldFilterName(sTemp);
+            aTypeName = sTemp;
         }
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
         {
             ::rtl::OUString sTemp;
             rArgs[nProperty].Value >>= sTemp;
-            aPreselectedFilterName = sTemp;
+            aFilterName = sTemp;
         }
     }
 
-    if ( aPreselectedFilterName.Len() )
+    const SfxFilter*  pFilter  = NULL;
+    SfxFilterFlags    nMust    = SFX_FILTER_IMPORT;
+    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+    SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+    if ( !aFilterName.Len() && aTypeName.Len() )
     {
-        aFilterName = SfxFilterContainer::ConvertToOldFilterName(aPreselectedFilterName);
-        if ( aFilterName.Len() == 0 )
-            aFilterName = aPreselectedFilterName;
+        pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
+        if ( !pFilter )
+            return sal_False;
+        else
+            aFilterName = pFilter->GetName();
     }
 
     xFrame = rFrame;
@@ -333,7 +336,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
 
     if ( !pFactory )
     {
-        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        pFilter = rMatcher.GetFilter4FilterName( aFilterName );
         SfxFactoryFilterContainer* pCont = pFilter ? (SfxFactoryFilterContainer*) pFilter->GetFilterContainer() : NULL;
         if ( pCont )
             pFactory = &pCont->GetFactory();
@@ -474,18 +477,12 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         //   (2) new with factory: "swriter: New_Filter_XYZ"    ( from SFX based UI )
         //   (3) new ( only name): "New_Filter_XYZ"             ( from not SFX based UI or API )
         //   (4) old ( only name): "Writer_60"                  ( from not SFX based UI or API )
-        String aOldFilterName = SfxFilterContainer::ConvertToOldFilterName( aPreselectedFilterName );
-        if ( aOldFilterName.Len() )
-            // the preselected filter name is convertable into an old filter name, case (4)
-            pFilter = rMatcher.GetFilter( aOldFilterName );
-        else
-        {
-            // the preselected filter name itself may be valid SFX filter name, case (1) or (2)
-            pFilter = rMatcher.GetFilter( aPreselectedFilterName );
-            if ( !pFilter )
-                // the preselected filter name is a new filter name from the configuration, case (3)
-                pFilter = rMatcher.GetFilter4FilterName( aPreselectedFilterName );
-        }
+
+        // the preselected filter name itself may be valid SFX filter name, case (1) or (2)
+        pFilter = rMatcher.GetFilter( aPreselectedFilterName );
+        if ( !pFilter )
+            // the preselected filter name is a new filter name from the configuration, case (3)
+            pFilter = rMatcher.GetFilter4FilterName( aPreselectedFilterName );
 
         if ( pFilter )
         {
@@ -512,13 +509,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     {
         // now try the type from the shallow detection or extracted from the preselected filter ( though the filter itself
         // was not valid! )
-        String aOldFilterName = SfxFilterContainer::ConvertToOldFilterName( aTypeName );
-        if ( aOldFilterName.Len() )
-            // the given type is convertable into an old filter name; filters with old names are never external ones
-            pFilter = rMatcher.GetFilter( aOldFilterName );
-        else
-            // "new" type name; look for a filter registered for the desired type that is not an external one
-            pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
+        // "new" type name; look for a filter registered for the desired type that is not an external one
+        pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
     }
 
     String aPrefix = String::CreateFromAscii( "private:factory/" );
@@ -527,7 +519,18 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         // private:factory URLs are used to create new documents, so nothing must be detected
         // use the result of the shallow detection
         if ( pFilter )
+        {
             aFilterName = pFilter->GetName();
+            if ( nIndexOfFilterName < nPropertyCount )
+                // convert to format with factory ( makes load more easy to implement )
+                lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
+            else
+            {
+                lDescriptor.realloc( nPropertyCount + 1 );
+                lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
+                lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
+            }
+        }
         else
             DBG_ERROR( "Illegal type for factory URL!" );
         return aTypeName;
@@ -599,13 +602,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                         // try the typename instead ( if any )
                         if ( aTypeName.getLength() )
                         {
-                            String aOldFilterName = SfxFilterContainer::ConvertToOldFilterName( aTypeName );
-                            if ( aOldFilterName.Len() )
-                                // the given type is convertable into an old filter name
-                                pFilter = rMatcher.GetFilter( aOldFilterName );
-                            else
-                                // new types detected by this service could be found by searching for a filter with this type name
-                                pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
+                            // new types detected by this service could be found by searching for a filter with this type name
+                            pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
 
                             if ( pFilter == pOldFilter )
                                 // filter was already checked
