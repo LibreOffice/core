@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-16 14:54:27 $
+ *  last change: $Author: ama $ $Date: 2001-12-14 10:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,13 +791,24 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 {
                     SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
                     const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-                    Point aRelPos = pObj->GetRelativePos();
-                    if ( rVert.GetPos() != aRelPos.Y() ||
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nRelPos = pObj->GetRelativePos().Y();
+                    const SwFrm *pTmp = pContact->GetAnchor();
+                    if( pTmp && pTmp->IsVertical() )
+                    {
+                        nRelPos = pObj->GetRelativePos().X();
+                        if( !pTmp->IsReverse() )
+                            nRelPos = -nRelPos -pObj->GetSnapRect().GetWidth();
+                    }
+#else
+                    SwTwips nRelPos = pObj->GetRelativePos().Y();
+#endif
+                    if ( rVert.GetPos() != nRelPos ||
                             VERT_NONE != rVert.GetVertOrient() )
                     {
                         SwFmtVertOrient aVert( rVert );
                         aVert.SetVertOrient( VERT_NONE );
-                        aVert.SetPos( aRelPos.Y() );
+                        aVert.SetPos( nRelPos );
                         SetAttr( aVert, *pFmt );
                     }
                     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-12-10 17:39:35 $
+ *  last change: $Author: ama $ $Date: 2001-12-14 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,12 +488,19 @@ void SwDrawContact::_Changed(const SdrObject& rObj, SdrUserCallType eType,
                 {
                     SwFrmFmt *pFmt = GetFmt();
                     const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-                    Point aRelPos = rObj.GetRelativePos();
-                    if( rVert.GetPos() != aRelPos.Y() )
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nRel = pAnch->IsVertical() ?
+                        rObj.GetRelativePos().X() : rObj.GetRelativePos().Y();
+                    if( !pAnch->IsReverse() )
+                        nRel = - nRel - rObj.GetSnapRect().GetWidth();
+#else
+                    SwTwips nRel = rObj.GetRelativePos().Y();
+#endif
+                    if( rVert.GetPos() != nRel )
                     {
                         SwFmtVertOrient aVert( rVert );
                         aVert.SetVertOrient( VERT_NONE );
-                        aVert.SetPos( aRelPos.Y() );
+                        aVert.SetPos( nRel );
                         pFmt->SetAttr( aVert );
                     }
                     ((SwTxtFrm*)pAnch)->Prepare();
