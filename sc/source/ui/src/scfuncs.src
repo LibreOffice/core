@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:40:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10105,7 +10105,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ portuguese_brazilian ] = "Returns the amount of interest for constant redemption rates.";
             Text[ japanese ] = "尦嬥嬒摍曉嵪偺擟堄偺婜偺棙懅傪曉偟傑偡丅";
             Text[ korean ] = "Returns the amount of interest for constant redemption rates.";
-            Text[ chinese_simplified ] = "计算一个分期偿还贷款金额固定不变的利息";
+            Text[ chinese_simplified ] = "计算一个分期偿还贷款金额的固定不变的利息。";
             Text[ chinese_traditional ] = "璸衡だ戳纕临禪蹿肂㏕﹚ぃ跑";
             Text[ turkish ] = "Returns the amount of interest for constant redemption rates.";
             Text[ arabic ] = "Returns the amount of interest for constant redemption rates.";
@@ -10176,7 +10176,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "period";
             Text[ danish ] = "period";
             Text[ swedish ] = "Period";
-            Text[ polish ] = "period";
+            Text[ polish ] = "Okres";
             Text[ portuguese_brazilian ] = "period";
             Text[ japanese ] = "婜";
             Text[ korean ] = "period";
@@ -10222,7 +10222,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "total_periods";
             Text[ danish ] = "total_periods";
             Text[ swedish ] = "Total_period";
-            Text[ polish ] = "total_periods";
+            Text[ polish ] = "suma_okres體";
             Text[ portuguese_brazilian ] = "total_periods";
             Text[ japanese ] = "婜娫";
             Text[ korean ] = "total_periods";
@@ -10268,7 +10268,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "invest";
             Text[ danish ] = "invest";
             Text[ swedish ] = "Investering";
-            Text[ polish ] = "invest";
+            Text[ polish ] = "Inwestycja";
             Text[ portuguese_brazilian ] = "invest";
             Text[ japanese ] = "尰嵼壙抣";
             Text[ korean ] = "invest";
