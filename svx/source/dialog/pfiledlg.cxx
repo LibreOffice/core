@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: pb $ $Date: 2000-10-05 12:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,44 +117,44 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
     {
         uno::Reference< plugin::XPluginManager > rPluginManager( xMgr->createInstance(
             OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), uno::UNO_QUERY );
-        if( rPluginManager.is() )
+        if ( rPluginManager.is() )
         {
             const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
             const plugin::PluginDescription* pDescription = aSeq.getConstArray();
             sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
 
-            for (int i=0; i<nAnzahlPlugins; i++)
+            for ( int i = 0; i < nAnzahlPlugins; i++ )
             {
-                String aStrPlugMIMEType  ( pDescription[i].Mimetype );
-                String aStrPlugName      ( pDescription[i].Description );
-                String aStrPlugExtension ( pDescription[i].Extension );
+                String aStrPlugMIMEType( pDescription[i].Mimetype );
+                String aStrPlugName( pDescription[i].Description );
+                String aStrPlugExtension( pDescription[i].Extension );
 
                 aStrPlugMIMEType.ToLowerAscii();
                 aStrPlugExtension.ToLowerAscii();
 
-                if ( (nKind == SID_INSERT_SOUND && aStrPlugMIMEType.SearchAscii ( sAudio ) == 0) ||
-                     (nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.SearchAscii ( sVideo ) == 0) )
+                if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.SearchAscii ( sAudio ) == 0 ) ||
+                     ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.SearchAscii ( sVideo ) == 0 ) )
                 {
                     // extension already in the filterlist of the filedlg ?
-                    sal_Bool bAlreadyExist=sal_False;
-                    for (int i=0; i<GetFilterCount() && !bAlreadyExist; i++)
-                    {
-                        bAlreadyExist = (GetFilterType(i).Search(aStrPlugExtension) != STRING_NOTFOUND);
-                    }
+                    sal_Bool bAlreadyExist = sal_False;
+                    for ( int j = 0; j < GetFilterCount() && !bAlreadyExist; j++ )
+                        bAlreadyExist = ( GetFilterType(j).Search( aStrPlugExtension ) != STRING_NOTFOUND );
 
-                    if (!bAlreadyExist)
+                    if ( !bAlreadyExist )
                     {
-                        // filterdescription already there ? (then append the new extension to the existing filter)
-                        int nfound=-1;
-                        for (int i=0; i<GetFilterCount() && nfound!=0; i++)
+                        // filterdescription already there?
+                        // (then append the new extension to the existing filter)
+                        int nfound = -1;
+                        for ( int k = 0; k < GetFilterCount() && nfound != 0; k++ )
                         {
-                            String aStrFilterName (GetFilterName(i));
-                            if ((nfound=aStrFilterName.Search(aStrPlugName)) == 0)
+                            String aStrFilterName( GetFilterName(k) );
+                            if ( ( nfound = aStrFilterName.Search( aStrPlugName ) ) == 0 )
                             {
-                                String aStrFilterExt (GetFilterType (i));
-                                RemoveFilter (aStrFilterName);
+                                String aStrFilterExt( GetFilterType(k) );
+                                RemoveFilter( aStrFilterName );
+                                if ( aStrPlugExtension.Len() > 0 )
+                                    aStrPlugExtension.Insert( sal_Unicode( ';' ) );
                                 aStrPlugExtension.Insert( aStrFilterExt );
-                                aStrPlugExtension.Insert( sal_Unicode( ';' ) );
                             }
                         }
 
@@ -172,21 +172,15 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
                         const sal_Char sMPEG[] = "*.mpeg";
 
                         if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sAVI ) )
-                        {
-                            aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_AVI);
-                        }
+                            aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_AVI );
                         else if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sMOV ) )
-                        {
-                            aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_MOV);
-                        }
-                        else if (aStrPlugExtension.SearchAscii( sMPG ) != STRING_NOTFOUND ||
-                                 aStrPlugExtension.SearchAscii( sMPE ) != STRING_NOTFOUND ||
-                                 aStrPlugExtension.SearchAscii( sMPEG ) != STRING_NOTFOUND)
-                        {
+                            aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_MOV );
+                        else if ( aStrPlugExtension.SearchAscii( sMPG ) != STRING_NOTFOUND ||
+                                  aStrPlugExtension.SearchAscii( sMPE ) != STRING_NOTFOUND ||
+                                  aStrPlugExtension.SearchAscii( sMPEG ) != STRING_NOTFOUND )
                             aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_MPEG);
-                        }
 
-                        AddFilter (aStrPlugName, aStrPlugExtension);
+                        AddFilter( aStrPlugName, aStrPlugExtension );
                     }
                 }
             }
