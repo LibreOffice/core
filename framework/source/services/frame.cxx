@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:24 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 15:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1716,6 +1716,7 @@ void SAL_CALL Frame::removeFrameActionListener( const Reference< XFrameActionLis
 //*****************************************************************************************************************
 void SAL_CALL Frame::dispose() throw( RuntimeException )
 {
+    Reference < XFrame > xThis( this );
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::dispose()" )
 
