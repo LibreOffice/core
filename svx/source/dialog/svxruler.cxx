@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-16 09:08:33 $
+ *  last change: $Author: pb $ $Date: 2001-08-27 13:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3215,7 +3215,7 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
                 aMenu.CheckItem(i+1, i == pTabs[pRuler_Imp->nIdx+TAB_GAP].nStyle);
                 aDev.SetOutputSize(aSz); // device loeschen
             }
-            aMenu.Execute( this, OutputToScreenPixel(rCEvt.GetMousePosPixel()));
+            aMenu.Execute( this, rCEvt.GetMousePosPixel() );
         }
         else
         {
@@ -3229,7 +3229,7 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
                 const USHORT nId = aMenu.GetItemId(i);
                 aMenu.CheckItem(nId, nId == (USHORT)eUnit);
             }
-            aMenu.Execute( this, OutputToScreenPixel(rCEvt.GetMousePosPixel()));
+            aMenu.Execute( this, rCEvt.GetMousePosPixel() );
         }
     }
     else
