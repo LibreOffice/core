@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:22:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,6 @@ hidspecial HID_SD_CTL_SLIDE_CHANGE      { HelpId = HID_SD_CTL_SLIDE_CHANGE; };
 hidspecial HID_SD_NAVIGATOR_TBX             { HelpId = HID_SD_NAVIGATOR_TBX; };
 hidspecial HID_SD_NAVIGATOR_LB              { HelpId = HID_SD_NAVIGATOR_LB; };
 
-hidspecial HID_SD_NAVIGATOR_TBI_LIVE    { HelpId = HID_SD_NAVIGATOR_TBI_LIVE; };
 hidspecial HID_SD_NAVIGATOR_TBI_PEN         { HelpId = HID_SD_NAVIGATOR_TBI_PEN; };
 hidspecial HID_SD_NAVIGATOR_TBI_FIRST   { HelpId = HID_SD_NAVIGATOR_TBI_FIRST; };
 hidspecial HID_SD_NAVIGATOR_TBI_PREV    { HelpId = HID_SD_NAVIGATOR_TBI_PREV; };
@@ -166,3 +165,12 @@ hidspecial HID_SD_TABPAGE_HEADERFOOTER_SLIDE { HelpId = HID_SD_TABPAGE_HEADERFOO
 hidspecial HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT { HelpId = HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT; };
 
 hidspecial SD_IF_SDDRAWMEDIAOBJECTBAR      { HelpId = SD_IF_SDDRAWMEDIAOBJECTBAR; };
+
+hidspecial HID_SD_TASK_PANE             { HelpId = HID_SD_TASK_PANE; };
+hidspecial HID_SD_SLIDE_DESIGNS         { HelpId = HID_SD_SLIDE_DESIGNS; };
+hidspecial HID_SD_CURRENT_MASTERS       { HelpId = HID_SD_CURRENT_MASTERS; };
+hidspecial HID_SD_RECENT_MASTERS        { HelpId = HID_SD_RECENT_MASTERS; };
+hidspecial HID_SD_ALL_MASTERS           { HelpId = HID_SD_ALL_MASTERS; };
+hidspecial HID_SD_SLIDE_LAYOUTS         { HelpId = HID_SD_SLIDE_LAYOUTS; };
+hidspecial HID_SD_CUSTOM_ANIMATIONS     { HelpId = HID_SD_CUSTOM_ANIMATIONS; };
+hidspecial HID_SD_SLIDE_TRANSITIONS     { HelpId = HID_SD_SLIDE_TRANSITIONS; };
