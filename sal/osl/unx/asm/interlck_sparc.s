@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck_sparc.s,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:43:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,9 @@ osl_incrementInterlockedCountV9:
 
 1:      ld      [%o0], %o1
         add     %o1, 1, %o2
-        cas     [%o0], %o1, %o2
+!       allow linux to build for v8
+        .word 0xD5E21009 
+!       cas     [%o0], %o1, %o2
         cmp     %o1, %o2
         bne     1b
         nop                         ! delay slot
@@ -286,7 +288,9 @@ osl_decrementInterlockedCountV9:
 
 1:      ld      [%o0], %o1
         sub     %o1, 1, %o2
-        cas     [%o0], %o1, %o2
+!       allow linux to build for v8
+        .word 0xD5E21009            
+!       cas     [%o0], %o1, %o2
         cmp     %o1, %o2
         bne     1b
         nop                         ! delay slot
@@ -295,4 +299,3 @@ osl_decrementInterlockedCountV9:
 
  .type  osl_decrementInterlockedCountV9,#function
  .size  osl_decrementInterlockedCountV9,.-osl_decrementInterlockedCountV9
-
