@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:01:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@ bool Lockfile_execWarning( Lockfile * that )
     // read information from lock
     String aLockname = that->m_aLockname;
     Config aConfig(aLockname);
-    aConfig.SetGroup(that->m_aGroup);
-    ByteString aHost  = aConfig.ReadKey( that->m_aHostkey );
-    ByteString aUser  = aConfig.ReadKey( that->m_aUserkey );
-    ByteString aStamp = aConfig.ReadKey( that->m_aStampkey );
-    ByteString aTime  = aConfig.ReadKey( that->m_aTimekey );
+    aConfig.SetGroup(that->Group());
+    ByteString aHost  = aConfig.ReadKey( that->Hostkey() );
+    ByteString aUser  = aConfig.ReadKey( that->Userkey() );
+    ByteString aStamp = aConfig.ReadKey( that->Stampkey() );
+    ByteString aTime  = aConfig.ReadKey( that->Timekey() );
 
     // display warning and return response
     QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_registry.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:12:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,37 +63,37 @@
 
 String RID_STR_REGISTERING_PACKAGE
 {
-    Text [ ENGLISH ] = "Enabling package: ";
-    Text = "Package wird aktiviert: ";
+    Text [ en-US ] = "Enabling package: ";
+    Text [ de ] = "Package wird aktiviert: ";
 };
 
 String RID_STR_REVOKING_PACKAGE
 {
-    Text [ ENGLISH ] = "Disabling package: ";
-    Text = "Package wird deaktiviert: ";
+    Text [ en-US ] = "Disabling package: ";
+    Text [ de ] = "Package wird deaktiviert: ";
 };
 
 String RID_STR_CANNOT_DETECT_MEDIA_TYPE
 {
-    Text [ ENGLISH ] = "Cannot detect media-type: ";
-    Text = "Media-Typ des Package konnte nicht ermittelt werden: ";
+    Text [ en-US ] = "Cannot detect media-type: ";
+    Text [ de ] = "Media-Typ des Package konnte nicht ermittelt werden: ";
 };
 
 String RID_STR_UNSUPPORTED_MEDIA_TYPE
 {
-    Text [ ENGLISH ] = "This media-type is not supported: ";
-    Text = "Dieser Media-Typ wird nicht unterstützt: ";
+    Text [ en-US ] = "This media-type is not supported: ";
+    Text [ de ] = "Dieser Media-Typ wird nicht unterstützt: ";
 };
 
 String RID_STR_ERROR_WHILE_REGISTERING
 {
-    Text [ ENGLISH ] = "An error occurred while enabling the package: ";
-    Text = "Fehler beim Aktivieren des Package: ";
+    Text [ en-US ] = "An error occurred while enabling the package: ";
+    Text [ de ] = "Fehler beim Aktivieren des Package: ";
 };
 
 String RID_STR_ERROR_WHILE_REVOKING
 {
-    Text [ ENGLISH ] = "An error occurred while disabling the package: ";
-    Text = "Fehler beim Deaktivieren des Package: ";
+    Text [ en-US ] = "An error occurred while disabling the package: ";
+    Text [ de ] = "Fehler beim Deaktivieren des Package: ";
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:10:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@ static ResMgr * getResMgr()
             throw RuntimeException( OUSTR("Cannot determine language!"),
                                     Reference<XInterface>() );
 
+        sal_Int32 nIndex;
+        ::com::sun::star::lang::Locale aLocale;
+        aLocale.Language = slang.getToken( 0, '-', nIndex );
+        aLocale.Country = slang.getToken( 1, '-', nIndex );
+        aLocale.Variant = slang.getToken( 2, '-', nIndex );
+
         OUString path;
         ::osl::Module::getUrlFromAddress( (void *) getResMgr, path );
         path = path.copy( 0, path.lastIndexOf( '/' ) + 1 ) + OUSTR("resource");
@@ -95,7 +101,7 @@ static ResMgr * getResMgr()
 
         s_pResMgr = ResMgr::CreateResMgr(
             "deployment" LIBRARY_SOLARUPD(),
-            ConvertIsoStringToLanguage( slang ), NULL, &resourcePath );
+            aLocale, NULL, &resourcePath );
         OSL_ASSERT( s_pResMgr != 0 );
     }
     return s_pResMgr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_component.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:13:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,31 +63,31 @@
 
 String RID_STR_DYN_COMPONENT
 {
-    Text [ ENGLISH ] = "UNO Dynamic Library Component";
-    Text = "UNO Dynamic Library Component";
+    Text [ en-US ] = "UNO Dynamic Library Component";
+    Text [ de ] = "UNO Dynamic Library Component";
 };
 
 String RID_STR_JAVA_COMPONENT
 {
-    Text [ ENGLISH ] = "UNO Java Component";
-    Text = "UNO Java Component";
+    Text [ en-US ] = "UNO Java Component";
+    Text [ de ] = "UNO Java Component";
 };
 
 String RID_STR_PYTHON_COMPONENT
 {
-    Text [ ENGLISH ] = "UNO Python Component";
-    Text = "UNO Python Component";
+    Text [ en-US ] = "UNO Python Component";
+    Text [ de ] = "UNO Python Component";
 };
 
 String RID_STR_RDB_TYPELIB
 {
-    Text [ ENGLISH ] = "UNO RDB Type Library";
-    Text = "UNO RDB Type Library";
+    Text [ en-US ] = "UNO RDB Type Library";
+    Text [ de ] = "UNO RDB Type Library";
 };
 
 String RID_STR_JAVA_TYPELIB
 {
-    Text [ ENGLISH ] = "UNO Java Type Library";
-    Text = "UNO Java Type Library";
+    Text [ en-US ] = "UNO Java Type Library";
+    Text [ de ] = "UNO Java Type Library";
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_script.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:19:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,25 +63,25 @@
 
 String RID_STR_BASIC_LIB
 {
-    Text [ ENGLISH ] = "%PRODUCTNAME Basic Library";
-    Text = "%PRODUCTNAME Basic Bibliothek";
+    Text [ en-US ] = "%PRODUCTNAME Basic Library";
+    Text [ de ] = "%PRODUCTNAME Basic Bibliothek";
 };
 
 String RID_STR_DIALOG_LIB
 {
-    Text [ ENGLISH ] = "Dialog Library";
-    Text = "Dialog-Bibliothek";
+    Text [ en-US ] = "Dialog Library";
+    Text [ de ] = "Dialog-Bibliothek";
 };
 
 String RID_STR_CANNOT_DETERMINE_LIBNAME
 {
-    Text [ ENGLISH ] = "The library name could not be determined.";
-    Text = "Bibliotheks-Name konnte nicht ermittelt werden.";
+    Text [ en-US ] = "The library name could not be determined.";
+    Text [ de ] = "Bibliotheks-Name konnte nicht ermittelt werden.";
 };
 
 String RID_STR_LIBNAME_ALREADY_EXISTS
 {
-    Text [ ENGLISH ] = "This library name already exists. Please choose a different name.";
-    Text = "Dieser Bibliotheks-Name wird bereits verwendet. Bitte wählen Sie einen anderen Namen.";
+    Text [ en-US ] = "This library name already exists. Please choose a different name.";
+    Text [ de ] = "Dieser Bibliotheks-Name wird bereits verwendet. Bitte wählen Sie einen anderen Namen.";
 };
 
