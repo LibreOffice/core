@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:16:17 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,20 @@
 #ifndef _SVX_LBOXCTRL_HXX_
 #include <lboxctrl.hxx>
 #endif
+#ifndef _VCL_MNEMONIC_HXX_
+#include <vcl/mnemonic.hxx>
+#endif
+#include <tools/urlobj.hxx>
 
 #include <svxids.hrc>
 #include <dialogs.hrc>
 
 #include "lboxctrl.hrc"
+
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 class SvxPopupWindowListBox;
 
@@ -127,15 +136,17 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     ListBox *       pListBox;
     ToolBox &       rToolBox;
     BOOL            bUserSel;
+    USHORT          nTbxId;
+    rtl::OUString   maCommandURL;
     // disallow copy-constructor and assignment-operator
 
-    SvxPopupWindowListBox( USHORT nSlotId,
-                           ToolBox& rTbx, USHORT nTbxItemId );
+    SvxPopupWindowListBox(const int& );
+    SvxPopupWindowListBox & operator = (const int& );
+
+//  SvxPopupWindowListBox( USHORT nSlotId, ToolBox& rTbx, USHORT nTbxItemId );
 
 public:
-    SvxPopupWindowListBox( USHORT nSlotId,
-                           ToolBox& rTbx,
-                           SfxBindings &rBindings );
+    SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nTbxId, ToolBox& rTbx );
     virtual ~SvxPopupWindowListBox();
 
     // SfxPopupWindow
@@ -155,21 +166,20 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-SvxPopupWindowListBox::SvxPopupWindowListBox(
-            USHORT nSlotId,
-            ToolBox& rTbx,
-            SfxBindings &rBindings ) :
-
-    SfxPopupWindow( nSlotId, SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ), rBindings ),
+SvxPopupWindowListBox::SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nId, ToolBox& rTbx ) :
+    SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
     aInfo       ( this, ResId( FT_NUM_OPERATIONS ) ),
     rToolBox    ( rTbx ),
-    bUserSel    ( FALSE )
+    bUserSel    ( FALSE ),
+    nTbxId      ( nId ),
+    maCommandURL( rCommandURL )
 {
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
     pListBox = new ListBox( this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
     FreeResource();
     pListBox->EnableMultiSelection( TRUE, TRUE );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+    AddStatusListener( rCommandURL );
 }
 
 
@@ -181,8 +191,7 @@ SvxPopupWindowListBox::~SvxPopupWindowListBox()
 
 SfxPopupWindow* SvxPopupWindowListBox::Clone() const
 {
-    return new SvxPopupWindowListBox( GetId(), rToolBox,
-                                      (SfxBindings &) GetBindings() );
+    return new SvxPopupWindowListBox( GetId(), maCommandURL, nTbxId, rToolBox );
 }
 
 
@@ -201,7 +210,7 @@ void SvxPopupWindowListBox::PopupModeEnd()
 void SvxPopupWindowListBox::StateChanged(
         USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    rToolBox.EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SFX_ITEM_DISABLED) );
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 
@@ -223,9 +232,8 @@ Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 SFX_IMPL_TOOLBOX_CONTROL( SvxListBoxControl, SfxStringItem );
 
 
-SvxListBoxControl::SvxListBoxControl(
-                            USHORT nId, ToolBox& rTbx, SfxBindings& rBind )
-    :SfxToolBoxControl( nId, rTbx, rBind ),
+SvxListBoxControl::SvxListBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+    :SfxToolBoxControl( nSlotId, nId, rTbx ),
     pPopupWin   ( 0 )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -265,9 +273,13 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
         pPopupWin->IsUserSelected() )
     {
         USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
-        SfxUInt16Item aItem( GetId(), nCount );
-        GetBindings().GetDispatcher()->Execute( GetId(),
-                                        SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+
+        INetURLObject aObj( m_aCommandURL );
+
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name   = aObj.GetURLPath();
+        aArgs[0].Value  = makeAny( sal_Int16( nCount ));
+        SfxToolBoxControl::Dispatch( m_aCommandURL, aArgs );
     }
     return 0;
 }
@@ -281,9 +293,9 @@ void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
 
     USHORT nId;
     if (nCount == 1)
-        nId = SID_UNDO == GetId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
+        nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
     else
-        nId = SID_UNDO == GetId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
+        nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
 
     aActionStr = String(SVX_RES(nId));
 
@@ -315,48 +327,75 @@ IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 
+SvxUndoRedoControl::SvxUndoRedoControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+    : SvxListBoxControl( nSlotId, nId, rTbx )
+{
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
+}
+
 SvxUndoRedoControl::~SvxUndoRedoControl()
 {
 }
 
+void SvxUndoRedoControl::StateChanged(
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+{
+    if ( nSID == SID_UNDO || nSID == SID_REDO )
+    {
+        if ( pState && pState->ISA( SfxStringItem ))
+        {
+            SfxStringItem& rItem = *(SfxStringItem *)pState;
+            ToolBox& rBox = GetToolBox();
+            String aQuickHelpText = MnemonicGenerator::EraseAllMnemonicChars( rItem.GetValue() );
+            rBox.SetQuickHelpText( GetId(), aQuickHelpText );
+        }
+        SvxListBoxControl::StateChanged( nSID, eState, pState );
+    }
+    else
+    {
+        aUndoRedoList.clear();
+
+        SfxStringListItem &rItem = *(SfxStringListItem *)pState;
+        const List* pLst = rItem.GetList();
+        DBG_ASSERT( pLst, "no undo actions available" );
+        if ( pLst )
+        {
+            for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
+                aUndoRedoList.push_back( rtl::OUString( *(String *)pLst->GetObject( nI )));
+        }
+    }
+}
 
 SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
 {
-    const USHORT nId = GetId();
-    DBG_ASSERT( SID_UNDO == nId || SID_REDO == nId, "mismatching ids" );
+    DBG_ASSERT(( SID_UNDO == GetSlotId() || SID_REDO == GetSlotId() ), "mismatching ids" );
 
-    const SfxPoolItem* pState = 0;
-    SfxBindings &rBindings = GetBindings();
-    SfxDispatcher &rDispatch = *rBindings.GetDispatcher();
-    SfxItemState eState = rDispatch.QueryState( SID_UNDO == nId
-                                                ? SID_GETUNDOSTRINGS
-                                                : SID_GETREDOSTRINGS, pState );
+    if ( m_aCommandURL.equalsAscii( ".uno:Undo" ))
+        updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GetUndoStrings" )));
+    else
+        updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GetRedoStrings" )));
 
-    if( eState >= SFX_ITEM_AVAILABLE  &&  pState)
-    {
-        ToolBox& rBox = GetToolBox();
+    ToolBox& rBox = GetToolBox();
 
-        pPopupWin = new SvxPopupWindowListBox( nId, rBox, rBindings );
-        pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoRedoControl,
-                                                PopupModeEndHdl ) );
-        ListBox &rListBox = pPopupWin->GetListBox();
-        rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
+    pPopupWin = new SvxPopupWindowListBox( GetSlotId(), m_aCommandURL, GetId(), rBox );
+    pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoRedoControl,
+                                            PopupModeEndHdl ) );
+    ListBox &rListBox = pPopupWin->GetListBox();
+    rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
 
-        SfxStringListItem &rItem = *(SfxStringListItem *) pState;
-        const List* pLst = rItem.GetList();
-        DBG_ASSERT( pLst, "no undo actions available" );
-        if( pLst )
-            for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
-                rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
-        rListBox.SelectEntryPos( 0 );
+    for( sal_uInt32 n = 0; n < aUndoRedoList.size(); n++ )
+        rListBox.InsertEntry( String( aUndoRedoList[n] ));
 
-        Impl_SetInfo( rListBox.GetSelectEntryCount() );
+    rListBox.SelectEntryPos( 0 );
+    aActionStr = String( SVX_RES( SID_UNDO == GetSlotId() ?
+                                  RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS ) );
+    Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
+    // move focus in floating window without
+    // closing it (GrabFocus() would close it!)
+    pPopupWin->StartPopupMode( &rBox, FLOATWIN_POPUPMODE_GRABFOCUS );
+    //pPopupWin->GetListBox().GrabFocus();
 
-        // move focus in floating window without
-        // closing it (GrabFocus() would close it!)
-        pPopupWin->StartPopupMode( &rBox, FLOATWIN_POPUPMODE_GRABFOCUS );
-        //pPopupWin->GetListBox().GrabFocus();
-    }
     return pPopupWin;
 }
