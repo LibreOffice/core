@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iframe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:53:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,12 +168,6 @@ sal_Bool SAL_CALL IFrameObject::load( const uno::Sequence < com::sun::star::bean
 {
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
-        uno::Reference < util::XCloseable > xClose( xFrame, uno::UNO_QUERY );
-        if ( xClose.is() )
-            xClose->addCloseListener( static_cast < util::XCloseListener* >(this) );
-        else
-            xFrame->addEventListener( static_cast < lang::XEventListener* >(this) );
-
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         IFrameWindow_Impl* pWin = new IFrameWindow_Impl( pParent, maFrmDescr.IsFrameBorderOn() );
@@ -183,6 +177,9 @@ sal_Bool SAL_CALL IFrameObject::load( const uno::Sequence < com::sun::star::bean
 
         uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
+
+        // we must destroy the IFrame before the parent is destroyed
+        xWindow->addEventListener( this );
 
         mxFrame = uno::Reference< frame::XFrame >( mxFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ) ),
                     uno::UNO_QUERY );
@@ -235,16 +232,6 @@ void SAL_CALL IFrameObject::addCloseListener( const com::sun::star::uno::Referen
 
 void SAL_CALL IFrameObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
 {
-}
-
-void SAL_CALL IFrameObject::queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException)
-{
-    cancel();
-}
-
-void SAL_CALL IFrameObject::notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
-{
-    cancel();
 }
 
 void SAL_CALL IFrameObject::disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
