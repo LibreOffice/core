@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 08:16:42 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 10:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,8 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
             {
                 if ( !pFrame->GetCurrentDocument() )
                 {
-                    pFrame->SetFrameInterface_Impl( Reference < XFrame >() );
+                    Reference < XFrame > aXFrame;
+                    pFrame->SetFrameInterface_Impl( aXFrame );
                     pFrame->DoClose();
                 }
                 bLoadState = sal_False;
@@ -316,7 +317,8 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
             {
                 if ( !pFrame->GetCurrentDocument() )
                 {
-                    pFrame->SetFrameInterface_Impl( Reference < XFrame >() );
+                    Reference < XFrame > aXFrame;
+                    pFrame->SetFrameInterface_Impl( aXFrame );
                     pFrame->DoClose();
                 }
                 bLoadState = sal_False;
@@ -377,7 +379,8 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
         if ( pFrame && !pFrame->GetCurrentDocument() )
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            pFrame->SetFrameInterface_Impl( Reference < XFrame >() );
+            Reference < XFrame > aXFrame;
+            pFrame->SetFrameInterface_Impl( aXFrame );
             pFrame->DoClose();
         }
         bLoadDone  = sal_True ;
