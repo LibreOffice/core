@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:48:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ TabDialog DLG_CHAR
     Text[ russian ] = "Ψπθτς";
     Text[ polish ] = "Znak";
     Text[ japanese ] = "ζ–‡ε­—";
-    Text[ language_user1 ] = "θλθ: Ρθμβξλ - -";
+    Text[ language_user1 ] = "; θλθ: Ρθμβξλ - -";
     Text[ chinese_traditional ] = "ε­—ε…ƒ";
     Text[ arabic ] = "ΗαΞΨ";
     Text[ dutch ] = "Teken";
@@ -494,7 +494,7 @@ TabPage TP_CHAR_URL
         Text[ arabic ] = "ΗΣΚΪΡΗΦ...";
         Text[ dutch ] = "~Selecteren...";
         Text[ chinese_simplified ] = "ι€‰ζ‹©(~B)...";
-        Text[ greek ] = "~Επιλογή...";
+        Text[ greek ] = "Επι~λογή...";
         Text[ korean ] = "μ„ νƒ(~B)...";
         Text[ turkish ] = "A~raώtύr...";
         Text[ catalan ] = "~Selecciona...";
@@ -654,7 +654,7 @@ TabPage TP_CHAR_URL
         Text[ arabic ] = "ΓΝΟΗΛ...";
         Text[ dutch ] = "~Gebeurtenissen";
         Text[ chinese_simplified ] = "δΊ‹δ»¶(~E)...";
-        Text[ greek ] = "Γεγονότα...";
+        Text[ greek ] = "Συμβάντα...";
         Text[ korean ] = "μ΄λ²¤νΈ(~E)...";
         Text[ turkish ] = "Olaylar...";
         Text[ catalan ] = "~Esdeveniments...";
@@ -722,7 +722,7 @@ TabPage TP_CHAR_URL
         Text[ arabic ] = "ΗΡΚΘΗΨ ΣΘή ÒνΗΡΚε";
         Text[ dutch ] = "B~ezochte koppeling";
         Text[ chinese_simplified ] = "ε·²η»θ®Ώι—®θΏ‡η„ι“Ύζ¥(~V)";
-        Text[ greek ] = "Συνδέσεις που έχουν επισκεφθεί";
+        Text[ greek ] = "Συνδέσεις που επιλέχτηκαν";
         Text[ korean ] = "λ°©λ¬Έν• λ§ν¬(~V)";
         Text[ turkish ] = "~Kullanύlmύώ hyperlink";
         Text[ catalan ] = "Enllaηos ~visitats";
@@ -788,6 +788,7 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
 
 
 
