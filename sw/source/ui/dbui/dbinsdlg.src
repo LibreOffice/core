@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:02:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,6 +784,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ hindi ] = "लेखासंचय स्तंभों को जोड़ो";
     Text[ slovak ] = "Vložiť stĺpce databázy";
 };
+
+
 
 
 
