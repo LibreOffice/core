@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:22:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ class SwFldDlg;
 class SwRenameXNamedDlg;
 class SwModalRedlineAcceptDlg;
 class SwTOXMark;
+
+#include "itabenum.hxx"
 
 namespace sw
 {
@@ -180,8 +182,7 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg // add for SwConvertTableDlg
 {
     DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg);
-    virtual void GetValues( sal_Unicode& rDelim,
-                    USHORT& rInsTblFlags,
+    virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
                     SwTableAutoFmt *& prTAFmt );
 };
 //add for SwConvertTableDlg end
@@ -342,7 +343,7 @@ class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
     DECL_ABSTDLG_BASE(AbstractInsTableDlg_Impl,SwInsTableDlg);
     virtual void            GetValues( String& rName, USHORT& rRow, USHORT& rCol,
-                                USHORT& rInsTblFlags, String& rTableAutoFmtName,
+                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt );
 };
 //for SwInsTableDlg end

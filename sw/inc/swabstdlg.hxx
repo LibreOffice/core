@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:15:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #endif
 #include "swunodef.hxx"
+#include "itabenum.hxx"
 
 class SfxTabPage;
 class SfxViewFrame;
@@ -198,7 +199,7 @@ class AbstractInsTableDlg : public VclAbstractDialog  //add for SwInsTableDlg
 {
 public:
     virtual void            GetValues( String& rName, USHORT& rRow, USHORT& rCol,
-                                USHORT& rInsTblFlags, String& rTableAutoFmtName,
+                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt ) = 0;
 };
 
@@ -278,7 +279,7 @@ class AbstractSwConvertTableDlg :  public VclAbstractDialog // add for SwConvert
 {
 public:
     virtual void GetValues( sal_Unicode& rDelim,
-                    USHORT& rInsTblFlags,
+                    SwInsertTableOptions& rInsTblFlags,
                     SwTableAutoFmt *& prTAFmt ) = 0;
 };
 
