@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:35:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@
 #include "imgmgr.hxx"
 #include "tbxconf.hxx"
 #include "accmgr.hxx"
+#include "QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include "msg.hxx"
 using namespace ::com::sun::star;
@@ -547,9 +548,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
             pFrame->GetFrame()->Appear();
 
             // fragen, ob gespeichert werden soll
-            String aText( SfxResId( STR_QUERY_SAVE_DOCUMENT ) );
-            aText.SearchAndReplace( DEFINE_CONST_UNICODE( "$(DOC)" ),
-                                    GetTitle( SFX_TITLE_PICKLIST ) );
             /*HACK for plugin::destroy()*/
             // Don't show SAVE dialog in plugin mode! We save our document in every way.
             short nRet = RET_YES;
@@ -562,12 +560,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 {
                     SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
                 }
-                QueryBox aQBox( &pFrame->GetWindow(), WB_YES_NO_CANCEL | WB_DEF_YES, aText );
-                aQBox.SetButtonText( BUTTONID_NO, SfxResId( STR_NOSAVEANDCLOSE ) );
-                aQBox.SetButtonText( BUTTONID_YES, SfxResId( STR_SAVEDOC ) );
-    //(mba)/task            if ( bForBrowsing )
-    //                aQBox.AddButton( String( SfxResId( RID_STR_NEW_TASK ) ), RET_NEWTASK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-                nRet = aQBox.Execute();
+                nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),GetTitle( SFX_TITLE_PICKLIST ));
             }
             /*HACK for plugin::destroy()*/
 
