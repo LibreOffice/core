@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 
 #pragma hdrstop
@@ -240,7 +240,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 static bool configureUcb(String const & rUcbUrl)
 {
     Reference< XMultiServiceFactory >
-        xFactory(utl::getProcessServiceFactory());
+        xFactory(comphelper::getProcessServiceFactory());
     if (!xFactory.is())
     {
         DBG_ERROR("configureUcb: No XMultiServiceFactory");
@@ -639,7 +639,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
 //! FSysEnableSysErrorBox( FALSE ); (pb) replaceable?
 
-    Reference < XDesktop > xDesktop ( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
 
     if( !CheckTryBuy_Impl() )
@@ -840,7 +840,7 @@ IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
     if ( pAppData_Impl->bBean )
             return 0;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
     ::com::sun::star::uno::Reference< ::com::sun::star::installation::XInstallationCheck >  xInst( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.installation.FontCheck") ), ::com::sun::star::uno::UNO_QUERY );
     if ( xInst.is() )
         xInst->checkWithDialog( sal_False );

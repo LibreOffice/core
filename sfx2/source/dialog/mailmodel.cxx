@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-11 07:36:46 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include <tools/tempfile.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 
@@ -273,7 +273,7 @@ sal_Bool SfxMailModel_Impl::Send()
     String aFileName, aContentType;
     if ( SaveDocument( aFileName, aContentType ) )
     {
-        Reference < XMultiServiceFactory > xMgr = ::utl::getProcessServiceFactory();
+        Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
 #if SUPD<609
         Reference < XDataContainer > xData(
             xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.chaos.DataContainer") ), UNO_QUERY );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
 using namespace ::ucb;
@@ -119,7 +119,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace rtl;
-using namespace utl;
+using namespace comphelper;
 using namespace osl;
 
 DECLARE_LIST( StringList_Impl, OUString* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-20 17:15:36 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
 #include <tools/tempfile.hxx>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef  _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
@@ -958,7 +958,7 @@ sal_Bool SfxMedium::TryStorage()
     if ( aStorage.Is() )
         return sal_True;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMgr( ::utl::getProcessServiceFactory() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMgr( ::comphelper::getProcessServiceFactory() );
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XArchiver >
             xPacker( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.util.Archiver" ) ), ::com::sun::star::uno::UNO_QUERY );
 
@@ -987,7 +987,7 @@ sal_Bool SfxMedium::TryStorage()
 
     // unpack all files to temp dir
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory = ::utl::getProcessServiceFactory();
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteractionHandler(
                 xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.uui.InteractionHandler") ), UNO_QUERY );
 

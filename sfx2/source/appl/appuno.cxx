@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 16:07:22 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,7 @@
 #ifndef _COM_SUN_STAR_REGISTRY_REGISTRYVALUETYPE_HPP_
 #include <com/sun/star/registry/RegistryValueType.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
-#endif
+#include <comphelper/processfactory.hxx>
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
@@ -540,7 +538,7 @@ void SfxComponentFactory::Init_Impl()
 {
 //  TRY
     {
-        Reference< XPropertySet > xMan( ::utl::getProcessServiceFactory(), UNO_QUERY );
+        Reference< XPropertySet > xMan( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
         Any aAny = xMan->getPropertyValue( DEFINE_CONST_UNICODE("Registry") );
         aAny >>= xRegistry;
         if ( xRegistry.is() )
@@ -731,7 +729,7 @@ void SfxComponentFactory::Init_Impl()
 
     if ( xRegistry.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::utl::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
         sal_uInt16 nCount = aKeyArr.Count();
         sal_uInt16 n;
         for ( n=0; n<nCount; n++ )
@@ -789,7 +787,7 @@ void SAL_CALL SfxJavaLoader::load(const ::com::sun::star::uno::Reference< ::com:
     aURL.Complete = rURL;
     aArgs = rArgs;
 
-    SfxURLTransformer aTrans ( ::utl::getProcessServiceFactory() );
+    SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
     aTrans.parseStrict( aURL );
 
     String aName( aURL.Path );
@@ -944,7 +942,7 @@ void SAL_CALL DownloaderLoader::load (   const ::com::sun::star::uno::Reference<
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadEventListener > &        rListener   ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >   aRef    =   rFrame->getContainerWindow () ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() ) ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() ) ;
 
     DownloadController* pController = new DownloadController(xMgr) ;
 

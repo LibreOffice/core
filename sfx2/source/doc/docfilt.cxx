@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #include <com/sun/star/plugin/XPluginContext.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 
 #pragma hdrstop
@@ -233,7 +233,7 @@ const ::com::sun::star::plugin::PluginDescription* SfxFilter::GetPlugData()
     {
         bPlugDataSearched = sal_True;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::utl::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
         ::com::sun::star::uno::Reference< ::com::sun::star::plugin::XPluginManager >
                 xPlugMgr( xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.plugin.PluginManager" ) ), ::com::sun::star::uno::UNO_QUERY );
         DBG_ASSERT( xPlugMgr.is(), "### cannot create instance com.sun.star.plugin.PluginManager!" );
@@ -270,7 +270,7 @@ sal_Bool SfxFilter::IsFirstPlugin() const
     const ::com::sun::star::plugin::PluginDescription* pData = GetPlugData();
     if( pData )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::utl::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
         ::com::sun::star::uno::Reference< ::com::sun::star::plugin::XPluginManager >
             xPlugMgr( xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.plugin.PluginManager" ) ), ::com::sun::star::uno::UNO_QUERY );
         DBG_ASSERT( xPlugMgr.is(), "### cannot create instance com.sun.star.plugin.PluginManager!" );

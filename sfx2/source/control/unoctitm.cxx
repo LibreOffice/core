@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
 #endif
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "unoctitm.hxx"
 #include "viewfrm.hxx"
@@ -116,7 +116,7 @@ SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBinding
     DBG_ASSERT( !pCtrlItem || !pCtrlItem->IsBound(), "ControllerItem fehlerhaft!" );
 
     aCommand.Complete = rCmd;
-    Reference < XURLTransformer > xTrans( ::utl::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( aCommand );
     pBindings->RegisterUnoController_Impl( this );
 }

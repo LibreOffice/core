@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 14:34:00 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -300,7 +300,7 @@ static AsynchronLink* pPendingCloser = 0;
 
 SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
 {
-    Reference < XFrame > xDesktop ( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XFrame > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
     SfxTopFrame *pFrame = Create( xFrame );
     pFrame->pImp->bHidden = bHidden;

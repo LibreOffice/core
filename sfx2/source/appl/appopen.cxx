@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 17:02:28 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #pragma hdrstop
 
@@ -1259,7 +1259,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pFrame )
             xFrame = pFrame->GetFrameInterface();
         else
-            xFrame = Reference < XFrame >( ::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+            xFrame = Reference < XFrame >( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
 
         // make URL ready
         URL aURL;
@@ -1281,7 +1281,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
 
         aURL.Complete = aFileName;
-        Reference < XURLTransformer > xTrans( ::utl::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( aURL );
 
         // load document using dispatch framework
@@ -1332,7 +1332,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         // synchron loading without a given frame
         SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-        Reference < XComponentLoader > xDesktop( ::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+        Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
         Reference < XModel > xModel( xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
         if ( xModel.is() )
             xController = xModel->getCurrentController();

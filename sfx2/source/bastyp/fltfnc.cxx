@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:41:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,14 +213,8 @@
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
-
-/* (mhu)
-#ifndef _COM_SUN_STAR_CHAOS_DOCUMENTHEADERFIELD_HPP_
-#include <com/sun/star/chaos/DocumentHeaderField.hpp>
-#endif
-*/
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
@@ -230,9 +224,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-/* (mhu)
-using namespace ::com::sun::star::chaos;
-*/
 using namespace ::rtl;
 using namespace ::vos;
 
@@ -1338,7 +1329,7 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
 
             const INetURLObject& rURLObj = rMedium.GetURLObject();
             String aName( rURLObj.GetMainURL() );
-            SfxURLTransformer aTrans ( ::utl::getProcessServiceFactory() );
+            SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
             ::rtl::OUString aTargetURL = aName;
 
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
@@ -1398,13 +1389,13 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
                 return bOk ? ERRCODE_ABORT : ERRCODE_IO_NOTSUPPORTED;
             }
 
-            SfxURLTransformer aTrans ( ::utl::getProcessServiceFactory() );
+            SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
             ::rtl::OUString aTargetURL = aName;
 
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xReg( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.FrameLoaderFactory") ), ::com::sun::star::uno::UNO_QUERY );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( xReg->createInstance( DEFINE_CONST_UNICODE("private:iexplorer") ), ::com::sun::star::uno::UNO_QUERY );
 
@@ -1440,7 +1431,7 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
 
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xFrameLoader ( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.comp.sfx2.DownloaderLoader") ), ::com::sun::star::uno::UNO_QUERY );
             if ( xFrameLoader.is() )
             {
@@ -1982,7 +1973,7 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
                 {
                     ::com::sun::star::util::URL aURL;
                     aURL.Complete = rMedium.GetName();
-                    SfxURLTransformer aTrans ( ::utl::getProcessServiceFactory() );
+                    SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
                     aTrans.parseStrict( aURL );
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
                     if ( xDisp.is() )
@@ -3052,7 +3043,7 @@ sal_uInt32 SfxPluginFilterContainer::Execute( SfxMedium& rMedium, SfxFrame*& pFr
     rMedium.GetItemSet()->Put( SfxStringItem( SID_CONTENTTYPE, rMedium.GetFilter()->GetMimeType() ) );
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
     TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( (::cppu::OWeakObject*)new PluginLoader(::utl::getProcessServiceFactory()), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( (::cppu::OWeakObject*)new PluginLoader(::comphelper::getProcessServiceFactory()), ::com::sun::star::uno::UNO_QUERY );
     rMedium.GetItemSet()->Put( SfxStringItem( SID_FILTER_NAME, rMedium.GetFilter()->GetName() ) );
     USHORT nRet = pFrame->LoadComponent_Impl( aTargetURL, aArgs, xLoader, rMedium.GetItemSet() );
 
@@ -3082,7 +3073,7 @@ IMPL_LINK( SfxPluginFilterContainer, LoadHdl_Impl, void*, pVoid )
         return 0;
 
     bInitialized = sal_True;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::utl::getProcessServiceFactory();
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     ::com::sun::star::uno::Reference< ::com::sun::star::plugin::XPluginManager >  xPlugMgr( xMan->createInstance( DEFINE_CONST_UNICODE("com.sun.star.plugin.PluginManager") ), ::com::sun::star::uno::UNO_QUERY );
     if( xPlugMgr.is() )
     {

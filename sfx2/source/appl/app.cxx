@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 17:02:28 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include <basic/basmgr.hxx>
@@ -1575,7 +1575,7 @@ sal_Bool SfxApplication::IsPlugin()
     // Set default return value if method failed.
     sal_Bool bReturn = sal_False;
     // Get Desktop to get a list of all current tasks on it.
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier > xDesktop( ::utl::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), ::com::sun::star::uno::UNO_QUERY );
     DBG_ASSERT( !(xDesktop.is()==sal_False), "SfxFrame::IsPlugin_Impl()Can't get reference to desktop service!\n" );
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
     while( xList->hasMoreElements() == sal_True )

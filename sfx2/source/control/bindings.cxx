@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-20 17:10:51 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/itemdel.hxx>
 
 #pragma hdrstop
@@ -2538,7 +2538,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
             aURL.Complete = aCmd;
         }
 
-        Reference < XURLTransformer > xTrans( ::utl::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( aURL );
         if ( !xDisp.is() )
             xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 17:30:55 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 #include <vcl/msgbox.hxx>
 
@@ -2031,7 +2031,7 @@ sal_Bool SfxFrame::ActivateNextChildWindow_Impl( sal_Bool bForward )
     String aCmd( DEFINE_CONST_UNICODE( ".uno:" ) );
     aCmd += String::CreateFromAscii( SFX_SLOTPOOL().GetUnoSlot( bForward ? SID_NEXTWINDOW : SID_PREVWINDOW )->GetUnoName() );
     aTargetURL.Complete = aCmd;
-    Reference < XURLTransformer > xTrans( ::utl::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  aTmpRef( GetFrameInterface() );
@@ -2123,7 +2123,7 @@ sal_Bool SfxFrame::IsPlugin_Impl() const
     // Set default return value if method failed.
     sal_Bool bReturn = sal_False;
     // Get Desktop to get a list of all current tasks on it.
-    Reference< XTasksSupplier > xDesktop( ::utl::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+    Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
     DBG_ASSERT( !(xDesktop.is()==sal_False), "SfxFrame::IsPlugin_Impl()Can't get reference to desktop service!\n" );
     Reference< XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
     while( xList->hasMoreElements() == sal_True )

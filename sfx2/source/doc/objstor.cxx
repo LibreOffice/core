@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 13:39:45 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 #include <cppuhelper/weak.hxx>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _SO_CLSIDS_HXX
@@ -1131,7 +1131,7 @@ sal_Bool SfxObjectShell::ConvertFrom
 sal_Bool SfxObjectShell::ImportFrom( SfxMedium&  rMedium )
 {
     String aName( GetMedium()->GetFilter()->GetFilterName() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::utl::getProcessServiceFactory();
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataImporter >  xLoader( xMan->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
     if ( xLoader.is() )
     {
@@ -1156,7 +1156,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium&  rMedium )
         xExport = pImp->xFilter;
     else
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::utl::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
         xExport = ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataExporter > ( xMan->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
     }
 

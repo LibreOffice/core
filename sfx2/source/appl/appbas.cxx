@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -731,7 +731,7 @@ BasicManager* SfxApplication::GetBasicManager()
         MakeVariable( pBas, pAppObj, "SubstPathVars", SID_SUBSTPATHVARS,SbxSTRING, SbxCLASS_METHOD );
 */
         // ::com::sun::star::frame::Desktop
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr = ::utl::getProcessServiceFactory();
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
         Any aDesktop;
         Reference< XDesktop > xDesktop( xSMgr->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
         aDesktop <<= xDesktop ;
