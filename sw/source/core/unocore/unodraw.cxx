@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: os $ $Date: 2000-11-27 07:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
 #endif
+#ifndef _UNOCOLL_HXX
+#include <unocoll.hxx>
+#endif
+#ifndef _UNOFRAME_HXX
+#include <unoframe.hxx>
+#endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
@@ -131,6 +137,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
 /* -----------------22.01.99 13:19-------------------
@@ -280,20 +287,18 @@ void    SwFmDrawPage::RemovePageView()
   -----------------------------------------------------------------------*/
 uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj )
 {
-    uno::Reference< drawing::XShape >  xShape;
+    uno::Reference< XInterface >  xShape;
     if( pObj )
     {
-        //TODO: wenn bereits ein SwXShape am Format angemeldet ist, dann das herausreichen!
         SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
         SwXShape* pxShape = (SwXShape*)SwClientIter( *pFmt ).
                                                 First( TYPE( SwXShape ));
         if(pxShape)
         {
-            xShape = uno::Reference< drawing::XShape >((cppu::OWeakObject*)pxShape, uno::UNO_QUERY);
-            pxShape->queryInterface(::getCppuType((const uno::Reference< drawing::XShape >*)0));
+            xShape =  *(cppu::OWeakObject*)pxShape;
         }
         else
-            xShape = _CreateShape( pObj );
+            xShape = pObj->getUnoShape();
     }
     return xShape;
 }
@@ -308,23 +313,55 @@ SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape
 /*-- 22.01.99 11:13:09---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
 uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj ) const
 {
-    uno::Reference< drawing::XShape >  xShape = SvxFmDrawPage::_CreateShape( pObj );
-    uno::Reference< XUnoTunnel > xShapeTunnel(xShape, uno::UNO_QUERY);
-    //don't create an SwXShape if it already exists
-    SwXShape* pShape = 0;
-    if(xShapeTunnel.is())
-        pShape = (SwXShape*)xShapeTunnel->getSomething(SwXShape::getUnoTunnelId());
-    if(!pShape)
+    uno::Reference< drawing::XShape >  xRet;
+    if(pObj->IsWriterFlyFrame())
     {
-        xShapeTunnel = 0;
-        uno::Reference< uno::XInterface > xCreate(xShape, uno::UNO_QUERY);
-        xShape = 0;
-        uno::Reference< XPropertySet >  xPrSet = new SwXShape( xCreate );
-        xShape = uno::Reference< drawing::XShape >(xPrSet, uno::UNO_QUERY);
+        SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)pObj->GetUserCall();
+        if(pFlyContact)
+        {
+            FlyCntType eType;
+            SwFrmFmt* pFlyFmt = pFlyContact->GetFmt();
+            SwDoc* pDoc = pFlyFmt->GetDoc();
+            const SwNodeIndex* pIdx;
+            if( RES_FLYFRMFMT == pFlyFmt->Which()
+                && 0 != ( pIdx = pFlyFmt->GetCntnt().GetCntntIdx() )
+                && pIdx->GetNodes().IsDocNodes()
+                )
+            {
+                const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
+                if(!pNd->IsNoTxtNode())
+                    eType = FLYCNTTYPE_FRM;
+                else if( pNd->IsGrfNode() )
+                    eType = FLYCNTTYPE_GRF;
+                else if( pNd->IsOLENode() )
+                    eType = FLYCNTTYPE_OLE;
+            }
+            else
+                throw RuntimeException();
+            xRet = SwXFrames::GetObject( *pFlyFmt, eType );
+        }
+     }
+    else
+    {
+        xRet = SvxFmDrawPage::_CreateShape( pObj );
+        uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
+        //don't create an SwXShape if it already exists
+        SwXShape* pShape = 0;
+        if(xShapeTunnel.is())
+            pShape = (SwXShape*)xShapeTunnel->getSomething(SwXShape::getUnoTunnelId());
+        if(!pShape)
+        {
+            xShapeTunnel = 0;
+            uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
+            xRet = 0;
+            uno::Reference< XPropertySet >  xPrSet = new SwXShape( xCreate );
+            xRet = uno::Reference< drawing::XShape >(xPrSet, uno::UNO_QUERY);
+        }
     }
-    return xShape;
+    return xRet;
 }
 
 /****************************************************************************
