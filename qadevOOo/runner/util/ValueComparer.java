@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueComparer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:16:19 $
+ *  last change:$Date: 2003-01-31 11:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,10 +143,31 @@ public class ValueComparer {
 
         for(int i = 0; i < fields.length && result; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
-                result = result & compareObjects(fields[i].get(op1), fields[i].get(op2));
+                Object obj1 = fields[i].get(op1);
+                Object obj2 = fields[i].get(op1);
+                if (obj1 instanceof com.sun.star.uno.Any) {
+                    try {
+                        if (utils.isVoid(obj1)) {
+                            obj1 = null;
+                        } else {
+                            obj1 = AnyConverter.toObject(((Any) obj1).getType(),obj1);
+                        }
+                    } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                    }
+                }
+                if (obj2 instanceof com.sun.star.uno.Any) {
+                    try {
+                        if (utils.isVoid(obj2)) {
+                            obj2 = null;
+                        } else {
+                            obj2 = AnyConverter.toObject(((Any) obj2).getType(),obj2);
+                        }
+                    } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                    }
+                }
 
-//              if(!result)
-//                  System.err.println("blabal :" + fields[i]);
+                result = result & compareObjects(obj1, obj2);
+
             }
         }
 
