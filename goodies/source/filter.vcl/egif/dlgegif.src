@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-17 20:12:35 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,16 @@ ModalDialog DLG_EXPORT_GIF
         Text [ danish ] = "Modus" ;
         Text [ portuguese_brazilian ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "Ó°ÄŞ";
-        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "æÖÚ";
         Text[ dutch ] = "Modus";
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
-        Text[ korean ] = "¸ğµå";
+        Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modo";
@@ -143,16 +143,16 @@ ModalDialog DLG_EXPORT_GIF
         Text [ french ] = "~Entrelacé" ;
         Text [ dutch ] = "~Interlaced" ;
         Text [ portuguese ] = "~Entrelaçado" ;
-        Text[ chinese_simplified ] = "½»´í(~I)";
+        Text[ chinese_simplified ] = "äº¤é”™(~I)";
         Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
         Text[ polish ] = "Interlaced";
-        Text[ japanese ] = "²İÀ°Ú°½•û®(~I)";
-        Text[ chinese_traditional ] = "¥æ¿ù(~I)";
+        Text[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾šï½°ï½½æ–¹å¼(~I)";
+        Text[ chinese_traditional ] = "äº¤éŒ¯(~I)";
         Text[ arabic ] = "ãÊÔÇÈß";
         Text[ dutch ] = "~Interlaced";
-        Text[ chinese_simplified ] = "½»´í(~I)";
+        Text[ chinese_simplified ] = "äº¤é”™(~I)";
         Text[ greek ] = "Ğåğëåãìİíç";
-        Text[ korean ] = "ÀÎÅÍ·¹ÀÌ½º(~I)";
+        Text[ korean ] = "ì¸í„°ë ˆì´ìŠ¤(~I)";
         Text[ turkish ] = "~Interlaced";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Entrelazado";
@@ -173,20 +173,20 @@ ModalDialog DLG_EXPORT_GIF
         Text [ french ] = "Objets de dessin" ;
         Text [ dutch ] = "Tekenobjecten" ;
         Text [ portuguese ] = "Objectos de desenho" ;
-        Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+        Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
         Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
         Text[ polish ] = "Obiekty graficzne";
-        Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+        Text[ japanese ] = "å›³å½¢æç”»ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
         Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Obiekty graficzne";
-    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
-    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
-    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
+    Text[ japanese ] = "å›³å½¢æç”»ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
+    Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶";
         Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
         Text[ dutch ] = "Tekenobjecten";
-        Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+        Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
         Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
-        Text[ korean ] = "±×¸®±â °³Ã¼";
+        Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´";
         Text[ turkish ] = "Çizim nesneleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objetos de dibujo";
@@ -208,36 +208,37 @@ ModalDialog DLG_EXPORT_GIF
         Text [ french ] = "Enregistrer en t~ransparence" ;
         Text [ dutch ] = "~Transparant opslaan" ;
         Text [ portuguese ] = "~Guardar em modo transparente" ;
-        Text[ chinese_simplified ] = "´æÅÌÍ¸Ã÷(~T)";
+        Text[ chinese_simplified ] = "å­˜ç›˜é€æ˜(~T)";
         Text[ russian ] = "Ñîõğàíèòü â ïğîçğà÷íîì ğåæèìå";
         Text[ polish ] = "Zapisz w trybie przeŸroczystym";
-        Text[ japanese ] = "“§‰ß«‚Ì‚Ü‚Ü•Û‘¶(~T)";
-        Text[ chinese_traditional ] = "Àx¦s³z©ú(~T)";
+        Text[ japanese ] = "é€éæ€§ã®ã¾ã¾ä¿å­˜(~T)";
+        Text[ chinese_traditional ] = "å„²å­˜é€æ˜(~T)";
         Text[ arabic ] = "ÍİÙ ÔİÇİ";
         Text[ dutch ] = "~Transparant opslaan";
-        Text[ chinese_simplified ] = "´æÅÌÍ¸Ã÷(~T)";
+        Text[ chinese_simplified ] = "å­˜ç›˜é€æ˜(~T)";
         Text[ greek ] = "ÁğïèŞêåõóç äéáöáíİò";
-        Text[ korean ] = "Åõ¸í ¸ğµå ÀúÀå(~T)";
+        Text[ korean ] = "íˆ¬ëª… ëª¨ë“œ ì €ì¥(~T)";
         Text[ turkish ] = "Saydam biçimde kaydet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Guardar en modo ~transparente";
         Text[ finnish ] = "Tallenna ~läpinäkyvyys";
     };
-    Text[ chinese_simplified ] = "GIF Ñ¡Ïî";
+    Text[ chinese_simplified ] = "GIF é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû GIF";
     Text[ polish ] = "Opcje GIF";
-    Text[ japanese ] = "GIF µÌß¼®İ";
-    Text[ chinese_traditional ] = "GIF¿ï¶µ";
+    Text[ japanese ] = "GIF ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ chinese_traditional ] = "GIFé¸é …";
     Text[ arabic ] = "GIF ÎíÇÑÇÊ";
     Text[ dutch ] = "GIF-opties";
-    Text[ chinese_simplified ] = "GIF Ñ¡Ïî";
+    Text[ chinese_simplified ] = "GIF é€‰é¡¹";
     Text[ greek ] = "Åğéëïãİò GIF";
-    Text[ korean ] = "GIF ¿É¼Ç";
+    Text[ korean ] = "GIF ì˜µì…˜";
     Text[ turkish ] = "GIF seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones GIF";
     Text[ finnish ] = "GIF-asetukset";
 };
+
 
 
 
