@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:46:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
 #include "morphdlg.hxx"
 
