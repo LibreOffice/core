@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-05 09:16:59 $
+ *  last change: $Author: tl $ $Date: 2002-07-31 08:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,7 +992,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAt
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            DBG_ERROR("unknown flags for SvxOutlinerForwarder::GetAttribs");
+            DBG_ERROR("unknown flags for SmTextForwarder::GetAttribs");
         }
 
         return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
@@ -1296,6 +1296,18 @@ sal_Bool SmTextForwarder::QuickFormatDoc( BOOL bFull )
     rEditEngine.QuickFormatDoc();
 
     return sal_True;
+}
+
+USHORT SmTextForwarder::GetDepth( USHORT nPara ) const
+{
+    // math has no outliner...
+    return 0;
+}
+
+sal_Bool SmTextForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
+{
+    // math has no outliner...
+    return 0 == nNewDepth;  // is it the value from 'GetDepth' ?
 }
 
 sal_Bool SmTextForwarder::Delete( const ESelection& rSelection )

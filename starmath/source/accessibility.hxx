@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-05 09:17:02 $
+ *  last change: $Author: tl $ $Date: 2002-07-31 08:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,9 @@ public:
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
+
+    virtual USHORT          GetDepth( USHORT nPara ) const;
+    virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
 };
 
 
