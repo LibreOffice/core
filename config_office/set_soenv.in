@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.55 $
-# Date:        $Date: 2005-03-30 11:38:22 $
+# Version:     $Revision: 1.56 $
+# Date:        $Date: 2005-04-06 10:53:34 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $UPD, $SOLARUPD, $WORK_STAMP, $TF_ONE51, $TF_UCB, 
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
-     $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, 
+     $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, $GCJ_DATABASE,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $NMAKE_PATH, 
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
@@ -878,6 +878,8 @@ $CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
 # Location of the JDK supported standard classes.zip file.
 # see above for why the change
 $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
+# Localtion of gcj cache
+$GCJ_DATABASE = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.$ds."openoffice.org.gcjdb";
 
 # Paths to run time shared libraries.
 if ($platform =~ m/solaris/) 
@@ -1621,6 +1623,10 @@ ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
 if ( $JDK ne "gcj" ) {
    ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
    ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
+}
+else {
+   ToFile( "GCJ_DATABASE",     $GCJ_DATABASE,       "e" );
+   ToFile( "JAVACACHE",        '@JAVACACHE@',       "e" );
 }
 if ( $platform =~ m/darwin/ )
 {  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
