@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 13:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,9 @@
 
 #define CB_HIGHLIGHT_ACCEPT 6
 #define CB_HIGHLIGHT_REJECT 7
-#define GB_TO_HIGHLIGHT     8
 
 //
-#define GB_REDLINING        10
+#define FL_FILTER           10
 #define TP_FILTER           11
 #define TP_VIEW             12
 #define CB_HIGHLIGHT        13

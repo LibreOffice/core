@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 07:50:53 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     HelpId = FID_CHG_ACCEPT ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 318 , 161 ) ;
+    Size = MAP_APPFONT ( 318 , 148 ) ;
     Text = "Änderungen anzeigen" ;
     Text [ ENGLISH ] = "Show Changes" ;
     Moveable = TRUE ;
@@ -77,7 +77,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text = "~Änderungen in der Tabelle anzeigen" ;
         Text [ ENGLISH ] = "Show changes in the spreadsheet" ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 150 , 12 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Show changes in spreadsheet" ;
         Text [ portuguese_brazilian ] = "?nderungen in der Tabelle anzeigen" ;
@@ -101,17 +101,19 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ catalan ] = "~Mostrar las modificaciones en la hoja";
         Text[ finnish ] = "~Näytä muutokset laskentataulukossa";
     };
-    GroupBox GB_REDLINING
+    FixedLine FL_FILTER
     {
-        Pos = MAP_APPFONT ( 3 , 18 ) ;
-        Size = MAP_APPFONT ( 260 ,107 ) ;
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 255 , 8 ) ;
+        Text = "Filtereinstellungen" ;
+        Text [ ENGLISH ] = "Filter options" ;
     };
     CheckBox CB_HIGHLIGHT_ACCEPT
     {
         Text = "A~kzeptierte Änderungen anzeigen" ;
         Text [ ENGLISH ] = "Show rejected changes" ;
-        Pos = MAP_APPFONT ( 14 , 125 ) ;
-        Size = MAP_APPFONT ( 150 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 246 , 10 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "Show ~accepted changes" ;
         Text [ portuguese_brazilian ] = "A~kzeptierte ?nderungen anzeigen" ;
@@ -137,10 +139,10 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     };
     CheckBox CB_HIGHLIGHT_REJECT
     {
-        Text = "A~bgelehnte Änderungen anzeigen" ;
-        Text [ ENGLISH ] = "Show accepted changes" ;
-        Pos = MAP_APPFONT ( 14 , 140 ) ;
-        Size = MAP_APPFONT ( 150 , 12 ) ;
+        Text = "Ab~gelehnte Änderungen anzeigen" ;
+        Text [ ENGLISH ] = "Show ~rejected changes" ;
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 246 , 10 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "Show ~rejected changes" ;
         Text [ portuguese_brazilian ] = "A~bgelehnte ?nderungen anzeigen" ;
@@ -164,27 +166,22 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ catalan ] = "~Mostrar las modificaciones rechazadas";
         Text[ finnish ] = "~Näytä hylätyt muutokset";
     };
-    GroupBox GB_TO_HIGHLIGHT
-    {
-        Pos = MAP_APPFONT ( 3 , 18 ) ;
-        Size = MAP_APPFONT ( 260 , 136 ) ;
-    };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 269 , 6 ) ;
+        Pos = MAP_APPFONT ( 267 , 6 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 269 , 23 ) ;
+        Pos = MAP_APPFONT ( 267 , 23 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 269 , 43 ) ;
+        Pos = MAP_APPFONT ( 267 , 43 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
     };

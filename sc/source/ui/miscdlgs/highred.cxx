@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:35:36 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,9 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
         aEdAssign       ( this, ResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ResId( RB_ASSIGN ), &aEdAssign ),
         aHighlightBox   ( this, ResId( CB_HIGHLIGHT)),
-        aGroupBox       ( this, ResId( GB_REDLINING)),
+        aFlFilter       ( this, ResId( FL_FILTER)),
         aCbAccept       ( this, ResId( CB_HIGHLIGHT_ACCEPT)),
         aCbReject       ( this, ResId( CB_HIGHLIGHT_REJECT)),
-        aHighlightFrame ( this, ResId( GB_TO_HIGHLIGHT    )),
 
         aOkButton       ( this, ResId( BTN_OK ) ),
         aCancelButton   ( this, ResId( BTN_CANCEL ) ),
@@ -140,9 +139,9 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 {
     FreeResource();
 
-    Point aPos=aGroupBox.GetPosPixel();
-    aFilterCtr.SetPosSizePixel(aPos,aGroupBox.GetSizePixel());
-    aGroupBox.Hide();
+    Point aFlFilterPt( aFlFilter.GetPosPixel() );
+    aFlFilterPt.Y() += aFlFilter.GetSizePixel().Height();
+    aFilterCtr.SetPosPixel( aFlFilterPt );
     MinSize=aFilterCtr.GetSizePixel();
     MinSize.Height()+=2;
     MinSize.Width()+=2;
@@ -150,7 +149,6 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighLightHandle ));
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
     aFilterCtr.HideRange(FALSE);
-    aFilterCtr.HideGroupBox();
     aFilterCtr.Show();
     SFX_APP()->LockDispatcher( TRUE);
     //SFX_APPWINDOW->Disable(FALSE);
