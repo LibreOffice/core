@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapbackbuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:09:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,21 @@ namespace vclcanvas
         const OutputDevice&                     mrRefDevice;
 
         /** When true, the bitmap contains the last valid
-            content. When false, and mpVDev is non-NULL, the VDev
-            contains the last valid content (which must be copied back
-            to the bitmap, when getBitmapReference() is called).
+            content. When false, and mbVDevContentIsCurrent is true,
+            the VDev contains the last valid content (which must be
+            copied back to the bitmap, when getBitmapReference() is
+            called). When both are false, this object is just
+            initialized.
          */
         mutable bool                            mbBitmapContentIsCurrent;
+
+        /** When true, and mpVDev is non-NULL, the VDev contains the
+            last valid content. When false, and
+            mbBitmapContentIsCurrent is true, the bitmap contains the
+            last valid content. When both are false, this object is
+            just initialized.
+         */
+        mutable bool                            mbVDevContentIsCurrent;
     };
 
     typedef ::boost::shared_ptr< BitmapBackBuffer > BitmapBackBufferSharedPtr;

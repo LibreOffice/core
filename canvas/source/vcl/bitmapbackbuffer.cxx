@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapbackbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:09:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,15 @@ namespace vclcanvas
         maBitmap( rBitmap ),
         mpVDev( NULL ),
         mrRefDevice( rRefDevice ),
-        mbBitmapContentIsCurrent( true )
+        mbBitmapContentIsCurrent( false ),
+        mbVDevContentIsCurrent( false )
     {
     }
 
     BitmapBackBuffer::~BitmapBackBuffer()
     {
         // make sure solar mutex is held on deletion (other methods
-        // are supposed to already hold the solar mutex)
+        // are supposed to be called with already locked solar mutex)
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         if( mpVDev )
@@ -130,7 +131,10 @@ namespace vclcanvas
 
     BitmapEx& BitmapBackBuffer::getBitmapReference()
     {
-        if( !mbBitmapContentIsCurrent && mpVDev )
+        OSL_ENSURE( !mbBitmapContentIsCurrent || !mbVDevContentIsCurrent,
+                    "BitmapBackBuffer::getBitmapReference(): Both bitmap and VDev are valid?!" );
+
+        if( mbVDevContentIsCurrent && mpVDev )
         {
             // VDev content is more current than bitmap - copy contents before!
             mpVDev->EnableMapMode( FALSE );
@@ -142,6 +146,7 @@ namespace vclcanvas
         // client queries bitmap, and will possibly alter content -
         // next time, VDev needs to be updated
         mbBitmapContentIsCurrent = true;
+        mbVDevContentIsCurrent   = false;
 
         return *maBitmap;
     }
@@ -165,16 +170,21 @@ namespace vclcanvas
 
     void BitmapBackBuffer::updateVDev() const
     {
+        OSL_ENSURE( !mbBitmapContentIsCurrent || !mbVDevContentIsCurrent,
+                    "BitmapBackBuffer::updateVDev(): Both bitmap and VDev are valid?!" );
+
         if( mpVDev && mbBitmapContentIsCurrent )
         {
             // fill with bitmap content
             mpVDev->EnableMapMode( FALSE );
             const Point aEmptyPoint;
             mpVDev->DrawBitmapEx( aEmptyPoint, *maBitmap );
-
-            // canvas queried the VDev, and will possibly paint into it
-            mbBitmapContentIsCurrent = false;
         }
+
+        // canvas queried the VDev, and will possibly paint into
+        // it. Next time, bitmap must be updated
+        mbBitmapContentIsCurrent = false;
+        mbVDevContentIsCurrent   = true;
     }
 
 }
