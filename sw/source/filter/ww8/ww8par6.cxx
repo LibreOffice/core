@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-25 14:10:36 $
+ *  last change: $Author: khz $ $Date: 2000-10-26 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_TSTPITEM_HXX //autogen
+#include <svx/tstpitem.hxx>
 #endif
 #ifndef _SVX_AKRNITEM_HXX //autogen
 #include <svx/akrnitem.hxx>
@@ -3542,6 +3545,27 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
             nLeftParaMgn      = nPara; // fuer Tabs merken
             nTxtFirstLineOfst = aLR.GetTxtFirstLineOfst();
         }
+
+        // adjust tabs that were set at this paragraph/style resp. before
+        // we encountered the LR Space Attribute
+        SvxTabStopItem* pTStop;
+        pTStop = (SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
+        if( pTStop )
+        {
+            for( USHORT nCnt = 0; nCnt < pTStop->Count(); ++nCnt )
+            {
+                SvxTabStop& rTab = (SvxTabStop&)((*pTStop)[ nCnt ]);
+                if(    SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment()
+                    && rTab.GetTabPos() >= nLeftParaMgn )
+                    rTab.GetTabPos() -= nLeftParaMgn;
+                else
+                {
+                    pTStop->Remove( nCnt );
+                    --nCnt;
+                }
+            }
+            NewAttr( *pTStop );
+        }
         break;
     //sprmPDxaLeft1
     case     19:
@@ -4732,12 +4756,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.3 2000-10-25 14:10:36 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.4 2000-10-26 12:23:38 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/25 14:10:36  khz
+      Now supporting negative horizontal indentation of paragrahps and tables
+
       Revision 1.2  2000/10/17 15:06:36  khz
       Bug #79439# WW border ordering is different than StarWriter's
 
