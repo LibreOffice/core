@@ -88,7 +88,7 @@
     <type> com.sun.star.beans.PropertyValue                             </type>
     <type> com.sun.star.beans.XPropertySet                              </type>
     <type> com.sun.star.container.XNameAccess                           </type>
-    <type> com.sun.star.document.XDocumentSubStorageSupplier            </type>
+    <type> com.sun.star.document.XStorageBasedDocument                  </type>
     <type> com.sun.star.document.XEventBroadcaster                      </type>
     <type> com.sun.star.document.XEventListener                         </type>
     <type> com.sun.star.embed.ElementModes                              </type>
