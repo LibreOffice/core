@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:28:34 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,14 +1042,14 @@ String STR_BEZIEROBJECTBARSHELL
     Text [ dutch ] = "Bézier modus" ;
     Text [ spanish ] = "Modo Bézier" ;
     Text [ english_us ] = "Bézier mode" ;
-    Text[ chinese_simplified ] = "Bézier Ä£Ê½";
+    Text[ chinese_simplified ] = "ÇúĞÎÄ£Ê½";
     Text[ russian ] = "Ğåæèì Áåçüå";
     Text[ polish ] = "Tryb Béziera";
     Text[ japanese ] = "ÍŞ¼Şª‹ÈüÓ°ÄŞ";
     Text[ chinese_traditional ] = "¦±½u¼Ò¦¡";
     Text[ arabic ] = "æÖÚ Bézier";
     Text[ dutch ] = "Bézier modus";
-    Text[ chinese_simplified ] = "Bézier Ä£Ê½";
+    Text[ chinese_simplified ] = "ÇúĞÎÄ£Ê½";
     Text[ greek ] = "ÊáôÜóôáóç êáìğıëçò";
     Text[ korean ] = "º£Áö¿¡ ¸ğµå";
     Text[ turkish ] = "Bézier kipi";
