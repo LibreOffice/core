@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:49:01 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:46:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,12 +113,6 @@ APP$(TNR)OBJS+= $(STDOBJVCL)
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP$(TNR)DEF=$(APP$(TNR)DEF)
-.ELSE
-USE_APP$(TNR)DEF=
-.ENDIF
-
 .IF "$(GUI)" == "UNX"
 APP$(TNR)DEPN+:=$(APP$(TNR)DEPNU)
 USE_APP$(TNR)DEF=
@@ -193,18 +187,14 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP$(TNR)OBJS) `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP$(TNR)STDLIBS) $(APP$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP$(TNR)LINKRES)" != ""
@@ -276,32 +266,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "WNT"
-
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP$(TNR)STACKN) $(STDOBJ) $(APP$(TNR)OBJS), $@, $(MISC)\$(APP$(TNR)TARGET).map, $(APP$(TNR)LIBS) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)), $(APP$(TNR)DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP$(TNR)RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP$(TNR)TARGET).map
-    @$(COPY) $(APP$(TNR)TARGET).sym $(BIN)\$(APP$(TNR)TARGET).sym
-    @$(RM) $(APP$(TNR)TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
 
 .ENDIF			# "$(APP$(TNR)TARGETN)"!=""
 
