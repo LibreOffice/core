@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:25:30 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 13:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ IMPL_LINK( OPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
         EndDialog( RET_OK );
     else
     {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
+        String aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
         aEDPassword.SetText( String() );
