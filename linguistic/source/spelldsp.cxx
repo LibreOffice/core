@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-05 11:30:48 $
+ *  last change: $Author: vg $ $Date: 2001-06-07 15:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ using namespace linguistic;
 
 ///////////////////////////////////////////////////////////////////////////
 
-static BOOL SvcListHasLanguage(
+BOOL SvcListHasLanguage(
         const SeqLangSvcEntry_Spell &rEntry,
         INT16 nLanguage )
 {
