@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:27:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 09:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,6 @@
 #include <sfx2/docfile.hxx>
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OSPLCFG_HXX
-#include <offmgr/osplcfg.hxx>
 #endif
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
