@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-21 12:16:02 $
+ *  last change: $Author: sb $ $Date: 2002-11-19 10:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength )
         else
         {
               if (nfeedback & XIMReverse)
-                nval |= SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                nval |= SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
               if (nfeedback & XIMUnderline)
                 nval |= SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
               if (nfeedback & XIMHighlight)
