@@ -10534,3 +10534,5 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?FindTextStyleAndHyperlink@XMLTextParagraphExport@@QBE?AVOUString@rtl@@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@AAEPAPBUXMLPropertyState@@@Z
 ?addHyperlinkAttributes@XMLTextParagraphExport@@QAEEABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXPropertyState@beans@star@sun@com@@@3456@ABV?$Reference@VXPropertySetInfo@beans@star@sun@com@@@3456@@Z
 ?IsPresentationShapesSupported@XMLShapeImportHelper@@QAEEXZ
+?exportTextContentEnumeration@XMLTextParagraphExport@@IAEEABV?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@EABV?$Reference@VXTextSection@text@star@sun@com@@@3456@EEPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@E@Z
+?processAttribute@SdXMLTextBoxShapeContext@@UAEXGABVOUString@rtl@@0@Z
