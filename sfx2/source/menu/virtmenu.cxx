@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:29:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
         if ( xFrame.is() )
             framework::AddonMenuManager::MergeAddonHelpMenu( xFrame, (MenuBar *)pSVMenu );
 
+        // Set addon menu pointer here to avoid problems. When accessibility is enabled, the whole menu
+        // is created immediately!
+        pAddonsMenu = pSVMenu->GetPopupMenu( SID_ADDONLIST );
     }
     else if ( pParent )
     {
