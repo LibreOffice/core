@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-09 08:34:15 $
+ *  last change: $Author: sb $ $Date: 2001-08-21 14:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,10 +1820,13 @@ bool INetURLObject::convertAbsToRel(UniString const & rTheAbsURIRef,
     }
     xub_StrLen nMatch = pSlash - pBasePathBegin;
 
-    // For file URLs, if the common prefix of the two paths is only "/" (which
-    // covers different DOS volumes like "/a:" and "/b:"), the subject is not
-    // made relative (it could be, but some people don't like that):
-    if (m_eScheme == INET_PROT_FILE && nMatch <= 1)
+    // If the two URLs are DOS file URLs starting with different volumes
+    // (e.g., file:///a:/... and file:///b:/...), the subject is not made
+    // relative (it could be, but some people do not like that):
+    if (m_eScheme == INET_PROT_FILE
+        && nMatch <= 1
+        && hasDosVolume(eStyle)
+        && aSubject.hasDosVolume(eStyle)) //TODO! ok to use eStyle for these?
     {
         rTheRelURIRef = aSubject.GetMainURL(eDecodeMechanism, eCharset);
         return false;
@@ -2987,6 +2990,18 @@ INetURLObject::FTPType INetURLObject::getFTPType() const
                 return FTP_TYPE_I;
         }
     return FTP_TYPE_NONE;
+}
+
+//============================================================================
+bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
+{
+    sal_Unicode const * p = m_aAbsURIRef.GetBuffer() + m_aPath.getBegin();
+    return (eStyle & FSYS_DOS) != 0
+           && m_aPath.getLength() >= 3
+           && p[0] == '/'
+           && INetMIME::isAlpha(p[1])
+           && p[2] == ':'
+           && (m_aPath.getLength() == 3 || p[3] == '/');
 }
 
 //============================================================================
@@ -4601,18 +4616,12 @@ UniString INetURLObject::getFSysPath(FSysStyle eStyle,
                 + (eStyle & FSYS_MAC ? 1 : 0)
             > 1)
     {
-        sal_Unicode const * p = m_aAbsURIRef.GetBuffer() + m_aPath.getBegin();
         eStyle = eStyle & FSYS_VOS
                  && m_aHost.isPresent()
                  && m_aHost.getLength() > 0 ?
                      FSYS_VOS :
-                 eStyle & FSYS_DOS
-                 && (!m_aHost.isPresent() || m_aHost.getLength() == 0)
-                 && m_aPath.getLength() >= 3
-                 && p[0] == '/'
-                 && INetMIME::isAlpha(p[1])
-                 && p[2] == ':'
-                 && (m_aPath.getLength() == 3 || p[3] == '/') ?
+                 hasDosVolume(eStyle)
+                 && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?
                      FSYS_DOS :
                  eStyle & FSYS_UNX
                  && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?

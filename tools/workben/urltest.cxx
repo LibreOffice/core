@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-09 08:34:57 $
+ *  last change: $Author: sb $ $Date: 2001-08-21 14:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,40 @@
  *
  ************************************************************************/
 
-#include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-
 #ifndef TOOLS_INETMIME_HXX
-#include <inetmime.hxx>
+#include "inetmime.hxx"
 #endif
 #ifndef _URLOBJ_HXX
-#include <urlobj.hxx>
+#include "urlobj.hxx"
+#endif
+
+#ifndef _RTL_STRING_H_
+#include "rtl/string.h"
+#endif
+#ifndef _RTL_STRING_HXX_
+#include "rtl/string.hxx"
+#endif
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+#ifndef _RTL_USTRING_H_
+#include "rtl/ustring.h"
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include "rtl/ustring.hxx"
+#endif
+
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
+#endif
+#ifndef INCLUDED_CSTDLIB
+#include <cstdlib>
+#define INCLUDED_CSTDLIB
+#endif
+#ifndef INCLUDED_STDIO_H
+#include <stdio.h>
+#define INCLUDED_STDIO_H
 #endif
 
 //============================================================================
@@ -85,11 +110,11 @@ struct RelToAbsTest
 };
 
 //============================================================================
-bool testRelToAbs(RelToAbsTest const * pTest, size_t nSize)
+bool testRelToAbs(RelToAbsTest const * pTest, std::size_t nSize)
 {
     bool bSuccess = true;
     INetURLObject aBase;
-    for (size_t i = 0; i < nSize; ++i)
+    for (std::size_t i = 0; i < nSize; ++i)
     {
         if (pTest[i].m_pBase)
         {
@@ -157,11 +182,11 @@ inline sal_Char const * toString(INetURLObject::FSysStyle eStyle)
 }
 
 //============================================================================
-bool testSetFSys(SetFSysTest const * pTest, size_t nSize)
+bool testSetFSys(SetFSysTest const * pTest, std::size_t nSize)
 {
     bool bSuccess = true;
     String aPath;
-    for (size_t i = 0; i < nSize; ++i)
+    for (std::size_t i = 0; i < nSize; ++i)
     {
         if (pTest[i].m_pPath)
             aPath = String::CreateFromAscii(pTest[i].m_pPath);
@@ -863,7 +888,7 @@ main()
         }
     }
 
-    if (true)
+    if (false)
     {
         abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "file:///"))));
@@ -887,6 +912,103 @@ main()
                                                    "file:///abcdef/de"))));
         abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "file:///abcdef/def"))));
+    }
+
+    if (true)
+    {
+        {
+            rtl::OUString
+                aBase(RTL_CONSTASCII_USTRINGPARAM("file:///a:/b/c"));
+            rtl::OUString aAbs(RTL_CONSTASCII_USTRINGPARAM("file:///a:/d/e"));
+            rtl::OUString aRel(INetURLObject::GetRelURL(aBase, aAbs));
+            if (!aRel.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("../d/e")))
+            {
+                printf("BAD GetRelURL(%s, %s) = %s\n",
+                       rtl::OUStringToOString(aBase, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aAbs, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aRel, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
+        {
+            rtl::OUString
+                aBase(RTL_CONSTASCII_USTRINGPARAM("file:///a:/b/c"));
+            rtl::OUString aAbs(RTL_CONSTASCII_USTRINGPARAM("file:///d:/e/f"));
+            rtl::OUString aRel(INetURLObject::GetRelURL(aBase, aAbs));
+            if (aRel != aAbs)
+            {
+                printf("BAD GetRelURL(%s, %s) = %s\n",
+                       rtl::OUStringToOString(aBase, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aAbs, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aRel, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
+        {
+            rtl::OUString
+                aBase(RTL_CONSTASCII_USTRINGPARAM("file:///a:/b/c"));
+            rtl::OUString aAbs(RTL_CONSTASCII_USTRINGPARAM("file:///d/e/f"));
+            rtl::OUString aRel(INetURLObject::GetRelURL(aBase, aAbs));
+            if (!aRel.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("../../d/e/f")))
+            {
+                printf("BAD GetRelURL(%s, %s) = %s\n",
+                       rtl::OUStringToOString(aBase, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aAbs, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aRel, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
+        {
+            rtl::OUString
+                aBase(RTL_CONSTASCII_USTRINGPARAM("file:///a:/b/c"));
+            rtl::OUString aAbs(RTL_CONSTASCII_USTRINGPARAM("file:///d:/e/f"));
+            rtl::OUString
+                aRel(INetURLObject::GetRelURL(aBase,
+                                              aAbs,
+                                              INetURLObject::WAS_ENCODED,
+                                              INetURLObject::DECODE_TO_IURI,
+                                              RTL_TEXTENCODING_UTF8,
+                                              INetURLObject::FSYS_UNX));
+            if (!aRel.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                       "../../d:/e/f")))
+            {
+                printf("BAD GetRelURL(%s, %s) = %s\n",
+                       rtl::OUStringToOString(aBase, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aAbs, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aRel, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
+        {
+            rtl::OUString
+                aBase(RTL_CONSTASCII_USTRINGPARAM("file:///test.html"));
+            rtl::OUString
+                aAbs(RTL_CONSTASCII_USTRINGPARAM("/images/myimage.gif"));
+            rtl::OUString aRel(INetURLObject::GetRelURL(aBase, aAbs));
+            if (aRel != aAbs)
+            {
+                printf("BAD GetRelURL(%s, %s) = %s\n",
+                       rtl::OUStringToOString(aBase, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aAbs, RTL_TEXTENCODING_UTF8).
+                           getStr(),
+                       rtl::OUStringToOString(aRel, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
