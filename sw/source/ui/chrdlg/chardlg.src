@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:32:03 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,10 @@
 #include "chardlg.hrc"
 #include "helpid.h"
 
-#define LBOX_DIFF 4
 TabDialog DLG_CHAR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Zeichen : Schrift */
     Text = "Zeichen" ;
     Text [ ENGLISH ] = "Character" ;
     Text [ norwegian ] = "Character" ;
@@ -338,12 +336,12 @@ TabPage TP_CHAR_URL
 {
     HelpID = HID_CHAR_URL ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_URL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 72 + LBOX_DIFF ) ;
+        Size = MAP_APPFONT ( 248 , 93 ) ;
         Text = "Hyperlink" ;
         Text [ English ] = "Hyperlink" ;
         Text [ english_us ] = "Hyperlink" ;
@@ -369,8 +367,8 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_URL
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "U~RL" ;
         Text [ English ] = "U~RL" ;
         Text [ english_us ] = "~URL" ;
@@ -396,7 +394,7 @@ TabPage TP_CHAR_URL
     };
     Edit ED_URL
     {
-        Pos = MAP_APPFONT ( 78 , 14 ) ;
+        Pos = MAP_APPFONT ( 78 , 15 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -431,8 +429,8 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_TEXT
     {
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "Te~xt" ;
         Text [ English ] = "Text" ;
         Text[ english_us ] = "Te~xt";
@@ -456,7 +454,7 @@ TabPage TP_CHAR_URL
     };
     Edit ED_TEXT
     {
-        Pos = MAP_APPFONT ( 78 , 29 ) ;
+        Pos = MAP_APPFONT ( 78 , 32 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -464,8 +462,8 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 49 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "~Name" ;
         Text [ English ] = "~Name" ;
         Text [ english_us ] = "~Name" ;
@@ -491,7 +489,7 @@ TabPage TP_CHAR_URL
     };
     Edit ED_NAME
     {
-        Pos = MAP_APPFONT ( 78 , 44 ) ;
+        Pos = MAP_APPFONT ( 78 , 47 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -499,7 +497,7 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_TARGET
     {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text = "~Frame" ;
         Text [ English ] = "Frame" ;
@@ -526,7 +524,7 @@ TabPage TP_CHAR_URL
     };
     ComboBox LB_TARGET
     {
-        Pos = MAP_APPFONT ( 78 , 59 ) ;
+        Pos = MAP_APPFONT ( 78 , 63 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -535,7 +533,7 @@ TabPage TP_CHAR_URL
     };
     PushButton PB_EVENT
     {
-        Pos = MAP_APPFONT ( 188 , 31 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Ereignisse..." ;
@@ -563,8 +561,8 @@ TabPage TP_CHAR_URL
     };
     GroupBox GB_STYLE
     {
-        Pos = MAP_APPFONT ( 6 , 78 + LBOX_DIFF ) ;
-        Size = MAP_APPFONT ( 248 , 42 + 2 * LBOX_DIFF ) ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 248 , 42 ) ;
         Text = "Zeichenvorlagen" ;
         Text [ English ] = "Character styles" ;
         Text [ dutch ] = "Tekenopmaakprofielen" ;
@@ -590,8 +588,8 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_VISITED
     {
-        Pos = MAP_APPFONT ( 12 , 91 + LBOX_DIFF ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "~Besuchter Link" ;
         Text [ English ] = "Visited link" ;
         Text [ dutch ] = "B~ezochte Link" ;
@@ -617,7 +615,7 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_VISITED
     {
-        Pos = MAP_APPFONT ( 78 , 90 + LBOX_DIFF ) ;
+        Pos = MAP_APPFONT ( 78 , 110 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -627,7 +625,7 @@ TabPage TP_CHAR_URL
     };
     FixedText FT_NOT_VISITED
     {
-        Pos = MAP_APPFONT ( 12 , 106 + 2 * LBOX_DIFF ) ;
+        Pos = MAP_APPFONT ( 12 , 128 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text = "~Unbesuchter Link" ;
         Text [ English ] = "Unvisited link" ;
@@ -654,7 +652,7 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_NOT_VISITED
     {
-        Pos = MAP_APPFONT ( 78 , 105 + 2 * LBOX_DIFF ) ;
+        Pos = MAP_APPFONT ( 78 , 126 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;

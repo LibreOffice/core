@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:30:54 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,18 @@
 TabPage TP_CONDCOLL
 {
     HelpID = HID_COND_COLL ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
+    GroupBox    GB_CONDITION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 179 ) ;
+        Text = "Optionen" ;
+        Text [ English ] = "Settings" ;
+    };
     CheckBox CB_CONDITION
     {
-        Pos = MAP_APPFONT ( 12 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Als bedingte Vorlage" ;
         Text [ English ] = "~As conditioned Style" ;
@@ -101,8 +108,8 @@ TabPage TP_CONDCOLL
     };
     FixedText FT_CONTEXT
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Kontext" ;
         Text [ English ] = "~Context" ;
         Disable = TRUE ;
@@ -128,8 +135,8 @@ TabPage TP_CONDCOLL
     };
     FixedText FT_USED
     {
-        Pos = MAP_APPFONT ( 100 , 25 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 100 , 28 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Verwendete Vorlage" ;
         Text [ English ] = "Used Style" ;
         Disable = TRUE ;
@@ -156,8 +163,8 @@ TabPage TP_CONDCOLL
     Control TB_CONDCOLLS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 36 ) ;
-        Size = MAP_APPFONT ( 173 , 80 ) ;
+        Pos = MAP_APPFONT ( 12 , 39 ) ;
+        Size = MAP_APPFONT ( 173 , 123 ) ;
         TabStop = TRUE ;
         ClipChildren = TRUE ;
         Disable = TRUE ;
@@ -165,9 +172,9 @@ TabPage TP_CONDCOLL
     };
     FixedText FT_STYLE
     {
-        Pos = MAP_APPFONT ( 190 , 25 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Absatzvorlagen" ;
+        Pos = MAP_APPFONT ( 190 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "A~bsatzvorlagen" ;
         Text [ English ] = "Styles" ;
         Disable = TRUE ;
         Text [ dutch ] = "Alineaprofielen" ;
@@ -192,8 +199,8 @@ TabPage TP_CONDCOLL
     };
     ListBox LB_STYLE
     {
-        Pos = MAP_APPFONT ( 188 , 36 ) ;
-        Size = MAP_APPFONT ( 60 , 60 ) ;
+        Pos = MAP_APPFONT ( 188 , 39 ) ;
+        Size = MAP_APPFONT ( 60 , 108 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
         Sort = TRUE ;
@@ -202,7 +209,7 @@ TabPage TP_CONDCOLL
     };
     ListBox LB_FILTER
     {
-        Pos = MAP_APPFONT ( 188 , 104 ) ;
+        Pos = MAP_APPFONT ( 188 , 150 ) ;
         Size = MAP_APPFONT ( 60 , 50 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
@@ -212,7 +219,7 @@ TabPage TP_CONDCOLL
     };
     PushButton PB_REMOVE
     {
-        Pos = MAP_APPFONT ( 129 , 119 ) ;
+        Pos = MAP_APPFONT ( 129 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Text = "~Entfernen" ;
         Text [ English ] = "~Remove" ;
@@ -240,7 +247,7 @@ TabPage TP_CONDCOLL
     };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 185 , 119 ) ;
+        Pos = MAP_APPFONT ( 185 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Text = "~Zuweisen" ;
         Text [ English ] = "Assign" ;

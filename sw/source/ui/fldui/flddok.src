@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:41:20 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@ TabPage TP_FLD_DOK
     HelpID = HID_FLD_DOK ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Dokument" ;
     Text [ ENGLISH ] = "Document" ;
     FixedText FT_DOKTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Feldtyp" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -102,8 +102,8 @@ TabPage TP_FLD_DOK
     ListBox LB_DOKTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 113 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 165 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         AutoHScroll = TRUE ;
@@ -111,7 +111,7 @@ TabPage TP_FLD_DOK
     FixedText FT_DOKSELECTION
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
@@ -140,16 +140,14 @@ TabPage TP_FLD_DOK
     ListBox LB_DOKSELECTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 113 ) ;
-         // Keine Sortierung auf Wunsch von MA (wg. Absender)
-         //        Sort = TRUE;
+        Pos = MAP_APPFONT ( 88 , 15 ) ;
+        Size = MAP_APPFONT ( 76 , 165 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_DOKFORMAT
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         TEXT = "F~ormat" ;
         TEXT [ English ] = "Format" ;
         Left = TRUE ;
@@ -176,9 +174,8 @@ TabPage TP_FLD_DOK
     ListBox LB_DOKFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 16 ) ;
-         //     Size = MAP_APPFONT ( 84 , 82 ) ;
-        Size = MAP_APPFONT ( 84 , 98 ) ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 151 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
         Sort = TRUE ;
@@ -187,17 +184,16 @@ TabPage TP_FLD_DOK
     ListBox LB_DOKNUMFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 16 ) ;
-         //     Size = MAP_APPFONT ( 84 , 82 ) ;
-        Size = MAP_APPFONT ( 84 , 98 ) ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 151 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
         Hide = TRUE ;
     };
     FixedText FT_DOKVALUE
     {
-        Pos = MAP_APPFONT ( 170 , 105 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 170 , 155 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         TEXT = "Ko~rrektur" ;
         TEXT [ English ] = "Offs~et" ;
         TEXT [ norwegian ] = "Offset" ;
@@ -227,7 +223,7 @@ TabPage TP_FLD_DOK
     Edit ED_DOKVALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Pos = MAP_APPFONT ( 170 , 167 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -236,7 +232,7 @@ TabPage TP_FLD_DOK
     NumericField ED_DOKLEVEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Pos = MAP_APPFONT ( 170 , 167 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         Text = "1" ;
         TabStop = TRUE ;
@@ -252,7 +248,7 @@ TabPage TP_FLD_DOK
     NumericField ED_DOKDATEOFF
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Pos = MAP_APPFONT ( 170 , 167 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         Text = "0" ;
         TabStop = TRUE ;
@@ -264,7 +260,7 @@ TabPage TP_FLD_DOK
     };
     CheckBox CB_DOKFIXEDCONTENT
     {
-        Pos = MAP_APPFONT ( 170 , 120 ) ;
+        Pos = MAP_APPFONT ( 170 , 170 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TEXT = "~Inhalt fixieren" ;
         TEXT [ English ] = "Fixed content" ;

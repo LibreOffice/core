@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,9 +616,9 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     Size aSz(aFormatLB.GetSizePixel());
 
     if (bChapterLevel)
-        aSz.Height() = aFormatLB.LogicToPixel(Size(1, 37), MAP_APPFONT).Height();
+        aSz.Height() = aFormatLB.LogicToPixel(Size(1, 94), MAP_APPFONT).Height();
     else
-        aSz.Height() = aFormatLB.LogicToPixel(Size(1, 71), MAP_APPFONT).Height();
+        aSz.Height() = aFormatLB.LogicToPixel(Size(1, 123), MAP_APPFONT).Height();
 
     aFormatLB.SetSizePixel(aSz);
 
@@ -1391,6 +1391,9 @@ void SwFldVarPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:37  hr
+    initial import
+
     Revision 1.54  2000/09/18 16:05:30  willem.vandorp
     OpenOffice header added.
 

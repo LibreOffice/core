@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:43:47 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@ TabPage TP_FLD_VAR
     HelpID = HID_FLD_VAR ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Variablen" ;
     Text [ ENGLISH ] = "Variables" ;
     FixedText FT_VARTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Feldtyp" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -103,8 +103,8 @@ TabPage TP_FLD_VAR
     ListBox LB_VARTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 83 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 135 ) ;
         TabStop = TRUE ;
         Sort = FALSE ;
         AutoHScroll = TRUE ;
@@ -139,15 +139,15 @@ TabPage TP_FLD_VAR
     ListBox LB_VARSELECTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 83 ) ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 135 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
     };
     FixedText FT_VARFORMAT
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         TEXT = "F~ormat" ;
         TEXT [ English ] = "Format" ;
         Left = TRUE ;
@@ -174,22 +174,22 @@ TabPage TP_FLD_VAR
     ListBox LB_VARFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 16 ) ;
-        Size = MAP_APPFONT ( 84 , 71 ) ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 123 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
     };
     ListBox LB_VARNUMFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 16 ) ;
-        Size = MAP_APPFONT ( 84 , 71 ) ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 123 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
     };
     CheckBox CB_VARINVISIBLE
     {
-        Pos = MAP_APPFONT ( 170 , 91 ) ;
+        Pos = MAP_APPFONT ( 170 , 141 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         TEXT = "~Unsichtbar" ;
         TEXT [ English ] = "Invisible" ;
@@ -218,8 +218,8 @@ TabPage TP_FLD_VAR
     };
     FixedText FT_VARCHAPTERHEADER
     {
-        Pos = MAP_APPFONT ( 170 , 62 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 170 , 112 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE ;
         TEXT = "Kapitelweise Nummerierung" ;
         TEXT [ English ] = "Chapter numbering" ;
@@ -245,8 +245,8 @@ TabPage TP_FLD_VAR
     };
     FixedText FT_VARCHAPTERLEVEL
     {
-        Pos = MAP_APPFONT ( 175 , 76 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 175 , 125 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Hide = TRUE ;
         TEXT = "E~bene" ;
         TEXT [ English ] = "Level" ;
@@ -274,7 +274,7 @@ TabPage TP_FLD_VAR
     {
         Border = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 75 ) ;
+        Pos = MAP_APPFONT ( 208 , 123 ) ;
         Size = MAP_APPFONT ( 46 , 76 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -365,7 +365,7 @@ TabPage TP_FLD_VAR
     };
     FixedText FT_VARSEPARATOR
     {
-        Pos = MAP_APPFONT ( 175 , 91 ) ;
+        Pos = MAP_APPFONT ( 175 , 140 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Hide = TRUE ;
         TEXT = "~Trenner" ;
@@ -392,7 +392,7 @@ TabPage TP_FLD_VAR
     };
     Edit ED_VARSEPARATOR
     {
-        Pos = MAP_APPFONT ( 208 , 90 ) ;
+        Pos = MAP_APPFONT ( 208 , 138 ) ;
         Size = MAP_APPFONT ( 46 , 12 ) ;
         Border = TRUE ;
         Hide = TRUE ;
@@ -401,8 +401,8 @@ TabPage TP_FLD_VAR
     };
     FixedText FT_VARNAME
     {
-        Pos = MAP_APPFONT ( 6 , 105 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 155 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "Na~me" ;
         TEXT [ English ] = "Na~me" ;
         Left = TRUE ;
@@ -429,15 +429,15 @@ TabPage TP_FLD_VAR
     Edit ED_VARNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Pos = MAP_APPFONT ( 6 , 166 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_VARVALUE
     {
-        Pos = MAP_APPFONT ( 88 , 105 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 88 , 155 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Wert" ;
         Text [ ENGLISH ] = "Value" ;
         Text [ norwegian ] = "Verdi" ;
@@ -466,14 +466,14 @@ TabPage TP_FLD_VAR
     Edit ED_VARVALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 117 ) ;
+        Pos = MAP_APPFONT ( 88 , 166 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     ToolBox TBX_VARNEWDEL
     {
-        Pos = MAP_APPFONT ( 167 , 117 ) ;
+        Pos = MAP_APPFONT ( 167 , 167 ) ;
         SVLook = TRUE ;
         Border = FALSE ;
         ItemList =

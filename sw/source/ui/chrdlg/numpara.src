@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 11:03:57 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabPage TP_NUMPARA
     GroupBox GB_NUMBER_STYLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 176 , 26 ) ;
+        Size = MAP_APPFONT ( 248 , 26 ) ;
         Text = "Nummerierungsvorlage" ;
         Text [ ENGLISH ] = "Number style" ;
         Text [ portuguese ] = "Estilo de numeração" ;
@@ -99,7 +99,7 @@ TabPage TP_NUMPARA
     };
     ListBox LB_NUMBER_STYLE
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 93 , 14 ) ;
         Size = MAP_APPFONT ( 158 , 65 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -191,7 +191,7 @@ TabPage TP_NUMPARA
     GroupBox GB_NEW_START
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 176 , 40 ) ;
+        Size = MAP_APPFONT ( 248 , 40 ) ;
         Text = "Nummerierung" ;
         Text [ English ] = "Numbering" ;
         TabStop = TRUE ;
@@ -218,7 +218,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_NEW_START
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Text = "~An diesem Absatz neu beginnen" ;
         Text [ English ] = "~Restart at this paragraph" ;
@@ -246,8 +246,8 @@ TabPage TP_NUMPARA
     };
     FixedText FT_NEW_START
     {
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Beginnen mit:" ;
         Text [ English ] = "~Start at:" ;
         Hide = TRUE ;
@@ -275,7 +275,7 @@ TabPage TP_NUMPARA
     NumericField NF_NEW_START
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 144 , 56 ) ;
+        Pos = MAP_APPFONT ( 225 , 57 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -292,7 +292,7 @@ TabPage TP_NUMPARA
     GroupBox GB_COUNT_PARA
     {
         Pos = MAP_APPFONT ( 6 , 75 ) ;
-        Size = MAP_APPFONT ( 176 , 53 ) ;
+        Size = MAP_APPFONT ( 248 , 54 ) ;
         Text = "Zeilennummerierung" ;
         Text [ English ] = "Line numbering" ;
         TabStop = TRUE ;
@@ -318,7 +318,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_COUNT_PARA
     {
-        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Text = "~Die Zeilen dieses Absatzes mitzählen" ;
         Text [ English ] = "~Include this paragraph in line numbering" ;
@@ -345,7 +345,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
-        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Text = "An diese~m Absatz neu beginnen" ;
         Text [ English ] = "~Restart at this paragraph" ;
@@ -372,7 +372,7 @@ TabPage TP_NUMPARA
     };
     FixedText FT_RESTART_NO
     {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "B~eginnen mit:" ;
         Text [ English ] = "~Start at:" ;
@@ -400,7 +400,7 @@ TabPage TP_NUMPARA
     NumericField NF_RESTART_PARA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 144 , 113 ) ;
+        Pos = MAP_APPFONT ( 225 , 114 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;

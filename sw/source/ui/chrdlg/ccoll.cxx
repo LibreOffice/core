@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,17 +154,18 @@ Page: Ctor
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
-    aConditionCB( this, SW_RES( CB_CONDITION ) ),
-    aContextFT  ( this, SW_RES( FT_CONTEXT  ) ),
-    aUsedFT     ( this, SW_RES( FT_USED         ) ),
-    aTbLinks(     this, SW_RES( TB_CONDCOLLS ) ),
-    aStyleFT    ( this, SW_RES( FT_STYLE    ) ),
-    aStyleLB    ( this, SW_RES( LB_STYLE    ) ),
-    aFilterLB   ( this, SW_RES( LB_FILTER   ) ),
-    aRemovePB   ( this, SW_RES( PB_REMOVE   ) ),
-    aAssignPB   ( this, SW_RES( PB_ASSIGN   ) ),
-    sNoTmpl     (       SW_RES( STR_NOTEMPL  ) ),
-    aStrArr     (       SW_RES( STR_REGIONS  ) ),
+    aConditionGB( this, ResId( GB_CONDITION )),
+    aConditionCB( this, ResId( CB_CONDITION ) ),
+    aContextFT  ( this, ResId( FT_CONTEXT   ) ),
+    aUsedFT     ( this, ResId( FT_USED      ) ),
+    aTbLinks(     this, ResId( TB_CONDCOLLS ) ),
+    aStyleFT    ( this, ResId( FT_STYLE     ) ),
+    aStyleLB    ( this, ResId( LB_STYLE     ) ),
+    aFilterLB   ( this, ResId( LB_FILTER    ) ),
+    aRemovePB   ( this, ResId( PB_REMOVE    ) ),
+    aAssignPB   ( this, ResId( PB_ASSIGN    ) ),
+    sNoTmpl     (       ResId( STR_NOTEMPL  ) ),
+    aStrArr     (       ResId( STR_REGIONS  ) ),
     rSh(::GetActiveView()->GetWrtShell()),
     pFmt(0),
     pCmds( SwCondCollItem::GetCmds() ),
@@ -521,6 +522,9 @@ const CommandStruct* SwCondCollItem::GetCmds()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:32  hr
+      initial import
+
       Revision 1.21  2000/09/18 16:05:13  willem.vandorp
       OpenOffice header added.
 

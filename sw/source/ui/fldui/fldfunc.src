@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:50:23 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@ TabPage TP_FLD_FUNC
     HelpID = HID_FLD_FUNC ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Funktionen" ;
     Text [ ENGLISH ] = "Functions" ;
     FixedText FT_FUNCTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Feldtyp" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -102,8 +102,8 @@ TabPage TP_FLD_FUNC
     ListBox LB_FUNCTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 113 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 165 ) ;
         TabStop = TRUE ;
         Sort = FALSE ;
         AutoHScroll = TRUE ;
@@ -111,7 +111,7 @@ TabPage TP_FLD_FUNC
     FixedText FT_FUNCSELECTION
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
@@ -141,8 +141,8 @@ TabPage TP_FLD_FUNC
     ListBox LB_FUNCSELECTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 113 ) ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 165 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
         Sort = TRUE ;
@@ -151,7 +151,7 @@ TabPage TP_FLD_FUNC
     FixedText FT_FUNCFORMAT
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "F~ormat" ;
         Text [ ENGLISH ] = "Format" ;
         Left = TRUE ;
@@ -178,14 +178,14 @@ TabPage TP_FLD_FUNC
     ListBox LB_FUNCFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 113 ) ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 165 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_FUNCNAME
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "Na~me" ;
         TEXT [ English ] = "Na~me" ;
         Left = TRUE ;
@@ -212,15 +212,15 @@ TabPage TP_FLD_FUNC
     Edit ED_FUNCNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 15 ) ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_FUNCVALUE
     {
-        Pos = MAP_APPFONT ( 170 , 33 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 170 , 30 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "~Wert" ;
         Text [ ENGLISH ] = "Value" ;
         Text [ norwegian ] = "Verdi" ;
@@ -249,15 +249,15 @@ TabPage TP_FLD_FUNC
     Edit ED_FUNCVALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 45 ) ;
+        Pos = MAP_APPFONT ( 170 , 41 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_FUNCCOND1
     {
-        Pos = MAP_APPFONT ( 170 , 33 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 170 , 30 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "~Dann" ;
         Text [ ENGLISH ] = "Then" ;
         Left = TRUE ;
@@ -285,7 +285,7 @@ TabPage TP_FLD_FUNC
     Edit ED_FUNCCOND1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 45 ) ;
+        Pos = MAP_APPFONT ( 170 , 41 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -293,8 +293,8 @@ TabPage TP_FLD_FUNC
     };
     FixedText FT_FUNCCOND2
     {
-        Pos = MAP_APPFONT ( 170 , 63 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 170 , 57 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "So~nst" ;
         Text [ ENGLISH ] = "Else" ;
         Left = TRUE ;
@@ -322,7 +322,7 @@ TabPage TP_FLD_FUNC
     Edit ED_FUNCCOND2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 75 ) ;
+        Pos = MAP_APPFONT ( 170 , 68 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -330,7 +330,7 @@ TabPage TP_FLD_FUNC
     };
     PushButton BT_FUNCMACRO
     {
-        Pos = MAP_APPFONT ( 204 , 115 ) ;
+        Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "M~akro..." ;
         Text [ English ] = "M~acro..." ;

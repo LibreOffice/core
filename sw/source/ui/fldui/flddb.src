@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:48:50 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@ TabPage TP_FLD_DB
     HelpID = HID_FLD_DB ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Datenbank" ;
     Text [ ENGLISH ] = "Database" ;
     FixedText FT_DBTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "~Feldtyp" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -102,7 +102,7 @@ TabPage TP_FLD_DB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 54 ) ;
+        Size = MAP_APPFONT ( 76 , 104 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         AutoHScroll = TRUE ;
@@ -117,8 +117,8 @@ TabPage TP_FLD_DB
     };
     FixedText FT_DBCONDITION
     {
-        Pos = MAP_APPFONT ( 6 , 76 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 126 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         TEXT = "Bedin~gung" ;
         TEXT [ English ] = "Conditio~n" ;
         TEXT [ norwegian ] = "Vilkår" ;
@@ -146,14 +146,14 @@ TabPage TP_FLD_DB
     Edit ED_DBCONDITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 88 ) ;
+        Pos = MAP_APPFONT ( 6 , 138 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_DBSETNUMBER
     {
-        Pos = MAP_APPFONT ( 6 , 105 ) ;
+        Pos = MAP_APPFONT ( 6 , 155 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
         TEXT = "Sat~znummer" ;
         TEXT [ English ] = "Setnumber" ;
@@ -182,7 +182,7 @@ TabPage TP_FLD_DB
     Edit ED_DBSETNUMBER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Pos = MAP_APPFONT ( 6 , 167 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -217,12 +217,12 @@ TabPage TP_FLD_DB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 16 ) ;
-        Size = MAP_APPFONT ( 166 , 72 ) ;
+        Size = MAP_APPFONT ( 166 , 122 ) ;
         TabStop = TRUE ;
     };
     RadioButton RB_DBOWNFORMAT
     {
-        Pos = MAP_APPFONT ( 94 , 103 ) ;
+        Pos = MAP_APPFONT ( 94 , 153 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "A~us Datenbank" ;
         Text [ ENGLISH ] = "From database" ;
@@ -248,7 +248,7 @@ TabPage TP_FLD_DB
     };
     RadioButton RB_DBFORMAT
     {
-        Pos = MAP_APPFONT ( 94 , 115 ) ;
+        Pos = MAP_APPFONT ( 94 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Se~lbst definiert" ;
         Text [ ENGLISH ] = "User defined" ;
@@ -274,7 +274,7 @@ TabPage TP_FLD_DB
     ListBox LB_DBNUMFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 113 ) ;
+        Pos = MAP_APPFONT ( 160 , 163 ) ;
         Size = MAP_APPFONT ( 88 , 60 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
@@ -283,7 +283,7 @@ TabPage TP_FLD_DB
     ListBox LB_DBFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 113 ) ;
+        Pos = MAP_APPFONT ( 160 , 163 ) ;
         Size = MAP_APPFONT ( 88 , 60 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
@@ -293,7 +293,7 @@ TabPage TP_FLD_DB
     };
     GroupBox GB_DBFORMAT
     {
-        Pos = MAP_APPFONT ( 88 , 91 ) ;
+        Pos = MAP_APPFONT ( 88 , 141 ) ;
         Size = MAP_APPFONT ( 166 , 38 ) ;
         TEXT = "Format" ;
         TEXT [ English ] = "Format" ;
