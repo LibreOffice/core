@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-14 17:41:16 $
+ *  last change: $Author: mfe $ $Date: 2001-03-09 10:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,13 @@ static void* oslWorkerWrapperFunction(void* pData)
 
     if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
-        pthread_cond_wait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock);
+        int nRet =0;
+        /* spurious wake up prevention */
+        do
+        {
+            nRet = pthread_cond_wait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock);
+        }
+        while ( nRet != 0 );
     }
 
 
@@ -382,7 +388,12 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
         return 0;
     }
 
-    pthread_cond_wait(&pThreadImpl->m_Suspend,&pThreadImpl->m_AccessLock);
+     /* spurious wake up prevention */
+    do
+    {
+        nRet = pthread_cond_wait(&pThreadImpl->m_Suspend,&pThreadImpl->m_AccessLock);
+    }
+    while ( nRet != 0 );
 
     pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
 
@@ -615,7 +626,6 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
         pthread_cond_signal(&pThreadImpl->m_Suspend);
     }
 
-
     pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SUSPENDED;
 
     pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
@@ -649,7 +659,13 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
         pthread_mutex_lock(&pThreadImpl->m_AccessLock);
         if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
         {
-            pthread_cond_wait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock);
+            int nRet = 0;
+            /* spurious wake up prevention */
+            do
+            {
+                nRet = pthread_cond_wait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock);
+            }
+            while ( nRet != 0 );
         }
         pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
     }
@@ -849,7 +865,6 @@ oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDela
         int ret;
         struct timeval  now;
         struct timespec delay;
-        int nOk=0;
 
         pthread_mutex_lock(&pThreadImpl->m_HandleLock);
         pThreadImpl->m_Timeout = 0;
@@ -861,17 +876,17 @@ oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDela
         SET_TIMESPEC(delay, now.tv_sec + (unsigned long) pDelay->Seconds,
                       (now.tv_usec * 1000) + (unsigned long) pDelay->Nanosec);
 
-        while ( nOk == 0 )
-        {
-            pthread_mutex_lock(&pThreadImpl->m_AccessLock);
+        pthread_mutex_lock(&pThreadImpl->m_AccessLock);
 
+        /* spurious wake up prevention */
+        do
+        {
             ret = pthread_cond_timedwait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock, &delay);
-            if ( ret != EINTR )
-            {
-                nOk=1;
-            }
-            pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
         }
+        while ( ret != 0 && ( ret != ETIME || ret != ETIMEDOUT ) );
+
+        pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
+
 
         pthread_mutex_lock(&pThreadImpl->m_HandleLock);
         pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
@@ -988,8 +1003,17 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
 
     if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
+        int nRet = 0;
+
         pthread_mutex_lock(&pThreadImpl->m_AccessLock);
-        pthread_cond_wait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock);
+
+         /* spurious wake up prevention */
+        do
+        {
+            nRet = pthread_cond_wait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock);
+        }
+        while ( nRet != 0 );
+
         pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
     }
 
@@ -1000,24 +1024,23 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
         int ret;
         struct timeval  now;
         struct timespec delay;
-        int nOk=0;
 
         gettimeofday(&now, NULL);
 
         SET_TIMESPEC(delay, now.tv_sec + pThreadImpl->m_Timeout / 1000,
                      now.tv_usec * 1000 + (pThreadImpl->m_Timeout % 1000) * 1000000);
 
-        while ( nOk == 0 )
-        {
-            pthread_mutex_lock(&pThreadImpl->m_AccessLock);
+        pthread_mutex_lock(&pThreadImpl->m_AccessLock);
 
-            ret=pthread_cond_timedwait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock, &delay);
-            if ( ret != EINTR )
-            {
-                nOk=1;
-            }
-            pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
+        /* spurious wake up prevention */
+        do
+        {
+            ret = pthread_cond_timedwait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock, &delay);
         }
+        while ( ret != 0 && ( ret != ETIME || ret != ETIMEDOUT ) );
+
+        pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
+
 
         pthread_mutex_lock(&pThreadImpl->m_HandleLock);
         pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
