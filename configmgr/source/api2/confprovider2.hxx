@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:23:21 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace configmgr
     using ::vos::ORef;
 
     class OConfigurationProviderImpl;
+
     //==========================================================================
     //= OConfigurationProvider
     //==========================================================================
@@ -117,6 +118,32 @@ namespace configmgr
         virtual lang::Locale SAL_CALL
             getLocale(  )
                 throw (uno::RuntimeException);
+
+
+        //XRefreshable
+         virtual void SAL_CALL
+            refresh(  )
+                throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            addRefreshListener(
+                const uno::Reference< util::XRefreshListener >& aListener )
+                    throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            removeRefreshListener(
+                const uno::Reference< util::XRefreshListener >& aListener )
+                    throw (uno::RuntimeException);
+        //XFlushable
+         virtual void SAL_CALL
+            flush(  )
+                throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            addFlushListener(
+                const uno::Reference< util::XFlushListener >& aListener )
+                    throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            removeFlushListener(
+                const uno::Reference< util::XFlushListener >& aListener )
+                    throw (uno::RuntimeException);
 
         // OPropertSetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
