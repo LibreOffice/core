@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 16:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,79 +894,95 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     if ( rOldChain.GetNext() )
         return SW_CHAIN_SOURCE_CHAINED;
 
-        //Ziel darf natuerlich nicht gleich Source sein und es
-        //darf keine geschlossene Kette entstehen.
-        const SwFrmFmt *pFmt = &rDest;
-        do
-        {   if ( pFmt == &rSource )
-                return SW_CHAIN_SELF;
-            pFmt = pFmt->GetChain().GetNext();
-
-        } while ( pFmt );
-
-
-        SwFlyFrm *pFly = ((SwFlyFrmFmt&)rDest).GetFrm();
-
-        //Auch eine Verkettung von Innen nach aussen oder von aussen
-        //nach innen ist nicht zulaessig.
-        SwClientIter aIter( (SwFrmFmt&)rSource );
-        SwFlyFrm *pSFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
-        if ( rDest.IsLowerOf( rSource  ) ||
-                rSource .IsLowerOf( rDest ) )
+    //Ziel darf natuerlich nicht gleich Source sein und es
+    //darf keine geschlossene Kette entstehen.
+    const SwFrmFmt *pFmt = &rDest;
+    do {
+        if( pFmt == &rSource )
             return SW_CHAIN_SELF;
+        pFmt = pFmt->GetChain().GetNext();
+    } while ( pFmt );
 
-        //Das Ziel darf noch keinen Master haben.
-        const SwFmtChain &rChain = pFly->GetFmt()->GetChain();
-        if ( rChain.GetPrev() )
-            return SW_CHAIN_IS_IN_CHAIN;
+    //Auch eine Verkettung von Innen nach aussen oder von aussen
+    //nach innen ist nicht zulaessig.
+    if( rDest.IsLowerOf( rSource ) || rSource .IsLowerOf( rDest ) )
+        return SW_CHAIN_SELF;
 
-        //Das Ziel muss leer sein.
-        SwCntntFrm *pCnt = pFly->ContainsCntnt();
+    //Das Ziel darf noch keinen Master haben.
+    const SwFmtChain &rChain = rDest.GetChain();
+    if( rChain.GetPrev() )
+        return SW_CHAIN_IS_IN_CHAIN;
 
-        if ( pCnt && !pCnt->IsTxtFrm() )
-            return SW_CHAIN_NOT_FOUND;
+    //Das Ziel muss leer sein.
+    const SwNodeIndex* pCntIdx = rDest.GetCntnt().GetCntntIdx();
+    if( !pCntIdx )
+        return SW_CHAIN_NOT_FOUND;
 
-        if ( pCnt && (pCnt->FindNext()      ||
-                        pCnt->IsInTab()     ||
-                        pCnt->IsInSct()     ||
-                        pCnt->IsInFtn()     ||
-                        pCnt->GetDrawObjs() ||
-                        ((SwTxtFrm*)pCnt)->GetTxt().Len()
-                        ))
-            return SW_CHAIN_NOT_EMPTY;
+    SwNodeIndex aNxtIdx( *pCntIdx, 1 );
+    const SwTxtNode* pTxtNd = aNxtIdx.GetNode().GetTxtNode();
+    if( !pTxtNd )
+        return SW_CHAIN_NOT_FOUND;
 
-        //Auf die richtige Area muessen wir auch noch einen Blick werfen.
-        //Beide Flys muessen im selben Bereich (Body, Head/Foot, Fly) sitzen
-        //Wenn die Source nicht der selektierte Rahmen ist, so reicht es
-        //Wenn ein passender gefunden wird (Der Wunsch kann z.B. von der API
-        //kommen).
-        const USHORT nFrmType = FRM_FLY  | FRM_HEADER | FRM_FOOTER  |
-                                FRM_ROOT | FRM_FTN;
-        SwFrm *pRef1 = pFly->GetAnchor();
-        while ( !(pRef1->GetType() & nFrmType) )
-            pRef1 = pRef1->GetUpper();
+    ULONG nFlySttNd = pCntIdx->GetIndex(), nTstSttNd;
+    if( 2 != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
+        pTxtNd->GetTxt().Len() )
+        return SW_CHAIN_NOT_EMPTY;
 
-        SwFlyFrm *pSourceFly = ((SwFlyFrmFmt&)rSource).GetFrm();
-        if ( pSourceFly && &rSource != pSourceFly->GetFmt() )
-            pSourceFly = 0;
-        SwClientIter aIter2( (SwFrmFmt&)rSource );
-        SwFlyFrm *pCompare = pSourceFly ? pSourceFly
-                                        : (SwFlyFrm*)aIter2.First( TYPE(SwFlyFrm) );
-        BOOL bAllowed = FALSE;
-        while ( !bAllowed && pCompare )
+    USHORT nArrLen = GetSpzFrmFmts()->Count();
+    for( USHORT n = 0; n < nArrLen; ++n )
+    {
+        const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
+        if ( ( rAnchor.GetAnchorId() == FLY_AT_CNTNT ||
+               rAnchor.GetAnchorId() == FLY_AT_FLY ||
+               rAnchor.GetAnchorId() == FLY_AUTO_CNTNT ) &&
+             0 != rAnchor.GetCntntAnchor() &&
+             nFlySttNd <= ( nTstSttNd =
+                         rAnchor.GetCntntAnchor()->nNode.GetIndex() ) &&
+             nTstSttNd < nFlySttNd + 2 )
         {
-            SwFrm *pRef2 = pCompare->GetAnchor();
-            while ( !(pRef2->GetType() & nFrmType) )
-                pRef2 = pRef2->GetUpper();
-            if ( pRef1 == pRef2 )
-                bAllowed = TRUE;
-            else
-                pCompare = pSourceFly ? 0 : (SwFlyFrm*)aIter2.Next();
+            return SW_CHAIN_NOT_EMPTY;
         }
-        if ( !bAllowed )
-            return SW_CHAIN_WRONG_AREA;
+    }
 
-        return SW_CHAIN_OK;
+    //Auf die richtige Area muessen wir auch noch einen Blick werfen.
+    //Beide Flys muessen im selben Bereich (Body, Head/Foot, Fly) sitzen
+    //Wenn die Source nicht der selektierte Rahmen ist, so reicht es
+    //Wenn ein passender gefunden wird (Der Wunsch kann z.B. von der API
+    //kommen).
+
+    // both in the same fly, header, footer or on the page?
+    const SwFmtAnchor &rSrcAnchor = rSource.GetAnchor(),
+                      &rDstAnchor = rDest.GetAnchor();
+    ULONG nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
+    BOOL bAllowed = FALSE;
+    if( FLY_PAGE == rSrcAnchor.GetAnchorId() )
+    {
+        if( FLY_PAGE == rDstAnchor.GetAnchorId() ||
+            ( rDstAnchor.GetCntntAnchor() &&
+              rDstAnchor.GetCntntAnchor()->nNode.GetIndex() > nEndOfExtras ))
+            bAllowed = TRUE;
+    }
+    else if( rSrcAnchor.GetCntntAnchor() && rDstAnchor.GetCntntAnchor() )
+    {
+        const SwNodeIndex &rSrcIdx = rSrcAnchor.GetCntntAnchor()->nNode,
+                            &rDstIdx = rDstAnchor.GetCntntAnchor()->nNode;
+        const SwStartNode* pSttNd = 0;
+        if( rSrcIdx == rDstIdx ||
+            ( !pSttNd &&
+                0 != ( pSttNd = rSrcIdx.GetNode().FindFlyStartNode() ) &&
+                pSttNd == rDstIdx.GetNode().FindFlyStartNode() ) ||
+            ( !pSttNd &&
+                0 != ( pSttNd = rSrcIdx.GetNode().FindFooterStartNode() ) &&
+                pSttNd == rDstIdx.GetNode().FindFooterStartNode() ) ||
+            ( !pSttNd &&
+                0 != ( pSttNd = rSrcIdx.GetNode().FindHeaderStartNode() ) &&
+                pSttNd == rDstIdx.GetNode().FindHeaderStartNode() ) ||
+            ( !pSttNd && rDstIdx.GetIndex() > nEndOfExtras &&
+                            rSrcIdx.GetIndex() > nEndOfExtras ))
+            bAllowed = TRUE;
+    }
+
+    return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;
 }
 /* -----------------23.07.98 13:56-------------------
  *
