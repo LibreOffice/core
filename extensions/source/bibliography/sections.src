@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:10:13 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "~Kýsa ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abreviatura";
+        Text[ finnish ] = "Lyhyt ~nimi";
     };
     FixedText FT_AUTHTYPE
     {
@@ -133,6 +134,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "~Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipo";
+        Text[ finnish ] = "~Tyyppi";
     };
     FixedText FT_YEAR
     {
@@ -160,6 +162,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yýl";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Año";
+        Text[ finnish ] = "~Vuosi";
     };
     FixedText FT_AUTHOR
     {
@@ -187,6 +190,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yazar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~utor";
+        Text[ finnish ] = "~Laatija";
     };
     FixedText FT_TITLE
     {
@@ -214,6 +218,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Títu~lo";
+        Text[ finnish ] = "Ot~sikko";
     };
     FixedText FT_PUBLISHER
     {
@@ -241,6 +246,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yayýnevi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editorial";
+        Text[ finnish ] = "~Julkaisija";
     };
     FixedText FT_ADDRESS
     {
@@ -268,6 +274,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Adres";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Dirección";
+        Text[ finnish ] = "O~soite";
     };
     FixedText FT_ISBN
     {
@@ -295,6 +302,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "~ISBN";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~SBN";
+        Text[ finnish ] = "~ISBN";
     };
     FixedText FT_CHAPTER
     {
@@ -322,6 +330,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Capítulo";
+        Text[ finnish ] = "~Luku";
     };
     FixedText FT_PAGE
     {
@@ -349,6 +358,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Sayfa(lar)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Página(s)";
+        Text[ finnish ] = "Si~vua";
     };
     FixedText FT_EDITOR
     {
@@ -376,6 +386,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yayýma hazýrlayan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editor";
+        Text[ finnish ] = "Muokkaaja";
     };
     FixedText FT_EDITION
     {
@@ -403,6 +414,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yayým";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Edición";
+        Text[ finnish ] = "Lai~tos";
     };
     FixedText FT_BOOKTITLE
     {
@@ -430,6 +442,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kitap adý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Título del libro";
+        Text[ finnish ] = "~Kirjan otsikko";
     };
     FixedText FT_VOLUME
     {
@@ -457,6 +470,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kitap no.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tomo";
+        Text[ finnish ] = "Laitos";
     };
     FixedText FT_HOWPUBLISHED
     {
@@ -484,6 +498,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yayým türü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tip~o de publicación";
+        Text[ finnish ] = "Julkaisun l~aji";
     };
     FixedText FT_ORGANIZATION
     {
@@ -511,6 +526,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Organizasyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Organización";
+        Text[ finnish ] = "Organi~saatio";
     };
     FixedText FT_INSTITUTION
     {
@@ -538,6 +554,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kurum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nstitución";
+        Text[ finnish ] = "Ins~tituutio";
     };
     FixedText FT_SCHOOL
     {
@@ -565,6 +582,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Üniversite/yüksek okul";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Universidad";
+        Text[ finnish ] = "Yli~opisto";
     };
     FixedText FT_REPORT
     {
@@ -592,6 +610,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Rapor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nforme";
+        Text[ finnish ] = "Ra~portti";
     };
     FixedText FT_MONTH
     {
@@ -619,6 +638,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Ay";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mes";
+        Text[ finnish ] = "~Kuukausi";
     };
     FixedText FT_JOURNAL
     {
@@ -646,6 +666,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Revista";
+        Text[ finnish ] = "~Päiväkirja";
     };
 
     FixedText FT_NUMBER
@@ -674,6 +695,7 @@ TabPage RID_TP_GENERAL
         Text[ language_user1 ] = "\"Sayý\" burada istisna (dergi için)";
         Text[ turkish ] = "Sayý";
         Text[ catalan ] = "~Número";
+        Text[ finnish ] = "Lu~ku";
     };
     FixedText FT_SERIES
     {
@@ -701,6 +723,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Dizi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Serie";
+        Text[ finnish ] = "Sar~ja";
     };
     FixedText FT_ANNOTE
     {
@@ -728,6 +751,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~notación";
+        Text[ finnish ] = "Huo~mautus";
     };
     FixedText FT_NOTE
     {
@@ -755,6 +779,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nota";
+        Text[ finnish ] = "~Huomautus";
     };
     FixedText FT_URL
     {
@@ -782,6 +807,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL";
+        Text[ finnish ] = "URL-osoite";
     };
     FixedText FT_CUSTOM1
     {
@@ -809,6 +835,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý alaný ~1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campo de usuario ~1";
+        Text[ finnish ] = "Käyttäjän määrittämä kenttä ~1";
     };
     FixedText FT_CUSTOM2
     {
@@ -836,6 +863,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý alaný ~2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campo de usuario ~2";
+        Text[ finnish ] = "Käyttäjän määrittämä kenttä ~2";
     };
     FixedText FT_CUSTOM3
     {
@@ -863,6 +891,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý alaný ~3";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campo de usuario ~3";
+        Text[ finnish ] = "Käyttäjän määrittämä kenttä ~3";
     };
     FixedText FT_CUSTOM4
     {
@@ -890,6 +919,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý alaný ~4";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campo de usuario ~4";
+        Text[ finnish ] = "Käyttäjän määrittämä kenttä ~4";
     };
     FixedText FT_CUSTOM5
     {
@@ -917,6 +947,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý alaný ~5";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campo de usuario ~5";
+        Text[ finnish ] = "Käyttäjän määrittämä kenttä ~5";
     };
     String ST_ERROR_PREFIX
     {
@@ -941,6 +972,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÊÚÐÑ ÊÚííä ÃÓãÇÁ ÇáÃÚãÏÉ ÇáÊÇáíÉ:\n";
         Text[ turkish ] = "Þu sütun adlarý atanamadý:\n";
         Text[ catalan ] = "No se pudieron asignar los siguientes nombres de columnas:\n";
+        Text[ finnish ] = "Seuraavia sarakenimiä ei voitu liittää:\n";
     };
     String ST_TYPE_ARTICLE
     {
@@ -966,6 +998,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Makale";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Artículo";
+        Text[ finnish ] = "Artikkeli";
     };
     String ST_TYPE_BOOK
     {
@@ -991,6 +1024,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kitap";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Libro";
+        Text[ finnish ] = "Kirja";
     };
     String ST_TYPE_BOOKLET
     {
@@ -1016,6 +1050,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Broþür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Folleto";
+        Text[ finnish ] = "Esitteet";
     };
     String ST_TYPE_CONFERENCE
     {
@@ -1041,6 +1076,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Toplantý tutanaðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informe de conferencia";
+        Text[ finnish ] = "Konferenssiraportti";
     };
     String ST_TYPE_INBOOK
     {
@@ -1066,6 +1102,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kitap özeti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Extracto de libro";
+        Text[ finnish ] = "Kirjan otos";
     };
     String ST_TYPE_INCOLLECTION
     {
@@ -1091,6 +1128,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Baþlýklý kitap özeti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Extracto de libro con título";
+        Text[ finnish ] = "Kirjan otos ja otsikko";
     };
     String ST_TYPE_INPROCEEDINGS
     {
@@ -1116,6 +1154,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Konferans raporu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informe de congreso";
+        Text[ finnish ] = "Konferenssimenettelyt";
     };
     String ST_TYPE_JOURNAL
     {
@@ -1141,6 +1180,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Revista";
+        Text[ finnish ] = "Päiväkirja";
     };
     String ST_TYPE_MANUAL
     {
@@ -1166,6 +1206,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Teknik dokümantasyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documentación técnica";
+        Text[ finnish ] = "Manuaalinen";
     };
     String ST_TYPE_MASTERSTHESIS
     {
@@ -1191,6 +1232,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Tez";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Trabajo de diplomatura";
+        Text[ finnish ] = "Tutkielma";
     };
     String ST_TYPE_MISC
     {
@@ -1216,6 +1258,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Diðer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Diversos";
+        Text[ finnish ] = "Sekalaiset";
     };
     String ST_TYPE_PHDTHESIS
     {
@@ -1241,6 +1284,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Disertasyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tesis doctoral";
+        Text[ finnish ] = "Väitöskirja";
     };
     String ST_TYPE_PROCEEDINGS
     {
@@ -1266,6 +1310,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Konferans raporu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informe de congreso";
+        Text[ finnish ] = "Konferenssimenettelyt";
     };
     String ST_TYPE_TECHREPORT
     {
@@ -1291,6 +1336,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Araþtýrma raporu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informe de investigación";
+        Text[ finnish ] = "Tutkimusraportti";
     };
     String ST_TYPE_UNPUBLISHED
     {
@@ -1316,6 +1362,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Yayýmlanmamýþ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Inédito";
+        Text[ finnish ] = "Julkaisematon";
     };
     String ST_TYPE_EMAIL
     {
@@ -1341,6 +1388,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "e-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mensaje electrónico";
+        Text[ finnish ] = "sähköposti";
     };
     String ST_TYPE_WWW
     {
@@ -1366,6 +1414,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "WWW belgesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documento WWW";
+        Text[ finnish ] = "Web-asiakirja";
     };
     String ST_TYPE_CUSTOM1
     {
@@ -1391,6 +1440,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý tanýmlý1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definido por usuario 1";
+        Text[ finnish ] = "Käyttäjän määrittämä1";
     };
     String ST_TYPE_CUSTOM2
     {
@@ -1416,6 +1466,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý tanýmlý2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definido por usuario 2";
+        Text[ finnish ] = "Käyttäjän määrittämä2";
     };
     String ST_TYPE_CUSTOM3
     {
@@ -1441,6 +1492,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý tanýmlý3";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definido por usuario 3";
+        Text[ finnish ] = "Käyttäjän määrittämä3";
     };
     String ST_TYPE_CUSTOM4
     {
@@ -1466,6 +1518,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý tanýmlý4";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definido por usuario 4";
+        Text[ finnish ] = "Käyttäjän määrittämä4";
     };
     String ST_TYPE_CUSTOM5
     {
@@ -1491,6 +1544,7 @@ TabPage RID_TP_GENERAL
         Text[ turkish ] = "Kullanýcý tanýmlý5";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definido por usuario 5";
+        Text[ finnish ] = "Käyttäjän määrittämä5";
     };
     Text[ english_us ] = "General";
     Text[ portuguese ] = "Geral";
@@ -1512,6 +1566,7 @@ TabPage RID_TP_GENERAL
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "General";
+    Text[ finnish ] = "Yleistä";
 };
 Menu RID_POPUP_ME_VIEW
 {
@@ -1542,6 +1597,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ turkish ] = "Bölüm ekle...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar sección...";
+            Text[ finnish ] = "Lisää osio";
         };
         MenuItem
         {
@@ -1568,6 +1624,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ turkish ] = "Bölümü sil...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Eliminar sección...";
+            Text[ finnish ] = "Poista osio";
         };
         MenuItem
         {
@@ -1594,6 +1651,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ turkish ] = "Adý deðiþtir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Modificar nombre...";
+            Text[ finnish ] = "Muokkaa nimeä";
         };
     };
 };
