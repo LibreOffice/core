@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.113 $
+#   $Revision: 1.114 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-18 13:44:01 $
+#   last change: $Author: hjs $ $Date: 2002-06-21 13:12:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1231,6 +1231,8 @@ JAVAMAKER*=javamaker
 RDBMAKER*=rdbmaker
 JAVA*=java
 SCPCOMP*=scpcomp
+SCPLINK*=scplink
+CPPLCC*=cpplcc
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-18 13:44:01 $
+#   last change: $Author: hjs $ $Date: 2002-06-21 13:12:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -261,7 +261,7 @@ CC+= /NMttNoLines
 .ENDIF
 
 #.IF"$(bndchk)"==""
-.IF "$(COMEX)"=="3" || "$(COMEX)"=="7" 
+.IF "$(COMEX)"=="3" || "$(COMEX)"=="7" || "$(COMEX)"=="1"
 CFLAGS+=-Zm200
 .ENDIF
 #.ENDIF
@@ -541,6 +541,7 @@ STARDEP=guw.pl javadep
 JAVAC=guw.pl javac
 JAVA=guw.pl java
 SCPCOMP=guw.pl scpcomp
+SCPLINK=guw.pl scplink
 CPPLCC=guw.pl cpplcc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF

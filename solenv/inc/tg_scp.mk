@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_scp.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-15 10:02:09 $
+#   last change: $Author: hjs $ $Date: 2002-06-21 13:12:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,7 +111,7 @@ $(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP$(TNR)LINK_PRODUCT_TYPE) >& $(NULLDEV)
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCPLINK) $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
 
