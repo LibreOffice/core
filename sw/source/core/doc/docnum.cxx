@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 11:00:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 12:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,6 +1148,30 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     SetModified();
 }
 
+void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
+{
+    if (DoesUndo())
+        StartUndo(UNDO_START);
+
+    ULONG nStt = rPaM.Start()->nNode.GetIndex();
+    ULONG nEnd = rPaM.End()->nNode.GetIndex();
+
+    for (ULONG n = nStt; n <= nEnd; n++)
+    {
+        SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
+
+        if (pCNd && NULL != pCNd->GetNumRule())
+        {
+            SwPaM aPam(*pCNd);
+
+            Insert(aPam, SwNumRuleItem(rNumRule.GetName()));
+        }
+    }
+
+    if (DoesUndo())
+        EndUndo(UNDO_START);
+}
+
 void SwDoc::SetNumRuleStart( const SwPosition& rPos, BOOL bFlag )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
@@ -1628,7 +1652,6 @@ BOOL SwDoc::GotoNextNum( SwPosition& rPos, BOOL bOverUpper,
 BOOL lcl_IsNumbering(sal_Int16 eNumberType)
 {
     BOOL bResult;
-
     switch(eNumberType)
     {
     case SVX_NUM_CHARS_UPPER_LETTER:
@@ -1662,7 +1685,6 @@ BOOL lcl_IsNumbering(sal_Int16 eNumberType)
 const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                                         BOOL bForward,
                                         BOOL bNum,
-                                        BOOL bOutline, // #115901#
                                         int nNonEmptyAllowed)
 {
     const SwNumRule * pResult = NULL;
@@ -1688,8 +1710,7 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if (pNumRule->IsOutlineRule() == bOutline && // #115901#
-                        lcl_IsNumbering(pNumRule->Get(0).GetNumberingType()) ==
+                    if (lcl_IsNumbering(pNumRule->Get(0).GetNumberingType()) ==
                         bNum)
                         pResult = pTxtNd->GetNumRule();
 
@@ -2136,30 +2157,45 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
     const SwNumRule* pRule = NULL;
     SwTxtNode* pTNd = rIdx.GetNode().GetTxtNode();
 
+    BOOL bTmp = FALSE;
     if (pTNd)
     {
         BOOL bTmp = FALSE;
         USHORT nOldLevel = 0;
 
-        pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE,TRUE);
-
-        if (pItem && ((SwNumRuleItem*)pItem)->GetValue().Len() )
+        if (bOutline)
         {
-            pNum = pTNd->GetNum();
-
-            if (pNum)
+            if (NO_NUMBERING != pTNd->GetTxtColl()->GetOutlineLevel())
             {
-                pRule = FindNumRulePtr(((SwNumRuleItem*)pItem)->
-                                       GetValue());
+                pNum = pTNd->GetOutlineNum();
+
+                if (pNum)
+                {
+                    pRule = GetOutlineNumRule();
+                }
             }
         }
+        else
+        {
+            pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE,TRUE);
 
+            if (pItem && ((SwNumRuleItem*)pItem)->GetValue().Len() )
+            {
+                pNum = pTNd->GetNum();
+
+                if (pNum)
+                {
+                    pRule = FindNumRulePtr(((SwNumRuleItem*)pItem)->
+                                           GetValue());
+                }
+            }
+        }
         if (pRule)
         {
             if (bDel)
-                bTmp = 0 != pNum->GetRealLevel();
+                bTmp = 0 != (pNum->GetLevel() & NO_NUMLEVEL);
             else
-                bTmp = 0 == pNum->GetLevel();
+                bTmp = 0 == (pNum->GetLevel() & NO_NUMLEVEL);
 
             nOldLevel = pNum->GetLevel();
         }
@@ -2168,18 +2204,17 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
             SVX_NUM_NUMBER_NONE != pRule->Get(GetRealLevel(pNum->GetLevel())).
             GetNumberingType())
         {
-            SwNodeNum aNum( *pNum );
-
-            if( bDel )
-                aNum.SetNoNum(FALSE);
-            else
-                aNum.SetNoNum(TRUE);
-
             if( DoesUndo() )
             {
                 ClearRedo();
-                AppendUndo( new SwUndoNumOrNoNum( rIdx, *pNum, aNum ) );
+                AppendUndo( new SwUndoNumOrNoNum( rIdx, bDel, bOutline ) );
             }
+            SwNodeNum aNum( *pNum );
+
+            if( bDel )
+                aNum.SetLevel( aNum.GetLevel() & ~NO_NUMLEVEL );
+            else
+                aNum.SetLevel( aNum.GetLevel() | NO_NUMLEVEL );
 
             pTNd->UpdateNum( aNum );
 #ifndef NUM_RELSPACE
