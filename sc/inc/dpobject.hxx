@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:27:01 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
+class TypedStrCollection;
 
 
 struct ScDPServiceDesc
@@ -131,6 +132,9 @@ private:
     ScDPOutput*             pOutput;
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
+    BOOL                    bAllowMove;
+    BOOL                    bInfoValid;     // affects: nHeaderRows
+    long                    nHeaderRows;    // page fields plus filter button
 
 
     void                CreateObjects();
@@ -144,6 +148,7 @@ public:
     virtual DataObject* Clone() const;
 
     void                SetAlive(BOOL bSet);
+    void                SetAllowMove(BOOL bSet);
 
     void                InvalidateData();
     void                InvalidateSource();
@@ -162,6 +167,7 @@ public:
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
     void                WriteSourceDataTo( ScDPObject& rDest ) const;
+    void                WriteTempDataTo( ScDPObject& rDest ) const;
 
     const ScSheetSourceDesc* GetSheetDesc() const   { return pSheetDesc; }
     const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc; }
@@ -180,11 +186,13 @@ public:
 
     String              GetDimName( long nDim, BOOL& rIsDataLayout );
     void                GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
-    long                GetHeaderDim( const ScAddress& rPos );
+    long                GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
     BOOL                GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
                                         long nDragDim,
                                         Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
     BOOL                IsFilterButton( const ScAddress& rPos );
+
+    void                FillPageList( TypedStrCollection& rStrings, long nField );
 
     void                ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestObj );
 
@@ -199,6 +207,10 @@ public:
                                          const ScRange& r, short nDx, short nDy, short nDz );
     BOOL                RefsEqual( const ScDPObject& r ) const;
     void                WriteRefsTo( ScDPObject& r ) const;
+
+    // apply drop-down attribute, initialize nHeaderRows, without accessing the source
+    // (button attribute must be present)
+    void                RefreshAfterLoad();
 
     static BOOL         HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();

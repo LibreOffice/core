@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:25:35 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,8 @@ private:
     void            HeaderCell( USHORT nCol, USHORT nRow, USHORT nTab,
                                 const com::sun::star::sheet::MemberResult& rData,
                                 BOOL bColHeader, long nLevel );
-    void            FieldCell( USHORT nCol, USHORT nRow, USHORT nTab, const String& rCaption );
+    void            FieldCell( USHORT nCol, USHORT nRow, USHORT nTab, const String& rCaption,
+                                BOOL bFrame = TRUE );
     void            CalcSizes();
 
 public:
@@ -158,10 +159,11 @@ public:
 
     void            Output();           //! Refresh?
     ScRange         GetOutputRange();
+    long            GetHeaderRows();
     BOOL            HasError();         // range overflow or exception from source
 
     void            GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
-    long            GetHeaderDim( const ScAddress& rPos );
+    long            GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
     BOOL            GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
                                     long nDragDim,
                                     Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
