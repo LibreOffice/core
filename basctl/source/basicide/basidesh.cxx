@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 16:15:26 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,18 @@
 #include <iderdll.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
+
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+using namespace ::rtl;
+
 
 TYPEINIT1( BasicIDEShell, SfxViewShell );
 
@@ -257,9 +269,13 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
             pWin->StoreData();
     }
 
-    if ( bPersistent && SFX_APP()->GetBasicManager()->IsModified() )
+    if ( bPersistent  )
     {
-        SFX_APP()->SaveBasicManager();
+        if ( SFX_APP()->GetBasicManager()->IsModified() )
+            SFX_APP()->SaveBasicManager();
+
+        SFX_APP()->SaveBasicContainer();
+        SFX_APP()->SaveDialogContainer();
 
         SfxBindings& rBindings = BasicIDE::GetBindings();
         rBindings.Invalidate( SID_SAVEDOC );
@@ -672,6 +688,17 @@ void BasicIDEShell::UpdateWindows()
             if ( pDocShell )
                 StartListening( *pDocShell, TRUE );
 
+            // New dialog container, now only for documents, later always
+            Reference< container::XNameAccess > xDialogAccess;
+            if( pDocShell )
+            {
+                Reference< script::XLibraryContainer > xDialogContainer
+                    = Reference< script::XLibraryContainer >
+                        ( pDocShell->GetDialogContainer(), uno::UNO_QUERY );
+                if( xDialogContainer.is() )
+                    xDialogAccess = Reference< container::XNameAccess >( xDialogContainer, uno::UNO_QUERY );
+            }
+
             USHORT nLibs = pBasicMgr->GetLibCount();
             for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
             {
@@ -697,16 +724,42 @@ void BasicIDEShell::UpdateWindows()
                             }
                         }
 
-                        // Und ein BasigDialog-Fenster...
-                        pLib->GetAll( SbxCLASS_OBJECT );
-                        for ( USHORT nObj = 0; nObj < pLib->GetObjects()->Count(); nObj++ )
+                        // New dialog container, now only for documents, later always
+                        if( xDialogAccess.is() )
                         {
-                            SbxVariable* pVar = pLib->GetObjects()->Get( nObj );
-                            if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == GetDialogSbxId() ) )
+                            rtl::OUString aLibName( pLib->GetName() );
+                            if( xDialogAccess->hasByName( aLibName ) )
                             {
-                                SbxObject* pObj = (SbxObject*)pVar;
-                                if ( !FindDlgWin( pLib, pObj->GetName(), FALSE ) )
-                                    CreateDlgWin( pLib, pObj->GetName(), pObj );
+                                Reference< container::XNameAccess > xLib;
+                                Any aElement = xDialogAccess->getByName( aLibName );
+                                aElement >>= xLib;
+                                if( xLib.is() )
+                                {
+                                    Sequence< OUString > aNames = xLib->getElementNames();
+                                    sal_Int32 nNameCount = aNames.getLength();
+                                    const OUString* pNames = aNames.getConstArray();
+                                    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+                                    {
+                                        OUString aDialogName = pNames[ i ];
+                                        if ( !FindDlgWin( pLib, aDialogName, FALSE ) )
+                                            CreateDlgWin( pLib, aDialogName, NULL );
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Und ein BasigDialog-Fenster...
+                            pLib->GetAll( SbxCLASS_OBJECT );
+                            for ( USHORT nObj = 0; nObj < pLib->GetObjects()->Count(); nObj++ )
+                            {
+                                SbxVariable* pVar = pLib->GetObjects()->Get( nObj );
+                                if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == GetDialogSbxId() ) )
+                                {
+                                    SbxObject* pObj = (SbxObject*)pVar;
+                                    if ( !FindDlgWin( pLib, pObj->GetName(), FALSE ) )
+                                        CreateDlgWin( pLib, pObj->GetName(), pObj );
+                                }
                             }
                         }
                     }
