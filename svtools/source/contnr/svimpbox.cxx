@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-06 13:36:26 $
+ *  last change: $Author: pb $ $Date: 2001-09-12 07:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2280,23 +2280,20 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_SPACE:
-            if( pView->GetSelectionMode() >= MULTIPLE_SELECTION )
+            if ( !bShift && !bMod1 )
             {
-                if( !bShift && !bMod1 )
+                if ( aSelEng.IsAddMode() )
                 {
-                    if( aSelEng.IsAddMode() )
-                    {
-                        // toggle selection
-                        BOOL bSel = TRUE;
-                        if( pView->IsSelected( pCursor ))
-                            bSel = FALSE;
-                        pView->Select( pCursor, bSel );
-                    }
-                    else
-                    {
-                        SelAllDestrAnch( FALSE );
-                        pView->Select( pCursor, TRUE );
-                    }
+                    // toggle selection
+                    BOOL bSel = TRUE;
+                    if ( pView->IsSelected( pCursor ) )
+                        bSel = FALSE;
+                    pView->Select( pCursor, bSel );
+                }
+                else
+                {
+                    SelAllDestrAnch( FALSE );
+                    pView->Select( pCursor, TRUE );
                 }
             }
             break;
