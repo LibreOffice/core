@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:18:59 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+#ifndef _SV_SALCTRLHANDLE_HXX
+#include <salctrlhandle.hxx>
 #endif
 
 #include <unohelp.hxx>
@@ -796,6 +799,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpFrameData->mnMouseMoveId      = 0;
         mpFrameData->mnLastMouseX       = -1;
         mpFrameData->mnLastMouseY       = -1;
+        mpFrameData->mnBeforeLastMouseX = -1;
+        mpFrameData->mnBeforeLastMouseY = -1;
         mpFrameData->mnFirstMouseX      = -1;
         mpFrameData->mnFirstMouseY      = -1;
         mpFrameData->mnLastMouseWinX    = -1;
@@ -1257,6 +1262,8 @@ ImplWinData* Window::ImplGetWinData() const
 {
     if ( !mpWinData )
     {
+        static const char* pNoNWF = getenv( "SAL_NO_NWF" );
+
         ((Window*)this)->mpWinData = new ImplWinData;
         mpWinData->mpExtOldText     = NULL;
         mpWinData->mpExtOldAttrAry  = NULL;
@@ -1266,7 +1273,10 @@ ImplWinData* Window::ImplGetWinData() const
         mpWinData->mpTrackRect      = NULL;
         mpWinData->mnTrackFlags     = 0;
         mpWinData->mnIsTopWindow    = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
-    }
+        mpWinData->mbMouseOver      = FALSE;
+        mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
+        mpWinData->mpSalControlHandle  = NULL;
+   }
 
     return mpWinData;
 }
@@ -4448,8 +4458,12 @@ Window::~Window()
             delete mpWinData->mpFocusRect;
         if ( mpWinData->mpTrackRect )
             delete mpWinData->mpTrackRect;
+        // Native widget support
+        delete mpWinData->mpSalControlHandle;
+        mpWinData->mpSalControlHandle = NULL;
         delete mpWinData;
     }
+
 
     // Overlap-Window-Daten loeschen
     if ( mpOverlapData )
@@ -5966,6 +5980,13 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     }
     else
     {
+        // inherit native widget flag for form controls
+        // required here, because frames never show up in the child hierarchy - which should be fixed....
+        // eg, the drop down of a combobox which is a system floating window
+        if( mbFrame && GetParent() && GetParent()->IsCompoundControl() &&
+            GetParent()->IsNativeWidgetEnabled() != IsNativeWidgetEnabled() )
+            EnableNativeWidget( GetParent()->IsNativeWidgetEnabled() );
+
         if ( mbCallMove )
         {
             ImplCallMove();
@@ -7225,6 +7246,23 @@ Point Window::GetPointerPosPixel()
 
 // -----------------------------------------------------------------------
 
+Point Window::GetLastPointerPosPixel()
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    Point aPos( mpFrameData->mnBeforeLastMouseX, mpFrameData->mnBeforeLastMouseY );
+#ifndef REMOTE_APPSERVER
+    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    {
+        // --- RTL --- (re-mirror mouse pos at this window)
+        ImplReMirror( aPos );
+    }
+#endif
+    return ImplFrameToOutput( aPos );
+}
+
+// -----------------------------------------------------------------------
+
 void Window::ShowPointer( BOOL bVisible )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -7244,6 +7282,13 @@ void Window::ShowPointer( BOOL bVisible )
 ULONG Window::GetCurrentModButtons()
 {
     return mpFrame ? mpFrame->GetCurrentModButtons() : 0;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Window::IsMouseOver()
+{
+    return ImplGetWinData()->mbMouseOver;
 }
 
 // -----------------------------------------------------------------------
@@ -8690,6 +8735,30 @@ BOOL Window::HasActiveChildFrame()
 LanguageType Window::GetInputLanguage() const
 {
     return mpFrame->GetInputLanguage();
+}
+
+void Window::EnableNativeWidget( BOOL bEnable )
+{
+    if( bEnable != ImplGetWinData()->mbEnableNativeWidget )
+    {
+        ImplGetWinData()->mbEnableNativeWidget = bEnable;
+        // sometimes the borderwindow is queried, so keep it in sync
+        if( mpBorderWindow )
+            mpBorderWindow->ImplGetWinData()->mbEnableNativeWidget = bEnable;
+    }
+
+    // push down, useful for compound controls
+    Window *pChild = mpFirstChild;
+    while( pChild )
+    {
+        pChild->EnableNativeWidget( bEnable );
+        pChild = pChild->mpNext;
+    }
+}
+
+BOOL Window::IsNativeWidgetEnabled() const
+{
+    return ImplGetWinData()->mbEnableNativeWidget;
 }
 
 Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
