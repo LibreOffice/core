@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-04 11:34:13 $
+ *  last change: $Author: sj $ $Date: 2001-05-04 15:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
 uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if( Index > 0 && mpObject && mpObject->IsNode() )
+    if( Index >= 0 && mpObject && mpObject->IsNode() )
     {
         struct drawing::GluePoint2 aGluePoint;
 
