@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.22 $
- *  last change: $Author: vg $ $Date: 2003-05-28 12:31:58 $
+ *  $Revision: 1.23 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #ifdef WIN32
 #include <malloc.h>
 #define alloca _alloca
-#elif !defined(FREEBSD) && !defined(NETBSD)
+#elif !defined(FREEBSD) && !defined(NETBSD) && !defined(MACOSX)
 #include <alloca.h>
 #endif
 
