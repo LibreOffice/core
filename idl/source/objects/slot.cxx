@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-03 10:47:20 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1108,6 +1108,8 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
     USHORT nId = (USHORT) GetSlotId().GetValue();
     USHORT nListCount = (USHORT) rList.Count();
     USHORT nPos;
+    ULONG m;  // for inner "for" loop
+
     if ( !nListCount )
         nPos = 0;
     else if ( nListCount == 1 )
@@ -1178,7 +1180,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
             xEnumSlot = NULL;
-            for( ULONG m=0; m<rBase.GetAttrList().Count(); m++ )
+            for( m=0; m<rBase.GetAttrList().Count(); m++ )
             {
                 SvMetaAttribute * pAttr = rBase.GetAttrList().GetObject( m );
                 if( pAttr->GetSlotId() == aSId )
