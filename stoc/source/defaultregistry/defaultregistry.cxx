@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-04 13:10:48 $
+ *  last change: $Author: jbu $ $Date: 2001-12-07 15:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
@@ -95,10 +98,12 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
 using namespace rtl;
@@ -147,7 +152,7 @@ OUString defreg_getImplementationName()
 //*************************************************************************
 class NestedKeyImpl;
 
-class NestedRegistryImpl    : public WeakAggImplHelper3 < XSimpleRegistry, XInitialization, XServiceInfo >
+class NestedRegistryImpl    : public WeakAggImplHelper4 < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
 {
 public:
     NestedRegistryImpl( );
@@ -172,6 +177,11 @@ public:
     virtual Reference< XRegistryKey > SAL_CALL getRootKey(  ) throw(InvalidRegistryException, RuntimeException);
     virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException);
     virtual void SAL_CALL mergeKey( const OUString& aKeyName, const OUString& aUrl ) throw(InvalidRegistryException, MergeConflictException, RuntimeException);
+
+    // XEnumerationAccess
+    virtual Reference< XEnumeration > SAL_CALL createEnumeration(  ) throw (RuntimeException);
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
 
     friend NestedKeyImpl;
 protected:
@@ -1212,6 +1222,71 @@ NestedRegistryImpl::~NestedRegistryImpl()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
+
+
+class RegistryEnumueration : public WeakImplHelper1< XEnumeration >
+{
+public:
+    RegistryEnumueration(
+        const Reference< XSimpleRegistry > &r1,
+        const Reference< XSimpleRegistry > &r2 )
+        : m_xReg1( r1 ) , m_xReg2( r2 )
+        {}
+public:
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (RuntimeException);
+    virtual Any SAL_CALL nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
+
+private:
+    Reference< XSimpleRegistry > m_xReg1;
+    Reference< XSimpleRegistry > m_xReg2;
+};
+
+sal_Bool RegistryEnumueration::hasMoreElements(  ) throw (RuntimeException)
+{
+    return m_xReg1.is() || m_xReg2.is();
+}
+
+Any RegistryEnumueration::nextElement(  )
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    Any a;
+    if( m_xReg1.is() )
+    {
+        a <<= m_xReg1;
+        m_xReg1.clear();
+    }
+    else if( m_xReg2.is() )
+    {
+        a <<= m_xReg2;
+        m_xReg2.clear();
+    }
+    else
+    {
+        throw NoSuchElementException( OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "NestedRegistry: no nextElement() !" ) ),Reference< XInterface > () );
+    }
+    return a;
+}
+
+
+Reference< XEnumeration > NestedRegistryImpl::createEnumeration(  ) throw (RuntimeException)
+{
+    MutexGuard guard( m_mutex );
+    return new RegistryEnumueration( m_localReg, m_defaultReg );
+}
+
+Type NestedRegistryImpl::getElementType(  ) throw (RuntimeException)
+{
+    return getCppuType( &m_localReg );
+}
+
+sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  ) throw (RuntimeException)
+{
+    MutexGuard guard( m_mutex );
+    return m_localReg.is() || m_defaultReg.is();
+}
+
+
 
 //*************************************************************************
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
