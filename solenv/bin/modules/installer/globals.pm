@@ -183,6 +183,7 @@ BEGIN
     $adafilename = "";
     $javafilename = "";
     $javafilename2 = "";
+    $javafilename3 = "";
 
     $starttime = "";
 
