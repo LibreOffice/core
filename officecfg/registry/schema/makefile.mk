@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2002-05-15 14:27:04 $
+#   last change: $Author: dg $ $Date: 2002-05-23 18:22:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ XCSFILES= \
     org$/openoffice$/Office$/Labels.xcs \
     org$/openoffice$/Office$/Views.xcs \
     org$/openoffice$/Office$/TypeDetection.xcs \
+    org$/openoffice$/Office$/ProtocolHandler.xcs \
     org$/openoffice$/Office$/Draw.xcs \
     org$/openoffice$/Office$/Impress.xcs \
     org$/openoffice$/Office$/Java.xcs \
@@ -108,11 +109,31 @@ TRIMXSL=$(foreach,i,$(XCSFILES) $(MISC)$/registry$/schema$/{$(subst,.xcs,.xcs $i
 ## for testing the compatibility with old format
 #COMPARE=$(foreach,i,$(XCSFILES) $(MISC)$/compare$/{$(subst,.xcs,.xcd $i)})
 
+UNIXTEXT= \
+    $(MISC)$/oo-common.conf \
+    $(MISC)$/oo-common.ldif
+
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+# create the mapping for the component data to ldap data store
+$(MISC)$/oo-component-map.properties : $(TRIMXSL)
+    +$(PERL) $(PRJ)$/util$/component-map.gen $@
+
+# create an ldap schema for component data in ldif format
+$(MISC)$/oo-component-list.ldif : $(MISC)$/oo-component-map.properties
+    +$(PERL) $(PRJ)$/util$/component-ldif.gen $@
+
+# create an ldap schema for component data in slapd format
+$(MISC)$/oo-component-list.conf : $(MISC)$/oo-component-list.ldif
+    +$(PERL) $(PRJ)$/util$/component-conf.gen $@
+
 ALLTAR: \
     $(TRIMXSL) \
+    $(UNIXTEXT) \
+    $(MISC)$/oo-component-map.properties \
+    $(MISC)$/oo-component-list.ldif \
+    $(MISC)$/oo-component-list.conf \
     $(XCDTRANSFORM) \
     $(OLDTRANSFORM) \
     $(COMPARE) 
