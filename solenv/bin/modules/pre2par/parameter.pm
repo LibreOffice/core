@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:48:53 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:10:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ $pre2par::globals::prog V1.0 (c) Ingo Schmidt 2003
 The following parameter are needed:
 -s: path to the pre file
 -o: path to the par file
+-l: path to the ulf file
 
 Example:
 
@@ -102,6 +103,7 @@ sub getparameter
 
         if ($param eq "-s") { $pre2par::globals::prefilename = shift(@ARGV); }
         elsif ($param eq "-o") { $pre2par::globals::parfilename = shift(@ARGV); }
+        elsif ($param eq "-l") { $pre2par::globals::ulffilename = shift(@ARGV); }
         else
         {
             print("\n*************************************\n");
