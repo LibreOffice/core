@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:49:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
 #endif
@@ -112,9 +109,6 @@
 #endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVX_TEXTANIM_HXX //autogen
-#include <svx/textanim.hxx>
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
@@ -210,6 +204,13 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
+
+#include <svx/xtable.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
@@ -486,7 +487,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-            pDlg->SetColorTable(OFF_APP()->GetStdColorTable());
+            pDlg->SetColorTable(XColorTable::GetStdColorTable());
 
         pDrView->GetAttributes( rSet );
     }
@@ -570,20 +571,25 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             {
                 SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );
                 pSdrView->GetAttributes( aNewAttr );
-                SvxTextTabDialog* pDlg = new SvxTextTabDialog(
-                                &(GetView().GetViewFrame()->GetWindow()),
-                                &aNewAttr, pSdrView );
-                USHORT nResult = pDlg->Execute();
-
-                if (nResult == RET_OK)
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if ( pFact )
                 {
-                    if (pSdrView->HasMarkedObj())
+                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
+                                &(GetView().GetViewFrame()->GetWindow()),
+                                &aNewAttr, ResId( RID_SVXDLG_TEXT ), pSdrView );
+                    USHORT nResult = pDlg->Execute();
+
+                    if (nResult == RET_OK)
                     {
-                        pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
-                        rReq.Done(*(pDlg->GetOutputItemSet()));
+                        if (pSdrView->HasMarkedObj())
+                        {
+                            pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
+                            rReq.Done(*(pDlg->GetOutputItemSet()));
+                        }
                     }
+
+                    delete( pDlg );
                 }
-                delete( pDlg );
             }
             break;
 
@@ -790,7 +796,12 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     Font aFont(sFontName, Size(1,1));
     if(!sSym.Len())
     {
-        SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
+        //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+
         Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
