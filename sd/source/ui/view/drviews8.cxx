@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:07:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,17 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_GRAPHIC:
         {
             pFuActual = new FuInsertGraphic( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+
+            Cancel();
+            rReq.Ignore ();
+
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
+        case SID_INSERT_AVMEDIA:
+        {
+            pFuActual = new FuInsertAVMedia( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
 
             Cancel();
             rReq.Ignore ();
