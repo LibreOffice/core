@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-29 02:39:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ polish ] = "Grupy";
         Text[ portuguese_brazilian ] = "Groups";
         Text[ japanese ] = "¸ŞÙ°Ìß";
-        Text[ korean ] = "Groups";
+        Text[ korean ] = "±×·ì";
         Text[ chinese_simplified ] = "Ğ¡×é";
         Text[ chinese_traditional ] = "¸s²Õ";
         Text[ turkish ] = "Groups";
@@ -119,7 +119,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_traditional ] = "¸s²Õ¤§¶¡´«­¶(~P)";
         Text[ arabic ] = "ÕİÍÉ ÌÏíÏÉ ÚäÏ ÊÛííÑ ÇáãÌãæÚÉ";
         Text[ greek ] = "Íİá óåëßäá ìå êÜèå áëëáãŞ ïìÜäáò";
-        Text[ korean ] = "±×·ìº¯°æ½Ã¿¡¡¡»õ¡¡ÂÊ (~P)";
+        Text[ korean ] = "±×·ì º¯°æ½Ã¿¡ »õ ÆäÀÌÁö(~P)";
         Text[ turkish ] = "~Her grup için yeni sayfa başlat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nueva página entre grupos";
@@ -236,7 +236,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~U)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "~Kolejnoœæ sortowania okreœl. przez u¿ytkownika";
+        Text[ polish ] = "Indywidualnie zdefiniowana kolejnoœæ sortowania";
         Text[ japanese ] = "‡˜‚Ìw’è(~U)";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~U)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
@@ -454,7 +454,7 @@ TabPage RID_SUBTBASE
         Text[ chinese_traditional ] = "­pºâ³W«h(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "°è»ê¡¡±ÔÄ¢(~F)";
+        Text[ korean ] = "°è»ê ±ÔÄ¢(~F)";
         Text[ turkish ] = "K~ullanılacak fonksiyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Usar función";
@@ -707,7 +707,7 @@ TabPage RID_SUBTBASE
     };
     StringList [ chinese_traditional ] =
     {
-            < "Á`¼Æ" ; Default ; > ;
+            < "¤p­p" ; Default ; > ;
         < "¼Æ¥Ø" ; Default ; > ;
         < "¥­§¡­È" ; Default ; > ;
         < "³Ì¤j­È" ; Default ; > ;
@@ -755,10 +755,10 @@ TabPage RID_SUBTBASE
         < "ÃÖ´ë" ; Default ; > ;
         < "ÃÖ¼Ò" ; Default ; > ;
         < "°ö" ; Default ; > ;
-        < "°³¼ö (¼ıÀÚ ¸¸)" ; Default ; > ;
-        < "StDev (Ç¥º»)" ; Default ; > ;
+        < "°³¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
+        < "StDev (»ùÇÃ)" ; Default ; > ;
         < "StAbwN (¸ğÁı´Ü)" ; Default ; > ;
-        < "ºĞ»ê (Ç¥º»)" ; Default ; > ;
+        < "ºĞ»ê (»ùÇÃ)" ; Default ; > ;
         < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -1006,6 +1006,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subtotales";
 };
+
 
 
 
