@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 09:17:13 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "열기(~O)";
             Text[ turkish ] = "A�";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Abrir";
+            Text[ catalan ] = "~Obre";
             Text[ finnish ] = "~Avaa";
             Text[ thai ] = "เ~ปิด";
         };
@@ -125,7 +125,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "새 창에서 열기";
             Text[ turkish ] = "Yeni bir pencerede a�";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Abrir en nueva ~ventana";
+            Text[ catalan ] = "Obre en una nova finestra";
             Text[ finnish ] = "Avaa uudessa ikkunassa";
             Text[ thai ] = "เปิดในหน้าต่างใหม่";
         };
@@ -156,7 +156,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "편집(~E)";
             Text[ turkish ] = "D~�zenle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Editar";
+            Text[ catalan ] = "~Edita";
             Text[ finnish ] = "~Muokkaa";
             Text[ thai ] = "แ~ก้ไข";
         };
@@ -166,6 +166,27 @@ Menu MN_READONLY_POPUP
             HelpID = FN_READONLY_SELECTION_MODE ;
             Text = "Text ausw�hlen" ;
             Text [ English ] = "Select Text" ;
+            Text[ english_us ] = "Select Text";
+            Text[ portuguese ] = "Select Text";
+            Text[ russian ] = "Select Text";
+            Text[ greek ] = "Select Text";
+            Text[ dutch ] = "Select Text";
+            Text[ french ] = "S�lectionner le texte";
+            Text[ spanish ] = "Seleccionar texto";
+            Text[ finnish ] = "Select Text";
+            Text[ italian ] = "Seleziona testo";
+            Text[ danish ] = "Select Text";
+            Text[ swedish ] = "Markera text";
+            Text[ polish ] = "Select Text";
+            Text[ portuguese_brazilian ] = "Select Text";
+            Text[ japanese ] = "テキストの選択";
+            Text[ korean ] = "텍스트 선택";
+            Text[ chinese_simplified ] = "选择文字";
+            Text[ chinese_traditional ] = "選取文字";
+            Text[ turkish ] = "Select Text";
+            Text[ arabic ] = "Select Text";
+            Text[ catalan ] = "Select Text";
+            Text[ thai ] = "Select Text";
         };
         MenuItem
         {
@@ -194,7 +215,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "다시 로드!(~L)";
             Text[ turkish ] = "Yeniden y�kle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Recargar";
+            Text[ catalan ] = "Torna a ~carregar";
             Text[ finnish ] = "~Lataa uudelleen";
             Text[ thai ] = "โ~หลดอีกครั้ง";
         };
@@ -225,7 +246,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "프레임 다시 로드";
             Text[ turkish ] = "Frame'i yeniden y�kle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Recargar frame";
+            Text[ catalan ] = "Torna a carregar el marc";
             Text[ finnish ] = "Lataa kehys uudelleen";
             Text[ thai ] = "โหลดกรอบอีกครั้ง";
         };
@@ -256,7 +277,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "HT~ML 소스텍스트";
             Text[ turkish ] = "HTM~L  kaynak kodu";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Texto fuente ~HTML";
+            Text[ catalan ] = "Font HT~ML";
             Text[ finnish ] = "HT~ML-l�hde";
             Text[ thai ] = "แหล่ง HT~ML ";
         };
@@ -288,7 +309,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "정지(~S)";
             Text[ turkish ] = "Dur";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Stop";
+            Text[ catalan ] = "~Atura";
             Text[ finnish ] = "~Seis";
             Text[ thai ] = "~หยุด";
         };
@@ -319,7 +340,7 @@ Menu MN_READONLY_POPUP
             Text[ greek ] = "~����";
             Text[ korean ] = "뒤로";
             Text[ turkish ] = "Geri";
-            Text[ catalan ] = "~Retroceder";
+            Text[ catalan ] = "Cap enrere";
             Text[ finnish ] = "Taaksep�in";
             Text[ thai ] = "ข้างหลัง";
         };
@@ -350,7 +371,7 @@ Menu MN_READONLY_POPUP
             Text[ greek ] = "�����~�";
             Text[ korean ] = "앞으로(~F)";
             Text[ turkish ] = "�leri";
-            Text[ catalan ] = "~Avanzar";
+            Text[ catalan ] = "~Cap endavant";
             Text[ finnish ] = "~Eteenp�in";
             Text[ thai ] = "~ข้างหน้า";
         };
@@ -382,7 +403,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "그래픽 저장...";
             Text[ turkish ] = "Grafi�i kaydet...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Guardar ~imagen...";
+            Text[ catalan ] = "Desa ~imatge...";
             Text[ finnish ] = "Tallenna kuvat...";
             Text[ thai ] = "บันทึกกราฟิค...";
         };
@@ -423,7 +444,7 @@ Menu MN_READONLY_POPUP
                         Text[ greek ] = "�� �������";
                         Text[ korean ] = "링크로서";
                         Text[ turkish ] = "Ba�lant� olarak";
-                        Text[ catalan ] = "Como v�nculo";
+                        Text[ catalan ] = "Com enlla�";
                         Text[ finnish ] = "Linkkin�";
                         Text[ thai ] = "เป็นการเชื่อมโยง";
                     };
@@ -454,7 +475,7 @@ Menu MN_READONLY_POPUP
                         Text[ korean ] = "복사";
                         Text[ turkish ] = "Kopyala";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Copiar";
+                        Text[ catalan ] = "Copia";
                         Text[ finnish ] = "Kopioi";
                         Text[ thai ] = "คัดลอก";
                     };
@@ -482,7 +503,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "그래픽 추가";
             Text[ turkish ] = "Grafik ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~A�adir imagen";
+            Text[ catalan ] = "~Afegeix imatge";
             Text[ finnish ] = "Lis�� kuva";
             Text[ thai ] = "เพิ่มกราฟิค";
         };
@@ -513,7 +534,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "배경 저장...";
             Text[ turkish ] = "Artalan� kaydet";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Guardar ~fondo...";
+            Text[ catalan ] = "Desa el fons...";
             Text[ finnish ] = "Tallenna tausta...";
             Text[ thai ] = "บันทึกพื้นหลัง...";
         };
@@ -554,7 +575,7 @@ Menu MN_READONLY_POPUP
                         Text[ korean ] = "링크로서";
                         Text[ turkish ] = "Ba�lant� olarak";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Como v�nculo";
+                        Text[ catalan ] = "Com enlla�";
                         Text[ finnish ] = "Linkkin�";
                         Text[ thai ] = "เป็นการเชื่อมโยง";
                     };
@@ -585,7 +606,7 @@ Menu MN_READONLY_POPUP
                         Text[ korean ] = "복사";
                         Text[ turkish ] = "Kopyala";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Copiar";
+                        Text[ catalan ] = "Copia";
                         Text[ finnish ] = "Kopioi";
                         Text[ thai ] = "คัดลอก";
                     };
@@ -613,7 +634,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "배경 추가";
             Text[ turkish ] = "Artalan� ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "A�adir ~fondo";
+            Text[ catalan ] = "Afegeix un fons";
             Text[ finnish ] = "Lis�� tausta";
             Text[ thai ] = "เพิ่มพื้นหลัง";
         };
@@ -645,7 +666,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "링크 복사(~L)";
             Text[ turkish ] = "Ba�lant�y� kopyala";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Copiar v�nculo";
+            Text[ catalan ] = "~Copia enlla�";
             Text[ finnish ] = "~Kopioi linkki";
             Text[ thai ] = "คัดลอกการเ~ชื่อมโยง";
         };
@@ -679,7 +700,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "그래픽 복사(~G)";
             Text[ turkish ] = "Grafi�i kopyala";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Copiar imagen";
+            Text[ catalan ] = "~Copia imatge";
             Text[ finnish ] = "~Kopioi kuva";
             Text[ thai ] = "คัดลอก~กราฟิค";
         };
@@ -711,7 +732,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "그래픽 로드";
             Text[ turkish ] = "Grafikleri y�kle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Cargar ~im�genes";
+            Text[ catalan ] = "Carrega ~imatges";
             Text[ finnish ] = "Lataa kuvat";
             Text[ thai ] = "โหลดกราฟิค";
         };
@@ -742,7 +763,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "그래픽 적용 해제";
             Text[ turkish ] = "Grafikleri kapat";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Desactivar ~im�genes";
+            Text[ catalan ] = "Desactiva ~imatges";
             Text[ finnish ] = "Grafiikka pois k�yt�st�";
             Text[ thai ] = "ไม่มีกราฟิค";
         };
@@ -774,7 +795,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "플러그인 적용 해제";
             Text[ turkish ] = "Plug-in'leri kapat";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Desactivar ~Plug-ins";
+            Text[ catalan ] = "Connectors desactivats";
             Text[ finnish ] = "Lis�osat pois k�yt�st�";
             Text[ thai ] = "ปิดปลั๊กอิน";
         };
@@ -786,6 +807,26 @@ Menu MN_READONLY_POPUP
             HelpID =  SID_WIN_FULLSCREEN;
             Text = "Vollbildschirm-Modus verlassen" ;
             Text [ english_us ] = "Leave Full-Screen Mode" ;
+            Text[ portuguese ] = "Leave Full-Screen Mode";
+            Text[ russian ] = "Leave Full-Screen Mode";
+            Text[ greek ] = "Leave Full-Screen Mode";
+            Text[ dutch ] = "Leave Full-Screen Mode";
+            Text[ french ] = "Leave Full-Screen Mode";
+            Text[ spanish ] = "Leave Full-Screen Mode";
+            Text[ finnish ] = "Leave Full-Screen Mode";
+            Text[ italian ] = "Leave Full-Screen Mode";
+            Text[ danish ] = "Leave Full-Screen Mode";
+            Text[ swedish ] = "Leave Full-Screen Mode";
+            Text[ polish ] = "Leave Full-Screen Mode";
+            Text[ portuguese_brazilian ] = "Leave Full-Screen Mode";
+            Text[ japanese ] = "Leave Full-Screen Mode";
+            Text[ korean ] = "Leave Full-Screen Mode";
+            Text[ chinese_simplified ] = "Leave Full-Screen Mode";
+            Text[ chinese_traditional ] = "Leave Full-Screen Mode";
+            Text[ turkish ] = "Leave Full-Screen Mode";
+            Text[ arabic ] = "Leave Full-Screen Mode";
+            Text[ catalan ] = "Leave Full-Screen Mode";
+            Text[ thai ] = "Leave Full-Screen Mode";
         };
     };
 };
@@ -814,7 +855,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ korean ] = "그래픽 내보내기";
     Text[ turkish ] = "Grafik ver";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Exportar imagen";
+    Text[ catalan ] = "Exporta imatge";
     Text[ finnish ] = "Grafiikan tuonti";
     Text[ thai ] = "ส่งออกกราฟิค";
 };
@@ -843,7 +884,7 @@ String STR_CHAIN_OK
     Text[ korean ] = "프레임에 연결하기 위해 왼쪽 마우스 버튼을 클릭하십시오.";
     Text[ turkish ] = "�er�eveler aras� ba�lant� olu�turmak i�in sol fare tu�unu kullan�n.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pulse el bot�n izquierdo del rat�n para vincular las marcos.";
+    Text[ catalan ] = "Prem el bot� esquerra del ratol� per enlla�ar les macros.";
     Text[ finnish ] = "Linkit� kehykset napsauttamalla hiiren kakkospainiketta.";
     Text[ thai ] = "คลิ๊กที่ปุ่มซ้ายของเม้าส์เพื่อเชื่อมโยงกรอบ";
 };
@@ -872,7 +913,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ korean ] = "목표 프레임이 비어있지 않습니다.";
     Text[ turkish ] = "Hedef �er�eve bo� de�il.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El marco destino no est� vac�o.";
+    Text[ catalan ] = "El marc de dest� est� buit.";
     Text[ finnish ] = "Kohdekehys ei ole tyhj�.";
     Text[ thai ] = "กรอบเป้าหมายว่าง";
 };
@@ -901,7 +942,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ korean ] = "목표 프레임은 이미 연결되어 있습니다.";
     Text[ turkish ] = "Hedef �er�eve ba�lant�s� olu�turulmu� durumda.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El marco destino ya est� vinculado.";
+    Text[ catalan ] = "El marc de dest� ja est� enlla�at.";
     Text[ finnish ] = "Kohdekehys on jo linkitetty.";
     Text[ thai ] = "กรอบเป้าหมายมีการเชื่อมโยงอยู่แล้ว";
 };
@@ -930,7 +971,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ korean ] = "목표 프레임은　연결이 불가능한　영역에 있습니다.";
     Text[ turkish ] = "Hedef �er�eve ba�lant� olu�turulamayacak bir alanda bulunuyor.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El marco destino se encuentra en un �rea en la que los v�nculos no son posibles.";
+    Text[ catalan ] = "El marc dest� es troba en una �rea on els enlla�os no s�n possibles.";
     Text[ finnish ] = "Linkin kohdekehys on virheellisell� alueella.";
     Text[ thai ] = "กรอบเป้าหมายสำหรับการเชื่อมโยงอยู่ในพื้นที่ที่ไม่ถูกต้อง";
 };
@@ -959,7 +1000,7 @@ String STR_CHAIN_NOT_FOUND
     Text[ korean ] = "현재의 위치에서 목표 프레임을　찾을수　없습니다.";
     Text[ turkish ] = "Y�r�rl�kteki konumda hedef �er�eve bulunam�yor.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "En la posici�n actual no se puede encontrar ning�n marco destino.";
+    Text[ catalan ] = "A la posici� actual no es pot trobar cap marc dest�.";
     Text[ finnish ] = "Kohdekehyst� ei l�ytynyt nykyisest� sijainnista.";
     Text[ thai ] = "ไม่พบกรอบเป้าหมายที่ตำแหน่งปัจจุบัน";
 };
@@ -988,7 +1029,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ korean ] = "소스 프레임은 이미 연결의 소스입니다.";
     Text[ turkish ] = "Kaynak �er�eve zaten bir ba�lant� zincirinin kayna��.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El marco origen ya es la fuente de un v�nculo.";
+    Text[ catalan ] = "El marc d'origen ja �s la font d'un enlla�.";
     Text[ finnish ] = "Kohdekehys on jo linkin l�hde.";
     Text[ thai ] = "แหล่งกรอบอยู่ในแหล่งการเชื่อมโยงอยู่แล้ว";
 };
@@ -1017,7 +1058,7 @@ String STR_CHAIN_SELF
     Text[ korean ] = "닫힌 연결은 불가능합니다.";
     Text[ turkish ] = "Kapal� bir zincir olu�turulamaz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible una secuencia cerrada.";
+    Text[ catalan ] = "No �s possible una seq��ncia tancada.";
     Text[ finnish ] = "Suljettu linkki ei ole mahdollinen.";
     Text[ thai ] = "ไม่สามารถปิดการเชื่อมโยงได้";
 };
@@ -1046,7 +1087,7 @@ String STR_REDLINE_INSERT
     Text[ greek ] = "����������";
     Text[ korean ] = "삽입됨";
     Text[ turkish ] = "Eklendi";
-    Text[ catalan ] = "Insertado";
+    Text[ catalan ] = "Insert";
     Text[ finnish ] = "Lis�tty";
     Text[ thai ] = "แทรก";
 };
@@ -1075,7 +1116,7 @@ String STR_REDLINE_DELETE
     Text[ korean ] = "삭제됨";
     Text[ turkish ] = "Silindi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminado";
+    Text[ catalan ] = "Suprimit";
     Text[ finnish ] = "Poistettu";
     Text[ thai ] = "ลบ";
 };
@@ -1104,7 +1145,7 @@ String STR_REDLINE_FORMAT
     Text[ greek ] = "�������������";
     Text[ korean ] = "서식 적용";
     Text[ turkish ] = "Faormatland�";
-    Text[ catalan ] = "Formateado";
+    Text[ catalan ] = "Formatat";
     Text[ finnish ] = "Muotoiltu";
     Text[ thai ] = "จัดรูปแบบ";
 };
@@ -1133,7 +1174,7 @@ String STR_REDLINE_TABLE
     Text[ korean ] = "표가 바뀌었습니다.";
     Text[ turkish ] = "Tablo de�i�tirildi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla modificada";
+    Text[ catalan ] = "La taula ha canviat";
     Text[ finnish ] = "Taulukko muuttunut";
     Text[ thai ] = "เปลี่ยนตาราง";
 };
@@ -1159,10 +1200,10 @@ String STR_REDLINE_FMTCOLL
     Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
     Text[ chinese_simplified ] = "已经设定了段落样式";
     Text[ greek ] = "����������� ������� ����������";
-    Text[ korean ] = "단락 템플릿 설정";
+    Text[ korean ] = "단락 스타일 설정";
     Text[ turkish ] = "Paragraf �ablonu belirlendi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicado estilo de p�rrafo";
+    Text[ catalan ] = "S'ha aplicat l'estil del par�graf";
     Text[ finnish ] = "K�ytetyt kappaletyylit";
     Text[ thai ] = "ลักษณะย่อหน้าแบบประยุกต์";
 };
@@ -1191,7 +1232,7 @@ String STR_ENDNOTE
     Text[ korean ] = "미주: ";
     Text[ turkish ] = "Son not: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nota final:  ";
+    Text[ catalan ] = "Nota final:";
     Text[ finnish ] = "Loppuhuomautus: ";
     Text[ thai ] = "อ้างอิงท้ายเรื่อง: ";
 };
@@ -1220,7 +1261,7 @@ String STR_FTNNOTE
     Text[ korean ] = "각주: ";
     Text[ turkish ] = "Dipnot: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nota al pie:  ";
+    Text[ catalan ] = "Nota al peu:";
     Text[ finnish ] = "Alaviite: ";
     Text[ thai ] = "เชิงอรรถ: ";
 };
@@ -1242,7 +1283,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ portuguese_brazilian ] = "Readonly content may not be changed.";
     MESSAGE[ japanese ] = "この範囲は読み取り専用です。内容の変更はできません。";
     MESSAGE[ chinese_simplified ] = "输入光标或选中的内容是受保护的。\n因此无法改写内容。";
-    MESSAGE[ chinese_traditional ] = "輸入光標或選取的位置是受保護的。\n無法修改唯讀的內容。";
+    MESSAGE[ chinese_traditional ] = "輸入游標或選取的位置是受保護的。\n無法修改唯讀的內容。";
     MESSAGE[ arabic ] = "��� ����� ������� �� ������� �� ���� ���� �� �������.\n���� �� ���� ���� ��� �������.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "输入光标或选中的内容是受保护的。\n因此无法改写内容。";
@@ -1250,7 +1291,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ korean ] = "쓰기 마크 또는 선택은 보호된 위치에 있습니다.\n수정은 허용되지 않습니다.";
     MESSAGE[ turkish ] = "Salt okunur bir i�erik de�i�tirilemez.\nYap�lan de�i�iklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "La marca o selecci�n se encuentra en una posici�n protegida.\nPor ello no se puede aceptar una modificaci�n.";
+    MESSAGE[ catalan ] = "La marca o selecci� es troba en una posici� protegida.\nPer aix� no es pot acceptar una modificaci�.";
     MESSAGE[ finnish ] = "Vain luku -sis�lt�� ei voi muuttaa.\nMuokkauksia ei hyv�ksyt�";
     MESSAGE[ thai ] = "ไม่สามารถเปลี่ยนแปลงเนื้อหาแบบอ่านอย่างเดียว\nไม่ยอมรับการดัดแปลงแก้ไข";
 };
