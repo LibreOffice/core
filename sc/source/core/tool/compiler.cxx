@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-04-06 16:44:43 $
+ *  last change: $Author: er $ $Date: 2001-05-02 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,17 @@ ScOpCodeList::ScOpCodeList( USHORT nRID, String pSymbolTable[] )
     }
     FreeResource();
 }
+
+
+class ScCompilerRecursionGuard
+{
+private:
+            short&              rRecursion;
+public:
+                                ScCompilerRecursionGuard( short& rRec )
+                                    : rRecursion( rRec ) { ++rRecursion; }
+                                ~ScCompilerRecursionGuard() { --rRecursion; }
+};
 
 
 void ScCompiler::Init()
@@ -1576,6 +1587,14 @@ void ScCompiler::PopTokenArray()
 
 BOOL ScCompiler::GetToken()
 {
+    static const short nRecursionMax = 42;
+    ScCompilerRecursionGuard aRecursionGuard( nRecursion );
+    if ( nRecursion > nRecursionMax )
+    {
+        SetError( errStackOverflow );
+        pToken = new ScByteToken( ocStop );
+        return FALSE;
+    }
     if ( bAutoCorrect && !pStack )
     {   // #61426# don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
@@ -2514,7 +2533,8 @@ void ScCompiler::NotLine()
 OpCode ScCompiler::Expression()
 {
     static const short nRecursionMax = 42;
-    if ( ++nRecursion > nRecursionMax )
+    ScCompilerRecursionGuard aRecursionGuard( nRecursion );
+    if ( nRecursion > nRecursionMax )
     {
         SetError( errStackOverflow );
         return ocStop;      //! stattdessen Token generieren?
@@ -2528,7 +2548,6 @@ OpCode ScCompiler::Expression()
         NotLine();
         PutCode(p);
     }
-    --nRecursion;
     return pToken->GetOpCode();
 }
 
