@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-15 14:24:00 $
+ *  last change: $Author: tra $ $Date: 2001-02-14 08:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _WIN32_DCOM
 #include "system.h"
 
 #include <osl/diagnose.h>
@@ -170,11 +169,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
 static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit)
 {
-#ifdef _WIN32_DCOM // DCOM
-    return CoInitializeEx( pvReserved, dwCoInit );
-#else
     return CoInitialize( pvReserved );
-#endif
 }
 
 /*****************************************************************************/
