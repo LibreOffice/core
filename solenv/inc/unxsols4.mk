@@ -3,7 +3,7 @@ ASM=/usr/ccs/bin/as
 AFLAGS=-P -q
 
 
-CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
+CDEFS+=-mt -D_PTHREADS -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -20,7 +20,7 @@ cc=cc
 
 CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
 CFLAGSCC=-xCC
-CFLAGSCXX=-features=no%altspell,no%localfor
+CFLAGSCXX=-features=no%altspell,no%localfor -library=no%Cstd
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
@@ -33,8 +33,8 @@ CFLAGSSLOGUIMT=-KPIC
 CFLAGSSLOCUIMT=-KPIC
 CFLAGSPROF=-xpg
 CFLAGSDEBUG=-g
-CFLAGSDBGUTIL=
-CFLAGSOPT=-O
+CFLAGSDBGUTIL=-norunpath 
+CFLAGSOPT=-xarch=v8 -xO3 -xspace
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
 
@@ -45,7 +45,7 @@ CFLAGSDFLTWARN=-w
 
 STDOBJVCL=$(L)$/salmain.o
 
-THREADLIB=-lposix4
+THREADLIB=
 .IF "$(PURIFY)"!=""
 LINK=/usr/local/purify-4.2-solaris2/purify CC
 .ELSE
@@ -54,7 +54,7 @@ LINK=CC
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
 # -norunpath prevents the compiler from recording his own libs in the runpath
-LINKFLAGS=-w -z combreloc -PIC -temp=/tmp -norunpath -library=no%Crun
+LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
 
 # -z text force fatal error if non PIC code is linked into shared library. Such code 
 #    would be expensive on startup
@@ -93,14 +93,14 @@ STDSLOGUI=
 .ENDIF
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDLIBCUIST=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDLIBGUIMT=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDLIBCUIMT=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDSHLGUIST=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDSHLCUIST=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDSHLGUIMT=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
-STDSHLCUIMT=-Bdynamic -lnsl -lsocket -ldl -lm -lCrun
+STDLIBGUIST=-Bdynamic -lm
+STDLIBCUIST=-Bdynamic -lm
+STDLIBGUIMT=-Bdynamic -lpthread -lm
+STDLIBCUIMT=-Bdynamic -lpthread -lm
+STDSHLGUIST=-Bdynamic -lCrun -lm -lc
+STDSHLCUIST=-Bdynamic -lCrun -lm -lc
+STDSHLGUIMT=-Bdynamic -lpthread -lCrun -lm -lc
+STDSHLCUIMT=-Bdynamic -lpthread -lCrun -lm -lc
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
@@ -131,8 +131,6 @@ DLLPOST=.so
 
 LDUMP=cppfilt /b /n /o /p
 
-CDEFS += -D_PTHREADS  
-#CFLAGS += -U_REENTRANT -U_POSIX_PTHREAD_SEMANTICS
 CFLAGSCXXSLO += -instances=static
 CFLAGSCXXOBJ += -instances=static
 
@@ -140,4 +138,3 @@ LINKFLAGSAPPGUI+= -instances=static
 LINKFLAGSSHLGUI+= -instances=static
 LINKFLAGSAPPCUI+= -instances=static
 LINKFLAGSSHLCUI+= -instances=static
-
