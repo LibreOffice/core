@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleFooterView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-09-08 12:40:55 $
+ *  last change: $Date: 2004-01-05 19:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ public class SwAccessibleFooterView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("dispose text document");
-        xTextDoc.dispose();
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     /**
