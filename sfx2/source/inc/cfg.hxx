@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:22:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ public:
     static String               FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle );
     static SfxConfigManager*    MakeCfgMgr_Impl( const String& rName, BOOL bWriting, BOOL& bCreated );
 };
-
+/*
 class SfxStatusBarManager;
 class SfxStbInfoArr_Impl;
 
@@ -574,7 +574,7 @@ public:
     virtual void                Reset( const SfxItemSet& );
     void                        Apply( SfxStatusBarManager*, BOOL );
 };
-
+*/
 
 #endif
 
