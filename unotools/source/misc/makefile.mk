@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pl $ $Date: 2000-10-27 15:18:39 $
+#   last change: $Author: hr $ $Date: 2000-11-07 09:33:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,14 +97,10 @@ UNOUCROUT=$(OUT)$/inc
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/types.obj         \
-        $(SLO)$/datetime.obj      \
-        $(SLO)$/numbers.obj       \
-        $(SLO)$/guarding.obj      \
-        $(SLO)$/sequence.obj      \
-        $(SLO)$/querydeep.obj     \
-        $(SLO)$/regpathhelper.obj	\
-        $(SLO)$/atom.obj
+SLOFILES=	$(SLO)$/atom.obj \
+            $(SLO)$/datetime.obj
+
+
 
 # --- Targets ----------------------------------
 
