@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEndnotesSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 /** makes it possible to access the endnotes within the
     context (e.g. document).
  */
-interface XEndnotesSupplier: com::sun::star::uno::XInterface
+published interface XEndnotesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
