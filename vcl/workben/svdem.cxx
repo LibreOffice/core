@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:30 $
+ *  last change: $Author: obo $ $Date: 2003-11-05 12:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,9 @@ SAL_IMPLEMENT_MAIN()
 
     // for this to work make sure an <appname>.ini file is available, you can just copy soffice.ini
     Reference< XComponentContext > xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    xMS = Reference< XMultiServiceFactory > (xComponentContext->getServiceManager(), UNO_QUERY);
-    ::comphelper::setProcessServiceFactory( xMS );
+    xMS = cppu::createRegistryServiceFactory(
+                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+
 
 #ifdef REMOTE_APPSERVER
     // allow remote clients to connect from any host (0) on the given port

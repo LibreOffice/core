@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hdu $ $Date: 2002-09-04 13:40:58 $
+#   last change: $Author: obo $ $Date: 2003-11-05 12:39:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,10 +113,19 @@ APP1DEF=		$(MISC)$/$(TARGET).def
 
 # --- Targets ------------------------------------------------------
 
+ALL : \
+    ALLTAR \
+    $(BIN)$/applicat.rdb
+
 .INCLUDE :	target.mk
 
-#svdem.cxx: $(I)tools.hxx	$(I)svgen.hxx	$(I)svwindow.hxx	\
-#			$(I)sv.hxx
+$(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
+    rm -f $@
+    $(GNUCOPY) $(UNOUCRRDB) $@
+     +cd $(BIN) && \
+         regcomp -register -r applicat.rdb \
+             -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
+             -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 # ------------------------------------------------------------------
 # Windows
@@ -137,25 +146,3 @@ $(MISC)$/$(TARGET).def: makefile
 
 .ENDIF
 
-# ------------------------------------------------------------------
-# OS2
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(TARGET).def: makefile
-    echo  NAME			$(TARGET) WINDOWAPI 				>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB			'os2STUB.EXE'                      >>$@
-.ENDIF
-.IF "$(COM)"!="MTW"
-    echo  EXETYPE		OS2 							   >>$@
-.ENDIF
-    echo  PROTMODE										   >>$@
-    echo  CODE			LOADONCALL						   >>$@
-    echo  DATA			PRELOAD MULTIPLE				   >>$@
-    echo  HEAPSIZE		16384							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-.ENDIF
