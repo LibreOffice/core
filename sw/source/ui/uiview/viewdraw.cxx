@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: od $ $Date: 2002-12-10 14:14:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
