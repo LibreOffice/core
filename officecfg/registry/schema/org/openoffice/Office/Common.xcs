@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:15:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7482,7 +7482,7 @@
 						<desc xml:lang="hu">Specifies the directory in which the plugins are saved.</desc>
 						<desc xml:lang="sl">Specifies the directory in which the plugins are saved.</desc>
 					</info>
-					<value oor:separator=":">$(userpath)/plugin</value>
+                    <value oor:separator=":">$(progpath)/plugin</value>
 				</prop>
 				<prop oor:name="Storage" oor:type="xs:string">
 					<info>
@@ -8314,7 +8314,7 @@
 						<desc xml:lang="hu">Specifies the default directory where the Office plugins are located.</desc>
 						<desc xml:lang="sl">Specifies the default directory where the Office plugins are located.</desc>
 					</info>
-					<value oor:separator=":">$(userpath)/plugin</value>
+                    <value oor:separator=":">$(progpath)/plugin</value>
 				</prop>
 				<prop oor:name="Temp" oor:type="xs:string">
 					<info>
