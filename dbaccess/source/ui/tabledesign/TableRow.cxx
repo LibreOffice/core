@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 10:37:30 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 09:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ sal_Bool OTableRow::IsPrimaryKey() const
     return m_pActFieldDescr && m_pActFieldDescr->IsPrimaryKey();
 }
 // -----------------------------------------------------------------------------
-void OTableRow::SetFieldType( const OTypeInfo* _pType )
+void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
 {
     DBG_CHKTHIS(OTableRow,NULL);
     if(_pType)
@@ -163,11 +163,14 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType )
                         m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),_pType->nPrecision));
             }
         }
+
         // type checking
-        if(m_pActFieldDescr->GetPrecision() > _pType->nPrecision)
+        if (_bForce || (m_pActFieldDescr->GetPrecision() > _pType->nPrecision))
             m_pActFieldDescr->SetPrecision(_pType->nPrecision);
-        if(m_pActFieldDescr->GetScale() > _pType->nMaximumScale)
-            m_pActFieldDescr->SetScale(0);
+
+        if (_bForce || (m_pActFieldDescr->GetScale() > _pType->nMaximumScale))
+            m_pActFieldDescr->SetScale(_pType->nMinimumScale);
+
         if(!_pType->bNullable && m_pActFieldDescr->IsNullable())
             m_pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
         if(!_pType->bAutoIncrement && m_pActFieldDescr->IsAutoIncrement())
