@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:29:21 $
+#   last change: $Author: kz $ $Date: 2004-05-20 21:24:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-# --- ImageList ----------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/menu.srs
-BMP_IN=$(PRJ)$/win/res
 
 # --- Files --------------------------------------------------------
 
