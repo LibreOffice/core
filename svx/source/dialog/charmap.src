@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:10:45 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 11:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,7 @@ String RID_SUBSETSTR_ARABIC_EXTENDED
         Text[ portuguese_brazilian ] = "Arabic Extended";
         Text[ japanese ] = "±×ËŞ±Šg’£•¶š";
         Text[ korean ] = "¾Æ¶ø¾î (È®Àå)";
+
         Text[ chinese_simplified ] = "°¢À­²®ÓïÀ©³ä";
         Text[ chinese_traditional ] = "ªü©Ô§B»yÂX¥R";
         Text[ turkish ] = "Arabic Extended";
@@ -812,6 +813,7 @@ String RID_SUBSETSTR_TELUGU
     Text = "Telugu" ;
     Text [ ENGLISH ] = "Telugu" ;
     Text[ english_us ] = "Telugu";
+
         Text[ portuguese ] = "Telugu";
         Text[ russian ] = "Òåëóãó";
         Text[ greek ] = "Telugu";
@@ -1059,7 +1061,7 @@ String RID_SUBSETSTR_GREEK_EXTENDED
     };
 String RID_SUBSETSTR_GENERAL_PUNCTUATION
 {
-    Text = "Allgemeine Punktuation" ;
+    Text = "Allgemeine Interpunktion" ;
     Text [ ENGLISH ] = "General Punctuation" ;
     Text[ english_us ] = "General Punctuation";
         Text[ portuguese ] = "Pontuação geral";
@@ -1262,6 +1264,7 @@ String RID_SUBSETSTR_MISC_TECHNICAL
     Text = "Verschiedene Technische Zeichen" ;
     Text [ ENGLISH ] = "Miscellaneous Technical" ;
     Text[ english_us ] = "Miscellaneous Technical";
+
         Text[ portuguese ] = "Caracteres técnicos vários";
         Text[ russian ] = "Ğàçíîîáğàçíûå òåõíè÷åñêèå ñèìâîëû";
         Text[ greek ] = "ÄéÜöïñïé ôå÷íéêïß ÷áñáêôŞñåò";
@@ -1451,6 +1454,7 @@ String RID_SUBSETSTR_MISC_DINGBATS
         Text[ japanese ] = "‚»‚Ì‘¼‚Ì‹L†";
         Text[ korean ] = "±âÅ¸ ±âÈ£";
         Text[ chinese_simplified ] = "¸÷ÖÖ·ûºÅ";
+
         Text[ chinese_traditional ] = "²V¦X¤°ÀA²Å¸¹";
         Text[ turkish ] = "Miscellaneous Symbols";
         Text[ arabic ] = "ÑãæÒ ãÎÊáİÉ";
@@ -1467,6 +1471,7 @@ String RID_SUBSETSTR_DINGBATS
         Text[ greek ] = "Dingbats";
         Text[ dutch ] = "Dingbats";
         Text[ french ] = "Dingbats";
+
         Text[ spanish ] = "Dingbats";
         Text[ italian ] = "Dingbats";
         Text[ danish ] = "Dingbats";
@@ -1663,6 +1668,7 @@ String RID_SUBSETSTR_CJK_COMPATIBILITY
     Text [ ENGLISH ] = "CJK Compatibility" ;
     Text[ english_us ] = "CJK Compatibility";
         Text[ portuguese ] = "Compatibilidade CJK";
+
         Text[ russian ] = "CJK-ñîâìåñòèìûå ñèìâîëû";
         Text[ greek ] = "CJK Óõìâáôüôçôá";
         Text[ dutch ] = "CJK-compatibel";
@@ -1844,6 +1850,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_A
         Text[ french ] = "Formes-A de présentation arabe";
         Text[ spanish ] = "Formas A de presentación árabe";
         Text[ italian ] = "Forme di presentazione arabe A";
+
         Text[ danish ] = "Arabic Presentation Forms-A";
         Text[ swedish ] = "Arabiskt presentationsformat-A";
         Text[ polish ] = "Arabskie formy prezentacyjne-A";
@@ -1924,6 +1931,7 @@ String RID_SUBSETSTR_SMALL_FORM_VARIANTS
         Text[ polish ] = "Warianty ma³ych form";
         Text[ portuguese_brazilian ] = "Small Form Variants";
         Text[ japanese ] = "¬šŒ`";
+
         Text[ korean ] = "ÀÛÀº Çü½Ä¡¡º¯Çü";
         Text[ chinese_simplified ] = "Ğ¡Ğ´±äÌå";
         Text[ chinese_traditional ] = "¤p¼gÅÜÅé";
@@ -2611,6 +2619,7 @@ String RID_SUBSETSTR_CHEROKEE
 {
     Text = "Cherokee" ;
     Text [ ENGLISH ] = "Cherokee" ;
+
     Text[ english_us ] = "Cherokee";
         Text[ portuguese ] = "Cherokee";
         Text[ russian ] = "Ïèñüìåííîñòü èíäåéöåâ ÷åğîêè";
