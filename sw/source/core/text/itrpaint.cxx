@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:35:55 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,13 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
+#include <EnhancedPDFExportHelper.hxx>
+#endif
+// <--
+
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
@@ -475,10 +482,17 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().SetUnderFnt( 0 );
         }
 
-        if( pPor->IsMultiPortion() )
-            PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
-        else
-            pPor->Paint( GetInfo() );
+        {
+            // --> FME 2004-06-24 #i16816# tagged pdf support
+            Por_Info aPorInfo( *pPor, *this );
+            SwTaggedPDFHelper aTaggedPDFHelper( 0, &aPorInfo, *pOut );
+            // <--
+
+            if( pPor->IsMultiPortion() )
+                PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
+            else
+                pPor->Paint( GetInfo() );
+        }
 
         // reset underline font
         if ( pOldUnderLineFnt )
@@ -496,7 +510,13 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( pPor->IsArrowPortion() && GetInfo().OnWin() && !pArrow )
             pArrow = (SwArrowPortion*)pPor;
 
-        pPor = !bDrawInWindow && GetInfo().X() > nMaxRight ? 0 : pNext;
+        pPor = bDrawInWindow || GetInfo().X() <= nMaxRight ||
+               // --> FME 2004-06-24 #i16816# tagged pdf support
+               ( GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
+                 pNext && pNext->IsHolePortion() ) ?
+               // <--
+               pNext :
+               0;
     }
 
     // delete underline font
