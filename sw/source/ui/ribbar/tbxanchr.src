@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:13:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,180 +70,45 @@ Menu MN_ANCHOR_POPUP
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_PAGE ;
-            Text = "Seite" ;
-            Text [ ENGLISH ] = "Page" ;
-            Text [ portuguese ] = "P·gina" ;
-            Text [ english_us ] = "Page" ;
-            Text [ portuguese_brazilian ] = "P·gina" ;
-            Text [ swedish ] = "Sida" ;
-            Text [ danish ] = "Side" ;
-            Text [ italian ] = "Pagina" ;
-            Text [ spanish ] = "P·gina" ;
-            Text [ french ] = "¿ la page" ;
-            Text [ dutch ] = "Pagina" ;
-            Text[ chinese_simplified ] = "È°µ";
-            Text[ russian ] = "—Ú‡ÌËˆ‡";
-            Text[ polish ] = "Strona";
-            Text[ japanese ] = "„Éö„Éº„Ç∏";
-            Text[ chinese_traditional ] = "È†Å";
-            Text[ arabic ] = "’›Õ…";
-            Text[ greek ] = "”ÂÎﬂ‰·";
-            Text[ korean ] = "ÌéòÏù¥ÏßÄ";
-            Text[ turkish ] = "Sayfa";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "P‡gina";
-            Text[ finnish ] = "Sivu";
-            Text[ thai ] = "‡∏´‡∏ô‡πâ‡∏≤";
-            Text[ czech ] = "Str√°nka";
-            Text[ hebrew ] = "‚ÄÆ◊ì◊£‚Ä¨";
-            Text[ hindi ] = "‡§™‡•É‡§∑‡•ç‡§†";
-            Text[ slovak ] = "Str√°nka";
-            Text[ hungarian ] = "Oldal";
-            Text[ slovenian ] = "Stran";
+            Text [ de ] = "Seite" ;
+            Text [ en-US ] = "Page" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_PARAGRAPH ;
-            Text = "Absatz" ;
-            Text [ ENGLISH ] = "Paragraph" ;
-            Text [ portuguese ] = "Par·grafo" ;
-            Text [ english_us ] = "Paragraph" ;
-            Text [ portuguese_brazilian ] = "Par·grafo" ;
-            Text [ swedish ] = "Stycke" ;
-            Text [ danish ] = "Afsnit" ;
-            Text [ italian ] = "Paragrafo" ;
-            Text [ spanish ] = "P·rrafo" ;
-            Text [ french ] = "Paragraphe" ;
-            Text [ dutch ] = "Alinea" ;
-            Text[ chinese_simplified ] = "ÊÆµËêΩ";
-            Text[ russian ] = "¿·Á‡ˆ";
-            Text[ polish ] = "Akapit";
-            Text[ japanese ] = "ÊÆµËêΩ";
-            Text[ chinese_traditional ] = "ÊÆµËêΩ";
-            Text[ arabic ] = "›ﬁ—…";
-            Text[ greek ] = "–·Ò‹„Ò·ˆÔÚ";
-            Text[ korean ] = "Îã®ÎùΩ";
-            Text[ turkish ] = "Paragraf";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Par‡graf";
-            Text[ finnish ] = "Kappale";
-            Text[ thai ] = "‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤";
-            Text[ czech ] = "Odstavec";
-            Text[ hebrew ] = "‚ÄÆ◊§◊°◊ß◊ê◊ï◊™‚Ä¨";
-            Text[ hindi ] = "‡§™‡§∞‡§ø‡§ö‡•ç‡§õ‡•á‡§¶";
-            Text[ slovak ] = "Odstavec";
-            Text[ hungarian ] = "Bekezd√©s";
-            Text[ slovenian ] = "Odstavek";
+            Text [ de ] = "Absatz" ;
+            Text [ en-US ] = "Paragraph" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_AT_CHAR ;
-            Text = "Am Zeichen" ;
-            Text [ ENGLISH ] = "At character" ;
-            Text [ english_us ] = "To Character" ;
-            Text [ portuguese_brazilian ] = "No caracter" ;
-            Text [ swedish ] = "Vid tecken" ;
-            Text [ danish ] = "Til tegn" ;
-            Text [ italian ] = "Al carattere" ;
-            Text [ spanish ] = "Al car·cter" ;
-            Text [ french ] = "Au caractËre" ;
-            Text [ dutch ] = "Aan teken" ;
-            Text [ portuguese ] = "No car·cter" ;
-            Text[ chinese_simplified ] = "Âú®Â≠óÁ¨¶‰∏ä";
-            Text[ russian ] = "  ÒËÏ‚ÓÎÛ";
-            Text[ polish ] = "Do znaku";
-            Text[ japanese ] = "ÊñáÂ≠ó„Å´";
-            Text[ chinese_traditional ] = "Âú®Â≠óÂÖÉ‰∏ä";
-            Text[ arabic ] = "⁄·Ï «·Õ—›";
-            Text[ greek ] = "”ÙÔÌ ˜·Ò·ÍÙﬁÒ·";
-            Text[ korean ] = "Î¨∏ÏûêÏóê";
-            Text[ turkish ] = "Karaktere";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Al car‡cter";
-            Text[ finnish ] = "Merkkiin";
-            Text[ thai ] = "‡∏ó‡∏µ‡πà‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞";
-            Text[ czech ] = "Na znak";
-            Text[ hebrew ] = "Am Zeichen";
-            Text[ hindi ] = "‡§Ö‡§ï‡•ç‡§∑‡§∞ ‡§Æ‡•á‡§Ç";
-            Text[ slovak ] = "Na znak";
-            Text[ hungarian ] = "Karakterhez";
-            Text[ slovenian ] = "Na znak";
+            Text [ de ] = "Am Zeichen" ;
+            Text [ en-US ] = "To Character" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_CHAR ;
-            Text = "Als Zeichen" ;
-            Text [ ENGLISH ] = "Like a character" ;
-            Text [ portuguese ] = "Como car·cter" ;
-            Text [ english_us ] = "As Character" ;
-            Text [ portuguese_brazilian ] = "Como caracter" ;
-            Text [ swedish ] = "Som tecken" ;
-            Text [ danish ] = "Som tegn" ;
-            Text [ italian ] = "Come carattere" ;
-            Text [ spanish ] = "Como car·cter" ;
-            Text [ french ] = "Comme caractËre" ;
-            Text [ dutch ] = "Als teken" ;
-            Text[ chinese_simplified ] = "ÂΩì‰ΩúÂ≠óÁ¨¶";
-            Text[ russian ] = " ‡Í ÒËÏ‚ÓÎ";
-            Text[ polish ] = "Jako znak";
-            Text[ japanese ] = "ÊñáÂ≠ó„Å®„Åó„Å¶";
-            Text[ chinese_traditional ] = "Áï∂‰ΩúÂ≠óÂÖÉ";
-            Text[ arabic ] = "ﬂÕ—›";
-            Text[ greek ] = "ŸÚ ˜·Ò·ÍÙﬁÒ·Ú";
-            Text[ korean ] = "Î¨∏ÏûêÎ°ú";
-            Text[ turkish ] = "Karakter olarak";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Com a car‡cter";
-            Text[ finnish ] = "Merkkin‰";
-            Text[ thai ] = "‡πÄ‡∏õ‡πá‡∏ô‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞";
-            Text[ czech ] = "Jako znak";
-            Text[ hebrew ] = "Als Zeichen";
-            Text[ hindi ] = "‡§Ö‡§ï‡•ç‡§∑‡§∞ ‡§ú‡•à‡§∏‡•á";
-            Text[ slovak ] = "Ako znak";
-            Text[ hungarian ] = "Karakterk√©nt";
-            Text[ slovenian ] = "Kot znak";
+            Text [ de ] = "Als Zeichen" ;
+            Text [ en-US ] = "As Character" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_FRAME ;
-            Text = "Rahmen" ;
-            Text [ ENGLISH ] = "Frame" ;
-            Text [ portuguese ] = "Moldura" ;
-            Text [ english_us ] = "Frame" ;
-            Text [ portuguese_brazilian ] = "Moldura" ;
-            Text [ swedish ] = "Ram" ;
-            Text [ danish ] = "Ramme" ;
-            Text [ italian ] = "Cornice" ;
-            Text [ spanish ] = "Marco" ;
-            Text [ french ] = "Cadre" ;
-            Text [ dutch ] = "Kader" ;
-            Text[ chinese_simplified ] = "Ê°Ü";
-            Text[ russian ] = "–‡ÏÍ‡";
-            Text[ polish ] = "Ramka";
-            Text[ japanese ] = "Êû†";
-            Text[ chinese_traditional ] = "ÊñáÂ≠óÊñπÂ°ä";
-            Text[ arabic ] = "ﬂ«œ—";
-            Text[ greek ] = "–Î·ﬂÛÈÔ";
-            Text[ korean ] = "ÌîÑÎ†àÏûÑ";
-            Text[ turkish ] = "«erÁeve";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Marc";
-            Text[ finnish ] = "Kehys";
-            Text[ thai ] = "‡∏Å‡∏£‡∏≠‡∏ö";
-            Text[ czech ] = "R√°mec";
-            Text[ hebrew ] = "‚ÄÆ◊û◊°◊í◊®◊™‚Ä¨";
-            Text[ hindi ] = "‡§´‡•ç‡§∞‡•á‡§Æ ";
-            Text[ slovak ] = "R√°mƒçek";
-            Text[ hungarian ] = "Keret";
-            Text[ slovenian ] = "Okvir";
+            Text [ de ] = "Rahmen" ;
+            Text [ en-US ] = "Frame" ;
+            Text [ x-comment ] = " ";
         };
     };
 };
