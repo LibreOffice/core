@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_codemaker_cppumaker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:54:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,5 +224,86 @@
 #include "test/codemaker/cppumaker/std.hpp"
 #include "test/codemaker/cppumaker/NDEBUG.hpp"
 #include "test/codemaker/cppumaker/get.hpp"
+#include "test/codemaker/cppumaker/HelperEnum.hpp"
+#include "test/codemaker/cppumaker/HelperStruct.hpp"
+#include "test/codemaker/cppumaker/BigStruct.hpp"
+#include "test/codemaker/cppumaker/Struct.hpp"
+#include "test/codemaker/cppumaker/StructUsage.hpp"
+#include "test/codemaker/cppumaker/AlignmentDerivedStruct.hpp"
 
-//TODO
+#include "boost/scoped_array.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Type.hxx"
+#include "com/sun/star/uno/TypeClass.hpp"
+#include "cppunit/simpleheader.hxx"
+
+#include <cstddef>
+
+namespace {
+
+class Test: public CppUnit::TestFixture {
+public:
+    void testBigStruct();
+
+    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testBigStruct);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+struct Guard {
+    explicit Guard(void * buffer):
+        p(new(buffer) test::codemaker::cppumaker::BigStruct) {}
+
+    ~Guard() { p->test::codemaker::cppumaker::BigStruct::~BigStruct(); }
+
+    test::codemaker::cppumaker::BigStruct * const p;
+};
+
+void Test::testBigStruct() {
+    // Default-initialize a BigStruct instance on top of a memory buffer filled
+    // with random data, and make sure that all members are default-initialized:
+    boost::scoped_array< char > buffer(
+        new char[sizeof (test::codemaker::cppumaker::BigStruct)]);
+    for (std::size_t i = 0; i < sizeof (test::codemaker::cppumaker::BigStruct);
+         ++i)
+    {
+        buffer[i] = '\x56';
+    }
+    Guard guard(buffer.get());
+    CPPUNIT_ASSERT_EQUAL(guard.p->m1, sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m2, static_cast< sal_Int8 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m3, static_cast< sal_Int16 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m4, static_cast< sal_uInt16 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m5, static_cast< sal_Int32 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m6, static_cast< sal_uInt32 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m7, static_cast< sal_Int64 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m8, static_cast< sal_uInt64 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m9, 0.0f);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m10, 0.0);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m11, static_cast< sal_Unicode >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m12.getLength(), static_cast< sal_Int32 >(0));
+    CPPUNIT_ASSERT_EQUAL(
+        guard.p->m13.getTypeClass(), com::sun::star::uno::TypeClass_VOID);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m15.getLength(), static_cast< sal_Int32 >(0));
+    CPPUNIT_ASSERT_EQUAL(
+        guard.p->m16, test::codemaker::cppumaker::HelperEnum_ZERO);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m17.m1, sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m17.m2.is(), sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m18.is(), sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m19, static_cast< sal_Int8 >(0));
+    CPPUNIT_ASSERT_EQUAL(
+        guard.p->m20, test::codemaker::cppumaker::HelperEnum_ZERO);
+
+#if defined __GNUC__ && __GNUC__ >= 3
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast< std::size_t >(16),
+        sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct));
+#endif
+}
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+
+}
+
+NOADDITIONAL;
