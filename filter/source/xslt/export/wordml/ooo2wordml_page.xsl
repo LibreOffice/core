@@ -51,9 +51,9 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:style="http://openoffice.org/2000/style" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:table="http://openoffice.org/2000/table" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" exclude-result-prefixes="style text fo office table">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:template match="style:master-page">
-        <xsl:apply-templates select="key( 'page-master', @style:page-master-name)"/>
+        <xsl:apply-templates select="key( 'page-layout', @style:page-layout-name)"/>
         <xsl:if test="style:header">
             <w:hdr w:type="odd">
                 <xsl:apply-templates select="style:header/text:p | style:header/table:table"/>
@@ -79,7 +79,7 @@
             </w:ftr>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="style:page-master">
+    <xsl:template match="style:page-layout">
         <xsl:choose>
             <xsl:when test="@style:page-usage = 'left'">
                 <w:type w:val="even-page"/>
@@ -96,89 +96,109 @@
             </xsl:otherwise>
         </xsl:choose>
         <xsl:variable name="page-width">
-            <xsl:if test="style:properties/@fo:page-width">
-                <xsl:call-template name="convert2dxa">
-                    <xsl:with-param name="value" select="style:properties/@fo:page-width"/>
+            <xsl:if test="style:page-layout-properties/@fo:page-width">
+                <xsl:call-template name="convert2twip">
+                    <xsl:with-param name="value" select="style:page-layout-properties/@fo:page-width"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:variable>
         <xsl:variable name="margin-left">
-            <xsl:if test="style:properties/@fo:margin-left">
-                <xsl:call-template name="convert2dxa">
-                    <xsl:with-param name="value" select="style:properties/@fo:margin-left"/>
+            <xsl:if test="style:page-layout-properties/@fo:margin-left">
+                <xsl:call-template name="convert2twip">
+                    <xsl:with-param name="value" select="style:page-layout-properties/@fo:margin-left"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:variable>
         <xsl:variable name="margin-right">
-            <xsl:if test="style:properties/@fo:margin-right">
-                <xsl:call-template name="convert2dxa">
-                    <xsl:with-param name="value" select="style:properties/@fo:margin-right"/>
+            <xsl:if test="style:page-layout-properties/@fo:margin-right">
+                <xsl:call-template name="convert2twip">
+                    <xsl:with-param name="value" select="style:page-layout-properties/@fo:margin-right"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:variable>
         <w:pgSz>
-            <xsl:if test="style:properties/@fo:page-width">
-                <xsl:attribute name="w:w"><xsl:value-of select="$page-width"/></xsl:attribute>
+            <xsl:if test="style:page-layout-properties/@fo:page-width">
+                <xsl:attribute name="w:w">
+                    <xsl:value-of select="$page-width"/>
+                </xsl:attribute>
             </xsl:if>
-            <xsl:if test="style:properties/@fo:page-height">
-                <xsl:attribute name="w:h"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="style:properties/@fo:page-height"/></xsl:call-template></xsl:attribute>
+            <xsl:if test="style:page-layout-properties/@fo:page-height">
+                <xsl:attribute name="w:h">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="style:page-layout-properties/@fo:page-height"/>
+                    </xsl:call-template>
+                </xsl:attribute>
             </xsl:if>
-            <xsl:if test="style:properties/@style:print-orientation">
-                <xsl:attribute name="w:orient"><xsl:value-of select="style:properties/@style:print-orientation"/></xsl:attribute>
+            <xsl:if test="style:page-layout-properties/@style:print-orientation">
+                <xsl:attribute name="w:orient">
+                    <xsl:value-of select="style:page-layout-properties/@style:print-orientation"/>
+                </xsl:attribute>
             </xsl:if>
         </w:pgSz>
         <w:pgMar>
-            <xsl:if test="style:properties/@fo:margin-top">
+            <xsl:if test="style:page-layout-properties/@fo:margin-top">
                 <xsl:variable name="top-margin">
-                    <xsl:call-template name="convert2dxa">
-                        <xsl:with-param name="value" select="style:properties/@fo:margin-top"/>
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="style:page-layout-properties/@fo:margin-top"/>
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:attribute name="w:top"><xsl:value-of select="$top-margin"/></xsl:attribute>
-                <xsl:if test="style:header-style/style:properties/@fo:min-height">
+                <xsl:attribute name="w:top">
+                    <xsl:value-of select="$top-margin"/>
+                </xsl:attribute>
+                <xsl:if test="style:header-style/style:page-layout-properties/@fo:min-height">
                     <xsl:variable name="header-height">
-                        <xsl:call-template name="convert2dxa">
-                            <xsl:with-param name="value" select="style:header-style/style:properties/@fo:min-height"/>
+                        <xsl:call-template name="convert2twip">
+                            <xsl:with-param name="value" select="style:header-style/style:page-layout-properties/@fo:min-height"/>
                         </xsl:call-template>
                     </xsl:variable>
-                    <xsl:attribute name="w:header"><xsl:value-of select="$top-margin - $header-height"/></xsl:attribute>
+                    <xsl:attribute name="w:header">
+                        <xsl:value-of select="$top-margin - $header-height"/>
+                    </xsl:attribute>
                 </xsl:if>
             </xsl:if>
-            <xsl:if test="style:properties/@fo:margin-bottom">
+            <xsl:if test="style:page-layout-properties/@fo:margin-bottom">
                 <xsl:variable name="bottom-margin">
-                    <xsl:call-template name="convert2dxa">
-                        <xsl:with-param name="value" select="style:properties/@fo:margin-bottom"/>
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="style:page-layout-properties/@fo:margin-bottom"/>
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:attribute name="w:bottom"><xsl:value-of select="$bottom-margin"/></xsl:attribute>
-                <xsl:if test="style:footer-style/style:properties/@fo:min-height">
+                <xsl:attribute name="w:bottom">
+                    <xsl:value-of select="$bottom-margin"/>
+                </xsl:attribute>
+                <xsl:if test="style:footer-style/style:page-layout-properties/@fo:min-height">
                     <xsl:variable name="footer-height">
-                        <xsl:call-template name="convert2dxa">
-                            <xsl:with-param name="value" select="style:footer-style/style:properties/@fo:min-height"/>
+                        <xsl:call-template name="convert2twip">
+                            <xsl:with-param name="value" select="style:footer-style/style:page-layout-properties/@fo:min-height"/>
                         </xsl:call-template>
                     </xsl:variable>
-                    <xsl:attribute name="w:footer"><xsl:value-of select="$bottom-margin - $footer-height"/></xsl:attribute>
+                    <xsl:attribute name="w:footer">
+                        <xsl:value-of select="$bottom-margin - $footer-height"/>
+                    </xsl:attribute>
                 </xsl:if>
             </xsl:if>
-            <xsl:if test="style:properties/@fo:margin-left">
-                <xsl:attribute name="w:left"><xsl:value-of select="$margin-left"/></xsl:attribute>
+            <xsl:if test="style:page-layout-properties/@fo:margin-left">
+                <xsl:attribute name="w:left">
+                    <xsl:value-of select="$margin-left"/>
+                </xsl:attribute>
             </xsl:if>
-            <xsl:if test="style:properties/@fo:margin-right">
-                <xsl:attribute name="w:right"><xsl:value-of select="$margin-right"/></xsl:attribute>
+            <xsl:if test="style:page-layout-properties/@fo:margin-right">
+                <xsl:attribute name="w:right">
+                    <xsl:value-of select="$margin-right"/>
+                </xsl:attribute>
             </xsl:if>
         </w:pgMar>
-        <xsl:variable name="border-top" select="style:properties/@fo:border-top | style:properties/@fo:border"/>
-        <xsl:variable name="border-bottom" select="style:properties/@fo:border-bottom | style:properties/@fo:border"/>
-        <xsl:variable name="border-left" select="style:properties/@fo:border-left | style:properties/@fo:border"/>
-        <xsl:variable name="border-right" select="style:properties/@fo:border-right | style:properties/@fo:border"/>
-        <xsl:variable name="border-line-width-top" select="style:properties/@style:border-line-width-top | style:properties/@style:border-line-width "/>
-        <xsl:variable name="border-line-width-bottom" select="style:properties/@style:border-line-width-bottom | style:properties/@style:border-line-width"/>
-        <xsl:variable name="border-line-width-left" select="style:properties/@style:border-line-width-left | style:properties/@style:border-line-width"/>
-        <xsl:variable name="border-line-width-right" select="style:properties/@style:border-line-width-right | style:properties/@style:border-line-width"/>
-        <xsl:variable name="padding-top" select="style:properties/@fo:padding-top | style:properties/@fo:padding"/>
-        <xsl:variable name="padding-bottom" select="style:properties/@fo:padding-bottom | style:properties/@fo:padding"/>
-        <xsl:variable name="padding-left" select="style:properties/@fo:padding-left | style:properties/@fo:padding"/>
-        <xsl:variable name="padding-right" select="style:properties/@fo:padding-right | style:properties/@fo:padding"/>
+        <xsl:variable name="border-top" select="style:page-layout-properties/@fo:border-top | style:page-layout-properties/@fo:border"/>
+        <xsl:variable name="border-bottom" select="style:page-layout-properties/@fo:border-bottom | style:page-layout-properties/@fo:border"/>
+        <xsl:variable name="border-left" select="style:page-layout-properties/@fo:border-left | style:page-layout-properties/@fo:border"/>
+        <xsl:variable name="border-right" select="style:page-layout-properties/@fo:border-right | style:page-layout-properties/@fo:border"/>
+        <xsl:variable name="border-line-width-top" select="style:page-layout-properties/@style:border-line-width-top | style:page-layout-properties/@style:border-line-width "/>
+        <xsl:variable name="border-line-width-bottom" select="style:page-layout-properties/@style:border-line-width-bottom | style:page-layout-properties/@style:border-line-width"/>
+        <xsl:variable name="border-line-width-left" select="style:page-layout-properties/@style:border-line-width-left | style:page-layout-properties/@style:border-line-width"/>
+        <xsl:variable name="border-line-width-right" select="style:page-layout-properties/@style:border-line-width-right | style:page-layout-properties/@style:border-line-width"/>
+        <xsl:variable name="padding-top" select="style:page-layout-properties/@fo:padding-top | style:page-layout-properties/@fo:padding"/>
+        <xsl:variable name="padding-bottom" select="style:page-layout-properties/@fo:padding-bottom | style:page-layout-properties/@fo:padding"/>
+        <xsl:variable name="padding-left" select="style:page-layout-properties/@fo:padding-left | style:page-layout-properties/@fo:padding"/>
+        <xsl:variable name="padding-right" select="style:page-layout-properties/@fo:padding-right | style:page-layout-properties/@fo:padding"/>
         <w:pgBorders w:offset-from="text">
             <xsl:if test="$border-top">
                 <xsl:element name="w:top">
@@ -187,8 +207,12 @@
                         <xsl:with-param name="so-border-line-width" select="$border-line-width-top"/>
                         <xsl:with-param name="so-border-position" select=" 'top' "/>
                     </xsl:call-template>
-                    <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-top"/></xsl:call-template></xsl:attribute>
-                    <xsl:if test="style:properties/@style:shadow!='none'">
+                    <xsl:attribute name="w:space">
+                        <xsl:call-template name="convert2pt">
+                            <xsl:with-param name="value" select="$padding-top"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:if test="style:page-layout-properties/@style:shadow!='none'">
                         <xsl:attribute name="w:shadow">on</xsl:attribute>
                     </xsl:if>
                 </xsl:element>
@@ -200,8 +224,12 @@
                         <xsl:with-param name="so-border-line-width" select="$border-line-width-bottom"/>
                         <xsl:with-param name="so-border-position" select=" 'bottom' "/>
                     </xsl:call-template>
-                    <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-bottom"/></xsl:call-template></xsl:attribute>
-                    <xsl:if test="style:properties/@style:shadow!='none'">
+                    <xsl:attribute name="w:space">
+                        <xsl:call-template name="convert2pt">
+                            <xsl:with-param name="value" select="$padding-bottom"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:if test="style:page-layout-properties/@style:shadow!='none'">
                         <xsl:attribute name="w:shadow">on</xsl:attribute>
                     </xsl:if>
                 </xsl:element>
@@ -213,8 +241,12 @@
                         <xsl:with-param name="so-border-line-width" select="$border-line-width-left"/>
                         <xsl:with-param name="so-border-position" select=" 'left' "/>
                     </xsl:call-template>
-                    <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-left"/></xsl:call-template></xsl:attribute>
-                    <xsl:if test="style:properties/@style:shadow!='none'">
+                    <xsl:attribute name="w:space">
+                        <xsl:call-template name="convert2pt">
+                            <xsl:with-param name="value" select="$padding-left"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:if test="style:page-layout-properties/@style:shadow!='none'">
                         <xsl:attribute name="w:shadow">on</xsl:attribute>
                     </xsl:if>
                 </xsl:element>
@@ -226,8 +258,12 @@
                         <xsl:with-param name="so-border-line-width" select="$border-line-width-right"/>
                         <xsl:with-param name="so-border-position" select=" 'right' "/>
                     </xsl:call-template>
-                    <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-right"/></xsl:call-template></xsl:attribute>
-                    <xsl:if test="style:properties/@style:shadow!='none'">
+                    <xsl:attribute name="w:space">
+                        <xsl:call-template name="convert2pt">
+                            <xsl:with-param name="value" select="$padding-right"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:if test="style:page-layout-properties/@style:shadow!='none'">
                         <xsl:attribute name="w:shadow">on</xsl:attribute>
                     </xsl:if>
                 </xsl:element>
@@ -236,7 +272,7 @@
         <xsl:variable name="valid-width">
             <xsl:value-of select="$page-width - $margin-left - $margin-right"/>
         </xsl:variable>
-        <xsl:apply-templates select="style:properties/style:columns">
+        <xsl:apply-templates select="style:page-layout-properties/style:columns">
             <xsl:with-param name="page-width" select="$valid-width"/>
         </xsl:apply-templates>
         <xsl:apply-templates select="/office:document/office:styles/text:linenumbering-configuration"/>
@@ -245,10 +281,16 @@
         <xsl:if test="not(@text:number-lines = 'false')">
             <xsl:element name="w:lnNumType">
                 <xsl:if test="@text:increment">
-                    <xsl:attribute name="w:count-by"><xsl:value-of select="@text:increment"/></xsl:attribute>
+                    <xsl:attribute name="w:count-by">
+                        <xsl:value-of select="@text:increment"/>
+                    </xsl:attribute>
                 </xsl:if>
                 <xsl:if test="@text:offset">
-                    <xsl:attribute name="w:distance"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="@text:offset"/></xsl:call-template></xsl:attribute>
+                    <xsl:attribute name="w:distance">
+                        <xsl:call-template name="convert2twip">
+                            <xsl:with-param name="value" select="@text:offset"/>
+                        </xsl:call-template>
+                    </xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="w:restart">continuous</xsl:attribute>
             </xsl:element>
@@ -257,25 +299,25 @@
     <xsl:template match="style:style" mode="section">
         <xsl:param name="master-page"/>
         <xsl:variable name="page-width">
-            <xsl:call-template name="convert2dxa">
-                <xsl:with-param name="value" select="$master-page/style:properties/@fo:page-width"/>
+            <xsl:call-template name="convert2twip">
+                <xsl:with-param name="value" select="$master-page/style:page-layout-properties/@fo:page-width"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="margin-left">
-            <xsl:call-template name="convert2dxa">
-                <xsl:with-param name="value" select="$master-page/style:properties/@fo:margin-left"/>
+            <xsl:call-template name="convert2twip">
+                <xsl:with-param name="value" select="$master-page/style:page-layout-properties/@fo:margin-left"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="margin-right">
-            <xsl:call-template name="convert2dxa">
-                <xsl:with-param name="value" select="$master-page/style:properties/@fo:margin-right"/>
+            <xsl:call-template name="convert2twip">
+                <xsl:with-param name="value" select="$master-page/style:page-layout-properties/@fo:margin-right"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="valid-width">
             <xsl:value-of select="$page-width - $margin-left - $margin-right"/>
         </xsl:variable>
         <w:type w:val="continuous"/>
-        <xsl:apply-templates select="style:properties/style:columns">
+        <xsl:apply-templates select="style:section-properties/style:columns">
             <xsl:with-param name="page-width" select="$valid-width"/>
         </xsl:apply-templates>
     </xsl:template>
@@ -283,7 +325,11 @@
         <xsl:param name="page-width"/>
         <w:cols w:num="{@fo:column-count}">
             <xsl:if test="@fo:column-gap">
-                <xsl:attribute name="w:space"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="@fo:column-gap"/></xsl:call-template></xsl:attribute>
+                <xsl:attribute name="w:space">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="@fo:column-gap"/>
+                    </xsl:call-template>
+                </xsl:attribute>
             </xsl:if>
             <xsl:if test="style:column-sep">
                 <xsl:attribute name="w:sep">on</xsl:attribute>
@@ -293,6 +339,7 @@
                     <xsl:attribute name="w:equalWidth">on</xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
+                    <xsl:attribute name="w:equalWidth">off</xsl:attribute>
                     <xsl:variable name="column-relative-width">
                         <xsl:call-template name="get-sum-column-width">
                             <xsl:with-param name="current-column" select="style:column[1]"/>
@@ -301,24 +348,30 @@
                     </xsl:variable>
                     <xsl:for-each select="style:column">
                         <xsl:element name="w:col">
-                            <xsl:attribute name="w:w"><xsl:value-of select="floor(substring-before(@style:rel-width,'*') * $page-width div $column-relative-width)"/></xsl:attribute>
+                            <xsl:attribute name="w:w">
+                                <xsl:value-of select="floor(substring-before(@style:rel-width,'*') * $page-width div $column-relative-width)"/>
+                            </xsl:attribute>
                             <xsl:if test="@fo:margin-right">
                                 <xsl:variable name="margin-right">
-                                    <xsl:call-template name="convert2dxa">
+                                    <xsl:call-template name="convert2twip">
                                         <xsl:with-param name="value" select="@fo:margin-right"/>
                                     </xsl:call-template>
                                 </xsl:variable>
                                 <xsl:choose>
                                     <xsl:when test="following-sibling::style:column">
                                         <xsl:variable name="margin-left">
-                                            <xsl:call-template name="convert2dxa">
+                                            <xsl:call-template name="convert2twip">
                                                 <xsl:with-param name="value" select="@fo:margin-left"/>
                                             </xsl:call-template>
                                         </xsl:variable>
-                                        <xsl:attribute name="w:space"><xsl:value-of select="$margin-right + $margin-left"/></xsl:attribute>
+                                        <xsl:attribute name="w:space">
+                                            <xsl:value-of select="$margin-right + $margin-left"/>
+                                        </xsl:attribute>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:attribute name="w:space"><xsl:value-of select="$margin-right"/></xsl:attribute>
+                                        <xsl:attribute name="w:space">
+                                            <xsl:value-of select="$margin-right"/>
+                                        </xsl:attribute>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:if>
