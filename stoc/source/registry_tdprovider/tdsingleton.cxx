@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdsingleton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:49:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 08:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,53 @@ using namespace com::sun::star;
 namespace stoc_rdbtdp
 {
 
+void SingletonTypeDescriptionImpl::init() {
+    {
+        MutexGuard guard(getMutex());
+        if (_xInterfaceTD.is() || _xServiceTD.is()) {
+            return;
+        }
+    }
+    Reference< XTypeDescription > base;
+    try {
+        base = Reference< XTypeDescription >(
+            _xTDMgr->getByHierarchicalName(_aBaseName), UNO_QUERY_THROW);
+    } catch (NoSuchElementException const & e) {
+        throw RuntimeException(
+            (OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.container.NoSuchElementException: "))
+             + e.Message),
+            static_cast< OWeakObject * >(this));
+    }
+    MutexGuard guard(getMutex());
+    if (!_xInterfaceTD.is() && !_xServiceTD.is()) {
+        switch (base->getTypeClass()) {
+        case TypeClass_INTERFACE:
+            _xInterfaceTD = Reference< XInterfaceTypeDescription >(
+                base, UNO_QUERY_THROW);
+            break;
+
+        case TypeClass_SERVICE:
+            _xServiceTD = Reference< XServiceTypeDescription >(
+                base, UNO_QUERY_THROW);
+            break;
+
+        default:
+            throw RuntimeException(
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "Singleton is based on neither interface nor service")),
+                static_cast< OWeakObject * >(this));
+        }
+    }
+    OSL_ASSERT(_xInterfaceTD.is() ^ _xServiceTD.is());
+}
+
 //__________________________________________________________________________________________________
 // virtual
 SingletonTypeDescriptionImpl::~SingletonTypeDescriptionImpl()
 {
-    delete _pServiceTD;
-
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -104,35 +145,29 @@ Reference< XServiceTypeDescription > SAL_CALL
 SingletonTypeDescriptionImpl::getService()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if ( !_pServiceTD )
-    {
-        Reference< XServiceTypeDescription > * pServiceTD
-            = new Reference< XServiceTypeDescription >();
-        try
-        {
-            _xTDMgr->getByHierarchicalName( _aServiceName ) >>= *pServiceTD;
-        }
-        catch ( NoSuchElementException const & )
-        {
-        }
-        OSL_ENSURE( (*pServiceTD).is(), "### no type description for service!" );
+    init();
+    return _xServiceTD;
+}
 
-        ClearableMutexGuard aGuard( getMutex() );
-        if ( _pServiceTD )
-        {
-            aGuard.clear();
-            delete pServiceTD;
-        }
-        else
-        {
-            _pServiceTD = pServiceTD;
-        }
-    }
+// XSingletonTypeDescription2
+//______________________________________________________________________________
+// virtual
+sal_Bool SAL_CALL
+SingletonTypeDescriptionImpl::isInterfaceBased()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    init();
+    return _xInterfaceTD.is();
+}
 
-    return *_pServiceTD;
+//______________________________________________________________________________
+// virtual
+Reference< XInterfaceTypeDescription > SAL_CALL
+SingletonTypeDescriptionImpl::getInterface()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    init();
+    return _xInterfaceTD;
 }
 
 }
-
-
-
