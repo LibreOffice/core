@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:08:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "logging.hxx"
 #endif
 
+class XMLTextStyleContext;
 //.........................................................................
 namespace xmloff
 {
@@ -107,7 +108,6 @@ namespace xmloff
 
     class IControlIdMap;
     class IFormsImportContext;
-    class OControlStyleContext;
 
     //=====================================================================
     //= OElementNameMap
@@ -146,7 +146,7 @@ namespace xmloff
         IFormsImportContext&    m_rFormImport;      // the form import context
         IEventAttacherManager&  m_rEventManager;    // the event attacher manager
 
-        const OControlStyleContext* m_pStyleElement;    // the XML element which describes the style we encountered
+        const XMLTextStyleContext*  m_pStyleElement;    // the XML element which describes the style we encountered
                                                         // while reading our element
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
@@ -215,6 +215,7 @@ namespace xmloff
 
     private:
         ::rtl::OUString implGetDefaultName() const;
+        void implImportGenericProperties();
 
         /** sets the style properties which have been read for the element (if any)
         */
@@ -712,13 +713,28 @@ namespace xmloff
     //=====================================================================
     //= OColumnWrapperImport
     //=====================================================================
-    class OColumnWrapperImport : public OControlWrapperImport
+    class OColumnWrapperImport : public SvXMLImportContext
     {
+    protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
+                                m_xOwnAttributes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                                m_xParentContainer;
+        IFormsImportContext&    m_rFormImport;
+        IEventAttacherManager&  m_rEventManager;
+
     public:
         OColumnWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
+
+        // SvXMLImportContext overridables
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     protected:
-        virtual OControlImport* implCreateChildContext(
+        OControlImport* implCreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             OControlElement::ElementType _eType);
     };
@@ -774,6 +790,10 @@ namespace xmloff
         virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
+
+        OControlImport* implCreateChildContext(
+                sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+                OControlElement::ElementType _eType );
 
 
         void implTranslateStringListProperty(const ::rtl::OUString& _rPropertyName, const ::rtl::OUString& _rValue);
