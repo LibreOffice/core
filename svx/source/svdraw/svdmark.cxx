@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,31 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
 
 ULONG SdrMarkList::FindObject(const SdrObject* pObj)
 {
+    // #109658#
+    //
+    // Since relying on OrdNums is not allowed for the selection because objects in the
+    // selection may not be inserted in a list if they are e.g. modified ATM, i changed
+    // this loop to just look if the object pointer is in the selection.
+    //
+    // Problem is that GetOrdNum() which is const, internally casts no non-const and
+    // hardly sets the OrdNum member of the object (nOrdNum) to 0 (ZERO) if the object
+    // is not inserted in a object list.
+    // Since this may be by purpose and necessary somewhere else i decided that it is
+    // less dangerous to change this method then changing SdrObject::GetOrdNum().
+    if(pObj && aList.Count())
+    {
+        for(sal_uInt32 a(0L); a < aList.Count(); a++)
+        {
+            if(((SdrMark*)(aList.GetObject(a)))->GetObj() == pObj)
+            {
+                return a;
+            }
+        }
+    }
+
+    return CONTAINER_ENTRY_NOTFOUND;
+
+    /*
     ForceSort();
     if (pObj==NULL || aList.Count()==0) return CONTAINER_ENTRY_NOTFOUND;
     const SdrObjList* pOL=pObj->GetObjList();
@@ -312,6 +337,7 @@ ULONG SdrMarkList::FindObject(const SdrObject* pObj)
         else nR=nMid;
     }
     return CONTAINER_ENTRY_NOTFOUND;
+    */
 }
 
 void SdrMarkList::InsertEntry(const SdrMark& rMark, FASTBOOL bChkSort)
