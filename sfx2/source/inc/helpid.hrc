@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 10:36:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,9 @@
 #define HID_CONFIG_LOAD                             (HID_SFX_START + 309)
 #define HID_CONFIG_SAVE                             (HID_SFX_START + 310)
 
-#define ACT_SFX_HID_END HID_CONFIG_SAVE
+#define HID_SEARCHDIALOG                            (HID_SFX_START + 311)
+
+#define ACT_SFX_HID_END HID_SEARCHDIALOG
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
