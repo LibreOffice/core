@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-24 14:27:10 $
+ *  last change: $Author: tl $ $Date: 2002-10-15 12:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,7 +1560,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     const SfxHyphenRegionItem *pHyp = NULL;
     USHORT nWhich = GetWhich( SID_ATTR_HYPHENREGION );
-    if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
         pHyp = &( (const SfxHyphenRegionItem &) rSet.Get( nWhich ) );
 
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
