@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-05 16:37:28 $
+#   last change: $Author: tv $ $Date: 2001-11-08 13:10:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,7 @@ ZIP1LIST        = srcheng.ini
 
 
 ZIP2TARGET      = $(CONFIG_USER_TARGET)
-ZIP2LIST        = autotbl.fmt                   \
-                dbtitle.rdb
-
+ZIP2LIST        = autotbl.fmt
 
 .INCLUDE : target.mk
 
