@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:18:10 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String S_PROG_START
     Text[ polish ] = "Uruchomienie programu: ($Arg1); ($Arg2)";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ korean ] = "ÇÁ·Î±×·¥ ½ÃÀÛ: ($Arg1); ($Arg2)";
+    Text[ korean ] = "í”„ë¡œê·¸ë¨ ì‹œì‘: ($Arg1); ($Arg2)";
     Text[ chinese_simplified ] = "Program start: ($Arg1); ($Arg2)";
     Text[ chinese_traditional ] = "Program start: ($Arg1); ($Arg2)";
     Text[ arabic ] = "Program start: ($Arg1); ($Arg2)";
@@ -114,7 +114,7 @@ String S_ERROR_OUTSIDE_TESTCASE
     Text[ polish ] = "B³¹d poza Testcase.";
     Text[ portuguese_brazilian ] = "Fehler au?erhalb eines Testcase.";
     Text[ japanese ] = "Error outside of test case.";
-    Text[ korean ] = "Å×½ºÆ® ÄÉÀÌ½º ¿ÜºÎÀÇ ¿À·ù";
+    Text[ korean ] = "í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ì™¸ë¶€ì˜ ì˜¤ë¥˜";
     Text[ chinese_simplified ] = "Error outside of test case";
     Text[ chinese_traditional ] = "Error outside of test case";
     Text[ arabic ] = "Error outside of test case";
@@ -138,7 +138,7 @@ String S_WARNING_PREFIX
     Text[ polish ] = "Ostrze¿enie: ";
     Text[ portuguese_brazilian ] = "Warning: ";
     Text[ japanese ] = "Warning: ";
-    Text[ korean ] = "°æ°í: ";
+    Text[ korean ] = "ê²½ê³ : ";
     Text[ chinese_simplified ] = "Warning: ";
     Text[ chinese_traditional ] = "Warning: ";
     Text[ arabic ] = "Warning:";
@@ -146,6 +146,7 @@ String S_WARNING_PREFIX
     Text[ catalan ] = "Advertencia: ";
     Text[ finnish ] = "Varoitus: ";
 };
+
 
 
 
