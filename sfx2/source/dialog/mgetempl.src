@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:41:55 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_MANAGE_STYLES
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -130,6 +131,7 @@ TabPage TP_MANAGE_STYLES
         Text[ turkish ] = "~Otomatik güncelleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar automáticamente";
+        Text[ finnish ] = "~Automaattinen päivitys";
     };
     FixedText FT_NEXT
     {
@@ -141,7 +143,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "Modello ~successivo" ;
         Text [ portuguese_brazilian ] = "~Próximo" ;
         Text [ portuguese ] = "~Estilo seguinte" ;
-        Text [ finnish ] = "~Seuraava" ;
+        Text [ finnish ] = "Seu~raava tyyli" ;
         Text [ danish ] = "Næste typografi" ;
         Text [ french ] = "~Style suivant" ;
         Text [ swedish ] = "Nästa ~formatmall" ;
@@ -180,7 +182,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "~Basato su" ;
         Text [ portuguese_brazilian ] = "~Baseado em" ;
         Text [ portuguese ] = "~Baseado em" ;
-        Text [ finnish ] = "~Perustuu" ;
+        Text [ finnish ] = "~Perusta" ;
         Text [ danish ] = "Kædet med" ;
         Text [ french ] = "~Lié à" ;
         Text [ swedish ] = "~Länkad med" ;
@@ -217,7 +219,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "~Area" ;
         Text [ portuguese_brazilian ] = "~Região" ;
         Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Alue" ;
+        Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Område" ;
@@ -266,7 +268,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "Contiene" ;
         Text [ portuguese_brazilian ] = "Contém" ;
         Text [ portuguese ] = "Contém" ;
-        Text [ finnish ] = "Sisältää" ;
+        Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indeholder" ;
         Text [ french ] = "Contient" ;
         Text [ swedish ] = "Innehåller" ;
