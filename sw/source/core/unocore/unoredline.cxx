@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,9 +863,9 @@ Sequence<Type> SwXRedline::getTypes()
     uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
     uno::Sequence<uno::Type> aBaseTypes = SwXRedlineBaseClass::getTypes();
     const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
+    sal_Int32 nCurType = aTypes.getLength();
     aTypes.realloc(aTypes.getLength() + aBaseTypes.getLength());
     uno::Type* pTypes = aTypes.getArray();
-    sal_Int32 nCurType = aTypes.getLength();
     for(sal_Int32 nType = 0; nType < aBaseTypes.getLength(); nType++)
         pTypes[nCurType++] = pBaseTypes[nType];
     return aTypes;
