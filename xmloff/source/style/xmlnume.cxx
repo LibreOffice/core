@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 18:59:51 $
+ *  last change: $Author: cl $ $Date: 2000-12-06 10:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             OUString sValue;
             rProp.Value >>= sValue;
             if( sValue.getLength() > 0 )
-                cBullet = (sal_Unicode)sValue[0];
+            {
+                // HACK
+                DBG_ASSERT( (sal_Unicode)sValue[0] != 0, "WARNING: don't know how to handle zero bullet chars?" );
+                if( (sal_Unicode)sValue[0] != 0 )
+                    cBullet = (sal_Unicode)sValue[0];
+            }
         }
         else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_RELSIZE, sizeof(XML_UNO_NAME_NRULE_BULLET_RELSIZE) ) )
         {
