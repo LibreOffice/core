@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-16 10:03:51 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuchar.hxx"
+
 #include <svx/editdata.hxx>
 #include <svx/svxids.hrc>
 #ifndef _EEITEM_HXX //autogen
@@ -77,13 +79,22 @@
 #endif
 
 #include "dlg_char.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "drviewsh.hxx"
-#include "viewshel.hxx"
-#include "docshell.hxx"
-#include "fuchar.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#include "DrawDocShell.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuChar, FuPoor );
 
@@ -93,9 +104,13 @@ TYPEINIT1( FuChar, FuPoor );
 |*
 \************************************************************************/
 
-FuChar::FuChar(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuChar::FuChar (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -159,5 +174,4 @@ FuChar::FuChar(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     }
 }
 
-
-
+} // end of namespace sd
