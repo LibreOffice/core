@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.6 $
- *  last change: $Author: hro $ $Date: 2001-05-10 10:17:55 $
+ *  $Revision: 1.7 $
+ *  last change: $Author: hro $ $Date: 2001-05-17 15:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,6 +1913,9 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
 #ifdef MAC
                 if (aPath[aPath.Len()-1] == ':')
                         aPath.Cut(aPath.Len()-1);
+#else
+                if (aPath.GetChar(aPath.Len()-1)== ACCESSDELIM(DEFSTYLE)[0])
+                        aPath.Erase(aPath.Len()-1);
 #endif
                 aPath += aThis;
                 DirEntry aEntry( String(aPath, osl_getThreadTextEncoding()));
