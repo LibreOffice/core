@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:49:13 $
+#   last change: $Author: rt $ $Date: 2003-08-27 12:09:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,8 @@ SLOFILES=$(SLO)$/shellexec.obj\
     $(SLO)$/shellexecentry.obj
 SHL1OBJS=$(SLOFILES) 
     
-SHL1TARGET= $(TARGET)
-SHL1IMPLIB= i$(TARGET)
+SHL1TARGET= syssh
+SHL1IMPLIB= isyssh
 
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
