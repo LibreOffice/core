@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:05:22 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 12:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,10 +296,6 @@ void ODbaseIndexDialog::Init()
     // und in die Indexliste der Tabelle eingetragen
 
     ///////////////////////////////////////////////////////////////////////////
-    // substitute $(INST)
-    m_aDSN = SFX_APP()->GetIniManager()->SubstPathVars( m_aDSN );
-
-    ///////////////////////////////////////////////////////////////////////////
     // if the string does not contain a path, cut the string
     DirEntry aInitEntry( m_aDSN );
     FileStat aFileStat(aInitEntry);     // do not combine - bug in VC++ 2.0!
@@ -504,6 +500,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:05:22  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 15:54:26  fs
  ************************************************************************/
