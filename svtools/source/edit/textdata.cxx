@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:40:02 $
+ *  last change: $Author: mt $ $Date: 2002-08-01 17:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ TEParaPortions::~TEParaPortions()
 
 void TEParaPortions::Reset()
 {
-    for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
+    for ( ULONG nPortion = 0; nPortion < Count(); nPortion++ )
         delete GetObject( nPortion );
     Clear();
 }
