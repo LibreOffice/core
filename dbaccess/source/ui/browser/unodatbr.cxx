@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-18 10:10:04 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 08:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3781,7 +3781,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case SID_PASTE:
         {
             TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-            if ( etQuery == eType )
+            if ( etQuery == eType || etQueryContainer == eType)
                 implPasteQuery( pEntry, ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
             else
                 implPasteTable( pEntry, aTransferData );
