@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-22 13:35:29 $
+ *  last change: $Author: mba $ $Date: 2000-11-22 18:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 #endif
 
 #include <vos/process.hxx>
-#include <unotools/localfilehelper.hxx>
 
 using namespace osl;
 using namespace utl;
@@ -394,7 +393,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         if ( SUBSTITUTE_INST == aSubString )
         {
             nReplaceLength = REPLACELENGTH_INST;
-            aReplacement = m_aInstURL;
+            aReplacement = m_aInstPath;
             bConvertToPath = sal_True;
         }
         else
@@ -403,7 +402,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         if ( SUBSTITUTE_USER == aSubString || SUBSTITUTE_USERPATH == aSubString )
         {
             nReplaceLength = REPLACELENGTH_USER;
-            aReplacement = m_aUserURL;
+            aReplacement = m_aUserPath;
             bConvertToPath = sal_True;
         }
         else
@@ -412,7 +411,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         if ( SUBSTITUTE_PROG == aSubString || SUBSTITUTE_PROGPATH == aSubString )
         {
             nReplaceLength = REPLACELENGTH_PROG;
-            aReplacement = m_aProgURL;
+            aReplacement = m_aProgPath;
             bConvertToPath = sal_True;
         }
         else
@@ -714,15 +713,17 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         DBG_ERRORFILE( "wrong any type" );
 
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALLURL );
-    if ( aAny >>= aOfficePath )
+    if ( !aAny.hasValue() || ( aAny >>= aOfficePath ) )
     {
         m_aInstURL = aOfficePath;
         if ( !m_aInstURL.Len() )
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aInstPath, m_aInstURL );
-    }
-    else if ( !aAny.hasValue() )
-    {
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aInstPath, m_aInstURL );
+        {
+            rtl::OUString aRet;
+            ::rtl::OUString aTmp;
+            FileBase::normalizePath( m_aInstPath, aTmp );
+            FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
+            m_aInstURL = aRet;
+        }
     }
     else
         DBG_ERRORFILE( "wrong any type" );
@@ -735,15 +736,17 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         DBG_ERRORFILE( "wrong any type" );
 
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::USERINSTALLURL );
-    if ( aAny >>= aUserPath )
+    if ( !aAny.hasValue() || ( aAny >>= aUserPath ) )
     {
         m_aUserURL = aUserPath;
         if ( !m_aUserURL.Len() )
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aUserPath, m_aUserURL );
-    }
-    else if ( !aAny.hasValue() )
-    {
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aUserPath, m_aUserURL );
+        {
+            rtl::OUString aRet;
+            ::rtl::OUString aTmp;
+            FileBase::normalizePath( m_aUserPath, aTmp );
+            FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
+            m_aUserURL = aRet;
+        }
     }
     else
         DBG_ERRORFILE( "wrong any type" );
@@ -752,13 +755,14 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     ::vos::OStartupInfo aInfo;
     aInfo.getExecutableFile( aProgName );
     sal_Int32 lastIndex = aProgName.lastIndexOf('/');
-    if ( lastIndex )
+    if ( lastIndex >= 0 )
     {
-        m_aProgPath = aProgName.copy(0, lastIndex + 1);
+        OUString aTemp = aProgName.copy( 0, lastIndex );
         OUString aTmp;
-        FileBase::getSystemPathFromNormalizedPath( m_aProgPath, aTmp );
+        FileBase::getFileURLFromNormalizedPath( aTemp, aTmp );
+        m_aProgURL = aTmp;
+        FileBase::getSystemPathFromNormalizedPath( aTemp, aTmp );
         m_aProgPath = aTmp;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aProgPath, m_aProgURL );
     }
 
     m_eLanguageType = LANGUAGE_ENGLISH_US;
