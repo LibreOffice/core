@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
+ *  last change: $Author: as $ $Date: 2002-04-22 13:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ namespace framework{
 #define SERVICENAME_STATUSINDICATOR                         DECLARE_ASCII("com.sun.star.task.XStatusIndicator"                  )
 #define SERVICENAME_UIINTERACTIONHANDLER                    DECLARE_ASCII("com.sun.star.task.InteractionHandler"                )
 #define SERVICENAME_JOBEXECUTOR                             DECLARE_ASCII("com.sun.star.task.JobExecutor"                       )
+#define SERVICENAME_DISPATCHRECORDERSUPPLIER                DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"         )
+#define SERVICENAME_DISPATCHRECORDER                        DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -131,6 +133,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_PIPETERMINATOR                   DECLARE_ASCII("com.sun.star.comp.OfficeIPCThreadController"         )
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                    DECLARE_ASCII("com.sun.star.comp.desktop.QuickstartWrapper"         )
 #define IMPLEMENTATIONNAME_JOBEXECUTOR                      DECLARE_ASCII("com.sun.star.comp.framework.JobExecutor"             )
+#define IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER         DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorderSupplier")
+#define IMPLEMENTATIONNAME_DISPATCHRECORDER                 DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorder"        )
 
 }       //  namespace framework
 
