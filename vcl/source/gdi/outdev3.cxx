@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: th $ $Date: 2000-12-08 18:35:43 $
+ *  last change: $Author: ka $ $Date: 2000-12-12 15:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3770,11 +3770,12 @@ BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
         aBmp = pVDev->GetBitmap( Point(), aSize );
         if ( !!aBmp && aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
         {
-            Point       aTempPoint;
-            Polygon     aPoly( Rectangle( aTempPoint, aSize ) );
-            long        nOldOffX = mnOutOffX;
-            long        nOldOffY = mnOutOffY;
-            BOOL        bOldMap = mbMap;
+            Point           aTempPoint;
+            Polygon         aPoly( Rectangle( aTempPoint, aSize ) );
+            long            nOldOffX = mnOutOffX;
+            long            nOldOffY = mnOutOffY;
+            GDIMetaFile*    pOldMetaFile = mpMetaFile;
+            BOOL            bOldMap = mbMap;
 
             aTempPoint.Y() = nOff;
             aPoly.Rotate( aTempPoint, mpFontEntry->mnOwnOrientation );
@@ -3782,6 +3783,7 @@ BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
 
             mnOutOffX   = 0L;
             mnOutOffY   = 0L;
+            mpMetaFile  = NULL;
             mbMap       = FALSE;
 
             DrawMask( Point( nX + aBound.Left(),
@@ -3791,6 +3793,7 @@ BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
             mnOutOffX   = nOldOffX;
             mnOutOffY   = nOldOffY;
             mbMap       = bOldMap;
+            mpMetaFile  = pOldMetaFile;
         }
 
         return TRUE;
