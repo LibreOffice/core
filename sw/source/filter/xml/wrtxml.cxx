@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::beans;
 
 SwXMLWriter::SwXMLWriter( sal_Bool bPl ) :
     bPlain( bPl )
@@ -139,6 +141,7 @@ sal_uInt32 SwXMLWriter::WriteStorage()
 sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
+    // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
@@ -146,32 +149,24 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     if( !xServiceFactory.is() )
         return ERR_SWG_WRITE_ERROR;
 
-    Reference< XInterface > xWriter = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer") );
-    ASSERT( xWriter.is(),
-            "SwXMLWriter::Write: com.sun.star.xml.sax.Writer service missing" );
-    if(!xWriter.is())
-        return ERR_SWG_WRITE_ERROR;
-
-    Reference< frame::XModel > xModel = rPaM.GetDoc()->GetDocShell()->GetModel();
-    ASSERT( xModel.is(),
-            "XMLWriter::Write: got no model" );
-    if( !xModel.is() )
-        return ERR_SWG_WRITE_ERROR;
-
-    pDoc = rPaM.GetDoc();
-    PutNumFmtFontsInAttrPool();
-//  PutEditEngFontsInAttrPool();
-
+    // Get data sink ...
     Reference< io::XOutputStream > xOut;
     SvStorageStreamRef xDocStream;
+    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    SvXMLGraphicHelper *pGraphicHelper = 0;
+
     SvStorage *pStorage = bPlain ? 0 : rMed.GetOutputStorage( sal_True );
     if( pStorage )
     {
+        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+                                                     GRAPHICHELPER_MODE_WRITE,
+                                                     sal_False );
+        xGraphicResolver = pGraphicHelper;
+
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-//      xDocStream->SetBufferSize( 16*1024 );
+        xDocStream->SetBufferSize( 16*1024 );
         xOut = new utl::OOutputStreamWrapper( *xDocStream );
     }
     else
@@ -179,44 +174,70 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
         xOut = rMed.GetDataSink();
     }
 
-    Reference< io::XActiveDataSource > xSrc( xWriter, UNO_QUERY );
-    xSrc->setOutputStream( xOut );
+    // get writer
+    Reference< io::XActiveDataSource > xWriter(
+            xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+            UNO_QUERY );
+    ASSERT( xWriter.is(),
+            "SwXMLWriter::Write: com.sun.star.xml.sax.Writer service missing" );
+    if(!xWriter.is())
+        return ERR_SWG_WRITE_ERROR;
 
-    Reference< document::XGraphicObjectResolver > xEmbeddedGraphicExport;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
-    if( pStorage )
-    {
-        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
-                                                     GRAPHICHELPER_MODE_WRITE,
-                                                     sal_False );
-        xEmbeddedGraphicExport = pGraphicHelper;
-    }
+    // connect writer and output stream
+    xWriter->setOutputStream( xOut );
 
+    // get filter
     Reference< xml::sax::XDocumentHandler > xHandler( xWriter, UNO_QUERY );
+    Sequence < Any > aArgs( 2 );
+    Any *pArgs = aArgs.getArray();
+    *pArgs++ <<= xHandler;
+    *pArgs++ <<= xGraphicResolver;
+    Reference< document::XExporter > xExporter(
+            xServiceFactory->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.office.sax.exporter.Writer"),
+                aArgs ),
+            UNO_QUERY );
+    ASSERT( xExporter.is(),
+            "XMLReader::Read: com.sun.star.xml.sax.exporter.Writer service missing" );
+    if( !xExporter.is() )
+        return ERR_SWG_WRITE_ERROR;
 
-    SwXMLExport *pExp = new SwXMLExport( xModel, rPaM, *pFileName, xHandler,
-                                         xEmbeddedGraphicExport,
-                                         bWriteAll, bWriteOnlyFirstTable,
-                                         bShowProgress );
+    //Get model
+    Reference< lang::XComponent > xModelComp(
+        rPaM.GetDoc()->GetDocShell()->GetModel(), UNO_QUERY );
+    ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
+    if( !xModelComp.is() )
+        return ERR_SWG_WRITE_ERROR;
 
-    Reference< document::XExporter > xExporter( pExp );
+    // connect model and filter
+    xExporter->setSourceDocument( xModelComp );
 
-    sal_uInt32 nRet = pExp->exportDoc( sXML_text );
+    pDoc = rPaM.GetDoc();
+    PutNumFmtFontsInAttrPool();
+    PutEditEngFontsInAttrPool();
+
+    Sequence < PropertyValue > aProps( 1 );
+    PropertyValue *pProps = aProps.getArray();
+    pProps->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FileName") );
+    (pProps++)->Value <<= OUString( rMed.GetName() );
+
+    Reference < XFilter > xFilter( xExporter, UNO_QUERY );
+    xFilter->filter( aProps );
+
     if( xDocStream.Is() )
         xDocStream->Commit();
 
     if( pStorage )
         pDoc->GetDocShell()->SaveAsChilds( pStorage );
 
-
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xEmbeddedGraphicExport = 0;
-//  delete pExp;
+    xGraphicResolver = 0;
 
     ResetWriter();
 
-    return nRet;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -232,11 +253,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.11 2001-01-12 16:34:01 cl Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.12 2001-01-17 10:55:18 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/01/12 16:34:01  cl
+      #82042# added support for xml filter components
+
       Revision 1.10  2001/01/08 09:44:55  mib
       Removed SwDoc and SvStorage members from SwXMLExport
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ protected:
 
 public:
 
+    SwXMLImport();
     SwXMLImport( SwDoc& rDoc, const SwPaM& rPaM, sal_Bool bLoadDoc,
                  sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
                  const ::com::sun::star::uno::Reference<
@@ -144,6 +145,22 @@ public:
                    SvStorage *pPkg );
 
     ~SwXMLImport();
+
+    void         setTextInsertMode(
+                     const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextRange > & rInsertPos );
+    void         setStyleInsertMode( sal_uInt16 nFamilies,
+                                     sal_Bool bOverwrite );
+
+    // ::com::sun::star::xml::sax::XDocumentHandler
+    virtual void SAL_CALL startDocument(void)
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL endDocument(void)
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+
+    // XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     void                    InsertStyles( sal_Bool bAuto );
     void                    FinishStyles();

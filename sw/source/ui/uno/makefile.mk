@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2000-11-07 14:42:08 $
+#   last change: $Author: mib $ $Date: 2001-01-17 10:54:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ CXXFILES = \
         unoatxt.cxx  \
         unomod.cxx  \
         unotxvw.cxx \
-        dlelstnr.cxx
+        dlelstnr.cxx \
+        unofreg.cxx
 
 
 SLOFILES =  \
@@ -95,7 +96,8 @@ SLOFILES =  \
         $(SLO)$/unoatxt.obj \
         $(SLO)$/unomod.obj \
         $(SLO)$/unotxvw.obj \
-        $(SLO)$/dlelstnr.obj
+        $(SLO)$/dlelstnr.obj \
+        $(SLO)$/unofreg.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/unodispatch.obj\
@@ -103,7 +105,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/unotxdoc.obj \
         $(SLO)$/unoatxt.obj \
         $(SLO)$/unomod.obj \
-        $(SLO)$/unotxvw.obj
+        $(SLO)$/unotxvw.obj \
+        $(SLO)$/unofreg.obj
 
 
 # --- Targets -------------------------------------------------------

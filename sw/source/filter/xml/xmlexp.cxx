@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
 #ifndef _PAM_HXX //autogen wg. SwPaM
 #include <pam.hxx>
@@ -110,6 +113,12 @@
 #ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
 #endif
+#ifndef _SWSWERROR_H
+#include <swerror.h>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 
 #ifndef _XMLTEXTE_HXX
 #include <xmltexte.hxx>
@@ -120,6 +129,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -163,6 +173,27 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 }
 #endif
 
+SwXMLExport::SwXMLExport() :
+    SvXMLExport( MAP_INCH, sXML_text ),
+#ifdef XML_CORE_API
+    pCurPaM( 0 ),
+    pOrigPaM( &rPaM ),
+#endif
+    pTableItemMapper( 0 ),
+    pTableLines( 0 ),
+    nContentProgressStart( 0 ),
+#ifdef XML_CORE_API
+    bExportWholeDoc( bExpWholeDoc ),
+    bExportFirstTableOnly( bExpFirstTableOnly ),
+#endif
+    bShowProgress( sal_True ),
+    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
+    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
+{
+    _InitItemExport();
+}
+
+#ifdef XML_CORE_API
 SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
              const OUString& rFileName,
              const Reference< XDocumentHandler > & rHandler,
@@ -171,10 +202,8 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
              sal_Bool bShowProg ) :
     SvXMLExport( rFileName, rHandler, rModel, rEmbeddedGrfObjs,
                  SW_MOD()->GetMetric( rPaM.GetDoc()->IsHTMLMode() ) ),
-#ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
-#endif
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
     nContentProgressStart( 0 ),
@@ -184,7 +213,29 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
 {
-    SwDoc *pDoc = rPaM.GetDoc();
+    _InitItemExport();
+}
+#endif
+
+sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
+{
+    if( !GetModel().is() )
+        return ERR_SWG_WRITE_ERROR;
+
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xTextTunnel.is() )
+        return ERR_SWG_WRITE_ERROR;
+
+    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+    ASSERT( pText, "SwXText missing" );
+    if( !pText )
+        return ERR_SWG_WRITE_ERROR;
+
+    SwDoc *pDoc = pText->GetDoc();
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
     sal_uInt16 nItems = rPool.GetItemCount( RES_UNKNOWNATR_CONTAINER );
@@ -219,13 +270,18 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
         }
     }
 
+    MapUnit eUnit = (MapUnit)SW_MOD()->GetMetric( pDoc->IsHTMLMode() );
+    if( GetMM100UnitConverter().getXMLMeasureUnit() != eUnit )
+    {
+        GetMM100UnitConverter().setXMLMeasureUnit( eUnit );
+        pTwipUnitConv->setXMLMeasureUnit( eUnit );
+    }
+
     SetExtended( bExtended );
 
 #ifdef XML_CORE_API
     SetCurPaM( rPaM, bExportWholeDoc, bExportFirstTableOnly );
 #endif
-
-    _InitItemExport();
 
     // Update doc stat, so that correct values are exported and
     // the progress works correctly.
@@ -248,6 +304,21 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     SdrModel* pModel = pDoc->GetDrawModel();
     if( pModel )
         pModel->GetPage( 0 )->RecalcObjOrdNums();
+
+    sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
+
+#ifdef XML_CORE_API
+    if( pCurPaM )
+    {
+        while( pCurPaM->GetNext() != pCurPaM )
+            delete pCurPaM->GetNext();
+        delete pCurPaM;
+        pCurPam = 0;
+    }
+#endif
+    ASSERT( !pTableLines, "there are table columns infos left" );
+
+    return nRet;
 }
 
 XMLTextParagraphExport* SwXMLExport::CreateTextParagraphExport()
@@ -262,16 +333,7 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
 
 __EXPORT SwXMLExport::~SwXMLExport()
 {
-#ifdef XML_CORE_API
-    if( pCurPaM )
-    {
-        while( pCurPaM->GetNext() != pCurPaM )
-            delete pCurPaM->GetNext();
-        delete pCurPaM;
-    }
-#endif
     _FinitItemExport();
-    ASSERT( !pTableLines, "there are table columns infos left" );
 }
 
 
@@ -313,6 +375,27 @@ void SwXMLExport::_ExportContent()
     GetTextParagraphExport()->exportFramesBoundToPage( bShowProgress );
     GetTextParagraphExport()->exportText( xText, bShowProgress );
 #endif
+}
+
+Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Writer" ) );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SwXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SwXMLExport" ) );
+}
+
+Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport;
 }
 
 #ifdef XML_CORE_API

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,8 @@ protected:
 
 public:
 
+    SwXMLExport();
+#ifdef XML_CORE_API
     SwXMLExport( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::frame::XModel > & rModel,
                  SwPaM& rPaM, const ::rtl::OUString& rFileName,
@@ -170,7 +172,10 @@ public:
                     ::com::sun::star::document::XGraphicObjectResolver > &,
                  sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
                  sal_Bool bShowProgr );
+#endif
     virtual ~SwXMLExport();
+
+    virtual sal_uInt32 exportDoc( const sal_Char *pClass=0 );
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:34:00 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATACONTROL_HPP_
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <com/sun/star/text/XTextRange.hpp>
+#endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
@@ -105,6 +108,9 @@
 #ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 #ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
 #endif
@@ -115,7 +121,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 XMLReader::XMLReader()
@@ -129,23 +138,12 @@ int XMLReader::GetReaderType()
 
 sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 {
+    // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
-        return ERR_SWG_READ_ERROR;
-
-    // Get model
-    SwDocShell *pDocSh = rDoc.GetDocShell();
-    ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
-    if( !pDocSh )
-        return ERR_SWG_READ_ERROR;
-
-    Reference< frame::XModel > xModel = pDocSh->GetModel();
-    ASSERT( xModel.is(),
-            "XMLReader::Read: got no model" );
-    if( !xModel.is() )
         return ERR_SWG_READ_ERROR;
 
     // Get data source ...
@@ -155,20 +153,20 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     Reference< io::XActiveDataSource > xSource;
     Reference< XInterface > xPipe;
+    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvStorageStreamRef xDocStream;
 
      xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
 
-    Reference< document::XGraphicObjectResolver > xEmbeddedGraphicExport;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
-    SvStorageStreamRef xDocStream;
     SvStorage *pStorage = pMedium->GetStorage();
     if( pStorage )
     {
         pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
                                                      GRAPHICHELPER_MODE_READ,
                                                      sal_False );
-        xEmbeddedGraphicExport = pGraphicHelper;
+        xGraphicResolver = pGraphicHelper;
 
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
@@ -203,21 +201,51 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     }
 
     // get parser
-    Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-    ASSERT( xXMLParser.is(),
+    Reference< xml::sax::XParser > xParser(
+            xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            UNO_QUERY );
+    ASSERT( xParser.is(),
             "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-    if( !xXMLParser.is() )
+    if( !xParser.is() )
         return ERR_SWG_READ_ERROR;
 
-    sal_uInt16 nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
-    sal_Bool bLoadDoc;
-    sal_Bool bInsert;
+    // get filter
+    Sequence < Any > aArgs( 1 );
+    Any *pArgs = aArgs.getArray();
+    *pArgs++ <<= xGraphicResolver;
+    Reference< xml::sax::XDocumentHandler > xFilter(
+            xServiceFactory->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.office.sax.importer.Writer"),
+                aArgs ),
+            UNO_QUERY );
+    ASSERT( xFilter.is(),
+            "XMLReader::Read: com.sun.star.xml.sax.importer.Writer service missing" );
+    if( !xFilter.is() )
+        return ERR_SWG_READ_ERROR;
+
+    // connect parser and filter
+    xParser->setDocumentHandler( xFilter );
+
+    // Get model
+    SwDocShell *pDocSh = rDoc.GetDocShell();
+    ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
+    if( !pDocSh )
+        return ERR_SWG_READ_ERROR;
+
+    Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
+    ASSERT( xModelComp.is(),
+            "XMLReader::Read: got no model" );
+    if( !xModelComp.is() )
+        return ERR_SWG_READ_ERROR;
+
+    // connect model and filter
+    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
+    xImporter->setTargetDocument( xModelComp );
+
     if( aOpt.IsFmtsOnly() )
     {
-        bLoadDoc = sal_False;
-        bInsert = aOpt.IsMerge();
-        nStyleFamilyMask = 0U;
+        sal_uInt16 nStyleFamilyMask = 0U;
         if( aOpt.IsFrmFmts() )
             nStyleFamilyMask |= SFX_STYLE_FAMILY_FRAME;
         if( aOpt.IsPageDescs() )
@@ -226,23 +254,23 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             nStyleFamilyMask |= (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
         if( aOpt.IsNumRules() )
             nStyleFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
+
+        Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
+        SwXMLImport *pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
+                                            SwXMLImport::getUnoTunnelId() );
+        pFilter->setStyleInsertMode( nStyleFamilyMask, !aOpt.IsMerge() );
     }
-    else
+    else if( bInsertMode )
     {
-        bLoadDoc = sal_True;
-        bInsert = bInsertMode;
-        nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
+        Reference < XTextRange > xTextRange =
+            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
+                                                        0 );
+        Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
+        SwXMLImport *pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
+                                            SwXMLImport::getUnoTunnelId() );
+        pFilter->setTextInsertMode( xTextRange );
     }
     aOpt.ResetAllFmtsOnly();
-
-    // get filter
-    Reference< xml::sax::XDocumentHandler > xFilter =
-            new SwXMLImport( rDoc, rPaM, bLoadDoc, bInsert, nStyleFamilyMask,
-                               xModel, xEmbeddedGraphicExport, pStorage );
-
-    // connect parser and filter
-    Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-    xParser->setDocumentHandler( xFilter );
 
     rDoc.AddLink(); // prevent deletion
     sal_uInt32 nRet = 0;
@@ -272,82 +300,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xEmbeddedGraphicExport = 0;
+    xGraphicResolver = 0;
     rDoc.RemoveLink();
 
     return nRet;
 }
-
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.8  2001/01/05 09:58:11  mib
-      default styles
-
-      Revision 1.7  2001/01/03 11:40:56  mib
-      support for OLE objects in XML files
-
-      Revision 1.6  2000/12/06 08:39:34  mib
-      #81388#: Content stream now is called Content.xml
-
-      Revision 1.5  2000/12/02 10:57:15  mib
-      #80795#: use packages
-
-      Revision 1.4  2000/11/20 09:18:37  jp
-      must change: processfactory moved
-
-      Revision 1.3  2000/10/26 09:38:52  mib
-      tables within headers and footers
-
-      Revision 1.2  2000/10/06 06:37:01  mib
-      Added missing include XActiveDataControl
-
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.13  2000/09/18 16:05:04  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.12  2000/07/07 13:58:36  mib
-      text styles using StarOffice API
-
-      Revision 1.11  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.10  2000/03/21 15:10:56  os
-      UNOIII
-
-      Revision 1.9  2000/03/13 14:33:43  mib
-      UNO3
-
-      Revision 1.8  2000/02/11 14:40:44  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.7  1999/11/26 11:15:20  mib
-      loading of styles only and insert mode
-
-      Revision 1.6  1999/11/19 16:40:21  os
-      modules renamed
-
-      Revision 1.5  1999/11/19 15:27:05  mib
-      Opt: using OUString constructor instead of StringToOUString
-
-      Revision 1.4  1999/09/23 11:53:47  mib
-      i18n, token maps and hard paragraph attributes
-
-      Revision 1.3  1999/08/19 14:51:30  HR
-      #65293#: fixed exception macro usage
-
-
-      Rev 1.2   19 Aug 1999 16:51:30   HR
-   #65293#: fixed exception macro usage
-
-      Rev 1.1   17 Aug 1999 16:31:26   MIB
-   import
-
-      Rev 1.0   12 Aug 1999 12:28:08   MIB
-   Initial revision.
-
-*************************************************************************/
-

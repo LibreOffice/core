@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
 #endif
@@ -259,6 +262,21 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     return pContext;
 }
 
+SwXMLImport::SwXMLImport() :
+    bLoadDoc( sal_True ),
+    bInsert( sal_False ),
+    nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
+    pDocElemTokenMap( 0 ),
+    pTableElemTokenMap( 0 ),
+    pTableItemMapper( 0 ),
+    pSttNdIdx( 0 ),
+    bProgressValid( sal_False ),
+    bShowProgress( sal_True ),
+    nProgress( 0 )
+{
+    _InitItemImport();
+
+}
 SwXMLImport::SwXMLImport(
         SwDoc& rDoc, const SwPaM& rPaM,
         sal_Bool bLDoc, sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
@@ -288,9 +306,88 @@ SwXMLImport::SwXMLImport(
     Reference < XTextCursor > xTextCursor =
         xText->createTextCursorByRange( xTextRange );
     GetTextImport()->SetCursor( xTextCursor );
+}
+
+SwXMLImport::~SwXMLImport()
+{
+    delete pDocElemTokenMap;
+    delete pTableElemTokenMap;
+    _FinitItemImport();
+}
+
+void SwXMLImport::setTextInsertMode(
+         const Reference< XTextRange > & rInsertPos )
+{
+    bInsert = sal_True;
+
+    Reference < XText > xText = rInsertPos->getText();
+    Reference < XTextCursor > xTextCursor =
+        xText->createTextCursorByRange( rInsertPos );
+    GetTextImport()->SetCursor( xTextCursor );
+}
+
+void SwXMLImport::setStyleInsertMode( sal_uInt16 nFamilies,
+                                      sal_Bool bOverwrite )
+{
+    bInsert = !bOverwrite;
+    nStyleFamilyMask = nFamilies;
+    bLoadDoc = sal_False;
+}
+
+const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+
+sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
+    throw(RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return SvXMLImport::getSomething( rId );
+}
+
+void SwXMLImport::startDocument( void )
+{
+    DBG_ASSERT( GetModel().is(), "model is missing" );
+    if( !GetModel().is() )
+        return;
+
+    // There only is a text cursor by now if we are in insert mode. In any
+    // other case we have to create one at the start of the document.
+    Reference < XTextCursor > xTextCursor = GetTextImport()->GetCursor();
+    if( !xTextCursor.is() )
+    {
+        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+        Reference < XText > xText = xTextDoc->getText();
+        xTextCursor = xText->createTextCursor();
+        GetTextImport()->SetCursor( xTextCursor );
+    }
+
+    Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xCrsrTunnel.is() )
+        return;
+    SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    if( !pTxtCrsr )
+        return;
+
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    ASSERT( pDoc, "SwDoc missing" );
+    if( !pDoc )
+        return;
+
     if( !IsStylesOnlyMode() )
     {
-        pSttNdIdx = new SwNodeIndex( rDoc.GetNodes() );
+        pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
             Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
@@ -304,24 +401,24 @@ SwXMLImport::SwXMLImport(
             const SwPosition* pPos = pPaM->GetPoint();
 
             // Split once and remember the node that has been splitted.
-            rDoc.SplitNode( *pPos );
+            pDoc->SplitNode( *pPos );
             *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
             // Split again.
-            rDoc.SplitNode( *pPos );
+            pDoc->SplitNode( *pPos );
 
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
-            rDoc.SetTxtFmtColl( *pPaM,
-                             rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
+            pDoc->SetTxtFmtColl( *pPaM,
+                             pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
         }
     }
 
     // We need a draw model to be able to set the z order
-    rDoc.MakeDrawModel();
+    pDoc->MakeDrawModel();
 }
 
-SwXMLImport::~SwXMLImport()
+void SwXMLImport::endDocument( void )
 {
     if( !IsStylesOnlyMode() )
     {
@@ -483,11 +580,8 @@ SwXMLImport::~SwXMLImport()
     GetTextImport()->ResetCursor();
 
     delete pSttNdIdx;
-    delete pDocElemTokenMap;
-    delete pTableElemTokenMap;
-    _FinitItemImport();
+    pSttNdIdx = 0;
 }
-
 
 XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
 {
@@ -542,3 +636,23 @@ void SwXMLImport::ShowProgress( sal_Int32 nPercent )
     }
 }
 
+uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Writer" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SwXMLImport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SwXMLImport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLImport;
+}
