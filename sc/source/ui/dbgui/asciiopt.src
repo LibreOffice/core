@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:49:21 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,26 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Spaltent~yp" ;
         Text [ ENGLISH ] = "Column t~ype" ;
+        Text[ english_us ] = "Column t~ype";
+        Text[ portuguese ] = "Tipo";
+        Text[ russian ] = "Òèï êîëîíîê";
+        Text[ greek ] = "Ôığïò óô~õëşí";
+        Text[ dutch ] = "T~ype";
+        Text[ french ] = "T~ype";
+        Text[ spanish ] = "T~ipo de columna";
+        Text[ finnish ] = "~Tyyppi";
+        Text[ italian ] = "Tipo colonna";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Kolumnt~yp";
+        Text[ polish ] = "Rodzaj kolumny";
+        Text[ portuguese_brazilian ] = "Typ";
+        Text[ japanese ] = "—ñ‚Ìí—Ş(~Y)";
+        Text[ korean ] = "À¯Çü(~Y)";
+        Text[ chinese_simplified ] = "ÁĞÀàĞÍ(~Y)";
+        Text[ chinese_traditional ] = "ÄæªºÃş«¬(~Y)";
+        Text[ turkish ] = "T~ip";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ catalan ] = "T~ipo";
     };
     ListBox LB_TYPE1
     {
@@ -138,7 +158,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ SWEDISH ] = "Delningsalternativ" ;
         Text [ PORTUGUESE ] = "Opções de separação" ;
         Text[ chinese_simplified ] = "·Ö¸ôÑ¡Ïî";
-        Text[ russian ] = "Ïàğàìåòğû ğàçäåëèòåëÿ";
+        Text[ russian ] = "Ïàğàìåòğû ğàçäåëåíèÿ";
         Text[ polish ] = "Opcje separatora";
         Text[ japanese ] = "‹æØ‚è‚ÌµÌß¼®İ";
         Text[ chinese_traditional ] = "¤À¹j¿ï¶µ";
@@ -170,7 +190,7 @@ ModalDialog RID_SCDLG_ASCII
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¹Ì¶¨µÄ¿í¶È(~F)";
         Text[ russian ] = "Ôèêñ.  øèğèíà";
-        Text[ polish ] = "Sta³a szeroko?æ";
+        Text[ polish ] = "Sta³a szerokoœæ";
         Text[ japanese ] = "ŒÅ’è•(~F)";
         Text[ chinese_traditional ] = "©T©wªº¼e«×(~F)";
         Text[ arabic ] = "ÚÑÖ ËÇÈÊ";
@@ -444,7 +464,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ portuguese ] = "~Ponto e vírgula" ;
         Text[ chinese_simplified ] = "·ÖºÅ(~E)";
         Text[ russian ] = "Òî÷êà ñ çàïÿòîé";
-        Text[ polish ] = "?rednik";
+        Text[ polish ] = "Œrednik";
         Text[ japanese ] = "¾ĞºÛİ(~E)";
         Text[ chinese_traditional ] = "¤À¸¹(~E)";
         Text[ arabic ] = "İÇÕáÉ ãäŞæØÉ";
@@ -664,3 +684,4 @@ ModalDialog RID_SCDLG_ASCII
     Text[ catalan ] = "Importar texto";
     Text[ finnish ] = "Tekstin tuonti";
 };
+
