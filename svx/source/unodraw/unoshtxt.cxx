@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:26:50 $
+ *  last change: $Author: thb $ $Date: 2002-02-26 12:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
     mpWindow        ( NULL ),
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
+    mpViewForwarder ( NULL ),
     mbDataValid     ( FALSE ),
     mbDestroyed     ( FALSE ),
     mbIsLocked      ( FALSE ),
@@ -237,6 +238,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
     mpWindow        ( &rWindow ),
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
+    mpViewForwarder ( NULL ),
     mbDataValid     ( FALSE ),
     mbDestroyed     ( FALSE ),
     mbIsLocked      ( FALSE ),
