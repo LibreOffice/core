@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:10:36 $
+ *  last change: $Author: nn $ $Date: 2001-06-01 18:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,30 +830,37 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
 {
     //  PutData ruft PutCell oder SetNormalString
 
-    //  harte Ausrichtungs-Attribute aus der EditEngine loeschen
-    USHORT nCount = rEngine.GetParagraphCount();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        const SfxItemSet& rOld = rEngine.GetParaAttribs( i );
-        if ( rOld.GetItemState( EE_PARA_JUST ) == SFX_ITEM_SET )
-        {
-            SfxItemSet aNew( rOld );
-            aNew.ClearItem( EE_PARA_JUST );
-            rEngine.SetParaAttribs( i, aNew );
-        }
-    }
-
     BOOL bRet = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScEditAttrTester aTester( &rEngine );
     BOOL bEditCell = aTester.NeedsObject();
     if ( bEditCell )
     {
-        EditTextObject* pData = rEngine.CreateTextObject();
+        //  copy data into new edit engine so alignment isn't removed
+        //  from source edit engine
+        EditEngine aCopyEngine( rEngine.GetEmptyItemSet().GetPool() );
+        EditTextObject* pOldData = rEngine.CreateTextObject();
+        aCopyEngine.SetText( *pOldData );
+        delete pOldData;
+
+        //  remove alignment attribute from local copy
+        USHORT nCount = aCopyEngine.GetParagraphCount();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            const SfxItemSet& rOld = aCopyEngine.GetParaAttribs( i );
+            if ( rOld.GetItemState( EE_PARA_JUST ) == SFX_ITEM_SET )
+            {
+                SfxItemSet aNew( rOld );
+                aNew.ClearItem( EE_PARA_JUST );
+                aCopyEngine.SetParaAttribs( i, aNew );
+            }
+        }
+
+        EditTextObject* pNewData = aCopyEngine.CreateTextObject();
         bRet = PutCell( rPos,
-                        new ScEditCell( pData, pDoc, rEngine.GetEditTextObjectPool() ),
+                        new ScEditCell( pNewData, pDoc, rEngine.GetEditTextObjectPool() ),
                         bApi );
-        delete pData;
+        delete pNewData;
     }
     else
     {
@@ -870,6 +877,7 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
         ScPatternAttr aPattern( pDoc->GetPool() );
         aPattern.GetFromEditItemSet( &rEditAttr );
         aPattern.DeleteUnchanged( pDoc->GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() ) );
+        aPattern.GetItemSet().ClearItem( ATTR_HOR_JUSTIFY );    // wasn't removed above if no edit object
         if ( aPattern.GetItemSet().Count() > 0 )
         {
             ScMarkData aMark;
