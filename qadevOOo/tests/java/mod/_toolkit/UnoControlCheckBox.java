@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:24 $
+ *  last change:$Date: 2003-05-27 14:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.awt.XCheckBox;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
@@ -92,12 +93,12 @@ public class UnoControlCheckBox extends TestCase {
     XTextDocument xTD2;
 
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
-            xTD2 = WriterTools.createTextDoc(Param.getMSF());
+            xTD2 = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
