@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:46:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,10 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( !HasChildPathFocus() )
+        {
+            pBindings->SetActiveFrame( NULL );
             pImp->pMgr->Deactivate_Impl();
+        }
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
