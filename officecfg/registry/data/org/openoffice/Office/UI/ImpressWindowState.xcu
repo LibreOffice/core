@@ -222,6 +222,12 @@
      <value xml:lang="de">Fontwork</value>
     </prop>
    </node>
+   <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Fontwork Shape</value>
+     <value xml:lang="de">Fontwork-Form</value>
+    </prop>
+   </node>
    <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Picture</value>
@@ -250,6 +256,42 @@
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Lines</value>
      <value xml:lang="de">Linien</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Basic Shapes</value>
+     <value xml:lang="de">Standardforman</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/symbolshapes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Symbol Shapes</value>
+     <value xml:lang="de">Symbolformen</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Block Arrows</value>
+     <value xml:lang="de">Blockpfeile</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/flowchartshapes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Flowcharts</value>
+     <value xml:lang="de">Flussdiagramme</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/calloutshapes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Callouts</value>
+     <value xml:lang="de">Legenden</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/starshapes" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Stars</value>
+     <value xml:lang="de">Sterne</value>
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/optionsbar" oor:op="replace">
