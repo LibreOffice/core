@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-22 08:15:33 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 13:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2463,9 +2463,15 @@ sal_Bool SfxDispatcher::_FindServer
     // Makro-Slot?
     if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
     {
-        rServer.SetShellLevel(nTotCount-1);
-        rServer.SetSlot(pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot)->GetSlot());
-        return sal_True;
+        const SfxSlot* pSlot = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot)->GetSlot();
+        if ( pSlot )
+        {
+            rServer.SetShellLevel(nTotCount-1);
+            rServer.SetSlot( pSlot );
+            return sal_True;
+        }
+
+        return sal_False;
     }
     // Verb-Slot?
     else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
@@ -2475,9 +2481,13 @@ sal_Bool SfxDispatcher::_FindServer
         {
             if ( pSh->ISA(SfxViewShell) )
             {
-                rServer.SetShellLevel(nShell);
-                rServer.SetSlot(pSh->GetVerbSlot_Impl(nSlot));
-                return sal_True;
+                const SfxSlot* pSlot = pSh->GetVerbSlot_Impl(nSlot);
+                if ( pSlot )
+                {
+                    rServer.SetShellLevel(nShell);
+                    rServer.SetSlot( pSlot );
+                    return sal_True;
+                }
             }
         }
 
