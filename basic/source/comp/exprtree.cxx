@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:06:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,17 @@ SbiExprNode* SbiExpression::Unary()
             pParser->Next();
             pNd = Unary();
             break;
+        case TYPEOF:
+        {
+            pParser->Next();
+            SbiExprNode* pObjNode = Operand();
+            pParser->TestToken( IS );
+            String aDummy;
+            SbiSymDef* pTypeDef = new SbiSymDef( aDummy );
+            pParser->TypeDecl( *pTypeDef, TRUE );
+            pNd = new SbiExprNode( pParser, pObjNode, pTypeDef->GetTypeId() );
+            break;
+        }
         default:
             pNd = Operand();
     }
