@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:33:08 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(const rtl::OUString& path);
 bool getJREInfoByPath(const rtl::OUString& path,
                       std::vector<rtl::Reference<VendorBase> > & vecInfos);
 
-std::vector<rtl::Reference<VendorBase> > getAllJREInfos(
-    const rtl::OUString& sVendor,
-    const rtl::OUString& sMinVersion,
-    const rtl::OUString& sMaxVersion,
-    const std::vector<rtl::OUString> & vecExludeVersions);
+std::vector<rtl::Reference<VendorBase> > getAllJREInfos();
 
 bool getJavaProps(
     const rtl::OUString & exePath,
