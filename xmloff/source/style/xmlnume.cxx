@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 14:51:35 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 13:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
 
         if( cBullet )
         {
+            if( cBullet < ' ' )
+            {
+                cBullet = 0xF000 + 149;
+            }
             // text:bullet-char="..."
             sTmp.append( cBullet );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR,
