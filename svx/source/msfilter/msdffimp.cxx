@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 14:43:48 $
+ *  last change: $Author: sj $ $Date: 2001-11-07 16:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,30 +370,54 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
         {
             DffPropFlags aPropFlag = { 1, 0, 0, 0 };
             if ( nTmp & 0x4000 )
-                aPropFlag.bBlip = TRUE;
+                aPropFlag.bBlip = sal_True;
             if ( nTmp & 0x8000 )
-                aPropFlag.bComplex = TRUE;
-            if ( aPropFlag.bComplex )
+                aPropFlag.bComplex = sal_True;
+            if ( aPropFlag.bComplex && nContent && ( nComplexDataFilePos < aHd.GetRecEndFilePos() ) )
             {
-                if ( nContent )
+                // normally nContent is the complete size of the complex property,
+                // but this is not always true for IMsoArrays ( what the hell is a IMsoArray ? )
+
+                // I love special threatments :-(
+                if ( ( nRecType == DFF_Prop_pVertices ) || ( nRecType == DFF_Prop_pSegmentInfo )
+                    || ( nRecType == DFF_Prop_fillShadeColors ) || ( nRecType == DFF_Prop_lineDashStyle )
+                        || ( nRecType == DFF_Prop_pWrapPolygonVertices ) )
                 {
-                    if ( nRecType == DFF_Prop_pVertices )
-                    {   // the ContentValue may be 6 bytes too small sometimes
-                        UINT32  nOldPos = rIn.Tell();
-                        INT16   nSize, nNumElem;
-                        rIn.Seek( nComplexDataFilePos );
-                        rIn >>  nNumElem >> nSize >> nSize;
+                    // now check if the current content size is possible, or 6 bytes too small
+                    sal_uInt32  nOldPos = rIn.Tell();
+                    sal_Int16   nNumElem, nNumElemReserved, nSize;
+
+                    rIn.Seek( nComplexDataFilePos );
+                    rIn >>  nNumElem >> nNumElemReserved >> nSize;
+                    if ( nNumElemReserved >= nNumElem )
+                    {
+                        // the size of these array elements is nowhere defined,
+                        // what if the size is negative ?
+                        // ok, we will make it positive and shift it.
+                        // for -16 this works
                         if ( nSize < 0 )
                             nSize = ( -nSize ) >> 2;
-                        if ( (sal_uInt32)( nSize * nNumElem ) == nContent )
+                        sal_uInt32 nDataSize = (sal_uInt32)( nSize * nNumElem );
+
+                        // sometimes the content size is 6 bytes too small (array header information is missing )
+                        if ( nDataSize == nContent )
                             nContent += 6;
-                        rIn.Seek( nOldPos );
+
+                        // check if array fits into the PropertyContainer
+                        if ( ( nComplexDataFilePos + nContent ) > aHd.GetRecEndFilePos() )
+                            nContent = 0;
                     }
-                    nContentEx = nComplexDataFilePos;
-                    nComplexDataFilePos += nContent;
+                    else
+                        nContent = 0;
+                    rIn.Seek( nOldPos );
                 }
-                else
-                    aPropFlag.bSet = FALSE;
+                if ( nContent )
+                {
+                    nContentEx = nComplexDataFilePos;   // insert the filepos of this property;
+                    nComplexDataFilePos += nContent;    // store filepos, that is used for the next complex property
+                }
+                else                                    // a complex property needs content
+                    aPropFlag.bSet = sal_False;         // otherwise something is wrong
             }
             rRec.mpContents[ nRecType ] = nContent;
             rRec.mpFlags[ nRecType ] = aPropFlag;
