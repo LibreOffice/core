@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-29 15:55:48 $
+ *  last change: $Author: mt $ $Date: 2000-11-30 12:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,6 +1098,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
 EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart ) const
 {
     BinTextObject* pTxtObj = new BinTextObject( pTextObjectPool );
+    pTxtObj->SetVertical( IsVertical() );
     MapUnit eMapUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
     pTxtObj->SetMetric( (sal_uInt16) eMapUnit );
     if ( pTxtObj->IsOwnerOfPool() )
