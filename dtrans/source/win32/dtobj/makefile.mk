@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-02 17:18:18 $
+#   last change: $Author: tra $ $Date: 2001-03-02 17:48:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,9 @@ SLOFILES=$(SLO)$/DtObjFactory.obj\
          $(SLO)$/TxtCnvtHlp.obj\
          $(SLO)$/DataFmtTransl.obj\
          $(SLO)$/FmtFilter.obj\
-         $(SLO)$/FetcList.obj
+         $(SLO)$/FetcList.obj\
+         $(SLO)$/Fetc.obj
+
 #$(SLO)$/WrpDOTransferable.obj
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
