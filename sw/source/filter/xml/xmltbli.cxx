@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,9 +696,9 @@ void SwXMLTableCellContext_Impl::EndElement()
                 // Until we have an API for copying we have to use the core.
                 Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTxtCursor, UNO_QUERY);
                 ASSERT( xSrcCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-                SwXTextCursor *pSrcTxtCrsr =
-                        (SwXTextCursor*)xSrcCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+                OTextCursorHelper *pSrcTxtCrsr =
+                        (OTextCursorHelper*)xSrcCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
                 ASSERT( pSrcTxtCrsr, "SwXTextCursor missing" );
                 SwDoc *pDoc = pSrcTxtCrsr->GetDoc();
                 const SwPaM *pSrcPaM = pSrcTxtCrsr->GetPaM();
@@ -711,9 +711,9 @@ void SwXMLTableCellContext_Impl::EndElement()
                         GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
                     ASSERT( xDstCrsrTunnel.is(),
                             "missing XUnoTunnel for Cursor" );
-                    SwXTextCursor *pDstTxtCrsr =
-                            (SwXTextCursor*)xDstCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+                    OTextCursorHelper *pDstTxtCrsr =
+                            (OTextCursorHelper*)xDstCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
                     ASSERT( pDstTxtCrsr, "SwXTextCursor missing" );
                     SwPaM aSrcPaM( *pSrcPaM->GetPoint(),
                                    *pSrcPaM->GetMark() );
@@ -1348,9 +1348,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor *pTxtCrsr =
-                (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr =
+                (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -2793,15 +2793,15 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor *pTxtCrsr =
-            (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr =
+            (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
 
     if( bFirstSection )
     {
         // The Cursor already is in the first section
-        pStNd = pTxtCrsr->GetCrsr()->GetNode()->FindTableBoxStartNode();
+        pStNd = pTxtCrsr->GetPaM()->GetNode()->FindTableBoxStartNode();
         bFirstSection = sal_False;
         OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
         GetImport().GetTextImport()->SetStyleAndAttrs(
