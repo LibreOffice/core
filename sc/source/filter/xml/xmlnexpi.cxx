@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:36:37 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,26 +73,12 @@
 #include "xmlcelli.hxx"
 #include "docuno.hxx"
 #include "global.hxx"
-//#include "document.hxx"
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
-#include <com/sun/star/sheet/XNamedRange.hpp>
-#endif
-
-#define SC_NAMEDRANGES "NamedRanges"
-#define SC_REPEAT_COLUMN "repeat-column"
-#define SC_REPEAT_ROW "repeat-row"
-#define SC_FILTER "filter"
-#define SC_PRINT_RANGE "print-range"
 
 using namespace com::sun::star;
 
@@ -158,108 +144,10 @@ SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( USHORT nPr
     return pContext;
 }
 
-sal_Int32 ScXMLNamedExpressionsContext::GetRangeType(const rtl::OUString sRangeType) const
-{
-    sal_Int32 nRangeType = 0;
-    rtl::OUStringBuffer sBuffer;
-    sal_Int16 i = 0;
-    while (i <= sRangeType.getLength())
-    {
-        if ((sRangeType[i] == ' ') || (i == sRangeType.getLength()))
-        {
-            rtl::OUString sTemp = sBuffer.makeStringAndClear();
-            if (sTemp.compareToAscii(SC_REPEAT_COLUMN) == 0)
-                nRangeType |= sheet::NamedRangeFlag::COLUMN_HEADER;
-            else if (sTemp.compareToAscii(SC_REPEAT_ROW) == 0)
-                nRangeType |= sheet::NamedRangeFlag::ROW_HEADER;
-            else if (sTemp.compareToAscii(SC_FILTER) == 0)
-                 nRangeType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
-            else if (sTemp.compareToAscii(SC_PRINT_RANGE) == 0)
-                 nRangeType |= sheet::NamedRangeFlag::PRINT_AREA;
-        }
-        else if (i < sRangeType.getLength())
-            sBuffer.append(sRangeType[i]);
-        i++;
-    }
-    return nRangeType;
-}
-
 void ScXMLNamedExpressionsContext::EndElement()
 {
-    if (GetScImport().GetModel().is())
-    {
-        uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
-        if (xPropertySet.is())
-        {
-            uno::Any aNamedRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES)));
-            uno::Reference <sheet::XNamedRanges> xNamedRanges;
-            if (aNamedRanges >>= xNamedRanges)
-            {
-                ScMyNamedExpressions* pNamedExpressions = GetScImport().GetNamedExpressions();
-                ScMyNamedExpressions::iterator aItr = pNamedExpressions->begin();
-                ScMyNamedExpressions::const_iterator aEndItr = pNamedExpressions->end();
-                table::CellAddress aCellAddress;
-                rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
-                while (aItr != aEndItr)
-                {
-                    sal_Int32 nOffset(0);
-                    if (ScXMLConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
-                    {
-                        try
-                        {
-                            xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
-                        }
-                        catch( uno::RuntimeException& r )
-                        {
-                            DBG_ERROR("here are some Named Ranges with the same name");
-                            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
-                            if (xIndex.is())
-                            {
-                                sal_Int32 nMax(xIndex->getCount());
-                                sal_Bool bInserted(sal_False);
-                                sal_Int32 nCount(1);
-                                rtl::OUStringBuffer sName((*aItr)->sName);
-                                sName.append(sal_Unicode('_'));
-                                while (!bInserted && nCount <= nMax)
-                                {
-                                    rtl::OUStringBuffer sTemp(sName);
-                                    sTemp.append(rtl::OUString::valueOf(nCount));
-                                    try
-                                    {
-                                        xNamedRanges->addNewByName(sTemp.makeStringAndClear(), sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
-                                        bInserted = sal_True;
-                                    }
-                                    catch( uno::RuntimeException& rE )
-                                    {
-                                        ++nCount;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    aItr++;
-                }
-                aItr = pNamedExpressions->begin();
-                while (aItr != aEndItr)
-                {
-                    sal_Int32 nOffset(0);
-                    if (ScXMLConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
-                    {
-                        sTempContent = (*aItr)->sContent;
-                        ScXMLConverter::ParseFormula(sTempContent, (*aItr)->bIsExpression);
-                        uno::Any aNamedRange = xNamedRanges->getByName((*aItr)->sName);
-                        uno::Reference <sheet::XNamedRange> xNamedRange;
-                        if (aNamedRange >>= xNamedRange)
-                            xNamedRange->setContent(sTempContent);
-                    }
-                    delete *aItr;
-                    aItr = pNamedExpressions->erase(aItr);
-                }
-            }
-        }
-    }
+    // happends in ScXMLImport::EndDocument()
+    // because it has to be set after the Database Ranges
 }
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
