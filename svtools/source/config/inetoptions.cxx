@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-13 18:49:24 $
+ *  last change: $Author: sb $ $Date: 2000-11-22 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef _SVTOOLS_INETOPTIONS_HXX_
 #include <inetoptions.hxx>
 #endif
-
-#if defined SOLARIS // must include <string> before <algorithm>...
-#include <string>
-#endif // SOLARIS
 
 #include <algorithm>
 #include <map>
@@ -134,8 +130,6 @@ public:
     {
         INDEX_DNS_IP_ADDRESS,
         INDEX_SMTP_SERVER_NAME,
-        INDEX_PROTOCOL_REVEAL_MAIL_ADDRESS,
-        INDEX_PROTOCOL_USER_AGENT,
         INDEX_PROXY_NO_PROXY,
         INDEX_PROXY_TYPE,
         INDEX_PROXY_FTP_NAME,
@@ -302,10 +296,6 @@ SvtInetOptions::Impl::Impl():
         = rtl::OUString::createFromAscii("DNS/IP_Address");
     m_aEntries[INDEX_SMTP_SERVER_NAME].m_aName
         = rtl::OUString::createFromAscii("SMTP/ServerName");
-    m_aEntries[INDEX_PROTOCOL_REVEAL_MAIL_ADDRESS].m_aName
-        = rtl::OUString::createFromAscii("Protocol/RevealMailAddress");
-    m_aEntries[INDEX_PROTOCOL_USER_AGENT].m_aName
-        = rtl::OUString::createFromAscii("Protocol/UserAgent");
     m_aEntries[INDEX_PROXY_NO_PROXY].m_aName
         = rtl::OUString::createFromAscii("Proxy/NoProxy");
     m_aEntries[INDEX_PROXY_TYPE].m_aName
@@ -477,24 +467,6 @@ rtl::OUString SvtInetOptions::GetSmtpServerName() const
 }
 
 //============================================================================
-bool SvtInetOptions::GetProtocolRevealMailAddress() const
-{
-    return
-        takeAny< sal_Bool >(m_pImpl->
-                                getProperty(
-                                    Impl::INDEX_PROTOCOL_REVEAL_MAIL_ADDRESS))
-            != false;
-}
-
-//============================================================================
-rtl::OUString SvtInetOptions::GetProtocolUserAgent() const
-{
-    return takeAny< rtl::OUString >(m_pImpl->
-                                        getProperty(
-                                            Impl::INDEX_PROTOCOL_USER_AGENT));
-}
-
-//============================================================================
 rtl::OUString SvtInetOptions::GetProxyNoProxy() const
 {
     return takeAny< rtl::OUString >(m_pImpl->
@@ -569,23 +541,6 @@ void SvtInetOptions::SetSmtpServerName(rtl::OUString const & rValue,
                                        bool bFlush)
 {
     m_pImpl->setProperty(Impl::INDEX_SMTP_SERVER_NAME,
-                         uno::makeAny(rValue),
-                         bFlush);
-}
-
-//============================================================================
-void SvtInetOptions::SetProtocolRevealMailAddress(bool bValue, bool bFlush)
-{
-    m_pImpl->setProperty(Impl::INDEX_PROTOCOL_REVEAL_MAIL_ADDRESS,
-                         uno::makeAny(sal_Bool(bValue)),
-                         bFlush);
-}
-
-//============================================================================
-void SvtInetOptions::SetProtocolUserAgent(rtl::OUString const & rValue,
-                                          bool bFlush)
-{
-    m_pImpl->setProperty(Impl::INDEX_PROTOCOL_USER_AGENT,
                          uno::makeAny(rValue),
                          bFlush);
 }
