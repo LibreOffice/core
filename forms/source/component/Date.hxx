@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:36:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,9 @@ protected:
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
     virtual ::com::sun::star::uno::Any
-                            translateControlValueToValidatableValue( ) const;
+                            translateControlValueToExternalValue( ) const;
+    virtual ::com::sun::star::uno::Any
+                            translateExternalValueToControlValue( ) const;
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
