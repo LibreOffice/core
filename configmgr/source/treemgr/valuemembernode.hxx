@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:49 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@ namespace configmgr
             class DeferredImpl;
             typedef rtl::Reference<DeferredImpl> DeferredImplRef;
 
-            DeferredImplRef m_xDeferredOperation;
             data::ValueNodeAccess m_aNodeRef;
+            DeferredImplRef m_xDeferredOperation;
         private:
             friend class GroupNodeImpl;
             friend class DeferredGroupNodeImpl;
