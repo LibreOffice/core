@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-12 13:25:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,8 @@ SdTransferable::~SdTransferable()
     if( bOwnDocument )
         delete pSdDrawDocumentIntern;
 
+    delete pOLEDataHelper;
+
     if( aDocShellRef.Is() )
     {
         SvEmbeddedObject* pObj = aDocShellRef;
@@ -230,7 +232,6 @@ SdTransferable::~SdTransferable()
 
     aDocShellRef.Clear();
 
-    delete pOLEDataHelper;
     delete pGraphic;
     delete pBookmark;
     delete pImageMap;
