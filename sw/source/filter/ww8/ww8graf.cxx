@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
+ *  last change: $Author: cmc $ $Date: 2001-03-30 11:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1470,10 +1470,13 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
     }
 
+    if( pnStartCp )
+        *pnStartCp = nStartCp;
+    if( pnEndCp )
+        *pnEndCp   = nEndCp;
+
     if( pbTestTxbxContainsText )
     {
-        if( pnStartCp ) *pnStartCp = nStartCp;
-        if( pnEndCp   ) *pnEndCp   = nEndCp;
         *pbTestTxbxContainsText    =    bTextWasRead
                                      && ! rbEraseTextObj;
     }
@@ -1532,12 +1535,14 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     aP1.X() += (INT16)SVBT16ToShort( pHd->dxa );
     aP1.Y() += (INT16)SVBT16ToShort( pHd->dya );
 
-    SdrTextObj* pObj = new SdrRectObj( OBJ_TEXT, Rectangle( aP0, aP1 ) );
+    SdrObject* pObj = new SdrRectObj( OBJ_TEXT, Rectangle( aP0, aP1 ) );
     pObj->SetModel( pDrawModel );
     Size aSize( (INT16)SVBT16ToShort( pHd->dxa ) ,
-                                 (INT16)SVBT16ToShort( pHd->dya ) );
+        (INT16)SVBT16ToShort( pHd->dya ) );
 
-    InsertTxbxText(pObj, &aSize, 0, 0, 0, 0, FALSE, bDummy );
+    long nStartCpFly,nEndCpFly;
+    InsertTxbxText(PTR_CAST(SdrTextObj,pObj), &aSize, 0, 0, 0, 0, FALSE,
+        bDummy,0,&nStartCpFly,&nEndCpFly);
 
     InsertObj( pObj, SVBT16ToShort( pDo->dhgt ) );
 
@@ -1546,7 +1551,7 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     SetStdAttr( aSet, aTxtB.aLnt, aTxtB.aShd );
     SetFill( aSet, aTxtB.aFill );
 
-    aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
+    aSet.Put( SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ) );
     aSet.Put( SdrTextAutoGrowWidthItem(  FALSE ) );
     aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
     aSet.Put( SdrTextLeftDistItem(  MIN_BORDER_DIST*2 ) );
@@ -1554,8 +1559,57 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     aSet.Put( SdrTextUpperDistItem( MIN_BORDER_DIST ) );
     aSet.Put( SdrTextLowerDistItem( MIN_BORDER_DIST ) );
 
-//-/    pObj->SetAttributes( aSet, FALSE );
     pObj->SetItemSetAndBroadcast(aSet);
+
+    //Cannot properly have draw objects in header, here with txtbox we can
+    //convert it successfully to a flyframe
+    if (bHdFtFtnEdn)
+    {
+        SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
+            RES_FRMATR_END-1);
+
+        //InnerDist is all 0 as word 6 doesn't store distance from borders and
+        //neither does it store the border style so its always simple
+        Rectangle aInnerDist(Point(0,0),Point(0,0));
+        MatchSdrItemsIntoFlySet( pObj, aFlySet, mso_lineSimple, aInnerDist,
+            TRUE);
+
+        //undo the anchor setting for draw graphics, remove the setting in the
+        //control stack, get the id from the drawpg and reuse it in the new
+        //flyframe and then remove it as well
+        pCtrlStck->DeleteAndDestroy(pCtrlStck->Count()-1);
+        const SwFmtAnchor &rAnchor = (const SwFmtAnchor&)pDrawFmt->GetAttr(
+            RES_ANCHOR);
+        SwFlyFrmFmt *pRetFrmFmt = rDoc.MakeFlySection( rAnchor.GetAnchorId(),
+            pPaM->GetPoint(), &aFlySet );
+        pDrawFmt->ResetAttr( RES_ANCHOR );
+
+        if (nEndCpFly-nStartCpFly)
+        {
+            WW8ReaderSave aSave( this );
+
+            // set Pam into the FlyFrame
+            const SwFmtCntnt& rCntnt = pRetFrmFmt->GetCntnt();
+            ASSERT( rCntnt.GetCntntIdx(), "Oops" );
+            pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
+            pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
+
+            ReadText( nStartCpFly, (nEndCpFly-nStartCpFly),
+                  MAN_MAINTEXT == pPlcxMan->GetManType()
+                ? MAN_TXBX
+                : MAN_TXBX_HDFT );
+
+            aSave.Restore( this );
+        }
+
+        if( pObj->GetPage() )
+            pDrawPg->RemoveObject( pObj->GetOrdNum() );
+        delete pObj;
+
+        SdrObject* pOurNewObject = CreateContactObject( pRetFrmFmt );
+        if( pOurNewObject )
+            pDrawPg->InsertObject( pOurNewObject );
+    }
 }
 
 
@@ -3024,11 +3078,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.16 2001-03-27 12:01:49 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.17 2001-03-30 11:21:05 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/03/27 12:01:49  cmc
+      brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
+
       Revision 1.15  2001/03/20 15:26:15  cmc
       ##572## accumulate escher text correctly, and clear on insertion
 
