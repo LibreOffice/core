@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: ka $ $Date: 2001-03-15 17:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX //autogen
 #include <svtools/imapobj.hxx>
+#endif
+#ifndef _TRANSFER_HXX //autogen
+#include <svtools/transfer.hxx>
 #endif
 #ifndef _IMAP_HXX //autogen
 #include <svtools/imap.hxx>
@@ -199,7 +202,7 @@ public:
 |*
 \************************************************************************/
 
-class IMapWindow : public GraphCtrl
+class IMapWindow : public GraphCtrl, public DropTargetHelper
 {
     NotifyInfo          aInfo;
     ImageMap            aIMap;
@@ -213,15 +216,18 @@ class IMapWindow : public GraphCtrl
 
 protected:
 
+    // GraphCtrl
     virtual void        MouseButtonUp(const MouseEvent& rMEvt);
     virtual void        Command(const CommandEvent& rCEvt);
-    virtual BOOL        QueryDrop( DropEvent& rDEvt );
-    virtual BOOL        Drop( const DropEvent& rDEvt );
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        SdrObjCreated( const SdrObject& rObj );
     virtual void        SdrObjChanged( const SdrObject& rObj );
     virtual void        MarkListHasChanged();
     virtual void        InitSdrModel();
+
+    // DropTargetHelper
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     void                CreateImageMap();
     void                ReplaceImageMap( const ImageMap& rNewImageMap, BOOL bScaleToGraphic );

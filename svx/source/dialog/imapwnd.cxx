@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: ka $ $Date: 2001-03-15 17:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,30 +73,23 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
 #endif
-
 #define _ANIMATION
 #define ITEMID_MACRO SID_ATTR_MACROITEM
-
 #ifndef _MACROPG_HXX //autogen
 #include <sfx2/macropg.hxx>
 #endif
-
 #ifndef _DTRANS_HXX //autogen
 #include <so3/dtrans.hxx>
 #endif
-
 #ifndef _GOODIES_IMAPRECT_HXX //autogen
 #include <svtools/imaprect.hxx>
 #endif
-
 #ifndef _GOODIES_IMAPCIRC_HXX //autogen
 #include <svtools/imapcirc.hxx>
 #endif
-
 #ifndef _GOODIES_IMAPPOLY_HXX //autogen
 #include <svtools/imappoly.hxx>
 #endif
-
 #ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
 #endif
@@ -178,7 +171,8 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
 \************************************************************************/
 
 IMapWindow::IMapWindow( Window* pParent, const ResId& rResId ) :
-            GraphCtrl       ( pParent, rResId )
+            GraphCtrl( pParent, rResId ),
+            DropTargetHelper( this )
 {
     SetWinStyle( WB_SDRMODE );
 
@@ -774,9 +768,9 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-BOOL IMapWindow::QueryDrop( DropEvent& rDEvt )
+sal_Int8 IMapWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return ( GetHitSdrObj( rDEvt.GetPosPixel() ) != NULL );
+    return( ( GetHitSdrObj( rEvt.maPosPixel ) != NULL ) ? rEvt.mnAction : DND_ACTION_NONE );
 }
 
 /*************************************************************************
@@ -785,18 +779,17 @@ BOOL IMapWindow::QueryDrop( DropEvent& rDEvt )
 |*
 \************************************************************************/
 
-BOOL IMapWindow::Drop( const DropEvent& rDEvt )
+sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    const String    aString;
-    INetBookmark aBookMark( aString, aString );
-    SvDataObjectRef aDataObj = SvDataObject::PasteDragServer( rDEvt );
-    BOOL            bRet = FALSE;
+    sal_Int8 nRet = DND_ACTION_NONE;
 
-    if ( aBookMark.HasFormat( *aDataObj ) )
+    if( IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
     {
-        SdrObject* pSdrObj = GetHitSdrObj( rDEvt.GetPosPixel() );
+        const String    aString;
+        INetBookmark    aBookMark( aString, aString );
+        SdrObject*      pSdrObj = GetHitSdrObj( rEvt.maPosPixel );
 
-        if ( pSdrObj && aBookMark.Paste( *aDataObj, SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
+        if( pSdrObj && TransferableDataHelper( rEvt.maDropEvent.Transferable ).GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aBookMark ) )
         {
             IMapObject* pIMapObj = GetIMapObj( pSdrObj );
 
@@ -806,12 +799,11 @@ BOOL IMapWindow::Drop( const DropEvent& rDEvt )
             pView->UnmarkAll();
             pView->MarkObj( pSdrObj, pView->GetPageViewPvNum( 0 ) );
             UpdateInfo( TRUE );
-
-            bRet = TRUE;
+            nRet =  rEvt.mnAction;
         }
     }
 
-    return bRet;
+    return nRet;
 }
 
 /*************************************************************************
