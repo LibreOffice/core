@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-07 16:51:39 $
+ *  last change: $Author: sj $ $Date: 2000-12-12 17:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 #ifndef _EPPT_HXX_
 #define _EPPT_HXX_
-
+#ifndef _PptEscherEx_HXX
+#include "escherex.hxx"
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -266,7 +268,7 @@ enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 #define EPP_LAYOUT_TITLERIGHT2BODIESLEFT 18 /* Vertical title on the right, body on the left split into 2 rows                        */
 
 class Polygon;
-class _EscherEx;
+class PptEscherEx;
 class XStatusIndicatorRef;
 
 struct PHLayout
@@ -426,7 +428,7 @@ struct PPTExCharSheet
                 PPTExCharSheet( int nInstance );
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, Collection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, _EscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
 
 };
 
@@ -464,7 +466,7 @@ struct PPTExParaSheet
                 PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv );
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, Collection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, _EscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
 };
 
 class PPTExStyleSheet
@@ -481,7 +483,7 @@ class PPTExStyleSheet
 
                 void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, Collection& rFontCollection, int nInstance, int nLevel );
                 sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
-                void            Write( SvStream& rSt, _EscherEx* pEx );
+                void            Write( SvStream& rSt, PptEscherEx* pEx );
 };
 
 
@@ -605,7 +607,7 @@ public:
                                         const ::com::sun::star::awt::Point& rB,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB );
 
-    void                WriteSolver( SvStream*, _EscherEx* );
+    void                WriteSolver( SvStream*, PptEscherEx* );
 
                         SolverContainer(){};
                         ~SolverContainer();
@@ -847,6 +849,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
         PPTExStyleSheet*                mpStyleSheet;
+        EscherGraphicProvider*          mpGraphicProvider;
         Fraction                        maFraction;
         MapMode                         maMapModeSrc;
         MapMode                         maMapModeDest;
@@ -876,7 +879,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            mbPresObj;
         sal_Bool            mbEmptyPresObj;
         sal_Bool            mbStatusIndicator;
-        sal_Int32           mnShadow;           // eq 0 wenn fillstyle = None & linestyle = None
         sal_Int32           mnAngle;
         sal_uInt32          mnTextStyle;
 
@@ -890,7 +892,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         SvStorageStream*    mpCurUserStrm;
         SvStorageStream*    mpStrm;
         SvStorageStream*    mpPicStrm;
-        _EscherEx*          mp_EscherEx;
+        PptEscherEx*        mpPptEscherEx;
 
         List                maExOleObj;
         sal_uInt32          mnVBAOleOfs;
@@ -954,7 +956,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplGetPageByIndex( sal_uInt32 nIndex, PageType );
         sal_Bool            ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = FALSE );
         sal_uInt32          ImplGetMasterIndex( PageType ePageType );
-        void                ImplFlipBoundingBox( const ::com::sun::star::awt::Point& rRefPoint );
+        void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt, const ::com::sun::star::awt::Point& rRefPoint );
         sal_Bool            ImplGetText();
         sal_Bool            ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
@@ -965,23 +967,19 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
                                 sal_uInt16 nOrder );
         void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction );
-        void                ImplWriteLineBundle( sal_Bool bEdge );
-        void                ImplWriteFillBundle( sal_Bool bEdge );
-        void                ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight = FALSE );
+        void                ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool bDisableAutoGrowHeight = FALSE );
         sal_Bool            ImplGetMasterTitleAndBody();
         sal_Bool            ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj, sal_uInt32 nTextStyle );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                                             sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBu );
-        void                ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPolygon = NULL );
+        void                ImplWriteAny( EscherPropertyContainer& rPropOpt, sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPolygon = NULL );
         void                ImplWritePage( SolverContainer& rSolver, PageType ePageType, sal_Bool bMaster, int nPageNumber = 0 );
         sal_Bool            ImplIsAutoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                     sal_Bool bIsGroup, sal_Int32 nAngle, sal_uInt32& nNewShapeType, sal_uInt32& nReplace, List& rAdjustmentList,
                                                         Rectangle& rPolyBoundRect );
-        sal_Bool            ImplGetGraphic( ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                                const String&, sal_Bool bFillBitmap, sal_Bool bOle = FALSE );
 
         ::com::sun::star::awt::Point        ImplMapPoint( const ::com::sun::star::awt::Point& );
         ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& );

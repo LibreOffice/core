@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-08 16:44:04 $
+ *  last change: $Author: sj $ $Date: 2000-12-12 17:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef __EscherEX_HXX
-#define __EscherEX_HXX
+#ifndef _PptEscherEX_HXX
+#define _PptEscherEX_HXX
 #ifndef _SVX_ESCHEREX_HXX
 #include <svx/escherex.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
-#include <com/sun/star/awt/Gradient.hpp>
 #endif
 
 // ---------------------------------------------------------------------------------------------
@@ -83,131 +80,33 @@ enum PPT_TextHeader
     PPTTH_QUARTERBODY  // Body in four-body slide
 };
 
-struct _EscherPropSortStruct
-{
-    BYTE*       pBuf;
-    UINT32      nPropSize;
-    UINT32      nPropValue;
-    UINT16      nPropId;
-};
-
-struct _Escher_GDIStruct
-{
-    Rectangle   GDIBoundRect;
-    Size        GDISize;
-    UINT32      GDIUncompressedSize;
-};
-
 // ---------------------------------------------------------------------------------------------
 
-class Color;
-class Graphic;
-class SvMemoryStream;
-class SvStorageStream;
-class _EscherEx : public EscherPersistTable
+class PptEscherEx : public EscherEx
 {
-        SvStorageStream*        mpOutStrm;
-        EscherGraphicProvider*  mpGraphicProvider;
-
-        UINT32                  mnStrmStartOfs;
-        int                     mnLevel;
-        UINT32*                 mpOffsets;
-        UINT32*                 mpSizes;
-        UINT16*                 mpRecTypes;                 // nimmt die Container RecTypes auf
-
-        UINT32                  mnDrawings;
         SvMemoryStream          maFIDCLs;
-        UINT32                  mnFIDCLs;                   // anzahl der cluster ID's
 
-        UINT32                  mnCurrentDg;
-        UINT32                  mnCurrentShapeID;           // die naechste freie ID
-        UINT32                  mnCurrentShapeMaximumID;    // die hoechste und auch benutzte ID
-        UINT32                  mnTotalShapesDg;            // anzahl der shapes im Dg
-        UINT32                  mnTotalShapeIdUsedDg;       // anzahl der benutzten shape Id's im Dg
-        UINT32                  mnTotalShapesDgg;           // anzahl der shapes im Dgg
-        UINT32                  mnCountOfs;
-        UINT32                  mnSortCount;
-        UINT32                  mnSortBufSize;
-        _EscherPropSortStruct*  mpSortStruct;
-        UINT32                  mnCountCount;
-        UINT32                  mnCountSize;
-        BOOL                    mb_EscherSpgr;
-        BOOL                    mb_EscherDg;
+        sal_uInt32  ImplDggContainerSize();
+        void        ImplWriteDggContainer( SvStream& rSt );
 
-        UINT32                  mnGroupLevel;
+        sal_uInt32  ImplDggAtomSize();
+        void        ImplWriteDggAtom( SvStream& rSt );
 
-        BOOL    ImplSeek( UINT32 nKey );
+        sal_uInt32  ImplOptAtomSize();
+        void        ImplWriteOptAtom( SvStream& rSt );
 
-        // ist die graphic noch nicht vorhanden, so wird sie eingefuegt
-
-        UINT32  ImplDggContainerSize();
-        void    ImplWriteDggContainer( SvStream& rSt );
-
-        UINT32  ImplDggAtomSize();
-        void    ImplWriteDggAtom( SvStream& rSt );
-
-        UINT32  ImplOptAtomSize();
-        void    ImplWriteOptAtom( SvStream& rSt );
-
-        UINT32  ImplSplitMenuColorsAtomSize();
-        void    ImplWriteSplitMenuColorsAtom( SvStream& rSt );
+        sal_uInt32  ImplSplitMenuColorsAtomSize();
+        void        ImplWriteSplitMenuColorsAtom( SvStream& rSt );
 
     public:
 
-                _EscherEx( SvStorageStream& rOut, UINT32 nDrawings );
-                ~_EscherEx();
-
-        void    InsertAtCurrentPos( UINT32 nBytes, BOOL bCont = FALSE );// es werden nBytes an der aktuellen Stream Position eingefuegt,
-                                                                    // die PersistantTable und interne Zeiger angepasst
-
-        void    InsertPersistOffset( UINT32 nKey, UINT32 nOffset ); // Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
-        BOOL    SeekToPersistOffset( UINT32 nKey );
-        BOOL    InsertAtPersistOffset( UINT32 nKey, UINT32 nValue );// nValue wird im Stream an entrsprechender Stelle eingefuegt(overwrite modus), ohne dass sich die
-                                                                    // aktuelle StreamPosition aendert
-
-        BOOL    SeekBehindRecHeader( UINT16 nRecType );             // der stream muss vor einem gueltigen Record Header oder Atom stehen
-
-                // features beim erzeugen folgender Container:
-                //
-                //      _Escher_DggContainer:   ein _EscherDgg Atom wird automatisch erzeugt und verwaltet
-                //      _Escher_DgContainer:        ein _EscherDg Atom wird automatisch erzeugt und verwaltet
-                //      _Escher_SpgrContainer:
-                //      _Escher_SpContainer:
+                PptEscherEx( SvStream& rOut, UINT32 nDrawings );
+                ~PptEscherEx();
 
         void    OpenContainer( UINT16 n_EscherContainer, int nRecInstance = 0 );
         void    CloseContainer();
 
-        void    BeginAtom();
-        void    EndAtom( UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-        void    AddAtom( UINT32 nAtomSitze, UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-        void    AddClientAnchor( const Rectangle& rRectangle );
-
         void    EnterGroup( Rectangle* pBoundRect = NULL, SvMemoryStream* pClientData = NULL );
-        UINT32  GetGroupLevel() const { return mnGroupLevel; };
-        BOOL    SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect );
-        BOOL    SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect );
-        void    LeaveGroup();
-
-                // ein _Escher_Sp wird geschrieben ( Ein _Escher_DgContainer muss dazu geoeffnet sein !!)
-        void    AddShape( UINT32 nShpInstance, UINT32 nFlagIds, UINT32 nShapeID = 0 );
-                // reserviert eine ShapeId
-        UINT32  GetShapeID();
-
-        void    BeginCount();
-        void    AddOpt( UINT16 nPropertyID, UINT32 nPropValue, BOOL bBlib = FALSE );
-                // der Buffer pProp wird spaeter bei einem EndCount automatisch freigegeben!!
-        BOOL    GetOpt( UINT16 nPropertyID, UINT32& rPropValue );
-        void    AddOpt( UINT16 nPropertyID, BOOL bBlib, UINT32 nPropValue, BYTE* pProp, UINT32 nPropSize );
-        void    AddColor( UINT32 nColor );
-        void    EndCount( UINT16 nRecType, UINT16 nRecVersion = 0 );
-
-        UINT32  GetColor( const UINT32 nColor, BOOL bSwap = TRUE );
-        UINT32  GetColor( const Color& rColor, BOOL bSwap = TRUE );
-        UINT32  GetGradientColor( const ::com::sun::star::awt::Gradient* pGradient, UINT32 bStartColor );
-        void    WriteGradient( const ::com::sun::star::awt::Gradient* pGradient );
-
-        UINT32  AddGraphic( SvStorageStream& rPicStrm, const ByteString& rUniqueId,
-                                const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr = NULL );
 
         UINT32  DrawingGroupContainerSize();
         void    WriteDrawingGroupContainer( SvStream& rSt );

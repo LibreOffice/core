@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-07 16:52:03 $
+ *  last change: $Author: sj $ $Date: 2000-12-12 17:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #ifndef _EPPT_DEF_HXX
 #include "epptdef.hxx"
 #endif
-#ifndef __EscherEX_HXX
+#ifndef _PptEscherEx_HXX
 #include "escherex.hxx"
 #endif
 #ifndef _SV_POLY_HXX
@@ -605,12 +605,12 @@ sal_uInt32 SolverContainer::ImplGetId( const ::com::sun::star::uno::Reference< :
 
 // ---------------------------------------------------------------------------------------------
 
-void SolverContainer::WriteSolver( SvStream* pStrm, _EscherEx* p_EscherEx )
+void SolverContainer::WriteSolver( SvStream* pStrm, PptEscherEx* pPptEscherEx )
 {
     sal_uInt32 nCount = maConnectorList.Count();
     if ( nCount )
     {
-        p_EscherEx->OpenContainer( ESCHER_SolverContainer, nCount );
+        pPptEscherEx->OpenContainer( ESCHER_SolverContainer, nCount );
 
         ConnectorRule aConnectorRule;
         aConnectorRule.nRuleId = 2;
@@ -628,7 +628,7 @@ void SolverContainer::WriteSolver( SvStream* pStrm, _EscherEx* p_EscherEx )
                 if ( aConnectorRule.nShapeB )
                     aConnectorRule.ncptiB = pPtr->GetConnectorRule( FALSE );
             }
-            p_EscherEx->AddAtom( 24, ESCHER_ConnectorRule, 1 );
+            pPptEscherEx->AddAtom( 24, ESCHER_ConnectorRule, 1 );
             *pStrm  << aConnectorRule.nRuleId
                     << aConnectorRule.nShapeA
                     << aConnectorRule.nShapeB
@@ -638,7 +638,7 @@ void SolverContainer::WriteSolver( SvStream* pStrm, _EscherEx* p_EscherEx )
 
             aConnectorRule.nRuleId += 2;
         }
-        p_EscherEx->CloseContainer();   // ESCHER_SolverContainer
+        pPptEscherEx->CloseContainer();   // ESCHER_SolverContainer
     }
 }
 
@@ -653,7 +653,7 @@ sal_uInt32 PPTWriter::ImplVBAInfoContainer( SvStream* pStrm )
                << (sal_uInt32)( nSize - 8 )
                << (sal_uInt32)( 2 | ( EPP_VBAInfoAtom << 16 ) )
                << (sal_uInt32)12;
-        mp_EscherEx->InsertPersistOffset( EPP_Persist_VBAInfoAtom, pStrm->Tell() );
+        mpPptEscherEx->InsertPersistOffset( EPP_Persist_VBAInfoAtom, pStrm->Tell() );
         *pStrm << (sal_uInt32)0
                << (sal_uInt32)0
                << (sal_uInt32)1;
@@ -854,7 +854,7 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
         for ( i = 0; i < mnMasterPages; i++ )
         {
             *pStrm << (sal_uInt32)( EPP_SlidePersistAtom << 16 ) << (sal_uInt32)20;
-            mp_EscherEx->InsertPersistOffset( EPP_MAINMASTER_PERSIST_KEY | i, pStrm->Tell() );
+            mpPptEscherEx->InsertPersistOffset( EPP_MAINMASTER_PERSIST_KEY | i, pStrm->Tell() );
             *pStrm << (sal_uInt32)0                 // psrReference - logical reference to the slide persist object ( EPP_MAINMASTER_PERSIST_KEY )
                    << (sal_uInt32)0                 // flags - only bit 3 used, if set then slide contains shapes other than placeholders
                    << (sal_Int32)0                  // numberTexts - number of placeholder texts stored with the persist object. Allows to display outline view without loading the slide persist objects
@@ -869,10 +869,10 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
 
 sal_Bool PPTWriter::ImplCloseDocument()
 {
-    sal_uInt32 nOfs = mp_EscherEx->PtGetOffsetByID( EPP_Persist_Document );
+    sal_uInt32 nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Document );
     if ( nOfs )
     {
-        mp_EscherEx->PtReplaceOrInsert( EPP_Persist_CurrentPos, mpStrm->Tell() );
+        mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_CurrentPos, mpStrm->Tell() );
         mpStrm->Seek( nOfs );
 
         mpExEmbed->Seek( STREAM_SEEK_TO_END );
@@ -938,12 +938,12 @@ sal_Bool PPTWriter::ImplCloseDocument()
                 nBytesToInsert += ( nSound + 8 );       // Size der SoundCollection Container + nSound
             }
         }
-        nBytesToInsert += mp_EscherEx->DrawingGroupContainerSize();
+        nBytesToInsert += mpPptEscherEx->DrawingGroupContainerSize();
         nBytesToInsert += ImplMasterSlideListContainer( NULL );
         nBytesToInsert += ImplDocumentListContainer( NULL );
 
         // nBytes im Stream einfuegen, und abhaengige Container anpassen
-        mp_EscherEx->InsertAtCurrentPos( nBytesToInsert, TRUE );
+        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, TRUE );
 
         // CREATE HYPERLINK CONTAINER
         if ( nExEmbedSize )
@@ -955,7 +955,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                     << (sal_uInt16)EPP_ExObjListAtom
                     << (sal_uInt32)4
                     << (sal_uInt32)mnExEmbed;
-            mp_EscherEx->InsertPersistOffset( EPP_Persist_ExObj, mpStrm->Tell() );
+            mpPptEscherEx->InsertPersistOffset( EPP_Persist_ExObj, mpStrm->Tell() );
             mpStrm->Write( mpExEmbed->GetData(), nExEmbedSize );
         }
 
@@ -964,7 +964,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
 
         // Open Container ( EPP_SrKinsoku )
         *mpStrm << (sal_uInt16)0x2f << (sal_uInt16)EPP_SrKinsoku << (sal_uInt32)12;
-        mp_EscherEx->AddAtom( 4, EPP_SrKinsokuAtom, 0, 3 );
+        mpPptEscherEx->AddAtom( 4, EPP_SrKinsokuAtom, 0, 3 );
         *mpStrm << (sal_Int32)0;                        // SrKinsoku Level 0
 
         // Open Container ( EPP_FontCollection )
@@ -972,7 +972,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
 
         for ( sal_uInt32 i = 0; i < maFontCollection.GetCount(); i++ )
         {
-            mp_EscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
+            mpPptEscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
             const String* pEntry = maFontCollection.GetById( i );
             sal_uInt32 nFontLen = pEntry->Len();
             for ( sal_uInt16 n = 0; n < 34; n++ )
@@ -983,13 +983,13 @@ sal_Bool PPTWriter::ImplCloseDocument()
                 *mpStrm << nUniCode;
             }
         }
-        mp_EscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
+        mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
         *mpStrm << (sal_uInt32)7                        // ?
                 << (sal_Int16)2                         // ?
                 << (sal_uInt8)9                          // ?
                 << (sal_uInt8)8                          // ?
                 << (sal_Int16)0;                        // ?
-        mp_EscherEx->AddAtom( 110, EPP_TxMasterStyleAtom, 0, 4 );
+        mpPptEscherEx->AddAtom( 110, EPP_TxMasterStyleAtom, 0, 4 );
         static sal_uInt8 aTxSuStyleAtom[ 110 ] =
         {
             0x05, 0x00, 0xff, 0xfd, 0x3f, 0x00, 0x00, 0x00, 0x22, 0x20, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00,
@@ -1010,7 +1010,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
             *mpStrm << (sal_uInt16)0xf << (sal_uInt16)EPP_SoundCollection << (sal_uInt32)nSound;
 
             // Create SoundCollAtom ( Referenz auf die naechste Freie SoundId );
-            mp_EscherEx->AddAtom( 4, EPP_SoundCollAtom );
+            mpPptEscherEx->AddAtom( 4, EPP_SoundCollAtom );
             *mpStrm << (sal_uInt32)( maSoundCollection.GetCount() );
 
             for ( sal_uInt32 i = 0; i < maSoundCollection.GetCount(); i++ )
@@ -1036,7 +1036,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                 sal_uInt32 nOldSoundPos = mpStrm->Tell();
                                 *mpStrm << (sal_uInt32)0;
 
-                                mp_EscherEx->AddAtom( nStringLen * 2, EPP_CString );        // Name Of Sound ( instance 0 )
+                                mpPptEscherEx->AddAtom( nStringLen * 2, EPP_CString );        // Name Of Sound ( instance 0 )
                                 for ( USHORT k = 0; k < nStringLen; k++ )
                                     *mpStrm << pSoundFile->GetChar( k ) << (sal_uInt8)0;
 
@@ -1044,16 +1044,16 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                 {
                                     if ( (sal_Char)'.' == pSoundFile->GetChar( nStringLen - 4 ) )
                                     {
-                                        mp_EscherEx->AddAtom( 8, EPP_CString, 0, 1 );   // Type Of Sound ( instance 1 )
+                                        mpPptEscherEx->AddAtom( 8, EPP_CString, 0, 1 );   // Type Of Sound ( instance 1 )
                                         for ( k = nStringLen - 4; k < nStringLen; k++ )
                                             *mpStrm << pSoundFile->GetChar( k ) << (sal_uInt8)0;
                                     }
                                 }
                                 ByteString aString( ByteString::CreateFromInt32( i + 1 ) );
-                                mp_EscherEx->AddAtom( aString.Len() * 2, EPP_CString, 0, 2 );
+                                mpPptEscherEx->AddAtom( aString.Len() * 2, EPP_CString, 0, 2 );
                                 for ( k = 0; k < aString.Len(); k++ )
                                     *mpStrm << aString.GetChar( k ) << (sal_uInt8)0;
-                                mp_EscherEx->AddAtom( nSizeOfSound, EPP_SoundData );
+                                mpPptEscherEx->AddAtom( nSizeOfSound, EPP_SoundData );
 
                                 sal_uInt32 nBytesLeft = nSizeOfSound;
                                 SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( *pSoundFile, STREAM_READ );
@@ -1083,11 +1083,11 @@ sal_Bool PPTWriter::ImplCloseDocument()
             delete pBuf;
         }
 
-        mp_EscherEx->WriteDrawingGroupContainer( *mpStrm );
+        mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
         ImplMasterSlideListContainer( mpStrm );
         ImplDocumentListContainer( mpStrm );
 
-        sal_uInt32 nOldPos = mp_EscherEx->PtGetOffsetByID( EPP_Persist_CurrentPos );
+        sal_uInt32 nOldPos = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_CurrentPos );
         if ( nOldPos )
         {
             mpStrm->Seek( nOldPos );
@@ -1347,252 +1347,9 @@ sal_Bool PPTWriter::ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
     return FALSE;
 }
 
-// ---------------------------------------------------------------------------------------------
-
-void PPTWriter::ImplWriteLineBundle( sal_Bool bEdge )
-{
-    sal_uInt32 nLineFlags = 0x80008;
-    ESCHER_LineEnd eLineEnd = ESCHER_LineArrowEnd;
-
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ) ) ) )
-    {
-        ::com::sun::star::drawing::PointSequence* pPolyPolygon = (::com::sun::star::drawing::PointSequence*)mAny.getValue();
-        sal_Int32 nSequenceCount = pPolyPolygon->getLength();
-        if ( nSequenceCount )
-        {
-            // Zeiger auf innere sequences holen
-            ::com::sun::star::awt::Point* pSequence = pPolyPolygon->getArray();
-            if ( pSequence )
-            {
-                switch ( nSequenceCount )
-                {
-                    case 0x4 :
-                    {
-                        switch( pSequence->X )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd;    break;
-                            case 0x529 : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                    break;
-                    case 0x7 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                    case 0xa : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                    case 0xd :
-                    {
-                        switch ( pSequence->X )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                            case 0x64 : eLineEnd = ESCHER_LineArrowOvalEnd; break;
-                            case 0x87c : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                }
-                mp_EscherEx->AddOpt( ESCHER_Prop_lineStartArrowLength, 2 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_lineStartArrowWidth, 2 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
-                nLineFlags |= 0x100010;
-            }
-        }
-    }
-
-    eLineEnd = ESCHER_LineArrowEnd;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LineEnd" ) ) ) )
-    {
-        ::com::sun::star::drawing::PointSequence* pPolyPolygon = (::com::sun::star::drawing::PointSequence*)mAny.getValue();
-        sal_Int32 nSequenceCount = pPolyPolygon->getLength();
-        if ( nSequenceCount )
-        {
-            // Zeiger auf innere sequences holen
-            ::com::sun::star::awt::Point* pSequence = pPolyPolygon->getArray();
-            if ( pSequence )
-            {
-                switch ( nSequenceCount )
-                {
-                    case 0x4 :
-                    {
-                        switch( pSequence->X )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd;    break;
-                            case 0x529 : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                    break;
-                    case 0x7 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                    case 0xa : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                    case 0xd :
-                    {
-                        switch ( pSequence->X )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                            case 0x64 : eLineEnd = ESCHER_LineArrowOvalEnd; break;
-                            case 0x87c : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                }
-                mp_EscherEx->AddOpt( ESCHER_Prop_lineEndArrowLength, 2 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_lineEndArrowWidth, 2 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
-                nLineFlags |= 0x100010;
-            }
-        }
-    }
-
-    mnShadow |= 1;
-
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ) ) ) )
-    {
-        ::com::sun::star::drawing::LineStyle aLS;
-        mAny >>= aLS;
-        switch ( aLS )
-        {
-            case ::com::sun::star::drawing::LineStyle_NONE :
-            {
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );           // 80000
-                mnShadow ^= 1;
-            }
-            break;
-
-            case ::com::sun::star::drawing::LineStyle_DASH :
-            {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ) ) ) )
-                {
-                    ESCHER_LineDashing eDash = ESCHER_LineSolid;
-                    ::com::sun::star::drawing::LineDash* pLineDash = (::com::sun::star::drawing::LineDash*)mAny.getValue();
-                    sal_Int32 nDistance = pLineDash->Distance << 1;
-                    switch ( pLineDash->Style )
-                    {
-                        case ::com::sun::star::drawing::DashStyle_ROUND :
-                        case ::com::sun::star::drawing::DashStyle_ROUNDRELATIVE :
-                            mp_EscherEx->AddOpt( ESCHER_Prop_lineEndCapStyle, 0 ); // Style Round setzen
-                        break;
-                    }
-                    if ( ((!(pLineDash->Dots )) || (!(pLineDash->Dashes )) ) || ( pLineDash->DotLen == pLineDash->DashLen ) )
-                    {
-                        sal_Int32 nLen = pLineDash->DotLen;
-                        if ( pLineDash->Dashes )
-                            nLen = pLineDash->DashLen;
-
-                        if ( nLen >= nDistance )
-                            eDash = ESCHER_LineLongDashGEL;
-                        else if ( pLineDash->Dots )
-                            eDash = ESCHER_LineDotSys;
-                        else
-                            eDash = ESCHER_LineDashGEL;
-                    }
-                    else                                                            // X Y
-                    {
-                        if ( pLineDash->Dots != pLineDash->Dashes )
-                        {
-                            if ( ( pLineDash->DashLen > nDistance ) || ( pLineDash->DotLen > nDistance ) )
-                                eDash = ESCHER_LineLongDashDotDotGEL;
-                            else
-                                eDash = ESCHER_LineDashDotDotSys;
-                        }
-                        else                                                        // X Y Y
-                        {
-                            if ( ( pLineDash->DashLen > nDistance ) || ( pLineDash->DotLen > nDistance ) )
-                                eDash = ESCHER_LineLongDashDotGEL;
-                            else
-                                eDash = ESCHER_LineDashDotGEL;
-
-                        }
-                    }
-                    mp_EscherEx->AddOpt( ESCHER_Prop_lineDashing, eDash );
-                }
-            }
-            case ::com::sun::star::drawing::LineStyle_SOLID :
-            default:
-            {
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
-            }
-            break;
-        }
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LineColor" ) ) ) )
-        {
-            sal_uInt32 nLineColor = mp_EscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
-            mp_EscherEx->AddOpt( ESCHER_Prop_lineColor, nLineColor );
-            mp_EscherEx->AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
-        }
-    }
-
-    sal_uInt32 nLineSize = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" ) ) ) )
-                                ? *((sal_uInt32*)mAny.getValue() ) : 0;
-
-    if ( nLineSize > 1 )
-        mp_EscherEx->AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 ); // 100TH MM -> PT , 1PT = 12700 EMU
-    if ( bEdge == FALSE )
-    {
-        mp_EscherEx->AddOpt( ESCHER_Prop_fFillOK, 0x1001 );
-        mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-    }
-}
-
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteFillBundle( sal_Bool bEdge )
-{
-    mp_EscherEx->AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
-    mp_EscherEx->AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
-
-    sal_uInt32 nFillBackColor = 0;
-    mnShadow |= 2;
-
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
-    {
-        ::com::sun::star::drawing::FillStyle aFS;
-        mAny >>= aFS;
-        switch( aFS )
-        {
-            case ::com::sun::star::drawing::FillStyle_GRADIENT :
-            {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) ) )
-                    mp_EscherEx->WriteGradient( (::com::sun::star::awt::Gradient*)mAny.getValue() );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-            }
-            break;
-
-            case ::com::sun::star::drawing::FillStyle_BITMAP :
-            {
-                ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ), TRUE );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor  );
-            }
-            break;
-            case ::com::sun::star::drawing::FillStyle_HATCH :
-            case ::com::sun::star::drawing::FillStyle_SOLID :
-            default:
-            {
-                sal_uInt16 nTransparency = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) ) )
-                                                    ? *((sal_Int16*)mAny.getValue()) : NULL;
-                if ( nTransparency != 100 )
-                {
-                    if ( nTransparency )    // opacity
-                        mp_EscherEx->AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
-                    {
-                        sal_uInt32 nFillColor = mp_EscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
-                        nFillBackColor = nFillColor ^ 0xffffff;
-                        mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, nFillColor );
-                    }
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
-                    break;
-                }
-            }
-            case ::com::sun::star::drawing::FillStyle_NONE :
-            {
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-                mnShadow ^= 2;
-            }
-            break;
-        }
-    }
-    ImplWriteLineBundle( bEdge );
-}
-
-//  -----------------------------------------------------------------------
-
-void PPTWriter::ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight )
+void PPTWriter::ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool bDisableAutoGrowHeight )
 {
     if ( ImplGetText() )
     {
@@ -1657,7 +1414,7 @@ void PPTWriter::ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight )
             if ( *( (sal_Int16*)mAny.get() ) == 1 )
             {
                 nTextAttr |= 0x10001;
-                mp_EscherEx->AddOpt( ESCHER_Prop_scaleText, ? );
+                rPropOpt.AddOpt( ESCHER_Prop_scaleText, ? );
             }
         }
 */
@@ -1683,15 +1440,15 @@ void PPTWriter::ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight )
             if ( bBool )
                 nTextAttr |= 0x20002;
         }
-        mp_EscherEx->AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
-        mp_EscherEx->AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
-        mp_EscherEx->AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
-        mp_EscherEx->AddOpt( ESCHER_Prop_dyTextBottom, nBottom * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, nBottom * 360 );
 
-        mp_EscherEx->AddOpt( ESCHER_Prop_WrapText, eWrapMode );
-        mp_EscherEx->AddOpt( ESCHER_Prop_AnchorText, eAnchor );
-        mp_EscherEx->AddOpt( ESCHER_Prop_FitTextToShape, nTextAttr );
-        mp_EscherEx->AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+        rPropOpt.AddOpt( ESCHER_Prop_WrapText, eWrapMode );
+        rPropOpt.AddOpt( ESCHER_Prop_AnchorText, eAnchor );
+        rPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, nTextAttr );
+        rPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
     }
 }
 
@@ -2049,7 +1806,7 @@ sal_Bool PPTWriter::ImplGetText()
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplFlipBoundingBox( const ::com::sun::star::awt::Point& rRefPoint )
+void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt, const ::com::sun::star::awt::Point& rRefPoint )
 {
     if ( mnAngle < 0 )
         mnAngle = ( 36000 + mnAngle ) % 36000;
@@ -2080,7 +1837,7 @@ void PPTWriter::ImplFlipBoundingBox( const ::com::sun::star::awt::Point& rRefPoi
     mnAngle *= 655;
     mnAngle += 0x8000;
     mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
-    mp_EscherEx->AddOpt( ESCHER_Prop_Rotation, mnAngle );
+    rPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
 }
 
 //  -----------------------------------------------------------------------
@@ -3521,7 +3278,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPolygon )
+void PPTWriter::ImplWriteAny( EscherPropertyContainer& rPropOpt, sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPolygon )
 {
 
     PolyPolygon aPolyPolygon;
@@ -3734,12 +3491,12 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
     *pPtr++ = 0;
     *pPtr++ = 0x80;
 
-    mp_EscherEx->AddOpt( ESCHER_Prop_geoRight, aGeoRect.GetSize().Width() );
-    mp_EscherEx->AddOpt( ESCHER_Prop_geoBottom, aGeoRect.GetSize().Height() );
+    rPropOpt.AddOpt( ESCHER_Prop_geoRight, aGeoRect.GetSize().Width() );
+    rPropOpt.AddOpt( ESCHER_Prop_geoBottom, aGeoRect.GetSize().Height() );
 
-    mp_EscherEx->AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-    mp_EscherEx->AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (sal_uInt8*)pVerticesBuf, nVerticesBufSize );
-    mp_EscherEx->AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (sal_uInt8*)pSegmentBuf, nSegmentBufSize );
+    rPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+    rPropOpt.AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (sal_uInt8*)pVerticesBuf, nVerticesBufSize );
+    rPropOpt.AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (sal_uInt8*)pSegmentBuf, nSegmentBufSize );
 }
 
 //  -----------------------------------------------------------------------
@@ -4266,7 +4023,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     if ( bDimHide )
         nAfterEffect |= 2;
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ) ) )
-        nDimColor = mp_EscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) ) | 0xfe000000;
+        nDimColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) ) | 0xfe000000;
 
     rSt << (sal_uInt32)( ( EPP_AnimationInfo << 16 ) | 0xf )  << (sal_uInt32)36
         << (sal_uInt32)( ( EPP_AnimationInfoAtom << 16 ) | 1 )<< (sal_uInt32)28
@@ -4638,20 +4395,19 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
 
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \
-    sal_uInt32 nId = mp_EscherEx->GetShapeID();                     \
-    mp_EscherEx->AddShape( (sal_uInt32)nType, (sal_uInt32)nFlags, nId );    \
+    sal_uInt32 nId = mpPptEscherEx->GetShapeID();                     \
+    mpPptEscherEx->AddShape( (sal_uInt32)nType, (sal_uInt32)nFlags, nId );    \
     aSolverContainer.AddShape( mXShape, nId );                  \
 }
 
 #define SHAPE_TEXT( bFill )                                     \
 {                                                               \
     mnTextStyle = EPP_TEXTSTYLE_TEXT;                           \
-    mp_EscherEx->OpenContainer( ESCHER_SpContainer );          \
-    ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                \
-    mp_EscherEx->BeginCount();                                  \
+    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );         \
+    ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                 \
     if ( bFill )                                                \
-        ImplWriteFillBundle( TRUE );                            \
-    ImplWriteTextBundle();                                      \
+        aPropOpt.CreateFillProperties( mXPropSet, sal_True );   \
+    ImplWriteTextBundle( aPropOpt );                            \
 }
 
 void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
@@ -4698,7 +4454,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             }
         }
         nGroups = GetGroupsClosed();
-        for ( sal_uInt32 i = 0; i < nGroups; i++, mp_EscherEx->LeaveGroup() );
+        for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() );
 
         if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE ) )
         {
@@ -4724,6 +4480,11 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             sal_uInt32  nShapeType;
             List        aAdjustmentList;
             Rectangle   aPolyBoundRect;
+
+            const ::com::sun::star::awt::Size   aSize100thmm( mXShape->getSize() );
+            const ::com::sun::star::awt::Point  aPoint100thmm( mXShape->getPosition() );
+            Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
+            EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect100thmm );
             if ( bGroup || bOpenBezier || bClosedBezier || bPolyPolygon || bPolyLine )
                 bIsAutoShape = ImplIsAutoShape( mXShape, mXPropSet, bGroup, mnAngle, nShapeType, nReplace, aAdjustmentList, aPolyBoundRect );
 
@@ -4752,7 +4513,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                         pTmp = new SvMemoryStream( 0x200, 0x200 );
                         ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
                     }
-                    mp_EscherEx->EnterGroup( &maRect, pTmp );
+                    mpPptEscherEx->EnterGroup( &maRect, pTmp );
                     delete pTmp;
                 }
                 else
@@ -4777,16 +4538,13 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
 
             sal_uInt8 nPlaceHolderAtom = EPP_PLACEHOLDER_NONE;
 
-            mnShadow = 2;
             mnTextSize = 0;
             mnTextStyle = EPP_TEXTSTYLE_NORMAL;
 
             if ( bIsAutoShape )
             {
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( nShapeType, 0xa00 );
-                mp_EscherEx->BeginCount();
-
                 ::com::sun::star::awt::Point aP( aPolyBoundRect.Left(), aPolyBoundRect.Top() );
                 ::com::sun::star::awt::Size  aS( aPolyBoundRect.GetWidth(), aPolyBoundRect.GetHeight() );
                 maPosition = ImplMapPoint( aP );
@@ -4809,23 +4567,20 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 mnAngle *= 655;
                 mnAngle += 0x8000;
                 mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
-                mp_EscherEx->AddOpt( ESCHER_Prop_Rotation, mnAngle );
+                aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
                 mnAngle = 0;
 
                 sal_uInt16 nAdjCount;
                 for ( nAdjCount = 0; nAdjCount < aAdjustmentList.Count(); nAdjCount++ )
-                    mp_EscherEx->AddOpt( ESCHER_Prop_adjustValue + nAdjCount, (sal_uInt32)aAdjustmentList.GetObject( nAdjCount ) );
+                    aPropOpt.AddOpt( ESCHER_Prop_adjustValue + nAdjCount, (sal_uInt32)aAdjustmentList.GetObject( nAdjCount ) );
 
-                if ( bPolyLine || bOpenBezier )
-                    ImplWriteLineBundle( FALSE );
-                else
-                    ImplWriteFillBundle( TRUE );
-                ImplWriteTextBundle();
+                aPropOpt.CreateFillProperties( mXPropSet, ( bPolyLine || bOpenBezier ) ? sal_False : sal_True );
+                ImplWriteTextBundle( aPropOpt );
             }
             else if ( mType == "drawing.Rectangle" )
             {
                 sal_Int32 nRadius = 0;
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CornerRadius" ) ) ) )
                 {
                     mAny >>= nRadius;
@@ -4834,7 +4589,6 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 if ( nRadius )
                 {
                     ADD_SHAPE( ESCHER_ShpInst_RoundRectangle, 0xa00 ); // Flags: Connector | HasSpt
-                    mp_EscherEx->BeginCount();
                     sal_Int32 nLenght = maRect.GetWidth();
                     if ( nLenght > maRect.GetHeight() )
                         nLenght = maRect.GetHeight();
@@ -4843,15 +4597,14 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                         nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
                     else
                         nRadius = ( 0x2a30 * nRadius ) / nLenght;
-                    mp_EscherEx->AddOpt( ESCHER_Prop_adjustValue, nRadius );
+                    aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
                 }
                 else
                 {
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );          // Flags: Connector | HasSpt
-                    mp_EscherEx->BeginCount();
                 }
-                ImplWriteFillBundle( TRUE );
-                ImplWriteTextBundle();
+                aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                ImplWriteTextBundle( aPropOpt );
             }
             else if ( mType == "drawing.Ellipse" )
             {
@@ -4885,10 +4638,9 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 }
                 if ( eCircleKind == ::com::sun::star::drawing::CircleKind_FULL )
                 {
-                    mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );            // Flags: Connector | HasSpt
-                    mp_EscherEx->BeginCount();
-                    ImplWriteFillBundle( TRUE );
+                    aPropOpt.CreateFillProperties( mXPropSet, sal_True );
                 }
                 else
                 {
@@ -4916,28 +4668,27 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     aEnd.X += aCenter.X;
                     aEnd.Y += aCenter.Y;
                     Polygon aPolygon( maRect, Point( aStart.X, aStart.Y ), Point( aEnd.X, aEnd.Y ), ePolyKind );
-                    mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );       // Flags: Connector | HasSpt
-                    mp_EscherEx->BeginCount();
                     switch ( ePolyKind )
                     {
                         case POLY_PIE :
                         case POLY_CHORD :
                         {
-                            ImplWriteAny( ANY_FLAGS_POLYPOLYGON, FALSE, &aPolygon );
-                            ImplWriteFillBundle( TRUE );
+                            ImplWriteAny( aPropOpt, ANY_FLAGS_POLYPOLYGON, FALSE, &aPolygon );
+                            aPropOpt.CreateFillProperties( mXPropSet, sal_True );
                         }
                         break;
 
                         case POLY_ARC :
                         {
-                            ImplWriteAny( ANY_FLAGS_POLYLINE, FALSE, &aPolygon );
-                            ImplWriteLineBundle( FALSE );
+                            ImplWriteAny( aPropOpt, ANY_FLAGS_POLYLINE, FALSE, &aPolygon );
+                            aPropOpt.CreateLineProperties( mXPropSet, sal_False );
                         }
                         break;
                     }
                 }
-                ImplWriteTextBundle();
+                ImplWriteTextBundle( aPropOpt );
             }
             else if ( mType == "drawing.Control" )
             {
@@ -5033,14 +4784,13 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 mpExEmbed->Seek( STREAM_SEEK_TO_END );
                 nOlePictureId = mnExEmbed;
 
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
                 ADD_SHAPE( ESCHER_ShpInst_HostControl, nSpFlags );
-                mp_EscherEx->BeginCount();
-                if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), FALSE, TRUE ) )
-                    mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
-                mp_EscherEx->AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False, sal_True ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                aPropOpt.AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
+                aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
 
                 if ( aControlName.Len() )
                 {
@@ -5056,9 +4806,9 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     }
                     *pTmp++ = 0;
                     *pTmp = 0;
-                    mp_EscherEx->AddOpt( ESCHER_Prop_wzName, TRUE, nBufSize, pBuf, nBufSize );
+                    aPropOpt.AddOpt( ESCHER_Prop_wzName, TRUE, nBufSize, pBuf, nBufSize );
                 }
-           }
+            }
             else if ( mType == "drawing.Connector" )
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aShapeA, aShapeB;
@@ -5110,8 +4860,8 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 ::com::sun::star::awt::Point aBeg( ImplMapPoint( aStartPoint ) );
                 ::com::sun::star::awt::Point aEnd( ImplMapPoint( aEndPoint ) );
                 maRect = Rectangle( Point( aBeg.X, aBeg.Y ), Point( aEnd.X, aEnd.Y ) );
-                ImplWriteAny( ANY_FLAGS_LINE, FALSE );
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                ImplWriteAny( aPropOpt, ANY_FLAGS_LINE, FALSE );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nFlags = 0xa00;                                  // Flags: Connector | HasSpt
                 if ( maRect.Top() > maRect.Bottom() )
                     nFlags |= 0x80;                                         // Flags: VertMirror
@@ -5126,18 +4876,16 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     case ::com::sun::star::drawing::ConnectorType_CURVE :
                     {
                         ADD_SHAPE( ESCHER_ShpInst_CurvedConnector3, nFlags );
-                        mp_EscherEx->BeginCount();
-                        mp_EscherEx->AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
-                        mp_EscherEx->AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
-                        mp_EscherEx->AddOpt( ESCHER_Prop_adjust2Value, -(sal_Int32)nAdjustValue2 );
+                        aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
+                        aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
+                        aPropOpt.AddOpt( ESCHER_Prop_adjust2Value, -(sal_Int32)nAdjustValue2 );
                     }
                     break;
 
                     case ::com::sun::star::drawing::ConnectorType_STANDARD :// Connector 2->5
                     {
                         ADD_SHAPE( ESCHER_ShpInst_BentConnector3, nFlags );
-                        mp_EscherEx->BeginCount();
-                        mp_EscherEx->AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
+                        aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
                     }
                     break;
 
@@ -5147,12 +4895,11 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     {
                         nFlags |= 0x100;
                         ADD_SHAPE( ESCHER_ShpInst_StraightConnector1, nFlags );
-                        mp_EscherEx->BeginCount();
-                        mp_EscherEx->AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
+                        aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
                     }
                     break;
                 }
-                ImplWriteLineBundle( FALSE );
+                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
                 mnAngle = 0;
             }
             else if ( mType == "drawing.Measure" )
@@ -5161,15 +4908,15 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             }
             else if ( mType == "drawing.Line" )
             {
-                ImplWriteAny( ANY_FLAGS_LINE, FALSE );
+                ImplWriteAny( aPropOpt, ANY_FLAGS_LINE, FALSE );
                 if ( ImplGetText() )
                 {
                     aTextRefPoint = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
                     mnTextSize = 0;
                     bAdditionalText = TRUE;
-                    mp_EscherEx->EnterGroup( &maRect );
+                    mpPptEscherEx->EnterGroup( &maRect );
                 }
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nFlags = 0xa00;                                  // Flags: Connector | HasSpt
                 if ( maRect.Top() > maRect.Bottom() )
                     nFlags |= 0x80;                                         // Flags: VertMirror
@@ -5177,78 +4924,73 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     nFlags |= 0x40;                                         // Flags: HorzMirror
 
                 ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
-                mp_EscherEx->BeginCount();
-                mp_EscherEx->AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-                ImplWriteLineBundle( FALSE );
+                aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
                 mnAngle = 0;
             }
             else if ( bPolyPolygon )
             {
                 if ( ImplGetText() )
                 {
-                    mp_EscherEx->EnterGroup( NULL );
-                    nGroupLevel = mp_EscherEx->GetGroupLevel();
+                    mpPptEscherEx->EnterGroup( NULL );
+                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = TRUE;
                     mnTextSize = 0;
                 }
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );            // Flags: Connector | HasSpt
-                mp_EscherEx->BeginCount();
-                ImplWriteAny( ANY_FLAGS_POLYPOLYGON, FALSE );
-                ImplWriteFillBundle( TRUE );
+                ImplWriteAny( aPropOpt, ANY_FLAGS_POLYPOLYGON, FALSE );
+                aPropOpt.CreateFillProperties( mXPropSet, sal_True );
                 mnAngle = 0;
             }
             else if ( bPolyLine )
             {
                 if ( ImplGetText() )
                 {
-                    mp_EscherEx->EnterGroup( NULL );
-                    nGroupLevel = mp_EscherEx->GetGroupLevel();
+                    mpPptEscherEx->EnterGroup( NULL );
+                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = TRUE;
                     mnTextSize = 0;
                 }
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );            // Flags: Connector | HasSpt
-                mp_EscherEx->BeginCount();
-                ImplWriteAny( ANY_FLAGS_POLYLINE, FALSE );
-                ImplWriteLineBundle( FALSE );
+                ImplWriteAny( aPropOpt, ANY_FLAGS_POLYLINE, FALSE );
+                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
                 mnAngle = 0;
             }
             else if ( bOpenBezier )
             {
                 if ( ImplGetText() )
                 {
-                    mp_EscherEx->EnterGroup( NULL );
-                    nGroupLevel = mp_EscherEx->GetGroupLevel();
+                    mpPptEscherEx->EnterGroup( NULL );
+                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = TRUE;
                     mnTextSize = 0;
                 }
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );            // Flags: Connector | HasSpt
-                mp_EscherEx->BeginCount();
-                ImplWriteAny( ANY_FLAGS_POLYLINE, TRUE );
-                ImplWriteLineBundle( FALSE );
+                ImplWriteAny( aPropOpt, ANY_FLAGS_POLYLINE, TRUE );
+                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
                 mnAngle = 0;
             }
             else if ( bClosedBezier )
             {
                 if ( ImplGetText() )
                 {
-                    mp_EscherEx->EnterGroup( NULL );
-                    nGroupLevel = mp_EscherEx->GetGroupLevel();
+                    mpPptEscherEx->EnterGroup( NULL );
+                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = TRUE;
                     mnTextSize = 0;
                 }
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );            // Flags: Connector | HasSpt
-                mp_EscherEx->BeginCount();
-                ImplWriteAny( ANY_FLAGS_POLYPOLYGON, TRUE );
-                ImplWriteFillBundle( TRUE );
+                ImplWriteAny( aPropOpt, ANY_FLAGS_POLYPOLYGON, TRUE );
+                aPropOpt.CreateFillProperties( mXPropSet, sal_True );
                 mnAngle = 0;
             }
             else if ( ( mType == "drawing.GraphicObject" ) || ( mType == "presentation.GraphicObject" ) )
             {
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
 
                 // ein GraphicObject kann auch ein ClickMe Element sein
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
@@ -5261,11 +5003,10 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     else if ( ( mnLayout == 9 ) || ( mnLayout == 6 ) )
                         nPlaceHolderAtom = 22;  // EPP_PLACEHOLDER_CLIPART
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );           // Flags: HaveAnchor | HaveMaster
-                    mp_EscherEx->BeginCount();
-                    mp_EscherEx->AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                    aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
                 }
                 else
                 {
@@ -5279,23 +5020,22 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     if ( mnTextSize )                                       // graphic object oder Flachenfuellung
                     {
                         ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );       // Flags: Connector | HasSpt
-                        mp_EscherEx->BeginCount();
-                        if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), TRUE ) )
+
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_True ) )
                         {
-                            mp_EscherEx->AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
-                            mp_EscherEx->AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
-                            mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-                            mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, 0x8000000 );
-                            mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-                            ImplWriteTextBundle();
+                            aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
+                            aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
+                            aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+                            aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x8000000 );
+                            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+                            ImplWriteTextBundle( aPropOpt );
                         }
                     }
                     else
                     {
                         ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                        mp_EscherEx->BeginCount();
-                        if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), FALSE ) )
-                            mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False ) )
+                            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     }
                     sal_uInt32 nPicFlags = 0;
                     ::com::sun::star::drawing::ColorMode eColorMode( ::com::sun::star::drawing::ColorMode_STANDARD );
@@ -5361,31 +5101,31 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                             if ( aGraphCrop.Left )
                             {
                                 sal_uInt32 nLeft = ( aGraphCrop.Left * 65536 ) / aCropSize.Width;
-                                mp_EscherEx->AddOpt( ESCHER_Prop_cropFromLeft, nLeft );
+                                aPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, nLeft );
                             }
                             if ( aGraphCrop.Top )
                             {
                                 sal_uInt32 nTop = ( aGraphCrop.Top * 65536 ) / aCropSize.Height;
-                                mp_EscherEx->AddOpt( ESCHER_Prop_cropFromTop, nTop );
+                                aPropOpt.AddOpt( ESCHER_Prop_cropFromTop, nTop );
                             }
                             if ( aGraphCrop.Right )
                             {
                                 sal_uInt32 nRight = ( aGraphCrop.Right * 65536 ) / aCropSize.Width;
-                                mp_EscherEx->AddOpt( ESCHER_Prop_cropFromRight, nRight );
+                                aPropOpt.AddOpt( ESCHER_Prop_cropFromRight, nRight );
                             }
                             if ( aGraphCrop.Bottom )
                             {
                                 sal_uInt32 nBottom = ( aGraphCrop.Bottom * 65536 ) / aCropSize.Height;
-                                mp_EscherEx->AddOpt( ESCHER_Prop_cropFromBottom, nBottom );
+                                aPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, nBottom );
                             }
                         }
                     }
                     if ( nContrast )
-                        mp_EscherEx->AddOpt( ESCHER_Prop_pictureContrast, nContrast );
+                        aPropOpt.AddOpt( ESCHER_Prop_pictureContrast, nContrast );
                     if ( nLuminance )
-                        mp_EscherEx->AddOpt( ESCHER_Prop_pictureBrightness, nLuminance );
+                        aPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nLuminance );
                     if ( nPicFlags )
-                        mp_EscherEx->AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
+                        aPropOpt.AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
                 }
             }
             else if ( ( mType == "drawing.Text" ) || ( mType == "presentation.Subtitle" ) || ( mType == "presentation.Notes" ) )
@@ -5405,12 +5145,11 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 {
                     if ( ( ePageType == NOTICE ) && mbEmptyPresObj )
                     {
-                        mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                         nPlaceHolderAtom = EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE;
                         ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x200 );
-                        mp_EscherEx->BeginCount();
-                        ImplWriteLineBundle( FALSE );
-                        mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
+                        aPropOpt.CreateLineProperties( mXPropSet, sal_False );
+                        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                     }
                     else if ( rLayout.bTitlePossible && bIsTitlePossible )
                     {
@@ -5419,20 +5158,19 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                         if ( ePageType == MASTER )
                             continue;
 
-                        mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                         mnTextStyle = EPP_TEXTSTYLE_TITLE;
                         nPlaceHolderAtom = EPP_PLACEHOLDER_TITLE;
                         ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
-                        mp_EscherEx->BeginCount();
-                        mp_EscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
-                        ImplWriteFillBundle( TRUE );
-                        ImplWriteTextBundle( TRUE );
+                        aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
+                        aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                        ImplWriteTextBundle( aPropOpt, sal_True );
                         if ( mbEmptyPresObj )
                         {
                             sal_uInt32 nNoLineDrawDash = 0;
-                            mp_EscherEx->GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
                             nNoLineDrawDash |= 0x10001;
-                            mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
                         }
                     }
                     else
@@ -5471,18 +5209,17 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                         {
                             mnTextStyle = EPP_TEXTSTYLE_BODY;
                             nPlaceHolderAtom = EPP_PLACEHOLDER_BODY;
-                            mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                             ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
-                            mp_EscherEx->BeginCount();
-                            mp_EscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
-                            ImplWriteFillBundle( TRUE );
-                            ImplWriteTextBundle( TRUE );
+                            aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                            aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                            ImplWriteTextBundle( aPropOpt, sal_True );
                             if ( mbEmptyPresObj )
                             {
                                 sal_uInt32 nNoLineDrawDash = 0;
-                                mp_EscherEx->GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                                aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
                                 nNoLineDrawDash |= 0x10001;
-                                mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
                             }
                         }
                         else mbPresObj = FALSE;
@@ -5498,14 +5235,13 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             else if ( ( mType == "drawing.Page" ) || ( mType == "presentation.Page" ) )
             {
                 nPlaceHolderAtom = EPP_PLACEHOLDER_GENERICTEXTOBJECT;
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );
-                mp_EscherEx->BeginCount();
-                mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x40004 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fFillOK, 0x100001 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110011 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90008 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fshadowObscured, 0x10001 );
+                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x40004 );
+                aPropOpt.AddOpt( ESCHER_Prop_fFillOK, 0x100001 );
+                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110011 );
+                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90008 );
+                aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x10001 );
             }
             else if ( mType == "drawing.Frame" )
             {
@@ -5515,7 +5251,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                         || ( mType == "presentation.Chart" ) || ( mType == "presentation.Table" )
                             || ( mType == "presentation.OrgChart" ) )
             {
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
                 {
                     nPlaceHolderAtom = 19;      // EPP_PLACEHOLDER_OBJECT;
@@ -5526,11 +5262,10 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     else if ( ( mnLayout == 9 ) || ( mnLayout == 6 ) )
                         nPlaceHolderAtom = 22;  // EPP_PLACEHOLDER_CLIPART
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );              // Flags: HaveAnchor | HaveMaster
-                    mp_EscherEx->BeginCount();
-                    mp_EscherEx->AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
-                    mp_EscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                    aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
                 }
                 else
                 {
@@ -5599,11 +5334,10 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     if ( nOlePictureId )
                         nSpFlags |= 0x10;
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, nSpFlags );
-                    mp_EscherEx->BeginCount();
-                    if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), FALSE, TRUE ) )
-                        mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False, sal_True ) )
+                        aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     if ( nOlePictureId )
-                        mp_EscherEx->AddOpt( ESCHER_Prop_pictureId, nOlePictureId );
+                        aPropOpt.AddOpt( ESCHER_Prop_pictureId, nOlePictureId );
                 }
             }
             else if ( ( (sal_Char)'3' == mType.GetChar( 8 ) ) && ( (char)'D' == mType.GetChar( 9 ) ) )  // drawing.3D
@@ -5612,48 +5346,26 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) ) )
                     continue;
 
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                mp_EscherEx->BeginCount();
 
-                if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), FALSE ) )
-                    mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), sal_False ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else if ( mType == "drawing.dontknow" )
             {
                 mnAngle = 0;
-                mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                mp_EscherEx->BeginCount();
-                if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), FALSE ) )
-                    mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else
             {
                 continue;
             }
-            if ( mnShadow ) // shadow wird nur ausgegeben, wenn es mindestens einen LinesStyle oder FillStyle gibt
-            {
-                ::com::sun::star::uno::Any aAny;
-                if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Shadow" ) ), sal_True ) )
-                {
-                    sal_Bool bBool;
-                    if ( aAny >>= bBool )
-                    {
-                        mp_EscherEx->AddOpt( ESCHER_Prop_fshadowObscured, 0x20002 );
-                        if ( ImplGetPropertyValue(  String( RTL_CONSTASCII_USTRINGPARAM( "ShadowColor" ) ) ) )
-                            mp_EscherEx->AddOpt( ESCHER_Prop_shadowColor, mp_EscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) ) );
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ShadowXDistance" ) ) ) )
-                            mp_EscherEx->AddOpt( ESCHER_Prop_shadowOffsetX, *((sal_Int32*)mAny.getValue()) * 360 );
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ShadowYDistance" ) ) ) )
-                            mp_EscherEx->AddOpt( ESCHER_Prop_shadowOffsetY, *((sal_Int32*)mAny.getValue()) * 360 );
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ShadowTransparence" ) ) ) )
-                            mp_EscherEx->AddOpt( ESCHER_Prop_shadowOpacity,  ( ( ( 100 - (*((sal_uInt16*)mAny.getValue()) ) ) << 16 ) / 100 ) );
-                    }
-                }
-            }
+            aPropOpt.CreateShadowProperties( mXPropSet );
             maRect.Justify();
-
             if ( mnAngle )
             {
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "RotationPointX" ) ) ) )
@@ -5662,12 +5374,12 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "RotationPointY" ) ) ) )
                     {
                         aRefPoint.Y = *( (sal_Int32*)mAny.getValue() );
-                        ImplFlipBoundingBox( ImplMapPoint( aRefPoint ) );
+                        ImplFlipBoundingBox( aPropOpt, ImplMapPoint( aRefPoint ) );
                     }
                 }
             }
-            mp_EscherEx->EndCount( ESCHER_OPT, 3 );
-            mp_EscherEx->AddClientAnchor( maRect );
+            aPropOpt.Commit( *mpStrm );
+            mpPptEscherEx->AddClientAnchor( maRect );
 
             ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ) ) )
@@ -5815,7 +5527,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
                 delete pClientTextBox, pClientTextBox = NULL;
             }
-            mp_EscherEx->CloseContainer();      // ESCHER_SpContainer
+            mpPptEscherEx->CloseContainer();      // ESCHER_SpContainer
         }
         nPrevTextStyle = mnTextStyle;
 
@@ -5823,31 +5535,30 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
         {
             bAdditionalText = FALSE;
 
-            ::com::sun::star::uno::Any aAny;
+            ::com::sun::star::uno::Any  aAny;
+            EscherPropertyContainer     aPropOpt;
             mnAngle = ( PropValue::GetPropertyValue( aAny,
                 mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
                     ? *((sal_Int32*)aAny.getValue() )
                     : 0;
 
+            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
+            aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
             if ( mType == "drawing.Line" )
             {
                 double fDist = hypot( maRect.GetWidth(), maRect.GetHeight() );
                 maRect = Rectangle( Point( aTextRefPoint.X, aTextRefPoint.Y ),
                                         Point( (sal_Int32)( aTextRefPoint.X + fDist ), aTextRefPoint.Y - 1 ) );
                 SHAPE_TEXT( FALSE );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );        // Size Shape To Fit Text
+                aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );        // Size Shape To Fit Text
                 if ( mnAngle < 0 )
                     mnAngle = ( 36000 + mnAngle ) % 36000;
                 if ( mnAngle )
-                    ImplFlipBoundingBox( ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() ) );
+                    ImplFlipBoundingBox( aPropOpt, ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() ) );
             }
             else
             {
                 SHAPE_TEXT( FALSE );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
 
                 if ( mnAngle < 0 )
                     mnAngle = ( 36000 + mnAngle ) % 36000;
@@ -5857,13 +5568,13 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 mnAngle *= 655;
                 mnAngle += 0x8000;
                 mnAngle &=~0xffff;  // nAngle auf volle Gradzahl runden
-                mp_EscherEx->AddOpt( ESCHER_Prop_Rotation, mnAngle );
-                mp_EscherEx->SetGroupSnapRect( nGroupLevel, maRect );
-                mp_EscherEx->SetGroupLogicRect( nGroupLevel, maRect );
+                aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
+                mpPptEscherEx->SetGroupSnapRect( nGroupLevel, maRect );
+                mpPptEscherEx->SetGroupLogicRect( nGroupLevel, maRect );
             }
-            mp_EscherEx->EndCount( ESCHER_OPT, 3 );
-            mp_EscherEx->AddClientAnchor( maRect );
+            aPropOpt.Commit( *mpStrm );
 
+            mpPptEscherEx->AddClientAnchor( maRect );
             if ( !pClientTextBox )
                 pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
@@ -5876,132 +5587,14 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
             delete pClientTextBox, pClientTextBox = NULL;
 
-            mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
-            mp_EscherEx->LeaveGroup();
+            mpPptEscherEx->CloseContainer();  // ESCHER_SpContainer
+            mpPptEscherEx->LeaveGroup();
         }
     }
     ClearGroupTable();                              // gruppierungen wegschreiben, sofern noch irgendwelche offen sind, was eigendlich nicht sein sollte
     nGroups = GetGroupsClosed();
-    for ( sal_uInt32 i = 0; i < nGroups; i++, mp_EscherEx->LeaveGroup() );
+    for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() );
     mnPagesWritten++;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-sal_Bool PPTWriter::ImplGetGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const String& rSource, sal_Bool bFillBitmap, sal_Bool bOle )
-{
-    sal_Bool        bRetValue = FALSE;
-    sal_Bool        bMirrored = FALSE;
-    sal_Bool        bBitmapTile = FALSE;
-    GraphicAttr*    pGraphicAttr = NULL;
-    GraphicObject   aGraphicObject;
-    String          aGraphicUrl;
-    ByteString      aUniqueId;
-
-    ::com::sun::star::uno::Any aAny;
-
-    if ( GetPropertyValue( aAny, rXPropSet, rSource ) )
-    {
-        ::com::sun::star::awt::Size aSize( mXShape->getSize() );
-        Point aEmptyPoint;
-        Rectangle aRect( aEmptyPoint, Size( aSize.Width, aSize.Height ) );
-
-        if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ) )
-        {
-            ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
-            const sal_uInt8*    pAry = aSeq.getArray();
-            sal_uInt32          nAryLen = aSeq.getLength();
-
-            if ( pAry && nAryLen )
-            {
-                Graphic         aGraphic;
-                SvMemoryStream  aTemp( (void*)pAry, nAryLen, STREAM_READ );
-                sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
-                if ( nErrCode == ERRCODE_NONE )
-                {
-                    aGraphicObject = aGraphic;
-                    aUniqueId = aGraphicObject.GetUniqueID();
-                }
-            }
-        }
-        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
-            if ( ::cppu::extractInterface( xBitmap, aAny ) )
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap;
-                if ( aAny >>= xBitmap )
-                {
-                    BitmapEx    aBitmapEx( VCLUnoHelper::GetBitmap( xBitmap ) );
-                    Graphic     aGraphic( aBitmapEx );
-                    aGraphicObject = aGraphic;
-                    aUniqueId = aGraphicObject.GetUniqueID();
-                }
-            }
-        }
-        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) )
-        {
-            aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
-        }
-        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) )
-        {
-            aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
-        }
-        if ( aGraphicUrl.Len() )
-        {
-            xub_StrLen nIndex = aGraphicUrl.Search( (sal_Unicode)':', 0 );
-            if ( nIndex != STRING_NOTFOUND )
-            {
-                nIndex++;
-                if ( aGraphicUrl.Len() > nIndex  )
-                    aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
-            }
-        }
-        if ( aUniqueId.Len() )
-        {
-            if ( !mpPicStrm )
-                mpPicStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
-            if ( mpPicStrm )
-            {
-                if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
-                    aAny >>= bMirrored;
-                if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) )
-                {
-                    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ) ) )
-                        aAny >>= bBitmapTile;
-                }
-                if ( !bFillBitmap )
-                {
-                    if ( bMirrored || mnAngle )
-                    {
-                        sal_uInt16 nAngle = (sal_uInt16)( ( mnAngle + 5 ) / 10 );
-                        pGraphicAttr = new GraphicAttr;
-                        pGraphicAttr->SetRotation( nAngle );
-                        if ( bMirrored )
-                            pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
-                        if ( nAngle )   // ppoint does not rotate graphics !
-                        {
-                            Polygon aPoly( maRect );
-                            aPoly.Rotate( maRect.TopLeft(), nAngle );
-                            maRect = aPoly.GetBoundRect();
-                            mnAngle = 0;
-                        }
-                    }
-                }
-                if ( ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) ) && bBitmapTile )
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
-                else
-                    mp_EscherEx->AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-
-                mp_EscherEx->AddOpt( ( bFillBitmap )
-                    ? ESCHER_Prop_fillBlip
-                    : ESCHER_Prop_pib, mp_EscherEx->AddGraphic( *mpPicStrm, aUniqueId, aRect, pGraphicAttr ), TRUE );
-                bRetValue = TRUE;
-            }
-        }
-        delete pGraphicAttr;
-    }
-    return bRetValue;
 }
 
 //  -----------------------------------------------------------------------
