@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:09:51 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 10:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
     // kein Copy abfangen.
     if( !rPam.HasMark() || *pStt >= *pEnd ||
-        ( pDoc == this && *pStt <= rPos && rPos < *pEnd ))
+        //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
+        ( pDoc == this && *pStt <= rPos && rPos <= *pEnd ))
         return FALSE;
 
     BOOL bEndEqualIns = pDoc == this && rPos == *pEnd;
@@ -1102,7 +1103,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
             !rRg.aStart.GetNode().IsSectionNode() &&
             !aTmpI.GetNode().IsEndNode() )
         {
-            ASSERT( ( rInsPos.GetIndex() - aSavePos.GetIndex() ) ==
+            ASSERT( rInsPos.GetIndex() - aSavePos.GetIndex() ==
                     rRg.aEnd.GetIndex() - rRg.aStart.GetIndex(),
                     "Es wurden zu wenig Nodes kopiert!" )
         }
