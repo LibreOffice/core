@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-23 10:50:18 $
+ *  last change: $Author: os $ $Date: 2002-11-19 07:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFlOptions      ( this, ResId( FL_OPTIONS ) ),
         aFtComment      ( this, ResId( FT_COMMENT ) ),
         aStrEurope      ( ResId( STR_EUROPE) ),
+        sAutomaticEntry ( ResId( STR_AUTO_ENTRY)),
 //      aIconList       ( ResId( IL_ICON ) ),   -> done Init_Impl
         nInitFormat     ( ULONG_MAX ),
         pNumItem        ( NULL ),
@@ -499,6 +500,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxUInt32Item*        pValFmtAttr     = NULL;
     const SfxPoolItem*          pItem           = NULL;
+    const SfxBoolItem*          pAutoEntryAttr = NULL;
 
     USHORT                      nCatLbSelPos    = 0;
     USHORT                      nFmtLbSelPos    = 0;
@@ -656,7 +658,13 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     {
         SetCategory(nCatLbSelPos );
     }
+    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ADD_AUTO ) );
+    if(SFX_ITEM_SET == eState)
+         pAutoEntryAttr = (const SfxBoolItem*)
+                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     aLbLanguage.SelectLanguage( eLangType );
+    if(pAutoEntryAttr)
+        AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
     UpdateFormatListBox_Impl(FALSE,TRUE);
 
 //! erAck 26.01.01
@@ -906,6 +914,10 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         // FillItemSet is only called on OK, here we can notify the
         // NumberFormatShell that all new user defined formats are valid.
         pNumFmtShell->ValidateNewEntries();
+        if(aLbLanguage.IsVisible() &&
+                LISTBOX_ENTRY_NOTFOUND != aLbLanguage.GetEntryPos(sAutomaticEntry))
+                rCoreAttrs.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
+                    aLbLanguage.GetSelectEntry() == sAutomaticEntry));
     }
 
     return bDataChanged;
@@ -1934,5 +1946,18 @@ void SvxNumberFormatTabPage::SetCategory(USHORT nPos)
     }
     aLbCategory.SelectEntryPos(nPos);
 }
-
+/* -----------------12.11.2002 14:35-----------------
+ * to support Writer text field language handling an
+ * additional entry needs to be inserted into the ListBox
+ * which marks a certain language as automatically detected
+ * Additionally the "Default" language is removed
+ * --------------------------------------------------*/
+void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, BOOL bSelect)
+{
+    aLbLanguage.RemoveLanguage(LANGUAGE_SYSTEM);
+    USHORT nPos = aLbLanguage.InsertEntry(sAutomaticEntry);
+    aLbLanguage.SetEntryData(nPos, (void*)(ULONG)eAutoLang);
+    if(bSelect)
+        aLbLanguage.SelectEntryPos(nPos);
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 12:25:56 $
+ *  last change: $Author: os $ $Date: 2002-11-19 07:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,6 +1071,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ catalan ] = "Europa";
         Text[ finnish ] = "Eurooppa";
         Text[ thai ] = "ยุโรป";
+    };
+    String STR_AUTO_ENTRY
+    {
+        Text = "Automatisch";
+        Text [english_us] = "Automatic";
     };
 
     Text[ chinese_simplified ] = "数字格式";
