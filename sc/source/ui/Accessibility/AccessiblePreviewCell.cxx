@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:00:51 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 10:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/brshitem.hxx>
 #include <vcl/window.hxx>
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
 
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 
@@ -247,9 +250,10 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
 {
-    Rectangle aCellRect(GetBoundingBox());
+    Rectangle aCellRect;
     if (mpViewShell)
     {
+        mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
@@ -265,7 +269,21 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBox() const throw (uno::RuntimeExc
 {
     Rectangle aCellRect;
     if (mpViewShell)
+    {
         mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
+        uno::Reference<XAccessible> xAccParent = const_cast<ScAccessiblePreviewCell*>(this)->getAccessibleParent();
+        if (xAccParent.is())
+        {
+            uno::Reference<XAccessibleContext> xAccParentContext = xAccParent->getAccessibleContext();
+            uno::Reference<XAccessibleComponent> xAccParentComp (xAccParentContext, uno::UNO_QUERY);
+            if (xAccParentComp.is())
+            {
+                Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
+                aCellRect.setX(aCellRect.getX() - aParentRect.getX());
+                aCellRect.setY(aCellRect.getY() - aParentRect.getY());
+            }
+        }
+    }
     return aCellRect;
 }
 
