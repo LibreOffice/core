@@ -15,6 +15,8 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/draw		\
     $(DESTDIRJAVAEXAMPLES)$/calc		\
     $(DESTDIRJAVAEXAMPLES)$/writer		\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 EXAMPLESLIST= \
@@ -40,7 +42,23 @@ EXAMPLESLIST= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/HardFormatting.java 		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/makefile.mk	   		\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile	  	 	
+    $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.html		\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/makefile.mk			\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Manifest			\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/README			\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl		\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.java	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/Makefile		\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/makefile.mk		\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/manifest		\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/README		\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SdrawDemo.java	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
+
 
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
