@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-04 06:50:36 $
+ *  last change: $Author: mt $ $Date: 2001-11-01 09:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,8 @@ void SAL_CALL VCLXToolkit::disposing()
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createWindow( const ::com::sun::star::awt::WindowDescriptor& rDescriptor ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
 
