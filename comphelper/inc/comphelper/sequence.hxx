@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 12:29:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,128 @@ namespace comphelper
 
         _rSeq.realloc(nLength-1);
     }
+
+    //-------------------------------------------------------------------------
+    /** Copy from a plain C/C++ array into a Sequence
+
+        @tpl SrcType
+        Array element type. Must be assignable to DstType
+
+        @tpl DstType
+        Sequence element type. Must be assignable from SrcType
+
+        @param i_pArray
+        Valid pointer to at least num elements of type SrcType
+
+        @param num
+        Number of array elements to copy
+
+        @return the resulting Sequence
+
+        @attention when copying from e.g. a double array to a
+        Sequence<int>, no proper rounding will be performed, but the
+        values will be truncated. There's currently no measure to
+        prevent or detect precision loss, overflow or truncation.
+     */
+    template < typename SrcType, typename DstType >
+    ::com::sun::star::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, int num )
+    {
+        ::com::sun::star::uno::Sequence< DstType > result( num );
+        ::std::copy( i_pArray, i_pArray+num, result.getArray() );
+        return result;
+    }
+
+    //-------------------------------------------------------------------------
+    /** Copy from a Sequence into a plain C/C++ array
+
+        @tpl SrcType
+        Sequence element type. Must be assignable to DstType
+
+        @tpl DstType
+        Array element type. Must be assignable from SrcType
+
+        @param io_pArray
+        Valid pointer to at least i_Sequence.getLength() elements of
+        type DstType
+
+        @param i_Sequence
+        Reference to a Sequence of SrcType elements
+
+        @return a pointer to the array
+
+        @attention when copying from e.g. a Sequence<double> to an int
+        array, no proper rounding will be performed, but the values
+        will be truncated. There's currently no measure to prevent or
+        detect precision loss, overflow or truncation.
+     */
+    template < typename SrcType, typename DstType >
+    DstType* sequenceToArray( DstType* io_pArray, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
+    {
+        ::std::copy( i_Sequence.getArray(), i_Sequence.getArray()+i_Sequence.getLength(), io_pArray );
+        return io_pArray;
+    }
+
+    //-------------------------------------------------------------------------
+    /** Copy from a container into a Sequence
+
+        @tpl SrcType
+        Container type. This type must fulfill the STL container
+        concept, in particular, the size(), begin() and end() methods
+        must be available and have the usual semantics.
+
+        @tpl DstType
+        Sequence element type. Must be assignable from SrcType's
+        elements
+
+        @param i_Container
+        Reference to the input contain with elements of type SrcType
+
+        @return the generated Sequence
+
+        @attention when copying from e.g. a vector<double> to a
+        Sequence<int>, no proper rounding will be performed, but the
+        values will be truncated. There's currently no measure to
+        prevent or detect precision loss, overflow or truncation.
+     */
+    template < typename SrcType, typename DstType >
+    ::com::sun::star::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
+    {
+        ::com::sun::star::uno::Sequence< DstType > result( i_Container.size() );
+        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+        return result;
+    }
+
+    //-------------------------------------------------------------------------
+    /** Copy from a Sequence into a container
+
+        @tpl SrcType
+        Sequence element type. Must be assignable to SrcType's
+        elements
+
+        @tpl DstType
+        Container type. This type must fulfill the STL container and
+        sequence concepts, in particular, the begin(), end() and the
+        unary constructor DstType(int) methods must be available and
+        have the usual semantics.
+
+        @param i_Sequence
+        Reference to a Sequence of SrcType elements
+
+        @return a pointer to the generated container
+
+        @attention when copying from e.g. a Sequence<double> to a
+        vector<int>, no proper rounding will be performed, but the
+        values will be truncated. There's currently no measure to
+        prevent or detect precision loss, overflow or truncation.
+     */
+    template < typename SrcType, typename DstType >
+    DstType sequenceToContainer( const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
+    {
+        DstType result( i_Sequence.getLength() );
+        ::std::copy( i_Sequence.getArray(), i_Sequence.getArray()+i_Sequence.getLength(), result.begin() );
+        return result;
+    }
+
 //.........................................................................
 }   // namespace comphelper
 //.........................................................................
