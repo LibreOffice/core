@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatasourceAdministrationDialog.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:37:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@ published service DatasourceAdministrationDialog
                 describing the parent window to use for the dialog.
             </li>
             <li><b>InitialSelection</b><br/>
-                String describing which data source should be selected initially.
-                This name must be known to the
+                String or XDataSource describing which data source should be selected initially.
+                This String name must be known to the
                 <service scope="com::sun::star::sdb">
                 DatabaseContext
                 </service>
