@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
         if( aFirstAddress == rMyCell.aCellAddress )
         {
             rMyCell.aMergeRange = aItr->aCellRange;
+            if (aItr->bIsFirst)
+                rMyCell.aMergeRange.EndRow = rMyCell.aMergeRange.StartRow + aItr->nRows - 1;
             rMyCell.bIsMergedBase = aItr->bIsFirst;
             rMyCell.bIsCovered = !aItr->bIsFirst;
             if( aItr->aCellRange.StartColumn < aItr->aCellRange.EndColumn )
