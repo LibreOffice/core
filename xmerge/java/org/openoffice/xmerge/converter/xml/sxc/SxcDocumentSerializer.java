@@ -412,9 +412,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             String colsRepeatedString = colsRepeatedNode.getNodeValue();
 
             Integer colsRepeatedInt = new Integer(colsRepeatedString);
-
             colsRepeated = colsRepeatedInt.intValue();
-
         } else {
 
             // The cell is not repeated
@@ -500,16 +498,16 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         Node tableStringValueNode =
             cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
-
         if (tableFormulaNode != null) {
-
             Debug.log(Debug.INFO, "TableFormulaNode\n");
             if(tableBooleanNode != null) {                  // Formula that returns Boolean
                 fmt.setValue(tableBooleanNode.getNodeValue());
             } else if(tableStringValueNode != null) {       // Formula Error
                 fmt.setValue(tableStringValueNode.getNodeValue());
-            } else {                                        // Regular Formula
+            } else if (tableValueNode != null) {                                        // Regular Formula
                 fmt.setValue(tableValueNode.getNodeValue());
+            } else {
+                Debug.log(Debug.INFO, "All nodes appear to be null");
             }
             String cellFormula = tableFormulaNode.getNodeValue();
             addCell(cellFormula);
