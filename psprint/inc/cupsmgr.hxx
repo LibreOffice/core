@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:47:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 
 #include <psprint/printerinfomanager.hxx>
 #include <osl/module.h>
+#include <osl/thread.h>
+#include <osl/mutex.hxx>
 
 namespace psp
 {
@@ -83,7 +85,7 @@ class CUPSManager : public PrinterInfoManager
     std::hash_map< FILE*, rtl::OString, FPtrHash >              m_aSpoolFiles;
     int                                                         m_nDests;
     void*                                                       m_pDests;
-    bool                                                        m_bFirstDest;
+    bool                                                        m_bNewDests;
     std::hash_map< rtl::OUString, int, rtl::OUStringHash >      m_aCUPSDestMap;
 
     rtl::OString                                                m_aUser;
@@ -92,10 +94,16 @@ class CUPSManager : public PrinterInfoManager
     // the password, so this cannot be helped
     rtl::OString                                                m_aPassword;
 
-    CUPSManager( CUPSWrapper*, int nDests = 0, void* pDests = NULL );
+    osl::Mutex                                                  m_aCUPSMutex;
+    oslThread                                                   m_aDestThread;
+
+    CUPSManager( CUPSWrapper* );
     virtual ~CUPSManager();
 
     virtual void initialize();
+
+    void runDests();
+    static void runDestThread(void* pMgr);
 public:
 
     static CUPSManager* tryLoadCUPS();
