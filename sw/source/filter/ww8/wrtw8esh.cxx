@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-18 09:51:53 $
+ *  last change: $Author: cmc $ $Date: 2001-09-26 10:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,6 +1072,9 @@ public:
     void FinishEscher();
     void WriteFrmExtraData( const SwFrmFmt& rFmt );
     void WritePictures();
+
+    EscherExHostAppData* StartShape( const uno::Reference< drawing::XShape >& )
+        {return &aHostData;}
 };
 
 void WinwordAnchoring::WriteData( EscherEx& rEx ) const
@@ -2479,11 +2482,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.20 2001-09-18 09:51:53 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.21 2001-09-26 10:49:38 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/09/18 09:51:53  cmc
+      #92104# displaced escher groups fixes
+
       Revision 1.19  2001/09/10 15:51:44  cmc
       #92059# Consider border widths in {im|ex}port of floating elements
 
