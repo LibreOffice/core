@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:06:48 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,9 +1373,9 @@ void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& r
     XPolyPolygon aTmpPolyPolygon;
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
-    // get LineStyleParameterPack
-    LineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, rOut);
-    LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
+    // get ImpLineStyleParameterPack
+    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, &rOut);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
     UINT16 nCount(aTmpPolyPolygon.Count());
     Polygon3D aPoly3D;
     UINT16 nLoopStart(0);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-16 16:15:11 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,9 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 
 static double SMALLEST_DASH_WIDTH(26.95);
 
-LineStyleParameterPack::LineStyleParameterPack(const SfxItemSet& rSet,
-    BOOL bForceHair, OutputDevice& rOut)
-:   mrOut(rOut),
+ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
+    BOOL bForceHair, OutputDevice* pOut)
+:   mpOut(pOut),
     rStartPolygon(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue()),
     rEndPolygon(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue()),
     bForceNoArrowsLeft(FALSE),
@@ -521,13 +521,13 @@ LineStyleParameterPack::LineStyleParameterPack(const SfxItemSet& rSet,
     }
 }
 
-LineStyleParameterPack::~LineStyleParameterPack()
+ImpLineStyleParameterPack::~ImpLineStyleParameterPack()
 {
     if(pDotDashArray)
         delete pDotDashArray;
 }
 
-UINT16 LineStyleParameterPack::GetFirstDashDotIndex(double fPos, double& rfDist) const
+UINT16 ImpLineStyleParameterPack::GetFirstDashDotIndex(double fPos, double& rfDist) const
 {
     double fIndPos = fPos - (fFullDashDotLen * (double)((UINT32)(fPos / fFullDashDotLen)));
     UINT16 nPos = 0;
@@ -544,7 +544,7 @@ UINT16 LineStyleParameterPack::GetFirstDashDotIndex(double fPos, double& rfDist)
     return nPos;
 }
 
-UINT16 LineStyleParameterPack::GetNextDashDotIndex(UINT16 nPos, double& rfDist) const
+UINT16 ImpLineStyleParameterPack::GetNextDashDotIndex(UINT16 nPos, double& rfDist) const
 {
     rfDist = pDotDashArray[nPos];
     nPos = (nPos + 1 == nNumDotDashArray) ? 0 : nPos + 1;
@@ -553,7 +553,7 @@ UINT16 LineStyleParameterPack::GetNextDashDotIndex(UINT16 nPos, double& rfDist) 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-double LineGeometryCreator::ImpSimpleFindCutPoint(
+double ImpLineGeometryCreator::ImpSimpleFindCutPoint(
     const Vector3D& rEdge1Start, const Vector3D& rEdge1Delta,
     const Vector3D& rEdge2Start, const Vector3D& rEdge2Delta)
 {
@@ -568,7 +568,7 @@ double LineGeometryCreator::ImpSimpleFindCutPoint(
     return fRetval;
 }
 
-void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext)
+void ImpLineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext)
 {
     if(mrLineAttr.GetLineWidth())
     {
@@ -894,7 +894,7 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
     }
 }
 
-void LineGeometryCreator::ImpCreateSegmentsForLine(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext, double fPolyPos)
+void ImpLineGeometryCreator::ImpCreateSegmentsForLine(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext, double fPolyPos)
 {
     Vector3D aEdge(*pRight - *pLeft);
     double fLen = aEdge.GetLength();
@@ -935,7 +935,7 @@ void LineGeometryCreator::ImpCreateSegmentsForLine(const Vector3D* pPrev, const 
     } while(fPos < fLen);
 }
 
-double LineGeometryCreator::ImpCreateLineStartEnd(Polygon3D& rArrowPoly, const Polygon3D& rSourcePoly, BOOL bFront, double fWantedWidth, BOOL bCentered)
+double ImpLineGeometryCreator::ImpCreateLineStartEnd(Polygon3D& rArrowPoly, const Polygon3D& rSourcePoly, BOOL bFront, double fWantedWidth, BOOL bCentered)
 {
     double fRetval(0.0);
     double fOffset(0.0);
@@ -1010,7 +1010,7 @@ double LineGeometryCreator::ImpCreateLineStartEnd(Polygon3D& rArrowPoly, const P
     return fRetval;
 }
 
-void LineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
+void ImpLineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
 {
     UINT16 nPntCnt = rSourcePoly.GetPointCount();
 
@@ -1030,7 +1030,7 @@ void LineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
             if(mrLineAttr.IsStartActive())
             {
                 // create line start polygon and move line end
-                Polygon3D aArrowPoly(XOutCreatePolygon(mrLineAttr.GetStartPolygon(), &mrLineAttr.GetOutDev()));
+                Polygon3D aArrowPoly(XOutCreatePolygon(mrLineAttr.GetStartPolygon(), mrLineAttr.GetOutDev()));
                 fStart = ImpCreateLineStartEnd(
                     aArrowPoly, rSourcePoly, TRUE,
                     (double)mrLineAttr.GetStartWidth(), mrLineAttr.IsStartCentered());
@@ -1040,7 +1040,7 @@ void LineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
             if(mrLineAttr.IsEndActive())
             {
                 // create line end polygon and move line end
-                Polygon3D aArrowPoly(XOutCreatePolygon(mrLineAttr.GetEndPolygon(), &mrLineAttr.GetOutDev()));
+                Polygon3D aArrowPoly(XOutCreatePolygon(mrLineAttr.GetEndPolygon(), mrLineAttr.GetOutDev()));
                 fEnd = fPolyLength - ImpCreateLineStartEnd(
                     aArrowPoly, rSourcePoly, FALSE,
                     (double)mrLineAttr.GetEndWidth(), mrLineAttr.IsEndCentered());
@@ -1607,9 +1607,9 @@ void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPoly
     XPolyPolygon aTmpPolyPolygon;
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
-    // get LineStyleParameterPack
-    LineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, rOut);
-    LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
+    // get ImpLineStyleParameterPack
+    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, &rOut);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
 
     // compute single lines
     for(UINT16 a=0;a<aTmpPolyPolygon.Count();a++)
