@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:00:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒ: ε¤‰ζ›΄γ®ζ‰ΏθªγΎγγ―ε΄δΈ‹";
     Text[ chinese_traditional ] = "θ‡ªε‹•ζ ΌεΌ: ζ¥ε—ζ–ζ¨ζ£„θ®ζ›΄ε…§ε®Ή";
     Text[ arabic ] = "ήΘζα Γζ ΡέΦ ΚΫννΡΗΚ ΗαΚδΣνή ΗαΚαήΗΖν";
-    Text[ greek ] = "ΑυτοΜορφή:Αποδοχή ή απόρριψη αλλαγών";
+    Text[ greek ] = "Αυτόματη μορφοποιηση:Αποδοχή ή απόρριψη αλλαγών";
     Text[ korean ] = "μλ™ μ„μ‹  λ³€κ²½ μ‚¬ν•­ μ μ© λλ” λ¬΄μ‹";
     Text[ turkish ] = "Otomatik formatlama: Deπiώiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
@@ -400,6 +400,8 @@ Menu MN_REDLINE_POPUP
         };
     };
 };
+
+
 
 
 
