@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:17:30 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,19 @@ protected:
     void EndListening(sal_Bool bRemoveListener = sal_True);
     sal_Bool    isListening() const { return bIsListening; }
 
+    virtual bool TransformSdrToControlCoordinates(
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+        sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
+    virtual bool TransformSdrToFormCoordinates(
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+        sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
+    virtual bool TransformControlToSdrCoordinates(
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+        sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
+    virtual bool TransformFormToSdrCoordinates(
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+        sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
+
 public:
     TYPEINFO();
 
@@ -151,6 +164,7 @@ public:
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
 
+    virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
     virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
@@ -206,6 +220,8 @@ public:
 
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
+
+    virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
 
     virtual void UpdateTabIndices();
     virtual void UpdateTabOrder();
