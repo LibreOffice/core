@@ -17134,3 +17134,6 @@ _real@8@3ffd820c49ba5e354000
 ??1SearchParam@utl@@QAE@XZ
 ?FillUserData@SvxCharPositionPage@@UAEXXZ
 ??_ESvxImportGraphicDialog@@WCGE@AEPAXI@Z
+?GetName@SvxHyperlinkNewDocTp@@IBE?AVString@@ABV2@@Z
+?GetPath@SvxHyperlinkNewDocTp@@IBE?AVString@@ABV2@@Z
+?UpdateExtension@SvxHyperlinkNewDocTp@@IAEXXZ
