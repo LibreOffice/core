@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-06 17:34:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,9 @@ class OArgumentList
 public:
 
     OArgumentList();
-    OArgumentList( sal_uInt32 nArgs, const NAMESPACE_RTL(OUString)* aArgument1, ... );
+    OArgumentList( sal_uInt32 nArgs, const ::rtl::OUString* aArgument1, ... );
     // switched argument list to avoid ambiguity with previous constructor.
-    OArgumentList( const NAMESPACE_RTL(OUString) aArgumentList[], sal_uInt32 nArgs );
+    OArgumentList( const ::rtl::OUString aArgumentList[], sal_uInt32 nArgs );
 
     OArgumentList( const OArgumentList& rOther);
 
@@ -121,9 +121,9 @@ class OEnvironment
 public:
 
     OEnvironment();
-    OEnvironment( sal_uInt32 nVars, const NAMESPACE_RTL(OUString)* aVariable1, ... );
+    OEnvironment( sal_uInt32 nVars, const ::rtl::OUString* aVariable1, ... );
     // switched argument list to avoid ambiguity with previous constructor.
-    OEnvironment( const NAMESPACE_RTL(OUString) aVariableList[], sal_uInt32 nVars );
+    OEnvironment( const ::rtl::OUString aVariableList[], sal_uInt32 nVars );
 
     OEnvironment( const OEnvironment& rOther );
 
@@ -202,10 +202,10 @@ public:
 
     OProcess( );
 
-    OProcess(const NAMESPACE_RTL(OUString)& strImageName);
+    OProcess(const ::rtl::OUString& strImageName);
 
-      OProcess(const NAMESPACE_RTL(OUString)& strImageName,
-             const NAMESPACE_RTL(OUString)& strWorkingDirectory);
+      OProcess(const ::rtl::OUString& strImageName,
+             const ::rtl::OUString& strWorkingDirectory);
 
     /// destroying a process object
     virtual ~OProcess();
@@ -268,8 +268,8 @@ public:
     void SAL_CALL provideIOResource(oslSocket Socket, TDescriptorFlags Flags = TFlags_Wait);
 
 protected:
-    const NAMESPACE_RTL(OUString) m_strImageName;
-    const NAMESPACE_RTL(OUString) m_strDirectory;
+    const ::rtl::OUString m_strImageName;
+    const ::rtl::OUString m_strDirectory;
 
     oslIOResource*     m_IoResources;
     sal_Int32          m_NoResources;
@@ -324,9 +324,9 @@ public:
         @param strCommandArg [out] the string that receives the argument.
         @return eNONE
     */
-    TStartupError SAL_CALL getCommandArg(sal_uInt32 nArg, NAMESPACE_RTL(OUString)& strCommandArg);
+    TStartupError SAL_CALL getCommandArg(sal_uInt32 nArg, ::rtl::OUString& strCommandArg);
 
-    TStartupError SAL_CALL getExecutableFile(NAMESPACE_RTL(OUString)& strImageName);
+    TStartupError SAL_CALL getExecutableFile(::rtl::OUString& strImageName);
 
     /** Get the value of one enviroment variable.
         @param Name [in] denotes the name of the variable to get.
@@ -334,7 +334,7 @@ public:
         @param Max [in] is the size of this buffer.
         @return eNONE, if the variable exist in the enviroment, otherwise False.
     */
-    TStartupError SAL_CALL getEnvironment(const NAMESPACE_RTL(OUString)& strVar, NAMESPACE_RTL(OUString)& strValue);
+    TStartupError SAL_CALL getEnvironment(const ::rtl::OUString& strVar, ::rtl::OUString& strValue);
 
 protected:
     oslIOResource* m_IoResources;
@@ -380,7 +380,7 @@ public:
         @return sal_True   if the nArg-th argument has been retriveded successfully
         @return sal_False  on all other cases
     */
-    sal_Bool SAL_CALL getCommandArg(sal_uInt32 nArg, NAMESPACE_RTL(OUString)& strCommandArg);
+    sal_Bool SAL_CALL getCommandArg(sal_uInt32 nArg, ::rtl::OUString& strCommandArg);
 
 
 };

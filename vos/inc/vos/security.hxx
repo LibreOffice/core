@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@ public:
         @return True, if the specified user is known by the underlying operating system,
         otherwise False
     */
-    sal_Bool SAL_CALL logonUser(const NAMESPACE_RTL(OUString)& strName,
-                                const NAMESPACE_RTL(OUString)& strPasswd);
+    sal_Bool SAL_CALL logonUser(const ::rtl::OUString& strName,
+                                const ::rtl::OUString& strPasswd);
     /** get the security information for one user.
         This method will try to login the user at the denoted file server.
         If a network resource named \\server\username exists and this resource
@@ -113,37 +113,37 @@ public:
         @return True, if the specified user is known by file server and the
         could be connected, otherwise False
     */
-    sal_Bool SAL_CALL logonUser(const NAMESPACE_RTL(OUString)& strName,
-                                const NAMESPACE_RTL(OUString)& strPasswd,
-                                const NAMESPACE_RTL(OUString)& strFileServer);
+    sal_Bool SAL_CALL logonUser(const ::rtl::OUString& strName,
+                                const ::rtl::OUString& strPasswd,
+                                const ::rtl::OUString& strFileServer);
 
     /** get the ident of the logged in user.
         @param strName [out] is the buffer which returns the name
         @param max [in] is the size of this buffer
         @return True, if any user is successfuly logged in, otherwise False
     */
-    sal_Bool SAL_CALL getUserIdent(NAMESPACE_RTL(OUString)& strIdent) const;
+    sal_Bool SAL_CALL getUserIdent(::rtl::OUString& strIdent) const;
 
     /** get the name of the logged in user.
         @param strName [out] is the buffer which returns the name
         @param max [in] is the size of this buffer
         @return True, if any user is successfuly logged in, otherwise False
     */
-    sal_Bool SAL_CALL getUserName(NAMESPACE_RTL(OUString)& strName) const;
+    sal_Bool SAL_CALL getUserName(::rtl::OUString& strName) const;
 
     /** get the home directory of the logged in user.
         @param strDirectory [out] is the buffer which returns the directory name
         @param max [in] is the size of this buffer
         @return True, if any user is successfuly logged in, otherwise False
     */
-    sal_Bool SAL_CALL getHomeDir(NAMESPACE_RTL(OUString)& strDirectory) const;
+    sal_Bool SAL_CALL getHomeDir(::rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
         @param strDirectory [out] is the buffer which returns the directory name
         @param max [in] is the size of this buffer
         @return True, if any user is successfuly logged in, otherwise False
     */
-    sal_Bool SAL_CALL getConfigDir(NAMESPACE_RTL(OUString)& strDirectory) const;
+    sal_Bool SAL_CALL getConfigDir(::rtl::OUString& strDirectory) const;
 
     /** Query if the user who is logged inhas administrator rigths.
         @return True, if the user has administrator rights, otherwise false.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:38:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ OArgumentList::OArgumentList() :
     // empty
 }
 
-OArgumentList::OArgumentList( sal_uInt32 nArgs, const NAMESPACE_RTL(OUString)* aArgument1, ... ) :
+OArgumentList::OArgumentList( sal_uInt32 nArgs, const ::rtl::OUString* aArgument1, ... ) :
     n_Args( nArgs )
 {
     m_aVec = new rtl_uString* [nArgs];
@@ -173,7 +173,7 @@ OEnvironment::OEnvironment() :
 {
 }
 
-OEnvironment::OEnvironment( sal_uInt32 nVars, const NAMESPACE_RTL(OUString)* aArgument1, ... ) :
+OEnvironment::OEnvironment( sal_uInt32 nVars, const ::rtl::OUString* aArgument1, ... ) :
     n_Vars( nVars )
 {
     m_aVec = new rtl_uString* [nVars];
@@ -196,7 +196,7 @@ OEnvironment::OEnvironment( sal_uInt32 nVars, const NAMESPACE_RTL(OUString)* aAr
 }
 
 
-OEnvironment::OEnvironment( const NAMESPACE_RTL(OUString) aVariableList[], sal_uInt32 nVars ) :
+OEnvironment::OEnvironment( const ::rtl::OUString aVariableList[], sal_uInt32 nVars ) :
     n_Vars( nVars )
 {
     m_aVec = new rtl_uString* [n_Vars];

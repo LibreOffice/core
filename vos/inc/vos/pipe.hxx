@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:38:54 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,14 +144,14 @@ public:
         @param strName
         @param Options
     */
-    OPipe(const NAMESPACE_RTL(OUString)& strName, TPipeOption Options = TOption_Open);
+    OPipe(const ::rtl::OUString& strName, TPipeOption Options = TOption_Open);
 
     /** Creates a pipe.
         @param strName
         @param Options
         @param Security
     */
-    OPipe(const NAMESPACE_RTL(OUString)& strName, TPipeOption Options,
+    OPipe(const ::rtl::OUString& strName, TPipeOption Options,
           const NAMESPACE_VOS(OSecurity)& rSecurity);
 
     /** Copy constructor.
@@ -173,7 +173,7 @@ public:
         @param Options
         @return True if socket was successfully created.
     */
-    sal_Bool SAL_CALL create(const NAMESPACE_RTL(OUString)& strName, TPipeOption Options = TOption_Open);
+    sal_Bool SAL_CALL create(const ::rtl::OUString& strName, TPipeOption Options = TOption_Open);
 
     /** Create a pipe with the given attributes.
         If socket was already created, the old one will be discarded.
@@ -182,7 +182,7 @@ public:
         @param Security
         @return True if socket was successfully created.
     */
-    sal_Bool SAL_CALL create(const NAMESPACE_RTL(OUString)& strName, TPipeOption Options,
+    sal_Bool SAL_CALL create(const ::rtl::OUString& strName, TPipeOption Options,
                      const NAMESPACE_VOS(OSecurity)& rSecurity);
 
     /** Assignment operator. If pipe was already created, the old one will

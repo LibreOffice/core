@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 10:01:09 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ public:
 
 
     virtual TAddrFamily SAL_CALL getFamily() const= 0;
-    virtual TResult SAL_CALL getHostname(NAMESPACE_RTL(OUString)& strHostName) const= 0;
+    virtual TResult SAL_CALL getHostname(::rtl::OUString& strHostName) const= 0;
     virtual SAL_CALL operator oslSocketAddr() const= 0;
     virtual void SAL_CALL operator= (oslSocketAddr Addr)= 0;
     virtual sal_Bool SAL_CALL operator== (oslSocketAddr Addr)= 0;
@@ -288,17 +288,17 @@ public:
         @return the hostname represented by the address.
         On failure returns the empty string.
     */
-    virtual TResult SAL_CALL getHostname(NAMESPACE_RTL(OUString)& strHostName) const;
+    virtual TResult SAL_CALL getHostname(::rtl::OUString& strHostName) const;
 
     /** Get the hostname for the local interface.
         @return the hostname or an error.
     */
-    static TResult SAL_CALL getLocalHostname(NAMESPACE_RTL(OUString)& strLocalHostName);
+    static TResult SAL_CALL getLocalHostname(::rtl::OUString& strLocalHostName);
 
     /** Tries to find an address for a host.
         @return A new created socket-address or 0 if the name could not be found.
     */
-    static oslSocketAddr SAL_CALL resolveHostname(const NAMESPACE_RTL(OUString)& strHostName);
+    static oslSocketAddr SAL_CALL resolveHostname(const ::rtl::OUString& strHostName);
 
     /** Wraps itself around the osl Socket-Address.
         The object assumes ownership of the Addr, it
@@ -343,7 +343,7 @@ public:
         Create a socket address either from a dotted decimal address
         (e.g. 141.99.128.50) or a hostname (e.g. www.stardiv.de).
     */
-    OInetSocketAddr(const NAMESPACE_RTL(OUString)& strAddrOrHostName, sal_Int32 Port);
+    OInetSocketAddr(const ::rtl::OUString& strAddrOrHostName, sal_Int32 Port);
 
     /**
         Copy constructor.
@@ -379,8 +379,8 @@ public:
         @return the port number in host-byte order or CVOS_PORT_NONE
         if no service/protocol pair could be found.
     */
-    static sal_Int32 SAL_CALL getServicePort(const NAMESPACE_RTL(OUString)& strServiceName,
-                              const NAMESPACE_RTL(OUString)& strProtocolName= ::rtl::OUString::createFromAscii( "tcp" ) );
+    static sal_Int32 SAL_CALL getServicePort(const ::rtl::OUString& strServiceName,
+                              const ::rtl::OUString& strProtocolName= ::rtl::OUString::createFromAscii( "tcp" ) );
 
 
     /** Delivers the port number of the address.
@@ -397,13 +397,13 @@ public:
     /** @return the dotted-address-form (141.99.128.90) of this address.
         On failure returns the empty string.
     */
-    TResult SAL_CALL getDottedAddr(NAMESPACE_RTL(OUString)& strDottedAddr) const;
+    TResult SAL_CALL getDottedAddr(::rtl::OUString& strDottedAddr) const;
 
     /** Sets the host-part of the address from the dotted-address-form (141.99.128.90)
         or from a hostname.
         @param strDottedAddrOrHostname the address in dotted form or a hostname.
     */
-    sal_Bool SAL_CALL setAddr(const NAMESPACE_RTL(OUString)& strDottedAddrOrHostname);
+    sal_Bool SAL_CALL setAddr(const ::rtl::OUString& strDottedAddrOrHostname);
 
 };
 
@@ -429,8 +429,8 @@ public:
 
     /** Create an IPX/SPX socketaddress from native parameters.
     */
-    OIpxSocketAddr(const NAMESPACE_RTL(OUString)& strNetNumber,
-                   const NAMESPACE_RTL(OUString)& strNodeNumber,
+    OIpxSocketAddr(const ::rtl::OUString& strNetNumber,
+                   const ::rtl::OUString& strNodeNumber,
                    sal_uInt32 SocketNumber);
 
     /** Copy constructor.
@@ -474,7 +474,7 @@ public:
     /** Builds a human readable string in the format network.node:socket.
         The numbers are given in hexadecimal form.
     */
-    void SAL_CALL getAddressString(NAMESPACE_RTL(OUString)& strAddressString) const;
+    void SAL_CALL getAddressString(::rtl::OUString& strAddressString) const;
 };
 
 
@@ -570,7 +570,7 @@ public:
     /** Get the hostname for the local interface.
         @return the hostname or an empty string ("").
     */
-    TResult SAL_CALL getLocalHost(NAMESPACE_RTL(OUString)& strLocalHost) const;
+    TResult SAL_CALL getLocalHost(::rtl::OUString& strLocalHost) const;
 
     /** Retrieves the address of the remote host of this socket.
         @param Addr [out] receives the address.
@@ -585,7 +585,7 @@ public:
     /** Get the hostname for the remote interface.
         @return the hostname or an empty string ("").
     */
-    TResult SAL_CALL getPeerHost(NAMESPACE_RTL(OUString)& strPeerHost) const;
+    TResult SAL_CALL getPeerHost(::rtl::OUString& strPeerHost) const;
 
     /** Binds the socket to the specified (local) interface.
         @param LocalInterface Address of the Interface
@@ -846,7 +846,7 @@ public:
         sal_Int16 if the buffer isn't large enough, but still remains
         a valid zero-terminated string.
     */
-    void SAL_CALL getError(NAMESPACE_RTL(OUString)& strError) const;
+    void SAL_CALL getError(::rtl::OUString& strError) const;
 
     /** Delivers a constant decribing the last error for the socket system.
         @return ENONE if no error occured, invalid_SocketError if

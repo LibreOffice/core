@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,11 @@ public:
     OModule();
 
     /// this c'tor is a combination of the default c'tor and load()
-    OModule(const NAMESPACE_RTL(OUString)& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
+    OModule(const ::rtl::OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
     virtual ~OModule();
 
     /// loads the specified module
-    sal_Bool SAL_CALL load(const NAMESPACE_RTL(OUString)& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
+    sal_Bool SAL_CALL load(const ::rtl::OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
 
     /// unloads the currently loaded module
     void SAL_CALL unload();
@@ -103,11 +103,11 @@ public:
 #if 0
     // not implemented yet
     // returns the name of the currently loaded module or an empty string if none.
-    NAMESPACE_RTL(OUString) SAL_CALL getModuleName();
+    ::rtl::OUString SAL_CALL getModuleName();
 #endif
 
     /// returns a pointer to the specified Symbol if found, NULL otherwise
-    void* SAL_CALL getSymbol(const NAMESPACE_RTL(OUString)& strSymbolName);
+    void* SAL_CALL getSymbol(const ::rtl::OUString& strSymbolName);
 
 protected:
 

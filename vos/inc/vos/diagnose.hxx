@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #define VOS_TRACE           _OSL_TRACE
 #define VOS_ASSERT(c)       _OSL_ASSERT(c, VOS_THIS_FILE, __LINE__)
 #define VOS_VERIFY(c)       _OSL_VERIFY(c, VOS_THIS_FILE, __LINE__)
-#define VOS_ENSHURE(c, m)   _OSL_ENSHURE(c, VOS_THIS_FILE, __LINE__, m)
+#define VOS_ENSHURE(c, m)   _OSL_ENSURE(c, VOS_THIS_FILE, __LINE__, m)
 #define VOS_ENSURE(c, m)    _OSL_ENSURE(c, VOS_THIS_FILE, __LINE__, m)
 
 #define VOS_PRECOND(c, m)   VOS_ENSHURE(c, m)

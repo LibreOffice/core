@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #ifndef _VOS_TYPES_HXX_
 #define _VOS_TYPES_HXX_
 
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
-#endif
 
 /* disable some warnings for MS-C */
 #ifdef _MSC_VER
