@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 15:16:23 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 03:10:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ OBJFILES=\
     $(OBJ)$/soreport.obj\
     $(OBJ)$/base64.obj
     
-LNGFILES=..$/all$/crashrep.lng
+LNGFILES=..$/all$/crashrep.ulf
 
 APP1OBJS=$(OBJFILES)
 
@@ -98,5 +98,5 @@ $(OBJ)$/soreport.obj: $(INCCOM)$/_version.h
 # using lngconvex.exe 
 
 $(RCFILES) : $(LNGFILES) makefile.mk rcfooter.txt rcheader.txt rctemplate.txt ctrylnglist.txt
-    +lngconvex.exe -lng ..\all\crashrep.lng -rc $(TARGET).rc -c  ctrylnglist.txt  -rct rctemplate.txt -rch rcheader.txt -rcf rcfooter.txt
+    +lngconvex.exe -lng $(COMMONMISC)$/crash_res$/crashrep.ulf -rc $(TARGET).rc -c  ctrylnglist.txt  -rct rctemplate.txt -rch rcheader.txt -rcf rcfooter.txt
     
