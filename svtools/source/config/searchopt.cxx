@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-21 13:06:43 $
+ *  last change: $Author: tl $ $Date: 2001-06-12 13:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,35 +314,35 @@ INT32 SvtSearchOptions::GetTransliterationFlags() const
 {
     INT32 nRes = 0;
 
-    if (!IsMatchCase())
+    if (!IsMatchCase()) // 'IsMatchCase' means act case sensitive
         nRes |= TransliterationModules_IGNORE_CASE;
-    if (!IsMatchFullHalfWidthForms())
+    if ( IsMatchFullHalfWidthForms())
         nRes |= TransliterationModules_IGNORE_WIDTH;
-    if (!IsMatchHiraganaKatakana())
+    if ( IsMatchHiraganaKatakana())
         nRes |= TransliterationModules_IGNORE_KANA;
-    if (!IsMatchContractions())
+    if ( IsMatchContractions())
         nRes |= TransliterationModules_ignoreSize_ja_JP;
-    if (!IsMatchMinusDashChoon())
+    if ( IsMatchMinusDashChoon())
         nRes |= TransliterationModules_ignoreMinusSign_ja_JP;
-    if (!IsMatchRepeatCharMarks())
+    if ( IsMatchRepeatCharMarks())
         nRes |= TransliterationModules_ignoreIterationMark_ja_JP;
-    if (!IsMatchVariantFormKanji())
+    if ( IsMatchVariantFormKanji())
         nRes |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
-    if (!IsMatchOldKanaForms())
+    if ( IsMatchOldKanaForms())
         nRes |= TransliterationModules_ignoreTraditionalKana_ja_JP;
-    if (!IsMatchDiziDuzu())
+    if ( IsMatchDiziDuzu())
         nRes |= TransliterationModules_ignoreZiZu_ja_JP;
-    if (!IsMatchBavaHafa())
+    if ( IsMatchBavaHafa())
         nRes |= TransliterationModules_ignoreBaFa_ja_JP;
-    if (!IsMatchTsithichiDhizi())
+    if ( IsMatchTsithichiDhizi())
         nRes |= TransliterationModules_ignoreTiJi_ja_JP;
-    if (!IsMatchHyuiyuByuvyu())
+    if ( IsMatchHyuiyuByuvyu())
         nRes |= TransliterationModules_ignoreHyuByu_ja_JP;
-    if (!IsMatchSesheZeje())
+    if ( IsMatchSesheZeje())
         nRes |= TransliterationModules_ignoreSeZe_ja_JP;
-    if (!IsMatchIaiya())
+    if ( IsMatchIaiya())
         nRes |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
-    if (!IsMatchKiku())
+    if ( IsMatchKiku())
         nRes |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
     if ( IsIgnorePunctuation())
         nRes |= TransliterationModules_ignoreSeparator_ja_JP;
