@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:19:20 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ String STR_HTML_TITLE
     Text[ hebrew ] = "HTML Tabelle kopieren";
     Text[ hindi ] = "HTML सारणी की प्रतिलिपि";
     Text[ slovak ] = "Kopírovať HTML tabuľku";
+    Text[ hungarian ] = "HTML-tábla másolása";
+    Text[ slovenian ] = "Kopiraj HTML-tabelo";
 };
 
 String STR_RTF_TITLE
@@ -139,6 +141,8 @@ String STR_RTF_TITLE
     Text[ hebrew ] = "RTF Tabelle kopieren";
     Text[ hindi ] = "RTF सारणी की प्रतिलिपि";
     Text[ slovak ] = "Kopírovať RTF tabuľku";
+    Text[ hungarian ] = "RTF-tábla másolása";
+    Text[ slovenian ] = "Kopiraj RTF-tabelo";
 };
 
 String STR_WIZ_COLUMN_SELECT_TITEL
@@ -153,7 +157,7 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ french ] = "Application de colonnes";
     Text[ spanish ] = "Aplicar columnas";
     Text[ italian ] = "Applica colonne";
-    Text[ danish ] = "Overtag kolonner";
+    Text[ danish ] = "Anvend kolonner";
     Text[ swedish ] = "�verta kolumner";
     Text[ polish ] = "Zastosuj kolumny";
     Text[ portuguese_brazilian ] = "Aplicar colunas";
@@ -170,6 +174,8 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ hebrew ] = "Spaltenübernahme";
     Text[ hindi ] = "स्तंभों को लागू करो";
     Text[ slovak ] = "Použiť na stĺpce";
+    Text[ hungarian ] = "Oszlopok érvényesítése";
+    Text[ slovenian ] = "Uporabi stolpce";
 };
 
 String STR_WIZ_TYPE_SELECT_TITEL
@@ -201,6 +207,8 @@ String STR_WIZ_TYPE_SELECT_TITEL
     Text[ hebrew ] = "Typformatierungen";
     Text[ hindi ] = "वर्ग रचना";
     Text[ slovak ] = "Formátovanie typu";
+    Text[ hungarian ] = "Típusformázás";
+    Text[ slovenian ] = "Oblikovanje vrste";
 };
 
 String STR_WIZ_PKEY_ALREADY_DEFINED
@@ -215,7 +223,7 @@ String STR_WIZ_PKEY_ALREADY_DEFINED
     Text[ french ] = "Les champs suivants ont d�j� �t� d�finis comme cl�s primaires :\n";
     Text[ spanish ] = "Ya se han definido los siguientes campos como llaves primarias:\n";
     Text[ italian ] = "I seguenti campi sono stati impostati come chiave primaria:\n";
-    Text[ danish ] = "F�lgende felter er allerede valgt som prim�rn�gle:\n";
+    Text[ danish ] = "F�lgende felter er allerede valgt som prim�rn�gler:\n";
     Text[ swedish ] = "F�ljande f�lt �r redan satta som prim�rnycklar:\n";
     Text[ polish ] = "Nast�puj�ce pola ju� zosta�y ustawione jako klucze g��wne:\n";
     Text[ portuguese_brazilian ] = "Os seguintes campos j� foram atribu�dos como chaves prim�rias:\n";
@@ -232,6 +240,8 @@ String STR_WIZ_PKEY_ALREADY_DEFINED
     Text[ hebrew ] = "Es sind bereits folgende Felder als Primärschlüssel gesetzt:\n";
     Text[ hindi ] = "निम्नलिखित क्षेत्रों को पहिले से ही प्रैमरी की जैसे सेट्ट किया है:\n";
     Text[ slovak ] = "Nasledujúce polia už boli použité ako primárny kľúč:\n";
+    Text[ hungarian ] = "A következő mezők már elsődleges kulcsnak vannak beállítva:\n";
+    Text[ slovenian ] = "Sledeča polja so že bila določena za primarne ključe:\n";
 };
 
 String STR_WIZ_NAME_MATCHING_TITEL
@@ -263,6 +273,8 @@ String STR_WIZ_NAME_MATCHING_TITEL
     Text[ hebrew ] = "Spalten zuordnen";
     Text[ hindi ] = "स्तंभों को निर्दिष्ट करो";
     Text[ slovak ] = "Priradiť stĺpce";
+    Text[ hungarian ] = "Oszlopok hozzárendelése";
+    Text[ slovenian ] = "Dodeli stolpce";
 };
 
 ModalDialog WIZ_RTFCOPYTABLE
@@ -273,7 +285,7 @@ ModalDialog WIZ_RTFCOPYTABLE
     Text [ english_us ] = "Copy RTF Table" ;
     Text [ portuguese_brazilian ] = "Copiar tabela RTF" ;
     Text [ swedish ]    = "Kopiera RTF-tabell" ;
-    Text [ danish ]     = "Kopier �RTF-tabel" ;
+    Text [ danish ]     = "Kopier RTF-tabel" ;
     Text [ italian ]    = "Copia tabella RTF" ;
     Text [ spanish ]    = "Copiar la tabla RTF" ;
     Text [ french ]     = "Copie de table RTF" ;
@@ -322,6 +334,8 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ hebrew ] = "‮עזרה‬";
         Text[ hindi ] = "~सहायता";
         Text[ slovak ] = "~Pomocník";
+        Text[ hungarian ] = "~Súgó";
+        Text[ slovenian ] = "~Pomoč";
     };
     CancelButton PB_CANCEL
     {
@@ -354,6 +368,8 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ hebrew ] = "‮ביטול‬";
         Text[ hindi ] = "~रद्द करो";
         Text[ slovak ] = "~Zrušiť";
+        Text[ hungarian ] = "~Mégsem";
+        Text[ slovenian ] = "Pre~kliči";
     };
     PushButton PB_PREV
     {
@@ -364,7 +380,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ english_us ] = "< ~Back";
         Text[ portuguese ] = "< ~Anterior";
         Text[ russian ] = "<~�����";
-        Text[ greek ] = "<����";
+        Text[ greek ] = "< ����";
         Text[ dutch ] = "< V~orige";
         Text[ french ] = "<Pr�c�dent";
         Text[ spanish ] = "< ~Regresar";
@@ -386,6 +402,8 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ hebrew ] = "<‮הקודם ‬";
         Text[ hindi ] = "< ~पीछे";
         Text[ slovak ] = "< ~Späť";
+        Text[ hungarian ] = "< ~Vissza";
+        Text[ slovenian ] = "< N~azaj";
     };
     PushButton PB_NEXT
     {
@@ -418,6 +436,8 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ hebrew ] = "‮הבא‬>";
         Text[ hindi ] = "~आगे>";
         Text[ slovak ] = "Ď~alší >";
+        Text[ hungarian ] = "~Tovább>";
+        Text[ slovenian ] = "~Naprej>";
     };
     OKButton PB_OK
     {
@@ -434,7 +454,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ french ] = "Cr�er";
         Text[ spanish ] = "~Crear";
         Text[ italian ] = "~Crea";
-        Text[ danish ] = "~Udf�r";
+        Text[ danish ] = "~Opret";
         Text[ swedish ] = "~F�rdigst�ll";
         Text[ polish ] = "~Utw�rz";
         Text[ portuguese_brazilian ] = "~Criar";
@@ -451,6 +471,8 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ hebrew ] = "~Fertig stellen";
         Text[ hindi ] = "~उत्पन्न करो";
         Text[ slovak ] = "Vytvo~riť";
+        Text[ hungarian ] = "~Létrehozás";
+        Text[ slovenian ] = "Ustva~ri";
     };
 
     Text[ greek ] = "��������� ������ RTF";
@@ -465,6 +487,8 @@ ModalDialog WIZ_RTFCOPYTABLE
     Text[ hebrew ] = "RTF Tabelle kopieren";
     Text[ hindi ] = "RTF सारणी की प्रतिलिपि";
     Text[ slovak ] = "Kopírovať RTF tabuľku";
+    Text[ hungarian ] = "RTF-tábla másolása";
+    Text[ slovenian ] = "Kopiraj RTF tabelo";
 };
 
 //==================================================================
@@ -509,6 +533,8 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ hebrew ] = "Vorhandene Spalten";
         Text[ hindi ] = "अस्तित्व में रहनेवाला स्तंभ";
         Text[ slovak ] = "Existujúce stĺpce";
+        Text[ hungarian ] = "Létező oszlopok";
+        Text[ slovenian ] = "Obstoječi stolpci";
     };
 
     MultiListBox LB_ORG_COLUMN_NAMES
@@ -669,6 +695,8 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ hebrew ] = "Spalteninformation";
         Text[ hindi ] = "स्तंभ सूचना";
         Text[ slovak ] = "Informácie o stĺpcoch";
+        Text[ hungarian ] = "Oszlopinformáció";
+        Text[ slovenian ] = "Podatki o stolpcu";
     };
 
     TabPage CONTROL_CONTAINER
@@ -710,6 +738,8 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ hebrew ] = "Automat. Typerkennung";
         Text[ hindi ] = "स्वचालित ढंग से वर्ग का पहचान";
         Text[ slovak ] = "Automatické rozpoznávanie typu";
+        Text[ hungarian ] = "Automatikus típusfelismerés";
+        Text[ slovenian ] = "Samodejno razpoznavanje vrst";
     };
 
     FixedText FT_AUTO
@@ -743,6 +773,8 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ hebrew ] = "(max.) ~Zeilen";
         Text[ hindi ] = "रेखाएँ (अ~धिकतम)";
         Text[ slovak ] = "Riadky (ma~x)";
+        Text[ hungarian ] = "Sorok (ma~x)";
+        Text[ slovenian ] = "Vrstice (~maks)";
     };
 
     NumericField ET_AUTO
@@ -799,6 +831,8 @@ Menu RID_SBA_RTF_PKEYPOPUP
             Text[ hebrew ] = "Primärschlüssel";
             Text[ hindi ] = "प्रैमरी की";
             Text[ slovak ] = "Primárny kľúč";
+            Text[ hungarian ] = "Elsődleges kulcs";
+            Text[ slovenian ] = "Primarni ključ";
         };
     };
 };
@@ -843,6 +877,8 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ hebrew ] = "Quelltabelle: \n";
         Text[ hindi ] = "मूल सारणी: \n";
         Text[ slovak ] = "Zdrojová tabuľka: \n";
+        Text[ hungarian ] = "Forrástábla: \n";
+        Text[ slovenian ] = "Izvorna tabela: \n";
     };
 
     FixedText FT_TABLE_RIGHT
@@ -860,7 +896,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ spanish ] = "Tabla destino: \n";
         Text[ finnish ] = "Kohdetaulu: \n";
         Text[ italian ] = "Tabella destinazione: \n";
-        Text[ danish ] = "M�ltabel: \n";
+        Text[ danish ] = "Destinations tabel:\n";
         Text[ swedish ] = "M�ltabell: \n";
         Text[ polish ] = "Tabela docelowa:\n";
         Text[ portuguese_brazilian ] = "Tabela de destino: \n";
@@ -876,6 +912,8 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ hebrew ] = "Zieltabelle: \n";
         Text[ hindi ] = "नियत स्थान सारणी: \n";
         Text[ slovak ] = "Cieľová tabuľka: \n";
+        Text[ hungarian ] = "Céltábla: \n";
+        Text[ slovenian ] = "Ciljna tabela: \n";
     };
 
     Control CTRL_LEFT
@@ -1009,6 +1047,8 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "~सब";
         Text[ slovak ] = "~Všetko";
+        Text[ hungarian ] = "~Mind";
+        Text[ slovenian ] = "~Vse";
     };
 
     PushButton PB_NONE
@@ -1043,6 +1083,8 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ hebrew ] = "~keine";
         Text[ hindi ] = "~कोई नहीं";
         Text[ slovak ] = "N~ič";
+        Text[ hungarian ] = "~Semmi";
+        Text[ slovenian ] = "Nob~ena";
     };
 };
 TabPage TAB_WIZ_COPYTABLE
@@ -1084,6 +1126,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "~Tabellenname";
         Text[ hindi ] = "~सारणी नाम";
         Text[ slovak ] = "Názov ta~buľky";
+        Text[ hungarian ] = "Tábla ~neve";
+        Text[ slovenian ] = "Ime ta~bele";
     };
 
     Edit ET_TABLENAME
@@ -1126,6 +1170,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     RadioButton RB_DEFDATA
     {
@@ -1158,6 +1204,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "Definition und D~aten";
         Text[ hindi ] = "~परिभाषा और ड़ॉटा";
         Text[ slovak ] = "De~finícia a dáta";
+        Text[ hungarian ] = "~Meghatározás és adatok";
+        Text[ slovenian ] = "De~finicija in podatki";
     };
     RadioButton RB_DEF
     {
@@ -1190,6 +1238,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "~Definition";
         Text[ hindi ] = "~परिभाषा";
         Text[ slovak ] = "Def~inícia";
+        Text[ hungarian ] = "~Meghatározás";
+        Text[ slovenian ] = "Def~inicija";
     };
 
     RadioButton RB_VIEW
@@ -1223,6 +1273,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "Als Tabellen~sicht";
         Text[ hindi ] = "~सारणी दृश्य जैसे";
         Text[ slovak ] = "Ako ~pohľad na tabuľku";
+        Text[ hungarian ] = "Táblané~zetként";
+        Text[ slovenian ] = "~Kot pogled tabele";
     };
 
     RadioButton RB_APPENDDATA
@@ -1256,6 +1308,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "Daten a~nhängen";
         Text[ hindi ] = "~डॉटा बाँधो";
         Text[ slovak ] = "Priložiť ~dáta";
+        Text[ hungarian ] = "Adat ~csatolása";
+        Text[ slovenian ] = "Priloži po~datke";
     };
 
     CheckBox CB_PRIMARY_COLUMN
@@ -1289,6 +1343,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "~Primärschlüssel erzeugen";
         Text[ hindi ] = "~प्रैमरी की उत्पन्न करो";
         Text[ slovak ] = "Vy~tvoriť primárny kľúč";
+        Text[ hungarian ] = "~Elsődleges kulcs létrehozása";
+        Text[ slovenian ] = "Us~tvari primarni ključ";
     };
     FixedText FT_KEYNAME
     {
@@ -1321,6 +1377,8 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम्";
         Text[ slovak ] = "Názov";
+        Text[ hungarian ] = "Név";
+        Text[ slovenian ] = "Ime";
     };
 
     Edit ET_KEYNAME
@@ -1344,7 +1402,7 @@ String STR_WIZ_TABLE_COPY
     Text[ french ] = "Copier la table";
     Text[ spanish ] = "Copiar la tabla";
     Text[ italian ] = "Copia tabella";
-    Text[ danish ] = "~Kopier tabel";
+    Text[ danish ] = "Kopier tabel";
     Text[ swedish ] = "Kopiera tabell";
     Text[ polish ] = "Kopiuj tabel�";
     Text[ portuguese_brazilian ] = "Copiar tabela";
@@ -1361,6 +1419,8 @@ String STR_WIZ_TABLE_COPY
     Text[ hebrew ] = "Tabelle kopieren";
     Text[ hindi ] = "सारणी का प्रतिलिपि";
     Text[ slovak ] = "Kopírovať tabuľku";
+    Text[ hungarian ] = "Tábla másolása";
+    Text[ slovenian ] = "Kopiraj tabelo";
 };
 
 String STR_COPYTABLE_TITLE_COPY
@@ -1371,7 +1431,7 @@ String STR_COPYTABLE_TITLE_COPY
     Text [ english_us ] = "Copy table" ;
     Text [ portuguese_brazilian ] = "Copiar tabela" ;
     Text [ swedish ] = "Kopiera tabell" ;
-    Text [ danish ] = "~Kopier tabel" ;
+    Text [ danish ] = "Kopier tabel" ;
     Text [ italian ] = "Copia tabella" ;
     Text [ spanish ] = "Copiar la tabla" ;
     Text [ french ] = "Copier la table" ;
@@ -1392,6 +1452,8 @@ String STR_COPYTABLE_TITLE_COPY
     Text[ hebrew ] = "Tabelle kopieren";
     Text[ hindi ] = "सारणी का प्रतिलिपि";
     Text[ slovak ] = "Kopírovať tabuľku";
+    Text[ hungarian ] = "Tábla másolása";
+    Text[ slovenian ] = "Kopiraj tabelo";
 };
 
 String STR_COPYTABLE_TITLE_MOVE
@@ -1423,6 +1485,8 @@ String STR_COPYTABLE_TITLE_MOVE
     Text[ hebrew ] = "Tabelle verschieben";
     Text[ hindi ] = "सारणी का स्थान परिवर्तन करो";
     Text[ slovak ] = "Presunúť tabuľku";
+    Text[ hungarian ] = "Tábla áthelyezése";
+    Text[ slovenian ] = "Premakni tabelo";
 };
 ErrorBox ERROR_INVALID_TABLE_NAME
 {
@@ -1436,7 +1500,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ french ] = "Ce nom de table n'est pas valide dans la base de donn�es active.";
     Message[ spanish ] = "Este nombre de tabla no es v�lido en la base de datos actual.";
     Message[ italian ] = "Il nome della tabella non � valido nel database attuale.";
-    Message[ danish ] = "I den aktuelle database er dette ikke et gyldigt tabelnavn.";
+    Message[ danish ] = "I den nuv�rende database er dette ikke et gyldigt tabelnavn.";
     Message[ swedish ] = "Det h�r �r inget giltigt tabellnamn i den aktuella databasen.";
     Message[ polish ] = "Ta nazwa tabeli jest nieprawid�owa w bie��cej bazie danych.";
     Message[ portuguese_brazilian ] = "Este nome de tabela n�o � v�lido no banco de dados atual.";
@@ -1454,6 +1518,8 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ hebrew ] = "In der aktuellen Datenbank ist dies kein gültiger Tabellenname.";
     Message[ hindi ] = "वर्तमान लेखासंचय में इस सारणी का नाम मान्य नहीं है ।";
     Message[ slovak ] = "Tento názov tabuľky nieje platný v tejto databáze.";
+    Message[ hungarian ] = "A jelenlegi adatbázisban ez a táblanév érvénytelen.";
+    Message[ slovenian ] = "To ime tabele ni veljavno v trenutni zbirki podatkov.";
 };
 String STR_ERR_DUPL_TABLENAME
 {
@@ -1463,7 +1529,7 @@ String STR_ERR_DUPL_TABLENAME
     Text [ english_us ] = "The table name \'$name$\' already exists.\nYou may enter a new name\nor append the data to the existing table." ;
     Text [ portuguese_brazilian ] = "O nome da tabela \'$name$\' j� existe.\nVoc� pode digitar um outro nome\nou anexar os dados � tabela existente." ;
     Text [ swedish ] = "Tabellnamnet \'$name$\' finns redan.\nDu kan ange ett nytt namn\neller tillfoga data till den existerande tabellen." ;
-    Text [ danish ] = "Tabelnavnet \'$name$\' findes allerede.\nDu kan indtaste et andet navn\neller vedh�fte dataene til den eksisterende tabel." ;
+    Text [ danish ] = "Tabelnavnet \'$name$\' findes allerede.\nDu kan indtaste et andet navn\neller vedh�fte data til den eksisterende tabel." ;
     Text [ italian ] = "Il nome della tabella \'$name$\' esiste gi� .\nPotete indicare un nuovo nome oppure \nallegare i dati alla tabella esistente." ;
     Text [ spanish ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente." ;
     Text [ french ] = "Le nom de table \'$name$\' existe d�j�.\nVous pouvez en indiquer un autre\nou bien joindre les donn�es � la table existante." ;
@@ -1485,6 +1551,8 @@ String STR_ERR_DUPL_TABLENAME
     Text[ hebrew ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen.";
     Text[ hindi ] = "सारणी नाम \'$name$\' पहिले से ही अस्तित्व में है ।\nआप नया नाम को प्रविष्ट कर सकते है\nअथवा ड़ॉटा को अस्तित्व में रहनेवाला सारणी में जोड़ सकते है ।";
     Text[ slovak ] = "Názov \'$name$\' už existuje.\nMôžete zadať nový názov\nalebo pridať dáta k existujúcej tabuľke.";
+    Text[ hungarian ] = "Már létező táblanév: \'$name$\'.\nMegadhat új táblanevet,\nvagy a létező táblába is felveheti az adatokat.";
+    Text[ slovenian ] = "Ime tabele \'$name$\' že obstaja.\nLahko vnesete novo ime\nali dodate podatke v obstoječo tabelo.";
 };
 
 ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
@@ -1501,7 +1569,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
     Message[ spanish ] = "Cambie el nombre de la tabla. Es demasiado largo.";
     Message[ finnish ] = "Please change the table name. It is too long.";
     Message[ italian ] = "Il nome della tabella � troppo lungo. Modificatelo.";
-    Message[ danish ] = "Please change the table name. It is too long.";
+    Message[ danish ] = "Ret venligst tabel navnet. Det er for langt.";
     Message[ swedish ] = "�ndra tabellnamnet. Det �r f�r l�ngt.";
     Message[ polish ] = "Please change the table name. It is too long.";
     Message[ japanese ] = "表名を変更してください。名前が長すぎます。";
@@ -1517,6 +1585,8 @@ ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
     Message[ thai ] = "Please change the table name. It is too long.";
     Message[ hindi ] = "Please change the table name. It is too long.";
     Message[ slovak ] = "Prosím zmente názov tabuľky, je príliš dlhý.";
+    Message[ hungarian ] = "A táblanév túl hosszú. Válasszon más táblanevet.";
+    Message[ slovenian ] = "Prosimo, da spremenite ime tabele, ker je predolgo.";
 };
 
 Image IMG_SORTUP_H
@@ -1546,6 +1616,18 @@ Image IMG_SORTDOWN_H
         Blue = 0xFFFF ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
