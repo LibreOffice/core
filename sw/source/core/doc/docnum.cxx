@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:51:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
+#endif
+#ifndef _SVX_ADJITEM_HXX
+#include <svx/adjitem.hxx>
 #endif
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
@@ -833,7 +836,7 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
 }
 
 void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
-                        BOOL bSetAbsLSpace )
+                        sal_Bool bSetAbsLSpace, sal_Bool bCalledFromShell )
 {
     SwUndoInsNum* pUndo;
     if( DoesUndo() )
@@ -848,8 +851,31 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     ULONG nPamPos = rPam.Start()->nNode.GetIndex();
     BOOL bSetItem = TRUE;
     SwNumRule* pNew = FindNumRulePtr( rRule.GetName() );
+
     if( !pNew )
+    {
         pNew = (*pNumRuleTbl)[ MakeNumRule( rRule.GetName(), &rRule ) ];
+
+        /* #109308# If called from a shell propagate an existing
+            adjust item at the beginning am rPam into the new
+            numbering rule. */
+        if (bCalledFromShell)
+        {
+            SwCntntNode * pCntntNode = rPam.GetCntntNode();
+
+            if (pCntntNode)
+            {
+                SwAttrSet & rAttrSet = pCntntNode->GetSwAttrSet();
+                const SfxPoolItem * pItem = NULL;
+
+                if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_PARATR_ADJUST,
+                                                          TRUE,
+                                                          &pItem))
+                    pNew->SetNumAdjust(((SvxAdjustItem *) pItem)->GetAdjust());
+            }
+        }
+
+    }
     else if( rRule.IsAutoRule() && !(*pNew == rRule) )
     {
         // die Rule existiert schon, wurde aber veraendert. Dann muss hier
