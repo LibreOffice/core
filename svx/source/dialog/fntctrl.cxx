@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-05 12:31:36 $
+ *  last change: $Author: gt $ $Date: 2002-08-06 08:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,14 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
+
+
+static void SetFont( const SvxFont& rNewFont, SvxFont& rImplFont )
+{
+    rImplFont = rNewFont;
+    rImplFont.SetTransparent( TRUE );
+    rImplFont.SetAlign( ALIGN_BASELINE );
+}
 
 // class FontPrevWin_Impl -----------------------------------------------
 
@@ -508,14 +516,33 @@ const SvxFont& SvxFontPrevWindow::GetFont() const
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::SetFont(const SvxFont &rOutFont)
+void SvxFontPrevWindow::SetFont( const SvxFont& rOutFont )
 {
-    SvxFont& rFont = pImpl->aFont;
-    rFont = rOutFont;
-    rFont.SetTransparent(TRUE);
-    rFont.SetAlign(ALIGN_BASELINE);
-    pImpl->Invalidate100PercentFontWidth();
+    ::SetFont( rOutFont, pImpl->aFont );
 
+    pImpl->Invalidate100PercentFontWidth();
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont )
+{
+    ::SetFont( rNormalOutFont, pImpl->aFont );
+    ::SetFont( rCJKOutFont, pImpl->aCJKFont );
+
+
+    pImpl->Invalidate100PercentFontWidth();
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetCJKFont( const SvxFont &rCJKOutFont )
+{
+    ::SetFont( rCJKOutFont, pImpl->aCJKFont );
+
+    pImpl->Invalidate100PercentFontWidth();
     Invalidate();
 }
 
