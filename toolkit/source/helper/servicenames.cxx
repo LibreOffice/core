@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:07:27 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,3 +118,5 @@ const sal_Char __FAR_DATA szServiceName_ImageProducer[] = "stardiv.vcl.ImageProd
 const sal_Char __FAR_DATA szServiceName_PrinterServer[] = "stardiv.vcl.PrinterServer", szServiceName2_PrinterServer[] = "com.sun.star.awt.PrinterServer";
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBar[] = "stardiv.vcl.control.ProgressBar", szServiceName2_UnoControlProgressBar[] = "com.sun.star.awt.UnoControlProgressBar";
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBarModel[] = "stardiv.vcl.controlmodel.ProgressBar", szServiceName2_UnoControlProgressBarModel[] = "com.sun.star.awt.UnoControlProgressBarModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlScrollBar[] = "stardiv.vcl.control.ScrollBar", szServiceName2_UnoControlScrollBar[] = "com.sun.star.awt.UnoControlScrollBar";
+const sal_Char __FAR_DATA szServiceName_UnoControlScrollBarModel[] = "stardiv.vcl.controlmodel.ScrollBar", szServiceName2_UnoControlScrollBarModel[] = "com.sun.star.awt.UnoControlScrollBarModel";

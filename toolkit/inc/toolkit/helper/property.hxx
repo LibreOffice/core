@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:03:25 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,12 @@ namespace rtl {
 #define BASEPROPERTY_PROGRESSVALUE          74  // sal_Int32
 #define BASEPROPERTY_PROGRESSVALUE_MIN      75  // sal_Int32
 #define BASEPROPERTY_PROGRESSVALUE_MAX      76  // sal_Int32
+#define BASEPROPERTY_SCROLLVALUE            77  // sal_Int32
+#define BASEPROPERTY_SCROLLVALUE_MAX        78  // sal_Int32
+#define BASEPROPERTY_LINEINCREMENT          79  // sal_Int32
+#define BASEPROPERTY_BLOCKINCREMENT         80  // sal_Int32
+#define BASEPROPERTY_VISIBLESIZE            81  // sal_Int32
+#define BASEPROPERTY_ORIENTATION            82  // sal_Int32
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.

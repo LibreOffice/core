@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:06:34 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,8 @@ uno::Reference< uno::XInterface >UnoControlDialogModel::createInstance( const ::
         pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlProgressBarModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlScrollBarModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
 
     uno::Reference< uno::XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
     return xNewModel;
@@ -304,7 +306,7 @@ uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames
     static uno::Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 17 );
+        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 18 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -323,6 +325,7 @@ uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames
         pNames[14] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
         pNames[15] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
         pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
+        pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
     }
     return *pNamesSeq;
 }
@@ -4056,4 +4059,264 @@ void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::c
 sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)
 {
     return ImplGetPropertyValue_INT32( BASEPROPERTY_PROGRESSVALUE );
+}
+
+
+//  ----------------------------------------------------
+//  class UnoControlScrollBarModel
+//  ----------------------------------------------------
+UnoControlScrollBarModel::UnoControlScrollBarModel()
+{
+    ImplRegisterProperty( BASEPROPERTY_BLOCKINCREMENT );
+    ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_LINEINCREMENT );
+    ImplRegisterProperty( BASEPROPERTY_ORIENTATION );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLVALUE );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLVALUE_MAX );
+    ImplRegisterProperty( BASEPROPERTY_VISIBLESIZE );
+}
+
+::rtl::OUString UnoControlScrollBarModel::getServiceName() const
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
+}
+
+uno::Any UnoControlScrollBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBar );
+        return aAny;
+    }
+
+    return UnoControlModel::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoControlScrollBarModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// ::com::sun::star::beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoControlScrollBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+
+//  ----------------------------------------------------
+//  class UnoScrollBarControl
+//  ----------------------------------------------------
+UnoScrollBarControl::UnoScrollBarControl()
+    : maAdjustmentListeners( *this )
+{
+}
+
+::rtl::OUString UnoScrollBarControl::GetComponentServiceName()
+{
+    return ::rtl::OUString::createFromAscii( "ScrollBar" );
+}
+
+// ::com::sun::star::uno::XInterface
+uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XAdjustmentListener*, this ),
+                                        SAL_STATIC_CAST( awt::XScrollBar*, this ) );
+    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoScrollBarControl )
+    getCppuType( ( uno::Reference< awt::XAdjustmentListener>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XScrollBar>* ) NULL ),
+    UnoControlBase::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+void UnoScrollBarControl::dispose() throw(uno::RuntimeException)
+{
+    lang::EventObject aEvt;
+    aEvt.Source = (::cppu::OWeakObject*)this;
+    maAdjustmentListeners.disposeAndClear( aEvt );
+    UnoControl::dispose();
+}
+
+void UnoScrollBarControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoControl::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XScrollBar >  xScrollBar( mxPeer, uno::UNO_QUERY );
+    xScrollBar->addAdjustmentListener( this );
+}
+
+// ::com::sun::star::awt::XAdjustmentListener
+void UnoScrollBarControl::adjustmentValueChanged( const ::com::sun::star::awt::AdjustmentEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException)
+{
+    switch ( rEvent.Type )
+    {
+        case ::com::sun::star::awt::AdjustmentType_ADJUST_LINE:
+        case ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE:
+        case ::com::sun::star::awt::AdjustmentType_ADJUST_ABS:
+        {
+            uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+
+            if ( xScrollBar.is() )
+            {
+                uno::Any aAny;
+                aAny <<= xScrollBar->getValue();
+                ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), aAny, sal_False );
+            }
+        }
+        break;
+        default:
+        {
+            DBG_ERROR( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
+
+        }
+    }
+
+    if ( maAdjustmentListeners.getLength() )
+        maAdjustmentListeners.adjustmentValueChanged( rEvent );
+}
+
+// ::com::sun::star::awt::XScrollBar
+void UnoScrollBarControl::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    maAdjustmentListeners.addInterface( l );
+}
+
+void UnoScrollBarControl::removeAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    maAdjustmentListeners.removeInterface( l );
+}
+
+void UnoScrollBarControl::setValue( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= n;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), aAny, sal_True );
+}
+
+void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= nValue;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), aAny, sal_True );
+    aAny <<= nVisible;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), aAny, sal_True );
+    aAny <<= nMax;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), aAny, sal_True );
+}
+
+sal_Int32 UnoScrollBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n;
+    if ( mxPeer.is() )
+    {
+        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        n = xScrollBar->getValue();
+    }
+    return n;
+}
+
+void UnoScrollBarControl::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= n;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), aAny, sal_True );
+}
+
+sal_Int32 UnoScrollBarControl::getMaximum() throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n;
+    if ( mxPeer.is() )
+    {
+        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        n = xScrollBar->getMaximum();
+    }
+    return n;
+}
+
+void UnoScrollBarControl::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= n;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINEINCREMENT ), aAny, sal_True );
+}
+
+sal_Int32 UnoScrollBarControl::getLineIncrement() throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n;
+    if ( mxPeer.is() )
+    {
+        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        n = xScrollBar->getLineIncrement();
+    }
+    return n;
+}
+
+void UnoScrollBarControl::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= n;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BLOCKINCREMENT ), aAny, sal_True );
+}
+
+sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n;
+    if ( mxPeer.is() )
+    {
+        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        n = xScrollBar->getBlockIncrement();
+    }
+    return n;
+}
+
+void UnoScrollBarControl::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= n;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), aAny, sal_True );
+}
+
+sal_Int32 UnoScrollBarControl::getVisibleSize() throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n;
+    if ( mxPeer.is() )
+    {
+        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        n = xScrollBar->getVisibleSize();
+    }
+    return n;
+}
+
+void UnoScrollBarControl::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= n;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), aAny, sal_True );
+}
+
+sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n;
+    if ( mxPeer.is() )
+    {
+        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        n = xScrollBar->getOrientation();
+    }
+    return n;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 09:30:18 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1891,6 +1891,7 @@ void VCLXScrollBar::SetWindow( Window* pWindow )
     VCLXWindow::SetWindow( pWindow );
 }
 
+// ::com::sun::star::lang::XComponent
 void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -1901,6 +1902,7 @@ void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
     VCLXWindow::dispose();
 }
 
+// ::com::sun::star::awt::XScrollbar
 void VCLXScrollBar::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2025,6 +2027,8 @@ void VCLXScrollBar::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::R
         else
             nStyle |= WB_VERT;
 
+        pWindow->SetStyle( nStyle );
+
         if ( pWindow->IsVisible() )
             pWindow->Resize();
     }
@@ -2048,6 +2052,138 @@ sal_Int32 VCLXScrollBar::getOrientation() throw(::com::sun::star::uno::RuntimeEx
 
 }
 
+// ::com::sun::star::awt::VclWindowPeer
+void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+    if ( pScrollBar )
+    {
+        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_SCROLLVALUE:
+            {
+                if ( !bVoid )
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                        setValue( n );
+                }
+            }
+            break;
+            case BASEPROPERTY_SCROLLVALUE_MAX:
+            {
+                if ( !bVoid )
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                        setMaximum( n );
+                }
+            }
+            break;
+            case BASEPROPERTY_LINEINCREMENT:
+            {
+                if ( !bVoid )
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                        setLineIncrement( n );
+                }
+            }
+            break;
+            case BASEPROPERTY_BLOCKINCREMENT:
+            {
+                if ( !bVoid )
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                        setBlockIncrement( n );
+                }
+            }
+            break;
+            case BASEPROPERTY_VISIBLESIZE:
+            {
+                if ( !bVoid )
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                        setVisibleSize( n );
+                }
+            }
+            break;
+            case BASEPROPERTY_ORIENTATION:
+            {
+                if ( !bVoid )
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                        setOrientation( n );
+                }
+            }
+            break;
+            default:
+            {
+                VCLXWindow::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+::com::sun::star::uno::Any VCLXScrollBar::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aProp;
+    ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+    if ( pScrollBar )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_SCROLLVALUE:
+            {
+                aProp <<= (sal_Int32) getValue();
+            }
+            break;
+            case BASEPROPERTY_SCROLLVALUE_MAX:
+            {
+                aProp <<= (sal_Int32) getMaximum();
+            }
+            break;
+            case BASEPROPERTY_LINEINCREMENT:
+            {
+                aProp <<= (sal_Int32) getLineIncrement();
+            }
+            break;
+            case BASEPROPERTY_BLOCKINCREMENT:
+            {
+                aProp <<= (sal_Int32) getBlockIncrement();
+            }
+            break;
+            case BASEPROPERTY_VISIBLESIZE:
+            {
+                aProp <<= (sal_Int32) getVisibleSize();
+            }
+            break;
+            case BASEPROPERTY_ORIENTATION:
+            {
+                aProp <<= (sal_Int32) getOrientation();
+            }
+            break;
+            default:
+            {
+                aProp <<= VCLXWindow::getProperty( PropertyName );
+            }
+        }
+    }
+    return aProp;
+}
+
 IMPL_LINK( VCLXScrollBar, ScrollHdl, ScrollBar*, EMPTYARG )
 {
     ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
@@ -2056,10 +2192,27 @@ IMPL_LINK( VCLXScrollBar, ScrollHdl, ScrollBar*, EMPTYARG )
         ::com::sun::star::awt::AdjustmentEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.Value = pScrollBar->GetThumbPos();
+
+        // set adjustment type
+        ScrollType aType = pScrollBar->GetType();
+        if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
+        {
+            aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_LINE;
+        }
+        else if ( aType == SCROLL_PAGEUP || aType == SCROLL_PAGEDOWN )
+        {
+            aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE;
+        }
+        else if ( aType == SCROLL_DRAG )
+        {
+            aEvent.Type = ::com::sun::star::awt::AdjustmentType_ADJUST_ABS;
+        }
+
         maAdjustmentListeners.adjustmentValueChanged( aEvent );
     }
     return 1;
 }
+
 
 //  ----------------------------------------------------
 //  class VCLXEdit
