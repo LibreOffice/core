@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-12 08:52:20 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 12:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,8 @@ public:
     // XInterface
     virtual Any SAL_CALL queryAggregation( const Type & rType ) throw(RuntimeException);
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException);
-    virtual void SAL_CALL acquire() throw(RuntimeException);
-    virtual void SAL_CALL release() throw(RuntimeException);
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes(  ) throw(RuntimeException);
@@ -417,12 +417,12 @@ Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvUnoImageMapObject::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvUnoImageMapObject::acquire() throw()
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvUnoImageMapObject::release() throw(uno::RuntimeException)
+void SAL_CALL SvUnoImageMapObject::release() throw()
 {
     OWeakAggObject::release();
 }
