@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:14:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2848,9 +2848,13 @@ void SAL_CALL SwXTextTable::setDataArray(
                     else
                     {
                         double d;
-                        if( !(rAny >>= d) )
-                            throw uno::RuntimeException();
-                        lcl_setValue( *pXCell, d );
+                        // #i20067# don't throw exception just do nothing if
+                        // there is no value set
+                        if( (rAny >>= d) )
+                            lcl_setValue( *pXCell, d );
+                        else
+                            lcl_setString( *pXCell, OUString(), TRUE );
+
                     }
                 }
             }
@@ -4305,9 +4309,12 @@ void SAL_CALL SwXCellRange::setDataArray(
                     else
                     {
                         double d;
-                        if( !(rAny >>= d) )
-                            throw uno::RuntimeException();
-                        lcl_setValue( *pXCell, d );
+                        // #i20067# don't throw exception just do nothing if
+                        // there is no value set
+                        if( (rAny >>= d) )
+                            lcl_setValue( *pXCell, d );
+                        else
+                            lcl_setString( *pXCell, OUString(), TRUE );
                     }
                 }
             }
