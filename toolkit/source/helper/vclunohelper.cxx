@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-22 08:35:27 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define SMART_UNO_GENERATION    // Fuer Methoden an der FontMetric
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -444,8 +442,8 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::com::su
     aFM.Descent = (sal_Int16)rFontMetric.GetDescent();
     aFM.Leading = (sal_Int16)rFontMetric.GetLeading();
     aFM.Slant = (sal_Int16)rFontMetric.GetSlant();
-    aFM.FirstChar = rFontMetric.getFirstChar();
-    aFM.LastChar = rFontMetric.getLastChar();
+    aFM.FirstChar = rFontMetric.GetFirstChar();
+    aFM.LastChar = rFontMetric.GetLastChar();
     return aFM;
 }
 
