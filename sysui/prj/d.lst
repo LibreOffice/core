@@ -1,9 +1,9 @@
 mkdir: %_DEST%\misc%_EXT%\icons
 mkdir: %_DEST%\inc%_EXT%\icons
 
-..\%__SRC%\misc%\*.ico %_DEST%\misc%_EXT%\icons%\*.ico
-..\%__SRC%\bin%\*.zip %_DEST%\bin%_EXT%\*.zip
-..\%__SRC%\misc%\dtint.sh %_DEST%\bin%_EXT%\dtint
+..\%__SRC%\misc\*.ico %_DEST%\misc%_EXT%\icons\*.ico
+..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%\*.zip
+..\%__SRC%\misc\dtint.sh %_DEST%\bin%_EXT%\dtint
 ..\unix\office\icons\*.xpm %_DEST%\inc%_EXT%\icons\*.xpm
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
