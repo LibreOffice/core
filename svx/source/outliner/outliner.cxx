@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-01 14:48:55 $
+ *  last change: $Author: mt $ $Date: 2002-08-05 14:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,13 +1026,15 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     aBulletFont.SetVertical( bVertical );
     aBulletFont.SetOrientation( bVertical ? 2700 : 0 );
 
-    Color aColor( COL_BLACK );
+    Color aColor( COL_AUTO );
     if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
     {
         aColor = pFmt->GetBulletColor();
-        if ( ( aColor == COL_AUTO ) || ( IsForceAutoColor() ) )
-            aColor = pEditEngine->GetAutoColor();
     }
+
+    if ( ( aColor == COL_AUTO ) || ( IsForceAutoColor() ) )
+        aColor = pEditEngine->GetAutoColor();
+
     aBulletFont.SetColor( aColor );
     return aBulletFont;
 }
@@ -1122,6 +1124,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         aNewFont.SetAlign( ALIGN_BOTTOM );
                         aNewFont.SetVertical( bVertical );
                         aNewFont.SetOrientation( bVertical ? 2700 : 0 );
+                        aNewFont.SetColor( aBulletFont.GetColor() );
                         pOutDev->SetFont( aNewFont );
                         String aPageText = String::CreateFromInt32( nPage );
                         Size aTextSz;
