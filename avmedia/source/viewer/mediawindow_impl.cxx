@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindow_impl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 15:54:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ void MediaWindowImpl::cleanUp()
 
         if( xComponent.is() )
             xComponent->dispose();
+
+        setPlayerWindow( NULL );
     }
 
     MediaWindowBaseImpl::cleanUp();
