@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:07:08 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ swedish ] = "Det gick inte att ladda en komponent (%s).\nStarta setupprogrammet och gör en reparation.";
     Text[ polish ] = "Sk³adnika (%s) nie mo¿na za³adowaæ.\nProszê rozpocznij program instalacyjny i przeprowadŸ naprawê.";
     Text[ portuguese_brazilian ] = "The component (%s) could not be loaded.\nPlease start setup with the option -repair.";
-    Text[ japanese ] = "ºİÎß°ÈİÄ(%s)‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğŠJn‚µ‚ÄC•œ‚ğÀs‚µ‚Ä‰º‚³‚¢B";
+    Text[ japanese ] = "ºİÎß°ÈİÄ(%s)‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğŠJn‚µ‚ÄC•œ‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò²¿¼ş(%s)¡£\nÇëÄúÑ¡Ôñ°²×°³ÌĞòµÄÑ¡ÏîĞŞ²¹¡£";
     Text[ chinese_traditional ] = "µLªk¸ü¤Jµ{¦¡³¡¥ó(%s)¡C\n½Ğ±z¿ï¾Ü¦w¸Ëµ{¦¡ªº­×½Æ¿ï¶µ¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊÍãíá Çáãßæä (%s).\n ÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ¡ Ëã ÇáŞíÇã ÈÚãáíÉ ÇáÅÕáÇÍ ÇááÇÒãÉ.";
