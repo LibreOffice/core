@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-12 16:01:06 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,24 @@ String STR_SVT_COLLATE_NORMAL
     /* default or normal sorting algorithm */
     Text = "Normal" ;
      Text [ ENGLISH ] = "Normal" ;
+    Text[ english_us ] = "Normal";
+    Text[ portuguese ] = "Normal";
+    Text[ russian ] = "Normal";
+    Text[ greek ] = "Normal";
+    Text[ dutch ] = "Normal";
+    Text[ french ] = "Normal";
+    Text[ spanish ] = "Normal";
+    Text[ italian ] = "Normal";
+    Text[ danish ] = "Normal";
+    Text[ swedish ] = "Normal";
+    Text[ polish ] = "Normal";
+    Text[ portuguese_brazilian ] = "Normal";
+    Text[ japanese ] = "Normal";
+    Text[ korean ] = "Normal";
+    Text[ chinese_simplified ] = "Normal";
+    Text[ chinese_traditional ] = "Normal";
+    Text[ turkish ] = "Normal";
+    Text[ arabic ] = "Normal";
 };
 
 String STR_SVT_COLLATE_CHARSET
@@ -100,6 +118,24 @@ String STR_SVT_COLLATE_CHARSET
     /* default or normal sorting algorithm */
     Text = "Charset" ;
      Text [ ENGLISH ] = "Character Set" ;
+    Text[ english_us ] = "Character Set";
+    Text[ portuguese ] = "Character Set";
+    Text[ russian ] = "Набор знаков";
+    Text[ greek ] = "Character Set";
+    Text[ dutch ] = "Character Set";
+    Text[ french ] = "Character Set";
+    Text[ spanish ] = "Character Set";
+    Text[ italian ] = "Character Set";
+    Text[ danish ] = "Character Set";
+    Text[ swedish ] = "Character Set";
+    Text[ polish ] = "Character Set";
+    Text[ portuguese_brazilian ] = "Character Set";
+    Text[ japanese ] = "Character Set";
+    Text[ korean ] = "Character Set";
+    Text[ chinese_simplified ] = "Character Set";
+    Text[ chinese_traditional ] = "Character Set";
+    Text[ turkish ] = "Character Set";
+    Text[ arabic ] = "Character Set";
 };
 
 String STR_SVT_COLLATE_DICTIONARY
@@ -107,6 +143,24 @@ String STR_SVT_COLLATE_DICTIONARY
     /* german dictionary word order / sorting */
     Text = "Dictionary" ;
     Text [ ENGLISH ] = "Dictionary" ;
+    Text[ english_us ] = "Dictionary";
+    Text[ portuguese ] = "Dictionary";
+    Text[ russian ] = "Словарь";
+    Text[ greek ] = "Dictionary";
+    Text[ dutch ] = "Dictionary";
+    Text[ french ] = "Dictionary";
+    Text[ spanish ] = "Dictionary";
+    Text[ italian ] = "Dictionary";
+    Text[ danish ] = "Dictionary";
+    Text[ swedish ] = "Dictionary";
+    Text[ polish ] = "Dictionary";
+    Text[ portuguese_brazilian ] = "Dictionary";
+    Text[ japanese ] = "Ћ«Џ‘";
+    Text[ korean ] = "Dictionary";
+    Text[ chinese_simplified ] = "Dictionary";
+    Text[ chinese_traditional ] = "Dictionary";
+    Text[ turkish ] = "Dictionary";
+    Text[ arabic ] = "Dictionary";
 };
 
 String STR_SVT_COLLATE_PINYIN
@@ -114,6 +168,24 @@ String STR_SVT_COLLATE_PINYIN
     /* chinese sorting algorithm */
     Text = "Pinyin" ;
     Text [ ENGLISH ] = "Pinyin" ;
+    Text[ english_us ] = "Pinyin";
+    Text[ portuguese ] = "Pinyin";
+    Text[ russian ] = "Pinyin";
+    Text[ greek ] = "Pinyin";
+    Text[ dutch ] = "Pinyin";
+    Text[ french ] = "Pinyin";
+    Text[ spanish ] = "Pinyin";
+    Text[ italian ] = "Pinyin";
+    Text[ danish ] = "Pinyin";
+    Text[ swedish ] = "Pinyin";
+    Text[ polish ] = "Pinyin";
+    Text[ portuguese_brazilian ] = "Pinyin";
+    Text[ japanese ] = "Pinyin";
+    Text[ korean ] = "Pinyin";
+    Text[ chinese_simplified ] = "Pinyin";
+    Text[ chinese_traditional ] = "Pinyin";
+    Text[ turkish ] = "Pinyin";
+    Text[ arabic ] = "Pinyin";
 };
 
 String STR_SVT_COLLATE_STROKE
@@ -121,6 +193,24 @@ String STR_SVT_COLLATE_STROKE
     /* chinese sorting algorithm */
     Text = "Stroke" ;
     Text [ ENGLISH ] = "Stroke" ;
+    Text[ english_us ] = "Stroke";
+    Text[ portuguese ] = "Stroke";
+    Text[ russian ] = "Stroke";
+    Text[ greek ] = "Stroke";
+    Text[ dutch ] = "Stroke";
+    Text[ french ] = "Stroke";
+    Text[ spanish ] = "Stroke";
+    Text[ italian ] = "Stroke";
+    Text[ danish ] = "Stroke";
+    Text[ swedish ] = "Stroke";
+    Text[ polish ] = "Stroke";
+    Text[ portuguese_brazilian ] = "Stroke";
+    Text[ japanese ] = "Stroke";
+    Text[ korean ] = "Stroke";
+    Text[ chinese_simplified ] = "Stroke";
+    Text[ chinese_traditional ] = "Stroke";
+    Text[ turkish ] = "Stroke";
+    Text[ arabic ] = "Stroke";
 };
 
 String STR_SVT_COLLATE_RADICAL
@@ -128,6 +218,24 @@ String STR_SVT_COLLATE_RADICAL
     /* chinese sorting algorithm */
     Text = "Radical" ;
     Text [ ENGLISH ] = "Radical" ;
+    Text[ english_us ] = "Radical";
+    Text[ portuguese ] = "Radical";
+    Text[ russian ] = "Корень";
+    Text[ greek ] = "Radical";
+    Text[ dutch ] = "Radical";
+    Text[ french ] = "Radical";
+    Text[ spanish ] = "Radical";
+    Text[ italian ] = "Radical";
+    Text[ danish ] = "Radical";
+    Text[ swedish ] = "Radical";
+    Text[ polish ] = "Radical";
+    Text[ portuguese_brazilian ] = "Radical";
+    Text[ japanese ] = "ЉїЋљ‚М•”Ћс";
+    Text[ korean ] = "Radical";
+    Text[ chinese_simplified ] = "Radical";
+    Text[ chinese_traditional ] = "Radical";
+    Text[ turkish ] = "Radical";
+    Text[ arabic ] = "Radical";
 };
 
 String STR_SVT_COLLATE_ZHUYIN
@@ -135,6 +243,24 @@ String STR_SVT_COLLATE_ZHUYIN
     /* chinese sorting algorithm */
     Text = "Zhuyin" ;
     Text [ ENGLISH ] = "Zhuyin" ;
+    Text[ english_us ] = "Zhuyin";
+    Text[ portuguese ] = "Zhuyin";
+    Text[ russian ] = "Zhuyin";
+    Text[ greek ] = "Zhuyin";
+    Text[ dutch ] = "Zhuyin";
+    Text[ french ] = "Zhuyin";
+    Text[ spanish ] = "Zhuyin";
+    Text[ italian ] = "Zhuyin";
+    Text[ danish ] = "Zhuyin";
+    Text[ swedish ] = "Zhuyin";
+    Text[ polish ] = "Zhuyin";
+    Text[ portuguese_brazilian ] = "Zhuyin";
+    Text[ japanese ] = "Zhuyin";
+    Text[ korean ] = "Zhuyin";
+    Text[ chinese_simplified ] = "Zhuyin";
+    Text[ chinese_traditional ] = "Zhuyin";
+    Text[ turkish ] = "Zhuyin";
+    Text[ arabic ] = "Zhuyin";
 };
 
 
