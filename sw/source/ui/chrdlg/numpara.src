@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:13:10 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Styl číslování";
         Text[ hebrew ] = "~Nummerierungsvorlage";
         Text[ hindi ] = "संख्या देने का शैली";
+        Text[ slovak ] = "Štýl číslovania";
     };
     ListBox LB_NUMBER_STYLE
     {
@@ -217,6 +218,10 @@ TabPage TP_NUMPARA
     {
          < "कोई नहीं" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; > ;
+    };
     };
     FixedLine FL_NEW_START
     {
@@ -250,6 +255,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "संख्या देना";
+        Text[ slovak ] = "Číslovanie";
     };
     TriStateBox CB_NEW_START
     {
@@ -284,6 +290,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Restartovat v tomto odstavci";
         Text[ hebrew ] = "~An diesem Absatz neu beginnen";
         Text[ hindi ] = "~इस परिच्छेद से पुनः प्रारंभ करो";
+        Text[ slovak ] = "R~eštartovať v tomto odstavci";
     };
     TriStateBox CB_NUMBER_NEW_START
     {
@@ -317,6 +324,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Začít číslem";
         Text[ hebrew ] = "~Beginnen mit";
         Text[ hindi ] = "~के सहित प्रारंभ";
+        Text[ slovak ] = "~Začať číslom";
     };
     NumericField NF_NEW_START
     {
@@ -366,6 +374,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Číslování řádků";
         Text[ hebrew ] = "‮מיספור שורות‬";
         Text[ hindi ] = "रेखा को संख्या देना";
+        Text[ slovak ] = "Číslovanie riadkov";
     };
     TriStateBox CB_COUNT_PARA
     {
@@ -399,6 +408,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Zahrnout tento odstavec do číslování řádků";
         Text[ hebrew ] = "~Die Zeilen dieses Absatzes mitzählen";
         Text[ hindi ] = "रे~खा को संख्या देने के समय इस परिच्छेद को सम्मिलित करो";
+        Text[ slovak ] = "~Zahrnúť tento odstavec do číslovania riadkov";
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
@@ -432,6 +442,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Restartovat na začátku tohoto odstavce";
         Text[ hebrew ] = "An diese~m Absatz neu beginnen";
         Text[ hindi ] = "इ~स परिच्छेद से पुनः प्रारंभ करो";
+        Text[ slovak ] = "Rešt~artovať na začiatku tohto odstavca";
     };
     FixedText FT_RESTART_NO
     {
@@ -465,6 +476,7 @@ TabPage TP_NUMPARA
         Text[ czech ] = "Začít číslem";
         Text[ hebrew ] = "B~eginnen mit";
         Text[ hindi ] = "~के सहित प्रारंभ";
+        Text[ slovak ] = "~Začať číslom";
     };
     NumericField NF_RESTART_PARA
     {
@@ -484,6 +496,8 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
