@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+#   last change: $Author: ganaya $ $Date: 2001-03-14 16:26:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,10 @@ SLOFILES=\
 SLOFILES+=$(SLO)$/staticmbcalc.obj
 .ENDIF
 
+.IF "$(OS)"=="MACOSX"
+.ELSE
 SHL1VERSIONMAP= $(TARGET).map
+.ENDIF
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
