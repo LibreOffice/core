@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocolhandlercache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:34 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ class HandlerCache
 
         sal_Bool search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const;
         sal_Bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
+        sal_Bool exists( const ::rtl::OUString& sURL ) const;
 };
 
 //_________________________________________________________________________________________________________________
