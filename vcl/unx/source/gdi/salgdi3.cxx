@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-12 13:21:55 $
+ *  last change: $Author: cp $ $Date: 2001-03-15 14:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,12 +899,14 @@ void SalGraphicsData::DrawServerFontString(
             const int nHeight   = rGM.GetSize().Height();
             XFillRectangle( pDisplay, hDrawable_, tmpGC, nDestX, nDestY, nWidth, nHeight );
         }
-#if 1
+#if 0
         aPos += rGM.GetDelta();
-#else
+#elif 0
         aPos = Point( nX, nY );
-        aPos += pServerFont->TransformPoint( Point( pDXAry[i], 0 ) );
-//###       aPos += Point( pDXAry[i], 0 );
+        aPos = pServerFont->TransformPoint( Point( pDXAry[i], 0 ) );
+        aPos += Point( pDXAry[i], 0 );
+#else
+        aPos += mpServerSideFont->TransformPoint( Point(rGM.GetCharWidth(),0) );
 #endif
     }
 
