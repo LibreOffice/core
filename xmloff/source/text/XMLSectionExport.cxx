@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: dvo $ $Date: 2001-01-22 19:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
-#include <stl/vector>
-#endif
+#include <vector>
 
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -622,43 +620,47 @@ void XMLSectionExport::ExportRegularSectionStart(
     }
     else
     {
-        // data source DDE
-        // unfortunately, we have to test all relevant strings for
-        // non-zero length
-        aAny = xPropSet->getPropertyValue(sDdeCommandFile);
-        OUString sApplication;
-        aAny >>= sApplication;
-        aAny = xPropSet->getPropertyValue(sDdeCommandType);
-        OUString sTopic;
-        aAny >>= sTopic;
-        aAny = xPropSet->getPropertyValue(sDdeCommandElement);
-        OUString sItem;
-        aAny >>= sItem;
-
-        if ( (sApplication.getLength() > 0) ||
-             (sTopic.getLength() > 0) ||
-             (sItem.getLength() > 0 )   )
+        // check for DDE first
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sDdeCommandFile))
         {
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                     sXML_dde_application, sApplication);
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_topic,
-                                     sTopic);
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_item,
-                                     sItem);
+            // data source DDE
+            // unfortunately, we have to test all relevant strings for
+            // non-zero length
+            aAny = xPropSet->getPropertyValue(sDdeCommandFile);
+            OUString sApplication;
+            aAny >>= sApplication;
+            aAny = xPropSet->getPropertyValue(sDdeCommandType);
+            OUString sTopic;
+            aAny >>= sTopic;
+            aAny = xPropSet->getPropertyValue(sDdeCommandElement);
+            OUString sItem;
+            aAny >>= sItem;
 
-            aAny = xPropSet->getPropertyValue(sIsAutomaticUpdate);
-            if (*(sal_Bool*)aAny.getValue())
+            if ( (sApplication.getLength() > 0) ||
+                 (sTopic.getLength() > 0) ||
+                 (sItem.getLength() > 0 )   )
             {
-                GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
-                                             sXML_automatic_update, sXML_true);
-            }
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                         sXML_dde_application, sApplication);
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_topic,
+                                         sTopic);
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_item,
+                                         sItem);
 
-            SvXMLElementExport aElem(GetExport(),
-                                     XML_NAMESPACE_OFFICE,
-                                     sXML_dde_source,
-                                     sal_True, sal_True);
+                aAny = xPropSet->getPropertyValue(sIsAutomaticUpdate);
+                if (*(sal_Bool*)aAny.getValue())
+                {
+                    GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
+                                            sXML_automatic_update, sXML_true);
+                }
+
+                SvXMLElementExport aElem(GetExport(),
+                                         XML_NAMESPACE_OFFICE,
+                                         sXML_dde_source, sal_True, sal_True);
+            }
+            // else: no DDE data source
         }
-        // else: no data source
+        // else: no DDE on this system
     }
 }
 
