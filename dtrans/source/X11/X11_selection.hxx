@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-01-31 18:46:12 $
+ *  last change: $Author: pl $ $Date: 2001-02-02 19:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ namespace x11 {
         int                         m_nDragButton;
         sal_Int8                    m_nUserDragAction;
         sal_Int8                    m_nSourceActions;
+        bool                        m_bDropSuccess;
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
         bool                        m_bWaitingForPrimaryConversion;
@@ -379,6 +380,8 @@ namespace x11 {
 
         // dnd helpers
         void sendDragStatus( Atom nDropAction );
+        void sendDropPosition( bool bForce, Time eventTime );
+        bool updateDragAction( int modifierState );
         int getXdndVersion( Window aWindow, Window& rProxy );
         // coordinates on root window
         void updateDragWindow( int nX, int nY, Window aRoot );
