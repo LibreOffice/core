@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-08 11:39:12 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,23 +284,6 @@ sal_Bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextClipformat( CLIPFORMAT a
 }
 
 //------------------------------------------------------------------------
-// helper function
-//------------------------------------------------------------------------
-
-OUString SAL_CALL CDataFormatTranslator::getCodePageFromLocaleId( LCID locale, LCTYPE lcType ) const
-{
-    OSL_ASSERT( IsValidLocale( locale, LCID_SUPPORTED ) );
-
-    // we use the GetLocaleInfoA because don't want to provide
-    // a unicode wrapper function for Win9x in sal/systools
-    char buff[6];
-    GetLocaleInfoA( locale, lcType, buff, sizeof( buff ) );
-    rtl_TextEncoding tenc = rtl_getTextEncodingFromPCCodePage( CP_ACP );
-
-    return OUString( buff, rtl_str_getLength( buff ), tenc );
-}
-
-//------------------------------------------------------------------------
 // should be called only if there is realy text on the clipboard
 //------------------------------------------------------------------------
 
@@ -346,18 +329,6 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
 //
 //------------------------------------------------------------------------
 
-inline
-OUString SAL_CALL CDataFormatTranslator::makeMimeCharsetFromLocaleId(
-    LCID lcid, LCTYPE lcType, const OUString& aCharsetValuePrefix ) const
-{
-    OUString charset = getCodePageFromLocaleId( lcid, lcType );
-    return aCharsetValuePrefix + charset;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromClipboard(
     const Reference< XTransferable >& refXTransferable, CLIPFORMAT aClipformat ) const
 {
@@ -367,7 +338,7 @@ OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromClipboard(
     if ( CF_TEXT == aClipformat )
     {
         LCID lcid = getCurrentLocaleFromClipboard( refXTransferable );
-        charset = makeMimeCharsetFromLocaleId(
+        charset = getMimeCharsetFromLocaleId(
                     lcid,
                     LOCALE_IDEFAULTANSICODEPAGE,
                     PRE_WINDOWS_CODEPAGE );
@@ -375,7 +346,7 @@ OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromClipboard(
     else if ( CF_OEMTEXT == aClipformat )
     {
         LCID lcid  = getCurrentLocaleFromClipboard( refXTransferable );
-        charset = makeMimeCharsetFromLocaleId(
+        charset = getMimeCharsetFromLocaleId(
                     lcid,
                     LOCALE_IDEFAULTCODEPAGE,
                     PRE_OEM_CODEPAGE );

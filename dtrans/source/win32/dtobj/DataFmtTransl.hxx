@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:45:42 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,7 @@ private:
     rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
     sal_Bool      SAL_CALL isOemOrAnsiTextClipformat( CLIPFORMAT aClipformat ) const;
 
-    rtl::OUString SAL_CALL getCodePageFromLocaleId( LCID locale, LCTYPE lcType ) const;
     LCID          SAL_CALL getCurrentLocaleFromClipboard( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable ) const;
-    rtl::OUString SAL_CALL makeMimeCharsetFromLocaleId( LCID lcid, LCTYPE lcType, const rtl::OUString& aCharsetValuePrefix ) const;
     rtl::OUString SAL_CALL getTextCharsetFromClipboard(
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable, CLIPFORMAT aClipformat ) const;
 

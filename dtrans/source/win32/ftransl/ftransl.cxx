@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:41 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,12 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
             // default is CF_TEXT
             aAny <<= static_cast< sal_Int32 >( CF_TEXT );
 
-            // but maybe it is unicode text or oem text
-            OUString charset = refXMimeCntType->getParameterValue( OUSTR( charset ) );
-            findStandardFormatIdForCharset( charset, aAny );
+            if ( refXMimeCntType->hasParameter( OUSTR( charset ) ) )
+            {
+                // but maybe it is unicode text or oem text
+                OUString charset = refXMimeCntType->getParameterValue( OUSTR( charset ) );
+                findStandardFormatIdForCharset( charset, aAny );
+            }
         }
         else
         {
@@ -181,11 +184,11 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content type detected!" );
+        OSL_ENSURE( sal_False, "Invalid content-type detected!" );
     }
     catch( NoSuchElementException& )
     {
-        OSL_ENSURE( sal_False, "text/plain Contenttype without charset parameter detected" );
+        OSL_ENSURE( sal_False, "Illegal content-type parameter" );
     }
     catch( ... )
     {
@@ -447,7 +450,7 @@ void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUStr
         aAny <<= static_cast< sal_Int32 >( CF_UNICODETEXT );
     else
     {
-        sal_Int32 wincp = getWinCodePageFromMimeCharset( aCharset );
+        sal_Int32 wincp = getWinCPFromMimeCharset( aCharset );
         if ( IsOEMCP ( wincp ) )
             aAny <<= static_cast< sal_Int32 >( CF_OEMTEXT );
     }
