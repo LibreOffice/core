@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:00:32 $
+ *  last change:$Date: 2003-06-11 16:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,12 @@ public class java_complex implements TestBase{
     private void getParamsForComplexTest(String fileName, TestParameters param) {
         // get the resource file
         try {
-            String path = System.getProperty("java.class.path");
+            if ( param.DebugIsActive ) {
+                System.out.println("Looking for "+fileName);
+            }
             java.net.URL url = this.getClass().getResource("/"+fileName);
             if (url != null) {
+                System.out.println("Parsing properties from "+fileName);
                 java.net.URLConnection connection = url.openConnection();
                 java.io.InputStream in = connection.getInputStream();
                 Properties props = new Properties();
@@ -179,7 +182,7 @@ public class java_complex implements TestBase{
                 while (enum.hasMoreElements()) {
                     String key = (String)enum.nextElement();
                     String value = (String)props.get(key);
-                    param.put(key, value);
+                    param.put(key.trim(), value.trim());
                 }
             }
         }
