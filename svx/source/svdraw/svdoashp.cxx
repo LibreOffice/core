@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:29:30 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,11 @@
 
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
+#endif
+
+// #i37448#
+#ifndef _SVDVIEW_HXX
+#include <svdview.hxx>
 #endif
 
 // #104018# replace macros above with type-safe methods
@@ -2215,6 +2220,19 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
 FASTBOOL SdrObjCustomShape::BegCreate( SdrDragStat& rDrag )
 {
     return SdrTextObj::BegCreate( rDrag );
+}
+
+// #i37448#
+FASTBOOL SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
+{
+    SdrView* pView = rStat.GetView();
+    if(pView && pView->IsSolidDraggingNow())
+    {
+        InvalidateRenderGeometry();
+    }
+
+    // call parent
+    return SdrTextObj::MovCreate( rStat );
 }
 
 void SdrObjCustomShape::BrkDrag( SdrDragStat& rDrag ) const
