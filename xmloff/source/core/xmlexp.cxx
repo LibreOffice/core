@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:12:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1062,8 +1062,6 @@ void SvXMLExport::ImplExportContent()
     CheckAttrList();
 
     {
-        // <office:body ...>
-        SetBodyAttributes();
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_BODY,
                                   sal_True, sal_True );
         {
@@ -1074,6 +1072,8 @@ void SvXMLExport::ImplExportContent()
                       GetXMLToken( XML_TRUE ) );
                 eClass = XML_TEXT;
             }
+            // <office:body ...>
+            SetBodyAttributes();
             SvXMLElementExport aElem( *this, meClass != XML_TOKEN_INVALID,
                                       XML_NAMESPACE_OFFICE, eClass,
                                         sal_True, sal_True );
