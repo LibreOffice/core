@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 07:23:52 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,19 @@ class AccessibleStateSetHelper
 {
 public:
     //=====  internal  ========================================================
+
     AccessibleStateSetHelper ();
+    /** constructs an object with some states initially set
+
+        <p>This ctor is compatible with
+        <method scope="comphelper">OAccessibleImplementationAccess::implGetForeignControlledStates</method></p>
+
+        @param _nInitialStates
+            is a bit mask. Every bit 2^n means that the state number n (as got from the
+            AccessibleStateType constants) should be set initially.
+    */
+    AccessibleStateSetHelper ( const sal_Int64 _nInitialStates );
+
     AccessibleStateSetHelper ( const AccessibleStateSetHelper& rHelper );
 protected:
     virtual ~AccessibleStateSetHelper   (void);

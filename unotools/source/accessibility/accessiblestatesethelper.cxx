@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 07:24:19 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ public:
                         AccessibleStateSetHelperImpl* pNewStates)
         throw (uno::RuntimeException);
 
+    void    AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
+
 private:
 #if 0
     ::std::bitset<BITFIELDSIZE> maStates; //Bitfield
@@ -141,6 +143,11 @@ sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     sal_uInt64 aTempBitSet(1);
     aTempBitSet <<= aState;
     return ((aTempBitSet & maStates) != 0);
+}
+
+void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) )
+{
+    maStates |= _nStates;
 }
 
 void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
@@ -202,6 +209,13 @@ AccessibleStateSetHelper::AccessibleStateSetHelper ()
     : mpHelperImpl(NULL)
 {
     mpHelperImpl = new AccessibleStateSetHelperImpl();
+}
+
+AccessibleStateSetHelper::AccessibleStateSetHelper ( const sal_Int64 _nInitialStates )
+    : mpHelperImpl(NULL)
+{
+    mpHelperImpl = new AccessibleStateSetHelperImpl();
+    mpHelperImpl->AddStates( _nInitialStates );
 }
 
 AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelper& rHelper)
