@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-18 11:19:46 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 13:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,10 +1234,21 @@ void SfxStatusBarConfigListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput( rKEvt );
 }
 
+#ifndef TF_SVDATA
+
 BOOL SfxStatusBarConfigListBox::NotifyQueryDrop( SvLBoxEntry* pEntry )
 {
     return SvTreeListBox::NotifyQueryDrop(pEntry);
 }
+
+#else
+
+BOOL SfxStatusBarConfigListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
+{
+    return SvTreeListBox::NotifyAcceptDrop(pEntry);
+}
+
+#endif
 
 BOOL SfxStatusBarConfigListBox::NotifyMoving(SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                                 SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos)

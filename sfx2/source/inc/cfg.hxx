@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-19 10:45:54 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,11 @@ public:
                                 SfxStatusBarConfigListBox( Window* pParent,
                                         const ResId& );
 
+#ifndef TF_SVDATA
     virtual BOOL                NotifyQueryDrop( SvLBoxEntry* pEntry );
+#else
+    virtual BOOL                NotifyAcceptDrop( SvLBoxEntry* pEntry );
+#endif
     virtual BOOL                NotifyMoving(SvLBoxEntry*,
                                     SvLBoxEntry*,SvLBoxEntry*&,ULONG&);
     virtual void                CheckButtonHdl();
