@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: va $ $Date: 2002-04-15 12:48:21 $
+ *  last change: $Author: va $ $Date: 2002-04-16 12:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,13 +304,13 @@ hidspecial HID { HelpID = HID_DLGDEPOT_2_TXTOLDRATE ; };
 hidspecial HID { HelpID = HID_DLGDEPOT_2_TXTNEWRATE ; };
 #define HID_DLGDEPOT_2_TXTDATE                    34542
 hidspecial HID { HelpID = HID_DLGDEPOT_2_TXTDATE ; };
-define HID_DLGDEPOT_3_TXTSTARTDATE                34543
+#define HID_DLGDEPOT_3_TXTSTARTDATE                34543
 hidspecial HID { HelpID = HID_DLGDEPOT_3_TXTSTARTDATE ; };
-define HID_DLGDEPOT_3_TXTENDDATE                  34544
+#define HID_DLGDEPOT_3_TXTENDDATE                  34544
 hidspecial HID { HelpID = HID_DLGDEPOT_3_TXTENDDATE ; };
-define HID_DLGDEPOT_3_OPTDAILY                    34545
+#define HID_DLGDEPOT_3_OPTDAILY                    34545
 hidspecial HID { HelpID = HID_DLGDEPOT_3_OPTDAILY ; };
-define HID_DLGDEPOT_3_OPTWEEKLY                   34546
+#define HID_DLGDEPOT_3_OPTWEEKLY                   34546
 hidspecial HID { HelpID = HID_DLGDEPOT_3_OPTWEEKLY ; };
 #define HID_DLGDEPOT_DIALOG_HISTORY               34547
 hidspecial HID { HelpID = HID_DLGDEPOT_DIALOG_HISTORY ; };
