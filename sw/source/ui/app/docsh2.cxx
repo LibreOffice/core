@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-23 14:46:26 $
+ *  last change: $Author: jp $ $Date: 2001-08-27 11:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,6 @@ using namespace ::rtl;
 using namespace ::sfx2;
 
 extern FASTBOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
-
 
 /*--------------------------------------------------------------------
     Beschreibung:   DocInfo setzen am SFX
@@ -891,7 +890,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
 
                     }
-                    if( xFP->execute() == RET_OK )
+
+                    if( ERRCODE_NONE == aDlgHelper.Execute() )
                     {
                         aFileName = xFP->getFiles().getConstArray()[0];
                     }
@@ -951,7 +951,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
                         aDlgHelper.AddFilter( pHtmlFlt->GetFilterName(), pHtmlFlt->GetDefaultExtension() );
                         aDlgHelper.SetCurrentFilter( pHtmlFlt->GetFilterName() );
-                        if(ERRCODE_NONE != aDlgHelper.Execute())
+                        if( ERRCODE_NONE != aDlgHelper.Execute())
                         {
                             break;
                         }
@@ -1282,7 +1282,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             sStartTemplate = pFnd ? pFnd->GetName()
                                                   : pAny ? pAny->GetName()
                                                            : aEmptyStr;
-                            nSelect = nIdx;
+                            nSelect = (sal_Int16)nIdx;
                         }
                         pEntries[nIdx++] = rTxtColl.GetName();
                     }
@@ -1309,7 +1309,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 xFP->setTitle( SW_RESSTR( nStrId ));
                 SvtPathOptions aPathOpt;
                 xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
-                if( RET_OK == xFP->execute() )
+                if( ERRCODE_NONE == aDlgHelper.Execute())
                 {
                     aFileName = xFP->getFiles().getConstArray()[0];
                     Any aTemplateValue = xCtrlAcc->getValue(
