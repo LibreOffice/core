@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 21:43:55 $
+ *  last change: $Author: rt $ $Date: 2001-06-14 21:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ String STR_DESCRIPTION_SDRAW_DOC
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Grafik / Präsentation" ;
     Text [ swedish ] = "%PRODUCTNAME-teckning" ;
     Text [ danish ] = "%PRODUCTNAME tegning" ;
-    Text [ italian ] = "Disegno %PRODUCTNAME " ;
+    Text [ italian ] = "~Disegno %PRODUCTNAME " ;
     Text [ spanish ] = "%PRODUCTNAME Dibujo" ;
     Text [ french ] = "Dessin %PRODUCTNAME" ;
     Text [ dutch ] = "%PRODUCTNAME tekening" ;
@@ -1095,5 +1095,6 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ arabic ] = "Formula";
     Text[ catalan ] = "Formula";
 };
+
 
 
