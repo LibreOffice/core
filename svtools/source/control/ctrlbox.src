@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-13 20:09:35 $
+ *  last change: $Author: cp $ $Date: 2001-08-17 08:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,13 @@ String STR_SVT_AUTOMATIC_COLOR
  * ressources for CollatorRessource / CollatorRessourceData resp.
  */
 
+String STR_SVT_COLLATE_ALPHANUMERIC
+{
+    /* alphanumeric sorting algorithm */
+    Text = "Alphanumerisch" ;
+     Text [ ENGLISH ] = "Alphanumeric" ;
+};
+
 String STR_SVT_COLLATE_NORMAL
 {
     /* default or normal sorting algorithm */
@@ -143,7 +150,7 @@ String STR_SVT_COLLATE_NORMAL
 String STR_SVT_COLLATE_CHARSET
 {
     /* default or normal sorting algorithm */
-    Text = "Charset" ;
+    Text = "Zeichensatz" ;
      Text [ ENGLISH ] = "Character Set" ;
     Text[ english_us ] = "Character set";
     Text[ portuguese ] = "Conjunto de caracteres";
@@ -170,7 +177,7 @@ String STR_SVT_COLLATE_CHARSET
 String STR_SVT_COLLATE_DICTIONARY
 {
     /* german dictionary word order / sorting */
-    Text = "Dictionary" ;
+    Text = "Wörterbuch" ;
     Text [ ENGLISH ] = "Dictionary" ;
     Text[ english_us ] = "Dictionary";
     Text[ portuguese ] = "Dicionário";

@@ -55,7 +55,7 @@ class CollatorRessourceData
 //
 // -------------------------------------------------------------------------
 
-#define COLLATOR_RESSOURCE_COUNT 7
+#define COLLATOR_RESSOURCE_COUNT 8
 
 CollatorRessource::CollatorRessource()
 {
@@ -64,19 +64,21 @@ CollatorRessource::CollatorRessource()
     #define ASCSTR(str) String(RTL_CONSTASCII_USTRINGPARAM(str))
     #define RESSTR(rid) String(SvtResId(rid))
 
-    mp_Data[0] = CollatorRessourceData (ASCSTR("charset"),
+    mp_Data[0] = CollatorRessourceData (ASCSTR("alphanumeric"),
+                                             RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
+    mp_Data[1] = CollatorRessourceData (ASCSTR("charset"),
                                              RESSTR(STR_SVT_COLLATE_CHARSET));
-    mp_Data[1] = CollatorRessourceData (ASCSTR("dictionary"),
+    mp_Data[2] = CollatorRessourceData (ASCSTR("dict"),
                                              RESSTR(STR_SVT_COLLATE_DICTIONARY));
-    mp_Data[2] = CollatorRessourceData (ASCSTR("normal"),
+    mp_Data[3] = CollatorRessourceData (ASCSTR("normal"),
                                              RESSTR(STR_SVT_COLLATE_NORMAL));
-    mp_Data[3] = CollatorRessourceData (ASCSTR("pinyin"),
+    mp_Data[4] = CollatorRessourceData (ASCSTR("pinyin"),
                                              RESSTR(STR_SVT_COLLATE_PINYIN));
-    mp_Data[4] = CollatorRessourceData (ASCSTR("radical"),
+    mp_Data[5] = CollatorRessourceData (ASCSTR("radical"),
                                              RESSTR(STR_SVT_COLLATE_RADICAL));
-    mp_Data[5] = CollatorRessourceData (ASCSTR("stroke"),
+    mp_Data[6] = CollatorRessourceData (ASCSTR("stroke"),
                                              RESSTR(STR_SVT_COLLATE_STROKE));
-    mp_Data[6] = CollatorRessourceData (ASCSTR("zhuyin"),
+    mp_Data[7] = CollatorRessourceData (ASCSTR("zhuyin"),
                                              RESSTR(STR_SVT_COLLATE_ZHUYIN));
 }
 
