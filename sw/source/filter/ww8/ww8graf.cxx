@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 18:38:30 $
+ *  last change: $Author: cmc $ $Date: 2001-08-03 15:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2125,6 +2125,14 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
             :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
 
+
+        //No drawing layer stuff in the header, so if
+        //this is going to be in the headerfooter and
+        //cannot be replaced by a fly then anchor it
+        //to the current page.
+        if ((bIsHeader || bIsFooter) && (!pRecord->bReplaceByFly))
+            eAnchor=FLY_PAGE;
+
         SwFmtAnchor aAnchor( eAnchor );
         aAnchor.SetAnchor( pPaM->GetPoint() );
         rFlySet.Put( aAnchor );
@@ -2357,9 +2365,16 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
                 if( pRecord )
                 {
+#if 0
                     Rectangle aInnerDist(   pRecord->nDxTextLeft,
                         pRecord->nDyTextTop, pRecord->nDxTextRight,
                         pRecord->nDyTextBottom  );
+#else
+                    //The inner distance only seems to be honoured in
+                    //word for textboxes, not for graphics and ole
+                    //objects.
+                    Rectangle aInnerDist(0,0,0,0);
+#endif
 
                     MatchSdrItemsIntoFlySet( pObject, aFlySet,
                         pRecord->eLineStyle, aInnerDist,
@@ -2961,11 +2976,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.29 2001-07-31 18:38:30 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.30 2001-08-03 15:39:16 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.29  2001/07/31 18:38:30  jp
+      Bug #90443#: don't call GetSlotId with our filter items
+
       Revision 1.28  2001/06/12 09:24:43  cmc
       #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
 
