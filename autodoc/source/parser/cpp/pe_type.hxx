@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ class PE_Type : public Cpp_PE
     void                On_start_DoubleColon(const char *);
     void                On_start_BuiltInType(const char *);
     void                On_start_TypeSpecializer(const char *);
+    void                On_start_typename(const char *);
 
     void                On_expect_namesegment_Identifier(const char *);
 

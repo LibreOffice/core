@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tpltp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class PE_TemplateTop : public cpp::Cpp_PE
 
     void                On_start_Less(const char *);
 
-    void                On_expect_qualifier_class(const char *);
+    void                On_expect_qualifier_ClassOrTypename(const char *);
     void                On_expect_qualifier_Other(const char *);
 
     void                On_expect_name_Identifier(const char *);
