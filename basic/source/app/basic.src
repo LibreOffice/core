@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 15:38:57 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,21 +346,21 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "~›ptal";
     };
-    TEXT[ portuguese ] = "StarOffice Basic: Procurar texto";
+    TEXT[ portuguese ] = "%PRODUCTNAME Basic: Procurar texto";
     TEXT[ russian ] = "StarBasic: Find Text";
     TEXT[ greek ] = "StarBasic: Find Text";
-    TEXT[ dutch ] = "StarOffice Basic: tekst zoeken";
+    TEXT[ dutch ] = "%PRODUCTNAME Basic: tekst zoeken";
     TEXT[ french ] = "StarBasic: Recherche de texte";
     TEXT[ spanish ] = "StarBasic: Buscar texto";
-    TEXT[ italian ] = "StarOffice Basic: Find Text";
+    TEXT[ italian ] = "%PRODUCTNAME Basic: Find Text";
     TEXT[ danish ] = "StarBasic: Find Text";
-    TEXT[ swedish ] = "StarOffice Basic: Find Text";
+    TEXT[ swedish ] = "%PRODUCTNAME Basic: Find Text";
     TEXT[ polish ] = "StarBasic: Find Text";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text suchen";
     TEXT[ japanese ] = "StarBasic: ï∂éöóÒÇÃåüçı";
     TEXT[ korean ] = "StarBasic: ≈ÿΩ∫∆Æ  √£±‚";
     TEXT[ chinese_simplified ] = "StarBasic: Find Text";
-    TEXT[ chinese_traditional ] = "StarOffice Basic°GFind Text";
+    TEXT[ chinese_traditional ] = "%PRODUCTNAME Basic°GFind Text";
     TEXT[ arabic ] = "StarBasic: Find Text";
     TEXT[ turkish ] = "StarBasic: Metni ara";
 };
@@ -480,15 +480,15 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "›ptal";
     };
-    TEXT[ portuguese ] = "StarOffice Basic: Substituir texto";
+    TEXT[ portuguese ] = "%PRODUCTNAME Basic: Substituir texto";
     TEXT[ russian ] = "StarBasic: Replace Text";
     TEXT[ greek ] = "StarBasic: Replace Text";
-    TEXT[ dutch ] = "StarOffice Basic: tekst vervangen";
+    TEXT[ dutch ] = "%PRODUCTNAME Basic: tekst vervangen";
     TEXT[ french ] = "StarBasic : Remplacement de texte";
     TEXT[ spanish ] = "StarBasic: Sustituir texto";
-    TEXT[ italian ] = "StarOffice Basic: Replace Text";
+    TEXT[ italian ] = "%PRODUCTNAME Basic: Replace Text";
     TEXT[ danish ] = "StarBasic: Replace Text";
-    TEXT[ swedish ] = "StarOffice Basic: Replace Text";
+    TEXT[ swedish ] = "%PRODUCTNAME Basic: Replace Text";
     TEXT[ polish ] = "StarBasic: Replace Text ";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text ersetzen";
     TEXT[ japanese ] = "StarBasic: ï∂éöóÒÇÃíuä∑";
@@ -1310,23 +1310,23 @@ String IDS_EDIT_VAR
 String IDS_APPNAME {
     TEXT = "StarBasic";
     TEXT [ english_us ] = "StarBasic";
-    TEXT[ portuguese ] = "StarOffice Basic";
+    TEXT[ portuguese ] = "%PRODUCTNAME Basic";
     TEXT[ russian ] = "StarBasic";
     TEXT[ greek ] = "StarBasic";
-    TEXT[ dutch ] = "StarOffice Basic";
+    TEXT[ dutch ] = "%PRODUCTNAME Basic";
     TEXT[ french ] = "StarBasic";
     TEXT[ spanish ] = "StarBasic";
-    TEXT[ italian ] = "StarOffice Basic";
+    TEXT[ italian ] = "%PRODUCTNAME Basic";
     TEXT[ danish ] = "StarBasic";
-    TEXT[ swedish ] = "StarOffice Basic";
+    TEXT[ swedish ] = "%PRODUCTNAME Basic";
     TEXT[ polish ] = "StarBasic";
     TEXT[ portuguese_brazilian ] = "StarBasic";
     TEXT[ japanese ] = "StarBasic";
-    TEXT[ korean ] = "StarOffice Basic";
+    TEXT[ korean ] = "%PRODUCTNAME Basic";
     TEXT[ chinese_simplified ] = "StarBasic";
-    TEXT[ chinese_traditional ] = "StarOffice Basic";
+    TEXT[ chinese_traditional ] = "%PRODUCTNAME Basic";
     TEXT[ arabic ] = "StarBasic";
-    TEXT[ turkish ] = "StarOffice Basic";
+    TEXT[ turkish ] = "%PRODUCTNAME Basic";
 };
 String IDS_APPNAME2 {
     TEXT = "StarTestTool";
@@ -1452,10 +1452,10 @@ TEXT = "*.TXT";
 String IDS_LOADDLG {
     TEXT = "StarBasic: Datei einlesen";
     TEXT [ english_us ] = "StarBasic: Load File";
-    TEXT[ portuguese ] = "StarOffice Basic: ler ficheiro";
+    TEXT[ portuguese ] = "%PRODUCTNAME Basic: ler ficheiro";
     TEXT[ russian ] = "StarBasic: Load File";
     TEXT[ greek ] = "StarBasic: Load File";
-    TEXT[ dutch ] = "StarOffice Basic: bestand lezen";
+    TEXT[ dutch ] = "%PRODUCTNAME Basic: bestand lezen";
     TEXT[ french ] = "StarBasic : Lecture du fichier";
     TEXT[ spanish ] = "StarBasic: Leer archivo";
     TEXT[ italian ] = "StarBasic: Load File";
@@ -1466,17 +1466,17 @@ String IDS_LOADDLG {
     TEXT[ japanese ] = "StarBasic: Ãß≤ŸÇÃì«Ç›çûÇ›";
     TEXT[ korean ] = "StarBasic: ∆ƒ¿œ ∑ŒµÂ";
     TEXT[ chinese_simplified ] = "StarBasic: Load File";
-    TEXT[ chinese_traditional ] = "StarOffice Basic°GLoad File";
+    TEXT[ chinese_traditional ] = "%PRODUCTNAME Basic°GLoad File";
     TEXT[ arabic ] = "StarBasic: Load File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ y¸kle";
 };
 String IDS_SAVEDLG {
     TEXT = "StarBasic: Datei speichern";
     TEXT [ english_us ] = "StarBasic: Save File";
-    TEXT[ portuguese ] = "StarOffice Basic: guardar ficheiro";
+    TEXT[ portuguese ] = "%PRODUCTNAME Basic: guardar ficheiro";
     TEXT[ russian ] = "StarBasic: Save File";
     TEXT[ greek ] = "StarBasic: Save File";
-    TEXT[ dutch ] = "StarOffice Basic: bestand opslaan";
+    TEXT[ dutch ] = "%PRODUCTNAME Basic: bestand opslaan";
     TEXT[ french ] = "StarBasic: Enregistrement du fichier";
     TEXT[ spanish ] = "StarBasic: Guardar archivo";
     TEXT[ italian ] = "StarBasic: Save File";
@@ -1487,7 +1487,7 @@ String IDS_SAVEDLG {
     TEXT[ japanese ] = "StarBasic: Ãß≤ŸÇÃï€ë∂";
     TEXT[ korean ] = "StarBasic: ∆ƒ¿œ ¿˙¿Â";
     TEXT[ chinese_simplified ] = "StarBasic: Save File";
-    TEXT[ chinese_traditional ] = "StarOffice Basic: Save File";
+    TEXT[ chinese_traditional ] = "%PRODUCTNAME Basic: Save File";
     TEXT[ arabic ] = "StarBasic: Save File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ kaydet";
 };
@@ -2911,10 +2911,10 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ arabic ] = "Cancel";
         TEXT[ turkish ] = "›ptal";
     };
-    TEXT[ portuguese ] = "StarOffice Basic: imprimir ficheiro";
+    TEXT[ portuguese ] = "%PRODUCTNAME Basic: imprimir ficheiro";
     TEXT[ russian ] = "StarBasic: Print File";
     TEXT[ greek ] = "StarBasic: Print File";
-    TEXT[ dutch ] = "StarOffice Basic: bestand afdrukken";
+    TEXT[ dutch ] = "%PRODUCTNAME Basic: bestand afdrukken";
     TEXT[ french ] = "StarBasic: Impression d'un fichier";
     TEXT[ spanish ] = "StarBasic: Imprimir archivo";
     TEXT[ italian ] = "StarBasic: Print file";
