@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ portuguese_brazilian ] = "Toleranz" ;
         Text [ portuguese ] = "Tolerвncia" ;
         Text[ chinese_simplified ] = "Ж«Іо";
-        Text[ russian ] = "Допустимость";
+        Text[ russian ] = "Допуск";
         Text[ polish ] = "Tolerancja";
         Text[ japanese ] = "‹–—e”Н€Н";
         Text[ chinese_traditional ] = "°ѕ®t";
