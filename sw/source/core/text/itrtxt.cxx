@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2002-01-09 08:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,16 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
 #endif
         if( IsRegisterOn() )
         {
+#ifdef VERTICAL_LAYOUT
+            SwTwips nTmpY = Y() + pCurr->GetAscent() + nLineHeight - pCurr->Height();
+            SWRECTFN( pFrm )
+            if ( bVert )
+                nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
+            nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
+#else
             SwTwips nTmpY = Y() + pCurr->GetAscent()
                             + nLineHeight - pCurr->Height() - RegStart();
+#endif
             KSHORT nDiff = KSHORT( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;

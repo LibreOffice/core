@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 08:56:52 $
+ *  last change: $Author: fme $ $Date: 2002-01-09 08:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,12 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
         pFrm = pFrm->GetUpper();
     if( ( FRM_BODY| FRM_FLY ) & pFrm->GetType() )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pFrm )
+        rRegStart = (pFrm->*fnRect->fnGetPrtTop)();
+#else
         rRegStart = pFrm->Frm().Top() + pFrm->Prt().Top();
+#endif
         pFrm = pFrm->FindPageFrm();
         if( pFrm->IsPageFrm() )
         {
@@ -594,7 +599,15 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                         }
                     }
                 }
+#ifdef VERTICAL_LAYOUT
+                const long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
+                if ( bVert )
+                    rRegStart -= nTmpDiff;
+                else
+                    rRegStart += nTmpDiff;
+#else
                 rRegStart += pDesc->GetRegAscent() - rRegDiff;
+#endif
             }
         }
     }
