@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 12:54:42 $
+ *  last change: $Author: gt $ $Date: 2002-07-31 07:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,11 +621,9 @@ DECLARE_LIST( ImplFontList, ImplFontNameListData* );
 // -------------------------------------------------------------------
 
 FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle ),
-    maImagePrinterFont( SvtResId( RID_IMG_PRINTERFONT ) ),
-    maImageBitmapFont( SvtResId( RID_IMG_BITMAPFONT ) ),
-    maImageScalableFont( SvtResId( RID_IMG_SCALABLEFONT ) )
+    ComboBox( pParent, nWinStyle )
 {
+    InitBitmaps();
     mpFontList = NULL;
     mbWYSIWYG = FALSE;
     mbSymbols = FALSE;
@@ -634,11 +632,9 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
 // -------------------------------------------------------------------
 
 FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( pParent, rResId ),
-    maImagePrinterFont( SvtResId( RID_IMG_PRINTERFONT ) ),
-    maImageBitmapFont( SvtResId( RID_IMG_BITMAPFONT ) ),
-    maImageScalableFont( SvtResId( RID_IMG_SCALABLEFONT ) )
+    ComboBox( pParent, rResId )
 {
+    InitBitmaps();
     mpFontList = NULL;
     mbWYSIWYG = FALSE;
     mbSymbols = FALSE;
@@ -649,6 +645,28 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
 FontNameBox::~FontNameBox()
 {
     ImplDestroyFontList();
+}
+
+// -------------------------------------------------------------------
+
+void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    ComboBox::DataChanged( rDCEvt );
+
+    if( rDCEvt.GetType() == DATACHANGED_SETTINGS && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitBitmaps();
+}
+
+// -------------------------------------------------------------------
+
+void FontNameBox::InitBitmaps( void )
+{
+    Color   aCol = GetSettings().GetStyleSettings().GetWindowColor();
+    BOOL    bHC = aCol.IsDark();
+
+    maImagePrinterFont = Image( SvtResId( bHC? RID_IMG_PRINTERFONT_HC : RID_IMG_PRINTERFONT ) );
+    maImageBitmapFont = Image( SvtResId( bHC? RID_IMG_BITMAPFONT_HC : RID_IMG_BITMAPFONT ) );
+    maImageScalableFont = Image( SvtResId( bHC? RID_IMG_SCALABLEFONT_HC : RID_IMG_SCALABLEFONT ) );
 }
 
 // -------------------------------------------------------------------
