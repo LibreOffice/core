@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 14:55:12 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ protected:
     void Activate(SdrPageView* pPageView, sal_Bool bSync = sal_False);
     void Deactivate(SdrPageView* pPageView, BOOL bDeactivateController = TRUE);
 
+    void smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
 
     /// the the auto focus to the first (in terms of the tab order) control
     void AutoFocus();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:57:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
+#include <com/sun/star/form/XReset.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #endif
@@ -90,8 +96,10 @@
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _SVX_FMMODEL_HXX //autogen wg. FmFormModel
+#endif
+#ifndef _SVX_FMMODEL_HXX
 #include <fmmodel.hxx>
 #endif
 
@@ -137,6 +145,7 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
@@ -165,10 +174,10 @@ FmXPageViewWinRec::FmXPageViewWinRec(const ::com::sun::star::uno::Reference< ::c
 
     if (pP)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xForms(pP->GetForms(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XIndexAccess >  xForms(pP->GetForms(), UNO_QUERY);
         sal_uInt32 nLength = xForms->getCount();
-        ::com::sun::star::uno::Any aElement;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm;
+        Any aElement;
+        Reference< XForm >  xForm;
         for (sal_uInt32 i = 0; i < nLength; i++)
         {
             xForms->getByIndex(i) >>= xForm;
@@ -666,6 +675,57 @@ void FmXFormView::AttachControl( const ::com::sun::star::uno::Reference< ::com::
 void FmXFormView::AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCtrlContainer,
                                   sal_Bool bDetach )
 {
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::smartControlReset( const Reference< XIndexAccess >& _rxModels )
+{
+    if (!_rxModels.is())
+    {
+        DBG_ERROR("FmXFormView::smartControlReset: invalid container!");
+        return;
+    }
+
+    static const ::rtl::OUString sClassIdPropertyName = FM_PROP_CLASSID;
+    static const ::rtl::OUString sBoundFieldPropertyName = FM_PROP_BOUNDFIELD;
+    sal_Int32 nCount = _rxModels->getCount();
+    Reference< XPropertySet > xCurrent;
+    Reference< XPropertySetInfo > xCurrentInfo;
+    Reference< XPropertySet > xBoundField;
+
+    for (sal_Int32 i=0; i<nCount; ++i)
+    {
+        _rxModels->getByIndex(i) >>= xCurrent;
+        if (xCurrent.is())
+            xCurrentInfo = xCurrent->getPropertySetInfo();
+        else
+            xCurrentInfo.clear();
+        if (!xCurrentInfo.is())
+            continue;
+
+        if (xCurrentInfo->hasPropertyByName(sClassIdPropertyName))
+        {   // it's a control model
+
+            // check if this control is bound to a living database field
+            if (xCurrentInfo->hasPropertyByName(sBoundFieldPropertyName))
+                xCurrent->getPropertyValue(sBoundFieldPropertyName) >>= xBoundField;
+            else
+                xBoundField.clear();
+
+            if (!xBoundField.is())
+            {   // no, not valid bound -> reset it
+                Reference< XReset > xControlReset(xCurrent, UNO_QUERY);
+                if (xControlReset.is())
+                    xControlReset->reset();
+            }
+        }
+        else
+        {
+            Reference< XIndexAccess > xContainer(xCurrent, UNO_QUERY);
+            if (xContainer.is())
+                smartControlReset(xContainer);
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
