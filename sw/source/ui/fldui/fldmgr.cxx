@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:40:16 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,7 +1684,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = 1;
+                sPar2 = '1';
             }
             else
             {
@@ -1692,7 +1692,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
                     nFormat = SVX_NUM_PAGEDESC;
                 short nOff = (short)sPar2.ToInt32();
                 nOff += 1;
-                sPar2 = nOff;
+                sPar2 = String::CreateFromInt32(nOff);
             }
             break;
 
@@ -1700,7 +1700,8 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = -1;
+                sPar2 = String::CreateFromAscii(
+                    RTL_CONSTASCII_STRINGPARAM("-1"));
             }
             else
             {
@@ -1708,7 +1709,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
                     nFormat = SVX_NUM_PAGEDESC;
                 short nOff = (short)sPar2.ToInt32();
                 nOff -= 1;
-                sPar2 = nOff;
+                sPar2 = String::CreateFromInt32(nOff);
             }
             break;
 
