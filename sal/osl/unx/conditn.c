@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:20 $
+ *  last change: $Author: mfe $ $Date: 2001-03-09 10:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,27 +67,23 @@
 #include <osl/diagnose.h>
 
 
-/*
-    The void* oslCondition is used as a pointer to a TCondition
-    struct.
-*/
-
-typedef struct _TCondition
+typedef struct _oslConditionImpl
 {
     pthread_cond_t  m_Condition;
     pthread_mutex_t m_Lock;
     sal_Bool            m_State;
-} TCondition;
+} oslConditionImpl;
+
 
 /*****************************************************************************/
 /* osl_createCondition */
 /*****************************************************************************/
 oslCondition SAL_CALL osl_createCondition()
 {
-      TCondition* pCond;
+      oslConditionImpl* pCond;
     int nRet=0;
 
-    pCond = (TCondition*) malloc(sizeof(TCondition));
+    pCond = (oslConditionImpl*) malloc(sizeof(oslConditionImpl));
 
     OSL_ASSERT(pCond);
 
@@ -134,12 +130,12 @@ oslCondition SAL_CALL osl_createCondition()
 /*****************************************************************************/
 void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
-    TCondition* pCond;
+    oslConditionImpl* pCond;
     int nRet = 0;
 
     if ( Condition )
     {
-        pCond = (TCondition*)Condition;
+        pCond = (oslConditionImpl*)Condition;
 
         nRet = pthread_cond_destroy(&pCond->m_Condition);
         if ( nRet != 0 )
@@ -165,11 +161,11 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
-   TCondition* pCond;
+   oslConditionImpl* pCond;
    int nRet=0;
 
    OSL_ASSERT(Condition);
-   pCond = (TCondition*)Condition;
+   pCond = (oslConditionImpl*)Condition;
 
    if ( pCond == 0 )
    {
@@ -210,12 +206,12 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
-    TCondition* pCond;
+    oslConditionImpl* pCond;
     int nRet=0;
 
     OSL_ASSERT(Condition);
 
-    pCond = (TCondition*)Condition;
+    pCond = (oslConditionImpl*)Condition;
 
     if ( pCond == 0 )
     {
@@ -255,12 +251,12 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 /*****************************************************************************/
 oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout)
 {
-    TCondition* pCond;
+    oslConditionImpl* pCond;
     int nRet=0;
     oslConditionResult Result = osl_cond_result_ok;
 
     OSL_ASSERT(Condition);
-    pCond = (TCondition*)Condition;
+    pCond = (oslConditionImpl*)Condition;
 
     if ( pCond == 0 )
     {
@@ -282,14 +278,14 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
             int                 ret;
             struct timeval      tp;
             struct timespec     to;
-            int                 nOk=0;
 
             gettimeofday(&tp, NULL);
 
             SET_TIMESPEC( to, tp.tv_sec + pTimeout->Seconds,
                               tp.tv_usec * 1000 + pTimeout->Nanosec );
 
-            while ( nOk == 0 )
+            /* spurious wake up prevention */
+            do
             {
                 ret = pthread_cond_timedwait(&pCond->m_Condition, &pCond->m_Lock, &to);
                 if ( ret != 0 )
@@ -319,15 +315,18 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
                     }
 /*                    OSL_TRACE("EINTR\n");*/
                 }
-                else
-                {
-                    nOk=1;
-                }
             }
+            while ( ret != 0 );
         }
         else
         {
-            nRet = pthread_cond_wait(&pCond->m_Condition, &pCond->m_Lock);
+            /* spurious wake up prevention */
+            do
+            {
+                nRet = pthread_cond_wait(&pCond->m_Condition, &pCond->m_Lock);
+            }
+            while ( nRet != 0 );
+
             if ( nRet != 0 )
             {
                 OSL_TRACE("osl_waitCondition : condition wait failed. Errno: %d; %s\n",
@@ -361,11 +360,11 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     sal_Bool State;
-    TCondition* pCond;
+    oslConditionImpl* pCond;
     int nRet=0;
 
     OSL_ASSERT(Condition);
-    pCond = (TCondition*)Condition;
+    pCond = (oslConditionImpl*)Condition;
 
     if ( pCond == 0 )
     {
