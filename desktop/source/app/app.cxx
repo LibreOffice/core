@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 12:26:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1447,8 +1447,6 @@ void Desktop::Main()
         LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
         */
 
-        AllSettings aSettings( Application::GetSettings() );
-
         //LanguageSelection langselect;
         OUString aUILocaleString = LanguageSelection::getLanguageString();
         sal_Int32 nIndex = 0;
@@ -1458,9 +1456,13 @@ void Desktop::Main()
 
         ::com::sun::star::lang::Locale aUILocale( aLanguage, aCountry, aVariant );
 
-        aSettings.SetUILocale( aUILocale );
-
         LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
+
+        // #i39040#, do not call anything between GetSettings and SetSettings that might have
+        // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
+        // which changes the MiscSettings !!! )
+        AllSettings aSettings( Application::GetSettings() );
+        aSettings.SetUILocale( aUILocale );
         aSettings.SetLanguage( eLanguage );
         Application::SetSettings( aSettings );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
