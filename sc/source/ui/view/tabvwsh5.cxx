@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-20 16:51:58 $
+ *  last change: $Author: nn $ $Date: 2001-11-29 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,16 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
                 break;
 
             case SC_HINT_DRWLAYER_NEW:
-                MakeDrawView();
+                {
+                    MakeDrawView();
+
+                    //  #95331# default for design mode in form shell is false now,
+                    //  but when the drawing model is created for an existing document,
+                    //  design mode has to be set (if not read-only):
+                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetViewData()->GetSfxDocShell()->IsReadOnly() );
+                    GetViewData()->GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
+                                                &aItem, 0L );
+                }
                 break;
 
             case SC_HINT_DOC_SAVED:
