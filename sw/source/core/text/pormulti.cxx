@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-13 14:33:13 $
+ *  last change: $Author: ama $ $Date: 2001-02-16 15:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
@@ -223,6 +226,39 @@ void SwMultiPortion::ActualizeTabulator()
             pPor = pPor->GetPortion();
         } while ( pPor );
     }
+}
+
+/*-----------------16.02.01 12:07-------------------
+ * SwRotatedPortion::SwRotatedPortion(..)
+ * --------------------------------------------------*/
+
+SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
+    xub_StrLen nEnd ) : SwMultiPortion( nEnd )
+{
+    const SvxCharRotateItem* pRot = (SvxCharRotateItem*)rCreate.pItem;
+    if( !pRot )
+    {
+        const SwTxtAttr& rAttr = *rCreate.pAttr;
+        if( RES_CHRATR_ROTATE == rAttr.Which() )
+            pRot = &rAttr.GetCharRotate();
+        else
+        {
+            SwCharFmt* pFmt = NULL;
+            if( RES_TXTATR_INETFMT == rAttr.Which() )
+                pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
+            else if( RES_TXTATR_CHARFMT == rAttr.Which() )
+                pFmt = rAttr.GetCharFmt().GetCharFmt();
+            if ( pFmt )
+            {
+                const SfxPoolItem* pItem;
+                if( SFX_ITEM_SET == pFmt->GetAttrSet().
+                    GetItemState( RES_CHRATR_ROTATE, TRUE, &pItem ) )
+                    pRot = (SvxCharRotateItem*)pItem;
+            }
+        }
+    }
+    if( pRot )
+        SetDirection( pRot->IsBottomToTop() ? 1 : 3 );
 }
 
 /*-----------------01.11.00 14:22-------------------
@@ -789,6 +825,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
 {
     const SvxTwoLinesItem* p2Lines = NULL;
+    const SvxCharRotateItem* pRotate = NULL;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
         GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) &&
@@ -815,6 +852,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         {
             if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
                 pRuby = pTmp;
+            else if( RES_CHRATR_ROTATE == pTmp->Which() )
+                pRuby = pTmp;
             else
             {
                 const SvxTwoLinesItem* p2Tmp = NULL;
@@ -833,7 +872,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = NULL;
         pRet->pAttr = pRuby;
-        pRet->nId = SW_MC_RUBY;
+        pRet->nId = ( RES_TXTATR_CJK_RUBY == pRuby->Which() ) ?
+                    SW_MC_RUBY : SW_MC_ROTATE;
         return pRet;
     }
     if( n2Lines < nCount || ( pItem && pItem == p2Lines &&

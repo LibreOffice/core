@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:30:24 $
+ *  last change: $Author: ama $ $Date: 2001-02-16 15:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,22 +1233,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 SwMultiPortion* pTmp = NULL;
                 if( SW_MC_RUBY == pCreate->nId )
                      pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(), nEnd );
+                else if( SW_MC_ROTATE == pCreate->nId )
+                    pTmp = new SwRotatedPortion( *pCreate, nEnd );
                 else
-#ifdef ROTATION_TEST
-                {
-                    static sal_uInt8 nTst = 1;
-                    switch ( nTst )
-                    {
-                        case 1 :
-                        case 3 : pTmp = new SwRotatedPortion( nEnd, nTst );
-                                 break;
-                        default:
-                        pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
-                    }
-                }
-#else
                     pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
-#endif
                 delete pCreate;
                 return pTmp;
             }

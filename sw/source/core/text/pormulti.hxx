@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-06 15:20:58 $
+ *  last change: $Author: ama $ $Date: 2001-02-16 15:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ public:
 class SwRotatedPortion : public SwMultiPortion
 {
 public:
+    SwRotatedPortion( const SwMultiCreator& rCreate, xub_StrLen nEnd );
     SwRotatedPortion( xub_StrLen nEnd, sal_uInt8 nDir = 1 )
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
 };
