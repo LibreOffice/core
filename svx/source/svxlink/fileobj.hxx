@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:28:23 $
+ *  last change: $Author: jp $ $Date: 2001-08-03 17:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class SvFileObject : public so3::SvLinkSource
     BOOL bNativFormat : 1;
     BOOL bClearMedium : 1;
     BOOL bStateChangeCalled : 1;
+    BOOL bInCallDownLoad : 1;
 
     BOOL GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
     BOOL LoadFile_Impl();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-06-25 17:15:17 $
+ *  last change: $Author: jp $ $Date: 2001-08-03 17:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ SvFileObject::SvFileObject()
 {
     bLoadAgain = bMedUseCache = TRUE;
     bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
-    bClearMedium = bProgress = bStateChangeCalled = FALSE;
+    bClearMedium = bProgress = bStateChangeCalled = bInCallDownLoad = FALSE;
 }
 
 
@@ -252,12 +252,15 @@ JP 28.02.96: noch eine Baustelle:
                             xMed->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
                     }
 
-                    xTmpMed = xMed;
-                    while( bWaitForData )
-                        Application::Reschedule();
+                    if( !bInCallDownLoad )
+                    {
+                        xTmpMed = xMed;
+                        while( bWaitForData )
+                            Application::Reschedule();
 
-                    xMed = xTmpMed;
-                    bClearMedium = TRUE;
+                        xMed = xTmpMed;
+                        bClearMedium = TRUE;
+                    }
                 }
 
                 if( pDownLoadData ||
@@ -284,7 +287,7 @@ JP 28.02.96: noch eine Baustelle:
                                 ? FORMAT_BITMAP
                                 : FORMAT_GDIMETAFILE;
 
-                SvMemoryStream aMemStm( 65535, 65535 );
+                SvMemoryStream aMemStm( 0, 65535 );
                 switch ( nFmt )
                 {
                 case SOT_FORMATSTR_ID_SVXB:
@@ -406,7 +409,9 @@ BOOL SvFileObject::LoadFile_Impl()
 
         SfxMediumRef xTmpMed = xMed;
         xMed->SetDataAvailableLink( STATIC_LINK( this, SvFileObject, LoadGrfNewData_Impl ) );
+        bInCallDownLoad = TRUE;
         xMed->DownLoad( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
+        bInCallDownLoad = FALSE;
 
         bClearMedium = !xMed.Is();
         if( bClearMedium )
@@ -608,6 +613,8 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
     // wenn wir von hier kommen, kann es kein Fehler mehr sein
     pThis->bLoadError = FALSE;
     pThis->bWaitForData = FALSE;
+    pThis->bInCallDownLoad = FALSE;
+
     if( !pThis->bInNewData && !pThis->bDataReady )
     {
             // Grafik ist fertig, also DataChanged von der Status-
