@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-08 09:06:13 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,11 @@
 #define __RSC
 
 #ifndef UUI_IDS_HRC
-#include <ids.hrc>
+#include "ids.hrc"
 #endif
+
 #ifndef UUI_LOGINDLG_HRC
-#include <logindlg.hrc>
+#include "logindlg.hrc"
 #endif
 
 ModalDialog DLG_UUI_LOGIN
@@ -84,10 +85,10 @@ ModalDialog DLG_UUI_LOGIN
         Size = MAP_APPFONT ( 185 , 18 ) ;
         WordBreak = TRUE ;
     };
-    GroupBox GB_LOGIN_ERROR
+    FixedLine GB_LOGIN_ERROR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 197 , 35 ) ;
+        Size = MAP_APPFONT ( 197 , 8 ) ;
         Text = "Meldung vom Server" ;
         Text [ English ] = "Report from server" ;
         Text [ english_us ] = "Message from server" ;
@@ -318,10 +319,10 @@ ModalDialog DLG_UUI_LOGIN
         Text[ catalan ] = "Guardar ~contraseña";
         Text[ finnish ] = "~Tallenna salasana";
     };
-    GroupBox GB_LOGIN_LOGIN
+    FixedLine GB_LOGIN_LOGIN
     {
         Pos = MAP_APPFONT ( 7 , 44 ) ;
-        Size = MAP_APPFONT ( 197 , 108 ) ;
+        Size = MAP_APPFONT ( 197 , 8 ) ;
         Text = "Anmelden" ;
         Text [ English ] = "Connect" ;
         Text [ english_us ] = "Login" ;
@@ -361,10 +362,10 @@ ModalDialog DLG_UUI_LOGIN
         Pos = MAP_APPFONT ( 209 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    String STR_LOGIN_AT
+    String STR_LOGIN_REALM
     {
-        Text = "auf " ;
-        Text [ English ] = "at " ;
+        Text = "Bitte geben Sie hier Benutzernamen und Passwort für \"%2\" auf %1 ein." ;
+        Text [ English ] = "Please enter user name and password here for \"%2\" on %1." ;
         Text [ portuguese ] = "em  " ;
         Text [ english_us ] = "to " ;
         Text [ portuguese_brazilian ] = "auf " ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-10 10:57:09 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,19 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
-#ifndef UUI_LOGINDLG_HRC
-#include <logindlg.hrc>
-#endif
 #ifndef UUI_LOGINDLG_HXX
-#include <logindlg.hxx>
+#include "logindlg.hxx"
+#endif
+
+#ifndef UUI_LOGINDLG_HRC
+#include "logindlg.hrc"
+#endif
+#ifndef UUI_IDS_HRC
+#include "ids.hrc"
+#endif
+
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
 #endif
 
 #ifdef UNX
@@ -82,6 +87,9 @@
 #endif
 
 // LoginDialog -------------------------------------------------------
+
+//............................................................................
+//............................................................................
 
 void LoginDialog::HideControls_Impl( USHORT nFlags )
 {
@@ -207,10 +215,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         aTmpPnt1 = aSavePasswdBtn.GetPosPixel();
         aTmpPnt1.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aTmpPnt1 );
-        Size aNewSz = aLoginGB.GetSizePixel();
-        aNewSz.Height() -= nOffset;
-        aLoginGB.SetSizePixel( aNewSz );
-        aNewSz = GetSizePixel();
+        Size aNewSz = GetSizePixel();
         aNewSz.Height() -= nOffset;
         SetSizePixel( aNewSz );
     }
@@ -222,10 +227,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         Point aTmpPnt = aSavePasswdBtn.GetPosPixel();
         aTmpPnt.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aTmpPnt );
-        Size aNewSz = aLoginGB.GetSizePixel();
-        aNewSz.Height() -= nOffset;
-        aLoginGB.SetSizePixel( aNewSz );
-        aNewSz = GetSizePixel();
+        Size aNewSz = GetSizePixel();
         aNewSz.Height() -= nOffset;
         SetSizePixel( aNewSz );
     }
@@ -248,7 +250,7 @@ IMPL_LINK( LoginDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
 {
-    PathDialog* pDlg = new PathDialog( this, WB_3DLOOK );
+    PathDialog* pDlg = new PathDialog( this, WB_SVLOOK );
     pDlg->SetPath( aPathED.GetText() );
 
     if ( pDlg->Execute() == RET_OK )
@@ -265,7 +267,7 @@ LoginDialog::LoginDialog
     Window* pParent,
     USHORT nFlags,
     const String& rServer,
-    const String& rRealm,
+    const String* pRealm,
     ResMgr* pResMgr
 ) :
 
@@ -292,18 +294,16 @@ LoginDialog::LoginDialog
     aHelpBtn        ( this, ResId( BTN_LOGIN_HELP ) )
 
 {
-    // Einlog-Ort eintragen
-    String aServer;
-
-    if ( ( ( nFlags & LF_NO_ACCOUNT ) == LF_NO_ACCOUNT ) && rRealm.Len() )
+    UniString aRequest;
+    if ((nFlags & LF_NO_ACCOUNT) != 0 && pRealm && pRealm->Len() != 0)
     {
-        aServer = rRealm;
-        ( ( aServer += ' ' ) += String( ResId( STR_LOGIN_AT ) ) ) += ' ';
+        aRequest = ResId(STR_LOGIN_REALM);
+        aRequest.SearchAndReplaceAscii("%2", *pRealm);
     }
-    aServer += rServer;
-    String aTxt = aRequestInfo.GetText();
-    aTxt.SearchAndReplaceAscii( "%1", aServer );
-    aRequestInfo.SetText( aTxt );
+    else
+        aRequest = aRequestInfo.GetText();
+    aRequest.SearchAndReplaceAscii("%1", rServer);
+    aRequestInfo.SetText(aRequest);
 
     FreeResource();
 
@@ -330,7 +330,7 @@ void LoginDialog::ClearPassword()
 {
     aPasswordED.SetText( String() );
 
-    if ( aNameED.GetText().Len() == 0 )
+    if ( 0 == aNameED.GetText().Len() )
         aNameED.GrabFocus();
     else
         aPasswordED.GrabFocus();
@@ -343,3 +343,6 @@ void LoginDialog::ClearAccount()
     aAccountED.SetText( String() );
     aAccountED.GrabFocus();
 };
+
+//............................................................................
+//............................................................................

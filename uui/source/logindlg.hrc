@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:11 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef UUI_LOGINDLG_HRC
 #define UUI_LOGINDLG_HRC
 
+
 //============================================================================
 #define INFO_LOGIN_ERROR        10
 #define GB_LOGIN_ERROR          11
@@ -85,7 +86,7 @@
 #define BTN_LOGIN_CANCEL        51
 #define BTN_LOGIN_HELP          52
 
-#define STR_LOGIN_AT            60
+#define STR_LOGIN_REALM         60
 
 #endif // UUI_LOGINDLG_HRC
 

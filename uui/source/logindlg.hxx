@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:11 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,25 +74,28 @@
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 //============================================================================
-#define LF_NO_PATH              0x0001  // "Pfad" verstecken
-#define LF_NO_USERNAME          0x0002  // "Name" verstecken
-#define LF_NO_PASSWORD          0x0004  // "Passwort" verstecken
-#define LF_NO_SAVEPASSWORD      0x0008  // "Passwort speichern" verstecken
-#define LF_NO_ERRORTEXT         0x0010  // Meldung verstecken
-#define LF_PATH_READONLY        0x0020  // "Pfad" readonly
-#define LF_USERNAME_READONLY    0x0040  // "Name" readonly
-#define LF_NO_ACCOUNT           0x0080  // "Account" verstecken
+#define LF_NO_PATH              0x0001  // hide "path"
+#define LF_NO_USERNAME          0x0002  // hide "name"
+#define LF_NO_PASSWORD          0x0004  // hide "password"
+#define LF_NO_SAVEPASSWORD      0x0008  // hide "save password"
+#define LF_NO_ERRORTEXT         0x0010  // hide message
+#define LF_PATH_READONLY        0x0020  // "path" readonly
+#define LF_USERNAME_READONLY    0x0040  // "name" readonly
+#define LF_NO_ACCOUNT           0x0080  // hide "account"
+
+//............................................................................
+//............................................................................
 
 //============================================================================
 class LoginDialog : public ModalDialog
 {
     FixedInfo       aErrorInfo;
-    GroupBox        aErrorGB;
+    FixedLine       aErrorGB;
     FixedInfo       aRequestInfo;
     FixedText       aPathFT;
     Edit            aPathED;
@@ -106,7 +109,7 @@ class LoginDialog : public ModalDialog
     FixedText       aAccountFT;
     Edit            aAccountED;
     CheckBox        aSavePasswdBtn;
-    GroupBox        aLoginGB;
+    FixedLine       aLoginGB;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
@@ -118,7 +121,7 @@ class LoginDialog : public ModalDialog
 
 public:
     LoginDialog( Window* pParent, USHORT nFlags,
-                 const String& rServer, const String& rRealm,
+                 const String& rServer, const String* pRealm,
                  ResMgr * pResMgr );
 
     String          GetPath() const { return aPathED.GetText(); }
@@ -146,6 +149,9 @@ public:
     void            ClearPassword();
     void            ClearAccount();
 };
+
+//............................................................................
+//............................................................................
 
 #endif // UUI_LOGINDLG_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:34:19 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,9 @@
 #endif
 #ifndef _SOLAR_H
 #include "tools/solar.h"
+#endif
+#ifndef _STRING_HXX
+#include "tools/string.hxx"
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include "vcl/msgbox.hxx"
@@ -452,7 +455,7 @@ void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
             xDialog(new LoginDialog(0,
                                     nFlags,
                                     rInfo.GetServer(),
-                                    rRealm,
+                                    &UniString(rRealm),
                                     xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
