@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:56:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,7 +643,9 @@ void SwHTMLParser::NewMultiCol()
     sal_Bool bPrcWidth = sal_True;
 
     const HTMLOptions *pOptions = GetOptions();
-    for( sal_uInt16 i = pOptions->Count(); i; )
+    sal_uInt16 i;
+
+    for( i = pOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pOptions)[--i];
         switch( pOption->GetToken() )
