@@ -2,9 +2,9 @@
 #
 #   $RCSfile: fullcpp.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 18:18:43 $
+#   last change: $Author: hr $ $Date: 2004-02-02 20:50:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBU
 
 .ENDIF
 
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
 CFLAGSCXX+= -frtti
 .ENDIF
 
