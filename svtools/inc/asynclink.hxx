@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynclink.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 06:53:23 $
+ *  last change: $Author: dv $ $Date: 2001-07-02 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ namespace vos
     class OMutex;
 }
 
+namespace svtools {
+
 class AsynchronLink
 {
     Link   _aLink;
@@ -105,5 +107,7 @@ public:
     BOOL IsSet() const { return _aLink.IsSet(); }
     Link GetLink() const { return _aLink; }
 };
+
+}
 
 #endif
