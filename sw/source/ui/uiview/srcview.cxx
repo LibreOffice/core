@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-04-10 12:20:18 $
+ *  last change: $Author: os $ $Date: 2002-07-01 14:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,8 +1113,10 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         {
             pStream->SetStreamCharSet( eDestEnc );
             pStream->Seek(0);
-
+            TextEngine* pTextEngine = aEditWin.GetTextEngine();
+            pTextEngine->EnableUndo(FALSE);
             aEditWin.Read(*pStream);//, EE_FORMAT_TEXT);
+            pTextEngine->EnableUndo(TRUE);
         }
         else
         {
