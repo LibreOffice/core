@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gconfbecdef.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:01:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 
 #include "uno/current_context.hxx"
 #include <stdio.h>
+#include <orbit/orbit.h>
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
@@ -102,7 +103,11 @@ static uno::Reference<uno::XInterface> SAL_CALL createGconfBackend(const uno::Re
             rtl::OUString aDesktopEnvironment;
             if ( (aValue >>= aDesktopEnvironment) && (aDesktopEnvironment.equalsAscii("GNOME")) )
             {
-                return * GconfBackend::createInstance(xContext);
+                // ORBit-2 versions < 2.8 cause a deadlock with the gtk+ VCL plugin
+                if ( (orbit_major_version >= 2) && (orbit_minor_version >= 8) )
+                {
+                    return * GconfBackend::createInstance(xContext);
+                }
             }
         }
 
