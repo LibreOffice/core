@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsave.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,43 +81,30 @@
 //
 
 ScPrintSaverTab::ScPrintSaverTab() :
-    nPrintCount(0),
-    pPrintRanges(NULL),
-    pRepeatCol(NULL),
-    pRepeatRow(NULL)
+    mpRepeatCol(NULL),
+    mpRepeatRow(NULL),
+    mbEntireSheet(FALSE)
 {
 }
 
 ScPrintSaverTab::~ScPrintSaverTab()
 {
-    delete[] pPrintRanges;
-    delete pRepeatCol;
-    delete pRepeatRow;
+    delete mpRepeatCol;
+    delete mpRepeatRow;
 }
 
-void ScPrintSaverTab::SetAreas( USHORT nCount, const ScRange* pRanges )
+void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, BOOL bEntireSheet )
 {
-    delete[] pPrintRanges;
-    if (nCount && pRanges)
-    {
-        nPrintCount = nCount;
-        pPrintRanges = new ScRange[nCount];
-        for (USHORT i=0; i<nCount; i++)
-            pPrintRanges[i] = pRanges[i];
-    }
-    else
-    {
-        nPrintCount = 0;
-        pPrintRanges = NULL;
-    }
+    maPrintRanges = rRanges;
+    mbEntireSheet = bEntireSheet;
 }
 
 void ScPrintSaverTab::SetRepeat( const ScRange* pCol, const ScRange* pRow )
 {
-    delete pRepeatCol;
-    pRepeatCol = pCol ? new ScRange(*pCol) : NULL;
-    delete pRepeatRow;
-    pRepeatRow = pRow ? new ScRange(*pRow) : NULL;
+    delete mpRepeatCol;
+    mpRepeatCol = pCol ? new ScRange(*pCol) : NULL;
+    delete mpRepeatRow;
+    mpRepeatRow = pRow ? new ScRange(*pRow) : NULL;
 }
 
 inline BOOL PtrEqual( const ScRange* p1, const ScRange* p2 )
@@ -127,18 +114,11 @@ inline BOOL PtrEqual( const ScRange* p1, const ScRange* p2 )
 
 BOOL ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
 {
-    BOOL bEqual = ( nPrintCount == rCmp.nPrintCount &&
-                    PtrEqual( pRepeatCol, rCmp.pRepeatCol ) &&
-                    PtrEqual( pRepeatRow, rCmp.pRepeatRow ) );
-    if (bEqual)
-        for (USHORT i=0; i<nPrintCount; i++)
-            if ( pPrintRanges[i] != rCmp.pPrintRanges[i] )
-            {
-                bEqual = FALSE;
-                break;
-            }
-
-    return bEqual;
+    return
+        PtrEqual( mpRepeatCol, rCmp.mpRepeatCol ) &&
+        PtrEqual( mpRepeatRow, rCmp.mpRepeatRow ) &&
+        (mbEntireSheet == rCmp.mbEntireSheet) &&
+        (maPrintRanges == rCmp.maPrintRanges);
 }
 
 //
