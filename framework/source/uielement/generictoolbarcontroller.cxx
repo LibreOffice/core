@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:27:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _VCL_MNEMONIC_HXX_
+#include <vcl/mnemonic.hxx>
 #endif
 #include <tools/urlobj.hxx>
 
@@ -278,7 +281,11 @@ throw ( RuntimeException )
                 nItemBits |= TIB_CHECKABLE;
             }
             else
-                m_pToolbar->SetItemText( m_nID, aStrValue );
+            {
+                ::rtl::OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
+                m_pToolbar->SetItemText( m_nID, aText );
+                m_pToolbar->SetQuickHelpText( m_nID, aText );
+            }
 
             m_pToolbar->ShowItem( m_nID, TRUE );
         }
