@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-22 16:09:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
-#ifndef _COM_SUN_STAR_JAVA_XJAVATHREADREGISTER_11_HPP_
-#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
-#endif
 #ifndef _COM_SUN_STAR_JAVA_XJAVAVM_HPP_
 #include <com/sun/star/java/XJavaVM.hpp>
 #endif
@@ -107,32 +104,26 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-
-JavaVM * pJVM;
-Reference< ::starjava::XJavaThreadRegister_11 > xRG11Ref;
-sal_Bool        bJRE_Error = sal_False;
-JavaVM_ *   pJRE_javaVM = NULL;
-
-int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
+::rtl::Reference< jvmaccess::VirtualMachine > InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
 {
+    ::rtl::Reference< jvmaccess::VirtualMachine > aRet;
     OSL_ENSURE(_rxFactory.is(),"No XMultiServiceFactory a.v.!");
     if(!_rxFactory.is())
-        return 0;
-
-    int result = 0;
-    JNIEnv * pEnv = NULL;
+        return aRet;
 
     try
     {
         Reference< ::starjava::XJavaVM > xVM(_rxFactory->createInstance(
             rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
 
-        OSL_ENSURE(_rxFactory.is(),"SDB_JRE_InitJava: I have no factory!");
+        OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
         if (!xVM.is() || !_rxFactory.is())
             throw Exception(); // -2;
 
         Sequence<sal_Int8> processID(16);
         rtl_getGlobalProcessId( (sal_uInt8*) processID.getArray() );
+        processID.realloc(17);
+        processID[16] = 0;
 
         Any uaJVM = xVM->getJavaVM( processID );
 
@@ -141,126 +132,71 @@ int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
         else
         {
             sal_Int32 nValue;
-            uaJVM >>= nValue;
-            pJVM = (JavaVM *)nValue;
+            jvmaccess::VirtualMachine* pJVM = NULL;
+            if ( uaJVM >>= nValue )
+                pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nValue);
+            else
+            {
+                sal_Int64 nTemp;
+                uaJVM >>= nTemp;
+                pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nTemp);
+            }
+            aRet = pJVM;
         }
-
-        xRG11Ref = Reference< ::starjava::XJavaThreadRegister_11 >(xVM, UNO_QUERY);
-        if (xRG11Ref.is())
-            xRG11Ref->registerThread();
-
-          pJVM->AttachCurrentThread(reinterpret_cast<void**>(&pEnv), NULL);
-
-        /**
-         * Ist zur Zeit nicht funktionsfaehig, wegen Solaris Deadlock.
-         */
-//      initStreamObserver(pEnv);
-//      if(pEnv->ExceptionOccurred())
-//      {
-//          pEnv->ExceptionDescribe();
-//          pEnv->ExceptionClear();
-//      }
-
     }
     catch (Exception& e)
     {
-        if ( pEnv )
-            isExceptionOccured(pEnv,sal_True);
-        result = -1;
     }
 
-    if(pEnv)
-    {
-        if(xRG11Ref.is())
-            xRG11Ref->revokeThread();
-
-        if(!xRG11Ref.is() || !xRG11Ref->isThreadAttached())
-            pJVM->DetachCurrentThread();
-    }
-
-    return result;
+    return aRet;
 }
-
-SDBThreadAttach::SDBThreadAttach() : bDetach(sal_False), pEnv(NULL)
+// -----------------------------------------------------------------------------
+::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::rtl::Reference< jvmaccess::VirtualMachine >& _rVM = ::rtl::Reference< jvmaccess::VirtualMachine >(),
+                                                        sal_Bool _bSet = sal_False)
 {
-    attachThread(pEnv);
-    isExceptionOccured(pEnv,sal_True);
+    static ::rtl::Reference< jvmaccess::VirtualMachine > s_VM;
+    if ( _rVM.is() || _bSet )
+        s_VM = _rVM;
+    return s_VM;
 }
-
-SDBThreadAttach::SDBThreadAttach(const Reference<XMultiServiceFactory >& _rxFactory) : bDetach(sal_False), pEnv(NULL)
+// -----------------------------------------------------------------------------
+::rtl::Reference< jvmaccess::VirtualMachine > java_lang_Object::getVM(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    attachThread(pEnv,_rxFactory);
-    isExceptionOccured(pEnv,sal_True);
-}
+    ::rtl::Reference< jvmaccess::VirtualMachine > xVM = getJavaVM();
+    if ( !xVM.is() && _rxFactory.is() )
+        getJavaVM(InitJava(_rxFactory));
 
+    return xVM;
+}
+// -----------------------------------------------------------------------------
+SDBThreadAttach::SDBThreadAttach()
+ : m_aGuard(java_lang_Object::getVM())
+{
+    pEnv = m_aGuard.getEnvironment();
+}
+// -----------------------------------------------------------------------------
 SDBThreadAttach::~SDBThreadAttach()
 {
-    sal_Bool bOk = isExceptionOccured(pEnv,sal_True);
-    OSL_ENSURE(!bOk,"Exception occured in JNI!");
-    detachThread();
 }
-
-void SDBThreadAttach::attachThread(JNIEnv * &pEnv,const Reference<XMultiServiceFactory >& _rxFactory)
+// -----------------------------------------------------------------------------
+sal_Int32& getJavaVMRefCount()
 {
-    xInit(_rxFactory);
-
-    if(xRG11Ref.is())
-    {
-        xRG11Ref->registerThread();
-        pJVM->AttachCurrentThread(reinterpret_cast<void**>(&pEnv), NULL);
-    }
+    static sal_Int32 s_nRefCount = 0;
+    return s_nRefCount;
 }
-
-void SDBThreadAttach::detachThread()
+// -----------------------------------------------------------------------------
+void SDBThreadAttach::addRef()
 {
-    xInit();
-
-    if(xRG11Ref.is())
-    {
-        xRG11Ref->revokeThread();
-        if(!xRG11Ref->isThreadAttached())
-            pJVM->DetachCurrentThread();
-    }
+    getJavaVMRefCount()++;
 }
-
-void SDBThreadAttach::xInit(const Reference<XMultiServiceFactory >& _rxFactory)
+// -----------------------------------------------------------------------------
+void SDBThreadAttach::releaseRef()
 {
-    StartJava(_rxFactory);
+    getJavaVMRefCount()--;
+    if ( getJavaVMRefCount() == 0 )
+        getJavaVM(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
 }
-
-sal_Bool SDBThreadAttach::IsJavaErrorOccured()
-{
-    return bJRE_Error;
-}
-
-void SDBThreadAttach::setError()
-{
-    bJRE_Error = sal_True;
-}
-
-static sal_Bool bStarted = sal_False;
-int SDBThreadAttach::StartJava(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    static sal_Bool bRecFlag = sal_False;
-    static int err = 0;
-    if( !bStarted )
-    {
-        vos::OGuard aGuard( vos::OMutex::getGlobalMutex() );
-        if( !bStarted && !bRecFlag)
-        {
-            bRecFlag = sal_True;
-            //  Application::EnterMultiThread();
-            // bStarted = sal_True must set after the VM is complete initialized
-            err = SDB_JRE_InitJava(_rxFactory);
-            if(err)
-                setError();
-            bStarted = sal_True;
-        }
-    }
-//  return bJRE_Error ? -1 : 0;
-    return err;
-}
-
+// -----------------------------------------------------------------------------
 // statische Variablen der Klasse:
 jclass java_lang_Object::theClass = 0;
 sal_uInt32 java_lang_Object::nObjCount = 0;
@@ -269,7 +205,6 @@ jclass java_lang_Object::getMyClass()
 {
     if( !theClass )
     {
-//      JNIEnv * pEnv = SDBThreadAttach::GetEnv();
         SDBThreadAttach t;
 
         if( !t.pEnv ) return (jclass)NULL;
@@ -283,18 +218,6 @@ jclass java_lang_Object::getMyClass()
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
             : object( 0 ),m_xFactory(_rxFactory)
 {
-//  SDBThreadAttach t(m_xFactory);
-//  if( !t.pEnv )
-//      return;
-//
-//  // Java-Call fuer den Konstruktor absetzen
-//  // temporaere Variable initialisieren
-//  char * cSignature = "()V";
-//  jclass tempClass;
-//  jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-//  tempClass = (jclass)t.pEnv->NewObjectA( getMyClass(), mID, NULL );
-//  saveRef( t.pEnv, tempClass );
-//  t.pEnv->DeleteLocalRef( tempClass );
 }
 
 // der protected-Konstruktor fuer abgeleitete Klassen
