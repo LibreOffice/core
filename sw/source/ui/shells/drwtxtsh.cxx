@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:31:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,8 +241,8 @@ void SwDrawTextShell::Init()
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
-    pOutliner = pSdrView->GetTextEditOutliner();
-    pOLV = pSdrView->GetTextEditOutlinerView();
+    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     ULONG nCtrl = pOutliner->GetControlWord();
     nCtrl |= EE_CNTRL_AUTOCORRECT;
 
@@ -341,6 +341,7 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
     Rectangle aNullRect;
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     Rectangle aOutRect = pOLV->GetOutputArea();
 
     if (aNullRect != aOutRect)
@@ -358,13 +359,7 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 
 BOOL SwDrawTextShell::IsTextEdit()
 {
-    if (!pOutliner || !pOLV)
-        Init();
-
-    if (!pOutliner || !pOLV)
-        return (FALSE);
-
-    return (pSdrView->IsTextEdit());
+    return pSdrView->IsTextEdit();
 }
 
 /*--------------------------------------------------------------------
@@ -511,16 +506,13 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     if( rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
         switch(rReq.GetSlot())
         {
         case FN_THESAURUS_DLG:
             pOLV->StartThesaurus();
-            break;
-
-        case FN_SPELLING_DLG:
-            pOLV->StartSpeller();
             break;
 
         case SID_HANGUL_HANJA_CONVERSION:
@@ -558,7 +550,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
-
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
 
     switch (rReq.GetSlot())
     {
@@ -568,6 +560,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
         case SID_SELECTALL:
         {
+            SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
             ULONG nParaCount = pOutliner->GetParagraphCount();
             if (nParaCount > 0)
                 pOLV->SelectRange(0L, USHORT(nParaCount) );
@@ -777,7 +770,10 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
         }
 
         if( nMode )
+        {
+            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             pOLV->TransliterateText( nMode );
+        }
     }
 }
 
@@ -787,6 +783,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     if(!pOLV)
         return;
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -856,6 +853,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     {
         // nicht flackern
         pOLV->HideCursor();
+        SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
         pOutliner->SetUpdateMode(FALSE);
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );
@@ -902,6 +900,18 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             rReq.AppendItem( SfxStringItem( FN_PARAM_1, aFont.GetName() ) );
         rReq.Done();
     }
+}
+/*-- 22.10.2003 14:26:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SfxUndoManager* SwDrawTextShell::GetUndoManager()
+{
+    SwWrtShell &rSh = GetShell();
+    pSdrView = rSh.GetDrawView();
+    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    pOutliner = pSdrView->GetTextEditOutliner();
+    return &pOutliner->GetUndoManager();
 }
 
 
