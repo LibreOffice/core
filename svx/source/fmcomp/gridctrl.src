@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:21 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Menu RID_SVXMNU_ROWS
             Text = "Zeilen l�schen" ;
             Text [ ENGLISH ] = "Delete rows" ;
             Text [ english_us ] = "Delete Rows" ;
-            Text [ portuguese_brazilian ] = "Zeilen l?chen" ;
+            Text [ portuguese_brazilian ] = "Excluir Linhas" ;
             Text [ swedish ] = "Radera rader" ;
             Text [ danish ] = "Slet r�kker" ;
             Text [ italian ] = "Elimina riga" ;
@@ -96,6 +96,9 @@ Menu RID_SVXMNU_ROWS
             Text[ catalan ] = "Suprimeix les files";
             Text[ finnish ] = "Poista rivit";
             Text[ thai ] = "ลบแถว";
+            Text[ czech ] = "Odstranit řádky";
+            Text[ hebrew ] = "‮מחיקת שורות‬";
+            Text[ hindi ] = "पंक्तियों को मिटाओ";
         };
         MenuItem
         {
@@ -105,7 +108,7 @@ Menu RID_SVXMNU_ROWS
             Text [ ENGLISH ] = "Save record" ;
             Text [ portuguese ] = "Guardar registo" ;
             Text [ english_us ] = "Save Record" ;
-            Text [ portuguese_brazilian ] = "Datensatz speichern" ;
+            Text [ portuguese_brazilian ] = "Salvar Registro" ;
             Text [ swedish ] = "Spara datapost" ;
             Text [ danish ] = "Gem datapost" ;
             Text [ italian ] = "Salva record di dati" ;
@@ -126,6 +129,9 @@ Menu RID_SVXMNU_ROWS
             Text[ catalan ] = "Desa el registre";
             Text[ finnish ] = "Tallenna tietue";
             Text[ thai ] = "บันทึกระเบียน";
+            Text[ czech ] = "Uložit záznam";
+            Text[ hebrew ] = "‮שמירת רשומות‬";
+            Text[ hindi ] = "लेखा को संचित करो";
         };
         MenuItem
         {
@@ -135,7 +141,7 @@ Menu RID_SVXMNU_ROWS
             Text [ ENGLISH ] = "Undo: Data entry" ;
             Text [ english_us ] = "Undo: Data entry" ;
             Text [ portuguese ] = "Anular: entrada de dados" ;
-            Text [ portuguese_brazilian ] = "R?kg?ngig: Dateneingabe" ;
+            Text [ portuguese_brazilian ] = "Desfazer: Entrada de dados" ;
             Text [ swedish ] = "�ngra: datainmatning" ;
             Text [ danish ] = "Fortryd: Datainput" ;
             Text [ italian ] = "Annulla: Immissione dati" ;
@@ -156,6 +162,9 @@ Menu RID_SVXMNU_ROWS
             Text[ catalan ] = "Desf�s: entrada de dades";
             Text[ finnish ] = "Kumoa: tietomerkint�";
             Text[ thai ] = "เลิกทำ: ป้อนข้อมูล";
+            Text[ czech ] = "Zpět: datová položka";
+            Text[ hebrew ] = "‮ביטול: הכנסת נתונים‬";
+            Text[ hindi ] = "अनावृत्ति: ड़ॉटा प्रविष्टि";
         };
     };
 };
@@ -171,7 +180,7 @@ Menu RID_SVXMNU_COLS
             Text [ ENGLISH ] = "~Insert column" ;
             Text [ english_us ] = "Insert ~Column" ;
             Text [ portuguese ] = "~Inserir coluna" ;
-            Text [ portuguese_brazilian ] = "~Spalte einf?en" ;
+            Text [ portuguese_brazilian ] = "~Inserir Coluna" ;
             Text [ swedish ] = "I~nfoga kolumn" ;
             Text [ danish ] = "Inds�t kolonne" ;
             Text [ italian ] = "~Inserisci colonna" ;
@@ -190,7 +199,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "TextField" ;
                         Text [ portuguese ] = "Caixa de texto" ;
                         Text [ english_us ] = "Text Box" ;
-                        Text [ portuguese_brazilian ] = "Edit" ;
+                        Text [ portuguese_brazilian ] = "Caixa de Texto" ;
                         Text [ swedish ] = "Textf�lt" ;
                         Text [ danish ] = "Tekstfelt" ;
                         Text [ italian ] = "Campo di testo" ;
@@ -211,6 +220,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Quadre de text";
                         Text[ finnish ] = "Tekstikehys";
                         Text[ thai ] = "กล่องข้อความ";
+                        Text[ czech ] = "Textové pole";
+                        Text[ hebrew ] = "‮תיבת טקסט‬";
+                        Text[ hindi ] = "टेक्स्ट् बॉक्स्";
                     };
                     MenuItem
                     {
@@ -220,7 +232,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "CheckBox" ;
                         Text [ portuguese ] = "Caixa de verifica��o" ;
                         Text [ english_us ] = "Check Box" ;
-                        Text [ portuguese_brazilian ] = "Checkbox" ;
+                        Text [ portuguese_brazilian ] = "Caixa de Verifica��o" ;
                         Text [ swedish ] = "Kryssruta" ;
                         Text [ danish ] = "Afkrydsningsfelt" ;
                         Text [ italian ] = "Casella di controllo" ;
@@ -241,6 +253,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Casella de verificaci�";
                         Text[ finnish ] = "Valintaruutu";
                         Text[ thai ] = "กล่องกาเครื่องหมาย";
+                        Text[ czech ] = "Zaškrtávací políčko";
+                        Text[ hebrew ] = "‮תיבת סימון‬";
+                        Text[ hindi ] = "चेक् बॉक्स्";
                     };
                     MenuItem
                     {
@@ -250,7 +265,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "ComboBox" ;
                         Text [ portuguese ] = "Caixa de combina��o" ;
                         Text [ english_us ] = "Combo Box" ;
-                        Text [ portuguese_brazilian ] = "Combobox" ;
+                        Text [ portuguese_brazilian ] = "Caixa de Combina��o" ;
                         Text [ swedish ] = "Kombinationsf�lt" ;
                         Text [ danish ] = "Kombinationsboks" ;
                         Text [ italian ] = "Casella combinata" ;
@@ -271,6 +286,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Quadre combinat";
                         Text[ finnish ] = "Yhdistelm�ruutu";
                         Text[ thai ] = "กล่องคอมโบ้ ";
+                        Text[ czech ] = "Kombinované pole";
+                        Text[ hebrew ] = "‮תיבה משולבת‬";
+                        Text[ hindi ] = "कॉम्बो बॉक्स्";
                     };
                     MenuItem
                     {
@@ -280,7 +298,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "ListBox" ;
                         Text [ portuguese ] = "Caixa de listagem" ;
                         Text [ english_us ] = "List Box" ;
-                        Text [ portuguese_brazilian ] = "Listbox" ;
+                        Text [ portuguese_brazilian ] = "Caixa de listagem" ;
                         Text [ swedish ] = "Listruta" ;
                         Text [ danish ] = "Rulleliste" ;
                         Text [ italian ] = "Casella di riepilogo" ;
@@ -301,6 +319,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Quadre de llista";
                         Text[ finnish ] = "Luetteloruutu";
                         Text[ thai ] = "กล่องรายการ";
+                        Text[ czech ] = "Pole seznamu";
+                        Text[ hebrew ] = "‮תיבת רשימה‬";
+                        Text[ hindi ] = "सूची बॉक्स्";
                     };
                     MenuItem
                     {
@@ -310,7 +331,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "DateField" ;
                         Text [ portuguese ] = "Campo para data" ;
                         Text [ english_us ] = "Date Field" ;
-                        Text [ portuguese_brazilian ] = "Datumsfeld" ;
+                        Text [ portuguese_brazilian ] = "Campo de data" ;
                         Text [ swedish ] = "Datumf�lt" ;
                         Text [ danish ] = "Datofelt" ;
                         Text [ italian ] = "Campo data" ;
@@ -331,6 +352,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Camp Data";
                         Text[ finnish ] = "P�iv�m��r�kentt�";
                         Text[ thai ] = "เขตข้อมูลวันที่";
+                        Text[ czech ] = "Pole pro datum";
+                        Text[ hebrew ] = "‮שדה תאריך‬";
+                        Text[ hindi ] = "दिनांक क्षेत्र";
                     };
                     MenuItem
                     {
@@ -340,7 +364,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "TimeField" ;
                         Text [ portuguese ] = "Campo hor�rio" ;
                         Text [ english_us ] = "Time Field" ;
-                        Text [ portuguese_brazilian ] = "Zeitfeld" ;
+                        Text [ portuguese_brazilian ] = "Campo da hora" ;
                         Text [ swedish ] = "Tidsf�lt" ;
                         Text [ danish ] = "Klokkesl�tsfelt" ;
                         Text [ italian ] = "Campo orario" ;
@@ -361,6 +385,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Camp Hora";
                         Text[ finnish ] = "Aikakentt�";
                         Text[ thai ] = "เขตข้อมูลเวลา";
+                        Text[ czech ] = "Pole pro čas";
+                        Text[ hebrew ] = "‮שדה שעה‬";
+                        Text[ hindi ] = "समय क्षेत्र";
                     };
                     MenuItem
                     {
@@ -370,7 +397,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "NumericField" ;
                         Text [ portuguese ] = "Campo num�rico" ;
                         Text [ english_us ] = "Numeric Field" ;
-                        Text [ portuguese_brazilian ] = "Numerisches Feld" ;
+                        Text [ portuguese_brazilian ] = "Campo Num�rico" ;
                         Text [ swedish ] = "Numeriskt f�lt" ;
                         Text [ danish ] = "Numerisk felt" ;
                         Text [ italian ] = "Campo numerico" ;
@@ -379,7 +406,7 @@ Menu RID_SVXMNU_COLS
                         Text [ dutch ] = "Numeriek veld" ;
                         Text[ chinese_simplified ] = "数字字段";
                         Text[ russian ] = "�������� ����";
-                        Text[ polish ] = "Pole numeryczne";
+                        Text[ polish ] = "Pole liczbowe";
                         Text[ japanese ] = "番号フィールド";
                         Text[ chinese_traditional ] = "數字欄位";
                         Text[ dutch ] = "Numeriek veld";
@@ -391,6 +418,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Campo num�ric";
                         Text[ finnish ] = "Numeerinen kentt�";
                         Text[ thai ] = "เขตข้อมูลตัวเลข";
+                        Text[ czech ] = "Číselné pole";
+                        Text[ hebrew ] = "‮שדה נומרי‬";
+                        Text[ hindi ] = "संख्या क्षेत्र";
                     };
                     MenuItem
                     {
@@ -400,7 +430,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "CurrencyField" ;
                         Text [ portuguese ] = "Campo para moeda" ;
                         Text [ english_us ] = "Currency Field" ;
-                        Text [ portuguese_brazilian ] = "W?hrungsfeld" ;
+                        Text [ portuguese_brazilian ] = "Campo Monet�rio" ;
                         Text [ swedish ] = "Valutaf�lt" ;
                         Text [ danish ] = "Valutafelt" ;
                         Text [ italian ] = "Campo di valuta" ;
@@ -421,6 +451,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Camp Moneda";
                         Text[ finnish ] = "Valuuttakentt�";
                         Text[ thai ] = "เขตข้อมูลสกุลเงิน";
+                        Text[ czech ] = "Měnové pole";
+                        Text[ hebrew ] = "‮שדה מטבע‬";
+                        Text[ hindi ] = "मुद्रा क्षेत्र";
                     };
                     MenuItem
                     {
@@ -430,7 +463,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "PatternField" ;
                         Text [ portuguese ] = "Campo mascarado" ;
                         Text [ english_us ] = "Pattern Field" ;
-                        Text [ portuguese_brazilian ] = "Maskiertes Feld" ;
+                        Text [ portuguese_brazilian ] = "Campo de Padr�o" ;
                         Text [ swedish ] = "Maskerat f�lt" ;
                         Text [ danish ] = "Maskeret felt" ;
                         Text [ italian ] = "Campo a maschera" ;
@@ -451,6 +484,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Camp emmascarat";
                         Text[ finnish ] = "Kuviokentt�";
                         Text[ thai ] = "เขตข้อมูลลวดลาย";
+                        Text[ czech ] = "Pole vzorku";
+                        Text[ hebrew ] = "‮שדה תבנית‬";
+                        Text[ hindi ] = "नमूना क्षेत्र";
                     };
                     MenuItem
                     {
@@ -468,8 +504,8 @@ Menu RID_SVXMNU_COLS
                         Text[ russian ] = "���� ��������������";
                         Text[ italian ] = "Campo formattato";
                         Text[ danish ] = "Formateret felt";
-                        Text[ polish ] = "Formatowane pole";
-                        Text[ portuguese_brazilian ] = "Formatted Field";
+                        Text[ polish ] = "Pole formatowane";
+                        Text[ portuguese_brazilian ] = "Campo formatado";
                         Text[ japanese ] = "書式設定されたフィールド";
                         Text[ korean ] = "서식 있는 필드";
                         Text[ chinese_simplified ] = "格式化的字段";
@@ -479,6 +515,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Camp formatat";
                         Text[ finnish ] = "Muotoiltu kentt�";
                         Text[ thai ] = "เขตข้อมูลการจัดรูปแบบ";
+                        Text[ czech ] = "Formátované pole";
+                        Text[ hebrew ] = "‮שדה מעוצב‬";
+                        Text[ hindi ] = "रचना की हुयी क्षेत्र";
                     };
                     MenuItem
                     {
@@ -497,8 +536,8 @@ Menu RID_SVXMNU_COLS
                         Text[ russian ] = "���� ���� � �������";
                         Text[ italian ] = "Campo data e orario";
                         Text[ danish ] = "Dato- og klokkesl�tsfelt";
-                        Text[ polish ] = "pole na dat� i godzin�";
-                        Text[ portuguese_brazilian ] = "date and time field";
+                        Text[ polish ] = "Pole daty i godziny";
+                        Text[ portuguese_brazilian ] = "Campo de Data e Hora";
                         Text[ japanese ] = "日付と時間のフィールド";
                         Text[ korean ] = "날짜 및 시간 필드";
                         Text[ chinese_simplified ] = "日期和时间区域";
@@ -508,12 +547,15 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "Camp Data i hora";
                         Text[ finnish ] = "P�iv�m��r� ja kellonaika -kentt�";
                         Text[ thai ] = "เขตข้อมูลวันที่และเวลา";
+                        Text[ czech ] = "Pole pro datum a čas";
+                        Text[ hebrew ] = "‮שדה תאריך ושעה‬";
+                        Text[ hindi ] = "दिनांक और समय क्षेत्र";
                     };
                 };
             };
             Text[ chinese_simplified ] = "插入列(~C)";
             Text[ russian ] = "�������� �������";
-            Text[ polish ] = "W~staw kolumn�";
+            Text[ polish ] = "Wstaw ~kolumn�";
             Text[ japanese ] = "列の挿入(~C)";
             Text[ chinese_traditional ] = "插入欄(~C)";
             Text[ dutch ] = "~Kolom invoegen";
@@ -525,6 +567,9 @@ Menu RID_SVXMNU_COLS
             Text[ catalan ] = "Insereix una ~columna";
             Text[ finnish ] = "~Lis�� sarake";
             Text[ thai ] = "แทรก~คอลัมน์";
+            Text[ czech ] = "Vložit sloupec";
+            Text[ hebrew ] = "‮הכנסת עמודה‬";
+            Text[ hindi ] = "स्तंभ को ~जोड़ो";
         };
         MenuItem
         {
@@ -533,7 +578,7 @@ Menu RID_SVXMNU_COLS
             Text = "~Ersetzen durch" ;
             Text [ ENGLISH ] = "~Replace with" ;
             Text [ english_us ] = "~Replace with" ;
-            Text [ portuguese_brazilian ] = "~?ndern zu" ;
+            Text [ portuguese_brazilian ] = "~Substituir por" ;
             Text [ swedish ] = "Ers�tt med" ;
             Text [ danish ] = "Erstat med" ;
             Text [ italian ] = "~Sostituisci con" ;
@@ -543,7 +588,7 @@ Menu RID_SVXMNU_COLS
             Text [ portuguese ] = "~Substituir por" ;
             Text[ chinese_simplified ] = "替换成(~R)";
             Text[ russian ] = "�������� ��";
-            Text[ polish ] = "Zmie� na";
+            Text[ polish ] = "~Zamie� na";
             Text[ japanese ] = "置き換え(~R)";
             Text[ chinese_traditional ] = "更替成(~R)";
             Text[ dutch ] = "~Vervangen door";
@@ -555,6 +600,9 @@ Menu RID_SVXMNU_COLS
             Text[ catalan ] = "~Reempla�a amb";
             Text[ finnish ] = "Korvaa ~kohteella";
             Text[ thai ] = "แ~ทนที่ด้วย";
+            Text[ czech ] = "Nahradit za";
+            Text[ hebrew ] = "‮ולהחליף ב‬";
+            Text[ hindi ] = "~से प्रतिस्थापित करो";
         };
         MenuItem
         {
@@ -563,7 +611,7 @@ Menu RID_SVXMNU_COLS
             Text = "Spalte ~l�schen" ;
             Text [ ENGLISH ] = "~Delete column" ;
             Text [ english_us ] = "Delete Column" ;
-            Text [ portuguese_brazilian ] = "Spalte ~l?chen" ;
+            Text [ portuguese_brazilian ] = "Excluir Coluna" ;
             Text [ swedish ] = "Radera ko~lumn" ;
             Text [ danish ] = "Slet kolonne" ;
             Text [ italian ] = "Elimina colonna" ;
@@ -585,6 +633,9 @@ Menu RID_SVXMNU_COLS
             Text[ catalan ] = "Suprimeix la columna";
             Text[ finnish ] = "Poista sarake";
             Text[ thai ] = "ลบคอลัมน์";
+            Text[ czech ] = "Odstranit sloupec";
+            Text[ hebrew ] = "‮מחיקת עמודה‬";
+            Text[ hindi ] = "स्तंभ को मिटाओ";
         };
         MenuItem
         {
@@ -602,8 +653,8 @@ Menu RID_SVXMNU_COLS
             Text[ russian ] = "������ �������";
             Text[ italian ] = "~Nascondi colonne";
             Text[ danish ] = "Skjul kolonne";
-            Text[ polish ] = "Ukryj kolumn�";
-            Text[ portuguese_brazilian ] = "~Hide column";
+            Text[ polish ] = "~Ukryj kolumny";
+            Text[ portuguese_brazilian ] = "~Ocultar colunas";
             Text[ japanese ] = "列を表示しない(~H)";
             Text[ korean ] = "열 숨기기(~H)";
             Text[ chinese_simplified ] = "隐入列(~H)";
@@ -613,6 +664,9 @@ Menu RID_SVXMNU_COLS
             Text[ catalan ] = "~Oculta les columnes";
             Text[ finnish ] = "~Piilota sarakkeet";
             Text[ thai ] = "~ซ่อนคอลัมน์";
+            Text[ czech ] = "Skrýt sloupce";
+            Text[ hebrew ] = "‮הסתרת עמודות‬";
+            Text[ hindi ] = "स्तंभों को छिपा~ओ";
         };
         MenuItem
         {
@@ -640,8 +694,8 @@ Menu RID_SVXMNU_COLS
                         Text[ russian ] = "~������ ...";
                         Text[ italian ] = "~Pi� ...";
                         Text[ danish ] = "Flere ...";
-                        Text[ polish ] = "Wi�cej ...";
-                        Text[ portuguese_brazilian ] = "~More ...";
+                        Text[ polish ] = "~Wi�cej...";
+                        Text[ portuguese_brazilian ] = "~Mais ...";
                         Text[ japanese ] = "その他(~M)...";
                         Text[ korean ] = "자세히(~M)...";
                         Text[ chinese_simplified ] = "更多(~M)...";
@@ -652,6 +706,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "~M�s ...";
                         Text[ finnish ] = "~Lis�� ...";
                         Text[ thai ] = "~รายละเอียด ...";
+                        Text[ czech ] = "Více...";
+                        Text[ hebrew ] = "‮עוד...‬";
+                        Text[ hindi ] = "~अधिक ...";
                     };
                     MenuItem
                     {
@@ -673,8 +730,8 @@ Menu RID_SVXMNU_COLS
                         Text[ russian ] = "~���";
                         Text[ italian ] = "~Tutte";
                         Text[ danish ] = "Alle";
-                        Text[ polish ] = "Wszystkie";
-                        Text[ portuguese_brazilian ] = "~All";
+                        Text[ polish ] = "~Wszystko";
+                        Text[ portuguese_brazilian ] = "~Todos";
                         Text[ japanese ] = "すべて(~A)";
                         Text[ korean ] = "모두(~A)";
                         Text[ chinese_simplified ] = "全部(~A)";
@@ -684,6 +741,9 @@ Menu RID_SVXMNU_COLS
                         Text[ catalan ] = "~Tots";
                         Text[ finnish ] = "~Kaikki";
                         Text[ thai ] = "~ทั้งหมด";
+                        Text[ czech ] = "Vše";
+                        Text[ hebrew ] = "‮הכל‬";
+                        Text[ hindi ] = "~सब";
                     };
                 };
             };
@@ -697,8 +757,8 @@ Menu RID_SVXMNU_COLS
             Text[ russian ] = "�������� �������";
             Text[ italian ] = "~Mostra colonne";
             Text[ danish ] = "Vis kolonner";
-            Text[ polish ] = "Wy�wietl kolumny";
-            Text[ portuguese_brazilian ] = "~Show columns";
+            Text[ polish ] = "~Poka� kolumny";
+            Text[ portuguese_brazilian ] = "~Mostrar colunas";
             Text[ japanese ] = "列を表示する(~S)";
             Text[ korean ] = "열 표시(~S)";
             Text[ chinese_simplified ] = "显示列(~S)";
@@ -708,6 +768,9 @@ Menu RID_SVXMNU_COLS
             Text[ catalan ] = "~Mostra les columnes";
             Text[ finnish ] = "~N�yt� sarakkeet";
             Text[ thai ] = "แ~สดงคอลัมน์";
+            Text[ czech ] = "Zobrazit sloupce";
+            Text[ hebrew ] = "‮הצגת עמודים‬";
+            Text[ hindi ] = "स्तं~भो को दिखाओ";
         };
         MenuItem
         {
@@ -717,7 +780,7 @@ Menu RID_SVXMNU_COLS
             Text [ ENGLISH ] = "~Column..." ;
             Text [ english_us ] = "Column..." ;
             Text[ italian ] = "~Colonna...";
-            Text[ portuguese_brazilian ] = "~Column...";
+            Text[ portuguese_brazilian ] = "Coluna...";
             Text[ portuguese ] = "~Coluna...";
             Text[ danish ] = "Kolonne...";
             Text[ french ] = "~Colonne...";
@@ -738,6 +801,9 @@ Menu RID_SVXMNU_COLS
             Text[ catalan ] = "Columna...";
             Text[ finnish ] = "Sarake...";
             Text[ thai ] = "คอลัมน์...";
+            Text[ czech ] = "Sloupec...";
+            Text[ hebrew ] = "‮עמוד...‬";
+            Text[ hindi ] = "स्तंभ...";
         };
     };
 };
@@ -752,6 +818,23 @@ Menu RID_SVXMNU_CELL
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
