@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:21:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 12:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,13 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 BOOL SdDrawViewShell::bPipette = FALSE;
+
+// Use magenta as transparency color instead of the standard gray that is
+// imported from vcl/image.hxx
+#undef IMAGE_STDBTN_COLOR
+#undef IMAGE_STDBTN_COLOR_HC
+#define IMAGE_STDBTN_COLOR Color(0xff,0x00,0xff)
+#define IMAGE_STDBTN_COLOR_HC Color(0xff,0x00,0xff)
 
 // ------------------------
 // - ScannerEventListener -
