@@ -1,8 +1,13 @@
         Command Line Options
         --------------------
 
-autodoc [-v <level>] -html <out> -lg <proglang> [-t <sourcetree>[ <sourcetree> ...]
-        [-d <sourcedir>[ <sourcedir> ...]  [-f <sourcefile>[ <sourcefile> ...]
+autodoc [-v <level>]
+        -html <out>
+        [-extroot <externroot> -extnsp <externnamespace>]
+        -lg <proglang>
+        [-t <sourcetree>[ <sourcetree> ...]
+        [-d <sourcedir>[ <sourcedir> ...]
+        [-f <sourcefile>[ <sourcefile> ...]
 
 
     -html <OutputDirectory>
@@ -10,6 +15,22 @@ autodoc [-v <level>] -html <out> -lg <proglang> [-t <sourcetree>[ <sourcetree> .
 
     -lg <ProgrammingLanguage>
         Allowed values: "c++" or "idl"
+
+    -extroot <externroot>
+        Only together with "-lg idl" and -extnsp.
+        Links to code entities not found within the current parsed
+        code, will be linked there, but only if -extnsp is given and
+        the linked entity is in the given namespace.
+        <externroot> is a http link, it needs no "http://" at the
+        beginning nor slash at the end.
+
+    -extnsp <externnamespace>
+        Only together with "-lg idl" and -extroot.
+        If a code entity is not found in the current parsed code, but
+        dwells in the namespace (or its children) given here, it is
+        linked into the locátion given by -extroot.
+        <externnamespace> is an absolute qualified namespace,
+        starting with "::".
 
     -t <SourceTree>*
         Directory with all subdirectories.
