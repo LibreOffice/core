@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:48:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@ typedef SvxGroupInfo_Impl* SvxGroupInfoPtr;
 SV_DECL_PTRARR_DEL(SvxGroupInfoArr_Impl, SvxGroupInfoPtr, 5, 5);
 DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10);
 
+class ImageProvider
+{
+public:
+    virtual Image GetImage( const rtl::OUString& rCommandURL ) = 0;
+};
+
 class SvxConfigFunctionListBox_Impl : public SvTreeListBox
 {
 friend class SvxConfigGroupListBox_Impl;
@@ -154,35 +160,42 @@ public:
 class SfxSlotPool;
 class SvxConfigGroupListBox_Impl : public SvTreeListBox
 {
-    SvxConfigFunctionListBox_Impl*  pFunctionListBox;
     SvxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;
     SfxSlotPool*                    pSlotPool;
 
-    // show Scripting Framework scripts
-    BOOL                            bShowSF;
+    SvxConfigFunctionListBox_Impl*  pFunctionListBox;
+    ImageProvider*                  m_pImageProvider;
 
-    // show Basic scripts
-    BOOL                            bShowBasic;
+    // show Scripting Framework scripts?
+    BOOL    bShowSF;
+
+    // show Basic scripts?
+    BOOL    bShowBasic;
 
 protected:
-    virtual void                    RequestingChilds( SvLBoxEntry *pEntry);
-    virtual BOOL                    Expand( SvLBoxEntry* pParent );
+    virtual void    RequestingChilds( SvLBoxEntry *pEntry);
+    virtual BOOL    Expand( SvLBoxEntry* pParent );
 
 public:
-                                    SvxConfigGroupListBox_Impl ( Window* pParent,
-                                        const ResId&, ULONG nConfigMode = 0 );
-                                    ~SvxConfigGroupListBox_Impl();
-    void                            ClearAll();
+            SvxConfigGroupListBox_Impl (
+                Window* pParent, const ResId&, ULONG nConfigMode = 0 );
 
-    void                            Init( SvStringsDtor *pArr = 0, SfxSlotPool* pSlotPool = 0 );
-    void                            SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
-                                    { pFunctionListBox = pBox; }
-    void                            Open( SvLBoxEntry*, BOOL );
-    void                            GroupSelected();
-    void                            SelectMacro( const SfxMacroInfoItem* );
-    void                            SelectMacro( const String&, const String& );
-    String                          GetGroup();
+            ~SvxConfigGroupListBox_Impl();
+
+    void    Init( SvStringsDtor *pArr = 0, SfxSlotPool* pSlotPool = 0 );
+    void    Open( SvLBoxEntry*, BOOL );
+    void    ClearAll();
+    void    SelectMacro( const SfxMacroInfoItem* );
+    void    SelectMacro( const String&, const String& );
+    void    GroupSelected();
+    String  GetGroup();
+
+    void    SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
+        { pFunctionListBox = pBox; }
+
+    void    SetImageProvider( ImageProvider* provider )
+        { m_pImageProvider = provider; }
 };
 
 class SvxScriptSelectorDialog :
@@ -199,8 +212,8 @@ class SvxScriptSelectorDialog :
     FixedLine                       aDescription;
     FixedText                       aDescriptionText;
 
-    BOOL                            bShowSlots;
-    Link                            maAddHdl;
+    BOOL                            m_bShowSlots;
+    Link                            m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( SelectHdl, Control* );
@@ -214,14 +227,17 @@ public:
 
     ~SvxScriptSelectorDialog ( );
 
-    void                SetAddHdl( const Link& rLink ) { maAddHdl = rLink; }
-    const Link&         GetAddHdl() const { return maAddHdl; }
+    void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
+    const Link& GetAddHdl() const { return m_aAddHdl; }
 
-    USHORT              GetSelectedId();
-    String              GetScriptURL();
-    String              GetSelectedDisplayName();
-    String              GetSelectedHelpText();
-    void                SetRunLabel();
+    void        SetImageProvider( ImageProvider* provider )
+        { aCategories.SetImageProvider( provider ); }
+
+    USHORT      GetSelectedId();
+    String      GetScriptURL();
+    String      GetSelectedDisplayName();
+    String      GetSelectedHelpText();
+    void        SetRunLabel();
 };
 
 #endif
