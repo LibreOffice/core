@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:20:22 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #undef private
 #ifndef _SV_TOOLBOX_H
 #include <toolbox.h>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <mnemonic.hxx>
 #endif
 
 using namespace vcl;
@@ -266,7 +269,7 @@ const XubString& ToolBox::ImplConvertMenuString( const XubString& rStr )
     {
         maCvtStr = rStr;
         maCvtStr.EraseTrailingChars( '.' );
-        maCvtStr.EraseAllChars( '~' );
+        maCvtStr = MnemonicGenerator::EraseAllMnemonicChars( maCvtStr );
         return maCvtStr;
     }
     else
