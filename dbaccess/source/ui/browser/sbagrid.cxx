@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 13:56:26 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,19 +1365,20 @@ void SbaGridControl::SetBrowserAttrs()
     static SfxItemInfo aItemInfos[] =
     {
         { 0, 0 },
-        { SID_ATTR_CHAR_FONT,       SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_COLOR,      SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_WEIGHT,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_POSTURE,    SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_FONT,           SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_COLOR,          SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_WEIGHT,         SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_POSTURE,        SFX_ITEM_POOLABLE },
         { 0, 0 },
         { 0, 0 },
-        { SID_ATTR_CHAR_STRIKEOUT,  SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_UNDERLINE,  SFX_ITEM_POOLABLE }
+        { SID_ATTR_CHAR_STRIKEOUT,      SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_UNDERLINE,      SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEM_POOLABLE }
     };
     static sal_uInt16 aAttrMap[] =
     {
-        SBA_DEF_FONT, SBA_DEF_UNDERLINE,
+        SBA_DEF_FONT, SID_ATTR_CHAR_WORDLINEMODE,
         0
     };
 
@@ -1396,7 +1397,8 @@ void SbaGridControl::SetBrowserAttrs()
         new SvxShadowedItem( sal_False, SBA_DEF_SHADOWED ),
         new SvxContourItem( sal_False, SBA_DEF_CONTOUR ),
         new SvxCrossedOutItem( STRIKEOUT_NONE, SBA_DEF_CROSSEDOUT ),
-        new SvxUnderlineItem( UNDERLINE_NONE, SBA_DEF_UNDERLINE )
+        new SvxUnderlineItem( UNDERLINE_NONE, SBA_DEF_UNDERLINE ),
+        new SfxBoolItem( sal_False, SBA_DEF_WORDLINEMODE )
     };
 
     SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFONT, SBA_DEF_UNDERLINE, aItemInfos, pDefaults);
@@ -2139,6 +2141,9 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     pAnyItem = &pAttr->Get( SBA_DEF_CROSSEDOUT );
     const SvxCrossedOutItem* pFontCrossedOutItem = (SvxCrossedOutItem*)pAnyItem;
 
+    pAnyItem = &pAttr->Get( SBA_DEF_WORDLINEMODE );
+    const SfxBoolItem* pWordLineModeItem = (SfxBoolItem*)pAnyItem;
+
     // build the returned font
     aReturn.SetFamily( pFontItem->GetFamily() );
     aReturn.SetName( pFontItem->GetFamilyName() );
@@ -2152,6 +2157,8 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     aReturn.SetShadow( pFontShadowItem->GetValue() );
     aReturn.SetOutline( pFontContourItem->GetValue() );
     aReturn.SetStrikeout( pFontCrossedOutItem->GetStrikeout() );
+
+    aReturn.SetWordLineMode( pWordLineModeItem->GetValue() );
 
     sal_uInt32 nHeight = pFontHeightItem->GetHeight();
 
@@ -2191,6 +2198,7 @@ void BuildItemsFromFont(SfxItemSet* pAttr, const ::com::sun::star::awt::FontDesc
     pAttr->Put(SvxPostureItem((FontItalic)rFont.Slant, SBA_DEF_POSTURE));
     pAttr->Put(SvxUnderlineItem((FontUnderline)rFont.Underline, SBA_DEF_UNDERLINE));
     pAttr->Put(SvxCrossedOutItem((FontStrikeout)rFont.Strikeout, SBA_DEF_CROSSEDOUT));
+    pAttr->Put(SfxBoolItem(rFont.WordLineMode, SBA_DEF_WORDLINEMODE));
 
     Size aSize(0, rFont.Height);
     aSize = OutputDevice::LogicToLogic(aSize, MAP_POINT, MAP_TWIP);
