@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 10:25:07 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ class OComponentEventThread
     DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter> , ThreadObjects);
     DECLARE_STL_VECTOR(sal_Bool,    ThreadBools);
 
-    OCountedMutex                   m_aMutex;
+    ::osl::Mutex                    m_aMutex;
     ::osl::Condition                m_aCond;            // Queue gefuellt?
     ThreadEvents                    m_aEvents;          // Event-Queue
     ThreadObjects                   m_aControls;        // Control fuer Submit
