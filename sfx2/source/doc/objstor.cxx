@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-28 09:07:06 $
+ *  last change: $Author: mav $ $Date: 2002-08-28 15:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1765,6 +1765,13 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
         SetError( GetMedium()->Unpack_Impl( pMedium->GetPhysicalName() ) );
 
+    // an interaction handler here can aquire only in case of GUI Saving
+    // and should be removed after the saving is done
+    Reference< XInteractionHandler > xInteract;
+    SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+    if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
+        pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
+
     sal_Bool bSaved = sal_False;
     if( !GetError() && SaveTo_Impl( *pMediumTmp, pArgs, sal_True ) )
     {
@@ -1776,6 +1783,8 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         ByteString aKey;
         if ( IsOwnStorageFormat_Impl( *pMediumTmp ) )
             aKey = pMediumTmp->GetStorage()->GetKey();
+
+        pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
 
         // retransfer parameters to original itemset
         if( pSet )
@@ -1945,6 +1954,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
         pSet->ClearItem( SID_VERSION );
         //pSet->ClearItem( SID_USE_FILTEROPTIONS );
+        pSet->ClearItem( SID_INTERACTIONHANDLER );
 
         SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if ( pFilterItem )

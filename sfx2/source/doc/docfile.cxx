@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 10:42:51 $
+ *  last change: $Author: mav $ $Date: 2002-08-28 15:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
+#include <com/sun/star/ucb/XProgressHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -209,6 +212,7 @@ using namespace ::com::sun::star::io;
 #include <svtools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <ucbhelper/contentbroker.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -1353,7 +1357,18 @@ void SfxMedium::Transfer_Impl()
             if ( !aFileName.Len() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
-            if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTransferContent ) )
+            // a special case, an interaction handler should be used for
+            // authentication in case it is available
+            Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnvForLogin;
+            Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
+
+            SFX_ITEMSET_ARG( GetItemSet(), pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+            if( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteractionHandler )
+             && xInteractionHandler.is() )
+                xComEnvForLogin = new ::ucb::CommandEnvironment( xInteractionHandler,
+                                                          Reference< ::com::sun::star::ucb::XProgressHandler >() );
+
+            if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnvForLogin, aTransferContent ) )
             {
                 // free resources, otherwise the transfer may fail
                 Close();
@@ -1400,7 +1415,7 @@ void SfxMedium::Transfer_Impl()
                     else
                         eError = ERRCODE_IO_GENERAL;
                 }
-                catch ( ::com::sun::star::uno::Exception& )
+                catch ( ::com::sun::star::uno::Exception& e )
                 {
                     eError = ERRCODE_IO_GENERAL;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:40:01 $
+ *  last change: $Author: mav $ $Date: 2002-08-28 15:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #include <com/sun/star/document/XExporter.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -177,6 +181,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::task;
 
 //====================================================================
 // Helper class to initialize an export dialog for PDF
@@ -918,6 +923,29 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     if ( nId == SID_SAVEDOC && pCurFilter && !pCurFilter->CanExport() && pDefFilter && pDefFilter->IsInternal() )
         nId = SID_SAVEASDOC;
+
+    // in case of saving an interaction handler can be required for authentication
+    if ( nId == SID_SAVEDOC || nId == SID_SAVEASDOC || nId == SID_SAVEASURL || nId == SID_EXPORTDOC )
+    {
+        Reference< XInteractionHandler > xInteract;
+        SFX_REQUEST_ARG( rReq, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+
+        DBG_ASSERT( !pxInteractionItem || ( ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() ),
+                    "Broken InteractionHandler!\n" );
+
+        if ( !pxInteractionItem )
+        {
+            Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+            if( xServiceManager.is() )
+            {
+                xInteract = Reference< XInteractionHandler >(
+                            xServiceManager->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
+                            UNO_QUERY );
+
+                rReq.AppendItem( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
+            }
+        }
+    }
 
     // interaktiv speichern via (nicht-Default) Filter?
     if ( !pFilterItem && GetMedium()->GetFilter() && HasName() && (nId == SID_SAVEDOC || nId == SID_UPDATEDOC) )
