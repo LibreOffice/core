@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,13 +256,10 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
                     sal_Int32 nPrec = DEFAULT_OTHER_PRECSION;
                     if ( GetPrecision() )
                         nPrec = GetPrecision();
-                    if ( _pType->nPrecision && _pType->nMaximumScale )
-                    {
-                        SetPrecision(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION);
+                    if ( _pType->nPrecision )
+                        SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION,_pType->nPrecision));
+                    if ( _pType->nMaximumScale )
                         SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
-                    }
-                    else if ( _pType->nPrecision )
-                        SetPrecision(::std::min<sal_Int32>(nPrec,_pType->nPrecision));
                 }
         }
         if ( !_pType->aCreateParams.getLength() )
