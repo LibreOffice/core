@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 14:04:14 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 14:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,9 +357,9 @@ void VCDlgEditor::DoScroll( ScrollBar* pActScroll )
 
 //----------------------------------------------------------------------------
 
-void VCDlgEditor::SetDialog( )
+void VCDlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
 {
-
+    /* FOR TEST
     // my dialog model  --  delete this later
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
@@ -435,55 +435,10 @@ void VCDlgEditor::SetDialog( )
     xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit1" ) ), aAny );
 
     // end of delete
-
-    // delete this 2
-    uno::Reference< script::XLibraryContainer > xDlgCont( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
-    Any aElement = xDlgCont->getByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")) );
-    Reference< container::XNameAccess > xDlgLib;
-    aElement >>= xDlgLib;
-    aElement = xDlgLib->getByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog1")) );
-    Sequence< sal_Int8 > aDialogsSeq;
-    aElement >>= aDialogsSeq;
-
-    // Create a DialogModel
-    Reference< container::XNameContainer > xDialogModel;
-    Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
-    xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
-    xDialogModel = aModelSeq.getConstArray()[0];
-
-    /*
-    Sequence< OUString > aDialogNames = xDlgLib->getElementNames();
-        sal_Int32 nNameCount = aDialogNames.getLength();
-    Sequence< Reference< container::XNameContainer > > aModelsSeq( nNameCount );
-    Reference< container::XNameContainer >* pModels = aModelsSeq.getArray();
-
-    const OUString* pNames = aDialogNames.getConstArray();
-    sal_Int32 i, nDialogCount = 0;
-//  for( i = 0 ; i < nNameCount ; i++ )
-//  {
-        OUString aLibName = pNames[ i ];
-
-        Any aElement = xDlgLib->getByName( aLibName );
-        Sequence< sal_Int8 > aDialogsSeq;
-        aElement >>= aDialogsSeq;
-
-        // Create a DialogModel
-        Reference< container::XNameContainer > xDialogModel;
-        Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
-        xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
-        xDialogModel = aModelSeq.getConstArray()[0];
-        if( xDialogModel.is() )
-            pModels[ nDialogCount++ ] = xDialogModel;
-//  }
-    if( nDialogCount < nNameCount )
-        aModelsSeq.realloc( nDialogCount );
     */
-    // end of delete 2
-
 
     // set dialog model
-    //m_xUnoControlDialogModel = xC;
-    m_xUnoControlDialogModel = xDialogModel;
+    m_xUnoControlDialogModel = xUnoControlDialogModel;
 
 
     pDlgEdForm = new DlgEdForm();
