@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 21:27:22 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 21:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,11 +293,11 @@ ToolBox RID_TOOLBOX
             Text [ portuguese ] = "Caixa de grupo" ;
             Text [ portuguese_brazilian ] = "FrameControl" ;
             /* ### ACHTUNG: Neuer Text in Resource? GroupBox einf�gen : GroupBox einf�gen */
-            Text[ chinese_simplified ] = "组合框";
+            Text[ chinese_simplified ] = "小组框";
             Text[ russian ] = "��������� �����";
             Text[ polish ] = "Ramka grupuj�ca";
             Text[ japanese ] = "ｸﾞﾙｰﾌﾟ枠";
-            Text[ chinese_traditional ] = "組合方塊";
+            Text[ chinese_traditional ] = "群組方塊";
             Text[ arabic ] = "FrameControl";
             Text[ greek ] = "������� ������������";
             Text[ korean ] = "그룹박스";
@@ -341,23 +341,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Datumsfeld" ;
             Text [ english ] = "DateField" ;
-            Text[ english_us ] = "DateField";
-            Text[ portuguese ] = "DateField";
+            Text[ english_us ] = "Date Field";
+            Text[ portuguese ] = "Campo de data";
             Text[ russian ] = "DateField";
             Text[ greek ] = "DateField";
-            Text[ dutch ] = "DateField";
-            Text[ french ] = "DateField";
-            Text[ spanish ] = "DateField";
+            Text[ dutch ] = "Datumveld";
+            Text[ french ] = "Champ de date";
+            Text[ spanish ] = "Campo de fecha";
             Text[ finnish ] = "DateField";
             Text[ italian ] = "DateField";
             Text[ danish ] = "DateField";
             Text[ swedish ] = "Datumf�lt";
             Text[ polish ] = "DateField";
             Text[ portuguese_brazilian ] = "DateField";
-            Text[ japanese ] = "DateField";
+            Text[ japanese ] = "日付ﾌｨｰﾙﾄﾞ";
             Text[ korean ] = "DateField";
             Text[ chinese_simplified ] = "日期字段";
-            Text[ chinese_traditional ] = "DateField";
+            Text[ chinese_traditional ] = "日期欄位";
             Text[ turkish ] = "DateField";
             Text[ arabic ] = "DateField";
             Text[ catalan ] = "DateField";
@@ -369,23 +369,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Numerisches Feld" ;
             Text [ english ] = "NumericField" ;
-            Text[ english_us ] = "NumericField";
-            Text[ portuguese ] = "NumericField";
+            Text[ english_us ] = "Numeric Field";
+            Text[ portuguese ] = "Campo num�rico";
             Text[ russian ] = "NumericField";
             Text[ greek ] = "NumericField";
-            Text[ dutch ] = "NumericField";
-            Text[ french ] = "NumericField";
-            Text[ spanish ] = "NumericField";
+            Text[ dutch ] = "Numeriek veld";
+            Text[ french ] = "Champ num�rique";
+            Text[ spanish ] = "Campo num�rico";
             Text[ finnish ] = "NumericField";
             Text[ italian ] = "NumericField";
             Text[ danish ] = "NumericField";
             Text[ swedish ] = "Numeriskt f�lt";
             Text[ polish ] = "NumericField";
             Text[ portuguese_brazilian ] = "NumericField";
-            Text[ japanese ] = "NumericField";
+            Text[ japanese ] = "番号ﾌｨｰﾙﾄﾞ";
             Text[ korean ] = "NumericField";
             Text[ chinese_simplified ] = "数字字段";
-            Text[ chinese_traditional ] = "NumericField";
+            Text[ chinese_traditional ] = "數字欄位";
             Text[ turkish ] = "NumericField";
             Text[ arabic ] = "NumericField";
             Text[ catalan ] = "NumericField";
@@ -397,23 +397,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Formatiertes Feld" ;
             Text [ english ] = "FormattedField" ;
-            Text[ english_us ] = "FormattedField";
-            Text[ portuguese ] = "FormattedField";
+            Text[ english_us ] = "Formatted Field";
+            Text[ portuguese ] = "Campo formatado";
             Text[ russian ] = "FormattedField";
             Text[ greek ] = "FormattedField";
-            Text[ dutch ] = "FormattedField";
-            Text[ french ] = "FormattedField";
-            Text[ spanish ] = "FormattedField";
+            Text[ dutch ] = "Opgemaakt veld";
+            Text[ french ] = "Champ format�";
+            Text[ spanish ] = "Campo formateado";
             Text[ finnish ] = "FormattedField";
             Text[ italian ] = "FormattedField";
             Text[ danish ] = "FormattedField";
             Text[ swedish ] = "Formaterat f�lt";
             Text[ polish ] = "FormattedField";
             Text[ portuguese_brazilian ] = "FormattedField";
-            Text[ japanese ] = "FormattedField";
+            Text[ japanese ] = "書式設定されたﾌｨｰﾙﾄﾞ";
             Text[ korean ] = "FormattedField";
-            Text[ chinese_simplified ] = "已格式化的字段";
-            Text[ chinese_traditional ] = "FormattedField";
+            Text[ chinese_simplified ] = "格式化的字段";
+            Text[ chinese_traditional ] = "格式化的字段";
             Text[ turkish ] = "FormattedField";
             Text[ arabic ] = "FormattedField";
             Text[ catalan ] = "FormattedField";
@@ -425,23 +425,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Dateiauswahl" ;
             Text [ english ] = "FileControl" ;
-            Text[ english_us ] = "FileControl";
-            Text[ portuguese ] = "FileControl";
+            Text[ english_us ] = "File Selection";
+            Text[ portuguese ] = "Selec��o de ficheiro";
             Text[ russian ] = "FileControl";
             Text[ greek ] = "FileControl";
-            Text[ dutch ] = "FileControl";
-            Text[ french ] = "FileControl";
-            Text[ spanish ] = "FileControl";
+            Text[ dutch ] = "Bestandselectie";
+            Text[ french ] = "S�lection de fichier";
+            Text[ spanish ] = "Selecci�n de archivo";
             Text[ finnish ] = "FileControl";
             Text[ italian ] = "FileControl";
             Text[ danish ] = "FileControl";
             Text[ swedish ] = "Filurval";
             Text[ polish ] = "FileControl";
             Text[ portuguese_brazilian ] = "FileControl";
-            Text[ japanese ] = "FileControl";
+            Text[ japanese ] = "ﾌｧｲﾙの選択";
             Text[ korean ] = "FileControl";
             Text[ chinese_simplified ] = "选择文件";
-            Text[ chinese_traditional ] = "FileControl";
+            Text[ chinese_traditional ] = "選取檔案";
             Text[ turkish ] = "FileControl";
             Text[ arabic ] = "FileControl";
             Text[ catalan ] = "FileControl";
@@ -688,23 +688,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Zeitfeld" ;
             Text [ english ] = "TimeField" ;
-            Text[ english_us ] = "TimeField";
-            Text[ portuguese ] = "TimeField";
+            Text[ english_us ] = "Time Field";
+            Text[ portuguese ] = "Campo hor�rio";
             Text[ russian ] = "TimeField";
             Text[ greek ] = "TimeField";
-            Text[ dutch ] = "TimeField";
-            Text[ french ] = "TimeField";
-            Text[ spanish ] = "TimeField";
+            Text[ dutch ] = "Tijdveld";
+            Text[ french ] = "Champ horaire";
+            Text[ spanish ] = "Campo horario";
             Text[ finnish ] = "TimeField";
             Text[ italian ] = "TimeField";
             Text[ danish ] = "TimeField";
             Text[ swedish ] = "Tidsf�lt";
             Text[ polish ] = "TimeField";
             Text[ portuguese_brazilian ] = "TimeField";
-            Text[ japanese ] = "TimeField";
+            Text[ japanese ] = "時刻ﾌｨｰﾙﾄﾞ";
             Text[ korean ] = "TimeField";
-            Text[ chinese_simplified ] = "TimeField";
-            Text[ chinese_traditional ] = "TimeField";
+            Text[ chinese_simplified ] = "时间字段";
+            Text[ chinese_traditional ] = "時間欄位";
             Text[ turkish ] = "TimeField";
             Text[ arabic ] = "TimeField";
             Text[ catalan ] = "TimeField";
@@ -716,23 +716,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "W�hrungsfeld" ;
             Text [ english ] = "CurrencyField" ;
-            Text[ english_us ] = "CurrencyField";
-            Text[ portuguese ] = "CurrencyField";
+            Text[ english_us ] = "Currency Field";
+            Text[ portuguese ] = "Campo para moeda";
             Text[ russian ] = "CurrencyField";
             Text[ greek ] = "CurrencyField";
-            Text[ dutch ] = "CurrencyField";
-            Text[ french ] = "CurrencyField";
-            Text[ spanish ] = "CurrencyField";
+            Text[ dutch ] = "Valutaveld";
+            Text[ french ] = "Champ mon�taire";
+            Text[ spanish ] = "Campo de moneda";
             Text[ finnish ] = "CurrencyField";
             Text[ italian ] = "CurrencyField";
             Text[ danish ] = "CurrencyField";
             Text[ swedish ] = "Valutaf�lt";
             Text[ polish ] = "CurrencyField";
             Text[ portuguese_brazilian ] = "CurrencyField";
-            Text[ japanese ] = "CurrencyField";
+            Text[ japanese ] = "通貨ﾌｨｰﾙﾄﾞ";
             Text[ korean ] = "CurrencyField";
-            Text[ chinese_simplified ] = "CurrencyField";
-            Text[ chinese_traditional ] = "CurrencyField";
+            Text[ chinese_simplified ] = "货币字段";
+            Text[ chinese_traditional ] = "貨幣欄位";
             Text[ turkish ] = "CurrencyField";
             Text[ arabic ] = "CurrencyField";
             Text[ catalan ] = "CurrencyField";
@@ -744,23 +744,23 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Maskiertes Feld" ;
             Text [ english ] = "PatternField" ;
-            Text[ english_us ] = "PatternField";
-            Text[ portuguese ] = "PatternField";
+            Text[ english_us ] = "Pattern Field";
+            Text[ portuguese ] = "Campo mascarado";
             Text[ russian ] = "PatternField";
             Text[ greek ] = "PatternField";
-            Text[ dutch ] = "PatternField";
-            Text[ french ] = "PatternField";
-            Text[ spanish ] = "PatternField";
+            Text[ dutch ] = "Patroonveld";
+            Text[ french ] = "Champ masqu�";
+            Text[ spanish ] = "Campo enmascarado";
             Text[ finnish ] = "PatternField";
             Text[ italian ] = "PatternField";
             Text[ danish ] = "PatternField";
             Text[ swedish ] = "Maskerat f�lt";
             Text[ polish ] = "PatternField";
             Text[ portuguese_brazilian ] = "PatternField";
-            Text[ japanese ] = "PatternField";
+            Text[ japanese ] = "ﾊﾟﾀｰﾝﾌｨｰﾙﾄﾞ";
             Text[ korean ] = "PatternField";
-            Text[ chinese_simplified ] = "PatternField";
-            Text[ chinese_traditional ] = "PatternField";
+            Text[ chinese_simplified ] = "掩码字段";
+            Text[ chinese_traditional ] = "遮罩欄位";
             Text[ turkish ] = "PatternField";
             Text[ arabic ] = "PatternField";
             Text[ catalan ] = "PatternField";
@@ -827,6 +827,7 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
 
 
