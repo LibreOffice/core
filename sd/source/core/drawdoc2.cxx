@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-11-04 14:39:19 $
+ *  last change: $Author: cl $ $Date: 2002-11-18 17:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,6 +1605,7 @@ USHORT SdDrawDocument::CreatePage (
 
     // Create new notes page and set it up.
     pNotesPage = (SdPage*) AllocPage(FALSE);
+    pNotesPage->SetPageKind(PK_NOTES);
     // Use master page of current page.
     nPgNum = pPreviousNotesPage->GetMasterPageNum(0);
     pNotesPage->InsertMasterPage(nPgNum);
