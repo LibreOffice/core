@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:47:03 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 15:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,8 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 // - TransferableHelper -
 // ----------------------
 
-TransferableHelper::TransferableHelper()
+TransferableHelper::TransferableHelper() :
+    mpFormats( new DataFlavorExVector )
 {
 }
 
@@ -227,20 +228,21 @@ TransferableHelper::TransferableHelper()
 
 TransferableHelper::~TransferableHelper()
 {
+    delete mpFormats;
 }
 
 // -----------------------------------------------------------------------------
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
-    if( !maAny.hasValue() || !maFormats.size() || ( maLastFormat != rFlavor.MimeType ) )
+    if( !maAny.hasValue() || !mpFormats->size() || ( maLastFormat != rFlavor.MimeType ) )
     {
         maLastFormat = rFlavor.MimeType;
         maAny = Any();
 
         Application::GetSolarMutex().acquire();
 
-        if( !maFormats.size() )
+        if( !mpFormats->size() )
             AddSupportedFormats();
 
         GetData( rFlavor );
@@ -262,16 +264,16 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
 Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() throw( RuntimeException )
 {
-    if( !maFormats.size() )
+    if( !mpFormats->size() )
     {
         Application::GetSolarMutex().acquire();
         AddSupportedFormats();
         Application::GetSolarMutex().release();
     }
 
-    Sequence< DataFlavor >      aRet( maFormats.size() );
-    DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
-    sal_uInt32                  nCurPos = 0;
+    Sequence< DataFlavor >          aRet( mpFormats->size() );
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_uInt32                      nCurPos = 0;
 
     while( aIter != aEnd )
         aRet[ nCurPos++ ] = (DataFlavor&)(*aIter++);
@@ -285,14 +287,14 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 {
     sal_Bool bRet = sal_False;
 
-    if( !maFormats.size() )
+    if( !mpFormats->size() )
     {
         Application::GetSolarMutex().acquire();
         AddSupportedFormats();
         Application::GetSolarMutex().release();
     }
 
-    DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
+    DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
 
     while( aIter != aEnd )
     {
@@ -417,7 +419,7 @@ void TransferableHelper::AddFormat( SotFormatStringId nFormat )
         if( SotExchange::GetFormatDataFlavor( nFormat, aFlavorEx ) )
         {
             aFlavorEx.mnSotId = nFormat;
-            maFormats.push_back( aFlavorEx );
+            mpFormats->push_back( aFlavorEx );
         }
 
         if( FORMAT_GDIMETAFILE == nFormat )
@@ -438,7 +440,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
         aFlavorEx.DataType = rFlavor.DataType;
         aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
 
-        maFormats.push_back( aFlavorEx );
+        mpFormats->push_back( aFlavorEx );
 
         if( FORMAT_GDIMETAFILE == aFlavorEx.mnSotId )
             AddFormat( SOT_FORMATSTR_ID_WMF );
@@ -449,12 +451,12 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 
 void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
 {
-    DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
+    DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
 
     while( aIter != aEnd )
     {
         if( nFormat == (*aIter).mnSotId )
-            aIter = maFormats.erase( aIter );
+            aIter = mpFormats->erase( aIter );
         else
             aIter++;
     }
@@ -464,12 +466,12 @@ void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
 
 void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 {
-    DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
+    DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
 
     while( aIter != aEnd )
     {
         if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
-            aIter = maFormats.erase( aIter );
+            aIter = mpFormats->erase( aIter );
         else
             aIter++;
     }
@@ -479,8 +481,8 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 {
-    DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
-    sal_Bool                    bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -498,7 +500,7 @@ sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 
 void TransferableHelper::ClearFormats()
 {
-    maFormats.clear();
+    mpFormats->clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -901,7 +903,7 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 // --------------------------
 
 TransferableDataHelper::TransferableDataHelper() :
-    mpFormatsVector( new ::std::vector< DataFlavorEx > )
+    mpFormats( new DataFlavorExVector )
 {
 }
 
@@ -909,7 +911,7 @@ TransferableDataHelper::TransferableDataHelper() :
 
 TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
     mxTransfer( rxTransferable ),
-    mpFormatsVector( new ::std::vector< DataFlavorEx > )
+    mpFormats( new DataFlavorExVector )
 {
     InitFormats();
 }
@@ -918,7 +920,7 @@ TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::sta
 
 TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
     mxTransfer( rDataHelper.mxTransfer ),
-    mpFormatsVector( new ::std::vector< DataFlavorEx >( *rDataHelper.mpFormatsVector ) )
+    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) )
 {
 }
 
@@ -927,7 +929,7 @@ TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rD
 TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDataHelper& rDataHelper )
 {
     mxTransfer = rDataHelper.mxTransfer;
-    delete mpFormatsVector, mpFormatsVector = new ::std::vector< DataFlavorEx >( *rDataHelper.mpFormatsVector );
+    delete mpFormats, mpFormats= new DataFlavorExVector( *rDataHelper.mpFormats );
 
     return *this;
 }
@@ -936,7 +938,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 
 TransferableDataHelper::~TransferableDataHelper()
 {
-    delete mpFormatsVector;
+    delete mpFormats;
 }
 
 // -----------------------------------------------------------------------------
@@ -944,7 +946,7 @@ TransferableDataHelper::~TransferableDataHelper()
 void TransferableDataHelper::InitFormats()
 {
     Application::GetSolarMutex().acquire();
-    mpFormatsVector->clear();
+    mpFormats->clear();
 
     try
     {
@@ -962,14 +964,14 @@ void TransferableDataHelper::InitFormats()
                 aFlavorEx.DataType = rFlavor.DataType;
                 aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
 
-                mpFormatsVector->push_back( aFlavorEx );
+                mpFormats->push_back( aFlavorEx );
 
                 if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !HasFormat( SOT_FORMAT_GDIMETAFILE ) )
                 {
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
                     {
                         aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
-                        mpFormatsVector->push_back( aFlavorEx );
+                        mpFormats->push_back( aFlavorEx );
                     }
                 }
             }
@@ -986,8 +988,8 @@ void TransferableDataHelper::InitFormats()
 
 sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 {
-    ::std::vector< DataFlavorEx >::iterator aIter( mpFormatsVector->begin() ), aEnd( mpFormatsVector->end() );
-    sal_Bool                                bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -1005,8 +1007,8 @@ sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 
 sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
-    ::std::vector< DataFlavorEx >::iterator aIter( mpFormatsVector->begin() ), aEnd( mpFormatsVector->end() );
-    sal_Bool                                bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -1024,28 +1026,35 @@ sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 
 sal_uInt32 TransferableDataHelper::GetFormatCount() const
 {
-    return mpFormatsVector->size();
+    return mpFormats->size();
 }
 
 // -----------------------------------------------------------------------------
 
 SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 {
-    DBG_ASSERT( nFormat < mpFormatsVector->size(), "TransferableDataHelper::GetFormat: invalid format index" );
-        return( ( nFormat < mpFormatsVector->size() ) ? (*mpFormatsVector)[ nFormat ].mnSotId : 0 );
+    DBG_ASSERT( nFormat < mpFormats->size(), "TransferableDataHelper::GetFormat: invalid format index" );
+    return( ( nFormat < mpFormats->size() ) ? (*mpFormats)[ nFormat ].mnSotId : 0 );
 }
 
 // -----------------------------------------------------------------------------
 
 DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) const
 {
-    DBG_ASSERT( nFormat < mpFormatsVector->size(), "TransferableDataHelper::GetFormat: invalid format index" );
+    DBG_ASSERT( nFormat < mpFormats->size(), "TransferableDataHelper::GetFormat: invalid format index" );
     DataFlavor aRet;
 
-    if( nFormat < mpFormatsVector->size() )
-        aRet = (DataFlavor&) (*mpFormatsVector)[ nFormat ];
+    if( nFormat < mpFormats->size() )
+        aRet = (DataFlavor&) (*mpFormats)[ nFormat ];
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+DataFlavorExVector& TransferableDataHelper::GetDataFlavorExVector() const
+{
+    return( *mpFormats );
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-15 13:28:02 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 15:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,16 +1454,36 @@ USHORT SotExchange::GetExchangeAction(
 // - new style GetExchange methods -
 // ---------------------------------
 
-static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >& rxTransferable, const SotAction_Impl& rEntry )
+static sal_Bool HasFormat_Impl( const DataFlavorExVector& rDataFlavorExVector, ULONG nId )
+{
+    DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
+    DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
+    sal_Bool                        bRet = sal_False;
+
+    while( aIter != aEnd )
+    {
+        if( nId == (*aIter++).mnSotId )
+        {
+            bRet = sal_True;
+            aIter = aEnd;
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
 {
     DataFlavor  aFlavor;
     BOOL        bRet = TRUE;
 
     try
     {
-        if( rxTransferable.is() &&
+        if( pxTransferable && (*pxTransferable).is() &&
             SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aFlavor ) &&
-            rxTransferable->isDataFlavorSupported( aFlavor ) )
+            (*pxTransferable)->isDataFlavorSupported( aFlavor ) )
         {
 #ifdef WNT
             switch( rEntry.nContextCheckId )
@@ -1473,11 +1493,11 @@ static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >& rxT
                     bRet = FALSE;
 
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
-                        rxTransferable->isDataFlavorSupported( aFlavor ) &&
+                        (*pxTransferable)->isDataFlavorSupported( aFlavor ) &&
                         SotExchange::GetFormatDataFlavor( rEntry.nFormatId, aFlavor ) &&
-                        rxTransferable->isDataFlavorSupported( aFlavor ) )
+                        (*pxTransferable)->isDataFlavorSupported( aFlavor ) )
                     {
-                        Any aAny( rxTransferable->getTransferData( aFlavor ) );
+                        Any aAny( (*pxTransferable)->getTransferData( aFlavor ) );
 
                         if( aAny.hasValue() )
                         {
@@ -1512,14 +1532,18 @@ static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >& rxT
     return bRet;
 }
 
+// -----------------------------------------------------------------------------
+
 static USHORT GetTransferableAction_Impl(
-                            const Reference< XTransferable >& rxTransferable,
-                             const SotAction_Impl* pArray, ULONG& rFormat,
-                            ULONG nOnlyTestFormat )
+                            const DataFlavorExVector& rDataFlavorExVector,
+                             const SotAction_Impl* pArray,
+                            ULONG& rFormat,
+                            ULONG nOnlyTestFormat,
+                            const Reference< XTransferable >* pxTransferable )
 {
     try
     {
-        if( rxTransferable.is() )
+        if( rDataFlavorExVector.size() )
         {
             DataFlavor              aFlavor;
             const SotAction_Impl*   pArrayStart = pArray;
@@ -1540,20 +1564,18 @@ static USHORT GetTransferableAction_Impl(
             while( nId != 0xffff )
             {
                 rFormat = nId;
-                if( ( !nOnlyTestFormat || nOnlyTestFormat == nId ) &&
-                    SotExchange::GetFormatDataFlavor( nId, aFlavor ) &&
-                    rxTransferable->isDataFlavorSupported( aFlavor ) &&
-                    ( !pArray->nContextCheckId ||
-                      CheckTransferableContext_Impl( rxTransferable, *pArray ) ) )
-                {
-                    if( SOT_FORMAT_FILE_LIST == rFormat )
-                    {
-                        const DataFlavor aFileListFlavor( aFlavor );
 
-                        if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_FILE, aFlavor ) &&
-                            rxTransferable->isDataFlavorSupported( aFlavor ) )
+                if( ( !nOnlyTestFormat || nOnlyTestFormat == nId ) &&
+                    HasFormat_Impl( rDataFlavorExVector, nId ) &&
+                    ( !pArray->nContextCheckId || CheckTransferableContext_Impl( pxTransferable, *pArray ) ) )
+                {
+                    if( pxTransferable && (*pxTransferable).is() && ( SOT_FORMAT_FILE_LIST == rFormat ) )
+                    {
+                        if( HasFormat_Impl( rDataFlavorExVector, SOT_FORMAT_FILE ) )
                         {
-                            Any aAny( rxTransferable->getTransferData( aFileListFlavor ) );
+                            DataFlavor aFileListFlavor;
+                            SotExchange::GetFormatDataFlavor( SOT_FORMAT_FILE_LIST, aFileListFlavor );
+                            Any aAny( (*pxTransferable)->getTransferData( aFileListFlavor ) );
 
                             if( aAny.hasValue() )
                             {
@@ -1597,11 +1619,16 @@ static USHORT GetTransferableAction_Impl(
     return EXCHG_INOUT_ACTION_NONE;
 }
 
-USHORT SotExchange::GetExchangeAction(
-                        const Reference< XTransferable >& rxTransferable,
-                        USHORT nDestination, USHORT nSourceOptions,
-                        USHORT nUserAction, ULONG& rFormat,
-                        USHORT& rDefaultAction, ULONG nOnlyTestFormat )
+// -----------------------------------------------------------------------------
+
+USHORT SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
+                                       USHORT nDestination,
+                                       USHORT nSourceOptions,
+                                       USHORT nUserAction,
+                                       ULONG& rFormat,
+                                       USHORT& rDefaultAction,
+                                       ULONG nOnlyTestFormat,
+                                       const Reference< XTransferable >* pxTransferable )
 {
     // hier wird jetzt die oben definierte Tabelle "implementiert"
     IMPL_DATA_ARRAY_1;
@@ -1638,26 +1665,27 @@ USHORT SotExchange::GetExchangeAction(
     */
     if( nUserAction == EXCHG_IN_ACTION_DEFAULT )
     {
-        nUserAction = GetTransferableAction_Impl( rxTransferable,
-                        pEntry->aDefaultActions, rFormat, nOnlyTestFormat );
+        nUserAction = GetTransferableAction_Impl(
+                        rDataFlavorExVector, pEntry->aDefaultActions,
+                        rFormat, nOnlyTestFormat, pxTransferable );
         // Unterstuetzt die Quelle die Aktion?
         if( !(nUserAction & nSourceOptions ))
         {
             // Nein -> Alle Aktionen der Quelle checken
             rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
             if( rDefaultAction && (nUserAction = GetTransferableAction_Impl(
-                                        rxTransferable, pEntry->aCopyActions,
-                                        rFormat, nOnlyTestFormat ) ) )
+                                        rDataFlavorExVector, pEntry->aCopyActions,
+                                        rFormat, nOnlyTestFormat, pxTransferable ) ) )
                 return nUserAction;
             rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
             if( rDefaultAction && (nUserAction = GetTransferableAction_Impl(
-                                        rxTransferable, pEntry->aLinkActions,
-                                        rFormat, nOnlyTestFormat ) ) )
+                                        rDataFlavorExVector, pEntry->aLinkActions,
+                                        rFormat, nOnlyTestFormat, pxTransferable ) ) )
                 return nUserAction;
             rDefaultAction = (EXCHG_IN_ACTION_MOVE & nSourceOptions);
             if( rDefaultAction && (nUserAction = GetTransferableAction_Impl(
-                                        rxTransferable, pEntry->aMoveActions,
-                                        rFormat, nOnlyTestFormat )))
+                                        rDataFlavorExVector, pEntry->aMoveActions,
+                                        rFormat, nOnlyTestFormat, pxTransferable )))
                 return nUserAction;
             rDefaultAction = 0;
             return 0;
@@ -1670,18 +1698,21 @@ USHORT SotExchange::GetExchangeAction(
     switch( nUserAction )
     {
     case EXCHG_IN_ACTION_MOVE:
-        nUserAction = GetTransferableAction_Impl( rxTransferable,
-                            pEntry->aMoveActions, rFormat, nOnlyTestFormat );
+        nUserAction = GetTransferableAction_Impl(
+                            rDataFlavorExVector, pEntry->aMoveActions,
+                            rFormat, nOnlyTestFormat, pxTransferable );
         break;
 
     case EXCHG_IN_ACTION_COPY:
-        nUserAction = GetTransferableAction_Impl( rxTransferable,
-                            pEntry->aCopyActions, rFormat, nOnlyTestFormat);
+        nUserAction = GetTransferableAction_Impl(
+                            rDataFlavorExVector, pEntry->aCopyActions,
+                            rFormat, nOnlyTestFormat, pxTransferable );
         break;
 
     case EXCHG_IN_ACTION_LINK:
-        nUserAction = GetTransferableAction_Impl( rxTransferable,
-                            pEntry->aLinkActions, rFormat, nOnlyTestFormat);
+        nUserAction = GetTransferableAction_Impl(
+                            rDataFlavorExVector, pEntry->aLinkActions,
+                            rFormat, nOnlyTestFormat, pxTransferable );
         break;
 
     default:
@@ -1690,4 +1721,44 @@ USHORT SotExchange::GetExchangeAction(
     return nUserAction;
 }
 
+// -----------------------------------------------------------------------------
 
+USHORT SotExchange::GetExchangeAction(
+                        const Reference< XTransferable >& rxTransferable,
+                        USHORT nDestination, USHORT nSourceOptions,
+                        USHORT nUserAction, ULONG& rFormat,
+                        USHORT& rDefaultAction, ULONG nOnlyTestFormat )
+{
+    DataFlavorExVector aVector;
+
+    if( rxTransferable.is() )
+    {
+        const Sequence< DataFlavor > aFlavors( rxTransferable->getTransferDataFlavors() );
+
+        for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
+        {
+            DataFlavorEx        aFlavorEx;
+            const DataFlavor&   rFlavor = aFlavors[ i ];
+
+            aFlavorEx.MimeType = rFlavor.MimeType;
+            aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
+            aFlavorEx.DataType = rFlavor.DataType;
+            aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
+
+            aVector.push_back( aFlavorEx );
+
+            if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !HasFormat_Impl( aVector, SOT_FORMAT_GDIMETAFILE ) )
+            {
+                if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
+                {
+                    aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
+                    aVector.push_back( aFlavorEx );
+                }
+            }
+        }
+    }
+
+    return( SotExchange::GetExchangeAction( aVector, nDestination, nSourceOptions,
+                                            nUserAction, rFormat, rDefaultAction,
+                                            nOnlyTestFormat, &rxTransferable ) );
+}

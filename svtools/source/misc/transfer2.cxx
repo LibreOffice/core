@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-05 12:44:24 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 15:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,63 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
+// -----------------------------------------
+// - DragSourceHelper::DragGestureListener -
+// -----------------------------------------
+
+DragSourceHelper::DragGestureListener::DragGestureListener( DragSourceHelper& rDragSourceHelper ) :
+    mrParent( rDragSourceHelper )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+DragSourceHelper::DragGestureListener::~DragGestureListener()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObject& Source ) throw( RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( const DragGestureEvent& rDGE ) throw( RuntimeException )
+{
+    const Point aPtPixel( rDGE.DragOriginX, rDGE.DragOriginY );
+    mrParent.StartDrag( rDGE.DragAction, aPtPixel );
+}
+
+// --------------------
+// - DragSourceHelper -
+// --------------------
+
+DragSourceHelper::DragSourceHelper( Window* pWindow ) :
+    mxDragGestureRecognizer( pWindow->GetDragGestureRecognizer() )
+{
+    if( mxDragGestureRecognizer.is() )
+    {
+        mxDragGestureListener = new DragSourceHelper::DragGestureListener( *this );
+        mxDragGestureRecognizer->addDragGestureListener( mxDragGestureListener );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+DragSourceHelper::~DragSourceHelper()
+{
+    if( mxDragGestureRecognizer.is()  )
+        mxDragGestureRecognizer->removeDragGestureListener( mxDragGestureListener );
+}
+
+// -----------------------------------------------------------------------------
+
+void DragSourceHelper::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+}
+
 // ----------------------------------------
 // - DropTargetHelper::DropTargetListener -
 // ----------------------------------------
@@ -199,7 +256,8 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const Dro
 // --------------------
 
 DropTargetHelper::DropTargetHelper( Window* pWindow ) :
-    mxDropTarget( pWindow->GetDropTarget() )
+    mxDropTarget( pWindow->GetDropTarget() ),
+    mpFormats( new DataFlavorExVector )
 {
     ImplConstruct();
 }
@@ -207,7 +265,8 @@ DropTargetHelper::DropTargetHelper( Window* pWindow ) :
 // -----------------------------------------------------------------------------
 
 DropTargetHelper::DropTargetHelper( const Reference< XDropTarget >& rxDropTarget ) :
-    mxDropTarget( rxDropTarget )
+    mxDropTarget( rxDropTarget ),
+    mpFormats( new DataFlavorExVector )
 {
     ImplConstruct();
 }
@@ -218,6 +277,8 @@ DropTargetHelper::~DropTargetHelper()
 {
     if( mxDropTarget.is() )
         mxDropTarget->removeDropTargetListener( mxDropTargetListener );
+
+    delete mpFormats;
 }
 
 // -----------------------------------------------------------------------------
@@ -239,7 +300,7 @@ void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDa
     DataFlavorEx        aFlavorEx;
     const DataFlavor*   pFlavor = rSupportedDataFlavors.getConstArray();
 
-    maDragFormats.clear();
+    mpFormats->clear();
 
     for( sal_uInt32 i = 0, nCount = rSupportedDataFlavors.getLength(); i < nCount; i++, pFlavor++ )
     {
@@ -248,7 +309,7 @@ void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDa
         aFlavorEx.DataType = pFlavor->DataType;
         aFlavorEx.mnSotId = SotExchange::RegisterFormat( *pFlavor );
 
-        maDragFormats.push_back( aFlavorEx );
+        mpFormats->push_back( aFlavorEx );
     }
 }
 
@@ -256,7 +317,7 @@ void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDa
 
 void DropTargetHelper::ImplEndDrag()
 {
-    maDragFormats.clear();
+    mpFormats->clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -277,8 +338,8 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 {
-    DataFlavorExList::iterator  aIter( maDragFormats.begin() ), aEnd( maDragFormats.end() );
-    sal_Bool                    bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -296,8 +357,8 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 
 sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
 {
-    DataFlavorExList::iterator  aIter( maDragFormats.begin() ), aEnd( maDragFormats.end() );
-    sal_Bool                    bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -309,4 +370,11 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+DataFlavorExVector& DropTargetHelper::GetDataFlavorExVector() const
+{
+    return( *mpFormats );
 }
