@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:36:34 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,12 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ swedish ] = "Villkor ~1" ;
         Text [ danish ] = "Betingelse 1" ;
         Text [ portuguese_brazilian ] = "Bedingung 1" ;
-        Text [ portuguese ] = "Condição 1" ;
+        Text [ portuguese ] = "Condição ~1" ;
         Text[ chinese_simplified ] = "Ìõ¼ş 1";
         Text[ russian ] = "Óñëîâèå 1";
         Text[ polish ] = "Warunek 1";
         Text[ japanese ] = "ğŒ 1";
-        Text[ chinese_traditional ] = "±ø¥ó 1";
+        Text[ chinese_traditional ] = "±ø¥ó ~1";
         Text[ arabic ] = "ÇáÔÑØ 1";
         Text[ greek ] = "ÓõíèŞêç ~1";
         Text[ korean ] = "Á¶°Ç 1";
@@ -305,7 +305,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "maggiore di" ; Default ; > ;
             < "minore o uguale" ; Default ; > ;
             < "maggiore o uguale" ; Default ; > ;
-            < "non uguale" ; Default ; > ;
+            < "diverso" ; Default ; > ;
             < "tra" ; Default ; > ;
             < "non tra" ; Default ; > ;
         };
@@ -593,7 +593,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ swedish ] = "~Cellformatmall" ;
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
-        Text [ portuguese ] = "Estilo da célula" ;
+        Text [ portuguese ] = "~Estilo da célula" ;
         Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
@@ -635,12 +635,12 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ swedish ] = "Villkor ~2" ;
         Text [ danish ] = "Betingelse 2" ;
         Text [ portuguese_brazilian ] = "Bedingung 2" ;
-        Text [ portuguese ] = "Condição 2" ;
+        Text [ portuguese ] = "Condição ~2" ;
         Text[ chinese_simplified ] = "Ìõ¼ş 2";
         Text[ russian ] = "Óñëîâèå 2";
         Text[ polish ] = "Warunek 2";
         Text[ japanese ] = "ğŒ 2";
-        Text[ chinese_traditional ] = "±ø¥ó 2";
+        Text[ chinese_traditional ] = "±ø¥ó ~2";
         Text[ arabic ] = "ÇáÔÑØ 2";
         Text[ greek ] = "ÓõíèŞêç ~2";
         Text[ korean ] = "Á¶°Ç 2";
@@ -1142,7 +1142,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ swedish ] = "C~ellformatmall" ;
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
-        Text [ portuguese ] = "Estilo da célula" ;
+        Text [ portuguese ] = "~Estilo da célula" ;
         Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
@@ -1184,12 +1184,12 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ swedish ] = "Villkor ~3" ;
         Text [ danish ] = "Betingelse 3" ;
         Text [ portuguese_brazilian ] = "Bedingung 3" ;
-        Text [ portuguese ] = "Condição 3" ;
+        Text [ portuguese ] = "Condição ~3" ;
         Text[ chinese_simplified ] = "Ìõ¼ş 3";
         Text[ russian ] = "Óñëîâèå 3";
         Text[ polish ] = "Warunek 3";
         Text[ japanese ] = "ğŒ 3";
-        Text[ chinese_traditional ] = "±ø¥ó 3";
+        Text[ chinese_traditional ] = "±ø¥ó ~3";
         Text[ arabic ] = "ÇáÔÑØ 3";
         Text[ greek ] = "ÓõíèŞêç ~3";
         Text[ korean ] = "Á¶°Ç 3";
@@ -1691,7 +1691,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ swedish ] = "Ce~llformatmall" ;
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
-        Text [ portuguese ] = "Estilo da célula" ;
+        Text [ portuguese ] = "E~stilo da célula" ;
         Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
@@ -1754,4 +1754,5 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ catalan ] = "Formato condicionado";
     Text[ finnish ] = "Ehdollinen muotoilu";
 };
+
 
