@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fapihelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:30:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,15 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
 
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
+#endif
+
+class SfxMedium;
 
 // ============================================================================
 
@@ -128,7 +130,6 @@ inline void setPropString(
 {
     ::setPropValue( xProp, rName, ::rtl::OUString( rText ) );
 }
-
 
 // Get properties =============================================================
 
@@ -177,6 +178,16 @@ inline bool getPropBool(
     return ::getPropBool( bRet, rxProp, rName ) && bRet;
 }
 
+// Static helper functions ====================================================
+
+/** Static API helper functions. */
+class ScfApiHelper : ScfNoInstance
+{
+public:
+    /** Opens a password dialog and returns the entered password.
+        @return  The entered password or an empty string on 'Cancel' or any error. */
+    static String       QueryPasswordForMedium( SfxMedium& rMedium );
+};
 
 // MultiPropertySets ==========================================================
 
@@ -223,6 +234,7 @@ public:
                                     const XPropertySetRef& xPropSet );
 };
 
+// ----------------------------------------------------------------------------
 
 inline const ::rtl::OUString& ScfMultiPSHelper::getName( sal_Int32 nIndex ) const
 {
@@ -235,7 +247,6 @@ inline ::com::sun::star::uno::Any& ScfMultiPSHelper::getAny( sal_Int32 nIndex )
     DBG_ASSERT( (0 <= nIndex) && (nIndex < maValueSeq.getLength()), "ScfMultiPSHelper::getValue - invalid index" );
     return maValueSeq[ nIndex ];
 }
-
 
 // ============================================================================
 
