@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 12:45:46 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 14:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,6 +1538,23 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
                 long nDiff = nMinHeight - nTxtHeight;
                 pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() + nDiff) );
                 pTmpLine->SetHeight( nMinHeight, nTxtHeight );
+            }
+        }
+        else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+        {
+            USHORT nPara = GetParaPortions().GetPos( pParaPortion );
+            if ( nPara || ( pTmpLine->GetStartPortion() != 0 ) ) // Nicht die aller erste Zeile
+            {
+                sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
+                sal_uInt32 nH = nTxtHeight;
+                nH *= rLSItem.GetPropLineSpace();
+                nH /= 100;
+                // Der Ascent muss um die Differenz angepasst werden:
+                long nDiff = pTmpLine->GetHeight() - nH;
+                if ( nDiff > pTmpLine->GetMaxAscent() )
+                    nDiff = pTmpLine->GetMaxAscent();
+                pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() - nDiff) );
+                pTmpLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
             }
         }
     }
