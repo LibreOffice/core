@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:45:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage RID_SVXPAGE_BORDER
     Text [ italian ] = "Bordo" ;
     Text [ portuguese_brazilian ] = "Borda" ;
     Text [ portuguese ] = "Contornos" ;
-    Text [ finnish ] = "Reunaviiva" ;
+    Text [ finnish ] = "Reunat" ;
     Text [ danish ] = "Ramme" ;
     Text [ french ] = "Bordure" ;
     Text [ swedish ] = "Inramning" ;
@@ -119,7 +119,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Cornice" ;
         Text [ portuguese_brazilian ] = "Borda" ;
         Text [ portuguese ] = "Disposição de linhas" ;
-        Text [ finnish ] = "Reunaviiva" ;
+        Text [ finnish ] = "Linienanordnung" ;
         Text [ danish ] = "Ramme" ;
         Text [ french ] = "Disposition des lignes" ;
         Text [ swedish ] = "Linjeplacering" ;
@@ -162,7 +162,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Linea" ;
         Text [ portuguese_brazilian ] = "Linhas" ;
         Text [ portuguese ] = "Linha" ;
-        Text [ finnish ] = "Viivat" ;
+        Text [ finnish ] = "Linie" ;
         Text [ danish ] = "Streg" ;
         Text [ french ] = "Ligne" ;
         Text [ swedish ] = "Linje" ;
@@ -208,6 +208,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Izquierda";
+        Text[ finnish ] = "~Links";
     };
     MetricField MF_LEFT
     {
@@ -250,6 +251,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "S~að";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
+        Text[ finnish ] = "R~echts";
     };
     MetricField MF_RIGHT
     {
@@ -292,6 +294,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "~Üst";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Arriba";
+        Text[ finnish ] = "~Oben";
     };
     MetricField MF_TOP
     {
@@ -333,6 +336,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "ÃÓÝá";
         Text[ turkish ] = "Al~t";
         Text[ catalan ] = "~Abajo";
+        Text[ finnish ] = "~Unten";
     };
     MetricField MF_BOTTOM
     {
@@ -375,6 +379,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "~Eþitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sincronizar";
+        Text[ finnish ] = "S~ynchronisieren";
     };
     FixedLine FL_DISTANCE
     {
@@ -402,6 +407,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
+        Text[ finnish ] = "Abstand zum Inhalt";
     };
 
     FixedText FT_SHADOWPOS
@@ -414,7 +420,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "~Posizione" ;
         Text [ portuguese_brazilian ] = "~Posição" ;
         Text [ portuguese ] = "~Posição" ;
-        Text [ finnish ] = "A~sema" ;
+        Text [ finnish ] = "~Sijainti" ;
         Text [ danish ] = "Placering" ;
         Text [ french ] = "~Position" ;
         Text [ swedish ] = "~Position" ;
@@ -495,7 +501,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Colore" ;
         Text [ portuguese_brazilian ] = "C~or" ;
         Text [ portuguese ] = "C~or" ;
-        Text [ finnish ] = "Vä~ri" ;
+        Text [ finnish ] = "~Väri" ;
         Text [ danish ] = "Farve" ;
         Text [ french ] = "~Couleur" ;
         Text [ swedish ] = "Fä~rg" ;
@@ -532,7 +538,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Ombre" ;
         Text [ portuguese_brazilian ] = "Sombra" ;
         Text [ portuguese ] = "Sombras" ;
-        Text [ finnish ] = "Varjo" ;
+        Text [ finnish ] = "Schatten" ;
         Text [ danish ] = "Skygge" ;
         Text [ french ] = "Ombre" ;
         Text [ swedish ] = "Skugga" ;
