@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OButtonModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:39:57 $
+ *  last change:$Date: 2003-09-08 11:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,21 @@
 
 package mod._forms;
 
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.drawing.XShape;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.FormTools;
 import util.WriterTools;
+
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 
 
 /**
@@ -135,15 +138,24 @@ public class OButtonModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
     }
 
     /**
     * Disposes StarWriter document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
 
