@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:56 $
+ *  last change: $Author: obo $ $Date: 2001-09-21 15:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@ namespace stoc_connector
             throw( NoConnectException, ConnectionSetupException, RuntimeException);
 
     public: // XServiceInfo
-        virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
-        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
+                virtual OUString              SAL_CALL getImplementationName() throw();
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
     };
 
     OConnector::OConnector(const Reference< XComponentContext > &xCtx)
@@ -345,12 +345,12 @@ namespace stoc_connector
         return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
     }
 
-    OUString OConnector::getImplementationName() SAL_THROW ( () )
+        OUString OConnector::getImplementationName() throw()
     {
         return connector_getImplementationName();
     }
 
-    sal_Bool OConnector::supportsService(const OUString& ServiceName) SAL_THROW( () )
+        sal_Bool OConnector::supportsService(const OUString& ServiceName) throw()
     {
         Sequence< OUString > aSNL = getSupportedServiceNames();
         const OUString * pArray = aSNL.getConstArray();
@@ -362,7 +362,7 @@ namespace stoc_connector
         return sal_False;
     }
 
-    Sequence< OUString > OConnector::getSupportedServiceNames(void) SAL_THROW( () )
+        Sequence< OUString > OConnector::getSupportedServiceNames(void) throw()
     {
         return connector_getSupportedServiceNames();
     }

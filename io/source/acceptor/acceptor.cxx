@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
+ *  last change: $Author: obo $ $Date: 2001-09-21 15:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,9 @@ namespace io_acceptor
         virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException);
 
     public: // XServiceInfo
-        virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
-        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
+                virtual OUString              SAL_CALL getImplementationName() throw();
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
 
     private:
         PipeAcceptor *m_pPipe;
@@ -437,12 +437,12 @@ namespace io_acceptor
         return *pNames;
     }
 
-    OUString OAcceptor::getImplementationName() SAL_THROW( () )
+        OUString OAcceptor::getImplementationName() throw()
     {
         return acceptor_getImplementationName();
     }
 
-    sal_Bool OAcceptor::supportsService(const OUString& ServiceName) SAL_THROW( () )
+        sal_Bool OAcceptor::supportsService(const OUString& ServiceName) throw()
     {
         Sequence< OUString > aSNL = getSupportedServiceNames();
         const OUString * pArray = aSNL.getConstArray();
@@ -454,7 +454,7 @@ namespace io_acceptor
         return sal_False;
     }
 
-    Sequence< OUString > OAcceptor::getSupportedServiceNames(void) SAL_THROW( () )
+        Sequence< OUString > OAcceptor::getSupportedServiceNames(void) throw()
     {
         return acceptor_getSupportedServiceNames();
     }

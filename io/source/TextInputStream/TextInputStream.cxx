@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-10 14:30:45 $
+ *  last change: $Author: obo $ $Date: 2001-09-21 15:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,9 @@ public:
         throw(RuntimeException);
 
     // Methods XServiceInfo
-    virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
-    virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
-    virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
+        virtual OUString              SAL_CALL getImplementationName() throw();
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
+        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
 };
 
 OTextInputStream::OTextInputStream()
@@ -505,12 +505,12 @@ Sequence< OUString > TextInputStream_getSupportedServiceNames()
     return *pNames;
 }
 
-OUString OTextInputStream::getImplementationName() SAL_THROW( () )
+OUString OTextInputStream::getImplementationName() throw()
 {
     return TextInputStream_getImplementationName();
 }
 
-sal_Bool OTextInputStream::supportsService(const OUString& ServiceName) SAL_THROW( () )
+sal_Bool OTextInputStream::supportsService(const OUString& ServiceName) throw()
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
@@ -522,7 +522,7 @@ sal_Bool OTextInputStream::supportsService(const OUString& ServiceName) SAL_THRO
     return sal_False;
 }
 
-Sequence< OUString > OTextInputStream::getSupportedServiceNames(void) SAL_THROW( () )
+Sequence< OUString > OTextInputStream::getSupportedServiceNames(void) throw()
 {
     return TextInputStream_getSupportedServiceNames();
 }
