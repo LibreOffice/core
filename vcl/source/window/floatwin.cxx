@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-27 15:31:08 $
+ *  last change: $Author: ssa $ $Date: 2002-04-16 07:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,8 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
 
     do
     {
-        Rectangle devRect( OutputToAbsoluteScreenPixel( ScreenToOutputPixel(pWin->GetPosPixel()) ), pWin->GetSizePixel() ) ;
+        //Rectangle devRect( OutputToAbsoluteScreenPixel( ScreenToOutputPixel(pWin->GetPosPixel()) ), pWin->GetSizePixel() ) ;
+        Rectangle devRect( pWin->GetWindowExtentsRelative( NULL ) );
         if ( devRect.IsInside( aAbsolute ) )
         {
             rHitTest = IMPL_FLOATWIN_HITTEST_WINDOW;
