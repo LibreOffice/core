@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:42:09 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,7 +1558,7 @@ PushButton PB_FORMAT
     TabStop = TRUE ;
     Text = "~..." ;
     Text [ ENGLISH ] = "~..." ;
-    Text[ english_us ] = "...";
+    Text[ english_us ] = "~...";
     Text[ portuguese ] = "...";
     Text[ russian ] = "...";
     Text[ greek ] = "...";
@@ -1597,7 +1597,7 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
     Text[ japanese ] = "\"$column$\" γ®ε—εγι‡θ¤‡γ—γ¦γ„γ¦γ€οΎƒο½°οΎοΎοΎ™γ®δΏε­γγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "μ—΄ μ΄λ¦„\"$column$\"μ΄ μ¤‘λ³µ ν• λ‹Ήλμ–΄ μκΈ° λ•λ¬Έμ— ν…μ΄λΈ”μ„ μ €μ¥ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε› δΈΊι‡ε¤δ½Ώη”¨ε—εη§°\"$column$\"οΌζ‰€δ»¥ζ— ζ³•ε­η›θΏ™δΈªθ΅¨ζ Όγ€‚";
-    Text[ chinese_traditional ] = "η„΅ζ³•ε„²ε­ι€™ε€‹θ΅¨ζ ΌοΌε› η‚Ίζ¬„δ½εη¨± \"$column$\" ε·²η¶“ε­ε¨γ€‚";
+    Text[ chinese_traditional ] = "η„΅ζ³•ε„²ε­ι€™ε€‹θ΅¨ζ ΌοΌε› η‚Ίζ¬„δ½εη¨±<$column$>ε·²η¶“ε­ε¨γ€‚";
     Text[ arabic ] = "αΗ νγίδ ΝέΩ ΗαΜΟζα΅ ζΠαί αΗΣΚΞΟΗγ ΗΣγ ΗαΪγζΟ \"$column$\" γΡΚνδ.";
     Text[ turkish ] = "\"$column$\" sόtun adύ daha φnce kullanύldύπύ iηin tablo kaydedilemiyor.";
     Text[ catalan ] = "No se puede guardar la tabla porque el nombre de columna \"$column$\" ha sido asignado dos veces.";
@@ -1621,7 +1621,7 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN
     Text[ japanese ] = "ε— \"$column$\" γ―οΎοΎοΎ—ο½²οΎοΎο½·ο½°γ«ε±γ—γΎγ™γ€‚γ“γ‚γ‚’ε‰ι™¤γ™γ‚‹γ¨γ€οΎοΎοΎ—ο½²οΎοΎο½·ο½°γ‚‚ε‰ι™¤γ•γ‚γ¦γ—γΎγ„γΎγ™γ€‚ε‰ι™¤γ—γ¦γ‚‚γ‹γΎγ„γΎγ›γ‚“γ‹γ€‚";
     Text[ korean ] = "μ—΄ \"$column$\"μ€(λ”) 1μ°¨ ν‚¤μ— μ†ν•©λ‹λ‹¤. μ΄ μ—΄μ΄ μ‚­μ λλ©΄ 1μ°¨ ν‚¤λ„ μ‚­μ λ©λ‹λ‹¤. μ •λ§λ΅ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "θΏ™δΈªε­—ζ®µ \"$column$\" ε±δΊδΈ»ε…³ι”®ε­—γ€‚ε¦‚ζζ‚¨ε ι™¤θΏ™δΈªε­—ζ®µοΌδΉε°±δΌδΈ€θµ·ε ι™¤δΈ»ε…³ι”®ε­—γ€‚θ¦ε ι™¤θΏ™δΈªε­—ζ®µοΌ";
-    Text[ chinese_traditional ] = "ι€™ε€‹ζ¬„ \"$column$\" ε±¬ζ–ΌδΈ»ι—ιµε­—γ€‚ε¦‚ζζ‚¨εªι™¤ι€™ε€‹ζ¬„δ½οΌδΉε°±ζƒδΈ€θµ·εªι™¤δΈ»ι—ιµε­—γ€‚θ¦εªι™¤ι€™ε€‹ζ¬„δ½οΌ";
+    Text[ chinese_traditional ] = "ι€™ε€‹ζ¬„<$column$>ε±¬ζ–ΌδΈ»ι—ιµε­—γ€‚ε¦‚ζεªι™¤ι€™ε€‹ζ¬„δ½οΌδΉε°±ζƒδΈ€θµ·εªι™¤δΈ»ι—ιµε­—γ€‚θ¦εªι™¤ι€™ε€‹ζ¬„δ½οΌ";
     Text[ turkish ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
     Text[ arabic ] = "νδΚγν ΗαΪγζΟ \"$column$\" Εαμ ΗαγέΚΗΝ ΗαΓΣΗΣν. ΕΠΗ Κγ ΝΠέε΅ έΣζέ νΚγ ΝΠέ ΗαγέΚΗΝ ΗαΓΣΗΣν ΓνΦΗπ. εα ΚΡνΟ ΘΗαέΪα ΝΠέ εΠΗ ΗαΪγζΟΏ";
     Text[ catalan ] = "La columna \"$column$\" pertenece a la llave primaria. En caso de que la elimine, eliminarα tambiιn la llave primaria. ΏDesea eliminarla realmente?";
@@ -1811,7 +1811,7 @@ String STR_TABLEDESIGN_CONNECTION_MISSING
 String STR_TABLEDESIGN_DATASOURCE_DELETED
 {
     Text = "Der Tabellenfilter konnte nicht angepasst werden, da die Datenquelle gelφscht wurde.";
-    Text [ english_us ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text [ english_us ] = "The table filter could not be adjusted because the data source has been deleted.";
     Text [ english ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ portuguese ] = "Foi impossνvel ajustar o filtro da tabela porque a fonte de dados foi eliminada.";
     Text[ russian ] = "Ρξγλΰρξβΰςό τθλόςπ ςΰαλθφϋ νεβξημξζνξ, οξρκξλόκσ θρςξχνθκ δΰννϋυ σδΰλεν.";
@@ -1826,7 +1826,7 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text[ polish ] = "Dopasowanie filtra tabeli nie jest moΏliwe, poniewaΏ usuniκto rσd³o danych.";
     Text[ portuguese_brazilian ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ japanese ] = "οΎƒοΎο½°οΎ€ο½Ώο½°ο½½γε‰ι™¤γ•γ‚γ¦γ—γΎγ£γ¦γ„γ‚‹γγ‚γ«γ€οΎƒο½°οΎοΎοΎ™οΎο½¨οΎ™οΎ€γ‚’ι©εγ§γγΎγ›γ‚“γ§γ—γγ€‚";
-    Text[ korean ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text[ korean ] = "μ΄λ―Έ λ°μ΄ν„° μ†μ¤κ°€ μ‚­μ λμ—μΌλ―€λ΅ μ‹νΈ ν•„ν„°λ¥Ό μ μ©ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•θ°ƒζ•΄θ΅¨ζ Όη­›ι€‰οΌε› δΈΊζ•°ζ®ζΊε·²η»θΆ«ε ι™¤γ€‚";
     Text[ chinese_traditional ] = "η„΅ζ³•θªΏζ•΄θ΅¨ζ Όη―©ιΈοΌε› η²θ³‡ζ–™ζΊε·²η¶“θΆ«εªι™¤γ€‚";
     Text[ turkish ] = "The table filter could not be saved because the datasource was deleted before.";
@@ -1935,7 +1935,7 @@ String STR_TABLEDESIGN_NO_PRIM_KEY
     Text[ polish ] = "W tej bazie danych wymagany jest w celu identyfikacji rekordu jednoznaczny indeks lub klucz g³σwny.\nDane bκdzie moΏna dopiero wtedy wpisaζ do tabeli, gdy bκdzie ona spe³niaζ jedno z tych dwσch kryteriσw.\n\nCzy utworzyζ teraz klucz g³σwny?";
     Text[ japanese ] = "γ“γ®οΎƒοΎο½°οΎ€οΎοΎο½°ο½½γ§γ―γ€οΎο½Ίο½°οΎ„οΎθ­ε¥γ«ζηΆΊγªο½²οΎοΎƒοΎο½―ο½Έο½½γ‚γ‚‹γ„γ―οΎοΎοΎ—ο½²οΎοΎο½·ο½°γεΏ…θ¦γ§γ™γ€‚\nγ“γ®ζ§‹ι€ ζ΅δ»¶γ®γ†γ΅γ©γ΅γ‚‰γ‹γ²γ¨γ¤γζΊ€γγ•γ‚γ‚‹γ¨γ€οΎƒο½°οΎοΎοΎ™γ«οΎƒοΎο½°οΎ€ε…¥ε›γ§γγΎγ™γ€‚\n\nοΎοΎοΎ—ο½²οΎοΎο½·ο½°γ‚’δ½ζγ—γΎγ™γ‹γ€‚";
     Text[ chinese_traditional ] = "ε¨ι€™ε€‹θ³‡ζ–™εΊ«θ­ε¥θ³‡ζ–™θ¦ζ±‚ζ‰δΈ€ε€‹ζηΆΊη„η΄ΆεΌ•ζΆη›®ζ–δΈ€ε€‹δΈ»ι—ιµε­—γ€‚\nεªζ‰ζ»Ώθ¶³ι€™ε€‹ζΆδ»¶ζ™‚ζ‚¨ζ‰θƒ½ε¤ ε¨θ΅¨ζ Όε…§θΌΈε…¥θ³‡ζ–™γ€‚\n\nηΎε¨θ¦ε»Ίη«‹δΈ€ε€‹δΈ»ι—ιµε­—οΉ–";
-    Text[ arabic ] = "ααΚΪΡέ Ϊαμ ΣΜα έν ήΗΪΟΙ ΗαΘνΗδΗΚ εΠε΅ γΨαζΘ έεΡΣ ζΗΦΝ Γζ γέΚΗΝ ΓΣΗΣν.\nαδ νγίδί ΕΟΞΗα ΘνΗδΗΚ έν ΗαΜΟζα ΕαΗ ΕΠΗ ίδΚ Κέν ΘΓΝΟ ΗαΤΡΨνδ.\n\nεα ΚΡνΟ ";
+    Text[ arabic ] = "ααΚΪΡέ Ϊαμ ΣΜα έν ήΗΪΟΙ ΗαΘνΗδΗΚ εΠε΅ γΨαζΘ έεΡΣ ζΗΦΝ Γζ γέΚΗΝ ΓΣΗΣν.\nαδ νγίδί ΕΟΞΗα ΘνΗδΗΚ έν ΗαΜΟζα ΕαΗ ΕΠΗ ίδΚ Κέν ΘΓΝΟ ΗαΤΡΨνδ.\n\nεα ΚΡνΟ";
     Text[ dutch ] = "In deze database wordt een index of een primaire sleutel verlangd ter identificatie van records.\nU kunt alleen gegevens invoeren in de tabel als u voldoet aan een van deze beide criteria.\nWilt u nu een primaire sleutel definiλren?";
     Text[ chinese_simplified ] = "θ―†ε«ζ•°ζ®εΊ“δΈ­η„ζ•°ζ®ζ΅η›®θ¦ζ±‚δ½Ώη”¨ζη΅®η„η΄ΆεΌ•ζ–δΈ»ε…³ι”®ε­—οΌ\nε¨θ®Ύε®εªδΌζ‰θƒ½ε¨θ΅¨ζ ΌδΈ­θΎ“ε…¥ζ•°ζ®γ€‚\n\nη°ε¨θ¦η”ζδΈ€δΈªδΈ»ε…³ι”®ε­—οΌ";
     Text[ greek ] = "Για την αναγνώριση της εγγραφής σε αυτή τη βάση δεδομένων απαιτείται ένα μοναδικό ευρετήριο ή ένα πρωτεύον κλειδί.\nΜπορείτε να εισάγετε τα δεδομένα στον πίνακα μόνον εφόσον εκπληρωθεί μια από τις δύο αυτές συνθήκες δομής.\n\nΘέλετε να δημιουργηθεί τώρα ένα πρωτεύον κλειδί;";
@@ -2217,13 +2217,14 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ polish ] = "Modyfikacja kolumny \"\\$column\\$\" nie powiod³a siκ. UsunΉζ jΉ i za³Ήczyζ nowy format?";
     Text[ portuguese_brazilian ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ japanese ] = "ε— \"\\$column\\$\" γ―ε¤‰ζ›΄γ§γγΎγ›γ‚“γ€‚ε‰ι™¤γ™γ‚‹γ‹γ‚γ‚γ«ζ–°γ—γθ¨­ε®γ—γζ›ΈεΌγ‚’ζ·»δ»γ—γΎγ™γ‹γ€‚";
-    Text[ korean ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
+    Text[ korean ] = "μ—΄ \"\\$column\\$\"μ„(λ¥Ό) λ³€κ²½ν•μ§€ λª»ν–μµλ‹λ‹¤. λ€μ‹ μ— μ΄ μ—΄μ„ μ‚­μ ν•κ³  μƒλ΅μ΄ μ„μ‹μ„ μ²¨λ¶€ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "ζ— ζ³•ζ›΄ζ”Ήε— \"\\$column\\$\" γ€‚θ¦ι‡ζ–°θ®Ύε®θΏ™δΈªε—η„ζ ΌεΌ?";
-    Text[ chinese_traditional ] = "η„΅ζ³•θ®ζ›΄ζ¬„ \"\\$column\\$\" γ€‚θ¦εªι™¤ε®ƒε†ι‡ζ–°θ¨­ε®ζ ΌεΌοΌ";
+    Text[ chinese_traditional ] = "η„΅ζ³•θ®ζ›΄ζ¬„<\\$column\\$>γ€‚θ¦εªι™¤ε®ƒε†ι‡ζ–°θ¨­ε®ζ ΌεΌοΌ";
     Text[ turkish ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ arabic ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ catalan ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
 };
+
 
 
 
