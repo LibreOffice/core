@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:10:42 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String ERR_INET_NAME_RESOLVE
     Text[ greek ] = "Δεν ήταν δυνατόν γίνει ανάλυση του ονόματος του υπολογιστή $(ARG1)";
     Text[ korean ] = "ΔΔΗ»ΕΝ ΐΜΈ§ΐ» Θ®ΐΞΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω \n";
     Text[ turkish ] = "Bilgisayarύn adύ ηφzόlemedi\n";
+    Text[ catalan ] = "El nombre del ordenador no se pudo resolver.\n";
 };
 String ERR_INET_CONNECT
 {
@@ -109,6 +110,7 @@ String ERR_INET_CONNECT
     Text[ greek ] = "Δεν ήταν δυνατόν να πραγματοποιηθεί η σύνδεση με το Internet";
     Text[ korean ] = "ΐΞΕΝ³έ ΑΆΌΣΐ»΅΅±ΈΓΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Internet baπlantύsύ gerηekleώtirilemedi.";
+    Text[ catalan ] = "No se pudo crear la conexiσn Internet";
 };
 String ERR_INET_READ
 {
@@ -132,6 +134,7 @@ String ERR_INET_READ
     Text[ greek ] = "Σφάλμα κατά την ανάγνωση δεδομένων από το Internet.\nΜήνυμα σφάλματος του διακομιστή: $(ARG1)";
     Text[ korean ] = "ΐΞΕΝ³έΐ»΅΅ΕλΗΡ µ¥ΐΜΕΝ ΐΠ±β Ώΐ·ω\n.Ό­Ήφ Ώΐ·ω Έή½ΓΑφ: $(ARG1)";
     Text[ turkish ] = "Internet όzerinden veri okunurken hata oluώtu.\nSunucu hata iletisi: $(ARG1)";
+    Text[ catalan ] = "Los datos no se pudieron leer a travιs de Internet.\nMensaje de error del servidor: $(ARG1)";
 };
 String ERR_INET_WRITE
 {
@@ -155,6 +158,7 @@ String ERR_INET_WRITE
     Text[ greek ] = "Σφάλμα κατά την μετάδοση δεδομένων μέσω του Internet.\nΜήνυμα σφάλματος του διακομιστή: $(ARG1)";
     Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­ µ¥ΐΜΕΝ  ΐόΌΫ Ώΐ·ω.\nΌ­Ήφ Ώΐ·ω Έή½ΓΑφ: $(ARG1)";
     Text[ turkish ] = "Veriler Internet όzerinden aktarύlamadύ.\nSunucu hata iletisi: $(ARG1)";
+    Text[ catalan ] = "Los datos no se pudieron transferir a Internet.\nMensaje de error del servidor: $(ARG1)";
 };
 String ERR_INET_GENERAL
 {
@@ -178,6 +182,7 @@ String ERR_INET_GENERAL
     Text[ greek ] = "Γενικό σφάλμα του Internet";
     Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­΅΅ΐΟΉέΐϋΐΞ Ώΐ·ω΅΅Ήί»ύ";
     Text[ turkish ] = "Genel Internet hatasύ";
+    Text[ catalan ] = "Error general en Internet";
 };
 String ERR_WRONG_URL
 {
@@ -201,6 +206,7 @@ String ERR_WRONG_URL
     Text[ greek ] = "Εσφαλμένο URL\n";
     Text[ korean ] = "URL Ώΐ·ω\n";
     Text[ turkish ] = "Hatalύ URL\n";
+    Text[ catalan ] = "URL errσnea\n";
 };
 String ERR_ACTIVEDOWNLOADS
 {
@@ -223,6 +229,7 @@ String ERR_ACTIVEDOWNLOADS
     Text[ greek ] = "Εκτελούνται ακόμη λήψεις δεδομένων.\nΘέλετε πραγματικά να τερματίσετε τη διαδικασία;\n";
     Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΓλΌÒΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "ήu an devam eden veri indirme iώleri var.\nGerηekten ηύkmak istiyor musunuz?\n";
+    Text[ catalan ] = "Todavνa existen descargas activas.\nΏDesea realmente cancelar?\n";
 };
 String ERR_QUEUEDDOWNLOADS
 {
@@ -246,6 +253,7 @@ String ERR_QUEUEDDOWNLOADS
     Text[ greek ] = "Υπάρχουν ακόμη λήψεις δεδομένων στη σειρά αναμονής.\nΘέλετε σίγουρα να τερματίσετε τη διαδικασία;\n";
     Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰ ΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΑΎ·αΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "Bekleme sύrasύnda veri indirme iώleri var.\nGerηekten ηύkmak istiyor musunuz?\n";
+    Text[ catalan ] = "Todavνa hay documentos para descargar.\nΏDesea realmente cancelar?\n";
 };
 String ERR_FILEISLOCAL
 {
@@ -269,6 +277,7 @@ String ERR_FILEISLOCAL
     Text[ greek ] = "Το αρχείο υπάρχει ήδη τοπικά στον υπολογιστή σας.\nΘέλετε να την αντιγράψετε παρ' όλα αυτά;";
     Text[ korean ] = "ΖΔΐΟΐΊ ΐΜΉΜ »ηΏλΐΪΐΗ΅΅ΔΔΗ»ΕΝΏ΅΅΅ΑφΏªΐϋΐΈ·Ξ΅΅ΑΈΐηΗΥ΄Ο΄Ω.\n±Χ·΅µµ ΊΉ»ηΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Dosya bilgisayarύnύzda zaten mevcut.\nYine de kopyalansύn mύ?";
+    Text[ catalan ] = "El archivo ya estα guardado localmente en su ordenador.\nΏDesea copiarlo de todas maneras?";
 };
 String ERR_FILENAMECHECK83
 {
@@ -292,6 +301,7 @@ String ERR_FILENAMECHECK83
     Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n και η επέκταση να περιέχει πάνω από 3 χαρακτήρες.";
     Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄ΒΑ΅°ϊ   \n Θ®ΐεΐΪ°΅3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄ΒΑ΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Girilen dosya adύ geηerli deπil.\nDosya adύ en fazla 8 ve dosyan\\uzantύsύ en fazla 3 karakter uzunluπunda olabilir.";
+    Text[ catalan ] = "El nombre del archivo especificado no es vαlido.\\Tenga en cuenta que el nombre debe tener un mαximo de 8 caracteres\ny la terminaciσn 3.";
 };
 String ERR_INSUFFICIENTDISKSPACE
 {
@@ -314,6 +324,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ greek ] = "Το αρχείο %1 υπερβαίνει τον διαθέσιμο χώρο αποθήκευσης.\nΘέλετε να συνεχίσετε;\n";
     Text[ korean ] = "ΖΔΐΟ %1ΐΜ£¨°΅ £©»ηΏλ°΅΄ΙΗΡ µπ½ΊΕ© °ψ°£ΊΈ΄Ω΅΅Ε®΄Ο΄Ω.\n±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "%1 dosyasύ mevcut disk alanύnύ aώύyor.\nDevam etmek istiyor musunuz ?\n";
+    Text[ catalan ] = "El tamaρo del archivo %1 excederα al del disponible en el disco.\nΏDesea continuar?\n";
 };
 //= Texte "downloadcontroller" =================================================================
 String STR_DOWNLOAD_SOURCE
@@ -338,6 +349,7 @@ String STR_DOWNLOAD_SOURCE
     Text[ greek ] = "Προέλευση";
     Text[ korean ] = "ΌÒ½Ί";
     Text[ turkish ] = "Kaynak";
+    Text[ catalan ] = "Fuente";
 };
 String STR_DOWNLOAD_DESTINATION
 {
@@ -361,6 +373,7 @@ String STR_DOWNLOAD_DESTINATION
     Text[ greek ] = "Προορισμός";
     Text[ korean ] = "ΕΈ°Ω";
     Text[ turkish ] = "Hedef";
+    Text[ catalan ] = "Destino";
 };
 String STR_DOWNLOAD_STATE
 {
@@ -384,6 +397,7 @@ String STR_DOWNLOAD_STATE
     Text[ greek ] = "Κατάσταση";
     Text[ korean ] = "»σΕΒ";
     Text[ turkish ] = "Durum";
+    Text[ catalan ] = "Estado";
 };
 String STR_DOWNLOAD_REMAININGTIME
 {
@@ -407,6 +421,7 @@ String STR_DOWNLOAD_REMAININGTIME
     Text[ greek ] = "Χρόνος που απομένει";
     Text[ korean ] = "³²ΐΊ ½Γ°£";
     Text[ turkish ] = "Kalan sόre";
+    Text[ catalan ] = "Tiempo restante";
 };
 String STR_DOWNLOAD_STATEFORMAT
 {
@@ -430,6 +445,7 @@ String STR_DOWNLOAD_STATEFORMAT
     Text[ chinese_traditional ] = "$(READ) Α`­p $(TOTAL) [ $(TIME) ]";
     Text[ arabic ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
     Text[ turkish ] = "$(READ) Toplam $(TOTAL) [ $(TIME) ]";
+    Text[ catalan ] = "$(READ) de $(TOTAL) [ $(TIME) ]";
 };
 
 Resource RID_DLSTATUS2
@@ -459,6 +475,7 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "΄Ωΐ½Ώ΅ Ώ¬°α: $(HOST). ΐΐ΄δΐ» ±β΄ΩΈ³΄Ο΄Ω...";
         Text[ turkish ] = "Baπlanύlan: $(HOST). Yanύt bekleniyor...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Conexiσn con: $(HOST). Esperando respuesta...";
     };
     String SVBINDSTATUS_CONNECTING
     {
@@ -485,6 +502,7 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "Ώ­±β: $(HOST)Ώ΅Ό­ $(TARGET)";
         Text[ turkish ] = "Aηύlan:  $(HOST) όzerinde bulunan $(TARGET)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Abriendo: $(TARGET) en $(HOST)";
     };
     String SVBINDSTATUS_DOWNLOADINGDATA
     {
@@ -511,6 +529,7 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "ΐόΌΫ: $(TARGET) ΖΗµ¶: $(BYTE)";
         Text[ turkish ] = "Aktarύlan: $(TARGET) Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Transfiriendo: $(TARGET) Leνdo: $(BYTE)";
     };
     String SVBINDSTATUS_ENDDOWNLOADDATA
     {
@@ -537,6 +556,7 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "Ώ¬°α ΗΨΑ¦";
         Text[ turkish ] = "Baπlantύ kesildi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desconectado";
     };
 };
 
