@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:17:18 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1920,7 +1920,7 @@ BOOL CheckPos( SwFrm *pFrm )
 BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 {
     ASSERT( !IsAgain(), "8-) Ungueltige Seite beachten." );
-    if ( IsAgain() )
+    if ( IsAgain() || !pTab->Lower() )
         return FALSE;
 
     SwDoc* pDoc = pRoot->GetFmt()->GetDoc();
