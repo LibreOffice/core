@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,7 +1399,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
 #ifdef BIDI
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
-                nTmpY, nX, nCurrStart, nSpaceAdd );
+                 nTmpY, nX, nCurrStart, nSpaceAdd );
 #else
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );
