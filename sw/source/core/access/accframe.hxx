@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ protected:
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
     // The editable state of a child should be checked
-    virtual sal_Bool CheckEditableStateChild( const SwFrm *pFrm );
+    virtual sal_Bool CheckStatesChild( const SwFrm *pFrm, sal_uInt8 nStates );
 
     // A child shall be disposed
     virtual sal_Bool DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
@@ -151,10 +151,11 @@ protected:
                             SwAccessibleFrame *pAcc = 0 );
     virtual void SetVisArea( const Rectangle& rNewVisArea );
 
-    static void CheckEditableStateChildren( const SwFrm *pFrm,
+    static void CheckStatesChildren( const SwFrm *pFrm,
                                   const Rectangle& rOldVisArea,
+                                 sal_uInt8 nStates,
                                   SwAccessibleFrame *pAcc = 0 );
-    inline void CheckEditableStateChildren();
+    inline void CheckStatesChildren( sal_uInt8 nStates );
     static void DisposeChildren( const SwFrm *pFrm,
                                   const Rectangle& rOldVisArea,
                                  sal_Bool bRecursive,
@@ -196,9 +197,9 @@ inline const SwFrm *SwAccessibleFrame::GetChildAt( const Point& rPos ) const
     return GetChildAt( aVisArea, pFrm, rPos );
 }
 
-inline void SwAccessibleFrame::CheckEditableStateChildren()
+inline void SwAccessibleFrame::CheckStatesChildren( sal_uInt8 nStates )
 {
-    CheckEditableStateChildren( GetFrm(), aVisArea, this );
+    CheckStatesChildren( GetFrm(), aVisArea, nStates, this );
 }
 
 inline void SwAccessibleFrame::DisposeChildren( sal_Bool bRecursive )

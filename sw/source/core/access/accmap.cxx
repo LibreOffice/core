@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-19 06:53:03 $
+ *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #ifndef _ACCFOOTNOTE_HXX
 #include <accfootnote.hxx>
 #endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
@@ -137,7 +134,7 @@ struct SwAccessibleEvent_Impl
 {
 public:
     enum EventType { INVALID_CONTENT, POS_CHANGED, CHILD_POS_CHANGED, DISPOSE,
-                         CARET_POS };
+                         CARET_OR_STATES };
 
 private:
     SwRect      aOldFrm;                // the old bounds for CHILD_POS_CHANGED
@@ -146,34 +143,50 @@ private:
                                         // the same as xAcc for any other
                                         // event type
     EventType   eType;                  // The event type
-    sal_Bool    bUpdateCaretPos;        // Send UpdateCaretPos event
+    sal_uInt8   nStates;                // check states or update caret pos
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
 public:
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                              const SwFrm *pF ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ),
-        bUpdateCaretPos( CARET_POS==eType )
+        eType( eT ), xAcc( pA ), pFrm( pF ), nStates( 0 )
     {}
     SwAccessibleEvent_Impl( EventType eT, const SwFrm *pF ) :
-        eType( eT ), pFrm( pF ),
-        bUpdateCaretPos( CARET_POS==eType )
-    {}
+        eType( eT ), pFrm( pF ), nStates( 0 )
+    {
+        ASSERT( SwAccessibleEvent_Impl::DISPOSE == eType,
+                "wrong event constructor, DISPOSE only" );
+    }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrm *pF, const SwRect& rR ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ), aOldFrm( rR ),
-        bUpdateCaretPos( CARET_POS==eType )
-    {}
+        eType( eT ), xAcc( pA ), pFrm( pF ), aOldFrm( rR ), nStates( 0 )
+    {
+        ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == eType,
+                "wrong event constructor, CHILD_POS_CHANGED only" );
+    }
+    SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
+                            const SwFrm *pF, sal_uInt8 nSt  ) :
+        eType( eT ), xAcc( pA ), pFrm( pF ), nStates( nSt )
+    {
+        ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == eType,
+                "wrong event constructor, CARET_OR_STATES only" );
+    }
 
+    inline void SetType( EventType eT ){ eType = eT; }
     inline EventType    GetType() const { return eType; }
-    inline ::vos::ORef < SwAccessibleContext > GetContext() const;
-    inline const SwRect& GetOldFrm() const { return aOldFrm; }
-    inline const SwFrm *GetFrm() const { return pFrm; }
-    inline SetUpdateCaretPos() { bUpdateCaretPos = sal_True; }
-    inline sal_Bool IsUpdateCaretPos() const { return bUpdateCaretPos; }
 
-    SwAccessibleEvent_Impl& Merge( const SwAccessibleEvent_Impl& );
+    inline ::vos::ORef < SwAccessibleContext > GetContext() const;
+
+    inline const SwRect& GetOldFrm() const { return aOldFrm; }
+
+    inline const SwFrm *GetFrm() const { return pFrm; }
+
+    inline SetStates( sal_uInt8 nSt ) { nStates |= nSt; }
+    inline sal_Bool IsUpdateCaretPos() const { return (nStates & ACC_STATE_CARET) != 0; }
+    inline sal_Bool IsCheckStates() const { return (nStates & ACC_STATE_MASK) != 0; }
+    inline sal_uInt8 GetStates() const { return nStates & ACC_STATE_MASK; }
+    inline sal_uInt8 GetAllStates() const { return nStates; }
 };
 
 inline ::vos::ORef < SwAccessibleContext >
@@ -186,17 +199,6 @@ inline ::vos::ORef < SwAccessibleContext >
     return xAccImpl;
 }
 
-SwAccessibleEvent_Impl& SwAccessibleEvent_Impl::Merge(
-        const SwAccessibleEvent_Impl& r )
-{
-    aOldFrm = r.aOldFrm;
-    DBG_ASSERT( xAcc == r.xAcc, "illegal merge op" );
-    DBG_ASSERT( pFrm == r.pFrm, "illegal merge op" );
-    eType = r.eType;
-    bUpdateCaretPos |= r.bUpdateCaretPos;
-
-    return *this;
-}
 
 typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
 
@@ -228,7 +230,7 @@ SwAccessibleMap::~SwAccessibleMap()
     if( pMap )
     {
         Reference < XAccessible > xAcc;
-        const SwRootFrm *pRootFrm = GetShell()->GetDoc()->GetRootFrm();
+        const SwRootFrm *pRootFrm = GetShell()->GetLayout();
         SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
         if( aIter != pMap->end() )
             xAcc = (*aIter).second;
@@ -266,14 +268,26 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
         sal_Bool bAppendEvent = sal_True;
         switch( rEvent.GetType() )
         {
-        case SwAccessibleEvent_Impl::INVALID_CONTENT:
-            // All events include a INVALID_CONTENT, so the only action that
-            // needs to be done is to put the event to the back. That's done
-            // automatically.
+        case SwAccessibleEvent_Impl::CARET_OR_STATES:
+            // A CARET_POS or CHECK_STATES event is added to any other
+            // event only. It is broadcasted after any other event, so the
+            // event should be put to the back.
             ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                     "invalid event combination" );
             ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
+            aEvent.SetStates( rEvent.GetAllStates() );
+            break;
+        case SwAccessibleEvent_Impl::INVALID_CONTENT:
+            // All events except CARET_OR_STATES include a INVALID_CONTENT,
+            // so the only action that needs to be done is to put the event
+            // to the back. That's done automatically.
+            ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                    "invalid event combination" );
+            ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
+                    "dispose events should not be stored" );
+            if( aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES )
+                aEvent.SetType( SwAccessibleEvent_Impl::INVALID_CONTENT );
             break;
         case SwAccessibleEvent_Impl::POS_CHANGED:
             // If the the old event is not a DISPOSE event, the new event
@@ -282,8 +296,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                     "invalid event combination" );
             ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
-            if( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE )
-                aEvent.Merge( rEvent );
+            aEvent.SetType( SwAccessibleEvent_Impl::POS_CHANGED );
             break;
         case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
             // CHILD_POS_CHANGED events can only follow CHILD_POS_CHANGED
@@ -303,16 +316,6 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
             ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
             bAppendEvent = sal_False;
-            break;
-        case SwAccessibleEvent_Impl::CARET_POS:
-            // A CARET_POS event is added to any other devnt only. It is
-            // broadcasted after any other event, so the event should be
-            // put to the back.
-            ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    "invalid event combination" );
-            ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
-                    "dispose events should not be stored" );
-            aEvent.SetUpdateCaretPos();
             break;
         }
         if( bAppendEvent )
@@ -349,7 +352,7 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
     ASSERT( !pMap->bLocked, "Map is locked" );
     pMap->bLocked = sal_True;
 
-    const SwRootFrm *pRootFrm = GetShell()->GetDoc()->GetRootFrm();
+    const SwRootFrm *pRootFrm = GetShell()->GetLayout();
     SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
     if( aIter != pMap->end() )
         xAcc = (*aIter).second;
@@ -659,8 +662,8 @@ void SwAccessibleMap::InvalidateCaretPosition( const SwFrm *pFrm )
                 if( GetShell()->ActionPend() )
                 {
                     SwAccessibleEvent_Impl aEvent(
-                        SwAccessibleEvent_Impl::CARET_POS, pOldAccImpl,
-                        pOldAccImpl->GetFrm() );
+                        SwAccessibleEvent_Impl::CARET_OR_STATES, pOldAccImpl,
+                        pOldAccImpl->GetFrm(), ACC_STATE_CARET );
                     AppendEvent( aEvent );
                 }
                 else
@@ -676,8 +679,8 @@ void SwAccessibleMap::InvalidateCaretPosition( const SwFrm *pFrm )
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
-                    SwAccessibleEvent_Impl::CARET_POS, pAccImpl,
-                    pFrm );
+                    SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
+                    pFrm, ACC_STATE_CARET );
                 AppendEvent( aEvent );
             }
             else
@@ -696,6 +699,24 @@ void SwAccessibleMap::SetCaretContext(
     {
         Reference < XAccessible > xAcc( rCaretContext.getBodyPtr() );
         pMap->xCaretContext = xAcc;
+    }
+}
+
+void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates )
+{
+    Reference< XAccessible > xAcc( GetDocumentView() );
+    SwAccessibleContext *pAccImpl =
+        static_cast< SwAccessibleContext *>( xAcc.get() );
+    if( GetShell()->ActionPend() )
+    {
+        SwAccessibleEvent_Impl aEvent(
+                SwAccessibleEvent_Impl::CARET_OR_STATES, pAccImpl,
+                        pAccImpl->GetFrm(), nStates );
+        AppendEvent( aEvent );
+    }
+    else
+    {
+        pAccImpl->CheckStates( nStates );
     }
 }
 
@@ -727,9 +748,13 @@ void SwAccessibleMap::FireEvents()
                             "dispose event has been stored" );
                     break;
                 }
-                if( SwAccessibleEvent_Impl::DISPOSE != (*aIter).GetType() &&
-                    (*aIter).IsUpdateCaretPos() )
-                    xAccImpl->InvalidateCaretPos();
+                if( SwAccessibleEvent_Impl::DISPOSE != (*aIter).GetType() )
+                {
+                    if( (*aIter).IsUpdateCaretPos() )
+                        xAccImpl->InvalidateCaretPos();
+                    if( (*aIter).IsCheckStates() )
+                        xAccImpl->CheckStates( (*aIter).GetStates() );
+                }
             }
 
             aIter++;

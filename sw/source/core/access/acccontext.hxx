@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ protected:
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
     // The editable state of a child should be checked
-    virtual sal_Bool CheckEditableStateChild( const SwFrm *pFrm );
+    virtual sal_Bool CheckStatesChild( const SwFrm *pFrm, sal_uInt8 nStates );
 
     // A child shall be disposed
     virtual sal_Bool DisposeChild( const SwFrm *pFrm,
@@ -361,7 +361,7 @@ public:
     virtual void SetVisArea( const Rectangle& rNewVisArea );
 
     // Check editable state
-    void CheckEditableState();
+    void CheckStates( sal_uInt8 nStates );
 
     const ::rtl::OUString& GetName() const { return sName; }
 };

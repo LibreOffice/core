@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,10 @@ void SwAccessibleFrame::SetVisArea( const SwFrm *pFrm,
     }
 }
 
-void SwAccessibleFrame::CheckEditableStateChildren( const SwFrm *pFrm,
-                                                const Rectangle& rOldVisArea,
-                                                SwAccessibleFrame *pAcc )
+void SwAccessibleFrame::CheckStatesChildren( const SwFrm *pFrm,
+                                              const Rectangle& rOldVisArea,
+                                             sal_uInt8 nStates,
+                                              SwAccessibleFrame *pAcc )
 {
     const SwFrm *pLower = pFrm->GetLower();
     while( pLower )
@@ -310,16 +311,16 @@ void SwAccessibleFrame::CheckEditableStateChildren( const SwFrm *pFrm,
             if( aFrm.IsOver( rOldVisArea ) )
             {
                 if( pAcc )
-                    bCheckLower = pAcc->CheckEditableStateChild( pLower );
+                    bCheckLower = pAcc->CheckStatesChild( pLower, nStates );
                 else
                     bCheckLower = sal_True;
             }
             if( bCheckLower )
-                CheckEditableStateChildren( pLower, rOldVisArea );
+                CheckStatesChildren( pLower, rOldVisArea, nStates );
         }
         else if( aFrm.IsOver( rOldVisArea ) )
         {
-            CheckEditableStateChildren( pLower, rOldVisArea, pAcc );
+            CheckStatesChildren( pLower, rOldVisArea, nStates, pAcc );
         }
 
         pLower = pLower->GetNext();
@@ -373,7 +374,8 @@ sal_Bool SwAccessibleFrame::ChildScrolled( const SwFrm *pFrm )
     return sal_True;
 }
 
-sal_Bool SwAccessibleFrame::CheckEditableStateChild( const SwFrm *pFrm )
+sal_Bool SwAccessibleFrame::CheckStatesChild( const SwFrm *pFrm,
+                                              sal_uInt8 nStates )
 {
     return sal_True;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -293,7 +296,8 @@ sal_Bool SwAccessibleContext::ChildScrolled( const SwFrm *pFrm )
     return bUpdateChildren;
 }
 
-sal_Bool SwAccessibleContext::CheckEditableStateChild( const SwFrm *pFrm )
+sal_Bool SwAccessibleContext::CheckStatesChild( const SwFrm *pFrm,
+                                                sal_uInt8 nStates )
 {
     sal_Bool bCheckChildren = sal_True;
 
@@ -308,7 +312,7 @@ sal_Bool SwAccessibleContext::CheckEditableStateChild( const SwFrm *pFrm )
 
         if( xChildImpl.isValid() )
         {
-            xChildImpl->CheckEditableState();
+            xChildImpl->CheckStates( nStates );
             bCheckChildren = sal_False;
         }
     }
@@ -340,28 +344,45 @@ sal_Bool SwAccessibleContext::DisposeChild( const SwFrm *pFrm,
     return bDisposeChildren;
 }
 
-void SwAccessibleContext::CheckEditableState()
+void SwAccessibleContext::CheckStates( sal_uInt8 nStates )
 {
     if( GetMap() )
     {
         ViewShell *pVSh = GetMap()->GetShell();
         if( pVSh )
         {
-            sal_Bool bIsOldEditableState;
-            sal_Bool bIsNewEditableState = IsEditable( pVSh );
+            if( (nStates & ACC_STATE_EDITABLE) != 0 )
             {
-                vos::OGuard aGuard( aMutex );
-                bIsOldEditableState = bIsEditableState;
-                bIsEditableState = bIsNewEditableState;
-            }
+                sal_Bool bIsOldEditableState;
+                sal_Bool bIsNewEditableState = IsEditable( pVSh );
+                {
+                    vos::OGuard aGuard( aMutex );
+                    bIsOldEditableState = bIsEditableState;
+                    bIsEditableState = bIsNewEditableState;
+                }
 
-            if( bIsOldEditableState != bIsNewEditableState )
-                FireStateChangedEvent( AccessibleStateType::EDITABLE,
-                                       bIsNewEditableState  );
+                if( bIsOldEditableState != bIsNewEditableState )
+                    FireStateChangedEvent( AccessibleStateType::EDITABLE,
+                                           bIsNewEditableState  );
+            }
+            if( (nStates & ACC_STATE_OPAQUE) != 0 )
+            {
+                sal_Bool bIsOldOpaqueState;
+                sal_Bool bIsNewOpaqueState = IsOpaque( pVSh );
+                {
+                    vos::OGuard aGuard( aMutex );
+                    bIsOldOpaqueState = bIsOpaqueState;
+                    bIsOpaqueState = bIsNewOpaqueState;
+                }
+
+                if( bIsOldOpaqueState != bIsNewOpaqueState )
+                    FireStateChangedEvent( AccessibleStateType::OPAQUE,
+                                           bIsNewOpaqueState  );
+            }
         }
     }
 
-    CheckEditableStateChildren();
+    CheckStatesChildren( nStates );
 }
 
 void SwAccessibleContext::Dispose( sal_Bool bRecursive )
@@ -510,11 +531,16 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
             {
                 xListener->notifyEvent( rEvent );
             }
-            catch( ::com::sun::star::uno::RuntimeException )
+            catch( ::com::sun::star::uno::RuntimeException& r )
             {
-                ASSERT( !xListener.is(),
-                        "Some external app missed to remove its listener\nQA: It's a bug in that app, not in ours!" );
-                aIter.remove();
+#ifdef DEBUG
+                ByteString aError( "Runtime exception caught for event" );
+                aError += ByteString::CreateFromInt32( rEvent.EventId );
+                aError += ".:\n";
+                aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aError.GetBuffer() );
+#endif
+//              aIter.remove();
             }
         }
     }
