@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-15 13:08:01 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 14:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 #include <svx/unonrule.hxx>
 #include <svx/eeitem.hxx>
 
+// #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
 #endif
@@ -891,6 +892,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool() );
     }
 
+    // #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver") ) )
     {
         return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE );
@@ -1010,7 +1012,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 {
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? 25 : 14 );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? 25 : (14 + 4) );
 
     sal_uInt16 i = 0;
 
@@ -1028,6 +1030,12 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapCircleObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapPolygonObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.NamespaceMap"));
+
+    // #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"));
 
     if(mbImpressDoc)
     {
