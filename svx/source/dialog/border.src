@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 12:06:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ TabPage RID_SVXPAGE_BORDER
     Hide = TRUE ;
     Text [ de ] = "Umrandung" ;
     Text [ en-US ] = "Borders" ;
-    Text [ x-comment ] = " ";
     FixedLine FL_BORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -109,7 +108,7 @@ TabPage RID_SVXPAGE_BORDER
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 61 , 61 ) ;
+        Size = MAP_APPFONT ( 61 , 65 ) ;
         TabStop = TRUE ;
         Text = "Border control";
     };
@@ -356,20 +355,32 @@ TabPage RID_SVXPAGE_BORDER
         Text [ en-US ] = "~Merge adjacent line styles" ;
     };
 
-#define _PREVIEW_IDLIST_\
-        IdList =                    \
-        {                           \
-            IID_PRENONE ;           \
-            IID_TABLE_PRE1 ;        \
-            IID_TABLE_PRE2 ;        \
-            IID_TABLE_PRE3 ;        \
-            IID_TABLE_PRE4 ;        \
-            IID_PARAGRAPH_PRE1 ;    \
-            IID_PARAGRAPH_PRE2 ;    \
-            IID_PARAGRAPH_PRE3 ;    \
-            IID_PARAGRAPH_PRE4 ;    \
-        };                          \
-        IdCount = { 9 ; };
+#define _PREVIEW_IDLIST_                \
+        IdList =                        \
+        {                               \
+            IID_PRE_CELL_NONE ;         \
+            IID_PRE_CELL_ALL ;          \
+            IID_PRE_CELL_LR ;           \
+            IID_PRE_CELL_TB ;           \
+            IID_PRE_CELL_L ;            \
+            IID_PRE_CELL_DIAG ;         \
+            IID_PRE_HOR_NONE ;          \
+            IID_PRE_HOR_OUTER ;         \
+            IID_PRE_HOR_HOR ;           \
+            IID_PRE_HOR_ALL ;           \
+            IID_PRE_HOR_OUTER2 ;        \
+            IID_PRE_VER_NONE ;          \
+            IID_PRE_VER_OUTER ;         \
+            IID_PRE_VER_VER ;           \
+            IID_PRE_VER_ALL ;           \
+            IID_PRE_VER_OUTER2 ;        \
+            IID_PRE_TABLE_NONE ;        \
+            IID_PRE_TABLE_OUTER ;       \
+            IID_PRE_TABLE_OUTERH ;      \
+            IID_PRE_TABLE_ALL ;         \
+            IID_PRE_TABLE_OUTER2 ;      \
+        };                              \
+        IdCount = { 21 ; };
 
     ImageList IL_PRE_BITMAPS
     {
@@ -383,6 +394,7 @@ TabPage RID_SVXPAGE_BORDER
         MaskColor = STD_MASKCOLOR ;
         _PREVIEW_IDLIST_
     };
+
 #define _SHADOW_IDLIST_             \
         IdList =                    \
         {                           \
@@ -430,13 +442,13 @@ String RID_SVXSTR_TABLE_PRESET_OUTERALL
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
-    Text [ de ] = "Äußere Umrandung zeichnen ohne innere Linien zu verändern" ;
+    Text [ de ] = "Äußere Umrandung zeichnen, ohne innere Linien zu verändern" ;
     Text [ en-US ] = "Set Outer Border Without Changing Inner Lines" ;
 };
-String RID_SVXSTR_PARA_PRESET_NONE
+String RID_SVXSTR_PARA_PRESET_DIAGONAL
 {
-    Text [ de ] = "Keine Umrandung zeichnen" ;
-    Text [ en-US ] = "Set No Border" ;
+    Text [ de ] = "Nur diagonale Linien zeichnen" ;
+    Text [ en-US ] = "Set Diagonal Lines Only" ;
 };
 String RID_SVXSTR_PARA_PRESET_ALL
 {
@@ -445,7 +457,7 @@ String RID_SVXSTR_PARA_PRESET_ALL
 };
 String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
 {
-    Text [ de ] = "Nur rechten und linken Rand zeichnen" ;
+    Text [ de ] = "Nur linken und rechten Rand zeichnen" ;
     Text [ en-US ] = "Set Left and Right Borders Only" ;
 };
 String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
@@ -457,6 +469,16 @@ String RID_SVXSTR_PARA_PRESET_ONLYLEFT
 {
     Text [ de ] = "Nur linken Rand zeichnen" ;
     Text [ en-US ] = "Set Left Border Only" ;
+};
+String RID_SVXSTR_HOR_PRESET_ONLYHOR
+{
+    Text [ de ] = "Oberen und unteren Rand und alle inneren Linien zeichnen";
+    Text [ en-US ] = "Set Top and Bottom Borders, and All Inner Lines";
+};
+String RID_SVXSTR_VER_PRESET_ONLYVER
+{
+    Text [ de ] = "Linken und rechten Rand und alle inneren Linien zeichnen";
+    Text [ en-US ] = "Set Left and Right Borders, and All Inner Lines";
 };
 String RID_SVXSTR_SHADOW_STYLE_NONE
 {
