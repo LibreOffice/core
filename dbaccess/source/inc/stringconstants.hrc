@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:09:47 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ struct _ConstAsciiString_
 #define PROPERTY_ID_SQLEXCEPTION            90
 #define PROPERTY_ID_ISHIDDEN                91
 #define PROPERTY_ID_SUPPRESSVERSIONCL       92
+#define PROPERTY_ID_LAYOUTINFORMATION       93
 
 //============================================================
 //= property names
@@ -292,6 +293,8 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_SUPPRESSVERSIONCL);
 DECLARE_CONSTASCII_USTRING(PROPERTY_SHOWTREEVIEW);
 DECLARE_CONSTASCII_USTRING(PROPERTY_SHOWTREEVIEWBUTTON);
 DECLARE_CONSTASCII_USTRING(PROPERTY_CURRENTQUERY);
+DECLARE_CONSTASCII_USTRING(PROPERTY_QUERYDESIGNVIEW);
+DECLARE_CONSTASCII_USTRING(PROPERTY_LAYOUTINFORMATION);
 
 //============================================================
 //= service names
@@ -396,6 +399,7 @@ DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_WIDTH);
 DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_NUMBERFORMAT);
 DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_RELPOSITION);
 DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HIDDEN);
+DECLARE_CONSTASCII_USTRING(CONFIGKEY_LAYOUTINFORMATION);
 
 //============================================================
 //= SQLSTATE
