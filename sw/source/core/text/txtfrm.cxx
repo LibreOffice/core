@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:10:37 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,32 +810,49 @@ void SwTxtFrm::CalcLineSpace()
     }
 }
 
+//
+// SET_WRONG( nPos, nCnt, fnFunc )
+//
+
 #define SET_WRONG( nPos, nCnt, fnFunc ) \
 { \
-    if ( !IsFollow() ) \
-    { \
-        if( GetTxtNode()->GetWrong() ) \
-            GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
-        else if ( ! GetTxtNode()->IsWrongDirty() ) \
-        { \
-            GetTxtNode()->SetWrong( new SwWrongList() ); \
-            GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) ); \
-        } \
-        GetNode()->SetWrongDirty( sal_True ); \
-        GetNode()->SetAutoCompleteWordDirty( sal_True ); \
-    } \
-    SwPageFrm *pPage = FindPageFrm(); \
-    if( pPage ) \
-    { \
-        pPage->InvalidateSpelling(); \
-        pPage->InvalidateAutoCompleteWords(); \
-    } \
+    if ( !IsFollow() && GetTxtNode()->GetWrong() ) \
+        GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
+    lcl_SetWrong( *this, nPos, nCnt ); \
 }
 
+void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
+{
+    if ( !rFrm.IsFollow() )
+    {
+        if ( !rFrm.GetTxtNode()->GetWrong() && !rFrm.GetTxtNode()->IsWrongDirty() )
+        {
+            rFrm.GetTxtNode()->SetWrong( new SwWrongList() ); \
+            rFrm.GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) ); \
+        }
+        rFrm.GetNode()->SetWrongDirty( sal_True ); \
+        rFrm.GetNode()->SetAutoCompleteWordDirty( sal_True ); \
+    }
+
+    SwPageFrm *pPage = rFrm.FindPageFrm();
+    if( pPage )
+    {
+        pPage->InvalidateSpelling();
+        pPage->InvalidateAutoCompleteWords();
+    }
+}
+
+//
+// SET_SCRIPT_INVAL( nPos )
+//
+
 #define SET_SCRIPT_INVAL( nPos )\
-{ \
-    if( GetPara() ) \
-        GetPara()->GetScriptInfo().SetInvalidity( nPos ); \
+    lcl_SetScriptInval( *this, nPos );
+
+void lcl_SetScriptInval( SwTxtFrm& rFrm, xub_StrLen nPos )
+{
+    if( rFrm.GetPara() )
+        rFrm.GetPara()->GetScriptInfo().SetInvalidity( nPos );
 }
 
 void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
@@ -2060,32 +2077,33 @@ SwTxtFrm *SwTxtFrm::GetFormatted()
  *                      SwTxtFrm::CalcFitToContent()
  *************************************************************************/
 
-KSHORT SwTxtFrm::CalcFitToContent( )
+KSHORT SwTxtFrm::CalcFitToContent()
 {
-    sal_Bool bNoPara = !HasPara();
-    if ( bNoPara )
-    {
-        SwParaPortion *pDummy = new SwParaPortion();
-        SetPara( pDummy );
-    }
+    SwParaPortion* pOldPara = GetPara();
+    SwParaPortion *pDummy = new SwParaPortion();
+    SetPara( pDummy, false );
+    const SwPageFrm* pPage = FindPageFrm();
+
+    const SwTwips nOldFrmWidth = Frm().Width();
+    const SwTwips nOldPrtWidth = Prt().Width();
+    const SwTwips nPageWidth = GetUpper()->IsVertical() ?
+                               pPage->Prt().Height() :
+                               pPage->Prt().Width();
+
+    Frm().Width( nPageWidth );
+    Prt().Width( nPageWidth );
 
     SwTxtFormatInfo aInf( this );
-    aInf.Right( KSHRT_MAX );
-    aInf.Width( KSHRT_MAX );
-    aInf.RealWidth( KSHRT_MAX );
     aInf.SetIgnoreFly( sal_True );
-
     SwTxtFormatter  aLine( this, &aInf );
-
     SwHookOut aHook( aInf );
-    KSHORT nMax = aLine._CalcFitToContent( );
-    if ( nMax )
-        nMax -= KSHORT( GetLeftMargin() );
 
-    if ( bNoPara )
-        ClearPara( );  // Dummy-Paraportion wieder loeschen
-    else
-        SetPara( NULL ); // Die Einzeilen-Formatinformation wegwerfen!
+    const USHORT nMax = aLine._CalcFitToContent() + 1;
+
+    Frm().Width( nOldFrmWidth );
+    Prt().Width( nOldPrtWidth );
+
+    SetPara( pOldPara );
 
     return nMax;
 }
