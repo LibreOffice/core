@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:40 $
+ *  last change: $Author: fme $ $Date: 2002-05-07 10:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2216,8 +2216,8 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
     else
     {
         pOpt->SetAlwaysAutoColor(rAccessibilityOptions.GetIsAutomaticFontColor());
-        pOpt->SetStopAnimatedGraphics(rAccessibilityOptions.GetIsAllowAnimatedGraphics());
-        pOpt->SetStopAnimatedText(rAccessibilityOptions.GetIsAllowAnimatedText());
+        pOpt->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
+        pOpt->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
     }
 }
 
