@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:08:08 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,9 +337,12 @@
 #define HID_OLE_CHECKLB             (HID_BASE + 477)
 #define HID_DLG_CREATE_AUTH_ENTRY   (HID_BASE + 478)
 #define HID_TP_PRIVATE_DATA         (HID_BASE + 479)
-#define HID_TP_BUSINESS_DATA        (HID_BASE + 480)
-#define HID_SECTION_FTNENDNOTES_PAGE (HID_BASE + 481)
-#define HID_TEXTGRID_PAGE           (HID_BASE + 482)
+
+#define HID_TP_BUSINESS_DATA            (HID_BASE + 480)
+#define HID_SECTION_FTNENDNOTES_PAGE    (HID_BASE + 481)
+#define HID_TEXTGRID_PAGE               (HID_BASE + 482)
+#define HID_OPTCOMPATIBILITY_PAGE       (HID_BASE + 483)
+#define HID_COMPATIBILITY_OPTIONS_BOX   (HID_BASE + 484)
 
 // AutoPilot Help-IDs *********************************************************
 
