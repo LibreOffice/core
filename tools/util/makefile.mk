@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-29 09:15:06 $
+#   last change: $Author: hjs $ $Date: 2001-09-13 09:31:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -215,7 +215,6 @@ SHL1OBJS=       $(SLO)\memmgr.obj
 SHL1STDLIBS+=   shell32.lib     \
                 mpr.lib         \
                 ole32.lib       \
-                user32.lib       \
                 uuid.lib        \
                 advapi32.lib
 .ENDIF
