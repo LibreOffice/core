@@ -2,8 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.21 $
- *  last change: $Author: mh $ $Date: 2001-12-19 15:08:23 $
+ *  $Revision: 1.22 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-04-09 18:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +474,7 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
+#ifndef MACOSX
     Dl_info dl_info;
 
     if(result = dladdr(addr, &dl_info))
@@ -492,7 +494,11 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 
         result = sal_True;
     }
-
+#else
+        // mh -> ed don't know how has to be implemented
+        result = sal_False;
+        fprintf( stderr, "osl_getModuleURLFrom address not impl." );
+#endif
     return result;
 }
 
