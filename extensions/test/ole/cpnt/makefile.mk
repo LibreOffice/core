@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 13:17:29 $
+#   last change: $Author: rt $ $Date: 2004-08-02 09:49:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ UNOTYPES= oletest.XTestSequence \
     oletest.XSimple3				\
     oletest.XTestInParameters	\
     oletest.XIdentity		\
+    com.sun.star.beans.XPropertySet \
     com.sun.star.beans.PropertyAttribute	\
     com.sun.star.uno.XAggregation		\
     com.sun.star.lang.XTypeProvider		\
@@ -114,6 +115,10 @@ SHL1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)
 
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+    SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
+.ENDIF
+
 SHL1DEPN=
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
@@ -124,6 +129,7 @@ DEF1EXPORTFILE=	exports.dxp
 
 
 ALLIDLFILES:=	..$/idl$/oletest.idl
+
 
 # --- Targets ------------------------------------------------------
 
