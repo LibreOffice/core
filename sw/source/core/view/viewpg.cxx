@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:13:27 $
+ *  last change: $Author: ama $ $Date: 2002-05-22 11:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,13 +499,19 @@ void ViewShell::PreViewPage(
             GetOut()->DrawRect( aShadow );
             if( !nSelectedPage )
             {
-                aShadow.Left() = aPageRect.Right() - 1;
-                aShadow.Right() = aPageRect.Left() + 1;
+                aShadow.Right() = aPageRect.Right() - 1;
+                aShadow.Left() = aPageRect.Left() + 1;
                 aShadow.Top() = aPageRect.Top() + 1;
                 aShadow.Bottom() = aPageRect.Bottom() - 1;
                 aShadow = GetOut()->PixelToLogic( aShadow );
                 GetOut()->SetFillColor( Color( COL_TRANSPARENT ) );
                 GetOut()->SetLineColor( aLineColor );
+                GetOut()->DrawRect( aShadow );
+                aShadow.Right() = aPageRect.Right() - 2;
+                aShadow.Left() = aPageRect.Left() + 2;
+                aShadow.Top() = aPageRect.Top() + 2;
+                aShadow.Bottom() = aPageRect.Bottom() - 2;
+                aShadow = GetOut()->PixelToLogic( aShadow );
                 GetOut()->DrawRect( aShadow );
             }
             GetOut()->SetFillColor( aFill );
@@ -1313,250 +1319,4 @@ Size ViewShell::GetPagePreViewPrtMaxSize() const
     }
     return aMaxSize;
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2002/04/08 14:32:45  ama
-      Fix #98404#: Border and shadow for pages
-
-      Revision 1.4  2002/03/15 07:33:34  os
-      #97978# page preview accessiblity implemented
-
-      Revision 1.3  2001/05/10 08:45:09  os
-      store print options at the document
-
-      Revision 1.2  2000/10/25 12:03:41  jp
-      Spellchecker/Hyphenator are not longer member of the shells
-
-      Revision 1.1.1.1  2000/09/19 00:08:29  hr
-      initial import
-
-      Revision 1.74  2000/09/18 16:04:37  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.73  2000/05/09 11:45:55  ama
-      Unicode changes
-
-      Revision 1.72  2000/04/27 07:37:23  os
-      UNICODE
-
-      Revision 1.71  2000/02/11 14:36:11  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.70  1999/12/14 14:28:30  jp
-      Bug #69595#: print can create single Jobs
-
-      Revision 1.69  1999/02/22 07:35:12  MA
-      1949globale Shell entsorgt, Shells am RootFrm
-
-
-      Rev 1.68   22 Feb 1999 08:35:12   MA
-   1949globale Shell entsorgt, Shells am RootFrm
-
-      Rev 1.67   14 Sep 1998 13:06:50   JP
-   Bug #56069#: keine 0 oder negative Scalierung erzeugen
-
-      Rev 1.66   19 Aug 1998 14:10:16   JP
-   Task #55252#: Sonderfall der Einspaltigkeit beachten
-
-      Rev 1.65   19 Aug 1998 11:16:30   JP
-   Task #55252#: optionale PagePreViewPrint-Einstellungen beachten
-
-      Rev 1.64   24 Jun 1998 18:45:24   MA
-   DataChanged fuer ScrollBar und Retouche, Retouche ganz umgestellt
-
-      Rev 1.63   21 Jun 1998 12:43:16   JP
-   Bug #51189#: ScrollHandling umgebaut; ab Seite 0 starten um Seite 1 & 2 nebeneinander zu sehen
-
-      Rev 1.62   19 Jun 1998 16:01:56   JP
-   neu: IsPreViewDocPos - stelle fest, ob der Point innerhalb einer Seite liegt
-
-      Rev 1.61   29 Apr 1998 09:31:28   MA
-   RetoucheBrush -> RetoucheColor
-
-      Rev 1.60   27 Apr 1998 12:28:12   AMA
-   Fix: Prospektdruck einer Selektion: Richtige Seiten drucken!
-
-      Rev 1.59   27 Jan 1998 22:35:42   JP
-   GetNumDepend durch GetDepends ersetzt
-
-      Rev 1.58   20 Nov 1997 12:39:22   MA
-   includes
-
-      Rev 1.57   03 Nov 1997 13:07:30   MA
-   precomp entfernt
-
-      Rev 1.56   29 Oct 1997 15:27:56   JP
-   PreViewPage: Leere Seiten mit anzeigen
-
-      Rev 1.55   13 Oct 1997 10:30:44   MA
-   Umbau/Vereinfachung Paint
-
-      Rev 1.54   01 Jul 1997 15:42:52   JP
-   Bug #41162#: beim drucken die Raender des Drukers herausrechen
-
-      Rev 1.53   18 Jun 1997 16:39:52   AMA
-   Fix #40745#: Formatieren fuer einen Referenzdrucker mit Zoomfaktor 1
-
-      Rev 1.52   06 Jun 1997 12:45:46   MA
-   chg: versteckte Absaetze ausblenden
-
-      Rev 1.51   14 Apr 1997 18:21:24   MA
-   #38806# Options auch fuer Prospect, jetzt mit eigener Methode
-
-      Rev 1.50   09 Feb 1997 20:58:44   JP
-   Bug #35760#: beim Core-Repaint die Bereiche der PagePreView mitteilen
-
-      Rev 1.49   19 Dec 1996 14:32:06   MA
-   #34691# BlackFont-Option uebernehmen
-
-      Rev 1.48   11 Nov 1996 09:57:56   MA
-   ResMgr
-
-      Rev 1.47   24 Aug 1996 17:10:36   JP
-   svdraw.hxx entfernt
-
-      Rev 1.46   26 Jul 1996 16:58:58   JP
-   Bug #29897#: PropectDruck - invers Druck korrekt behandeln
-
-      Rev 1.45   18 Jul 1996 07:18:18   SWG
-   ein include zu wenig
-
-      Rev 1.44   17 Jul 1996 10:53:04   OS
-   svdraw unter OS/2 ausserhalb der PCH
-
-      Rev 1.43   16 Jul 1996 15:52:36   MA
-   new: PrintPageBackground
-
-      Rev 1.42   02 Jul 1996 12:08:52   JP
-   Bug #28965#: Positionierung korrigiert/optimiert
-
-      Rev 1.41   28 Jun 1996 10:59:26   AMA
-   Fix: Kein ASSERT mehr beim Komplettausdruck der Seitenvorschau.
-
-      Rev 1.40   27 Jun 1996 19:12:14   HJS
-   includes
-
-      Rev 1.39   27 Jun 1996 19:08:36   HJS
-   includes
-
-      Rev 1.38   27 Jun 1996 16:24:28   MA
-   includes
-
-      Rev 1.37   24 Jun 1996 20:17:54   HJS
-   include hintids.hxx
-
-      Rev 1.36   11 Jun 1996 19:44:40   JP
-   Bug #27584#: kein ULONG_MAX als Item verschicken -> eigene MessageId definieren
-
-      Rev 1.35   21 Mar 1996 14:04:30   MA
-   svhxx entfernt
-
-      Rev 1.34   20 Mar 1996 11:50:46   MA
-   Warnings
-
-      Rev 1.33   08 Mar 1996 14:19:00   JP
-   kleinere Bugs beim PrintProspect behoben
-
-      Rev 1.32   07 Mar 1996 16:48:24   JP
-   neu: PrintPropect
-
-      Rev 1.31   23 Jan 1996 14:14:46   JP
-   Bug #24575#: an der Imp-Struktur die 1. sichtbare Seite setzen
-
-      Rev 1.30   30 Nov 1995 13:26:20   MA
-   opt: Desktop nicht mehr per Polygon
-
-      Rev 1.29   24 Nov 1995 17:11:46   OM
-   PCH->PRECOMPILED
-
-      Rev 1.28   14 Nov 1995 11:01:48   MA
-   Options nachgepflegt
-
-      Rev 1.27   13 Nov 1995 12:18:36   MA
-   chg: static -> lcl_
-
-      Rev 1.26   08 Nov 1995 12:17:34   AMA
-   Set statt Change (301)
-
-      Rev 1.25   29 Aug 1995 09:59:12   JP
-   Bug 18260: PrintPreView - nicht ueber den Rand hinausdrucken
-
-      Rev 1.24   22 Aug 1995 17:59:08   JP
-   Bug 17695: Print - auf der letzten Seite das Raster beibehalten
-
-      Rev 1.23   11 Aug 1995 18:10:12   JP
-   Print: reverse drucken - nicht den Speicher ueberschreiben, PageFrame-Pointer verschieben
-
-      Rev 1.22   11 Aug 1995 14:48:34   AMA
-   Fix: Kopienanzahl beim Drucken quadriert
-
-      Rev 1.21   09 Aug 1995 22:04:16   ER
-   ! global/static data _vor_ seg_eofglobals
-
-      Rev 1.20   06 Aug 1995 20:28:58   JP
-   Bug17235: erst die Wiese malen; Bug17090: nicht immer alles Painten;  Bundsteg abgeklemmt
-
-      Rev 1.19   19 Jun 1995 09:51:52   KH
-   Anpassung Metrowerks
-
-      Rev 1.18   10 May 1995 14:01:18   MA
-   fix: Painten waehrend des Druckens.
-
-      Rev 1.17   06 May 1995 14:22:32   JP
-   USHORTs als static
-
-      Rev 1.16   06 May 1995 10:08:28   JP
-   ClacPreView: WinSize in Pixel, Abstaende richtig berechnen
-
-      Rev 1.15   05 May 1995 19:35:22   AMA
-   Umbau pProgress; Fix: FontCache+PreView
-
-      Rev 1.14   03 May 1995 20:34:14   AMA
-   Umbau: SfxProgress etc.
-
-      Rev 1.13   20 Apr 1995 18:21:26   JP
-   MapMode: auf glatte Prozentwerte runden, Bugfix fuers Drucken
-
-      Rev 1.12   27 Mar 1995 20:21:28   JP
-   CalcPreView: neuer Parameter - virtuelle Seitennummer returnen (fuer StatusLeiste)
-
-      Rev 1.11   13 Mar 1995 11:38:22   KH
-   Anpassung CFRONT
-
-      Rev 1.10   09 Mar 1995 16:58:26   JP
-   PreViewPage: Visarea am Ende loeschen, dadurch Ausgabe verhindern, wenn in anderer Shell eine Eingabe erfolgt
-
-      Rev 1.9   02 Mar 1995 11:23:34   JP
-   PrintPreView: Seitenhoehe richtig errechnen
-
-      Rev 1.8   01 Mar 1995 22:35:30   JP
-   Drucken noch ein wenig verbessert
-
-      Rev 1.7   01 Mar 1995 21:05:20   JP
-   neu: Drucken (ungetestet)
-
-      Rev 1.6   28 Feb 1995 21:33:10   JP
-   PreViewPage: bei der richtigen Seite den Bundsteg malen
-
-      Rev 1.5   27 Feb 1995 11:11:26   JP
-   kleinere Bugfixes
-
-      Rev 1.4   27 Feb 1995 00:05:22   JP
-   Paint: Current Shell stezen
-
-      Rev 1.3   26 Feb 1995 15:05:18   JP
-   nochmals umgestellt, Max aller Seiten errechnen
-
-      Rev 1.2   24 Feb 1995 21:43:04   JP
-   weitere Teile implementiert
-
-      Rev 1.1   24 Feb 1995 15:46:04   JP
-   1.Seite beachten, Doppelseiten sonderbehandeln
-
-      Rev 1.0   24 Feb 1995 00:13:12   JP
-   Initial revision.
-
-*************************************************************************/
 
