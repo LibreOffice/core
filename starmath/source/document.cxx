@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 12:50:57 $
+ *  last change: $Author: cmc $ $Date: 2001-02-02 14:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,6 +712,13 @@ BOOL SmDocShell::Load(SvStorage *pStor)
             MathType aEquation(aText);
             bRet = (1 == aEquation.Parse(pStor));
         }
+        else if( pStor->IsStream(C2S("Content.xml")))
+        {
+            // is this a fabulous math package ?
+            SmXMLWrapper aEquation(GetModel());
+            SfxMedium aMedium(pStor);
+            bRet = aEquation.Import(aMedium);
+        }
         else
         {
             bRet = 0 != Try3x (pStor, STREAM_READWRITE);
@@ -800,17 +807,28 @@ BOOL SmDocShell::SaveAs(SvStorage * pNewStor)
     BOOL bRet = FALSE;
     if ( SfxInPlaceObject::SaveAs( pNewStor ) )
     {
-        SvStorageStreamRef aStm = pNewStor->OpenStream(
-                                    String::CreateFromAscii(pStarMathDoc));
-        aStm->SetVersion( pNewStor->GetVersion() );
-        GetPool().SetFileFormatVersion( USHORT( pNewStor->GetVersion() ));
-        aStm->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-        aStm->SetKey( pNewStor->GetKey() ); // Passwort setzen
-
-        if ( aStm.Is() )
+        if (pNewStor->GetVersion() >= SOFFICE_FILEFORMAT_XML)
         {
-            ImplSave( aStm );
-            bRet = TRUE;
+            // a math package as a storage
+            SmXMLWrapper aEquation(GetModel());
+            SfxMedium aMedium(pNewStor);
+            aEquation.SetFlat(sal_False);
+            bRet = aEquation.Export(aMedium);
+        }
+        else
+        {
+            SvStorageStreamRef aStm = pNewStor->OpenStream(
+                                        String::CreateFromAscii(pStarMathDoc));
+            aStm->SetVersion( pNewStor->GetVersion() );
+            GetPool().SetFileFormatVersion( USHORT( pNewStor->GetVersion() ));
+            aStm->SetBufferSize(DOCUMENT_BUFFER_SIZE);
+            aStm->SetKey( pNewStor->GetKey() ); // Passwort setzen
+
+            if ( aStm.Is() )
+            {
+                ImplSave( aStm );
+                bRet = TRUE;
+            }
         }
     }
     return bRet;
