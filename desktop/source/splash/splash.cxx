@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:44:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#include <rtl/logfile.hxx>
 
 
 using namespace ::rtl;
@@ -175,6 +176,9 @@ void SAL_CALL SplashScreen::setText(const OUString& aText)
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "::SplashScreen::setValue (lo119109)" );
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "value=%d", nValue );
+
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if (_bVisible) {
         Show();
