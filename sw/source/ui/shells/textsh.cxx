@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:52:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,6 +667,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_SMA:
         {
+            // #i34343# Inserting a math object into an autocompletion crashes
+            // the suggestion has to be removed before
+            GetView().GetEditWin().StopQuickHelp();
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
             rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, TRUE, 0, &rReq );
         }
