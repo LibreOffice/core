@@ -13,7 +13,8 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 ..\%__SRC%\misc\org.openoffice.Office.Chart.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Chart.xml
 ..\%__SRC%\misc\org.openoffice.Office.Common.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Common.xml
 ..\%__SRC%\misc\org.openoffice.Office.DataAccess.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.DataAccess.xml
-..\%__SRC%\misc\org.openoffice.Office.Dialogs.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Dialogs.xml
+..\%__SRC%\misc\org.openoffice.Office.Views.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Views.xml
+..\%__SRC%\misc\org.openoffice.Office.TypeDetection.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.TypeDetection.xml
 ..\%__SRC%\misc\org.openoffice.Office.Draw.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Draw.xml
 ..\%__SRC%\misc\org.openoffice.Office.Impress.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Impress.xml
 ..\%__SRC%\misc\org.openoffice.Office.Java.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Java.xml
@@ -38,5 +39,32 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 ..\%__SRC%\misc\org.openoffice.UserProfile.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.UserProfile.xml
 
 ..\%__SRC%\misc\*.xsd %_DEST%\xml%_EXT%\office\schema\*.xsd
-..\data\*.xml %_DEST%\xml%_EXT%\office\definition\*.xml
+
+..\data\org.openoffice.Office.Bibliography.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Bibliography.xml
+..\data\org.openoffice.Office.Calc.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Calc.xml
+..\data\org.openoffice.Office.Chart.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Chart.xml
+..\data\org.openoffice.Office.Common.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Common.xml
+..\data\org.openoffice.Office.DataAccess.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.DataAccess.xml
+..\data\org.openoffice.Office.Views.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Views.xml
+..\data\org.openoffice.Office.TypeDetection.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.TypeDetection.xml
+..\data\org.openoffice.Office.Draw.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Draw.xml
+..\data\org.openoffice.Office.Impress.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Impress.xml
+..\data\org.openoffice.Office.Java.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Java.xml
+..\data\org.openoffice.Office.Linguistic.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Linguistic.xml
+..\data\org.openoffice.Office.Math.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Math.xml
+..\data\org.openoffice.Office.Writer.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Writer.xml
+..\data\org.openoffice.Office.WriterWeb.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.WriterWeb.xml
+..\data\org.openoffice.Office.Filter.Calc.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Calc.xml
+..\data\org.openoffice.Office.Filter.Chart.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Chart.xml
+..\data\org.openoffice.Office.Filter.Common.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Common.xml
+..\data\org.openoffice.Office.Filter.Draw.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Draw.xml
+..\data\org.openoffice.Office.Filter.Impress.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Impress.xml
+..\data\org.openoffice.Office.Filter.Math.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Math.xml
+..\data\org.openoffice.Office.Filter.Writer.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.Writer.xml
+..\data\org.openoffice.Office.Filter.WriterWeb.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Filter.WriterWeb.xml
+..\data\org.openoffice.Inet.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Inet.xml
+..\data\org.openoffice.ucb.Hierarchy.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.ucb.Hierarchy.xml
+..\data\org.openoffice.ucb.Store.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.ucb.Store.xml
+..\data\org.openoffice.Setup.xml %_DEST%\xml%_EXT%\office\definition\org.openoffice.Setup.xml
+
 
