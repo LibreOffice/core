@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,17 +178,23 @@ protected:
 
 public:
 
-    SwXMLExport(sal_uInt16 nExportFlags = EXPORT_ALL);
+    // #110680#
+    SwXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        sal_uInt16 nExportFlags = EXPORT_ALL);
+
 #ifdef XML_CORE_API
-    SwXMLExport( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::frame::XModel > & rModel,
-                 SwPaM& rPaM, const ::rtl::OUString& rFileName,
-                 const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::document::XGraphicObjectResolver > &,
-                 sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-                 sal_Bool bShowProgr );
+    // #110680#
+    SwXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
+        SwPaM& rPaM,
+        const ::rtl::OUString& rFileName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
+        sal_Bool bExpWholeDoc,
+        sal_Bool bExpFirstTableOnly,
+        sal_Bool bShowProgr );
 #endif
     virtual ~SwXMLExport();
 
