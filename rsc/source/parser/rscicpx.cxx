@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-19 12:37:37 $
+ *  last change: $Author: pl $ $Date: 2002-02-26 10:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2230,6 +2230,7 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
     INS_WINBIT(pClassToolBox,Scroll)
     INS_WINBIT(pClassToolBox,LineSpacing)
     INS_WINBIT(pClassToolBox,RectStyle)
+    INS_WINBIT(pClassToolBox,Tabstop)
 
     return pClassToolBox;
 }
