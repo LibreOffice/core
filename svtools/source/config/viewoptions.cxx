@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-10 11:42:50 $
+ *  last change: $Author: as $ $Date: 2000-11-10 11:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ class SvtViewDialogOptions_Impl : public ConfigItem
         virtual void Commit();
 
         sal_Bool    Exist       (   const   OUString&   sName                                                           );
-        void        Delete      (   const   OUString&   sName                                                           );
+        sal_Bool    Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
         void        GetSize     (   const   OUString&   sName   ,           sal_Int32&  nWidth  ,   sal_Int32&  nHeight );
@@ -345,13 +345,15 @@ sal_Bool SvtViewDialogOptions_Impl::Exist( const OUString& sName )
 }
 
 //*****************************************************************************************************************
-void SvtViewDialogOptions_Impl::Delete( const OUString& sName )
+sal_Bool SvtViewDialogOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode = sName;
-    if( ClearNodeSet( sNode ) == sal_True )
+    OUString sNode  = sName;
+    sal_Bool bState = ClearNodeSet( sNode );
+    if( bState == sal_True )
     {
         m_aList.erase( sName );
     }
+    return bState;
 }
 
 //*****************************************************************************************************************
@@ -411,7 +413,7 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
         virtual void Commit();
 
         sal_Bool    Exist       (   const   OUString&   sName                                                           );
-        void        Delete      (   const   OUString&   sName                                                           );
+        sal_Bool    Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
         sal_Int32   GetPageID   (   const   OUString&   sName                                                           );
@@ -543,13 +545,15 @@ sal_Bool SvtViewTabDialogOptions_Impl::Exist( const OUString& sName )
 }
 
 //*****************************************************************************************************************
-void SvtViewTabDialogOptions_Impl::Delete( const OUString& sName )
+sal_Bool SvtViewTabDialogOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode = sName;
-    if( ClearNodeSet( sNode ) == sal_True )
+    OUString sNode  = sName;
+    sal_Bool bState = ClearNodeSet( sNode );
+    if( bState == sal_True )
     {
         m_aList.erase( sName );
     }
+    return bState;
 }
 
 //*****************************************************************************************************************
@@ -607,7 +611,7 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
         virtual void Commit();
 
         sal_Bool    Exist       (   const   OUString&   sName                               );
-        void        Delete      (   const   OUString&   sName                               );
+        sal_Bool    Delete      (   const   OUString&   sName                               );
         OUString    GetUserData (   const   OUString&   sName                               );
         void        SetUserData (   const   OUString&   sName,  const   OUString&   sData   );
 
@@ -714,13 +718,15 @@ sal_Bool SvtViewTabPageOptions_Impl::Exist( const OUString& sName )
 }
 
 //*****************************************************************************************************************
-void SvtViewTabPageOptions_Impl::Delete( const OUString& sName )
+sal_Bool SvtViewTabPageOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode = sName;
-    if( ClearNodeSet( sNode ) == sal_True )
+    OUString sNode  = sName;
+    sal_Bool bState = ClearNodeSet( sNode );
+    if( bState == sal_True )
     {
         m_aList.erase( sName );
     }
+    return bState;
 }
 
 //*****************************************************************************************************************
@@ -750,7 +756,7 @@ class SvtViewWindowOptions_Impl : public ConfigItem
         virtual void Commit();
 
         sal_Bool    Exist       (   const   OUString&   sName                                                           );
-        void        Delete      (   const   OUString&   sName                                                           );
+        sal_Bool    Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
         void        GetSize     (   const   OUString&   sName   ,           sal_Int32&  nWidth  ,   sal_Int32&  nHeight );
@@ -898,13 +904,15 @@ sal_Bool SvtViewWindowOptions_Impl::Exist( const OUString& sName )
 }
 
 //*****************************************************************************************************************
-void SvtViewWindowOptions_Impl::Delete( const OUString& sName )
+sal_Bool SvtViewWindowOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode = sName;
-    if( ClearNodeSet( sNode ) == sal_True )
+    OUString sNode  = sName;
+    sal_Bool bState = ClearNodeSet( sNode );
+    if( bState == sal_True )
     {
         m_aList.erase( sName );
     }
+    return bState;
 }
 
 //*****************************************************************************************************************
@@ -1114,30 +1122,32 @@ sal_Bool SvtViewOptions::Exist() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtViewOptions::Delete()
+sal_Bool SvtViewOptions::Delete()
 {
     // Ready for multithreading
     MutexGuard aGuard( GetOwnStaticMutex() );
 
+    sal_Bool bState = sal_False;
     switch( m_eViewType )
     {
         case E_DIALOG       :   {
-                                    m_pDataContainer_Dialogs->Delete( m_sViewName );
+                                    bState = m_pDataContainer_Dialogs->Delete( m_sViewName );
                                 }
                                 break;
         case E_TABDIALOG    :   {
-                                    m_pDataContainer_TabDialogs->Delete( m_sViewName );
+                                    bState = m_pDataContainer_TabDialogs->Delete( m_sViewName );
                                 }
                                 break;
         case E_TABPAGE      :   {
-                                    m_pDataContainer_TabPages->Delete( m_sViewName );
+                                    bState = m_pDataContainer_TabPages->Delete( m_sViewName );
                                 }
                                 break;
         case E_WINDOW       :   {
-                                    m_pDataContainer_Windows->Delete( m_sViewName );
+                                    bState = m_pDataContainer_Windows->Delete( m_sViewName );
                                 }
                                 break;
     }
+    return bState;
 }
 
 //*****************************************************************************************************************
