@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-22 13:54:58 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 11:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,9 +864,6 @@ Reference< XResultSet > Content::createCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( !isFolder() )
-        return Reference< XResultSet >();
-
     sal_Int32 nCount = rPropertyNames.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
@@ -922,9 +919,6 @@ Reference< XResultSet > Content::createCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( !isFolder() )
-        return Reference< XResultSet >();
-
     sal_Int32 nCount = rPropertyHandles.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
@@ -980,9 +974,6 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( !isFolder() )
-        return Reference< XDynamicResultSet >();
-
     sal_Int32 nCount = rPropertyNames.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
@@ -1022,9 +1013,6 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    if ( !isFolder() )
-        return Reference< XDynamicResultSet >();
-
     sal_Int32 nCount = rPropertyHandles.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
