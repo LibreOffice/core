@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:10:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,14 +805,9 @@ Bitmap RID_SVXBMP_THEME_DEFAULT_BIG
     File = "galdefl.bmp" ;
 };
 
-Bitmap RID_SVXBMP_GALLERY_SOUND
+Bitmap RID_SVXBMP_GALLERY_MEDIA
 {
-    File = "galsound.bmp";
-};
-
-Bitmap RID_SVXBMP_GALLERY_SOUND_0
-{
-    File = "galsnd0.bmp";
+    File = "galmedia.bmp";
 };
 
 Bitmap RID_SVXBMP_GALLERY_SOUND_1
