@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 11:10:01 $
+ *  last change: $Author: tbe $ $Date: 2001-03-16 13:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,10 @@ protected:
 
     void implSetNewObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+
+    ::rtl::OUString GetHeadlineName(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+
     void implDetachController();
 
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:50:02 $
+ *  last change: $Author: tbe $ $Date: 2001-03-16 13:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,10 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-//#ifndef _SVX_FMPROP_HRC
-//#include <svx/fmprop.hrc>
-//#endif
+
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-//#ifndef _TOOLKIT_UNOHLP_HXX
-//#include <toolkit/helper/vclunohelper.hxx>
-//#endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -103,30 +98,25 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
-#include <com/sun/star/form/XForm.hpp>
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
-#include <com/sun/star/form/FormComponentType.hpp>
-#endif
+
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
 #endif
-//#ifndef _SVX_FMRESIDS_HRC
-//#include <svx/fmresids.hrc>
-//#endif
-//#ifndef _SVX_FMSERVS_HXX
-//#include "fmservs.hxx"
-//#endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
@@ -158,7 +148,11 @@
 #endif
 
 #include "basidesh.hxx"
+#include <iderid.hxx>
 
+#ifndef _BASCTL_DLGRESID_HRC
+#include <dlgresid.hrc>
+#endif
 
 //============================================================================
 // PropBrwMgr
@@ -208,89 +202,15 @@ const long WIN_BORDER = 2;
 const long MIN_WIN_SIZE_X = 50;
 const long MIN_WIN_SIZE_Y = 50;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 
 //----------------------------------------------------------------------------
-
-::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
-{
-    ::rtl::OUString aClassName;
-    /*
-    switch (nClassId)
-    {
-        case FormComponentType::TEXTFIELD:
-        {
-            Reference< XInterface >  xIFace;
-            aUnoObj >>= xIFace;
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_EDIT));
-            if (xIFace.is())
-            {   // we have a chance to check if it's a formatted field model
-                Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
-                if (xInfo.is() && (xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD)))
-                    aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FORMATTED));
-                else if (!xInfo.is())
-                {
-                    // couldn't distinguish between formatted and edit with the service name, so try with the properties
-                    Reference< XPropertySet >  xProps(xIFace, UNO_QUERY);
-                    if (xProps.is())
-                    {
-                        Reference< XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
-                        if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(FM_PROP_FORMATSSUPPLIER))
-                            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FORMATTED));
-                    }
-                }
-            }
-        }
-        break;
-
-        case FormComponentType::COMMANDBUTTON:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_PUSHBUTTON)); break;
-        case FormComponentType::RADIOBUTTON:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_RADIOBUTTON)); break;
-        case FormComponentType::CHECKBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_CHECKBOX)); break;
-        case FormComponentType::LISTBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_LISTBOX)); break;
-        case FormComponentType::COMBOBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_COMBOBOX)); break;
-        case FormComponentType::GROUPBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_GROUPBOX)); break;
-        case FormComponentType::IMAGEBUTTON:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
-        case FormComponentType::FIXEDTEXT:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FIXEDTEXT)); break;
-        case FormComponentType::GRIDCONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_DBGRID)); break;
-        case FormComponentType::FILECONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FILECONTROL)); break;
-        case FormComponentType::DATEFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_DATEFIELD)); break;
-        case FormComponentType::TIMEFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_TIMEFIELD)); break;
-        case FormComponentType::NUMERICFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_NUMERICFIELD)); break;
-        case FormComponentType::CURRENCYFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
-        case FormComponentType::PATTERNFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_PATTERNFIELD)); break;
-        case FormComponentType::IMAGECONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_IMAGECONTROL)); break;
-        case FormComponentType::HIDDENCONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_HIDDEN_CLASSNAME)); break;
-
-        case FormComponentType::CONTROL:
-        default:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_CONTROL_CLASSNAME)); break;
-    }
-    */
-    return aClassName;
-}
 
 //============================================================================
 // PropBrw
@@ -429,20 +349,7 @@ sal_Bool PropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    // remember our bindings: while we're closed, we're deleted, too, so accessing the bindings after this
-    // would be deadly
-    // 10/19/00 - 79321 - FS
-    ///SfxBindings& rBindings = SfxControllerItem::GetBindings();
-
     sal_Bool bClose = SfxFloatingWindow::Close();
-
-    if (bClose)
-    {
-        /*
-        rBindings.Invalidate(SID_FM_CTL_PROPERTIES);
-        rBindings.Invalidate(SID_FM_PROPERTIES);
-        */
-    }
 
     return bClose;
 }
@@ -497,33 +404,83 @@ void PropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
         );
 
         // set the new title according to the selected object
-        //String sTitle;
-        ////sTitle = String(SVX_RES(RID_STR_PROPERTIES_CONTROL));
-        /*
-        if  (::comphelper::hasProperty(FM_PROP_CLASSID, _rxObject))
-        {
-            Any aClassIdValue(_rxObject->getPropertyValue(FM_PROP_CLASSID));
-            if (aClassIdValue.hasValue())
-            {
-                sal_Int16 nClassID = ::comphelper::getINT16(_rxObject->getPropertyValue(FM_PROP_CLASSID));
-                sTitle = String(SVX_RES(RID_STR_PROPERTIES_CONTROL));
-                sTitle += String(GetUIHeadlineName(nClassID, makeAny(_rxObject)));
-            }
-        }
-        else if (Reference< XForm >(_rxObject, UNO_QUERY).is())
-            sTitle = String(SVX_RES(RID_STR_PROPERTIES_FORM));
-        else if (!_rxObject.is())
-            sTitle = String(SVX_RES(RID_STR_NO_PROPERTIES));
-        else if (!::comphelper::hasProperty(FM_PROP_DATASOURCE, _rxObject) || !::comphelper::hasProperty(FM_PROP_NAME, _rxObject))
-        {
-            // no form component and (no form or no name) -> Multiselection
-            sTitle = String(SVX_RES(RID_STR_PROPERTIES_CONTROL));
-            sTitle += String(SVX_RES(RID_STR_PROPTITLE_MULTISELECT));
-        }
-        */
-        //SetText(sTitle);
-
+        SetText( GetHeadlineName(_rxObject) );
     }
+}
+
+//----------------------------------------------------------------------------
+
+::rtl::OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
+{
+    ::rtl::OUString aName;
+    Reference< lang::XServiceInfo > xServiceInfo( _rxObject, UNO_QUERY );
+
+    if (xServiceInfo.is())    // single selection
+    {
+        sal_uInt16 nResId = 0;
+        aName = ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_PROPERTIES));
+
+        Sequence< ::rtl::OUString > aServiceNames( xServiceInfo->getSupportedServiceNames() );
+        DBG_ASSERT( aServiceNames.getLength() == 1 , "PropBrw: aServiceNames.getLength() != 1" );
+        ::rtl::OUString const & aServiceName = aServiceNames.getConstArray()[ 0 ];
+
+        if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ))
+        {
+            nResId = RID_STR_CLASS_DIALOG;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
+        {
+            nResId = RID_STR_CLASS_BUTTON;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ))
+        {
+            nResId = RID_STR_CLASS_RADIOBUTTON;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
+        {
+            nResId = RID_STR_CLASS_CHECKBOX;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
+        {
+            nResId = RID_STR_CLASS_LISTBOX;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
+        {
+            nResId = RID_STR_CLASS_COMBOBOX;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+        {
+            nResId = RID_STR_CLASS_GROUPBOX;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
+        {
+            nResId = RID_STR_CLASS_EDIT;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
+        {
+            nResId = RID_STR_CLASS_FIXEDTEXT;
+        }
+        else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
+        {
+            nResId = RID_STR_CLASS_IMAGECONTROL;
+        }
+
+        if (nResId)
+        {
+            aName += ::rtl::OUString( IDEResId(nResId) );
+        }
+    }
+    else if (!_rxObject.is())    // no properties
+    {
+        aName = ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES));
+    }
+    else    // multiselection
+    {
+        aName = ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_PROPERTIES));
+        aName += ::rtl::OUString(IDEResId(RID_STR_BRWTITLE_MULTISELECT));
+    }
+
+    return aName;
 }
 
 //----------------------------------------------------------------------------
@@ -611,14 +568,10 @@ void PropBrw::Update( SdrView* pNewView )
             EndListening( *(pView->GetModel()) );
             pView = NULL;
             implSetNewObject(Reference< XPropertySet >());
-
-            //SetText( CreateTitle() );
             return;
         }
 
-        //SetText( CreateTitle() );
         StartListening( *(pView->GetModel()) );
-
     }
     catch (Exception&)
     {
