@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: vg $ $Date: 2004-01-06 12:45:24 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,7 +1276,7 @@ void ATSUIPrintFontList( const ItemCount  nFontItemsCount,
             {
                 for ( k = i; k < j; k++ )
                 {
-                    strcpy(  pFontFamilyStyle,
+                    snprintf(  pFontFamilyStyle, kFontStyleNameLength, "%s",
                             &hFontList[ k ]->mpFontName[ hFontList[ k ]->mnFontStyleByteOffset ]
                           );
 
@@ -1370,7 +1370,7 @@ void ATSUIFPrintFontList( const char       *pFileName,
                 {
                     for ( k = i; k < j; k++ )
                     {
-                        strcpy(  pFontFamilyStyle,
+                        snprintf( pFontFamilyStyle, kFontStyleNameLength, "%s",
                                 &hFontList[ k ]->mpFontName[ hFontList[ k ]->mnFontStyleByteOffset ]
                               );
 
