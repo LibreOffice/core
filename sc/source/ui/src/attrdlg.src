@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:08:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Čísla";
                 Text[ hebrew ] = "Zahlen";
                 Text[ hindi ] = "संख्या";
+                Text[ slovak ] = "Čísla";
             };
             PageItem
             {
@@ -157,6 +158,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -188,6 +190,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -221,6 +224,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -252,6 +256,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन ढइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -285,6 +290,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -318,6 +324,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -351,6 +358,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ czech ] = "Ochrana buňky";
                 Text[ hebrew ] = "Zellschutz";
                 Text[ hindi ] = "कोष्ठ रक्षा";
+                Text[ slovak ] = "Ochrana bunky";
             };
         };
     };
@@ -369,6 +377,7 @@ TabDialog RID_SCDLG_ATTR
     Text[ czech ] = "Atributy buňky";
     Text[ hebrew ] = "Zellen formatieren";
     Text[ hindi ] = "कोष्ठ ऐट्रिब्यूट्स";
+    Text[ slovak ] = "Atribúty bunky";
 };
 
  //================================================
@@ -414,6 +423,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Zamknuto";
         Text[ hebrew ] = "~Gesperrt";
         Text[ hindi ] = "~रक्षित";
+        Text[ slovak ] = "Ch~ránené";
     };
     TriStateBox BTN_HIDE_FORMULAR
     {
@@ -448,6 +458,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Skrýt vzorec";
         Text[ hebrew ] = "~Formel ausblenden";
         Text[ hindi ] = "~सूत्र छिपाओ";
+        Text[ slovak ] = "S~kryť vzorec";
     };
     TriStateBox BTN_HIDE_ALL
     {
@@ -482,6 +493,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Skrýt vše";
         Text[ hebrew ] = "~Alles ausblenden";
         Text[ hindi ] = "~सब छिपाओ";
+        Text[ slovak ] = "Skryť vš~etko";
     };
     FixedText FT_HINT
     {
@@ -519,6 +531,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Ochrana buněk je aktivní pouze tehdy pokud zapnete ochranu aktivního listu.\n\nVyberte 'Zamknout dokument' z menu 'Nástroje' a zvolte 'List'.";
         Text[ hebrew ] = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'.";
         Text[ hindi ] = "केवल वर्तमान शीट् को रक्षा करने बाद ही कोष्ठ रक्षा सक्षम हो सकता है ।\n\n'औज़ार' मेनु से 'लेखपत्र रक्षा' विकल्प को चुनिए, और 'शीट्' को निर्दिष्ट कीजिए ।";
+        Text[ slovak ] = "Ochrana bunky je účinná iba v prípade že je chránený celý list. \n\nVyberte 'Zamknúť Dokument' z menu 'Nástroje' a zvolte 'List'.";
     };
     FixedLine FL_PROTECTION
     {
@@ -552,6 +565,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Ochrana";
         Text[ hebrew ] = "Schutz";
         Text[ hindi ] = "रक्षा";
+        Text[ slovak ] = "Ochrana";
     };
     TriStateBox BTN_HIDE_PRINT
     {
@@ -586,6 +600,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Skrýt při tisku";
         Text[ hebrew ] = "Für Aus~druck ausblenden";
         Text[ hindi ] = "~छपाई करने के समय छिपाओ";
+        Text[ slovak ] = "Skryť počas ~tlače";
     };
     FixedText FT_HINT2
     {
@@ -595,7 +610,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben." ;
         Text [ ENGLISH ] = "Cells of current selection will be omitted for printing." ;
         Text [ norwegian ] = "Cells of current selection will be omitted for printing." ;
-        Text [ italian ] = "Le celle della selezione corrente\nnon verranno stampate." ;
+        Text [ italian ] = "Le celle della selezione attiva\nnon verranno stampate." ;
         Text [ portuguese_brazilian ] = "As c�lulas selecionadas ser�o omitidas na impress�o." ;
         Text [ portuguese ] = "As c�lulas da selec��o actual ser�o omitidas na impress�o." ;
         Text [ finnish ] = "Valitut solut ohitetaan tulostettaessa." ;
@@ -620,6 +635,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Vybrané buňky budou při tisku vynechány.";
         Text[ hebrew ] = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben.";
         Text[ hindi ] = "चुने हुए कोष्ठों को छपाई करने के समय उपेक्षा किया जाएगा ।";
+        Text[ slovak ] = "Vybrané bunky budú pri tlači vynechané.";
     };
     FixedLine FL_PRINT
     {
@@ -653,8 +669,11 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ czech ] = "Tisknout";
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छपाई";
+        Text[ slovak ] = "Tlač";
     };
 };
+
+
 
 
 
