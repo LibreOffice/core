@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javachild.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:46:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,10 @@
  *
  ************************************************************************/
 
+
+#ifdef SOLAR_JAVA
 #include <jni.h>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -118,6 +121,7 @@ JavaChildWindow::~JavaChildWindow()
 
 void JavaChildWindow::implTestJavaException( void* pEnv )
 {
+#ifdef SOLAR_JAVA
     JNIEnv*     pJavaEnv = reinterpret_cast< JNIEnv* >( pEnv );
     jthrowable  jtThrowable = pJavaEnv->ExceptionOccurred();
 
@@ -125,7 +129,7 @@ void JavaChildWindow::implTestJavaException( void* pEnv )
     { // is it a java exception ?
 #if OSL_DEBUG_LEVEL > 1
         pJavaEnv->ExceptionDescribe();
-#endif
+#endif // OSL_DEBUG_LEVEL > 1
         pJavaEnv->ExceptionClear();
 
         jclass          jcThrowable = pJavaEnv->FindClass("java/lang/Throwable");
@@ -142,6 +146,7 @@ void JavaChildWindow::implTestJavaException( void* pEnv )
 
         throw uno::RuntimeException(ouMessage, uno::Reference<uno::XInterface>());
     }
+#endif // SOLAR_JAVA
 }
 
 // -----------------------------------------------------------------------
@@ -153,6 +158,7 @@ sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
 #if defined WNT
     nRet = reinterpret_cast< sal_Int32 >( GetSystemData()->hWnd );
 #elif defined UNX
+#ifdef SOLAR_JAVA
     uno::Reference< lang::XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
     if( xFactory.is() && ( GetSystemData()->aWindow > 0 ) )
@@ -223,7 +229,8 @@ sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
             }
         }
     }
-#else
+#endif // SOLAR_JAVA
+#else // WNT || UNX
     // TBD
 #endif
 
