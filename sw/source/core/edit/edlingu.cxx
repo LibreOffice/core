@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:32:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,7 +950,7 @@ uno::Reference< XSpellAlternatives >
 
             if ( xSpellAlt.is() )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 pNode->GetWrong()->Invalidate( 0, STRING_LEN );
                 pNode->SetWrongDirty( sal_True );
 #endif
