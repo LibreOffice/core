@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:59:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #ifndef _CPPUHELPER_IMPLBASE9_HXX_
 #include <cppuhelper/implbase9.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
+#include <com/sun/star/embed/XTransactionListener.hpp>
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -211,7 +217,7 @@ typedef ::cppu::ImplHelper9 <   ::com::sun::star::lang::XServiceInfo
                             >   ODatabaseSource_Base;
 
 
-typedef ::cppu::ImplHelper9 <   ::com::sun::star::frame::XModel
+typedef ::cppu::ImplHelper10    <   ::com::sun::star::frame::XModel
                             ,   ::com::sun::star::util::XModifiable
                             ,   ::com::sun::star::frame::XStorable
                             ,   ::com::sun::star::view::XPrintable
@@ -220,6 +226,7 @@ typedef ::cppu::ImplHelper9 <   ::com::sun::star::frame::XModel
                             ,   ::com::sun::star::util::XCloseable
                             ,   ::drafts::com::sun::star::ui::XUIConfigurationManagerSupplier
                             ,   ::com::sun::star::document::XDocumentSubStorageSupplier
+                            , ::com::sun::star::embed::XTransactionListener
                             >   ODatabaseSource_OfficeDocument;
 
 
@@ -510,6 +517,12 @@ public:
     virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
 
+// XTransactionListener
+    virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName, sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
 protected:
 // helper
@@ -541,6 +554,7 @@ protected:
     void clearConnections();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage();
+    void commitStorages();
 };
 
 //........................................................................
