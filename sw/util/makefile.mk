@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 12:46:22 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:28:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,6 @@ sw_res_files= \
     $(SRS)$/misc.srs         \
     $(SRS)$/ribbar.srs       \
     $(SRS)$/shells.srs       \
-    $(SRS)$/swslots.srs     \
     $(SRS)$/table.srs        \
     $(SRS)$/uiview.srs       \
     $(SRS)$/undo.srs        \
