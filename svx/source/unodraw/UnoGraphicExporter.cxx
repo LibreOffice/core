@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 09:45:03 $
+ *  last change: $Author: cl $ $Date: 2002-10-29 13:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,10 @@ namespace svx
         virtual sal_Bool SAL_CALL supportsMimeType( const ::rtl::OUString& MimeTypeName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException);
 
+        DECL_LINK(PaintProc, SdrPaintProcRec*);
+
+        VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const;
+
     private:
         Reference< XShape >     mxShape;
         Reference< XDrawPage >  mxPage;
@@ -248,70 +252,6 @@ namespace svx
         throw()
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.GraphicExporter" ) );
-    }
-
-    /** creates an virtual device for the given page
-
-        @return the returned VirtualDevice is owned by the caller
-    */
-    VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel )
-    {
-        SdrModel* pDoc = pPage->GetModel();
-
-        VirtualDevice*  pVDev = new VirtualDevice();
-        MapMode         aMM( MAP_100TH_MM );
-
-        Size aPageSize(pPage->GetSize());
-        aPageSize.Width()  -= pPage->GetLftBorder();
-        aPageSize.Width()  -= pPage->GetRgtBorder();
-        aPageSize.Height() -= pPage->GetUppBorder();
-        aPageSize.Height() -= pPage->GetLwrBorder();
-
-        // use scaling?
-        if( nWidthPixel )
-        {
-            const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
-
-            aMM.SetScaleX( aFrac );
-
-            if( nHeightPixel == 0 )
-                aMM.SetScaleY( aFrac );
-        }
-
-        if( nHeightPixel )
-        {
-            const Fraction aFrac( (long) nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
-
-            if( nWidthPixel == 0 )
-                aMM.SetScaleX( aFrac );
-
-            aMM.SetScaleY( aFrac );
-        }
-
-        pVDev->SetMapMode( aMM );
-        BOOL bAbort = !pVDev->SetOutputSize(aPageSize);
-        DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
-
-        SdrView* pView = new SdrView(pDoc, pVDev);
-        pView->SetPageVisible( FALSE );
-        pView->SetBordVisible( FALSE );
-        pView->SetGridVisible( FALSE );
-        pView->SetHlplVisible( FALSE );
-        pView->SetGlueVisible( FALSE );
-        pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
-        SdrPageView* pPageView  = pView->GetPageView(pPage);
-
-    //  DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
-    //  FrameView* pFrameView   = pViewShell->GetFrameView();
-    //  pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
-    //  pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
-    //  pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
-
-        Point aPoint( pPage->GetLftBorder(), pPage->GetUppBorder() );
-        Region aRegion (Rectangle( aPoint, aPageSize ) );
-        pView->InitRedraw(pVDev, aRegion);
-        delete pView;
-        return pVDev;
     }
 
     GDIMetaFile RemoveClipRegionActions( const GDIMetaFile& rMtf )
@@ -399,6 +339,99 @@ GraphicExporter::GraphicExporter()
 
 GraphicExporter::~GraphicExporter()
 {
+}
+
+IMPL_LINK( GraphicExporter, PaintProc, SdrPaintProcRec *, pRecord )
+{
+    SdrObject* pObj = pRecord->pObj;
+    if( !pObj->IsEmptyPresObj() )
+    {
+        pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+    }
+    else
+    {
+        // sad but true, background shapes are also empty presentation objects
+        // so we need to check if this is one
+        if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
+        {
+            pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+        }
+    }
+
+    return 0;
+}
+
+/** creates an virtual device for the given page
+
+    @return the returned VirtualDevice is owned by the caller
+*/
+VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const
+{
+    SdrModel* pDoc = pPage->GetModel();
+
+    VirtualDevice*  pVDev = new VirtualDevice();
+    MapMode         aMM( MAP_100TH_MM );
+
+    Size aPageSize(pPage->GetSize());
+    aPageSize.Width()  -= pPage->GetLftBorder();
+    aPageSize.Width()  -= pPage->GetRgtBorder();
+    aPageSize.Height() -= pPage->GetUppBorder();
+    aPageSize.Height() -= pPage->GetLwrBorder();
+
+    // use scaling?
+    if( nWidthPixel )
+    {
+        const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+
+        aMM.SetScaleX( aFrac );
+
+        if( nHeightPixel == 0 )
+            aMM.SetScaleY( aFrac );
+    }
+
+    if( nHeightPixel )
+    {
+        const Fraction aFrac( (long) nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+
+        if( nWidthPixel == 0 )
+            aMM.SetScaleX( aFrac );
+
+        aMM.SetScaleY( aFrac );
+    }
+
+    pVDev->SetMapMode( aMM );
+    BOOL bAbort = !pVDev->SetOutputSize(aPageSize);
+    DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
+
+    SdrView* pView = new SdrView(pDoc, pVDev);
+    pView->SetPageVisible( FALSE );
+    pView->SetBordVisible( FALSE );
+    pView->SetGridVisible( FALSE );
+    pView->SetHlplVisible( FALSE );
+    pView->SetGlueVisible( FALSE );
+    pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
+    SdrPageView* pPageView  = pView->GetPageView(pPage);
+
+//  DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
+//  FrameView* pFrameView   = pViewShell->GetFrameView();
+//  pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
+//  pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
+//  pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
+
+    Point aPoint( pPage->GetLftBorder(), pPage->GetUppBorder() );
+    Region aRegion (Rectangle( aPoint, aPageSize ) );
+    const Link aPaintProcLink( LINK(this, GraphicExporter, PaintProc ) );
+
+//  pView->InitRedraw(pVDev, aRegion, 0, &aPaintProcLink);
+
+    for (USHORT i=0; i<pView->GetPageViewCount(); i++)
+    {
+        SdrPageView* pPV=pView->GetPageViewPvNum(i);
+        pPV->InitRedraw(pVDev,aRegion,0,&aPaintProcLink );
+    }
+
+    delete pView;
+    return pVDev;
 }
 
 // XFilter
@@ -605,7 +638,16 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
                     aVDev.SetRelativeMapMode( aVMap );
                     aVDev.IntersectClipRegion( aClipRect );
-                    pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ) ) );
+                    const Link aPaintProcLink( LINK(this, GraphicExporter, PaintProc ) );
+
+//                  pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ), 0, &aPaintProcLink ) );
+
+                    for (USHORT i=0; i<pView->GetPageViewCount(); i++)
+                    {
+                        SdrPageView* pPV=pView->GetPageViewPvNum(i);
+                        pPV->InitRedraw(&aVDev,Region( Rectangle( Point(), aNewSize ) ),0,&aPaintProcLink );
+                    }
+
                     aVDev.Pop();
 
                     aMtf.Stop();
