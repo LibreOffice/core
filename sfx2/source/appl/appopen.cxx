@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 10:40:55 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,8 +1491,25 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         // synchron loading without a given frame or as blank frame
         SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+
+        // Desktop service must exists! dont catch() or check for problems here ...
+        // But loading of documents can fail by other reasons. Handle it more gracefully.
         Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-        Reference < XComponent > xComp = xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs );
+        Reference < XComponent >       xComp;
+        try
+        {
+            xComp = xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs );
+        }
+        catch(const RuntimeException&)
+        {
+            throw;
+        }
+        catch(const ::com::sun::star::uno::Exception&)
+        {
+            xDesktop.clear();
+            xComp.clear();
+        }
+
         Reference < XModel > xModel( xComp, UNO_QUERY );
         if ( xModel.is() )
             xController = xModel->getCurrentController();
