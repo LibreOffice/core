@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-24 13:32:57 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 15:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,11 +1643,12 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
         aEvent.xclient.data.l[1]    = 0;
         aEvent.xclient.data.l[2]    = m_nLastDragX << 16 | (m_nLastDragY&0xffff);
         aEvent.xclient.data.l[3]    = eventTime;
-        if( m_nUserDragAction == DNDConstants::ACTION_MOVE )
-            aEvent.xclient.data.l[4]=m_nXdndActionMove;
-        else if( m_nUserDragAction == DNDConstants::ACTION_COPY )
+
+        if( m_nUserDragAction & DNDConstants::ACTION_COPY )
             aEvent.xclient.data.l[4]=m_nXdndActionCopy;
-        else if( m_nUserDragAction == DNDConstants::ACTION_LINK )
+        else if( m_nUserDragAction & DNDConstants::ACTION_MOVE )
+            aEvent.xclient.data.l[4]=m_nXdndActionMove;
+        else if( m_nUserDragAction & DNDConstants::ACTION_LINK )
             aEvent.xclient.data.l[4]=m_nXdndActionLink;
         else
             aEvent.xclient.data.l[4]=m_nXdndActionCopy;
