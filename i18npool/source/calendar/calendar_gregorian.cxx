@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-19 20:38:44 $
+ *  last change: $Author: er $ $Date: 2002-12-06 18:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,18 +558,18 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 // fall thru
             case CalendarDisplayCode::SHORT_DAY:
             case CalendarDisplayCode::LONG_YEAR:
-                sprintf(aStr, "%d", value);
+                sprintf(aStr, "%d", value);     // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_MONTH:
                 value += 1;     // month is zero based
-                sprintf(aStr, "%02d", value);
+                sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
                 // take last 2 digits
                 value %= 100;
                 // fall through
             case CalendarDisplayCode::LONG_DAY:
-                sprintf(aStr, "%02d", value);
+                sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;
 
             case CalendarDisplayCode::SHORT_DAY_NAME:

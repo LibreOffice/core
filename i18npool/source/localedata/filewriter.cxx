@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filewriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-07-15 14:16:10 $
+ *  last change: $Author: er $ $Date: 2002-12-06 18:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,12 @@
 //-----------------------------------------
 OFileWriter::OFileWriter(const char *pcFile, const char *locale ) {
 
-    strncpy( m_pcFile , pcFile, 1024 );
+    strncpy( m_pcFile , pcFile, sizeof(m_pcFile) );
+    m_pcFile[sizeof(m_pcFile)-1] = 0;
     printf("file generated=%s\n", m_pcFile);
     m_f = fopen( m_pcFile , "w" );
-    strcpy(theLocale, locale);
+    strncpy( theLocale, locale, sizeof(theLocale) );
+    theLocale[sizeof(theLocale)-1] = 0;
 }
 
 OFileWriter::~OFileWriter() {

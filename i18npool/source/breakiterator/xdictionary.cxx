@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-02 01:35:52 $
+ *  last change: $Author: er $ $Date: 2002-12-06 18:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,16 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #include <com/sun/star/i18n/WordType.hpp>
 #include <tools/string.hxx>
 #include <xdictionary.hxx>
 #include <unicode.hxx>
 #include <string.h>
-#include <stdio.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -80,13 +84,14 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 xdictionary::xdictionary(sal_Char *lang)
 {
-    sal_Char name[20];
-#ifdef WIN32
-    sprintf(name, "dict_%s.dll", lang);
+#ifdef SAL_DLLPREFIX
+    OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
+    aBuf.appendAscii( SAL_DLLPREFIX );
 #else
-    sprintf(name, "libdict_%s.so", lang);
+    OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
 #endif
-    oslModule hModule = osl_loadModule( OUString::createFromAscii(name).pData, SAL_LOADMODULE_DEFAULT );
+    aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
+    oslModule hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
     if( hModule ) {
         int (*func)();
         func = (int(*)()) osl_getSymbol( hModule, OUString::createFromAscii("getExistMark").pData );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_jewish.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-08 15:08:06 $
+ *  last change: $Author: er $ $Date: 2002-12-06 18:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,10 +327,8 @@ Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNa
     throw (RuntimeException)
 {
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR) {
-        sal_Int16 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
-        sal_Char aStr[4];
-        sprintf(aStr, "%03d", value);
-        return OUString::createFromAscii(aStr);
+        sal_Int32 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
+        return OUString::valueOf( value );
     }
     else
         return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-10-18 21:29:05 $
+ *  last change: $Author: er $ $Date: 2002-12-06 18:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,8 @@ public:
       nbOfTransliterations(0), isStartDayOfWeek(false), foundDefaultName(false),
       flag(-1), foundVarient(false), openElement(false), rootNode(0)
     {
-        strcpy(theLocale, locale);
+        strncpy( theLocale, locale, sizeof(theLocale) );
+        theLocale[sizeof(theLocale)-1] = 0;
     }
 
     ~TestDocumentHandler(  )
