@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 12:14:56 $
+ *  last change: $Author: jl $ $Date: 2002-03-06 16:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,12 +1284,18 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
 
         OString * arProps= new OString[cprops];
 
-        OString sPattern("-X");
+        /*If there are entries in the Java section of the java.ini/javarc which are meant
+          to be java system properties then they get a "-D" at the beginning of the string.
+          Entries which start with "-" are regarded as java options as they are passed at
+          the command-line. If those entries appear under the Java section then there are
+          used as they are. For example, the entry  "-ea" would be uses as
+          JavaVMOption.optionString.
+         */
+        OString sJavaOption("-");
         for( sal_uInt16 x= 0; x< cprops; x++)
         {
             OString sOption(vm_args.properties[x]);
-
-            if ( ! sOption.matchIgnoreAsciiCase(sPattern, 0))
+            if (!sOption.matchIgnoreAsciiCase(sJavaOption, 0))
                 arProps[x]= OString("-D") + vm_args.properties[x];
             else
                 arProps[x]= vm_args.properties[x];
