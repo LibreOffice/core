@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:08:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScRange     aScRange;
                 ScAddress   aScAddress;
                 USHORT      nResult = aScRange.Parse( aAddress, pDoc );
-                USHORT      nTab = pViewData->GetTabNo();
+                SCTAB       nTab = pViewData->GetTabNo();
                 BOOL        bMark = TRUE;
 
                 // Ist es ein Bereich ?
@@ -329,7 +329,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         //  1-basierte Zeilennummer
 
-                        aScAddress.SetRow( (USHORT)(nNumeric - 1) );
+                        aScAddress.SetRow( (SCROW)(nNumeric - 1) );
                         aScAddress.SetCol( pViewData->GetCurX() );
                         aScAddress.SetTab( nTab );
                         aScRange = ScRange( aScAddress, aScAddress );
@@ -338,15 +338,15 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if ( aScRange.aStart.Row() > MAXROW || aScRange.aEnd.Row() > MAXROW )
+                if ( !ValidRow(aScRange.aStart.Row()) || !ValidRow(aScRange.aEnd.Row()) )
                     nResult = 0;
 
                 // wir haben was gefunden
                 if( nResult & SCA_VALID )
                 {
                     bFound = TRUE;
-                    USHORT nCol = aScRange.aStart.Col();
-                    USHORT nRow = aScRange.aStart.Row();
+                    SCCOL nCol = aScRange.aStart.Col();
+                    SCROW nRow = aScRange.aStart.Row();
                     BOOL bNothing = ( pViewData->GetCurX()==nCol && pViewData->GetCurY()==nRow );
 
                     // markieren
@@ -413,7 +413,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     //  wenn es ein Tabellenname ist, umschalten (fuer Navigator/URL's)
 
-                    USHORT nNameTab;
+                    SCTAB nNameTab;
                     if ( pDoc->GetTable( aAddress, nNameTab ) )
                     {
                         bFound = TRUE;
@@ -446,7 +446,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             if ( pReqArgs )
             {
                 //  Tabelle fuer Basic ist 1-basiert
-                USHORT nTab = ((const SfxUInt16Item&)pReqArgs->Get(nSlot)).GetValue() - 1;
+                SCTAB nTab = ((const SfxUInt16Item&)pReqArgs->Get(nSlot)).GetValue() - 1;
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 if ( nTab < pDoc->GetTableCount() )
                 {
@@ -751,8 +751,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             ScViewData& rViewData = *GetViewData();
             ScDocument& rDoc = *rViewData.GetDocument();
             ScMarkData& rMark = rViewData.GetMarkData();
-            sal_uInt16 nTabCount = rDoc.GetTableCount();
-            sal_uInt16 nTab;
+            SCTAB nTabCount = rDoc.GetTableCount();
+            SCTAB nTab;
 
             SvULongs aIndexList( 4, 4 );
             SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, sal_False );
@@ -796,12 +796,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 sal_uInt16 nSelCount = aIndexList.Count();
                 sal_uInt16 nSelIx;
-                sal_uInt16 nFirstVisTab = 0;
+                SCTAB nFirstVisTab = 0;
 
                 // special case: only hidden tables selected -> do nothing
                 sal_Bool bVisSelected = sal_False;
                 for( nSelIx = 0; !bVisSelected && (nSelIx < nSelCount); ++nSelIx )
-                    bVisSelected = rDoc.IsVisible( nFirstVisTab = aIndexList[nSelIx] );
+                    bVisSelected = rDoc.IsVisible( nFirstVisTab = static_cast<SCTAB>(aIndexList[nSelIx]) );
                 if( !bVisSelected )
                     nSelCount = 0;
 
@@ -812,7 +812,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rMark.SelectTable( nTab, sal_False );
 
                     for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
-                        rMark.SelectTable( aIndexList[nSelIx], sal_True );
+                        rMark.SelectTable( static_cast<SCTAB>(aIndexList[nSelIx]), sal_True );
 
                     // activate another table, if current is deselected
                     if( !rMark.GetTableSelect( rViewData.GetTabNo() ) )
@@ -1016,7 +1016,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_PROTECT_TABLE:
             {
                 ScDocument*         pDoc = GetViewData()->GetDocument();
-                USHORT              nTab = GetViewData()->GetTabNo();
+                SCTAB               nTab = GetViewData()->GetTabNo();
                 SfxPasswordDialog*  pDlg;
                 String              aPassword;
                 BOOL                bCancel = FALSE;
