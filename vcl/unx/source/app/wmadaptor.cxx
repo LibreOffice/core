@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-12 11:17:42 $
+ *  last change: $Author: pl $ $Date: 2002-01-17 12:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     m_pDisplay = m_pSalDisplay->GetDisplay();
 
     initAtoms();
+    getNetWmName(); // try to discover e.g. Sawfish
 
     // check for dtwm running
     if( m_aWMAtoms[ DTWM_IS_RUNNING ] )
@@ -834,7 +835,8 @@ void WMAdaptor::initAtoms()
     // get basic atoms
     for( int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
         m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
-
+    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
+    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
 }
 
 /*
@@ -846,8 +848,6 @@ void NetWMAdaptor::initAtoms()
     WMAdaptor::initAtoms();
 
     m_aWMAtoms[ NET_SUPPORTED ]             = XInternAtom( m_pDisplay, "_NET_SUPPORTED", True );
-    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
-    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
 }
 
 /*
@@ -860,8 +860,6 @@ void GnomeWMAdaptor::initAtoms()
 
     m_aWMAtoms[ WIN_PROTOCOLS ]             = XInternAtom( m_pDisplay, "_WIN_PROTOCOLS", True );
     m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_WIN_SUPPORTING_WM_CHECK", True );
-    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
-    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
 }
 
 /*
