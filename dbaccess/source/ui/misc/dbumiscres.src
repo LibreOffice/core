@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.66 $
+*  $Revision: 1.67 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-21 17:20:34 $
+*  last change: $Author: vg $ $Date: 2005-02-21 12:46:20 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -115,7 +115,11 @@ Resource RSC_DATASOURCE_TYPES
     };
     String STR_MOZILLA
     {
-        Text  ="sdbc:address:mozilla";
+        Text  ="sdbc:address:mozilla:";
+    };
+    String STR_THUNDERBIRD
+    {
+        Text  ="sdbc:address:thunderbird:";
     };
     String STR_LDAP
     {
@@ -226,6 +230,11 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     {
         Text [ de ] = "Interne Datenbank";
         Text[ en-US ] = "Embedded database";
+     };
+     String STR_THUNDERBIRD
+     {
+         Text [ de ] = "Thunderbird Adressbuch";
+         Text[ en-US ] = "Thunderbird Address Book";
     };
 };
 
