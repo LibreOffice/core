@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellRange.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:55:47 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,9 @@ module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::CellRange
-/** area of cells within a spreadsheet (text).
+/** area of cells within a text table.
+
+    @see com::sun::star::text::TextTable
  */
 service CellRange
 {
@@ -123,71 +124,71 @@ service CellRange
 
     interface com::sun::star::table::XCellRange;
 
-        [optional] interface com::sun::star::sheet::XCellRangeData;
+    [optional] interface com::sun::star::sheet::XCellRangeData;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** contains color of the background.
-         */
-        [property] long BackColor;
+    /** contains color of the background.
+     */
+    [property] long BackColor;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** contains the filter name of the background graphic.
-         */
-        [property] string BackGraphicFilter;
+    /** contains the filter name of the background graphic.
+     */
+    [property] string BackGraphicFilter;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** determins the location of the background graphic.
-         */
-        [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+    /** determins the location of the background graphic.
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** contains the URL of the background graphic.
-         */
-        [property] string BackGraphicURL;
+    /** contains the URL of the background graphic.
+     */
+    [property] string BackGraphicURL;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** determins if the background color is transparent.
-         */
-        [property] boolean BackTransparent;
+    /** determins if the background color is transparent.
+     */
+    [property] boolean BackTransparent;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** determins if the first column of the table should be treated as
-            axis labels when a chart is to be created.
-         */
-        [property] boolean ChartColumnAsLabel;
+    /** determins if the first column of the table should be treated as
+        axis labels when a chart is to be created.
+     */
+    [property] boolean ChartColumnAsLabel;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** determins if the first row of the table should be treated as
-            axis labels when a chart is to be created.
-         */
-        [property] boolean ChartRowAsLabel;
+    /** determins if the first row of the table should be treated as
+        axis labels when a chart is to be created.
+     */
+    [property] boolean ChartRowAsLabel;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** contains the number format.
-        */
-        [property] long NumberFormat;
+    /** contains the number format.
+    */
+    [property] long NumberFormat;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** determins the top margin of the cell.
-         */
-        [property] long TopMargin;
+    /** determins the top margin of the cell.
+     */
+    [property] long TopMargin;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
-        /** determins the bottom margin of the cell.
-         */
-        [property] long BottomMargin;
+    /** determins the bottom margin of the cell.
+     */
+    [property] long BottomMargin;
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 
 };
 
