@@ -52,7 +52,6 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.xmerge.util.registry;
 
 import java.util.*;
@@ -189,12 +188,23 @@ public final class ConverterInfoMgr {
         ConverterInfo converterInfo;
         boolean       rc = false;
 
-        Enumeration ciEnum = converterInfoList.elements();
+        // FIX (HJ): Has to use an iterator, since we are removing items
+        /*Enumeration ciEnum = converterInfoList.elements();
         while (ciEnum.hasMoreElements())
         {
             converterInfo = (ConverterInfo)ciEnum.nextElement();
             if (jar.equals(converterInfo.getJarName())) {
                converterInfoList.remove(converterInfo);
+               rc = true;
+            }
+        }*/
+
+        Iterator ciIter = converterInfoList.iterator();
+        while (ciIter.hasNext())
+        {
+            converterInfo = (ConverterInfo)ciIter.next();
+            if (jar.equals(converterInfo.getJarName())) {
+               ciIter.remove();
                rc = true;
             }
         }
