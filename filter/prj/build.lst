@@ -1,6 +1,7 @@
 fl	filter	:	goodies xmloff NULL
-fl	filter									usr1	-	all	fl_mkout		NULL
-fl	filter\prj								get		-	all	fl_prj			NULL
+fl	filter									usr1	-	all	fl_mkout			NULL
+fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	NULL
-fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint	NULL
-
+fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		NULL
+fl	filter\source\pdf						nmake	-	all	fl_pdf				NULL
+fl	filter\source\svg						nmake	-	all	fl_svg				NULL
