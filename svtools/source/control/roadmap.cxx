@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:40:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/OUString.hxx>
 #endif
+#include <memory>
 
 #define RMENTRYPOINT_X      4
 #define RMENTRYPOINT_Y      27
@@ -252,6 +253,7 @@ namespace svt
         if ( ! m_pImpl->isComplete() )
             delete m_pImpl->InCompleteHyperLabel;
         delete m_pImpl;
+        m_pImpl = NULL;
     }
 
 
@@ -292,16 +294,7 @@ namespace svt
 
         if (_RMID != RMINCOMPLETE )
         {
-            if (_Index == 0)
-            {
-                CurHyperLabel = new ORoadmapHyperLabel(this, WB_TABSTOP | WB_WORDBREAK);     //WB_GROUP |
-                CurHyperLabel->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
-            }
-            else
-            {
-                CurHyperLabel = new ORoadmapHyperLabel(this, WB_TABSTOP | WB_WORDBREAK);
-                CurHyperLabel->SetZOrder( OldHyperLabel, WINDOW_ZORDER_BEHIND );
-            }
+            CurHyperLabel = new ORoadmapHyperLabel(this, WB_WORDBREAK);
             CurHyperLabel->SetInteractive( m_pImpl->isInteractive() );
             m_pImpl->insertHyperLabel(_Index, CurHyperLabel );
         }
@@ -614,6 +607,14 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    void ORoadmap::GetFocus()
+    {
+        ORoadmapHyperLabel* pCurHyperLabel = GetByID( GetCurrentRoadmapItemID() );
+        if ( pCurHyperLabel != NULL )
+            pCurHyperLabel->GrabFocus();
+    }
+
+    //---------------------------------------------------------------------
     sal_Bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
     {
         DeselectOldRoadmapItems();
@@ -753,58 +754,67 @@ namespace svt
 
 
     ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, const ResId& _rId)
-        :OutputDevice()
     {
-        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
-        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, _rId); // WB_TABSTOP |
+        mpDescHyperLabel = new HyperLabel(_pParent, _rId); // WB_TABSTOP |
     }
 
 
     ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, WinBits _nWinStyle)
-        :OutputDevice()
     {
-        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, _nWinStyle); //WB_TABSTOP |
         mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
-        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpDescHyperLabel = new HyperLabel(_pParent, _nWinStyle); // WB_TABSTOP |
+    }
+
+    //---------------------------------------------------------------------
+    void ORoadmapHyperLabel::GrabFocus()
+    {
+        if ( mpDescHyperLabel )
+            mpDescHyperLabel->GrabFocus();
     }
 
 
     void ORoadmapHyperLabel::SetInteractive( sal_Bool _bInteractive )
     {
+        if ( mpDescHyperLabel )
         mpDescHyperLabel->SetInteractive(_bInteractive);
     }
 
     void ORoadmapHyperLabel::SetID( sal_Int16 _ID )
     {
-        mpDescHyperLabel->SetID(_ID);
+        if ( mpDescHyperLabel )
+            mpDescHyperLabel->SetID(_ID);
     }
 
     sal_Int16 ORoadmapHyperLabel::GetID() const
     {
-        return mpDescHyperLabel->GetID();
+        return mpDescHyperLabel ? mpDescHyperLabel->GetID() : sal_Int16(-1);
     }
 
     void ORoadmapHyperLabel::SetIndex( sal_Int32 _Index )
     {
-        mpDescHyperLabel->SetIndex(_Index);
+        if ( mpDescHyperLabel )
+            mpDescHyperLabel->SetIndex(_Index);
     }
 
 
     sal_Int32 ORoadmapHyperLabel::GetIndex() const
     {
-        return mpDescHyperLabel->GetIndex();
+        return mpDescHyperLabel ? mpDescHyperLabel->GetIndex() : sal_Int32(-1);
     }
 
 
     void ORoadmapHyperLabel::SetLabel( ::rtl::OUString _rText )
     {
-        mpDescHyperLabel->SetText(_rText);
+        if ( mpDescHyperLabel )
+            mpDescHyperLabel->SetText(_rText);
     }
 
 
     ::rtl::OUString ORoadmapHyperLabel::GetLabel( )
     {
-        return mpDescHyperLabel->GetText();
+            return mpDescHyperLabel ? mpDescHyperLabel->GetText() : String();
     }
 
 
@@ -851,11 +861,11 @@ namespace svt
         return mpIDLabel->IsEnabled();
     }
 
-    void ORoadmapHyperLabel::GrabFocus()
-    {
-        mpDescHyperLabel->GrabFocus();
-
-    }
+//  void ORoadmapHyperLabel::GrabFocus()
+//  {
+//      mpDescHyperLabel->GrabFocus();
+//
+//  }
 
     void ORoadmapHyperLabel::ToggleBackgroundColor( const Color& _rGBColor )
     {
@@ -904,15 +914,21 @@ namespace svt
 
     ORoadmapHyperLabel::~ORoadmapHyperLabel( )
     {
-        delete mpIDLabel;
-        delete mpDescHyperLabel;
-
+        {
+            ::std::auto_ptr<Control> aTemp(mpIDLabel);
+            mpIDLabel = NULL;
+        }
+        {
+            ::std::auto_ptr<Control> aTemp(mpDescHyperLabel);
+            mpDescHyperLabel = NULL;
+        }
     }
 
 
     void ORoadmapHyperLabel::SetClickHdl( const Link& rLink )
     {
-        mpDescHyperLabel->SetClickHdl( rLink);
+        if ( mpDescHyperLabel )
+            mpDescHyperLabel->SetClickHdl( rLink);
     }
 
     const Link& ORoadmapHyperLabel::GetClickHdl( ) const
