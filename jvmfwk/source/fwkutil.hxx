@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-14 14:44:09 $
+ *  last change: $Author: jl $ $Date: 2004-05-17 13:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 
+#define ENVIRONMENT_VAR_JRE_PATH "OO_USE_JRE"
+
 namespace jfw
 {
 osl::Mutex * getFwkMutex();
@@ -75,6 +77,37 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
 rtl::OUString getPlatform();
+/** //Todo
+    Gets the directory where the user data is written
+    Can have these values:
+    - ~/.StarOffice/user/config (used in office)
+    - arbitrary directory determined by environment variable
+    - tmp directory (running out of office, e.g. regcomp)
+
+    @return
+    File URL of the directory
+ */
+rtl::OUString getJavaSettingsDirectory();
+
+
+enum JFW_MODE
+{
+    /** The mode is unknown.
+     */
+    JFW_MODE_INDETERMINED,
+    /** This library is loaded in an office process.
+     */
+    JFW_MODE_OFFICE,
+    /** We are NOT in an office process. The javavendors.xml is located next to
+        the jvmfwk.dll, the javasettings.xml is NEIHER created, NOR read or written.
+        As class path the environment variable CLASSPATH is used. The JRE, which
+        is to be used is determined by the environment variable OO_USE_JRE. It must
+        contain a file URL to the JRE.
+     */
+    JFW_MODE_ENV_SIMPLE
+};
+
+JFW_MODE getMode();
 /** Get the file URL to the javasettings.xml
  */
 rtl::OUString getUserSettingsURL();
@@ -99,6 +132,14 @@ rtl::OString getVendorSettingsPath();
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
 
+class CNodeJava;
+/** creates the -Djava.class.path option with the complete classpath.
+    If param mode is JFW_MODE_ENV_SIMPLE then the param javaSettings is ignored.
+ */
+javaFrameworkError makeClassPathOption(
+    JFW_MODE mode, CNodeJava & javaSettings, /*out*/rtl::OString & sOption);
+
+
 struct PluginLibrary;
 class VersionInfo;
 class CJavaInfo;
@@ -118,7 +159,8 @@ javaFrameworkError getVersionInformation(
 
 /** Gets the file URL to the plubin library for the currently selected Java.
  */
-javaFrameworkError getPluginLibrary(rtl::OUString & sLibPathe);
+javaFrameworkError getPluginLibrary(
+    const rtl::OUString & sVendor, rtl::OUString & sLibPathe);
 
 /** Called from writeJavaInfoData. It sets the process identifier. When
 java is to be started, then the current id is compared to the one set by

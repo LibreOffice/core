@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-14 14:44:09 $
+ *  last change: $Author: jl $ $Date: 2004-05-17 13:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,19 +219,11 @@ rtl::OUString getPlatform()
     return buf.makeStringAndClear();
 }
 
-javaFrameworkError getPluginLibrary(rtl::OUString & sLibUrl)
+javaFrameworkError getPluginLibrary(
+    const rtl::OUString& sVendor, rtl::OUString & sLibUrl)
 {
     javaFrameworkError errcode = JFW_E_NONE;
-    CNodeJava javaNode;
-    if ((errcode = javaNode.loadFromSettings()) != JFW_E_NONE)
-        return errcode;
 
-    CJavaInfo aInfo(javaNode.getJavaInfo());
-    if (aInfo == NULL)
-        return JFW_E_NO_SELECT;
-
-    //With the vendor name we can get the associated plugin library
-    //from the javavendors.xml
     rtl::OString sVendorsPath = getVendorSettingsPath();
     CXmlDocPtr docVendor;
     CXPathContextPtr contextVendor;
@@ -246,7 +238,7 @@ javaFrameworkError getPluginLibrary(rtl::OUString & sLibUrl)
 
     rtl::OUStringBuffer usBuffer(256);
     usBuffer.appendAscii("/jf:javaSelection/jf:plugins/jf:library[@vendor=\"");
-    usBuffer.append(aInfo.getVendor());
+    usBuffer.append(sVendor);
     usBuffer.appendAscii("\"]/text()");
     rtl::OUString ouExpr = usBuffer.makeStringAndClear();
     rtl::OString sExpression =
@@ -790,5 +782,106 @@ rtl::OUString getDirFromFile(const rtl::OUString& usFilePath)
     sal_Int32 index= usFilePath.lastIndexOf('/');
     return rtl::OUString(usFilePath.getStr(), index);
 }
+
+//todo !!!
+rtl::OUString getJavaSettingsDirectory()
+{
+    //test if we are running within an office
+    return rtl::OUString();
+}
+
+JFW_MODE getMode()
+{
+    //Determine if we run in an office process:
+    rtl_uString* sExe = NULL;
+    if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
+        return JFW_MODE_INDETERMINED;
+    rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
+
+    //create the name of the executable
+    rtl::OUStringBuffer buff(128);
+    buff.appendAscii("soffice");
+    buff.appendAscii(SAL_PRGEXTENSION);
+    rtl::OUString sOffice = buff.makeStringAndClear();
+
+    sal_Int32 index = 0;
+    if ((index = ouExe.lastIndexOf(sOffice)) != 1
+        && index + sOffice.getLength() == ouExe.getLength())
+        return JFW_MODE_OFFICE;
+
+
+    //FWK_MODE_ENV_SIMPLE ?
+    rtl::OUString sOO_USE_JRE(RTL_CONSTASCII_USTRINGPARAM(ENVIRONMENT_VAR_JRE_PATH));
+
+    rtl_uString * psOO_USE_JRE = 0;
+    if (osl_getEnvironment(sOO_USE_JRE.pData, & psOO_USE_JRE) != osl_Process_E_None)
+        return JFW_MODE_INDETERMINED;
+
+    rtl::OUString sOO_USE_JRE_VALUE(psOO_USE_JRE, SAL_NO_ACQUIRE);
+    if (sOO_USE_JRE_VALUE.getLength() > 0)
+        return JFW_MODE_ENV_SIMPLE;
+
+    return JFW_MODE_INDETERMINED;
+
+
+}
+
+javaFrameworkError makeClassPathOption(
+    JFW_MODE mode, CNodeJava & javaSettings, rtl::OString & sOption)
+{
+    //Compose the class path
+    rtl::OUStringBuffer sBufCP(4096);
+    char szSep[] = {SAL_PATHSEPARATOR,0};
+    if (mode == JFW_MODE_OFFICE)
+    {
+        //build the class path from the classes directory
+        rtl::OUString sClassPath;
+        javaFrameworkError errcode = jfw::buildClassPathFromDirectory(
+            javaSettings.m_sClassesDirectory, sClassPath);
+        if (errcode != JFW_E_NONE)
+            return JFW_E_ERROR;
+        sBufCP.append(sClassPath);
+        // append all user selected jars to the classpath
+        if (javaSettings.getUserClassPath().getLength() != 0)
+        {
+            sBufCP.appendAscii(szSep);
+            sBufCP.append(javaSettings.getUserClassPath());
+        }
+    }
+    else if (mode == JFW_MODE_ENV_SIMPLE)
+    {
+        //We use the CLASSPATH environment variable
+        rtl::OUString sCP(
+            RTL_CONSTASCII_USTRINGPARAM("CLASSPATH"));
+
+        rtl_uString * psCPVal = 0;
+        if (osl_getEnvironment(sCP.pData, & psCPVal) != osl_Process_E_None)
+            return JFW_E_ERROR;
+
+        rtl::OUString sCPVal(psCPVal, SAL_NO_ACQUIRE);
+        sBufCP.append(sCPVal);
+    }
+    else
+        OSL_ASSERT(0);
+
+    //add the path of the UNO components
+    rtl::OUString sComponents =
+        jfw::retrieveClassPath(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "${$PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}")));
+    sBufCP.append(sComponents);
+    sComponents = jfw::retrieveClassPath(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "${$PKG_UserUnoFile:UNO_JAVA_CLASSPATH}")));
+
+    sBufCP.append(sComponents);
+    rtl::OString sOptionClassPath("-Djava.class.path=");
+    sOptionClassPath += rtl::OUStringToOString(
+        sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
+
+    sOption = sOptionClassPath;
+    return JFW_E_NONE;
+}
+
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
+ *  last change: $Author: jl $ $Date: 2004-05-17 13:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "osl/thread.hxx"
 #include "osl/module.hxx"
+#include "osl/process.h"
 #include "sal/config.h"
 #include "jvmfwk/framework.h"
 #include "jvmfwk/vendorplugin.h"
@@ -299,74 +300,94 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         return JFW_E_RUNNING_JVM;
     if (ppVM == NULL)
         return JFW_E_INVALID_ARG;
-#ifdef WNT
-    //Because on Windows there is no system setting that we can use to determine
-    //if Assistive Technology Tool support is needed, we ship a .reg file that the
-    //user can use to create a registry setting. When the user forgets to set
-    //the key before he starts the office then a JRE may be selected without access bridge.
-    //When he later sets the key then we select a JRE with accessibility support but
-    //only if the user has not manually changed the selected JRE in the options dialog.
-    if (jfw::isAccessibilitySupportDesired())
+
+    jfw::CNodeJava javaSettings;
+    jfw::CJavaInfo aInfo;
+    jfw::JFW_MODE mode = jfw::getMode();
+
+    if (mode == jfw::JFW_MODE_OFFICE)
     {
-        jfw::CJavaInfo info = NULL;
-        javaFrameworkError err = JFW_E_NONE;
-        if ((err = jfw_getSelectedJRE( & info)) != JFW_E_NONE)
-            return err;
-        // If no JRE has been selected then we do no select one. This function shall then
-        //return JFW_E_NO_SELECT
-        if (info != NULL &&
-            (info->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
+#ifdef WNT
+        //Because on Windows there is no system setting that we can use to determine
+        //if Assistive Technology Tool support is needed, we ship a .reg file that the
+        //user can use to create a registry setting. When the user forgets to set
+        //the key before he starts the office then a JRE may be selected without access bridge.
+        //When he later sets the key then we select a JRE with accessibility support but
+        //only if the user has not manually changed the selected JRE in the options dialog.
+        if (jfw::isAccessibilitySupportDesired())
         {
-            //has the user manually selected a JRE?
-            jfw::CNodeJava settings;
-            if ((errcode = settings.loadFromSettings()) != JFW_E_NONE)
-                return errcode;
-            if (settings.getJavaInfoAttrAutoSelect() == true)
+            jfw::CJavaInfo info = NULL;
+            javaFrameworkError err = JFW_E_NONE;
+            if ((err = jfw_getSelectedJRE( & info)) != JFW_E_NONE)
+                return err;
+            // If no JRE has been selected then we do no select one. This function shall then
+            //return JFW_E_NO_SELECT
+            if (info != NULL &&
+                (info->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
             {
-                //The currently selected JRE has no access bridge
-                if ((err = jfw_findAndSelectJRE(NULL)) != JFW_E_NONE)
-                    return err;
+                //has the user manually selected a JRE?
+                jfw::CNodeJava settings;
+                if ((errcode = settings.loadFromSettings()) != JFW_E_NONE)
+                    return errcode;
+                if (settings.getJavaInfoAttrAutoSelect() == true)
+                {
+                    //The currently selected JRE has no access bridge
+                    if ((err = jfw_findAndSelectJRE(NULL)) != JFW_E_NONE)
+                        return err;
+                }
             }
         }
-    }
 #endif
-    jfw::CNodeJava javaSettings;
-    if ((errcode = javaSettings.loadFromSettings()) != JFW_E_NONE)
-        return errcode;
+        if ((errcode = javaSettings.loadFromSettings()) != JFW_E_NONE)
+            return errcode;
 
-    //get the current java setting (javaInfo)
-    jfw::CJavaInfo aInfo(javaSettings.getJavaInfo());
-    //check if a Java has ever been selected
-    if (aInfo == NULL)
-        return JFW_E_NO_SELECT;
-    //check if the javavendors.xml has changed after a Java was selected
-    rtl::OString sVendorUpdate;
-    if ((errcode = jfw::getElementUpdated(sVendorUpdate))
-        != JFW_E_NONE)
-        return errcode;
-    if (sVendorUpdate != javaSettings.getJavaInfoAttrVendorUpdate())
-        return JFW_E_INVALID_SETTINGS;
+        //get the current java setting (javaInfo)
+        aInfo = javaSettings.getJavaInfo();
+        //check if a Java has ever been selected
+        if (aInfo == NULL)
+            return JFW_E_NO_SELECT;
+        //check if the javavendors.xml has changed after a Java was selected
+        rtl::OString sVendorUpdate;
+        if ((errcode = jfw::getElementUpdated(sVendorUpdate))
+            != JFW_E_NONE)
+            return errcode;
+        if (sVendorUpdate != javaSettings.getJavaInfoAttrVendorUpdate())
+            return JFW_E_INVALID_SETTINGS;
 
-    //check if JAVA is disabled
-    //If Java is enabled, but it was disabled when this process was started
-    // then no preparational work, such as setting the LD_LIBRARY_PATH, was
-    //done. Therefore if a JRE needs it it must not be started.
-    if (javaSettings.getEnabled() == sal_False)
-        return JFW_E_JAVA_DISABLED;
-    else if (g_bEnabledSwitchedOn &&
-             (aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
-        return JFW_E_NEED_RESTART;
+        //check if JAVA is disabled
+        //If Java is enabled, but it was disabled when this process was started
+        // then no preparational work, such as setting the LD_LIBRARY_PATH, was
+        //done. Therefore if a JRE needs it it must not be started.
+        if (javaSettings.getEnabled() == sal_False)
+            return JFW_E_JAVA_DISABLED;
+        else if (g_bEnabledSwitchedOn &&
+                 (aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
+            return JFW_E_NEED_RESTART;
 
-    //Check if the selected Java was set in this process. If so it
-    //must not have the requirments flag JFW_REQUIRE_NEEDRESTART
-    if ((aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART)
-        &&
-        (jfw::wasJavaSelectedInSameProcess() == true))
-        return JFW_E_NEED_RESTART;
+        //Check if the selected Java was set in this process. If so it
+        //must not have the requirments flag JFW_REQUIRE_NEEDRESTART
+        if ((aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART)
+            &&
+            (jfw::wasJavaSelectedInSameProcess() == true))
+            return JFW_E_NEED_RESTART;
+    } // end mode FWK_MODE_OFFICE
+    else if (mode == jfw::JFW_MODE_ENV_SIMPLE)
+    {
+        rtl::OUString sOO_USE_JRE(RTL_CONSTASCII_USTRINGPARAM(ENVIRONMENT_VAR_JRE_PATH));
 
+        rtl_uString * psOO_USE_JRE = 0;
+        if (osl_getEnvironment(sOO_USE_JRE.pData, & psOO_USE_JRE) != osl_Process_E_None)
+            return JFW_E_ERROR;
+
+        rtl::OUString sOO_USE_JRE_VALUE(psOO_USE_JRE, SAL_NO_ACQUIRE);
+
+        if ((errcode = jfw_getJavaInfoByPath(sOO_USE_JRE_VALUE.pData, & aInfo))
+            != JFW_E_NONE)
+            return errcode;
+    }
     //get the function jfw_plugin_startJavaVirtualMachine
     rtl::OUString sLibPath;
-    if ((errcode = jfw::getPluginLibrary(sLibPath)) != JFW_E_NONE)
+    if ((errcode = jfw::getPluginLibrary(aInfo.getVendor(), sLibPath)) != JFW_E_NONE)
         return errcode;
     osl::Module modulePlugin(sLibPath);
     if ( ! modulePlugin)
@@ -380,38 +401,6 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     if (pFunc == NULL)
         return JFW_E_ERROR;
 
-    //Compose the class path
-    rtl::OUStringBuffer sBufCP(4096);
-    //build the class path from the classes directory
-    rtl::OUString sClassPath;
-    errcode = jfw::buildClassPathFromDirectory(
-        javaSettings.m_sClassesDirectory, sClassPath);
-    if (errcode != JFW_E_NONE)
-        return JFW_E_ERROR;
-    sBufCP.append(sClassPath);
-    // append all user selected jars to the classpath
-    if (javaSettings.getUserClassPath().getLength() != 0)
-    {
-        char szSep[] = {SAL_PATHSEPARATOR,0};
-        sBufCP.appendAscii(szSep);
-        sBufCP.append(javaSettings.getUserClassPath());
-    }
-    //add the path of the UNO components
-    rtl::OUString sComponents =
-        jfw::retrieveClassPath(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "${$PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}")));
-    sBufCP.append(sComponents);
-    sComponents = jfw::retrieveClassPath(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "${$PKG_UserUnoFile:UNO_JAVA_CLASSPATH}")));
-
-    sBufCP.append(sComponents);
-    rtl::OString sOptionClassPath("-Djava.class.path=");
-    sOptionClassPath += rtl::OUStringToOString(
-        sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
-
-
     // create JavaVMOptions array that is passed to the plugin
     // it contains the classpath and all options set in the
     //options dialog
@@ -424,6 +413,10 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         return JFW_E_ERROR;
 
     //The first argument is the classpath
+    rtl::OString sOptionClassPath;
+    if ((errcode = jfw::makeClassPathOption(
+             mode, javaSettings, sOptionClassPath)) != JFW_E_NONE)
+        return errcode;
     arOpt[0].optionString= (char*) sOptionClassPath.getStr();
     arOpt[0].extraInfo = NULL;
     // Set a flag that this JVM has been created via the JNI Invocation API
