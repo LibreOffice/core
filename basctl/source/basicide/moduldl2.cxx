@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 12:12:19 $
+ *  last change: $Author: tbe $ $Date: 2001-09-27 14:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,12 +189,20 @@ void LibPage::CheckButtons()
         aDelButton.Disable();
     */
 
-    // TODO: enable password button
     SvLBoxEntry* pCur = aLibBox.GetCurEntry();
     if ( pCur )
     {
-        aPasswordButton.Disable();
-        //aInsertLibButton.Disable();     // TODO: enable aInsertLibButton
+        String aLibName = aLibBox.GetEntryText( pCur, 0 );
+        if ( aLibName.EqualsIgnoreCaseAscii( "Standard" ) )
+        {
+            aPasswordButton.Disable();
+            aDelButton.Disable();
+        }
+        else
+        {
+            aPasswordButton.Enable();
+            aDelButton.Enable();
+        }
     }
 }
 
