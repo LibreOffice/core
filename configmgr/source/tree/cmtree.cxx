@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:14:49 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 16:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,17 @@ namespace configmgr
         {
             m_nChildLevel = (ITreeProvider::ALL_LEVELS == _nParentLevel) ? ITreeProvider::ALL_LEVELS : _nParentLevel - 1;
         }
-        virtual void handle(ValueNode&) { /* not interested in value nodes */ }
+        virtual void handle(ValueNode& _rNode)
+        {
+            OUString aNodeName = _rNode.getName();
+            INode*   pChild    = m_pCacheSubtree->getChild(aNodeName);
+            // only not existing nodes are interesting other should be in the cache
+            if (!pChild)
+            {
+                pChild = _rNode.clone();
+                m_pCacheSubtree->addChild(::std::auto_ptr<INode>(pChild));
+            }
+        }
         virtual void handle(ISubtree& _rSubtree)
         {
             OUString aNodeName = _rSubtree.getName();
