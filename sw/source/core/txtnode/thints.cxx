@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:35:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_CHRATR_ROTATE:
     case RES_CHRATR_SCALEW:
     case RES_CHRATR_RELIEF:
+    case RES_CHRATR_HIDDEN:
         pNew = new SwTxtAttrEnd( rNew, nStt, nEnd );
         break;
     case RES_TXTATR_CHARFMT:
@@ -342,6 +343,10 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
             }
             break;
 
+        case RES_CHRATR_HIDDEN:
+            SetCalcHiddenCharFlags();
+            break;
+
         case RES_TXTATR_FTN:
             ((SwTxtFtn*)pAttr)->SetStartNode( 0 );
             nDelMsg = RES_FOOTNOTE_DELETED;
@@ -363,7 +368,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 switch( pFld->GetTyp()->Which() )
                 {
                 case RES_HIDDENPARAFLD:
-                    SetCalcVisible();
+                    SetCalcHiddenParaField();
                     // kein break !
                 case RES_DBSETNUMBERFLD:
                 case RES_GETEXPFLD:
@@ -502,6 +507,7 @@ BOOL SwTxtNode::Insert( SwTxtAttr *pAttr, USHORT nMode )
                 }
                 break;
             }
+
             case RES_TXTATR_FTN :
             {
                 // Fussnoten, man kommt an alles irgendwie heran.
@@ -636,8 +642,9 @@ BOOL SwTxtNode::Insert( SwTxtAttr *pAttr, USHORT nMode )
     if( USHRT_MAX == pSwpHints->GetPos( pAttr ) )
         return FALSE;
 
-    if(bHiddenPara)
-        SetCalcVisible();
+    if( bHiddenPara )
+        SetCalcHiddenParaField();
+
     return TRUE;
 }
 
@@ -699,6 +706,17 @@ void SwTxtNode::Delete( USHORT nTxtWhich, xub_StrLen nStart, xub_StrLen nEnd )
         if( nWhich == nTxtWhich &&
             *( pSttIdx = pTxtHt->GetStart()) == nStart )
         {
+            if ( nWhich == RES_CHRATR_HIDDEN  )
+                SetCalcHiddenCharFlags();
+            else if ( nWhich == RES_TXTATR_CHARFMT )
+            {
+                // Check if character format contains hidden attribute:
+                const SwCharFmt* pFmt = pTxtHt->GetCharFmt().GetCharFmt();
+                const SfxPoolItem* pItem;
+                if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, TRUE, &pItem ) )
+                    SetCalcHiddenCharFlags();
+            }
+
             pEndIdx = pTxtHt->GetEnd();
 
             // Text-Attribute sind voellig dynamisch, so dass diese nur
@@ -1197,6 +1215,8 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
         }
     }
 
+    SetCalcHiddenCharFlags();
+
     if( pNd->pSwpHints->CanBeDeleted() )
         DELETEZ( pNd->pSwpHints );
 }
@@ -1236,11 +1256,11 @@ void SwpHints::CalcFlags()
  *                      SwpHints::CalcVisibleFlag()
  *************************************************************************/
 
-BOOL SwpHints::CalcVisibleFlag()
+BOOL SwpHints::CalcHiddenParaField()
 {
-    BOOL bOldVis = bVis;
-    bCalcVis = FALSE;
-    BOOL            bNewVis  = TRUE;
+    bCalcHiddenParaField = FALSE;
+    BOOL bOldHasHiddenParaField = bHasHiddenParaField;
+    BOOL bNewHasHiddenParaField  = FALSE;
     const USHORT    nSize = Count();
     const SwTxtAttr *pTxtHt;
 
@@ -1252,20 +1272,20 @@ BOOL SwpHints::CalcVisibleFlag()
         if( RES_TXTATR_FIELD == nWhich )
         {
             const SwFmtFld& rFld = pTxtHt->GetFld();
-            if( RES_HIDDENPARAFLD == rFld.GetFld()->GetTyp()->Which())
+            if( RES_HIDDENPARAFLD == rFld.GetFld()->GetTyp()->Which() )
             {
                 if( !((SwHiddenParaField*)rFld.GetFld())->IsHidden() )
                 {
-                    SetVisible(TRUE);
-                    return !bOldVis;
+                    SetHiddenParaField(FALSE);
+                    return !bOldHasHiddenParaField;
                 }
                 else
-                    bNewVis = FALSE;
+                    bNewHasHiddenParaField = TRUE;
             }
         }
     }
-    SetVisible( bNewVis );
-    return bOldVis != bNewVis;
+    SetHiddenParaField( bNewHasHiddenParaField );
+    return bOldHasHiddenParaField != bNewHasHiddenParaField;
 }
 
 
@@ -1675,8 +1695,16 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
     switch( nWhich )
     {
     case RES_TXTATR_CHARFMT:
+    {
+        // Check if character format contains hidden attribute:
+        const SwCharFmt* pFmt = pHint->GetCharFmt().GetCharFmt();
+        const SfxPoolItem* pItem;
+        if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, TRUE, &pItem ) )
+            rNode.SetCalcHiddenCharFlags();
+
         ((SwTxtCharFmt*)pHint)->ChgTxtNode( &rNode );
         break;
+    }
     case RES_TXTATR_INETFMT:
         {
             ((SwTxtINetFmt*)pHint)->ChgTxtNode( &rNode );
@@ -1815,6 +1843,10 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                                                     RES_POOLCHR_RUBYTEXT );
             pFmt->Add( (SwTxtRuby*)pHint );
         }
+        break;
+
+    case RES_CHRATR_HIDDEN:
+        rNode.SetCalcHiddenCharFlags();
         break;
     }
 
@@ -2220,9 +2252,10 @@ void SwpHints::DeleteAtPos( const USHORT nPos )
                 ((SwDDEFieldType*)pFldTyp)->DecRefCnt();
             ((SwTxtFld*)pHint)->ChgTxtNode( 0 );
         }
-        else if( !bVis && RES_HIDDENPARAFLD == pFldTyp->Which() )
-            bCalcVis = TRUE;
+        else if( bHasHiddenParaField && RES_HIDDENPARAFLD == pFldTyp->Which() )
+            bCalcHiddenParaField = TRUE;
     }
+
     CalcFlags();
     CHECK;
 }
