@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:28:38 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/ctloptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -178,6 +179,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pColorConfig( NULL ),
     pAccessOptions( NULL ),
     pCTLOptions( NULL ),
+    pUserOptions( NULL ),
     pTeamDlg( NULL ),
     nCurRefDlgId( 0 ),
     pErrorHdl( NULL ),
@@ -384,6 +386,10 @@ void ScModule::DeleteCfg()
     {
         EndListening(*pCTLOptions);
         DELETEZ( pCTLOptions );
+    }
+    if( pUserOptions )
+    {
+        DELETEZ( pUserOptions );
     }
 }
 
@@ -1012,6 +1018,15 @@ SvtCTLOptions& ScModule::GetCTLOptions()
     }
 
     return *pCTLOptions;
+}
+
+SvtUserOptions&  ScModule::GetUserOptions()
+{
+    if( !pUserOptions )
+    {
+        pUserOptions = new SvtUserOptions;
+    }
+    return *pUserOptions;
 }
 
 USHORT ScModule::GetOptDigitLanguage()
