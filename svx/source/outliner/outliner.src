@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:32:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String RID_OUTLUNDO_HEIGHT
     TEXT [ italian ] = "Sposta" ;
     TEXT [ portuguese_brazilian ] = "Mover" ;
     TEXT [ portuguese ] = "Mover" ;
-    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ finnish ] = "Siirrä" ;
     TEXT [ danish ] = "Flyt" ;
     TEXT [ french ] = "Déplacer" ;
     TEXT [ swedish ] = "Flytta" ;
@@ -117,6 +117,7 @@ String RID_OUTLUNDO_DEPTH
     Text[ turkish ] = "Girinti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangría";
+    Text[ finnish ] = "Sisennä";
 };
 String RID_OUTLUNDO_EXPAND
 {
@@ -146,6 +147,7 @@ String RID_OUTLUNDO_EXPAND
     Text[ turkish ] = "Alt bölümleri göster";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar subpárrafos";
+    Text[ finnish ] = "Näytä alipisteet";
 };
 String RID_OUTLUNDO_COLLAPSE
 {
@@ -175,6 +177,7 @@ String RID_OUTLUNDO_COLLAPSE
     Text[ turkish ] = "Alt bölümleri gizle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ocultar subpárrafos";
+    Text[ finnish ] = "Pienennä";
 };
 String RID_OUTLUNDO_ATTR
 {
