@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:49:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,10 +288,8 @@ namespace presentation
 
         void SimpleContinuousActivityBase::dequeued()
         {
-            ENSURE_AND_THROW( !isActive(),
-                              "SimpleContinuousActivityBase::dequeued(): Dequeued, but still active?!" );
-
-            endAnimation();
+            if (! isActive())
+                endAnimation();
         }
 
     }
