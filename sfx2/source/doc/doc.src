@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:34:49 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,8 +310,8 @@ String STR_ERROR_NOSTORAGE
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
-    Text [ de ] = "$(FILENAME) enthält möglicherweise Elemente, die mit $(FORMAT)-Format nicht\nkompatibel sind. Möchten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um zu speichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das\nDokument im aktuellen %PRODUCTNAME-Format.";
-    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format.\nDo you want to save the document in this format?\n\n - To save, click 'Yes'\n - To preserve formatting, click No. Next save the document in the latest\n%PRODUCTNAME format.";
+    Text [ de ] = "$(FILENAME) enthält möglicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. Möchten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
+    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format. Do you want to save the document in this format?\n\n- To save in $(FORMAT) Format, click 'Yes'\n- To preserve formatting, click No. Next save the document in the latest %PRODUCTNAME format.";
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_MUSTOWNFORMAT
