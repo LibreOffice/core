@@ -2,9 +2,9 @@
  *
  *  $RCSfile: os2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:33:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ void CreateDriveMapImpl();
 
 static DriveMapItem aDriveMap[26];
 
-static String sLastCaseSensitiveDir = "";
 static BOOL   bLastCaseSensitive    = FALSE;
 
 //====================================================================
