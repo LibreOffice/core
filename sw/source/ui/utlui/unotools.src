@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:16:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,15 +304,15 @@ Resource RES_FRMEX_MENU
     };
     ItemList [ chinese_simplified ] =
     {
-            < "比例" ;      ST_MENU_ZOOM; > ;
-        < "向上" ;  ST_MENU_UP;     > ;
-        < "向下" ;  ST_MENU_DOWN; > ;
+            < "比例(~Z)" ;      ST_MENU_ZOOM; > ;
+        < "向上(~U)" ;  ST_MENU_UP;     > ;
+        < "向下(~W)" ;  ST_MENU_DOWN; > ;
     };
     ItemList [ chinese_traditional ] =
     {
-            < "陪ボゑㄒ" ;      ST_MENU_ZOOM; > ;
-        < "" ;  ST_MENU_UP;     > ;
-        < "" ;  ST_MENU_DOWN; > ;
+            < "陪ボゑㄒ(~Z)" ;      ST_MENU_ZOOM; > ;
+        < "(~U)" ;  ST_MENU_UP;     > ;
+        < "(~W)" ;  ST_MENU_DOWN; > ;
     };
     ItemList [ arabic ] =
     {
