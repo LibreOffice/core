@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-09 15:37:16 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 16:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,8 @@ SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass ) :
     bExtended( sal_False ),
     pNumExport(0L),
     pProgressBarHelper( NULL ),
-    pEventExport( NULL )
+    pEventExport( NULL ),
+    bSaveLinkedSections(sal_True)
 {
     _InitCtor();
 }
@@ -241,7 +242,8 @@ SvXMLExport::SvXMLExport(
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY ),
     pProgressBarHelper( NULL ),
-    pEventExport( NULL )
+    pEventExport( NULL ),
+    bSaveLinkedSections(sal_True)
 {
     _InitCtor();
 
@@ -268,7 +270,8 @@ SvXMLExport::SvXMLExport(
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
-    pEventExport( NULL )
+    pEventExport( NULL ),
+    bSaveLinkedSections(sal_True)
 {
     _InitCtor();
 
@@ -297,7 +300,8 @@ SvXMLExport::SvXMLExport(
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
-    pEventExport( NULL )
+    pEventExport( NULL ),
+    bSaveLinkedSections(sal_True)
 {
     _InitCtor();
 

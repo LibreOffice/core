@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,6 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const XMLTextNumRuleInfo& rNextRule,
     sal_Bool bAutoStyles)
 {
-    // careful: exportListChange may only be called for (!bAutoStyles)
-    // I'd like a cleaner solution! Maybe export all section styles upfront.
     if ( bAutoStyles )
     {
         if ( rNextSection.is() )
@@ -243,11 +241,17 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             XMLTextNumRuleInfo aEmptyNumRule;
             exportListChange(rPrevRule, aEmptyNumRule);
 
-            // build stacks of old and new sections
+            // Build stacks of old and new sections
+            // Sections on top of mute sections should not be on the stack
             vector<Reference<XTextSection> > aOldStack;
             Reference<XTextSection> aCurrent = rPrevSection;
             while(aCurrent.is())
             {
+                // if we have a mute section, ignore all its children
+                // (all previous ones)
+                if (pSectionExport->IsMuteSection(aCurrent))
+                    aOldStack.clear();
+
                 aOldStack.push_back(aCurrent);
                 aCurrent = aCurrent->getParentSection();
             }
@@ -256,6 +260,11 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             aCurrent = rNextSection;
             while(aCurrent.is())
             {
+                // if we have a mute section, ignore all its children
+                // (all previous ones)
+                if (pSectionExport->IsMuteSection(aCurrent))
+                    aNewStack.clear();
+
                 aNewStack.push_back(aCurrent);
                 aCurrent = aCurrent->getParentSection();
             }

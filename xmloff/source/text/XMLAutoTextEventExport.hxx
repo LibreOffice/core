@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,14 @@ class XMLAutoTextEventExport : public SvXMLExport
 {
     ::std::set< ::rtl::OUString > * eventCount;
 
+    /// names of groups to be exported; export all group if empty.
+    ::com::sun::star::uno::Sequence< ::rtl::OUString> & rGroupNames;
+
+
     // generate a combined name for sake of counting names
     ::rtl::OUString combinedName(
         const ::rtl::OUString& rGroupName,
         const ::rtl::OUString& rEntryName);
-
 
 public:
     XMLAutoTextEventExport();
@@ -114,7 +117,8 @@ protected:
     void exportAutoTextContainer(
         const sal_Char* pClass,
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XAutoTextContainer> & rAutoTextContainer);
+            ::com::sun::star::text::XAutoTextContainer> & rAutoTextContainer,
+        ::com::sun::star::uno::Sequence< ::rtl::OUString> & rGroupNames);
 
     void exportAutoTextGroup(
         ::rtl::OUString& rName,
@@ -128,10 +132,11 @@ protected:
             ::com::sun::star::text::XAutoTextEntry> & rEntry);
 
 
-    /// count the number of events (to be used by hasXXX() methods)
+    /// count the number of events (to be used before hasXXX() methods)
     void countEvents(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XAutoTextContainer> & rAutoTextContainer);
+            ::com::sun::star::text::XAutoTextContainer> & rAutoTextContainer,
+        ::com::sun::star::uno::Sequence< ::rtl::OUString> & rGroupNames);
 
     /// does the document have any events ?
     sal_Bool hasDocumentEvents();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace com { namespace sun { namespace star {
     {
         class XTextSection;
         class XDocumentIndex;
+        class XTextContent;
     }
     namespace beans
     {
@@ -206,6 +207,24 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection,
         sal_Bool bAutoStyles);
+
+    /**
+     * Should the content of this section be exported?
+     * (E.g. linked sections in global documents are not always exported)
+     */
+    sal_Bool IsMuteSection(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextSection > & rSection);
+
+    /**
+     * XTextContent-version of IsMuteSection(Reference<XTextSection>&)
+     * returns *true* for all non-section elements
+     */
+    sal_Bool IsMuteSection(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextContent > & rSection,
+        /// return value if this content doesn't support the section property
+        sal_Bool bDefault);
 
     /**
      * Export the configuration element for bibliography indices.

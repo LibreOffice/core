@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:29 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 XMLAutoTextEventExport::XMLAutoTextEventExport() :
     SvXMLExport( MAP_INCH, sXML_auto_text ),
-    eventCount( NULL )
+    eventCount( NULL ),
+    rGroupNames( * new Sequence<OUString> )
 {
 }
 
@@ -171,7 +172,8 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     const Reference<XDocumentHandler> & rHandler,
     const Reference<XModel> & rModel) :
         SvXMLExport(rFileName, rHandler, rModel, MAP_INCH),
-        eventCount( NULL )
+        eventCount( NULL ),
+        rGroupNames( * new Sequence<OUString> )
 {
 }
 
@@ -193,8 +195,13 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( const sal_Char *pClass )
 
         if (xAutoTextContainer.is())
         {
-            countEvents(xAutoTextContainer);
-            exportAutoTextContainer(pClass, xAutoTextContainer);
+            // export all, or only the name groups?
+            Sequence<OUString> & rNames =
+                (rGroupNames.getLength() > 0) ? rGroupNames :
+                xAutoTextContainer->getElementNames();
+
+            countEvents(xAutoTextContainer, rNames);
+            exportAutoTextContainer(pClass, xAutoTextContainer, rNames);
         }
     }
     return 0;
@@ -202,7 +209,8 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( const sal_Char *pClass )
 
 void XMLAutoTextEventExport::exportAutoTextContainer(
     const sal_Char *pClass,
-    Reference<XAutoTextContainer> & rAutoTextContainer)
+    Reference<XAutoTextContainer> & rAutoTextContainer,
+    Sequence<OUString> & rNames)
 {
     if (hasDocumentEvents())
     {
@@ -235,12 +243,11 @@ void XMLAutoTextEventExport::exportAutoTextContainer(
                 *this, XML_NAMESPACE_TEXT, sXML_auto_text_events,
                 sal_True, sal_True);
 
-            // iterate over container and process all groups
-            Sequence<OUString> aNames = rAutoTextContainer->getElementNames();
-            sal_Int32 nCount = aNames.getLength();
+            // iterate over group list
+            sal_Int32 nCount = rNames.getLength();
             for(sal_Int32 i = 0; i < nCount; i++)
             {
-                OUString& rName = aNames[i];
+                OUString& rName = rNames[i];
                 Any aAny = rAutoTextContainer->getByName(rName);
                 Reference<XAutoTextGroup> xGroup;
                 aAny >>= xGroup;
@@ -306,7 +313,8 @@ void XMLAutoTextEventExport::exportAutoTextEntry(
 
 
 void XMLAutoTextEventExport::countEvents(
-    Reference<XAutoTextContainer> & rAutoTextContainer)
+    Reference<XAutoTextContainer> & rAutoTextContainer,
+    Sequence<OUString> & rNames)
 {
     OUString sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType"));
     OUString sNone(RTL_CONSTASCII_USTRINGPARAM("None"));
@@ -314,19 +322,18 @@ void XMLAutoTextEventExport::countEvents(
     set<OUString> * pEventCount = new set<OUString> ;
 
     // iterate over all groups
-    Sequence<OUString> aGroupNames = rAutoTextContainer->getElementNames();
-    sal_Int32 nGroupsCount = aGroupNames.getLength();
+    sal_Int32 nGroupsCount = rNames.getLength();
     for(sal_Int32 i = 0; i < nGroupsCount; i++)
     {
-        OUString& rGroupName = aGroupNames[i];
+        OUString& rGroupName = rNames[i];
         Any aAny = rAutoTextContainer->getByName(rGroupName);
         Reference<XAutoTextGroup> xGroup;
         aAny >>= xGroup;
 
         // iterate over all autotexts in this group
         Sequence<OUString> aEntryNames = xGroup->getElementNames();
-        sal_Int32 nEntriesCount = aEntryNames.getLength();
-        for(sal_Int32 i = 0; i < nEntriesCount; i++)
+        sal_Int32 nEntryCount = aEntryNames.getLength();
+        for(sal_Int32 i = 0; i < nEntryCount; i++)
         {
             OUString& rEntryName = aEntryNames[i];
 

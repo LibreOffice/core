@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 12:28:29 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,11 +1038,19 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
     sal_Bool bHasContent sal_False;
     Reference<XTextSection> xCurrentTextSection = rBaseSection;
 
-    while( rContEnum->hasMoreElements() )
+    sal_Bool bHoldElement = sal_False;
+    Reference < XTextContent > xTxtCntnt;
+    while( bHoldElement || rContEnum->hasMoreElements() )
     {
-        Any aAny = rContEnum->nextElement();
-        Reference < XTextContent > xTxtCntnt;
-        aAny >>= xTxtCntnt;
+        if (bHoldElement)
+        {
+            bHoldElement = sal_False;
+        }
+        else
+        {
+            Any aAny = rContEnum->nextElement();
+            aAny >>= xTxtCntnt;
+        }
 
         Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
         if( xServiceInfo->supportsService( sParagraphService ) )
@@ -1056,7 +1064,22 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         aPrevNumInfo, aNextNumInfo,
                                         bAutoStyles );
 
-            exportParagraph( xTxtCntnt, bAutoStyles, bProgress,  bExportParagraph );
+            // if we found a mute section: skip all section content
+            if (pSectionExport->IsMuteSection(xCurrentTextSection))
+            {
+                while (rContEnum->hasMoreElements() &&
+                       pSectionExport->IsMuteSection(xTxtCntnt, sal_True))
+                {
+                    Any aAny = rContEnum->nextElement();
+                    aAny >>= xTxtCntnt;
+                }
+                // the first non-mute element still needs to be processed
+                bHoldElement =
+                    ! pSectionExport->IsMuteSection(xTxtCntnt, sal_False);
+            }
+            else
+                exportParagraph( xTxtCntnt, bAutoStyles, bProgress,
+                                 bExportParagraph );
             bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTableService ) )
