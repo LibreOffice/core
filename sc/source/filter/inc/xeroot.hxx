@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:28:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@ public:
     XclExpTabIdBuffer&          GetTabIdBuffer() const;
     /** Returns the link manager. */
     XclExpLinkManager&          GetLinkManager() const;
+
+    /** Returns the Excel add-in function name for a Calc function name. */
+    String                      GetXclAddInName( const String& rScName ) const;
 
     /** Checks if the passed cell address is a valid Excel cell position.
         @descr  See XclRoot::CheckCellAddress for details. */
