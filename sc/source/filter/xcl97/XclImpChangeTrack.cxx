@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:47:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,9 +190,10 @@ void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
     DoAcceptRejectAction( nFirst, nLast );
 }
 
-sal_uInt16 XclImpChangeTrack::ReadTabNum()
+SCTAB XclImpChangeTrack::ReadTabNum()
 {
-    return pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
+    return static_cast<SCTAB>(pExcRoot->pIR->GetTabInfo().GetCurrentIndex(
+                pStrm->ReaduInt16(), nTabIdCount ));
 }
 
 void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
@@ -221,16 +222,16 @@ sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
     return aRecHeader.nIndex != 0;
 }
 
-sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16& rLastTab )
+sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab )
 {
     if( LookAtuInt8() == 0x01 )
     {
         // internal ref - read tab num and return sc tab num (position in TABID list)
         pStrm->Ignore( 3 );
-        rFirstTab = pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
+        rFirstTab = static_cast< SCTAB >( pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) );
         sal_uInt8 nFillByte = pStrm->ReaduInt8();
         rLastTab = (nFillByte == 0x00) ?
-            pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) : rFirstTab;
+            static_cast< SCTAB >( pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) ) : rFirstTab;
     }
     else
     {
@@ -245,7 +246,7 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
         String aTabName( pStrm->ReadUniString() );
         ScfTools::ConvertToScSheetName( aTabName );
         pStrm->Ignore( 1 );
-        rFirstTab = rLastTab = pExcRoot->pIR->GetLinkManager().GetScTab( aUrl, aTabName );
+        rFirstTab = rLastTab = static_cast<SCTAB>(pExcRoot->pIR->GetLinkManager().GetScTab( aUrl, aTabName ));
     }
     return sal_True;
 }
@@ -438,7 +439,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
 void XclImpChangeTrack::ReadChTrTabId()
 {
     if( !nTabIdCount )      // read only 1st time, otherwise calculated by <ReadChTrInsertTab()>
-        nTabIdCount = (sal_uInt16)(pStrm->GetRecLeft() >> 1);
+        nTabIdCount = (pStrm->GetRecLeft() >> 1);
 }
 
 void XclImpChangeTrack::ReadChTrMoveRange()
@@ -472,7 +473,7 @@ void XclImpChangeTrack::ReadChTrInsertTab()
     *pStrm >> aRecHeader;
     if( CheckRecord( EXC_CHTR_OP_INSTAB ) )
     {
-        sal_uInt16 nTab = ReadTabNum();
+        SCTAB nTab = ReadTabNum();
         if( pStrm->IsValid() )
         {
             nTabIdCount++;
@@ -553,7 +554,7 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 }
 
 // virtual, called from ExcToSc8::Convert()
-BOOL XclImpChTrFmlConverter::Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab )
+BOOL XclImpChTrFmlConverter::Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab )
 {
     aIn.Ignore( 2 );
     return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab );
