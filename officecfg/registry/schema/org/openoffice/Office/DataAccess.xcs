@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-07 09:07:55 $
+ *  last change: $Author: os $ $Date: 2002-08-14 15:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,6 +896,12 @@
 			<prop oor:name="ViewHeight" oor:type="xs:int"/>
 			<prop oor:name="QueryText" oor:type="xs:string"/>
 			<prop oor:name="QueryField" oor:type="xs:string"/>
+            <prop oor:name="ShowColumnAssignmentWarning" oor:type="xs:boolean">
+                <value>true</value>
+				<info>
+                    <desc xml:lang="en-US">Determines whether a non-assigned column results in a warning box.</desc>
+				</info>
+            </prop>
 			<node-ref oor:name="CurrentDataSource" oor:node-type="DataSource">
 				<!-- OldPath: Bibliography/BibliographyCurrent-->
 				<!-- OldLocation: Soffice.ini-->
