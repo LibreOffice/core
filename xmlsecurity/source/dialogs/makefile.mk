@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: gt $ $Date: 2004-07-19 11:08:46 $
+#   last change: $Author: gt $ $Date: 2004-07-20 05:35:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ SRC1FILES =  \
             warnings.src
 
 SLOFILES=	\
-            $(SLO)$/stbcontrl.obj				\
             $(SLO)$/digitalsignaturesdialog.obj	\
             $(SLO)$/certificatechooser.obj		\
             $(SLO)$/certificateviewer.obj		\
