@@ -62,8 +62,8 @@ ToolBox RID_SVX_EXTRUSION_BAR
 
 String RID_SVX_EXTRUSION_BAR
 {
-    Text = "Extrusion";
-    Text [english] = "Extrusion";
+    Text [ de ] = "Extrusion";
+    Text [ en-US ] = "Extrusion";
 };
 
 
