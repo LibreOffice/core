@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:22:30 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _SVTOOLS_SCRIPTEDTEXT_HXX
+#include <svtools/scriptedtext.hxx>
+#endif
 
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
@@ -102,6 +105,9 @@
 #endif
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 #ifndef _TAUTOFMT_HRC
 #include <tautofmt.hrc>
@@ -126,25 +132,26 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
 private:
-    SwTableAutoFmt      aCurData;
-    VirtualDevice       aVD;
-    BOOL                bFitWidth;
-    static BYTE         aFmtMap[25];        // Zuordnung: Zelle->Format
-    Rectangle           aCellArray[25];     // Position und Groesse der Zellen
-    SvxBoxItem*         aLinePtrArray[49];  // LinienAttribute
-    Size                aPrvSize;
-    const USHORT        nLabelColWidth;
-    const USHORT        nDataColWidth1;
-    const USHORT        nDataColWidth2;
-    const USHORT        nRowHeight;
-    const String        aStrJan;
-    const String        aStrFeb;
-    const String        aStrMar;
-    const String        aStrNorth;
-    const String        aStrMid;
-    const String        aStrSouth;
-    const String        aStrSum;
-    SvNumberFormatter*  pNumFmt;
+    SwTableAutoFmt          aCurData;
+    VirtualDevice           aVD;
+    SvtScriptedTextHelper   aScriptedText;
+    BOOL                    bFitWidth;
+    static BYTE             aFmtMap[25];        // Zuordnung: Zelle->Format
+    Rectangle               aCellArray[25];     // Position und Groesse der Zellen
+    SvxBoxItem*             aLinePtrArray[49];  // LinienAttribute
+    Size                    aPrvSize;
+    const USHORT            nLabelColWidth;
+    const USHORT            nDataColWidth1;
+    const USHORT            nDataColWidth2;
+    const USHORT            nRowHeight;
+    const String            aStrJan;
+    const String            aStrFeb;
+    const String            aStrMar;
+    const String            aStrNorth;
+    const String            aStrMid;
+    const String            aStrSouth;
+    const String            aStrSum;
+    SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
     void    Init            ();
     void    DoPaint         ( const Rectangle& rRect );
@@ -154,7 +161,7 @@ private:
     void    DrawBackground  ( BYTE nIndex );
     void    DrawFrame       ( BYTE nIndex );
     void    DrawString      ( BYTE nIndex );
-    void    MakeFont        ( BYTE nIndex, Font& rFont );
+    void    MakeFonts       ( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
     String  MakeNumberString( String cellString, BOOL bAddDec );
     void    DrawFrameLine   ( const SvxBorderLine&  rLineD,
                               Point                 from,
@@ -668,6 +675,7 @@ IMPL_LINK_INLINE_END( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
 AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         Window          ( pParent, rRes ),
         aVD             ( *this ),
+        aScriptedText   ( aVD ),
         aCurData        ( aEmptyStr ),
         bFitWidth       ( FALSE ),
         aStrJan         ( SW_RES( STR_JAN ) ),
@@ -1114,29 +1122,44 @@ void AutoFmtPreview::DrawFrame( BYTE nIndex )
 
 //------------------------------------------------------------------------
 
+void lcl_SetFontProperties(
+        Font& rFont,
+        const SvxFontItem& rFontItem,
+        const SvxWeightItem& rWeightItem,
+        const SvxPostureItem& rPostureItem )
+{
+    rFont.SetFamily     ( rFontItem.GetFamily() );
+    rFont.SetName       ( rFontItem.GetFamilyName() );
+    rFont.SetStyleName  ( rFontItem.GetStyleName() );
+    rFont.SetCharSet    ( rFontItem.GetCharSet() );
+    rFont.SetPitch      ( rFontItem.GetPitch() );
+    rFont.SetWeight     ( (FontWeight)rWeightItem.GetValue() );
+    rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
+}
 
-void AutoFmtPreview::MakeFont( BYTE nIndex, Font& rFont )
+#define SETONALLFONTS( MethodName, Value )                  \
+rFont.MethodName( Value );                                  \
+rCJKFont.MethodName( Value );                               \
+rCTLFont.MethodName( Value );
+
+void AutoFmtPreview::MakeFonts( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( nIndex );
 
-    rFont = GetFont();
+    rFont = rCJKFont = rCTLFont = GetFont();
+    Size aFontSize( rFont.GetSize().Width(), 10 );
 
-    const SvxFontItem& rFontItem = rBoxFmt.GetFont();
-    rFont.SetFamily      ( rFontItem.GetFamily() );
-    rFont.SetName        ( rFontItem.GetFamilyName() );
-    rFont.SetStyleName   ( rFontItem.GetStyleName() );
-    rFont.SetCharSet     ( rFontItem.GetCharSet() );
-    rFont.SetPitch       ( rFontItem.GetPitch() );
-    rFont.SetWeight      ( (FontWeight)rBoxFmt.GetWeight().GetValue() );
-    rFont.SetUnderline   ( (FontUnderline)rBoxFmt.GetUnderline().GetValue() );
-    rFont.SetStrikeout   ( (FontStrikeout)rBoxFmt.GetCrossedOut().GetValue() );
-    rFont.SetItalic      ( (FontItalic)rBoxFmt.GetPosture().GetValue() );
-    rFont.SetOutline     ( rBoxFmt.GetContour().GetValue() );
-    rFont.SetShadow      ( rBoxFmt.GetShadowed().GetValue() );
-    rFont.SetColor       ( rBoxFmt.GetColor().GetValue() );
+    lcl_SetFontProperties( rFont, rBoxFmt.GetFont(), rBoxFmt.GetWeight(), rBoxFmt.GetPosture() );
+    lcl_SetFontProperties( rCJKFont, rBoxFmt.GetCJKFont(), rBoxFmt.GetCJKWeight(), rBoxFmt.GetCJKPosture() );
+    lcl_SetFontProperties( rCTLFont, rBoxFmt.GetCTLFont(), rBoxFmt.GetCTLWeight(), rBoxFmt.GetCTLPosture() );
 
-    rFont.SetSize        ( Size( rFont.GetSize().Width(), 10 ) );
-    rFont.SetTransparent ( TRUE );
+    SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFmt.GetUnderline().GetValue() );
+    SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFmt.GetCrossedOut().GetValue() );
+    SETONALLFONTS( SetOutline,      rBoxFmt.GetContour().GetValue() );
+    SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );
+    SETONALLFONTS( SetColor,        rBoxFmt.GetColor().GetValue() );
+    SETONALLFONTS( SetSize,         aFontSize );
+    SETONALLFONTS( SetTransparent,  TRUE );
 }
 
 //------------------------------------------------------------------------
@@ -1220,7 +1243,6 @@ MAKENUMSTR:
 
     if( cellString.Len() )
     {
-        Font                oldFont;
         Size                aStrSize;
         BYTE                nFmtIndex       = (BYTE) aFmtMap[nIndex];
         Rectangle&          cellRect        = aCellArray[nIndex];
@@ -1234,12 +1256,15 @@ MAKENUMSTR:
                             cellRect.GetHeight() - FRAME_OFFSET );
         if( aCurData.IsFont() )
         {
-            Font aFont;
-            MakeFont( nFmtIndex, aFont );
-            oldFont = aVD.GetFont();
-            aVD.SetFont( aFont );
+            Font aFont, aCJKFont, aCTLFont;
+            MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
+            aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
         }
-        aStrSize = Size(aVD.GetTextWidth( cellString ), aVD.GetTextHeight());
+        else
+            aScriptedText.SetDefaultFont();
+
+        aScriptedText.SetText( cellString, pBreakIt->xBreak );
+        aStrSize = aScriptedText.GetTextSize();
 
         if( aCurData.IsFont() &&
             theMaxStrSize.Height() < aStrSize.Height() )
@@ -1247,8 +1272,8 @@ MAKENUMSTR:
                 // wenn der String in diesem Font nicht
                 // in die Zelle passt, wird wieder der
                 // Standard-Font genommen:
-                aVD.SetFont( oldFont );
-                aStrSize = Size(aVD.GetTextWidth( cellString ), aVD.GetTextHeight());
+                aScriptedText.SetDefaultFont();
+                aStrSize = aScriptedText.GetTextSize();
         }
 
         while( theMaxStrSize.Width() <= aStrSize.Width() &&
@@ -1258,7 +1283,8 @@ MAKENUMSTR:
 //                          cellString.Erase( 0, 1 );
 //                  else
             cellString.Erase( cellString.Len() - 1 );
-            aStrSize = Size(aVD.GetTextWidth( cellString ), aVD.GetTextHeight());
+            aScriptedText.SetText( cellString, pBreakIt->xBreak );
+            aStrSize = aScriptedText.GetTextSize();
         }
 
         nRightX  = (USHORT)(  cellRect.GetWidth()
@@ -1322,11 +1348,8 @@ MAKENUMSTR:
         }
 
         //-------------------------------
-        aVD.DrawText( aPos, cellString );
+        aScriptedText.DrawText( aPos );
         //-------------------------------
-
-        if ( aCurData.IsFont() )
-            aVD.SetFont( oldFont );
     }
 }
 
@@ -1735,6 +1758,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/09/27 17:22:30  jp
+    Task #91873#: remove usage of GetSystemLanguage and other system realted methods
+
     Revision 1.6  2001/06/14 17:21:51  fme
     Fix: #86988#: Redesign of dialogs
 
