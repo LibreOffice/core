@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 13:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,19 @@ OIndex::OIndex( const ::rtl::OUString& _Name,
 OIndex::~OIndex( )
 {
     delete m_pColumns;
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OIndex::createArrayHelper( sal_Int32 _nId) const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& SAL_CALL OIndex::getInfoHelper()
+{
+    return *OIndex_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OIndex::queryInterface( const Type & rType ) throw(RuntimeException)

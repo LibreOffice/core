@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 13:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ namespace connectivity
 
             using ODescriptor_BASE::rBHelper;
             // OPropertyArrayUsageHelper
-            DECLARE_CTY_PROPERTY(OIndex_PROP,OIndex)
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         public:
             DECLARE_CTY_DEFAULTS( ODescriptor_BASE);
 
