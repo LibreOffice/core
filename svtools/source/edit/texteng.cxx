@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,9 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
             aPaM = ImpInsertParaBreak( aPaM );
 
         nStart = nEnd+1;
+
+        if ( nStart < nEnd )    // #108611# overflow
+            break;
     }
 
     TextModified();
