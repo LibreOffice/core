@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-01 08:04:36 $
+ *  last change: $Author: ama $ $Date: 2001-10-02 07:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,13 +318,20 @@ void SwFntObj::ChooseFont( ViewShell *pSh, OutputDevice *pOut )
 static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
     nScrHeight = USHRT_MAX;
-
+#ifdef FONT_TEST_DEBUG
+    long nTest = 1;
+    GET_VARIABLE( 9, nTest );
+#endif
     Printer *pPrt;
     // "No screen adj"
     if( pSh && ( !pSh->GetDoc()->IsBrowseMode() ||
                   pSh->GetViewOptions()->IsPrtFormat() ) &&
         ( 0 != ( pPrt = (Printer *)(pSh->GetDoc()->GetPrt() ) ) ) &&
-        pPrt->IsValid() )
+        pPrt->IsValid()
+#ifdef FONT_TEST_DEBUG
+        && nTest
+#endif
+        )
 #ifdef MAC
     {
         CheckPrtFont( pPrt );
@@ -647,6 +654,40 @@ void SwFntObj::SetDevFont( ViewShell *pSh, OutputDevice *pOut )
  *
  *************************************************************************/
 
+#ifdef FONT_TEST_DEBUG
+
+void lcl_Pos( USHORT nWhich, long& rPos, long nWidth, long nLeft, long nRight )
+{
+    long nScr = 3;
+    long nL = 0;
+    long nR = 1;
+    GET_VARIABLE( nWhich, nScr );
+    GET_VARIABLE( nWhich + 1, nL );
+    GET_VARIABLE( nWhich + 2, nR );
+    long nDiv = nScr + nL + nR;
+    if( !nDiv )
+    {   // Default
+        if( nWhich )
+        {
+            nScr = 3;
+            nL = 0;
+            nR = 1;
+            nDiv = 4;
+        }
+        else
+        {
+            nScr = 0;
+            nL = 1;
+            nR = 0;
+            nDiv = 1;
+        }
+    }
+    rPos = nScr * ( rPos + nWidth ) + nL * ( nLeft + nWidth ) + nR * nRight;
+    rPos /= nDiv;
+}
+
+#endif
+
 // ER 09.07.95 20:34
 // mit -Ox Optimierung stuerzt's unter win95 ab
 // JP 12.07.95: unter WNT auch (i386);       Alpha ??
@@ -944,11 +985,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
-#ifdef DEBUG
-            long nTest = nMul;
-            GET_VARIABLE( 0, nTest );
-            nMul = (USHORT)nTest;
-#endif
             long *pScrArray = NULL;
 
             if ( pPrtFont->GetKerning() )
@@ -1008,7 +1044,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 // linksbuendig zur Druckerposition.
                 else if ( nCh == CH_BLANK )
                 {
-                    nScrPos = pKernArray[i-1]+nScr;
+#ifdef FONT_TEST_DEBUG
+                    lcl_Pos( 3, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
+                    nScrPos = pKernArray[i-1] + nScr;
+#endif
                     if ( cChPrev == CH_BLANK )
                         nSpaceSum += nOtherHalf;
                     if ( i + 1 == nCnt )
@@ -1020,16 +1060,28 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 {
                     if ( cChPrev == CH_BLANK )
                     {
+#ifdef FONT_TEST_DEBUG
+                        lcl_Pos( 6, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
                         nScrPos = pKernArray[i-1] + nScr;
+#endif
                         // kein Pixel geht verloren:
                         nSpaceSum += nOtherHalf;
                     }
                     else if ( cChPrev == '-' )
+#ifdef FONT_TEST_DEBUG
+                        lcl_Pos( 6, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
                         nScrPos = pKernArray[i-1] + nScr;
+#endif
                     else
                     {
+#ifdef FONT_TEST_DEBUG
+                        lcl_Pos( 0, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
+#else
                         nScrPos += nScr;
                         nScrPos = ( nMul * nScrPos + pKernArray[i] ) / nDiv;
+#endif
                     }
                 }
                 cChPrev = nCh;
