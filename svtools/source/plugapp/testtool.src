@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 22:38:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 11:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "½sΏθ(~E)";
             Text[ arabic ] = "ΚΝΡνΡ";
         Text[ greek ] = "Επεξεργασία";
-        Text[ korean ] = "ΖνΑύ";
+        Text[ korean ] = "ΖνΑύ(~E)";
         Text[ turkish ] = "~Dόzenle";
         Text[ language_user1 ] = " ";
     };
@@ -409,7 +409,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "³Ζµω(~C)";
             Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
-        Text[ korean ] = "ΑΦ";
+        Text[ korean ] = "ΑΦ(~C)";
         Text[ turkish ] = "~Aηύklama";
         Text[ language_user1 ] = " ";
     };
@@ -435,7 +435,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "ΏοΎά(~S)";
             Text[ arabic ] = "ΚΝΟνΟ";
         Text[ greek ] = "Επιλογή";
-        Text[ korean ] = "Ό±ΕΓ";
+        Text[ korean ] = "Ό±ΕΓ(~S)";
         Text[ turkish ] = "~Seη";
         Text[ language_user1 ] = " ";
     };
@@ -488,7 +488,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "±µ¨ό(~A)";
             Text[ arabic ] = "ήΘζα";
         Text[ greek ] = "~Αποδοχή";
-        Text[ korean ] = "µΏΐΗ";
+        Text[ korean ] = "µΏΐΗ(~A)";
         Text[ turkish ] = "~Kabul";
         Text[ language_user1 ] = " ";
     };
@@ -514,7 +514,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "Δ~Δς(~N)";
             Text[ arabic ] = "ΗαΚΗαν";
         Text[ greek ] = "Επόμενο";
-        Text[ korean ] = "΄Ωΐ½";
+        Text[ korean ] = "΄Ωΐ½(~N)";
         Text[ turkish ] = "~έleri";
         Text[ language_user1 ] = " ";
     };
