@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenCommandArgument.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-22 13:48:59 $
+ *  last change: $Author: kso $ $Date: 2000-11-22 15:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,12 @@ struct OpenCommandArgument
         read and write access to the contents.
 
         If an XActiveDataSink is supplied, the implementation of the command
-        needs to provide an implementation of an object implementing both
-        interface <type>com::sun::star::io::XInputStream</type> and
-        interface <type>com::sun::star::io::XSeekable</type>. This object
-        has to be supplied to the data sink.
+        needs to provide an implementation of an object implementing the
+        interface <type>com::sun::star::io::XInputStream</type>. It is
+        highly recommended that this object also implements the interface
+        <type>com::sun::star::io::XSeekable</type>, if this can be done
+        without wasting resources ( i.e. allocating huge memory buffers ).
+        The implementation object has to be supplied to the data sink.
     */
     com::sun::star::uno::XInterface Sink;
 
