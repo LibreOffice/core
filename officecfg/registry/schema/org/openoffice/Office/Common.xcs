@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-15 14:07:12 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 13:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2875,68 +2875,68 @@
         <group oor:name="Filter">
             <!-- Responsible: SJ / OS -->
             <info>
-                <desc xml:lang="en-US">Settings for Microsoft-, Graphic- and HTML filter</desc>
+                <desc xml:lang="en-US">settings for Microsoft-, Graphic- and HTML filter</desc>
             </info>
             <group oor:name="Microsoft">
                 <!-- Responsible: SJ -->
 				<info>
-					<desc xml:lang="en-US">Specifies, what kind of OLE objects are to be converted when importing/exporting Microsoft documents</desc>
+					<desc xml:lang="en-US">specifies, what kind of OLE objects are to be converted when importing/exporting Microsoft documents</desc>
 				</info>
                 <group oor:name="Import">
 					<info>
-						<desc xml:lang="en-US">Specifies, what kind of OLE objects are to be converted when importing Microsoft documents</desc>
+						<desc xml:lang="en-US">specifies, what kind of OLE objects are to be converted when importing Microsoft documents</desc>
 					</info>
                     <prop oor:name="MathTypeToMath" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if convertable MathType OLE objects should be converted into Math objects </desc>
+                            <desc xml:lang="en-US">specifies, if convertable MathType OLE objects should be converted into Math objects </desc>
                         </info>
                     </prop>
                     <prop oor:name="WinWordToWriter" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if convertable WinWord OLE objects should be converted into Writer objects</desc>
+                            <desc xml:lang="en-US">specifies, if convertable WinWord OLE objects should be converted into Writer objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="ExcelToCalc" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if convertable Excel OLE objects should be converted into Calc objects</desc>
+                            <desc xml:lang="en-US">specifies, if convertable Excel OLE objects should be converted into Calc objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="PowerPointToImpress" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies, if convertable PowerPoint OLE objects should be converted into Impress objects</desc>
+                            <desc xml:lang="en-US">specifies, if convertable PowerPoint OLE objects should be converted into Impress objects</desc>
                         </info>
                     </prop>
                 </group>
                 <group oor:name="Export">
 					<info>
-						<desc xml:lang="en-US">Specifies, what kind of OLE objects are to be converted when exporting Microsoft documents</desc>
+						<desc xml:lang="en-US">specifies, what kind of OLE objects are to be converted when exporting Microsoft documents</desc>
 					</info>
                     <prop oor:name="MathToMathType" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies if embedded Math objects should be converted into MathType objects</desc>
+                            <desc xml:lang="en-US">specifies if embedded Math objects should be converted into MathType objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="WriterToWinWord" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies if embedded Writer objects should be converted into WinWord objects</desc>
+                            <desc xml:lang="en-US">specifies if embedded Writer objects should be converted into WinWord objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="CalcToExcel" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies if embedded Calc objects should be converted into Excel objects</desc>
+                            <desc xml:lang="en-US">specifies if embedded Calc objects should be converted into Excel objects</desc>
                         </info>
                     </prop>
                     <prop oor:name="ImpressToPowerPoint" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">Specifies if embedded Impress objects should be converted into PowerPoint objects</desc>
+                            <desc xml:lang="en-US">specifies if embedded Impress objects should be converted into PowerPoint objects</desc>
                         </info>
                     </prop>
                 </group>
@@ -2944,19 +2944,22 @@
             <group oor:name="Graphic">
                 <!-- Responsible: SJ -->
 				<info>
-					<desc xml:lang="en-US">Default settings for graphic filter</desc>
+					<desc xml:lang="en-US">default settings for graphic import and export dialogs</desc>
 				</info>
                 <group oor:name="Import">
 					<info>
-						<desc xml:lang="en-US">Default settings for import graphic filter</desc>
+						<desc xml:lang="en-US">graphic import</desc>
 					</info>
                     <group oor:name="PCD">
+						<info>
+							<desc xml:lang="en-US">PCD - Photo CD Base</desc>
+						</info>
                         <prop oor:name="Resolution" oor:type="xs:int">
                             <!-- OldPath: PCD-IMPORT-RESOLUTION -->
                             <!-- OldLocation: fltopt.ini -->
                             <value>2</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the import resolution for the PCD-format: 0 - Base16 ( 192 * 128 pixel ) 1 - Base4 ( 384 * 256 pixel ) 2 - Base ( 768 * 512 pixel )</desc>
+                                <desc xml:lang="en-US">specifies the import resolution for the PCD-format: 0 - Base16 ( 192 * 128 pixel ) 1 - Base4 ( 384 * 256 pixel ) 2 - Base ( 768 * 512 pixel )</desc>
                                 <label xml:lang="en-US">Resolution - Base16 / Base4 / Base</label>
                             </info>
                             <constraints>
@@ -2983,9 +2986,12 @@
                 </group>
                 <group oor:name="Export">
 					<info>
-						<desc xml:lang="en-US">Default settings for export graphic filter</desc>
+						<desc xml:lang="en-US">graphic export</desc>
 					</info>
                     <group oor:name="BMP">
+						<info>
+							<desc xml:lang="en-US">BMP - Windows Bitmap</desc>
+						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: BMP-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3116,6 +3122,9 @@
                         </node-ref>
                     </group>
                     <group oor:name="EPS">
+						<info>
+							<desc xml:lang="en-US">EPS - Encapsulated PostScript</desc>
+						</info>
                         <!-- OldLocation: fltopt.ini -->
                         <!-- UIHints: File  Export  Filetype File  Export  Filetype  EPS-Encapsulated Postscript -->
                         <prop oor:name="Preview" oor:type="xs:int">
@@ -3233,6 +3242,9 @@
                         </prop>
                     </group>
                     <group oor:name="GIF">
+						<info>
+							<desc xml:lang="en-US">GIF - Graphics Interchange</desc>
+						</info>
                         <prop oor:name="Interlaced" oor:type="xs:int">
                             <!-- OldPath: GIF-EXPORT-INTERLACED -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3277,6 +3289,9 @@
                         </prop>
                     </group>
                     <group oor:name="JPG">
+						<info>
+							<desc xml:lang="en-US">JPEG - Joint Photographic Experts Group</desc>
+						</info>
                         <prop oor:name="Quality" oor:type="xs:int">
                             <!-- OldPath: JPG-EXPORT-QUALITY -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3313,6 +3328,9 @@
                         </prop>
                     </group>
                     <group oor:name="MET">
+						<info>
+							<desc xml:lang="en-US">MET - OS/2 Metafile</desc>
+						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: MET-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3340,6 +3358,9 @@
                         </node-ref>
                     </group>
                     <group oor:name="PCT">
+						<info>
+							<desc xml:lang="en-US">PCT - Mac Pict</desc>
+						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: PCT-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3367,6 +3388,9 @@
                         </node-ref>
                     </group>
                     <group oor:name="PBM">
+						<info>
+							<desc xml:lang="en-US">PBM - Portable Bitmap</desc>
+						</info>
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PBM-EXPORT-FORMAT -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3390,6 +3414,9 @@
                         </prop>
                     </group>
                     <group oor:name="PGM">
+						<info>
+							<desc xml:lang="en-US">PGM - Portable Graymap</desc>
+						</info>
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PGM-EXPORT-FORMAT -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3413,6 +3440,9 @@
                         </prop>
                     </group>
                     <group oor:name="PPM">
+						<info>
+							<desc xml:lang="en-US">PPM - Portable Pixelmap</desc>
+						</info>
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PPM-EXPORT-FORMAT -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3436,6 +3466,9 @@
                         </prop>
                     </group>
                     <group oor:name="SVM">
+						<info>
+							<desc xml:lang="en-US">SVM - StarView Meta File</desc>
+						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: SVM-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3463,6 +3496,9 @@
                         </node-ref>
                     </group>
                     <group oor:name="WMF">
+						<info>
+							<desc xml:lang="en-US">WMF - Windows Metafile</desc>
+						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: WMF-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3489,7 +3525,10 @@
                             <!-- UIHints: File  Export  Filetype  WMF - MS Windows Metafile - [dialog] WMF Options -->
                         </node-ref>
                     </group>
-                    <group oor:name="EMF">
+                   <group oor:name="EMF">
+						<info>
+							<desc xml:lang="en-US">EMF - Enhanced Metafile</desc>
+						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: EMF-EXPORT-MODE -->
                             <!-- OldLocation: fltopt.ini -->
@@ -3517,6 +3556,9 @@
                         </node-ref>
                     </group>
                     <group oor:name="PNG">
+						<info>
+							<desc xml:lang="en-US">PNG - Portable Network Graphic</desc>
+						</info>
                         <prop oor:name="Compression" oor:type="xs:int">
                             <!-- OldPath: PNG-EXPORT-COMPRESSION -->
                             <!-- OldLocation: fltopt.ini -->
