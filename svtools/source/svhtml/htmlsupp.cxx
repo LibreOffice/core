@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsupp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString,
 
 void HTMLParser::RemoveSGMLComment( String &rString, BOOL bFull )
 {
-    sal_Unicode c;
+    sal_Unicode c = 0;
     while( rString.Len() &&
            ( ' '==(c=rString.GetChar(0UL)) || '\t'==c || '\r'==c || '\n'==c ) )
         rString.Erase( 0UL, 1UL );
