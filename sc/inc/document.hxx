@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:43:16 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 19:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,6 +680,7 @@ public:
     BOOL            DoSubTotals( USHORT nTab, ScSubTotalParam& rParam );
     void            RemoveSubTotals( USHORT nTab, ScSubTotalParam& rParam );
     BOOL            TestRemoveSubTotals( USHORT nTab, const ScSubTotalParam& rParam );
+    BOOL            HasSubTotalCells( const ScRange& rRange );
 
     void            PutCell( const ScAddress&, ScBaseCell* pCell, BOOL bForceTab = FALSE );
     void            PutCell( const ScAddress&, ScBaseCell* pCell,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:35 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 19:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,20 @@ BOOL ScDocument::DoSubTotals( USHORT nTab, ScSubTotalParam& rParam )
             return pTab[nTab]->DoSubTotals( rParam );
 
     return FALSE;
+}
+
+BOOL ScDocument::HasSubTotalCells( const ScRange& rRange )
+{
+    ScCellIterator aIter( this, rRange );
+    ScBaseCell* pCell = aIter.GetFirst();
+    while (pCell)
+    {
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->IsSubTotal() )
+            return TRUE;
+
+        pCell = aIter.GetNext();
+    }
+    return FALSE;   // none found
 }
 
 //  kopiert aus diesem Dokument die Zellen von Positionen, an denen in pPosDoc
