@@ -6050,7 +6050,8 @@
             </node>
             <node oor:name=".uno:TestMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value/>
+                    <value xml:lang="de">Testmodus ein/aus</value>
+                    <value xml:lang="en-US">Test Mode On/Off</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineStyle" oor:op="replace">
