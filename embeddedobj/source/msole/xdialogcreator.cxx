@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdialogcreator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:56:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,12 @@
 
 
 #include <osl/thread.h>
+#include <osl/file.hxx>
 #include <vos/module.hxx>
+#include <comphelper/classids.hxx>
 
 #include "platform.h"
+#include <confighelper.hxx>
 #include "xdialogcreator.hxx"
 
 
@@ -121,54 +124,40 @@ uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 
-//-------------------------------------------------------------------------
-sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
-{
-    // TODO/LATER: move this method and other methods like this to a standalone library
-    if ( aClassID1.getLength() != aClassID2.getLength() )
-        return sal_False;
-
-    for ( sal_Int32 nInd = 0; nInd < aClassID1.getLength(); nInd++ )
-        if ( aClassID1[nInd] != aClassID2[nInd] )
-            return sal_False;
-
-    return sal_True;
-}
+sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 );
 
 //-------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_Int8 >& aClassID )
 {
-    // TODO/LATER: The ClassIDs must be moved to a general place or to configuration so that this workaround can be removed
-
     // Writer
-    if ( ClassIDsEqual( aClassID,
-                        GetSequenceClassID( 0x30a2652a, 0xddf7, 0x45e7, 0xac, 0xa6, 0x3e, 0xab, 0x26, 0xfc, 0x8a, 0x4e ) ) )
-        return GetSequenceClassID( 0x8BC6B165, 0xB1B2, 0x4EDD, 0xAA, 0x47, 0xDA, 0xE2, 0xEE, 0x68, 0x9D, 0xD6 );
+    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_60 ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_8 ) ) )
+        return GetSequenceClassID( SO3_SW_CLASSID_60 );
 
     // Calc
-    if ( ClassIDsEqual( aClassID,
-                        GetSequenceClassID( 0x7b342dc4, 0x139a, 0x4a46, 0x8a, 0x93, 0xdb, 0x8, 0x27, 0xcc, 0xee, 0x9c ) ) )
-        return GetSequenceClassID( 0x47BBB4CB, 0xCE4C, 0x4E80, 0xA5, 0x91, 0x42, 0xD9, 0xAE, 0x74, 0x95, 0x0F );
+    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SC_OLE_EMBED_CLASSID_60 ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SC_OLE_EMBED_CLASSID_8 ) ) )
+        return GetSequenceClassID( SO3_SC_CLASSID_60 );
 
     // Impress
-    if ( ClassIDsEqual( aClassID,
-                        GetSequenceClassID( 0xe5a0b632, 0xdfba, 0x4549, 0x93, 0x46, 0xe4, 0x14, 0xda, 0x6, 0xe6, 0xf8 ) ) )
-        return GetSequenceClassID( 0x9176E48A, 0x637A, 0x4D1F, 0x80, 0x3B, 0x99, 0xD9, 0xBF, 0xAC, 0x10, 0x47 );
+    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) ) )
+        return GetSequenceClassID( SO3_SIMPRESS_CLASSID_60 );
 
     // Draw
-    if ( ClassIDsEqual( aClassID,
-                        GetSequenceClassID( 0x41662fc2, 0xd57, 0x4aff, 0xab, 0x27, 0xad, 0x2e, 0x12, 0xe7, 0xc2, 0x73 ) ) )
-        return GetSequenceClassID( 0x4BAB8970, 0x8A3B, 0x45B3, 0x99, 0x1C, 0xCB, 0xEE, 0xAC, 0x6B, 0xD5, 0xE3 );
+    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) ) )
+        return GetSequenceClassID( SO3_SDRAW_CLASSID_60 );
 
     // Chart
-    if ( ClassIDsEqual( aClassID,
-                        GetSequenceClassID( 0xd415cd93, 0x35c4, 0x4c6f, 0x81, 0x9d, 0xa6, 0x64, 0xa1, 0xc8, 0x13, 0xae ) ) )
-        return GetSequenceClassID( 0x12DCAE26, 0x281F, 0x416F, 0xA2, 0x34, 0xC3, 0x08, 0x61, 0x27, 0x38, 0x2E );
+    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SCH_OLE_EMBED_CLASSID_8 ) ) )
+        return GetSequenceClassID( SO3_SCH_CLASSID_60 );
 
     // Math
-    if ( ClassIDsEqual( aClassID,
-                        GetSequenceClassID( 0xd0484de6, 0xaaee, 0x468a, 0x99, 0x1f, 0x8d, 0x4b, 0x7, 0x37, 0xb5, 0x7a ) ) )
-        return GetSequenceClassID( 0x078B7ABA, 0x54FC, 0x457F, 0x85, 0x51, 0x61, 0x47, 0xE7, 0x76, 0xA9, 0x97 );
+    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_60 ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_60 ) ) )
+        return GetSequenceClassID( SO3_SM_CLASSID_60 );
 
     return aClassID;
 }
@@ -250,16 +239,15 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
     if ( OLEUI_OK == uTemp )
     {
-        uno::Reference< embed::XEmbedObjectCreator > xEmbCreator(
-                    m_xFactory->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.embed.EmbeddedObjectCreator" ) ),
-                    uno::UNO_QUERY );
-        if ( !xEmbCreator.is() )
-            throw uno::RuntimeException();
-
-
         if (io.dwFlags & IOF_SELECTCREATENEW)
         {
+            uno::Reference< embed::XEmbedObjectCreator > xEmbCreator(
+                        m_xFactory->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.EmbeddedObjectCreator" ) ),
+                        uno::UNO_QUERY );
+            if ( !xEmbCreator.is() )
+                throw uno::RuntimeException();
+
             uno::Sequence< sal_Int8 > aClassID = GetSequenceClassID( io.clsid.Data1,
                                                                      io.clsid.Data2,
                                                                      io.clsid.Data3,
@@ -283,9 +271,31 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
         else
         {
             ::rtl::OUString aFileName = ::rtl::OStringToOUString( ::rtl::OString( szFile ), osl_getThreadTextEncoding() );
+            rtl::OUString aFileURL;
+            if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
+                throw uno::RuntimeException();
+
             uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
             aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
-            aMediaDescr[0].Value <<= aFileName;
+            aMediaDescr[0].Value <<= aFileURL;
+
+            // TODO: use config helper for type detection
+            uno::Reference< embed::XEmbedObjectCreator > xEmbCreator;
+            ConfigurationHelper aHelper( m_xFactory );
+
+            if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
+                xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
+                        m_xFactory->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.EmbeddedObjectCreator" ) ),
+                        uno::UNO_QUERY );
+            else
+                xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
+                        m_xFactory->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
+                        uno::UNO_QUERY );
+
+            if ( !xEmbCreator.is() )
+                throw uno::RuntimeException();
 
             aObjectInfo.Object = uno::Reference< embed::XEmbeddedObject >(
                             xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, lObjArgs ),
