@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:52:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ void ViewShell::PrintHandout (
 {
     SdrObject* pObj;
     SdPage* pPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
-    SdPage* pMaster = (SdPage*) pPage->GetMasterPage(0);
+    SdPage& rMaster = (SdPage&)pPage->TRG_GetMasterPage();
 
     BOOL        bScalePage = TRUE;
     if ( pPrintOpts )
@@ -698,7 +698,7 @@ void ViewShell::PrintHandout (
     }
 
     // Hoch/Querformat aendern?
-    Orientation eOrientation = pMaster->GetOrientation();
+    Orientation eOrientation = rMaster.GetOrientation();
 
     short nDlgResult = RET_OK;
 
@@ -749,7 +749,7 @@ void ViewShell::PrintHandout (
             pPrintView = new DrawView (GetDocSh(), &rPrinter, NULL);
 
         sd::PresentationObjectList::iterator aIter;
-        const sd::PresentationObjectList::iterator aEnd( pMaster->GetPresObjList().end() );
+        const sd::PresentationObjectList::iterator aEnd( rMaster.GetPresObjList().end() );
         USHORT  nPageCount = nProgressOffset;
 
         WriteFrameViewData();
@@ -761,7 +761,7 @@ void ViewShell::PrintHandout (
 
         while ( nPage < nPageMax )
         {
-            aIter = pMaster->GetPresObjList().begin();
+            aIter = rMaster.GetPresObjList().begin();
 
             // Anzahl ALLER Seiten im Dokument:
             USHORT nAbsPageCnt = GetDoc()->GetPageCount();
@@ -828,7 +828,7 @@ void ViewShell::PrintHandout (
             pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
             pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
 
-            pPrintView->InitRedraw(&rPrinter, Rectangle(Point(0,0),
+            pPrintView->CompleteRedraw(&rPrinter, Rectangle(Point(0,0),
                                 pPage->GetSize()));
 
             if ( rTimeDateStr.Len() )
@@ -844,7 +844,7 @@ void ViewShell::PrintHandout (
 
         USHORT nRealPage = GetDoc()->GetSdPage(0, PK_STANDARD)->GetPageNum();
 
-        aIter = pMaster->GetPresObjList().begin();
+        aIter = rMaster.GetPresObjList().begin();
 
         pObj = (aIter != aEnd) ? (*aIter++).mpObject : NULL;
 
@@ -1195,7 +1195,7 @@ void ViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                                         pView->DrawAllMarked( rPrinter, aPtZero );
                                     }
                                     else
-                                        pPrintView->InitRedraw( &rPrinter, Rectangle( aPtZero,
+                                        pPrintView->CompleteRedraw( &rPrinter, Rectangle( aPtZero,
                                                                 aPageSize ) );
                                 }
                                 if( bWidth )
@@ -1260,7 +1260,7 @@ void ViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                             if (this->ISA(DrawViewShell) && bPrintMarkedOnly)
                                 pView->DrawAllMarked( rPrinter, aPtZero );
                             else
-                                pPrintView->InitRedraw(&rPrinter, Rectangle(Point(0,0),
+                                pPrintView->CompleteRedraw(&rPrinter, Rectangle(Point(0,0),
                                                         pPage->GetSize()));
                             rPrinter.SetMapMode(aStdMap);
 
@@ -1306,7 +1306,7 @@ void ViewShell::PrintPage (
     if (this->ISA(DrawViewShell) && bPrintMarkedOnly)
         pView->DrawAllMarked( rPrinter, aPtZero );
     else
-        pPrintView->InitRedraw( &rPrinter, Rectangle( aPtZero,
+        pPrintView->CompleteRedraw( &rPrinter, Rectangle( aPtZero,
                                 pPage->GetSize() ) );
 
     pPrintView->HidePage( pPrintView->GetPageView( pPage ) );
@@ -1335,7 +1335,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         SdrView* pDrView = GetDrawView();
 
-        if( pDrView->HasMarkedObj() )
+        if( pDrView->AreObjectsMarked() )
         {
             SfxStyleSheet* pStyleSheet = pDrView->GetStyleSheet();
             if( pStyleSheet )
