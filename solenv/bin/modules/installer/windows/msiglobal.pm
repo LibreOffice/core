@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:30:28 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:57:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -811,25 +811,20 @@ sub copy_windows_installer_files_into_installset
 {
     my ($installdir, $includepatharrayref) = @_;
 
-    # the source directory is defined with the parameter "-msifiles"
-    # in the variable $installer::globals::msifilespath
-
     @copyfile = ();
     push(@copyfile, "instmsia.exe");
     push(@copyfile, "instmsiw.exe");
-    push(@copyfile, "Installer.exe");
+    push(@copyfile, "loader2.exe");
 
     for ( my $i = 0; $i <= $#copyfile; $i++ )
     {
-        # my $sourcefile = $installer::globals::msifilespath . $installer::globals::separator . $copyfile[$i];
-
         my $filename = $copyfile[$i];
         my $sourcefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
 
         if ( ! -f $$sourcefileref ) { installer::exiter::exit_program("ERROR: msi file not found: $$sourcefileref !", "copy_windows_installer_files_into_installset"); }
 
         my $destfile;
-        if ( $copyfile[$i] eq "Installer.exe" ) { $destfile = "setup.exe"; }    # renaming the loader
+        if ( $copyfile[$i] eq "loader2.exe" ) { $destfile = "setup.exe"; }  # renaming the loader
         else { $destfile = $copyfile[$i]; }
 
         $destfile = $installdir . $installer::globals::separator . $destfile;
@@ -847,12 +842,14 @@ sub copy_child_projects_into_installset
 {
     my ($installdir) = @_;
 
-    # the source directory is defined with the parameter "-msifiles"
-    # in the variable $installer::globals::msifilespath
+    # the source directory is defined with the parameter "-msichild"
+    # in the variable $installer::globals::msichildpath
+
+    if ( $installer::globals::msichildpath eq "" ) { installer::exiter::exit_program("ERROR: Path for child products not set!", "copy_child_projects_into_installset"); }
 
     # adding Java
 
-    my $sourcefile = $installer::globals::msifilespath . $installer::globals::separator . "java2" . $installer::globals::separator . $installer::globals::javafilename;
+    my $sourcefile = $installer::globals::msichildpath . $installer::globals::separator . "java2" . $installer::globals::separator . $installer::globals::javafilename;
     if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java child project file not found: $sourcefile !", "copy_child_projects_into_installset"); }
     my $destdir = $installdir . $installer::globals::separator . "java";
     if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
@@ -860,7 +857,7 @@ sub copy_child_projects_into_installset
 
     # adding Adabas ( complete directory )
 
-    my $sourcedir = $installer::globals::msifilespath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
+    my $sourcedir = $installer::globals::msichildpath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
     if ( ! -d $sourcedir ) { installer::exiter::exit_program("ERROR: Adabas child project file not found: $sourcedir !", "copy_child_projects_into_installset"); }
     $destdir = $installdir . $installer::globals::separator . "adabas";
     if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
