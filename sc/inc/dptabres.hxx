@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 17:43:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef SC_DPTABRES_HXX
 #define SC_DPTABRES_HXX
 
+#include <vector>
+
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -84,6 +86,10 @@
 #include "global.hxx"       // enum ScSubTotalFunc
 #endif
 
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldReference;
+} } } }
+
 
 class ScAddress;
 class ScDocument;
@@ -92,35 +98,142 @@ class ScDPDimension;
 class ScDPLevel;
 class ScDPMember;
 class ScDPAggData;
+class ScDPResultMember;
 
 struct ScDPValueData;
+
+typedef ::std::vector<sal_Int32> ScMemberSortOrder;
+
+//
+//  selected subtotal information, passed down the dimensions
+//
+
+struct ScDPSubTotalState
+{
+    ScSubTotalFunc eColForce;
+    ScSubTotalFunc eRowForce;
+    long nColSubTotalFunc;
+    long nRowSubTotalFunc;
+
+    ScDPSubTotalState() :
+        eColForce( SUBTOTAL_FUNC_NONE ),
+        eRowForce( SUBTOTAL_FUNC_NONE ),
+        nColSubTotalFunc( -1 ),
+        nRowSubTotalFunc( -1 )
+    {}
+};
+
+//
+//  indexes when calculating running totals
+//  Col/RowVisible: simple counts from 0 - without sort order applied - visible index
+//                  (only used for running total / relative index)
+//  Col/RowIndexes: with sort order applied - member index
+//                  (used otherwise - so other members' children can be accessed)
+//
+
+class ScDPRunningTotalState
+{
+    ScDPResultMember*   pColResRoot;
+    ScDPResultMember*   pRowResRoot;
+    long*               pColVisible;
+    long*               pColIndexes;
+    long*               pRowVisible;
+    long*               pRowIndexes;
+    long                nColIndexPos;
+    long                nRowIndexPos;
+
+public:
+            ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot );
+            ~ScDPRunningTotalState();
+
+    ScDPResultMember*   GetColResRoot() const   { return pColResRoot; }
+    ScDPResultMember*   GetRowResRoot() const   { return pRowResRoot; }
+
+    const long*         GetColVisible() const   { return pColVisible; }
+    const long*         GetColIndexes() const   { return pColIndexes; }
+    const long*         GetRowVisible() const   { return pRowVisible; }
+    const long*         GetRowIndexes() const   { return pRowIndexes; }
+
+    void    AddColIndex( long nVisible, long nSorted );
+    void    AddRowIndex( long nVisible, long nSorted );
+    void    RemoveColIndex();
+    void    RemoveRowIndex();
+};
+
+struct ScDPRelativePos
+{
+    long    nBasePos;       // simple count, without sort order applied
+    long    nDirection;
+
+    ScDPRelativePos( long nBase, long nDir );
+};
 
 //
 //  aggregated data
 //! separate header file?
 //
 
+//  Possible values for the nCount member:
+//  (greater than 0 counts the collected values)
+const long SC_DPAGG_EMPTY        =  0;  // empty during data collection
+const long SC_DPAGG_DATA_ERROR   = -1;  // error during data collection
+const long SC_DPAGG_RESULT_EMPTY = -2;  // empty result calculated
+const long SC_DPAGG_RESULT_VALID = -3;  // valid result calculated
+const long SC_DPAGG_RESULT_ERROR = -4;  // error in calculated result
+
 class ScDPAggData
 {
 private:
     double          fVal;
-    double          fSquare;
+    double          fAux;
     long            nCount;
     ScDPAggData*    pChild;
 
 public:
-            ScDPAggData() : fVal(0.0), fSquare(0.0), nCount(0), pChild(NULL) {}
+            ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(NULL) {}
             ~ScDPAggData() { delete pChild; }
 
-    void    Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc );
-    double  GetResult( ScSubTotalFunc eFunc ) const;
-    BOOL    HasError( ScSubTotalFunc eFunc ) const;
-    BOOL    HasData() const                         { return ( nCount != 0 ); }
+    void    Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
+    void    Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
+    BOOL    IsCalculated() const;
+
+    double  GetResult() const;
+    BOOL    HasError() const;
+    BOOL    HasData() const;
+
+    void    SetResult( double fNew );
+    void    SetEmpty( BOOL bSet );
+    void    SetError();
+
+    double  GetAuxiliary() const;
+    void    SetAuxiliary( double fNew );
+
+    void    Reset();        // also deletes children
 
     const ScDPAggData*  GetExistingChild() const    { return pChild; }
     ScDPAggData*        GetChild();
 };
 
+//
+//  Row and grand total state, passed down (column total is at result member)
+//
+
+class ScDPRowTotals
+{
+    ScDPAggData aRowTotal;
+    ScDPAggData aGrandTotal;
+    BOOL        bIsInColRoot;
+
+public:
+            ScDPRowTotals();
+            ~ScDPRowTotals();
+
+    ScDPAggData*    GetRowTotal( long nMeasure );
+    ScDPAggData*    GetGrandTotal( long nMeasure );
+
+    BOOL            IsInColRoot() const     { return bIsInColRoot; }
+    void            SetInColRoot(BOOL bSet) { bIsInColRoot = bSet; }
+};
 
 // --------------------------------------------------------------------
 //
@@ -134,7 +247,6 @@ class ScDPDataDimension;
 class ScDPDataMember;
 struct ScDPItemData;
 
-
 #define SC_DPMEASURE_ALL    -1
 #define SC_DPMEASURE_ANY    -2
 
@@ -146,25 +258,35 @@ private:
 
     long                    nMeasCount;
     ScSubTotalFunc*         pMeasFuncs;
+    ::com::sun::star::sheet::DataPilotFieldReference* pMeasRefs;
+    USHORT*                 pMeasRefOrient;
     String*                 pMeasNames;
+    BOOL                    bLateInit;
     BOOL                    bDataAtCol;
     BOOL                    bDataAtRow;
+
+    //! add "displayed values" settings
 
 public:
                         ScDPResultData( ScDPSource* pSrc );     //! Ref
                         ~ScDPResultData();
 
     void                SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
-                                        const String* pNames );
+                                        const ::com::sun::star::sheet::DataPilotFieldReference* pRefs,
+                                        const USHORT* pRefOrient, const String* pNames );
     void                SetDataLayoutOrientation( USHORT nOrient );
+    void                SetLateInit( BOOL bSet );
 
     long                GetMeasureCount() const     { return nMeasCount; }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
     String              GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc) const;
     String              GetMeasureDimensionName(long nMeasure) const;
+    const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
+    USHORT              GetMeasureRefOrient(long nMeasure) const;
 
     BOOL                IsDataAtCol() const             { return bDataAtCol; }
     BOOL                IsDataAtRow() const             { return bDataAtRow; }
+    BOOL                IsLateInit() const              { return bLateInit; }
 
     long                GetColStartMeasure() const;
     long                GetRowStartMeasure() const;
@@ -185,7 +307,10 @@ private:
     ScDPDataMember*         pDataRoot;
     BOOL                    bHasElements;
     BOOL                    bForceSubTotal;
+    BOOL                    bHasHiddenDetails;
     BOOL                    bInitialized;
+    BOOL                    bAutoHidden;
+    ScDPAggData             aColTotal;              // to store column totals
 
 public:
                         ScDPResultMember( ScDPResultData* pData, ScDPDimension* pDim,
@@ -200,13 +325,16 @@ public:
     BOOL                IsValid() const;
     BOOL                IsVisible() const;
     long                GetSize(long nMeasure) const;
+    BOOL                HasHiddenDetails() const;
+    BOOL                IsSubTotalInTitle(long nMeasure) const;
 
 //  BOOL                SubTotalEnabled() const;
-    long                GetSubTotalCount() const;
+    long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
 
     BOOL                IsNamedItem( const ScDPItemData& r ) const;
 
     void                SetHasElements()    { bHasElements = TRUE; }
+    void                SetAutoHidden()     { bAutoHidden = TRUE; }
 
     void                ProcessData( const ScDPItemData* pChildMembers,
                                         ScDPResultDimension* pDataDim,
@@ -225,12 +353,27 @@ public:
                                             com::sun::star::sheet::DataResult> >& rSequence,
                                     long& rRow, long nMeasure ) const;
 
+    void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
+    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
+                                                ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const;
+
+    void                SortMembers( ScDPResultMember* pRefMember );
+    void                DoAutoShow( ScDPResultMember* pRefMember );
+
+    void                ResetResults( BOOL bRoot );
+
+    void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+
                         //! this will be removed!
     const ScDPResultDimension*  GetChildDimension() const   { return pChildDimension; }
     ScDPResultDimension*        GetChildDimension()         { return pChildDimension; }
 
+    ScDPDataMember*         GetDataRoot() const             { return pDataRoot; }
+
     ScDPDimension*          GetParentDim()      { return pParentDim; }          //! Ref
     ScDPLevel*              GetParentLevel()    { return pParentLevel; }        //! Ref
+
+    ScDPAggData*        GetColTotal( long nMeasure ) const;
 };
 
 class ScDPDataMember
@@ -241,7 +384,7 @@ private:
     ScDPDataDimension*      pChildDimension;
     ScDPAggData             aAggregate;
 
-    void                UpdateValues(const ScDPValueData* pValues);
+    void                UpdateValues( const ScDPValueData* pValues, const ScDPSubTotalState& rSubState );
 
 public:
                         ScDPDataMember( ScDPResultData* pData, ScDPResultMember* pRes );
@@ -250,18 +393,38 @@ public:
     void                InitFrom( ScDPResultDimension* pDim );
 
     String              GetName() const;
-    BOOL                HasData(long nMeasure) const;
+    BOOL                IsVisible() const;
+    BOOL                HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
 
     BOOL                IsNamedItem( const ScDPItemData& r ) const;
 
-    void                ProcessData( const ScDPItemData* pChildMembers, const ScDPValueData* pValues );
+    BOOL                HasHiddenDetails() const;
 
-    BOOL                HasError(long nMeasure) const;
-    double              GetAggregate(long nMeasure) const;
+    void                ProcessData( const ScDPItemData* pChildMembers, const ScDPValueData* pValues,
+                                    const ScDPSubTotalState& rSubState );
+
+    BOOL                HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    const ScDPAggData*  GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    ScDPAggData*        GetAggData( long nMeasure, const ScDPSubTotalState& rSubState );
 
     void                FillDataRow( const ScDPResultMember* pRefMember,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
-                                    long& rCol, long nMeasure, BOOL bIsSubTotalRow ) const;
+                                    long& rCol, long nMeasure, BOOL bIsSubTotalRow,
+                                    const ScDPSubTotalState& rSubState ) const;
+
+    void                UpdateDataRow( const ScDPResultMember* pRefMember, long nMeasure, BOOL bIsSubTotalRow,
+                                    const ScDPSubTotalState& rSubState );
+    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure, BOOL bIsSubTotalRow,
+                                    const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
+                                    ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent );
+
+    void                SortMembers( ScDPResultMember* pRefMember );
+    void                DoAutoShow( ScDPResultMember* pRefMember );
+
+    void                ResetResults();
+
+    void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
 
                         //! this will be removed!
     const ScDPDataDimension*    GetChildDimension() const   { return pChildDimension; }
@@ -284,7 +447,16 @@ class ScDPResultDimension
 private:
     ScDPResultData*         pResultData;
     ScDPResultMembers       aMembers;
+    String                  aDimensionName;     //! or ptr to IntDimension?
     BOOL                    bIsDataLayout;      //! or ptr to IntDimension?
+    BOOL                    bSortByData;
+    BOOL                    bSortAscending;
+    long                    nSortMeasure;
+    ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
+    BOOL                    bAutoShow;
+    BOOL                    bAutoTopItems;
+    long                    nAutoMeasure;
+    long                    nAutoCount;
 
 public:
                         ScDPResultDimension( ScDPResultData* pData );
@@ -314,11 +486,45 @@ public:
                                             com::sun::star::sheet::DataResult> >& rSequence,
                                     long nRow, long nMeasure ) const;
 
+    void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
+    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
+                                            ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const;
+
+    void                SortMembers( ScDPResultMember* pRefMember );
+    long                GetSortedIndex( long nUnsorted ) const;
+
+    void                DoAutoShow( ScDPResultMember* pRefMember );
+
+    void                ResetResults();
+
+                        //  called for the reference dimension
+    ScDPDataMember*     GetRowReferenceMember( const ScDPRelativePos* pMemberPos, const String* pName,
+                                    const long* pRowIndexes, const long* pColIndexes ) const;
+
+                        //  uses row root member from ScDPRunningTotalState
+    static ScDPDataMember* GetColReferenceMember( const ScDPRelativePos* pMemberPos, const String* pName,
+                                    long nRefDimPos, const ScDPRunningTotalState& rRunning );
+
+    void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+
                         //  for ScDPDataDimension::InitFrom
     long                GetMemberCount() const;
     ScDPResultMember*   GetMember(long n) const;
 
+    const ScMemberSortOrder& GetMemberOrder() const     { return aMemberOrder; }
+    ScMemberSortOrder&  GetMemberOrder()                { return aMemberOrder; }
+
     BOOL                IsDataLayout() const    { return bIsDataLayout; }
+    String              GetName() const         { return aDimensionName; }
+
+    BOOL                IsSortByData() const    { return bSortByData; }
+    BOOL                IsSortAscending() const { return bSortAscending; }
+    long                GetSortMeasure() const  { return nSortMeasure; }
+
+    BOOL                IsAutoShow() const      { return bAutoShow; }
+    BOOL                IsAutoTopItems() const  { return bAutoTopItems; }
+    long                GetAutoMeasure() const  { return nAutoMeasure; }
+    long                GetAutoCount() const    { return nAutoCount; }
 
     ScDPResultDimension* GetFirstChildDimension() const;
 };
@@ -327,6 +533,7 @@ class ScDPDataDimension
 {
 private:
     ScDPResultData*     pResultData;
+    ScDPResultDimension* pResultDimension;  // column
     ScDPDataMembers     aMembers;
     BOOL                bIsDataLayout;      //! or ptr to IntDimension?
 
@@ -335,11 +542,31 @@ public:
                         ~ScDPDataDimension();
 
     void                InitFrom( ScDPResultDimension* pDim );      // recursive
-    void                ProcessData( const ScDPItemData* pDataMembers, const ScDPValueData* pValues );
+    void                ProcessData( const ScDPItemData* pDataMembers, const ScDPValueData* pValues,
+                                    const ScDPSubTotalState& rSubState );
 
     void                FillDataRow( const ScDPResultDimension* pRefDim,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
-                                    long nCol, long nMeasure, BOOL bIsSubTotalRow ) const;
+                                    long nCol, long nMeasure, BOOL bIsSubTotalRow,
+                                    const ScDPSubTotalState& rSubState ) const;
+
+    void                UpdateDataRow( const ScDPResultDimension* pRefDim, long nMeasure, BOOL bIsSubTotalRow,
+                                    const ScDPSubTotalState& rSubState ) const;
+    void                UpdateRunningTotals( const ScDPResultDimension* pRefDim, long nMeasure, BOOL bIsSubTotalRow,
+                                    const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
+                                    ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const;
+
+    void                SortMembers( ScDPResultDimension* pRefDim );
+    long                GetSortedIndex( long nUnsorted ) const;
+
+    void                DoAutoShow( ScDPResultDimension* pRefDim );
+
+    void                ResetResults();
+
+    void                DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
+
+    long                GetMemberCount() const;
+    ScDPDataMember*     GetMember(long n) const;
 };
 
 #endif
