@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 07:12:38 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,60 +539,25 @@ void SwSrcView::Execute(SfxRequest& rReq)
             pFileDlg->SetPath( aPathOpt.GetWorkPath() );
             if( RET_OK == pFileDlg->Execute())
             {
-                String aFileName = pFileDlg->GetPath();
-
-                INetURLObject aURL( aFileName );
-                if ( INET_PROT_FILE == aURL.GetProtocol() )
+                SfxMedium aMedium( pFileDlg->GetPath(),
+                                    STREAM_WRITE | STREAM_SHARE_DENYNONE,
+                                    FALSE );
+#ifdef USED
+                // set the filter for the correct handling of
+                // extended attributes
+                SfxObjectFactory& rFac = GetDocShell()->GetFactory();
+                for( USHORT i = 0; i < rFac.GetFilterCount(); i++ )
                 {
-                    SvFileStream aCpy( aURL.PathToFileName(), STREAM_WRITE| STREAM_TRUNC );
-                    aEditWin.Write(aCpy);//, EE_FORMAT_TEXT);
-
-                    SvEaMgr *pMgr = new SvEaMgr(aCpy);
-                    SwDocShell* pDocSh = GetDocShell();
-                    SfxObjectFactory& rFac = pDocSh->GetFactory();
-                    const SfxFilter* pFilter = 0;
-                    for( USHORT i = 0; i < rFac.GetFilterCount(); i++ )
+                    const SfxFilter* pFlt = rFac.GetFilter( i );
+                    if( pFlt && pFlt->GetFilterName() == sHtml )
                     {
-                        const SfxFilter* pFlt = rFac.GetFilter( i );
-                        if( pFlt && pFlt->GetFilterName() == sHtml )
-                        {
-                            pFilter = pFlt;
-                            break;
-                        }
+                        aMedium.SetFilter( pFlt );
+                        break;
                     }
-                    if(pFilter)
-                    {
-                        String aBuffer;
-
-                        pMgr->SetComment(pDocSh->GetDocInfo().GetComment());
-#ifdef OS2
-                        if ( pFilter->GetDocIconId() )
-                        {
-                            ResId aResId(pFilter->GetDocIconId(),
-                                        rFac.GetMenuBarId()->GetResMgr());
-                            pMgr->SetIcon(aResId);
-                        }
+                }
 #endif
-                        pMgr->SetFileType(pFilter->GetTypeName().GetToken( 0, ';' ));
-                        if ( SvEaMgr::GetAppCreator(aBuffer) )
-                            pMgr->SetCreator(aBuffer);
-
-                        delete pMgr;
-
-                    }
-                    aCpy.Close();
-                }
-                else
-                {
-                    SfxMedium aMedium( aFileName, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                       FALSE, FALSE );
-                    {
-                        SvFileStream aCpy( aMedium.GetPhysicalName(), STREAM_WRITE| STREAM_TRUNC );
-                        aEditWin.Write(aCpy);//, EE_FORMAT_TEXT);
-                    }
-                    aMedium.Close();
-                    aMedium.Commit();
-                }
+                aEditWin.Write( *aMedium.GetOutStream() );
+                aMedium.Commit();
             }
             delete pFileDlg;
         }
