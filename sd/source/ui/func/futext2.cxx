@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 10:14:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "futext.hxx"
+
 #include <svx/editdata.hxx>
 #include <offmgr/osplcfg.hxx>
 #ifndef _OFF_APP_HXX //autogen
@@ -73,13 +75,14 @@
 
 #include <comphelper/extract.hxx>
 
-#include "futext.hxx"
 #include "app.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "optsitem.hxx"
 
 using namespace ::com::sun::star;
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -103,4 +106,5 @@ void FuText::SetSpellOptions( ULONG& rCntrl )
         rCntrl &= ~EE_CNTRL_ONLINESPELLING;
 }
 
+} // end of namespace sd
 
