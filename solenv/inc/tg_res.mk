@@ -9,7 +9,7 @@ $(RCTARGET): $(RCFILES) 		\
 .IF "$(NO_REC_RES)"!=""
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .ENDIF
-    $(RC) $(INCLUDE) $(RCLANGFLAGS) $(RCFLAGS)
+    $(RC) $(INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .IF "$(NO_REC_RES)"!=""
     @+echo > $(RES)$/$(@:f)
 .ENDIF
