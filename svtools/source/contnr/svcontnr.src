@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svcontnr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:07:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ String STR_SVT_ACC_DESC_TABLISTBOX
     Text[ danish ] = "Row: %1, Column: %2";
     Text[ swedish ] = "Rad: %1, kolumn: %2";
     Text[ polish ] = "Row: %1, Column: %2";
-    Text[ portuguese_brazilian ] = "Row: %1, Column: %2";
+    Text[ portuguese_brazilian ] = "Linha: %1, Coluna: %2";
     Text[ japanese ] = "行: %1, 列: %2";
     Text[ korean ] = "행: %1, 열: %2";
     Text[ chinese_simplified ] = "行：%1, 列：%2";
@@ -131,7 +131,7 @@ String STR_SVT_ACC_DESC_FILEVIEW
     Text[ danish ] = ", Type: %1, URL: %2";
     Text[ swedish ] = ", typ: %1, URL: %2";
     Text[ polish ] = ", Type: %1, URL: %2";
-    Text[ portuguese_brazilian ] = ", Type: %1, URL: %2";
+    Text[ portuguese_brazilian ] = ", Tipo: %1, URL: %2";
     Text[ japanese ] = ", タイプ: %1, URL: %2";
     Text[ korean ] = ", 유형: %1, URL: %2";
     Text[ chinese_simplified ] = "，类型：%1, URL: %2";
@@ -228,10 +228,11 @@ String STR_SVT_ACC_EMPTY_FIELD
     Text[ thai ] = "Empty Field";
     Text[ czech ] = "Prázdné pole";
     Text[ hebrew ] = "Empty Field";
-    Text[ portuguese_brazilian ] = "Empty Field";
+    Text[ portuguese_brazilian ] = "Campo vazio";
     Text[ hindi ] = "Empty Field";
     Text[ slovak ] = "Prázdne pole";
 };
+
 
 
 
