@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:42:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3168,7 +3168,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ dutch ] = "Tabsto~ps" ;
         Text [ spanish ] = "Tabulad~ores" ;
         Text [ english_us ] = "Ta~bs" ;
-        Text[ chinese_simplified ] = "制表符(~B)";
+        Text[ chinese_simplified ] = "制表符";
         Text[ russian ] = "���������";
         Text[ polish ] = "Tabulatory";
         Text[ japanese ] = "タブ(~B)";
@@ -3229,6 +3229,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Aus~geblendeter Text" ;
         Text [ english_us ] = "Hidden text" ;
+        Text[ chinese_simplified ] = "隐入的文字";
     };
     CheckBox CB_FLD_HIDDEN
     {
@@ -3236,6 +3237,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Feldbefehle: Verste~ckter Text" ;
         Text [ english_us ] = "Fields: Hidden te~xt" ;
+        Text[ chinese_simplified ] = "字段：隐入的文字";
     };
     CheckBox CB_FLD_HIDDEN_PARA
     {
@@ -3243,6 +3245,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Feldbefehle: ~Versteckte Abs�tze" ;
         Text [ english_us ] = "Fields: Hidden p~aragraphs" ;
+        Text[ chinese_simplified ] = "字段：隐入的段落";
     };
     FixedLine FL_SEPARATOR_SHDW
     {
