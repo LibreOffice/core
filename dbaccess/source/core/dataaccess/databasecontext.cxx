@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:42:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 16:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,39 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     Reference< XInterface > xNewObject = *(new ODatabaseSource(*this, aObjectBase, _rName, m_xServiceManager));
     m_aDatabaseObjects[_rName] = WeakReferenceHelper(xNewObject);
 
+    // check if we have any session persistent properties to initialize the new object with
+    if (m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_rName))
+    {   // yes, we do ....
+        Reference< XPropertySet > xDSProps(xNewObject, UNO_QUERY);
+        if (xDSProps.is())
+        {
+            const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_rName];
+            const PropertyValue* pSessionPersistentProps = rSessionPersistentProps.getConstArray();
+
+            for (sal_Int32 i=0; i<rSessionPersistentProps.getLength(); ++i, ++pSessionPersistentProps)
+            {
+                try
+                {
+                    xDSProps->setPropertyValue(pSessionPersistentProps->Name, pSessionPersistentProps->Value);
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("ODatabaseContext::getRegisteredObject: could not set a session-persistent property on the data source!");
+                }
+            }
+        }
+        else
+            DBG_ERROR("ODatabaseContext::getRegisteredObject: missing an interface!");
+    }
+
+    // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
+    // properties
+    Reference< XComponent > xComponent(xNewObject, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast<XEventListener*>(this));
+    else
+        DBG_ERROR("ODatabaseContext::getRegisteredObject: missing the XComponent interface!");
+
     return xNewObject;
 }
 
@@ -359,6 +392,72 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 
     // add the object to our bag
     m_aDatabaseObjects[_rName] = WeakReferenceHelper(_rxObject);
+
+    // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
+    // properties
+    Reference< XComponent > xComponent(_rxObject, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast<XEventListener*>(this));
+    else
+        DBG_ERROR("ODatabaseContext::registerObject: missing the XComponent interface!");
+
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::disposing( const EventObject& _rSource ) throw(RuntimeException)
+{
+    Reference< XInterface > xSource(_rSource.Source, UNO_QUERY);
+        // the query is for normalizing, else it could be XInterface part of any XInterface-derived concrete interface
+        // the object implements
+    ConstObjectCacheIterator aLookup;
+    for (   aLookup = m_aDatabaseObjects.begin();
+            aLookup != m_aDatabaseObjects.end();
+            ++aLookup
+        )
+    {
+        if (Reference< XInterface >(aLookup->second.get(), UNO_QUERY).get() == xSource.get())
+            break;
+    }
+    DBG_ASSERT(aLookup != m_aDatabaseObjects.end(), "ODatabaseContext::disposing(EventObject): where does this come from (not from my data sources)?");
+    if (aLookup != m_aDatabaseObjects.end())
+    {
+        Sequence< PropertyValue > aRememberProps;
+
+        try
+        {
+            // get the info about the properties, check which ones are transient and not readonly
+            Reference< XPropertySet > xSourceProps(xSource, UNO_QUERY);
+            Reference< XPropertySetInfo > xSetInfo;
+            if (xSourceProps.is())
+                xSetInfo = xSourceProps->getPropertySetInfo();
+            Sequence< Property > aProperties;
+            if (xSetInfo.is())
+                aProperties = xSetInfo->getProperties();
+
+            if (aProperties.getLength())
+            {
+                const Property* pProperties = aProperties.getConstArray();
+                for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
+                {
+                    if  (   ((pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0)
+                        &&  ((pProperties->Attributes & PropertyAttribute::READONLY) == 0)
+                        )
+                    {
+                        // found such a property
+                        sal_Int32 nTilNow = aRememberProps.getLength();
+                        aRememberProps.realloc(nTilNow + 1);
+                        aRememberProps[nTilNow] = PropertyValue(pProperties->Name, 0, xSourceProps->getPropertyValue(pProperties->Name), PropertyState_DIRECT_VALUE);
+                    }
+                }
+            }
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("ODatabaseContext::disposing(EventObject): could not collect the session-persistent properties!");
+        }
+
+        m_aDatasourceProperties[aLookup->first] = aRememberProps;
+    }
 }
 
 //------------------------------------------------------------------------------

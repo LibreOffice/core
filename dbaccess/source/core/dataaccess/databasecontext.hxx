@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 16:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,17 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
 #endif
 #ifndef _DBA_REGISTRATION_HELPER_HXX_
 #include "registrationhelper.hxx"
@@ -119,11 +122,12 @@ namespace dbaccess
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::lang::XServiceInfo,
-                                          ::com::sun::star::container::XEnumerationAccess,
-                                          ::com::sun::star::container::XNameAccess,
-                                          ::com::sun::star::uno::XNamingService,
-                                          ::com::sun::star::lang::XUnoTunnel > DatabaseAccessContext_Base;
+typedef ::cppu::WeakComponentImplHelper6    <   ::com::sun::star::lang::XServiceInfo
+                                            ,   ::com::sun::star::container::XEnumerationAccess
+                                            ,   ::com::sun::star::container::XNameAccess
+                                            ,   ::com::sun::star::uno::XNamingService
+                                            ,   ::com::sun::star::lang::XEventListener
+                                            ,   ::com::sun::star::lang::XUnoTunnel > DatabaseAccessContext_Base;
 
 class ODatabaseContext
             :public DatabaseAccessContext_Base
@@ -136,6 +140,14 @@ protected:
 
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::WeakReferenceHelper, ObjectCache );
     ObjectCache     m_aDatabaseObjects;
+
+    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >, PropertyCache );
+    PropertyCache   m_aDatasourceProperties;
+        // as we hold our data sources weak, we have to cache all properties on the data sources which are
+        // transient but stored as long as the session lasts. The database context is the session (as it lives
+        // as long as the session does), but the data sources may die before the session does, and then be
+        // recreated afterwards. So it's our (the context's) responsibility to store the session-persistent
+        // properties.
 
 public:
     ODatabaseContext(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
@@ -176,6 +188,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
 private:
     /// get the node a data source is based on
