@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:38:22 $
+#   last change: $Author: obo $ $Date: 2003-10-21 08:44:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,5 +138,7 @@ NOOPTFILES=$(SLO)$/fmprop.obj
 SVXLIGHTOBJFILES= \
     $(OBJ)$/fmpage.obj      \
     $(OBJ)$/fmmodel.obj
+
+# --- Targets ----------------------------------
 
 .INCLUDE :  target.mk
