@@ -1,8 +1,9 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\framework
 mkdir: %_DEST%\xml%_EXT%\uiconfig
-mkdir: %_DEST%\xml%_EXT%\uiconfig\startmodule
-mkdir: %_DEST%\xml%_EXT%\uiconfig\startmodule\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\StartModule
+mkdir: %_DEST%\xml%_EXT%\uiconfig\StartModule\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\StartModule\toolbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*
@@ -35,6 +36,7 @@ hedabu: ..\inc\classes\addonsoptions.hxx %_DEST%\inc%_EXT%\framework\addonsoptio
 hedabu: ..\inc\classes\addonmenu.hxx %_DEST%\inc%_EXT%\framework\addonmenu.hxx
 hedabu: ..\inc\classes\sfxhelperfunctions.hxx %_DEST%\inc%_EXT%\framework\sfxhelperfunctions.hxx
 
-..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\startmodule\menubar\*.xml
+..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\StartModule\menubar\*.xml
+..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\StartModule\toolbar\*.xml
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
