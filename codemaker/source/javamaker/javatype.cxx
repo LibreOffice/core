@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-02-05 16:08:17 $
+ *  last change: $Author: jsc $ $Date: 2001-03-06 08:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1745,7 +1745,7 @@ sal_Bool EnumType::dumpFile(FileStream& o)
     RTFieldAccess   access = RT_ACCESS_INVALID;
     RTConstValue    constValue;
     OString         fieldName;
-    sal_uInt32      value=0;
+    sal_Int32       value=0;
 
     sal_uInt16 i;
     for (i=0; i < fieldCount; i++)
@@ -1758,8 +1758,8 @@ sal_Bool EnumType::dumpFile(FileStream& o)
         fieldName = m_reader.getFieldName(i);
         constValue = m_reader.getFieldConstValue(i);
 
-        if (constValue.m_type == RT_TYPE_INT32)
-            value = constValue.m_value.aLong;
+        if (constValue.m_type == RT_TYPE_UINT32)
+            value = (sal_Int32)constValue.m_value.aULong;
         else
             value++;
 
@@ -1888,7 +1888,8 @@ sal_Bool produceType(const OString& typeName,
                 InterfaceType iType(reader, typeName, typeMgr, typeDependencies);
                 ret = iType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
-                ret = iType.dumpDependedTypes(pOptions);
+                if ( !pOptions->isValid("-nD") )
+                    ret = iType.dumpDependedTypes(pOptions);
             }
             break;
         case RT_TYPE_MODULE:
@@ -1907,7 +1908,8 @@ sal_Bool produceType(const OString& typeName,
                 StructureType sType(reader, typeName, typeMgr, typeDependencies);
                 ret = sType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
-                ret = sType.dumpDependedTypes(pOptions);
+                if ( !pOptions->isValid("-nD") )
+                    ret = sType.dumpDependedTypes(pOptions);
             }
             break;
         case RT_TYPE_ENUM:
@@ -1915,7 +1917,8 @@ sal_Bool produceType(const OString& typeName,
                 EnumType enType(reader, typeName, typeMgr, typeDependencies);
                 ret = enType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
-                ret = enType.dumpDependedTypes(pOptions);
+                if ( !pOptions->isValid("-nD") )
+                    ret = enType.dumpDependedTypes(pOptions);
             }
             break;
         case RT_TYPE_EXCEPTION:
@@ -1923,7 +1926,8 @@ sal_Bool produceType(const OString& typeName,
                 ExceptionType eType(reader, typeName, typeMgr, typeDependencies);
                 ret = eType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
-                ret = eType.dumpDependedTypes(pOptions);
+                if ( !pOptions->isValid("-nD") )
+                    ret = eType.dumpDependedTypes(pOptions);
             }
             break;
         case RT_TYPE_CONSTANTS:
@@ -1939,7 +1943,8 @@ sal_Bool produceType(const OString& typeName,
                 TypeDefType tdType(reader, typeName, typeMgr, typeDependencies);
                 ret = tdType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
-                ret = tdType.dumpDependedTypes(pOptions);
+                if ( !pOptions->isValid("-nD") )
+                    ret = tdType.dumpDependedTypes(pOptions);
             }
             break;
         case RT_TYPE_SERVICE:

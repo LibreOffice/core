@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-06 08:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,16 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     m_options["-B"] = OString(s);
                     break;
+                case 'n':
+                    if (av[i][2] != 'D' || av[i][3] != '\0')
+                    {
+                        OString tmp("'-nD', please check");
+                            tmp += " your input '" + OString(av[i]) + "'";
+                        throw IllegalArgument(tmp);
+                    }
+
+                    m_options["-nD"] = OString("");
+                    break;
                 case 'T':
                     if (av[i][2] == '\0')
                     {
@@ -225,11 +235,12 @@ OString JavaOptions::prepareHelp()
     help += "    -O<path>   = path describes the root directory for the generated output.\n";
     help += "                 The output directory tree is generated under this directory.\n";
     help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
-    help += "      [t1;...]   type is generated. If no '-T' option is specified,\n";
-    help += "                 then output for all types is generated.\n";
+    help += "      [t1;...]   type and all dependent types are generated. If no '-T' option is \n";
+    help += "                 specified, then output for all types is generated.\n";
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
+    help += "    -nD        = no dependent types are generated.\n";
     help += prepareVersion();
 
     return help;
