@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2000-12-13 16:27:47 $
+#   last change: $Author: rt $ $Date: 2000-12-19 11:28:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,9 +113,8 @@ DEF1EXPORTFILE=	exports.dxp
 SHL2TARGET=		fwl$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
 
-SHL2OBJS=		$(SLO)$/registertemp.obj
-
-SHL2LIBS=		$(SLB)$/fwk_baehservices.lib
+SHL2OBJS=		$(SLO)$/registertemp.obj			\
+                $(SLO)$/mediatypedetectionhelper.obj
 
 SHL2STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
