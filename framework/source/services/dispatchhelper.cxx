@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:40:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,13 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Reference< css::frame::XDispatch >          xDispatch       = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
     css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyDispatch (xDispatch, css::uno::UNO_QUERY);
 
+    // make sure that synchronous execution is used (if possible)
+    css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
+    sal_Int32 nLength = lArguments.getLength();
+    aArguments.realloc( nLength + 1 );
+    aArguments[ nLength ].Name = ::rtl::OUString::createFromAscii("SynchronMode");
+    aArguments[ nLength ].Value <<= (sal_Bool) sal_True;
+
     css::uno::Any aResult;
     if (xNotifyDispatch.is())
     {
@@ -221,15 +228,16 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         /* } SAFE */
 
         // dispatch it and wait for a notification
-        xNotifyDispatch->dispatchWithNotification(aURL, lArguments, xListener);
-        m_aBlock.wait();
+        // TODO/MBA: waiting in main thread?!
+        xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
+        //m_aBlock.wait();
         aResult = m_aResult;
     }
     else
     if (xDispatch.is())
     {
         // dispatch it without any chance to get a result
-        xDispatch->dispatch(aURL,lArguments);
+        xDispatch->dispatch( aURL, aArguments );
     }
 
     return aResult;
