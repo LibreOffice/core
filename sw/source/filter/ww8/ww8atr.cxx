@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:10:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,7 +1654,7 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 
                         if( 3 == nRet )
                             aFillTxt = aTxt;
-                        else if( 4 == nRet )
+                        else if ((4 == nRet) || (2 == nRet)) //#109414#
                             aFillTxt = '\t';
                         else
                             aFillTxt.Erase();
