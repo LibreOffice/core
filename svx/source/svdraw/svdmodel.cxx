@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:53:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,132 +208,132 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrModelInfo::SdrModelInfo(FASTBOOL bInit):
-    aCreationDate(Date(0),Time(0)),
-    aLastWriteDate(Date(0),Time(0)),
-    aLastReadDate(Date(0),Time(0)),
-    aLastPrintDate(Date(0),Time(0)),
-    eCreationCharSet(RTL_TEXTENCODING_DONTKNOW),
-    eLastWriteCharSet(RTL_TEXTENCODING_DONTKNOW),
-    eLastReadCharSet(RTL_TEXTENCODING_DONTKNOW)
-{
-    if (bInit)
-    {
-        aCreationDate = DateTime();
-        eCreationCharSet = gsl_getSystemTextEncoding();
-    }
-}
+//BFS01SdrModelInfo::SdrModelInfo(FASTBOOL bInit):
+//BFS01 aCreationDate(Date(0),Time(0)),
+//BFS01 aLastWriteDate(Date(0),Time(0)),
+//BFS01 aLastReadDate(Date(0),Time(0)),
+//BFS01 aLastPrintDate(Date(0),Time(0)),
+//BFS01 eCreationCharSet(RTL_TEXTENCODING_DONTKNOW),
+//BFS01 eLastWriteCharSet(RTL_TEXTENCODING_DONTKNOW),
+//BFS01 eLastReadCharSet(RTL_TEXTENCODING_DONTKNOW)
+//BFS01{
+//BFS01 if (bInit)
+//BFS01 {
+//BFS01     aCreationDate = DateTime();
+//BFS01     eCreationCharSet = gsl_getSystemTextEncoding();
+//BFS01 }
+//BFS01}
 
-SvStream& operator<<(SvStream& rOut, const SdrModelInfo& rModInfo)
-{
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrModelInfo");
-#endif
-    rOut<<UINT32(rModInfo.aCreationDate.GetDate());
-    rOut<<UINT32(rModInfo.aCreationDate.GetTime());
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrModelInfo& rModInfo)
+//BFS01{
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrModelInfo");
+//BFS01#endif
+//BFS01 rOut<<UINT32(rModInfo.aCreationDate.GetDate());
+//BFS01 rOut<<UINT32(rModInfo.aCreationDate.GetTime());
+//BFS01
+//BFS01 // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eCreationCharSet ) );
+//BFS01 rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eCreationCharSet, (sal_uInt16)rOut.GetVersion()));
+//BFS01
+//BFS01 /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
+//BFS01    We just have to write anythink in the file for compatibility:
+//BFS01         eCreationGUI    eLastWriteGUI   eLastReadGUI
+//BFS01         eCreationCPU    eLastWriteCPU   eLastReadCPU
+//BFS01         eCreationSys    eLastWriteSys   eLastReadSys
+//BFS01
+//BFS01
+//BFS01 */
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationGUI);
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationCPU);
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationSys);
+//BFS01
+//BFS01 rOut<<UINT32(rModInfo.aLastWriteDate.GetDate());
+//BFS01 rOut<<UINT32(rModInfo.aLastWriteDate.GetTime());
+//BFS01
+//BFS01 // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastWriteCharSet ) );
+//BFS01 rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastWriteCharSet, (sal_uInt16)rOut.GetVersion()));
+//BFS01
+//BFS01 // see comment above
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteGUI);
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteCPU);
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteSys);
+//BFS01
+//BFS01 rOut<<UINT32(rModInfo.aLastReadDate.GetDate());
+//BFS01 rOut<<UINT32(rModInfo.aLastReadDate.GetTime());
+//BFS01
+//BFS01 // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastReadCharSet ) );
+//BFS01 rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastReadCharSet, (sal_uInt16)rOut.GetVersion()));
+//BFS01
+//BFS01 // see comment above
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadGUI);
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadCPU);
+//BFS01 rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadSys);
+//BFS01
+//BFS01 rOut<<UINT32(rModInfo.aLastPrintDate.GetDate());
+//BFS01 rOut<<UINT32(rModInfo.aLastPrintDate.GetTime());
+//BFS01 return rOut;
+//BFS01}
 
-    // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eCreationCharSet ) );
-    rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eCreationCharSet, (sal_uInt16)rOut.GetVersion()));
-
-    /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
-       We just have to write anythink in the file for compatibility:
-            eCreationGUI    eLastWriteGUI   eLastReadGUI
-            eCreationCPU    eLastWriteCPU   eLastReadCPU
-            eCreationSys    eLastWriteSys   eLastReadSys
-
-
-    */
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationGUI);
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationCPU);
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eCreationSys);
-
-    rOut<<UINT32(rModInfo.aLastWriteDate.GetDate());
-    rOut<<UINT32(rModInfo.aLastWriteDate.GetTime());
-
-    // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastWriteCharSet ) );
-    rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastWriteCharSet, (sal_uInt16)rOut.GetVersion()));
-
-    // see comment above
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteGUI);
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteCPU);
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteSys);
-
-    rOut<<UINT32(rModInfo.aLastReadDate.GetDate());
-    rOut<<UINT32(rModInfo.aLastReadDate.GetTime());
-
-    // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastReadCharSet ) );
-    rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastReadCharSet, (sal_uInt16)rOut.GetVersion()));
-
-    // see comment above
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadGUI);
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadCPU);
-    rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadSys);
-
-    rOut<<UINT32(rModInfo.aLastPrintDate.GetDate());
-    rOut<<UINT32(rModInfo.aLastPrintDate.GetTime());
-    return rOut;
-}
-
-SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
-{
-    if (rIn.GetError()!=0) return rIn;
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrModelInfo");
-#endif
-    UINT8  n8;
-    UINT32 n32;
-    rIn>>n32; rModInfo.aCreationDate.SetDate(n32);
-    rIn>>n32; rModInfo.aCreationDate.SetTime(n32);
-
-    // #90477# rIn>>n8;  rModInfo.eCreationCharSet=rtl_TextEncoding(n8);
-    rIn >> n8;
-    n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
-    rModInfo.eCreationCharSet = rtl_TextEncoding(n8);
-
-    /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
-       We just have to write anythink in the file for compatibility:
-            eCreationGUI    eLastWriteGUI   eLastReadGUI
-            eCreationCPU    eLastWriteCPU   eLastReadCPU
-            eCreationSys    eLastWriteSys   eLastReadSys
-
-
-    */
-    rIn>>n8;  //    rModInfo.eCreationGUI=GUIType(n8);
-    rIn>>n8;  //    rModInfo.eCreationCPU=CPUType(n8);
-    rIn>>n8;  //    rModInfo.eCreationSys=SystemType(n8);
-    rIn>>n32; rModInfo.aLastWriteDate.SetDate(n32);
-    rIn>>n32; rModInfo.aLastWriteDate.SetTime(n32);
-
-    // #90477# rIn>>n8;  rModInfo.eLastWriteCharSet=rtl_TextEncoding(n8);
-    rIn >> n8;
-    n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
-    rModInfo.eLastWriteCharSet = rtl_TextEncoding(n8);
-
-    // see comment above
-    rIn>>n8;  //    rModInfo.eLastWriteGUI=GUIType(n8);
-    rIn>>n8;  //    rModInfo.eLastWriteCPU=CPUType(n8);
-    rIn>>n8;  //    rModInfo.eLastWriteSys=SystemType(n8);
-
-    rIn>>n32; rModInfo.aLastReadDate.SetDate(n32);
-    rIn>>n32; rModInfo.aLastReadDate.SetTime(n32);
-
-    // #90477# rIn>>n8;  rModInfo.eLastReadCharSet=rtl_TextEncoding(n8);
-    rIn >> n8;
-    n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
-    rModInfo.eLastReadCharSet = rtl_TextEncoding(n8);
-
-    // see comment above
-    rIn>>n8;  //    rModInfo.eLastReadGUI=GUIType(n8);
-    rIn>>n8;  //    rModInfo.eLastReadCPU=CPUType(n8);
-    rIn>>n8;  //    rModInfo.eLastReadSys=SystemType(n8);
-
-    rIn>>n32; rModInfo.aLastPrintDate.SetDate(n32);
-    rIn>>n32; rModInfo.aLastPrintDate.SetTime(n32);
-
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrModelInfo");
+//BFS01#endif
+//BFS01 UINT8  n8;
+//BFS01 UINT32 n32;
+//BFS01 rIn>>n32; rModInfo.aCreationDate.SetDate(n32);
+//BFS01 rIn>>n32; rModInfo.aCreationDate.SetTime(n32);
+//BFS01
+//BFS01 // #90477# rIn>>n8;  rModInfo.eCreationCharSet=rtl_TextEncoding(n8);
+//BFS01 rIn >> n8;
+//BFS01 n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
+//BFS01 rModInfo.eCreationCharSet = rtl_TextEncoding(n8);
+//BFS01
+//BFS01 /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
+//BFS01    We just have to write anythink in the file for compatibility:
+//BFS01         eCreationGUI    eLastWriteGUI   eLastReadGUI
+//BFS01         eCreationCPU    eLastWriteCPU   eLastReadCPU
+//BFS01         eCreationSys    eLastWriteSys   eLastReadSys
+//BFS01
+//BFS01
+//BFS01 */
+//BFS01 rIn>>n8;  //    rModInfo.eCreationGUI=GUIType(n8);
+//BFS01 rIn>>n8;  //    rModInfo.eCreationCPU=CPUType(n8);
+//BFS01 rIn>>n8;  //    rModInfo.eCreationSys=SystemType(n8);
+//BFS01 rIn>>n32; rModInfo.aLastWriteDate.SetDate(n32);
+//BFS01 rIn>>n32; rModInfo.aLastWriteDate.SetTime(n32);
+//BFS01
+//BFS01 // #90477# rIn>>n8;  rModInfo.eLastWriteCharSet=rtl_TextEncoding(n8);
+//BFS01 rIn >> n8;
+//BFS01 n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
+//BFS01 rModInfo.eLastWriteCharSet = rtl_TextEncoding(n8);
+//BFS01
+//BFS01 // see comment above
+//BFS01 rIn>>n8;  //    rModInfo.eLastWriteGUI=GUIType(n8);
+//BFS01 rIn>>n8;  //    rModInfo.eLastWriteCPU=CPUType(n8);
+//BFS01 rIn>>n8;  //    rModInfo.eLastWriteSys=SystemType(n8);
+//BFS01
+//BFS01 rIn>>n32; rModInfo.aLastReadDate.SetDate(n32);
+//BFS01 rIn>>n32; rModInfo.aLastReadDate.SetTime(n32);
+//BFS01
+//BFS01 // #90477# rIn>>n8;  rModInfo.eLastReadCharSet=rtl_TextEncoding(n8);
+//BFS01 rIn >> n8;
+//BFS01 n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
+//BFS01 rModInfo.eLastReadCharSet = rtl_TextEncoding(n8);
+//BFS01
+//BFS01 // see comment above
+//BFS01 rIn>>n8;  //    rModInfo.eLastReadGUI=GUIType(n8);
+//BFS01 rIn>>n8;  //    rModInfo.eLastReadCPU=CPUType(n8);
+//BFS01 rIn>>n8;  //    rModInfo.eLastReadSys=SystemType(n8);
+//BFS01
+//BFS01 rIn>>n32; rModInfo.aLastPrintDate.SetDate(n32);
+//BFS01 rIn>>n32; rModInfo.aLastPrintDate.SetTime(n32);
+//BFS01
+//BFS01 return rIn;
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -362,7 +362,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     pStyleSheetPool=NULL;
     pDefaultStyleSheet=NULL;
     pLinkManager=NULL;
-    pLoadedModel=NULL;
+    //BFS01pLoadedModel=NULL;
     pUndoStack=NULL;
     pRedoStack=NULL;
     pAktPaintPV=NULL;
@@ -385,8 +385,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     bSaveOLEPreview=FALSE;
     bPasteResize=FALSE;
     bNoBitmapCaching=FALSE;
-    bLoading=FALSE;
-    bStreamingSdrModel=FALSE;
+    //BFS01bLoading=FALSE;
+//BFS04 bStreamingSdrModel=FALSE;
     bReadOnly=FALSE;
     nStreamCompressMode=COMPRESSMODE_NONE;
     nStreamNumberFormat=NUMBERFORMAT_INT_BIGENDIAN;
@@ -422,7 +422,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
 
     if ( pPool == NULL )
     {
-        pItemPool=new SdrItemPool(SDRATTR_START, SDRATTR_END, bLoadRefCounts);
+        pItemPool=new SdrItemPool(0L, bLoadRefCounts);
+        //BFS01pItemPool=new SdrItemPool(SDRATTR_START, SDRATTR_END, bLoadRefCounts);
         // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
         SfxItemPool* pOutlPool=EditEngine::CreatePool( bLoadRefCounts );
         // OutlinerPool als SecondaryPool des SdrPool
@@ -456,7 +457,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
-    aInfo(TRUE),
+//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32)
 {
@@ -469,7 +470,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCoun
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
-    aInfo(TRUE),
+//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32),
     aTablePath(rPath)
@@ -483,7 +484,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPer
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
-    aInfo(TRUE),
+//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32)
 {
@@ -496,7 +497,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtCo
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
-    aInfo(TRUE),
+//BFS01 aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32),
     aTablePath(rPath)
@@ -578,7 +579,7 @@ SdrModel::~SdrModel()
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
 
-    delete pLoadedModel;
+    //BFS01delete pLoadedModel;
 
 #ifndef SVX_LIGHT
     // Tabellen, Listen und Paletten loeschen
@@ -640,40 +641,40 @@ void SdrModel::SetReadOnly(FASTBOOL bYes)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrModel::DoProgress(ULONG nVal)
-{
-    if (aIOProgressLink.IsSet()) {
-        if (nVal==0) { // Anfang
-            USHORT nVal=0;
-            aIOProgressLink.Call(&nVal);
-            nProgressPercent=0;
-            nProgressAkt=0;
-        } else if (nVal==0xFFFFFFFF) { // Ende
-            USHORT nVal=100;
-            aIOProgressLink.Call(&nVal);
-            nProgressPercent=100;
-            nProgressAkt=nProgressMax;
-        } else if (nVal!=nProgressAkt && nProgressMax!=0) { // dazwischen
-            USHORT nPercent;
-            if (nVal>nProgressOfs) nVal-=nProgressOfs; else nVal=0;
-            if (nVal>nProgressMax) nVal=nProgressMax;
-            if (nVal<=0x00FFFFFF) nPercent=USHORT(nVal*100/nProgressMax);
-            else {
-                ULONG nBla=nProgressMax/100; // Weil sonst Ueberlauf!
-                nPercent=USHORT(nVal/=nBla);
-            }
-            if (nPercent==0) nPercent=1;
-            if (nPercent>99) nPercent=99;
-            if (nPercent>nProgressPercent) {
-                aIOProgressLink.Call(&nPercent);
-                nProgressPercent=nPercent;
-            }
-            if (nVal>nProgressAkt) {
-                nProgressAkt=nVal;
-            }
-        }
-    }
-}
+//BFS01void SdrModel::DoProgress(ULONG nVal)
+//BFS01{
+//BFS01 if (aIOProgressLink.IsSet()) {
+//BFS01     if (nVal==0) { // Anfang
+//BFS01         USHORT nVal=0;
+//BFS01         aIOProgressLink.Call(&nVal);
+//BFS01         nProgressPercent=0;
+//BFS01         nProgressAkt=0;
+//BFS01     } else if (nVal==0xFFFFFFFF) { // Ende
+//BFS01         USHORT nVal=100;
+//BFS01         aIOProgressLink.Call(&nVal);
+//BFS01         nProgressPercent=100;
+//BFS01         nProgressAkt=nProgressMax;
+//BFS01     } else if (nVal!=nProgressAkt && nProgressMax!=0) { // dazwischen
+//BFS01         USHORT nPercent;
+//BFS01         if (nVal>nProgressOfs) nVal-=nProgressOfs; else nVal=0;
+//BFS01         if (nVal>nProgressMax) nVal=nProgressMax;
+//BFS01         if (nVal<=0x00FFFFFF) nPercent=USHORT(nVal*100/nProgressMax);
+//BFS01         else {
+//BFS01             ULONG nBla=nProgressMax/100; // Weil sonst Ueberlauf!
+//BFS01             nPercent=USHORT(nVal/=nBla);
+//BFS01         }
+//BFS01         if (nPercent==0) nPercent=1;
+//BFS01         if (nPercent>99) nPercent=99;
+//BFS01         if (nPercent>nProgressPercent) {
+//BFS01             aIOProgressLink.Call(&nPercent);
+//BFS01             nProgressPercent=nPercent;
+//BFS01         }
+//BFS01         if (nVal>nProgressAkt) {
+//BFS01             nProgressAkt=nVal;
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 void SdrModel::SetMaxUndoActionCount(ULONG nAnz)
 {
@@ -902,53 +903,53 @@ SdrPage* SdrModel::AllocPage(FASTBOOL bMasterPage)
     return new SdrPage(*this,bMasterPage);
 }
 
-const SdrModel* SdrModel::LoadModel(const String& rFileName)
-{
-    if(pLoadedModel && aLoadedModelFN.Equals(rFileName))
-    {
-        return pLoadedModel;
-    }
-    else
-    {
-        delete pLoadedModel;
-        pLoadedModel = NULL;
-        aLoadedModelFN = String();
+//BFS01const SdrModel* SdrModel::LoadModel(const String& rFileName)
+//BFS01{
+//BFS01 if(pLoadedModel && aLoadedModelFN.Equals(rFileName))
+//BFS01 {
+//BFS01     return pLoadedModel;
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     delete pLoadedModel;
+//BFS01     pLoadedModel = NULL;
+//BFS01     aLoadedModelFN = String();
+//BFS01
+//BFS01     SdrModel*           pModel = new SdrModel;
+//BFS01     const INetURLObject aFileURL( rFileName );
+//BFS01
+//BFS01     DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+//BFS01
+//BFS01     SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+//BFS01
+//BFS01     if( pIStm )
+//BFS01     {
+//BFS01         pModel->GetItemPool().Load( *pIStm );
+//BFS01         (*pIStm) >> *pModel;
+//BFS01
+//BFS01         if( pIStm->GetError() )
+//BFS01             delete pModel, pModel = NULL;
+//BFS01         else
+//BFS01         {
+//BFS01             pLoadedModel = pModel;
+//BFS01             aLoadedModelFN = rFileName;
+//BFS01         }
+//BFS01
+//BFS01         delete pIStm;
+//BFS01     }
+//BFS01     else
+//BFS01         delete pModel, pModel = NULL;
+//BFS01
+//BFS01     return pModel;
+//BFS01 }
+//BFS01}
 
-        SdrModel*           pModel = new SdrModel;
-        const INetURLObject aFileURL( rFileName );
-
-        DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-
-        if( pIStm )
-        {
-            pModel->GetItemPool().Load( *pIStm );
-            (*pIStm) >> *pModel;
-
-            if( pIStm->GetError() )
-                delete pModel, pModel = NULL;
-            else
-            {
-                pLoadedModel = pModel;
-                aLoadedModelFN = rFileName;
-            }
-
-            delete pIStm;
-        }
-        else
-            delete pModel, pModel = NULL;
-
-        return pModel;
-    }
-}
-
-void SdrModel::DisposeLoadedModels()
-{
-    delete pLoadedModel;
-    pLoadedModel = NULL;
-    aLoadedModelFN = String();
-}
+//BFS01void SdrModel::DisposeLoadedModels()
+//BFS01{
+//BFS01 delete pLoadedModel;
+//BFS01 pLoadedModel = NULL;
+//BFS01 aLoadedModelFN = String();
+//BFS01}
 
 void SdrModel::SetTextDefaults() const
 {
@@ -1131,18 +1132,18 @@ void SdrModel::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
     }
 }
 
-void SdrModel::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
-{
-    USHORT nAnz=GetMasterPageCount();
-    USHORT nNum;
-    for (nNum=0; nNum<nAnz; nNum++) {
-        GetMasterPage(nNum)->RemoveNotPersistentObjects(bNoBroadcast);
-    }
-    nAnz=GetPageCount();
-    for (nNum=0; nNum<nAnz; nNum++) {
-        GetPage(nNum)->RemoveNotPersistentObjects(bNoBroadcast);
-    }
-}
+//BFS01void SdrModel::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
+//BFS01{
+//BFS01 USHORT nAnz=GetMasterPageCount();
+//BFS01 USHORT nNum;
+//BFS01 for (nNum=0; nNum<nAnz; nNum++) {
+//BFS01     GetMasterPage(nNum)->RemoveNotPersistentObjects(bNoBroadcast);
+//BFS01 }
+//BFS01 nAnz=GetPageCount();
+//BFS01 for (nNum=0; nNum<nAnz; nNum++) {
+//BFS01     GetPage(nNum)->RemoveNotPersistentObjects(bNoBroadcast);
+//BFS01 }
+//BFS01}
 
 void SdrModel::RefDeviceChanged()
 {
@@ -1723,9 +1724,9 @@ void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
     Broadcast(aHint);
 }
 
-void SdrModel::WriteData(SvStream& rOut) const
-{
-    DBG_ERROR("SdrModel::WriteData(): binfilter still used, but should not (!)");
+//BFS01void SdrModel::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 DBG_ERROR("SdrModel::WriteData(): binfilter still used, but should not (!)");
 //  const ULONG nOldCompressMode = nStreamCompressMode;
 //  ULONG       nNewCompressMode = nStreamCompressMode;
 //
@@ -1951,11 +1952,11 @@ void SdrModel::WriteData(SvStream& rOut) const
 //
 //  // Endemarke
 //  SdrIOHeader(rOut, STREAM_WRITE, SdrIOEndeID);
-}
+//BFS01}
 
-void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-{
-    DBG_ERROR("SdrModel::ReadData(): binfilter still used, but should not (!)");
+//BFS01void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 DBG_ERROR("SdrModel::ReadData(): binfilter still used, but should not (!)");
 //  if(rIn.GetError())
 //      return;
 //
@@ -2287,171 +2288,180 @@ void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 //      // um dieses kenntlich zu machen, wird das Flag zurueckgesetzt
 //      bStarDrawPreviewMode = FALSE;
 //  }
-}
+//BFS01}
 
-void SdrModel::AfterRead()
-{
-    // alle MasterPages und alle Pages durchlaufen
-    UINT16 nCnt(GetMasterPageCount());
-    UINT16 i;
+//BFS01void SdrModel::AfterRead()
+//BFS01{
+//BFS01 // alle MasterPages und alle Pages durchlaufen
+//BFS01 UINT16 nCnt(GetMasterPageCount());
+//BFS01 UINT16 i;
+//BFS01
+//BFS01 for(i=0; i < nCnt; i++)
+//BFS01 {
+//BFS01     GetMasterPage(i)->AfterRead();
+//BFS01 }
+//BFS01
+//BFS01 nCnt = GetPageCount();
+//BFS01
+//BFS01 for(i=0; i < nCnt; i++)
+//BFS01 {
+//BFS01     GetPage(i)->AfterRead();
+//BFS01 }
+//BFS01
+//BFS01#ifndef SVX_LIGHT
+//BFS01 // Investigation of bMyPool to check if it's allowed to delete the OLE objects.
+//BFS01 // If bMyPool == FALSE it's not allowed (Writer)
+//BFS01 if( pPersist && bMyPool )
+//BFS01 {
+//BFS01     SvInfoObjectMemberList* pList = (SvInfoObjectMemberList*) pPersist->GetObjectList();
+//BFS01
+//BFS01     if( pList )
+//BFS01     {
+//BFS01         SvInfoObjectRef pInfo = pList->First();
+//BFS01         while( pInfo.Is() )
+//BFS01         {
+//BFS01             BOOL bFound = FALSE;
+//BFS01             String aName = pInfo->GetObjName();
+//BFS01             UINT16 a;
+//BFS01
+//BFS01             nCnt = GetPageCount();
+//BFS01             for( a = 0; a < nCnt && !bFound; a++ )
+//BFS01             {
+//BFS01                 // Pages
+//BFS01                 SdrObjListIter aIter( *GetPage(a) );
+//BFS01                 while( !bFound && aIter.IsMore() )
+//BFS01                 {
+//BFS01                     SdrObject* pObj = aIter.Next();
+//BFS01                     if( pObj->ISA(SdrOle2Obj) )
+//BFS01                     {
+//BFS01                         if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
+//BFS01                             bFound = TRUE;
+//BFS01                     }
+//BFS01                 }
+//BFS01             }
+//BFS01
+//BFS01             nCnt = GetMasterPageCount();
+//BFS01             for( a = 0; a < nCnt && !bFound; a++ )
+//BFS01             {
+//BFS01                 // MasterPages
+//BFS01                 SdrObjListIter aIter( *GetMasterPage(a) );
+//BFS01                 while( !bFound && aIter.IsMore() )
+//BFS01                 {
+//BFS01                     SdrObject* pObj = aIter.Next();
+//BFS01                     if( pObj->ISA(SdrOle2Obj) )
+//BFS01                     {
+//BFS01                         if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
+//BFS01                             bFound = TRUE;
+//BFS01                     }
+//BFS01                 }
+//BFS01             }
+//BFS01
+//BFS01             if( !bFound )
+//BFS01                 pInfo->SetDeleted(TRUE);
+//BFS01
+//BFS01             pInfo = pList->Next();
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01#endif
+//BFS01}
 
-    for(i=0; i < nCnt; i++)
-    {
-        GetMasterPage(i)->AfterRead();
-    }
+//BFS01ULONG SdrModel::ImpCountAllSteamComponents() const
+//BFS01{
+//BFS01 UINT32 nCnt(0);
+//BFS01 UINT16 nAnz(GetMasterPageCount());
+//BFS01 UINT16 nNum;
+//BFS01
+//BFS01 for(nNum = 0; nNum < nAnz; nNum++)
+//BFS01 {
+//BFS01     nCnt += GetMasterPage(nNum)->CountAllObjects();
+//BFS01 }
+//BFS01
+//BFS01 nAnz = GetPageCount();
+//BFS01
+//BFS01 for(nNum = 0; nNum < nAnz; nNum++)
+//BFS01 {
+//BFS01     nCnt += GetPage(nNum)->CountAllObjects();
+//BFS01 }
+//BFS01
+//BFS01 return nCnt;
+//BFS01}
 
-    nCnt = GetPageCount();
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrModel& rMod)
+//BFS01{
+//BFS01 ((SdrModel*)&rMod)->nProgressOfs=0;
+//BFS01 ((SdrModel*)&rMod)->nProgressMax=rMod.ImpCountAllSteamComponents(); // Hier passenden Wert einsetzen
+//BFS01 ((SdrModel*)&rMod)->DoProgress(0);
+//BFS01 ULONG nPos0=rOut.Tell();
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOModlID);
+//BFS01 USHORT nCompressMerk=rOut.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
+//BFS01 rMod.WriteData(rOut);
+//BFS01 rOut.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
+//BFS01 ((SdrModel*)&rMod)->DoProgress(0xFFFFFFFF);
+//BFS01 ((SdrModel*)&rMod)->Broadcast(SdrHint(HINT_MODELSAVED)); // #43095#
+//BFS01 return rOut;
+//BFS01}
 
-    for(i=0; i < nCnt; i++)
-    {
-        GetPage(i)->AfterRead();
-    }
-
-    // Investigation of bMyPool to check if it's allowed to delete the OLE objects.
-    // If bMyPool == FALSE it's not allowed (Writer)
-    if( pPersist && bMyPool )
-    {
-        uno::Sequence < rtl::OUString > aNames = pPersist->GetEmbeddedObjectContainer().GetObjectNames();
-        for ( sal_Int32 nObj=0; nObj<aNames.getLength(); nObj++ )
-        {
-            BOOL bFound = FALSE;
-            String aName = aNames[nObj];
-            UINT16 a;
-
-            nCnt = GetPageCount();
-            for( a = 0; a < nCnt && !bFound; a++ )
-            {
-                // Pages
-                SdrObjListIter aIter( *GetPage(a) );
-                while( !bFound && aIter.IsMore() )
-                {
-                    SdrObject* pObj = aIter.Next();
-                    if( pObj->ISA(SdrOle2Obj) )
-                    {
-                        if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
-                            bFound = TRUE;
-                    }
-                }
-            }
-
-            nCnt = GetMasterPageCount();
-            for( a = 0; a < nCnt && !bFound; a++ )
-            {
-                // MasterPages
-                SdrObjListIter aIter( *GetMasterPage(a) );
-                while( !bFound && aIter.IsMore() )
-                {
-                    SdrObject* pObj = aIter.Next();
-                    if( pObj->ISA(SdrOle2Obj) )
-                    {
-                        if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
-                            bFound = TRUE;
-                    }
-                }
-            }
-
-            if( !bFound )
-                pPersist->GetEmbeddedObjectContainer().RemoveEmbeddedObject( aName );
-        }
-    }
-}
-
-ULONG SdrModel::ImpCountAllSteamComponents() const
-{
-    UINT32 nCnt(0);
-    UINT16 nAnz(GetMasterPageCount());
-    UINT16 nNum;
-
-    for(nNum = 0; nNum < nAnz; nNum++)
-    {
-        nCnt += GetMasterPage(nNum)->CountAllObjects();
-    }
-
-    nAnz = GetPageCount();
-
-    for(nNum = 0; nNum < nAnz; nNum++)
-    {
-        nCnt += GetPage(nNum)->CountAllObjects();
-    }
-
-    return nCnt;
-}
-
-SvStream& operator<<(SvStream& rOut, const SdrModel& rMod)
-{
-    ((SdrModel*)&rMod)->nProgressOfs=0;
-    ((SdrModel*)&rMod)->nProgressMax=rMod.ImpCountAllSteamComponents(); // Hier passenden Wert einsetzen
-    ((SdrModel*)&rMod)->DoProgress(0);
-    ULONG nPos0=rOut.Tell();
-    SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOModlID);
-    USHORT nCompressMerk=rOut.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
-    rMod.WriteData(rOut);
-    rOut.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
-    ((SdrModel*)&rMod)->DoProgress(0xFFFFFFFF);
-    ((SdrModel*)&rMod)->Broadcast(SdrHint(HINT_MODELSAVED)); // #43095#
-    return rOut;
-}
-
-SvStream& operator>>(SvStream& rIn, SdrModel& rMod)
-{
-    if (rIn.GetError()!=0) return rIn;
-    rMod.aReadDate=DateTime(); // Zeitpunkt des Lesens merken
-    rMod.nProgressOfs=rIn.Tell();
-    rMod.nProgressMax=0xFFFFFFFF; // Vorlaeufiger Wert
-    rMod.DoProgress(0);
-
-    // #116168#
-    rMod.ClearModel(sal_False);
-
-    SdrIOHeader aHead(rIn,STREAM_READ);
-    rMod.nLoadVersion=aHead.GetVersion();
-    if (!aHead.IsMagic()) {
-        rIn.SetError(SVSTREAM_FILEFORMAT_ERROR); // Format-Fehler
-        return rIn;
-    }
-    if (aHead.GetMajorVersion()>nAktSdrFileMajorVersion) {
-        rIn.SetError(SVSTREAM_WRONGVERSION); // Datei zu neu / Programm zu alt
-        return rIn;
-    }
-    rMod.nProgressMax=aHead.GetBlockSize();
-    rMod.DoProgress(rIn.Tell());
-    rMod.bLoading=TRUE;
-    rtl_TextEncoding eStreamCharSetMerker=rIn.GetStreamCharSet(); // Der StreamCharSet wird von SdrModel::ReadData() gesetzt
-    USHORT nCompressMerk=rIn.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
-    rMod.ReadData(aHead,rIn);
-    rIn.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
-
-    rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
-
-    rMod.bLoading=FALSE;
-    rMod.DoProgress(rIn.Tell());
-    rMod.AfterRead();
-    rMod.DisposeLoadedModels();
-
-    rMod.ImpSetUIUnit(); // weil ggf. neues Scaling eingelesen
-    rMod.DoProgress(0xFFFFFFFF);
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrModel& rMod)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 rMod.aReadDate=DateTime(); // Zeitpunkt des Lesens merken
+//BFS01 rMod.nProgressOfs=rIn.Tell();
+//BFS01 rMod.nProgressMax=0xFFFFFFFF; // Vorlaeufiger Wert
+//BFS01 rMod.DoProgress(0);
+//BFS01
+//BFS01 // #116168#
+//BFS01 rMod.ClearModel(sal_False);
+//BFS01
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
+//BFS01 rMod.nLoadVersion=aHead.GetVersion();
+//BFS01 if (!aHead.IsMagic()) {
+//BFS01     rIn.SetError(SVSTREAM_FILEFORMAT_ERROR); // Format-Fehler
+//BFS01     return rIn;
+//BFS01 }
+//BFS01 if (aHead.GetMajorVersion()>nAktSdrFileMajorVersion) {
+//BFS01     rIn.SetError(SVSTREAM_WRONGVERSION); // Datei zu neu / Programm zu alt
+//BFS01     return rIn;
+//BFS01 }
+//BFS01 rMod.nProgressMax=aHead.GetBlockSize();
+//BFS01 rMod.DoProgress(rIn.Tell());
+//BFS01 rMod.bLoading=TRUE;
+//BFS01 rtl_TextEncoding eStreamCharSetMerker=rIn.GetStreamCharSet(); // Der StreamCharSet wird von SdrModel::ReadData() gesetzt
+//BFS01 USHORT nCompressMerk=rIn.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
+//BFS01 rMod.ReadData(aHead,rIn);
+//BFS01 rIn.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
+//BFS01
+//BFS01 rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
+//BFS01
+//BFS01 rMod.bLoading=FALSE;
+//BFS01 rMod.DoProgress(rIn.Tell());
+//BFS01 rMod.AfterRead();
+//BFS01 rMod.DisposeLoadedModels();
+//BFS01
+//BFS01 rMod.ImpSetUIUnit(); // weil ggf. neues Scaling eingelesen
+//BFS01 rMod.DoProgress(0xFFFFFFFF);
+//BFS01 return rIn;
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrModel::WriteModelInfo(SvStream& rOut) const
-{
-    FASTBOOL bRet=FALSE;
-    if (rOut.GetError()!=0) return bRet;
-    SdrIOHeaderLookAhead aLookAhead(rOut);
-    ULONG nCompat;
-    rOut>>nCompat;
-    char cMagic[4];
-    FASTBOOL bJoeMagicOk=(rOut.Read(cMagic,4)==4) && memcmp(cMagic,SdrIOJoeMagic,4)==0;
-    if (aLookAhead.GetVersion()>=11 && aLookAhead.IsMagic() &&
-        bJoeMagicOk && aLookAhead.IsID(SdrIOModlID) && rOut.GetError()==0)
-    {
-        rOut<<aInfo;
-        bRet=rOut.GetError()==0;
-    }
-    return bRet;
-}
+//BFS01FASTBOOL SdrModel::WriteModelInfo(SvStream& rOut) const
+//BFS01{
+//BFS01 FASTBOOL bRet=FALSE;
+//BFS01 if (rOut.GetError()!=0) return bRet;
+//BFS01 SdrIOHeaderLookAhead aLookAhead(rOut);
+//BFS01 ULONG nCompat;
+//BFS01 rOut>>nCompat;
+//BFS01 char cMagic[4];
+//BFS01 FASTBOOL bJoeMagicOk=(rOut.Read(cMagic,4)==4) && memcmp(cMagic,SdrIOJoeMagic,4)==0;
+//BFS01 if (aLookAhead.GetVersion()>=11 && aLookAhead.IsMagic() &&
+//BFS01     bJoeMagicOk && aLookAhead.IsID(SdrIOModlID) && rOut.GetError()==0)
+//BFS01 {
+//BFS01     rOut<<aInfo;
+//BFS01     bRet=rOut.GetError()==0;
+//BFS01 }
+//BFS01 return bRet;
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2697,89 +2707,89 @@ void SdrModel::SetStarDrawPreviewMode(BOOL bPreview)
 }
 
 
-void SdrModel::PrepareStore()
-{
-    // is done by PreSave now
-    DBG_ERROR("Please call PreSave now. It'll do the desired job.");
-}
+//BFS01void SdrModel::PrepareStore()
+//BFS01{
+//BFS01 // is done by PreSave now
+//BFS01 DBG_ERROR("Please call PreSave now. It'll do the desired job.");
+//BFS01}
 
-void SdrModel::PreSave()
-{
-    sal_uInt16 nCnt(GetMasterPageCount());
-    sal_uInt16 a;
+//BFS01void SdrModel::PreSave()
+//BFS01{
+//BFS01 sal_uInt16 nCnt(GetMasterPageCount());
+//BFS01 sal_uInt16 a;
+//BFS01
+//BFS01 for( a = 0; a < nCnt; a++)
+//BFS01 {
+//BFS01     // MasterPages
+//BFS01     const SdrPage& rPage = *GetMasterPage(a);
+//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
+//BFS01     if( pObj )
+//BFS01     {
+//BFS01//BFS01          pObj->GetProperties().PreProcessSave();
+//BFS01     }
+//BFS01
+//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+//BFS01     {
+//BFS01//BFS01          rPage.GetObj(b)->GetProperties().PreProcessSave();
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 nCnt = GetPageCount();
+//BFS01 for(a = 0; a < nCnt; a++)
+//BFS01 {
+//BFS01     // Pages
+//BFS01     const SdrPage& rPage = *GetPage(a);
+//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
+//BFS01     if( pObj )
+//BFS01     {
+//BFS01//BFS01          pObj->GetProperties().PreProcessSave();
+//BFS01     }
+//BFS01
+//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+//BFS01     {
+//BFS01//BFS01          rPage.GetObj(b)->GetProperties().PreProcessSave();
+//BFS01     }
+//BFS01 }
+//BFS01}
 
-    for( a = 0; a < nCnt; a++)
-    {
-        // MasterPages
-        const SdrPage& rPage = *GetMasterPage(a);
-        SdrObject* pObj = rPage.GetBackgroundObj();
-        if( pObj )
-        {
-            pObj->GetProperties().PreProcessSave();
-        }
-
-        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-        {
-            rPage.GetObj(b)->GetProperties().PreProcessSave();
-        }
-    }
-
-    nCnt = GetPageCount();
-    for(a = 0; a < nCnt; a++)
-    {
-        // Pages
-        const SdrPage& rPage = *GetPage(a);
-        SdrObject* pObj = rPage.GetBackgroundObj();
-        if( pObj )
-        {
-            pObj->GetProperties().PreProcessSave();
-        }
-
-        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-        {
-            rPage.GetObj(b)->GetProperties().PreProcessSave();
-        }
-    }
-}
-
-void SdrModel::PostSave()
-{
-    sal_uInt16 nCnt(GetMasterPageCount());
-    sal_uInt16 a;
-
-    for( a = 0; a < nCnt; a++)
-    {
-        // MasterPages
-        const SdrPage& rPage = *GetMasterPage(a);
-        SdrObject* pObj = rPage.GetBackgroundObj();
-        if( pObj )
-        {
-            pObj->GetProperties().PostProcessSave();
-        }
-
-        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-        {
-            rPage.GetObj(b)->GetProperties().PostProcessSave();
-        }
-    }
-
-    nCnt = GetPageCount();
-    for(a = 0; a < nCnt; a++)
-    {
-        // Pages
-        const SdrPage& rPage = *GetPage(a);
-        SdrObject* pObj = rPage.GetBackgroundObj();
-        if( pObj )
-        {
-            pObj->GetProperties().PostProcessSave();
-        }
-
-        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-        {
-            rPage.GetObj(b)->GetProperties().PostProcessSave();
-        }
-    }
-}
+//BFS01void SdrModel::PostSave()
+//BFS01{
+//BFS01 sal_uInt16 nCnt(GetMasterPageCount());
+//BFS01 sal_uInt16 a;
+//BFS01
+//BFS01 for( a = 0; a < nCnt; a++)
+//BFS01 {
+//BFS01     // MasterPages
+//BFS01     const SdrPage& rPage = *GetMasterPage(a);
+//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
+//BFS01     if( pObj )
+//BFS01     {
+//BFS01//BFS01          pObj->GetProperties().PostProcessSave();
+//BFS01     }
+//BFS01
+//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+//BFS01     {
+//BFS01//BFS01          rPage.GetObj(b)->GetProperties().PostProcessSave();
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 nCnt = GetPageCount();
+//BFS01 for(a = 0; a < nCnt; a++)
+//BFS01 {
+//BFS01     // Pages
+//BFS01     const SdrPage& rPage = *GetPage(a);
+//BFS01     SdrObject* pObj = rPage.GetBackgroundObj();
+//BFS01     if( pObj )
+//BFS01     {
+//BFS01//BFS01          pObj->GetProperties().PostProcessSave();
+//BFS01     }
+//BFS01
+//BFS01     for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+//BFS01     {
+//BFS01         rPage.GetObj(b)->GetProperties().PostProcessSave();
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 uno::Reference< uno::XInterface > SdrModel::getUnoModel()
 {
