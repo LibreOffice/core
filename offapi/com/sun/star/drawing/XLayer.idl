@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLayer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 /** identifies the object as a <type>Layer</type>.
  */
-interface XLayer: com::sun::star::beans::XPropertySet
+published interface XLayer: com::sun::star::beans::XPropertySet
 {
 };
 
