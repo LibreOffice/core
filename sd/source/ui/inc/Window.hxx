@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Window.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:47:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ class Window
 {
 public:
     Window (::Window* pParent);
-    ~Window();
+    virtual ~Window (void);
 
     void    SetViewShell (ViewShell* pViewSh);
 
@@ -133,17 +133,17 @@ public:
         rectangle is displayed as large as possible in the window while at
         the same time maintaining the rectangle's aspect ratio and adding a
         small space at all its four sides (about 3% of width and height).
-        As a result the this window's map mode is adapted accordingly.
+        The map mode is adapted accordingly.
         @param rZoomRect
             The rectangle is expected to be given relative to the upper left
             corner of the window in logical coordinates (100th of mm).
         @return
             The new zoom factor is returned as integral percent value.
     */
-    long    SetZoomRect(const Rectangle& rZoomRect);
+    long SetZoomRect (const Rectangle& rZoomRect);
 
-    void    SetMinZoomAutoCalc(BOOL bAuto) { bMinZoomAutoCalc = bAuto; }
-    void    SetCalcMinZoomByMinSide(BOOL bMin) { bCalcMinZoomByMinSide = bMin; }
+    void SetMinZoomAutoCalc (bool bAuto);
+    void SetCalcMinZoomByMinSide (bool bMin);
 
     /** Calculate the minimal zoom factor as the value at which the
         application area would completely fill the window.  All values set
@@ -155,25 +155,33 @@ public:
         <p>This calculation is performed only when the
         <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
     */
-    void    CalcMinZoom();
-    void    SetMinZoom(long nMin) { nMinZoom = (USHORT) nMin; }
-    long    GetMinZoom() const { return nMinZoom; }
-    void    SetMaxZoom(long nMax) { nMaxZoom = (USHORT) nMax; }
-    long    GetMaxZoom() const { return nMaxZoom; }
+    void CalcMinZoom (void);
+    void SetMinZoom (long int nMin);
+    long GetMinZoom (void) const;
+    void SetMaxZoom (long int nMax);
+    long GetMaxZoom (void) const;
 
-    long    GetZoom() const
-        { return GetMapMode().GetScaleX().GetNumerator() * 100L /
-                 GetMapMode().GetScaleX().GetDenominator(); }
+    long GetZoom (void) const;
 
-    Point   GetWinViewPos() { return aWinPos; }
-    Point   GetViewOrigin() { return aViewOrigin; }
-    Size    GetViewSize()   { return aViewSize; }
-    void    SetWinViewPos(const Point& rPnt);
-    void    SetViewOrigin(const Point& rPnt);
-    void    SetViewSize(const Size& rSize);
-    void    SetCenterAllowed(BOOL bIsAllowed) { bCenterAllowed = bIsAllowed; }
+    Point GetWinViewPos (void) const;
+    Point GetViewOrigin (void) const;
+    Size GetViewSize (void) const;
+    void SetWinViewPos(const Point& rPnt);
+    void SetViewOrigin(const Point& rPnt);
+    void SetViewSize(const Size& rSize);
+    void SetCenterAllowed (bool bIsAllowed);
 
-    void    UpdateMapOrigin(BOOL bInvalidate = TRUE);
+    /** Calculate origin of the map mode accoring to the size of the view
+        and window (its size in model coordinates; that takes the zoom
+        factor into account), and the bCenterAllowed flag.  When it is not
+        set then nothing is changed.  When in any direction the window is
+        larger than the view or the value of aWinPos in this direction is -1
+        then the window is centered in this direction.
+        */
+    void UpdateMapOrigin (BOOL bInvalidate = TRUE);
+
+    void UpdateMapMode (void);
+
     double  GetVisibleX();          // Interface fuer ScrollBars
     double  GetVisibleY();
     void    SetVisibleXY(double fX, double fY);
@@ -183,7 +191,6 @@ public:
     double  GetScrlLineHeight();
     double  GetScrlPageWidth();
     double  GetScrlPageHeight();
-    void    DropScroll(const Point& rMousePos);
     virtual void GrabFocus();
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -191,24 +198,32 @@ public:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
+    /** The DropScroll() method is used by AcceptDrop() to scroll the
+        content of the window while dragging and dropping.  With this method
+        you can control whether DropScroll() shall be used.
+    */
+    void SetUseDropScroll (bool bUseDropScroll);
+    void DropScroll (const Point& rMousePos);
+
 protected:
-    ::sd::Window* pShareWin;
-    Point       aWinPos;
-    Point       aViewOrigin;
-    Size        aViewSize;
-    USHORT      nMinZoom;
-    USHORT      nMaxZoom;
+    ::sd::Window* mpShareWin;
+    Point maWinPos;
+    Point maViewOrigin;
+    Size maViewSize;
+    USHORT mnMinZoom;
+    USHORT mnMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
         depening on the current zoom factor.  According to task #105436# its
         default value is now FALSE.
     */
-    BOOL        bMinZoomAutoCalc;
-    BOOL        bCalcMinZoomByMinSide;
-    BOOL        bCenterAllowed;
-    long        nTicks;
-    BOOL        bDraggedFrom;
+    bool mbMinZoomAutoCalc;
+    bool mbCalcMinZoomByMinSide;
+    bool mbCenterAllowed;
+    long mnTicks;
+    bool mbDraggedFrom;
 
     ViewShell* mpViewShell;
+    bool mbUseDropScroll;
 
     virtual void Resize();
     virtual void Paint(const Rectangle& rRect);
