@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:06:44 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 11:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,18 +85,24 @@ public:
     virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
     virtual void        Reset           ( const SfxItemSet& rCoreSet );
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
+    virtual void        DataChanged     ( const DataChangedEvent& rDCEvt );
 
 private:
            ScTablePage( Window*         pParent,
                          const SfxItemSet&  rCoreSet );
             ~ScTablePage();
+
+    void            ShowImage();
+
 private:
     FixedLine       aFlPageDir;
     RadioButton     aBtnTopDown;
     RadioButton     aBtnLeftRight;
-    FixedBitmap     aBmpPageDir;
-    Bitmap          aImgLeftRight;
-    Bitmap          aImgTopDown;
+    FixedImage      aBmpPageDir;
+    Image           aImgLeftRight;
+    Image           aImgTopDown;
+    Image           aImgLeftRightHC;
+    Image           aImgTopDownHC;
     CheckBox        aBtnPageNo;
     NumericField    aEdPageNo;
 
