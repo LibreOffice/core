@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 12:16:20 $
+ *  last change: $Author: cd $ $Date: 2001-07-09 12:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@ namespace rtl
         for profiling purposes.
 
         Profiling output should only be generated for a special product version of OpenOffice
-        which is compiled with a defined preprocessor symbol 'PROFILE'.
+        which is compiled with a defined preprocessor symbol 'TIMELOG'.
         Therefore we have provided a set of macros that uses the class Logfile only if
         this symbol is defined.  If the macros are not sufficient, i.e. you need more
         then three arguments for a printf style message, then you have to insert an
-        #ifdef PROFILE/#endif brace yourself.
+        #ifdef TIMELOG/#endif brace yourself.
 
         Additionally the environment variable RTL_LOGFILE has to be defined in order to generate
         logging information. If the variable is not empty, it creates a file with the name
@@ -171,7 +171,7 @@ namespace rtl
     }
 }
 
-#ifdef PROFILE
+#ifdef TIMELOG
 #define RTL_LOGFILE_CONTEXT( instance, name ) ::rtl::Logfile instance( name )
 #define RTL_LOGFILE_CONTEXT_TRACE( instance, message ) \
         rtl_logfile_trace( "%06lu %lu | %s : %s\n", \
