@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-28 11:36:08 $
+ *  last change: $Author: mtg $ $Date: 2001-03-29 17:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
@@ -107,6 +109,9 @@
 #endif
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #endif
 
 #ifndef _DOC_HXX
@@ -140,12 +145,23 @@
 #include <docsh.hxx>
 #endif
 
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+
+#ifndef _FORBIDDEN_CHARACTERS_ENUM_HXX
+#include <ForbiddenCharactersEnum.hxx>
+#endif
+
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::i18n;
 
 sal_Char __READONLY_DATA sXML_np__text[] = "text";
 sal_Char __READONLY_DATA sXML_np__table[] = "table";
@@ -721,9 +737,8 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
 }
 void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 {
-    if( !GetModel().is() )
+    if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || IsOrganizerMode() || !GetModel().is() )
         return;
-
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
@@ -802,32 +817,92 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue > & aConfigProps)
 {
     Reference < XPropertySet > xPropSet = Reference < XPropertySet >(GetModel(), UNO_QUERY);
-    if (xPropSet.is())
+    if (!IsInsertMode() && !IsStylesOnlyMode() && !IsBlockMode() && !IsOrganizerMode() && xPropSet.is() )
     {
         sal_Int32 nCount = aConfigProps.getLength();
         const PropertyValue *pValue = aConfigProps.getConstArray();
 
-        OUString sLinkUpdateMode ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) );
-        OUString sFieldAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) );
-        OUString sChartAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) );
-        OUString sAddParaTableSpacing ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) );
-        OUString sAddParaTableSpacingAtStart ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) );
-        OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
-
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            if (pValue->Name.equals( sLinkUpdateMode ) )
-                xPropSet->setPropertyValue( sLinkUpdateMode, pValue->Value);
-            else if (pValue->Name.equals( sFieldAutoUpdate ) )
-                xPropSet->setPropertyValue( sFieldAutoUpdate, pValue->Value);
-            else if (pValue->Name.equals( sChartAutoUpdate ) )
-                xPropSet->setPropertyValue( sChartAutoUpdate, pValue->Value);
-            else if (pValue->Name.equals( sAddParaTableSpacing ) )
-                xPropSet->setPropertyValue( sAddParaTableSpacing, pValue->Value);
-            else if (pValue->Name.equals( sAddParaTableSpacingAtStart ) )
-                xPropSet->setPropertyValue( sAddParaTableSpacingAtStart, pValue->Value);
-            else if (pValue->Name.equals( sPrinterName ) )
-                xPropSet->setPropertyValue( sPrinterName, pValue->Value);
+            if (pValue->Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacterSequence" ) ) )
+            {
+                Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+                Reference < XText > xText = xTextDoc->getText();
+                Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+                ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+                if( !xTextTunnel.is() )
+                    continue;
+
+                SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                                    SwXText::getUnoTunnelId() );
+                ASSERT( pText, "SwXText missing" );
+                if( !pText )
+                    continue;
+
+                SwDoc *pDoc = pText->GetDoc();
+                Reference < XIndexAccess > xIndex;
+                pValue->Value >>= xIndex;
+                sal_Int32 nCount = xIndex->getCount();
+                Any aAny;
+                Sequence < PropertyValue > aProps;
+                for (sal_Int32 i = 0; i < nCount; i++)
+                {
+                    aAny = xIndex->getByIndex( i );
+                    sal_Int32 nIndex;
+                    if ((aAny >>= aProps) && ((nIndex = aProps.getLength()) == SW_FORBIDDEN_CHARACTER_MAX ) )
+                    {
+                        PropertyValue *pForChar = aProps.getArray();
+                        ForbiddenCharacters aForbid;
+                        Locale aLocale;
+                        OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
+                        OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
+                        OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
+                        OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
+                        OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
+                        sal_Bool bHaveLanguage = sal_False, bHaveCountry = sal_False, bHaveVariant = sal_False,
+                                 bHaveBegin = sal_False, bHaveEnd = sal_False;
+
+                        for ( sal_Int32 j = 0 ; j < nIndex ; j++ )
+                        {
+                            if (pForChar->Name.equals (sLanguage ) )
+                            {
+                                pForChar->Value >>= aLocale.Language;
+                                bHaveLanguage = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sCountry ) )
+                            {
+                                pForChar->Value >>= aLocale.Country;
+                                bHaveCountry = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sVariant ) )
+                            {
+                                pForChar->Value >>= aLocale.Variant;
+                                bHaveVariant = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sBeginLine ) )
+                            {
+                                pForChar->Value >>= aForbid.beginLine;
+                                bHaveBegin = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sEndLine ) )
+                            {
+                                pForChar->Value >>= aForbid.endLine;
+                                bHaveEnd = sal_True;
+                            }
+                            pForChar++;
+                        }
+
+                        if ( bHaveLanguage && bHaveCountry && bHaveVariant && bHaveBegin && bHaveEnd )
+                        {
+                            LanguageType eLang = SvxLocaleToLanguage ( aLocale );
+                            if (eLang != LANGUAGE_NONE )
+                                pDoc->SetForbiddenCharacters ( eLang, aForbid );
+                        }
+                    }
+                }
+            }
+            else
+                xPropSet->setPropertyValue ( pValue->Name, pValue->Value);
             pValue++;
         }
     }
