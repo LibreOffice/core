@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: af $ $Date: 2002-07-25 09:35:07 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 08:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ SdOutlineViewShell::~SdOutlineViewShell()
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
+        pClipEvtLstnr->ClearCallbackLink();     // #103849# prevent callback if another thread is waiting
         pClipEvtLstnr->release();
     }
 }

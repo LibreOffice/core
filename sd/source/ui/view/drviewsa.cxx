@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-08-21 14:57:05 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 08:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,7 @@ SdDrawViewShell::~SdDrawViewShell()
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
+        pClipEvtLstnr->ClearCallbackLink();     // #103849# prevent callback if another thread is waiting
         pClipEvtLstnr->release();
     }
 
