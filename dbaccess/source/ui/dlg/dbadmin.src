@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 12:08:46 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 13:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1814,44 +1814,71 @@ TabPage PAGE_TABLESUBSCRIPTION
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
 
-    GroupBox GB_TABLESUBSCRIPTION
+    FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 141 ) ;
-        Text = "Filter";
-        Text [ english ] = "Filter";
-        Text [ english_us ] = "Filter";
-        Text [ portuguese ] = "Filtro";
-        Text [ russian ] = "Ôèëüòğ";
-        Text [ greek ] = "Ößëôñï";
-        Text [ dutch ] = "Filter";
-        Text [ french ] = "Filtre";
-        Text [ spanish ] = "Filtro";
-        Text [ italian ] = "Filtro";
-        Text [ danish ] = "Filter";
-        Text [ swedish ] = "Filter";
-        Text [ polish ] = "Filtr";
-        Text [ portuguese_brazilian ] = "Filter";
-        Text [ japanese ] = "Ì¨ÙÀ";
-        Text [ korean ] = "ÇÊÅÍ";
-        Text [ chinese_simplified ] = "É¸Ñ¡";
-        Text [ chinese_traditional ] = "¿z¿ï";
-        Text [ turkish ] = "Filter";
-        Text [ arabic ] = "ÇáİáÊÑ";
+        Pos = MAP_APPFONT ( 4 , 6 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Tabellen und Tabellenfilter";
+        Text [ english ] = "Tables and Table filter";
+        Text [ english_us ] = "Tables and Table filter";
+    };
+    ToolBox TLB_ACTIONS
+    {
+        Pos = MAP_APPFONT ( 7 , 18 ) ;
+        Size = MAP_APPFONT ( 246 , 14 ) ;
+        ButtonType = BUTTON_SYMBOL;
+        Align = BOXALIGN_TOP;
+        Customize = FALSE;
+        HelpId = HID_DSADMIN_TABLE_TOOLBOX;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                MID_NEW_TABLE_DESIGN
+                ItemBitmap = Bitmap { File = "tablenew_sc.bmp"; };
+            };
+            ToolBoxItem
+            {
+                MID_EDIT_TABLE
+                ItemBitmap = Bitmap { File = "tableedit_sc.bmp"; };
+            };
+            ToolBoxItem
+            {
+                MID_DROP_TABLE
+                ItemBitmap = Bitmap { File = "tabledrop_sc.bmp"; };
+            };
+        };
     };
     Control CTL_TABLESUBSCRIPTION
     {
-        Pos     = MAP_APPFONT ( 12 , 15 ) ;
-        Size    = MAP_APPFONT ( 236 , 122 ) ;
+        Pos     = MAP_APPFONT ( 7 , 35 ) ;
+        Size    = MAP_APPFONT ( 246 , 81 ) ;
         Group   = TRUE;
         Border  = TRUE ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_TABLE_SELECTOR;
     };
+    FixedText FT_FILTER_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( 7 , 122 ) ;
+        Size    = MAP_APPFONT ( 246 , 16 ) ;
+        HelpId = HID_DSADMIN_FILTER_EXPLANATION;
+        Text = "Kreuzen Sie bitte in der obigen Liste diejenigen Tabellen an, die für die Applikationen sichtbar sein sollen.";
+        Text [ english ] = "In the list above, please check the tables which should be visible for the applications.";
+        Text [ english_us ] = "In the list above, please check the tables which should be visible for the applications.";
+    };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 144 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Spalten";
+        Text [ english ] = "Columns";
+        Text [ english_us ] = "Columns";
+    };
     CheckBox CB_SUPPRESVERSIONCL
     {
-        Pos     = MAP_APPFONT ( 6 , 152 ) ;
-        Size    = MAP_APPFONT ( 200 , 12 ) ;
+        Pos     = MAP_APPFONT ( 7 , 156 ) ;
+        Size    = MAP_APPFONT ( 246 , 12 ) ;
         Group   = TRUE ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;
@@ -1887,10 +1914,10 @@ TabPage PAGE_QUERYADMINISTRATION
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_QUERYADMINISTRATION;
 
-    GroupBox GB_COLLECTION
+    FixedLine FL_COLLECTION
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 192 , 176 ) ;
+        Pos = MAP_APPFONT ( 4 , 6 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Abfragen";
         Text [ english ] = "Queries";
         Text [ english_us ] = "Queries";
@@ -1912,98 +1939,51 @@ TabPage PAGE_QUERYADMINISTRATION
         Text [ turkish ] = "Queries";
         Text [ arabic ] = "ÇÓÊİÓÇÑÇÊ";
     };
+    ToolBox TLB_ACTIONS
+    {
+        Pos = MAP_APPFONT ( 7 , 18 ) ;
+        Size = MAP_APPFONT ( 246 , 14 ) ;
+        ButtonType = BUTTON_SYMBOL;
+        Align = BOXALIGN_TOP;
+        Customize = FALSE;
+        HelpId = HID_DSADMIN_QUERY_TOOLBOX;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                MID_QUERY_NEW_DESIGN
+                ItemBitmap = Bitmap { File = "querynewdesign_sc.bmp"; };
+            };
+            ToolBoxItem
+            {
+                MID_QUERY_NEW_SQL
+                ItemBitmap = Bitmap { File = "querynewsql_sc.bmp"; };
+            };
+            ToolBoxItem
+            {
+                MID_QUERY_EDIT_DESIGN
+                ItemBitmap = Bitmap { File = "queryeditdesign_sc.bmp"; };
+            };
+            ToolBoxItem
+            {
+                MID_QUERY_EDIT_SQL
+                ItemBitmap = Bitmap { File = "queryeditsql_sc.bmp"; };
+            };
+            ToolBoxItem
+            {
+                MID_QUERY_DROP
+                ItemBitmap = Bitmap { File = "querydrop_sc.bmp"; };
+            };
+        };
+    };
     Control CTL_COLLECTION
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 180 , 159 ) ;
+        Pos = MAP_APPFONT ( 7 , 35 ) ;
+        Size = MAP_APPFONT ( 246, 138 ) ;
         Border = TRUE;
         SVLook = TRUE;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_QUERIES;
-    };
-    PushButton PB_NEWQUERY
-    {
-        Pos = MAP_APPFONT ( 204, 6 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        SVLook = TRUE;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_QUERIES_NEW;
-        Text = "~Neu";
-        Text [ english ] = "~New";
-        Text [ english_us ] = "~New";
-        Text [ portuguese ] = "~Novo";
-        Text [ russian ] = "Ñîçä~àòü";
-        Text [ greek ] = "Äçìéïõñãßá";
-        Text [ dutch ] = "~Nieuw";
-        Text [ french ] = "~Nouveau";
-        Text [ spanish ] = "~Nuevo";
-        Text [ italian ] = "~Nuovo";
-        Text [ danish ] = "~New";
-        Text [ swedish ] = "~Ny";
-        Text [ polish ] = "Nowy";
-        Text [ portuguese_brazilian ] = "~New";
-        Text [ japanese ] = "V‹Kì¬(~N)";
-        Text [ korean ] = "~New";
-        Text [ chinese_simplified ] = "ĞÂ½¨²éÑ¯(~N)";
-        Text [ chinese_traditional ] = "·s¬d¸ß(~N)";
-        Text [ turkish ] = "~New";
-        Text [ arabic ] = "ÌÏíÏ";
-    };
-    PushButton PB_EDITQUERY
-    {
-        Pos = MAP_APPFONT ( 204, 23 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        SVLook = TRUE;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_QUERIES_EDIT;
-        Text = "~Bearbeiten";
-        Text [ english ] = "~Edit";
-        Text [ english_us ] = "~Edit";
-        Text [ portuguese ] = "~Editar";
-        Text [ russian ] = "~Ïğàâêà";
-        Text [ greek ] = "Åğåîåñãáóßá";
-        Text [ dutch ] = "~Bewerken";
-        Text [ french ] = "~Éditer";
-        Text [ spanish ] = "~Editar";
-        Text [ italian ] = "Modi~fica";
-        Text [ danish ] = "~Edit";
-        Text [ swedish ] = "R~edigera";
-        Text [ polish ] = "Edytuj";
-        Text [ portuguese_brazilian ] = "~Edit";
-        Text [ japanese ] = "•ÒW(~E)";
-        Text [ korean ] = "~Edit";
-        Text [ chinese_simplified ] = "±à¼­(~E)";
-        Text [ chinese_traditional ] = "½s¿è(~E)";
-        Text [ turkish ] = "~Edit";
-        Text [ arabic ] = "ÊÍÑíÑ";
-    };
-    PushButton PB_DELETEQUERY
-    {
-        Pos = MAP_APPFONT ( 204, 40 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        SVLook = TRUE;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_QUERIES_DELETE;
-        Text = "~Löschen";
-        Text [ english ] = "~Delete";
-        Text [ english_us ] = "~Delete";
-        Text [ portuguese ] = "~Eliminar";
-        Text [ russian ] = "~Óäàëèòü";
-        Text [ greek ] = "ÄéáãñáöŞ";
-        Text [ dutch ] = "~Delete";
-        Text [ french ] = "~Supprimer";
-        Text [ spanish ] = "~Eliminar";
-        Text [ italian ] = "~Elimina";
-        Text [ danish ] = "~Delete";
-        Text [ swedish ] = "~Radera";
-        Text [ polish ] = "Usuñ";
-        Text [ portuguese_brazilian ] = "~Delete";
-        Text [ japanese ] = "íœ(~D)";
-        Text [ korean ] = "~Delete";
-        Text [ chinese_simplified ] = "É¾³ı(~D)";
-        Text [ chinese_traditional ] = "§R°£(~D)";
-        Text [ turkish ] = "~Delete";
-        Text [ arabic ] = "ÍĞİ";
     };
 };
 
@@ -2016,21 +1996,22 @@ TabPage PAGE_DOCUMENTLINKS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_DOCUMENTLINKS;
 
-    GroupBox GB_COLLECTION
+    FixedLine FL_COLLECTION
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 176 ) ;
+        Pos = MAP_APPFONT ( 4 , 6 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Verknüpfungen";
         Text [ english ] = "Bookmarks";
         Text [ english_us ] = "Bookmarks";
     };
     ToolBox TLB_ACTIONS
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 236 , 14 ) ;
+        Pos = MAP_APPFONT ( 7 , 18 ) ;
+        Size = MAP_APPFONT ( 246 , 14 ) ;
         ButtonType = BUTTON_SYMBOL;
         Align = BOXALIGN_TOP;
         Customize = FALSE;
+        HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX;
         ItemList =
         {
             ToolBoxItem
@@ -2076,8 +2057,8 @@ TabPage PAGE_DOCUMENTLINKS
     };
     Control CTL_COLLECTION
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 236 , 142 ) ;
+        Pos = MAP_APPFONT ( 7 , 35 ) ;
+        Size = MAP_APPFONT ( 246 , 139 ) ;
         Border = TRUE;
         SVLook = TRUE;
         TabStop = TRUE ;
@@ -2341,29 +2322,12 @@ WarningBox WARN_SAVEFORQUERIES
         "Sollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
     Message [ english ] = "To administrate the $objects$ of a data source, it must be saved.\n"
         "Should all changes made in this dialog now be saved?";
-    Message [ english_us ] = "To administrate the queries of a data source, that data source must be saved.\nShould all changes made in this dialog be saved now?";
+    Message [ english_us ] = "To administrate the $objects$ of a data source, that data source must be saved.\nShould all changes made in this dialog be saved now?";
 
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_YES;
 
     Message[ language_user1 ] = "For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
-    Message[ portuguese ] = "É necessário guardar a fonte de dados para poder administrar as respectivas consultas.\nGuardar as modificações efectuadas nesta caixa de diálogo?";
-    Message[ russian ] = "Äëÿ óïğàâëåíèÿ çàïğîñàìè èñòî÷íèêà äàííûõ, íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÑîõğàíèòü âñå èçìåíåíèÿ, âûïîëíåííûå â ıòîì äèàëîãå?";
-    Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÈİëåôå íá áğïèçêåõôïıí üëåò ïé áëëáãİò ğïõ İãéíáí óå áõôüí ôïí äéÜëïãï;";
-    Message[ dutch ] = "Om de query's van een gegevensbron te beheren moet deze zijn opgeslagen.\nWilt u de wijzigingen die u in deze dialoog heeft aangebracht nu opslaan?";
-    Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les requêtes.\nEnregistrer toutes les modifications effectuées dans cette boîte de dialogue ?";
-    Message[ spanish ] = "Para poder administrar las consultas de una fuente de datos, debe guardarse esta.\n¿Desea guardar todas las modificaciones realizadas hasta ahora en este diálogo?";
-    Message[ italian ] = "Per gestire la ricerca di una sorgente di dati è necessario prima salvarla.\nVolete salvare le modifiche raccolte fino adesso nel dialogo?";
-    Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
-    Message[ swedish ] = "För att sökningarna i en datakälla ska kunna administreras måste datakällan sparas.\nSka alla ändringar som hittills har gjorts i den här dialogen sparas nu?";
-    Message[ polish ] = "Administracja kwerend Ÿród³a danych wymaga jego uprzedniego zapisania.\nZapisaæ wszystkie zmiany ³¹cznie ze zmianami dokonanymi w danym oknie dialogowym?";
-    Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
-    Message[ japanese ] = "ÃŞ°À¿°½‚Ì¸´Ø°‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚±‚ÌÀŞ²±Û¸Ş‚Ås‚Á‚½‚·‚×‚Ä‚Ì•ÏX‚ğ‚¢‚Ü‚·‚®•Û‘¶‚µ‚Ü‚·‚©B";
-    Message[ korean ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
-    Message[ chinese_simplified ] = "ÔÚ¹ÜÀí×ÊÁÏÔ´µÄ²éÑ¯Ö®Ç°±ØĞëÏÈ´æÅÌËü¡£\nÏÖÔÚÒª´æÅÌÕâ¸ö¶Ô»°¿òÖ®ÖĞ¸ü¸ÄµÄÄÚÈİ£¿";
-    Message[ chinese_traditional ] = "¦bºŞ²z¸ê®Æ·½ªº¬d¸ß¤§«e¥²¶·¥ıÀx¦s¥¦¡C\n²{¦b­nÀx¦s³o­Ó¹ï¸Ü¤è¶ôªºÅÜ§ó¤º®e¡H";
-    Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
-    Message[ arabic ] = "áÅÏÇÑÉ ÇÓÊİÓÇÑÇÊ ãÕÏÑ ÈíÇäÇÊ¡ íÌÈ ÍİÙ åĞÇ ÇáãÕÏÑ.\nåá ÊÑíÏ ÍİÙ ßÇİÉ ÇáÊÛííÑÇÊ ÇáÊí ÊãÊ ÍÊì ÇáÂä İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¿";
 };
 
 ErrorBox ERR_CANTADMINQUERIES
@@ -2394,6 +2358,19 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ chinese_traditional ] = "­nºŞ²z¤@­Ó¸ê®Æ·½ªº¬d¸ß¡A¥²¶·¥ıÀx¦s¥¦¡C\n¦ı¬O²{¦b±z¤£¥i¥HÀx¦sÅÜ§ó¤º®e¡A¦]¬°¦s¦b¦WºÙ¨R¬ğ¿ù»~¡C\n\n¦b±Æ°£¿ù»~¤§«e±zµLªk¦sÀxÅÜ§ó¡C";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ arabic ] = "áÅÏÇÑÉ ÇÓÊİÓÇÑÇÊ ãÕÏÑ ÈíÇäÇÊ¡ íÌÈ Ãä ÊŞæã ÃæáÇğ ÈÍİÙ åĞÇ ÇáãÕÏÑ¡\nÅáÇ Ãä ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ áÇ ÊÓãÍ ÈÍİÙ ÇáÊÛííÑÇÊ (ÈÓÈÈ æÌæÏ ÊÚÇÑÖ İí ÇáÃÓãÇÁ).\n\náÇ íãßäß ÅÏÇÑÉ ÇáÇÓÊİÓÇÑÇÊ¡ ÅáÇ ÈÚÏ ÅÒÇáÉ åĞå ÇáÊÚÇÑÖÇÊ æÍİÙ ÇáÊÛííÑÇÊ.";
+};
+
+ErrorBox ERR_CANTDOTABLEACTION
+{
+    Message = "Für diese Aktion müssen die Änderungen an der Datenquelle gespeichert werden.\n"
+        "Allerdings erlauben die aktuellen Eingaben es nicht, dies zu tun, da es Namenskonflikte zwischen verschiedenen Datenquellen gibt.\n\n"
+        "Solange diese Konflikte nicht gelöst sind, können Sie die Aktion nicht ausführen.";
+    Message [ english ] = "For this operation, the data source must be saved.\n"
+        "However, the current settings do not allow this, due to conflicting names of different data sources.\n\n"
+        "As long as these conflicts aren't resolved, you won't be able to do the requested operation.";
+    Message [ english_us ] = "For this operation, the data source must be saved.\n"
+        "However, the current settings do not allow this, due to conflicting names of different data sources.\n\n"
+        "As long as these conflicts aren't resolved, you won't be able to do the requested operation.";
 };
 
 String STR_QUERY_OBJECTS
@@ -2438,9 +2415,22 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text [ english_us ] = "The directory $name$ could not be created.";
 };
 
+QueryBox QUERY_NEED_TO_SAVE_FILTER
+{
+    Message = "Um diese Aktion auszuführen, müssen die bis jetzt in diesem Dialog vorgenommene Änderungen gespeichert werden.\nWollen Sie fortfahren?";
+    Message [ english ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
+    Message [ english_us ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
+
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_YES;
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2001/05/08 12:08:46  fs
+ *  #86224# new strings
+ *
  *  Revision 1.42  2001/05/03 19:17:52  kz
  *  Merge SRC630: 03.05.01 - 21:16:46 (NoBranch)
  *
