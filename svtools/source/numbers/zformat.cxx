@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:44:34 $
+ *  last change: $Author: er $ $Date: 2001-02-14 16:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,21 +549,9 @@ SvNumberformat::SvNumberformat(String& rString,
                 eOp1 = NUMBERFORMAT_OP_GT;              // default: > 0
             else if (nIndex == 2 && eOp2 == NUMBERFORMAT_OP_NO)
                 eOp2 = NUMBERFORMAT_OP_LT;              // default: < 0
-            if (sStr.Len() == 0)                        // leeres Teilformat
-            {                                           // Sonderfall 1
-            }
-/*                                          // Typ undefined
-#ifndef ENABLEUNICODE
-            else if (sStr.ICompare(pSc->GetStandardName()) == COMPARE_EQUAL)
-#else
-            else if (sStr.Compare(pSc->GetStandardName()) == COMPARE_EQUAL)
-#endif
+            if (sStr.Len() == 0)                        // empty sub format
             {
-                rString.Replace(pSc->GetStandardName(), rString.Search(sStr));
-                NumFor[nIndex].Info().eScannedType = NUMBERFORMAT_NUMBER;
             }
-*/
-                                                        // -> Sonderfall 2
             else
             {
                 nStrPos = pSc->ScanFormat( sStr, aComment );
@@ -611,7 +599,15 @@ SvNumberformat::SvNumberformat(String& rString,
             bCancel = TRUE;
         }
         if (rString.Len() == nPos)
+        {
+            if ( nIndex == 2 && eSymbolType == SYMBOLTYPE_FORMAT &&
+                    rString.GetChar(nPos-1) == ';' )
+            {   // #83510# A 4th subformat explicitly specified to be empty
+                // hides any text. Need the type here for HasTextFormat()
+                NumFor[3].Info().eScannedType = NUMBERFORMAT_TEXT;
+            }
             bCancel = TRUE;
+        }
     }                                               // of for
     if (bCondition)
     {
