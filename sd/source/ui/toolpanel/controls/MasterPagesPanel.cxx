@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:07:22 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,11 @@
  ************************************************************************/
 
 #include "MasterPagesPanel.hxx"
+#include "taskpane/ScrollPanel.hxx"
 #include "CurrentMasterPagesSelector.hxx"
 #include "RecentMasterPagesSelector.hxx"
 #include "AllMasterPagesSelector.hxx"
+#include "taskpane/TaskPaneControlFactory.hxx"
 
 #include "DrawViewShell.hxx"
 #include "ViewShellBase.hxx"
@@ -129,6 +131,15 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
 
 MasterPagesPanel::~MasterPagesPanel (void)
 {
+}
+
+
+
+
+std::auto_ptr<ControlFactory> MasterPagesPanel::CreateControlFactory (ViewShellBase& rBase)
+{
+    return std::auto_ptr<ControlFactory>(
+        new ControlFactoryWithArgs1<MasterPagesPanel,ViewShellBase>(rBase));
 }
 
 } } } // end of namespace ::sd::toolpanel::controls
