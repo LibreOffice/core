@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 12:48:06 $
+ *  last change: $Author: cp $ $Date: 2001-05-31 14:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2138,16 +2138,16 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
             break;
         case POINTER_WINDOW_NSIZE:
-            aCur = XCreateFontCursor( pDisp_, XC_top_tee );
+            aCur = XCreateFontCursor( pDisp_, XC_top_side );
             break;
         case POINTER_WINDOW_SSIZE:
-            aCur = XCreateFontCursor( pDisp_, XC_bottom_tee );
+            aCur = XCreateFontCursor( pDisp_, XC_bottom_side );
             break;
         case POINTER_WINDOW_WSIZE:
-            aCur = XCreateFontCursor( pDisp_, XC_left_tee );
+            aCur = XCreateFontCursor( pDisp_, XC_left_side );
             break;
         case POINTER_WINDOW_ESIZE:
-            aCur = XCreateFontCursor( pDisp_, XC_right_tee );
+            aCur = XCreateFontCursor( pDisp_, XC_right_side );
             break;
         case POINTER_NWSIZE:
             MAKE_CURSOR( nwsesize_ );
