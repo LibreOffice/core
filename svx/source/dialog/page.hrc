@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
+ *  last change: $Author: os $ $Date: 2001-05-17 06:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,12 @@
 #define FT_PAGELAYOUT           21
 
 #define LB_NUMBER_FORMAT        30
-#define FL_NUMBER_FORMAT        31
+#define FL_LAYOUT        31
 #define FT_NUMBER_FORMAT        32
 
 #define WN_BSP                  40
 
+#define FT_ORIENTATION          48
 #define FT_PAPER_FORMAT         49
 #define LB_PAPER_SIZE           50
 #define RB_PORTRAIT             51
@@ -97,13 +98,12 @@
 #define CB_REGISTER             60
 #define FT_REGISTER             61
 #define LB_REGISTER             62
-#define FL_REGISTER             63
+#define FL_BOTTOM_SEP           64
 
 #define CB_HORZ                 70
 #define CB_VERT                 71
 #define CB_ADAPT                72
-#define FT_PAGE_NAME            73
-#define FL_EXTRA                74
+#define FT_TBL_ALIGN            73
 
 #define PB_BACK                 80
 

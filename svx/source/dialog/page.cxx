@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
+ *  last change: $Author: os $ $Date: 2001-05-17 06:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,10 +241,11 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aPageText           ( this, ResId( FT_PAGELAYOUT ) ),
     aNumberFormatBox    ( this, ResId( LB_NUMBER_FORMAT ) ),
     aNumberFormatText   ( this, ResId( FT_NUMBER_FORMAT ) ),
-    aNumberFormatFl     ( this, ResId( FL_NUMBER_FORMAT ) ),
+    aLayoutFL           ( this, ResId( FL_LAYOUT ) ),
     aBspWin             ( this, ResId( WN_BSP ) ),
     aPaperFormatText    ( this, ResId( FT_PAPER_FORMAT ) ),
     aPaperSizeBox       ( this, ResId( LB_PAPER_SIZE ) ),
+    aOrientationFT      ( this, ResId( FT_ORIENTATION ) ),
     aPortraitBtn        ( this, ResId( RB_PORTRAIT ) ),
     aLandscapeBtn       ( this, ResId( RB_LANDSCAPE ) ),
     aPaperWidthText     ( this, ResId( FT_PAPER_WIDTH ) ),
@@ -254,16 +255,14 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aPaperTrayLbl       ( this, ResId( FT_PAPER_TRAY ) ),
     aPaperTrayBox       ( this, ResId( LB_PAPER_TRAY ) ),
     aPaperSizeFl        ( this, ResId( FL_PAPER_SIZE ) ),
+    aBottomSeparatorFl  ( this, ResId( FL_BOTTOM_SEP ) ),
+    aTblAlignFT         ( this, ResId( FT_TBL_ALIGN ) ),
     aHorzBox            ( this, ResId( CB_HORZ ) ),
     aVertBox            ( this, ResId( CB_VERT ) ),
     aAdaptBox           ( this, ResId( CB_ADAPT ) ),
-    aPageName           ( this, ResId( FT_PAGE_NAME ) ),
-    aExtraFl            ( this, ResId( FL_EXTRA ) ),
-
     aRegisterCB         ( this, ResId( CB_REGISTER ) ),
     aRegisterFT         ( this, ResId( FT_REGISTER ) ),
     aRegisterLB         ( this, ResId( LB_REGISTER ) ),
-    aRegisterFl         ( this, ResId( FL_REGISTER ) ),
 
     aInsideText         (       ResId( STR_INSIDE ) ),
     aOutsideText        (       ResId( STR_OUTSIDE ) ),
@@ -276,7 +275,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 {
     bBorderModified = FALSE;
-
+    aBottomSeparatorFl.SetStyle(aBottomSeparatorFl.GetStyle()|WB_VERT);
     FreeResource();
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -549,13 +548,11 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     // Applikationsspezifisch
 
-    USHORT nResId = 0;
-
     switch ( eMode )
     {
         case SVX_PAGE_MODE_CENTER:
         {
-            nResId = RID_SVXSTR_CALC_PAGE;
+            aTblAlignFT.Show();
             aHorzBox.Show();
             aVertBox.Show();
 
@@ -579,10 +576,6 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
         case SVX_PAGE_MODE_PRESENTATION:
         {
-            nResId = RID_SVXSTR_DRAW_PAGE;
-            aHorzBox.SetText( String( SVX_RESSTR( RID_SVXSTR_FULLSIZE ) ) );
-            aHorzBox.Show(); // f"ur Gesamte Seite ausf"ullen (Hintergr.Obj.)
-            aHorzBox.SetHelpId( HID_TPPAGE_FULLSIZE );
             aAdaptBox.Show();
             String sUser = GetUserData();
 
@@ -594,8 +587,6 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
                 aAdaptBox.Check( pItem ?
                     ( (const SfxBoolItem*)pItem )->GetValue() : FALSE );
             }
-            pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
-            aHorzBox.Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue() : FALSE );
 
             //!!! hidden, weil von StarDraw nicht implementiert
             aLayoutBox.Hide();
@@ -603,23 +594,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
             break;
         }
-
-        default:
-        {
-            nResId = RID_SVXSTR_WRITER_PAGE;
-            if(!aRegisterCB.IsVisible())
-                aPageName.Show();
-            pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
-
-            if ( pItem )
-                aPageName.SetText(((const SfxStringItem*)pItem)->GetValue());
-            else
-                aPageName.SetText( String() );
-        }
     }
 
-    if ( nResId )
-        aExtraFl.SetText( SVX_RESSTR( nResId ) );
 
     // im Beispiel Hintergrund und Umrandung anzeigen
     ResetBackground_Impl( rSet );
@@ -868,15 +844,6 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PAGE_EXT1 ),
                       aAdaptBox.IsChecked() ) );
             bModified |= TRUE;
-
-            if( aHorzBox.IsChecked() != aHorzBox.GetSavedValue() )
-            {
-                SfxBoolItem aHorz( GetWhich( SID_ATTR_PAGE_EXT2 ),
-                                   aHorzBox.IsChecked() );
-                rSet.Put( aHorz );
-                bModified |= TRUE;
-            }
-
             break;
         }
 
@@ -1645,13 +1612,9 @@ void SvxPageDescPage::CalcMargin_Impl()
 
 IMPL_LINK_INLINE_START( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
 {
-    // Wird im Draw zweckentfremdet
-    if( eMode != SVX_PAGE_MODE_PRESENTATION )
-    {
-        aBspWin.SetHorz( aHorzBox.IsChecked() );
-        aBspWin.SetVert( aVertBox.IsChecked() );
-        UpdateExample_Impl();
-    }
+    aBspWin.SetHorz( aHorzBox.IsChecked() );
+    aBspWin.SetVert( aVertBox.IsChecked() );
+    UpdateExample_Impl();
     return 0;
 }
 IMPL_LINK_INLINE_END( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
@@ -1666,12 +1629,9 @@ void SvxPageDescPage::SetCollectionList(const List* pList)
         aRegisterLB.InsertEntry(*(String*)pList->GetObject(i));
     }
 
-    aPageName .Hide();
-    aExtraFl .Hide();
     aRegisterCB  .Show();
     aRegisterFT  .Show();
     aRegisterLB.Show();
-    aRegisterFl  .Show();
     aRegisterCB.SetClickHdl(LINK(this, SvxPageDescPage, RegisterModify));
 }
 
