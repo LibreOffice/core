@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:45:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,11 +1069,11 @@ String STR_LINE_TOP
     Text [ danish ] = "Række øverst" ;
     Text [ portuguese ] = "Linha superior" ;
     Text [ portuguese_brazilian ] = "Zeile oben" ;
-    Text[ chinese_simplified ] = "ĞĞÏòÉÏ";
+    Text[ chinese_simplified ] = "ĞĞÉÏ·½";
     Text[ russian ] = "Ñòğîêà ñâåğõó";
     Text[ polish ] = "Wiersz na górze";
     Text[ japanese ] = "s‚Ìã";
-    Text[ chinese_traditional ] = "¦æ¦V¤W";
+    Text[ chinese_traditional ] = "¦æ¤W¤è";
     Text[ arabic ] = "ÃÚáì ÇáÓØÑ";
     Text[ greek ] = "ÃñáììŞ - Üíù";
     Text[ korean ] = "ÁÙ À§";
@@ -1093,11 +1093,11 @@ String STR_LINE_BOTTOM
     Text [ danish ] = "Række nederst" ;
     Text [ portuguese ] = "Linha inferior" ;
     Text [ portuguese_brazilian ] = "Zeile unten" ;
-    Text[ chinese_simplified ] = "ÏÂÒ»ĞĞ";
+    Text[ chinese_simplified ] = "ĞĞÏÂ·½";
     Text[ russian ] = "Ñòğîêà ñíèçó";
     Text[ polish ] = "Wiersz na dole";
     Text[ japanese ] = "s‚Ì‰º";
-    Text[ chinese_traditional ] = "¤U¤@¦æ";
+    Text[ chinese_traditional ] = "¦æ¤U¤è";
     Text[ arabic ] = "ÃÓİá ÇáÓØÑ";
     Text[ greek ] = "ÃñáììŞ - êÜôù";
     Text[ korean ] = "ÁÙ ¾Æ·¡";
