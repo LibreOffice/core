@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 14:01:46 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 12:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+// #95343# -----------------
+#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
+#endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
@@ -167,9 +171,11 @@ namespace pcr
     //========================================================================
     //= OPropertyBrowserController
     //========================================================================
+    // #95343#------------------------------------------------------------------------------------
     typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::frame::XController
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
+                                    // #95343# -----------------------
                                     ,   ::com::sun::star::awt::XLayoutConstrains
                                     >   OPropertyBrowserController_Base;
     typedef ::comphelper::OPropertyContainer    OPropertyBrowserController_PropertyBase1;
@@ -289,7 +295,7 @@ namespace pcr
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-        // XLayoutConstrains
+        // XLayoutConstrains #95343# ----------------
         virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException);
@@ -427,6 +433,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2002/01/09 14:01:46  fs
+ *  removed the implementation of XInitialization (obsolete since a long time ago, as I discovered during #96068#)
+ *
  *  Revision 1.14  2001/12/13 09:14:26  fs
  *  preparations for #95343# - support the XLayoutConstraints interface
  *

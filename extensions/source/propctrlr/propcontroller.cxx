@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 14:01:46 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 12:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,31 +441,6 @@ namespace pcr
     void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& _rSource ) throw (RuntimeException)
     {
         // not interested in
-    }
-
-    //------------------------------------------------------------------------
-    awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize(  ) throw (RuntimeException)
-    {
-        return awt::Size( 250, 300 );
-    }
-
-    //------------------------------------------------------------------------
-    awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize(  ) throw (RuntimeException)
-    {
-        return getMinimumSize( );
-            // TODO: depending on the strings we have on our current page
-    }
-
-    //------------------------------------------------------------------------
-    awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const awt::Size& _rNewSize ) throw (RuntimeException)
-    {
-        awt::Size aMinSize = getMinimumSize( );
-        awt::Size aAdjustedSize( _rNewSize );
-        if ( aAdjustedSize.Width < aMinSize.Width )
-            aAdjustedSize.Width = aMinSize.Width;
-        if ( aAdjustedSize.Height < aMinSize.Height )
-            aAdjustedSize.Height = aMinSize.Height;
-        return aAdjustedSize;
     }
 
     //------------------------------------------------------------------------
@@ -1063,6 +1038,33 @@ namespace pcr
         return nControlType;
     }
 
+    // XLayoutConstrains #95343# ----------------
+    ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize() throw (::com::sun::star::uno::RuntimeException)
+    {
+        ::com::sun::star::awt::Size aSize;
+        if( m_pView )
+            return m_pView->getMinimumSize();
+        else
+            return aSize;
+    }
+
+    ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return getMinimumSize();
+    }
+
+    ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const ::com::sun::star::awt::Size& _rNewSize ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        awt::Size aMinSize = getMinimumSize( );
+        awt::Size aAdjustedSize( _rNewSize );
+        if ( aAdjustedSize.Width < aMinSize.Width )
+            aAdjustedSize.Width = aMinSize.Width;
+        if ( aAdjustedSize.Height < aMinSize.Height )
+            aAdjustedSize.Height = aMinSize.Height;
+        return aAdjustedSize;
+    }
+
+
 //............................................................................
 } // namespace pcr
 //............................................................................
@@ -1070,6 +1072,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2002/01/09 14:01:46  fs
+ *  removed the implementation of XInitialization (obsolete since a long time ago, as I discovered during #96068#)
+ *
  *  Revision 1.17  2001/12/13 09:14:26  fs
  *  preparations for #95343# - support the XLayoutConstraints interface
  *
