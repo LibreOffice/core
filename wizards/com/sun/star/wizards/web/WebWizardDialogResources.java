@@ -11,6 +11,7 @@ public class WebWizardDialogResources extends Resource {
 
     String resSessionName;
     String resSizeTemplate;
+    String resSpecifyNewFileLocation;
     String resCreatedTemplate;
     String resUpdatedTemplate;
     String resSlides;
@@ -320,7 +321,7 @@ public class WebWizardDialogResources extends Resource {
         resLocalTargetCouldNotCreate    = getResText(RID_WEBWIZARDDIALOG_START + 149);
         resLocalTargetCreate            = getResText(RID_WEBWIZARDDIALOG_START + 150);
         resSizeTemplate                 = getResText(RID_WEBWIZARDDIALOG_START + 151);
-
+        resSpecifyNewFileLocation       = getResText(RID_WEBWIZARDDIALOG_START + 152);
 
         resClose                        = getResText(RID_COMMON_START + 17);
         resCancel                       = getResText(RID_COMMON_START + 11);
