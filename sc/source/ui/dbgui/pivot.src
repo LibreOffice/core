@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:19:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "Çà";
         Text[ turkish ] = "SATIR";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "FILA";
     };
     Window WND_COL
     {
@@ -133,6 +134,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "¿­";
         Text[ turkish ] = "SÜTUN";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "COLUMNA";
     };
     Window WND_DATA
     {
@@ -161,6 +163,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "µ¥ÀÌÅÍ";
         Text[ turkish ] = "VERÝ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "DATOS";
     };
     Window WND_SELECT
     {
@@ -202,6 +205,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "¿À¸¥ÂÊ¿¡¼­ºÎÅÍ ¿øÇÏ´Â À§Ä¡·Î ÇÊµå ²ø¾î´ç±â½Ê½Ã¿À";
         Text[ turkish ] = "Saðdaki alanlarý fare ile istenen konuma sürükleyin.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Arrastre los campos de la página derecha hacia el área deseada.";
     };
     GroupBox GB_LAYOUT
     {
@@ -286,6 +290,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "°á°ú";
         Text[ turkish ] = "Sonuç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resultado";
     };
     FixedText FT_OUTAREA
     {
@@ -315,6 +320,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "Ãâ·Â";
         Text[ turkish ] = "Çýktý baþl.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resultado en";
     };
     ListBox LB_OUTAREA
     {
@@ -359,6 +365,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -389,6 +396,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ºó Çà ¹«½Ã(~E)";
         Text[ turkish ] = "Boþ satýrlarý ~yok say";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ignorar filas vacías";
     };
     CheckBox BTN_DETECTCAT
     {
@@ -419,6 +427,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "¹üÁÖ Ç¥½Ã(~I)";
         Text[ turkish ] = "~Kategoriyi tanýmla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~dentificar categorías";
     };
     CheckBox BTN_TOTALCOL
     {
@@ -447,6 +456,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ÇÕ°è¡¡¿­(~C)";
         Text[ turkish ] = "Sütun ~toplamý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Columnas de totales";
     };
     CheckBox BTN_TOTALROW
     {
@@ -475,6 +485,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ÇÕ°è Çà(~T)";
         Text[ turkish ] = "Satýr t~oplamý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Filas de totales";
     };
     String PIVOTSTR_SUM
     {
@@ -501,6 +512,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ÇÕ°è - ";
         Text[ turkish ] = "Toplam - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Total -  ";
     };
     String PIVOTSTR_COUNT
     {
@@ -527,6 +539,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "°³¼ö - ";
         Text[ turkish ] = "Adet Sayýsý - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad -  ";
     };
     String PIVOTSTR_AVG
     {
@@ -553,6 +566,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "Æò±Õ°ª- ";
         Text[ turkish ] = "Ortalama - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Media -  ";
     };
     String PIVOTSTR_MAX
     {
@@ -579,6 +593,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ÃÖ´ë - ";
         Text[ turkish ] = "Max - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Máx -  ";
     };
     String PIVOTSTR_MIN
     {
@@ -605,6 +620,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ÃÖ¼Ò - ";
         Text[ turkish ] = "Min - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mín -  ";
     };
     String PIVOTSTR_PROD
     {
@@ -631,6 +647,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "°ö - ";
         Text[ turkish ] = "Çarpým - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Producto -  ";
     };
     String PIVOTSTR_COUNT2
     {
@@ -658,6 +675,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "°³¼ö - ";
         Text[ turkish ] = "Adet sayýsý - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad -  ";
     };
     String PIVOTSTR_DEV
     {
@@ -684,6 +702,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "StDev - ";
         Text[ turkish ] = "StDev - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "DevNorm -  ";
     };
     String PIVOTSTR_DEV2
     {
@@ -710,6 +729,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "StDevP - ";
         Text[ turkish ] = "StDevP - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "DevNormP -  ";
     };
     String PIVOTSTR_VAR
     {
@@ -736,6 +756,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ºÐ»ê - ";
         Text[ turkish ] = "Var - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Var -  ";
     };
     String PIVOTSTR_VAR2
     {
@@ -762,6 +783,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ºÐ»ê - ";
         Text[ turkish ] = "VarP - ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Var2 -  ";
     };
     Text[ danish ] = "DataPilot";
     Text[ french ] = "DataPilote";
@@ -783,5 +805,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ";
     Text[ turkish ] = "Veri pilotu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Piloto de datos";
 };
 
