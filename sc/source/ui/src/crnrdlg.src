@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:41:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ japanese ] = "γƒ©γƒ™γƒ«η―„ε›²γ®ζ‡ε®";
     Text[ chinese_traditional ] = "ε®ηΎ©ζ¨™ι΅ε€ε";
     Text[ arabic ] = "ΚΪΡνέ δΨΗή ΗαΪδζδΙ";
-    Text[ greek ] = "Ορισμός περιοχής επιγραφής";
+    Text[ greek ] = "Ορισμός περιοχής επισήμανσης";
     Text[ korean ] = "λ μ΄λΈ” λ²”μ„ μ§€μ •";
     Text[ turkish ] = "Etiket aralύπύnύ belirle";
     Text[ language_user1 ] = " ";
@@ -413,6 +413,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ hindi ] = "ΰ¤²ΰ¥‡ΰ¤¬ΰ¤Ώΰ¤² ΰ¤«ΰ¥ΰ¤²ΰ¤Ύΰ¤µ ΰ¤•ΰ¥‹ ΰ¤ªΰ¤°ΰ¤Ώΰ¤­ΰ¤Ύΰ¤·ΰ¤Ύ ΰ¤¦ΰ¥‹";
     Text[ slovak ] = "DefinovaΕ¥ oblasΕ¥ popiskov";
 };
+
 
 
 
