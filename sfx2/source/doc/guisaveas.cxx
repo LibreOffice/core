@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:34:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE2_HPP_
+#include <com/sun/star/frame/XStorable2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -238,6 +241,7 @@ class ModelData_Impl
     SfxStoringHelper* m_pOwner;
     uno::Reference< frame::XModel > m_xModel;
     uno::Reference< frame::XStorable > m_xStorable;
+    uno::Reference< frame::XStorable2 > m_xStorable2;
     uno::Reference< util::XModifiable > m_xModifiable;
 
     ::rtl::OUString m_aDocumentServiceName;
@@ -257,6 +261,7 @@ public:
 
     uno::Reference< frame::XModel > GetModel();
     uno::Reference< frame::XStorable > GetStorable();
+    uno::Reference< frame::XStorable2 > GetStorable2();
     uno::Reference< util::XModifiable > GetModifiable();
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
@@ -342,6 +347,19 @@ uno::Reference< frame::XStorable > ModelData_Impl::GetStorable()
     }
 
     return m_xStorable;
+}
+
+//-------------------------------------------------------------------------
+uno::Reference< frame::XStorable2 > ModelData_Impl::GetStorable2()
+{
+    if ( !m_xStorable2.is() )
+    {
+        m_xStorable2 = uno::Reference< frame::XStorable2 >( m_xModel, uno::UNO_QUERY );
+        if ( !m_xStorable2.is() )
+            throw uno::RuntimeException();
+    }
+
+    return m_xStorable2;
 }
 
 //-------------------------------------------------------------------------
@@ -1161,7 +1179,25 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         {
             // Document properties can contain streams that should be freed before storing
             aModelData.FreeDocumentProps();
-            aModelData.GetStorable()->store();
+
+            if ( aModelData.GetStorable2().is() )
+            {
+                try
+                {
+                    aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
+                }
+                catch( lang::IllegalArgumentException& )
+                {
+                    OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                    aModelData.GetStorable()->store();
+                }
+            }
+            else
+            {
+                OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
+                aModelData.GetStorable()->store();
+            }
+
             return sal_False;
         }
         else
