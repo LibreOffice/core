@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:03:37 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
 #include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
@@ -213,7 +216,12 @@ sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL,
 
     m_bDocumentReadOnly = sal_False;
 
-    m_aArgs = _aArguments;
+    static ::rtl::OUString s_sStatusIndicator(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
+    static ::rtl::OUString s_sInteractionHandler(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
+    ::comphelper::MediaDescriptor aMedia(_aArguments);
+    aMedia.erase(s_sStatusIndicator);
+    aMedia.erase(s_sInteractionHandler);
+    aMedia >> m_aArgs;
     m_sFileURL = _sURL;
     if ( !m_sName.getLength() )
         m_sName = m_sFileURL;
@@ -223,14 +231,15 @@ sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL,
 
     try
     {
-        const PropertyValue* pValue =::std::find_if(m_aArgs.getConstArray(),
-                                                    m_aArgs.getConstArray() + m_aArgs.getLength(),
-                                                    ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"))));
+        const PropertyValue* pValue =::std::find_if(_aArguments.getConstArray(),
+                                                    _aArguments.getConstArray() + _aArguments.getLength(),
+                                                    ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),s_sStatusIndicator));
 
         Sequence<Any> aFilterArgs;
-        if ( pValue && pValue != (m_aArgs.getConstArray() + m_aArgs.getLength()) )
+        Reference<XStatusIndicator> xStatusIndicator;
+        if ( pValue && pValue != (_aArguments.getConstArray() + _aArguments.getLength()) )
         {
-            Reference<XStatusIndicator> xStatusIndicator(pValue->Value,UNO_QUERY);
+            xStatusIndicator.set(pValue->Value,UNO_QUERY);
 
             // set progress range and start status indicator
             sal_Int32 nProgressRange(1000000);
@@ -250,7 +259,9 @@ sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL,
             xImporter->setTargetDocument(xComponent);
             Reference<XFilter> xFilter(xImporter,UNO_QUERY);
 
-            xFilter->filter(m_aArgs);
+            xFilter->filter(_aArguments);
+            if ( xStatusIndicator.is() )
+                xStatusIndicator->end();
         }
         else
             return sal_False;
@@ -263,6 +274,7 @@ sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL,
     {
         return sal_False;
     }
+
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -383,6 +395,8 @@ void SAL_CALL ODatabaseSource::store(  ) throw (IOException, RuntimeException)
         throw DisposedException();
 
     store(m_sFileURL,m_aArgs);
+
+    notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone")));
 }
 // -----------------------------------------------------------------------------
 void ODatabaseSource::store(const ::rtl::OUString& sURL, const Sequence< PropertyValue >& lArguments )
@@ -483,7 +497,8 @@ void SAL_CALL ODatabaseSource::storeAsURL( const ::rtl::OUString& sURL, const Se
 
         }
         m_aArgs = lArguments;
-        store();
+        store(m_sFileURL,m_aArgs);
+        notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone")));
     }
     else
         throw IOException();
@@ -546,6 +561,7 @@ void SAL_CALL ODatabaseSource::setModified( sal_Bool _bModified ) throw (Propert
         m_bModified = _bModified;
         lang::EventObject aEvt(*this);
         NOTIFY_LISTERNERS(m_aModifyListeners,XModifyListener,modified)
+        notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")));
     }
 }
 // -----------------------------------------------------------------------------
@@ -837,11 +853,11 @@ void ODatabaseSource::writeStorage(const ::rtl::OUString& _sURL, const Sequence<
     Reference<XStatusIndicator> xStatusIndicator;
     try
     {
-        const PropertyValue* pValue =::std::find_if(m_aArgs.getConstArray(),
-                                                    m_aArgs.getConstArray() + m_aArgs.getLength(),
+        const PropertyValue* pValue =::std::find_if(lArguments.getConstArray(),
+                                                    lArguments.getConstArray() + lArguments.getLength(),
                                                     ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"))));
 
-        if ( pValue && pValue != (m_aArgs.getConstArray() + m_aArgs.getLength()) )
+        if ( pValue && pValue != (lArguments.getConstArray() + lArguments.getLength()) )
         {
             xStatusIndicator.set(pValue->Value,UNO_QUERY);
 
@@ -1072,6 +1088,15 @@ void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun:
     m_aFlushListeners.removeInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
+void ODatabaseSource::notifyEvent(const ::rtl::OUString& _sEventName)
+{
+    if ( m_xDocEventBroadcaster.is() )
+    {
+        ::com::sun::star::document::EventObject aEvent(*this, _sEventName);
+        m_xDocEventBroadcaster->notifyEvent(aEvent);
+    }
+}
+// -----------------------------------------------------------------------------
 sal_Bool ODatabaseSource::commitEmbeddedStorage()
 {
     sal_Bool bStore = sal_False;
@@ -1091,6 +1116,7 @@ sal_Bool ODatabaseSource::commitEmbeddedStorage()
     }
     return bStore;
 }
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
