@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:49:54 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:10:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DPOWERPC -DPPC 
 # STATICLIB=-l$(STATICLIBNAME)
 
 # MacOS X specific Java compilation/link flags
+SOLAR_JAVA*=TRUE
 .IF "$(SOLAR_JAVA)"!=""
     JAVADEF=-DSOLAR_JAVA
     JAVAFLAGSDEBUG=-g
