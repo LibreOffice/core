@@ -88,12 +88,8 @@
             </xsl:if>
             <xsl:for-each select="w:font">
                 <xsl:element name="style:font-face">
-                    <xsl:attribute name="style:name">
-                        <xsl:value-of select="@w:name"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="svg:font-family">
-                        <xsl:value-of select="@w:name"/>
-                    </xsl:attribute>
+                    <xsl:attribute name="style:name"><xsl:value-of select="@w:name"/></xsl:attribute>
+                    <xsl:attribute name="svg:font-family"><xsl:value-of select="@w:name"/></xsl:attribute>
                     <!-- added by glu, for process special fonts e.g. Marlett, -->
                     <xsl:if test="w:charset/@w:val = '02'">
                         <xsl:attribute name="style:font-charset">x-symbol</xsl:attribute>
@@ -124,14 +120,7 @@
                         </xsl:choose>
                     </xsl:if>
                     <xsl:if test="w:pitch and string-length(w:pitch/@w:val) &gt; 0">
-                        <xsl:attribute name="style:font-pitch">
-                            <xsl:choose>
-                                <xsl:when test="w:pitch/@w:val = 'default'">variable</xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="w:pitch/@w:val"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
+                        <xsl:attribute name="style:font-pitch"><xsl:choose><xsl:when test="w:pitch/@w:val = 'default'">variable</xsl:when><xsl:otherwise><xsl:value-of select="w:pitch/@w:val"/></xsl:otherwise></xsl:choose></xsl:attribute>
                     </xsl:if>
                 </xsl:element>
             </xsl:for-each>
@@ -141,6 +130,7 @@
         <office:styles>
             <!--The next statement Added by wguo,collect the pict's dash and mark-style.The template is implemented in file wordml2ooo_draw.xsl-->
             <xsl:apply-templates select="/w:wordDocument/w:body//w:pict" mode="style4dash_mark"/>
+            <xsl:apply-templates select="//v:fill" mode="office-style"/>
             <xsl:call-template name="create-default-paragraph-styles"/>
             <xsl:call-template name="create-default-text-styles"/>
             <xsl:call-template name="create-default-frame-style"/>
@@ -175,18 +165,12 @@
     </xsl:template>
     <xsl:template match="w:style">
         <style:style>
-            <xsl:attribute name="style:name">
-                <xsl:value-of select="concat('w',translate(@w:styleId,' ','_'))"/>
-            </xsl:attribute>
+            <xsl:attribute name="style:name"><xsl:value-of select="concat('w',translate(@w:styleId,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/></xsl:attribute>
             <xsl:if test="w:basedOn">
-                <xsl:attribute name="style:parent-style-name">
-                    <xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ','_'))"/>
-                </xsl:attribute>
+                <xsl:attribute name="style:parent-style-name"><xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/></xsl:attribute>
             </xsl:if>
             <xsl:if test="w:next">
-                <xsl:attribute name="style:next-style-name">
-                    <xsl:value-of select="w:next/@w:val"/>
-                </xsl:attribute>
+                <xsl:attribute name="style:next-style-name"><xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/></xsl:attribute>
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="@w:type = 'character'">
@@ -194,9 +178,7 @@
                 </xsl:when>
                 <!-- table, paragraph are the same as in Writer . glu -->
                 <xsl:when test="@w:type">
-                    <xsl:attribute name="style:family">
-                        <xsl:value-of select="@w:type"/>
-                    </xsl:attribute>
+                    <xsl:attribute name="style:family"><xsl:value-of select="@w:type"/></xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="style:family">text</xsl:attribute>
@@ -256,29 +238,84 @@
     </xsl:template>
     <xsl:template name="ConvertMeasure">
         <xsl:param name="TargetMeasure" select="'cm'"/>
+        <xsl:param name="TargetTruncate" select=" 'all' "/>
         <xsl:param name="value"/>
+        <!-- When TargetTruncate ='all'  it returns the number whichsoever the return value is negative or positive
+               When TargetTruncate ='nonNegative' it only returns nonNegative number, all negative number to be returned as 0
+               When TargetTruncate ='positive" it only returns positive number, all nonPositive number to be returned as 1 -->
+        <xsl:variable name="return_value">
+            <xsl:choose>
+                <!-- remove the measure mark, if the value is null, the result should be 0. Must be the first case  -->
+                <xsl:when test="string-length(translate($value,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ','')) = 0">0</xsl:when>
+                <xsl:when test="string-length(translate($value,'-.0123456789 ','')) = 0">
+                    <xsl:value-of select="$value"/>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'cm'">
+                    <xsl:call-template name="convert2cm">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'pt'">
+                    <xsl:call-template name="convert2pt">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'twip'">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'in'">
+                    <xsl:call-template name="convert2in">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:choose>
-            <!-- remove the measure mark, if the value is null, the result should be 0. Must be the first case  -->
-            <xsl:when test="string-length(translate($value,'abcdefghijklmnopqrstuvwxyz ','')) = 0">0</xsl:when>
-            <xsl:when test="$TargetMeasure = 'cm'">
-                <xsl:call-template name="convert2cm">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
+            <xsl:when test="$TargetTruncate = 'all' ">
+                <xsl:choose>
+                    <xsl:when test="number($TargetMeasure) = 'NaN' ">
+                        <xsl:value-of select=" '0' "/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$return_value"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
-            <xsl:when test="$TargetMeasure = 'pt'">
-                <xsl:call-template name="convert2pt">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
+            <xsl:when test="$TargetTruncate = 'nonNegative' ">
+                <xsl:choose>
+                    <xsl:when test="number($TargetMeasure) = 'NaN' ">
+                        <xsl:value-of select=" '0' "/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test=" $return_value &lt; 0  ">
+                                <xsl:value-of select=" '0' "/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$return_value"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
-            <xsl:when test="$TargetMeasure = 'twip'">
-                <xsl:call-template name="convert2twip">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="$TargetMeasure = 'in'">
-                <xsl:call-template name="convert2in">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
+            <xsl:when test="$TargetTruncate = 'positive' ">
+                <xsl:choose>
+                    <xsl:when test="number($TargetMeasure) = 'NaN' ">
+                        <xsl:value-of select=" '1' "/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test=" $return_value &lt;= 0 ">
+                                <xsl:value-of select=" '1' "/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$return_value"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
