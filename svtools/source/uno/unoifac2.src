@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:09:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Menu RID_CONTEXTMENU
             Text = "Öff~nen" ;
             Text[ English ] = "~Open" ;
             Text[ italian ] = "~Apri";
-            Text[ portuguese_brazilian ] = "Öff~nen";
+            Text[ portuguese_brazilian ] = "?ff~nen";
             Text[ portuguese ] = "~Abrir";
             Text[ danish ] = "Å~bn";
             Text[ french ] = "Ouvrir";
@@ -107,7 +107,7 @@ Menu RID_CONTEXTMENU
             Text = "Öffnen in neuem ~Fenster" ;
             Text[ English ] = "Open in ~new window" ;
             Text[ italian ] = "Apri nella ~finestra nuova";
-            Text[ portuguese_brazilian ] = "Öff~nen in neuem ~Fenster";
+            Text[ portuguese_brazilian ] = "?ff~nen in neuem ~Fenster";
             Text[ portuguese ] = "Abrir em ~nova janela";
             Text[ danish ] = "Åbn i nyt vindue";
             Text[ french ] = "Ouvrir dans une nouvelle ~fenêtre";
@@ -171,7 +171,7 @@ Menu RID_CONTEXTMENU
             Text = "Verknüpfung ~hinzufügen" ;
             Text[ English ] = "~Add bookmark" ;
             Text[ italian ] = "~Aggiungi collegamento";
-            Text[ portuguese_brazilian ] = "Verknüpfung ~hinzufügen";
+            Text[ portuguese_brazilian ] = "Verkn?fung ~hinzuf?en";
             Text[ portuguese ] = "Adicionar ~ligação";
             Text[ danish ] = "Tilføj kæde";
             Text[ french ] = "~Ajouter un lien";
