@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-28 12:33:45 $
+ *  last change: $Author: pb $ $Date: 2002-03-22 13:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-
-
 #include<tools/list.hxx>
 #include<tools/stream.hxx>
 #include<tools/string.hxx>
@@ -69,8 +67,11 @@
 #include<filelist.hxx>
 #pragma hdrstop
 
-TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
+TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
 
 // String-Liste zum Speichern der Namen deklarieren
 DECLARE_LIST( FileStringList, String* );
@@ -291,7 +292,7 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
             }
 
             // append the filepath
-            rFileList.AppendFile( String( aStr, RTL_TEXTENCODING_ASCII_US ) );
+            rFileList.AppendFile( String( aStr, osl_getThreadTextEncoding() ) );
         }
     }
 
