@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 17:15:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,24 @@ String S_UNKNOWN_METHOD
 String S_UNPACKING_STORAGE_FAILED
 {
     Text = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
-    Text[ english_us ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ english_us ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ portuguese ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ russian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ greek ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ dutch ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ french ] = "La dÈcompression du stockage \"($Arg1)\" vers \"($Arg2)\" a ÈchouÈ.";
+    Text[ spanish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ italian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ danish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ swedish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ polish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ portuguese_brazilian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ japanese ] = "ãLâØëïíu \"($Arg1)\" Ç \"($Arg2)\" Ç…íäèoÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
+    Text[ korean ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ chinese_simplified ] = "Ω‚—πÀıŒƒº˛ \"($Arg1)\" ÷¡ \"($Arg2)\" √ª”–≥…π¶°£";
+    Text[ chinese_traditional ] = "∏—¿£¡Y¿…Æ◊ \"($Arg1)\" ¶‹ \"($Arg2)\" •¢±—°C";
+    Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ arabic ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
 };
 /*
 String
