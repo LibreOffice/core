@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-26 14:24:57 $
+#   last change: $Author: kso $ $Date: 2001-07-03 10:59:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,7 @@ IDLFILES=\
     CookieRequest.idl\
     CrossReference.idl\
     DataContainer.idl\
+        DefaultHierarchyDataSource.idl\
     DocumentHeaderField.idl\
     DocumentStoreMode.idl\
     DuplicateProviderException.idl\
@@ -129,6 +130,9 @@ IDLFILES=\
     GlobalTransferCommandArgument.idl\
     HandleCookiesRequest.idl\
     HierarchyContentProvider.idl\
+        HierarchyDataSource.idl\
+        HierarchyDataReadAccess.idl\
+        HierarchyDataReadWriteAccess.idl\
     HierarchyFolderContent.idl\
     HierarchyLinkContent.idl\
     HierarchyRootFolderContent.idl\
