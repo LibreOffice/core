@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-22 10:15:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,7 +787,8 @@ const XubString& ImpGetResStr(USHORT nResID)
 #ifdef DBG_UTIL
         DBG_ERROR("ImpGetResStr(): ResourceID outside of cache range!");
 #endif
-        return String();
+        static String aEmpty;
+        return aEmpty;
     }
 }
 
