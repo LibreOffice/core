@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:12:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,9 +840,8 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
 #endif
     }
 
-    sal_Bool bPropsFail = sal_False;
-    sal_Bool bPropsFail2= sal_False;
-    css::java::JavaNotConfiguredException confexc;
+
+    sal_Bool bPropsFail= sal_False;
     try
     {
         //JavaNotConfiguredException is rethrown. The user chose not to use java, therefore
@@ -853,6 +852,10 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
     {
         //no java.ini. This can be the case when the setup runs and java was used for accessibility etc.
         bPropsFail= sal_True;
+    }
+    catch(css::java::JavaNotConfiguredException& e)
+    {
+        throw;
     }
     catch(css::java::JavaNotConfiguredException& e)
     {
@@ -880,15 +883,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
                 "and there are no environment variables set which " \
                 "contain configuration data")), 0);
         }
-<<<<<<< javavm.cxx
-
-=======
->>>>>>> 1.52.2.1.16.2
     }
-<<<<<<< javavm.cxx
-
-=======
->>>>>>> 1.52.2.1.16.2
     try {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
