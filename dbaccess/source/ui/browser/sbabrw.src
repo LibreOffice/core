@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:02 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 19:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,38 @@ ToolBox RID_BRW_QRY_TOOLBOX
     {
         MID_SBA_QRY_REFRESH
         HelpId = ID_BROWSER_REFRESH ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_EDIT
+        HelpId = ID_BROWSER_EDITDOC ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_SAVE
+        HelpID = ID_BROWSER_SAVEDOC ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_UNDO
+        HelpId = ID_BROWSER_UNDO ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_CUT
+        HelpId = ID_BROWSER_CUT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_COPY
+        HelpId = ID_BROWSER_COPY ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_PASTE
+        HelpId = ID_BROWSER_PASTE ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
