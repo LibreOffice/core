@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:40:38 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 14:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,27 +174,25 @@ void SwView::ExecDraw(SfxRequest& rReq)
         pEItem = (const SfxAllEnumItem*)pItem;
     }
 
-    if (nSlotId == SID_INSERT_DRAW && pEItem)
-    {
-        static sal_uInt16 __READONLY_DATA aSlotTable[] =
+    if( SID_INSERT_DRAW == nSlotId && pEItem)
+        switch( pEItem->GetValue() )
         {
-            SID_OBJECT_SELECT,
-            SID_DRAW_LINE,
-            SID_DRAW_RECT,
-            SID_DRAW_ELLIPSE,
-            SID_DRAW_POLYGON_NOFILL,
-            SID_DRAW_BEZIER_NOFILL,
-            SID_DRAW_FREELINE_NOFILL,
-            SID_DRAW_ARC,
-            SID_DRAW_PIE,
-            SID_DRAW_CIRCLECUT,
-            SID_DRAW_TEXT,
-            SID_DRAW_TEXT_MARQUEE,
-            SID_DRAW_CAPTION
-        };
-
-        nSlotId = aSlotTable[pEItem->GetValue()];
-    }
+        case SVX_SNAP_DRAW_SELECT:          nSlotId = SID_OBJECT_SELECT;        break;
+        case SVX_SNAP_DRAW_LINE:            nSlotId = SID_DRAW_LINE;            break;
+        case SVX_SNAP_DRAW_RECT:            nSlotId = SID_DRAW_RECT;            break;
+        case SVX_SNAP_DRAW_ELLIPSE:         nSlotId = SID_DRAW_ELLIPSE;         break;
+        case SVX_SNAP_DRAW_POLYGON_NOFILL:  nSlotId = SID_DRAW_POLYGON_NOFILL;  break;
+        case SVX_SNAP_DRAW_BEZIER_NOFILL:   nSlotId = SID_DRAW_BEZIER_NOFILL;   break;
+        case SVX_SNAP_DRAW_FREELINE_NOFILL: nSlotId = SID_DRAW_FREELINE_NOFILL; break;
+        case SVX_SNAP_DRAW_ARC:             nSlotId = SID_DRAW_ARC;             break;
+        case SVX_SNAP_DRAW_PIE:             nSlotId = SID_DRAW_PIE;             break;
+        case SVX_SNAP_DRAW_CIRCLECUT:       nSlotId = SID_DRAW_CIRCLECUT;       break;
+        case SVX_SNAP_DRAW_TEXT:            nSlotId = SID_DRAW_TEXT;            break;
+        case SVX_SNAP_DRAW_TEXT_VERTICAL:   nSlotId = SID_DRAW_TEXT_VERTICAL;   break;
+        case SVX_SNAP_DRAW_TEXT_MARQUEE:    nSlotId = SID_DRAW_TEXT_MARQUEE;        break;
+        case SVX_SNAP_DRAW_CAPTION:         nSlotId = SID_DRAW_CAPTION;         break;
+        case SVX_SNAP_DRAW_CAPTION_VERTICAL: nSlotId = SID_DRAW_CAPTION_VERTICAL; break;
+        }
 
     if (nSlotId == SID_OBJECT_SELECT && nFormSfxId == nSlotId)
     {
@@ -251,8 +249,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_TEXT:
+        case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
             pFuncPtr = new ConstRectangle(pWrtShell, pEditWin, this);
             nDrawSfxId = nSlotId;
             break;
@@ -378,8 +378,6 @@ void SwView::NoRotate()
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
 
-
-
 sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SdrObject* pObj;
@@ -398,7 +396,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
         pSdrView->PickObj( aDocPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
         pObj->ISA( SdrTextObj ) &&
         !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
-        bReturn = BeginTextEdit(pObj, pPV, pEditWin, sal_True);
+        bReturn = BeginTextEdit(pObj, pPV, pEditWin, FALSE );
 
     pSdrView->SetHitTolerancePixel( nOld );
 
@@ -411,7 +409,8 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
 
 
-sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, sal_Bool bIsNewObj)
+sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
+                                Window* pWin, sal_Bool bIsNewObj )
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
@@ -419,7 +418,6 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
-        SwWrtShell *pSh = &GetWrtShell();
         pOutliner->SetRefDevice(pSh->GetPrt());
         pOutliner->SetSpeller(xSpell);
         pOutliner->SetHyphenator( ::GetHyphenator() );
@@ -449,8 +447,12 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
         pOutliner->SetControlWord(nCntrl);
         const SfxPoolItem& rItem = pSh->GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
         pOutliner->SetDefaultLanguage(((const SvxLanguageItem&)rItem).GetLanguage());
+
+        if( bIsNewObj )
+            pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
+                                    SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
     }
-    sal_Bool bRet = pSdrView->BegTextEdit( pObj, pPV, pWin, bIsNewObj, pOutliner);
+    sal_Bool bRet = pSdrView->BegTextEdit( pObj, pPV, pWin, TRUE, pOutliner );
 
     return bRet;
 }

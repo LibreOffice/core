@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:35:59 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 14:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include <offmgr/app.hxx>
 #endif
 #ifndef _SWMODULE_HXX
-#include "swmodule.hxx"
+#include <swmodule.hxx>
 #endif
 
 
@@ -391,41 +391,37 @@ void SwView::GetDrawState(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
 
-    sal_uInt16 nWhich = aIter.FirstWhich();
-    while(nWhich)
-    {
+    for( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich;
+                                            nWhich = aIter.NextWhich() )
         switch(nWhich)
         {
-            case SID_INSERT_DRAW:
+        case SID_INSERT_DRAW:
+            if(bWeb)
+                rSet.DisableItem(nWhich);
+            else
             {
-                if(bWeb)
-                    rSet.DisableItem(nWhich);
-                else
-                {
-                    SfxAllEnumItem aEnum(SID_INSERT_DRAW, nDrawSfxId);
-                    rSet.Put(aEnum);
-                }
+                SfxAllEnumItem aEnum(SID_INSERT_DRAW, nDrawSfxId);
+                rSet.Put(aEnum);
             }
             break;
 
-            case SID_SHOW_HIDDEN:
-            case SID_SHOW_FORMS:
-                rSet.DisableItem( nWhich );
-                // rSet.Put( SfxBoolItem(nWhich,sal_True ));
-                break;
+        case SID_SHOW_HIDDEN:
+        case SID_SHOW_FORMS:
+            rSet.DisableItem( nWhich );
+            // rSet.Put( SfxBoolItem(nWhich,sal_True ));
+            break;
 
-            case SID_DRAW_TEXT_MARQUEE:
-                if (::GetHtmlMode(GetDocShell()) & HTMLMODE_SOME_STYLES)
-                    rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich));
-                else
-                    rSet.DisableItem(nWhich);
-                break;
-            case SID_OBJECT_SELECT:
-                rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich || nFormSfxId == nWhich));
-                break;
+        case SID_DRAW_TEXT_MARQUEE:
+            if (::GetHtmlMode(GetDocShell()) & HTMLMODE_SOME_STYLES)
+                rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich));
+            else
+                rSet.DisableItem(nWhich);
+            break;
+        case SID_OBJECT_SELECT:
+            rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich ||
+                                          nFormSfxId == nWhich));
+            break;
         }
-        nWhich = aIter.NextWhich();
-    }
 }
 
 /*--------------------------------------------------------------------
