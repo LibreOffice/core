@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-07 18:08:09 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 12:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ public:
 // class SfxHelpWindow_Impl ----------------------------------------------
 
 class HelpInterceptor_Impl;
+class HelpListener_Impl;
 class SfxHelpWindow_Impl : public SplitWindow
 {
 private:
@@ -206,6 +207,7 @@ private:
     SfxHelpIndexWindow_Impl*    pIndexWin;
     SfxHelpTextWindow_Impl*     pTextWin;
     HelpInterceptor_Impl*       pHelpInterceptor;
+    HelpListener_Impl*          pHelpListener;
 
     sal_Int32           nExpandWidth;
     sal_Int32           nCollapseWidth;
@@ -225,6 +227,7 @@ private:
 
     DECL_LINK(          SelectHdl, ToolBox* );
     DECL_LINK(          OpenHdl, ListBox* );
+    DECL_LINK(          ChangeHdl, HelpListener_Impl* );
 
 public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,

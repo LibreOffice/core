@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-07 17:42:31 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 12:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,14 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
 #include <com/sun/star/beans/PropertyValue.hdl>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
 #endif
 #include <limits.h>
 
@@ -110,6 +116,16 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
 
     m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
     m_nCurPos = m_pHistory->Count() - 1;
+
+    if ( m_xListener.is() )
+    {
+        ::com::sun::star::frame::FeatureStateEvent aEvent;
+        URL aURL;
+        aURL.Complete = rURL;
+        aEvent.FeatureURL = aURL;
+        aEvent.Source = (::com::sun::star::frame::XDispatch*)this;
+        m_xListener->statusChanged( aEvent );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -202,7 +218,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
 {
     Sequence< ::rtl::OUString > aURLList( 1 );
-    aURLList[0] = ::rtl::OUString::createFromAscii( "vnd.sun.star.help://*" );
+    aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://");
     return aURLList;;
 }
 
@@ -247,6 +263,8 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener( const Reference< XStatusL
     throw( RuntimeException )
 
 {
+    DBG_ASSERT( !m_xListener.is(), "listener already exists" );
+    m_xListener = xControl;
 }
 
 void SAL_CALL HelpInterceptor_Impl::removeStatusListener( const Reference< XStatusListener >& xControl,
@@ -255,5 +273,37 @@ void SAL_CALL HelpInterceptor_Impl::removeStatusListener( const Reference< XStat
     throw( RuntimeException )
 
 {
+    m_xListener = 0;
+}
+
+// HelpListener_Impl -----------------------------------------------------
+
+HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
+{
+    pInterceptor = pInter;
+    pInterceptor->addStatusListener( this, ::com::sun::star::util::URL() );
+}
+
+// -----------------------------------------------------------------------
+
+void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+
+    throw( ::com::sun::star::uno::RuntimeException )
+
+{
+    INetURLObject aObj( Event.FeatureURL.Complete );
+    aFactory = aObj.GetHost();
+    aChangeLink.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& obj )
+
+    throw( ::com::sun::star::uno::RuntimeException )
+
+{
+    pInterceptor->removeStatusListener( this, ::com::sun::star::util::URL() );
+    pInterceptor = NULL;
 }
 

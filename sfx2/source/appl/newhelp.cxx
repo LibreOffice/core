@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 09:00:46 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 12:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,8 +322,11 @@ void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
-    aFactory = rFactory;
-    InitializeIndex();
+    if ( rFactory != aFactory )
+    {
+        aFactory = rFactory;
+        InitializeIndex();
+    }
 }
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -820,6 +823,14 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
+{
+    SetFactory( pListener->GetFactory() );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParent, WinBits nBits ) :
@@ -829,6 +840,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pIndexWin       ( NULL ),
     pTextWin        ( NULL ),
     pHelpInterceptor( new HelpInterceptor_Impl() ),
+    pHelpListener   ( new HelpListener_Impl( pHelpInterceptor ) ),
     nExpandWidth    ( 0 ),
     nCollapseWidth  ( 0 ),
     nHeight         ( 0 ),
@@ -847,6 +859,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow_Impl, SelectHdl ) );
     pTextWin->Show();
     pHelpInterceptor->setInterception( pTextWin->getFrame() );
+    pHelpListener->SetChangeHdl( LINK( this, SfxHelpWindow_Impl, ChangeHdl ) );
 
     LoadConfig();
 }
