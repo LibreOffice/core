@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,8 +321,8 @@ ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nTab(r.nTab),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
         bHasHeader(r.bHasHeader),bInplace(r.bInplace),bCaseSens(r.bCaseSens),
-        bRegExp(r.bRegExp),bDuplicate(r.bDuplicate),bByRow(r.bByRow),
-        bDestPers(r.bDestPers)
+        bRegExp(r.bRegExp), bMixedComparison(r.bMixedComparison),
+        bDuplicate(r.bDuplicate), bByRow(r.bByRow), bDestPers(r.bDestPers)
 {
     nEntryCount = 0;
 
@@ -346,8 +346,8 @@ void ScQueryParam::Clear()
     nRow1=nRow2=nDestRow = 0;
     nDestTab = 0;
     nTab = SCTAB_MAX;
-    bHasHeader=bCaseSens=bRegExp = FALSE;
-    bInplace=bByRow=bDuplicate=bDestPers = TRUE;
+    bHasHeader = bCaseSens = bRegExp = bMixedComparison = FALSE;
+    bInplace = bByRow = bDuplicate = bDestPers = TRUE;
 
     Resize( MAXQUERY );
     for (USHORT i=0; i<MAXQUERY; i++)
@@ -370,6 +370,7 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bInplace    = r.bInplace;
     bCaseSens   = r.bCaseSens;
     bRegExp     = r.bRegExp;
+    bMixedComparison = r.bMixedComparison;
     bDuplicate  = r.bDuplicate;
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
@@ -405,6 +406,7 @@ BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (bInplace    == rOther.bInplace)
         && (bCaseSens   == rOther.bCaseSens)
         && (bRegExp     == rOther.bRegExp)
+        && (bMixedComparison == rOther.bMixedComparison)
         && (bDuplicate  == rOther.bDuplicate)
         && (bDestPers   == rOther.bDestPers)
         && (nDestTab    == rOther.nDestTab)
