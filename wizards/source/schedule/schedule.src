@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:14:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ Text[ swedish ] = "%PRODUCTNAME kalender";
     Text[ arabic ] = "ÊŞæíã%PRODUCTNAME ";
     Text[ turkish ] = "%PRODUCTNAME Takvimi";
     Text[ catalan ] = "%PRODUCTNAME Calendario";
+    Text[ finnish ] = "%PRODUCTNAME: Kalenteri";
 };
 
 String  dlgCalTitleBack
@@ -159,6 +160,7 @@ Text[ swedish ] = "Tillbaka";
     Text[ arabic ] = "ÇáÓÇÈŞ";
     Text[ turkish ] = "Geri";
     Text[ catalan ] = "Atrás";
+    Text[ finnish ] = "Edellinen";
 };
 
 String  dlgCalTitleOwnData
@@ -184,6 +186,7 @@ Text[ swedish ] = "Egna data";
     Text[ arabic ] = "ÇáÈíÇäÇÊ ÇáÎÇÕÉ";
     Text[ turkish ] = "Kişisel veriler";
     Text[ catalan ] = "Mis datos";
+    Text[ finnish ] = "Henkilötiedot";
 };
 
 String dlgSchdlTitle
@@ -210,6 +213,7 @@ Text[ swedish ] = "Beräkna helgdagar";
     Text[ turkish ] = "Tatil günlerinin hesaplanması";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cálculo de los días festivos";
+    Text[ finnish ] = "Lisää lomat kalenteriin";
 };
 
 String dlgOK
@@ -235,6 +239,7 @@ Text[ swedish ] = "Färdigställ";
     Text[ arabic ] = "ÅäÔÇÁ";
     Text[ turkish ] = "Oluştur";
     Text[ catalan ] = "Crear";
+    Text[ finnish ] = "Luo";
 };
 
 String dlgCancel
@@ -260,6 +265,7 @@ Text[ swedish ] = "Avbryt";
     Text[ arabic ] = "ÅáÛÇÁ";
     Text[ turkish ] = "İptal";
     Text[ catalan ] = "Cancelar";
+    Text[ finnish ] = "Peruuta";
 };
 
 String  dlgCalFrameOption
@@ -285,6 +291,7 @@ Text[ swedish ] = "Kalender";
     Text[ arabic ] = "ÊŞæíã";
     Text[ turkish ] = "Takvim";
     Text[ catalan ] = "Calendario";
+    Text[ finnish ] = "Kalenteri";
 };
 
 String  dlgCalOptionYear
@@ -303,13 +310,14 @@ Text[ swedish ] = "~Årsöversikt";
     Text[ danish ] = "~Årsoversigt";
     Text[ polish ] = "~Przegl¹d roku";
     Text[ portuguese_brazilian ] = "~Year Overview";
-    Text[ japanese ] = "”NŠÔ•\\(~Y)";
+    Text[ japanese ] = "”NŠÔ•\\";
     Text[ korean ] = "³â°£ ÀÏÁ¤ °³¿ä";
     Text[ chinese_simplified ] = "ÄêÊÓÍ¼(~Y)";
     Text[ chinese_traditional ] = "¦~ÀËµø¹Ï";
     Text[ arabic ] = "ãáÎÕ ÓäÉ~";
     Text[ turkish ] = "~Yıla genel bakış";
     Text[ catalan ] = "~Resumen del año";
+    Text[ finnish ] = "&Vuoden yleiskuvaus";
 };
 
 String  dlgCalOptionMonth
@@ -328,13 +336,14 @@ Text[ swedish ] = "~Månad";
     Text[ danish ] = "~Måned";
     Text[ polish ] = "~Miesi¹c";
     Text[ portuguese_brazilian ] = "~Month";
-    Text[ japanese ] = "Œ(~M)";
+    Text[ japanese ] = "Œ";
     Text[ korean ] = "¿ù";
     Text[ chinese_simplified ] = "ÔÂ(~M)";
     Text[ chinese_traditional ] = "¤ë";
     Text[ arabic ] = "ÔåÑ~";
     Text[ turkish ] = "~Ay";
     Text[ catalan ] = "~Mes";
+    Text[ finnish ] = "&Kuukausi";
 };
 
 String dlgSchdlDescription
@@ -361,6 +370,7 @@ Text[ swedish ] = "Beräkna helgdagar för";
     Text[ turkish ] = "Tatil günleri hesaplaması";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cálculo de los días festivos para";
+    Text[ finnish ] = "Lisää lomat:";
 };
 
 String dlgSchdlCountry
@@ -387,6 +397,7 @@ Text[ swedish ] = "Sverige";
     Text[ turkish ] = "Türkiye";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "España";
+    Text[ finnish ] = "USA";
 };
 
 String dlgTime
@@ -412,6 +423,7 @@ Text[ swedish ] = "Tidsrymd";
     Text[ arabic ] = "ÇáİÊÑÉ ÇáÒãäíÉ";
     Text[ turkish ] = "Zaman aralığı";
     Text[ catalan ] = "Período";
+    Text[ finnish ] = "Aikakehys";
 };
 
 String dlgYear
@@ -438,6 +450,7 @@ Text[ swedish ] = "År";
     Text[ turkish ] = "Yıl";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Año";
+    Text[ finnish ] = "Vuosi";
 };
 
 String dlgCalMonth
@@ -464,6 +477,7 @@ Text[ swedish ] = "Månad";
     Text[ turkish ] = "Ay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mes";
+    Text[ finnish ] = "Kuukausi";
 };
 
 String  dlgSpecificBankholidays
@@ -508,6 +522,7 @@ Text[ swedish ] = "Egna data";
     Text[ arabic ] = "ÇáÈíÇäÇÊ ÇáÎÇÕÉ";
     Text[ turkish ] = "Kişisel veriler";
     Text[ catalan ] = "Mis datos";
+    Text[ finnish ] = "Henkilötiedot";
 };
 
 String dlgCalInsert
@@ -526,13 +541,14 @@ Text[ swedish ] = "~Infoga";
     Text[ danish ] = "~Indsæt";
     Text[ polish ] = "~Wstaw";
     Text[ portuguese_brazilian ] = "~Insert";
-    Text[ japanese ] = "‘}“ü(~I)";
+    Text[ japanese ] = "‘}“ü";
     Text[ korean ] = "»ğÀÔ";
     Text[ chinese_simplified ] = "²åÈë(~I)";
     Text[ chinese_traditional ] = "´¡¤J";
     Text[ arabic ] = "ÅÏÑÇÌ~";
     Text[ turkish ] = "~Ekle";
     Text[ catalan ] = "~Insertar";
+    Text[ finnish ] = "&Lisää";
 };
 
 String dlgCalDelete
@@ -551,13 +567,14 @@ Text[ swedish ] = "Ta ~bort";
     Text[ danish ] = "~Fjern";
     Text[ polish ] = "~Usuñ";
     Text[ portuguese_brazilian ] = "~Delete";
-    Text[ japanese ] = "íœ(~D)";
+    Text[ japanese ] = "íœ";
     Text[ korean ] = "»èÁ¦";
     Text[ chinese_simplified ] = "É¾³ı(~D)";
     Text[ chinese_traditional ] = "§R°£";
     Text[ arabic ] = "ÍĞİ~";
     Text[ turkish ] = "~Sil";
     Text[ catalan ] = "~Eliminar";
+    Text[ finnish ] = "&Poista";
 };
 
 String dlgCalNewEvent
@@ -583,6 +600,7 @@ Text[ swedish ] = "Ny händelse";
     Text[ arabic ] = "ÍÏË ÌÏíÏ";
     Text[ turkish ] = "Yeni olay";
     Text[ catalan ] = "Nuevo acontecimiento";
+    Text[ finnish ] = "Uusi tapahtuma";
 };
 
 String dlgCalEvent
@@ -608,6 +626,7 @@ Text[ swedish ] = "Händelse";
     Text[ arabic ] = "ÍÏË";
     Text[ turkish ] = "Olay";
     Text[ catalan ] = "Acontecimiento";
+    Text[ finnish ] = "Tapahtuma";
 };
 
 String dlgCalEventOnce
@@ -633,6 +652,7 @@ Text[ swedish ] = "Engångsföreteelse";
     Text[ arabic ] = "ãÑÉ æÇÍÏÉ";
     Text[ turkish ] = "Bir kerelik";
     Text[ catalan ] = "Único";
+    Text[ finnish ] = "Kerran";
 };
 
 String dlgCalEventDay
@@ -659,6 +679,7 @@ Text[ swedish ] = "Dag";
     Text[ turkish ] = "Gün";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Día";
+    Text[ finnish ] = "Päivä";
 };
 
 String dlgCalEventMonth
@@ -685,6 +706,7 @@ Text[ swedish ] = "Månad";
     Text[ turkish ] = "Ay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mes";
+    Text[ finnish ] = "Kuukausi";
 };
 
 String dlgCalEventYear
@@ -711,6 +733,7 @@ Text[ swedish ] = "År";
     Text[ turkish ] = "Yıl";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Año";
+    Text[ finnish ] = "Vuosi";
 };
 
 // --------------------------------------------------------------------
@@ -739,6 +762,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ arabic ] = "egypt.bmp";
     Text[ turkish ] = "turkiye.bmp";
     Text[ catalan ] = "spain.bmp";
+    Text[ finnish ] = "usa.bmp";
 };
 
 // --------------------------------------------------------------------
@@ -763,6 +787,7 @@ Text[ swedish ] = "Allmänna helgdagar";
     Text[ korean ] = "ÀÏ¹İ¡¡°øÈŞÀÏ";
     Text[ turkish ] = "Genel tatil günleri";
     Text[ catalan ] = "Días festivos generales";
+    Text[ finnish ] = "Yleiset lomapäivät";
 };
 
 
@@ -791,6 +816,7 @@ Text[ swedish ] = "Januari";
     Text[ arabic ] = "íäÇíÑ";
     Text[ turkish ] = "Ocak";
     Text[ catalan ] = "Enero";
+    Text[ finnish ] = "Tammikuu";
 };
 
 String dlgMonth+1
@@ -816,6 +842,7 @@ Text[ swedish ] = "Februari";
     Text[ arabic ] = "İÈÑÇíÑ";
     Text[ turkish ] = "Şubat";
     Text[ catalan ] = "Febrero";
+    Text[ finnish ] = "Helmikuu";
 };
 
 String dlgMonth+2
@@ -841,6 +868,7 @@ Text[ swedish ] = "Mars";
     Text[ arabic ] = "ãÇÑÓ";
     Text[ turkish ] = "Mart";
     Text[ catalan ] = "Marzo";
+    Text[ finnish ] = "Maaliskuu";
 };
 
 String dlgMonth+3
@@ -866,6 +894,7 @@ Text[ swedish ] = "April";
     Text[ arabic ] = "ÃÈÑíá";
     Text[ turkish ] = "Nisan";
     Text[ catalan ] = "Abril";
+    Text[ finnish ] = "Huhtikuu";
 };
 
 String dlgMonth+4
@@ -891,6 +920,7 @@ Text[ swedish ] = "Maj";
     Text[ arabic ] = "ãÇíæ";
     Text[ turkish ] = "Mayıs";
     Text[ catalan ] = "Mayo";
+    Text[ finnish ] = "Toukokuu";
 };
 
 String dlgMonth+5
@@ -916,6 +946,7 @@ Text[ swedish ] = "Juni";
     Text[ arabic ] = "íæäíæ";
     Text[ turkish ] = "Haziran";
     Text[ catalan ] = "Junio";
+    Text[ finnish ] = "Kesäkuu";
 };
 
 String dlgMonth+6
@@ -941,6 +972,7 @@ Text[ swedish ] = "Juli";
     Text[ arabic ] = "íæáíæ";
     Text[ turkish ] = "Temmuz";
     Text[ catalan ] = "Julio";
+    Text[ finnish ] = "Heinäkuu";
 };
 
 String dlgMonth+7
@@ -966,6 +998,7 @@ Text[ swedish ] = "Augusti";
     Text[ arabic ] = "ÃÛÓØÓ";
     Text[ turkish ] = "Ağustos";
     Text[ catalan ] = "Agosto";
+    Text[ finnish ] = "Elokuu";
 };
 
 String dlgMonth+8
@@ -991,6 +1024,7 @@ Text[ swedish ] = "September";
     Text[ arabic ] = "ÓÈÊãÈÑ";
     Text[ turkish ] = "Eylül";
     Text[ catalan ] = "Septiembre";
+    Text[ finnish ] = "Syyskuu";
 };
 
 String dlgMonth+9
@@ -1016,6 +1050,7 @@ Text[ swedish ] = "Oktober";
     Text[ arabic ] = "ÃßÊæÈÑ";
     Text[ turkish ] = "Ekim";
     Text[ catalan ] = "Octubre";
+    Text[ finnish ] = "Lokakuu";
 };
 
 String dlgMonth+10
@@ -1041,6 +1076,7 @@ Text[ swedish ] = "November";
     Text[ arabic ] = "äæİãÈÑ";
     Text[ turkish ] = "Kasım";
     Text[ catalan ] = "Noviembre";
+    Text[ finnish ] = "Marraskuu";
 };
 
 String dlgMonth+11
@@ -1066,6 +1102,7 @@ Text[ swedish ] = "December";
     Text[ arabic ] = "ÏíÓãÈÑ";
     Text[ turkish ] = "Aralık";
     Text[ catalan ] = "Diciembre";
+    Text[ finnish ] = "Joulukuu";
 };
 
 // --------------------------------------------------------------------
@@ -1093,6 +1130,7 @@ Text[ swedish ] = "Års- / månadskalender";
     Text[ arabic ] = "ÊŞæíã Óäæí / ÊŞæíã ÔåÑí";
     Text[ turkish ] = "Yıllık / Aylık takvim";
     Text[ catalan ] = "Calendario anual/mensual";
+    Text[ finnish ] = "Vuosi-/kuukausikalenteri";
 };
 
 String msgCalError
@@ -1118,6 +1156,7 @@ Text[ swedish ] = "Ett fel uppstod när kalendern skapades.";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅäÔÇÁ ÇáÊŞæíã.";
     Text[ turkish ] = "Takvim hazırlanırken bir hata oluştu.";
     Text[ catalan ] = "Ha ocurrido un error al crear el calendario.";
+    Text[ finnish ] = "On ilmennyt virhe luotaessa kalenteria.";
 };
 
 String msgCalRemoveTitle
@@ -1143,6 +1182,7 @@ Text[ swedish ] = "Ta bort händelseposter";
     Text[ arabic ] = "ÍĞİ ÅÏÎÇáÇÊ ÇáÍÏË";
     Text[ turkish ] = "Olay girişlerini sil";
     Text[ catalan ] = "Eliminar acontecimientos";
+    Text[ finnish ] = "Poista tapahtumamerkinnät";
 };
 
 String msgCalRemove
@@ -1161,7 +1201,7 @@ Text[ swedish ] = "Skall de markerade posterna tas bort?";
     Text[ danish ] = "Er du sikker på, at du vil fjerne de markerede elementer?";
     Text[ polish ] = "Czy usun¹æ zaznaczone wpisy?";
     Text[ portuguese_brazilian ] = "Delete the selected entries?";
-    Text[ japanese ] = "‘I‚ñ‚¾€–Ú‚ğíœ‚µ‚Ü‚·‚©?";
+    Text[ japanese ] = "‘I‘ğ‚µ‚½€–Ú‚ğíœ‚µ‚Ü‚·‚©B";
     Text[ korean ] = "¼±ÅÃµÈ Ç×¸ñÀ» Á¦°ÅÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_simplified ] = "ÒªÉ¾³ıÑ¡ÖĞµÄÌõÄ¿Âğ£¿";
     Text[ chinese_traditional ] = "­n§R°£¿ï¤¤ªº°O¿ı¡H";
@@ -1169,6 +1209,7 @@ Text[ swedish ] = "Skall de markerade posterna tas bort?";
     Text[ turkish ] = "Seçilen girişler silinsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¿Desea eliminar los registros seleccionados?";
+    Text[ finnish ] = "Poistetaanko valitut merkinnät?";
 };
 
 // --------------------------------------------------------------------
@@ -1203,6 +1244,7 @@ Text[ swedish ] = "";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Çalışma haftası";
     Text[ catalan ] = "Semana laboral";
+    Text[ finnish ] = "Työviikko";
 };
 
 String stlWeekend
@@ -1235,6 +1277,7 @@ Text[ swedish ] = "";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Haftasonu";
     Text[ catalan ] = "Fin de semana";
+    Text[ finnish ] = "Viikonloppu";
 };
 
 // --------------------------------------------------------------------
@@ -1262,6 +1305,7 @@ Text[ swedish ] = "Kalender";
     Text[ arabic ] = "ÇáÊŞæíã";
     Text[ turkish ] = "Takvim";
     Text[ catalan ] = "Calendario";
+    Text[ finnish ] = "Kalenteri";
 };
 
 String  nameCalMonth
@@ -1288,6 +1332,7 @@ Text[ swedish ] = "Månad";
     Text[ turkish ] = "Ay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mes";
+    Text[ finnish ] = "Kuukausi";
 };
 
 
@@ -1315,4 +1360,5 @@ Text[ English_us ] = "Progress:";
     Text[ turkish ] = "Progress";
     Text[ arabic ] = "ÇáÊŞÏã:";
     Text[ catalan ] = "Progreso:";
+    Text[ finnish ] = "Tilanne:";
 };
