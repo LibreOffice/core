@@ -1,4 +1,4 @@
-oc  officecfg   :   soltools solenv NULL
+oc  officecfg   :   soltools solenv external NULL
 oc	officecfg								usr30073	-	none	 NULL
 oc	officecfg								usr1	-	all	oc_mkout NULL
 oc	officecfg\org\openoffice\configuration	nmake	-	all	oc_config NULL
