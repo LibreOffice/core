@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:39:54 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,22 +502,6 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
                     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
                     if ( !pData )
                         pDrawLayer->MirrorRTL( pObject );
-                    else if ( pObject->ISA( SdrCaptionObj ) )
-                    {
-                        //  Re-positioning only moves the whole object so the tail
-                        //  points to the cell. The position of the text area relative
-                        //  to the tail must be mirrored here.
-
-                        SdrCaptionObj* pCaption = (SdrCaptionObj*) pObject;
-                        Rectangle aOldRect = pCaption->GetLogicRect();
-                        long nTail = pCaption->GetTailPos().X();
-                        Rectangle aNewRect = aOldRect;
-
-                        aNewRect.Left() = 2 * nTail - aOldRect.Right();
-                        aNewRect.Right() = 2 * nTail - aOldRect.Left();
-
-                        pCaption->SetLogicRect( aNewRect );
-                    }
 
                     pObject = aIter.Next();
                 }
