@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:20:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "showview.hxx"
 #ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
 #endif
@@ -68,12 +69,16 @@
 
 #pragma hdrstop
 
-#include "showview.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "viewshel.hxx"
-#include "frmview.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 
+namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -90,14 +95,17 @@ SO2_DECL_REF(SvInPlaceClient)
 |*
 \************************************************************************/
 
-ShowView::ShowView(SdDrawDocument* pDoc, OutputDevice* pOut,
-                   SdViewShell* pViewShell, Window* pWin)
-        : FmFormView(pDoc, pOut),
-          pDrDoc(pDoc),
-          pViewSh(pViewShell),
-          pWindowForPlugIns(pWin),
-          nAllowInvalidateSmph(0),
-          bAllowMasterPageCaching(TRUE)
+ShowView::ShowView (
+    SdDrawDocument* pDoc,
+    OutputDevice* pOut,
+    ViewShell* pViewShell,
+    ::Window* pWin)
+    : FmFormView(pDoc, pOut),
+      pDrDoc(pDoc),
+      pViewSh(pViewShell),
+      pWindowForPlugIns(pWin),
+      nAllowInvalidateSmph(0),
+      bAllowMasterPageCaching(TRUE)
 {
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
@@ -149,7 +157,7 @@ BOOL ShowView::IsInvalidateAllowed() const
 |*
 \************************************************************************/
 
-void ShowView::InvalidateOneWin(Window& rWin)
+void ShowView::InvalidateOneWin (::Window& rWin)
 {
     if (IsInvalidateAllowed())
     {
@@ -163,7 +171,7 @@ void ShowView::InvalidateOneWin(Window& rWin)
 |*
 \************************************************************************/
 
-void ShowView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
+void ShowView::InvalidateOneWin (::Window& rWin, const Rectangle& rRect)
 {
     if (IsInvalidateAllowed())
     {
@@ -181,16 +189,16 @@ void ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
 // #110094#-7
 //  BOOL bMPCache = FALSE;
-//
+
 //  if (bAllowMasterPageCaching && pViewSh &&
-//      pViewSh == (SdViewShell*) SfxViewShell::Current() &&
+//      pViewSh == (ViewShell*) SfxViewShell::Current() &&
 //      pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
 //      pOutDev->GetOutDevType() != OUTDEV_PRINTER)
 //  {
 //      // Aktive ViewShell: Caching einschalten
 //      bMPCache = TRUE;
 //  }
-//
+
 //  if (bMPCache)
 //  {
 //      if (!IsMasterPagePaintCaching())
@@ -221,7 +229,4 @@ void ShowView::DoConnect(SdrOle2Obj* pOleObj)
     // connected wird jetzt in FuSlideShow::ShowPlugIns()
 }
 
-
-
-
-
+} // end of namespace sd
