@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:49:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "øﬁ¬ ∫Œ≈Õ(~L)";
         Text[ turkish ] = "S~oldan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De i~zquierda";
     };
     MetricField ED_LEFTINDENT
     {
@@ -154,6 +155,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "ø¿∏•¬ ∫Œ≈Õ(~H)";
         Text[ turkish ] = "Sa~dan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De derec~ha";
     };
     MetricField ED_RIGHTINDENT
     {
@@ -198,6 +200,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "√π ¡Ÿ(~F)";
         Text[ turkish ] = "›lk ~sat˝r";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pri~m. lÌnea";
     };
     MetricField ED_FLINEINDENT
     {
@@ -242,6 +245,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "¿⁄µø(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Auto~m·tico";
     };
     GroupBox GB_INDENT
     {
@@ -270,6 +274,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "µÈø© æ≤±‚";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SangrÌa";
     };
     FixedText FT_TOPDIST
     {
@@ -299,6 +304,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "¿ß(~T)";
         Text[ turkish ] = "~‹st";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Arriba";
     };
     MetricField ED_TOPDIST
     {
@@ -343,6 +349,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "æ∆∑°(~B)";
         Text[ turkish ] = "~Alt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~bajo";
     };
     MetricField ED_BOTTOMDIST
     {
@@ -386,6 +393,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "∞£∞›";
         Text[ turkish ] = "Aral˝k";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Espacio";
     };
     ListBox LB_LINEDIST
     {
@@ -601,6 +609,15 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Sencillo" ; Default ; > ;
+        < "1,5 lÌneas" ; Default ; > ;
+        < "Doble" ; Default ; > ;
+        < "Proporcional" ; Default ; > ;
+        < "MÌnimo" ; Default ; > ;
+        < "Regleta" ; Default ; > ;
+    };
     };
     String ST_LINEDIST_ABS
     {
@@ -625,6 +642,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "∞Ì¡§";
         Text[ turkish ] = "Sabit";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fijo";
     };
     FixedText FT_LINEDIST
     {
@@ -653,6 +671,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "¿«";
         Text[ turkish ] = "De~.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~de";
     };
     MetricField ED_LINEDISTPERCENT
     {
@@ -717,6 +736,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "¡Ÿ∞£∞›";
         Text[ turkish ] = "Sat˝r aral˝˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Interlineado";
     };
     Window WN_EXAMPLE
     {
@@ -750,6 +770,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "πÃ∏Æ ∫∏±‚";
         Text[ turkish ] = "÷nizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PrevisualizaciÛn";
     };
     CheckBox CB_REGISTER
     {
@@ -777,6 +798,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "»∞º∫»≠(~C)";
         Text[ turkish ] = "Di~kkate al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Con~siderar";
     };
     GroupBox GB_REGISTER
     {
@@ -804,6 +826,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ korean ] = "µÓ∑œ »Æ¿Œ";
         Text[ turkish ] = "E˛it sat˝r y¸kseklii";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Conformidad registro";
     };
     Text[ chinese_simplified ] = "ÀıΩ¯∫Õº‰∏Ù";
     Text[ russian ] = "ŒÚÒÚÛÔ˚ Ë ËÌÚÂ‚‡Î˚";
@@ -815,6 +838,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     Text[ korean ] = "µÈø© æ≤±‚øÕ ∞£∞›";
     Text[ turkish ] = "Girinti ve Aral˝klar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "SangrÌas y espacios";
 };
  // RID_SVXPAGE_ALIGN_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
@@ -861,6 +885,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "ø…º«";
         Text[ turkish ] = "SeÁenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Options";
     };
     RadioButton BTN_LEFTALIGN
     {
@@ -890,6 +915,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "øﬁ¬  ∏¬√„(~L)";
         Text[ turkish ] = "So~l";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~zquierda";
     };
     RadioButton BTN_RIGHTALIGN
     {
@@ -918,6 +944,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "ø¿∏•¬ (~T)";
         Text[ turkish ] = "Sa~";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha";
     };
     RadioButton BTN_CENTERALIGN
     {
@@ -928,7 +955,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ norwegian ] = "~Center" ;
         Text [ italian ] = "~Centrato" ;
         Text [ portuguese_brazilian ] = "~Centro" ;
-        Text [ portuguese ] = "~Centro" ;
+        Text [ portuguese ] = "~Centrado" ;
         Text [ finnish ] = "~Keski" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "~CentrÈ" ;
@@ -946,6 +973,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "∞°øÓµ• ∏¬√„(~C)";
         Text[ turkish ] = "~Ortala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Centrado";
     };
     RadioButton BTN_JUSTIFYALIGN
     {
@@ -974,6 +1002,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "æÁ¬  ∏¬√„(~J)";
         Text[ turkish ] = "~›ki yana yasla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Justificado";
     };
     FixedText FT_LASTLINE
     {
@@ -1001,6 +1030,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "∏∂¡ˆ∏∑ ¡Ÿ(~L)";
         Text[ turkish ] = "So~n sat˝r";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "⁄~ltima lÌnea";
     };
     ListBox LB_LASTLINE
     {
@@ -1089,7 +1119,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     StringList [ polish ] =
     {
             < "Z lewej" ; Default ; > ;
-        < "Wyúrodkowany" ; Default ; > ;
+        < "Wyúrodkuj" ; Default ; > ;
         < "Wyjustuj" ; Default ; > ;
     };
     StringList [ japanese ] =
@@ -1134,6 +1164,12 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Izquierda" ; Default ; > ;
+        < "Centrado" ; Default ; > ;
+        < "Justificada" ; Default ; > ;
+    };
     };
     CheckBox CB_EXPAND
     {
@@ -1161,6 +1197,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "∞≥∫∞ ¥‹æÓ »Æ¿Â(~E)";
         Text[ turkish ] = "Son sˆzc¸¸ ~geni˛let";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~xpandir una palabra";
     };
     FixedLine FL_VERTEX
     {
@@ -1199,6 +1236,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "πÃ∏Æ ∫∏±‚";
         Text[ turkish ] = "÷nizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Preview";
     };
     FixedLine FL_VERTALIGN
     {
@@ -1207,6 +1245,25 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text = "Vertikale Textausrichtung" ;
         Text [ ENGLISH ] = "Vertical text alignment" ;
         Hide = TRUE;
+        Text[ english_us ] = "Vertical text alignment";
+        Text[ portuguese ] = "Alinhamento vertical do texto";
+        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÚÂÍÒÚ‡ ÔÓ ‚ÂÚËÍ‡ÎË";
+        Text[ greek ] = "Vertical text alignment";
+        Text[ dutch ] = "Verticale uitlijning";
+        Text[ french ] = "Alignement vertical du texte";
+        Text[ spanish ] = "AlineaciÛn vertical del texto";
+        Text[ italian ] = "Allineamento verticale testo";
+        Text[ danish ] = "Vertical text alignment";
+        Text[ swedish ] = "Vertikal textjustering";
+        Text[ polish ] = "WyrÛwnanie tekstu w pionie";
+        Text[ portuguese_brazilian ] = "Vertical text alignment";
+        Text[ japanese ] = "ècèëÇ´";
+        Text[ korean ] = "Vertical text alignment";
+        Text[ chinese_simplified ] = "Vertical text alignment";
+        Text[ chinese_traditional ] = "Vertical text alignment";
+        Text[ turkish ] = "Vertical text alignment";
+        Text[ arabic ] = "Vertical text alignment";
+        Text[ catalan ] = "Vertical text alignment";
     };
     ListBox LB_VERTALIGN
     {
@@ -1230,6 +1287,166 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
             < "Center" ; > ;
             < "Bottom" ; > ;
         };
+    StringList [ language_user1 ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "Automatic" ; > ;
+        < "Base line" ; > ;
+        < "Top" ; > ;
+        < "Middle" ; > ;
+        < "Bottom" ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "Autom·tico" ; > ;
+        < "Linha de base" ; > ;
+        < "Topo" ; > ;
+        < "Centrado" ; > ;
+        < "Base" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¿‚ÚÓÏ‡ÚË˜ÂÒÍË" ; > ;
+        < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ" ; > ;
+        < "—‚ÂıÛ" ; > ;
+        < "œÓ ˆÂÌÚÛ" ; > ;
+        < "—ÌËÁÛ" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Automatisch" ; > ;
+        < "Basislijn" ; > ;
+        < "Boven" ; > ;
+        < "Gecentreerd" ; > ;
+        < "Beneden" ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "Automatique" ; > ;
+        < "Ligne de base" ; > ;
+        < "En haut" ; > ;
+        < "CentrÈ" ; > ;
+        < "En bas" ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "Autom·tico" ; > ;
+        < "LÌnea de base" ; > ;
+        < "Arriba" ; > ;
+        < "Centrado" ; > ;
+        < "Abajo" ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "Automatico" ; > ;
+        < "Linea di base" ; > ;
+        < "In alto" ; > ;
+        < "Al centro" ; > ;
+        < "In basso" ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Automatiskt" ; > ;
+        < "Baslinje" ; > ;
+        < "Uppe" ; > ;
+        < "Centrerat" ; > ;
+        < "Nere" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Automatycznie" ; > ;
+        < "Linia podstawowa" ; > ;
+        < "W gÛrze" ; > ;
+        < "Wyúrodkuj" ; > ;
+        < "W dole" ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "é©ìÆ" ; > ;
+        < "äÓê¸" ; > ;
+        < "è„ëµÇ¶" ; > ;
+        < "íÜâõëµÇ¶" ; > ;
+        < "â∫ëµÇ¶" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Automatisch" ; > ;
+        < "Grundlinie" ; > ;
+        < "Oben" ; > ;
+        < "Zentriert" ; > ;
+        < "Unten" ; > ;
+    };
     };
     Text[ chinese_simplified ] = "∂‘∆Î";
     Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
@@ -1241,6 +1458,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     Text[ korean ] = "∏¬√„";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AlineaciÛn";
 };
  // RID_SVXPAGE_EXT_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_EXT_PARAGRAPH
@@ -1285,6 +1503,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¿⁄µø¿∏∑Œ(~U)";
         Text[ turkish ] = "Oto~matik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Au~tom·tico";
     };
     FixedText FT_BEFORE
     {
@@ -1314,6 +1533,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "∫Œ≈Õ(~A)";
         Text[ turkish ] = "~asg.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~en";
     };
     NumericField ED_HYPHENBEFORE
     {
@@ -1360,6 +1580,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¡Ÿ ∏∂¡ˆ∏∑∫Œ∫–ø° πÆ¿⁄";
         Text[ turkish ] = "sat˝rsonu karakteri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "car·cter al final de la lÌnea";
     };
     FixedText FT_AFTER
     {
@@ -1389,6 +1610,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "∫Œ≈Õ(~T)";
         Text[ turkish ] = "a~sg.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "e~n";
     };
     NumericField ED_HYPHENAFTER
     {
@@ -1435,6 +1657,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¡Ÿ Ω√¿€∫Œ∫–ø° πÆ¿⁄";
         Text[ turkish ] = "sat˝rba˛˝ karakteri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "car·cter al comienzo de la lÌnea";
     };
     FixedText FT_MAXHYPH
     {
@@ -1464,6 +1687,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "√÷¥Î ø¨º” «œ¿Ã«¬ ºˆ(~M)";
         Text[ turkish ] = "Azami ard˝˛˝k ay˝rma i˛areti sa~y˝s˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad m·xima de ~guiones consecutivos";
     };
     NumericField ED_MAXHYPH
     {
@@ -1504,6 +1728,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "«œ¿Ã«¬ ≥÷±‚";
         Text[ turkish ] = "Heceleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SeparaciÛn sil·bica";
     };
     TriStateBox BTN_PAGEBREAK
     {
@@ -1534,6 +1759,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "≥™¥©±‚(~B)";
         Text[ turkish ] = "~Kesme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Salto";
     };
     RadioButton BTN_BREAKPAGE
     {
@@ -1565,6 +1791,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "∆‰¿Ã¡ˆ(~P)";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "P·~gina";
     };
     RadioButton BTN_BREAKCOLUMN
     {
@@ -1594,6 +1821,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "ø≠(~M)";
         Text[ turkish ] = "S~¸tun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Columna";
     };
     RadioButton BTN_PAGEBREAKBEFORE
     {
@@ -1625,6 +1853,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "±◊ ¿¸(~F)";
         Text[ turkish ] = "~sonra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De~lante";
     };
     RadioButton BTN_PAGEBREAKAFTER
     {
@@ -1654,6 +1883,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "±◊ ¥Ÿ¿Ω(~E)";
         Text[ turkish ] = "~ˆnce";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "de~tr·s";
     };
     TriStateBox BTN_PAGECOLL
     {
@@ -1684,6 +1914,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "∆‰¿Ã¡ˆ ¿Ø«¸∞˙ «‘≤≤(~Y)";
         Text[ turkish ] = "Sayfa biÁiml~i";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+        Text[ catalan ] = "C~on estilo de p·gina";
     };
     ListBox LB_PAGECOLL
     {
@@ -1719,6 +1950,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "∆‰¿Ã¡ˆ π¯»£(~N)";
         Text[ turkish ] = "Sayfa n~umaras˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N˙~mero de p·gina";
     };
     NumericField ED_PAGENUM
     {
@@ -1762,6 +1994,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¥‹∂Ù ≥™¥©¡ˆ æ ±‚(~D)";
         Text[ turkish ] = "Paragraf˝ ~bˆlme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mantener ~lÌneas juntas";
     };
     TriStateBox CB_KEEPTOGETHER
     {
@@ -1790,6 +2023,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¥‹∂ÙµÈ¿ª ∞∞¿∫ ∆‰¿Ã¡ˆø°(~K)";
         Text[ turkish ] = "Paragra~flar˝ birlikte tut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mantener p·rra~fos juntos";
     };
     TriStateBox BTN_WIDOWS
     {
@@ -1800,24 +2034,25 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "~Widow control" ;
         Group = TRUE ;
         Text[ language_user1 ] = " ";
-        Text[ english_us ] = "~Orphan control";
+        Text[ english_us ] = "~Widow control";
         Text[ portuguese ] = "Controlo de linhas ~isoladas";
         Text[ russian ] = "¡ÂÁ ÍÓÌˆÂ‚˚ı ‚ËÒˇ˜Ëı ÒÚÓÍ";
         Text[ greek ] = " ·Ì¸Ì·Ú '~ÔÒˆ·ÌÔ˝'";
         Text[ dutch ] = "~Zwevende regels: wezen";
-        Text[ french ] = "Traitement des orphelines";
+        Text[ french ] = "Traitement des ~veuves";
         Text[ spanish ] = "Ajuste de ~huÈrfanas";
-        Text[ italian ] = "Vedove";
+        Text[ italian ] = "Controllo ~vedove";
         Text[ danish ] = "Fransk horeunge-ordning";
-        Text[ swedish ] = "~ƒnkekontroll";
+        Text[ swedish ] = "Ho~rungekontroll";
         Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
         Text[ portuguese_brazilian ] = "~Vi˙vas";
-        Text[ japanese ] = "â¸Õﬂ∞ºﬁéûÇ…écÇ∑çsêî(~O)";
+        Text[ japanese ] = "íióéëOÇ≈â¸Õﬂ∞ºﬁ(~W)";
         Text[ korean ] = "√≥¿Ω «—¡Ÿ ∫–∏Æ πÊ¡ˆ(~O)";
         Text[ chinese_simplified ] = "∂Œ¬‰÷Æ÷–≤ª∑÷“≥(~O)";
         Text[ chinese_traditional ] = "¨q∏®§ß§§§£§¿≠∂(~O)";
         Text[ turkish ] = "~›lk sat˝r˝ paragrafla birle˛tir";
         Text[ arabic ] = " ⁄œÌ· «‰›’«· ”ÿ— «·›ﬁ—… «·√Ê·";
+        Text[ catalan ] = "Ajuste de ~huÈrfanas";
     };
     NumericField ED_WIDOWS
     {
@@ -1864,6 +2099,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¡Ÿ";
         Text[ turkish ] = "Sat˝r";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "LÌneas";
     };
     TriStateBox BTN_ORPHANS
     {
@@ -1874,24 +2110,25 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "~Orphan control" ;
         Group = TRUE ;
         Text[ language_user1 ] = " ";
-        Text[ english_us ] = "~Widow control";
+        Text[ english_us ] = "~Orphan control";
         Text[ portuguese ] = "Controlo de linhas ~vi˙vas";
         Text[ russian ] = "¡ÂÁ Ì‡˜‡Î¸Ì˚ı ‚ËÒˇ˜Ëı ÒÚÓÍ";
         Text[ greek ] = " ·Ì¸Ì·Ú \"~˜ﬁÒ·Ú\"";
         Text[ dutch ] = "Z~wevende regels: weduwen";
-        Text[ french ] = "Traitement des veuves";
+        Text[ french ] = "Traitement des ~orphelines";
         Text[ spanish ] = "Ajuste de ~viudas";
-        Text[ italian ] = "~Orfane";
+        Text[ italian ] = "Controllo ~orfane";
         Text[ danish ] = "Horeunge-ordning";
-        Text[ swedish ] = "H~orungekontroll";
+        Text[ swedish ] = "ƒnkek~ontroll";
         Text[ polish ] = "Bez oddz. os~tat. wiersza akap.";
         Text[ portuguese_brazilian ] = "~”rf„os";
-        Text[ japanese ] = "íióéëOÇ≈â¸Õﬂ∞ºﬁ(~W)";
+        Text[ japanese ] = "â¸Õﬂ∞ºﬁÇ…écÇ∑çsêî(~W)";
         Text[ korean ] = "∏∂¡ˆ∏∑  «—¡Ÿ ∫–∏Æ πÊ¡ˆ(~W)";
         Text[ chinese_simplified ] = "”Îœ¬∂ŒÕ¨“≥(~W)";
         Text[ chinese_traditional ] = "ªP§U¨q¶P≠∂(~W)";
         Text[ turkish ] = "So~n sat˝r˝ paragrafla birle˛tir";
         Text[ arabic ] = " ⁄œÌ· «‰›’«· ”ÿ— «·›ﬁ—… «·√ŒÌ—";
+        Text[ catalan ] = "Ajuste de ~viudas";
     };
     NumericField ED_ORPHANS
     {
@@ -1938,6 +2175,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "¡Ÿ";
         Text[ turkish ] = "Sat˝r";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "LÌneas";
     };
     GroupBox GB_OPTIONS
     {
@@ -1967,6 +2205,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "ø…º«";
         Text[ turkish ] = "SeÁenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     Text[ chinese_simplified ] = "ªª––∫Õ∑÷“≥";
     Text[ russian ] = "œÓÎÓÊÂÌËÂ Ì‡ ÒÚ‡ÌËˆÂ";
@@ -1978,6 +2217,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Text[ korean ] = "≈ÿΩ∫∆Æ »Â∏ß";
     Text[ turkish ] = "Metin ak˝˛˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Flujo del texto";
 };
 /*-- 29.11.00 11:36:24---------------------------------------------------
   Asian typography
@@ -2013,6 +2253,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "¥´¶Ê(~I)";
         Text[ turkish ] = "Options";
         Text[ arabic ] = "ŒÌ«—« ";
+        Text[ catalan ] = "Cambio de fila";
     };
     TriStateBox CB_AS_FORBIDDEN
     {
@@ -2038,6 +2279,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "≈U§Œ¶Ê≠∫¶Ê•Ω∏T§Ó®œ•Œ¶r§∏™∫≤M≥Ê";
         Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
         Text[ arabic ] = " ÿ»Ìﬁ ﬁ«∆„… «·√Õ—› «·„„‰Ê⁄… ⁄·Ï »œ«Ì… «·√”ÿ— Ê‰Â«Ì Â«";
+        Text[ catalan ] = "Considerar lista de caracteres no aceptables a comienzo y fin de lÌnea.";
     };
     TriStateBox CB_AS_ALLOW_WORD_BREAK
     {
@@ -2063,6 +2305,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "§π≥\\¶Ë§Â§ß§§™∫¶rµ¸¥´¶Ê§¿∂}";
         Text[ turkish ] = "Allow break inside of words in latin text";
         Text[ arabic ] = "«·”„«Õ »›«’· «·‰’ œ«Œ· «·ﬂ·„«  ›Ì «·‰’Ê’ «··« Ì‰Ì…";
+        Text[ catalan ] = "Permitir salto dentro de palabras en texto con caracteres latinos.";
     };
     TriStateBox CB_AS_HANG_PUNC
     {
@@ -2088,6 +2331,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "¶Ê•Ω™˛•[º–¬I≤≈∏π";
         Text[ turkish ] = "Hanging punctuation";
         Text[ arabic ] = "«·”„«Õ »⁄·«„«  «· ‰ﬁÌÿ «·„⁄·ﬁ…";
+        Text[ catalan ] = "Permitir puntuaciÛn libre";
     };
     GroupBox GB_AS_CHAR_DIST
     {
@@ -2113,6 +2357,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "¶r§∏∂°πj";
         Text[ turkish ] = "Character distance";
         Text[ arabic ] = " »«⁄œ «·√Õ—›";
+        Text[ catalan ] = "Espacio entre caracteres";
     };
     TriStateBox CB_AS_PUNCTUATION
     {
@@ -2138,6 +2383,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "§π≥\\¶Ê≠∫™˛•[¿£¡Yº–¬I≤≈∏π";
         Text[ turkish ] = "Allow punctuation at line start";
         Text[ arabic ] = "«·”„«Õ »⁄·«„«  «· ‰ﬁÌÿ ⁄‰œ »œ«Ì… «·”ÿ— ··÷€ÿ";
+        Text[ catalan ] = "Permitir puntuaciÛn al comienzo de fila para comprimir";
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
@@ -2163,6 +2409,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "¶b§§§È¡˙§Â¶r©M¶Ë§Â§Œ≤V¶X§Â¶r§ß∂°•[§J™≈ÆÊ";
         Text[ turkish ] = "Apply distance between asian, latin and complex text";
         Text[ arabic ] = "«” Œœ«„ „”«›… »Ì‰ «·‰’Ê’ «·¬”ÌÊÌ… Ê«··« Ì‰Ì… Ê«·„⁄ﬁœ….";
+        Text[ catalan ] = "Aplicar espacio entre texto asi·tico, latino y complejo.";
     };
     TriStateBox CB_AS_ADJUST_NUMBERS
     {
@@ -2188,6 +2435,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "¶€∞ Ω’æ„§§§È¡˙§Â¶r©Mº∆¶r§ß∂°™∫∂°πj";
         Text[ turkish ] = "Automatically adjust distance between asian text and numbers";
         Text[ arabic ] = "„·«¡„…  ·ﬁ«∆Ì… ··„”«›… »Ì‰ «·‰’ «·¬”ÌÊÌ Ê«·√—ﬁ«„";
+        Text[ catalan ] = "Ajustar autom·ticamente espacio entre texto asi·tico y n˙meros";
     };
     FixedText FT_TEXT_ALIGN
     {
@@ -2213,6 +2461,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "§Â¶rπÔªÙ(~T)";
         Text[ turkish ] = "Text alignment";
         Text[ arabic ] = "„Õ«–«… «·‰’";
+        Text[ catalan ] = "AlineaciÛn de texto";
     };
     ListBox LB_TEXT_ALIGN
     {
@@ -2324,6 +2573,11 @@ TabPage RID_SVXPAGE_PARA_ASIAN
             < " ·ﬁ«∆Ì" ; Default ; > ;
         < "??ÌœÊÌ" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Autom·tico" ; Default ; > ;
+        < "??Manualmente" ; Default ; > ;
+    };
     };
     Text[ english_us ] = "Asian Typography";
     Text[ portuguese ] = "Tipografia asi·tica";
@@ -2343,6 +2597,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Text[ chinese_traditional ] = "§§§È¡˙§Â¶r";
     Text[ turkish ] = "Asian typography";
     Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
+    Text[ catalan ] = "TipografÌa asi·tica";
 };
 
  // ********************************************************************** EOF
