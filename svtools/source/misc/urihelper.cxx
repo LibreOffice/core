@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:33 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ URIHelper::removePassword(UniString const & rURI,
     INetURLObject aObj(rURI, eEncodeMechanism, eCharset);
     return aObj.HasError() ?
                rURI :
-               aObj.GetURLNoPass(eDecodeMechanism, eCharset);
+               String(aObj.GetURLNoPass(eDecodeMechanism, eCharset));
 }
 
 //============================================================================
