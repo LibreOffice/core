@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:45:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,8 +355,8 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials);
 //------------------------------------------------------------------------------
 sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
-    // Überprüfung auf korrekte Namensgebung im SQL Sinne
-    // Dieses ist wichtig für Tabellennamen beispielsweise
+    // Ueberpruefung auf korrekte Namensgebung im SQL Sinne
+    // Dieses ist wichtig fuer Tabellennamen beispielsweise
     ::rtl::OString aName(rName,rName.getLength(),RTL_TEXTENCODING_ASCII_US);
     const char* pStr = aName.getStr();
     if (isdigit(*pStr))
