@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logging.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-09 11:55:05 $
+ *  last change: $Author: mh $ $Date: 2002-10-16 19:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ namespace xmloff
 {
 //.........................................................................
 
+#ifdef TIMELOG
     //=====================================================================
     //= OStackedLogging
     //=====================================================================
@@ -86,6 +87,7 @@ namespace xmloff
         delete m_aLogger.top();
         m_aLogger.pop();
     }
+#endif
 
 //.........................................................................
 }   // namespace xmloff
@@ -94,6 +96,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/10/09 11:55:05  obo
+ *  #100000# change include path
+ *
  *  Revision 1.1  2002/10/02 14:26:19  fs
  *  initial checkin - helper for timestamp logging
  *
