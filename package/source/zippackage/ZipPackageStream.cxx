@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:37:17 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,19 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+
+
 #ifndef _ZIP_PACKAGE_STREAM_HXX
 #include <ZipPackageStream.hxx>
 #endif
@@ -68,11 +81,12 @@
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
+#ifndef _ENCRYPTED_DATA_HEADER_HXX_
+#include <EncryptedDataHeader.hxx>
+#endif
+
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
-#endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
 
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -95,9 +109,11 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 , bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
 , bIsEncrypted ( sal_False )
-, bPackageMember ( sal_False )
 , bHaveOwnKey ( sal_False )
 , xEncryptionData ( )
+, m_nStreamMode( PACKAGE_STREAM_NOTSET )
+, m_nMagicalHackSize( 0 )
+, m_nMagicalHackPos( 0 )
 {
     SetFolder ( sal_False );
     aEntry.nVersion     = -1;
@@ -149,6 +165,62 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.nExtraLen = rInEntry.nExtraLen;
 }
 
+sal_Bool ZipPackageStream::ParsePackageRawStream()
+{
+    OSL_ENSURE( xStream.is(), "A stream must be provided!\n" );
+
+    if ( !xStream.is() )
+        return sal_False;
+
+    sal_Bool bOk = sal_False;
+
+    vos::ORef < EncryptionData > xTempEncrData;
+    sal_Int32 nMagHackSize = 0;
+    Sequence < sal_Int8 > aHeader ( 4 );
+
+    if ( xStream->readBytes ( aHeader, 4 ) == 4 )
+    {
+        const sal_Int8 *pHeader = aHeader.getConstArray();
+        sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
+                             ( pHeader [1] & 0xFF ) << 8  |
+                             ( pHeader [2] & 0xFF ) << 16 |
+                             ( pHeader [3] & 0xFF ) << 24;
+        if ( nHeader == n_ConstHeader )
+        {
+            // this is one of our god-awful, but extremely devious hacks, everyone cheer
+            xTempEncrData = new EncryptionData;
+
+            ::rtl::OUString aMediaType;
+            if ( ZipFile::StaticFillData ( xTempEncrData, nMagHackSize, aMediaType, xStream ) )
+            {
+                // We'll want to skip the data we've just read, so calculate how much we just read
+                // and remember it
+                m_nMagicalHackPos = n_ConstHeaderSize + xTempEncrData->aSalt.getLength()
+                                                    + xTempEncrData->aInitVector.getLength()
+                                                    + xTempEncrData->aDigest.getLength()
+                                                    + aMediaType.getLength() * sizeof( sal_Unicode );
+                m_nMagicalHackSize = nMagHackSize;
+                sMediaType = aMediaType;
+
+                bOk = sal_True;
+            }
+        }
+    }
+
+    if ( !bOk )
+    {
+        // the provided stream is not a raw stream
+        return sal_False;
+    }
+
+    xEncryptionData = xTempEncrData;
+    SetIsEncrypted ( sal_True );
+    // it's already compressed and encrypted
+    bToBeEncrypted = bToBeCompressed = sal_False;
+
+    return sal_True;
+}
+
 #if defined( MACOSX ) && ( __GNUC__ < 3 )
     //XInterface
 Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
@@ -180,16 +252,36 @@ void SAL_CALL ZipPackageStream::release(  )
 }
 #endif
 
+void ZipPackageStream::SetPackageMember( sal_Bool bNewValue )
+{
+    if ( bNewValue )
+    {
+        m_nStreamMode = PACKAGE_STREAM_PACKAGEMEMBER;
+        m_nMagicalHackPos = 0;
+        m_nMagicalHackSize = 0;
+    }
+    else if ( m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER )
+        m_nStreamMode = PACKAGE_STREAM_NOTSET; // must be reset
+}
+
 // XActiveDataSink
 void SAL_CALL ZipPackageStream::setInputStream( const Reference< io::XInputStream >& aStream )
         throw(RuntimeException)
 {
+    // TODO: wrap the stream in case it is not seekable
+    // The package component requires that every stream either be FROM a package or it must support XSeekable!
+    Reference< io::XSeekable > xSeek( aStream, UNO_QUERY );
+    if ( !xSeek.is() )
+        throw RuntimeException( OUString::createFromAscii( "The stream must support XSeekable!" ),
+                                Reference< XInterface >() );
+
     xStream = aStream;
     SetPackageMember ( sal_False );
     aEntry.nTime = -1;
+    m_nStreamMode = PACKAGE_STREAM_DETECT;
 }
 
-Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
+Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
         throw(RuntimeException)
 {
     if (IsPackageMember())
@@ -198,7 +290,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
         {
             if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
-            return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData, bIsEncrypted );
+            return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted );
         }
         catch (ZipException &)//rException)
         {
@@ -231,6 +323,98 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         return xStream;
 }
 
+// XDataSinkEncrSupport
+//--------------------------------------------------------------------------
+Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
+        throw ( packages::WrongPasswordException,
+                io::IOException,
+                RuntimeException )
+{
+    // There is no stream attached to this object
+    if ( m_nStreamMode == PACKAGE_STREAM_NOTSET )
+        return Reference< io::XInputStream >();
+
+    // this method can not be used together with old approach
+    if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
+        throw packages::zip::ZipIOException(); // TODO
+
+    if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
+        xEncryptionData->aKey = rZipPackage.getEncryptionKey();
+
+    if (IsPackageMember())
+        return rZipPackage.getZipFile().getDataStream( aEntry, xEncryptionData, bIsEncrypted );
+    else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
+        return ZipFile::StaticGetDataFromRawStream( xStream, xEncryptionData );
+    else
+        return xStream;
+}
+
+//--------------------------------------------------------------------------
+Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
+        throw ( packages::NoEncryptionException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    // There is no stream attached to this object
+    if ( m_nStreamMode == PACKAGE_STREAM_NOTSET )
+        return Reference< io::XInputStream >();
+
+    // this method can not be used together with old approach
+    if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
+        throw packages::zip::ZipIOException(); // TODO
+
+    if (IsPackageMember())
+    {
+        if ( !bIsEncrypted || xEncryptionData.isEmpty() )
+            throw packages::NoEncryptionException(); // TODO
+
+        return rZipPackage.getZipFile().getWrappedRawStream( aEntry, xEncryptionData, sMediaType );
+    }
+    else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
+        return xStream;
+    else
+        throw packages::NoEncryptionException(); // TODO
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL ZipPackageStream::setDataStream( const Reference< io::XInputStream >& aStream )
+        throw ( io::IOException,
+                RuntimeException )
+{
+    setInputStream( aStream );
+    m_nStreamMode = PACKAGE_STREAM_DATA;
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL ZipPackageStream::setRawStream( const Reference< io::XInputStream >& aStream )
+        throw ( packages::EncryptionNotAllowedException,
+                packages::NoRawFormatException,
+                io::IOException,
+                RuntimeException)
+{
+    // TODO: wrap the stream in case it is not seekable
+    // The package component requires that every stream either be FROM a package or it must support XSeekable!
+    Reference< io::XSeekable > xSeek( aStream, UNO_QUERY );
+    if ( !xSeek.is() )
+        throw RuntimeException( OUString::createFromAscii( "The stream must support XSeekable!" ),
+                                Reference< XInterface >() );
+
+    xSeek->seek( 0 );
+    Reference< io::XInputStream > xOldStream = xStream;
+    xStream = aStream;
+    if ( !ParsePackageRawStream() )
+    {
+        xStream = xOldStream;
+        throw packages::NoRawFormatException();
+    }
+
+    SetPackageMember ( sal_False );
+    aEntry.nTime = -1;
+    m_nStreamMode = PACKAGE_STREAM_RAW;
+}
+
+
+// XUnoTunnel
 
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw(RuntimeException)
@@ -248,31 +432,56 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
-        aValue >>= sMediaType;
-
-        if (sMediaType.getLength() > 0)
+        if ( aValue >>= sMediaType )
         {
-            if ( sMediaType.indexOf (OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1
-             || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )
-                bToBeCompressed = sal_True;
-            else
-                bToBeCompressed = sal_False;
+            if (sMediaType.getLength() > 0)
+            {
+                if ( sMediaType.indexOf (OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1
+                 || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )
+                    bToBeCompressed = sal_True;
+                else
+                    bToBeCompressed = sal_False;
+            }
         }
+        else
+            throw IllegalArgumentException( OUString::createFromAscii( "MediaType must be a string!\n" ),
+                                            Reference< XInterface >(),
+                                            2 );
+
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
-        aValue >>= aEntry.nSize;
+    {
+        if ( !( aValue >>= aEntry.nSize ) )
+            throw IllegalArgumentException( OUString::createFromAscii( "Wrong type for Size property!\n" ),
+                                            Reference< XInterface >(),
+                                            2 );
+    }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
     {
-        aValue >>= bToBeEncrypted;
-        if ( bToBeEncrypted && xEncryptionData.isEmpty())
-            xEncryptionData = new EncryptionData;
+        sal_Bool bEnc = sal_False;
+        if ( aValue >>= bEnc )
+        {
+            // In case of new raw stream, the stream must not be encrypted on storing
+            if ( bEnc && m_nStreamMode == PACKAGE_STREAM_RAW )
+                throw IllegalArgumentException( OUString::createFromAscii( "Raw stream can not be encrypted on storing" ),
+                                                Reference< XInterface >(),
+                                                2 );
+
+            bToBeEncrypted = bEnc;
+            if ( bToBeEncrypted && xEncryptionData.isEmpty())
+                xEncryptionData = new EncryptionData;
+        }
+        else
+            throw IllegalArgumentException( OUString::createFromAscii( "Wrong type for Encrypted property!\n" ),
+                                            Reference< XInterface >(),
+                                            2 );
+
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
-        if ( xEncryptionData.isEmpty())
-            xEncryptionData = new EncryptionData;
-        bHaveOwnKey = bToBeEncrypted = sal_True;
-        if ( !( aValue >>= xEncryptionData->aKey ) )
+        Sequence < sal_Int8 > aNewKey;
+
+        if ( !( aValue >>= aNewKey ) )
         {
             OUString sTempString;
             if ( ( aValue >>= sTempString ) )
@@ -283,18 +492,51 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                 const sal_Unicode *pChar = sTempString.getStr();
                 for ( sal_Int16 i = 0; i < nNameLength; i++)
                     pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
-                xEncryptionData->aKey = aSequence;
+                aNewKey = aSequence;
             }
             else
-                throw IllegalArgumentException();
+                throw IllegalArgumentException( OUString::createFromAscii( "Wrong type for EncryptionKey property!\n" ),
+                                                Reference< XInterface >(),
+                                                2 );
         }
+
+        if ( aNewKey.getLength() )
+        {
+            if ( xEncryptionData.isEmpty())
+                xEncryptionData = new EncryptionData;
+
+            xEncryptionData->aKey = aNewKey;
+            // In case of new raw stream, the stream must not be encrypted on storing
+            bHaveOwnKey = sal_True;
+            if ( m_nStreamMode != PACKAGE_STREAM_RAW )
+                bToBeEncrypted = sal_True;
+        }
+        else
+            bHaveOwnKey = sal_False;
     }
 #if SUPD>617
     else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
 #else
     else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
 #endif
-        aValue >>= bToBeCompressed;
+    {
+        sal_Bool bCompr = sal_False;
+
+        if ( aValue >>= bCompr )
+        {
+            // In case of new raw stream, the stream must not be encrypted on storing
+            if ( bCompr && m_nStreamMode == PACKAGE_STREAM_RAW )
+                throw IllegalArgumentException( OUString::createFromAscii( "Raw stream can not be encrypted on storing" ),
+                                                Reference< XInterface >(),
+                                                2 );
+
+            bToBeCompressed = bCompr;
+        }
+        else
+            throw IllegalArgumentException( OUString::createFromAscii( "Wrong type for Compressed property!\n" ),
+                                            Reference< XInterface >(),
+                                            2 );
+    }
     else
         throw beans::UnknownPropertyException();
 }
@@ -315,14 +557,10 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Encrypted" ) ) )
     {
-        aAny <<= bToBeEncrypted;
+        aAny <<= ( m_nStreamMode == PACKAGE_STREAM_RAW ) ? sal_True : bToBeEncrypted;
         return aAny;
     }
-#if SUPD>617
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
-#else
-    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
-#endif
     {
         aAny <<= bToBeCompressed;
         return aAny;
@@ -335,6 +573,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     else
         throw beans::UnknownPropertyException();
 }
+
 void ZipPackageStream::setSize (const sal_Int32 nNewSize)
 {
     if (aEntry.nCompressedSize != nNewSize )
