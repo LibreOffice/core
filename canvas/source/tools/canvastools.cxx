@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:07:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 
 #include <canvas/canvastools.hxx>
 
+#include <limits>
 #include <memory>
 #include <algorithm>
 #include <cstdio>
@@ -120,6 +121,15 @@ namespace canvas
         // prototypes
         uno::Sequence< uno::Any >& getVCLDeviceInfo( uno::Reference< rendering::XGraphicDevice > xDevice, uno::Sequence< uno::Any >& o_rxParams );
         uno::Sequence< uno::Any >& getDXDeviceInfo( uno::Reference< rendering::XGraphicDevice > xDevice, uno::Sequence< uno::Any >& o_rxParams );
+
+        // ---------------------------------------------------------------------
+
+        geometry::RealSize2D createInfiniteSize2D()
+        {
+            return geometry::RealSize2D(
+                ::std::numeric_limits<double>::infinity(),
+                ::std::numeric_limits<double>::infinity() );
+        }
 
         // ---------------------------------------------------------------------
 
