@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:54:42 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,20 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDORIENTATION_HPP_
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XDATAPILOTFIEL_HPP_
+#ifndef _COM_SUN_STAR_SHEET_XDATAPILOTFIELD_HPP_
 #include <com/sun/star/sheet/XDataPilotField.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XDATAPILOTFIELDGROUPING_HPP_
+#include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -124,19 +130,32 @@
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
+#endif
 
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
+#endif
 
-#include<memory>
+#include <memory>
+#include <vector>
 
 class ScDocShell;
 class ScPivot;
 class ScDPSaveDimension;
+class ScDPSaveGroupDimension;
+class ScDPSaveNumGroupDimension;
+struct ScDPNumGroupInfo;
 
 class ScDataPilotTableObj;
 class ScDataPilotFieldObj;
@@ -467,11 +486,19 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+struct ScFieldGroup
+{
+    ::rtl::OUString sName;
+    ::std::vector < ::rtl::OUString > aMembers;
+};
 
-class ScDataPilotFieldObj : public cppu::WeakImplHelper4<
+typedef ::std::vector < ScFieldGroup > ScFieldGroups;
+
+class ScDataPilotFieldObj : public cppu::WeakImplHelper5<
                                         com::sun::star::container::XNamed,
                                         com::sun::star::beans::XPropertySet,
                                         com::sun::star::sheet::XDataPilotField,
+                                        com::sun::star::sheet::XDataPilotFieldGrouping,
                                         com::sun::star::lang::XServiceInfo>
 {
 private:
@@ -547,14 +574,202 @@ public:
     void setCurrentPage(const rtl::OUString& sPage);
     sal_Bool getUseCurrentPage() const;
     void setUseCurrentPage(sal_Bool bUse);
-    com::sun::star::sheet::DataPilotFieldAutoShowInfo getAutoShowInfo();
-    void setAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo);
-    com::sun::star::sheet::DataPilotFieldLayoutInfo getLayoutInfo();
-    void setLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo);
-    com::sun::star::sheet::DataPilotFieldReference getReference();
-    void setReference(const com::sun::star::sheet::DataPilotFieldReference& aInfo);
-    com::sun::star::sheet::DataPilotFieldSortInfo getSortInfo();
-    void setSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo);
+    const com::sun::star::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();
+    void setAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo* pInfo);
+    const com::sun::star::sheet::DataPilotFieldLayoutInfo* getLayoutInfo();
+    void setLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo* pInfo);
+    const com::sun::star::sheet::DataPilotFieldReference* getReference();
+    void setReference(const com::sun::star::sheet::DataPilotFieldReference* pInfo);
+    const com::sun::star::sheet::DataPilotFieldSortInfo* getSortInfo();
+    void setSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo* pInfo);
+    sal_Bool getShowEmpty() const;
+    void setShowEmpty(sal_Bool bShow);
+
+    void SetGroupInfo(const ScDPNumGroupInfo& rGroupInfo,
+        com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo);
+    void FillGroupInfo(const ScDPSaveGroupDimension* pGroupDim,
+        const ScDPSaveNumGroupDimension* pNumGroupDim, com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo);
+    sal_Bool hasGroupInfo();
+    com::sun::star::sheet::DataPilotFieldGroupInfo getGroupInfo();
+    void setGroupInfo(const com::sun::star::sheet::DataPilotFieldGroupInfo* pInfo);
+
+                            // XDataPilotFieldGrouping
+    sal_Bool HasString(const com::sun::star::uno::Sequence< ::rtl::OUString >& aItems, const ::rtl::OUString& aString);
+    virtual com::sun::star::uno::Reference < com::sun::star::sheet::XDataPilotField > SAL_CALL
+        createNameGroup(const com::sun::star::uno::Sequence< ::rtl::OUString >& aItems)
+             throw (::com::sun::star::uno::RuntimeException,
+                    ::com::sun::star::lang::IllegalArgumentException);
+    virtual com::sun::star::uno::Reference < com::sun::star::sheet::XDataPilotField > SAL_CALL
+        createDateGroup(const com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo)
+             throw (::com::sun::star::uno::RuntimeException,
+                    ::com::sun::star::lang::IllegalArgumentException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScDataPilotFieldGroupsObj : public cppu::WeakImplHelper4<
+                                        com::sun::star::container::XEnumerationAccess,
+                                        com::sun::star::container::XIndexAccess,
+                                        com::sun::star::container::XNameContainer,
+                                        com::sun::star::lang::XServiceInfo>
+{
+private:
+    ScFieldGroups           aGroups;
+
+public:
+                            ScDataPilotFieldGroupsObj(const ScFieldGroups& rGroups);
+    virtual                 ~ScDataPilotFieldGroupsObj();
+
+                            // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XNameReplace
+    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName,
+                                const ::com::sun::star::uno::Any& aElement )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XNameContainer
+    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName,
+                                const ::com::sun::star::uno::Any& aElement )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::container::ElementExistException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+                                throw (::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScDataPilotFieldGroupObj : public cppu::WeakImplHelper5<
+                                        com::sun::star::container::XEnumerationAccess,
+                                        com::sun::star::container::XIndexAccess,
+                                        com::sun::star::container::XNameContainer,
+                                        com::sun::star::container::XNamed,
+                                        com::sun::star::lang::XServiceInfo>
+{
+private:
+    ScFieldGroup            aGroup;
+
+public:
+                            ScDataPilotFieldGroupObj(const ScFieldGroup& rGroup);
+    virtual                 ~ScDataPilotFieldGroupObj();
+
+                            // XNamed
+    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XNameReplace
+    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName,
+                                const ::com::sun::star::uno::Any& aElement )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XNameContainer
+    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName,
+                                const ::com::sun::star::uno::Any& aElement )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::container::ElementExistException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+                                throw (::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScDataPilotFieldGroupItemObj : public cppu::WeakImplHelper2<
+                                        com::sun::star::container::XNamed,
+                                        com::sun::star::lang::XServiceInfo>
+{
+private:
+    rtl::OUString           sName;
+
+public:
+                            ScDataPilotFieldGroupItemObj(const rtl::OUString& rName);
+    virtual                 ~ScDataPilotFieldGroupItemObj();
+
+                            // XNamed
+    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
