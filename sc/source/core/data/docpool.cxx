@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:10:53 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 12:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,17 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
                         aItemInfos, NULL, bLoadRefCounts ),
         pSecondary  ( pSecPool )
 {
-    Font            aStdFont        = System::GetStandardFont( STDFONT_SWISS );
-    Font            aCjkFont        = System::GetStandardFont( STDFONT_SWISS );
-    Font            aCtlFont        = System::GetStandardFont( STDFONT_SWISS );
+    //  latin font from GetDefaultFonts is not used, STDFONT_SWISS instead
+    Font aStdFont = System::GetStandardFont( STDFONT_SWISS );
+    SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamily(),
+                                            aStdFont.GetName(), aStdFont.GetStyleName(),
+                                            aStdFont.GetPitch(), aStdFont.GetCharSet(),
+                                            ATTR_FONT );
+
+    SvxFontItem* pCjkFont = new SvxFontItem( ATTR_CJK_FONT );
+    SvxFontItem* pCtlFont = new SvxFontItem( ATTR_CTL_FONT );
+    SvxFontItem aDummy;
+    GetDefaultFonts( aDummy, *pCjkFont, *pCtlFont );
 
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
     SfxItemSet*     pSet = new SfxItemSet( *this, ATTR_PATTERN_START, ATTR_PATTERN_END );
@@ -226,9 +234,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
 
-    ppPoolDefaults[ ATTR_FONT            - ATTR_STARTINDEX ] = new SvxFontItem( aStdFont.GetFamily(),
-                                                                    aStdFont.GetName(), aStdFont.GetStyleName(),
-                                                                    aStdFont.GetPitch(), aStdFont.GetCharSet() );
+    ppPoolDefaults[ ATTR_FONT            - ATTR_STARTINDEX ] = pStdFont;
     ppPoolDefaults[ ATTR_FONT_HEIGHT     - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200 );        // 10 pt;
     ppPoolDefaults[ ATTR_FONT_WEIGHT     - ATTR_STARTINDEX ] = new SvxWeightItem;
     ppPoolDefaults[ ATTR_FONT_POSTURE    - ATTR_STARTINDEX ] = new SvxPostureItem;
@@ -238,19 +244,13 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_FONT_SHADOWED   - ATTR_STARTINDEX ] = new SvxShadowedItem;
     ppPoolDefaults[ ATTR_FONT_COLOR      - ATTR_STARTINDEX ] = new SvxColorItem;
     ppPoolDefaults[ ATTR_FONT_LANGUAGE   - ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW), ATTR_FONT_LANGUAGE );
-    ppPoolDefaults[ ATTR_CJK_FONT        - ATTR_STARTINDEX ] = new SvxFontItem( aStdFont.GetFamily(),
-                                                                    aStdFont.GetName(), aStdFont.GetStyleName(),
-                                                                    aStdFont.GetPitch(), aStdFont.GetCharSet(),
-                                                                    ATTR_CJK_FONT );
+    ppPoolDefaults[ ATTR_CJK_FONT        - ATTR_STARTINDEX ] = pCjkFont;
     ppPoolDefaults[ ATTR_CJK_FONT_HEIGHT - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_CJK_FONT_HEIGHT );
     ppPoolDefaults[ ATTR_CJK_FONT_WEIGHT - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT );
     ppPoolDefaults[ ATTR_CJK_FONT_POSTURE- ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_CJK_FONT_POSTURE );
     ppPoolDefaults[ ATTR_CJK_FONT_LANGUAGE-ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW),
                                                                     ATTR_CJK_FONT_LANGUAGE );
-    ppPoolDefaults[ ATTR_CTL_FONT        - ATTR_STARTINDEX ] = new SvxFontItem( aStdFont.GetFamily(),
-                                                                    aStdFont.GetName(), aStdFont.GetStyleName(),
-                                                                    aStdFont.GetPitch(), aStdFont.GetCharSet(),
-                                                                    ATTR_CTL_FONT );
+    ppPoolDefaults[ ATTR_CTL_FONT        - ATTR_STARTINDEX ] = pCtlFont;
     ppPoolDefaults[ ATTR_CTL_FONT_HEIGHT - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_CTL_FONT_HEIGHT );
     ppPoolDefaults[ ATTR_CTL_FONT_WEIGHT - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT );
     ppPoolDefaults[ ATTR_CTL_FONT_POSTURE- ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_CTL_FONT_POSTURE );
