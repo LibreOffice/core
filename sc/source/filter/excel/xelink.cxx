@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:45:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,21 +362,12 @@ private:
 private:
     typedef ::std::auto_ptr< XclExpExtNameList > XclExpExtNameListPtr;
 
-    /** This enumeration specifies the type of a SUPBOOK record. */
-    enum XclExpSBType
-    {
-        xlSBSelf,               /// SUPBOOK is used for internal references.
-        xlSBUrl,                /// SUPBOOK is used for external references.
-        xlSBDde,                /// SUPBOOK is used for DDE links.
-        xlSBAddIn               /// SUPBOOK contains add-in functions.
-    };
-
     XclExpRecordList< XclExpXct > maXctList;    /// List of XCT records (which contain CRN records).
     String                      maUrl;          /// URL of the external document or application name for DDE.
     String                      maDdeTopic;     /// Topic of an DDE link.
     XclExpString                maUrlEncoded;   /// Document name encoded for Excel.
     XclExpExtNameListPtr        mpExtNameList;  /// List of EXTERNNAME records.
-    XclExpSBType                meType;         /// Type of this SUPBOOK record.
+    XclSupbookType              meType;         /// Type of this SUPBOOK record.
     sal_uInt16                  mnXclTabCount;  /// Number of internal sheets.
 };
 
@@ -1042,14 +1033,14 @@ void XclExpXct::WriteBody( XclExpStream& rStrm )
 
 XclExpSupbook::XclExpSupbook( sal_uInt16 nXclTabCount ) :
     XclExpRecord( EXC_ID_SUPBOOK, 4 ),
-    meType( xlSBSelf ),
+    meType( EXC_SBTYPE_SELF ),
     mnXclTabCount( nXclTabCount )
 {
 }
 
 XclExpSupbook::XclExpSupbook() :
     XclExpRecord( EXC_ID_SUPBOOK, 4 ),
-    meType( xlSBAddIn ),
+    meType( EXC_SBTYPE_ADDIN ),
     mnXclTabCount( 1 )
 {
 }
@@ -1058,7 +1049,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl ) :
     XclExpRecord( EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
     maUrlEncoded( XclExpUrlHelper::EncodeUrl( rRoot, rUrl ) ),
-    meType( xlSBUrl ),
+    meType( EXC_SBTYPE_EXTERN ),
     mnXclTabCount( 0 )
 {
     SetRecSize( 2 + maUrlEncoded.GetSize() );
@@ -1069,7 +1060,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, co
     maUrl( rApplic ),
     maDdeTopic( rTopic ),
     maUrlEncoded( XclExpUrlHelper::EncodeDde( rApplic, rTopic ) ),
-    meType( xlSBDde ),
+    meType( EXC_SBTYPE_SPECIAL ),
     mnXclTabCount( 0 )
 {
     SetRecSize( 2 + maUrlEncoded.GetSize() );
@@ -1083,12 +1074,12 @@ const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nXclTab ) const
 
 bool XclExpSupbook::IsUrlLink( const String& rUrl ) const
 {
-    return (meType == xlSBUrl) && (maUrl == rUrl);
+    return (meType == EXC_SBTYPE_EXTERN) && (maUrl == rUrl);
 }
 
 bool XclExpSupbook::IsDdeLink( const String& rApplic, const String& rTopic ) const
 {
-    return (meType == xlSBDde) && (maUrl == rApplic) && (maDdeTopic == rTopic);
+    return (meType == EXC_SBTYPE_SPECIAL) && (maUrl == rApplic) && (maDdeTopic == rTopic);
 }
 
 void XclExpSupbook::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, sal_uInt16 nSBTab )
@@ -1099,7 +1090,7 @@ void XclExpSupbook::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRan
 
 sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName )
 {
-    DBG_ASSERT( meType == xlSBUrl, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
+    DBG_ASSERT( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
     sal_uInt16 nSBTab = ::ulimit< sal_uInt16 >( maXctList.Count() );
     XclExpXct* pXct = new XclExpXct( rTabName, nSBTab );
     SetRecSize( GetRecSize() + pXct->GetTabName().GetSize() );
@@ -1136,11 +1127,11 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
 {
     switch( meType )
     {
-        case xlSBSelf:
+        case EXC_SBTYPE_SELF:
             rStrm << mnXclTabCount << EXC_SUPB_SELF;
         break;
-        case xlSBUrl:
-        case xlSBDde:
+        case EXC_SBTYPE_EXTERN:
+        case EXC_SBTYPE_SPECIAL:
         {
             sal_uInt16 nCount = ::ulimit< sal_uInt16 >( maXctList.Count() );
             rStrm << nCount << maUrlEncoded;
@@ -1149,7 +1140,7 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
                 rStrm << pXct->GetTabName();
         }
         break;
-        case xlSBAddIn:
+        case EXC_SBTYPE_ADDIN:
             rStrm << mnXclTabCount << EXC_SUPB_ADDIN;
         break;
         default:
