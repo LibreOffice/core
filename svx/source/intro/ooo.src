@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:27:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #define OOO_VENDOR "Sun Microsystems Inc."
 #define OOO_LICENSE "LGPL"
 #else
-#define OOO_VENDOR "my company"
+//#define OOO_VENDOR "my company"
 #define OOO_LICENSE "LGPL"
 #endif
 
