@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:16:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,8 +356,8 @@ TabPage RID_SFXPAGE_LINGU
     };
     String STR_SPELL_AUTO
     {
-        Text [ de ] = "Automatische Prüfung" ;
-        Text [ en-US ] = "AutoCheck";
+        Text [ de ] = "Rechtschreibung während der Eingabe überprüfen" ;
+        Text [ en-US ] = "Check spelling as you type";
     };
     String STR_HIDE_MARKINGS
     {
