@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #include "componentdatahelper.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -89,11 +91,9 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
-        namespace beans     = ::com::sun::star::beans;
-        namespace container = ::com::sun::star::container;
 
-        namespace backenduno = ::drafts::com::sun::star::configuration::backend;
-
+        namespace backenduno = ::com::sun::star::configuration::backend;
+        using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
 
         typedef ::cppu::WeakImplHelper1<backenduno::XLayerHandler> LayerMergeHandler_Base;
@@ -123,91 +123,91 @@ namespace configmgr
         public:
             virtual void SAL_CALL
                 startLayer(  )
-                    throw (MalformedDataException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endLayer(  )
-                    throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideNode( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                    throw (MalformedDataException, container::NoSuchElementException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endNode(  )
-                    throw (MalformedDataException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 dropNode( const OUString& aName )
-                    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                    throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endProperty(  )
-                    throw (MalformedDataException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValue( const uno::Any& aValue )
-                    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
-                    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         private:
             void propagateAttributes(ISubtree & _rParent);
 
             node::Attributes makePropertyAttributes(sal_Int16 aSchemaAttributes)
-                CFG_UNO_THROW1( lang::IllegalArgumentException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void checkPropertyType(uno::Type const & _aType)
-                CFG_UNO_THROW1( beans::IllegalTypeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void applyPropertyValue(uno::Any const & _aValue)
-                CFG_UNO_THROW1( beans::IllegalTypeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void applyPropertyValue(uno::Any const & _aValue, OUString const & _aLocale)
-                CFG_UNO_THROW2( beans::IllegalTypeException, lang::IllegalArgumentException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void applyAttributes(INode * pNode, sal_Int16 aNodeAttributes)
-                CFG_UNO_THROW1( lang::IllegalArgumentException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
-            void overrideLayerRoot( const OUString& aName, sal_Int16 aAttributes )
-                CFG_THROW4 (MalformedDataException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+            void overrideLayerRoot( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
-            bool startOverride(INode * pNode) /* check if writable, mark merged */
+            bool startOverride(INode * pNode, sal_Bool bClear) /* check if writable, mark merged */
                 CFG_NOTHROW( );
 
             void implAddOrReplaceNode(const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes)
-                CFG_THROW4 (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException);
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void ensureUnchanged(INode const * pNode) const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void setLocalizedValue(ISubtree * pProperty, uno::Any const & _aValue, OUString const & _aLocale)
-                CFG_UNO_THROW1( beans::IllegalTypeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void setValueAndCheck(ValueNode & _rValueNode, uno::Any const & _aValue)
-                CFG_UNO_THROW1( beans::IllegalTypeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
        private:
            void skipNode()          { ++m_nSkipping; }
            bool isSkipping() const  { return m_nSkipping != 0; }
