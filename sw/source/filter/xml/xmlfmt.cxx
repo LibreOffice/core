@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:19:47 $
+ *  last change: $Author: mib $ $Date: 2001-04-04 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #endif
 #ifndef _XMLOFF_XMLTEXTSHAPESTYLECONTEXT_HXX
 #include <xmloff/XMLTextShapeStyleContext.hxx>
+#endif
+#ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
+#include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #endif
 
 #ifndef _NUMRULE_HXX
@@ -945,10 +948,9 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
                                           sal_True );
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        // As long as there are no element items, we can use the text
-        // style class.
-        pStyle = new XMLTextStyleContext( GetImport(), nPrefix,
-                            rLocalName, xAttrList, *this, nFamily, sal_True );
+        // There are no writer specific defaults for graphic styles!
+        pStyle = new XMLGraphicsDefaultStyle( GetImport(), nPrefix,
+                            rLocalName, xAttrList, *this );
         break;
     default:
         pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily,

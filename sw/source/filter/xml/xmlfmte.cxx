@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: mib $ $Date: 2001-04-04 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
@@ -139,6 +142,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::lang;
 
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
 {
@@ -237,6 +241,20 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
 void SwXMLExport::_ExportStyles( sal_Bool bUsed )
 {
     SvXMLExport::_ExportStyles( bUsed );
+    Reference < XMultiServiceFactory > xFactory (GetModel(), UNO_QUERY);
+    if (xFactory.is())
+    {
+        OUString sDrawingDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.drawing.Defaults" ) );
+        Reference < XInterface > xInt = xFactory->createInstance ( sDrawingDefaults );
+        if ( xInt.is() )
+        {
+            Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
+            if (xPropSet.is())
+                GetTextParagraphExport()->exportDefaultStyle(
+                                    xPropSet, XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
+                                       GetShapeExport()->CreateShapePropMapper(*this));
+        }
+    }
     GetTextParagraphExport()->exportTextStyles( bUsed );
 }
 
