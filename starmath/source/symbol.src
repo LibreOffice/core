@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:29:44 $
+ *  last change: $Author: tl $ $Date: 2001-08-02 15:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,70 @@
 
 Resource RID_LOCALIZED_NAMES
 {
+    StringArray RID_FRENCH_50_NAMES
+    {
+        ItemList =
+        {
+            < "BETA" ; > ;
+            < "beta" ; > ;
+            < "ETA" ; > ;
+            < "eta" ; > ;
+            < "JOTA" ; > ;
+            < "jota" ; > ;
+            < "CHI" ; > ;
+            < "chi" ; > ;
+            < "MY" ; > ;
+            < "my" ; > ;
+            < "NY" ; > ;
+            < "ny" ; > ;
+            < "OMIKRON" ; > ;
+            < "omikron" ; > ;
+            < "OMEGA" ; > ;
+            < "omega" ; > ;
+            < "RHO" ; > ;
+            < "rho" ; > ;
+            < "THETA" ; > ;
+            < "theta" ; > ;
+            < "YPSILON" ; > ;
+            < "ypsilon" ; > ;
+            < "ZETA" ; > ;
+            < "zeta" ; > ;
+            < "varrho" ; > ;
+            < "vartheta" ; > ;
+        };
+    };
+    StringArray RID_FRENCH_60_NAMES
+    {
+        ItemList =
+        {
+            < "BÊTA" ; > ;
+            < "bêta" ; > ;
+            < "ÊTA" ; > ;
+            < "êta" ; > ;
+            < "IOTA" ; > ;
+            < "iota" ; > ;
+            < "KHI" ; > ;
+            < "khi" ; > ;
+            < "MU" ; > ;
+            < "mu" ; > ;
+            < "NU" ; > ;
+            < "nu" ; > ;
+            < "OMICRON" ; > ;
+            < "omicron" ; > ;
+            < "OMÉGA" ; > ;
+            < "oméga" ; > ;
+            < "RHÔ" ; > ;
+            < "rhô" ; > ;
+            < "THÊTA" ; > ;
+            < "thêta" ; > ;
+            < "UPSILON" ; > ;
+            < "upsilon" ; > ;
+            < "ZÊTA" ; > ;
+            < "zêta" ; > ;
+            < "varrhô" ; > ;
+            < "varthêta" ; > ;
+        };
+    };
     StringArray RID_EXPORT_SYMBOLSET_NAMES
     {
         ItemList =
