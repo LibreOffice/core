@@ -285,5 +285,50 @@ public interface OfficeConstants {
 
     /** StarCalc XML <i>office:class</i> value. */
     public final static String SXC_TYPE = "spreadsheet";
-}
 
+    /** Element tag for <i>manifest:manifest</i>entry in Manifest XML */
+    public final static String TAG_MANIFEST_ROOT = "manifest:manifest";
+
+    /** Element tag for <i>manifest:file-entry</i> entry in Manifest XML. */
+    public final static String TAG_MANIFEST_FILE = "manifest:file-entry";
+
+    /**
+     * Attribute tag for <i>manifest:media-type</i> of element
+     * <i>manifest:file-entry.</i>
+     */
+    public final static String ATTRIBUTE_MANIFEST_FILE_TYPE = "manifest:media-type";
+
+    /**
+     * Attribute tag for <i>manifest:full-path</i> of element
+     * <i>manifest:file-entry.</i>
+     */
+    public final static String ATTRIBUTE_MANIFEST_FILE_PATH = "manifest:full-path";
+
+
+    /** StarWriter XML MIME type. */
+    public final static String SXW_MIME_TYPE = "application/vnd.sun.xml.writer";
+
+    /** StarWriter XML Template MIME type. */
+    public final static String STW_MIME_TYPE = "application/vnd.sun.xml.writer.template";
+
+    /** StarCalc XML MIME type. */
+    public final static String SXC_MIME_TYPE = "application/vnd.sun.xml.calc";
+
+    /** StarCalc XML Template MIME type. */
+    public final static String STC_MIME_TYPE = "application/vnd.sun.xml.calc.template";
+
+    /** StarImpress XML MIME type. */
+    public final static String SXI_MIME_TYPE = "application/vnd.sun.xml.impress";
+
+    /** StarImpress XML Template MIME type. */
+    public final static String STI_MIME_TYPE = "application/vnd.sun.xml.impress.template";
+
+    /** StarDraw XML MIME type. */
+    public final static String SXD_MIME_TYPE = "application/vnd.sun.xml.draw";
+
+    /** StarMath XML MIME type. */
+    public final static String SXM_MIME_TYPE = "application/vnd.sun.xml.math";
+
+    /** StarWriter Global XML MIME Type */
+    public final static String SXG_MIME_TYPE = "application/vnd.sun.xml.writer.global";
+}
