@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:31:16 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,19 @@ namespace dbtools
     // return the datasource for the given datasource name
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsDataSourceName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+
+    /** search for a name that is NOT in the NameAcces
+        @param      _rxContainer    the NameAcces container to search in
+        @param      _rBaseName      the base name that should be created
+    */
+    ::rtl::OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxContainer,
+                                     const ::rtl::OUString& _rBaseName);
+
+    /** create a name which is a valid SQL 92 identifier name
+        @param      _rName          the string which should be converted
+        @param      _rSpecials      @see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
+    */
+    ::rtl::OUString convertName2SQLName(const ::rtl::OUString& _rName,const ::rtl::OUString& _rSpecials);
 
 //.........................................................................
 }   // namespace dbtools

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:31:47 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,7 @@ void TransferFormComponentProperties(
                 // die Effective-Properties sollten immer void oder string oder double sein ....
 
             if (hasProperty(sPropDefaultDate, xNewProps) && !bIsString)
-            {   // (einen String in ein Datum zu konvertieren muss nicht immer klappen, denn das ganze kann ja an
+            {   // (einen ::rtl::OUString in ein Datum zu konvertieren muss nicht immer klappen, denn das ganze kann ja an
                 // eine Textspalte gebunden gewesen sein, aber mit einem double koennen wir was anfangen)
                 Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultDate, makeAny(aDate));
@@ -801,11 +801,11 @@ void TransferFormComponentProperties(
             }
 
             if (hasProperty(sPropDefaultText, xNewProps) && bIsString)
-            {   // und hier den String
+            {   // und hier den ::rtl::OUString
                 xNewProps->setPropertyValue(sPropDefaultText, aEffectiveDefault);
             }
 
-            // nyi: die Uebersetzung zwischen doubles und String wuerde noch mehr Moeglichkeien eroeffnen
+            // nyi: die Uebersetzung zwischen doubles und ::rtl::OUString wuerde noch mehr Moeglichkeien eroeffnen
         }
     }
 
@@ -822,7 +822,7 @@ void TransferFormComponentProperties(
 
             // Sprache des neuen Formats
 //          ::rtl::OString sLanguage, sCountry;
-//          ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), String(sLanguage.getStr()), String(sCountry.getStr()));
+//          ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), ::rtl::OUString(sLanguage.getStr()), ::rtl::OUString(sCountry.getStr()));
 //          Locale aNewLanguage(
 //              ::rtl::OStringToOUString(sLanguage, RTL_TEXTENCODING_ASCII_US),
 //              ::rtl::OStringToOUString(sCountry, RTL_TEXTENCODING_ASCII_US),
@@ -898,7 +898,7 @@ void TransferFormComponentProperties(
                 aNewDefault <<= DBTypeConversion::toDouble(*(Time*)aTime.getValue());
         }
 
-        // double oder String werden direkt uebernommen
+        // double oder ::rtl::OUString werden direkt uebernommen
         if (hasProperty(sPropDefaultValue, xOldProps))
             aNewDefault = xOldProps->getPropertyValue(sPropDefaultValue);
         if (hasProperty(sPropDefaultText, xOldProps))
@@ -1136,6 +1136,76 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     }
     return nSearchFlag;
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName)
+{
+    ::rtl::OUString sName(_rBaseName);
+    sal_Int32 nPos = 1;
+    sName += ::rtl::OUString::valueOf(nPos);
+
+    while(_rxContainer->hasByName(sName))
+    {
+        sName = _rBaseName;
+        sName += ::rtl::OUString::valueOf(++nPos);
+    }
+    return sName;
+}
+sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials);
+#include <ctype.h>      //isdigit
+//------------------------------------------------------------------------------
+sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
+{
+    // Überprüfung auf korrekte Namensgebung im SQL Sinne
+    // Dieses ist wichtig für Tabellennamen beispielsweise
+    ::rtl::OString aName(rName,rName.getLength(),RTL_TEXTENCODING_ASCII_US);
+    const char* pStr = aName.getStr();
+    if (isdigit(*pStr))
+        return sal_False;
+
+    for (; *pStr; ++pStr )
+        if(!isCharOk(*pStr,_rSpecials))
+            return sal_False;
+
+    if  (   rName.getLength()
+        &&  (   (rName.toChar() == '_')
+            ||  (   (rName.toChar() >= '0')
+                &&  (rName.toChar() <= '9')
+                )
+            )
+        )
+        return sal_False;
+    // the SQL-Standard requires the first character to be an alphabetic character, which
+    // isn't easy to decide in UniCode ...
+    // So we just prohibit the characters which already lead to problems ....
+    // 11.04.00 - 74902 - FS
+
+    return sal_True;
+}
+//------------------------------------------------------------------
+sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
+{
+
+    if ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
+          c == '_' || _rSpecials.indexOf(c) != -1)
+          return sal_True;
+    else
+        return sal_False;
+}
+//------------------------------------------------------------------
+// Erzeugt einen neuen Namen falls noetig
+::rtl::OUString convertName2SQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
+{
+    if(isValidSQLName(rName,_rSpecials))
+        return rName;
+    ::rtl::OUString aNewName(rName);
+    const sal_Unicode* pStr = rName.getStr();
+    sal_Bool bValid(!isdigit(*pStr));
+    for (; bValid && *pStr; pStr++ )
+        if(!isCharOk(*pStr,_rSpecials))
+            aNewName.replace(*pStr,'_');
+
+    return aNewName;
+}
 
 
 //.........................................................................
@@ -1146,6 +1216,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/02/14 10:31:47  oj
+ *  neew method
+ *
  *  Revision 1.14  2001/02/05 10:32:31  oj
  *  check statement length
  *
