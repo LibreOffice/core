@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 17:59:14 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 17:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include <svtools/moduleoptions.hxx>
 #include "sddll.hxx"
 #include "diactrl.hxx"
 #include "tbx_ww.hxx"
@@ -88,7 +89,7 @@
 
 void SdDLL::RegisterFactorys()
 {
-    if (SFX_APP()->HasFeature(SFX_FEATURE_SIMPRESS))
+    if (SvtModuleOptions().IsImpress())
     {
         // Impress
         SdDrawViewShell::RegisterFactory(1);
@@ -96,8 +97,7 @@ void SdDLL::RegisterFactorys()
         SdOutlineViewShell::RegisterFactory(3);
     }
 
-    if (SFX_APP()->HasFeature(SFX_FEATURE_SDRAW))
-    {
+    if (SvtModuleOptions().IsDraw()) {
         // Draw
         SdGraphicViewShell::RegisterFactory(1);
     }
