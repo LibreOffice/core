@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:38:26 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Numaralama biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilo de numeración";
+        Text[ finnish ] = "Numerointityyli";
     };
     ListBox LB_NUMBER_STYLE
     {
@@ -192,6 +193,10 @@ TabPage TP_NUMPARA
     {
              < "Ninguno" ; > ;
     };
+    StringList [ finnish ] =
+    {
+             < "Ei mitään" ; > ;
+    };
     };
     GroupBox GB_NEW_START
     {
@@ -221,6 +226,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeración";
+        Text[ finnish ] = "Numerointi";
     };
     TriStateBox CB_NEW_START
     {
@@ -250,6 +256,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Bu paragraf ile yeniden baþla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Volver a empezar en este párrafo";
+        Text[ finnish ] = "~Aloita alusta tämän kappaleen kohdalla";
     };
     FixedText FT_NEW_START
     {
@@ -279,6 +286,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "~Baþlangýç deðeri:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Empezar ~con:";
+        Text[ finnish ] = "~Aloita kohteella:";
     };
     NumericField NF_NEW_START
     {
@@ -324,6 +332,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Satýr numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeración de líneas";
+        Text[ finnish ] = "Rivien numerointi";
     };
     TriStateBox CB_COUNT_PARA
     {
@@ -352,6 +361,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Bu paragrafýn da satýrlarýný numarala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Con~tar las líneas de este párrafo";
+        Text[ finnish ] = "~Sisällytä tämä kappale rivinumerointiin";
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
@@ -380,6 +390,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Bu paragraf ile yeniden baþla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Volver a empe~zar en este párrafo";
+        Text[ finnish ] = "~Aloita tässä kappaleessa uudestaan";
     };
     FixedText FT_RESTART_NO
     {
@@ -408,6 +419,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "~Baþlangýç deðeri:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Empezar ~con:";
+        Text[ finnish ] = "~Aloitus:";
     };
     NumericField NF_RESTART_PARA
     {
