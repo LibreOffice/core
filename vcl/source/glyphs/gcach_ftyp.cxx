@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.81 $
- *  last change: $Author: hdu $ $Date: 2002-11-12 11:37:10 $
+ *  $Revision: 1.82 $
+ *  last change: $Author: pl $ $Date: 2002-11-18 14:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,31 +660,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
         rTo.mnLastChar      = pOS2->usLastCharIndex;
     }
-}
-
-// -----------------------------------------------------------------------
-
-int GetVerticalFlags( sal_Unicode nChar )
-{
-    if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo
-     || (nChar == 0x2030 || nChar == 0x2031)    // per mille sign
-     || (nChar >= 0x3000 && nChar <= 0xfaff)    // unified CJK
-     || (nChar >= 0xfe20 && nChar <= 0xfe6f)    // CJK compatibility
-     || (nChar >= 0xff00 && nChar <= 0xfffd) )  // other CJK
-    {
-        if( nChar == 0x2010 || nChar == 0x2015
-        ||  nChar == 0x2016 || nChar == 0x2026
-        || (nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
-        ||  nChar == 0xFF3B || nChar == 0xFF3D
-        || (nChar >= 0xFF5B && nChar <= 0xFF63)
-        ||  nChar == 0xFFE3 )
-            return GF_NONE;   // not rotated
-        else if( nChar == 0x30fc )
-            return GF_ROTR;  // right
-        return GF_ROTL;      // left
-    }
-
-    return GF_NONE;
 }
 
 static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-06 16:59:03 $
+ *  last change: $Author: pl $ $Date: 2002-11-18 14:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2005,7 +2005,6 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // subset glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
     int nOrigCount = nGlyphs;
-    DBG_ASSERT( nGlyphs < 256, "too many glyphs for subsetting" );
     USHORT    aShortIDs[ 256 ];
     sal_uInt8 aTempEncs[ 256 ];
 
@@ -2013,9 +2012,13 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     for( i = 0; i < nGlyphs; ++i )
     {
         aTempEncs[i] = pEncoding[i];
-        aShortIDs[i] = static_cast<USHORT>(pGlyphIDs[i]);
+        int nGFlags = pGlyphIDs[i] & GF_FLAGMASK;
+        if( nGFlags & GF_ISCHAR )
+            aShortIDs[i] = MapChar( aSftTTF.get(), pGlyphIDs[i] & GF_IDXMASK, 1 );
+        else
+            aShortIDs[i] = static_cast<USHORT>(pGlyphIDs[i] & GF_IDXMASK);
         // find NotDef glyph
-        if( !pGlyphIDs[i] )
+        if( !aShortIDs[i] )
             nNotDef = i;
     }
 
@@ -2031,6 +2034,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         aShortIDs[0] = 0;
         aTempEncs[0] = 0;
     }
+    DBG_ASSERT( nGlyphs < 257, "too many glyphs for subsetting" );
 
     // fill pWidth array
     TTSimpleGlyphMetrics* pMetrics =

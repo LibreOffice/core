@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 11:30:16 $
+ *  last change: $Author: pl $ $Date: 2002-11-18 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2527,7 +2527,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         for( int i = 0; i < nGlyphs; i++ )
         {
             nGlyphFlags[i] = (pGlyphs[i] & GF_FLAGMASK);
+#ifndef WNT
+            // #104930# workaround for Win32 bug: the glyph ids are actually
+            // Unicodes for vertical fonts because Win32 does not return
+            // the correct glyph ids; this is indicated by GF_ISCHAR which is
+            // needed in SalGraphics::CreateFontSubset to convert the Unicodes
+            // to vertical glyph ids. Doing this here on a per character
+            // basis would be a major performance hit.
             pGlyphs[i] &= GF_IDXMASK;
+#endif
             if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
                 pUnicodes[i] = rText.GetChar( pCharPosAry[i] );
             else
