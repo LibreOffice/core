@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:54:02 $
+ *  last change: $Author: nn $ $Date: 2000-11-10 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "undoutil.hxx"
 #include "chgtrack.hxx"
 #include "dociter.hxx"
+#include "cell.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -1244,7 +1245,12 @@ void __EXPORT ScUndoReplace::Undo()
     }
     else
     {
-        pDoc->SetString( aCursorPos.GetCol(), aCursorPos.GetRow(), aCursorPos.GetTab(), aUndoStr );
+        // #78889# aUndoStr may contain line breaks
+        if ( aUndoStr.Search('\n') != STRING_NOTFOUND )
+            pDoc->PutCell( aCursorPos.GetCol(), aCursorPos.GetRow(), aCursorPos.GetTab(),
+                            new ScEditCell( aUndoStr, pDoc ) );
+        else
+            pDoc->SetString( aCursorPos.GetCol(), aCursorPos.GetRow(), aCursorPos.GetTab(), aUndoStr );
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.GetCol(), aCursorPos.GetRow(),
                                        SC_FOLLOW_JUMP, FALSE, FALSE );
