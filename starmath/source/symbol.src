@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:42:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,22 +402,22 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "noelement" ; > ;
+        < "strictlylessthan" ; > ;
+        < "strictlygreaterthan" ; > ;
+        < "notequal" ; > ;
+        < "identical" ; > ;
+        < "tendto" ; > ;
+        < "infinite" ; > ;
+        < "angle" ; > ;
+        < "perthousand" ; > ;
+        < "and" ; > ;
+        < "or" ; > ;
     };
     ItemList [ portuguese ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "alfa" ; > ;
+        < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -474,27 +474,27 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "desigual" ; > ;
+        < "idêntico" ; > ;
+        < "tende" ; > ;
+        < "infinito" ; > ;
+        < "Ângulo" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "e" ; > ;
+        < "ou" ; > ;
     };
     ItemList [ russian ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+            < "Àëüôà" ; > ;
+        < "Àëüôà" ; > ;
+        < "Áåòà" ; > ;
+        < "Áåòà" ; > ;
+        < "Ãàììà" ; > ;
+        < "Ãàììà" ; > ;
         < "delta" ; > ;
-        < "DELTA" ; > ;
+        < "ÄÅËÜÒÀ" ; > ;
         < "epsilon" ; > ;
-        < "EPSILON" ; > ;
+        < "ÈÏÑÈËÎÍ" ; > ;
         < "zeta" ; > ;
         < "ZETA" ; > ;
         < "eta" ; > ;
@@ -505,8 +505,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "JOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
-        < "lambda" ; > ;
-        < "LAMBDA" ; > ;
+        < "Ëÿìáäà" ; > ;
+        < "Ëÿìáäà" ; > ;
         < "my" ; > ;
         < "MY" ; > ;
         < "ny" ; > ;
@@ -515,8 +515,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "XI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
-        < "pi" ; > ;
-        < "PI" ; > ;
+        < "ÏÈ" ; > ;
+        < "ÏÈ" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
         < "sigma" ; > ;
@@ -543,23 +543,23 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "íåðàâíî" ; > ;
+        < "ÑÎÂÏÀÄ" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "Áåñêîíå÷íî" ; > ;
+        < "Óãîë" ; > ;
         < "promille" ; > ;
         < "und" ; > ;
-        < "oder" ; > ;
+        < "ÈËÈ" ; > ;
     };
     ItemList [ greek ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+            < "¢ëöá" ; > ;
+        < "¢ëöá" ; > ;
+        < "ÂÞôá" ; > ;
+        < "ÂÞôá" ; > ;
+        < "ÃÜììá" ; > ;
+        < "ÃÜììá" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
         < "epsilon" ; > ;
@@ -612,19 +612,19 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "ÄéÜöïñï" ; > ;
+        < "EXACT" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "¢ðåéñï" ; > ;
+        < "Ãùíßá" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "KAI" ; > ;
+        < "OR" ; > ;
     };
     ItemList [ dutch ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "Alfa" ; > ;
+        < "Alfa" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -681,21 +681,21 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "niet gelijk aan" ; > ;
+        < "GELIJK" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "oneindig" ; > ;
+        < "Hoek" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "en" ; > ;
+        < "OF" ; > ;
     };
     ItemList [ french ] =
     {
             < "alpha" ; > ;
         < "ALPHA" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
+        < "Bêta" ; > ;
+        < "Bêta" ; > ;
         < "gamma" ; > ;
         < "GAMMA" ; > ;
         < "delta" ; > ;
@@ -750,27 +750,27 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "différent" ; > ;
+        < "EXACT" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "infini" ; > ;
+        < "Angle" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "ET" ; > ;
+        < "OU" ; > ;
     };
     ItemList [ spanish ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "alfa" ; > ;
+        < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
         < "GAMMA" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
-        < "epsilon" ; > ;
-        < "EPSILON" ; > ;
+        < "épsilon" ; > ;
+        < "ÉPSILON" ; > ;
         < "zeta" ; > ;
         < "ZETA" ; > ;
         < "eta" ; > ;
@@ -789,8 +789,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "NY" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
+        < "ómikron" ; > ;
+        < "ÓMIKRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
@@ -799,8 +799,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "ípsilon" ; > ;
+        < "ÍPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -815,23 +815,23 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "varrho" ; > ;
         < "varsigma" ; > ;
         < "varphi" ; > ;
-        < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "elemento" ; > ;
+        < "sinelemento" ; > ;
+        < "muchomenos" ; > ;
+        < "muchomayor" ; > ;
+        < "diferente" ; > ;
+        < "idéntico" ; > ;
+        < "tiende" ; > ;
+        < "infinito" ; > ;
+        < "Ángulo" ; > ;
+        < "pormil" ; > ;
+        < "y" ; > ;
+        < "o" ; > ;
     };
     ItemList [ italian ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -860,8 +860,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "XI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
-        < "pi" ; > ;
-        < "PI" ; > ;
+        < "PI.GRECO" ; > ;
+        < "PI.GRECO" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
         < "sigma" ; > ;
@@ -888,19 +888,19 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "diverso" ; > ;
+        < "IDENTICO" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "Infinito" ; > ;
+        < "Angolo" ; > ;
         < "promille" ; > ;
         < "und" ; > ;
-        < "oder" ; > ;
+        < "Oppure" ; > ;
     };
     ItemList [ danish ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "Procent" ; > ;
+        < "Alfa" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -957,14 +957,14 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "forskellig fra" ; > ;
+        < "EKSAKT" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "uendelig" ; > ;
+        < "Vinkel" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "og" ; > ;
+        < "ELLER" ; > ;
     };
     ItemList [ swedish ] =
     {
@@ -1008,8 +1008,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "TAU" ; > ;
         < "ypsilon" ; > ;
         < "YPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
+        < "fi" ; > ;
+        < "FI" ; > ;
         < "chi" ; > ;
         < "CHI" ; > ;
         < "psi" ; > ;
@@ -1026,19 +1026,19 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "inte lika med" ; > ;
+        < "identisk" ; > ;
+        < "går mot" ; > ;
+        < "oändlig" ; > ;
+        < "vinkel" ; > ;
         < "promille" ; > ;
         < "och" ; > ;
         < "eller" ; > ;
     };
     ItemList [ polish ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "alfa" ; > ;
+        < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -1053,16 +1053,16 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
         < "omikron" ; > ;
@@ -1075,8 +1075,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -1095,14 +1095,14 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "nierówny" ; > ;
+        < "IDENTYCZNY" ; > ;
+        < "d¹¿y" ; > ;
+        < "nieskoñczonoœæ" ; > ;
+        < "K¹t" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "ORAZ" ; > ;
+        < "LUB" ; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
@@ -1229,27 +1229,27 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "varrho" ; > ;
         < "varsigma" ; > ;
         < "varphi" ; > ;
-        < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "‘®‚·‚é" ; > ;
+        < "‘®‚³‚È‚¢" ; > ;
+        < "”ñí‚É¬‚³‚¢" ; > ;
+        < "”ñí‚É‘å‚«‚¢" ; > ;
+        < "“™†”Û’è" ; > ;
+        < "‡“¯" ; > ;
+        < "‰E–îˆó" ; > ;
+        < "–³ŒÀ‘å" ; > ;
+        < "Šp" ; > ;
+        < "Êß°ÐÙ" ; > ;
+        < "‚©‚Â" ; > ;
+        < "‚Ü‚½‚Í" ; > ;
     };
     ItemList [ korean ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+            < "¾ËÆÄ" ; > ;
+        < "¾ËÆÄ" ; > ;
+        < "º£Å¸" ; > ;
+        < "º£Å¸" ; > ;
+        < "°¨¸¶" ; > ;
+        < "°¨¸¶" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
         < "epsilon" ; > ;
@@ -1302,19 +1302,19 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "´ÙÀ½°ú °°Áö ¾ÊÀ½" ; > ;
+        < "EXACT" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "¹«ÇÑ´ë" ; > ;
+        < "°¢µµ" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "¿Í" ; > ;
+        < "OR" ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
             < "alpha" ; > ;
-        < "ALPHA" ; > ;
+        < "alpha" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -1335,8 +1335,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
         < "ny" ; > ;
         < "NY" ; > ;
         < "xi" ; > ;
@@ -1367,18 +1367,18 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "varrho" ; > ;
         < "varsigma" ; > ;
         < "varphi" ; > ;
-        < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "ÔªËØ" ; > ;
+        < "·ÇÔªËØ" ; > ;
+        < "·Ç³£Ð¡ÓÚ" ; > ;
+        < "·Ç³£´óÓÚ" ; > ;
+        < "²»µÈÓÚ" ; > ;
+        < "µÈÍ¬" ; > ;
+        < "½Ó½ü" ; > ;
+        < "ÎÞÏÞ" ; > ;
+        < "½Ç¶È" ; > ;
+        < "Ç§·ÖÂÊ" ; > ;
+        < "ºÍ" ; > ;
+        < "»ò" ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
@@ -1404,8 +1404,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
         < "ny" ; > ;
         < "NY" ; > ;
         < "xi" ; > ;
@@ -1436,23 +1436,23 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "varrho" ; > ;
         < "varsigma" ; > ;
         < "varphi" ; > ;
-        < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "¤¸¯À" ; > ;
+        < "«D¤¸¯À" ; > ;
+        < "«D±`¤p©ó" ; > ;
+        < "«D±`¤j©ó" ; > ;
+        < "¤£µ¥©ó" ; > ;
+        < "µ¥¦P" ; > ;
+        < "±µªñ" ; > ;
+        < "µL­­" ; > ;
+        < "¨¤«×" ; > ;
+        < "¤d¤À²v" ; > ;
+        < "©M" ; > ;
+        < "©Î" ; > ;
     };
     ItemList [ turkish ] =
     {
-            < "alpha" ; > ;
-        < "ALPHA" ; > ;
+            < "Alfa" ; > ;
+        < "Alfa" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -1509,14 +1509,14 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "eþit deðildir" ; > ;
+        < "EXACT" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "Sonsuz" ; > ;
+        < "Açý" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "ve" ; > ;
+        < "VEYA" ; > ;
     };
     ItemList [ arabic ] =
     {
@@ -1524,8 +1524,8 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+        < "ÛÇãÇ" ; > ;
+        < "ÛÇãÇ" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
         < "epsilon" ; > ;
@@ -1578,14 +1578,14 @@ Resource RID_LOCALIZED_SYMBOL_NAMES
         < "keinelement" ; > ;
         < "kleingegen" ; > ;
         < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
+        < "áÇ íÓÇæí" ; > ;
+        < "EXACT" ; > ;
         < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
+        < "áÇäåÇÆí" ; > ;
+        < "ÇáÒÇæíÉ" ; > ;
         < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "AND" ; > ;
+        < "Ãæ" ; > ;
     };
     ItemList [ catalan ] =
     {
