@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 09:05:46 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 16:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,8 +534,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         bIsUrl = pIsUrl->GetValue();
 
                     SwScriptField* pFld = (SwScriptField*)pMgr->GetCurFld();
-                    bNew = !(pFld && pFld->GetTyp()->Which() == RES_SCRIPTFLD);
-                    bUpdate = ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+                    bNew = !pFld || !(pFld->GetTyp()->Which() == RES_SCRIPTFLD);
+                    bUpdate = pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
                 }
                 else
                 {
