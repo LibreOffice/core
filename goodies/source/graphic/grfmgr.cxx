@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-25 15:15:34 $
+ *  last change: $Author: thb $ $Date: 2002-10-29 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,12 +732,13 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
 {
     enum { MaxTileCacheSize1D=100 };
 
-    if( pOut == NULL )
+    if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
         return FALSE;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
     const Size      aOutTileSize( pOut->LogicToPixel( rSize, aOutMapMode ) );
+    BOOL            bRet( FALSE );
 
     if( GetGraphic().GetType() == GRAPHIC_BITMAP &&
         aOutTileSize.Width() * aOutTileSize.Height() < MaxTileCacheSize1D*MaxTileCacheSize1D )
@@ -753,42 +754,39 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
         aVDev.SetMapMode( aMapMode );
 
         // draw bitmap content
-        if( !ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
-            return FALSE;
-
-        BitmapEx aTileBitmap( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) );
-
-        // draw alpha content, if any
-        if( IsTransparent() )
+        if( ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
         {
-            GraphicObject aAlphaGraphic;
+            BitmapEx aTileBitmap( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) );
 
-            if( GetGraphic().IsAlpha() )
-                aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
-            else
-                aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
+            // draw alpha content, if any
+            if( IsTransparent() )
+            {
+                GraphicObject aAlphaGraphic;
 
-            if( !aAlphaGraphic.ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
-                return FALSE;
+                if( GetGraphic().IsAlpha() )
+                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+                else
+                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
 
-            // Combine bitmap and alpha/mask
-            if( GetGraphic().IsAlpha() )
-                aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                        AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
-            else
-                aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                        aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+                if( aAlphaGraphic.ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
+                {
+                    // Combine bitmap and alpha/mask
+                    if( GetGraphic().IsAlpha() )
+                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
+                                                AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
+                    else
+                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
+                                                aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+                }
+            }
+
+            // paint generated tile
+            GraphicObject aTmpGraphic( aTileBitmap );
+            bRet = aTmpGraphic.DrawTiled( pOut, rArea,
+                                          Size( rSize.Width()*nNumTilesInCacheX,
+                                                rSize.Height()*nNumTilesInCacheY ),
+                                          rOffset, pAttr, nFlags );
         }
-
-        // paint generated tile
-        GraphicObject aTmpGraphic( aTileBitmap );
-        if( !aTmpGraphic.DrawTiled( pOut, rArea,
-                                    Size( rSize.Width()*nNumTilesInCacheX,
-                                          rSize.Height()*nNumTilesInCacheY ),
-                                    rOffset, pAttr, nFlags ) )
-            return FALSE;
-
-        return TRUE;
     }
     else
     {
@@ -823,15 +821,15 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
 
         // Paint all tiles
         // ===============
-        BOOL bRet( ImplDrawTiled( *pOut, aOutStart,
-                                  (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + aOutTileSize.Width() - 1) / aOutTileSize.Width(),
-                                  (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + aOutTileSize.Height() - 1) / aOutTileSize.Height(),
-                                  aOutTileSize, pAttr, nFlags ) );
+        bRet = ImplDrawTiled( *pOut, aOutStart,
+                              (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + aOutTileSize.Width() - 1) / aOutTileSize.Width(),
+                              (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + aOutTileSize.Height() - 1) / aOutTileSize.Height(),
+                              aOutTileSize, pAttr, nFlags );
 
         pOut->Pop();
-
-        return bRet;
     }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
