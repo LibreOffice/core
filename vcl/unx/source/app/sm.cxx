@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:56:25 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include <saldisp.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <salframe.h>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
@@ -301,7 +301,7 @@ IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
 {
     SMprintf( GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
     if( GetSalData()->pFirstFrame_ )
-        GetSalData()->pFirstFrame_->maFrameData.ShutDown();
+        GetSalData()->pFirstFrame_->ShutDown();
     return 0;
 }
 
