@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:08:06 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,28 +318,7 @@ class LocalSingleBackend : public SingleBackendBase {
         sal_Bool isMoreRecent(const rtl::OUString& aComponent,
                               sal_Int32 aLayerId,
                               const rtl::OUString& aTimestamp) ;
-        /**
-          Validates a file URL
-
-          @param aFileURL    URL of the file to validate
-          */
-        void validateFileURL(rtl::OUString& aFileURL);
-        /**
-           Checks if a Directory exist for a given file URL
-
-          @param aFileURL    URL of the file to validate
-          */
-        void checkIfDirectory(rtl::OUString& aFileURL)
-            throw (backend::BackendSetupException);
-        /**
-           Checks if a File exist for a given file URL
-
-          @param aFileURL    URL of the file to validate
-          */
-        void checkFileExists(rtl::OUString& aFileURL)
-            throw (backend::CannotConnectException);
-
-} ;
+    } ;
 
 } } // configmgr.localbe
 
