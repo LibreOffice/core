@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageListWatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 14:32:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,16 +132,28 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
     {
         case PK_STANDARD:
         {
-            DBG_ASSERT(nPgNum <= maPageVectorStandard.size(), "ImpPageListWatcher::GetSdPage: access out of range (!)");
             if (nPgNum>=0 && nPgNum<maPageVectorStandard.size())
                 pRetval = maPageVectorStandard[nPgNum];
+            else
+            {
+                DBG_ASSERT(nPgNum <= maPageVectorStandard.size(),
+                    "ImpPageListWatcher::GetSdPage(PK_STANDARD): access out of range");
+                DBG_WARNING2 ("    %d  > %d",
+                    nPgNum, nPgNum<maPageVectorStandard.size());
+            }
             break;
         }
         case PK_NOTES:
         {
-            DBG_ASSERT(nPgNum <= maPageVectorNotes.size(), "ImpPageListWatcher::GetSdPage: access out of range (!)");
             if (nPgNum>=0 && nPgNum<maPageVectorNotes.size())
                 pRetval = maPageVectorNotes[nPgNum];
+            else
+            {
+                DBG_ASSERT(nPgNum <= maPageVectorNotes.size(),
+                    "ImpPageListWatcher::GetSdPage(PK_NOTES): access out of range");
+                DBG_WARNING2("    %d > %d",
+                    nPgNum, nPgNum<maPageVectorNotes.size());
+            }
             break;
         }
         case PK_HANDOUT:
@@ -152,6 +164,11 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
             DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             if (nPgNum == 0)
                 pRetval = mpHandoutPage;
+            else
+            {
+                DBG_ASSERT(nPgNum == 0L,
+                    "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
+            }
             break;
         }
     }
