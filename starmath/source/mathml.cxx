@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 18:47:07 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,13 +968,13 @@ void SmXMLContext_Helper::ApplyAttrs()
         }
         if (sFontFamily.getLength())
         {
-            if (sFontFamily.equalsIgnoreCase(OUString(
+            if (sFontFamily.equalsIgnoreAsciiCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM(sXML_fixed))))
                 aToken.eType = TFIXED;
-            else if (sFontFamily.equalsIgnoreCase(OUString(
+            else if (sFontFamily.equalsIgnoreAsciiCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM("sans"))))
                 aToken.eType = TSANS;
-            else if (sFontFamily.equalsIgnoreCase(OUString(
+            else if (sFontFamily.equalsIgnoreAsciiCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM("serif"))))
                 aToken.eType = TSERIF;
             else //Just give up, we need to extend our font mechanism to be
