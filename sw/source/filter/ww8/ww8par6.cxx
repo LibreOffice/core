@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-10 13:13:03 $
+ *  last change: $Author: cmc $ $Date: 2001-05-14 13:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3070,6 +3070,12 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, BYTE* pData, short nLen )
                             //       128 = Wie Style, 129 entgegen Style
     BOOL bOn = *pData & 1;
     SwWW8StyInf* pSI = &pCollA[nAktColl];
+    if (pPlcxMan)
+    {
+        BYTE *pCharIstd = pPlcxMan->GetChpPLCF()->HasSprm(bVer67 ? 80 : 0x4A30);
+        if (pCharIstd)
+            pSI = &pCollA[SVBT16ToShort( pCharIstd )];
+    }
 
     if( pAktColl )                          // StyleDef -> Flags merken
     {
@@ -3084,7 +3090,9 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, BYTE* pData, short nLen )
             pSI->n81Flags &= ~nMask;        // Flag loeschen
     }
     else
-    {                                       // im Text -> Flags abfragen
+    {
+
+        // im Text -> Flags abfragen
         if( *pData & 0x80 )                 // Bit 7 gesetzt ?
         {
             if( pSI->n81Flags & nMask )     // und in StyleDef an ?
@@ -5136,12 +5144,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.28 2001-05-10 13:13:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.29 2001-05-14 13:36:48 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.28  2001/05/10 13:13:03  cmc
+      ##766## Another missing special case for simplified chinese
+
       Revision 1.27  2001/05/04 09:19:37  cmc
       ##766## chinese emphasis mark is comma not dot
 
