@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
     mbSelectionEnabled      = sal_True;
 
     // default settings
-    m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG;
+    m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
     if( WB_OPEN == ( nFlags & WB_OPEN ) )
         m_nMustFlags = SFX_FILTER_IMPORT;
     else
