@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:15:13 $
+ *  last change: $Author: pb $ $Date: 2002-08-06 11:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,8 +466,10 @@ short SwTemplateDlg::Ok()
 
 const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 {
-    delete GetInputSetImpl();
-    return new SfxItemSet(GetStyleSheet().GetItemSet());
+    SfxItemSet* pInSet = GetInputSetImpl();
+    pInSet->ClearItem();
+    pInSet->SetParent( &GetStyleSheet().GetItemSet() );
+    return pInSet;
 }
 
 /*--------------------------------------------------------------------
