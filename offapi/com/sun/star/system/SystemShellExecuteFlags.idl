@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemShellExecuteFlags.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-27 09:33:29 $
+ *  last change: $Author: tra $ $Date: 2001-05-03 12:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** These constants are used to specify a mode of the file dialog
+/** These constants are used to specify a mode of the ShellExecute-Service
  */
 
 constants SystemShellExecuteFlags
