@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:45:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,7 @@ public:
 
     SfxDispatcher   &GetDispatcher();
 
+    void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
     virtual BOOL            HasUIFeature( ULONG nFeature );
     virtual void            ShowCursor( FASTBOOL bOn = TRUE );
@@ -592,6 +593,9 @@ public:
 
     // Attribute haben sich geaendert
     DECL_LINK( AttrChangedNotify, SwWrtShell * );
+
+    // form control has been activated
+    DECL_LINK( FormControlActivated, FmFormShell* );
 
     // Links bearbeiten
     void            EditLinkDlg();
