@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:38:12 $
+ *  last change: $Author: os $ $Date: 2001-10-17 13:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,9 +751,9 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
         {
             static SfxItemPropertyMap aTableFormulaPropMap[] =
             {
-                {SW_PROP_NAME(UNO_NAME_CONTENT), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_FORMULA), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_EXPRESSION), FIELD_PROP_BOOL1,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL1,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
                 {0,0,0,0}
             };

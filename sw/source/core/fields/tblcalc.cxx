@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:38:12 $
+ *  last change: $Author: os $ $Date: 2001-10-17 13:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,10 +251,10 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, const String& rProperty ) const
     {
         rAny <<= rtl::OUString(SwTableFormula::GetFormula());
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_EXPRESSION)))
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
-        BOOL bExpression = 0 == (GSE_STRING & nSubType);
-        rAny.setValue(&bExpression, ::getBooleanCppuType());
+        BOOL bFormula = 0 != (SUB_CMD & nSubType);
+        rAny.setValue(&bFormula, ::getBooleanCppuType());
     }
     else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
         rAny <<= rtl::OUString(GetExpStr());
@@ -274,13 +274,14 @@ BOOL SwTblField::PutValue( const uno::Any& rAny, const String& rProperty )
         rAny >>= uTmp;
         SetFormula( uTmp );
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_EXPRESSION)))
+
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
-        BOOL bExpression = *(sal_Bool*)rAny.getValue();
-        if(bExpression)
-            nSubType = 0;
+        BOOL bFormula = *(sal_Bool*)rAny.getValue();
+        if(bFormula)
+            nSubType = GSE_FORMULA|SUB_CMD;
         else
-            nSubType = GSE_STRING;
+            nSubType = GSE_FORMULA;
     }
     else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
     {
