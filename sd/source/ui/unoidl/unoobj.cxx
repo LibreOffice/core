@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:19:32 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
+#endif
+
+#ifndef _SD_SPOUTLINER_HXX
+#include "sdoutl.hxx"
 #endif
 
 #include "anminfo.hxx"
@@ -376,7 +380,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             if(!(aValue >>= nVerb))
                 throw lang::IllegalArgumentException();
 
-            pInfo->nVerb = nVerb;
+            pInfo->nVerb = (USHORT)nVerb;
             break;
         }
         case WID_DIMCOLOR:
@@ -780,45 +784,52 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
         return;
 
     SdrObject* pObj = GetSdrObject();
-    if( pObj )
+    if( pObj == NULL )
+        return;
+
+    if( pObj->IsEmptyPresObj() != bEmpty )
     {
-        if( pObj->IsEmptyPresObj() != bEmpty )
+        if(!bEmpty)
         {
-            {
-                OUString aEmptyStr;
-                if( bEmpty)
-                {
-                    SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
-                    if(pPage)
-                    aEmptyStr = pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
-                }
-
-                if(!bEmpty && pObj->ISA(SdrOle2Obj))
-                {
-                    // really delete SdrOutlinerObj at pObj
-                    pObj->NbcSetOutlinerParaObject(0L);
-                }
-                else
-                {
-                    uno::Reference< text::XTextRange > xTextRange( (drawing::XShape*)this, uno::UNO_QUERY );
-                    if( xTextRange.is() )
-                    {
-                        xTextRange->setString( aEmptyStr );
-                    }
-                }
-            }
-
-            if(bEmpty != pObj->IsEmptyPresObj())
-            {
-                pObj->SetEmptyPresObj(bEmpty);
-
-                if(!bEmpty && pObj->ISA(SdrOle2Obj))
-                {
-                    // really delete SdrOutlinerObj at pObj
-                    pObj->NbcSetOutlinerParaObject(0L);
-                }
-            }
+            // really delete SdrOutlinerObj at pObj
+            pObj->NbcSetOutlinerParaObject(0L);
         }
+        else
+        {
+            // now set an empty OutlinerParaObject at pObj without
+            // any content but with the style of the old OutlinerParaObjects
+            // first paragraph
+            do
+            {
+                SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+                DBG_ASSERT( pDoc, "no document?" );
+                if( pDoc == NULL)
+                    break;
+
+                SdOutliner* pOutliner = pDoc->GetInternalOutliner();
+                DBG_ASSERT( pOutliner, "no outliner?" );
+                if( pOutliner == NULL )
+                    break;
+
+                SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+                DBG_ASSERT( pPage, "no page?" );
+                if( pPage == NULL )
+                    break;
+
+                OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+                pOutliner->SetText( *pOutlinerParaObject );
+                SfxStyleSheetPool* pStyle = pOutliner->GetStyleSheetPool();
+                pOutliner->Clear();
+                pOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)pDoc->GetStyleSheetPool() );
+                pOutliner->SetStyleSheet( 0, pPage->GetTextStyleSheetForObject( pObj ) );
+                pOutliner->Insert( pPage->GetPresObjText( pPage->GetPresObjKind(pObj) ) );
+                pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
+                pOutliner->Clear();
+            }
+            while(0);
+        }
+
+        pObj->SetEmptyPresObj(bEmpty);
     }
 }
 
