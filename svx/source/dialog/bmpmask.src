@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:21:07 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "색상";
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colores";
+        Text[ catalan ] = "Colors";
         Text[ finnish ] = "V�rit";
         Text[ thai ] = "สี";
     };
@@ -136,7 +136,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "소스 색상";
         Text[ turkish ] = "Kaynak renk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Color fuente";
+        Text[ catalan ] = "Color font";
         Text[ finnish ] = "L�hdev�ri";
         Text[ thai ] = "แหล่งสี";
     };
@@ -165,7 +165,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "허용 오차";
         Text[ turkish ] = "Tolerans";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tolerancia";
+        Text[ catalan ] = "Toler�ncia";
         Text[ finnish ] = "Toleranssi";
         Text[ thai ] = "ลักษณะกว้าง";
     };
@@ -194,7 +194,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "바꿀 색상...";
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplazar con...";
+        Text[ catalan ] = "Reempla�a amb...";
         Text[ finnish ] = "Korvaa kohteella...";
         Text[ thai ] = "แทนที่ด้วย...";
     };
@@ -385,7 +385,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "투명(~A)";
         Text[ turkish ] = "Saydaml�k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Transparencia";
+        Text[ catalan ] = "Transpar�ncia";
         Text[ finnish ] = "~L�pin�kyvyys";
         Text[ thai ] = "โปร่~งแสง";
     };
@@ -415,7 +415,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ korean ] = "바꾸기(~R)";
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplazar";
+        Text[ catalan ] = "Reempla�a";
         Text[ finnish ] = "~Korvaa";
         Text[ thai ] = "แ~ทนที่";
     };
@@ -466,7 +466,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ korean ] = "색 골라내기";
                 Text[ turkish ] = "Renk �rne�i al";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pipeta";
+                Text[ catalan ] = "Comptagotes";
                 Text[ finnish ] = "V�rivalitsin";
                 Text[ thai ] = "ตัวหยดสี";
             };
@@ -498,7 +498,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ korean ] = "색 골라내기";
     Text[ turkish ] = "Renk �rne�i al";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pipeta";
+    Text[ catalan ] = "Comptagotes";
     Text[ finnish ] = "V�rivalitsin";
     Text[ thai ] = "ตัวหยดสี";
 
@@ -537,7 +537,7 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ chinese_traditional ] = "透明";
     Text[ turkish ] = "Saydam";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "Transparente";
+    Text[ catalan ] = "Transparent";
     Text[ finnish ] = "L�pin�kyv�";
     Text[ thai ] = "โปร่งแสง";
 };
