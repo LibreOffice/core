@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:24:19 $
+ *  last change: $Author: os $ $Date: 2002-09-26 14:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,11 @@
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
 
+using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -438,7 +442,9 @@ ULONG SwReader::Read( const Reader& rOptions )
 
         SfxObjectCreateMode eMode;
         USHORT nLinkMode = pDoc->GetLinkUpdMode();
-        if( nLinkMode != NEVER && pDoc->GetDocShell() &&
+        USHORT nUpdateDocMode = pDoc->GetDocShell()->GetUpdateDocMode();
+        if( pDoc->GetDocShell() &&
+                (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
             pDoc->GetLinkManager().GetLinks().Count() &&
             SFX_CREATE_MODE_INTERNAL !=
                         ( eMode = pDoc->GetDocShell()->GetCreateMode()) &&
@@ -447,15 +453,27 @@ ULONG SwReader::Read( const Reader& rOptions )
             !pDoc->GetDocShell()->IsPreview() )
         {
             ViewShell* pVSh = 0;
-            if( pDoc->GetRootFrm() && !pDoc->GetEditShell( &pVSh ) && !pVSh )
+            BOOL bAskUpdate = nLinkMode == MANUAL;
+            BOOL bUpdate = TRUE;
+            switch(nUpdateDocMode)
             {
-                ViewShell aVSh( *pDoc, 0, 0 );
-
-                SET_CURR_SHELL( &aVSh );
-                pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, TRUE, FALSE );
+                case document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
+                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
+                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
+//                case document::UpdateDocMode::ACCORDING_TO_CONFIG:break;
             }
-            else
-                pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, TRUE, FALSE );
+            if(bUpdate)
+            {
+                if( pDoc->GetRootFrm() && !pDoc->GetEditShell( &pVSh ) && !pVSh )
+                {
+                    ViewShell aVSh( *pDoc, 0, 0 );
+
+                    SET_CURR_SHELL( &aVSh );
+                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE );
+                }
+                else
+                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE );
+            }
         }
 
         eOld = (SwRedlineMode)(pDoc->GetRedlineMode() & ~REDLINE_IGNORE);
