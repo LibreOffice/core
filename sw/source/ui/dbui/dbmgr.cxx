@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:45:09 $
+ *  last change: $Author: os $ $Date: 2001-05-23 13:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,8 +833,6 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
 
     rOpt.nMergeCnt = 0;
     rOpt.nMergeAct = 0;
-
-    bInMerge = FALSE;
 
     nMergeType = DBMGR_INSERT;
 
