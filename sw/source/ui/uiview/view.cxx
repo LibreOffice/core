@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:43:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,6 +825,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nFormSfxId( USHRT_MAX ),
     nSelectionType( INT_MAX ),
     nLastPasteDestination( 0xFFFF ),
+    nLeftBorderDistance( 0 ),
+    nRightBorderDistance( 0 ),
     nNewPage(USHRT_MAX),
     bInMailMerge(FALSE),
     bInDtor(FALSE)
