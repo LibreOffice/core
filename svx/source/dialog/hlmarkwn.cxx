@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-12 10:52:48 $
+ *  last change: $Author: os $ $Date: 2002-08-14 08:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
 #endif
 
 // UNO-Stuff
@@ -388,10 +394,12 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
     const ULONG nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
+
+    BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    Color aMaskColor( bHighContrast ? COL_LIGHTMAGENTA : COL_LIGHTGRAY );
     const OUString aProp_LinkDisplayName( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) );
     const OUString aProp_LinkTarget( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.LinkTarget" ) );
     const OUString aProp_LinkDisplayBitmap( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayBitmap" ) );
-
     for( ULONG i = 0; i < nLinks; i++ )
     {
         uno::Any aAny;
@@ -439,14 +447,15 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     uno::Reference< awt::XBitmap > aXBitmap;
                     if( aAny >>= aXBitmap )
                     {
-                        BitmapEx aBmp( VCLUnoHelper::GetBitmap( aXBitmap ) );
-
+                        Image aBmp( VCLUnoHelper::GetBitmap( aXBitmap ).GetBitmap(), aMaskColor );
                         // insert Displayname into treelist with bitmaps
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
                                                         FALSE, LIST_APPEND,
                                                         (void*)pData );
+                        maLbTree.SetExpandedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
+                        maLbTree.SetCollapsedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
                         nEntries++;
                     }
                     else
