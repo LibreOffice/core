@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:01:02 $
+ *  last change: $Author: oj $ $Date: 2001-02-20 11:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,7 +1095,7 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
     return xKeyColumns;
 }
 // -----------------------------------------------------------------------------
-void OTableController::checkColumns()
+void OTableController::checkColumns() throw(::com::sun::star::sdbc::SQLException)
 {
     ::comphelper::UStringMixEqual bCase(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
     ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
