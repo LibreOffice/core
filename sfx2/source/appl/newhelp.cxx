@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-26 10:17:07 $
+ *  last change: $Author: pb $ $Date: 2001-09-27 10:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,41 +353,48 @@ void ContentListBox_Impl::ClearChildren( SvLBoxEntry* pParent )
 
 void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
 {
-    if ( !pParent->HasChilds() )
+    try
     {
-        if ( pParent->GetUserData() )
+        if ( !pParent->HasChilds() )
         {
-            String aURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
-                SfxContentHelper::GetHelpTreeViewContents( aURL );
-
-            const ::rtl::OUString* pEntries  = aList.getConstArray();
-            UINT32 i, nCount = aList.getLength();
-            for ( i = 0; i < nCount; ++i )
+            if ( pParent->GetUserData() )
             {
-                String aRow( pEntries[i] );
-                String aTitle, aURL;
-                xub_StrLen nIdx = 0;
-                aTitle = aRow.GetToken( 0, '\t', nIdx );
-                aURL = aRow.GetToken( 0, '\t', nIdx );
-                sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
-                sal_Bool bIsFolder = ( '1' == cFolder );
-                SvLBoxEntry* pEntry = NULL;
-                if ( bIsFolder )
+                String aURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
+                    SfxContentHelper::GetHelpTreeViewContents( aURL );
+
+                const ::rtl::OUString* pEntries  = aList.getConstArray();
+                UINT32 i, nCount = aList.getLength();
+                for ( i = 0; i < nCount; ++i )
                 {
-                    pEntry = InsertEntry( aTitle, aOpenChapterImage, aClosedChapterImage, pParent, TRUE );
-                    pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
-                }
-                else
-                {
-                    pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
-                    Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String(RTL_CONSTASCII_USTRINGPARAM("TargetURL" ) ) ) );
-                    rtl::OUString aTargetURL;
-                    if ( aAny >>=  aTargetURL )
-                        pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
+                    String aRow( pEntries[i] );
+                    String aTitle, aURL;
+                    xub_StrLen nIdx = 0;
+                    aTitle = aRow.GetToken( 0, '\t', nIdx );
+                    aURL = aRow.GetToken( 0, '\t', nIdx );
+                    sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
+                    sal_Bool bIsFolder = ( '1' == cFolder );
+                    SvLBoxEntry* pEntry = NULL;
+                    if ( bIsFolder )
+                    {
+                        pEntry = InsertEntry( aTitle, aOpenChapterImage, aClosedChapterImage, pParent, TRUE );
+                        pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
+                    }
+                    else
+                    {
+                        pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
+                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String(RTL_CONSTASCII_USTRINGPARAM("TargetURL" ) ) ) );
+                        rtl::OUString aTargetURL;
+                        if ( aAny >>=  aTargetURL )
+                            pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
+                    }
                 }
             }
         }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
     }
 }
 
@@ -662,8 +669,9 @@ void IndexTabPage_Impl::InitializeIndex()
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( Exception& )
     {
+        DBG_ERROR( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
     aIndexCB.SetUpdateMode( TRUE );
@@ -1665,9 +1673,11 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.InsertItem( TBI_BOOKMARKS, Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
     aToolBox.SetQuickHelpText( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
     aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+/*!!! pb: searchdialog problem not fixable til 6.0 final
     aToolBox.InsertItem( TBI_SEARCHDIALOG, Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
     aToolBox.SetQuickHelpText( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ) );
     aToolBox.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
+*/
 
     Size a3Size = LogicToPixel( Size( 0, 3 ), MAP_APPFONT );
     Size a14Size = LogicToPixel( Size( 0, 14 ), MAP_APPFONT );
@@ -1698,27 +1708,34 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 
 IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
 {
-    // select the words, which are equal to the search text of the search page
-    Reference < XController > xController = xFrame->getController();
-    if ( xController.is() )
+    try
     {
-        // get document
-        Reference < XSearchable > xSearchable( xController->getModel(), UNO_QUERY );
-        if ( xSearchable.is() )
+        // select the words, which are equal to the search text of the search page
+        Reference < XController > xController = xFrame->getController();
+        if ( xController.is() )
         {
-            // create descriptor, set string and find all words
-            Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-            xSrchDesc->setSearchString( aSearchText );
-            Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
-            // then select all found words
-            Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
-            if ( xSelectionSup.is() )
+            // get document
+            Reference < XSearchable > xSearchable( xController->getModel(), UNO_QUERY );
+            if ( xSearchable.is() )
             {
-                Any aAny;
-                aAny <<= xSelection;
-                xSelectionSup->select( aAny );
+                // create descriptor, set string and find all words
+                Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
+                xSrchDesc->setSearchString( aSearchText );
+                Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
+                // then select all found words
+                Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
+                if ( xSelectionSup.is() )
+                {
+                    Any aAny;
+                    aAny <<= xSelection;
+                    xSelectionSup->select( aAny );
+                }
             }
         }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 1;
@@ -1773,9 +1790,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
             aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ), Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
             aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+/*!!! pb: searchdialog problem not fixable til 6.0 final
             aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ), Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
             aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
-
+*/
             if ( bIsDebug )
             {
                 aMenu.InsertSeparator();
@@ -1841,8 +1859,9 @@ void SfxHelpTextWindow_Impl::GetFocus()
                     xWindow->setFocus();
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( Exception& )
         {
+            DBG_ERROR( "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
         }
     }
 }
@@ -2348,7 +2367,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 }
                 catch( Exception& )
                 {
-                    DBG_ERRORFILE( "exception caught" )
+                    DBG_ERROR( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
                 }
             }
             break;
