@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-17 10:56:34 $
+ *  last change: $Author: mt $ $Date: 2002-09-04 13:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
-
-#define EXTRAOFFSET_X   2
 
 
 // - Redo
@@ -476,6 +474,21 @@ void Edit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
 
 // -----------------------------------------------------------------------
 
+long Edit::ImplGetExtraOffset() const
+{
+    // MT 09/2002: nExtraOffsetX should become a member, instead of checking every time,
+    // but I need an incompatible update for this...
+    // #94095# Use extra offset only when edit has a border
+    long nExtraOffset = 0;
+    if( ( GetStyle() & WB_BORDER ) || ( mbIsSubEdit && ( GetParent()->GetStyle() & WB_BORDER ) ) )
+        nExtraOffset = 2;
+
+    return nExtraOffset;
+}
+
+
+// -----------------------------------------------------------------------
+
 XubString Edit::ImplGetText() const
 {
     if ( mcEchoChar || (GetStyle() & WB_PASSWORD) )
@@ -532,7 +545,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     if ( !bDrawSelection && !mpIMEInfos )
     {
-        aPos.X() = GetTextWidth( aText, 0, nStart ) + mnXOffset + EXTRAOFFSET_X;
+        aPos.X() = GetTextWidth( aText, 0, nStart ) + mnXOffset + ImplGetExtraOffset();
         DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
     }
     else
@@ -608,7 +621,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                 else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
                     SetTextColor( Color( COL_LIGHTGRAY ) );
             }
-            aPos.X() = GetTextWidth( aText, 0, nIndex ) + mnXOffset + EXTRAOFFSET_X;
+            aPos.X() = GetTextWidth( aText, 0, nIndex ) + mnXOffset + ImplGetExtraOffset();
             DrawText( aPos, aText, nIndex, nTmpEnd - nIndex, pVector, pDisplayText );
             nIndex = nTmpEnd;
         }
@@ -801,7 +814,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
     long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.Len()) )
         nCursorWidth = GetTextWidth( aText, (xub_StrLen)maSelection.Max(), 1 );
-    long nCursorPosX = nTextWidth + mnXOffset + EXTRAOFFSET_X;
+    long nCursorPosX = nTextWidth + mnXOffset + ImplGetExtraOffset();
 
     // Cursor muss im sichtbaren Bereich landen:
     Size aOutSize = GetOutputSizePixel();
@@ -819,25 +832,25 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
         }
         else
         {
-            mnXOffset = (aOutSize.Width()-EXTRAOFFSET_X) - nTextWidth;
+            mnXOffset = (aOutSize.Width()-ImplGetExtraOffset()) - nTextWidth;
             // Etwas mehr?
-            if ( (aOutSize.Width()-EXTRAOFFSET_X) < nTextWidth )
+            if ( (aOutSize.Width()-ImplGetExtraOffset()) < nTextWidth )
             {
-                long nMaxNegX = (aOutSize.Width()-EXTRAOFFSET_X) - GetTextWidth( aText );
+                long nMaxNegX = (aOutSize.Width()-ImplGetExtraOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
                 if ( mnXOffset < nMaxNegX )  // beides negativ...
                     mnXOffset = nMaxNegX;
             }
         }
 
-        nCursorPosX = nTextWidth + mnXOffset + EXTRAOFFSET_X;
+        nCursorPosX = nTextWidth + mnXOffset + ImplGetExtraOffset();
         if ( nCursorPosX == aOutSize.Width() )  // dann nicht sichtbar...
             nCursorPosX--;
 
         if ( mnXOffset != nOldXOffset )
         {
-            if ( mnXOffset > (-EXTRAOFFSET_X) )
-                ImplClearBackground( 0, mnXOffset+EXTRAOFFSET_X );
+            if ( mnXOffset > (-ImplGetExtraOffset()) )
+                ImplClearBackground( 0, mnXOffset+ImplGetExtraOffset() );
             ImplRepaint();
         }
     }
@@ -893,22 +906,22 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
             if ( mnXOffset != nOldXOffset )
             {
                 nPaintStart = 0;
-                if ( mnXOffset > (-EXTRAOFFSET_X) )
-                    ImplClearBackground( 0, mnXOffset+EXTRAOFFSET_X );
+                if ( mnXOffset > (-ImplGetExtraOffset()) )
+                    ImplClearBackground( 0, mnXOffset+ImplGetExtraOffset() );
             }
-            ImplClearBackground( nNewWidth+mnXOffset+EXTRAOFFSET_X, nOldWidth+nOldXOffset+EXTRAOFFSET_X );
+            ImplClearBackground( nNewWidth+mnXOffset+ImplGetExtraOffset(), nOldWidth+nOldXOffset+ImplGetExtraOffset() );
         }
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         nPaintStart = 0;
-        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1+EXTRAOFFSET_X, mnXOffset+1+EXTRAOFFSET_X );
+        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1+ImplGetExtraOffset(), mnXOffset+1+ImplGetExtraOffset() );
     }
     else // EDIT_ALIGN_CENTER
     {
         nPaintStart = 0;
-        ImplClearBackground( 0, mnXOffset + 1 + EXTRAOFFSET_X );
-        ImplClearBackground( mnXOffset+nNewWidth-1, GetOutputSizePixel().Width() + EXTRAOFFSET_X );
+        ImplClearBackground( 0, mnXOffset + 1 + ImplGetExtraOffset() );
+        ImplClearBackground( mnXOffset+nNewWidth-1, GetOutputSizePixel().Width() + ImplGetExtraOffset() );
     }
 
     ImplRepaint( nPaintStart, STRING_LEN );
@@ -919,7 +932,7 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
 
 xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
 {
-    return GetTextBreak( ImplGetText(), rWindowPos.X() - mnXOffset - EXTRAOFFSET_X );
+    return GetTextBreak( ImplGetText(), rWindowPos.X() - mnXOffset - ImplGetExtraOffset() );
 }
 
 // -----------------------------------------------------------------------
@@ -1883,7 +1896,7 @@ void Edit::ImplHideDDCursor()
 
 void Edit::Modify()
 {
-        if ( mbIsSubEdit )
+    if ( mbIsSubEdit )
     {
         ((Edit*)GetParent())->Modify();
     }
