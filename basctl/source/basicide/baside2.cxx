@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-01-17 11:04:29 $
+ *  last change: $Author: tbe $ $Date: 2001-03-09 16:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,6 +1146,44 @@ void ModulWindow::Deactivating()
 USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOOL bFromStart )
 
 {
+
+#if SUPD >= 625
+
+    // Mann koennte fuer das blinde Alle-Ersetzen auch auf
+    // Syntaxhighlighting/Formatierung verzichten...
+    AssertValidEditEngine();
+    ExtTextView* pView = GetEditView();
+    TextSelection aSel;
+    if ( bFromStart )
+    {
+        aSel = pView->GetSelection();
+        if ( !rSearchItem.GetBackward() )
+            pView->SetSelection( TextSelection() );
+        else
+            pView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+    }
+
+    BOOL bForward = !rSearchItem.GetBackward();
+    USHORT nFound = 0;
+    if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
+         ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
+    {
+        nFound = pView->Search( rSearchItem.GetSearchOptions() , bForward );
+    }
+    else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
+              ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )
+    {
+        BOOL bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+        nFound = pView->Replace( rSearchItem.GetSearchOptions() , bAll , bForward );
+    }
+
+    if ( bFromStart && !nFound )
+        pView->SetSelection( aSel );
+
+    return nFound;
+
+#else // SUPD >= 625
+
     // Mann koennte fuer das blinde Alle-Ersetzen auch auf
     // Syntaxhighlighting/Formatierung verzichten...
     AssertValidEditEngine();
@@ -1192,6 +1230,9 @@ USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOO
         pView->SetSelection( aSel );
 
     return nFound;
+
+#endif // SUPD >= 625
+
 }
 
 SfxUndoManager* __EXPORT ModulWindow::GetUndoManager()
