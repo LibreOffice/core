@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.80 $
+*  $Revision: 1.81 $
 *
-*  last change: $Author: obo $ $Date: 2005-01-25 09:40:50 $
+*  last change: $Author: obo $ $Date: 2005-01-25 15:20:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1248,7 +1248,7 @@ End
 STD_UNO_LIB_FILE( gid_File_Lib_Offacc, offacc)
 
 #ifdef SOLAR_JAVA
-
+#ifndef GCJ
 #ifndef MACOSX
 
 File gid_File_Lib_Officebean
@@ -1263,7 +1263,7 @@ File gid_File_Lib_Officebean
 End
 
 #endif
-
+#endif
 #endif
 
 #ifdef WNT
@@ -1990,8 +1990,10 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 
 #ifdef SOLAR_JAVA
+#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
 UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
+#endif
 #endif
 
 #ifdef UNX
