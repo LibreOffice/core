@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: rt $ $Date: 2001-06-29 02:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄ×Ö¿ò(~T)";
         Text[ russian ] = "~Îáîçíà÷èòü òåêñò";
         Text[ polish ] = "Symbol zastêpczy tekstu";
-        Text[ japanese ] = "•¶š—ñ‚ÌÌßÚ°½ÎÙÀŞ(~T)";
+        Text[ japanese ] = "Ã·½Ä‚ÌÌßÚ°½ÎÙÀŞ(~T)";
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
         Text[ arabic ] = "ÊáãíÍ Åáì ÇáäÕ";
         Text[ greek ] = "ÕğïäŞëùóç êåéìİíïõ";
@@ -547,7 +547,7 @@ TabPage TP_OPTIONS_MISC
         TabStop = TRUE ;
         Text = "Mit ~Autopiloten starten" ;
         Text [ ENGLISH ] = "~Start with autopilot" ;
-        Text [ english_us ] = "Start with AutoPilots" ;
+        Text [ english_us ] = "Start with AutoPilot" ;
         Text[ portuguese ] = "Iniciar com A~utoPiloto";
         Text[ russian ] = "Çàïóñê ñ ïîìîùüş Àâòîïèëîòà";
         Text[ dutch ] = "~Met AutoPiloot starten";
@@ -724,7 +724,7 @@ TabPage TP_OPTIONS_MISC
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ italian ] = "Unità di misura" ;
         Text [ portuguese_brazilian ] = "Unidades m?tricas" ;
-        Text [ portuguese ] = "Unidade de medida" ;
+        Text [ portuguese ] = "~Unidade de medida" ;
         Text [ finnish ] = "Mittayksikkö" ;
         Text [ danish ] = "Måleenhed" ;
         Text [ french ] = "Unité de ~mesure" ;
@@ -765,7 +765,7 @@ TabPage TP_OPTIONS_MISC
         Text [ spanish ] = "Distancia entre tabuladores" ;
         Text [ french ] = "Espace entre les ~tabulations" ;
         Text [ dutch ] = "Tabstops" ;
-        Text [ portuguese ] = "Intervalo entre tabulações" ;
+        Text [ portuguese ] = "I~ntervalo entre tabulações" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
         Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
         Text[ russian ] = "Ïîçèöèÿ òàáóëÿòîğà";
@@ -979,7 +979,7 @@ TabPage TP_OPTIONS_MISC
         Text = "Zeichn~ungsmaßstab" ;
         Text [ ENGLISH ] = "Drawing scale" ;
         Text[ english_us ] = "~Drawing scale";
-        Text[ portuguese ] = "Escala de desenho";
+        Text[ portuguese ] = "Es~cala de desenho";
         Text[ russian ] = "Ìàñøòàá ğèñóíêà";
         Text[ greek ] = "Êëßìáêá ó÷åäéáó~ìïı";
         Text[ dutch ] = "Drawing scale";
@@ -1021,7 +1021,7 @@ TabPage TP_OPTIONS_MISC
         Text [ dutch ] = "Paginabreedte" ;
         Text [ swedish ] = "Sid~bredd" ;
         Text [ danish ] = "Sidebredde" ;
-        Text [ portuguese ] = "Largura de página" ;
+        Text [ portuguese ] = "~Largura de página" ;
         Text [ portuguese_brazilian ] = "Seitenbreite" ;
         Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È";
         Text[ russian ] = "Øèğèíà ñòğàíèöû";
@@ -1074,7 +1074,7 @@ TabPage TP_OPTIONS_MISC
         Text [ french ] = "~Hauteur de page" ;
         Text [ swedish ] = "S~idhöjd" ;
         Text [ danish ] = "Sidehøjde" ;
-        Text [ portuguese ] = "Altura da página" ;
+        Text [ portuguese ] = "~Altura da página" ;
         Text [ portuguese_brazilian ] = "Seitenh?e" ;
         Text[ chinese_simplified ] = "Ò³Ãæ¸ß¶È";
         Text[ russian ] = "Âûñîòà ñòğàíèöû";
@@ -1127,6 +1127,7 @@ TabPage TP_OPTIONS_MISC
     Text[ finnish ] = "Muu";
     Text[ catalan ] = "Otros";
 };
+
 
 
 
