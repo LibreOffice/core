@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:06:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,6 +1136,9 @@ void XMLShapeExportPropertyMapper::ContextFilter(
          property != rProperties.end();
          property++ )
     {
+        if( property->mnIndex == -1 )
+            continue;
+
         // find properties with context
         // to prevent writing this property set mnIndex member to -1
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
@@ -1431,6 +1434,9 @@ void XMLPageExportPropertyMapper::ContextFilter(
          property != rProperties.end();
          property++ )
     {
+        if( property->mnIndex == -1 )
+            continue;
+
         // find properties with context
         // to prevent writing this property set mnIndex member to -1
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
