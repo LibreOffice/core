@@ -161,8 +161,10 @@ XInputStream_impl::readBytes(
         //TODO! translate memory exhaustion (if it were detectable...) into
         // io::BufferSizeExceededException
 
-    sal_uInt64 nrc;
-    m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc );
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc )
+       != osl::FileBase::E_None)
+        throw io::IOException();
 
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
