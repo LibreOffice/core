@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:23:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,9 @@ void ToolBox::ImplInvalidate( BOOL bNewCalc, BOOL bFullPaint )
                 maTimer.Start();
         }
     }
+
+    // request new layout by layoutmanager
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_FORMATCHANGED );
 }
 
 // -----------------------------------------------------------------------
