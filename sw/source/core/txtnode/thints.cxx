@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-05 09:39:15 $
+ *  last change: $Author: ama $ $Date: 2001-09-06 13:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1371,7 +1371,7 @@ BOOL SwpHints::Merge( SwTxtNode &rNode, SwTxtAttr* pAttr )
             const USHORT nEnd = *pEnd;
             SwTxtAttr *pPrev;
             SwTxtAttr *pNext;
-            USHORT nEndIdx = aHtEnd.GetPos( pAttr );
+            USHORT nEndIdx = aHtEnd.C40_GETPOS( SwTxtAttr, pAttr );
             ASSERT( USHRT_MAX != nEndIdx, "Missing end index" );
             if( nEndIdx )
             {
