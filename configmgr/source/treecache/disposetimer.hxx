@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-15 17:15:21 $
+ *  last change: $Author: jb $ $Date: 2001-04-09 12:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,9 @@ namespace configmgr
         }
     //-------- Control of execution  ------------------------------------------
         void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) throw ( lang::WrappedTargetException, uno::RuntimeException);
+
+        /// stop pending activities for one set of options (do not discard them)
+        bool clearTasks(vos::ORef< OOptions > const& _xOptions);
 
         /// stop and discard pending activities
         void stopAndWriteCache();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-15 17:15:21 $
+ *  last change: $Author: jb $ $Date: 2001-04-09 12:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,12 +387,14 @@ OTreeCacheWriteScheduler::~OTreeCacheWriteScheduler()
 
 void OTreeCacheWriteScheduler::stopAndWriteCache()
 {
-    osl::MutexGuard aOwnGuard( m_aMutex );
+    osl::ClearableMutexGuard aOwnGuard( m_aMutex );
 
     CFG_TRACE_INFO("Cancelling all cache writings, Stopping timer");
 
     if (m_xTimer.isValid())
         m_xTimer->dispose(); // just to be sure
+
+    aOwnGuard.clear();
 
     runWriter();
 }
@@ -418,7 +420,7 @@ void OTreeCacheWriteScheduler::onTimerShot()
     }
     catch (...)
     {
-        OSL_ENSURE(false, "ERROR: Unknown Exception left a disposer");
+        OSL_ENSURE(false, "ERROR: Unknown Exception left a writer");
     }
 
     TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
@@ -430,27 +432,25 @@ void OTreeCacheWriteScheduler::onTimerShot()
 void OTreeCacheWriteScheduler::runWriter()
 {
     // Write Cache
-    CFG_TRACE_INFO("Starting lasy write");
+    CFG_TRACE_INFO("Starting lazy write");
     osl::ClearableMutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
 
     for (CacheWriteList::iterator it = m_aWriteList.begin();
          it != m_aWriteList.end();
          )
     {
-        vos::ORef< OOptions > xTaskOption = *it;
-        if (xTaskOption.isValid())
+        if (it->isValid())
         {
+            vos::ORef< OOptions > xTaskOption = *it;
+            ++it; // advance iterator now iterator  -writeOneTree ...may erase current element
             try
             {
                 writeOneTreeFoundByOption(xTaskOption);
             }
             catch (uno::Exception&)
             {
-                it = m_aWriteList.erase(it);
+                CFG_TRACE_ERROR("TreeCacheWriteScheduler: Attempt to write data failed - error is (currently ignored)");
             }
-
-            // TODO error handling not correct at the moment
-            it = m_aWriteList.erase(it);
         }
         else
         {
@@ -466,10 +466,29 @@ void OTreeCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > c
 {
     if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(_xOptions,false))
     {
-        CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
+        CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - starting write task");
         pInfo->syncPending(_xOptions, m_rTreeManager);
         // we got a pending list with pointers from TreeInfo.
     }
+    else
+    {
+        CFG_TRACE_WARNING_NI("- Data container (TreeInfo) to write not found: Ignoring task");
+    }
+    m_aWriteList.remove(_xOptions);
+}
+
+// -----------------------------------------------------------------------------
+bool OTreeCacheWriteScheduler::clearTasks(vos::ORef< OOptions > const& _xOptions)
+{
+    osl::MutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
+
+    // sadly list::remove doesn't return an indication of what it did
+    bool bFound = std::find(m_aWriteList.begin(),m_aWriteList.end(),_xOptions) != m_aWriteList.end();
+
+    if (bFound)
+        m_aWriteList.remove(_xOptions);
+
+    return bFound;
 }
 
 // -----------------------------------------------------------------------------
@@ -504,23 +523,26 @@ void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOpti
     OSL_ASSERT(_xOptions.isValid());
     OSL_ENSURE(_xOptions->getLocale().getLength() >0, "ERROR: OTreeDisposeScheduler: cannot handle complete user scheduling");
 
-    osl::MutexGuard aGuard( m_aMutex );
-
-    CFG_TRACE_INFO("Scheduling cache write for user '%s' with locale '%s'",
-                    OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
-
-    CFG_TRACE_INFO_NI("- cache write will be started in about %d seconds", int(m_aCleanupInterval.getTimeValue().Seconds));
-
     if (_bAsync)
     {
+        osl::MutexGuard aGuard( m_aMutex );
+
+        CFG_TRACE_INFO("Scheduling cache write for user '%s' with locale '%s'",
+                        OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
+
         // lasy writing
         m_aWriteList.push_back(_xOptions);
 
         TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
         implStartBefore(aNewTime);
+
+        CFG_TRACE_INFO_NI("- cache write will be started in about %d seconds", int(m_aCleanupInterval.getTimeValue().Seconds));
     }
     else
     {
+        CFG_TRACE_INFO("Starting direct cache write for user '%s' with locale '%s'",
+                        OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
+
         // write now!
         writeOneTreeFoundByOption(_xOptions);
     }
