@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,11 @@
  *
  ************************************************************************/
 
-
+#ifndef _SFX_OBJITEM_HXX //autogen
+#include <sfx2/objitem.hxx>
+#endif
 #ifndef _SFXMSG_HXX //autogen
 #include <sfx2/msg.hxx>
-#endif
-
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -74,75 +72,98 @@
 #include <svtools/intitem.hxx>
 #endif
 
-#ifndef _FM_FMITEMS_HXX //autogen
-#include "fmitems.hxx"
+#define ITEMID_WEIGHT       0
+#define ITEMID_UNDERLINE    0
+#define ITEMID_CROSSEDOUT   0
+#define ITEMID_CONTOUR      0
+#define ITEMID_SHADOWED     0
+#define ITEMID_POSTURE      0
+#define ITEMID_FONTHEIGHT   0
+#define ITEMID_FONT         0
+#define ITEMID_CHARRELIEF   0
+#define ITEMID_ESCAPEMENT   0
+#define ITEMID_COLOR        0
+#define ITEMID_WORDLINEMODE 0
+#define ITEMID_CHARSCALE_W  0
+#define ITEMID_AUTOKERN     0
+#define ITEMID_ULSPACE      0
+#define ITEMID_LRSPACE      0
+#define ITEMID_LINESPACING  0
+#define ITEMID_LANGUAGE     0
+#define ITEMID_KERNING      0
+#define ITEMID_TABSTOP      0
+#define ITEMID_ADJUST       0
+#define ITEMID_EMPHASISMARK 0
+#ifndef _SVX_WGHTITEM_HXX
+#include "wghtitem.hxx"
+#endif
+#ifndef _SVX_UDLNITEM_HXX
+#include "udlnitem.hxx"
+#endif
+#ifndef _SVX_CRSDITEM_HXX
+#include "crsditem.hxx"
+#endif
+#ifndef _SVX_ITEM_HXX
+#include "cntritem.hxx"
+#endif
+#ifndef _SVX_SHDDITEM_HXX
+#include "shdditem.hxx"
+#endif
+#ifndef _SVX_POSTITEM_HXX
+#include "postitem.hxx"
+#endif
+#ifndef _SVX_CLIPBOARDCTL_HXX_
+#include "clipfmtitem.hxx"
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include "fhgtitem.hxx"
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include "fontitem.hxx"
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include "charreliefitem.hxx"
+#endif
+#ifndef _SVX_ESCPITEM_HXX
+#include "escpitem.hxx"
+#endif
+#ifndef _SVX_COLRITEM_HXX
+#include "colritem.hxx"
+#endif
+#ifndef _SVX_WRLMITEM_HXX
+#include "wrlmitem.hxx"
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include "charscaleitem.hxx"
+#endif
+#ifndef _SVX_AKRNITEM_HXX
+#include "akrnitem.hxx"
+#endif
+#ifndef _SVX_ULSPITEM_HXX
+#include "ulspitem.hxx"
+#endif
+#ifndef _SVX_LRSPITEM_HXX
+#include "lrspitem.hxx"
+#endif
+#ifndef _SVX_LSPCITEM_HXX
+#include "lspcitem.hxx"
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include "langitem.hxx"
+#endif
+#ifndef _SVX_KERNITEM_HXX
+#include "kernitem.hxx"
+#endif
+#ifndef _SVX_TSPTITEM_HXX
+#include "tstpitem.hxx"
+#endif
+#ifndef _SVX_ADJITEM_HXX
+#include "adjitem.hxx"
+#endif
+#ifndef _SVX_EMPHITEM_HXX
+#include "emphitem.hxx"
 #endif
 
-#ifndef _SFX_OBJITEM_HXX //autogen
-#include <sfx2/objitem.hxx>
-#endif
-
-#ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
-#endif
-
-
-/************************************************************/
-extern SfxType0 aSfxUInt32Item_Impl;
-SfxType0 aSfxUInt32Item_Impl =
-{
-    TYPE(SfxUInt32Item), 0
-};
-
-/************************************************************/
-extern SfxType0 aSfxObjectItem_Impl;
-SfxType0 aSfxObjectItem_Impl =
-{
-    TYPE(SfxObjectItem), 0
-};
-
-/************************************************************/
-extern SfxType0 aSfxInt32Item_Impl;
-SfxType0 aSfxInt32Item_Impl =
-{
-    TYPE(SfxInt32Item), 0
-};
-// diese werden nur bei einer Aufteilung in 2 Dll's gebraucht
-#if 1
-#if defined(WNT) || defined(OS2)
-/************************************************************/
-extern SfxType0 aSfxUInt16Item_Impl;
-SfxType0 aSfxUInt16Item_Impl =
-{
-    TYPE(SfxUInt16Item), 0
-};
-
-
-
-/************************************************************/
-extern SfxType0 aSfxVoidItem_Impl;
-SfxType0 aSfxVoidItem_Impl =
-{
-    TYPE(SfxVoidItem), 0
-};
-
-
-/************************************************************/
-extern SfxType0 aSfxStringItem_Impl;
-SfxType0 aSfxStringItem_Impl =
-{
-    TYPE(SfxStringItem), 0
-};
-
-
-/************************************************************/
-extern SfxType0 aSfxBoolItem_Impl;
-SfxType0 aSfxBoolItem_Impl =
-{
-    TYPE(SfxBoolItem), 0
-};
-
-
-#endif
-#endif
+#define SFX_TYPEMAP
+#include "svxslots.hxx"
 
