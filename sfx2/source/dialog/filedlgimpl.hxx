@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ namespace sfx2
 
         SfxFilterMatcher*           mpMatcher;
         GraphicFilter*              mpGraphicFilter;
-        FileDialogHelper*           mpParent;
+        FileDialogHelper*           mpAntiImpl;
+        Window*                     mpPreferredParentWindow;
 
         ::rtl::OUString             maPath;
         ::rtl::OUString             maFileName;
@@ -222,9 +223,12 @@ namespace sfx2
         void                    handleDialogSizeChanged();
 
         // Own methods
-                                FileDialogHelper_Impl( FileDialogHelper* pParent,
-                                                       const short nDialogType,
-                                                       sal_uInt32 nFlags );
+                                FileDialogHelper_Impl(
+                                    FileDialogHelper* _pAntiImpl,
+                                    const short nDialogType,
+                                    sal_uInt32 nFlags,
+                                    Window* _pPreferredParentWindow = NULL
+                                );
         virtual                 ~FileDialogHelper_Impl();
 
         ErrCode                 execute( SvStringsDtor*& rpURLList,
@@ -232,7 +236,6 @@ namespace sfx2
                                          String&         rFilter );
         ErrCode                 execute();
 
-//      void                    setPath( const ::rtl::OUString& rPath );
         void                    setFilter( const ::rtl::OUString& rFilter );
 
         /** sets the directory which should be browsed
