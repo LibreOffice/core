@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-06 10:01:16 $
+ *  last change: $Author: dvo $ $Date: 2000-10-06 13:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,6 +500,8 @@ XMLTextImportHelper::~XMLTextImportHelper()
 
     delete pPrevFrmNames;
     delete pNextFrmNames;
+
+    _FinitBackpatcher();
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
@@ -1033,77 +1035,6 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     }
 }
 
-XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()
-{
-    if (NULL == pFootnoteBackpatcher)
-    {
-        pFootnoteBackpatcher =
-            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber
-//                                                ,sCurrentPresentation,
-//                                                sal_False, 0
-                );
-    }
-    return *pFootnoteBackpatcher;
-}
-
-XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
-{
-    if (NULL == pSequenceIdBackpatcher)
-    {
-        pSequenceIdBackpatcher =
-            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber
-//                                                ,sCurrentPresentation,
-//                                                sal_False, 0
-                );
-    }
-    return *pSequenceIdBackpatcher;
-}
-
-XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
-{
-    if (NULL == pSequenceNameBackpatcher)
-    {
-        pSequenceNameBackpatcher =
-            new XMLPropertyBackpatcher<OUString>(sSourceName
-//                                               ,sCurrentPresentation,
-//                                               sal_False, sSequenceNumber
-                );
-                                            // hack: last parameter not used
-    }
-    return *pSequenceNameBackpatcher;
-}
-
-void XMLTextImportHelper::InsertFootnoteID(
-    const OUString& sXMLId,
-    sal_Int16 nAPIId)
-{
-    GetFootnoteBP().ResolveId(sXMLId, nAPIId);
-}
-
-void XMLTextImportHelper::ProcessFootnoteReference(
-    const OUString& sXMLId,
-    const Reference<XPropertySet> & xPropSet)
-{
-    GetFootnoteBP().SetProperty(xPropSet, sXMLId);
-}
-
-void XMLTextImportHelper::InsertSequenceID(
-    const OUString& sXMLId,
-    const OUString& sName,
-    sal_Int16 nAPIId)
-{
-    GetSequenceIdBP().ResolveId(sXMLId, nAPIId);
-    GetSequenceNameBP().ResolveId(sXMLId, sName);
-}
-
-void XMLTextImportHelper::ProcessSequenceReference(
-    const OUString& sXMLId,
-    const Reference<XPropertySet> & xPropSet)
-{
-    GetSequenceIdBP().SetProperty(xPropSet, sXMLId);
-    GetSequenceNameBP().SetProperty(xPropSet, sXMLId);
-}
-
 
 void XMLTextImportHelper::ConnectFrameChains(
         const OUString& rFrmName,
@@ -1188,15 +1119,3 @@ sal_Bool XMLTextImportHelper::IsInFrame()
 
     return bIsInFrame;
 }
-
-
-// The environment unxsols2 compiles all template instantiations as
-// file local (CC ... -instances=static ...), so txtimp.cxx *cannot*
-// see the explicit instantiations at the end of
-// XMLPropertyBackpatcher.cxx. To circumvent this problem, we *must*
-// instantiate the templates here, too. This requires the full class
-// definition and the template instantiations, hence we include
-// the .cxx file.
-#ifdef SOLARIS
-#include "XMLPropertyBackpatcher.cxx"
-#endif

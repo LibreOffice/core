@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPropertyBackpatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-04 21:16:49 $
+ *  last change: $Author: dvo $ $Date: 2000-10-06 13:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef _XMLOFF_XMLPROPERTYBACKPATCHER_HXX
 #include "XMLPropertyBackpatcher.hxx"
+#endif
+
+#ifndef _XMLOFF_TEXTIMP_HXX_
+#include "txtimp.hxx"   // XMLTextImportHelper partially implemented here
 #endif
 
 
@@ -252,3 +256,86 @@ void XMLPropertyBackpatcher<A>::SetDefault()
 template class XMLPropertyBackpatcher<sal_Int16>;
 template class XMLPropertyBackpatcher<OUString>;
 
+
+
+//
+// XMLTextImportHelper
+//
+// Code from XMLTextImportHelper using the XMLPropertyBackpatcher is
+// implemented here. The reason is that in the unxsols2 environment,
+// all templates are instatiated as file local (switch
+// -instances=static), and thus are not accessible from the outside.
+//
+// The previous solution was to force additional instantiation of
+// XMLPropertyBackpatcher in txtimp.cxx. This solution combines all
+// usage of the XMLPropertyBackpatcher in XMLPropertyBackpatcher.cxx
+// instead.
+//
+
+XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()
+{
+    if (NULL == pFootnoteBackpatcher)
+    {
+        pFootnoteBackpatcher =
+            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber);
+    }
+    return *pFootnoteBackpatcher;
+}
+
+XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
+{
+    if (NULL == pSequenceIdBackpatcher)
+    {
+        pSequenceIdBackpatcher =
+            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber);
+    }
+    return *pSequenceIdBackpatcher;
+}
+
+XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
+{
+    if (NULL == pSequenceNameBackpatcher)
+    {
+        pSequenceNameBackpatcher =
+            new XMLPropertyBackpatcher<OUString>(sSourceName);
+    }
+    return *pSequenceNameBackpatcher;
+}
+
+void XMLTextImportHelper::InsertFootnoteID(
+    const OUString& sXMLId,
+    sal_Int16 nAPIId)
+{
+    GetFootnoteBP().ResolveId(sXMLId, nAPIId);
+}
+
+void XMLTextImportHelper::ProcessFootnoteReference(
+    const OUString& sXMLId,
+    const Reference<XPropertySet> & xPropSet)
+{
+    GetFootnoteBP().SetProperty(xPropSet, sXMLId);
+}
+
+void XMLTextImportHelper::InsertSequenceID(
+    const OUString& sXMLId,
+    const OUString& sName,
+    sal_Int16 nAPIId)
+{
+    GetSequenceIdBP().ResolveId(sXMLId, nAPIId);
+    GetSequenceNameBP().ResolveId(sXMLId, sName);
+}
+
+void XMLTextImportHelper::ProcessSequenceReference(
+    const OUString& sXMLId,
+    const Reference<XPropertySet> & xPropSet)
+{
+    GetSequenceIdBP().SetProperty(xPropSet, sXMLId);
+    GetSequenceNameBP().SetProperty(xPropSet, sXMLId);
+}
+
+void XMLTextImportHelper::_FinitBackpatcher()
+{
+    delete pFootnoteBackpatcher;
+    delete pSequenceIdBackpatcher;
+    delete pSequenceNameBackpatcher;
+}
