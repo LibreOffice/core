@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.16 $
+*  $Revision: 1.17 $
 *
-*  last change: $Author: hr $ $Date: 2004-09-08 15:04:20 $
+*  last change: $Author: obo $ $Date: 2004-09-08 15:41:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -433,6 +433,11 @@ End
 Directory gid_Dir_Share_Xslt_Import_Wordml
     ParentID = gid_Dir_Share_Xslt_Import;
     DosName = "wordml";
+End
+
+Directory gid_Dir_Share_Xslt_Import_Common
+    ParentID = gid_Dir_Share_Xslt_Import;
+    DosName = "common";
 End
 
 Directory gid_Dir_Share_Dtd
