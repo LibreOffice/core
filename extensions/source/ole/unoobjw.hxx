@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:41 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,11 @@
 #ifndef _UNOOBJW_HXX
 #define _UNOOBJW_HXX
 
-#include <com/sun/star/script/XAllListener.hpp>
-#include <com/sun/star/script/XEventAttacher.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <vos/refernce.hxx>
+
 #include <tools/presys.h>
 #include "stdafx.h"
 #include "comifaces.hxx"
@@ -101,31 +100,7 @@ struct equal_to_IUnknown_Impl
     }
 };
 
-typedef hash_map
-<
-    IUnknown*,
-    Reference<XInterface>,
-    hash_IUnknown_Impl,
-    equal_to_IUnknown_Impl
-> WrapperMap;
 
-typedef hash_map
-<
-    DWORD,
-    OleRef<IDispatch>,
-    hash<DWORD>,
-    equal_to<DWORD>
-> ConnectionMap;
-
-struct GenListenerData
-{
-    Any             helper;
-    OUString                listenerType;
-    OUString                addListenerParam;
-    Reference<XEventListener>   xGenListener;
-};
-
-typedef vector<GenListenerData> GenListenerDataList;
 
 struct MemberInfo
 {
@@ -157,152 +132,6 @@ typedef hash_map
     DISPID,
     MemberInfo
 > IdToMemberInfoMap;
-/*****************************************************************************
-
-    class declaration: EnumConnections_Impl
-
-*****************************************************************************/
-
-//class EnumConnections_Impl : public IEnumConnections
-//{
-//public:
-//
-//  EnumConnections_Impl(CONNECTDATA* pConnection, ULONG numOfConn);
-//  ~EnumConnections_Impl();
-//
-//  /* IUnknown methods */
-//  STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-//  STDMETHOD_(ULONG, AddRef)();
-//  STDMETHOD_(ULONG, Release)();
-//
-//  /* IEnumConnections */
-//    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next(
-//        /* [in] */ ULONG cConnections,
-//        /* [out] */ CONNECTDATA __RPC_FAR *rgcd,
-//        /* [out] */ ULONG __RPC_FAR *lpcFetched);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Skip(
-//        /* [in] */ ULONG cConnections);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Reset(void);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Clone(
-//        /* [out] */ IEnumConnections __RPC_FAR *__RPC_FAR *ppEnum);
-//
-//protected:
-//
-//  vos::ORefCount      m_refCount;
-//  CONNECTDATA*    m_pConnection;
-//  ULONG           m_numOfConn;
-//  ULONG           m_index;
-//};
-
-
-/*****************************************************************************
-
-    class declaration: ConnectionPoint_Impl
-
-*****************************************************************************/
-
-
-//class ConnectionPoint_Impl : public IConnectionPoint
-//                         , public WeakImplHelper1<XAllListener>
-//{
-//public:
-//
-//  ConnectionPoint_Impl(const Reference<XInvocation>& xInv,
-//                       const Reference<XInterface>& xOrigin,
-//                       const Reference<XEventAttacher>& xEventAttacher,
-//                       IConnectionPointContainer* pContainer);
-//
-//  ~ConnectionPoint_Impl();
-//
-//  /* IUnknown methods */
-//  STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-//  STDMETHOD_(ULONG, AddRef)();
-//  STDMETHOD_(ULONG, Release)();
-//
-//  /* IConnectionPoint */
-//    virtual HRESULT STDMETHODCALLTYPE GetConnectionInterface(
-//        /* [out] */ IID __RPC_FAR *piid);
-//
-//    virtual HRESULT STDMETHODCALLTYPE GetConnectionPointContainer(
-//        /* [out] */ IConnectionPointContainer __RPC_FAR *__RPC_FAR *ppCPC);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Advise(
-//        /* [in] */ IUnknown __RPC_FAR *pUnkSink,
-//        /* [out] */ DWORD __RPC_FAR *pdwCookie);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Unadvise(
-//        /* [in] */ DWORD dwCookie);
-//
-//    virtual HRESULT STDMETHODCALLTYPE EnumConnections(
-//        /* [out] */ IEnumConnections __RPC_FAR *__RPC_FAR *ppEnum);
-//
-//
-//
-//  /* XEventListener */
-//    virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
-//
-//  /* XAllListener */
-//    virtual void SAL_CALL firing( const AllEventObject& iaEvent ) throw(RuntimeException);
-//    virtual Any SAL_CALL approveFiring( const AllEventObject& aEvent ) throw(InvocationTargetException, RuntimeException);
-//
-//
-//protected:
-//
-//  void registerListener();
-//  void unregisterListener();
-//
-//  vos::ORefCount                          m_refCount;
-//  Reference<XInvocation>                      m_xInvocation;
-//  Reference<XInterface>           m_xOrigin;
-//  OleRef<IConnectionPointContainer>   m_rContainer;
-//  ConnectionMap                       m_connection;
-//  DWORD                               m_nextCookie;
-//  Reference<XEventAttacher>                   m_xEventAttacher;
-//  GenListenerDataList                 m_xGenListenerList;
-//};
-
-/*****************************************************************************
-
-    class declaration: EnumConnectionPoints_Impl
-
-*****************************************************************************/
-
-//class EnumConnectionPoints_Impl : public IEnumConnectionPoints
-//{
-//public:
-//
-//  EnumConnectionPoints_Impl(OleRef<IConnectionPoint>* pPoints, ULONG numOfPoints);
-//  ~EnumConnectionPoints_Impl();
-//
-//  /* IUnknown methods */
-//  STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-//  STDMETHOD_(ULONG, AddRef)();
-//  STDMETHOD_(ULONG, Release)();
-//
-//  /* IEnumConnectionPoints */
-//    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next(
-//        /* [in] */ ULONG cConnections,
-//        /* [out] */ IConnectionPoint __RPC_FAR *__RPC_FAR *rgpcn,
-//        /* [out] */ ULONG __RPC_FAR *lpcFetched);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Skip(
-//        /* [in] */ ULONG cConnections);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Reset(void);
-//
-//    virtual HRESULT STDMETHODCALLTYPE Clone(
-//        /* [out] */ IEnumConnectionPoints __RPC_FAR *__RPC_FAR *ppEnum);
-//
-//protected:
-//
-//  vos::ORefCount                      m_refCount;
-//  OleRef<IConnectionPoint>*       m_pPoints;
-//  ULONG                           m_numOfPoints;
-//  ULONG                           m_index;
-//};
 
 /*****************************************************************************
 
@@ -312,7 +141,6 @@ typedef hash_map
 
 class InterfaceOleWrapper_Impl : public WeakImplHelper2<XBridgeSupplier2, XInitialization>,
                                  public IDispatchEx,
-//                               public IConnectionPointContainer,
                                  public UnoConversionUtilities<InterfaceOleWrapper_Impl>,
                                  public IUnoObjectWrapper
 {
@@ -376,14 +204,6 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetNameSpaceParent(
         /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
 
-    /* IConnectionPointContainer */
-//    virtual HRESULT STDMETHODCALLTYPE EnumConnectionPoints(
-//        /* [out] */ IEnumConnectionPoints __RPC_FAR *__RPC_FAR *ppEnum);
-//
-//    virtual HRESULT STDMETHODCALLTYPE FindConnectionPoint(
-//        /* [in] */ REFIID riid,
-//        /* [out] */ IConnectionPoint __RPC_FAR *__RPC_FAR *ppCP);
-
     //XInterface ----------------------------------------------------------
     void SAL_CALL InterfaceOleWrapper_Impl::acquire(  ) throw();
     void SAL_CALL InterfaceOleWrapper_Impl::release(  ) throw();
@@ -404,7 +224,6 @@ public:
     STDMETHOD( getOriginalUnoStruct)( Any * pStruct);
 
     // UnoConversionUtility
-//  virtual Reference< XSingleServiceFactory > getInvocationFactory();
     virtual Reference< XInterface > createUnoWrapperInstance();
     virtual Reference< XInterface > createComWrapperInstance();
 
@@ -430,10 +249,8 @@ protected:
     Reference<XInvocation>                  m_xInvocation;
     Reference<XExactName>                   m_xExactName;
     Reference<XInterface>                   m_xOrigin;
-    Reference<XEventAttacher>               m_xEventAttacher;
     NameToIdMap                     m_nameToDispIdMap;
     vector<MemberInfo>              m_MemberInfos;
-    OleRef<IConnectionPoint>        m_rConnectionPoint;
     // This member is used to determine the default value
     // denoted by DISPID_VALUE (0). For proper results in JavaScript
     // we have to return the default value when we write an object
