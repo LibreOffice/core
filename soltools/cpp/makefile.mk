@@ -9,6 +9,7 @@ PRJ=..
 PRJNAME=soltools
 TARGET=cpp
 TARGETTYPE=CUI
+NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -31,7 +32,7 @@ OBJFILES= \
 APP1TARGET	=	$(TARGET)
 APP1STACK	=	1000000
 APP1OBJS	=   $(OBJ)$/_cpp.obj
-APP1STDLIBS	= 	$(STDLIBCUIMT)
+#APP1STDLIBS	= 	$(STDLIBCUIMT)
 APP1LIBS	=	$(LB)$/$(TARGET).lib
 APP1DEPN	=   $(LB)$/$(TARGET).lib
 

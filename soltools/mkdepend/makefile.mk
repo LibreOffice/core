@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:50:16 $
+#   last change: $Author: nf $ $Date: 2001-04-19 08:59:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ OBJFILES=  \
 
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
-APP1STDLIBS=$(LIBSTLPORTST)
+#APP1STDLIBS=$(LIBSTLPORTST)
 
 .IF "$(OS)"=="MACOSX"
 NOSHAREDSTATICLIB=TRUE
