@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:28:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,100 +1378,6 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     return pLFOInfo->pNumRule;
 }
 
-void WW8ListManager::MapStyleToOrigList(const SwNumRule &rNmRule,
-    SwWW8StyInf& rStyleInf)
-{
-    maStyleNumberingMap.insert(std::make_pair< SwNumRule const * const, SwWW8StyInf * >(&rNmRule,&rStyleInf));
-}
-
-void WW8ListManager::StrengthReduceListStyles()
-{
-    /*
-     For all the styles that wanted to use a given list style check and that
-     had new list styles created to match the actual indentation used for the
-     style see if it is possible to put humpty dumpty back together again and
-     create a single list style that comprises all the split styles based on
-     the original style.
-
-     There must have been at least one split from the original style to need to
-     do this (i.e. the sPrevious check) and there must be only one (or none)
-     style using each list level to avoid clobbering the synced indentation for
-     the conflicting styles that caused the split from the desired list in the
-     first place.
-    */
-    myMapIter aIter = maStyleNumberingMap.begin();
-    myMapIter aEnd = maStyleNumberingMap.end();
-    while (aIter != aEnd)
-    {
-        const SwNumRule *pNumRule = aIter->first;
-        std::vector<String> aLevels[MAXLEVEL];
-        const int nMax = pNumRule->IsContinusNum() ? 1 : MAXLEVEL;
-
-        myMapIter aCurrentIter = aIter;
-        myMapIter aEndOfCurrentIter =
-            maStyleNumberingMap.upper_bound(pNumRule);
-        while (aCurrentIter != aEndOfCurrentIter)
-        {
-            const SwWW8StyInf *pCurrent = aCurrentIter->second;
-            ASSERT(pCurrent->nListLevel < nMax, "strange");
-            const SwNumRuleItem &rItem = pCurrent->pFmt->GetNumRule();
-            ASSERT(rItem.GetValue().Len(), "impossible");
-            if (rItem.GetValue().Len())
-                aLevels[pCurrent->nListLevel].push_back(rItem.GetValue());
-            ++aCurrentIter;
-        }
-        bool bSuitable = true;
-        bool bRequired = false;
-        String sPrevious;
-        for (int i = 0;i < nMax;++i)
-        {
-            std::sort(aLevels[i].begin(), aLevels[i].end());
-            std::vector<String>::iterator aSIter =
-                std::unique(aLevels[i].begin(),aLevels[i].end());
-            aLevels[i].erase(aSIter, aLevels[i].end());
-            if (aLevels[i].size() > 1)
-            {
-                bSuitable = false;
-                break;
-            }
-            else if (!aLevels[i].empty())
-            {
-                if (!sPrevious.Len())
-                    sPrevious = aLevels[i][0];
-                else if (sPrevious != aLevels[i][0])
-                    bRequired = true;
-            }
-        }
-        if (bSuitable && bRequired)
-        {
-            SwNumRule *pNewRule = CreateNextRule(
-                pNumRule->IsContinusNum() ? true : false);
-
-            for (int i=0; i < MAXLEVEL; ++i)
-                pNewRule->Set(i, pNumRule->Get(i));
-
-            for (aCurrentIter = aIter; aCurrentIter != aEndOfCurrentIter;
-                ++aCurrentIter)
-            {
-                SwWW8StyInf *pCurrent = aCurrentIter->second;
-                const SwNumRuleItem &rItem = pCurrent->pFmt->GetNumRule();
-                ASSERT(rItem.GetValue().Len(), "impossible");
-                if (!rItem.GetValue().Len())
-                    continue;
-                const SwNumRule* pRule = rDoc.FindNumRulePtr(rItem.GetValue());
-                ASSERT(pRule, "impossible");
-                if (!pRule)
-                    continue;
-                const SwNumFmt& rRule = pRule->Get(pCurrent->nListLevel);
-                pNewRule->Set(pCurrent->nListLevel, rRule);
-                pCurrent->pFmt->SetAttr(SwNumRuleItem(pNewRule->GetName()));
-            }
-        }
-        aIter = aEndOfCurrentIter;
-    }
-    maStyleNumberingMap.clear();
-}
-
 //----------------------------------------------------------------------------
 //          SwWW8ImplReader:  anhaengen einer Liste an einen Style oder Absatz
 //----------------------------------------------------------------------------
@@ -1506,82 +1412,44 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     return bRes;
 }
 
-SwNumRule* SwWW8ImplReader::SyncStyleIndentWithList( SwWW8StyInf &rStyle,
-    SwNumRule* pRule, BYTE nLevel)
+void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    /*
-    #i1886#
-    When a style has a numbering rule attached to it in word, the numbering
-    rule contains indentation information for the style. The style itself also
-    has indentation info, generally setting one in word sets the indentation
-    in the list formatting for the level in the list to be the same, so the
-    two remain in sync. But it is possible for them to fall out of sync. In
-    which case the styles indentation is the real indentation for the level of
-    the list that is attached to it. The solution is to create a new list
-    based upon the one registered on the style and change the formatting of
-    the level that is effectively overridden by the styles formatting info.
-
-    Once the styles numbering is correctly setup then conceptionally setting a
-    numbering style on anything in word removes all its original indentation
-    information and the lists is used instead, so if we have a style which has
-    a outline list formatting and it happens to be based on a style that has
-    indentation, then that inherited indentation is stripped from the style.
-    */
-
-    /*
-    #105652#, only the left and first line offset indent are relevent for
-    list indentation, the right is not, and can be retained after list
-    indentation is accounted for, and must not be considered when set as
-    a flag that the list indentation is our of sync
-    */
-    const SvxLRSpaceItem &rLR =
-        (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE);
-    if (rStyle.bListReleventIndentSet)
-    {
-        const SwNumFmt& rRule = pRule->Get( nLevel );
-
-        bool bRequired = false;
-        if ( rRule.GetAbsLSpace() != rLR.GetTxtLeft() )
-            bRequired = true;
-        else if(rLR.GetTxtFirstLineOfst() && (rLR.GetTxtFirstLineOfst() != 0))
-        {
-            if (rRule.GetFirstLineOffset() != rLR.GetTxtFirstLineOfst())
-                bRequired = true;
-        }
-
-        if (bRequired)
-        {
-            //new list required with these settings.
-            SwNumRule *pNewRule = pLstManager->CreateNextRule(
-                pRule->IsContinusNum() ? true : false);
-
-            for (int i=0; i<MAXLEVEL; ++i)
-            {
-                const SwNumFmt& rSubRule = pRule->Get(i);
-                pNewRule->Set( i, rSubRule );
-            }
-
-            SwNumFmt aRule = pRule->Get(nLevel);
-            aRule.SetAbsLSpace(rLR.GetTxtLeft());
-            if (rLR.GetTxtFirstLineOfst() != 1)
-                aRule.SetFirstLineOffset(rLR.GetTxtFirstLineOfst());
-            pNewRule->Set( nLevel, aRule );
-            pRule = pNewRule;
-        }
-    }
-    SvxLRSpaceItem aLR(rLR);
-    aLR.SetLeft(0);
-    aLR.SetTxtFirstLineOfst(0);
+    rStyle.nLeftParaMgn = rFmt.GetAbsLSpace();
+    rStyle.nTxtFirstLineOfst = GetListFirstLineIndent(rFmt);
+    SvxLRSpaceItem aLR(
+            (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE));
+    aLR.SetTxtLeft(rStyle.nLeftParaMgn);
+    aLR.SetTxtFirstLineOfst(rStyle.nTxtFirstLineOfst);
     rStyle.pFmt->SetAttr(aLR);
-    return pRule;
+    rStyle.bListReleventIndentSet = true;
 }
 
-void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
-    sal_uInt16 nActLFO, sal_uInt8 nActLevel)
+void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    SwWW8StyInf &rStyleInf = pCollA[ nStyle ];
-    if( rStyleInf.bValid )
+    if (rStyle.bListReleventIndentSet)
     {
+        SvxLRSpaceItem aLR(
+            (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE));
+        SyncStyleIndentWithList(aLR, rFmt);
+        rStyle.pFmt->SetAttr(aLR);
+    }
+    else
+    {
+        SvxLRSpaceItem aLR(
+            (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE));
+        aLR.SetTxtLeft(0);
+        aLR.SetTxtFirstLineOfst(0);
+        rStyle.pFmt->SetAttr(aLR);
+    }
+}
+
+void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
+    sal_uInt8 nActLevel)
+{
+    SwWW8StyInf &rStyleInf = pCollA[nStyle];
+    if (rStyleInf.bValid)
+    {
+        ASSERT(pAktColl, "Cannot be called outside of style import");
         // Phase 1: Nummerierungsattribute beim Einlesen einer StyleDef
         if( pAktColl )
         {
@@ -1594,100 +1462,54 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
             {
                 rStyleInf.nLFOIndex  = nActLFO;
                 rStyleInf.nListLevel = nActLevel;
+
+                if (
+                    (USHRT_MAX > nActLFO) &&
+                    (WW8ListManager::nMaxLevel > nActLevel)
+                   )
+                {
+                    SwNumRule *pNmRule =
+                        pLstManager->GetNumRuleForActivation(nActLFO,nActLevel);
+                    if (pNmRule)
+                        UseListIndent(rStyleInf, pNmRule->Get(nActLevel));
+                }
             }
         }
-        else
+    }
+}
+
+
+void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
+{
+    SwWW8StyInf &rStyleInf = pCollA[ nStyle ];
+    if (rStyleInf.bValid)
+    {
         // Phase 2: aktualisieren der StyleDef nach einlesen aller Listen
+        SwNumRule* pNmRule = 0;
+        sal_uInt16 nLFO = rStyleInf.nLFOIndex;
+        sal_uInt8  nLevel = rStyleInf.nListLevel;
+        if (
+             (USHRT_MAX > nLFO) &&
+             (WW8ListManager::nMaxLevel > nLevel)
+           )
         {
-            sal_uInt16 nLFO;
-            sal_uInt8   nLevel;
-            if (
-                 (USHRT_MAX > nActLFO) &&
-                 (WW8ListManager::nMaxLevel > nActLevel)
-               )
-            {
-                // Plan A: die Werte fuer Listen- und Level-Nummer wurden
-                // uebergeben
-                nLFO   = nActLFO;
-                nLevel = nActLevel;
-            }
-            else
-            {
-                // Plan B: die vorhin in Phase 1 gespeicherten Werte sind zu
-                // nehmen
-                nLFO   = rStyleInf.nLFOIndex;
-                nLevel = rStyleInf.nListLevel;
-            }
-            if (
-                 (USHRT_MAX > nLFO) &&
-                 (WW8ListManager::nMaxLevel > nLevel)
-               )
-            {
-                SwNumRule* pNmRule =
-                    pLstManager->GetNumRuleForActivation(nLFO,nLevel);
+            pNmRule = pLstManager->GetNumRuleForActivation(nLFO, nLevel);
 
-                if( pNmRule )
-                {
-                    pNmRule = SyncStyleIndentWithList(rStyleInf,pNmRule,nLevel);
-                    if( MAXLEVEL > rStyleInf.nOutlineLevel )
-                        rStyleInf.pOutlineNumrule = pNmRule;
-                    else
-                    {
-                        rStyleInf.pFmt->SetAttr(
-                            SwNumRuleItem( pNmRule->GetName() ) );
-                        rStyleInf.bHasStyNumRule = true;
-                    }
-                }
-            }
-            else
+            if (pNmRule)
             {
-                //inherit numbering from base if not explicitly set for this
-                //style
-                if  (
-                      (rStyleInf.nBase < nStyle) && rStyleInf.pFmt &&
-                      (
-                        SFX_ITEM_SET !=
-                        rStyleInf.pFmt->GetItemState(RES_PARATR_NUMRULE, false)
-                      )
-                    )
+                if( MAXLEVEL > rStyleInf.nOutlineLevel )
+                    rStyleInf.pOutlineNumrule = pNmRule;
+                else
                 {
-                    rStyleInf.pOutlineNumrule =
-                        pCollA[rStyleInf.nBase].pOutlineNumrule;
-                    const SfxPoolItem* pItem;
-                    if (pCollA[rStyleInf.nBase].pFmt &&
-                    SFX_ITEM_SET == pCollA[rStyleInf.nBase].pFmt->
-                        GetItemState(RES_PARATR_NUMRULE, false, &pItem))
-                    {
-                        const SwNumRuleItem *pRule=(const SwNumRuleItem *)pItem;
-                        rStyleInf.pFmt->SetAttr(*pRule);
-                    }
-                    rStyleInf.bHasStyNumRule =
-                        pCollA[rStyleInf.nBase].bHasStyNumRule;
-                    rStyleInf.nLFOIndex = pCollA[rStyleInf.nBase].nLFOIndex;
-                    rStyleInf.nListLevel = pCollA[rStyleInf.nBase].nListLevel;
+                    rStyleInf.pFmt->SetAttr(
+                        SwNumRuleItem( pNmRule->GetName() ) );
+                    rStyleInf.bHasStyNumRule = true;
                 }
-            }
-
-            //If this style has a numrule the map this style to its desired
-            //numrule, so we can check later if a different indentation
-            //required a new numrule for the list level in use to be created
-            //instead, and if so then we can check if a single numrule
-            //comprising all the specially created levels can be substituted
-            //for the multiple list styles for each level
-            if (
-                 rStyleInf.pFmt && rStyleInf.bHasStyNumRule &&
-                 (USHRT_MAX > rStyleInf.nLFOIndex) &&
-                 (WW8ListManager::nMaxLevel > rStyleInf.nListLevel)
-               )
-            {
-                SwNumRule* pNmRule =
-                    pLstManager->GetNumRuleForActivation(rStyleInf.nLFOIndex,
-                    rStyleInf.nListLevel);
-                ASSERT(pNmRule, "impossible")
-                if (pNmRule)
-                    pLstManager->MapStyleToOrigList(*pNmRule, rStyleInf);
             }
         }
+
+        if (pNmRule)
+            SetStyleIndent(rStyleInf, pNmRule->Get(nLevel));
     }
 }
 
@@ -1710,20 +1532,11 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
 
             if (bSetAttr)
-            {
                 pTxtNode->SwCntntNode::SetAttr(SwNumRuleItem(pRule->GetName()));
 
-                SvxLRSpaceItem aLR(*(SvxLRSpaceItem*)GetFmtAttr(RES_LR_SPACE));
-                if( 1 < aLR.GetTxtFirstLineOfst() )
-                {
-                    aLR.SetTxtFirstLineOfst( 1 );
-                    pTxtNode->SwCntntNode::SetAttr(aLR);
-                }
-            }
+            pTxtNode->SetNumLSpace(bSetAttr);
 
-            pTxtNode->SetNumLSpace( bSetAttr );
-
-            pTxtNode->UpdateNum( SwNodeNum( nActLevel ) );
+            pTxtNode->UpdateNum(SwNodeNum(nActLevel));
         }
     }
 }
@@ -1731,8 +1544,8 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 {
     // sind wir erst beim Einlesen der StyleDef ?
-    if( pAktColl )
-        RegisterNumFmtOnStyle( nAktColl , nActLFO, nActLevel);
+    if (pAktColl)
+        SetStylesList( nAktColl , nActLFO, nActLevel);
     else
         RegisterNumFmtOnTxtNode(nActLFO, nActLevel);
 }
