@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:19:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,7 +1029,7 @@ static void ImplAddTokenFontNames( String& rName, const OUString& rFontNames )
 Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                                    ULONG nFlags, const OutputDevice* pOutDev )
 {
-    #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
+    #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Arial;Bitstream Vera Sans;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
     #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Andale Sans UI"
