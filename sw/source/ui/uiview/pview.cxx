@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:56:44 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1600,7 +1600,7 @@ MOVEPAGE:
             // die Sache mit der Orientation
             if(pPPVPD)
             {
-                SfxPrinter* pPrinter = GetPrinter();
+                SfxPrinter* pPrinter = GetPrinter( TRUE );
                 if((pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE)
                         != pPPVPD->GetLandscape())
                     pPrinter->SetOrientation(pPPVPD->GetLandscape() ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
