@@ -56,7 +56,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB1FILES) $(LIB1OBJFILES))
-    @-+echo $(LIB1OBJFILES) > $(null,$(LIB1OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB1OBJFILES) > $(null,$(LIB1OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB1FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -127,7 +127,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB2FILES) $(LIB2OBJFILES))
-    @-+echo $(LIB2OBJFILES) > $(null,$(LIB2OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB2OBJFILES) > $(null,$(LIB2OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB2FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -198,7 +198,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB3FILES) $(LIB3OBJFILES))
-    @-+echo $(LIB3OBJFILES) > $(null,$(LIB3OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB3OBJFILES) > $(null,$(LIB3OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB3FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -269,7 +269,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB4FILES) $(LIB4OBJFILES))
-    @-+echo $(LIB4OBJFILES) > $(null,$(LIB4OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB4OBJFILES) > $(null,$(LIB4OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB4FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -340,7 +340,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB5FILES) $(LIB5OBJFILES))
-    @-+echo $(LIB5OBJFILES) > $(null,$(LIB5OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB5OBJFILES) > $(null,$(LIB5OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB5FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -411,7 +411,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB6FILES) $(LIB6OBJFILES))
-    @-+echo $(LIB6OBJFILES) > $(null,$(LIB6OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB6OBJFILES) > $(null,$(LIB6OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB6FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -482,7 +482,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB7FILES) $(LIB7OBJFILES))
-    @-+echo $(LIB7OBJFILES) > $(null,$(LIB7OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB7OBJFILES) > $(null,$(LIB7OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB7FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -553,7 +553,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB8FILES) $(LIB8OBJFILES))
-    @-+echo $(LIB8OBJFILES) > $(null,$(LIB8OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB8OBJFILES) > $(null,$(LIB8OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB8FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -624,7 +624,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB9FILES) $(LIB9OBJFILES))
-    @-+echo $(LIB9OBJFILES) > $(null,$(LIB9OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB9OBJFILES) > $(null,$(LIB9OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB9FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
@@ -695,7 +695,7 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB10FILES) $(LIB10OBJFILES))
-    @-+echo $(LIB10OBJFILES) > $(null,$(LIB10OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-+echo $(LIB10OBJFILES) > $(null,$(LIB10OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
     @-$(TYPE) $(foreach,i,$(LIB10FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
