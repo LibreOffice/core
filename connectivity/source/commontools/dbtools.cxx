@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:01:29 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
@@ -1216,6 +1216,9 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/02/16 16:01:29  oj
+ *  some new functions
+ *
  *  Revision 1.15  2001/02/14 10:31:47  oj
  *  neew method
  *

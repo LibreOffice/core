@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:25:17 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"

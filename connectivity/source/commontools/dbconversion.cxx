@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-03 09:02:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #ifndef _INC_STDIO
 #include <stdio.h>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 
@@ -791,6 +791,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/01/03 09:02:13  oj
+ *  check month >0 and < 13
+ *
  *  Revision 1.9  2000/12/06 12:14:59  oj
  *  #80219# toDays corrected
  *

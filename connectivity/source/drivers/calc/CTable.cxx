@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 13:51:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE calc
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_

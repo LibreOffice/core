@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-08 09:18:58 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
