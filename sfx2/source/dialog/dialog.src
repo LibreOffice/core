@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:22:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message [ dutch ] = "Deze sjabloon bestaat reeds. Overschrijven?" ;
     Message [ spanish ] = "El estilo ya existe. ¿Desea sobrescribirlo?" ;
     Message [ english_us ] = "Style already exists. Overwrite?" ;
-    Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸²Ğ´Ëü£¿";
+    Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸ÄĞ´£¿";
     Message[ russian ] = "Øàáëîí óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
     Message[ polish ] = "Szablon ju¿ istnieje. Czy go zast¹piæ?";
     Message[ japanese ] = "‚±‚Ì½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
@@ -1095,6 +1095,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
 
 
