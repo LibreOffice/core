@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 16:55:09 $
+ *  last change: $Author: thb $ $Date: 2001-04-25 18:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,15 +354,15 @@ void FilterConfigCache::ImplInitSmart()
     {
         FilterConfigCacheEntry  aEntry;
 
-        OUString    sExtension( RTL_CONSTASCII_USTRINGPARAM( *pPtr++ ) );
+        OUString    sExtension( OUString::createFromAscii( *pPtr++ ) );
 
         aEntry.sType = sExtension;
         aEntry.sUIName = sExtension;
 
-        ByteString sFlags( RTL_CONSTASCII_USTRINGPARAM( *pPtr++ ) );
+        ByteString sFlags( *pPtr++ );
         aEntry.nFlags = sFlags.ToInt32();
 
-        OUString    sUserData( RTL_CONSTASCII_USTRINGPARAM( *pPtr ) );
+        OUString    sUserData( OUString::createFromAscii( *pPtr ) );
         aEntry.CreateFilterName( sUserData );
 
         aEntry.sExtension = sExtension;
