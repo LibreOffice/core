@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 14:10:26 $
+ *  last change: $Author: sab $ $Date: 2002-09-27 08:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2543,7 +2543,10 @@ void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::R
     if ( pDocShell && aRanges.Count() )     // leer = nichts zu tun
     {
         ScDocFunc aFunc(*pDocShell);
-        aFunc.ChangeIndent( *GetMarkData(), FALSE, TRUE );
+        //#97041#; put only MultiMarked ScMarkData in ChangeIndent
+        ScMarkData aMarkData(*GetMarkData());
+        aMarkData.MarkToMulti();
+        aFunc.ChangeIndent( aMarkData, FALSE, TRUE );
     }
 }
 
@@ -2553,7 +2556,10 @@ void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::R
     if ( pDocShell && aRanges.Count() )     // leer = nichts zu tun
     {
         ScDocFunc aFunc(*pDocShell);
-        aFunc.ChangeIndent( *GetMarkData(), TRUE, TRUE );
+        //#97041#; put only MultiMarked ScMarkData in ChangeIndent
+        ScMarkData aMarkData(*GetMarkData());
+        aMarkData.MarkToMulti();
+        aFunc.ChangeIndent( aMarkData, TRUE, TRUE );
     }
 }
 
