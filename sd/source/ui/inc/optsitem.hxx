@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:17:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,10 @@ private:
     // #90356#
     BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
 
+    sal_Bool    bPreviewNewEffects;
+    sal_Bool    bPreviewChangedEffects;
+    sal_Bool    bPreviewTransitions;
+
     /** This value controls the device to use for formatting documents.
         The currently supported values are 0 for the current printer or 1
         for the printer independent virtual device the can be retrieved from
@@ -382,6 +386,10 @@ public:
     ULONG   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
     ULONG   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
 
+    sal_Bool    IsPreviewNewEffects() const { Init(); return bPreviewNewEffects; }
+    sal_Bool    IsPreviewChangedEffects() const { Init(); return bPreviewChangedEffects; }
+    sal_Bool    IsPreviewTransitions() const { Init(); return bPreviewTransitions; }
+
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
     void    SetMoveOnlyDragging( BOOL bOn = TRUE ) { if( bMoveOnlyDragging != bOn ) { OptionsChanged(); bMoveOnlyDragging = bOn; } }
@@ -410,6 +418,10 @@ public:
     // #97016#
     void    SetDefaultObjectSizeWidth( ULONG nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
     void    SetDefaultObjectSizeHeight( ULONG nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
+
+    void    SetPreviewNewEffects( sal_Bool bOn )  { if( bPreviewNewEffects != bOn ) { OptionsChanged(); bPreviewNewEffects = bOn; } }
+    void    SetPreviewChangedEffects( sal_Bool bOn )  { if( bPreviewChangedEffects != bOn ) { OptionsChanged(); bPreviewChangedEffects = bOn; } }
+    void    SetPreviewTransitions( sal_Bool bOn )  { if( bPreviewTransitions != bOn ) { OptionsChanged(); bPreviewTransitions = bOn; } }
 };
 
 // -----------------------------------------------------------------------------
