@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Selection" ;
                 Text [ norwegian ] = "Selection" ;
                 Text [ italian ] = "Selezione" ;
-                Text [ portuguese_brazilian ] = "Sele??o" ;
+                Text [ portuguese_brazilian ] = "Sele��o" ;
                 Text [ portuguese ] = "Selec��o" ;
                 Text [ finnish ] = "Valinta" ;
                 Text [ danish ] = "Marker" ;
@@ -112,6 +112,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Selecci�";
                 Text[ thai ] = "การเลือก";
+                Text[ czech ] = "Výběr";
+                Text[ hebrew ] = "‮מבחר‬";
+                Text[ hindi ] = "चुनाव";
             };
             ToolBoxItem
             {
@@ -143,6 +146,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nia";
                 Text[ thai ] = "เส้น";
+                Text[ czech ] = "Úsečka";
+                Text[ hebrew ] = "‮קו‬";
+                Text[ hindi ] = "रेखा";
             };
             ToolBoxItem
             {
@@ -153,7 +159,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Rectangle" ;
                 Text [ norwegian ] = "Rectangle" ;
                 Text [ italian ] = "Rettangolo" ;
-                Text [ portuguese_brazilian ] = "Ret?ngulo" ;
+                Text [ portuguese_brazilian ] = "Ret�ngulo" ;
                 Text [ portuguese ] = "Rect�ngulo" ;
                 Text [ finnish ] = "Suorakulmio" ;
                 Text [ danish ] = "Rektangel" ;
@@ -174,6 +180,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Rectangle";
                 Text[ thai ] = "สี่เหลี่ยม";
+                Text[ czech ] = "Obdélník";
+                Text[ hebrew ] = "‮מלבן‬";
+                Text[ hindi ] = "आयत";
             };
             ToolBoxItem
             {
@@ -206,6 +215,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Elipse";
                 Text[ thai ] = "วงรี";
+                Text[ czech ] = "Elipsa";
+                Text[ hebrew ] = "‮אליפסה‬";
+                Text[ hindi ] = "दीर्घवृत्त";
             };
             ToolBoxItem
             {
@@ -216,7 +228,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Polygon" ;
                 Text [ norwegian ] = "Polygon" ;
                 Text [ italian ] = "Poligono" ;
-                Text [ portuguese_brazilian ] = "Pol?gono" ;
+                Text [ portuguese_brazilian ] = "Pol�gono" ;
                 Text [ portuguese ] = "Pol�gono" ;
                 Text [ finnish ] = "Monikulmio" ;
                 Text [ danish ] = "Polygon" ;
@@ -237,6 +249,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pol�gon";
                 Text[ thai ] = "หลายเหลี่ยม";
+                Text[ czech ] = "Mnohoúhelník";
+                Text[ hebrew ] = "‮רב צלעות‬";
+                Text[ hindi ] = "बहुभुज क्षेत्र";
             };
             ToolBoxItem
             {
@@ -257,15 +272,18 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ danish ] = "Kurve";
                 Text[ swedish ] = "Kurva";
                 Text[ polish ] = "Krzywa";
-                Text[ portuguese_brazilian ] = "Bezier";
+                Text[ portuguese_brazilian ] = "Curva";
                 Text[ japanese ] = "曲線";
                 Text[ korean ] = "곡선";
                 Text[ chinese_simplified ] = "曲线";
                 Text[ chinese_traditional ] = "曲線";
-                Text[ turkish ] = "Bezier";
+                Text[ turkish ] = "E�ri";
                 Text[ arabic ] = "B�zier";
                 Text[ catalan ] = "B�zier";
                 Text[ thai ] = "โค้ง";
+                Text[ czech ] = "Křivka";
+                Text[ hebrew ] = "‮עקומה‬";
+                Text[ hindi ] = "वक्र";
             };
             ToolBoxItem
             {
@@ -285,16 +303,19 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ italian ] = "Mano libera";
                 Text[ danish ] = "Frih�ndslinje";
                 Text[ swedish ] = "Frihandslinje";
-                Text[ polish ] = "Linia narysowana odr�cznie";
-                Text[ portuguese_brazilian ] = "Freihand";
+                Text[ polish ] = "Linia odr�czna";
+                Text[ portuguese_brazilian ] = "Linha de M�o-Livre";
                 Text[ japanese ] = "フリーハンドの曲線";
                 Text[ korean ] = "자유형 선";
                 Text[ chinese_simplified ] = "自由形线条";
                 Text[ chinese_traditional ] = "自由形線條";
-                Text[ turkish ] = "Serbest bi�im";
+                Text[ turkish ] = "Serbest �izgi";
                 Text[ arabic ] = "��";
                 Text[ catalan ] = "Forma lliure";
                 Text[ thai ] = "เส้นอิสระ";
+                Text[ czech ] = "Čára od ruky";
+                Text[ hebrew ] = "‮סרטוט חופשי‬";
+                Text[ hindi ] = "मुक्त रचित रेखा";
             };
             ToolBoxItem
             {
@@ -326,6 +347,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Arc";
                 Text[ thai ] = "ส่วนโค้งของวงกลม";
+                Text[ czech ] = "Oblouk";
+                Text[ hebrew ] = "‮קשת‬";
+                Text[ hindi ] = "चाप";
             };
             ToolBoxItem
             {
@@ -336,7 +360,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Pie" ;
                 Text [ portuguese ] = "Sectograma" ;
                 Text [ english_us ] = "Ellipse Pie" ;
-                Text [ portuguese_brazilian ] = "Torta" ;
+                Text [ portuguese_brazilian ] = "Setor de Elipse" ;
                 Text [ swedish ] = "Ellipssektor" ;
                 Text [ danish ] = "Ellipsesektor" ;
                 Text [ italian ] = "Settore di cerchio" ;
@@ -356,6 +380,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ catalan ] = "Sector d'elipse";
                 Text[ finnish ] = "Soikion lohko";
                 Text[ thai ] = "วงรีพาย";
+                Text[ czech ] = "Eliptická výseč";
+                Text[ hebrew ] = "‮עוגה אליפסית‬";
+                Text[ hindi ] = "दीर्घवृत्त पइ";
             };
             ToolBoxItem
             {
@@ -366,7 +393,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Circlecut" ;
                 Text [ portuguese ] = "Segmento de c�rculo" ;
                 Text [ english_us ] = "Circle Segment" ;
-                Text [ portuguese_brazilian ] = "Circlerecortar" ;
+                Text [ portuguese_brazilian ] = "Segmento de c�rculo" ;
                 Text [ swedish ] = "Cirkelsegment" ;
                 Text [ danish ] = "Cirkelsegment" ;
                 Text [ italian ] = "Segmento di cerchio" ;
@@ -386,6 +413,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ catalan ] = "Segment del cercle";
                 Text[ finnish ] = "Ympyr�n segmentti";
                 Text[ thai ] = "ส่วนของวงกลม";
+                Text[ czech ] = "Kruhová úseč";
+                Text[ hebrew ] = "‮מיקטע עיגול‬";
+                Text[ hindi ] = "वृत्त खण्ड";
             };
             ToolBoxItem
             {
@@ -417,6 +447,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Text";
                 Text[ thai ] = "ข้อความ";
+                Text[ czech ] = "Text";
+                Text[ hebrew ] = "‮טקסט‬";
+                Text[ hindi ] = "टेक्स्ट्";
             };
             ToolBoxItem
             {
@@ -435,17 +468,20 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ italian ] = "Testo verticale";
                 Text[ danish ] = "Lodret tekst";
                 Text[ swedish ] = "Vertikal text";
-                Text[ polish ] = "Pionowy tekst";
-                Text[ portuguese_brazilian ] = "Vertical Text";
+                Text[ polish ] = "Tekst w pionie";
+                Text[ portuguese_brazilian ] = "Texto Vertical";
                 Text[ japanese ] = "縦書きテキスト";
                 Text[ korean ] = "세로 쓰기 텍스트";
                 Text[ chinese_simplified ] = "直式文字";
                 Text[ chinese_traditional ] = "直式文字";
-                Text[ turkish ] = "Vertical Text";
+                Text[ turkish ] = "Dikey metin";
                 Text[ arabic ] = "�� �����";
                 Text[ catalan ] = "Text vertical";
                 Text[ finnish ] = "Pystysuuntainen teksti";
                 Text[ thai ] = "ข้อความแนวตั้ง";
+                Text[ czech ] = "Svislý text";
+                Text[ hebrew ] = "‮טקסט אנכי‬";
+                Text[ hindi ] = "लम्ब टेक्स्ट्";
             };
             ToolBoxItem
             {
@@ -456,7 +492,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Marquee" ;
                 Text [ portuguese ] = "Texto animado" ;
                 Text [ english_us ] = "Text Animation" ;
-                Text [ portuguese_brazilian ] = "Lauftext" ;
+                Text [ portuguese_brazilian ] = "Anima��o de Texto" ;
                 Text [ swedish ] = "Animerad text" ;
                 Text [ danish ] = "Animeret tekst" ;
                 Text [ italian ] = "Testo scorrevole" ;
@@ -476,6 +512,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ catalan ] = "Animaci� de text";
                 Text[ finnish ] = "Tekstianimaatio";
                 Text[ thai ] = "การเคลื่อนไหวข้อความ";
+                Text[ czech ] = "Animovaný text";
+                Text[ hebrew ] = "‮אנימצית טקסט‬";
+                Text[ hindi ] = "टेक्स्ट् हुलास";
             };
             ToolBoxItem
             {
@@ -486,7 +525,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Caption" ;
                 Text [ norwegian ] = "Bildetekst" ;
                 Text [ italian ] = "Legenda" ;
-                Text [ portuguese_brazilian ] = "Legenda" ;
+                Text [ portuguese_brazilian ] = "Textos Explicativos" ;
                 Text [ portuguese ] = "Legenda" ;
                 Text [ finnish ] = "Kuvatekstit" ;
                 Text [ danish ] = "Forklaring" ;
@@ -497,16 +536,19 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ english_us ] = "Callouts" ;
                 Text[ chinese_simplified ] = "图例";
                 Text[ russian ] = "�������";
-                Text[ polish ] = "Legenda";
+                Text[ polish ] = "Obja�nienia";
                 Text[ japanese ] = "凡例";
                 Text[ chinese_traditional ] = "圖例";
                 Text[ greek ] = "��������";
-                Text[ korean ] = "범례";
+                Text[ korean ] = "설명선";
                 Text[ arabic ] = "����� ������";
                 Text[ turkish ] = "Belirtme �izgisi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Llegendes";
                 Text[ thai ] = "คำบรรยายภาพ";
+                Text[ czech ] = "Bubliny";
+                Text[ hebrew ] = "‮דיבורים‬";
+                Text[ hindi ] = "कॉलौट्स";
             };
             ToolBoxItem
             {
@@ -525,23 +567,26 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ italian ] = "Legenda verticale";
                 Text[ danish ] = "Lodret forklaring";
                 Text[ swedish ] = "Vertikal f�rklaring";
-                Text[ polish ] = "Pionowa legenda";
-                Text[ portuguese_brazilian ] = "Vertical Caption";
+                Text[ polish ] = "Pionowy podpis";
+                Text[ portuguese_brazilian ] = "Texto Explicativo Vertical";
                 Text[ japanese ] = "縦書き用凡例";
-                Text[ korean ] = "수직 범례";
+                Text[ korean ] = "수직 설명선";
                 Text[ chinese_simplified ] = "直式图例";
                 Text[ chinese_traditional ] = "直式圖例";
-                Text[ turkish ] = "Vertical Caption";
+                Text[ turkish ] = "Dikey Belitrme �izgisi";
                 Text[ arabic ] = "����� ������� ������";
                 Text[ catalan ] = "Llegenda vertical";
                 Text[ finnish ] = "Pystysuuntainen kuvateksti";
                 Text[ thai ] = "คำบรรยายภาพแนวตั้ง";
+                Text[ czech ] = "Svislá bublina";
+                Text[ hebrew ] = "‮דיבורים אנכיים‬";
+                Text[ hindi ] = "लम्ब कॉलौट्";
             };
         };
     };
     Text [ portuguese ] = "Fun��es de desenho" ;
     Text [ english_us ] = "Draw Functions" ;
-    Text [ portuguese_brazilian ] = "Zeichenfunktionen" ;
+    Text [ portuguese_brazilian ] = "Fun��es de Desenho" ;
     Text [ swedish ] = "Ritfunktioner" ;
     Text [ danish ] = "Tegnefunktioner" ;
     Text [ italian ] = "Funzioni di disegno" ;
@@ -550,7 +595,7 @@ FloatingWindow RID_SVXTBX_DRAW
     Text [ dutch ] = "Tekenfuncties" ;
     Text[ chinese_simplified ] = "绘图功能";
     Text[ russian ] = "������� ���������";
-    Text[ polish ] = "Funkcje graficzne";
+    Text[ polish ] = "Funkcje rysunkowe";
     Text[ japanese ] = "図形描画機能";
     Text[ chinese_traditional ] = "繪圖功能";
     Text[ greek ] = "����������� ���������";
@@ -561,6 +606,9 @@ FloatingWindow RID_SVXTBX_DRAW
     Text[ catalan ] = "Funcions de dibuix";
     Text[ finnish ] = "Piirtotoiminnot";
     Text[ thai ] = "ฟังก์ชั่นการวาดรูป";
+    Text[ czech ] = "Kreslící funkce";
+    Text[ hebrew ] = "‮פונקציות סרטוט‬";
+    Text[ hindi ] = "खींचने का फंक्शन्स";
 };
 FloatingWindow RID_SVXTBX_ALIGNMENT
 {
@@ -597,7 +645,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ ENGLISH ] = "Left" ;
                 Text [ norwegian ] = "Left" ;
                 Text [ italian ] = "Sinistra" ;
-                Text [ portuguese_brazilian ] = "A Esquerda" ;
+                Text [ portuguese_brazilian ] = "Esquerda" ;
                 Text [ portuguese ] = "Esquerda" ;
                 Text [ finnish ] = "Vasen" ;
                 Text [ danish ] = "Venstre" ;
@@ -618,6 +666,9 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Esquerra";
                 Text[ thai ] = "ซ้าย";
+                Text[ czech ] = "Vlevo";
+                Text[ hebrew ] = "‮שמאל‬";
+                Text[ hindi ] = "बायाँ";
             };
             ToolBoxItem
             {
@@ -627,7 +678,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ ENGLISH ] = "Centered" ;
                 Text [ norwegian ] = "Centered" ;
                 Text [ italian ] = "Centrato" ;
-                Text [ portuguese_brazilian ] = "Centralizado" ;
+                Text [ portuguese_brazilian ] = "Centro" ;
                 Text [ portuguese ] = "Centrado" ;
                 Text [ finnish ] = "Keskell�" ;
                 Text [ danish ] = "Centreret" ;
@@ -648,6 +699,9 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Centre";
                 Text[ thai ] = "ตรงกลาง";
+                Text[ czech ] = "Na střed";
+                Text[ hebrew ] = "‮מרכז‬";
+                Text[ hindi ] = "केन्द्र";
             };
             ToolBoxItem
             {
@@ -657,7 +711,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ ENGLISH ] = "Right" ;
                 Text [ norwegian ] = "Right" ;
                 Text [ italian ] = "Destra" ;
-                Text [ portuguese_brazilian ] = "A Direita" ;
+                Text [ portuguese_brazilian ] = "Direita" ;
                 Text [ portuguese ] = "Direita" ;
                 Text [ finnish ] = "Oikea" ;
                 Text [ danish ] = "H�jre" ;
@@ -678,6 +732,9 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Dreta";
                 Text[ thai ] = "ขวา";
+                Text[ czech ] = "Vpravo";
+                Text[ hebrew ] = "‮ימין‬";
+                Text[ hindi ] = "दाहिना";
             };
             ToolBoxItem
             {
@@ -687,7 +744,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ ENGLISH ] = "Top" ;
                 Text [ norwegian ] = "Top" ;
                 Text [ italian ] = "Sopra" ;
-                Text [ portuguese_brazilian ] = "Topo" ;
+                Text [ portuguese_brazilian ] = "Em cima" ;
                 Text [ portuguese ] = "Em cima" ;
                 Text [ finnish ] = "Yl�reuna" ;
                 Text [ danish ] = "�verst" ;
@@ -698,7 +755,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Top" ;
                 Text[ chinese_simplified ] = "向上";
                 Text[ russian ] = "������";
-                Text[ polish ] = "W g�rze";
+                Text[ polish ] = "U g�ry";
                 Text[ japanese ] = "上";
                 Text[ chinese_traditional ] = "向上";
                 Text[ greek ] = "����";
@@ -708,6 +765,9 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Superior";
                 Text[ thai ] = "บน";
+                Text[ czech ] = "Nahoru";
+                Text[ hebrew ] = "‮למעלה‬";
+                Text[ hindi ] = "ऊपर";
             };
             ToolBoxItem
             {
@@ -738,6 +798,9 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Centrat";
                 Text[ thai ] = "ตรงกลาง";
+                Text[ czech ] = "Na střed";
+                Text[ hebrew ] = "‮ממורכז‬";
+                Text[ hindi ] = "केन्द्रित";
             };
             ToolBoxItem
             {
@@ -747,7 +810,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ ENGLISH ] = "Bottom" ;
                 Text [ norwegian ] = "Bottom" ;
                 Text [ italian ] = "Sotto" ;
-                Text [ portuguese_brazilian ] = "Base" ;
+                Text [ portuguese_brazilian ] = "Em baixo" ;
                 Text [ portuguese ] = "Em baixo" ;
                 Text [ finnish ] = "Alareuna" ;
                 Text [ danish ] = "Nederst" ;
@@ -758,7 +821,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Bottom" ;
                 Text[ chinese_simplified ] = "向下";
                 Text[ russian ] = "�����";
-                Text[ polish ] = "W dole";
+                Text[ polish ] = "U do�u";
                 Text[ japanese ] = "下";
                 Text[ chinese_traditional ] = "向下";
                 Text[ greek ] = "����";
@@ -768,6 +831,9 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Part inferior";
                 Text[ thai ] = "ล่าง";
+                Text[ czech ] = "Dolů";
+                Text[ hebrew ] = "‮למטה‬";
+                Text[ hindi ] = "नीचे";
             };
         };
     };
@@ -783,8 +849,20 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineament";
     Text[ thai ] = "จัดตำแหน่ง";
+    Text[ czech ] = "Zarovnání";
+    Text[ hebrew ] = "‮יישור‬";
+    Text[ hindi ] = "पंक्तिकरण";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
