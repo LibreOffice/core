@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,11 @@ class SvtAccessibilityOptions;
 // OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
 
+// OD 24.03.2003 #108282# - delete member <mnVirtPage> and its accessor.
 class SwPagePreViewWin : public Window
 {
     ViewShell*          mpViewShell;
-    USHORT              mnSttPage, mnVirtPage;
+    USHORT              mnSttPage;
     BYTE                mnRow, mnCol;
     Size                maPxWinSize;
     Fraction            maScale;
@@ -132,10 +133,8 @@ public:
     BYTE    GetCol() const      { return mnCol; }
     void    SetCol( BYTE n )    { if( n ) mnCol = n; }
 
-    USHORT  GetVirtPage() const     { return mnVirtPage; }
     USHORT  GetSttPage() const      { return mnSttPage; }
-    void    SetSttPage( USHORT n )
-        { mnSttPage = mnVirtPage = n; if( !n ) ++mnVirtPage; }
+    void    SetSttPage( USHORT n )  { mnSttPage = n; }
 
     /** get selected page number of document preview
 
