@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:19:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ using namespace ::com::sun::star::uno;
 
 #define FILETYPE_TEXT       1
 #define FILETYPE_GRF        2
+#define FILETYPE_OBJECT     3
 
 class SvxFileObjProgress_Impl : public SfxProgress
 {
@@ -321,6 +322,10 @@ JP 28.02.96: noch eine Baustelle:
             }
         }
         break;
+    case FILETYPE_OBJECT:
+        // TODO/LATER: possibility to insert a new object
+        rData <<= rtl::OUString( sFileNm );
+        break;
     }
     return sal_True/*0 != aTypeList.Count()*/;
 }
@@ -359,6 +364,11 @@ BOOL SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 
     case OBJECT_CLIENT_FILE:
         nType = FILETYPE_TEXT;
+        break;
+
+    case OBJECT_CLIENT_OLE:
+        nType = FILETYPE_OBJECT;
+        // TODO/LATER: introduce own type to be used for exchanging
         break;
 
     default:
@@ -548,6 +558,29 @@ String SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink )
                 sFile.Erase();
         }
         break;
+
+    case OBJECT_CLIENT_OLE:
+        {
+            nType = FILETYPE_OBJECT;        // falls noch nicht gesetzt
+            Window* pOld = Application::GetDefDialogParent();
+            Application::SetDefDialogParent( pParent );
+
+            SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, String() );
+            if( xMed.Is() )
+            {
+                sFile = xMed->GetName();
+                sFile += ::sfx2::cTokenSeperator;
+// Bereich!         sFile += xMed->GetFilter()->GetName();
+                sFile += ::sfx2::cTokenSeperator;
+                sFile += xMed->GetFilter()->GetFilterName();
+            }
+            else
+                sFile.Erase();
+
+            Application::SetDefDialogParent( pOld );
+        }
+        break;
+
     case OBJECT_CLIENT_FILE:
         {
             nType = FILETYPE_TEXT;      // falls noch nicht gesetzt
