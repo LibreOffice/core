@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:48:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,11 +668,6 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
         if ( xModel.is() )
         {
             SfxItemSet *pSet = GetMedium()->GetItemSet();
-/*
-            const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
-            if ( pFilter )
-                pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
-*/
             uno::Sequence< beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
@@ -683,7 +678,9 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             impl_addToModelCollection(xModel);
         }
 
+        pImp->bInitialized = sal_True;
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, this ) );
         return sal_True;
     }
 
@@ -3425,7 +3422,18 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
         const ::rtl::OUString* pSubElements = aSubElements.getConstArray();
         for ( sal_Int32 nInd = 0; nInd < aSubElements.getLength(); nInd++ )
         {
-            if ( xSource->isStorageElement( aSubElements[nInd] ) )
+            if ( aSubElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ) ) ) )
+            {
+                // The workaround for compatibility with SO7, "Configurations" substorage must be preserved
+                if ( xSource->isStorageElement( aSubElements[nInd] ) )
+                {
+                    OSL_ENSURE( !xTarget->hasByName( aSubElements[nInd] ),
+                                "The target storage is an output storage, the element should not exist in the target!\n" );
+
+                    xSource->copyElementTo( aSubElements[nInd], xTarget, aSubElements[nInd] );
+                }
+            }
+            else if ( xSource->isStorageElement( aSubElements[nInd] ) )
             {
                 uno::Reference< embed::XStorage > xSubStorage;
                 try {
