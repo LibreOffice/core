@@ -47,11 +47,14 @@ public class MethodThread extends Thread {
         }
         catch(java.lang.reflect.InvocationTargetException e) {
             Throwable t = e.getTargetException();
-            if (!(t instanceof StatusException)) {
+            if (!(t instanceof ComplexTestCase.AssureException)) {
                 t.printStackTrace(mLog);
                 mErrMessage = t.getMessage();
+                if (mErrMessage == null)
+                    mErrMessage = t.toString();
                 mExceptionHappened = true;
             }
+
         }
     }
 
