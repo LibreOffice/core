@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleRegistry.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:26:53 $
+ *  last change:$Date: 2003-09-08 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,19 @@
 
 package mod._simreg;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
@@ -104,14 +106,14 @@ public class SimpleRegistry extends TestCase {
             throws java.io.IOException {
         File srcF = new File(src) ;
         File dstF = new File(dst) ;
-        System.out.println("H1");
+        log.println("H1");
 
         if (dstF.exists()) dstF.delete() ;
-        System.out.println("H2");
+        log.println("H2");
         dstF.createNewFile() ;
 
         dstF.deleteOnExit() ;
-        System.out.println("H3");
+        log.println("H3");
 
         FileInputStream fIn = new FileInputStream(srcF) ;
         System.out.println("H4");
