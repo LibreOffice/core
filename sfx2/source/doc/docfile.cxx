@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: as $ $Date: 2002-08-22 10:07:56 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 10:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,13 +1530,9 @@ void SfxMedium::GetMedium_Impl()
             SFX_ITEMSET_ARG( GetItemSet(), pContentTypeItem, SfxStringItem, SID_CONTENT_TYPE, sal_False);
             SFX_ITEMSET_ARG( GetItemSet(), pRefererItem, SfxStringItem, SID_REFERER, sal_False);
 
-            Sequence < PropertyValue > aProps(1);
             ::rtl::OUString aReferer;
             if ( pRefererItem )
                 aReferer = pRefererItem->GetValue();
-
-            aProps[0].Name = ::rtl::OUString::createFromAscii("Referer");
-            aProps[0].Value <<= aReferer;
 
             if ( pPostDataItem )
             {
@@ -1570,11 +1566,11 @@ void SfxMedium::GetMedium_Impl()
                     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > aTempHandler =
                             new SfxMediumHandler_Impl( xInteractionHandler );
                     pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, nStorOpenMode, aTempHandler );
+                        GetContent(), Sequence < PropertyValue >(), nStorOpenMode, aTempHandler );
                 }
                 else
                     pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, nStorOpenMode, xInteractionHandler, bIsWritable ? NULL : pHandler );
+                        GetContent(), Sequence < PropertyValue >(), nStorOpenMode, xInteractionHandler, bIsWritable ? NULL : pHandler );
             }
 
             if ( !pImp->xLockBytes.Is() )
@@ -1595,7 +1591,7 @@ void SfxMedium::GetMedium_Impl()
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, SFX_STREAM_READONLY, xInteractionHandler, pHandler );
+                        GetContent(), Sequence < PropertyValue >(), SFX_STREAM_READONLY, xInteractionHandler, pHandler );
 
                 if ( !pHandler && !pImp->bDownloadDone )
                     Done_Impl( pImp->xLockBytes->GetError() );
