@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 11:20:34 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 14:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include "fwkutil.hxx"
 
 
-#define JAVASETTINGS "javasettings.xml"
+#define JAVASETTINGS "javasettings"
 #define VENDORSETTINGS "javavendors.xml"
 #define USE_ACCESSIBILITY_FILE "useatjava.txt"
 /** The vector contains on return file urls to the plugins.
@@ -164,6 +164,55 @@ rtl::OUString retrieveClassPath( ::rtl::OUString const & macro )
         }
     }
     while (index >= 0);
+    return buf.makeStringAndClear();
+}
+
+//ToDo we should use a SAL function to determine which platform and OS we are working on.
+rtl::OUString getPlatform()
+{
+    char * szArchitecture =
+#if defined SPARC
+    "sparc";
+#elif defined INTEL
+    "x86";
+#elif defined POWERPC
+    "ppc";
+#elif defined MIPS
+    "mips";
+#elif defined S390
+    "s390";
+#else
+#error unknown plattform
+#endif
+
+    char * szOS =
+
+#if defined WNT
+        "wnt";
+#elif defined  SOLARIS
+    "solaris";
+#elif defined LINUX
+    "linux";
+#elif defined MACOSX
+    "macosx";
+#elif defined FREEBSD
+    "freebsd";
+#elif defined NETBSD
+    "netbsd";
+#elif defined AIX
+    "aix";
+#else
+#error unknown operating system
+#endif
+    rtl::OUStringBuffer buf(256);
+    buf.appendAscii("_");
+    rtl::OUString sOS = rtl::OStringToOUString(
+        rtl::OString(szOS), RTL_TEXTENCODING_UTF8);
+    buf.append(sOS);
+    buf.appendAscii("_");
+    rtl::OUString sArch = rtl::OStringToOUString(
+        rtl::OString(szArchitecture), RTL_TEXTENCODING_UTF8);
+    buf.append(sArch);
     return buf.makeStringAndClear();
 }
 
@@ -272,11 +321,13 @@ rtl::OUString getUserSettingsURL()
 
     if (sUserDir.getLength() == 0)
         return rtl::OUString();
-
-    rtl::OUString sSettings(
-        sUserDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user/config/")) +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(JAVASETTINGS)));
-    return sSettings;
+    rtl::OUStringBuffer sSettingsBuffer(512);
+    sSettingsBuffer.append(sUserDir);
+    sSettingsBuffer.appendAscii("/user/config/");
+    sSettingsBuffer.appendAscii(JAVASETTINGS);
+    sSettingsBuffer.append(getPlatform());
+    sSettingsBuffer.appendAscii(".xml");
+    return sSettingsBuffer.makeStringAndClear();
 }
 
 rtl::OString getUserSettingsPath()
@@ -300,8 +351,9 @@ rtl::OUString getSharedSettingsURL()
     sBufSettings.append(sBase);
     sBufSettings.appendAscii("/share/config/");
     sBufSettings.appendAscii(JAVASETTINGS);
+    sBufSettings.append(getPlatform());
+    sBufSettings.appendAscii(".xml");
     return sBufSettings.makeStringAndClear();
-
 }
 
 rtl::OString getSharedSettingsPath()

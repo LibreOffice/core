@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 12:46:47 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 14:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     //added manually
     jfw::CNodeJava node;
     errcode = node.loadFromSettings();
-//     if (errcode != JFW_E_NONE)
-//         return errcode;
+    if (errcode != JFW_E_NONE)
+        return errcode;
 
     const std::vector<rtl::OString>& vecJRELocations =
         node.getJRELocations();

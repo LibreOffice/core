@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 14:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,8 @@ javaFrameworkError CNodeJava::loadUserSettings()
 {
     javaFrameworkError errcode = JFW_E_NONE;
     CXmlDocPtr docUser;
+
+    javaFrameworkError err = prepareSettingsDocument();
 
     //Read the user elements
     rtl::OString sSettingsPath = jfw::getUserSettingsPath();
