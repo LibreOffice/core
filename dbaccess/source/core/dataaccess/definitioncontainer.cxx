@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-25 12:43:09 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -271,10 +277,6 @@ void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName,
     if (!xNewFlushable.is())
         throw IllegalArgumentException();
 
-    // the configuration does not support different types of operations in one transaction, so we must commit
-    // before and after we create the new node, to ensure, that every transaction we ever do contains only
-    // one type of operation (insert, remove, update)
-    OSL_VERIFY(m_aConfigurationNode.commit());
     OConfigurationNode aObjectNode = m_aConfigurationNode.createNode(_rName);
     OSL_VERIFY(m_aConfigurationNode.commit());
 
@@ -631,10 +633,6 @@ void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
     }
 
     m_aDocumentObjectKeys.erase(_rName);
-    // the configuration does not support different types of operations in one transaction, so we must commit
-    // before and after we create the new node, to ensure, that every transaction we ever do contains only
-    // one type of operation (insert, remove, update)
-    OSL_VERIFY(m_aConfigurationNode.commit());
     m_aConfigurationNode.removeNode(_rName);
     OSL_VERIFY(m_aConfigurationNode.commit());
 }
@@ -690,17 +688,9 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
     _rNewObjectNode.clear();
     // update the configuration
     // clear all old data
-    // the configuration does not support different types of operations in one transaction, so we must commit
-    // before and after we create the new node, to ensure, that every transaction we ever do contains only
-    // one type of operation (insert, remove, update)
-    OSL_VERIFY(m_aConfigurationNode.commit());
     m_aConfigurationNode.removeNode(_rName);
     OSL_VERIFY(m_aConfigurationNode.commit());
 
-    // the configuration does not support different types of operations in one transaction, so we must commit
-    // before and after we create the new node, to ensure, that every transaction we ever do contains only
-    // one type of operation (insert, remove, update)
-    OSL_VERIFY(m_aConfigurationNode.commit());
     _rNewObjectNode = m_aDocumentObjectKeys[_rName] = m_aConfigurationNode.createNode(_rName);
     OSL_VERIFY(m_aConfigurationNode.commit());
 }
@@ -713,9 +703,9 @@ void ODefinitionContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw 
 
     if (_bIntendWriteAccess && isReadOnly())
         DisposedException(
-            ::rtl::OUString::createFromAscii("You have no write access to the configuration tree the object is based on."),
-                // TODO : put this into a resource
-            Reference< XInterface >(const_cast<XServiceInfo*>(static_cast<const XServiceInfo*>(this))));
+            DBACORE_RESSTRING(RID_STR_NEED_CONFIG_WRITE_ACCESS),
+            Reference< XInterface >(const_cast<XServiceInfo*>(static_cast<const XServiceInfo*>(this)))
+        );
 
     DBG_ASSERT( (m_aDocuments.size() == m_aDocumentObjectKeys.size()) &&
                 (m_aDocuments.size() == m_aDocumentMap.size()),
