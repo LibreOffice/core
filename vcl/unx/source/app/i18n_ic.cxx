@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-12 11:58:47 $
+ *  last change: $Author: cp $ $Date: 2001-06-26 11:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,11 @@ SalI18N_InputContext::~SalI18N_InputContext()
         XFree( mpStatusAttributes );
     if ( mpPreeditAttributes != NULL )
         XFree( mpPreeditAttributes );
+
+    if (maClientData.aText.pUnicodeBuffer != NULL)
+          free(maClientData.aText.pUnicodeBuffer);
+    if (maClientData.aText.pCharStyle != NULL)
+        free(maClientData.aText.pUnicodeBuffer);
 }
 
 // ----------------------------------------------------------------------------
@@ -196,14 +201,17 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
         XLIB_Window  aFocusWindow  = pFrame->maFrameData.GetWindow();
 
         // for status callbacks and commit string callbacks
+        #define PREEDIT_BUFSZ 16
         maClientData.bIsMultilingual        = mbMultiLingual;
         maClientData.eState                 = ePreeditStatusStartPending;
         maClientData.pFrame                 = pFrame;
-          maClientData.aText.pUnicodeBuffer     = NULL;
-          maClientData.aText.pCharStyle         = NULL;
+          maClientData.aText.pUnicodeBuffer     =
+                            (sal_Unicode*)malloc(PREEDIT_BUFSZ * sizeof(sal_Unicode));
+          maClientData.aText.pCharStyle         =
+                            (XIMFeedback*)malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback));;
+          maClientData.aText.nSize              = PREEDIT_BUFSZ;
           maClientData.aText.nCursorPos         = 0;
           maClientData.aText.nLength            = 0;
-          maClientData.aText.nSize              = 0;
 
         //
         // Status attributes
