@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:10:58 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _OPTLOAD_HXX
 #include <optload.hxx>
+#endif
+#ifndef _OPTCOMP_HXX
+#include <optcomp.hxx>
 #endif
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
@@ -321,7 +324,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                 pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, (USHORT)::GetTabDist(rDefTabs)));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, pPref->GetDefTab()));
+            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, (UINT16)pPref->GetDefTab()));
     }
 
     /*-----------------01.02.97 11.13-------------------
@@ -596,11 +599,11 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 /* -----------------12.02.99 12:28-------------------
  *
  * --------------------------------------------------*/
-SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*  pRet = 0;
+    SfxTabPage* pRet = NULL;
 
-    switch(nId)
+    switch( nId )
     {
         case RID_SW_TP_CONTENT_OPT:
         case RID_SW_TP_HTML_CONTENT_OPT:
@@ -657,12 +660,14 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         break;
         case RID_SW_TP_REDLINE_OPT:     pRet = SwRedlineOptionsTabPage::Create(pParent, rSet); break;
         case RID_SW_TP_OPTLOAD_PAGE:    pRet = SwLoadOptPage::Create(pParent, rSet); break;
+        case RID_SW_TP_OPTCOMPATIBILITY_PAGE:   pRet = SwCompatibilityOptPage::Create(pParent, rSet); break;
 #ifndef PRODUCT
         case  RID_SW_TP_OPTTEST_PAGE:   pRet = SwTestTabPage::Create(pParent, rSet); break;
 #endif
         case  RID_SW_TP_BACKGROUND:     pRet = SvxBackgroundTabPage::Create(pParent, rSet); break;
     }
-    DBG_ASSERT(pRet, "Id unbekannt")
+
+    DBG_ASSERT( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" )
     return pRet;
 }
 
