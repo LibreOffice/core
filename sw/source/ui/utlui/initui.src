@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:38:58 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,7 +964,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_simplified ] = "ΙΟÒ»΄Ξ΄ςΣ΅";
         TEXT[ russian ] = "Οξρλεδνÿÿ πΰροεχΰςκΰ";
         TEXT[ polish ] = "Ostatni wydruk";
-        TEXT[ japanese ] = "Εγ‚Ι‚µ‚½σό";
+        TEXT[ japanese ] = "‘O‰ρ‚Μσό";
         TEXT[ chinese_traditional ] = "¤W¤@¦Έ¦C¦L";
         TEXT[ arabic ] = "ΗαΨΘΗΪΙ ΗαΓΞνΡΙ";
         TEXT[ greek ] = "Τελευταία εκτύπωση";
