@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 12:14:16 $
+ *  last change: $Author: ka $ $Date: 2001-12-05 12:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,9 +1232,22 @@ BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectSGF( SvStream& rStm, BOOL bExtendedInfo )
 {
-    BOOL bRet;
+    BOOL bRet = FALSE;
 
-    if ( bRet = ( aPathExt.CompareToAscii( "sgf",3 ) == COMPARE_EQUAL ) )
+    if( aPathExt.CompareToAscii( "sgf", 3 ) == COMPARE_EQUAL )
+        bRet = TRUE;
+    else
+    {
+        BYTE nFirst, nSecond;
+
+        rStm.Seek( nStmPos );
+        rStm >> nFirst >> nSecond;
+
+        if( nFirst == 'J' && nSecond == 'J' )
+            bRet = TRUE;
+    }
+
+    if( bRet )
         nFormat = GFF_SGF;
 
     return bRet;

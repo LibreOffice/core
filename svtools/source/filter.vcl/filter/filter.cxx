@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-08 16:19:10 $
+ *  last change: $Author: ka $ $Date: 2001-12-05 12:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,6 +755,17 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
         bSomethingTested = TRUE;
         if( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL )
             return TRUE;
+    }
+
+    //--------------------------- SGF ------------------------------------
+    if( !bTest || ( rFormatExtension.CompareToAscii( "SGF", 3 ) == COMPARE_EQUAL ) )
+    {
+        bSomethingTested=TRUE;
+        if( sFirstBytes[ 0 ] == 'J' && sFirstBytes[ 1 ] == 'J' )
+        {
+            rFormatExtension = UniString::CreateFromAscii( "SGF", 3 );
+            return TRUE;
+        }
     }
 
     return bTest && !bSomethingTested;
