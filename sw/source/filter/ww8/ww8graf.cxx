@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-27 15:36:10 $
+ *  last change: $Author: cmc $ $Date: 2002-08-29 11:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2173,10 +2173,12 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
     return 0;
 }
 
-void SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
+RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool bOrgObjectWasReplace)
 {
-    if( pRecord )
+    ASSERT(pRecord, "No pRecord!");
+    RndStdIds eAnchor = FLY_PAGE;
+    if (pRecord)
     {
         // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
         // nYAlign - abs. Position, Top,   Centered,  Bottom, Inside, Outside
@@ -2256,8 +2258,6 @@ void SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
         UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
-
-        RndStdIds eAnchor;
 
         eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
             :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
@@ -2366,7 +2366,8 @@ void SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
                 aRelOriTab[  nYRelTo ];
             // Make an adjustment for the special case where we want to align
             // vertically to page when horizontally aligned centre to character
-            if (((pRecord->nXAlign == 1) || (pRecord->nXAlign == 2)) && (pRecord->nXRelTo == 3)
+            if (((pRecord->nXAlign == 1) ||
+                (pRecord->nXAlign == 2)) && (pRecord->nXRelTo == 3)
                 && (pRecord->nYAlign == 2) && (pRecord->nYRelTo ==1))
             {
                 eVertRel = REL_PG_PRTAREA;
@@ -2377,6 +2378,8 @@ void SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
         }
     }
+
+    return eAnchor;
 }
 
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
@@ -2547,7 +2550,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pF->nby = WW8_FSPA::RelPageBorder;
         }
 
-        RndStdIds eAnchor = FLY_AT_CNTNT;  //FLY_PAGE
+        RndStdIds eAnchor = FLY_AT_CNTNT;
         if (pF->nby != WW8_FSPA::RelText)
         {
             if( bIsHeader || bIsFooter)
@@ -2556,7 +2559,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 eAnchor = FLY_PAGE;
         }
 
-        ProcessEscherAlign( pRecord, pF, aFlySet, bReplaceable );
+        if (pRecord)
+            eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet, bReplaceable);
 
         // Should we, and is it possible to make this into a writer textbox
         if( (!(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) &&
@@ -2801,7 +2805,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eShapeType, aInnerDist );
 
-        pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet );
+        pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet);
         ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
             "Not the anchor type requested!");
 

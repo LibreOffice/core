@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-21 09:21:40 $
+ *  last change: $Author: cmc $ $Date: 2002-08-29 11:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,7 +1079,7 @@ friend class WW8FormulaControl;
         SfxAllItemSet &rSet);
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
-    void ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
+    RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
     SwFlyFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
