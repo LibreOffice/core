@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:47:23 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:11:49 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -199,7 +199,7 @@ $(EXAMPLE_NAME) : $(REGISTERFLAG) $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make $(APP1_NAME).run 
+	@echo $(MAKE) $(APP1_NAME).run 
 	@echo --------
 	@echo Before you can run the examples the components "$(QM)$(COMPONENT1_NAME)$(QM)", 
 	@echo "$(QM)$(COMPONENT2_NAME)$(QM)" and "$(QM)$(COMPONENT3_NAME)$(QM)" must be deployed. 
