@@ -2,9 +2,9 @@
  *
  *  $RCSfile: c_funct.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ class Function : public CodeEntity
 
     // Interface ary::RepositoryEntity
     virtual void        do_StoreAt(
-                            Display &           o_rOut ) const;
+                            ary::Display &      o_rOut ) const;
     virtual RCid        inq_RC() const;
     virtual const Documentation &
                         inq_Info() const;

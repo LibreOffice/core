@@ -2,9 +2,9 @@
  *
  *  $RCSfile: c_namesp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,10 @@ class Namespace : public CodeEntity,
                             std::vector< const Namespace* > &
                                                 o_rResultList ) const;
     Rid                 Search_LocalClass(
-                            const udmstri &     i_sName ) const;
+                            const String &      i_sName ) const;
+    Rid                 Search_LocalOperation(
+                            const String &      i_sName,
+                            OSid                i_nSignature ) const;
   private:
     // Interface CodeEntity
     virtual Cid         inq_Id() const;
