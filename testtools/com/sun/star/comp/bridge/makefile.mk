@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-04 07:05:17 $
+#   last change: $Author: jbu $ $Date: 2002-09-17 15:10:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,12 @@ TARGET=com_sun_star_comp_bridge
 # ------------------------------------------------------------------
 
 
-JARFILES 		= sandbox.jar ridl.jar jurt.jar
+JARFILES 		= sandbox.jar ridl.jar jurt.jar juh.jar
 
 
 JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/TestComponent.class
+    $(CLASSDIR)$/$(PACKAGE)$/TestComponent.class \
+    $(CLASSDIR)$/$(PACKAGE)$/TestComponentMain.class
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
