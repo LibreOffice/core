@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:29:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ polish ] = "Wielkie i ma砮 litery";
     TEXT[ portuguese_brazilian ] = "Change case";
     TEXT[ japanese ] = "暥帤庬偺曄姺";
-    TEXT[ korean ] = "Change case";
+    TEXT[ korean ] = "措/家巩磊";
     TEXT[ chinese_simplified ] = "变化字母和字体格式";
     TEXT[ chinese_traditional ] = "跑てダ㎝Α";
     TEXT[ turkish ] = "Change case";
