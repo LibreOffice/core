@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-01 12:45:12 $
+ *  last change: $Author: mtg $ $Date: 2001-08-01 12:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _UNOTOOLS_XTEMPFILE_HXX
-#include <unotools/XTempFile.hxx>
+#ifndef _XTEMPFILE_HXX
+#include <XTempFile.hxx>
 #endif
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>

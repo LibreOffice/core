@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-01 12:44:09 $
+ *  last change: $Author: mtg $ $Date: 2001-08-01 12:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _UNOTOOLS_XTEMPFILE_HXX
-#define _UNOTOOLS_XTEMPFILE_HXX
+#ifndef _XTEMPFILE_HXX
+#define _XTEMPFILE_HXX
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
