@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:59:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #include "stlpool.hxx"
 #include "unmovss.hxx"
 #include "sdresid.hxx"
+#include "tools/IdleDetection.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -314,6 +315,7 @@ public:
 
 private:
     Timer maDelayedPreviewCreationTimer;
+
     /** Use a vector for the queue so that we can iterate over all
         elements and remove those that became invalid.
     */
@@ -326,6 +328,9 @@ private:
 
     /// The time to wait (in milliseconds) between the creation of previews.
     static const int DELAYED_CREATION_TIMEOUT=250;
+    /// The time to wait when the system is not idle.
+    static const int DELAYED_CREATION_TIMEOUT_WHEN_NOT_IDLE=1000;
+
     DECL_LINK(DelayedPreviewCreation, Timer *);
     ::sd::DrawDocShell* LoadDocument (
         const String& sFileName,
@@ -755,8 +760,19 @@ IMPL_LINK(MasterPageContainer::Implementation,
     DelayedPreviewCreation,
     Timer*, pTimer)
 {
-    while (maRequestQueue.size()>0 && ! GetpApp()->AnyInput())
+    bool bIsShowingFullScreenShow (true);
+
+    while (maRequestQueue.size() > 0)
     {
+        // First check whether the system is idle.
+        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
+        if (nIdleState != tools::IdleDetection::IDET_IDLE)
+        {
+            if (nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE != 0)
+                bIsShowingFullScreenShow = true;
+            break;
+        }
+
         PreviewCreationRequest aRequest (maRequestQueue.front());
         maRequestQueue.pop();
 
@@ -772,7 +788,13 @@ IMPL_LINK(MasterPageContainer::Implementation,
     }
 
     if (maRequestQueue.size() > 0)
+    {
+        if (bIsShowingFullScreenShow)
+            maDelayedPreviewCreationTimer.SetTimeout (DELAYED_CREATION_TIMEOUT_WHEN_NOT_IDLE);
+        else
+            maDelayedPreviewCreationTimer.SetTimeout (DELAYED_CREATION_TIMEOUT);
         pTimer->Start();
+    }
 
     return 0;
 }
