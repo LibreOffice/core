@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-14 09:58:43 $
+ *  last change: $Author: obo $ $Date: 2004-10-13 07:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,8 +568,6 @@ void inflate_rc_template_to_file(
 
 int main(int argc, char* argv[])
 {
-    OSL_ASSERT(0);
-
     try
     {
         CommandLine cmdline(argc, argv);
