@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 11:01:46 $
+ *  last change: $Author: dbo $ $Date: 2002-10-30 11:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ import java.util.Hashtable;
  * to the java runtime system, e.g. for delaying the need of a class,
  * so that it is possible to generate it on the fly.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2002-10-29 11:01:46 $
+ * @version     $Revision: 1.8 $ $ $Date: 2002-10-30 11:10:41 $
  * @since       UDK1.0
  */
 public class Type {
@@ -170,24 +170,28 @@ public class Type {
             _typeClass = (TypeClass)__typeNameToTypeClass.get(_typeName);
 
         else {
-            if(Enum.class.isAssignableFrom(zClass)) {
-                _typeClass = TypeClass.ENUM;
-                _typeName  = zClass.getName();
-            }
-            else if(Union.class.isAssignableFrom(zClass)) {
-                _typeClass = TypeClass.UNION;
-                _typeName  = zClass.getName();
-            }
-            else if(zClass.isInterface()) {
+            if (XInterface.class.isAssignableFrom(zClass))
+            {
                 _typeClass = TypeClass.INTERFACE;
-                _typeName  = zClass.getName();
+                if (zClass.isInterface())
+                    _typeName = zClass.getName();
+                else
+                    _typeName = XInterface.class.getName();
             }
             else if(zClass.isArray()) {
                 _typeClass = TypeClass.SEQUENCE;
                 _typeName = "[]" + (new Type(_class.getComponentType()).getTypeName());
             }
+            else if(Enum.class.isAssignableFrom(zClass)) {
+                _typeClass = TypeClass.ENUM;
+                _typeName  = zClass.getName();
+            }
             else if(Throwable.class.isAssignableFrom(zClass)) {
                 _typeClass = TypeClass.EXCEPTION;
+                _typeName  = zClass.getName();
+            }
+            else if(Union.class.isAssignableFrom(zClass)) {
+                _typeClass = TypeClass.UNION;
                 _typeName  = zClass.getName();
             }
             else {
