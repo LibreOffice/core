@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-02 12:06:12 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 12:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,15 @@ String SAMPLES
     Text[ danish ] = "For at kunne udnytte dette eksempels fulde funktionsmuligheder skal der oprettes et nyt dokument p� grundlag af denne skabelon.";
     Text[ polish ] = "Aby dany przyk�ad mo�na by�o w pe�ni wykorzysta�, nale�y na podstawie danego szablonu utworzy� nowy dokument.";
     Text[ portuguese_brazilian ] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
-    Text[ japanese ] = "このｻﾝﾌﾟﾙがうまく機能させるには、このﾃﾝﾌﾟﾚｰﾄを手本に新しいﾄﾞｷｭﾒﾝﾄを作成しなければなりません。";
-    Text[ korean ] = "이 예의 기능성을 완벽하게　이용할 수 있도록 하기위해서는 이 서식 파일을 기초로 새 문서를 작성해야 합니다.";
+    Text[ japanese ] = "このサンプルの機能をうまく応用するには、このテンプレートをベースとした新しいドキュメントを作成する必要があります。";
+    Text[ korean ] = "이 예의 기능성을 완벽하게 이용할 수 있도록 하기 위해서는 이 템플릿을 기초로 새 문서를 작성해야 합니다.";
     Text[ chinese_simplified ] = "只有首先借助这个样式新建一个文档，才能充分使用示例功能。";
-    Text[ chinese_traditional ] = "要想充分利用這個樣式的各種优秀功能，您必須採用這個樣式來新建一個文件。";
+    Text[ chinese_traditional ] = "要想充分利用這個樣式的各種優秀功能，您必須採用這個樣式來新建一個文件。";
     Text[ arabic ] = "��� ������ ������� ��� ������ ��� ����� ������ ���� ����� ����� ���� �������� ��� ������.";
     Text[ turkish ] = "Bu �rne�in t�m i�levlerini kullanabilmek i�in, bu �ablon ile yeni bir belge olu�turun.";
-    Text[ catalan ] = "Para que est� disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
+    Text[ catalan ] = "Per tal d'utilitzar les funcions d'aquesta mostra al cent per cent, creeu un document a partir d'aquesta plantilla.";
     Text[ finnish ] = "Jotta voisit k�ytt�� mallin toimintoja t�ysipainoisesti, luo asiakirja t�m�n mallipohjan avulla.";
+    Text[ thai ] = "เพื่อที่จะใช้ตัวอย่างนี้อย่างเต็มสมรรถนะ, ให้สร้างเอกสารที่มีพื้นฐานบนแม่แบบนี้";
 };
 
 String SAMPLES + 1
@@ -121,8 +122,9 @@ String SAMPLES + 1
     Text[ chinese_traditional ] = "提示";
     Text[ arabic ] = "������";
     Text[ turkish ] = "Bilgi";
-    Text[ catalan ] = "Indicaci�n";
+    Text[ catalan ] = "Comentaris";
     Text[ finnish ] = "Huomautukset";
+    Text[ thai ] = "หมายเหตุ";
 };
 
 // --------------------------------------------------------------------
@@ -142,15 +144,16 @@ String STYLES
     Text[ swedish ] = "Temaurval";
     Text[ polish ] = "Wyb�r temat�w";
     Text[ portuguese_brazilian ] = "Design Selection";
-    Text[ japanese ] = "ﾃｰﾏの選択";
+    Text[ japanese ] = "テーマの選択";
     Text[ korean ] = "주제 선택";
     Text[ chinese_simplified ] = "选择主题";
     Text[ chinese_traditional ] = "選擇設計風格";
     Text[ arabic ] = "������ ��������";
     Text[ turkish ] = "Konu se�imi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecci�n de temas";
+    Text[ catalan ] = "Selecci� de temes";
     Text[ finnish ] = "Teeman valinta";
+    Text[ thai ] = "การเลือกรูปแบบ";
 };
 
 String STYLES + 1
@@ -169,14 +172,15 @@ String STYLES + 1
     Text[ swedish ] = "Fel uppstod n�r det aktuella dokumentet skulle sparas i urklippet! F�ljande �tg�rd g�r inte att �ngra.";
     Text[ polish ] = "B��d podczas tymczasowego zapisywania aktualnych dokument�w! Nast�puj�cej akcji nie mo�na cofn��.";
     Text[ portuguese_brazilian ] = "Error while temporarily saving the document! The following action cannot be undone.";
-    Text[ japanese ] = "現在のﾄﾞｷｭﾒﾝﾄをｸﾘｯﾌﾟﾎﾞｰﾄﾞに保存するときにｴﾗｰが発生しました。次のｱｸｼｮﾝは元に戻せません。";
+    Text[ japanese ] = "現在のドキュメントをクリップボードに保存するときにエラーが発生しました。次のアクションは元に戻せません。";
     Text[ korean ] = "현재 문서를 중간 저장하는 동안 오류가 발생했습니다!  연속되는 작업을 실행취소할 수 없습니다.";
     Text[ chinese_simplified ] = "在存盘当前文档时发生错误！无法取消下列操作。";
     Text[ chinese_traditional ] = "暫存文件發生錯誤！無法恢復以下的動作。";
     Text[ arabic ] = "��� ��� ����� ��� ������� ������ �� �������! �� ���� ������� �� ������� ������.";
     Text[ turkish ] = "Belgeyi panoya kaydederken hata olu�tu! Bir sonraki i�lem geri al�namaz.";
-    Text[ catalan ] = "�Ha ocurrido un error al guardar el documento actual en el portapapeles! No se puede deshacer la siguiente acci�n.";
+    Text[ catalan ] = "S'ha produ�t un error en desar el document actual al porta-retalls! La seg�ent acci� no es pot desfer.";
     Text[ finnish ] = "On ilmennyt virhe tallennettaessa asiakirjaa leikep�yd�lle! Seuraavaa toimintoa ei voi peruuttaa.";
+    Text[ thai ] = "ผิดพลาดขณะกำลังบันทึกเอกสารไปยังคลิปบอร์ด! ไม่สามารถไม่ทำการกระทำต่อไปนี้ได้";
 };
 
 String STYLES + 2
@@ -188,22 +192,23 @@ String STYLES + 2
     Text[ russian ] = "������";
     Text[ greek ] = "~�������";
     Text[ dutch ] = "~Annuleren";
-    Text[ french ] = "~Annuler";
+    Text[ french ] = "Annuler";
     Text[ spanish ] = "~Cancelar";
     Text[ italian ] = "Annulla";
-    Text[ danish ] = "Annuller";
+    Text[ danish ] = "~Annuller";
     Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "Cancel";
-    Text[ japanese ] = "ｷｬﾝｾﾙ(~C)";
+    Text[ japanese ] = "キャンセル(~C)";
     Text[ korean ] = "취소(~C)";
     Text[ chinese_simplified ] = "取消(~C)";
     Text[ chinese_traditional ] = "取消(~C)";
     Text[ arabic ] = "����� �����";
     Text[ turkish ] = "�ptal";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Cancelar";
-    Text[ finnish ] = "Cancel";
+    Text[ catalan ] = "~Cancel.la";
+    Text[ finnish ] = "~Peruuta";
+    Text[ thai ] = "~ยกเลิก";
 };
 
 String STYLES + 3
@@ -217,8 +222,8 @@ String STYLES + 3
     Text[ dutch ] = "~OK";
     Text[ french ] = "~OK";
     Text[ spanish ] = "~Aceptar";
-    Text[ italian ] = "OK";
-    Text[ danish ] = "OK";
+    Text[ italian ] = "O~K";
+    Text[ danish ] = "~OK";
     Text[ swedish ] = "~OK";
     Text[ polish ] = "OK";
     Text[ portuguese_brazilian ] = "OK";
@@ -229,8 +234,9 @@ String STYLES + 3
     Text[ arabic ] = "�����";
     Text[ turkish ] = "Tamam";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Aceptar";
-    Text[ finnish ] = "OK";
+    Text[ catalan ] = "~D'acord";
+    Text[ finnish ] = "~OK";
+    Text[ thai ] = "~ตกลง";
 };
 
 // --------------------------------------------------------------------
@@ -250,27 +256,42 @@ String AgendaDlgName
     Text[ danish ] = "Referatskabelon";
     Text[ polish ] = "Szablon protoko�u";
     Text[ portuguese_brazilian ] = "Minutes Template";
-    Text[ japanese ] = "議事録のﾃﾝﾌﾟﾚｰﾄ";
-    Text[ korean ] = "프로토콜 서식파일";
+    Text[ japanese ] = "議事録のテンプレート";
+    Text[ korean ] = "프로토콜 서식 파일";
     Text[ chinese_simplified ] = "记录样式";
     Text[ chinese_traditional ] = "協定樣式";
     Text[ arabic ] = "���� ��������";
     Text[ turkish ] = "Tutanak �ablonu";
-    Text[ catalan ] = "Plantilla de protocolo";
+    Text[ catalan ] = "Plantilla d'actes";
     Text[ finnish ] = "P�yt�kirjamallipohja";
+    Text[ thai ] = "แม่แบบบันทึกการประชุม";
 };
 
 String AgendaDlgNoCancel
 {
-    Text = "Es mu� eine Option best�tigt werden.";
+    Text = "Es muss eine Option best�tigt werden.";
     Text[English] = "An option must be selected.";
-    Text[ english_us ] = "An option must be selected.";
+    Text[ english_us ] = "An option must be confirmed.";
     Text[ portuguese ] = "� necess�rio confirmar uma op��o.";
-    Text[ dutch ] = "Er moet een optie worden geselecteer.";
-    Text[ french ] = "Une des options doit �tre accept�e.";
+    Text[ dutch ] = "Er moet een optie worden bevestigd.";
+    Text[ french ] = "Confirmation d'une option requise.";
     Text[ spanish ] = "Debe confirmar una opci�n.";
-    Text[ italian ] = "Si deve confermare una opzione.";
+    Text[ italian ] = "� necessario confermare una opzione.";
     Text[ swedish ] = "Ett alternativ m�ste bekr�ftas.";
+    Text[ russian ] = "���������� ����������� ��������.";
+    Text[ greek ] = "������ �� ����� ������ ���� ��������.";
+    Text[ finnish ] = "Valinta on vahvistettava.";
+    Text[ danish ] = "Du skal bekr�fte en indstilling.";
+    Text[ polish ] = "Nale�y potwierdzi� jak�� opcj�.";
+    Text[ portuguese_brazilian ] = "An option must be selected.";
+    Text[ japanese ] = "オプションの1つは選択してください。";
+    Text[ korean ] = "옵션을 확인해야 합니다.";
+    Text[ chinese_simplified ] = "必须选择一个选项。";
+    Text[ chinese_traditional ] = "必須確定一個選項。";
+    Text[ turkish ] = "Bir se�enek onaylanmal�d�r.";
+    Text[ arabic ] = "��� ����� ��� ��������.";
+    Text[ catalan ] = "Heu de confirmar una opci�.";
+    Text[ thai ] = "ต้องยืนยันตัวเลือก";
 };
 
 String AgendaDlgFrame
@@ -289,14 +310,15 @@ String AgendaDlgFrame
     Text[ danish ] = "Referattype";
     Text[ polish ] = "Typ protoko�u";
     Text[ portuguese_brazilian ] = "Minutes Type";
-    Text[ japanese ] = "議事録のﾀｲﾌﾟ";
+    Text[ japanese ] = "議事録のタイプ";
     Text[ korean ] = "프로토콜 형식";
     Text[ chinese_simplified ] = "记录类型";
     Text[ chinese_traditional ] = "記錄類型";
     Text[ arabic ] = "��� ����������";
     Text[ turkish ] = "Tutanak tipi";
-    Text[ catalan ] = "Tipo de protocolo";
+    Text[ catalan ] = "Tipus d'acta";
     Text[ finnish ] = "P�yt�kirjatyyppi";
+    Text[ thai ] = "ชนิดบันทึกการประชุม";
 };
 
 String AgendaDlgButton1
@@ -321,8 +343,9 @@ String AgendaDlgButton1
     Text[ chinese_traditional ] = "會談結果記錄";
     Text[ arabic ] = "�������� �������";
     Text[ turkish ] = "Sonu� tutana��";
-    Text[ catalan ] = "Protocolo de resultado";
+    Text[ catalan ] = "Actes de resultats";
     Text[ finnish ] = "Tulosp�yt�kirja";
+    Text[ thai ] = "ผลบันทึกการประชุม";
 };
 
 String AgendaDlgButton2
@@ -347,8 +370,9 @@ String AgendaDlgButton2
     Text[ chinese_traditional ] = "會談過程記錄";
     Text[ arabic ] = "�������� �� �����";
     Text[ turkish ] = "De�erlendirme tutana��";
-    Text[ catalan ] = "Protocolo del transcurso";
+    Text[ catalan ] = "Protocol del transcurs";
     Text[ finnish ] = "Arviointip�yt�kirja";
+    Text[ thai ] = "ประเมินผลบันทึกการประชุม";
 };
 
 // --------------------------------------------------------------------
@@ -368,14 +392,15 @@ String CorrespondenceNoTextmark
     Text[ danish ] = "Tekstmarkeringen 'Recipient' mangler.";
     Text[ polish ] = "Brak zak�adki 'Recipient'.";
     Text[ portuguese_brazilian ] = "The Bookmark 'Recipient' is lacking.";
-    Text[ japanese ] = "ﾃｷｽﾄﾏｰｸ 'Recipient' がありません。";
+    Text[ japanese ] = "テキストマーク 'Recipient' がありません。";
     Text[ korean ] = "책갈피'Recipient'가 없습니다.";
     Text[ chinese_simplified ] = "书签 'Recipient' 不存在。";
     Text[ chinese_traditional ] = "標記<Recipient>不存在。";
     Text[ arabic ] = "������� �������� 'Recipient' �����.";
     Text[ turkish ] = "'Al�c�' Belirteci mevcut de�il.";
-    Text[ catalan ] = "Falta la marca de texto 'Recipient'.";
+    Text[ catalan ] = "Falta la marca de text 'Recipient'.";
     Text[ finnish ] = "Kirjanmerkki Vastaanottaja puuttuu.";
+    Text[ thai ] = "ตัวคั่น 'ผู้รับ' ตกหล่น";
 };
 
 String CorrespondenceNoTextmark+1
@@ -394,14 +419,15 @@ String CorrespondenceNoTextmark+1
     Text[ danish ] = "Det er ikke muligt at inds�tte brevfeltningsfelter.";
     Text[ polish ] = "Nie mo�na by�o wstawi� p�l listu seryjnego.";
     Text[ portuguese_brazilian ] = "Mail Merge fields can not be included.";
-    Text[ japanese ] = "差し込み印刷のﾌｨｰﾙﾄﾞを挿入できません。";
-    Text[ korean ] = "폼 레터 필드를 삽입하지 못했습니다.";
+    Text[ japanese ] = "差し込み印刷のフィールドを挿入できません。";
+    Text[ korean ] = "편지지 양식 필드를 삽입하지 못했습니다.";
     Text[ chinese_simplified ] = "无法插入邮件合并字段。";
     Text[ chinese_traditional ] = "無法插入郵件合併的欄位。";
     Text[ arabic ] = "�� ���� ����� ���� ���� �����.";
     Text[ turkish ] = "Standart mektup alanlar� eklenemiyor.";
-    Text[ catalan ] = "No se pueden insertar campos de cartas en serie.";
+    Text[ catalan ] = "No es poden incloure camps de carta de formulari";
     Text[ finnish ] = "Lomakekirjekenttien liitt�minen ei onnistu.";
+    Text[ thai ] = "ไม่สามารถรวมเขตข้อมูลแบบฟอร์มจดหมาย";
 };
 
 String CorrespondenceMsgError
@@ -420,7 +446,7 @@ String CorrespondenceMsgError
     Text[ danish ] = "Fejl";
     Text[ polish ] = "B��d";
     Text[ portuguese_brazilian ] = "Error";
-    Text[ japanese ] = "ｴﾗｰ";
+    Text[ japanese ] = "エラー";
     Text[ korean ] = "오류";
     Text[ chinese_simplified ] = "错误";
     Text[ chinese_traditional ] = "錯誤";
@@ -428,6 +454,7 @@ String CorrespondenceMsgError
     Text[ turkish ] = "Hata";
     Text[ catalan ] = "Error";
     Text[ finnish ] = "Virhe";
+    Text[ thai ] = "ข้อผิดพลาด";
 };
 
 String CorrespondenceDialog
@@ -443,7 +470,7 @@ String CorrespondenceDialog
     Text[ swedish ] = "Mottagare";
     Text[ russian ] = "����������";
     Text[ greek ] = "�� ���������� �� �������;";
-    Text[ danish ] = "Hvad vil du skrive?";
+    Text[ danish ] = "Modtager";
     Text[ polish ] = "Odbiorca";
     Text[ portuguese_brazilian ] = "What do you want to write?";
     Text[ japanese ] = "宛先";
@@ -452,8 +479,9 @@ String CorrespondenceDialog
     Text[ chinese_traditional ] = "收件者";
     Text[ arabic ] = "���� ���� �� ���ȿ";
     Text[ turkish ] = "Ne yazmak istiyorsunuz?";
-    Text[ catalan ] = "�Qu� desea escribir?";
-    Text[ finnish ] = "Mit� haluat kirjoittaa?";
+    Text[ catalan ] = "Destinatari";
+    Text[ finnish ] = "Saaja";
+    Text[ thai ] = "ผู้รับ";
 };
 
 String CorrespondenceDialog+1
@@ -469,7 +497,7 @@ String CorrespondenceDialog+1
     Text[ swedish ] = "En mottagare";
     Text[ russian ] = "���� ����������";
     Text[ greek ] = "���������� ��������";
-    Text[ danish ] = "Enkelt brev";
+    Text[ danish ] = "�n modtager";
     Text[ polish ] = "Pojedynczy odbiorca";
     Text[ portuguese_brazilian ] = "Single letter";
     Text[ japanese ] = "１通";
@@ -480,7 +508,8 @@ String CorrespondenceDialog+1
     Text[ turkish ] = "Tek mektup";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta individual";
-    Text[ finnish ] = "Yksitt�inen kirje";
+    Text[ finnish ] = "Yksi vastaanottaja";
+    Text[ thai ] = "ผู้รับคนเดียว";
 };
 
 String CorrespondenceDialog+2
@@ -492,21 +521,22 @@ String CorrespondenceDialog+2
     Text[ dutch ] = "Meer geadresseerden (adresdatabase)";
     Text[ french ] = "Plusieurs destinataires (BD d'adresses)";
     Text[ spanish ] = "Varios destinatarios (base de datos de direcciones)";
-    Text[ italian ] = "Pi� destinatari (database rubrica)";
+    Text[ italian ] = "Pi� destinatari (database Rubrica)";
     Text[ swedish ] = "Flera mottagare (adressdatabas)";
     Text[ russian ] = "��������� ����������� (���� ������ �������)";
     Text[ greek ] = "��������� ��������";
-    Text[ danish ] = "Brevfletningsbrev";
+    Text[ danish ] = "Flere modtagere (adressedatabase)";
     Text[ polish ] = "Kilku odbiorc�w (adresowa baza danych)";
     Text[ portuguese_brazilian ] = "Multiple letter";
-    Text[ japanese ] = "複数(ｱﾄﾞﾚｽ帳ﾃﾞｰﾀﾍﾞｰｽ)";
-    Text[ korean ] = "여러 수신인 (주소 테이터 베이스)";
+    Text[ japanese ] = "複数(アドレス帳データベース)";
+    Text[ korean ] = "여러 수신인 (주소 데이터 베이스)";
     Text[ chinese_simplified ] = "多个收件人(通讯簿数据库)";
     Text[ chinese_traditional ] = "多個收件者(地址資料庫)";
     Text[ arabic ] = "���� �����";
     Text[ turkish ] = "Standart mektup";
-    Text[ catalan ] = "Carta en serie";
-    Text[ finnish ] = "Lomakekirje";
+    Text[ catalan ] = "Carta formulari";
+    Text[ finnish ] = "Useita vastaanottajia (osoitetietokanta)";
+    Text[ thai ] = "ผู้รับหลายคน (ฐานข้อมูลที่อยู่)";
 };
 
 String CorrespondenceDialog+3
@@ -520,19 +550,20 @@ String CorrespondenceDialog+3
     Text[ dutch ] = "Gebruikmaking van sjabloon";
     Text[ french ] = "Utilisation du mod�le";
     Text[ spanish ] = "Uso de la plantilla";
-    Text[ finnish ] = "Use of this template";
+    Text[ finnish ] = "Mallipohjan k�ytt�";
     Text[ italian ] = "Uso del modello";
-    Text[ danish ] = "Use of this template";
+    Text[ danish ] = "Anvendelse af skabelonen";
     Text[ swedish ] = "Anv�ndning av den h�r mallen";
     Text[ polish ] = "Zastosowanie szablonu";
     Text[ portuguese_brazilian ] = "Use of this template";
-    Text[ japanese ] = "ﾃﾝﾌﾟﾚｰﾄを使用";
+    Text[ japanese ] = "テンプレートを使用";
     Text[ korean ] = "이 템플릿의 사용";
     Text[ chinese_simplified ] = "使用样式";
     Text[ chinese_traditional ] = "使用樣式";
     Text[ turkish ] = "Use of this template";
     Text[ arabic ] = "Use of this template";
-    Text[ catalan ] = "Use of this template";
+    Text[ catalan ] = "�s d'aquesta plantilla";
+    Text[ thai ] = "ใช้แม่แบบนี้";
 };
 
 
@@ -548,19 +579,20 @@ String CorrespondenceFields
     Text[ dutch ] = "Op plaatsvervanger klikken en overschrijven";
     Text[ french ] = "Clic sur le substituant pour remplacement";
     Text[ spanish ] = "Pulse sobre el comod�n y sobrescriba";
-    Text[ finnish ] = "Click place holder and overwrite";
+    Text[ finnish ] = "Napsauta paikanninta ja kirjoita sen p��lle";
     Text[ italian ] = "Cliccate lo spazio e scrivete";
-    Text[ danish ] = "Click place holder and overwrite";
+    Text[ danish ] = "Klik p� pladsholder, og overskriv";
     Text[ swedish ] = "Klicka p� platsh�llaren och skriv �ver";
     Text[ polish ] = "Skasuj tekst pola przez zapisanie";
     Text[ portuguese_brazilian ] = "Click place holder and overwrite";
-    Text[ japanese ] = "ﾌﾟﾚｰｽﾌｫﾙﾀﾞをｸﾘｯｸして上書きする";
+    Text[ japanese ] = "プレースフォルダをクリックして上書きする";
     Text[ korean ] = "플레이스홀더를 클릭한 후 덮어쓰기";
     Text[ chinese_simplified ] = "点击这里，开始输入文字。";
     Text[ chinese_traditional ] = "按一下，開始輸入文字。";
     Text[ turkish ] = "Click place holder and overwrite";
     Text[ arabic ] = "Click place holder and overwrite";
-    Text[ catalan ] = "Click place holder and overwrite";
+    Text[ catalan ] = "Fes clic al comod� i sobreescriu";
+    Text[ thai ] = "คลิ๊กตำแหน่งวางวัตถุและเขียนทับ";
 };
 
 String CorrespondenceFields+1
@@ -575,9 +607,9 @@ String CorrespondenceFields+1
     Text[ dutch ] = "Firma";
     Text[ french ] = "Soci�t�";
     Text[ spanish ] = "Empresa";
-    Text[ finnish ] = "Company";
+    Text[ finnish ] = "Yritys";
     Text[ italian ] = "Azienda";
-    Text[ danish ] = "Company";
+    Text[ danish ] = "Firma";
     Text[ swedish ] = "F�retag";
     Text[ polish ] = "Firma";
     Text[ portuguese_brazilian ] = "Company";
@@ -587,7 +619,8 @@ String CorrespondenceFields+1
     Text[ chinese_traditional ] = "公司";
     Text[ turkish ] = "Company";
     Text[ arabic ] = "Company";
-    Text[ catalan ] = "Company";
+    Text[ catalan ] = "Empresa";
+    Text[ thai ] = "บริษัท";
 };
 
 String CorrespondenceFields+2
@@ -602,9 +635,9 @@ String CorrespondenceFields+2
     Text[ dutch ] = "Afdeling";
     Text[ french ] = "Service";
     Text[ spanish ] = "Departamento";
-    Text[ finnish ] = "Department";
+    Text[ finnish ] = "Osasto";
     Text[ italian ] = "Reparto";
-    Text[ danish ] = "Department";
+    Text[ danish ] = "Afdeling";
     Text[ swedish ] = "Avdelning";
     Text[ polish ] = "Dzia�";
     Text[ portuguese_brazilian ] = "Department";
@@ -614,7 +647,8 @@ String CorrespondenceFields+2
     Text[ chinese_traditional ] = "部門";
     Text[ turkish ] = "Department";
     Text[ arabic ] = "Department";
-    Text[ catalan ] = "Department";
+    Text[ catalan ] = "Departament";
+    Text[ thai ] = "แผนก";
 };
 
 String CorrespondenceFields+3
@@ -629,9 +663,9 @@ String CorrespondenceFields+3
     Text[ dutch ] = "Voornaam";
     Text[ french ] = "Pr�nom";
     Text[ spanish ] = "Nombre";
-    Text[ finnish ] = "First Name";
+    Text[ finnish ] = "Etunimi";
     Text[ italian ] = "Nome";
-    Text[ danish ] = "First Name";
+    Text[ danish ] = "Fornavn";
     Text[ swedish ] = "F�rnamn";
     Text[ polish ] = "Imi�";
     Text[ portuguese_brazilian ] = "First Name";
@@ -641,7 +675,8 @@ String CorrespondenceFields+3
     Text[ chinese_traditional ] = "名字";
     Text[ turkish ] = "First Name";
     Text[ arabic ] = "First Name";
-    Text[ catalan ] = "First Name";
+    Text[ catalan ] = "Nom";
+    Text[ thai ] = "ชื่อ";
 };
 
 String CorrespondenceFields+4
@@ -656,9 +691,9 @@ String CorrespondenceFields+4
     Text[ dutch ] = "Achternaam";
     Text[ french ] = "Nom";
     Text[ spanish ] = "Apellidos";
-    Text[ finnish ] = "Last Name";
+    Text[ finnish ] = "Sukunimi";
     Text[ italian ] = "Cognome";
-    Text[ danish ] = "Last Name";
+    Text[ danish ] = "Efternavn";
     Text[ swedish ] = "Efternamn";
     Text[ polish ] = "Nazwisko";
     Text[ portuguese_brazilian ] = "Last Name";
@@ -668,7 +703,8 @@ String CorrespondenceFields+4
     Text[ chinese_traditional ] = "姓氏";
     Text[ turkish ] = "Last Name";
     Text[ arabic ] = "Last Name";
-    Text[ catalan ] = "Last Name";
+    Text[ catalan ] = "Cognom";
+    Text[ thai ] = "นามสกุล";
 };
 
 String CorrespondenceFields+5
@@ -683,9 +719,9 @@ String CorrespondenceFields+5
     Text[ dutch ] = "Straat";
     Text[ french ] = "Rue";
     Text[ spanish ] = "Calle";
-    Text[ finnish ] = "Address";
+    Text[ finnish ] = "Osoite";
     Text[ italian ] = "Via";
-    Text[ danish ] = "Address";
+    Text[ danish ] = "Gade";
     Text[ swedish ] = "Gatuadress";
     Text[ polish ] = "Adres";
     Text[ portuguese_brazilian ] = "Address";
@@ -695,7 +731,8 @@ String CorrespondenceFields+5
     Text[ chinese_traditional ] = "街道";
     Text[ turkish ] = "Address";
     Text[ arabic ] = "Address";
-    Text[ catalan ] = "Address";
+    Text[ catalan ] = "Adre�a";
+    Text[ thai ] = "ถนน";
 };
 
 String CorrespondenceFields+6
@@ -710,9 +747,9 @@ String CorrespondenceFields+6
     Text[ dutch ] = "Land";
     Text[ french ] = "Pays";
     Text[ spanish ] = "Pa�s";
-    Text[ finnish ] = "Country";
+    Text[ finnish ] = "Maa";
     Text[ italian ] = "Paese";
-    Text[ danish ] = "Country";
+    Text[ danish ] = "Land";
     Text[ swedish ] = "Land";
     Text[ polish ] = "Kraj";
     Text[ portuguese_brazilian ] = "Country";
@@ -722,7 +759,8 @@ String CorrespondenceFields+6
     Text[ chinese_traditional ] = "國家";
     Text[ turkish ] = "Country";
     Text[ arabic ] = "Country";
-    Text[ catalan ] = "Country";
+    Text[ catalan ] = "Pa�s";
+    Text[ thai ] = "ประเทศ";
 };
 
 
@@ -738,9 +776,9 @@ String CorrespondenceFields+7
     Text[ dutch ] = "Postcode";
     Text[ french ] = "C.P.";
     Text[ spanish ] = "C�digo postal";
-    Text[ finnish ] = "Postal Code";
+    Text[ finnish ] = "Postinumero";
     Text[ italian ] = "C.A.P.";
-    Text[ danish ] = "Postal Code";
+    Text[ danish ] = "Postnr.";
     Text[ swedish ] = "Postnr";
     Text[ polish ] = "Kod pocztowy";
     Text[ portuguese_brazilian ] = "Postal Code";
@@ -750,7 +788,8 @@ String CorrespondenceFields+7
     Text[ chinese_traditional ] = "郵遞區號";
     Text[ turkish ] = "Postal Code";
     Text[ arabic ] = "Postal Code";
-    Text[ catalan ] = "Postal Code";
+    Text[ catalan ] = "Codi Postal";
+    Text[ thai ] = "รหัสไปรษณีย์";
 };
 
 String CorrespondenceFields+8
@@ -765,9 +804,9 @@ String CorrespondenceFields+8
     Text[ dutch ] = "Plaats";
     Text[ french ] = "Ville";
     Text[ spanish ] = "Ciudad";
-    Text[ finnish ] = "City";
+    Text[ finnish ] = "Postitoimipaikka";
     Text[ italian ] = "Localit�";
-    Text[ danish ] = "City";
+    Text[ danish ] = "By";
     Text[ swedish ] = "Ort";
     Text[ polish ] = "Miejscowo��";
     Text[ portuguese_brazilian ] = "City";
@@ -777,7 +816,8 @@ String CorrespondenceFields+8
     Text[ chinese_traditional ] = "城市";
     Text[ turkish ] = "City";
     Text[ arabic ] = "City";
-    Text[ catalan ] = "City";
+    Text[ catalan ] = "Ciutat";
+    Text[ thai ] = "เมือง";
 };
 
 String CorrespondenceFields+9
@@ -792,19 +832,20 @@ String CorrespondenceFields+9
     Text[ dutch ] = "Titel";
     Text[ french ] = "Titre";
     Text[ spanish ] = "T�tulo";
-    Text[ finnish ] = "Title";
+    Text[ finnish ] = "Otsikko";
     Text[ italian ] = "Titolo";
-    Text[ danish ] = "Title";
+    Text[ danish ] = "Titel";
     Text[ swedish ] = "Titel";
     Text[ polish ] = "Tytu�";
     Text[ portuguese_brazilian ] = "Title";
     Text[ japanese ] = "肩書き";
-    Text[ korean ] = "직위";
+    Text[ korean ] = "직함";
     Text[ chinese_simplified ] = "称呼";
     Text[ chinese_traditional ] = "稱呼";
     Text[ turkish ] = "Title";
     Text[ arabic ] = "Title";
-    Text[ catalan ] = "Title";
+    Text[ catalan ] = "T�tol";
+    Text[ thai ] = "ยศ";
 };
 
 
@@ -822,17 +863,18 @@ String CorrespondenceFields+10
     Text[ spanish ] = "Posici�n";
     Text[ finnish ] = "Sijainti";
     Text[ italian ] = "Posizione";
-    Text[ danish ] = "Start_ved";
+    Text[ danish ] = "Stilling";
     Text[ swedish ] = "Befattning";
     Text[ polish ] = "Pozycja";
     Text[ portuguese_brazilian ] = "Position";
-    Text[ japanese ] = "役職";
+    Text[ japanese ] = "職務";
     Text[ korean ] = "직위";
     Text[ chinese_simplified ] = "职位";
     Text[ chinese_traditional ] = "職位";
     Text[ turkish ] = "�� unvan�";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "Position";
+    Text[ catalan ] = "Posici�";
+    Text[ thai ] = "ตำแหน่ง";
 };
 
 
@@ -848,9 +890,9 @@ String CorrespondenceFields+11
     Text[ dutch ] = "Aanhef";
     Text[ french ] = "Appellation";
     Text[ spanish ] = "Tratamiento";
-    Text[ finnish ] = "Form of Address";
+    Text[ finnish ] = "Osoitemuoto";
     Text[ italian ] = "Formula di apertura";
-    Text[ danish ] = "Form of Address";
+    Text[ danish ] = "Tiltale";
     Text[ swedish ] = "Tilltal";
     Text[ polish ] = "Zwrot grzeczno�ciowy";
     Text[ portuguese_brazilian ] = "Form of Address";
@@ -860,7 +902,8 @@ String CorrespondenceFields+11
     Text[ chinese_traditional ] = "收件者的稱呼";
     Text[ turkish ] = "Form of Address";
     Text[ arabic ] = "Form of Address";
-    Text[ catalan ] = "Form of Address";
+    Text[ catalan ] = "Tractament";
+    Text[ thai ] = "แบบฟอร์มที่อยู่";
 };
 
 
@@ -876,19 +919,20 @@ String CorrespondenceFields+12
     Text[ dutch ] = "Initialen";
     Text[ french ] = "Initiales";
     Text[ spanish ] = "Iniciales";
-    Text[ finnish ] = "Initials";
+    Text[ finnish ] = "Nimikirjaimet";
     Text[ italian ] = "Iniziali";
-    Text[ danish ] = "Initials";
+    Text[ danish ] = "Initialer";
     Text[ swedish ] = "Initialer";
     Text[ polish ] = "Inicja�y";
     Text[ portuguese_brazilian ] = "Initials";
-    Text[ japanese ] = "ｲﾆｼｬﾙ";
+    Text[ japanese ] = "イニシャル";
     Text[ korean ] = "머리글자";
     Text[ chinese_simplified ] = "缩写";
     Text[ chinese_traditional ] = "縮寫";
     Text[ turkish ] = "Initials";
     Text[ arabic ] = "Initials";
-    Text[ catalan ] = "Initials";
+    Text[ catalan ] = "Inicials";
+    Text[ thai ] = "ชื่อย่อ";
 };
 
 
@@ -904,9 +948,9 @@ String CorrespondenceFields+13
     Text[ dutch ] = "Aanhef";
     Text[ french ] = "Formule d'ouverture";
     Text[ spanish ] = "Tratamiento";
-    Text[ finnish ] = "Salutation";
+    Text[ finnish ] = "Arvo";
     Text[ italian ] = "Inizio lettera";
-    Text[ danish ] = "Salutation";
+    Text[ danish ] = "Starthilsen";
     Text[ swedish ] = "H�lsningsfras";
     Text[ polish ] = "Zwrot grzeczno�ciowy";
     Text[ portuguese_brazilian ] = "Salutation";
@@ -916,7 +960,8 @@ String CorrespondenceFields+13
     Text[ chinese_traditional ] = "信函開頭稱呼";
     Text[ turkish ] = "Salutation";
     Text[ arabic ] = "Salutation";
-    Text[ catalan ] = "Salutation";
+    Text[ catalan ] = "Salutaci�";
+    Text[ thai ] = "คำขึ้นต้นจดหมาย";
 };
 
 
@@ -932,9 +977,9 @@ String CorrespondenceFields+14
     Text[ dutch ] = "Tel. priv�";
     Text[ french ] = "T�l. domicile";
     Text[ spanish ] = "Tel. privado";
-    Text[ finnish ] = "Home Phone";
+    Text[ finnish ] = "Kotipuhelin";
     Text[ italian ] = "Tel. privato";
-    Text[ danish ] = "Home Phone";
+    Text[ danish ] = "Tlf. privat";
     Text[ swedish ] = "Tfn privat";
     Text[ polish ] = "Tel. (pryw.)";
     Text[ portuguese_brazilian ] = "Home Phone";
@@ -944,7 +989,8 @@ String CorrespondenceFields+14
     Text[ chinese_traditional ] = "私人電話";
     Text[ turkish ] = "Home Phone";
     Text[ arabic ] = "Home Phone";
-    Text[ catalan ] = "Home Phone";
+    Text[ catalan ] = "Tel�fon (particular)";
+    Text[ thai ] = "โทรศัพท์บ้าน";
 };
 
 
@@ -960,9 +1006,9 @@ String CorrespondenceFields+15
     Text[ dutch ] = "Tel. firma";
     Text[ french ] = "T�l. bureau 2";
     Text[ spanish ] = "Tel. trabajo";
-    Text[ finnish ] = "Work Phone";
+    Text[ finnish ] = "Ty�puhelin";
     Text[ italian ] = "Tel. lavoro";
-    Text[ danish ] = "Work Phone";
+    Text[ danish ] = "Tlf. arbejde";
     Text[ swedish ] = "Tfn arbete";
     Text[ polish ] = "Tel. (s�u�b.)";
     Text[ portuguese_brazilian ] = "Work Phone";
@@ -972,7 +1018,8 @@ String CorrespondenceFields+15
     Text[ chinese_traditional ] = "公務電話";
     Text[ turkish ] = "Work Phone";
     Text[ arabic ] = "Work Phone";
-    Text[ catalan ] = "Work Phone";
+    Text[ catalan ] = "Tel�fon (feina)";
+    Text[ thai ] = "โทรศัพท์ที่ทำงาน";
 };
 
 
@@ -988,7 +1035,7 @@ String CorrespondenceFields+16
     Text[ dutch ] = "Fax";
     Text[ french ] = "Fax";
     Text[ spanish ] = "Fax";
-    Text[ finnish ] = "faksi";
+    Text[ finnish ] = "Faksi";
     Text[ italian ] = "Fax";
     Text[ danish ] = "Fax";
     Text[ swedish ] = "Fax";
@@ -1001,6 +1048,7 @@ String CorrespondenceFields+16
     Text[ turkish ] = "Faks";
     Text[ arabic ] = "������";
     Text[ catalan ] = "Fax";
+    Text[ thai ] = "โทรสาร";
 };
 
 
@@ -1022,13 +1070,14 @@ String CorrespondenceFields+17
     Text[ swedish ] = "E-post";
     Text[ polish ] = "e-mail";
     Text[ portuguese_brazilian ] = "E-Mail";
-    Text[ japanese ] = "E-Mail";
+    Text[ japanese ] = "E-mail";
     Text[ korean ] = "e-Ｍail";
     Text[ chinese_simplified ] = "电子邮件";
     Text[ chinese_traditional ] = "電子郵件";
     Text[ turkish ] = "E-posta";
     Text[ arabic ] = "������ ����������";
-    Text[ catalan ] = "E-Mail";
+    Text[ catalan ] = "Correu electr�nic";
+    Text[ thai ] = "อีเมล์";
 };
 
 
@@ -1072,19 +1121,20 @@ String CorrespondenceFields+19
     Text[ dutch ] = "Opmerkingen";
     Text[ french ] = "Notes";
     Text[ spanish ] = "Notas";
-    Text[ finnish ] = "Notes";
+    Text[ finnish ] = "Huomautukset";
     Text[ italian ] = "Note";
-    Text[ danish ] = "Notes";
+    Text[ danish ] = "Note";
     Text[ swedish ] = "Anteckning";
     Text[ polish ] = "Notatka";
     Text[ portuguese_brazilian ] = "Notes";
-    Text[ japanese ] = "ﾒﾓ";
+    Text[ japanese ] = "メモ";
     Text[ korean ] = "참고";
     Text[ chinese_simplified ] = "备注";
     Text[ chinese_traditional ] = "備註";
     Text[ turkish ] = "Notes";
     Text[ arabic ] = "Notes";
     Text[ catalan ] = "Notes";
+    Text[ thai ] = "บันทึกย่อ";
 };
 
 
@@ -1095,24 +1145,25 @@ String CorrespondenceFields+20
     Text[ english_us ] = "Alt. Field 1";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 1";
-    Text[ russian ] = "���� 1";
+    Text[ russian ] = "�������. ���� 1";
     Text[ greek ] = "Alt. Field 1";
     Text[ dutch ] = "Alt. veld 1";
     Text[ french ] = "Champ facultatif 1";
     Text[ spanish ] = "Campo alt. 1";
-    Text[ finnish ] = "Alt. Field 1";
+    Text[ finnish ] = "Vaiht. kentt� 1";
     Text[ italian ] = "Campo 1";
-    Text[ danish ] = "Alt. Field 1";
+    Text[ danish ] = "Alt. felt 1";
     Text[ swedish ] = "Alt.f�lt 1";
     Text[ polish ] = "Pole 1";
     Text[ portuguese_brazilian ] = "Alt. Field 1";
-    Text[ japanese ] = "予備ﾌｨｰﾙﾄﾞ 1";
+    Text[ japanese ] = "予備フィールド 1";
     Text[ korean ] = "Alt. 필드 1";
     Text[ chinese_simplified ] = "预备栏 1";
     Text[ chinese_traditional ] = "預備欄 1";
     Text[ turkish ] = "Alt. Field 1";
     Text[ arabic ] = "Alt. Field 1";
-    Text[ catalan ] = "Alt. Field 1";
+    Text[ catalan ] = "Camp alt. 1";
+    Text[ thai ] = "Alt. เขตข้อมูล 1";
 };
 
 
@@ -1123,24 +1174,25 @@ String CorrespondenceFields+21
     Text[ english_us ] = "Alt. Field 2";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 2";
-    Text[ russian ] = "���� 2";
+    Text[ russian ] = "�������. ���� 2";
     Text[ greek ] = "Alt. Field 2";
     Text[ dutch ] = "Alt. veld 2";
     Text[ french ] = "Champ facultatif 2";
     Text[ spanish ] = "Campo alt. 2";
-    Text[ finnish ] = "Alt. Field 2";
+    Text[ finnish ] = "Vaiht. kentt� 2";
     Text[ italian ] = "Campo 2";
-    Text[ danish ] = "Alt. Field 2";
+    Text[ danish ] = "Alt. felt 2";
     Text[ swedish ] = "Alt.f�lt 2";
     Text[ polish ] = "Pole 2";
     Text[ portuguese_brazilian ] = "Alt. Field 2";
-    Text[ japanese ] = "予備ﾌｨｰﾙﾄﾞ 2";
+    Text[ japanese ] = "予備フィールド 2";
     Text[ korean ] = "Alt. 필드 2";
     Text[ chinese_simplified ] = "预备栏 2";
     Text[ chinese_traditional ] = "預備欄 2";
     Text[ turkish ] = "Alt. Field 2";
     Text[ arabic ] = "Alt. Field 2";
-    Text[ catalan ] = "Alt. Field 2";
+    Text[ catalan ] = "Camp alt. 2";
+    Text[ thai ] = "Alt. เขตข้อมูล 2";
 };
 
 
@@ -1151,24 +1203,25 @@ String CorrespondenceFields+22
     Text[ english_us ] = "Alt. Field 3";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 3";
-    Text[ russian ] = "���� 3";
+    Text[ russian ] = "�������. ���� 3";
     Text[ greek ] = "Alt. Field 3";
     Text[ dutch ] = "Alt. veld 3";
     Text[ french ] = "Champ facultatif 3";
     Text[ spanish ] = "Campo alt. 3";
-    Text[ finnish ] = "Alt. Field 3";
+    Text[ finnish ] = "Vaiht. kentt� 3";
     Text[ italian ] = "Campo 3";
-    Text[ danish ] = "Alt. Field 3";
+    Text[ danish ] = "Alt. felt 3";
     Text[ swedish ] = "Alt.f�lt 3";
     Text[ polish ] = "Pole 3";
     Text[ portuguese_brazilian ] = "Alt. Field 3";
-    Text[ japanese ] = "予備ﾌｨｰﾙﾄﾞ 3";
+    Text[ japanese ] = "予備フィールド 3";
     Text[ korean ] = "Alt. 필드 3";
     Text[ chinese_simplified ] = "预备栏 3";
     Text[ chinese_traditional ] = "預備欄 3";
     Text[ turkish ] = "Alt. Field 3";
     Text[ arabic ] = "Alt. Field 3";
-    Text[ catalan ] = "Alt. Field 3";
+    Text[ catalan ] = "Camp alt. 3";
+    Text[ thai ] = "Alt. เขตข้อมูล 3";
 };
 
 
@@ -1184,19 +1237,20 @@ String CorrespondenceFields+23
     Text[ dutch ] = "Alt. veld 4";
     Text[ french ] = "Champ facultatif 4";
     Text[ spanish ] = "Campo alt. 4";
-    Text[ finnish ] = "Alt. Field 4";
+    Text[ finnish ] = "Vaiht. kentt� 4";
     Text[ italian ] = "Campo 4";
-    Text[ danish ] = "Alt. Field 4";
+    Text[ danish ] = "Alt. felt 4";
     Text[ swedish ] = "Alt.f�lt 4";
     Text[ polish ] = "Pole 4";
     Text[ portuguese_brazilian ] = "Alt. Field 4";
-    Text[ japanese ] = "予備ﾌｨｰﾙﾄﾞ 4";
+    Text[ japanese ] = "予備フィールド 4";
     Text[ korean ] = "Alt. 필드 4";
     Text[ chinese_simplified ] = "预备栏 4";
     Text[ chinese_traditional ] = "預備欄 4";
     Text[ turkish ] = "Alt. Field 4";
     Text[ arabic ] = "Alt. Field 4";
-    Text[ catalan ] = "Alt. Field 4";
+    Text[ catalan ] = "Camp alt. 4";
+    Text[ thai ] = "Alt. เขตข้อมูล 4";
 };
 
 
@@ -1207,7 +1261,7 @@ String CorrespondenceFields+24
     Text[ english_us ] = "ID";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "ID";
-    Text[ russian ] = "����������������� �����";
+    Text[ russian ] = "ID";
     Text[ greek ] = "��������� (ID)";
     Text[ dutch ] = "ID";
     Text[ french ] = "ID";
@@ -1224,7 +1278,7 @@ String CorrespondenceFields+24
     Text[ chinese_traditional ] = "ID";
     Text[ turkish ] = "Tan�t�c�";
     Text[ arabic ] = "�����";
-    Text[ catalan ] = "ID";
+    Text[ catalan ] = "Identificaci�";
 };
 
 
@@ -1240,9 +1294,9 @@ String CorrespondenceFields+25
     Text[ dutch ] = "Regio";
     Text[ french ] = "�tat";
     Text[ spanish ] = "Provincia";
-    Text[ finnish ] = "State";
+    Text[ finnish ] = "Osavaltio";
     Text[ italian ] = "Regione";
-    Text[ danish ] = "State";
+    Text[ danish ] = "Delstat";
     Text[ swedish ] = "Delstat";
     Text[ polish ] = "Wojew�dztwo";
     Text[ portuguese_brazilian ] = "State";
@@ -1252,7 +1306,8 @@ String CorrespondenceFields+25
     Text[ chinese_traditional ] = "省";
     Text[ turkish ] = "State";
     Text[ arabic ] = "State";
-    Text[ catalan ] = "State";
+    Text[ catalan ] = "Provincia";
+    Text[ thai ] = "รัฐ";
 };
 
 
@@ -1268,19 +1323,20 @@ String CorrespondenceFields+26
     Text[ dutch ] = "Tel. kantoor";
     Text[ french ] = "T�l. bureau 2";
     Text[ spanish ] = "Tel. oficina";
-    Text[ finnish ] = "Office Phone";
+    Text[ finnish ] = "Toimistopuhelin";
     Text[ italian ] = "Tel. ufficio";
-    Text[ danish ] = "Office Phone";
+    Text[ danish ] = "Tlf. kontor";
     Text[ swedish ] = "Tfn kontor";
     Text[ polish ] = "Tel. (s�u�b.)";
     Text[ portuguese_brazilian ] = "Office Phone";
-    Text[ japanese ] = "事務所電話";
+    Text[ japanese ] = "オフィス電話";
     Text[ korean ] = "사무실 전화";
     Text[ chinese_simplified ] = "办公室电话";
     Text[ chinese_traditional ] = "辦公室電話";
     Text[ turkish ] = "Office Phone";
     Text[ arabic ] = "Office Phone";
-    Text[ catalan ] = "Office Phone";
+    Text[ catalan ] = "Telf. oficina";
+    Text[ thai ] = "โทรศัพท์ที่ทำงาน";
 };
 
 
@@ -1296,19 +1352,20 @@ String CorrespondenceFields+27
     Text[ dutch ] = "Pager";
     Text[ french ] = "Pager";
     Text[ spanish ] = "Pager";
-    Text[ finnish ] = "Pager";
+    Text[ finnish ] = "Hakulaite";
     Text[ italian ] = "Teledrin";
     Text[ danish ] = "Persons�ger";
     Text[ swedish ] = "Persons�kare";
     Text[ polish ] = "Pager";
     Text[ portuguese_brazilian ] = "Pager";
-    Text[ japanese ] = "ﾎﾟｹｯﾄﾍﾞﾙ";
+    Text[ japanese ] = "ポケットベル";
     Text[ korean ] = "호출기";
     Text[ chinese_simplified ] = "BP 机";
     Text[ chinese_traditional ] = "BP 機";
     Text[ turkish ] = "�a�r� cihaz�";
     Text[ arabic ] = "����";
     Text[ catalan ] = "Pager";
+    Text[ thai ] = "เพจเจอร์";
 };
 
 
@@ -1324,9 +1381,9 @@ String CorrespondenceFields+28
     Text[ dutch ] = "Tel. mobiel";
     Text[ french ] = "T�l. portable";
     Text[ spanish ] = "Tel. m�vil";
-    Text[ finnish ] = "Mobile Phone";
+    Text[ finnish ] = "Matkapuhelin";
     Text[ italian ] = "Cellulare";
-    Text[ danish ] = "Mobile Phone";
+    Text[ danish ] = "Tlf. mobil";
     Text[ swedish ] = "Mobiltfn";
     Text[ polish ] = "Tel. kom�rkowy";
     Text[ portuguese_brazilian ] = "Mobile Phone";
@@ -1336,7 +1393,8 @@ String CorrespondenceFields+28
     Text[ chinese_traditional ] = "手機";
     Text[ turkish ] = "Mobile Phone";
     Text[ arabic ] = "Mobile Phone";
-    Text[ catalan ] = "Mobile Phone";
+    Text[ catalan ] = "Telf. m�bil";
+    Text[ thai ] = "มือถือ";
 };
 
 
@@ -1352,9 +1410,9 @@ String CorrespondenceFields+29
     Text[ dutch ] = "Tel. andere";
     Text[ french ] = "T�l. autre";
     Text[ spanish ] = "Otros tel�fonos";
-    Text[ finnish ] = "Other Phone";
+    Text[ finnish ] = "Muu puhelin";
     Text[ italian ] = "Altro telefono";
-    Text[ danish ] = "Other Phone";
+    Text[ danish ] = "Tlf. �vrige";
     Text[ swedish ] = "Tfn annan";
     Text[ polish ] = "Inne telefony";
     Text[ portuguese_brazilian ] = "Other Phone";
@@ -1364,7 +1422,8 @@ String CorrespondenceFields+29
     Text[ chinese_traditional ] = "其他電話";
     Text[ turkish ] = "Other Phone";
     Text[ arabic ] = "Other Phone";
-    Text[ catalan ] = "Other Phone";
+    Text[ catalan ] = "Altre telf.";
+    Text[ thai ] = "โทรศัพท์อื่น ๆ";
 };
 
 String CorrespondenceFields+30
@@ -1379,9 +1438,9 @@ String CorrespondenceFields+30
     Text[ dutch ] = "Kalender URL";
     Text[ french ] = "URL du calendrier";
     Text[ spanish ] = "Calendario URL";
-    Text[ finnish ] = "Calendar URL";
+    Text[ finnish ] = "Kalenterin URL";
     Text[ italian ] = "Calendario URL";
-    Text[ danish ] = "Calendar URL";
+    Text[ danish ] = "Kalender-URL";
     Text[ swedish ] = "Kalender-URL";
     Text[ polish ] = "URL kalendarza";
     Text[ portuguese_brazilian ] = "Calendar URL";
@@ -1391,7 +1450,8 @@ String CorrespondenceFields+30
     Text[ chinese_traditional ] = "行事曆 URL";
     Text[ turkish ] = "Calendar URL";
     Text[ arabic ] = "Calendar URL";
-    Text[ catalan ] = "Calendar URL";
+    Text[ catalan ] = "Calendari URL";
+    Text[ thai ] = "ปฏิทิน URL";
 };
 
 String CorrespondenceFields+31
@@ -1406,9 +1466,9 @@ String CorrespondenceFields+31
     Text[ dutch ] = "Uitnodiging";
     Text[ french ] = "Invitation";
     Text[ spanish ] = "Invitar";
-    Text[ finnish ] = "Invite";
+    Text[ finnish ] = "Kutsu";
     Text[ italian ] = "Invito";
-    Text[ danish ] = "Invite";
+    Text[ danish ] = "Inviter";
     Text[ swedish ] = "Bjud in";
     Text[ polish ] = "Zaprosi�";
     Text[ portuguese_brazilian ] = "Invite";
@@ -1418,7 +1478,8 @@ String CorrespondenceFields+31
     Text[ chinese_traditional ] = "邀請";
     Text[ turkish ] = "Invite";
     Text[ arabic ] = "Invite";
-    Text[ catalan ] = "Invite";
+    Text[ catalan ] = "Invitaci�";
+    Text[ thai ] = "เชิญ";
 };
 
 
@@ -1436,18 +1497,19 @@ String TextField
     Text[ french ] = "Ce champ de donn�es d'identit� n'est pas d�fini !";
     Text[ spanish ] = "�El campo de datos de usuario no est� definido!";
     Text[ italian ] = "Il campo dati utente non � stato definito!";
-    Text[ danish ] = "Textfield is not defined!";
+    Text[ danish ] = "Brugerdatafeltet er ikke defineret!";
     Text[ swedish ] = "Anv�ndardataf�lt �r inte definierat!";
     Text[ polish ] = "Nie zdefiniowano pola danych u�ytkownika!";
     Text[ portuguese_brazilian ] = "Textfield is not defined!";
-    Text[ japanese ] = "ﾕｰｻﾞｰﾃﾞｰﾀのﾌｨｰﾙﾄﾞが定義されていません。";
+    Text[ japanese ] = "ユーザーデータのフィールドが定義されていません。";
     Text[ korean ] = "사용자데이터필드가 정의되지 않았습니다!";
     Text[ chinese_simplified ] = "还没有定义使用者字段！";
     Text[ chinese_traditional ] = "還沒有定義使用者資料欄位!";
     Text[ turkish ] = "Textfield is not defined!";
     Text[ arabic ] = "�� ��� ����� ��� ������ ��������!";
-    Text[ catalan ] = "�El campo de datos de usuario no est� definido!";
-    Text[ finnish ] = "Benutzerdatenfeld ist nicht definiert!";
+    Text[ catalan ] = "No s'ha definit el camp dades de l'usuari!";
+    Text[ finnish ] = "K�ytt�j�n tietokentt�� ei ole m��ritetty.";
+    Text[ thai ] = "ไม่ได้ระบุเขตข้อมูลผู้ใช้!";
 };
 
 String Newsletter
@@ -1464,17 +1526,18 @@ String Newsletter
     Text[ spanish ] = "Dise�o general";
     Text[ finnish ] = "General Layout";
     Text[ italian ] = "Layout generale";
-    Text[ danish ] = "General Layout";
+    Text[ danish ] = "Generelt layout";
     Text[ swedish ] = "Allm�n layout";
-    Text[ polish ] = "General Layout";
+    Text[ polish ] = "Uk�ad og�lny";
     Text[ portuguese_brazilian ] = "General Layout";
-    Text[ japanese ] = "全般ﾚｲｱｳﾄ";
+    Text[ japanese ] = "全般レイアウト";
     Text[ korean ] = "일반 레이아웃";
     Text[ chinese_simplified ] = "一般的版式";
     Text[ chinese_traditional ] = "一般的版式";
     Text[ turkish ] = "General Layout";
     Text[ arabic ] = "General Layout";
-    Text[ catalan ] = "General Layout";
+    Text[ catalan ] = "Disseny general";
+    Text[ thai ] = "เค้าโครงทั่วไป";
 };
 
 
@@ -1492,17 +1555,18 @@ String Newsletter + 1
     Text[ spanish ] = "Dise�o predeterminado";
     Text[ finnish ] = "Standard Layout";
     Text[ italian ] = "Layout standard";
-    Text[ danish ] = "Standard Layout";
+    Text[ danish ] = "Standardlayout";
     Text[ swedish ] = "Standardlayout";
-    Text[ polish ] = "Standard Layout";
+    Text[ polish ] = "Uk�ad domy�lny";
     Text[ portuguese_brazilian ] = "Standard Layout";
-    Text[ japanese ] = "標準ﾚｲｱｳﾄ";
+    Text[ japanese ] = "標準レイアウト";
     Text[ korean ] = "표준 레이아웃";
     Text[ chinese_simplified ] = "标准的版式";
     Text[ chinese_traditional ] = "標準的版式";
     Text[ turkish ] = "Standard Layout";
     Text[ arabic ] = "Standard Layout";
-    Text[ catalan ] = "Standard Layout";
+    Text[ catalan ] = "Disseny est�ndard";
+    Text[ thai ] = "ค่าเริ่มต้นเค้าโครง";
 };
 
 String Newsletter + 2
@@ -1511,7 +1575,7 @@ String Newsletter + 2
     Text[English] = "Party Layout";
     Text[ english_us ] = "Commemorative publication layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog f�r die Zeitungsvorlage";
-    Text[ portuguese ] = "Configura��o de publica��o comemorativa";
+    Text[ portuguese ] = "Publica��o festiva";
     Text[ russian ] = "��������� ������";
     Text[ greek ] = "Party Layout";
     Text[ dutch ] = "Feestelijk lay-out";
@@ -1519,17 +1583,18 @@ String Newsletter + 2
     Text[ spanish ] = "Dise�o festivo";
     Text[ finnish ] = "Party Layout";
     Text[ italian ] = "Layout per una festa";
-    Text[ danish ] = "Party Layout";
-    Text[ swedish ] = "Festskrift";
-    Text[ polish ] = "Party Layout";
+    Text[ danish ] = "Festskrift";
+    Text[ swedish ] = "Festh�fte";
+    Text[ polish ] = "Wydanie jubileuszowe";
     Text[ portuguese_brazilian ] = "Party Layout";
-    Text[ japanese ] = "記念刊行物ﾚｲｱｳﾄ";
+    Text[ japanese ] = "記念刊行物レイアウト";
     Text[ korean ] = "모임 레이아웃";
     Text[ chinese_simplified ] = "纪念文";
     Text[ chinese_traditional ] = "紀念文";
     Text[ turkish ] = "Party Layout";
     Text[ arabic ] = "Party Layout";
-    Text[ catalan ] = "Party Layout";
+    Text[ catalan ] = "Disseny festiu";
+    Text[ thai ] = "เค้าโครงการจัดพิมพ์เพื่อเป็นอนุสรณ์";
 };
 
 String Newsletter + 3
@@ -1546,17 +1611,18 @@ String Newsletter + 3
     Text[ spanish ] = "Dise�o prospecto";
     Text[ finnish ] = "Brochure Layout";
     Text[ italian ] = "Layout depliant";
-    Text[ danish ] = "Brochure Layout";
+    Text[ danish ] = "Brochurelayout";
     Text[ swedish ] = "Broschyrlayout";
-    Text[ polish ] = "Brochure Layout";
+    Text[ polish ] = "Broszura";
     Text[ portuguese_brazilian ] = "Brochure Layout";
-    Text[ japanese ] = "ﾁﾗｼ広告ﾚｲｱｳﾄ";
+    Text[ japanese ] = "チラシ広告レイアウト";
     Text[ korean ] = "브로셔 레이아웃";
     Text[ chinese_simplified ] = "小手册的版式";
     Text[ chinese_traditional ] = "小手冊的版式";
     Text[ turkish ] = "Brochure Layout";
     Text[ arabic ] = "Brochure Layout";
-    Text[ catalan ] = "Brochure Layout";
+    Text[ catalan ] = "Disseny tr�ptic";
+    Text[ thai ] = "เค้าโครงโบรชัวร์";
 };
 
 String Newsletter + 10
@@ -1584,6 +1650,7 @@ String Newsletter + 10
     Text[ turkish ] = "Format";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Format";
+    Text[ thai ] = "รูปแบบ";
 };
 
 String Newsletter + 11
@@ -1592,7 +1659,7 @@ String Newsletter + 11
     Text[English] = "Single sided";
     Text[ english_us ] = "Single-sided";
     Text[ language_user1 ] = "'Format' Option im Initialdialog f�r die Zeitungsvorlage";
-    Text[ portuguese ] = "Single sided";
+    Text[ portuguese ] = "Uma p�gina";
     Text[ russian ] = "� ����� �������";
     Text[ greek ] = "Single sided";
     Text[ dutch ] = "Enkelzijdig";
@@ -1600,9 +1667,9 @@ String Newsletter + 11
     Text[ spanish ] = "Por un lado";
     Text[ finnish ] = "Single sided";
     Text[ italian ] = "Una pagina";
-    Text[ danish ] = "Single sided";
-    Text[ swedish ] = "En sida";
-    Text[ polish ] = "Single sided";
+    Text[ danish ] = "Etsidet";
+    Text[ swedish ] = "Enkelsidig";
+    Text[ polish ] = "Z jednej strony";
     Text[ portuguese_brazilian ] = "Single sided";
     Text[ japanese ] = "1面";
     Text[ korean ] = "단면";
@@ -1610,7 +1677,8 @@ String Newsletter + 11
     Text[ chinese_traditional ] = "單頁";
     Text[ turkish ] = "Single sided";
     Text[ arabic ] = "Single sided";
-    Text[ catalan ] = "Single sided";
+    Text[ catalan ] = "Una cara";
+    Text[ thai ] = "ข้างเดียว";
 };
 
 String Newsletter + 12
@@ -1627,9 +1695,9 @@ String Newsletter + 12
     Text[ spanish ] = "Ambas caras";
     Text[ finnish ] = "double sided";
     Text[ italian ] = "Due pagine";
-    Text[ danish ] = "double sided";
-    Text[ swedish ] = "Dubbla sidor";
-    Text[ polish ] = "double sided";
+    Text[ danish ] = "Dobbeltsidet";
+    Text[ swedish ] = "Dubbelsidig";
+    Text[ polish ] = "Z dw�ch stron";
     Text[ portuguese_brazilian ] = "double sided";
     Text[ japanese ] = "2面";
     Text[ korean ] = "양면";
@@ -1637,7 +1705,8 @@ String Newsletter + 12
     Text[ chinese_traditional ] = "雙頁";
     Text[ turkish ] = "double sided";
     Text[ arabic ] = "double sided";
-    Text[ catalan ] = "double sided";
+    Text[ catalan ] = "Dues cares";
+    Text[ thai ] = "สองข้าง";
 };
 
 
