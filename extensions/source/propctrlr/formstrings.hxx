@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:43:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 08:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_FONT_SLANT,             "FontSlant");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_UNDERLINE,         "FontUnderline");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_STRIKEOUT,         "FontStrikeout");
+    PCR_CONSTASCII_STRING( PROPERTY_FONT_RELIEF,            "FontRelief");
+    PCR_CONSTASCII_STRING( PROPERTY_FONT_EMPHASIS_MARK,     "FontEmphasisMark");
+    PCR_CONSTASCII_STRING( PROPERTY_TEXTLINECOLOR,          "TextLineColor");
     PCR_CONSTASCII_STRING( PROPERTY_HELPURL,                "HelpURL");
     PCR_CONSTASCII_STRING( PROPERTY_RECORDMARKER,           "HasRecordMarker");
     PCR_CONSTASCII_STRING( PROPERTY_BOUNDFIELD,             "BoundField");
@@ -267,6 +270,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/02 12:43:12  tbe
+ *  added scrollbar properties
+ *
  *  Revision 1.7  2001/04/26 09:16:34  tbe
  *  added progressbar properties
  *
