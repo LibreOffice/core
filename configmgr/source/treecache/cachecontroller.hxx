@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:41 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include "autoreferencemap.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
 namespace configmgr
 {
 // ---------------------------------------------------------------------------
@@ -107,14 +111,19 @@ namespace configmgr
 
     : public ICachedDataProvider
     , public IDirectDataProvider // Refcounted
+    , public INodeDataListener
     {
         typedef backend::IMergedDataProvider Backend;
         typedef rtl::Reference< Backend > BackendRef;
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+            CreationContext;
     public:
         /** ctor
         */
         explicit
-        CacheController(BackendRef const & _xBackend, memory::HeapManager & _rCacheHeapManager);
+        CacheController(BackendRef const & _xBackend,
+                        memory::HeapManager & _rCacheHeapManager,
+                        const uno::Reference<uno::XComponentContext>& xContext);
 
     // ICachedDataProvider implementation
     public:
@@ -248,6 +257,9 @@ namespace configmgr
             @param _aRequest
                 identifies the component to be loaded
 
+            @param __bAddListenter
+                identifies is listener is to be registered to backend
+
             @returns
                 A valid component instance for the given component.
 
@@ -256,7 +268,8 @@ namespace configmgr
                 The exact exception being thrown may depend on the underlying backend.
 
         */
-        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest)
+        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest,
+                                                 bool _bAddListenter)
             CFG_UNO_THROW_ALL();
 
         /** loads default data for a (partial) tree and returns it as return value
@@ -295,7 +308,13 @@ namespace configmgr
         */
         virtual TemplateResult getTemplateData(TemplateRequest const & _aRequest)
             CFG_UNO_THROW_ALL();
+        //INodeDataListener Implementation
+        /** Triggered when component data is changed
 
+            @param _aRequest
+                identifies the data that changed
+        */
+        virtual void dataChanged(const ComponentRequest& _aRequest) CFG_NOTHROW();
     protected:
         // ref counted, that's why no public dtor
         ~CacheController();
@@ -315,7 +334,8 @@ namespace configmgr
         bool normalizeResult(std::auto_ptr<ISubtree> &  _aResult, RequestOptions const & _aOptions);
 
         // reads data from the backend directly
-        ComponentResult loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  );
+        ComponentResult loadDirectly(ComponentRequest const & _aRequest, bool _bAddListenter )
+            CFG_UNO_THROW_ALL(  );
         // reads default data from the backend directly
         NodeResult loadDefaultsDirectly(NodeRequest const & _aRequest) CFG_UNO_THROW_ALL(  );
         // writes an update  to the backend directly
@@ -336,8 +356,8 @@ namespace configmgr
         data::TreeAddress addTemplates ( backend::ComponentData const & _aComponentInstance );
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
 
-        OTreeDisposeScheduler   * createDisposer();
-        OCacheWriteScheduler    * createCacheWriter();
+        OTreeDisposeScheduler   * createDisposer(const CreationContext& _xContext);
+        OCacheWriteScheduler    * createCacheWriter(const CreationContext& _xContext);
 
         void flushPendingUpdates();
 
