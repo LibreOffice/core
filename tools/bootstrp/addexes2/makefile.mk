@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2000-11-20 01:31:10 $
+#   last change: $Author: hjs $ $Date: 2001-02-05 17:01:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=tools
 TARGET=addexes2
 TARGETTYPE=CUI
 TARGETTHREAD=MT
+NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
