@@ -1,4 +1,4 @@
-SALHLP_1_0 {
+SAMPLELIB {
     global:
 GetVersionInfo;
 _fini;
