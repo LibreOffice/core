@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:38:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,6 +981,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             pImp->aTempName = pMedium->GetPhysicalName();
             pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
             pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
+            pMedium->GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetOrigURL() ) );
         }
         else
         {
@@ -2322,8 +2323,6 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     }
     else
         bSaved = DoSave_Impl( pSet );
-    if ( bSaved && SvtSaveOptions().IsAutoSave() )
-        pSfxApp->GetAutoSaveTimer_Impl()->Start();
     return bSaved;
 }
 
@@ -3352,6 +3351,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
     try
     {
         uno::Sequence< ::rtl::OUString > aSubElements = xSource->getElementNames();
+        const ::rtl::OUString* pSubElements = aSubElements.getConstArray();
         for ( sal_Int32 nInd = 0; nInd < aSubElements.getLength(); nInd++ )
         {
             if ( xSource->isStorageElement( aSubElements[nInd] ) )
@@ -3407,7 +3407,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
                         default:
                         {
                             OSL_ENSURE(
-                                aSubElements[nInd].equalsAscii( "Configuration2" ) || !xTarget->hasByName( aSubElements[nInd] ),
+                                aSubElements[nInd].equalsAscii( "Configurations2" ) || !xTarget->hasByName( aSubElements[nInd] ),
                                 "The target storage is an output storage, the element should not exist in the target!\n" );
 
                             if ( !xTarget->hasByName( aSubElements[nInd] ) )
