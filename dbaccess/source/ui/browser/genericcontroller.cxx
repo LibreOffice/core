@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-24 15:13:36 $
+ *  last change: $Author: oj $ $Date: 2002-10-11 08:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,10 +973,28 @@ IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
     {
         try
         {
-            Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xCurrentFrame,UNO_QUERY);
-            if(xCloseable.is())
-                xCloseable->close(sal_False); // false - holds the owner ship for this frame inside this object!
-        } catch(CloseVetoException&) {}
+            // #104032# OJ
+            URL aURL;
+            aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
+            if (m_xUrlTransformer.is())
+                m_xUrlTransformer->parseStrict(aURL);
+            Reference< XDispatchProvider > xDispProv(m_xCurrentFrame, UNO_QUERY);
+            Reference< XDispatch > xCloseDispatch;
+            if (xDispProv.is())
+                xCloseDispatch = xDispProv->queryDispatch(aURL, m_xCurrentFrame->getName(), FrameSearchFlag::SELF);
+            OSL_ENSURE(xCloseDispatch.is(), "SbaTableQueryBrowser::OnAsyncCloseTask: could not get a dispatcher!");
+            if ( xCloseDispatch.is() && xCloseDispatch != *this )
+            {
+                xCloseDispatch->dispatch(aURL, Sequence< PropertyValue >());
+            }
+            else
+            {
+                Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xCurrentFrame,UNO_QUERY);
+                if(xCloseable.is())
+                    xCloseable->close(sal_False); // false - holds the owner ship for this frame inside this object!
+            }
+        }
+        catch(const Exception&) {}
     }
     return 0L;
 }
