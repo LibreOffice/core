@@ -106,7 +106,10 @@ Sub CalmdSwitchOwnDataOrGeneral()
 		DlgCalModel.cmdInsert.Enabled = DlgCalModel.txtEvent.Text &lt;&gt; &quot;&quot;
 		ToggleYearBox()
 	Else
+		dim bla as boolean
 		DlgCalModel.Step = 1
+		DlgCalendar.GetControl(&quot;lblHolidays&quot;).Visible = sCurLangLocale  = cLANGUAGE_GERMAN
+		DlgCalendar.GetControl(&quot;lstHolidays&quot;).Visible = sCurLangLocale  = cLANGUAGE_GERMAN
 		DlgCalModel.cmdOwnData.Label = cCalSubcmdSwitchOwnDataOrGeneral_OwnData$
 	End If
 End Sub
