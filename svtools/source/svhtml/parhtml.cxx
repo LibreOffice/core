@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:30:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1768,6 +1768,10 @@ int HTMLParser::FilterPRE( int nToken )
     case HTML_BOLD_OFF:
     case HTML_ITALIC_ON:
     case HTML_ITALIC_OFF:
+    case HTML_STRIKE_ON:
+    case HTML_STRIKE_OFF:
+    case HTML_STRIKETHROUGH_ON:
+    case HTML_STRIKETHROUGH_OFF:
     case HTML_UNDERLINE_ON:
     case HTML_UNDERLINE_OFF:
     case HTML_BASEFONT_ON:
@@ -1778,6 +1782,50 @@ int HTMLParser::FilterPRE( int nToken )
     case HTML_BLINK_OFF:
     case HTML_SPAN_ON:
     case HTML_SPAN_OFF:
+    case HTML_SUBSCRIPT_ON:
+    case HTML_SUBSCRIPT_OFF:
+    case HTML_SUPERSCRIPT_ON:
+    case HTML_SUPERSCRIPT_OFF:
+    case HTML_BIGPRINT_ON:
+    case HTML_BIGPRINT_OFF:
+    case HTML_SMALLPRINT_OFF:
+    case HTML_SMALLPRINT_ON:
+
+    case HTML_EMPHASIS_ON:
+    case HTML_EMPHASIS_OFF:
+    case HTML_CITIATION_ON:
+    case HTML_CITIATION_OFF:
+    case HTML_STRONG_ON:
+    case HTML_STRONG_OFF:
+    case HTML_CODE_ON:
+    case HTML_CODE_OFF:
+    case HTML_SAMPLE_ON:
+    case HTML_SAMPLE_OFF:
+    case HTML_KEYBOARD_ON:
+    case HTML_KEYBOARD_OFF:
+    case HTML_VARIABLE_ON:
+    case HTML_VARIABLE_OFF:
+    case HTML_DEFINSTANCE_ON:
+    case HTML_DEFINSTANCE_OFF:
+    case HTML_SHORTQUOTE_ON:
+    case HTML_SHORTQUOTE_OFF:
+    case HTML_LANGUAGE_ON:
+    case HTML_LANGUAGE_OFF:
+    case HTML_AUTHOR_ON:
+    case HTML_AUTHOR_OFF:
+    case HTML_PERSON_ON:
+    case HTML_PERSON_OFF:
+    case HTML_ACRONYM_ON:
+    case HTML_ACRONYM_OFF:
+    case HTML_ABBREVIATION_ON:
+    case HTML_ABBREVIATION_OFF:
+    case HTML_INSERTEDTEXT_ON:
+    case HTML_INSERTEDTEXT_OFF:
+    case HTML_DELETEDTEXT_ON:
+    case HTML_DELETEDTEXT_OFF:
+    case HTML_TELETYPE_ON:
+    case HTML_TELETYPE_OFF:
+
         break;
 
     // der Rest wird als unbekanntes Token behandelt
