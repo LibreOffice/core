@@ -363,6 +363,40 @@ public class XMergeBridge {
         return true;
        }
 
+    public String replace(String origString, String origChar, String replaceChar){
+           String tmp="";
+           int index=origString.indexOf(origChar);
+           if(index !=-1){
+           while (index !=-1){
+               String first =origString.substring(0,index);
+               first=first.concat(replaceChar);
+               tmp=tmp.concat(first);
+               origString=origString.substring(index+1,origString.length());
+               index=origString.indexOf(origChar);
+               if(index==-1) {
+               tmp=tmp.concat(origString);
+               }
+
+           }
+
+           }
+           return tmp;
+    }
+
+    public String needsMask(String origString){
+        if (origString.indexOf("&")!=-1){
+        origString=replace(origString,"&","&amp;");
+        }
+        if (origString.indexOf("<")!=-1){
+        origString=replace(origString,"<","&lt;");
+        }
+        if (origString.indexOf(">")!=-1){
+        origString=replace(origString,">","&gt;");
+        }
+        return origString;
+
+    }
+
 
 
        public void  startDocument ()    {
@@ -384,6 +418,8 @@ public class XMergeBridge {
         }
     }
 
+
+
     public void startElement (String str, com.sun.star.xml.sax.XAttributeList xattribs)
     {
 
@@ -396,7 +432,7 @@ public class XMergeBridge {
             {
             str=str.concat(xattribs.getNameByIndex(i));
             str=str.concat("=\"");
-            str=str.concat(xattribs.getValueByIndex(i));
+            str=str.concat(needsMask(xattribs.getValueByIndex(i)));
             str=str.concat("\" ");
             }
         }
@@ -422,81 +458,13 @@ public class XMergeBridge {
         catch (Exception e){
         System.out.println("\n"+e);
         }
-        //System.out.println(str);
+
 
     }
     public void characters(String str){
-        //System.out.println(str);
-        String tmp="";
-        int index=str.indexOf("&");
-        if(index !=-1){
-        while (index !=-1){
-           String first =str.substring(0,index);
-           first=first.concat("&amp;");
-           tmp=tmp.concat(first);
-           str=str.substring(index+1,str.length());
-           index=str.indexOf("&");
-           if(index==-1) {
-               tmp=tmp.concat(str);
-           }
-
-        }
-        }else{
-        tmp=str;
-        }
-        str=tmp;
-         tmp="";
-        index=str.indexOf("<");
-        if(index !=-1){
-        while (index !=-1){
-           String first =str.substring(0,index);
-           first=first.concat("&lt;");
-           tmp=tmp.concat(first);
-           str=str.substring(index+1,str.length());
-           index=str.indexOf("<");
-           if(index==-1) {
-               tmp=tmp.concat(str);
-           }
-
-        }
-        }else{
-        tmp=str;
-        }
-         str=tmp;
-         tmp="";
-        index=str.indexOf(">");
-        if(index !=-1){
-        while (index !=-1){
-           String first =str.substring(0,index);
-           first=first.concat("&gt;");
-           tmp=tmp.concat(first);
-           str=str.substring(index+1,str.length());
-           index=str.indexOf(">");
-           if(index==-1) {
-               tmp=tmp.concat(str);
-           }
-
-        }
-        }else{
-        tmp=str;
-        }
-
-        /*
-        //System.out.println(tmp);
-        if (tmp.indexOf("<")!=-1){
-        str=tmp.substring(0,tmp.indexOf("<"));
-        str=str.concat("&lt;");
-        str=str.concat(tmp.substring(tmp.indexOf("<")+1,tmp.length()));
-        tmp=str;
-        }
-        if (tmp.indexOf(">")!=-1){
-        str=tmp.substring(0,tmp.indexOf(">"));
-        str=str.concat("&gt;");
-        str=str.concat(tmp.substring(tmp.indexOf(">")+1,tmp.length()));
-        tmp=str;
-        }*/
+        str=needsMask(str);
         try{
-         xOutStream.writeBytes(tmp.getBytes("UTF-8"));
+         xOutStream.writeBytes(str.getBytes("UTF-8"));
         }
        catch (Exception e){
            System.out.println("\n"+e);
