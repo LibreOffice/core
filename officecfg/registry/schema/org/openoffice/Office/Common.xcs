@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: af $ $Date: 2002-08-07 12:01:51 $
+ *  last change: $Author: fs $ $Date: 2002-08-13 14:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,15 +1048,12 @@
 			</group>
 		</group>
 		<group oor:name="Cache">
-            <!-- Responsible: AF -->
-            <info>
-                <desc xml:lang="en-US">Cache related options..</desc>
-            </info>
+			<!-- Responsible: AF -->
+			<info>
+				<desc xml:lang="en-US">Cache related options..</desc>
+			</info>
 			<group oor:name="DrawingEngine">
-                <!-- Responsible: AF -->
-                <info>
-                    <desc xml:lang="en-US">Cache related options of the drawing engine.</desc>
-                </info>
+				<!-- Responsible: AF -->
 				<prop oor:name="OLE_Objects" oor:type="xs:int">
 					<!-- OldPath: soffice-WorkingSet -->
 					<!-- OldLocation: soffice.ini -->
@@ -1067,12 +1064,12 @@
 						<desc xml:lang="en-US">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 					</info>
 				</prop>
+				<info>
+					<desc xml:lang="en-US">Cache related options of the drawing engine.</desc>
+				</info>
 			</group>
 			<group oor:name="Writer">
-                <!-- Responsible: AF -->
-                <info>
-                    <desc xml:lang="en-US">Cache related options of the Writer.</desc>
-                </info>
+				<!-- Responsible: AF -->
 				<prop oor:name="OLE_Objects" oor:type="xs:int">
 					<!-- OldPath: soffice-WorkingSet -->
 					<!-- OldLocation: soffice.ini -->
@@ -1083,6 +1080,9 @@
 						<desc xml:lang="en-US">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 					</info>
 				</prop>
+				<info>
+					<desc xml:lang="en-US">Cache related options of the Writer.</desc>
+				</info>
 			</group>
 			<group oor:name="GraphicManager">
 				<prop oor:name="TotalCacheSize" oor:type="xs:int">
@@ -1515,7 +1515,7 @@
 			</group>
 		</group>
 		<group oor:name="Gallery">
-            <!-- Responsible: AF -->
+			<!-- Responsible: AF -->
 			<prop oor:name="ID_Dialog" oor:type="xs:boolean">
 				<!-- OldPath: Common/Peets-ID-Dialog -->
 				<!-- OldLocation: soffice.ini -->
@@ -2434,9 +2434,6 @@
 		</group>
 		<group oor:name="Print">
 			<!-- Responsible: AF -->
-			<info>
-                <desc xml:lang="en-US">Options related to printing.</desc>
-            </info>
 			<prop oor:name="PrintingModifiesDocument" oor:type="xs:boolean">
 				<!-- Responsible: (MBA)-->
 				<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
@@ -2446,6 +2443,9 @@
 					<label xml:lang="en-US">(PrinterOptions) PrintingModifiesDocument</label>
 				</info>
 			</prop>
+			<info>
+				<desc xml:lang="en-US">Options related to printing.</desc>
+			</info>
 			<group oor:name="Warning">
 				<!-- Responsible: (OS) -->
 				<prop oor:name="PaperSize" oor:type="xs:boolean">
@@ -2496,14 +2496,11 @@
 				</info>
 			</group>
 			<group oor:name="Option">
-                <!-- Responsible: AF -->
-                <info>
-                    <desc xml:lang="en-US">Options related to printing.</desc>
-                </info>
-                <group oor:name="Printer">
-                    <info>
-                        <desc xml:lang="en-US">Options related to printing.</desc>
-                    </info>
+				<!-- Responsible: AF -->
+				<info>
+					<desc xml:lang="en-US">Options related to printing.</desc>
+				</info>
+				<group oor:name="Printer">
 					<prop oor:name="ReduceTransparency" oor:type="xs:boolean">
 						<!-- Responsible: AF -->
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
@@ -2607,6 +2604,9 @@
 							<label xml:lang="en-US">(PrinterOptions) ConvertToGreyscales</label>
 						</info>
 					</prop>
+					<info>
+						<desc xml:lang="en-US">Options related to printing.</desc>
+					</info>
 				</group>
 				<group oor:name="File">
 					<prop oor:name="ReduceTransparency" oor:type="xs:boolean">
@@ -2844,13 +2844,28 @@
 				</set>
 			</group>
 			<group oor:name="Registration">
-				<prop oor:name="URL" oor:type="xs:string"/>
-				<prop oor:name="ReminderDate" oor:type="xs:string"/>
+				<!-- Responsible: FS-->
+				<prop oor:name="URL" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">string specifying the URL to be used for online registration</desc>
+					</info>
+				</prop>
+				<prop oor:name="ReminderDate" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">string representation of the date at which the user should be reminded (e.g. "13.02.2002")</desc>
+					</info>
+				</prop>
 				<prop oor:name="RequestDialog" oor:type="xs:int">
 					<value>2</value>
+					<info>
+						<desc xml:lang="en-US">number used internally to determine when the dialog should be started</desc>
+					</info>
 				</prop>
 				<prop oor:name="ShowMenuItem" oor:type="xs:boolean">
 					<value>true</value>
+					<info>
+						<desc xml:lang="en-US">boolean specifying if the "Registration..." menu item is available</desc>
+					</info>
 				</prop>
 			</group>
 		</group>
@@ -2876,10 +2891,7 @@
 			</group>
 		</group>
 		<group oor:name="Vectorize">
-            <!-- Responsible: AF -->
-            <info>
-              <desc xml:lang="en-US">Options related to the vectorization of bitmaps.</desc>
-            </info>
+			<!-- Responsible: AF -->
 			<prop oor:name="ColorCount" oor:type="xs:short">
 				<!-- OldPath: Draw_Impress/Vectorize -->
 				<!-- OldLocation: drawing.cfg -->
@@ -2941,9 +2953,12 @@
 					<maxInclusive oor:value="128"/>
 				</constraints>
 			</prop>
+			<info>
+				<desc xml:lang="en-US">Options related to the vectorization of bitmaps.</desc>
+			</info>
 		</group>
 		<group oor:name="Image">
-            <!-- Responsible: AF -->
+			<!-- Responsible: AF -->
 			<group oor:name="Color">
 				<prop oor:name="Grayscale" oor:type="xs:short">
 					<!-- OldPath: Image/Colors -->
