@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 15:52:17 $
+ *  last change: $Author: bm $ $Date: 2003-12-16 13:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "ItemPropertyMap.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "ErrorBar.hxx"
+#include "PropertyHelper.hxx"
 
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
@@ -162,15 +163,28 @@ void lcl_RemoveMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer 
     }
 }
 
-void lcl_AddMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
+void lcl_AddMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt,
+    const uno::Reference< beans::XPropertySet > & xSeriesProp )
 {
     if( !xRegCnt.is())
         return;
     OSL_ASSERT( ! lcl_HasMeanValueLine( xRegCnt ));
 
     // todo: use a valid context
-    xRegCnt->addRegressionCurve( ::chart::RegressionCurveHelper::createMeanValueLine(
-                                     uno::Reference< uno::XComponentContext >() ));
+    uno::Reference< chart2::XRegressionCurve > xCurve(
+        ::chart::RegressionCurveHelper::createMeanValueLine(
+            uno::Reference< uno::XComponentContext >() ));
+    xRegCnt->addRegressionCurve( xCurve );
+
+    if( xSeriesProp.is())
+    {
+        uno::Reference< beans::XPropertySet > xProp( xCurve, uno::UNO_QUERY );
+        if( xProp.is())
+        {
+            xProp->setPropertyValue( C2U( "LineColor" ),
+                                     xSeriesProp->getPropertyValue( C2U( "Color" )));
+        }
+    }
 }
 
 uno::Reference< beans::XPropertySet > lcl_GetYErrorBar(
@@ -251,7 +265,10 @@ bool lcl_getRegressType( const uno::Reference< chart2::XRegressionCurveContainer
     return bResult;
 }
 
-uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve( SvxChartRegress eRegress )
+uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve(
+    SvxChartRegress eRegress,
+    const uno::Reference< beans::XPropertySet > & xFormerProp,
+    const uno::Reference< beans::XPropertySet > & xSeriesProp )
 {
     uno::Reference< chart2::XRegressionCurve > xResult;
     ::rtl::OUString aServiceName;
@@ -280,6 +297,22 @@ uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve( SvxChartRe
         // todo: use a valid context
         xResult.set( ::chart::RegressionCurveHelper::createRegressionCurveByServiceName(
                          uno::Reference< uno::XComponentContext >(), aServiceName ));
+
+        uno::Reference< beans::XPropertySet > xProp( xResult, uno::UNO_QUERY );
+        if( xProp.is())
+        {
+            if( xFormerProp.is())
+                ::chart::PropertyHelper::copyProperties( xFormerProp, xProp );
+            else
+            {
+                if( xSeriesProp.is())
+                {
+                    xProp->setPropertyValue( C2U( "LineColor" ),
+                                             xSeriesProp->getPropertyValue( C2U( "Color" )));
+                }
+                xProp->setPropertyValue( C2U( "LineWidth" ), uno::makeAny( sal_Int32( 100 )));
+            }
+        }
     }
 
     return xResult;
@@ -288,9 +321,12 @@ uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve( SvxChartRe
 /** removes all regression curves that are of type linear, log, exp or pot. (not
     mean-value) and returns true, if anything was removed
  */
-bool lcl_removeAllKnownRegressionCurves( const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
+::std::pair< bool, uno::Reference< beans::XPropertySet > >
+lcl_removeAllKnownRegressionCurves(
+    const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
 {
-    bool bResult = false;
+    ::std::pair< bool, uno::Reference< beans::XPropertySet > > aResult;
+    aResult.first = false;
     ::std::vector< sal_Int32 > aDeleteIndexes;
 
     if( xRegCnt.is())
@@ -319,12 +355,18 @@ bool lcl_removeAllKnownRegressionCurves( const uno::Reference< chart2::XRegressi
 
             if( aDeleteIndexes.size() > 0 )
             {
+                bool bGotFormerProp = false;
                 for( ::std::vector< sal_Int32 >::const_iterator aIt = aDeleteIndexes.begin();
                      aIt != aDeleteIndexes.end(); ++aIt )
                 {
+                    if( ! bGotFormerProp )
+                    {
+                        aResult.second.set( aCurves[*aIt], uno::UNO_QUERY );
+                        bGotFormerProp = true;
+                    }
                     xRegCnt->removeRegressionCurve( aCurves[ *aIt ] );
                 }
-                bResult = true;
+                aResult.first = true;
             }
         }
         catch( uno::Exception & ex )
@@ -333,7 +375,7 @@ bool lcl_removeAllKnownRegressionCurves( const uno::Reference< chart2::XRegressi
         }
     }
 
-    return bResult;
+    return aResult;
 }
 
 uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
@@ -430,7 +472,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( ! bNewHasMeanValueLine )
                     lcl_RemoveMeanValueLine( xRegCnt );
                 else
-                    lcl_AddMeanValueLine( xRegCnt );
+                    lcl_AddMeanValueLine( xRegCnt, GetPropertySet() );
                 bChanged = true;
             }
         }
@@ -583,7 +625,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
             if( eRegress == CHREGRESS_NONE )
             {
-                bChanged = lcl_removeAllKnownRegressionCurves( xRegCnt );
+                bChanged = lcl_removeAllKnownRegressionCurves( xRegCnt ).first;
             }
             else
             {
@@ -591,9 +633,10 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( ! lcl_getRegressType( xRegCnt, eOldRegress ) ||
                     eOldRegress != eRegress )
                 {
-                    lcl_removeAllKnownRegressionCurves( xRegCnt );
+                    uno::Reference< beans::XPropertySet > xFormerProp(
+                        lcl_removeAllKnownRegressionCurves( xRegCnt ).second );
                     xRegCnt->addRegressionCurve(
-                        lcl_createRegressionCurve( eRegress ));
+                        lcl_createRegressionCurve( eRegress, xFormerProp, GetPropertySet() ));
                     bChanged = true;
                 }
             }
@@ -669,6 +712,9 @@ void StatisticsItemConverter::FillSpecialItem(
                             eErrorKind = CHERROR_PERCENT; break;
                         case chart2::ErrorBarStyle_ERROR_MARGIN:
                             eErrorKind = CHERROR_BIGERROR; break;
+                        case chart2::ErrorBarStyle_STANDARD_ERROR:
+                            // not yet available in UI
+                            break;
 
                         case chart2::ErrorBarStyle_FROM_DATA:
                             // suppress warning
