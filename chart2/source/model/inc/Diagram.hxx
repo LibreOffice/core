@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:21 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 13:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ private:
         ::drafts::com::sun::star::chart2::XLegend >
                         m_xLegend;
 
-    const ::rtl::OUString m_aTemplateServiceName;
+    ::rtl::OUString m_aTemplateServiceName;
 };
 
 } //  namespace chart
