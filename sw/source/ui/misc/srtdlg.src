@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:01:26 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
         Text[ slovak ] = "Stĺpec";
+        Text[ hungarian ] = "Oszlop";
+        Text[ slovenian ] = "Stolpec";
     };
     FixedText FT_KEYTYP
     {
@@ -173,6 +175,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Schlüsseltyp";
         Text[ hindi ] = "की वर्ग";
         Text[ slovak ] = "Druh kľúča";
+        Text[ hungarian ] = "Kulcstípus";
+        Text[ slovenian ] = "Vrsta ključa";
     };
     FixedText FT_DIR
     {
@@ -207,6 +211,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Reihenfolge";
         Text[ hindi ] = "क्रम";
         Text[ slovak ] = "Poradie";
+        Text[ hungarian ] = "Sorrend";
+        Text[ slovenian ] = "Razvrsti";
     };
     CheckBox CB_KEY1
     {
@@ -220,7 +226,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "Chave ~1" ;
         Text [ portuguese ] = "Tecla ~1" ;
         Text [ finnish ] = "Avain ~1" ;
-        Text [ danish ] = "N�gle 1" ;
+        Text [ danish ] = "N�gle ~1" ;
         Text [ french ] = "Crit�re ~1" ;
         Text [ swedish ] = "Nyckel ~1" ;
         Text [ dutch ] = "Sleutel ~1" ;
@@ -243,6 +249,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Schlüssel ~1";
         Text[ hindi ] = "की ~1";
         Text[ slovak ] = "Kľúč ~1";
+        Text[ hungarian ] = "~1. kulcs";
+        Text[ slovenian ] = "Ključ ~1";
     };
     NumericField ED_KEY1
     {
@@ -290,6 +298,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Numerisch";
         Text[ hindi ] = "संख्या";
         Text[ slovak ] = "Číselný";
+        Text[ hungarian ] = "Szám";
+        Text[ slovenian ] = "Številčno";
     };
     ListBox DLB_KEY1
     {
@@ -311,7 +321,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "~Ascendente" ;
         Text [ portuguese ] = "~Ascendente" ;
         Text [ finnish ] = "~Nouseva" ;
-        Text [ danish ] = "Stigende" ;
+        Text [ danish ] = "St~igende" ;
         Text [ french ] = "Croissant" ;
         Text [ swedish ] = "Stig~ande" ;
         Text [ dutch ] = "~Oplopend" ;
@@ -335,6 +345,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "~Aufsteigend";
         Text[ hindi ] = "~आरोहण क्रम";
         Text[ slovak ] = "~Vzostupne";
+        Text[ hungarian ] = "~Növekvő";
+        Text[ slovenian ] = "N~araščajoče";
     };
     RadioButton RB_DN
     {
@@ -347,7 +359,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "~Descendente" ;
         Text [ portuguese ] = "~Descendente" ;
         Text [ finnish ] = "~Laskeva" ;
-        Text [ danish ] = "Faldende" ;
+        Text [ danish ] = "Fal~dende" ;
         Text [ french ] = "D�croissant" ;
         Text [ swedish ] = "Fallan~de" ;
         Text [ dutch ] = "~Aflopend" ;
@@ -370,6 +382,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "A~bsteigend";
         Text[ hindi ] = "~अवरोहण क्रम";
         Text[ slovak ] = "~Zostupne";
+        Text[ hungarian ] = "~Csökkenő";
+        Text[ slovenian ] = "Pa~dajoče";
     };
     CheckBox CB_KEY2
     {
@@ -383,7 +397,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "Chave ~2" ;
         Text [ portuguese ] = "Tecla ~2" ;
         Text [ finnish ] = "Avain ~2" ;
-        Text [ danish ] = "N�gle 2" ;
+        Text [ danish ] = "N�gle ~2" ;
         Text [ french ] = "Crit�re ~2" ;
         Text [ swedish ] = "Nyckel ~2" ;
         Text [ dutch ] = "Sleutel ~2" ;
@@ -405,6 +419,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Schlüssel ~2";
         Text[ hindi ] = "की ~2";
         Text[ slovak ] = "Kľúč ~2";
+        Text[ hungarian ] = "~2. kulcs";
+        Text[ slovenian ] = "Ključ ~2";
     };
     NumericField ED_KEY2
     {
@@ -466,6 +482,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "A~ufsteigend";
         Text[ hindi ] = "आरोहण क्रम";
         Text[ slovak ] = "Vzostupne";
+        Text[ hungarian ] = "Növekvő";
+        Text[ slovenian ] = "Naraščajoče";
     };
     RadioButton RB_DN2
     {
@@ -501,6 +519,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Ab~steigend";
         Text[ hindi ] = "अवरोहण क्रम";
         Text[ slovak ] = "Zostupne";
+        Text[ hungarian ] = "Csökkenő";
+        Text[ slovenian ] = "Padajoče";
     };
     CheckBox CB_KEY3
     {
@@ -514,7 +534,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "Chave ~3" ;
         Text [ portuguese ] = "Tecla ~3" ;
         Text [ finnish ] = "Avain ~3" ;
-        Text [ danish ] = "N�gle 3" ;
+        Text [ danish ] = "N�gle ~3" ;
         Text [ french ] = "Cl� 3" ;
         Text [ swedish ] = "Nyckel ~3" ;
         Text [ dutch ] = "Sleutel ~3" ;
@@ -536,6 +556,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Schlüssel ~3";
         Text[ hindi ] = "की ~3";
         Text[ slovak ] = "Kľúč ~3";
+        Text[ hungarian ] = "~3. kulcs";
+        Text[ slovenian ] = "Ključ ~3";
     };
     NumericField ED_KEY3
     {
@@ -597,6 +619,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Aufstei~gend";
         Text[ hindi ] = "आरोहण क्रम";
         Text[ slovak ] = "Vzostupne";
+        Text[ hungarian ] = "Növekvő";
+        Text[ slovenian ] = "Naraščajoče";
     };
     RadioButton RB_DN3
     {
@@ -632,6 +656,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Absteigen~d";
         Text[ hindi ] = "अवरोहण क्रम";
         Text[ slovak ] = "Zostupne";
+        Text[ hungarian ] = "Csökkenő";
+        Text[ slovenian ] = "Padajoče";
     };
     FixedLine FL_SORT_2
     {
@@ -644,10 +670,10 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "Crit�rios de ordena��o" ;
         Text [ portuguese ] = "Regra" ;
         Text [ finnish ] = "Lajitteluperuste" ;
-        Text [ danish ] = "Regel" ;
+        Text [ danish ] = "Sorteringskriterier" ;
         Text [ french ] = "R�gle" ;
         Text [ swedish ] = "Regel" ;
-        Text [ dutch ] = "Criteria" ;
+        Text [ dutch ] = "Sorteercriteria" ;
         Text [ spanish ] = "Criterios" ;
         Text [ english_us ] = "Sort criteria" ;
         Text[ chinese_simplified ] = "排序规则";
@@ -666,6 +692,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Regel";
         Text[ hindi ] = "सोर्ट सिद्धान्त";
         Text[ slovak ] = "Kritériá radenia";
+        Text[ hungarian ] = "Rendezési elv";
+        Text[ slovenian ] = "Pogoji razvrščanja";
     };
     RadioButton RB_COL
     {
@@ -678,7 +706,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "~Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
         Text [ finnish ] = "~Sarakkeet" ;
-        Text [ danish ] = "Kolonner" ;
+        Text [ danish ] = "~Kolonner" ;
         Text [ french ] = "C~olonnes" ;
         Text [ swedish ] = "Kolumner" ;
         Text [ dutch ] = "~Kolommen" ;
@@ -701,6 +729,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "S~palten";
         Text[ hindi ] = "स्तं~भें";
         Text[ slovak ] = "S~tĺpce";
+        Text[ hungarian ] = "Osz~lopok";
+        Text[ slovenian ] = "Stol~pci";
     };
     RadioButton RB_ROW
     {
@@ -713,7 +743,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "R�kker" ;
+        Text [ danish ] = "~R�kker" ;
         Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
@@ -737,6 +767,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "~Zeilen";
         Text[ hindi ] = "पंक्ति~याँ";
         Text[ slovak ] = "~Riadky";
+        Text[ hungarian ] = "~Sorok";
+        Text[ slovenian ] = "V~rstice";
     };
     FixedLine FL_DIR
     {
@@ -771,6 +803,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Richtung";
         Text[ hindi ] = "दिशा";
         Text[ slovak ] = "Smer";
+        Text[ hungarian ] = "Irány";
+        Text[ slovenian ] = "Smer";
     };
     RadioButton RB_TAB
     {
@@ -783,7 +817,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "~Tabula��o" ;
         Text [ portuguese ] = "~Tabula��es" ;
         Text [ finnish ] = "Sarkaimet" ;
-        Text [ danish ] = "Tabulator" ;
+        Text [ danish ] = "Tabu~lator" ;
         Text [ french ] = "Tabulation" ;
         Text [ swedish ] = "~Tabulator" ;
         Text [ dutch ] = "Ta~b" ;
@@ -807,6 +841,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "~Tabulator";
         Text[ hindi ] = "~टॉब्स";
         Text[ slovak ] = "~Tabulátory";
+        Text[ hungarian ] = "~Tabulátorok";
+        Text[ slovenian ] = "~Tabulatorji";
     };
     RadioButton RB_TABCH
     {
@@ -819,7 +855,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "~Caracter" ;
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
-        Text [ danish ] = "Tegn" ;
+        Text [ danish ] = "Te~gn" ;
         Text [ french ] = "Caract�res" ;
         Text [ swedish ] = "Te~cken" ;
         Text [ dutch ] = "~Teken" ;
@@ -842,6 +878,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Z~eichen";
         Text[ hindi ] = "~अक्षर";
         Text[ slovak ] = "~Znak";
+        Text[ hungarian ] = "~Karakter";
+        Text[ slovenian ] = "~Znak";
     };
     Edit ED_TABCH
     {
@@ -884,6 +922,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Trenner";
         Text[ hindi ] = "अलगानेवाला";
         Text[ slovak ] = "Oddeľovač";
+        Text[ hungarian ] = "Elválasztó";
+        Text[ slovenian ] = "Ločilo";
     };
     String STR_ROW
     {
@@ -916,6 +956,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Zeile";
         Text[ hindi ] = "पंक्तियाँ";
         Text[ slovak ] = "Riadky";
+        Text[ hungarian ] = "Sorok";
+        Text[ slovenian ] = "Vrstice";
     };
     String STR_COL
     {
@@ -948,6 +990,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
         Text[ slovak ] = "Stĺpec";
+        Text[ hungarian ] = "Oszlop";
+        Text[ slovenian ] = "Stolpec";
     };
     PushButton PB_DELIM
     {
@@ -987,6 +1031,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "भाषा";
         Text[ slovak ] = "Jazyk";
+        Text[ hungarian ] = "Nyelv";
+        Text[ slovenian ] = "Jezik";
     };
     ListBox LB_LANG
     {
@@ -1027,6 +1073,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "Einstellung";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenie";
+        Text[ hungarian ] = "Beállítás";
+        Text[ slovenian ] = "Nastavitev";
     };
     CheckBox CB_CASE
     {
@@ -1043,7 +1091,7 @@ ModalDialog DLG_SORTING
         Text[ french ] = "Comparaison exacte";
         Text[ spanish ] = "Comparaci�n exacta";
         Text[ italian ] = "Paragone esatto";
-        Text[ danish ] = "Eksakt sammenligning";
+        Text[ danish ] = "STORE og sm� bogstaver";
         Text[ swedish ] = "Exakt j�mf�relse";
         Text[ polish ] = "Uwz~gl�dniaj wielko�� liter";
         Text[ portuguese_brazilian ] = "Diferenciar Mai�sculas/Min�sculas";
@@ -1060,6 +1108,8 @@ ModalDialog DLG_SORTING
         Text[ hebrew ] = "‮התאמת אותיות גדולות/קטנות‬";
         Text[ hindi ] = "केस तुलना";
         Text[ slovak ] = "Rozlišovať veľkosť";
+        Text[ hungarian ] = "Kis- és nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Razlikuj velike in male črke";
     };
 
     Text[ chinese_simplified ] = "排序";
@@ -1078,6 +1128,8 @@ ModalDialog DLG_SORTING
     Text[ hebrew ] = "‮מיון‬";
     Text[ hindi ] = "सोर्ट";
     Text[ slovak ] = "Zoradiť";
+    Text[ hungarian ] = "Rendezés";
+    Text[ slovenian ] = "Razvrsti";
 };
 InfoBox MSG_SRTERR
 {
@@ -1112,7 +1164,10 @@ InfoBox MSG_SRTERR
     MESSAGE[ hebrew ] = "Selektion konnte nicht sortiert werden";
     MESSAGE[ hindi ] = "चुनाव को सोर्ट नहीं कर सकता है";
     MESSAGE[ slovak ] = "Vybrané objekty nie je možné zoradiť";
+    MESSAGE[ hungarian ] = "Nem rendezhető a kijelölt rész";
+    MESSAGE[ slovenian ] = "Ni mogoče razvrstiti izbora";
 };
+
 
 
 
