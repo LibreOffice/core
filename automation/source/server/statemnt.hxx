@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:29:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ public:
     {
         bIsInReschedule = TRUE;
         pLastFocusWindow = GetpApp()->GetFocusWindow();
-        bWasDragManager = NULL /*!= DragManager::GetDragManager()*/;
+        bWasDragManager = false /*!= DragManager::GetDragManager()*/;
         bWasPopupMenu = NULL != PopupMenu::GetActivePopupMenu();
         bBasicWasRunning = StarBASIC::IsRunning();
         bWasExecuting = bExecuting;
@@ -351,7 +351,7 @@ public:
 
 class StatementCommand : public StatementList   // Befehl ausführen (wintree, resetaplication ...)
 {
-    friend ImplRemoteControl;
+    friend class ImplRemoteControl;
 protected:
     USHORT nMethodId;
     USHORT nParams;
