@@ -94,8 +94,20 @@ public class Formula extends CellValue {
         setRow(row);
         setCol(column);
         setFormula(cellContents);
-        double cellLong = (double) Double.parseDouble(value);
-        num     = EndianConverter.writeDouble(cellLong);
+        if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            num[0]=(byte)0x01;
+            num[1]=(byte)0x00;
+            if(value.equalsIgnoreCase("true")) {
+                num[2]=(byte)0x01;
+            } else {
+                num[2]=(byte)0x00;
+            }
+            num[3]=(byte)0x00;num[4]=(byte)0x00;num[5]=(byte)0x00;
+            num[6]=(byte)0xFF;num[7]=(byte)0xFF;
+        } else {
+            double cellLong = (double) Double.parseDouble(value);
+            num = EndianConverter.writeDouble(cellLong);
+        }
     }
 
     /**
