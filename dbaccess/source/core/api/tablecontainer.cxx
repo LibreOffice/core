@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:30 $
+ *  last change: $Author: oj $ $Date: 2002-10-16 11:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
                 aIter->second = createObject(_sElementName);
             ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
+            sal_Bool bIsView = sal_False;
             Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
             if(xTable.is())
             {
@@ -638,12 +639,22 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
                 ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+
+                ::rtl::OUString sType;
+                xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
+                bIsView = sType.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")));
             }
 
             if(!sComposedName.getLength())
                 ::dbtools::throwFunctionSequenceException(*this);
 
-            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
+            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
+
+            // #104282# OJ
+            if ( bIsView ) // here we have a view
+                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
+            else
+                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
             aSql += sComposedName;
             Reference< XStatement > xStmt = m_xConnection->createStatement(  );
             if(xStmt.is())
