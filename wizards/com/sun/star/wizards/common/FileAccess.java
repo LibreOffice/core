@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FileAccess.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:28:40 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:50:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.common;
 import java.io.File;
 import java.util.Vector;
@@ -478,7 +477,9 @@ public class FileAccess {
             fileAccess.kill(file);
             return true;
         } catch (CommandAbortedException e) {
+            e.printStackTrace(System.out);
         } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
 
         return false;
