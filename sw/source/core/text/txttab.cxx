@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 09:37:52 $
+ *  last change: $Author: fme $ $Date: 2002-08-08 10:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include "itrform2.hxx"
 #include "txtfrm.hxx"
 
+extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
 
 /*************************************************************************
  *                    SwLineInfo::GetTabStop()
@@ -328,7 +329,11 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     // 8532: CenterTabs, deren Blankbreite nicht mehr in die Zeile passt
     sal_Bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
-    if( !bFull )
+    // #95477# Rotated tab stops get the width of one blank
+    const USHORT nDir = UnMapDirection( rInf.GetFont()->GetOrientation(),
+                                        rInf.GetTxtFrm()->IsVertical() );
+
+    if( ! bFull && 0 == nDir )
     {
         const MSHORT nWhich = GetWhichPor();
         switch( nWhich )
