@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:51:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ String STR_HUMAN_SWGLOBDOC_NAME
     Text[ hebrew ] = "‚ÄÆ◊û◊°◊û◊ö ◊ê◊ë‚Ä¨";
     Text[ hindi ] = "‡§Æ‡§æ‡§∏‡•ç‡§ü‡§∞ ‡§≤‡•á‡§ñ‡§™‡§§‡•ç‡§∞";
     Text[ slovak ] = "Hlavn√Ω dokument";
+    Text[ hungarian ] = "F≈ëdokumentum";
+    Text[ slovenian ] = "Glavni dokument";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -109,11 +111,11 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ portuguese ] = "%PRODUCTNAME 6.0 Documento-mestre";
     TEXT[ russian ] = "—ÓÒÚ‡‚ÌÓÈ ‰ÓÍÛÏÂÌÚ (%PRODUCTNAME 6.0)";
     TEXT[ greek ] = "%PRODUCTNAME 6.0 -  ˝ÒÈÔ ›„„Ò·ˆÔ";
-    TEXT[ dutch ] = "%PRODUCTNAME 6.0 Masterdocument";
+    TEXT[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION Masterdocument";
     TEXT[ french ] = "%PRODUCTNAME %PRODUCTVERSION Document maÓtre";
     TEXT[ spanish ] = "Documento maestro %PRODUCTNAME %PRODUCTVERSION ";
     TEXT[ italian ] = "%PRODUCTNAME %PRODUCTVERSION Documento master";
-    TEXT[ danish ] = "%PRODUCTNAME 6.0 Hoveddokument";
+    TEXT[ danish ] = "%PRODUCTNAME %PRODUCTVERSION-hoveddokument";
     TEXT[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-samlingsdokument";
     TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g≥Ûwny";
     TEXT[ portuguese_brazilian ] = "Documento Mestre %PRODUCTNAME 6.0 ";
@@ -130,12 +132,16 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ hebrew ] = "%PRODUCTNAME 6.0 Global Dokument";
     TEXT[ hindi ] = "%PRODUCTNAME 6.0 ‡§Æ‡§æ‡§∏‡•ç‡§ü‡§∞ ‡§≤‡•á‡§ñ‡§™‡§§‡•ç‡§∞";
     TEXT[ slovak ] = "Hlavn√Ω dokument %PRODUCTNAME %PRODUCTVERSION";
+    TEXT[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION-f≈ëdokumentum";
+    TEXT[ slovenian ] = "Glavni dokument programa %PRODUCTNAME 6.0";
 };
 
 #define MN_SW_GLOBAL
 #include "swmn.hrc"
 #define MN_SW_PORTAL
 #include "swmn.hrc"
+
+
 
 
 
