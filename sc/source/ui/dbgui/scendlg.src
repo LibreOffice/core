@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text = "Szenario anlegen" ;
     Text [ ENGLISH ] = "Create Scenario" ;
     Text [ NORWEGIAN ] = "Lag Scenario" ;
-    Text [ DANISH ] = "Opret scenarie" ;
+    Text [ DANISH ] = "Opret scenario" ;
     Text [ ENGLISH_US ] = "Create Scenario" ;
     Text [ SPANISH ] = "Crear escenario" ;
     Text [ FINNISH ] = "Luo hahmotelma" ;
@@ -291,7 +291,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ english_us ] = "Edit Scenario" ;
         Text [ portuguese_brazilian ] = "Szenario bearbeiten" ;
         Text [ swedish ] = "Bearbeta scenario" ;
-        Text [ danish ] = "Rediger scenarie" ;
+        Text [ danish ] = "Rediger scenario" ;
         Text [ italian ] = "Modifica scenario" ;
         Text [ spanish ] = "Editar escenario" ;
         Text [ french ] = "Modifier scénario" ;
