@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 15:33:19 $
+ *  last change: $Author: mt $ $Date: 2001-04-12 10:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,15 +471,6 @@ BOOL ImplEntryList::IsEntryPosSelected( USHORT nIndex ) const
     return pImplEntry ? pImplEntry->mbIsSelected : FALSE;
 }
 
-// -----------------------------------------------------------------------
-
-void ImplEntryList::SetNoSelection()
-{
-    USHORT nEntryCount = GetEntryCount();
-    for ( USHORT n = 0; n < nEntryCount; n++ )
-        SelectEntry( n, FALSE );
-}
-
 // =======================================================================
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
@@ -499,6 +490,7 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     mbSelectionChanged  = FALSE;
     mbMouseMoveSelect   = FALSE;
     mbMulti             = FALSE;
+    mbStackMode         = FALSE;
     mbGrabFocus         = FALSE;
     mbUserDrawEnabled   = FALSE;
     mbInUserDraw        = FALSE;
@@ -1748,13 +1740,11 @@ void ImplListBox::SelectEntry( USHORT nPos, BOOL bSelect )
 
 void ImplListBox::SetNoSelection()
 {
-    USHORT nSelected = GetEntryList()->GetSelectEntryCount();
-    for ( USHORT n = 0; n < nSelected; n++ )
+    while ( GetEntryList()->GetSelectEntryCount() )
     {
-        USHORT nS = GetEntryList()->GetSelectEntryPos( n );
+        USHORT nS = GetEntryList()->GetSelectEntryPos( 0 );
         SelectEntry( nS, FALSE );
     }
-    maLBWindow.GetEntryList()->SetNoSelection();
 }
 
 // -----------------------------------------------------------------------
@@ -2425,4 +2415,3 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
             mpImplLB->GetMainWindow()->GrabFocus();
     }
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-09 11:45:28 $
+ *  last change: $Author: mt $ $Date: 2001-04-12 10:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,11 +922,7 @@ BOOL ComboBox::IsInDropDown() const
 
 void ComboBox::EnableMultiSelection( BOOL bMulti )
 {
-#if SUPD > 627
     mpImplLB->EnableMultiSelection( bMulti, FALSE );
-#else
-    mpImplLB->EnableMultiSelection( bMulti );
-#endif
     mpImplLB->SetMultiSelectionSimpleMode( TRUE );
 }
 
