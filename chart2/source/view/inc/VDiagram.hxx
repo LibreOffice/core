@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,6 @@ public: //methods
                      ::com::sun::star::drawing::XShapes >& xFinalTarget
              , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
 
-    void    setSceneMatrix( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
-
     void    createShapes( const ::com::sun::star::awt::Point& rPos
                         , const ::com::sun::star::awt::Size& rSize );
 
@@ -137,7 +135,6 @@ private: //members
     // this is an additional inner shape that represents the coordinate region -  that is - where to place data points
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xCoordinateRegionShape;
 
-    ::com::sun::star::drawing::HomogenMatrix                                m_oSceneMatrix;
     sal_Int32                                                               m_nDimension;
     sal_Bool                                                                m_bPolar;
     ::com::sun::star::uno::Reference<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-27 10:49:06 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "ViewDefines.hxx"
 #include "Stripe.hxx"
 #include "macros.hxx"
+#include "Rotation.hxx"
 
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
@@ -88,6 +89,25 @@
 #include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
 #endif
 
+
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+// header for class SvxShape
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
+// header for class E3dScene
+#ifndef _E3D_SCENE3D_HXX
+#include <svx/scene3d.hxx>
+#endif
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -104,12 +124,10 @@ VDiagram::VDiagram(
     , m_pShapeFactory(NULL)
     , m_xOuterGroupShape(NULL)
     , m_xCoordinateRegionShape(NULL)
-    , m_oSceneMatrix()
     , m_nDimension(nDimension)
     , m_bPolar(bPolar)
     , m_xDiagram(xDiagram)
 {
-
 }
 
 VDiagram::~VDiagram()
@@ -128,11 +146,6 @@ void SAL_CALL VDiagram::init(
     m_xFinalTarget  = xFinalTarget;
     m_xShapeFactory = xFactory;
     m_pShapeFactory = new ShapeFactory(xFactory);
-}
-
-void  VDiagram::setSceneMatrix( const drawing::HomogenMatrix& rMatrix )
-{
-    m_oSceneMatrix = rMatrix;
 }
 
 void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
@@ -222,7 +235,167 @@ void VDiagram::createShapes_2d( const awt::Point& rPos, const awt::Size& rSize )
     }
 }
 
-void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
+SceneDescriptor lcl_getDefaultSceneDescriptor()
+{
+    DBG_ERROR("not implemented yet");
+    SceneDescriptor aSceneDescriptor;
+    return aSceneDescriptor;
+}
+
+drawing::HomogenMatrix lcl_getTransformationMatrixForOuterScene( const uno::Reference< XDiagram >& xDiagram )
+{
+    //because of a bug in the drawing layer the matrix at the outer scene does only affect rotation
+
+    SceneDescriptor aSceneDescriptor;
+    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
+    if( !xProp.is() || !(xProp->getPropertyValue( C2U( "SceneProperties" ) ) >>= aSceneDescriptor) )
+        aSceneDescriptor = lcl_getDefaultSceneDescriptor();
+
+    Matrix4D aTranslateM4;
+    aTranslateM4.Translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0);
+
+    Matrix4D aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle );
+
+    Matrix4D aM4 = aRotateM4*aTranslateM4;
+
+    //@todo remove this test:
+    double fTestAngle=1.0;
+    drawing::Direction3D aTestDirection(1,1,1);
+    Rotation::getRotationAxisAngleFromMatrixRepresentation( aTestDirection, fTestAngle, aRotateM4 );
+    /*
+    Matrix4D aM4;
+    aM4.RotateY( -ZDIRECTION*F_PI/9.0 );
+    aM4.RotateX( ZDIRECTION*F_PI/10.0 );
+    */
+
+    //aM4.RotateY( ZDIRECTION*F_PI/2.0 );
+    //aM4.RotateX( -ZDIRECTION*F_PI/2.0 );
+//    aM4.RotateY( -ZDIRECTION*F_PI/2.0 );
+
+    //Matrix4D aTest;
+    //aTest.RotateY( aSceneDescriptor.fRotationAngle*F_PI/180.0 );
+    //aM4.RotateX( -ZDIRECTION*F_PI/2.0 );
+
+//  aM4.Translate(0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0);
+//  aM4.Scale(1, 1, ZDIRECTION); //invert direction of z coordinate to get a left handed system
+//        aM4.Scale(1.0, 1.0, 1.0/50.0);
+    return Matrix4DToHomogenMatrix(aM4);
+}
+
+drawing::HomogenMatrix lcl_getTransformationMatrixForInnerScene( const uno::Reference< XDiagram >& xDiagram )
+{
+    SceneDescriptor aSceneDescriptor;
+    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
+    if( !xProp.is() || !(xProp->getPropertyValue( C2U( "SceneProperties" ) ) >>= aSceneDescriptor) )
+        aSceneDescriptor = lcl_getDefaultSceneDescriptor();
+
+    Matrix4D aM4;
+    double CatsFactor = 3.0;//@todo needs to be calculated from seriescount and slot distance ...
+    aM4.Scale(1.0, aSceneDescriptor.fRelativeHeight, aSceneDescriptor.fRelativeDepth/CatsFactor);
+    return Matrix4DToHomogenMatrix(aM4);
+}
+
+E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
+{
+    E3dScene* pRet=NULL;
+    uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
+    uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
+    if(xUnoTunnel.is()&&xTypeProvider.is())
+    {
+        SvxShape* pSvxShape = reinterpret_cast<SvxShape*>(xUnoTunnel->getSomething( SvxShape::getUnoTunnelId() ));
+        if(pSvxShape)
+        {
+            SdrObject* pObj = pSvxShape->GetSdrObject();
+            if( pObj && pObj->ISA(E3dScene) )
+                pRet = (E3dScene*)pObj;
+        }
+    }
+    return pRet;
+}
+
+/*
+//default is Light 1 on, but we want to use the Light 2 as in the old chart (Light 2 is not specular by default)
+xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_1 ), uno::makeAny((sal_Bool)false) );
+xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_2 ), uno::makeAny((sal_Bool)true) );
+
+//(204,204,204);
+uno::Any aAnyLightColor_1     = xProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_1 ) );
+uno::Any aAnyLightDirection_1 = xProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 ) );
+
+sal_Int32 nLightColor_1; aAnyLightColor_1 >>= nLightColor_1;
+drawing::Direction3D aLightDirection_1; aAnyLightDirection_1 >>= aLightDirection_1;
+
+xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ), aAnyLightColor_1 );
+xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ), uno::makeAny(drawing::Direction3D(1,1,1)) );
+*/
+
+void lcl_setLightSource( const LightSource& rLightSource, sal_Int32 nNumber, const uno::Reference< beans::XPropertySet >& xProp )
+{
+    if( nNumber >= 8 )
+        return;
+    if(0==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_1 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_1 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(1==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_2 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(2==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_3 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_3 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_3 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(3==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_4 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_4 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_4 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(4==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_5 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_5 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_5 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(5==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_6 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_6 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_6 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(6==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_7 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_7 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_7 ), uno::makeAny(rLightSource.aDirection) );
+    }
+    else if(7==nNumber)
+    {
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_8 ), uno::makeAny((sal_Bool)true) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_8 ), uno::makeAny(rLightSource.nDiffuseColor) );
+        xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_8 ), uno::makeAny(rLightSource.aDirection) );
+    }
+}
+
+void lcl_setScenePropertiesExceptTransformation( const SceneDescriptor& rSceneDescriptor, const uno::Reference< beans::XPropertySet >& xProp )
+{
+    xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR ), uno::makeAny( rSceneDescriptor.nAmbientLightColor )); //UNO_NAME_3D_SCENE_AMBIENTCOLOR sal_Int32
+    xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny( rSceneDescriptor.aShadeMode )); // drawing::ShadeMode_FLAT FLAT, PHONG, SMOOTH, DRAFT
+
+    for( sal_Int32 nL=0; nL<rSceneDescriptor.aLightSources.getLength();nL++)
+    {
+        const LightSource& rLightSource = rSceneDescriptor.aLightSources[nL];
+        lcl_setLightSource( rLightSource, nL, xProp );
+    }
+}
+
+void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rReservedSize )
 {
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is()))
@@ -233,62 +406,40 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
     m_xLogicTarget->add(m_xOuterGroupShape);
+    ShapeFactory::setShapeName( m_xOuterGroupShape, C2U("MarkHandles") );
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( m_xOuterGroupShape, uno::UNO_QUERY );
     DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
-        //set TransformationMatrix
-        uno::Any aTM = uno::Any( &m_oSceneMatrix, ::getCppuType((const drawing::HomogenMatrix*)0) );
-
         sal_Int32 nDistance = (sal_Int32)FIXED_SIZE_FOR_3D_CHART_VOLUME*8; //(FIXED_SIZE_FOR_3D_CHART_VOLUME * 4) / 6
         sal_Int32 nFocalLen = nDistance*3;
 
         try
         {
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ), aTM );
+            //set TransformationMatrix
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ), uno::makeAny(lcl_getTransformationMatrixForOuterScene(m_xDiagram)) );
             //uno::Any aCG = createDefaultCameraGeometry();
             //xProp->setPropertyValue( C2U( UNO_NAME_3D_CAMERA_GEOMETRY ), aCG );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_DISTANCE ), uno::makeAny(nDistance) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_FOCAL_LENGTH ), uno::makeAny(nFocalLen) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE ), uno::makeAny(drawing::ProjectionMode_PERSPECTIVE) ); //ProjectionMode_PARALLEL
 
-
-            //default is Light 1 on, but we want to use the Light 2 as in the old chart (Light 2 is not specular by default)
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_1 ), uno::makeAny((sal_Bool)false) );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_2 ), uno::makeAny((sal_Bool)true) );
-
-            //(204,204,204);
-            uno::Any aAnyLightColor_1     = xProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_1 ) );
-            uno::Any aAnyLightDirection_1 = xProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 ) );
-
-            sal_Int32 nLightColor_1; aAnyLightColor_1 >>= nLightColor_1;
-            drawing::Direction3D aLightDirection_1; aAnyLightDirection_1 >>= aLightDirection_1;
-
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ), aAnyLightColor_1 );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ), uno::makeAny(drawing::Direction3D(1,1,1)) );
-
+            SceneDescriptor aSceneDescriptor;
             uno::Reference< beans::XPropertySet > xModelDiaProp( m_xDiagram, uno::UNO_QUERY );
-            SceneDescriptor aSceneDescr;
-            if( xModelDiaProp.is() &&
-                ( xModelDiaProp->getPropertyValue( C2U( "SceneProperties" )) >>= aSceneDescr ))
-            {
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny( aSceneDescr.aShadeMode ));
-            }
-            else
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny(drawing::ShadeMode_FLAT) ); //FLAT, PHONG, SMOOTH, DRAFT
+            if( !xModelDiaProp.is() || !( xModelDiaProp->getPropertyValue( C2U( "SceneProperties" )) >>= aSceneDescriptor ))
+                aSceneDescriptor = lcl_getDefaultSceneDescriptor();
+            lcl_setScenePropertiesExceptTransformation( aSceneDescriptor, xProp );
 
             //D3DSceneTwoSidedLighting
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING )
                 , uno::makeAny( (sal_Bool)true) );
 
-
             //UNO_NAME_3D_SCENE_DISTANCE D3DSceneDistance sal_Int32
             //UNO_NAME_3D_SCENE_FOCAL_LENGTH sal_Int32
             //UNO_NAME_3D_SCENE_PERSPECTIVE drawing::ProjectionMode
 
-            //UNO_NAME_3D_SCENE_AMBIENTCOLOR sal_Int32
             //UNO_NAME_3D_SCENE_LIGHTCOLOR_1 sal_Int32
             //UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 drawing::Direction3D
             //UNO_NAME_3D_SCENE_LIGHTON_1 Bool
@@ -305,9 +456,6 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             ASSERT_EXCEPTION( e );
         }
     }
-    m_xOuterGroupShape->setPosition(rPos); //FIXED_SIZE_FOR_3D_CHART_VOLUME
-    m_xOuterGroupShape->setSize(rSize); //FIXED_SIZE_FOR_3D_CHART_VOLUME
-
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
@@ -317,7 +465,6 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
 
     //-------------------------------------------------------------------------
     //create additional group to manipulate the aspect ratio of the whole diagram:
-    /*
     {
         uno::Reference< beans::XPropertySet > xProp( xOuterGroup_Shapes, uno::UNO_QUERY );
         DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
@@ -325,11 +472,7 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
         {
             try
             {
-                Matrix4D aM4;
-                double CatsFactor = 15.0;//@todo needs to be calculated from seriescount and slot distance ...
-                aM4.Scale(1.0, 1.0, 1.0/CatsFactor);
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
-                    , uno::makeAny(Matrix4DToHomogenMatrix(aM4)) );
+                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ), uno::makeAny(lcl_getTransformationMatrixForInnerScene(m_xDiagram)) );
             }
             catch( uno::Exception& e )
             {
@@ -337,7 +480,6 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             }
         }
     }
-    */
 
     //---------------------------
 
@@ -408,6 +550,30 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
                 ASSERT_EXCEPTION( e );
             }
         }
+    }
+
+    //calculate correct 2d dimensions for getting a correct initial 2D aspect ratio
+    E3dScene* pScene = lcl_getE3dScene( m_xOuterGroupShape );
+    pScene->CorrectSceneDimensions();
+
+    //do not change aspect ratio of 3D scene with 2D bound rect
+    awt::Size aDiagramSize;
+    {
+        awt::Size aAspectRatioSize = m_xOuterGroupShape->getSize();
+        double fMax = std::max(rReservedSize.Width,rReservedSize.Height);
+        double fFactorWidth = double(rReservedSize.Width)/double(aAspectRatioSize.Width);
+        double fFactorHeight = double(rReservedSize.Height)/double(aAspectRatioSize.Height);
+        double fFactor = std::min(fFactorWidth,fFactorHeight);
+        aDiagramSize.Width=static_cast<sal_Int32>(fFactor*aAspectRatioSize.Width);
+        aDiagramSize.Height=static_cast<sal_Int32>(fFactor*aAspectRatioSize.Height);
+        m_xOuterGroupShape->setSize(aDiagramSize);
+    }
+    //center diagram position
+    {
+        awt::Point aNewPosition(rPos);
+        aNewPosition.X += static_cast<sal_Int32>(double(rReservedSize.Width-aDiagramSize.Width)/2.0);
+        aNewPosition.Y += static_cast<sal_Int32>(double(rReservedSize.Height-aDiagramSize.Height)/2.0);
+        m_xOuterGroupShape->setPosition(aNewPosition);
     }
 }
 
