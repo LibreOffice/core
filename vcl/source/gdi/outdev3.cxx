@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-06 11:36:30 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 11:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,32 +1555,6 @@ ImplFontCache::~ImplFontCache()
 ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                                    const Font& rFont, const Size& rSize )
 {
-#ifdef DBG_UTIL
-    {
-    // Test all Fonttables for correct sorting
-    static BOOL bInit = FALSE;
-    if ( !bInit )
-    {
-        const ImplFontNameAttr* pList = aImplFontNameList;
-        int                     nCount = sizeof( aImplFontNameList ) / sizeof( ImplFontNameAttr );
-        int                     i;
-        for ( i = 1; i < nCount; i++ )
-        {
-            if ( ImplStrMatchCompare( String( pList[i].mpName, RTL_TEXTENCODING_ASCII_US ),
-                                      pList[i-1].mpName ) <= 0 )
-            {
-                ByteString aStr( "ImplFontNameList not sorted: " );
-                aStr += pList[i-1].mpName;
-                aStr.Append( " >= " );
-                aStr += pList[i].mpName;
-                DBG_ERROR( aStr.GetBuffer() );
-            }
-        }
-        bInit = TRUE;
-    }
-    }
-#endif
-
     const XubString& rName      = rFont.GetName();
     const XubString& rStyleName = rFont.GetStyleName();
     long nWidth                 = rSize.Width();
