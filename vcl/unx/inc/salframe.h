@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:31:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ public:
                                 void *pExtTextEvent);
     #endif
     inline  SalColormap    &GetColormap() const;
-            bool            IsOverrideRedirect() const;
+    bool                    IsOverrideRedirect() const;
+    bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
     void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
