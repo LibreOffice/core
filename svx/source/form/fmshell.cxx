@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:18:19 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,9 +386,6 @@ using namespace ::com::sun::star::form;
 using namespace ::svxform;
 
 //========================================================================
-//========================================================================
-#ifdef NOOLDSV
-//------------------------------------------------------------------------
 FmFormShell::FormShellWaitObject::FormShellWaitObject(const FmFormShell* _pShell)
     :m_pWindow(NULL)
 {
@@ -406,13 +403,6 @@ FmFormShell::FormShellWaitObject::~FormShellWaitObject()
     if (m_pWindow)
         m_pWindow->LeaveWait();
 }
-#else
-class FormShellWaitObject : public WaitObject
-{
-public:
-    FormShellWaitObject(FmFormShell* _pShell) { }
-};
-#endif
 //========================================================================
 //------------------------------------------------------------------------
 sal_Bool IsFormComponent( const SdrObject& rObj )
@@ -996,7 +986,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_TAB_DIALOG:
         {
-            FmTabOrderDlg aTabOrderDlg(::comphelper::getProcessServiceFactory(), GetpApp()->GetAppWindow(), this );
+            FmTabOrderDlg aTabOrderDlg(::comphelper::getProcessServiceFactory(), Application::GetDefDialogParent(), this );
             aTabOrderDlg.Execute();
             rReq.Done();
         }   break;
