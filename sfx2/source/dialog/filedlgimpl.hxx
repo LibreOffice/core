@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-23 07:16:36 $
+ *  last change: $Author: gt $ $Date: 2002-10-31 13:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,10 @@ namespace sfx2
 
         sal_Bool                isInOpenMode() const;
         String                  getCurrentFilterUIName() const;
+
+        void                    LoadLastUsedFilter( const ::rtl::OUString& _rContextIdentifier );
+        void                    SaveLastUsedFilter( const ::rtl::OUString& _rContextIdentifier );
+        void                    SaveLastUsedFilter( void );
 
         DECL_LINK( TimeOutHdl_Impl, Timer* );
         DECL_LINK( HandleEvent, FileDialogHelper* );

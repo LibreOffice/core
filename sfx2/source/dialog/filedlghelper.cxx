@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 10:34:09 $
+ *  last change: $Author: gt $ $Date: 2002-10-31 13:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ const short FILESAVE_AUTOEXTENSION = TemplateDescription::FILESAVE_AUTOEXTENSION
 #define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 #define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
 #define USERITEM_NAME           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserItem" ))
+#define SD_EXPORT_IDENTIFIER    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ))
+#define SI_EXPORT_IDENTIFIER    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ))
 
 //-----------------------------------------------------------------------------
 
@@ -460,6 +462,38 @@ String FileDialogHelper_Impl::getCurrentFilterUIName() const
     return aFilterName;
 }
 
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::LoadLastUsedFilter( const OUString& _rContextIdentifier )
+{
+    SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+
+    if( aDlgOpt.Exists() )
+    {
+        OUString    aLastFilter;
+        if( aDlgOpt.GetUserItem( _rContextIdentifier ) >>= aLastFilter )
+            setFilter( aLastFilter );
+    }
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::SaveLastUsedFilter( const OUString& _rContextIdentifier )
+{
+    SvtViewOptions( E_DIALOG, IODLG_CONFIGNAME ).SetUserItem( _rContextIdentifier,
+                        makeAny( getFilterWithExtension( getFilter() ) ) );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::SaveLastUsedFilter( void )
+{
+    OUString aConfigId;
+    switch( meContext )
+    {
+        case FileDialogHelper::SD_EXPORT:   aConfigId = SD_EXPORT_IDENTIFIER;   break;
+        case FileDialogHelper::SI_EXPORT:   aConfigId = SI_EXPORT_IDENTIFIER;   break;
+    }
+    if( aConfigId.getLength() )
+        SaveLastUsedFilter( aConfigId );
+}
 
 // ------------------------------------------------------------------------
 const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
@@ -1422,6 +1456,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     rpURLList->Insert( pURL, rpURLList->Count() );
                 }
             }
+            SaveLastUsedFilter();
             return ERRCODE_NONE;
         }
         else
@@ -2012,7 +2047,8 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
 
-    sal_Int32   nNewHelpId;
+    sal_Int32   nNewHelpId = 0;
+    OUString    aConfigId;
 
     switch( _eNewContext )
     {
@@ -2025,8 +2061,12 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
         case FileDialogHelper::SW_INSERT_VIDEO:
         case FileDialogHelper::SC_INSERT_VIDEO:
         case FileDialogHelper::SD_INSERT_VIDEO:         nNewHelpId = SID_INSERT_VIDEO;          break;
-        default:                                        nNewHelpId = 0;
+        case FileDialogHelper::SD_EXPORT:               aConfigId = SD_EXPORT_IDENTIFIER;       break;
+        case FileDialogHelper::SI_EXPORT:               aConfigId = SI_EXPORT_IDENTIFIER;       break;
     }
+
+    if( aConfigId.getLength() )
+        LoadLastUsedFilter( aConfigId );
 
     if( nNewHelpId )
         this->setDialogHelpId( nNewHelpId );
