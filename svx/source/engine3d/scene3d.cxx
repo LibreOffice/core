@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:42:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,13 +1332,13 @@ void E3dScene::RotateScene (const Point& rRef, long nWink, double sn, double cs)
     Center.X() = (UpperLeft.X() + dxOutRectHalf) - rRef.X();
     Center.Y() = -((UpperLeft.Y() + dyOutRectHalf) - rRef.Y());
                   // Ein paar Spezialfaelle zuerst abhandeln (n*90 Grad n ganzzahlig)
-    if (sn==1.0 && cs==0.0) { // 90ø
+    if (sn==1.0 && cs==0.0) { // 90deg
         NewCenter.X() = -Center.Y();
         NewCenter.Y() = -Center.X();
-    } else if (sn==0.0 && cs==-1.0) { // 180ø
+    } else if (sn==0.0 && cs==-1.0) { // 180deg
         NewCenter.X() = -Center.X();
         NewCenter.Y() = -Center.Y();
-    } else if (sn==-1.0 && cs==0.0) { // 270ø
+    } else if (sn==-1.0 && cs==0.0) { // 270deg
         NewCenter.X() =  Center.Y();
         NewCenter.Y() = -Center.X();
     }
@@ -1391,7 +1391,7 @@ void E3dScene::TakeObjNamePlural(XubString& rName) const
 
 /*************************************************************************
 |*
-|* Die NbcRotate-Routine überlädt die des SdrObject. Die Idee ist die Scene
+|* Die NbcRotate-Routine ueberlaedt die des SdrObject. Die Idee ist die Scene
 |* drehen zu koennen und relativ zur Lage der Scene dann auch die Objekte
 |* in der Scene
 |*
@@ -1405,7 +1405,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetGlueReallyAbsolute(TRUE);
 
         // So dass war die Szene, ab jetzt kommen die Objekte in der Szene
-        // 3D-Objekte gibt es nur ein einziges das kann zwar mehrere Flächen haben aber die Flaechen
+        // 3D-Objekte gibt es nur ein einziges das kann zwar mehrere Flaechen haben aber die Flaechen
         // muessen ja nicht zusammenhaengend sein
         // es ermoeglicht den Zugriff auf Kindobjekte
         // Ich gehe also die gesamte Liste durch und rotiere um die Z-Achse die durch den
