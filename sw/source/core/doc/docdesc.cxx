@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:01:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -196,7 +193,7 @@
 
 #include <SwUndoPageDesc.hxx>
 
-void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
+static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
                          SwFrmFmt &rFmt2, SfxPrinter *pPrt, BOOL bCheck )
 {
     //Einstellung von Seitengroesse und Seitenraendern. Dazu wird
@@ -715,7 +712,7 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     {
         pNew = new SwPageDesc( rName, GetDfltFrmFmt(), this );
         //Default-Seitenformat einstellen.
-        ::lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(),
+        lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(),
                               GetPrt(), FALSE );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
@@ -984,7 +981,7 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
         for ( USHORT i = 0; i < GetPageDescCnt(); ++i )
         {
             SwPageDesc& rDesc = _GetPageDesc( i );
-            ::lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(),
+            lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(),
                                   rDesc.GetLeft(), pPrt, TRUE );
         }
         }
