@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 15:00:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                     if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aOutputURL, aOutputFile ) && aOutputFile.Len() )
                     {
                         aJStr = pEnv->NewStringUTF( ByteString( aLocalFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                        aArgs = pEnv->NewObjectArray( 2, pEnv->FindClass( "java/lang/String" ), aJStr );
+                        aArgs = static_cast<jobjectArray>(pEnv->NewObjectArray( 2, pEnv->FindClass( "java/lang/String" ), aJStr ));
                         aJStr = pEnv->NewStringUTF( ByteString( aOutputFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                         pEnv->SetObjectArrayElement( aArgs, 1, aJStr );
                         pEnv->CallStaticVoidMethod( aClass, aMId, aArgs );
