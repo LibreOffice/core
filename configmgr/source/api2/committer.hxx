@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: roottree.hxx,v $
+ *  $RCSfile: committer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,50 +59,33 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_ROOTTREE_HXX_
-#define CONFIGMGR_ROOTTREE_HXX_
+#ifndef CONFIGMGR_API_COMMITTER_HXX_
+#define CONFIGMGR_API_COMMITTER_HXX_
 
 namespace configmgr
 {
-    class ISubtree;
-    struct TreeChangeList;
-
-    namespace configuration
+    class ITreeProvider2;
+//-----------------------------------------------------------------------------
+    namespace configapi
     {
 //-----------------------------------------------------------------------------
-        class Tree; typedef Tree RootTree;
-        class TreeImpl;
-        class AbsolutePath;
-        typedef unsigned int NodeOffset;
-        typedef unsigned int TreeDepth;
 
+        class ApiTreeImpl;
 //-----------------------------------------------------------------------------
 
-        RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
-                                        ISubtree& rCacheNode, TreeDepth nDepth,
-                                        NodeOffset nRoot = 1);
-
-        RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
-                                        ISubtree& rCacheNode, TreeDepth nDepth,
-                                        NodeOffset nRoot = 1);
-
-//-----------------------------------------------------------------------------
-        class CommitHelper
+        /// allows to update values of a simple type within a <type>NodeRef</type> that refers to a Group
+        class Committer
         {
-            TreeImpl* m_pTree;
+            ApiTreeImpl& m_rTree;
         public:
-            CommitHelper(Tree const& aTree);
+            Committer(ApiTreeImpl& rTree);
 
-            // collect all changes into rChangeList
-            bool prepareCommit(TreeChangeList& rChangeList);
-            // finish and clean up the changes in rChangeList after they are integrated
-            void finishCommit(TreeChangeList& rChangeList);
-            // restore the changes in rChangeList as pending
-            void revertCommit(TreeChangeList& rChangeList);
+            void commit();
+        private:
+            ITreeProvider2* getUpdateProvider();
         };
-
 //-----------------------------------------------------------------------------
     }
 }
 
-#endif // CONFIGMGR_ROOTTREE_HXX_
+#endif // CONFIGMGR_API_COMMITTER_HXX_

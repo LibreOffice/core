@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: roottree.hxx,v $
+ *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,50 +59,89 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_ROOTTREE_HXX_
-#define CONFIGMGR_ROOTTREE_HXX_
+#include "committer.hxx"
+
+#include "apitreeimplobj.hxx"
+#include "roottree.hxx"
+#include "cmtreemodel.hxx"
+#include "confproviderimpl2.hxx"
 
 namespace configmgr
 {
-    class ISubtree;
-    struct TreeChangeList;
-
-    namespace configuration
+//-----------------------------------------------------------------------------
+    namespace configapi
     {
 //-----------------------------------------------------------------------------
-        class Tree; typedef Tree RootTree;
-        class TreeImpl;
-        class AbsolutePath;
-        typedef unsigned int NodeOffset;
-        typedef unsigned int TreeDepth;
-
+        using configuration::Tree;
+        using configuration::CommitHelper;
 //-----------------------------------------------------------------------------
+namespace
+{
+    //-------------------------------------------------------------------------
+    struct NotifyDisabler
+    {
+        ApiTreeImpl& m_rTree;
+        bool m_bOldState;
 
-        RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
-                                        ISubtree& rCacheNode, TreeDepth nDepth,
-                                        NodeOffset nRoot = 1);
-
-        RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
-                                        ISubtree& rCacheNode, TreeDepth nDepth,
-                                        NodeOffset nRoot = 1);
-
-//-----------------------------------------------------------------------------
-        class CommitHelper
+        NotifyDisabler(ApiTreeImpl& rTree)
+        : m_rTree(rTree)
+        , m_bOldState(rTree .enableNotification(false) )
         {
-            TreeImpl* m_pTree;
-        public:
-            CommitHelper(Tree const& aTree);
+        }
 
-            // collect all changes into rChangeList
-            bool prepareCommit(TreeChangeList& rChangeList);
-            // finish and clean up the changes in rChangeList after they are integrated
-            void finishCommit(TreeChangeList& rChangeList);
-            // restore the changes in rChangeList as pending
-            void revertCommit(TreeChangeList& rChangeList);
-        };
+        ~NotifyDisabler()
+        {
+            m_rTree.enableNotification(m_bOldState);
+        }
+    };
+    //-------------------------------------------------------------------------
+}
 
+//-----------------------------------------------------------------------------
+// class Committer
+//-----------------------------------------------------------------------------
+
+Committer::Committer(ApiTreeImpl& rTree)
+: m_rTree(rTree)
+{}
+//-----------------------------------------------------------------------------
+
+ITreeProvider2* Committer::getUpdateProvider()
+{
+    return &m_rTree.getProvider().getProviderImpl();
+}
+
+//-----------------------------------------------------------------------------
+void Committer::commit()
+{
+    OClearableWriteSynchronized aProviderGuard(m_rTree.getProviderLock());
+    OClearableWriteSynchronized aLocalGuard(m_rTree.getDataLock());
+
+    Tree aTree(m_rTree.getTree());
+    if (!aTree.hasChanges()) return;
+
+
+    TreeChangeList  aChangeList(aTree.getContextPath().toString(),aTree.getRootNode().getName().toString());
+
+    ITreeProvider2* pUpdateProvider = getUpdateProvider();
+    OSL_ASSERT(pUpdateProvider);
+
+    CommitHelper    aHelper(aTree);
+    if (aHelper.prepareCommit(aChangeList))
+    {
+
+        pUpdateProvider->updateTree(aChangeList);
+        aHelper.finishCommit(aChangeList);
+
+        aLocalGuard.clear();        // done locally
+        aProviderGuard.downgrade(); // keep a read lock for notification
+
+        NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
+        pUpdateProvider->notifyUpdate(aChangeList);
+
+    }
+}
 //-----------------------------------------------------------------------------
     }
 }
 
-#endif // CONFIGMGR_ROOTTREE_HXX_

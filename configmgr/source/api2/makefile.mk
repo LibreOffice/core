@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jb $ $Date: 2000-11-07 14:34:33 $
+#   last change: $Author: jb $ $Date: 2000-11-10 12:21:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=	\
         $(SLO)$/apitreeaccess.obj	\
         $(SLO)$/apitreeimplobj.obj	\
         $(SLO)$/confignotifier.obj	\
+        $(SLO)$/committer.obj	\
         $(SLO)$/elementaccess.obj	\
         $(SLO)$/elementimpl.obj	\
         $(SLO)$/groupaccess.obj	\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-09 15:11:17 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@ namespace configmgr
     class INode;
     class ISubtree;
     class ITemplateProvider;
-    class NodeChanges;
+
+    class Change;
+    class SubtreeChange;
 
     namespace configuration
     {
@@ -313,6 +315,26 @@ namespace configmgr
             ISynchronizedData* getRootLock();
             ISynchronizedData const* getRootLock() const;
 
+        public:
+            // old style commit
+            std::auto_ptr<Change>   legacyCommitChanges();
+            void legacyFinishCommit(Change& rRootChange);
+            void legacyRevertCommit(Change& rRootChange);
+        protected:
+            std::auto_ptr<Change> doCommitChanges(NodeOffset nNode);
+            void doFinishCommit(Change& rChange, NodeOffset nNode);
+            void doRevertCommit(Change& rChange, NodeOffset nNode);
+
+            void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+            void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+            void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+        protected:
+            /// set a new parent context for this tree
+            void setContext(TreeImpl* pParentTree, NodeOffset nParentNode);
+            /// set no-parent context for this tree
+            void clearContext();
+
+
         private:
             // ISynchronizedData
             void acquireReadAccess() const;
@@ -322,12 +344,6 @@ namespace configmgr
         private:
             virtual RootTreeImpl const* doCastToRootTree() const = 0;
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
-        protected:
-            /// set a new parent context for this tree
-            void setContext(TreeImpl* pParentTree, NodeOffset nParentNode);
-            /// set no-parent context for this tree
-            void clearContext();
-
         private:
             void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges) const;
             void implCommitChangesFrom(NodeOffset nNode);
@@ -389,6 +405,13 @@ namespace configmgr
             void attachTo(ISubtree& rOwningSet, Name const& aElementName);
             /// tranfer ownership from the given set
             void detachFrom(ISubtree& rOwningSet, Name const& aElementName);
+
+            /// tranfer ownership from the given oenwer
+            void takeNodeFrom(std::auto_ptr<INode>& rOldOwner);
+            /// transfer ownership to the given owner
+            void releaseTo(std::auto_ptr<INode>& rNewOwner);
+            /// transfer ownership to the given owner, also providing a new name
+            void releaseAs(std::auto_ptr<INode>& rNewOwner, Name const& aElementName);
 
         // context operation
             /// set a new root name

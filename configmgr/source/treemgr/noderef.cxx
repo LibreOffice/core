@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-09 14:32:39 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,18 @@ Node* TreeImplHelper::node(NodeRef const& aNode)
 NodeOffset TreeImplHelper::offset(NodeRef const& aNode)
 {
     return aNode.m_nPos;
+}
+//-----------------------------------------------------------------------------
+
+TreeImpl* TreeImplHelper::tree(NodeID const& aNodeID)
+{
+    return aNodeID.m_pTree;
+}
+//-----------------------------------------------------------------------------
+
+NodeOffset TreeImplHelper::offset(NodeID const& aNodeID)
+{
+    return aNodeID.m_nNode;
 }
 
 //-----------------------------------------------------------------------------
@@ -773,6 +785,50 @@ bool findDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
             return false;
 
     return true;
+}
+//-----------------------------------------------------------------------------
+
+void getAllContainedNodes(Tree const& aTree, NodeIDList& aList)
+{
+    aList.clear();
+
+    if (TreeImpl* pImpl = TreeImplHelper::impl(aTree))
+    {
+        NodeOffset nCount = pImpl->nodeCount();
+        aList.reserve(nCount);
+
+        NodeOffset const nEnd = pImpl->root() + nCount;
+
+        for(NodeOffset nOffset = pImpl->root();
+            nOffset < nEnd;
+            ++nOffset)
+        {
+            OSL_ASSERT( pImpl->isValidNode(nOffset) );
+            aList.push_back( NodeID(pImpl,nOffset) );
+        }
+
+        OSL_ASSERT( aList.size()==nCount );
+    }
+}
+//-----------------------------------------------------------------------------
+
+void getAllChildrenHelper(NodeID const& aNode, NodeIDList& aList)
+{
+    aList.clear();
+
+    if (TreeImpl* pImpl = TreeImplHelper::tree(aNode))
+    {
+        if (NodeOffset const nParent = TreeImplHelper::offset(aNode))
+        {
+            for(NodeOffset nOffset = pImpl->firstChild(nParent);
+                nOffset != 0;
+                nOffset = pImpl->findNextChild(nParent,nOffset))
+            {
+                OSL_ASSERT( pImpl->isValidNode(nOffset) );
+                aList.push_back( NodeID(pImpl,nOffset) );
+            }
+        }
+    }
 }
 //-----------------------------------------------------------------------------
 

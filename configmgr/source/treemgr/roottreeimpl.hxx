@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottreeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-09 15:11:17 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace configmgr
                             ISubtree& rCacheTree, TreeDepth nDepth,
                             NodeOffset nRoot = 1);
 
+            // make it public
         private:
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;

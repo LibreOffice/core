@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
+
+#include "cmtreemodel.hxx"
 
 namespace configmgr
 {
@@ -445,6 +447,59 @@ void DeferredValueNodeImpl::doCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
+std::auto_ptr<ValueChange> DeferredValueNodeImpl::preCommitChange()
+{
+    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
+
+    // first find the mode of the change
+    // initial value is harmless (done locally) or produces an error elsewhere
+    ValueChange::Mode eMode = ValueChange::changeDefault;
+
+    if (m_bDefault)
+    {
+        OSL_ASSERT(!m_pNewValue);
+        eMode = ValueChange::setToDefault;
+    }
+    else if (m_pNewValue == 0)
+        OSL_ENSURE( false, "ERROR: Cannot make a change from no change !");
+
+    else if (!ValueNodeImpl::isDefault())
+        eMode = ValueChange::changeValue;
+
+    else if (ValueNodeImpl::getValueType().getTypeClass() == uno::TypeClass_ANY)
+        eMode = ValueChange::typeIsAny;
+
+    else
+        eMode = ValueChange::wasDefault;
+
+    // now get the name of this node
+    NodeInfo aInfo;
+    getNodeInfo(aInfo);
+
+    // now make a ValueChange
+    ValueChange* pChange = new ValueChange( aInfo.name.toString(), getValue(),
+                                            eMode, ValueNodeImpl::getValue());
+
+    return std::auto_ptr<ValueChange>( pChange);
+}
+//-----------------------------------------------------------------------------
+
+void DeferredValueNodeImpl::finishCommit(ValueChange& rChange)
+{
+    OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Committed change does not match the intended value");
+
+    delete m_pNewValue, m_pNewValue = 0;
+    m_bDefault = false;
+}
+//-----------------------------------------------------------------------------
+
+void DeferredValueNodeImpl::revertCommit(ValueChange& rChange)
+{
+    OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Reverted change does not match the intended value");
+    OSL_ENSURE(doHasChanges(), "DeferredValueNodeImpl: No Changes to restore");
+}
+//-----------------------------------------------------------------------------
+
 void DeferredValueNodeImpl::doMarkChanged()
 {
     // ignore
@@ -631,6 +686,39 @@ void DeferredGroupNodeImpl::doCommitChanges()
     }
 }
 //-----------------------------------------------------------------------------
+
+std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitChange()
+{
+    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
+
+    std::auto_ptr<SubtreeChange> aRet;
+
+    if (m_bChanged)
+    {
+        // get the name of this node
+        NodeInfo aInfo;
+        getNodeInfo(aInfo);
+
+        aRet.reset( new SubtreeChange(aInfo.name.toString()) );
+    }
+    return aRet;
+}
+//-----------------------------------------------------------------------------
+
+void DeferredGroupNodeImpl::finishCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+    m_bChanged = false;
+}
+//-----------------------------------------------------------------------------
+
+void DeferredGroupNodeImpl::revertCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+    OSL_ENSURE(m_bChanged, "DeferredGroupNodeImpl: No Changes to restore");
+}
+//-----------------------------------------------------------------------------
+
 
 void DeferredGroupNodeImpl::doMarkChanged()
 {
@@ -1195,6 +1283,222 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
+std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::preCommitChanges()
+{
+    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
+
+    // nowfirst get the name of this node
+    NodeInfo aInfo;
+    getNodeInfo(aInfo);
+
+    // and make a SubtreeChange
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.name.toString()) );
+
+    pSetChange->setChildTemplateName(getElementTemplate()->getPath().toString());
+
+    // commit preexisting nodes
+    {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
+        it != stop;
+        ++it)
+    {
+        if (m_aChangedData.getElement(it->first) == 0)
+        {
+            OSL_ASSERT(it->second.isValid());
+
+            std::auto_ptr<Change> pNewChange( it->second->legacyCommitChanges() );
+            if (pNewChange.get() != 0)
+                pSetChange->addChange(pNewChange);
+        }
+    }}
+
+    // commit added and deleted nodes
+    {
+        NativeIterator it = m_aChangedData.beginNative();
+        NativeIterator const stop = m_aChangedData.endNative();
+
+        while(it != stop)
+        {
+            Name    aName       = it->first;
+            Element aNewElement = it->second;
+
+            Element* pOriginal = TreeSetNodeImpl::getStoredElement(aName);
+
+            if (aNewElement.isValid())
+            {
+                std::auto_ptr<INode> aAddedTree;
+                aNewElement->releaseTo( aAddedTree );
+
+                OSL_ENSURE( aAddedTree.get(), "Could not take the new tree from the ElementTree");
+
+                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString() );
+
+                std::auto_ptr<Change> pNewChange( pAddNode );
+
+                if (pOriginal)
+                    pAddNode->setReplacing();
+
+                pSetChange->addChange(pNewChange);
+            }
+            else
+            {
+                if (pOriginal)
+                {
+                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString()) );
+
+                    pSetChange->addChange(pNewChange);
+                }
+                //else nothing to do
+            }
+
+            ++it;
+        }
+    }
+    return pSetChange;
+}
+//-----------------------------------------------------------------------------
+
+void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
+{
+    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+
+        Element* pOriginal = getStoredElement(aElementName);
+
+        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
+        {
+            // handle a added, replaced or deleted node
+            std::auto_ptr<INode> aRemovedNode;
+
+            if (pNewElement->isValid())
+            {
+                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
+                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
+
+                AddNode& rAddNode =  static_cast<AddNode&>(*it);
+
+                aRemovedNode = rAddNode.releaseReplacedNode();
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=aRemovedNode.get())  );
+
+                // do we need to rename the tree (or node) here ??
+                (*pNewElement)->makeIndirect(true);
+            }
+            else
+            {
+                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
+                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
+
+                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
+                aRemovedNode = rRemoveNode.releaseRemovedNode();
+
+                OSL_ASSERT(pOriginal);
+            }
+            // handle a added or deleted node
+            if (pOriginal)
+            {
+                OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
+
+                OSL_ASSERT(pOriginal->isValid());
+                (*pOriginal)->takeNodeFrom(aRemovedNode);
+                (*pOriginal)->commitChanges(); // tree is detached => commit directly
+                (*pOriginal)->makeIndirect(false);
+            }
+        }
+        else
+        {
+            // handle preexisting nodes
+            OSL_ENSURE(pOriginal, "Changed Element is missing");
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+
+            if (pOriginal)
+                (*pOriginal)->legacyFinishCommit(*it);
+        }
+        m_aChangedData.removeElement(aElementName);
+    }
+    m_bChanged = false;
+
+    OSL_ENSURE(m_aChangedData.isEmpty(), "ERROR: Uncommitted changes left in set node");
+}
+//-----------------------------------------------------------------------------
+
+void DeferredTreeSetNodeImpl::revertCommit(SubtreeChange& rChanges)
+{
+    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+
+        Element* pOriginal = getStoredElement(aElementName);
+
+        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
+        {
+            // handle a added, replaced or deleted node
+            std::auto_ptr<INode> pRemovedNode;
+
+            if (pNewElement->isValid())
+            {
+                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
+                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
+
+                AddNode& rAddNode =  static_cast<AddNode&>(*it);
+
+                pRemovedNode = rAddNode.releaseReplacedNode();
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=rAddNode.getReplacedNode_Unsafe())  );
+
+                std::auto_ptr<INode> aAddedNode = rAddNode.releaseAddedNode();
+                OSL_ENSURE(aAddedNode.get(), "Cannot restore new node: Change lost ownership");
+
+                // restore the tree
+                (*pNewElement)->takeNodeFrom(aAddedNode);
+            }
+            else
+            {
+                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
+                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
+
+                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
+                pRemovedNode = rRemoveNode.releaseRemovedNode();
+
+                OSL_ASSERT(pOriginal);
+                OSL_ASSERT((0 != pOriginal) == (0!=rRemoveNode.getRemovedNode_Unsafe())  );
+            }
+            OSL_ENSURE(pRemovedNode.get() == 0, "Possible problems reverting removed node: Change took ownership");
+            // handle a added or deleted node
+            if (pOriginal && pRemovedNode.get())
+            {
+                OSL_ASSERT(pOriginal->isValid());
+                (*pOriginal)->takeNodeFrom(pRemovedNode);
+            }
+            OSL_ENSURE(pRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
+        }
+        else
+        {
+            // handle preexisting nodes
+            OSL_ENSURE(pOriginal, "Changed Element is missing");
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+
+            if (pOriginal)
+                (*pOriginal)->legacyRevertCommit(*it);
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+
 void DeferredTreeSetNodeImpl::implInsertNewElement(Name const& aName, Element const& aNewElement)
 {
     attach(aNewElement,aName,false);
@@ -1516,6 +1820,222 @@ void DeferredValueSetNodeImpl::doCommitChanges()
         ValueSetNodeImpl::setNodeName(*m_pNewName);
 
         delete m_pNewName, m_pNewName = 0;
+    }
+}
+//-----------------------------------------------------------------------------
+
+std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::preCommitChanges()
+{
+    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
+
+    // nowfirst get the name of this node
+    NodeInfo aInfo;
+    getNodeInfo(aInfo);
+
+    // and make a SubtreeChange
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.name.toString()) );
+
+    pSetChange->setChildTemplateName(getElementTemplate()->getPath().toString());
+
+    // commit preexisting nodes
+    {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
+        it != stop;
+        ++it)
+    {
+        if (m_aChangedData.getElement(it->first) == 0)
+        {
+            OSL_ASSERT(it->second.isValid());
+
+            std::auto_ptr<Change> pNewChange( it->second->legacyCommitChanges() );
+            if (pNewChange.get() != 0)
+                pSetChange->addChange(pNewChange);
+        }
+    }}
+
+    // commit added and deleted nodes
+    {
+        NativeIterator it = m_aChangedData.beginNative();
+        NativeIterator const stop = m_aChangedData.endNative();
+
+        while(it != stop)
+        {
+            Name    aName       = it->first;
+            Element aNewElement = it->second;
+
+            Element* pOriginal = ValueSetNodeImpl::getStoredElement(aName);
+
+            if (aNewElement.isValid())
+            {
+                std::auto_ptr<INode> aAddedTree;
+                aNewElement->releaseTo( aAddedTree );
+
+                OSL_ENSURE( aAddedTree.get(), "Could not take the new tree from the ElementTree");
+
+                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString() );
+
+                std::auto_ptr<Change> pNewChange( pAddNode );
+
+                if (pOriginal)
+                    pAddNode->setReplacing();
+
+                pSetChange->addChange(pNewChange);
+            }
+            else
+            {
+                if (pOriginal)
+                {
+                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString()) );
+
+                    pSetChange->addChange(pNewChange);
+                }
+                //else nothing to do
+            }
+
+            ++it;
+        }
+    }
+    return pSetChange;
+}
+//-----------------------------------------------------------------------------
+
+void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
+{
+    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+
+        Element* pOriginal = getStoredElement(aElementName);
+
+        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
+        {
+            // handle a added, replaced or deleted node
+            std::auto_ptr<INode> aRemovedNode;
+
+            if (pNewElement->isValid())
+            {
+                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
+                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
+
+                AddNode& rAddNode =  static_cast<AddNode&>(*it);
+
+                aRemovedNode = rAddNode.releaseReplacedNode();
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=aRemovedNode.get())  );
+
+                // do we need to rename the tree (or node) here ??
+                (*pNewElement)->makeIndirect(true);
+            }
+            else
+            {
+                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
+                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
+
+                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
+                aRemovedNode = rRemoveNode.releaseRemovedNode();
+
+                OSL_ASSERT(pOriginal);
+            }
+            // handle a added or deleted node
+            if (pOriginal)
+            {
+                OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
+
+                OSL_ASSERT(pOriginal->isValid());
+                (*pOriginal)->takeNodeFrom(aRemovedNode);
+                (*pOriginal)->commitChanges(); // tree is detached => commit directly
+                (*pOriginal)->makeIndirect(false);
+            }
+        }
+        else
+        {
+            // handle preexisting nodes
+            OSL_ENSURE(pOriginal, "Changed Element is missing");
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+
+            if (pOriginal)
+                (*pOriginal)->legacyFinishCommit(*it);
+        }
+        m_aChangedData.removeElement(aElementName);
+    }
+    m_bChanged = false;
+
+    OSL_ENSURE(m_aChangedData.isEmpty(), "ERROR: Uncommitted changes left in set node");
+}
+//-----------------------------------------------------------------------------
+
+void DeferredValueSetNodeImpl::revertCommit(SubtreeChange& rChanges)
+{
+    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+
+        Element* pOriginal = getStoredElement(aElementName);
+
+        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
+        {
+            // handle a added, replaced or deleted node
+            std::auto_ptr<INode> pRemovedNode;
+
+            if (pNewElement->isValid())
+            {
+                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
+                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
+
+                AddNode& rAddNode =  static_cast<AddNode&>(*it);
+
+                pRemovedNode = rAddNode.releaseReplacedNode();
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=rAddNode.getReplacedNode_Unsafe())  );
+
+                std::auto_ptr<INode> aAddedNode = rAddNode.releaseAddedNode();
+                OSL_ENSURE(aAddedNode.get(), "Cannot restore new node: Change lost ownership");
+
+                // restore the tree
+                (*pNewElement)->takeNodeFrom(aAddedNode);
+            }
+            else
+            {
+                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
+                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
+
+                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
+                pRemovedNode = rRemoveNode.releaseRemovedNode();
+
+                OSL_ASSERT(pOriginal);
+                OSL_ASSERT((0 != pOriginal) == (0!=rRemoveNode.getRemovedNode_Unsafe())  );
+            }
+            OSL_ENSURE(pRemovedNode.get() == 0, "Possible problems reverting removed node: Change took ownership");
+            // handle a added or deleted node
+            if (pOriginal && pRemovedNode.get())
+            {
+                OSL_ASSERT(pOriginal->isValid());
+                (*pOriginal)->takeNodeFrom(pRemovedNode);
+            }
+            OSL_ENSURE(pRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
+        }
+        else
+        {
+            // handle preexisting nodes
+            OSL_ENSURE(pOriginal, "Changed Element is missing");
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+
+            if (pOriginal)
+                (*pOriginal)->legacyRevertCommit(*it);
+        }
     }
 }
 //-----------------------------------------------------------------------------

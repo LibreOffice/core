@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,14 @@
 #include "roottreeimpl.hxx"
 #include "nodefactory.hxx"
 #include "noderef.hxx"
+#include "cmtreemodel.hxx"
 
 namespace configmgr
 {
     namespace configuration
     {
+//-----------------------------------------------------------------------------
+// factory methods
 //-----------------------------------------------------------------------------
 
 RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
@@ -79,6 +82,7 @@ RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
                                         aContextPath, rCacheNode, nDepth
                                     ));
 }
+//-----------------------------------------------------------------------------
 
 RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
                                 ISubtree& rCacheNode, TreeDepth nDepth,
@@ -90,6 +94,81 @@ RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
 }
 
 //-----------------------------------------------------------------------------
+// class CommitHelper
+//-----------------------------------------------------------------------------
+
+CommitHelper::CommitHelper(Tree const& aTree)
+{
+    m_pTree = TreeImplHelper::impl(aTree);
+    OSL_ENSHURE(m_pTree, "INTERNAL ERROR: Unexpected NULL tree in commit helper");
+}
+//-----------------------------------------------------------------------------
+
+bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
+{
+    OSL_ENSURE(m_pTree,"Cannot commit without a tree");
+    if (m_pTree == NULL)
+        return false;
+
+    // get and check the changes
+    std::auto_ptr<Change> pBaseChange(m_pTree->legacyCommitChanges());
+    if (pBaseChange.get() == NULL)
+        return false;
+
+    OSL_ENSURE(pBaseChange->ISA(SubtreeChange),"Cannot commit non-tree nodes");
+    if (!pBaseChange->ISA(SubtreeChange))
+    {
+        m_pTree->legacyRevertCommit(*pBaseChange);
+        return false;
+    }
+
+    std::auto_ptr<SubtreeChange> pTreeChange( static_cast<SubtreeChange*>(pBaseChange.release()) );
+
+    // find the name and path of the change
+    Name aRootName(m_pTree->name(m_pTree->root()));
+    AbsolutePath aPath = m_pTree->getContextPath().compose(RelativePath(aRootName));
+
+    OSL_ENSURE(aRootName.toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
+
+    // now fill the TreeChangeList
+    rChangeList.pathToRoot = aPath.toString();
+    rChangeList.root.swap( *pTreeChange );
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+void CommitHelper::finishCommit(TreeChangeList& rChangeList)
+{
+    OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
+
+    // find the name and path of the change
+    Name aRootName(m_pTree->name(m_pTree->root()));
+    AbsolutePath aPath = m_pTree->getContextPath().compose(RelativePath(aRootName));
+
+    OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
+    if (rChangeList.pathToRoot != aPath.toString())
+        throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
+
+    m_pTree->legacyFinishCommit(rChangeList.root);
+}
+//-----------------------------------------------------------------------------
+
+void CommitHelper::revertCommit(TreeChangeList& rChangeList)
+{
+    OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
+
+    Name aRootName(m_pTree->name(m_pTree->root()));
+    AbsolutePath aPath = m_pTree->getContextPath().compose(RelativePath(aRootName));
+
+    OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: cannot handle rebased changes trees");
+    if (rChangeList.pathToRoot != aPath.toString())
+        throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
+
+    m_pTree->legacyRevertCommit(rChangeList.root);
+}
+//-----------------------------------------------------------------------------
+
     }
 }
 

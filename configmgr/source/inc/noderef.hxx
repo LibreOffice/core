@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include "apitypes.hxx"
 #include "configexcept.hxx"
+#include <stl/vector>
 
 namespace configmgr
 {
@@ -293,6 +294,10 @@ namespace configmgr
         public:
             NodeRef bind(NodeOffset nNode) const;
             NodeRef rebind(NodeRef const& aNode) const;
+
+        // Comparison
+        public:
+            friend bool equalTree(Tree const& lhs, Tree const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
         private:
             friend class TreeImplHelper;
             TreeImpl* m_pImpl;
@@ -410,6 +415,11 @@ namespace configmgr
         UnoAny getSimpleValue(Tree const& aTree, NodeRef const& aNode);
 
         ISynchronizedData* getRootLock(Tree const& aTree);
+
+        typedef std::vector<NodeID>     NodeIDList;
+
+        void getAllContainedNodes(Tree const& aTree, NodeIDList& aList);
+        void getAllChildrenHelper(NodeID const& aNode, NodeIDList& aList);
 
     //-------------------------------------------------------------------------
 

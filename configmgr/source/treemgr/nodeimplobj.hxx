@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,12 @@ namespace configmgr
             virtual void setNodeName(Name const& rName);
 
         protected:
+        // legacy commit support
+            virtual std::auto_ptr<ValueChange> preCommitChange();
+            virtual void finishCommit(ValueChange& rChange);
+            virtual void revertCommit(ValueChange& rChange);
+
+        protected:
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
             virtual void doCommitChanges();
@@ -241,6 +247,12 @@ namespace configmgr
         // NodeImpl implementation
             virtual void getNodeInfo(NodeInfo& rInfo) const;
             virtual void setNodeName(Name const& rName);
+
+        protected:
+        // legacy commit support
+            virtual std::auto_ptr<SubtreeChange> preCommitChange();
+            virtual void finishCommit(SubtreeChange& rChange);
+            virtual void revertCommit(SubtreeChange& rChange);
 
         // Base obverrideables
         private:
@@ -384,6 +396,12 @@ namespace configmgr
             virtual void getNodeInfo(NodeInfo& rInfo) const;
             virtual void setNodeName(Name const& rName);
 
+        protected:
+        // legacy commit support
+            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
+            virtual void finishCommit(SubtreeChange& rChanges);
+            virtual void revertCommit(SubtreeChange& rChanges);
+
         // Base Overrideables
         private:
             virtual bool        doIsEmpty() const;
@@ -426,6 +444,12 @@ namespace configmgr
         // NodeImpl implementation
             virtual void getNodeInfo(NodeInfo& rInfo) const;
             virtual void setNodeName(Name const& rName);
+
+        protected:
+        // legacy commit support
+            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
+            virtual void finishCommit(SubtreeChange& rChanges);
+            virtual void revertCommit(SubtreeChange& rChanges);
 
         // Base Overrideables
         private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
 
             aTree.integrate(aChange, aNode, true);
 
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -242,8 +243,9 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
             //aSender.queryConstraints(aChange); - N/A: no external constraints on set children possible
 
             aTree.integrate(aChange, aNode, true);
+            attachSetElement(rNode, aElementTree);
 
-            //impl.clearForBroadcast();
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -312,7 +314,7 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
 
             aTree.integrate(aChange, aNode, true);
 
-            //impl.clearForBroadcast();
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -387,8 +389,9 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
+        attachSetElement(rNode, aElementTree);
 
-        //impl.clearForBroadcast();
+        impl.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -453,7 +456,7 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
 
         aTree.integrate(aChange, aNode, true);
 
-        //impl.clearForBroadcast();
+        impl.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -519,8 +522,9 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
+        detachSetElement(impl->getFactory(), ElementTree::extract(aChildTree));
 
-        //impl.clearForBroadcast();
+        impl.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -581,7 +585,7 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
 
         aTree.integrate(aChange, aNode, true);
 
-        //impl.clearForBroadcast();
+        impl.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)

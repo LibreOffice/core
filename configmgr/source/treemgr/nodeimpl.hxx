@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ namespace configmgr
     class INode;
     class ISubtree;
     class ValueNode;
+
+    class SubtreeChange;
+    class ValueChange;
 
     namespace configuration
     {
@@ -157,6 +160,10 @@ namespace configmgr
             virtual void            getNodeInfo(NodeInfo& rInfo) const;
             virtual void            setNodeName(Name const& rName) = 0;
 
+            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
+            virtual void finishCommit(SubtreeChange& rChanges);
+            virtual void revertCommit(SubtreeChange& rChanges);
+
         // MoreNodeImpl implementation - direct clients don't need it
         private:
             virtual NodeType::Enum  getType() const;
@@ -212,6 +219,11 @@ namespace configmgr
             virtual void            setNodeName(Name const& rName) = 0;
             virtual NodeType::Enum  getType() const;
 
+        // legacy commit - default is 'Not supported'
+            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
+            virtual void finishCommit(SubtreeChange& rChanges);
+            virtual void revertCommit(SubtreeChange& rChanges);
+
         protected:
             TreeImpl*   getParentTree() const;
             NodeOffset  getContextOffset() const;
@@ -265,6 +277,11 @@ namespace configmgr
             virtual void            getNodeInfo(NodeInfo& rInfo) const;
             virtual void            setNodeName(Name const& rName) = 0;
             virtual NodeType::Enum  getType() const;
+
+        // legacy commit - default is 'Not supported'
+            virtual std::auto_ptr<ValueChange> preCommitChange();
+            virtual void finishCommit(ValueChange& rChange);
+            virtual void revertCommit(ValueChange& rChange);
 
         // More NodeImpl implementation - direct clients don't need it
         private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,80 @@ void ValueNodeImpl::dispatch(INodeHandler& rHandler)
 }
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// legacy commit
+//-----------------------------------------------------------------------------
+
+std::auto_ptr<SubtreeChange> SetNodeImpl::preCommitChanges()
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
+    return std::auto_ptr<SubtreeChange>();
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::finishCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChange.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::revertCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChange.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+std::auto_ptr<SubtreeChange> GroupNodeImpl::preCommitChanges()
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
+    return std::auto_ptr<SubtreeChange>();
+}
+//-----------------------------------------------------------------------------
+
+void GroupNodeImpl::finishCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
+}
+//-----------------------------------------------------------------------------
+
+void GroupNodeImpl::revertCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+std::auto_ptr<ValueChange> ValueNodeImpl::preCommitChange()
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
+    return std::auto_ptr<ValueChange>();
+}
+//-----------------------------------------------------------------------------
+
+void ValueNodeImpl::finishCommit(ValueChange& )
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
+}
+//-----------------------------------------------------------------------------
+
+void ValueNodeImpl::revertCommit(ValueChange& )
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 namespace
 {
     struct AbstractNodeCast : INodeHandler

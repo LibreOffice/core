@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,12 @@
 #include "template.hxx"
 
 #include <vos/ref.hxx>
+#include <stl/memory>
 
 namespace configmgr
 {
     class IRefCountedTemplateProvider;
+    class INode;
 
     namespace configuration
     {
@@ -135,6 +137,15 @@ namespace configmgr
 
             Tree getTree() const;
             static ElementTree extract(Tree const& aTree);
+            /** if the element tree owns it's node tree, ownership is given to the caller.
+                <p>WARNING: Irresponsible use of this feature produces crashes</p>
+            */
+            static void releaseOwnedElement(std::auto_ptr<INode>& rNewOwner, ElementTree const& aElementTree);
+            /** if the element tree owns it's node tree, ownership is given to the caller
+                and the root of the tree is assigned the given name.
+                <p>WARNING: Irresponsible use of this feature produces crashes</p>
+            */
+            static void releaseOwnedElementAs(std::auto_ptr<INode>& rNewOwner, ElementTree const& aElementTree, Name const& aNewName);
         };
 //-----------------------------------------------------------------------------
 

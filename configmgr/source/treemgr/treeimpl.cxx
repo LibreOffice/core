@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-09 15:11:17 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,184 @@ void TreeImpl::makeIndirect(bool bIndirect)
 }
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// old-style commit handling
+//-----------------------------------------------------------------------------
+
+std::auto_ptr<Change> TreeImpl::legacyCommitChanges()
+{
+    return doCommitChanges( root() );
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::legacyFinishCommit(Change& rRootChange)
+{
+    doFinishCommit( rRootChange, root() );
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::legacyRevertCommit(Change& rRootChange)
+{
+    doRevertCommit( rRootChange, root() );
+}
+//-----------------------------------------------------------------------------
+
+std::auto_ptr<Change> TreeImpl::doCommitChanges(NodeOffset nNode)
+{
+    OSL_ASSERT(isValidNode(nNode));
+    Node* pNode = node(nNode);
+
+    std::auto_ptr<Change> aRet;
+
+    if (!pNode->hasChanges())
+    {
+        // do nothing
+        OSL_ASSERT(!aRet.get());
+        OSL_ASSERT(nNode == root()); // only hit this for root (external request)
+    }
+    else if (pNode->isValueNode())
+    {
+        std::auto_ptr<ValueChange> aValueChange(pNode->valueImpl().preCommitChange());
+        aRet.reset(aValueChange.release());
+    }
+    else if (pNode->isSetNode())
+    {
+        std::auto_ptr<SubtreeChange> aSetChange(pNode->setImpl().preCommitChanges());
+        aRet.reset(aSetChange.release());
+    }
+    else
+    {
+        OSL_ENSURE(pNode->isGroupNode(),"INTERNAL ERROR: Unknown kind of node");
+        std::auto_ptr<SubtreeChange> aGroupChange(pNode->groupImpl().preCommitChanges());
+
+        OSL_ASSERT(aGroupChange.get());
+        if (aGroupChange.get())
+            doCommitSubChanges( *aGroupChange, nNode);
+
+        aRet.reset(aGroupChange.release());
+    }
+    return aRet;
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doFinishCommit(Change& rChange, NodeOffset nNode)
+{
+    OSL_ASSERT(isValidNode(nNode));
+    Node* pNode = node(nNode);
+
+    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isValueNode())
+    {
+        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
+
+        ValueChange& rValueChange = static_cast<ValueChange&>(rChange);
+
+        pNode->valueImpl().finishCommit(rValueChange);
+    }
+    else if (pNode->isSetNode())
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
+
+        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+
+        pNode->setImpl().finishCommit(rSubtreeChange);
+    }
+    else
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
+
+        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+        pNode->groupImpl().finishCommit(rSubtreeChange);
+        doFinishSubCommitted( rSubtreeChange, nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doRevertCommit(Change& rChange, NodeOffset nNode)
+{
+    OSL_ASSERT(isValidNode(nNode));
+    Node* pNode = node(nNode);
+
+    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isValueNode())
+    {
+        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
+
+        ValueChange& rValueChange = static_cast<ValueChange&>(rChange);
+
+        pNode->valueImpl().revertCommit(rValueChange);
+    }
+    else if (pNode->isSetNode())
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
+
+        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+
+        pNode->setImpl().revertCommit(rSubtreeChange);
+    }
+    else
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
+
+        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+        pNode->groupImpl().revertCommit(rSubtreeChange);
+        doRevertSubCommitted( rSubtreeChange, nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode)
+{
+    for(NodeOffset nNode = firstChild(nParentNode); nNode != 0; nNode = findNextChild(nParentNode,nNode) )
+    {
+        if (node(nNode)->hasChanges())
+            aChangesParent.addChange( doCommitChanges(nNode) );
+    }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode)
+{
+    for(SubtreeChange::MutatingChildIterator
+            it = aChangesParent.begin_changes(),
+            stop = aChangesParent.end_changes();
+        it != stop;
+        ++it)
+    {
+        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+        OSL_ENSURE( nNode != 0, "Changed node not found in tree");
+
+        doFinishCommit(*it,nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode)
+{
+    for(SubtreeChange::MutatingChildIterator
+            it = aChangesParent.begin_changes(),
+            stop = aChangesParent.end_changes();
+        it != stop;
+        ++it)
+    {
+        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+        OSL_ENSURE( nNode != 0, "Changed node not found in tree");
+
+        doRevertCommit(*it,nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
 // Node Collection navigation
 //-----------------------------------------------------------------------------
 
@@ -735,6 +913,42 @@ void ElementTreeImpl::detachFrom(ISubtree& rOwningSet, Name const& aElementName)
         m_pOwnedNode = aNode.release();
     }
 }
+//-----------------------------------------------------------------------------
+
+/// transfer ownership from the given owner
+void ElementTreeImpl::takeNodeFrom(std::auto_ptr<INode>& rOldOwner)
+{
+    OSL_ENSURE(!m_pOwnedNode,"ERROR: Cannot take over a node - already owning");
+    OSL_ENSURE(rOldOwner.get(),"ERROR: Cannot take over NULL node");
+    if (!m_pOwnedNode)
+    {
+        m_pOwnedNode = rOldOwner.release();
+    }
+}
+//-----------------------------------------------------------------------------
+
+/// transfer ownership to the given owner
+void ElementTreeImpl::releaseTo(std::auto_ptr<INode>& rNewOwner)
+{
+    OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot release a non-owned node");
+
+    rNewOwner.reset(m_pOwnedNode);
+    m_pOwnedNode = 0;
+}
+//-----------------------------------------------------------------------------
+
+/// transfer ownership to the given owner, also providing a new name
+void ElementTreeImpl::releaseAs(std::auto_ptr<INode>& rNewOwner, Name const& aElementName)
+{
+    OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot release and rename a non-owned node");
+
+    if (m_pOwnedNode)
+        renameTree(aElementName);
+
+    rNewOwner.reset(m_pOwnedNode);
+    m_pOwnedNode = 0;
+}
+//-----------------------------------------------------------------------------
 
 // context handling
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,23 @@ ElementTree ElementTree::extract(Tree const& aTree)
     return ElementTree(pImpl);
 }
 //-----------------------------------------------------------------------------
+
+void ElementTree::releaseOwnedElement(std::auto_ptr<INode>& rNewOwner, ElementTree const& aElementTree)
+{
+    OSL_PRECOND(aElementTree.isValid(),"ERROR: Trying to take over the content of a NULL element tree");
+    OSL_PRECOND(aElementTree->isFree(),"Trying to take over the content of a owned element tree - returning NULL");
+
+    aElementTree->releaseTo(rNewOwner);
+}
+
+//-----------------------------------------------------------------------------
+void ElementTree::releaseOwnedElementAs(std::auto_ptr<INode>& rNewOwner, ElementTree const& aElementTree, Name const& aNewName)
+{
+    OSL_PRECOND(aElementTree.isValid(),"ERROR: Trying to take over the content of a NULL element tree");
+    OSL_PRECOND(aElementTree->isFree(),"Trying to take over the content of a owned element tree - returning NULL");
+
+    aElementTree->releaseAs(rNewOwner,aNewName);
+}
 
 //-----------------------------------------------------------------------------
 // class SetElementInfo
