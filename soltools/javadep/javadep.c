@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-04-23 10:20:56 $
+ *  last change: $Author: nf $ $Date: 2001-04-23 11:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,29 +795,31 @@ simple_getopt(int nargc, char *pargv[], const char *poptstring)
     char *parg = pargv[optind];
 
     /* skip all response file arguments */
-    while ( *parg == '@' )
-        parg = pargv[++optind];
+    if ( parg ) {
+        while ( *parg == '@' )
+            parg = pargv[++optind];
 
-    if ( parg[0] == '-' && parg[1] != '\0' ) {
-        char *popt;
-        int c = parg[1];
-        if ( (popt = strchr(poptstring, c)) == NULL ) {
-            optopt = c;
-            if ( opterr )
-                fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-            return '?';
-        }
-        if ( *(++popt) == ':') {
-             if ( parg[2] != '\0' ) {
-                 optarg = ++parg;
+        if ( parg[0] == '-' && parg[1] != '\0' ) {
+            char *popt;
+            int c = parg[1];
+            if ( (popt = strchr(poptstring, c)) == NULL ) {
+                optopt = c;
+                if ( opterr )
+                    fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
+                return '?';
+            }
+            if ( *(++popt) == ':') {
+                 if ( parg[2] != '\0' ) {
+                     optarg = ++parg;
+                 } else {
+                     optarg = pargv[++optind];
+                 }
              } else {
-                 optarg = pargv[++optind];
+                 optarg = NULL;
              }
-         } else {
-             optarg = NULL;
-         }
-         ++optind;
-         return c;
+             ++optind;
+             return c;
+        }
     }
     return -1;
 }
