@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 15:23:00 $
+ *  last change: $Author: os $ $Date: 2000-11-22 16:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2248,62 +2248,9 @@ uno::Reference< XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     //kein static
     uno::Reference< XPropertySetInfo >  aRef;
-    sal_uInt16 nPos = USHRT_MAX;
-    if(GetFldType())
+    if(m_nServiceId != USHRT_MAX)
     {
-        sal_uInt16 nResId = GetFldType()->Which();
-        switch(nResId)
-        {
-            case  RES_DBFLD         : nPos = SW_SERVICE_FIELDTYPE_DATABASE;break;
-            case  RES_USERFLD       : nPos = SW_SERVICE_FIELDTYPE_USER;break;
-            case  RES_FILENAMEFLD   : nPos = SW_SERVICE_FIELDTYPE_FILE_NAME;break;
-            case  RES_DBNAMEFLD     : nPos = SW_SERVICE_FIELDTYPE_DATABASE_NAME;break;
-            case  RES_DATEFLD       : break;
-            case  RES_TIMEFLD       : break;
-            case  RES_PAGENUMBERFLD : nPos = SW_SERVICE_FIELDTYPE_PAGE_NUM;break;
-            case  RES_AUTHORFLD     : nPos = SW_SERVICE_FIELDTYPE_AUTHOR;break;
-            case  RES_CHAPTERFLD    : nPos = SW_SERVICE_FIELDTYPE_CHAPTER;break;
-            case  RES_DOCSTATFLD    : //alle Statistik-Felder haben die gleiche PropertyMap
-                nPos = SW_SERVICE_FIELDTYPE_PAGE_COUNT;
-            break;
-            case  RES_GETEXPFLD     : nPos = SW_SERVICE_FIELDTYPE_GET_EXP;break;
-            case  RES_SETEXPFLD     : nPos = SW_SERVICE_FIELDTYPE_SET_EXP;break;
-            case  RES_GETREFFLD     : nPos = SW_SERVICE_FIELDTYPE_GET_REFERENCE;break;
-            case  RES_HIDDENTXTFLD  :
-                nPos = m_nServiceId;
-            break;
-            case  RES_POSTITFLD     : nPos = SW_SERVICE_FIELDTYPE_ANNOTATION;break;
-    //      case  RES_REGFLD        : nPos = ;break;
-    //      case  RES_VARREGFLD     : nPos = ;break;
-    //      case  RES_SETREFFLD     : nPos = ;break;
-            case  RES_INPUTFLD      : nPos = SW_SERVICE_FIELDTYPE_INPUT;break;
-            case  RES_MACROFLD      : nPos = SW_SERVICE_FIELDTYPE_MACRO;break;
-            case  RES_DDEFLD        : nPos = SW_SERVICE_FIELDTYPE_DDE;break;
-            case  RES_TABLEFLD      : nPos = SW_SERVICE_FIELDTYPE_TABLEFIELD;break;
-            case  RES_HIDDENPARAFLD : nPos = SW_SERVICE_FIELDTYPE_HIDDEN_PARA;break;
-            case  RES_DOCINFOFLD    : nPos = SW_SERVICE_FIELDTYPE_DOC_INFO;break;
-            case  RES_TEMPLNAMEFLD  : nPos = SW_SERVICE_FIELDTYPE_TEMPLATE_NAME;break;
-            case  RES_DBNEXTSETFLD  : nPos = SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET;break;
-            case  RES_DBNUMSETFLD   : nPos = SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET;break;
-            case  RES_DBSETNUMBERFLD: nPos = SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM;break;
-            case  RES_EXTUSERFLD    : nPos = SW_SERVICE_FIELDTYPE_USER_EXT;break;
-            case  RES_REFPAGESETFLD : nPos = SW_SERVICE_FIELDTYPE_REF_PAGE_SET;break;
-            case  RES_REFPAGEGETFLD : nPos = SW_SERVICE_FIELDTYPE_REF_PAGE_GET;break;
-            case  RES_INTERNETFLD   : 0;break;
-            case  RES_JUMPEDITFLD   : nPos = SW_SERVICE_FIELDTYPE_JUMP_EDIT;break;
-            case  RES_SCRIPTFLD     : nPos = SW_SERVICE_FIELDTYPE_SCRIPT;break;
-            case  RES_DATETIMEFLD   :
-            case  RES_FIXDATEFLD    :
-            case  RES_FIXTIMEFLD    : nPos = SW_SERVICE_FIELDTYPE_DATETIME; break;
-            case  RES_AUTHORITY:      nPos = SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY; break;
-    //      case  RES_FIELDS_END    : nPos = ;break;
-        }
-    }
-    else
-        nPos = m_nServiceId;
-    if(nPos != USHRT_MAX)
-    {
-        const SfxItemPropertyMap* pMap = SwFieldPropMapProvider::GetPropertyMap(nPos);
+        const SfxItemPropertyMap* pMap = SwFieldPropMapProvider::GetPropertyMap(m_nServiceId);
         uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(pMap);
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
