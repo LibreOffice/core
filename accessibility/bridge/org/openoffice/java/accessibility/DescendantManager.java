@@ -54,25 +54,27 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
+
+import com.sun.star.accessibility.*;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
 
 import javax.accessibility.AccessibleState;
 
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.accessibility.*;
 
 public abstract class DescendantManager extends Component {
     protected XAccessibleSelection unoAccessibleSelection = null;
     protected javax.accessibility.Accessible activeDescendant = null;
     protected boolean multiselectable = false;
 
-    protected DescendantManager(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+    protected DescendantManager(XAccessible xAccessible,
+        XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
 
-    protected DescendantManager(XAccessible xAccessible, XAccessibleContext xAccessibleContext, boolean multiselectable) {
+    protected DescendantManager(XAccessible xAccessible,
+        XAccessibleContext xAccessibleContext, boolean multiselectable) {
         super(xAccessible, xAccessibleContext);
         this.multiselectable = multiselectable;
     }
@@ -80,46 +82,49 @@ public abstract class DescendantManager extends Component {
     /**
     * Update the proxy objects appropriatly on property change events
     */
-    protected class AccessibleDescendantManagerListener extends AccessibleUNOComponentListener {
-
+    protected class AccessibleDescendantManagerListener
+        extends AccessibleUNOComponentListener {
         protected AccessibleDescendantManagerListener() {
-            super();
+            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+                    unoAccessibleContext);
         }
 
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
                 case AccessibleEventId.SELECTION_CHANGED:
-                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
+                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY,
+                        null, null);
+
                     break;
+
                 default:
                     super.notifyEvent(event);
             }
         }
     }
 
-    protected abstract class AccessibleDescendantManager extends AccessibleUNOComponent
+    protected abstract class AccessibleDescendantManager
+        extends AccessibleUNOComponent
         implements javax.accessibility.AccessibleSelection {
-
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
         protected AccessibleDescendantManager() {
-            super();
+            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+                    unoAccessibleContext);
         }
 
         /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(
+            XAccessibleStateSet unoAS) {
             javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
 
             states.add(AccessibleExtendedState.MANAGES_DESCENDANTS);
+
             if (multiselectable) {
                 states.add(javax.accessibility.AccessibleState.MULTISELECTABLE);
             }
 
             return states;
         }
-
 
         /*
         * AccessibleContext
@@ -198,4 +203,3 @@ public abstract class DescendantManager extends Component {
         }
     }
 }
-
