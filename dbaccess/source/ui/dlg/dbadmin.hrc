@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #define PB_ADDALLTABLES         3
 #define PB_NEW_DATASOURCE       4
 #define PB_CREATEDATABASE       5
+#define BTN_PASSWORD_OK         6
+#define BTN_PASSWORD_CANCEL     7
+#define BTN_PASSWORD_HELP       8
+#define PB_CONVERTDATABASE      9
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
@@ -193,6 +197,12 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24.66.1  2003/04/17 10:36:08  oj
+ *  #109006# add adabas strings
+ *
+ *  Revision 1.24  2002/11/21 15:23:00  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
  *  Revision 1.23  2002/11/15 12:28:32  oj
  *  #105175# insert none for empty string
  *
