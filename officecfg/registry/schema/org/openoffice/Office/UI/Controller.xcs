@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:29:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,16 @@
 			</set>
 			<set oor:name="ToolBar" oor:node-type="ControllerType">
 				<info>
+<<<<<<< Controller.xcs
 					<desc>Contains UNO component implementation names that implement toolbar controller which are bound to a command and module name.</desc>
+=======
+					<desc xml:lang="en-US">Contains UNO component implementation names that implement tool bar controller which are bound to a command and module name.</desc>
+				</info>
+			</set>
+			<set oor:name="StatusBar" oor:node-type="ControllerType">
+				<info>
+					<desc xml:lang="en-US">Contains UNO component implementation names that implement status bar controller which are bound to a command and module name.</desc>
+>>>>>>> 1.5.160.1
 				</info>
 			</set>
 		</group>
