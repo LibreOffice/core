@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:19:50 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,57 +211,6 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
         if (nTypeId == TYP_MACROFLD)
         {
             String sName(GetCurField()->GetPar1());
-            BasicManager *pBasMgr = 0;
-            GetFldMgr().SetMacroModule(0);
-
-            if (sName.GetToken( 0, '.') == SFX_APP()->GetName())
-                pBasMgr = SFX_APP()->GetBasicManager();
-            else
-            {
-                SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-                pBasMgr = pSh->GetView().GetDocShell()->GetBasicManager();
-            }
-
-            if (pBasMgr)
-            {
-                String sLibName(sName.GetToken(1, '.'));
-                StarBASIC* pBasic = pBasMgr->GetLib(sLibName);
-
-                if (pBasic)
-                {
-                    SbModule* pModule = pBasic->FindModule( sName.GetToken( 2, '.') );
-                    GetFldMgr().SetMacroModule(pModule);
-                }
-            }
-
-            if (sName.Len())
-            {
-                // Inhalt von sName umdrehen
-                String sBuf;
-                String sTmp;
-                USHORT nPos = 0;
-                USHORT nCount = sName.GetTokenCount('.');
-
-                for (int i = nCount - 1; i >= nCount - 4; i--)
-                {
-                    if (i == nCount - 4)
-                    {
-                        nPos = 0;
-                        sName.GetToken(i, '.', nPos);
-                        sTmp = sName.Copy(0, nPos - 1);
-                    }
-                    else
-                    {
-                        sTmp = sName.GetToken(i, '.');
-                        sTmp += '.';
-                    }
-
-                    sBuf += sTmp;
-                }
-
-                sName = sBuf;
-            }
-
             GetFldMgr().SetMacroPath(sName);
         }
     }
@@ -430,7 +379,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
         {
             case TYP_MACROFLD:
                 bMacro = TRUE;
-                bShowSelection = TRUE;
                 if (GetFldMgr().GetMacroPath().Len())
                     bValue = TRUE;
                 else
@@ -438,7 +386,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
 
                 aNameFT.SetText(SW_RESSTR(STR_MACNAME));
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
-                aNameED.SetText(aSelectionLB.GetSelectEntry());
+                aNameED.SetText(GetFldMgr().GetMacroName());
                 break;
 
             case TYP_HIDDENPARAFLD:
@@ -647,22 +595,22 @@ void SwFldFuncPage::UpdateSubType()
 
     if (bEnable)
     {
-        if (nTypeId == TYP_MACROFLD)
-        {
-            BOOL bHasMacro = GetFldMgr().GetMacroPath().Len() != 0;
-
-            if (bHasMacro)
-            {
-                aSelectionLB.SelectEntry(GetFldMgr().GetMacroPath());
-                aNameED.SetText(aSelectionLB.GetSelectEntry());
-                aValueFT.Enable();
-                aValueED.Enable();
-            }
-            EnableInsert(bHasMacro);
-        }
-        else
             aSelectionLB.SelectEntryPos(0);
     }
+
+    if (nTypeId == TYP_MACROFLD)
+    {
+        BOOL bHasMacro = GetFldMgr().GetMacroPath().Len() != 0;
+
+        if (bHasMacro)
+        {
+            aNameED.SetText(GetFldMgr().GetMacroName());
+            aValueFT.Enable();
+            aValueED.Enable();
+        }
+        EnableInsert(bHasMacro);
+    }
+
     aSelectionLB.SetUpdateMode(TRUE);
 }
 
@@ -718,7 +666,8 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
             break;
 
         case TYP_MACROFLD:
-            aName = TurnMacroString(aName);
+            // use the full script URL, not the name in the Edit control
+            aName = GetFldMgr().GetMacroPath();
             break;
 
         case TYP_CONDTXTFLD:
