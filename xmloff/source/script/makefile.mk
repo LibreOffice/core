@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ab $ $Date: 2000-11-28 11:27:35 $
+#   last change: $Author: dvo $ $Date: 2000-12-19 18:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,13 @@ ALL: $(INCCOM)$/rscrev.hxx ALLTAR
 
 SLOFILES =	\
         $(SLO)$/xmlscripte.obj \
-        $(SLO)$/xmlscripti.obj
+        $(SLO)$/xmlscripti.obj \
+        $(SLO)$/XMLEventExport.obj \
+        $(SLO)$/XMLEventImportHelper.obj \
+        $(SLO)$/XMLEventsImportContext.obj \
+        $(SLO)$/XMLStarBasicContextFactory.obj \
+        $(SLO)$/XMLStarBasicExportHandler.obj
+
 
 # --- Tagets -------------------------------------------------------
 

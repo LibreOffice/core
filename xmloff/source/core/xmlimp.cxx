@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:22:38 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include "xmlnumfi.hxx"
 #endif
+#ifndef _XMLOFF_XMLEVENTIMPORTHELPER_HXX
+#include "XMLEventImportHelper.hxx"
+#endif
+#ifndef _XMLOFF_XMLSTARBASICCONTEXTFACTORY_HXX
+#include "XMLStarBasicContextFactory.hxx"
+#endif
 
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include "ProgressBarHelper.hxx"
@@ -132,6 +138,7 @@ sal_Char __READONLY_DATA sXML_np__number[] = "_number";
 sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
 sal_Char __READONLY_DATA sXML_np__chart[] = "_chart";
 sal_Char __READONLY_DATA sXML_np__math[] = "_math";
+sal_Char __READONLY_DATA sXML_np__script[] = "_script";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
@@ -186,7 +193,8 @@ void SvXMLImport::_InitCtor()
                                sXML_n_math, XML_NAMESPACE_MATH );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM_IDX, sXML_namespace_form,
                                   sXML_url_form, XML_NAMESPACE_FORM );
-
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT_IDX, sXML_np__script,
+                               sXML_url_script, XML_NAMESPACE_SCRIPT );
 
     // namespaces used in the technical preview (SO 5.2)
     pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_FO_IDX, sXML_np__fo_old,
@@ -225,7 +233,8 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     pNumImport( NULL ),
     xModel( rModel ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( NULL )
+    pProgressBarHelper( NULL ),
+    pEventImportHelper( NULL )
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
@@ -242,7 +251,8 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     xModel( rModel ),
     xGraphicObjects( rGraphicObjects ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( NULL )
+    pProgressBarHelper( NULL ),
+    pEventImportHelper( NULL )
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
@@ -681,6 +691,22 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return sRet;
 }
 
+XMLEventImportHelper& SvXMLImport::GetEventImport()
+{
+    if (!pEventImportHelper)
+    {
+        // construct event helper and register StarBasic handler and standard
+        // event tables
+        pEventImportHelper = new XMLEventImportHelper();
+        OUString sStarBasic(RTL_CONSTASCII_USTRINGPARAM(sXML_starbasic));
+        pEventImportHelper->RegisterFactory(sStarBasic,
+                                            new XMLStarBasicContextFactory());
+        pEventImportHelper->AddTranslationTable(aStandardEventTable);
+    }
+
+    return *pEventImportHelper;
+}
+
 void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )
 {
     xFontDecls = pFontDecls;
@@ -744,4 +770,3 @@ const SvXMLStylesContext *SvXMLImport::GetMasterStyles() const
 {
     return (const SvXMLStylesContext *)&xMasterStyles;
 }
-

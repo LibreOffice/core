@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP_
+#include <com/sun/star/document/XEventSupplier.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
 #include <com/sun/star/text/XTextSection.hpp>
@@ -227,7 +230,9 @@
 #ifndef _XMLOFF_XMLINDEXMARKEXPORT_HXX_
 #include "XMLIndexMarkExport.hxx"
 #endif
-
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::std;
@@ -1601,6 +1606,11 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_text_box, sal_False, sal_True );
+
+    // script:events
+    Reference<XEventSupplier> xEventSupp( xTxtFrame, UNO_QUERY );
+    GetExport().GetEventExport().Export(xEventSupp);
+
     exportText( xTxt, sal_False, bProgress, sal_True );
 }
 
@@ -1789,6 +1799,10 @@ void XMLTextParagraphExport::_exportTextGraphic(
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_image, sal_False, sal_True );
 
+    // script:events
+    Reference<XEventSupplier> xEventSupp( rPropSet, UNO_QUERY );
+    GetExport().GetEventExport().Export(xEventSupp);
+
     // svg:desc
     OUString sAltText;
     aAny = rPropSet->getPropertyValue( sAlternativeText );
@@ -1900,6 +1914,10 @@ void XMLTextParagraphExport::_exportTextEmbedded(
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               pElem, sal_False, sal_True );
+
+    // script:events
+    Reference<XEventSupplier> xEventSupp( rPropSet, UNO_QUERY );
+    GetExport().GetEventExport().Export(xEventSupp);
 
     // svg:desc
     if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )

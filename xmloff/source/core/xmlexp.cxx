@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 16:13:37 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@
 #include "families.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
+#include "XMLStarBasicExportHandler.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -210,7 +218,8 @@ SvXMLExport::SvXMLExport(
     bExtended( sal_False ),
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY ),
-    pProgressBarHelper( NULL )
+    pProgressBarHelper( NULL ),
+    pEventExport( NULL )
 {
     _InitCtor();
 }
@@ -233,7 +242,8 @@ SvXMLExport::SvXMLExport(
     xModel( rModel ),
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( NULL )
+    pProgressBarHelper( NULL ),
+    pEventExport( NULL )
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
@@ -260,7 +270,8 @@ SvXMLExport::SvXMLExport(
     xModel( rModel ),
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( NULL )
+    pProgressBarHelper( NULL ),
+    pEventExport( NULL )
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
@@ -739,6 +750,23 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
 
     return sRet;
 }
+
+XMLEventExport& SvXMLExport::GetEventExport()
+{
+    if( NULL == pEventExport)
+    {
+        // create EventExport on demand
+        pEventExport = new XMLEventExport(*this, NULL);
+
+        // and register standard handlers + names
+        OUString sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic"));
+        pEventExport->AddHandler(sStarBasic, new XMLStarBasicExportHandler());
+        pEventExport->AddTranslationTable(aStandardEventTable);
+    }
+
+    return *pEventExport;
+}
+
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
                                         sal_uInt16 nPrefixKey,

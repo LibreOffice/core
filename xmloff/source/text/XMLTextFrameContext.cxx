@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
+#include <com/sun/star/document/XEventSupplier.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -115,10 +118,14 @@
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
 #include "shapeimport.hxx"
 #endif
+#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
+#include "XMLEventsImportContext.hxx"
+#endif
 
 #ifndef _XMLTEXTLISTBLOCKCONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -129,6 +136,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
+using ::com::sun::star::document::XEventSupplier;
 
 class XMLTextFrameDescContext_Impl : public SvXMLImportContext
 {
@@ -710,6 +718,24 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                               nPrefix, rLocalName,
                                                xAttrList, xPropSet, sal_True );
         }
+    }
+    else if( (XML_NAMESPACE_SCRIPT == nPrefix) &&
+             rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1) )
+    {
+        // do we still have the frame object?
+        if (xPropSet.is())
+        {
+            // is it an event supplier?
+            Reference<XEventSupplier> xEventSupplier(xPropSet, UNO_QUERY);
+            if (xEventSupplier.is())
+            {
+                // OK, we have the events, so create the context
+                pContext = new XMLEventsImportContext(GetImport(), nPrefix,
+                                                   rLocalName, xEventSupplier);
+            }
+            // else: no events, no event import
+        }
+        // else: no object, no event import
     }
     else if( xOldTextCursor.is() )  // text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(

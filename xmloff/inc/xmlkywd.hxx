@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:21:58 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,9 @@ XML_CONSTASCII_ACTION( sXML_error_upper_limit, "error-upper-limit" );
 XML_CONSTASCII_ACTION( sXML_escapement_sub, "sub" );
 XML_CONSTASCII_ACTION( sXML_escapement_super, "super" );
 XML_CONSTASCII_ACTION( sXML_even_page, "even-page" );
+XML_CONSTASCII_ACTION( sXML_event, "event" );
+XML_CONSTASCII_ACTION( sXML_events, "events" );
+XML_CONSTASCII_ACTION( sXML_event_name, "event-name" );
 XML_CONSTASCII_ACTION( sXML_execute, "execute" );
 XML_CONSTASCII_ACTION( sXML_execute_macro, "execute-macro" );
 XML_CONSTASCII_ACTION( sXML_exists, "exists" );
@@ -652,7 +655,7 @@ XML_CONSTASCII_ACTION( sXML_footnotes_configuration, "footnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_footnotes_position, "footnotes-position" );
 XML_CONSTASCII_ACTION( sXML_forall, "forall" );
 XML_CONSTASCII_ACTION( sXML_foreground, "foreground" );
-XML_CONSTASCII_ACTION( sXML_foreign_object, "foreign_object" );
+XML_CONSTASCII_ACTION( sXML_foreign_object, "foreign-object" );
 XML_CONSTASCII_ACTION( sXML_format_source, "format-source" );
 XML_CONSTASCII_ACTION( sXML_formula, "formula");
 XML_CONSTASCII_ACTION( sXML_formula_hidden, "formula-hidden");
@@ -829,6 +832,7 @@ XML_CONSTASCII_ACTION( sXML_letter_kerning, "letter-kerning" );
 XML_CONSTASCII_ACTION( sXML_letter_spacing, "letter-spacing" );
 XML_CONSTASCII_ACTION( sXML_letters, "letters" );
 XML_CONSTASCII_ACTION( sXML_level, "level" );
+XML_CONSTASCII_ACTION( sXML_library, "library" );
 XML_CONSTASCII_ACTION( sXML_library_embedded, "library-embedded" );
 XML_CONSTASCII_ACTION( sXML_library_linked, "library-linked" );
 XML_CONSTASCII_ACTION( sXML_light, "light");
@@ -868,6 +872,7 @@ XML_CONSTASCII_ACTION( sXML_lt, "lt");
 XML_CONSTASCII_ACTION( sXML_ltr, "ltr");
 XML_CONSTASCII_ACTION( sXML_luminance , "luminance" );
 XML_CONSTASCII_ACTION( sXML_maction, "maction");
+XML_CONSTASCII_ACTION( sXML_macro_name, "macro-name");
 XML_CONSTASCII_ACTION( sXML_main_entry_style_name, "main-entry-style-name" );
 XML_CONSTASCII_ACTION( sXML_major, "major" );
 XML_CONSTASCII_ACTION( sXML_maligngroup, "maligngroup");
@@ -1314,6 +1319,7 @@ XML_CONSTASCII_ACTION( sXML_stagger_even, "stagger-even" );
 XML_CONSTASCII_ACTION( sXML_stagger_odd, "stagger-odd" );
 XML_CONSTASCII_ACTION( sXML_standard, "standard" );
 XML_CONSTASCII_ACTION( sXML_standard_deviation, "standard-deviation" );
+XML_CONSTASCII_ACTION( sXML_starbasic, "starbasic" );
 XML_CONSTASCII_ACTION( sXML_start, "start" );
 XML_CONSTASCII_ACTION( sXML_start_color, "start-color" );
 XML_CONSTASCII_ACTION( sXML_start_intensity, "start-intensity" );
