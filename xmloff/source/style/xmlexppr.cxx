@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-27 16:38:56 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 08:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,70 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
 //
 // After that I call the method 'ContextFilter'.
 //
+
+typedef std::list<XMLPropertyState> MyPropertyStateList;
+
+class MyPropertyStates
+{
+    MyPropertyStateList             aProps;
+    MyPropertyStateList::iterator   aLastItr;
+    sal_uInt32                      nCount;
+public:
+    MyPropertyStates();
+    void AddPropertyState(const XMLPropertyState& aProp);
+    void FillPropertyStateVector(std::vector<XMLPropertyState>& aVector);
+};
+
+MyPropertyStates::MyPropertyStates()
+    : aProps(),
+    nCount(0)
+{
+    aLastItr = aProps.begin();
+}
+
+void MyPropertyStates::AddPropertyState(const XMLPropertyState& aProp)
+{
+    MyPropertyStateList::iterator aItr = aProps.begin();
+    sal_Bool bInserted(sal_False);
+    if (nCount)
+    {
+        if (aLastItr->mnIndex < aProp.mnIndex)
+            aItr = ++aLastItr;
+    }
+    do
+    {
+        if (aItr == aProps.end())
+        {
+            aLastItr = aProps.insert(aProps.end(), aProp);
+            bInserted = sal_True;
+            nCount++;
+        }
+        else if (aItr->mnIndex > aProp.mnIndex)
+        {
+            aLastItr = aProps.insert(aItr, aProp);
+            bInserted = sal_True;
+            nCount++;
+        }
+    }
+    while(!bInserted && (aItr++ != aProps.end()));
+}
+
+void MyPropertyStates::FillPropertyStateVector(std::vector<XMLPropertyState>& aVector)
+{
+    if (nCount)
+    {
+        aVector.resize(nCount, XMLPropertyState(-1));
+        MyPropertyStateList::iterator aItr = aProps.begin();
+        sal_uInt32 i (0);
+        while (aItr != aProps.end())
+        {
+            aVector[i] = *aItr;
+            aItr++;
+            i++;
+        }
+    }
+}
+
 struct MyToFilterProperty
 {
     rtl::OUString           sApiName;
@@ -243,7 +307,6 @@ void MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_
             aLastItr = aProps.insert(aProps.end(), MyToFilterProperty(sApiName, nIndex));
             bInserted = sal_True;
             nCount++;
-            aLastItr = --aProps.end();
         }
         else if (aItr->sApiName > sApiName)
         {
@@ -276,6 +339,7 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
                                             UniReference< XMLPropertySetMapper > maPropMapper, const sal_Bool bDefault)
 {
     MyToFilterPropertyList::iterator aItr = aProps.begin();
+    MyPropertyStates aProps;
     for(sal_uInt32 i = 0; i < nCount; i++, aItr++ )
     {
         if( pStates[i] == PropertyState_DIRECT_VALUE )
@@ -296,13 +360,14 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
                             MID_FLAG_DEFAULT_ITEM_EXPORT) != 0)))
                     {
                         aNewProperty.mnIndex = *aIndexItr;
-                        aPropStates.push_back( aNewProperty );
+                        aProps.AddPropertyState( aNewProperty );
                     }
                     aIndexItr++;
                 }
             }
         }
     }
+    aProps.FillPropertyStateVector(aPropStates);
 }
 
 vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
