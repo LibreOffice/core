@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 07:02:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,8 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId)
 
     switch (_nId)
     {
+        case SID_CLOSEDOC:
+            break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
@@ -346,6 +348,10 @@ void OJoinController::Execute(sal_uInt16 _nId)
 {
     switch(_nId)
     {
+        case SID_CLOSEDOC:
+            closeTask();
+            return;
+            break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
             static_cast<OJoinDesignView*>(m_pView)->setReadOnly(!m_bEditable);
@@ -394,7 +400,14 @@ void OJoinController::removeConnectionData(::std::auto_ptr<OTableConnectionData>
     m_vTableConnectionData.erase( ::std::find(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData.get()));
 }
 // -----------------------------------------------------------------------------
-
+void OJoinController::AddSupportedFeatures()
+{
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]        = ID_BROWSER_REDO;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/Close")]    = SID_CLOSEDOC;
+}
+// -----------------------------------------------------------------------------
 
 
 

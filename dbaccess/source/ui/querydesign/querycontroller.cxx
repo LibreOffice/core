@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-24 10:42:08 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -97,6 +100,9 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
@@ -105,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
 #endif
 #ifndef DBAUI_DLGSAVE_HXX
 #include "dlgsave.hxx"
@@ -135,6 +144,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -181,7 +193,9 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
@@ -246,6 +260,7 @@ OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
     ,m_pSqlIterator(NULL)
     ,m_nSplitPos(-1)
     ,m_nVisibleRows(0x400)
+    ,m_bCreateView(sal_False)
 {
     m_pParseContext = new OQueryParseContext();
     m_pSqlParser    = new OSQLParser(_rM,m_pParseContext);
@@ -310,7 +325,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
+            aReturn.bEnabled = !m_bCreateView && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
@@ -318,13 +333,13 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case SID_PRINTDOCDIRECT:
             break;
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = m_bEditable && m_pWindow->getView()->isCutAllowed();
+            aReturn.bEnabled = m_bEditable && m_pWindow && m_pWindow->getView()->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
-            aReturn.bEnabled = m_pWindow->getView()->isCopyAllowed();
+            aReturn.bEnabled = m_pWindow && m_pWindow->getView()->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = m_bEditable && m_pWindow->getView()->isPasteAllowed();
+            aReturn.bEnabled = m_bEditable && m_pWindow && m_pWindow->getView()->isPasteAllowed();
             break;
         case ID_BROWSER_SQL:
             aReturn.bEnabled = m_bEsacpeProcessing && m_pSqlIterator;
@@ -336,7 +351,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
         case ID_BROWSER_QUERY_VIEW_ALIASES:
-            aReturn.aState = ::cppu::bool2any(m_pWindow->getView()->isSlotEnabled(_nId));
+            aReturn.aState = ::cppu::bool2any(m_pWindow && m_pWindow->getView()->isSlotEnabled(_nId));
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
             aReturn.aState = ::cppu::bool2any(m_bDistinct);
@@ -367,143 +382,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_SAVEASDOC:
         case ID_BROWSER_SAVEDOC:
-            {
-                OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-
-                Reference<XNameAccess> xQueries = getQueries();
-                if(xQueries.is())
-                {
-                    // first we need a name for our query so ask the user
-                    sal_Bool bNew = 0 == m_sName.getLength();
-                    bNew = bNew || (ID_BROWSER_SAVEASDOC == _nId);
-                    if(bNew)
-                    {
-                        String aDefaultName;
-                        if(ID_BROWSER_SAVEASDOC == _nId && !bNew)
-                            aDefaultName = String(m_sName);
-                        else
-                        {
-                            String aName = String(ModuleRes(STR_QRY_TITLE));
-                            aName = aName.GetToken(0,' ');
-                            aDefaultName = String(::dbtools::createUniqueName(xQueries,aName));
-                        }
-
-                        Reference<XDatabaseMetaData> xMeta;
-                        if(m_xConnection.is())
-                            xMeta = m_xConnection->getMetaData();
-                        OSaveAsDlg aDlg(
-                                getView(), CommandType::QUERY, xQueries,
-                                xMeta, aDefaultName,
-                                (ID_BROWSER_SAVEASDOC == _nId) ? SAD_OVERWRITE : SAD_DEFAULT);
-
-                        if(aDlg.Execute() == RET_OK)
-                            m_sName = aDlg.getName();
-                    }
-                    // did we get a name
-                    if(m_sName.getLength())
-                    {
-                        SQLExceptionInfo aInfo;
-                        try
-                        {
-                            Reference<XPropertySet> xQuery;
-                            if(bNew || !xQueries->hasByName(m_sName)) // just to make sure the query already exists
-                            {
-                                if(xQueries->hasByName(m_sName))
-                                {
-                                    Reference<XDrop> xNameCont(xQueries,UNO_QUERY);
-                                    OSL_ENSURE(xNameCont.is(),"Can not drop query!");
-                                    if(xNameCont.is())
-                                        xNameCont->dropByName(m_sName);
-                                }
-
-                                Reference<XDataDescriptorFactory> xFact(xQueries,UNO_QUERY);
-                                OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-                                xQuery = xFact->createDataDescriptor();
-                                OSL_ENSURE(xQuery.is(),"OQueryController::Execute ID_BROWSER_SAVEDOC: Create query failed!");
-                                // to set the name is only allowed when the wuery is new
-                                xQuery->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
-                            }
-                            else
-                            {
-                                ::cppu::extractInterface(xQuery,xQueries->getByName(m_sName));
-                            }
-                            // now set the properties
-                            m_sStatement = m_pWindow->getView()->getStatement();
-                            ::rtl::OUString sTranslatedStmt;
-                            if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
-                            {
-                                try
-                                {
-                                    ::rtl::OUString aErrorMsg;
-                                    ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
-                                    //  m_pParseNode = pNode;
-                                    if(pNode)
-                                    {
-                                        pNode->parseNodeToStr(  sTranslatedStmt,
-                                                                m_xConnection->getMetaData());
-                                        delete pNode;
-                                    }
-                                    m_xComposer->setQuery(sTranslatedStmt);
-                                    sTranslatedStmt = m_xComposer->getComposedQuery();
-                                }
-                                catch(SQLException& e)
-                                {
-                                    ::dbtools::SQLExceptionInfo aInfo(e);
-                                    showError(aInfo);
-                                    break;
-                                }
-                            }
-                            else if(!m_sStatement.getLength())
-                            {
-                                ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
-                                aBox.Execute();
-                                break;
-                            }
-                            else
-                                sTranslatedStmt = m_sStatement;
-
-                            xQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(sTranslatedStmt));
-                            xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
-                            xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
-                            xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
-                            xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME,makeAny(m_sUpdateSchemaName));
-
-
-                            // now we save the layout information
-                            //  create the output stream
-                            m_pWindow->getView()->SaveUIConfig();
-                            Sequence< sal_Int8 > aOutputSeq;
-                            {
-                                Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
-                                Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
-                                Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
-                                Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
-                                Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-                                OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
-                                xOutDataSource->setOutputStream(xMarkOutStream);
-                                Save(xOutStream);
-                                xQuery->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
-                            }
-
-                            if(bNew)
-                            {
-                                Reference<XAppend> xAppend(xQueries,UNO_QUERY);
-                                OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
-                                xAppend->appendByDescriptor(xQuery);
-                            }
-                            setModified(sal_False);
-                        }
-                        catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
-                        catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
-                        catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-                        catch(Exception&)
-                        {
-                            OSL_ENSURE(0,"Query could not be inserted!");
-                        }
-                        showError(aInfo);
-                    }
-                }
-            }
+            doSaveAsDoc(ID_BROWSER_SAVEASDOC == _nId);
+            if(m_bCreateView)
+                closeTask();
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -626,8 +507,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
-    try
-    {
+
         OJoinController::initialize(aArguments);
 
         //  m_pWindow->initialize(m_xCurrentFrame);
@@ -661,14 +541,32 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             {
                 m_bDesign = ::cppu::any2bool(aValue.Value);
             }
+            else if(aValue.Name == PROPERTY_CREATEVIEW)
+            {
+                m_bCreateView = ::cppu::any2bool(aValue.Value);
+            }
         }
 
         if (!m_xConnection.is())
         {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
             createNewConnection(sal_False);
         }
-        if (!m_xConnection.is())    // we have no connection so what else should we do
+        if (!m_xConnection.is())
+        {   // we have no connection so what else should we do
             m_bDesign = sal_False;
+            if(m_bCreateView)
+            {
+                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+                ODataView* pWindow = getView();
+                InfoBox(pWindow, aMessage).Execute();
+                Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
+                if(xTask.is())
+                {
+                    xTask->close();
+                    throw SQLException();
+                }
+            }
+        }
 
         // we need a datasource
         if(m_xConnection.is())
@@ -676,6 +574,45 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             Reference<XChild> xChild(m_xConnection,UNO_QUERY);
             if(xChild.is())
                 m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
+            // now we have to check if our database supports views
+            if(m_bCreateView)
+            {
+                static ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
+                Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+                Reference<XResultSet> xRes = xMeta->getTableTypes();
+                sal_Bool bFound = sal_False;
+                if(xRes.is())
+                {
+                    Reference<XRow> xRow(xRes,UNO_QUERY);
+                    while(xRes->next())
+                    {
+                        ::rtl::OUString sValue = xRow->getString(1);
+                        if(!xRow->wasNull() && sValue == sView)
+                            bFound = sal_True;
+                    }
+                }
+                if(!bFound)
+                {   // we can't create views so we ask if the user wants to create a query instead
+                    m_bCreateView = sal_False;
+                    sal_Bool bClose = sal_False;
+                    {
+                        String aTitle(ModuleRes(STR_QUERYDESIGN_NO_VIEW_SUPPORT));
+                        String aMessage(ModuleRes(STR_QUERYDESIGN_NO_VIEW_ASK));
+                        ODataView* pWindow = getView();
+                        OSQLMessageBox aDlg(pWindow,aTitle, aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Query);
+                        bClose = aDlg.Execute() == RET_NO;
+                    }
+                    if(bClose)
+                    {
+                        Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
+                        if(xTask.is())
+                        {
+                            xTask->close();
+                            throw SQLException();
+                        }
+                    }
+                }
+            }
         }
         else
         {
@@ -683,11 +620,13 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
             OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
         }
-
+    try
+    {
         // get command from the query if a query name was supplied
         if(m_sName.getLength())
         {
-            Reference<XNameAccess> xQueries = getQueries();
+            OSL_ENSURE(!m_bCreateView,"Can not support a name for a view!");
+            Reference<XNameAccess> xQueries = getElements();
             if(xQueries.is())
             {
                 Reference<XPropertySet> xProp;
@@ -858,17 +797,11 @@ sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeExc
 // -----------------------------------------------------------------------------
 void OQueryController::AddSupportedFeatures()
 {
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Redo")] = ID_BROWSER_REDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Save")] = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Undo")] = ID_BROWSER_UNDO;
-
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]    = SID_HELPMENU;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]      = SID_NEWDOC;
+    OJoinController::AddSupportedFeatures();
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]        = ID_BROWSER_COPY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]         = ID_BROWSER_CUT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]       = ID_BROWSER_PASTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]   = SID_SAVEASDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpen")]         = SID_EXPLORERCONTENT_OPEN;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpenDocument")] = SID_EXPLORERCONTENT_OPEN_DOCUMENT;
-
 }
 // -----------------------------------------------------------------------------
 ToolBox* OQueryController::CreateToolBox(Window* _pParent)
@@ -975,19 +908,28 @@ OTableWindowData* OQueryController::createTableWindowData()
     return new OQueryTableWindowData();
 }
 // -----------------------------------------------------------------------------
-Reference<XNameAccess> OQueryController::getQueries()
+Reference<XNameAccess> OQueryController::getElements()  const
 {
-    Reference<XNameAccess> xQueries;
-    Reference<XQueriesSupplier> xConSup(m_xConnection,UNO_QUERY);
-    if(xConSup.is())
-        xQueries = xConSup->getQueries();
+    Reference<XNameAccess> xElements;
+    if(m_bCreateView)
+    {
+        Reference<XViewsSupplier> xConSup(m_xConnection,UNO_QUERY);
+        if(xConSup.is())
+            xElements = xConSup->getViews();
+    }
     else
     {
-        Reference<XQueryDefinitionsSupplier> xSup(m_xDataSource,UNO_QUERY);
-        if(xSup.is())
-            xQueries = xSup->getQueryDefinitions();
+        Reference<XQueriesSupplier> xConSup(m_xConnection,UNO_QUERY);
+        if(xConSup.is())
+            xElements = xConSup->getQueries();
+        else
+        {
+            Reference<XQueryDefinitionsSupplier> xSup(m_xDataSource,UNO_QUERY);
+            if(xSup.is())
+                xElements = xSup->getQueryDefinitions();
+        }
     }
-    return xQueries;
+    return xElements;
 }
 // -----------------------------------------------------------------------------
 void OQueryController::executeQuery()
@@ -1105,8 +1047,227 @@ void OQueryController::executeQuery()
         for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
             bAllEmpty = (*aIter)->IsEmpty();
 
-        ErrorBox aBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
-        aBox.Execute();
+        ErrorBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT)).Execute();
+    }
+}
+// -----------------------------------------------------------------------------
+String OQueryController::getMenu() const
+{
+    return String::CreateFromInt32(RID_QUERY_DESIGN_MAIN_MENU);
+}
+// -----------------------------------------------------------------------------
+void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
+{
+    sal_Bool bNew = 0 == m_sName.getLength();
+    bNew = bNew || _bSaveAs;
+    if(bNew)
+    {
+        String aDefaultName;
+        if(_bSaveAs && !bNew)
+            aDefaultName = String(m_sName);
+        else
+        {
+            String aName = String(ModuleRes(m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE));
+            aName = aName.GetToken(0,' ');
+            aDefaultName = String(::dbtools::createUniqueName(_xElements,aName));
+        }
+
+        Reference<XDatabaseMetaData> xMeta;
+        if(m_xConnection.is())
+            xMeta = m_xConnection->getMetaData();
+        OSaveAsDlg aDlg(
+            getView(), m_bCreateView ? CommandType::TABLE : CommandType::QUERY, _xElements,
+                xMeta, aDefaultName,
+                _bSaveAs ? SAD_OVERWRITE : SAD_DEFAULT);
+
+        if(aDlg.Execute() == RET_OK)
+        {
+            m_sName = aDlg.getName();
+            if(m_bCreateView)
+            {
+                m_sUpdateCatalogName    = aDlg.getCatalog();
+                m_sUpdateSchemaName = aDlg.getSchema();
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
+{
+    OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
+
+    Reference<XNameAccess> xElements = getElements();
+    if(xElements.is())
+    {
+        sal_Bool bNew = 0 == m_sName.getLength();
+        bNew = bNew || _bSaveAs;
+        // first we need a name for our query so ask the user
+        askForNewName(xElements,_bSaveAs);
+
+        // did we get a name
+        if(m_sName.getLength())
+        {
+            SQLExceptionInfo aInfo;
+            try
+            {
+                Reference<XPropertySet> xProp;
+                if(bNew || !xElements->hasByName(m_sName)) // just to make sure the query already exists
+                {
+                    if(xElements->hasByName(m_sName))
+                    {
+                        Reference<XDrop> xNameCont(xElements,UNO_QUERY);
+                        OSL_ENSURE(xNameCont.is(),"Can not drop query!");
+                        if(xNameCont.is())
+                            xNameCont->dropByName(m_sName);
+                    }
+
+                    Reference<XDataDescriptorFactory> xFact(xElements,UNO_QUERY);
+                    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
+                    xProp = xFact->createDataDescriptor();
+                    OSL_ENSURE(xProp.is(),"OQueryController::Execute ID_BROWSER_SAVEDOC: Create query failed!");
+                    // to set the name is only allowed when the wuery is new
+                    xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
+                }
+                else
+                {
+                    ::cppu::extractInterface(xProp,xElements->getByName(m_sName));
+                }
+                // now set the properties
+                m_sStatement = m_pWindow->getView()->getStatement();
+                ::rtl::OUString sTranslatedStmt;
+                if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
+                {
+                    try
+                    {
+                        ::rtl::OUString aErrorMsg;
+                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+                        //  m_pParseNode = pNode;
+                        if(pNode)
+                        {
+                            pNode->parseNodeToStr(  sTranslatedStmt,
+                                                    m_xConnection->getMetaData());
+                            delete pNode;
+                        }
+                        m_xComposer->setQuery(sTranslatedStmt);
+                        sTranslatedStmt = m_xComposer->getComposedQuery();
+                    }
+                    catch(SQLException& e)
+                    {
+                        ::dbtools::SQLExceptionInfo aInfo(e);
+                        showError(aInfo);
+                        return;
+                    }
+                }
+                else if(!m_sStatement.getLength())
+                {
+                    ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
+                    aBox.Execute();
+                    return;
+                }
+                else
+                    sTranslatedStmt = m_sStatement;
+
+                xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sTranslatedStmt));
+
+                // some properties are only valid for a query object
+                if(m_bCreateView)
+                {
+                    xProp->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(m_sUpdateCatalogName));
+                    xProp->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(m_sUpdateSchemaName));
+                }
+                else
+                {
+                    xProp->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
+                    xProp->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
+                    xProp->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME,makeAny(m_sUpdateSchemaName));
+                    xProp->setPropertyValue(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
+
+                    // now we save the layout information
+                    //  create the output stream
+                    m_pWindow->getView()->SaveUIConfig();
+                    Sequence< sal_Int8 > aOutputSeq;
+                    Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
+                    Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
+                    Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
+                    Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
+                    Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
+                    OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
+                    xOutDataSource->setOutputStream(xMarkOutStream);
+                    Save(xOutStream);
+                    xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
+                }
+
+                if(bNew)
+                {
+                    Reference<XAppend> xAppend(xElements,UNO_QUERY);
+                    OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
+                    xAppend->appendByDescriptor(xProp);
+
+                    if(m_bCreateView)
+                    {
+                        Reference<XPropertySet> xProp2;
+                        if(xElements->hasByName(m_sName))
+                            xElements->getByName(m_sName) >>= xProp2;
+                        if(!xProp2.is()) // correct name and try again
+                        {
+                            // it can be that someone inserted new data for us
+                            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+                            xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
+                            xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
+                            xProp->getPropertyValue(PROPERTY_NAME)          >>= sTable;
+
+                            ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
+                            m_sName = sComposedName;
+                        }
+                        // now check if our datasource has set a tablefilter and if append the new table name to it
+                        Reference< XChild> xChild(m_xConnection,UNO_QUERY);
+                        if(xChild.is())
+                        {
+                            Reference< XPropertySet> xDSProp(xChild->getParent(),UNO_QUERY);
+                            if(xDSProp.is())
+                            {
+                                Sequence< ::rtl::OUString > aFilter;
+                                xDSProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
+                                // first check if we have something like SCHEMA.%
+                                sal_Bool bHasToInsert = sal_True;
+                                static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+                                const ::rtl::OUString* pBegin = aFilter.getConstArray();
+                                const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
+                                for (;pBegin != pEnd; ++pBegin)
+                                {
+                                    if(pBegin->indexOf('%') != -1)
+                                    {
+                                        sal_Int32 nLen;
+                                        if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(m_sName,nLen))
+                                            bHasToInsert = sal_False;
+                                        else if(pBegin->getLength() == 1)
+                                            bHasToInsert = sal_False;
+                                    }
+                                }
+                                if(bHasToInsert)
+                                {
+                                    aFilter.realloc(aFilter.getLength()+1);
+                                    aFilter.getArray()[aFilter.getLength()-1] = m_sName;
+                                    xDSProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
+                                    Reference<XFlushable> xFlush(xDSProp,UNO_QUERY);
+                                    if(xFlush.is())
+                                        xFlush->flush();
+                                }
+                            }
+                        }
+                    }
+                }
+                setModified(sal_False);
+            }
+            catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
+            catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
+            catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
+            catch(Exception&)
+            {
+                OSL_ENSURE(0,"OQueryController::doSaveAsDoc: Query could not be inserted!");
+            }
+            showError(aInfo);
+        }
     }
 }
 // -----------------------------------------------------------------------------
