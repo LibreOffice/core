@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:02:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,6 @@
 #endif
 #endif
 
-// #define ITEMID_SIZE             0
-
 #include "glob.hrc"
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -125,28 +123,62 @@
 #include "helpids.h"
 
 #include "app.hxx"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
 #include "sdresid.hxx"
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
+#endif
 #include "sdpage.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "stlpool.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_DRAWVIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "drviewsh.hxx"
-#include "sdruler.hxx"
-#include "sdclient.hxx"
-#include "preview.hxx"
-#include "prevchld.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#include "Ruler.hxx"
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "optsitem.hxx"
+#ifndef SD_FU_SEARCH_HXX
 #include "fusearch.hxx"
+#endif
+#ifndef SD_FU_SPELL_HXX
 #include "fuspell.hxx"
-#include "sdoutl.hxx"
-#include "animobjs.hxx"
+#endif
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_ANIMATION_CHILD_WINDOW_HXX
+#include "AnimationChildWindow.hxx"
+#endif
 #include "SdUnoDrawView.hxx"
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -161,23 +193,24 @@ SO2_DECL_REF(SvStorage)
 #pragma optimize ( "", off )
 #endif
 
+namespace sd {
+
 /*************************************************************************
 |*
 |* Activate(), beim ersten Aufruf wird eine Shell fuer den Object Bar erzeugt
 |*
 \************************************************************************/
 
-void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
+void DrawViewShell::Activate(BOOL bIsMDIActivate)
 {
-    SdViewShell::Activate(bIsMDIActivate);
-    if (nCurrentObjectBar == 0)    // nur wenn noch kein Object Bar existent
+    ViewShell::Activate(bIsMDIActivate);
+    ObjectBarManager &rObjectBarManager (GetObjectBarManager());
+
+    if (rObjectBarManager.GetTopObjectBarId() == 0)
     {
-        nCurrentObjectBar = RID_DRAW_OBJ_TOOLBOX;
-
-        RemoveSubShell();
-        AddSubShell( *(SfxShell*) aShellTable.Get( RID_FORMLAYER_TOOLBOX ) );
-
-        AddSubShell( *(SfxShell*) aShellTable.Get( nCurrentObjectBar ) );
+        // There is not yet an active object bar.
+        rObjectBarManager.PushObjectBar (RID_FORMLAYER_TOOLBOX);
+        rObjectBarManager.PushObjectBar (RID_DRAW_OBJ_TOOLBOX);
     }
 
     if (bIsMDIActivate)
@@ -195,9 +228,9 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
     }
 }
 
-void SdDrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
+void DrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
 {
-    SdViewShell::UIActivate(pIPObj);
+    ViewShell::UIActivate(pIPObj);
 
     // #94252# Disable own controls
     aTabControl.Disable();
@@ -207,7 +240,7 @@ void SdDrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
     aLayerBtn.Disable();
 }
 
-void SdDrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
+void DrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
 {
     // #94252# Enable own controls
     aTabControl.Enable();
@@ -234,7 +267,7 @@ void SdDrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
         aLayerBtn.Enable();
     }
 
-    SdViewShell::UIDeactivate(pIPObj);
+    ViewShell::UIDeactivate(pIPObj);
 }
 
 /*************************************************************************
@@ -243,9 +276,9 @@ void SdDrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::Deactivate(BOOL bIsMDIActivate)
+void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
-    SdViewShell::Deactivate(bIsMDIActivate);
+    ViewShell::Deactivate(bIsMDIActivate);
 }
 
 /*************************************************************************
@@ -254,7 +287,7 @@ void SdDrawViewShell::Deactivate(BOOL bIsMDIActivate)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SelectionHasChanged()
+void DrawViewShell::SelectionHasChanged()
 {
     // Um die Performance zu steigern wird jetzt die komplette
     // Shell invalidiert statt alle Slots einzeln
@@ -296,7 +329,8 @@ void SdDrawViewShell::SelectionHasChanged()
         }
     }
 
-    SdClient* pIPClient = (SdClient*) GetIPClient();
+    ViewShellBase& rBase = GetViewShellBase();
+    Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
 
     if ( pIPClient && pIPClient->IsInPlaceActive() )
     {
@@ -304,7 +338,6 @@ void SdDrawViewShell::SelectionHasChanged()
         * Ggf. OLE-Objekt beruecksichtigen und deaktivieren
         **********************************************************************/
 
-        // if we have no ole object marked and have an inplace active ipc client
         // this means we recently deselected an inplace active ole object so
         // we need to deselect it now
         if (!pOleObj)
@@ -312,7 +345,7 @@ void SdDrawViewShell::SelectionHasChanged()
             pIPClient->GetProtocol().Reset2Open();
 
             SFX_APP()->SetViewFrame( GetViewFrame() );
-            SetVerbs(0);
+            rBase.SetVerbs(0);
             pDrView->ShowMarkHdl(NULL);
         }
         else
@@ -321,11 +354,11 @@ void SdDrawViewShell::SelectionHasChanged()
 
             if ( aIPObj.Is() )
             {
-                SetVerbs( &aIPObj->GetVerbList() );
+                rBase.SetVerbs( &aIPObj->GetVerbList() );
             }
             else
             {
-                SetVerbs(NULL);
+                rBase.SetVerbs(NULL);
             }
         }
     }
@@ -337,7 +370,7 @@ void SdDrawViewShell::SelectionHasChanged()
             SvVerb aVerb( 0, String( SdResId(STR_EDIT_OBJ) ) );
             SvVerbList aVerbList;
             aVerbList.Append( aVerb );
-            SetVerbs( &aVerbList );
+            rBase.SetVerbs( &aVerbList );
         }
         else
 #endif
@@ -347,16 +380,16 @@ void SdDrawViewShell::SelectionHasChanged()
 
             if ( aIPObj.Is() )
             {
-                SetVerbs( &aIPObj->GetVerbList() );
+                rBase.SetVerbs( &aIPObj->GetVerbList() );
             }
             else
             {
-                SetVerbs(NULL);
+                rBase.SetVerbs(NULL);
             }
         }
         else
         {
-            SetVerbs(NULL);
+            rBase.SetVerbs(NULL);
         }
     }
 
@@ -377,12 +410,12 @@ void SdDrawViewShell::SelectionHasChanged()
         else
             nObjBarId = RID_DRAW_OBJ_TOOLBOX;
 
-        SwitchObjectBar(nObjBarId);
+        GetObjectBarManager().SwitchObjectBar (nObjBarId);
     }
 
-    // #96124# Invalidate for every subshell
-    SfxShell* pShell = (SfxShell*) aShellTable.Get( GetObjectBar() );
-    if( pShell )
+    // #96124# Invalidate the currently active object bar.
+    SfxShell* pShell = GetObjectBarManager().GetTopObjectBar();
+    if (pShell != NULL)
         pShell->Invalidate();
 
     if( SFX_APP()->GetHelpPI() )
@@ -390,8 +423,8 @@ void SdDrawViewShell::SelectionHasChanged()
 
     pDrView->UpdateSelectionClipboard( FALSE );
 
-    if( pController )
-        pController->fireSelectionChangeListener();
+    if (GetSubController() != NULL)
+        GetSubController()->FireSelectionChangeListener();
 }
 
 
@@ -401,12 +434,12 @@ void SdDrawViewShell::SelectionHasChanged()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SetZoom( long nZoom )
+void DrawViewShell::SetZoom( long nZoom )
 {
     // Make sure that the zoom factor will not be recalculated on
     // following window resizings.
     bZoomOnPage = FALSE;
-    SdViewShell::SetZoom( nZoom );
+    ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
@@ -416,9 +449,9 @@ void SdDrawViewShell::SetZoom( long nZoom )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
+void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
 {
-    SdViewShell::SetZoomRect( rZoomRect );
+    ViewShell::SetZoomRect( rZoomRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
@@ -428,7 +461,7 @@ void SdDrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawViewShell, TabModeBtnHdl, Button *, pButton )
+IMPL_LINK( DrawViewShell, TabModeBtnHdl, Button *, pButton )
 {
     if ( !((ImageButton*) pButton)->IsChecked() ||
          pButton == &aLayerBtn)
@@ -458,12 +491,13 @@ IMPL_LINK( SdDrawViewShell, TabModeBtnHdl, Button *, pButton )
 |*
 \************************************************************************/
 
-USHORT SdDrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
+USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
-    if ( SdViewShell::PrepareClose(bUI, bForBrowsing) != TRUE )
+    if ( ViewShell::PrepareClose(bUI, bForBrowsing) != TRUE )
         return FALSE;
 
-    SfxChildWindow* pPreviewChild = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
+    SfxChildWindow* pPreviewChild = GetViewFrame()->GetChildWindow(
+        PreviewChildWindow::GetChildWindowId() );
     BOOL            bRet = TRUE;
 
     if( pFuSlideShow )
@@ -474,10 +508,11 @@ USHORT SdDrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 
     if( pPreviewChild && pPreviewChild->GetWindow() )
     {
-        SdPreviewWin*   pPreviewWin = (SdPreviewWin*) pPreviewChild->GetWindow();
-        FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
+        PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+            pPreviewChild->GetWindow());
+        FuSlideShow* pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
 
-        if( pPreviewWin->GetDoc() == pDoc && pShow && pShow->IsInputLocked() )
+        if( pPreviewWin->GetDoc() == GetDoc() && pShow && pShow->IsInputLocked() )
         {
             //          pShow->Terminate();
             //          bRet = FALSE;
@@ -495,7 +530,7 @@ USHORT SdDrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     }
     else if( !bRet )
     {
-        aCloseTimer.SetTimeoutHdl( LINK( this, SdDrawViewShell, CloseHdl ) );
+        aCloseTimer.SetTimeoutHdl( LINK( this, DrawViewShell, CloseHdl ) );
         aCloseTimer.SetTimeout( 20 );
         aCloseTimer.Start();
     }
@@ -509,16 +544,18 @@ USHORT SdDrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
+void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 {
     if (eEditMode != eEMode || bLayerMode != bLMode)
     {
         USHORT nActualPageNum = 0;
 
-        if( pController )
+        SdUnoDrawView* pController =
+            static_cast<SdUnoDrawView*>(GetSubController());
+        if (pController != NULL)
         {
-            pController->fireChangeEditMode( eEMode == EM_MASTERPAGE );
-            pController->fireChangeLayerMode( bLMode );
+            pController->FireChangeEditMode (eEMode == EM_MASTERPAGE);
+            pController->FireChangeLayerMode (bLMode);
         }
 
         if ( pDrView->IsTextEdit() )
@@ -552,11 +589,11 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 
             SdPage* pPage;
             String aPageName;
-            USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+            USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
 
             for (USHORT i = 0; i < nPageCnt; i++)
             {
-                pPage = pDoc->GetSdPage(i, ePageKind);
+                pPage = GetDoc()->GetSdPage(i, ePageKind);
                 aPageName = pPage->GetName();
                 aTabControl.InsertPage(i + 1, aPageName);
 
@@ -579,7 +616,8 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             /******************************************************************
             * MASTERPAGE
             ******************************************************************/
-            GetViewFrame()->SetChildWindow(SdAnimationChildWindow::GetChildWindowId(), FALSE );
+            GetViewFrame()->SetChildWindow(
+                AnimationChildWindow::GetChildWindowId(), FALSE );
 
             // Emulate radio button behaviour.  Order of checking buttons on
             // or off is important for accessibility.
@@ -589,18 +627,18 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             if (!pActualPage)
             {
                 // Sofern es keine pActualPage gibt, wird die erste genommen
-                pActualPage = pDoc->GetSdPage(0, ePageKind);
+                pActualPage = GetDoc()->GetSdPage(0, ePageKind);
             }
 
             SdPage* pPreviewPage = pActualPage;
 
             aTabControl.Clear();
             USHORT nActualMasterPageNum = 0;
-            USHORT nMasterPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+            USHORT nMasterPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
             for (USHORT i = 0; i < nMasterPageCnt; i++)
             {
-                SdPage* pMaster = pDoc->GetMasterSdPage(i, ePageKind);
+                SdPage* pMaster = GetDoc()->GetMasterSdPage(i, ePageKind);
                 String aLayoutName(pMaster->GetLayoutName());
                 aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
@@ -662,7 +700,7 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 |*
 \************************************************************************/
 
-long SdDrawViewShell::GetHCtrlWidth()
+long DrawViewShell::GetHCtrlWidth()
 {
     return ( aTabControl.GetSizePixel().Width() +
              aPageBtn.GetSizePixel().Width() * 3 );
@@ -675,9 +713,9 @@ long SdDrawViewShell::GetHCtrlWidth()
 |*
 \************************************************************************/
 
-SvxRuler* SdDrawViewShell::CreateHRuler(SdWindow* pWin, BOOL bIsFirst)
+SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, BOOL bIsFirst)
 {
-    SdRuler* pRuler;
+    Ruler* pRuler;
     WinBits  aWBits;
     USHORT   nFlags = SVXRULER_SUPPORT_OBJECT;
 
@@ -691,12 +729,12 @@ SvxRuler* SdDrawViewShell::CreateHRuler(SdWindow* pWin, BOOL bIsFirst)
     else
         aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
 
-    pRuler = new SdRuler(*this, &GetViewFrame()->GetWindow(), pWin, nFlags,
-                          GetViewFrame()->GetBindings(), aWBits);
+    pRuler = new Ruler (*this, &GetViewFrame()->GetWindow(), pWin, nFlags,
+        GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
     // Metric ...
-    UINT16 nMetric = pDoc->GetUIUnit();
+    UINT16 nMetric = GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
         nMetric = GetModuleFieldUnit();
@@ -704,10 +742,10 @@ SvxRuler* SdDrawViewShell::CreateHRuler(SdWindow* pWin, BOOL bIsFirst)
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
     // ... und auch DefTab am Lineal einstellen
-    pRuler->SetDefTabDist( pDoc->GetDefaultTabulator() ); // Neu
+    pRuler->SetDefTabDist( GetDoc()->GetDefaultTabulator() ); // Neu
 
     Fraction aUIScale(pWin->GetMapMode().GetScaleX());
-    aUIScale *= pDoc->GetUIScale();
+    aUIScale *= GetDoc()->GetUIScale();
     pRuler->SetZoom(aUIScale);
 
     return pRuler;
@@ -719,18 +757,18 @@ SvxRuler* SdDrawViewShell::CreateHRuler(SdWindow* pWin, BOOL bIsFirst)
 |*
 \************************************************************************/
 
-SvxRuler* SdDrawViewShell::CreateVRuler(SdWindow* pWin)
+SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
 {
-    SdRuler* pRuler;
+    Ruler* pRuler;
     WinBits  aWBits = WB_VSCROLL | WB_3DLOOK | WB_BORDER;
     USHORT   nFlags = SVXRULER_SUPPORT_OBJECT;
 
-    pRuler = new SdRuler(*this, &GetViewFrame()->GetWindow(), pWin, nFlags,
-                          GetViewFrame()->GetBindings(), aWBits);
+    pRuler = new Ruler(*this, &GetViewFrame()->GetWindow(), pWin, nFlags,
+        GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
     // #96629# Metric same as HRuler, use document setting
-    UINT16 nMetric = pDoc->GetUIUnit();
+    UINT16 nMetric = GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
         nMetric = GetModuleFieldUnit();
@@ -738,7 +776,7 @@ SvxRuler* SdDrawViewShell::CreateVRuler(SdWindow* pWin)
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
     Fraction aUIScale(pWin->GetMapMode().GetScaleY());
-    aUIScale *= pDoc->GetUIScale();
+    aUIScale *= GetDoc()->GetUIScale();
     pRuler->SetZoom(aUIScale);
 
     return pRuler;
@@ -750,7 +788,7 @@ SvxRuler* SdDrawViewShell::CreateVRuler(SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::UpdateHRuler()
+void DrawViewShell::UpdateHRuler()
 {
     Invalidate( SID_ATTR_LONG_LRSPACE );
     Invalidate( SID_RULER_PAGE_POS );
@@ -772,7 +810,7 @@ void SdDrawViewShell::UpdateHRuler()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::UpdateVRuler()
+void DrawViewShell::UpdateVRuler()
 {
     Invalidate( SID_ATTR_LONG_LRSPACE );
     Invalidate( SID_RULER_PAGE_POS );
@@ -793,9 +831,9 @@ void SdDrawViewShell::UpdateVRuler()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SetUIUnit(FieldUnit eUnit)
+void DrawViewShell::SetUIUnit(FieldUnit eUnit)
 {
-    SdViewShell::SetUIUnit(eUnit);
+    ViewShell::SetUIUnit(eUnit);
 }
 
 /*************************************************************************
@@ -804,7 +842,7 @@ void SdDrawViewShell::SetUIUnit(FieldUnit eUnit)
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawViewShell, TabSplitHdl, TabBar *, pTab )
+IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
 {
     long nMax = aHSplit.GetPosPixel().X() - aTabControl.GetPosPixel().X();
 
@@ -830,10 +868,10 @@ IMPL_LINK( SdDrawViewShell, TabSplitHdl, TabBar *, pTab )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ResetActualPage()
+void DrawViewShell::ResetActualPage()
 {
     USHORT nCurrentPage = aTabControl.GetCurPageId() - 1;
-    USHORT nPageCount   = (eEditMode == EM_PAGE)?pDoc->GetSdPageCount(ePageKind):pDoc->GetMasterSdPageCount(ePageKind);
+    USHORT nPageCount   = (eEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(ePageKind):GetDoc()->GetMasterSdPageCount(ePageKind);
     if (nPageCount > 0)
         nCurrentPage = Min((USHORT)(nPageCount - 1), nCurrentPage);
     else
@@ -850,26 +888,26 @@ void SdDrawViewShell::ResetActualPage()
 
         for (USHORT i = 0; i < nPageCount; i++)
         {
-            pPage = pDoc->GetSdPage(i, ePageKind);
+            pPage = GetDoc()->GetSdPage(i, ePageKind);
             aPageName = pPage->GetName();
             aTabControl.InsertPage(i + 1, aPageName);
 
             // Selektionskennungen der Seiten korrigieren
-            pDoc->SetSelected(pPage, i == nCurrentPage);
+            GetDoc()->SetSelected(pPage, i == nCurrentPage);
         }
 
         aTabControl.SetCurPageId(nCurrentPage + 1);
     }
     else // EM_MASTERPAGE
     {
-        SdPage* pActualPage = pDoc->GetMasterSdPage(nCurrentPage, ePageKind);
+        SdPage* pActualPage = GetDoc()->GetMasterSdPage(nCurrentPage, ePageKind);
         aTabControl.Clear();
         USHORT nActualMasterPageNum = 0;
 
-        USHORT nMasterPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        USHORT nMasterPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
         for (USHORT i = 0; i < nMasterPageCnt; i++)
         {
-            SdPage* pMaster = pDoc->GetMasterSdPage(i, ePageKind);
+            SdPage* pMaster = GetDoc()->GetMasterSdPage(i, ePageKind);
             String aLayoutName(pMaster->GetLayoutName());
             aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
             aTabControl.InsertPage(i + 1, aLayoutName);
@@ -893,7 +931,7 @@ void SdDrawViewShell::ResetActualPage()
 \************************************************************************/
 
 
-ErrCode SdDrawViewShell::DoVerb(long nVerb)
+ErrCode DrawViewShell::DoVerb(long nVerb)
 {
     if ( pDrView->HasMarkedObj() )
     {
@@ -973,7 +1011,7 @@ ErrCode SdDrawViewShell::DoVerb(long nVerb)
                         SimDLL::Update(aNewIPObj, pTempSdrGrafObj->GetGraphic(), pWindow);
                         ActivateObject(pSdrOle2Obj, SVVERB_SHOW);
 
-                        SdClient* pClient = (SdClient*) GetIPClient();
+                        Client* pClient = (Client*) GetIPClient();
 
                         if (pClient)
                             pClient->SetSdrGrafObj( pTempSdrGrafObj );
@@ -994,15 +1032,16 @@ ErrCode SdDrawViewShell::DoVerb(long nVerb)
 |*
 \************************************************************************/
 
-BOOL SdDrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+BOOL DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     BOOL bActivated = FALSE;
 
-    if ( !pDocSh->IsUIActive() )
+    if ( !GetDocSh()->IsUIActive() )
     {
-        bActivated = SdViewShell::ActivateObject(pObj, nVerb);
+        bActivated = ViewShell::ActivateObject(pObj, nVerb);
 
-        SdClient* pClient = (SdClient*) GetIPClient();
+        OSL_ASSERT(GetViewShell()!=NULL);
+        Client* pClient = static_cast<Client*>(GetViewShell()->GetIPClient());
 
         if (pClient)
         {
@@ -1020,7 +1059,7 @@ BOOL SdDrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 |*
 \************************************************************************/
 
-BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
+BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 {
     BOOL bOK = FALSE;
 
@@ -1028,11 +1067,11 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
     {
         bOK = TRUE;
 
-        BOOL bIsChanged = pDoc->IsChanged();
+        BOOL bIsChanged = GetDoc()->IsChanged();
 
         if (pActualPage)
         {
-            SdPage* pNewPage = pDoc->GetSdPage(nSelectedPage, ePageKind);
+            SdPage* pNewPage = GetDoc()->GetSdPage(nSelectedPage, ePageKind);
 
             if (pActualPage == pNewPage)
             {
@@ -1056,17 +1095,17 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
 
         if (eEditMode == EM_PAGE)
         {
-            pActualPage = pDoc->GetSdPage(nSelectedPage, ePageKind);
+            pActualPage = GetDoc()->GetSdPage(nSelectedPage, ePageKind);
         }
         else
         {
-            SdPage* pMaster = pDoc->GetMasterSdPage(nSelectedPage, ePageKind);
+            SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, ePageKind);
 
             // Passt die selektierte Seite zur MasterPage?
-            USHORT nPageCount = pDoc->GetSdPageCount(ePageKind);
+            USHORT nPageCount = GetDoc()->GetSdPageCount(ePageKind);
             for (USHORT i = 0; i < nPageCount; i++)
             {
-                SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
+                SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
                 if(pPage && pPage->IsSelected() && pPage->GetMasterPage(0) == pMaster)
                 {
                     pActualPage = pPage;
@@ -1079,7 +1118,7 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
                 // Die erste Seite nehmen, welche zur MasterPage passt
                 for (USHORT i = 0; i < nPageCount; i++)
                 {
-                    SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
+                    SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
                     if(pPage && pPage->GetMasterPage(0) == pMaster)
                     {
                         pActualPage = pPage;
@@ -1089,27 +1128,28 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
             }
         }
 
-        for (USHORT i = 0; i < pDoc->GetSdPageCount(ePageKind); i++)
+        for (USHORT i = 0; i < GetDoc()->GetSdPageCount(ePageKind); i++)
         {
             // Alle Seiten deselektieren
-            pDoc->SetSelected( pDoc->GetSdPage(i, ePageKind), FALSE);
+            GetDoc()->SetSelected( GetDoc()->GetSdPage(i, ePageKind), FALSE);
         }
 
         if (!pActualPage)
         {
             // Sofern es keine pActualPage gibt, wird die erste genommen
-            pActualPage = pDoc->GetSdPage(0, ePageKind);
+            pActualPage = GetDoc()->GetSdPage(0, ePageKind);
         }
 
         // diese Seite auch selektieren (pActualPage zeigt immer auf Zeichenseite,
         // nie auf eine Masterpage)
-        pDoc->SetSelected(pActualPage, TRUE);
+        GetDoc()->SetSelected(pActualPage, TRUE);
 
         if( !pFuSlideShow || ( pFuSlideShow->GetAnimationMode() != ANIMATIONMODE_SHOW ) )
         {
             // VisArea zuziehen, um ggf. Objekte zu deaktivieren
             // !!! only if we are not in presentation mode (#96279) !!!
-            DisconnectAllClients();
+            OSL_ASSERT (GetViewShell()!=NULL);
+            GetViewShell()->DisconnectAllClients();
             VisAreaChanged(Rectangle(Point(), Size(1, 1)));
         }
 
@@ -1121,7 +1161,7 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
             /**********************************************************************
             * PAGEMODE
             **********************************************************************/
-            pDoc->SetSelected(pActualPage, TRUE);
+            GetDoc()->SetSelected(pActualPage, TRUE);
 
             SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
 
@@ -1147,8 +1187,10 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
 
             pDrView->HideAllPages();
             pDrView->ShowPage(pActualPage, Point(0, 0));
-            if( pController )
-                pController->fireSwitchCurrentPage( pActualPage );
+            SdUnoDrawView* pController =
+                static_cast<SdUnoDrawView*>(GetSubController());
+            if (pController != NULL)
+                pController->FireSwitchCurrentPage (pActualPage);
 
             SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
 
@@ -1209,16 +1251,18 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
 
             pDrView->HideAllPages();
 
-            SdPage* pMaster = pDoc->GetMasterSdPage(nSelectedPage, ePageKind);
+            SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, ePageKind);
 
             if( !pMaster )              // Falls es diese Page nicht geben sollte
-                pMaster = pDoc->GetMasterSdPage(0, ePageKind);
+                pMaster = GetDoc()->GetMasterSdPage(0, ePageKind);
 
             USHORT nNum = pMaster->GetPageNum();
             pDrView->ShowMasterPagePgNum(nNum, Point(0, 0));
 
-            if( pController )
-                pController->fireSwitchCurrentPage( pMaster );
+            SdUnoDrawView* pController =
+                static_cast<SdUnoDrawView*>(GetSubController());
+            if (pController != NULL)
+                pController->FireSwitchCurrentPage (pMaster);
 
             SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
 
@@ -1271,7 +1315,7 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
             pDrView->SetAnimationMode(TRUE);
         }
 
-        pDoc->SetChanged(bIsChanged);
+        GetDoc()->SetChanged(bIsChanged);
     }
 
     return (bOK);
@@ -1284,18 +1328,15 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
 |*
 \************************************************************************/
 
-BOOL SdDrawViewShell::IsSwitchPageAllowed() const
+BOOL DrawViewShell::IsSwitchPageAllowed() const
 {
-    BOOL bOK = TRUE;
+    bool bOK = true;
 
-    FmFormShell* pShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
+    FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+    if (pFormShell!=NULL && !pFormShell->PrepareClose (FALSE))
+        bOK = false;
 
-    if (pShell && !pShell->PrepareClose(FALSE))
-    {
-        bOK = FALSE;
-    }
-
-    return( bOK && !bInEffectAssignment );
+    return bOK && !bInEffectAssignment;
 }
 
 /*************************************************************************
@@ -1305,7 +1346,7 @@ BOOL SdDrawViewShell::IsSwitchPageAllowed() const
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ResetActualLayer()
+void DrawViewShell::ResetActualLayer()
 {
     // remember old layer cound and current layer id
     // this is needed when one layer is renamed to
@@ -1327,7 +1368,7 @@ void SdDrawViewShell::ResetActualLayer()
     String aMeasureLinesLayer( SdResId(STR_LAYER_MEASURELINES) );
     USHORT nNewLayer = 0;
     USHORT nActiveLayer = SDRLAYER_NOTFOUND;
-    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
     USHORT nLayerCnt = rLayerAdmin.GetLayerCount();
 
     for ( USHORT nLayer = 0; nLayer < nLayerCnt; nLayer++ )
@@ -1407,7 +1448,7 @@ void SdDrawViewShell::ResetActualLayer()
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawViewShell, CloseHdl, Timer*, pTimer )
+IMPL_LINK( DrawViewShell, CloseHdl, Timer*, pTimer )
 {
     pTimer->Stop();
     GetViewFrame()->GetBindings().Execute( SID_CLOSEWIN );
@@ -1420,7 +1461,7 @@ IMPL_LINK( SdDrawViewShell, CloseHdl, Timer*, pTimer )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SetHelpIdBySelection()
+void DrawViewShell::SetHelpIdBySelection()
 {
     UINT32 nHelpId = 0;
     const SdrMarkList& rMarkList = pDrView->GetMarkList();
@@ -1557,11 +1598,15 @@ void SdDrawViewShell::SetHelpIdBySelection()
 |*
 \************************************************************************/
 
-sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                      SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
+sal_Int8 DrawViewShell::AcceptDrop (
+    const AcceptDropEvent& rEvt,
+    DropTargetHelper& rTargetHelper,
+    ::sd::Window* pTargetWindow,
+    USHORT nPage,
+    USHORT nLayer )
 {
     if( nPage != SDRPAGE_NOTFOUND )
-        nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
+        nPage = GetDoc()->GetSdPage( nPage, ePageKind )->GetPageNum();
 
     if( pFuSlideShow )
     {
@@ -1580,11 +1625,15 @@ sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHel
 |*
 \************************************************************************/
 
-sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                       SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
+sal_Int8 DrawViewShell::ExecuteDrop (
+    const ExecuteDropEvent& rEvt,
+    DropTargetHelper& rTargetHelper,
+    ::sd::Window* pTargetWindow,
+    USHORT nPage,
+    USHORT nLayer)
 {
     if( nPage != SDRPAGE_NOTFOUND )
-        nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
+        nPage = GetDoc()->GetSdPage( nPage, ePageKind )->GetPageNum();
 
     if( pFuSlideShow )
     {
@@ -1596,6 +1645,8 @@ sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetH
 
     return pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
 }
+
+} // end of namespace sd
 
 #ifdef WNT
 #pragma optimize ( "", on )
