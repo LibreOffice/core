@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 12:47:37 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 07:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,10 +571,13 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if( pPage )
             {
                 SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
-                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
-                aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE), bVisible);
-                pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                if( pDoc->GetMasterPageCount() )
+                {
+                    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                    SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE), bVisible);
+                    pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                }
             }
             break;
         }
@@ -588,10 +591,13 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if( pPage )
             {
                 SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
-                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
-                aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE), bVisible);
-                pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                if( pDoc->GetMasterPageCount() )
+                {
+                    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                    SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE), bVisible);
+                    pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                }
             }
 
             break;
@@ -740,9 +746,16 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         if( pPage )
         {
             SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
-            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-            SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
-            aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+            if( pDoc->GetMasterPageCount() )
+            {
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+            }
+            else
+            {
+                aAny <<= (sal_Bool)sal_False;
+            }
         }
         break;
     }
@@ -752,9 +765,16 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         if( pPage )
         {
             SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
-            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-            SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
-            aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+            if( pDoc->GetMasterPageCount() )
+            {
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+            }
+            else
+            {
+                aAny <<= (sal_Bool)sal_False;
+            }
         }
         break;
     }
