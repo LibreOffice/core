@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 07:56:53 $
+ *  last change: $Author: os $ $Date: 2002-05-21 15:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,7 +1634,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 
                     if( !bIsDocReadOnly && bNormalChar )
-                        eKeyState = KS_InsChar;
+                    {
+                        const int nSelectionType = rSh.GetSelectionType();
+                        if((nSelectionType & SwWrtShell::SEL_DRW) &&
+                            0 == (nSelectionType & SwWrtShell::SEL_DRW_TXT) &&
+                            rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1)
+                                eKeyState = KS_GoIntoDrawing;
+                        else
+                            eKeyState = KS_InsChar;
+                    }
                     else
                     {
                         bNormalChar = FALSE;
