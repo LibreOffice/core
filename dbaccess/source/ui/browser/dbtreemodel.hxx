@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:43:36 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,10 @@ namespace dbaui
     class DBTreeListModel : public SvLBoxTreeList,
                             public dbaui::OModuleClient
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDatabaseContext;        /// database context we're working in
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                        m_xDatabaseContext;     /// database context we're working in
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        m_xORB;
 
         void insertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xNameAccess,SvLBoxEntry* _pParent,const Image& _rImage);
     public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:41:05 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,13 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/XExecutableDialog.hpp>
+#endif
+#include <com/sun/star/beans/PropertyValue.hpp>
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
@@ -104,22 +111,34 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace dbaui;
+using namespace ::dbaui;
+using namespace ::dbtools;
+
 // -------------------------------------------------------------------------
 
 DBTreeListModel::DBTreeListModel(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xMultiServiceFacatory)
+    :m_xORB(_xMultiServiceFacatory)
 {
-    DBG_ASSERT(_xMultiServiceFacatory.is(), "DBTreeListModel::DBTreeListModel : need a service factory !");
+    DBG_ASSERT(m_xORB.is(), "DBTreeListModel::DBTreeListModel : need a service factory !");
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >(_xMultiServiceFacatory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
     }
     catch(Exception&)
     {
@@ -211,46 +230,91 @@ void DBTreeListModel::fillEntry(SvLBoxEntry* _pParent)
         Any aValue(m_xDatabaseContext->getByName(aName));
         if(pData->bTable)
         {
-            sal_Bool bComplete = sal_False;
             Reference<XPropertySet> xProp;
             aValue >>= xProp;
-            Any aPwd    = xProp->getPropertyValue(::rtl::OUString::createFromAscii("Password"));
-            Any aPwdReq = xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired"));
-            Any aUser   = xProp->getPropertyValue(::rtl::OUString::createFromAscii("User"));
-            // only complete when password is requiered and password is empty
-            if(cppu::any2bool(aPwdReq) && !comphelper::getString(aPwd).getLength())
-                bComplete = sal_True;
-
-            Reference<XConnection> xConnection;  // supports the service sdb::connection
-            if(bComplete)
+            ::rtl::OUString sPwd, sUser;
+            sal_Bool bPwdReq = sal_False;
+            try
             {
-                Reference<XCompletedConnection> xCompletedConnection;
-                aValue >>= xCompletedConnection;
-               //   xConnection->connectWithCompletion();
+                xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+                bPwdReq = cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
+                xProp->getPropertyValue(PROPERTY_USER) >>= sUser;
             }
-            else
+            catch(Exception&)
             {
-                Reference<XDataSource> xDataSource(xProp,UNO_QUERY);
-                xConnection = xDataSource->getConnection(comphelper::getString(aUser),comphelper::getString(aPwd));
+                DBG_ERROR("DBTreeListModel::fillEntry: error while retrieving data source properties!");
             }
-            if(xConnection.is())
-            {
-                DBTreeListUserData* pFirstData = (DBTreeListUserData*)pFirstParent->GetUserData();
-                if(!pFirstData->xInterface.is())
-                    pFirstData->xInterface = xConnection;
 
-                Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
-                if(xTabSup.is())
-                {
-                    Image aImage(ModuleRes(TABLE_TREE_ICON));
-                    insertEntries(xTabSup->getTables(),_pParent,aImage);
+            SQLExceptionInfo aInfo;
+            try
+            {
+
+                Reference<XConnection> xConnection;  // supports the service sdb::connection
+                if(bPwdReq && !sPwd.getLength())
+                {   // password required, but empty -> connect using an interaction handler
+                    Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
+                    if (!xConnectionCompletion.is())
+                    {
+                        DBG_ERROR("DBTreeListModel::fillEntry: missing an interface ... need an error message here!");
+                    }
+                    else
+                    {   // instantiate the default SDB interaction handler
+                        Reference< XInteractionHandler > xHandler(m_xORB->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+                        if (!xHandler.is())
+                        {
+                            ShowServiceNotAvailableError(NULL, String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
+                                // TODO: a real parent!
+                        }
+                        else
+                        {
+                            xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
+                        }
+                    }
                 }
-
-                Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
-                if(xViewSup.is())
+                else
                 {
-                    Image aImage(ModuleRes(VIEW_TREE_ICON));
-                    insertEntries(xViewSup->getViews(),_pParent,aImage);
+                    Reference<XDataSource> xDataSource(xProp,UNO_QUERY);
+                    xConnection = xDataSource->getConnection(sUser, sPwd);
+                }
+                if(xConnection.is())
+                {
+                    DBTreeListUserData* pFirstData = (DBTreeListUserData*)pFirstParent->GetUserData();
+                    if(!pFirstData->xInterface.is())
+                        pFirstData->xInterface = xConnection;
+
+                    Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
+                    if(xTabSup.is())
+                    {
+                        Image aImage(ModuleRes(TABLE_TREE_ICON));
+                        insertEntries(xTabSup->getTables(),_pParent,aImage);
+                    }
+
+                    Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
+                    if(xViewSup.is())
+                    {
+                        Image aImage(ModuleRes(VIEW_TREE_ICON));
+                        insertEntries(xViewSup->getViews(),_pParent,aImage);
+                    }
+                }
+            }
+            catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
+            catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
+            catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
+            catch(Exception&) { DBG_ERROR("DBTreeListModel::fillEntry: could not connect - unknown exception!"); }
+            if (aInfo.isValid())
+            {
+                try
+                {
+                    Sequence< Any > aArgs(1);
+                    aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, aInfo.get(), PropertyState_DIRECT_VALUE);
+                    Reference< XExecutableDialog > xErrorDialog(
+                        m_xORB->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
+                    if (xErrorDialog.is())
+                        xErrorDialog->execute();
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("DBTreeListModel::fillEntry: could not display the error message!");
                 }
             }
         }
