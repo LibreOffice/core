@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 13:49:46 $
+ *  last change: $Author: jp $ $Date: 2001-08-30 08:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,12 +334,11 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
         rListBox.SetSelectHdl( LINK( this, SvxUndoControl, SelectHdl ) );
 
         SfxStringListItem &rItem = *(SfxStringListItem *) pState;
-        String aStrList( rItem.GetString() );
-        xub_StrLen nCount = aStrList.GetTokenCount( '\n' );
-        xub_StrLen nIdx = 0;
-        DBG_ASSERT( nCount > 0, "no undo actions available" );
-        for (xub_StrLen i = 0;  i < nCount;  ++i)
-            rListBox.InsertEntry( aStrList.GetToken( 0, '\n', nIdx ) );
+        const List* pLst = rItem.GetList();
+        DBG_ASSERT( pLst, "no undo actions available" );
+        if( pLst )
+            for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
+                rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
         rListBox.SelectEntryPos( 0 );
         Impl_SetInfo( 1 );
 
@@ -408,12 +407,11 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
         rListBox.SetSelectHdl( LINK( this, SvxRedoControl, SelectHdl ) );
 
         SfxStringListItem &rItem = *(SfxStringListItem *) pState;
-        String aStrList( rItem.GetString() );
-        xub_StrLen nCount = aStrList.GetTokenCount( '\n' );
-        xub_StrLen nIdx = 0;
-        DBG_ASSERT( nCount > 0, "no undo actions available" );
-        for (xub_StrLen i = 0;  i < nCount;  ++i)
-            rListBox.InsertEntry( aStrList.GetToken( 0, '\n', nIdx ) );
+        const List* pLst = rItem.GetList();
+        DBG_ASSERT( pLst, "no redo actions available" );
+        if( pLst )
+            for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
+                rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
         rListBox.SelectEntryPos( 0 );
         Impl_SetInfo( 1 );
 
