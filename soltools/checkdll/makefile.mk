@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-25 09:13:43 $
+#   last change: $Author: mh $ $Date: 2001-11-27 10:43:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,9 @@ NO_DEFAULT_STL=TRUE
 APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
 DEPOBJFILES	=	$(APP1OBJS) 
+.IF "$(OS)"=="NETBSD"
+APP1STDLIBS	+= -Wl,--whole-archive -lgcc -Wl,--no-whole-archive
+.ENDIF
 .ENDIF # "$(GUI)"=="UNX"
 
 # --- Targets ------------------------------------------------------
