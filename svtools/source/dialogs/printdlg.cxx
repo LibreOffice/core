@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 12:42:34 $
+ *  last change: $Author: pl $ $Date: 2001-09-13 11:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _VCL_FILEDLG_HXX
-#include <vcl/filedlg.hxx>
-#endif
-#ifndef _SVTOOLS_FILEDLG_HXX
-#include <filedlg.hxx>
 #endif
 #ifndef _SV_JOBSET_HXX
 #include <vcl/jobset.hxx>
@@ -448,41 +442,6 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
         }
     }
 
-    // fall back to old style dialogues if service is not available
-    VclFileDialog* pVclFileDlg = GetpApp()->CreateFileDialog( this, WB_SAVEAS );
-    if ( pVclFileDlg )
-    {
-        short nRet = pVclFileDlg->Execute();
-
-        if ( nRet == RET_OK )
-        {
-            if( Application::IsRemoteServer() )
-            {
-                maFiPrintFile.SetText( pVclFileDlg->GetPath() );
-            }
-            else
-            {
-                INetURLObject aObj( pVclFileDlg->GetPath() );
-                maFiPrintFile.SetText( aObj.PathToFileName() );
-            }
-            ImplCheckOK();
-        }
-
-        delete pVclFileDlg;
-    }
-    else
-    {
-        FileDialog* pFileDlg = new FileDialog( this, WB_SAVEAS );
-        short nRet = pFileDlg->Execute();
-
-        if ( nRet == RET_OK )
-        {
-            maFiPrintFile.SetText( pFileDlg->GetPath() );
-            ImplCheckOK();
-        }
-
-        delete pFileDlg;
-    }
     return 0;
 }
 
