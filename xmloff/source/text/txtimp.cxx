@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 13:33:43 $
+ *  last change: $Author: dvo $ $Date: 2000-10-06 10:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,3 +1188,15 @@ sal_Bool XMLTextImportHelper::IsInFrame()
 
     return bIsInFrame;
 }
+
+
+// The environment unxsols2 compiles all template instantiations as
+// file local (CC ... -instances=static ...), so txtimp.cxx *cannot*
+// see the explicit instantiations at the end of
+// XMLPropertyBackpatcher.cxx. To circumvent this problem, we *must*
+// instantiate the templates here, too. This requires the full class
+// definition and the template instantiations, hence we include
+// the .cxx file.
+#ifdef SOLARIS
+#include "XMLPropertyBackpatcher.cxx"
+#endif
