@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:53:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: hr $ $Date: 2003-06-13 12:53:28 $ $Revision: 1.24 $
+ // $Author: hr $ $Date: 2003-07-03 18:00:47 $ $Revision: 1.25 $
  //
  //---------------------------------------------------------------------------
 
@@ -346,6 +346,7 @@ ModalDialog DLG_COLWIDTH
     Text[ hindi ] = "स्तंभ चौड़ाई";
     Text[ slovak ] = "Šírka stĺpca";
 };
+
 
 
 
