@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:26:52 $
+ *  last change:$Date: 2004-01-05 19:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,8 @@ public class SdUnoDrawView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing impress documents");
-        xDrawDoc.dispose();
-        xSecondDrawDoc.dispose();
+        util.DesktopTools.closeDoc(xDrawDoc);;
+        util.DesktopTools.closeDoc(xSecondDrawDoc);;
     }
 
     /**
