@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltercommon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:17:53 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ public:
     sal_Int32       maFileFormatVersion;
     sal_Int32       mnDocumentIconID;
 
+    sal_Bool        mbReadonly;
     filter_info_impl();
     filter_info_impl( const filter_info_impl& rInfo );
     int operator==( const filter_info_impl& ) const;
