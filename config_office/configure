@@ -3307,7 +3307,7 @@ done
       COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
       echo "$as_me:$LINENO: checking the SUN Workshop C compiler version" >&5
 echo $ECHO_N "checking the SUN Workshop C compiler version... $ECHO_C" >&6
-            _workshop_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C /`
+            _workshop_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
       _workshop_version=`echo $_workshop_string | $AWK '{ print $1 }'`
       _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'`
       if test "$_workshop_major" != "5"; then
