@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
+ *  last change: $Author: dl $ $Date: 2001-05-08 14:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,17 @@ void __EXPORT SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
             else
                 rSet.DisableItem( SID_ATTR_YEAR2000 );
         }
+    }
+
+    if ( !pView->GetTextEditOutliner() )
+    {
+        rSet.DisableItem( SID_TRANSLITERATE_UPPER );
+        rSet.DisableItem( SID_TRANSLITERATE_UPPER );
+        rSet.DisableItem( SID_TRANSLITERATE_LOWER );
+        rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
+        rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
+        rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
+        rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
     }
 }
 
