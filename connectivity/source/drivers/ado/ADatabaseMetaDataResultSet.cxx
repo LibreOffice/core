@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 10:05:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
@@ -1209,6 +1210,11 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
 //  aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[2] = aMap;
+
+    TInt2IntMap aColumnValueMapping;
+    aColumnValueMapping[VARIANT_FALSE]      = ColumnValue::NO_NULLS;
+    aColumnValueMapping[VARIANT_TRUE]       = ColumnValue::NULLABLE;
+    m_aValueRange[7] = aColumnValueMapping;
 
     // now adjust the column mapping
     // OJ 24.01.2002  96860
