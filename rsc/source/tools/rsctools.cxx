@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-15 16:18:43 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,7 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
     int     nItems;
     char    szBuffer[4096];       // file buffer
     USHORT  i;
+    bool bInQuotes = false;
 
     // Programmname
     ppCmd->Append( ((RscMem *)0)->Assignsw( *ppArgv, 0 ) );
@@ -290,16 +291,24 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
             {
                 if( !isspace( szBuffer[ 0 ] ) )
                 {
+                    /*
+                     *  #i27914# double ticks '"' now have a duplicate function:
+                     *  1. they define a string ( e.g. -DFOO="baz" )
+                     *  2. a string can contain spaces, so -DFOO="baz zum" defines one
+                     *  argument no two !
+                     */
                     USHORT n = 0;
-                    while( nItems && !isspace( szBuffer[ n ] ) &&
+                    while( nItems && (!isspace( szBuffer[ n ] ) || bInQuotes) &&
                            n +1 < sizeof( szBuffer )  )
                     {
                         n++;
                         nItems = fread( &szBuffer[ n ], 1,
                                         sizeof( char ), fFile );
+                        if( szBuffer[n] == '"' )
+                            bInQuotes = !bInQuotes;
                     }
                     szBuffer[ n ] = '\0';
-                    ppCmd->Append( ((RscMem *)0)->Assignsw( szBuffer, 0 ) );
+                    ppCmd->Append( RscMem::Assignsw( szBuffer, 0 ) );
                 }
                 nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
             };
@@ -454,7 +463,7 @@ RscPtrPtr :: RscPtrPtr(){
 |*
 |*    RscPtrPtr :: ~RscPtrPtr()
 |*
-|*    Beschreibung      Zerst”rt eine Tabelle mit Zeigern, die Zeiger werde
+|*    Beschreibung      Zerstört eine Tabelle mit Zeigern, die Zeiger werde
 |*                      ebenfalls freigegebn
 |*    Ersterstellung    MM 13.02.91
 |*    Letzte Aenderung  MM 13.02.91
