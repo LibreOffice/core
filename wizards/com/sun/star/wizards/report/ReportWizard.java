@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 16:05:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ public class ReportWizard {
     short CurTabIndex;
     int MaxSortIndex = -1;
     int TextFieldCount;
+    int PageAddCount;
     String[] sDatabaseList;
     static String[] TableNames;
     static String[] QueryNames;
@@ -748,6 +749,7 @@ public class ReportWizard {
     public void gotoNextStep(){
     try{
         boolean bgoon = true;
+        PageAddCount = 1;
         int PageCount = 6;
         int iPage = AnyConverter.toInt(Tools.getUNOPropertyValue(CurUNODialog.xDialogModel, "Step"));
         switch (iPage){
@@ -759,7 +761,7 @@ public class ReportWizard {
             updateThirdStep(CurReportDocument.CurDBMetaData);
             break;
         case SOGROUPPAGE:
-            updateFourthStep(CurReportDocument.CurDBMetaData);
+            if (updateFourthStep(CurReportDocument.CurDBMetaData))
             break;
         case SOSORTPAGE:
             bgoon = setupSortcriteria();
@@ -813,7 +815,7 @@ public class ReportWizard {
         CurReportDocument.unlockallControllers();
         if (bgoon == true){
         if (iPage < PageCount){
-            Tools.setUNOPropertyValues(CurUNODialog.xDialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage + 1), WizardTitle[iPage]});
+            Tools.setUNOPropertyValues(CurUNODialog.xDialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage + PageAddCount), WizardTitle[iPage]});
             CurUNODialog.assignPropertyToDialogControl("lblDialogHeader", "Label", WizardHeaderText[iPage]);
         }
         }
@@ -1254,16 +1256,20 @@ public class ReportWizard {
     }
 
 
-    public void updateFourthStep(DBMetaData CurDBMetaData){
+    public boolean updateFourthStep(DBMetaData CurDBMetaData){
+    int SortFieldCount = 0;
     try{
         String CurFieldTitle;
         CurUNODialog.setFocus("lstSort1");
         if (checkIfToupdateStep(CurReportDocument.CurDBMetaData, 3) == true){
         getGroupFieldNames(CurDBMetaData);
         int FieldCount = CurDBMetaData.FieldNames.length;
-        int SortFieldCount = FieldCount + 1 - CurDBMetaData.GroupFieldNames.length;
-        String SortFieldNames[] = new String[SortFieldCount];
-        String ViewSortFieldNames[] = new String[SortFieldCount];
+        int GroupFieldCount = CurDBMetaData.GroupFieldNames.length;
+        SortFieldCount = FieldCount - CurDBMetaData.GroupFieldNames.length;
+        if (SortFieldCount == 0)
+            PageAddCount = 2;
+        String SortFieldNames[] = new String[SortFieldCount + 1];
+        String ViewSortFieldNames[] = new String[SortFieldCount + 1];
         SortFieldNames[0] = sNoSorting;
         ViewSortFieldNames[0] = sNoSorting;
         String CurFieldName;
@@ -1293,9 +1299,11 @@ public class ReportWizard {
         }
         //      System.out.println(xSortListBox[0].getSelectedItemPos());
         }
+    return (SortFieldCount > 0);
     }
     catch(Exception exception){
         exception.printStackTrace(System.out);
+        return false;
     }}
 
 
@@ -1763,7 +1771,7 @@ public class ReportWizard {
 
         public void run(){
         try{
-            if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+            if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, false))
             CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
             if (bcreateTemplate == false){
             boolean bDocisStored = Tools.storeDocument(xMSF, CurReportDocument.xComponent, StorePath, "StarOffice XML (Writer)",
