@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textproperties.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:32:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,17 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
     namespace properties
     {
-        class TextProperties : public AttributeProperties
+        class SVX_DLLPUBLIC TextProperties : public AttributeProperties
         {
         protected:
             // create a new itemset
