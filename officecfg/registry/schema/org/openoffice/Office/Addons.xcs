@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:08:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 18:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,25 +69,30 @@
 		<group oor:name="MenuItem">
 			<info>
 				<desc xml:lang="en-US">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc xml:lang="zh-CN">描述表示外部组件功能的菜单项。名称必须明确，并且应该使用软件包方案 (如 org.openoffice.external.applicationexecuter) 编写，以尽量减少名称冲突。</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A command URL which represents the function to execute.</desc>
+					<desc xml:lang="zh-CN">表示要执行的功能的命令 URL。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
 					<desc xml:lang="en-US">A localized string used to as the menu item title.</desc>
+					<desc xml:lang="zh-CN">用作菜单项标题的本地化的字串。</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+					<desc xml:lang="zh-CN">用于引用可选的内部菜单图像的专用 URL。示例：private:image/3216 引用 id=3216 的 Office 内部图像。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Target" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+					<desc xml:lang="zh-CN">这是分发命令使用的目标 URL。某些目标要使用特殊的 URL：_self，当前框; _default，默认; _blank，建立新框。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
@@ -98,16 +103,19 @@
 			<set oor:name="Submenu" oor:node-type="MenuItem">
 				<info>
 					<desc xml:lang="en-US">An optional set to allow sub menus.</desc>
+					<desc xml:lang="zh-CN">允许子菜单的可选集合。</desc>
 				</info>
 			</set>
 		</group>
 		<group oor:name="PopupMenu">
 			<info>
 				<desc xml:lang="en-US">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc xml:lang="zh-CN">描述表示外部组件功能的菜单项/图标栏项。名称必须明确，并且应该使用软件包方案 (如 org.openoffice.external.applicationexecuter) 编写，以尽量减少名称冲突。</desc>
 			</info>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
 					<desc xml:lang="en-US">A localized string used to as the menu title.</desc>
+					<desc xml:lang="zh-CN">用作菜单标题的本地化的字串。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
@@ -118,31 +126,37 @@
 			<set oor:name="Submenu" oor:node-type="MenuItem">
 				<info>
 					<desc xml:lang="en-US">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
+					<desc xml:lang="zh-CN">允许子菜单的可选集合。此属性不能用于定义图标栏项。</desc>
 				</info>
 			</set>
 		</group>
 		<group oor:name="ToolBarItem">
 			<info>
 				<desc xml:lang="en-US">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc xml:lang="zh-CN">描述表示外部组件功能的图标栏项。名称必须明确，并且应该使用软件包方案 (如 org.openoffice.external.applicationexecuter) 编写，以尽量减少名称冲突。</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A command URL which represents the function to execute.</desc>
+					<desc xml:lang="zh-CN">表示要执行的功能的命令 URL。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
 					<desc xml:lang="en-US">A localized string used to as the menu item title.</desc>
+					<desc xml:lang="zh-CN">用作菜单项标题的本地化的字串。</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+					<desc xml:lang="zh-CN">用于引用可选的内部菜单图像的专用 URL。示例：private:image/3216 引用 id=3216 的 Office 内部图像。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Target" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+					<desc xml:lang="zh-CN">这是分发命令使用的目标 URL。某些目标要使用特殊的 URL：_self，当前框; _default，默认; _blank，建立新框。</desc>
 				</info>
 			</prop>
 			<prop oor:name="Context" oor:type="xs:string">
@@ -158,21 +172,25 @@
 			<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
 				<info>
 					<desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
+					<desc xml:lang="zh-CN">菜单图像和图标栏上的小按钮使用的二元位图数据。小图像的标准大小为 16x16 像素。</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBig" oor:type="xs:hexBinary">
 				<info>
 					<desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
+					<desc xml:lang="zh-CN">图标栏上的大按钮使用的二元位图数据。大图像的标准大小为 26x26 像素。</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
 				<info>
 					<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
+					<desc xml:lang="zh-CN">高对比度显示使用的二元位图数据。小图像的标准大小为 16x16 像素。</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
 				<info>
 					<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
+					<desc xml:lang="zh-CN">高对比度显示使用的二元位图数据。大图像的标准大小为 26x26 像素。</desc>
 				</info>
 			</prop>
 		</group>
@@ -201,10 +219,56 @@
 		<group oor:name="AddonUI">
 			<info>
 				<desc xml:lang="en-US">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="el">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="nl">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="fr">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="fi">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="cs">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="da">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="zh-CN">含有有关 Addon 使用者界面结构的信息。</desc>
+				<desc xml:lang="zh-TW">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="ar">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="he">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="ca">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="pt">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="ru">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="es">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="it">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="sv">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="pl">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="pt-BR">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="ja">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="ko">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="tr">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="th">Contains information about the structure of addon user interface.</desc>
+				<desc xml:lang="hi-IN">Contains information about the structure of addon user interface.</desc>
 			</info>
 			<set oor:name="AddonMenu" oor:node-type="MenuItem">
 				<info>
 					<desc xml:lang="en-US">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="el">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="nl">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="fr">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="fi">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="cs">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="da">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="zh-CN">含有 Office 使用的 Addon 菜单的结构。它向使用者提供外部组件的功能。</desc>
+					<desc xml:lang="zh-TW">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ar">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="he">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ca">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="pt">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ru">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="es">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="it">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="sv">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="pl">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="pt-BR">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ja">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ko">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="tr">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="th">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+					<desc xml:lang="hi-IN">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
 				</info>
 			</set>
 			<set oor:name="Images" oor:node-type="Images">
@@ -215,11 +279,35 @@
 			<set oor:name="OfficeMenuBar" oor:node-type="PopupMenu">
 				<info>
 					<desc xml:lang="en-US">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="el">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="nl">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="fr">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="fi">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="cs">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="da">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="zh-CN">含有插入到 Office 菜单栏中的 Addon 弹出式菜单的结构。它向使用者提供外部组件的功能。</desc>
+					<desc xml:lang="zh-TW">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ar">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="he">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ca">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="pt">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ru">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="es">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="it">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="sv">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="pl">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="pt-BR">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ja">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="ko">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="tr">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="th">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+					<desc xml:lang="hi-IN">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
 				</info>
 			</set>
 			<set oor:name="OfficeToolBar" oor:node-type="ToolBarItems">
 				<info>
 					<desc xml:lang="en-US">Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
+					<desc xml:lang="zh-CN">含有插入到 Office 功能栏中的功能列单。此集合不支持可选属性“Submenu”！</desc>
 				</info>
 			</set>
 			<set oor:name="OfficeHelp" oor:node-type="MenuItem">
@@ -230,3 +318,11 @@
 		</group>
 	</component>
 </oor:component-schema>
+
+
+
+
+
+
+
+
