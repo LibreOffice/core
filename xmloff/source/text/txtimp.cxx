@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-28 07:48:53 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,7 +1622,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
          (XML_TOK_TEXT_CHANGE_END != nToken) &&
          (XML_TOK_TEXT_CHANGE_START != nToken) )
     {
-        ResetOpenRedlineId();
+//      ResetOpenRedlineId();
     }
 
     if( XML_TEXT_TYPE_BODY == eType && bContent )
@@ -1947,7 +1947,8 @@ void XMLTextImportHelper::RedlineAdd(
     const OUString& rId,
     const OUString& rAuthor,
     const OUString& rComment,
-    const DateTime& rDateTime)
+    const DateTime& rDateTime,
+    sal_Bool bMergeLastPara)
 {
     // dummy implementation: do nothing
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,9 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> xOldCursor;
 
-    ::rtl::OUString sID;
+    ::rtl::OUString sID;        /// redline-ID
+
+    sal_Bool bMergeLastPara;    /// merge-last-paragraph flag
 
 public:
 

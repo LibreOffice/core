@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-05 17:51:21 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,12 @@ void XMLIndexTOCContext::StartElement(
                 rImport->GetCursor()->goLeft(2, sal_False);
             }
         }
+
+        // finally, check for redlines that should start at
+        // the section start node
+        if( bValid )
+            GetImport().GetTextImport()->
+                RedlineAdjustStartNodeCursor(sal_True);
 
         // find text:style-name attribute and set section style
         // find text:protected and set value

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,8 @@ XMLChangedRegionImportContext::XMLChangedRegionImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName)
+        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        bMergeLastPara(sal_True)
 {
 }
 
@@ -135,10 +136,22 @@ void XMLChangedRegionImportContext::StartElement(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
-        if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
-             ( IsXMLToken( sLocalName, XML_ID ) )  )
+
+        OUString& rValue = xAttrList->getValueByIndex(nAttr);
+        if ( XML_NAMESPACE_TEXT == nPrefix )
         {
-            sID = xAttrList->getValueByIndex(nAttr);
+            if( IsXMLToken( sLocalName, XML_ID ) )
+            {
+                sID = rValue;
+            }
+            else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
+            {
+                sal_Bool bTmp;
+                if( SvXMLUnitConverter::convertBool(bTmp, rValue) )
+                {
+                    bMergeLastPara = bTmp;
+                }
+            }
         }
     }
 }
@@ -207,7 +220,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     if (SvXMLUnitConverter::convertDateTime(aDateTime, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime);
+            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-10 15:51:26 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,12 +142,9 @@ void XMLChangeImportContext::StartElement(
                 rHelper->RedlineSetCursor(rID,sal_False,bIsOutsideOfParagraph);
 
             // outside of paragraph and still open? set open redline ID
-            if (bIsStart)
+            if (bIsOutsideOfParagraph)
             {
-                if (bIsOutsideOfParagraph && !bIsEnd)
-                    rHelper->SetOpenRedlineId(rID);
-                else
-                    rHelper->ResetOpenRedlineId();
+                rHelper->SetOpenRedlineId(rID);
             }
         }
         // else: ignore

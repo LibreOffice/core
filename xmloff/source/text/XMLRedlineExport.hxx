@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ class XMLRedlineExport
     const ::rtl::OUString sIsInHeaderFooter;
     const ::rtl::OUString sRedlineProtectionKey;
     const ::rtl::OUString sRecordChanges;
+    const ::rtl::OUString sMergeLastPara;
 
     const ::rtl::OUString sChangePrefix;
 
@@ -244,6 +245,8 @@ private:
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet);
 
+    /// write a comment string as sequence of <text:p> elements
+    void WriteComment(const ::rtl::OUString& rComment);
 };
 
 #endif

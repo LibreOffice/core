@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-23 18:49:49 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2080,6 +2080,8 @@ namespace xmloff { namespace token {
         TOKEN( "table-formula" ),               // XML_TABLE_FORMULA
 
         TOKEN( "embedded-text" ),              // XML_EMBEDDED_TEXT
+
+        TOKEN( "merge-last-paragraph"),        // XML_MERGE_LAST_PARAGRAPH
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

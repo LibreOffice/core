@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 19:13:25 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
     sIsInHeaderFooter(RTL_CONSTASCII_USTRINGPARAM("IsInHeaderFooter")),
     sRedlineProtectionKey(RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey")),
     sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")),
+    sMergeLastPara(RTL_CONSTASCII_USTRINGPARAM("MergeLastPara")),
     rExport(rExp),
     aChangeMap(),
     pCurrentChangesList(NULL)
@@ -459,14 +460,23 @@ void XMLRedlineExport::ExportChangeInline(
 void XMLRedlineExport::ExportChangedRegion(
     const Reference<XPropertySet> & rPropSet)
 {
-    // export changed-region element (with change-ID)
+    // Redline-ID
     rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_ID, GetRedlineID(rPropSet) );
+
+    // merge-last-paragraph
+    Any aAny = rPropSet->getPropertyValue(sMergeLastPara);
+    if( ! *(sal_Bool*)aAny.getValue() )
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_MERGE_LAST_PARAGRAPH,
+                             XML_FALSE);
+
+    // export change region element
     SvXMLElementExport aChangedRegion(rExport, XML_NAMESPACE_TEXT,
                                       XML_CHANGED_REGION, sal_True, sal_True);
 
+
     // scope for (first) change element
     {
-        Any aAny = rPropSet->getPropertyValue(sRedlineType);
+        aAny = rPropSet->getPropertyValue(sRedlineType);
         OUString sType;
         aAny >>= sType;
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
@@ -489,7 +499,7 @@ void XMLRedlineExport::ExportChangedRegion(
 
     // changed change? Hierarchical changes can onl be two levels
     // deep. Here we check for the second level.
-    Any aAny = rPropSet->getPropertyValue(sRedlineSuccessorData);
+    aAny = rPropSet->getPropertyValue(sRedlineSuccessorData);
     Sequence<PropertyValue> aSuccessorData;
     aAny >>= aSuccessorData;
 
@@ -573,50 +583,33 @@ void XMLRedlineExport::ExportChangeInfo(
     // comment as <text:p> sequence
     aAny = rPropSet->getPropertyValue(sRedlineComment);
     aAny >>= sTmp;
-    if (sTmp.getLength() > 0)
-    {
-        // iterate over all string-pieces separated by return (0x0a) and
-        // put each inside a paragraph element.
-        SvXMLTokenEnumerator aEnumerator(sTmp, sal_Char(0x0a));
-        OUString aSubString;
-        while (aEnumerator.getNextToken(aSubString))
-        {
-            SvXMLElementExport aParagraph(
-                rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
-            rExport.Characters(aSubString);
-        }
-    }
+    WriteComment( sTmp );
 }
 
 void XMLRedlineExport::ExportChangeInfo(
     const Sequence<PropertyValue> & rPropertyValues)
 {
+    OUString sComment;
+
     sal_Int32 nCount = rPropertyValues.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
     {
         const PropertyValue& rVal = rPropertyValues[i];
 
-        if (rVal.Name.equals(sRedlineAuthor))
+        if( rVal.Name.equals(sRedlineAuthor) )
         {
             OUString sTmp;
             rVal.Value >>= sTmp;
             if (sTmp.getLength() > 0)
             {
-                rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR,
-                                     sTmp);
+                rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR, sTmp);
             }
         }
-        else if (rVal.Name.equals(sRedlineComment))
+        else if( rVal.Name.equals(sRedlineComment) )
         {
-            OUString sTmp;
-            rVal.Value >>= sTmp;
-            if (sTmp.getLength() > 0)
-            {
-                rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_COMMENT,
-                                     sTmp);
-            }
+            rVal.Value >>= sComment;
         }
-        else if (rVal.Name.equals(sRedlineDateTime))
+        else if( rVal.Name.equals(sRedlineDateTime) )
         {
             util::DateTime aDateTime;
             rVal.Value >>= aDateTime;
@@ -625,7 +618,7 @@ void XMLRedlineExport::ExportChangeInfo(
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME,
                                  sBuf.makeStringAndClear());
         }
-        else if (rVal.Name.equals(sRedlineType))
+        else if( rVal.Name.equals(sRedlineType) )
         {
             // check if this is an insertion; cf. comment at calling location
             OUString sTmp;
@@ -639,6 +632,8 @@ void XMLRedlineExport::ExportChangeInfo(
     // finally write element
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
                                    XML_CHANGE_INFO, sal_True, sal_True);
+
+    WriteComment( sComment );
 }
 
 void XMLRedlineExport::ExportStartOrEndRedline(
@@ -652,33 +647,47 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     aAny >>= aValues;
     const PropertyValue* pValues = aValues.getConstArray();
 
-    // seek for redline ID
+    // seek for redline properties
+    sal_Bool bIsCollapsed = sal_False;
+    sal_Bool bIsStart = sal_True;
+    OUString sId;
+    sal_Bool bIdOK = sal_False; // have we seen an ID?
     sal_Int32 nLength = aValues.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
         if (sRedlineIdentifier.equals(pValues[i].Name))
         {
-            OUString sId;
             pValues[i].Value >>= sId;
-
-            // TODO: use GetRedlineID or elimiate that function
-            OUStringBuffer sBuffer(sChangePrefix);
-            sBuffer.append(sId);
-
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_CHANGE_ID,
-                                 sBuffer.makeStringAndClear());
-
-            // export the element
-            // (whitespace because we're not inside paragraphs)
-            SvXMLElementExport aChangeElem(
-                rExport, XML_NAMESPACE_TEXT,
-                bStart ? XML_CHANGE_START : XML_CHANGE_END,
-                sal_True, sal_True);
-
-            // and break out of loop, in case a second RedlineIdentifier Value
-            break;
+            bIdOK = sal_True;
         }
-        // else: ignore Value
+        else if (sIsCollapsed.equals(pValues[i].Name))
+        {
+            bIsCollapsed = *(sal_Bool*)pValues[i].Value.getValue();
+        }
+        else if (sIsStart.equals(pValues[i].Name))
+        {
+            bIsStart = *(sal_Bool*)pValues[i].Value.getValue();
+        }
+    }
+
+    if( bIdOK )
+    {
+        DBG_ASSERT( sId.getLength() > 0, "Redlines must have IDs" );
+
+        // TODO: use GetRedlineID or elimiate that function
+        OUStringBuffer sBuffer(sChangePrefix);
+        sBuffer.append(sId);
+
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_CHANGE_ID,
+                             sBuffer.makeStringAndClear());
+
+        // export the element
+        // (whitespace because we're not inside paragraphs)
+        SvXMLElementExport aChangeElem(
+            rExport, XML_NAMESPACE_TEXT,
+            bIsCollapsed ? XML_CHANGE :
+                ( bIsStart ? XML_CHANGE_START : XML_CHANGE_END ),
+            sal_True, sal_True);
     }
 }
 
@@ -709,5 +718,22 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     else
     {
         DBG_ERROR("XPropertySet expected");
+    }
+}
+
+void XMLRedlineExport::WriteComment(const OUString& rComment)
+{
+    if (rComment.getLength() > 0)
+    {
+        // iterate over all string-pieces separated by return (0x0a) and
+        // put each inside a paragraph element.
+        SvXMLTokenEnumerator aEnumerator(rComment, sal_Char(0x0a));
+        OUString aSubString;
+        while (aEnumerator.getNextToken(aSubString))
+        {
+            SvXMLElementExport aParagraph(
+                rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+            rExport.Characters(aSubString);
+        }
     }
 }
