@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-03 10:49:03 $
+ *  last change: $Author: ama $ $Date: 2002-07-03 10:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3754,7 +3754,7 @@
                     <prop oor:name="PrintLayout" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Export -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
                         <value>false</value>
                         <info>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-06-10 14:41:51 $
+ *  last change: $Author: ama $ $Date: 2002-07-03 10:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@
         <prop oor:name="GraphicObject" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -335,7 +335,7 @@
         <prop oor:name="Table" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -346,7 +346,7 @@
         <prop oor:name="DrawingControl" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -357,7 +357,7 @@
         <prop oor:name="FieldCode" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <value>false</value>
           <info>
@@ -368,7 +368,7 @@
         <prop oor:name="Note" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -388,7 +388,7 @@
       </group>
       <group oor:name="NonprintingCharacter">
         <prop oor:name="MetaCharacters" oor:type="xs:boolean">
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: View - Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -399,7 +399,7 @@
         <prop oor:name="ParagraphEnd" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -410,7 +410,7 @@
         <prop oor:name="OptionalHyphen" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>true</value>
           <info>
@@ -421,7 +421,7 @@
         <prop oor:name="Space" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -432,7 +432,7 @@
         <prop oor:name="ProtectedSpace" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>true</value>
           <info>
@@ -443,7 +443,7 @@
         <prop oor:name="Tab" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -454,7 +454,7 @@
         <prop oor:name="Break" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -465,7 +465,7 @@
         <prop oor:name="HiddenText" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -476,7 +476,7 @@
         <prop oor:name="HiddenParagraph" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <value>true</value>
           <info>
@@ -489,7 +489,7 @@
         <prop oor:name="Link" oor:type="xs:int">
           <!-- OldPath: Writer/Other/Update -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Update links -->
           <value>1</value>
           <info>
@@ -517,7 +517,7 @@
         <prop oor:name="Field" oor:type="xs:boolean">
           <!-- OldPath: Writer/Other/Update -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
           <value>true</value>
           <info>
@@ -528,7 +528,7 @@
         <prop oor:name="Chart" oor:type="xs:boolean">
           <!-- OldPath: Writer/Other/Update -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
           <value>true</value>
           <info>
@@ -543,7 +543,7 @@
         <prop oor:name="Guide" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
@@ -554,7 +554,7 @@
         <prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
@@ -565,7 +565,7 @@
         <prop oor:name="LargeControlPoint" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
@@ -578,7 +578,7 @@
         <prop oor:name="HorizontalScroll" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <value>true</value>
           <info>
@@ -589,7 +589,7 @@
         <prop oor:name="VerticalScroll" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <value>true</value>
           <info>
@@ -600,7 +600,7 @@
         <prop oor:name="HorizontalRuler" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <value>true</value>
           <info>
@@ -610,7 +610,7 @@
         </prop>
         <prop oor:name="HorizontalRulerUnit" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
             <desc xml:lang="en-US">Specifies the measurement unit of the horizontal ruler units</desc>
@@ -667,7 +667,7 @@
         <prop oor:name="VerticalRuler" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <value>false</value>
           <info>
@@ -686,7 +686,7 @@
         </prop>
         <prop oor:name="VerticalRulerUnit" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
             <desc xml:lang="en-US">Specifies the measurement unit of the Vertical ruler units</desc>
@@ -743,7 +743,7 @@
         <prop oor:name="SmoothScroll" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <value>false</value>
           <info>
@@ -756,7 +756,7 @@
         <prop oor:name="MeasureUnit" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Meas. Units -->
           <value>2</value>
           <info>
@@ -814,7 +814,7 @@
         <prop oor:name="TabStop" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Tab stops -->
           <!-- Notice: The default value is valid for the English Version (depends, if a metric system is used on the platform); NonMetric: 1270 1/100 mm-->
           <value>1250</value>
@@ -867,7 +867,7 @@
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: Writer/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
           <value>false</value>
           <info>
@@ -878,7 +878,7 @@
         <prop oor:name="VisibleGrid" oor:type="xs:boolean">
           <!-- OldPath: Writer/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
           <value>false</value>
           <info>
@@ -889,7 +889,7 @@
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: Writer/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
           <value>false</value>
           <info>
@@ -902,7 +902,7 @@
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: Writer/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <value>1000</value>
           <info>
@@ -913,7 +913,7 @@
         <prop oor:name="YAxis" oor:type="xs:int">
           <!-- OldPath: Writer/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <value>1000</value>
           <info>
@@ -926,7 +926,7 @@
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: Writer/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <value>1</value>
           <info>
@@ -937,7 +937,7 @@
         <prop oor:name="YAxis" oor:type="xs:int">
           <!-- OldPath: Writer/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <value>1</value>
           <info>
@@ -951,7 +951,7 @@
       <prop oor:name="Standard" oor:type="xs:string">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
         <value xsi:nil="true"/>
         <info>
@@ -962,7 +962,7 @@
       <prop oor:name="Heading" oor:type="xs:string">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <value xsi:nil="true"/>
         <info>
@@ -973,7 +973,7 @@
       <prop oor:name="List" oor:type="xs:string">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <value xsi:nil="true"/>
         <info>
@@ -984,7 +984,7 @@
       <prop oor:name="Caption" oor:type="xs:string">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <value xsi:nil="true"/>
         <info>
@@ -995,7 +995,7 @@
       <prop oor:name="Index" oor:type="xs:string">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <value xsi:nil="true"/>
         <info>
@@ -1006,7 +1006,7 @@
       <prop oor:name="Document" oor:type="xs:boolean">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP / OS-->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts -->
         <value>false</value>
         <info>
@@ -1017,7 +1017,7 @@
     </group>
     <group oor:name="DefaultFontCJK">
       <prop oor:name="Standard" oor:type="xs:string">
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian) -->
         <value xsi:nil="true"/>
         <info>
@@ -1026,7 +1026,7 @@
         </info>
       </prop>
       <prop oor:name="Heading" oor:type="xs:string">
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
         <value xsi:nil="true"/>
         <info>
@@ -1035,7 +1035,7 @@
         </info>
       </prop>
       <prop oor:name="List" oor:type="xs:string">
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
         <value xsi:nil="true"/>
         <info>
@@ -1044,7 +1044,7 @@
         </info>
       </prop>
       <prop oor:name="Caption" oor:type="xs:string">
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
         <value xsi:nil="true"/>
         <info>
@@ -1053,7 +1053,7 @@
         </info>
       </prop>
       <prop oor:name="Index" oor:type="xs:string">
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
         <value xsi:nil="true"/>
         <info>
@@ -1062,7 +1062,7 @@
         </info>
       </prop>
       <prop oor:name="Document" oor:type="xs:boolean">
-        <!-- Responsible: JP / OS-->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
         <value>false</value>
         <info>
@@ -1118,7 +1118,7 @@
         </info>
       </prop>
       <prop oor:name="Document" oor:type="xs:boolean">
-        <!-- Responsible: OS / OS-->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
         <value>false</value>
         <info>
@@ -1132,7 +1132,7 @@
         <prop oor:name="Graphic" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -1143,7 +1143,7 @@
         <prop oor:name="Table" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -1154,7 +1154,7 @@
         <prop oor:name="Drawing" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -1165,7 +1165,7 @@
         <prop oor:name="Control" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -1176,7 +1176,7 @@
         <prop oor:name="Background" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -1187,7 +1187,7 @@
         <prop oor:name="PrintBlack" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <value>false</value>
           <info>
@@ -1198,7 +1198,7 @@
         <prop oor:name="Note" oor:type="xs:int">
           <!-- OldPath: Writer/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Notes -->
           <value>0</value>
           <info>
@@ -1232,7 +1232,7 @@
         <prop oor:name="LeftPage" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <value>true</value>
           <info>
@@ -1243,7 +1243,7 @@
         <prop oor:name="RightPage" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <value>true</value>
           <info>
@@ -1254,7 +1254,7 @@
         <prop oor:name="Reversed" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <value>false</value>
           <info>
@@ -1265,7 +1265,7 @@
         <prop oor:name="Brochure" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <value>false</value>
           <info>
@@ -1278,7 +1278,7 @@
         <prop oor:name="SinglePrintJob" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Output -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Output -->
           <value>false</value>
           <info>
@@ -1289,7 +1289,7 @@
         <prop oor:name="Fax" oor:type="xs:string">
           <!-- OldPath: Writer/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document  Print - [Section] Fax -->
           <info>
             <desc xml:lang="en-US">For specifying the fax machine to be used to fax directly from the document</desc>
@@ -1301,7 +1301,7 @@
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Papertray -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Paper tray -->
           <value>false</value>
           <info>
@@ -1316,7 +1316,7 @@
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Table/Shift -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric: 635 1/100 mm-->
           <value>500</value>
@@ -1328,7 +1328,7 @@
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Table/Shift -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric: 635 1/100 mm-->
           <value>500</value>
@@ -1342,7 +1342,7 @@
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Table/Insert -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric:  635 1/100 mm-->
           <value>500</value>
@@ -1354,7 +1354,7 @@
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Table/Insert -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform);NonMetric:  2540 1/100 mm-->
           <value>2500</value>
@@ -1368,7 +1368,7 @@
         <prop oor:name="Effect" oor:type="xs:int">
           <!-- OldPath: Writer/Table -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Effect -->
           <value>2</value>
           <info>
@@ -1397,7 +1397,7 @@
         <prop oor:name="NumberRecognition" oor:type="xs:boolean">
           <!-- OldPath: Writer/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
@@ -1408,7 +1408,7 @@
         <prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
           <!-- OldPath: Writer/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
@@ -1419,7 +1419,7 @@
         <prop oor:name="Alignment" oor:type="xs:boolean">
           <!-- OldPath: Writer/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
@@ -1434,7 +1434,7 @@
         <prop oor:name="UseDirectCursor" oor:type="xs:boolean">
           <!-- OldPath: Writer/Cursor/DirectCursor -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
           <value>false</value>
           <info>
@@ -1445,7 +1445,7 @@
         <prop oor:name="Insert" oor:type="xs:int">
           <!-- OldPath: Writer/Cursor/DirectCursor -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
           <value>2</value>
           <info>
@@ -1480,7 +1480,7 @@
         <prop oor:name="ProtectedArea" oor:type="xs:boolean">
           <!-- OldPath: Writer/Cursor/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Options -->
           <value>true</value>
           <info>
@@ -1496,7 +1496,7 @@
           <prop oor:name="Attribute" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Insert -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <value>3</value>
             <info>
@@ -1558,7 +1558,7 @@
           <prop oor:name="Color" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Insert -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
             <value>-1</value>
@@ -1571,7 +1571,7 @@
           <prop oor:name="Attribute" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Delete -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <value>3</value>
             <info>
@@ -1628,7 +1628,7 @@
           <prop oor:name="Color" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Delete -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
             <value>-1</value>
@@ -1641,7 +1641,7 @@
           <prop oor:name="Attribute" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <value>1</value>
             <info>
@@ -1703,7 +1703,7 @@
           <prop oor:name="Color" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
             <value>-1</value>
@@ -1717,7 +1717,7 @@
         <prop oor:name="Mark" oor:type="xs:int">
           <!-- OldPath: Writer/Changes/Lines_changed -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
           <value>3</value>
           <info>
@@ -1754,7 +1754,7 @@
         <prop oor:name="Color" oor:type="xs:int">
           <!-- OldPath: Writer/Changes//Lines_changed -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
           <value>0</value>
           <info>
@@ -1767,7 +1767,7 @@
       <group oor:name="Caption">
         <!-- OldLocation: Soffice.cfg -->
         <!-- OldPath: Writer/Insert/Caption -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!--UIHints:
 Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Automatic" oor:type="xs:boolean">
@@ -2846,7 +2846,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="Table">
         <!-- OldLocation: Soffice.cfg -->
         <!-- OldPath: Writer/Insert/Tables -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
         <prop oor:name="Header" oor:type="xs:boolean">
           <value>true</value>
@@ -2883,7 +2883,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="AddBetween" oor:type="xs:boolean">
           <!-- OldPath: Writer/Other/Compatibility -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
           <value>false</value>
           <info>
@@ -2894,7 +2894,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="AddToStart" oor:type="xs:boolean">
           <!-- OldPath: Writer/Other/Compatibility -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
           <value>false</value>
           <info>
@@ -2909,7 +2909,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="FileLinks" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/AutoText -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Edit  AutoText  Save Links relative -->
           <value>false</value>
           <info>
@@ -2920,7 +2920,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="InternetLinks" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/AutoText -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Edit  AutoText  Save Links relative -->
           <value>false</value>
           <info>
@@ -2931,7 +2931,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="ShowPreview" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/AutoText -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Edit  AutoText  Show preview -->
           <value>false</value>
           <info>
@@ -2942,7 +2942,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="ShowToolTip" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/AutoText -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Edit  AutoText  display remainder ... -->
           <value>false</value>
           <info>
@@ -2956,7 +2956,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="UseReplacementTable" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement table -->
             <value>true</value>
             <info>
@@ -2967,7 +2967,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo INitial Capitals -->
             <value>true</value>
             <info>
@@ -2978,7 +2978,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first letter of every sentence -->
             <value>true</value>
             <info>
@@ -2989,7 +2989,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold* and _underline_ -->
             <value>true</value>
             <info>
@@ -3000,7 +3000,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="SetInetAttribute" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL regocnition -->
             <value>true</value>
             <info>
@@ -3011,7 +3011,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
             <value>true</value>
             <info>
@@ -3022,7 +3022,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeFraction" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace 1/2... -->
             <value>true</value>
             <info>
@@ -3033,7 +3033,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeDash" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
             <value>true</value>
             <info>
@@ -3044,7 +3044,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="DelEmptyParagraphs" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Remove blank paragraphs -->
             <value>false</value>
             <info>
@@ -3055,7 +3055,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ReplaceUserStyle" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace custom styles -->
             <value>true</value>
             <info>
@@ -3066,7 +3066,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ReplaceQuote" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace Standard Quotes... -->
             <value>true</value>
             <info>
@@ -3077,7 +3077,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="CombineParagraphs" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater -->
             <value>true</value>
             <info>
@@ -3088,7 +3088,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="CombineValue" oor:type="xs:int">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: OS-->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater... / Edit/Combine/Minimum size-->
             <value>50</value>
             <info>
@@ -3098,7 +3098,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean">
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
             <value>true</value>
             <info>
@@ -3108,7 +3108,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DelSpacesBetween" oor:type="xs:boolean">
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs between Lineend and -begin -->
             <value>true</value>
             <info>
@@ -3120,7 +3120,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldPath: Writer/AutoFormat/Options -->
               <!-- OldLocation: Soffice.cfg -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
               <value>true</value>
               <info>
@@ -3132,7 +3132,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="Char" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <value>8226</value>
                 <info>
@@ -3142,7 +3142,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="Font" oor:type="xs:string">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <value>StarSymbol</value>
                 <info>
@@ -3152,7 +3152,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="FontFamily" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <!--Defautl value 0 = Symbol-->
                 <value>0</value>
@@ -3163,7 +3163,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="FontCharset" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <!--Defautl value 10 = Symbol-->
                 <value>10</value>
@@ -3174,7 +3174,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="FontPitch" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <!--Defautl value 2 = Variable-->
                 <value>2</value>
@@ -3189,7 +3189,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="Enable" oor:type="xs:boolean">
             <!-- OldPath: AutoCorrect/Options/All -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - AutoFormat while typing -->
             <value>true</value>
             <info>
@@ -3200,7 +3200,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeDash" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
             <value>true</value>
             <info>
@@ -3211,7 +3211,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeToBorders" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/ByInput -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply border -->
             <value>true</value>
             <info>
@@ -3222,7 +3222,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ChangeToTable" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/ByInput -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Create table -->
             <value>true</value>
             <info>
@@ -3233,7 +3233,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="ReplaceStyle" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/ByInput -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
             <value>false</value>
             <info>
@@ -3243,7 +3243,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean">
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
             <value>true</value>
             <info>
@@ -3253,7 +3253,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DelSpacesBetween" oor:type="xs:boolean">
             <!-- OldLocation: Soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  AutoCorrect Options  Delete Blanks and Tabs between Lineend and -begin -->
             <value>true</value>
             <info>
@@ -3265,7 +3265,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldPath: Writer/AutoFormat/ByInput -->
               <!-- OldLocation: Soffice.cfg -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
               <value>true</value>
               <info>
@@ -3277,7 +3277,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="Char" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
                 <value>8226</value>
                 <info>
@@ -3287,7 +3287,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="Font" oor:type="xs:string">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
                 <value>StarSymbol</value>
                 <info>
@@ -3297,7 +3297,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="FontFamily" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
                 <!--Defautl value 0 = Symbol-->
                 <value>0</value>
@@ -3308,7 +3308,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="FontCharset" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
                 <!--Defautl value 10 = Symbol-->
                 <value>10</value>
@@ -3319,7 +3319,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <prop oor:name="FontPitch" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
                 <!--Defautl value 2 = Variable-->
                 <value>2</value>
@@ -3335,7 +3335,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Enable" oor:type="xs:boolean">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show suggestions -->
           <value>true</value>
           <info>
@@ -3346,7 +3346,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="MinWordLen" oor:type="xs:int">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  min. word length -->
           <value>5</value>
           <info>
@@ -3357,7 +3357,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="MaxListLen" oor:type="xs:int">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  max. entries -->
           <value>500</value>
           <info>
@@ -3368,7 +3368,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="CollectWords" oor:type="xs:boolean">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Collect suggestions -->
           <value>true</value>
           <info>
@@ -3379,7 +3379,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="EndlessList" oor:type="xs:boolean">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Endless suggestions -->
           <value>false</value>
           <info>
@@ -3390,7 +3390,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="AppendBlank" oor:type="xs:boolean">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Append blanc -->
           <value>false</value>
           <info>
@@ -3401,7 +3401,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="ShowAsTip" oor:type="xs:boolean">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show as tip -->
           <value>false</value>
           <info>
@@ -3412,7 +3412,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="AcceptKey" oor:type="xs:int">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Accept with -->
           <value>1280</value>
           <info>
@@ -3449,7 +3449,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="UseAddress" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Labels -->
           <value>false</value>
           <info>
@@ -3460,7 +3460,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Address" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc xml:lang="en-US">Specifies the label text (address)</desc>
@@ -3470,7 +3470,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Database" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc xml:lang="en-US">Specifies the database used</desc>
@@ -3482,7 +3482,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Continous" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Labels -->
           <value>false</value>
           <info>
@@ -3493,7 +3493,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Brand" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc xml:lang="en-US">Specifies the brand name of the label format</desc>
@@ -3503,7 +3503,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Type" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc xml:lang="en-US">Specifies the type of the label format</desc>
@@ -3515,7 +3515,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>1</value>
           <info>
@@ -3526,7 +3526,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>1</value>
           <info>
@@ -3537,7 +3537,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="HorizontalDistance" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>10000</value>
           <info>
@@ -3548,7 +3548,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="VerticalDistance" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>10000</value>
           <info>
@@ -3559,7 +3559,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Width" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>10000</value>
           <info>
@@ -3570,7 +3570,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Height" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>10000</value>
           <info>
@@ -3581,7 +3581,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="LeftMargin" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>0</value>
           <info>
@@ -3592,7 +3592,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="TopMargin" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Format -->
           <value>0</value>
           <info>
@@ -3605,7 +3605,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Options -->
           <value>false</value>
           <info>
@@ -3616,7 +3616,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Page" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Options -->
           <value>true</value>
           <info>
@@ -3627,7 +3627,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Options -->
           <value>1</value>
           <info>
@@ -3638,7 +3638,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  Labels  Options -->
           <value>1</value>
           <info>
@@ -3653,7 +3653,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Continous" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <value>false</value>
           <info>
@@ -3664,7 +3664,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Brand" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
             <desc xml:lang="en-US">Specifies the brand name of the business card format</desc>
@@ -3674,7 +3674,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Type" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
             <desc xml:lang="en-US">Specifies the type of the business card format</desc>
@@ -3686,7 +3686,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>1</value>
           <info>
@@ -3697,7 +3697,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>1</value>
           <info>
@@ -3708,7 +3708,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="HorizontalDistance" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>10000</value>
           <info>
@@ -3719,7 +3719,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="VerticalDistance" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>10000</value>
           <info>
@@ -3730,7 +3730,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Width" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>10000</value>
           <info>
@@ -3741,7 +3741,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Height" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>10000</value>
           <info>
@@ -3752,7 +3752,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="LeftMargin" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>0</value>
           <info>
@@ -3763,7 +3763,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="TopMargin" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <value>0</value>
           <info>
@@ -3776,7 +3776,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <value>false</value>
           <info>
@@ -3787,7 +3787,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Page" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <value>true</value>
           <info>
@@ -3798,7 +3798,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <value>1</value>
           <info>
@@ -3809,7 +3809,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <value>1</value>
           <info>
@@ -3822,7 +3822,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Group" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/Content -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  BusinessCards -->
           <value xsi:nil="true"/>
           <info>
@@ -3833,7 +3833,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Block" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/Content -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  BusinessCards -->
           <value xsi:nil="true"/>
           <info>
@@ -3845,7 +3845,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="FirstName" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3856,7 +3856,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Name" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3867,7 +3867,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="ShortCut" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3878,7 +3878,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="SecondFirstName" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3889,7 +3889,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="SecondName" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3900,7 +3900,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="SecondShortCut" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3911,7 +3911,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Street" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3922,7 +3922,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Zip" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3933,7 +3933,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="City" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3944,7 +3944,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Country" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3955,7 +3955,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="State" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3966,7 +3966,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Title" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3977,7 +3977,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Profession" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3988,7 +3988,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Phone" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -3999,7 +3999,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Mobile" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -4010,7 +4010,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Fax" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -4021,7 +4021,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="WebAddress" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -4032,7 +4032,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Email" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
@@ -4045,7 +4045,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Company" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4056,7 +4056,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="CompanyExt" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4067,7 +4067,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Slogan" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4078,7 +4078,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Street" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4089,7 +4089,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Zip" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4100,7 +4100,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="City" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4111,7 +4111,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Country" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4122,7 +4122,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="State" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4133,7 +4133,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Position" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4144,7 +4144,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Phone" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4155,7 +4155,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Mobile" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4166,7 +4166,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Fax" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4177,7 +4177,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="WebAddress" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4188,7 +4188,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Email" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
@@ -4202,7 +4202,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="Selection">
         <!-- OldPath: Writer/Toolbars/ObjectBar -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Right mouse click to the toolbar with object selection-->
         <prop oor:name="Graphic" oor:type="xs:int">
           <value>-1</value>
@@ -4240,7 +4240,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="ShowListBox" oor:type="xs:boolean">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>false</value>
         <info>
@@ -4251,7 +4251,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="GlobalDocMode" oor:type="xs:boolean">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>true</value>
         <info>
@@ -4262,7 +4262,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="RootType" oor:type="xs:int">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>-1</value>
         <info>
@@ -4273,7 +4273,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="SelectedPosition" oor:type="xs:int">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>0</value>
         <info>
@@ -4283,7 +4283,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="OutlineLevel" oor:type="xs:int">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>10</value>
         <info>
@@ -4298,7 +4298,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="InsertMode" oor:type="xs:int">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>0</value>
         <info>
@@ -4326,7 +4326,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <prop oor:name="ActiveBlock" oor:type="xs:int">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Navigator -->
         <value>0</value>
         <info>
@@ -4339,7 +4339,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Addressee" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Envelope -->
           <info>
             <desc xml:lang="en-US">Specifies the recipient&amp;apos;s address</desc>
@@ -4349,7 +4349,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Sender" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Envelope -->
           <value xsi:nil="true"/>
           <info>
@@ -4360,7 +4360,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="UseSender" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Envelope -->
           <value>true</value>
           <info>
@@ -4371,7 +4371,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Database" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Envelope -->
           <info>
             <desc xml:lang="en-US">Specifies the database to be used for the addressee</desc>
@@ -4383,7 +4383,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="AddresseeFromLeft" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Format //  old twips: 6463 / 2-->
           <value>5700</value>
           <info>
@@ -4394,7 +4394,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="AddresseeFromTop" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Format  // old twips: 6463 / 2-->
           <value>5700</value>
           <info>
@@ -4405,7 +4405,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="SenderFromLeft" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Format -->
           <value>1000</value>
           <info>
@@ -4416,7 +4416,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="SenderFromTop" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Format -->
           <value>1000</value>
           <info>
@@ -4427,7 +4427,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Width" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Format -->
           <value>11400</value>
           <info>
@@ -4438,7 +4438,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Height" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Format -->
           <value>22700</value>
           <info>
@@ -4451,7 +4451,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Alignment" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Printer -->
           <value>0</value>
           <info>
@@ -4494,7 +4494,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="FromAbove" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Printer -->
           <value>true</value>
           <info>
@@ -4505,7 +4505,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Right" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Printer -->
           <value>0</value>
           <info>
@@ -4516,7 +4516,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <prop oor:name="Down" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Insert  Envolpe  Printer -->
           <value>0</value>
           <info>
@@ -4529,7 +4529,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
     <group oor:name="InsertData">
       <set oor:name="DataSet" oor:node-type="DataSetType">
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP / OS-->
+        <!-- Responsible: OS -->
         <!-- UIHints: Dialog Insert Database Columns -->
       </set>
     </group>
@@ -4538,14 +4538,14 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Template">
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page1-->
           </node-ref>
         </group>
         <group oor:name="Logo">
           <prop oor:name="Visible" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 1/ Logo-->
             <value xsi:nil="true"/>
             <info>
@@ -4558,7 +4558,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Elements">
           <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 1 -->
             <!-- Notice: Constraints: Any -->
             <info>
@@ -4568,7 +4568,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Date" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 / Date -->
             <!-- Notice: Default: Current date -->
             <info>
@@ -4578,7 +4578,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Time" oor:type="xs:long">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 / Time -->
             <!--Current Time-->
             <info>
@@ -4588,7 +4588,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Location" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 -->
             <info>
               <desc xml:lang="en-US">Location of the meeting</desc>
@@ -4597,7 +4597,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Occasion" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 / Occasion -->
             <value xsi:nil="true"/>
             <info>
@@ -4607,7 +4607,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="BringAlong" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 / Bring along -->
             <value xsi:nil="true"/>
             <info>
@@ -4617,7 +4617,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Prepare" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 / Please prepare -->
             <value xsi:nil="true"/>
             <info>
@@ -4627,7 +4627,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Notes" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 / Notes -->
             <value xsi:nil="true"/>
             <info>
@@ -4637,7 +4637,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Convened" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Convened by -->
             <value xsi:nil="true"/>
             <info>
@@ -4647,7 +4647,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Presiding" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Presiding -->
             <value xsi:nil="true"/>
             <info>
@@ -4657,7 +4657,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Minutes" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Minutes -->
             <value xsi:nil="true"/>
             <info>
@@ -4667,7 +4667,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Participants" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Participants -->
             <value xsi:nil="true"/>
             <info>
@@ -4677,7 +4677,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Guests" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Guests -->
             <value xsi:nil="true"/>
             <info>
@@ -4687,7 +4687,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Experts" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Experts -->
             <value xsi:nil="true"/>
             <info>
@@ -4697,7 +4697,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Postprocessing" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 3 / Follow-up -->
             <value xsi:nil="true"/>
             <info>
@@ -4707,7 +4707,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="UseMinutes" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 6 / Yes-No-->
             <value xsi:nil="true"/>
             <info>
@@ -4719,7 +4719,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="AgendaTopics">
           <prop oor:name="Number" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 4 / Agenda topic -->
             <!-- Notice: This must be generic, as it depends on the number of entries defined by the user. -->
             <value xsi:nil="true"/>
@@ -4733,14 +4733,14 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <set oor:name="AgendaList" oor:node-type="AgendaType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page4-->
           </set>
         </group>
         <group oor:name="Save">
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 / Title -->
             <value xsi:nil="true"/>
             <info>
@@ -4768,7 +4768,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 / Subject -->
             <value xsi:nil="true"/>
             <info>
@@ -4796,7 +4796,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 / Name -->
             <!-- Notice: Constraints: Any -->
             <value xsi:nil="true"/>
@@ -4807,7 +4807,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateInfo" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 / Info -->
             <value xsi:nil="true"/>
             <info>
@@ -4817,7 +4817,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoDocName" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 -->
             <value xsi:nil="true"/>
             <info>
@@ -4827,7 +4827,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPrefix" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 -->
             <value xsi:nil="true"/>
             <info>
@@ -4837,7 +4837,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPath" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 / Destination -->
             <value xsi:nil="true"/>
             <info>
@@ -4851,7 +4851,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Template">
           <prop oor:name="Type" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 1 -->
             <value xsi:nil="true"/>
             <info>
@@ -4861,14 +4861,14 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page1-->
           </node-ref>
         </group>
         <group oor:name="Logo">
           <prop oor:name="Visible" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 2 / Which type of logo?-->
             <value xsi:nil="true"/>
             <info>
@@ -4877,7 +4877,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="IsGraphic" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 2 / Which type of logo? - Graphics-->
             <value xsi:nil="true"/>
             <info>
@@ -4887,7 +4887,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Text" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 2 / Which type of logo? - Text-->
             <value xsi:nil="true"/>
             <info>
@@ -4898,7 +4898,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <node-ref oor:name="GraphicFile" oor:node-type="FileType"/>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 2 / Position-->
             <info>
               <desc xml:lang="en-US">X,Y-Position of the Logo frame</desc>
@@ -4906,7 +4906,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Size" oor:node-type="SizeType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 2 / Size-->
             <info>
               <desc xml:lang="en-US">Size of the Logo frame</desc>
@@ -4915,7 +4915,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Alignment">
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 2 / Position-->
               <info>
                 <desc xml:lang="en-US">Alignment of the logo frame</desc>
@@ -4923,7 +4923,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Position" oor:node-type="PositionType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 2 / Position-->
               <info>
                 <desc xml:lang="en-US">Position of the logo frame</desc>
@@ -4935,7 +4935,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Sender">
           <prop oor:name="Content" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 3-->
             <value xsi:nil="true"/>
             <info>
@@ -4945,7 +4945,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Show" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 3 (for private letters)-->
             <value xsi:nil="true"/>
             <info>
@@ -4955,7 +4955,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Repeat" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 3 (for business letters)-->
             <value xsi:nil="true"/>
             <info>
@@ -4965,7 +4965,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 3 / Enter sender address -->
             <info>
               <desc xml:lang="en-US">X,Y-Position of the sender tex frame</desc>
@@ -4973,7 +4973,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Size" oor:node-type="SizeType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 3 / Enter sender address -->
             <info>
               <desc xml:lang="en-US">Size of the sender text frame</desc>
@@ -4983,7 +4983,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Alignment">
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 3 / Enter sender address -->
               <info>
                 <desc xml:lang="en-US">Alignment of the sender text frame</desc>
@@ -4991,7 +4991,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Position" oor:node-type="PositionType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 3 / Enter sender address -->
               <info>
                 <desc xml:lang="en-US">Position of the sender text frame</desc>
@@ -5003,7 +5003,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Recipient">
           <prop oor:name="Database" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 4 / Database -->
             <value xsi:nil="true"/>
             <info>
@@ -5013,7 +5013,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DataTable" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Database -->
             <value xsi:nil="true"/>
             <info>
@@ -5023,7 +5023,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Content" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 4 / Address-->
             <value xsi:nil="true"/>
             <info>
@@ -5033,7 +5033,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Salutation" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 4 / Salutation -->
             <value xsi:nil="true"/>
             <info>
@@ -5043,7 +5043,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="SalutationField" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 4 / Salutation -->
             <value xsi:nil="true"/>
             <info>
@@ -5052,7 +5052,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 4 / Addressee -->
             <info>
               <desc xml:lang="en-US">X,Y-Position of the Addressee text frame</desc>
@@ -5060,7 +5060,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Size" oor:node-type="SizeType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 4 / Addressee -->
             <info>
               <desc xml:lang="en-US">Size of the Addressee text frame</desc>
@@ -5069,7 +5069,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Alignment">
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 4 / Addressee -->
               <info>
                 <desc xml:lang="en-US">Alignment of the Addressee text frame</desc>
@@ -5077,7 +5077,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Position" oor:node-type="PositionType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 4 / Addressee -->
               <info>
                 <desc xml:lang="en-US">Position of the Addressee frame</desc>
@@ -5089,7 +5089,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Elements">
           <prop oor:name="Copy" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
             <value xsi:nil="true"/>
             <info>
@@ -5099,7 +5099,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Enclosure" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 2 / Logo -->
             <value xsi:nil="true"/>
             <info>
@@ -5109,7 +5109,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element1">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 / Which elements should the letter contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 1 in the text</desc>
@@ -5120,7 +5120,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element2">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 / Which elements should the letter contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 2 in the text</desc>
@@ -5131,7 +5131,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element3">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 / Which elements should the letter contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 3 in the text</desc>
@@ -5142,7 +5142,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element4">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 / Which elements should the letter contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 4 in the text</desc>
@@ -5153,7 +5153,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Date">
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 / Date -->
               <info>
                 <desc xml:lang="en-US">To insert a date as a field function</desc>
@@ -5164,7 +5164,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Subject">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 / Subject line -->
               <info>
                 <desc xml:lang="en-US">To insert a subject line</desc>
@@ -5175,7 +5175,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="PageNumber">
             <prop oor:name="Visible" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
               <value xsi:nil="true"/>
               <info>
@@ -5185,7 +5185,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="TextBefore" oor:type="xs:string" oor:localized="true">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
               <info>
                 <desc xml:lang="en-US">Text before the page number</desc>
@@ -5193,7 +5193,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="Format" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
               <!-- Notice: Depends on the international settings -->
               <info>
@@ -5203,7 +5203,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <group oor:name="TotalPageCount">
               <prop oor:name="Visible" oor:type="xs:boolean">
                 <!-- OldLocation: wizard.ini -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
                 <value xsi:nil="true"/>
                 <info>
@@ -5213,7 +5213,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </prop>
               <prop oor:name="TextBefore" oor:type="xs:string" oor:localized="true">
                 <!-- OldLocation: wizard.ini -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
                 <info>
                   <desc xml:lang="en-US">Specifies the text before the total page number</desc>
@@ -5225,7 +5225,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Header">
           <prop oor:name="FromTop" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 7 / Header -->
             <info>
               <desc xml:lang="en-US">Distance of header to the top  [UNIT=1/10 mm]</desc>
@@ -5234,7 +5234,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="FromText" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 7 / Header -->
             <info>
               <desc xml:lang="en-US">Distance of header to text  [UNIT=1/10 mm]</desc>
@@ -5244,7 +5244,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Sender">
             <prop oor:name="Visible" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Header -->
               <value xsi:nil="true"/>
               <info>
@@ -5253,7 +5253,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <node-ref oor:name="Size" oor:node-type="SizeType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints:File / AutoPilot / Letter / Page 7 / Header-->
               <info>
                 <desc xml:lang="en-US">Size of sender frame</desc>
@@ -5262,7 +5262,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Alignment" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Header -->
               <info>
                 <desc xml:lang="en-US">Alignment of the sender frame in the header</desc>
@@ -5272,7 +5272,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Logo">
             <prop oor:name="Visible" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Header -->
               <value xsi:nil="true"/>
               <info>
@@ -5281,7 +5281,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <node-ref oor:name="Size" oor:node-type="SizeType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints:File / AutoPilot / Letter / Page 7 / Header-->
               <info>
                 <desc xml:lang="en-US">Size of logo frame</desc>
@@ -5290,7 +5290,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Alignment" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Header -->
               <info>
                 <desc xml:lang="en-US">Alignment of the Logo frame in the header</desc>
@@ -5302,7 +5302,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="OnPage1">
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
               <value xsi:nil="true"/>
               <info>
@@ -5312,7 +5312,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="Separator" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
               <value xsi:nil="true"/>
               <info>
@@ -5322,7 +5322,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
               <info>
                 <desc xml:lang="en-US">Text of the footer</desc>
@@ -5330,7 +5330,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="FromBottom" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
               <info>
                 <desc xml:lang="en-US">Distance of footer from bottom on page 1  [UNIT=1/10 mm]</desc>
@@ -5339,7 +5339,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="FromText" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
               <info>
                 <desc xml:lang="en-US">Distance of footer from text on page 1  [UNIT=1/10 mm]</desc>
@@ -5350,7 +5350,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="OnContinuationPages">
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Footer -->
               <value xsi:nil="true"/>
               <info>
@@ -5360,7 +5360,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="FromBottom" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Footer -->
               <info>
                 <desc xml:lang="en-US">Distance of footer next page from bottom  [UNIT=1/10 mm]</desc>
@@ -5369,7 +5369,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="FromText" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 7 / Footer -->
               <info>
                 <desc xml:lang="en-US">Distance of footer next page from text  [UNIT=1/10 mm]</desc>
@@ -5381,7 +5381,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="PageMargin">
           <prop oor:name="Left" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
             <value xsi:nil="true"/>
             <info>
@@ -5391,7 +5391,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Right" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
             <value xsi:nil="true"/>
             <info>
@@ -5403,7 +5403,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Save">
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 -->
             <value xsi:nil="true"/>
             <info>
@@ -5431,7 +5431,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 -->
             <value xsi:nil="true"/>
             <info>
@@ -5459,7 +5459,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 / Name -->
             <value xsi:nil="true"/>
             <info>
@@ -5469,7 +5469,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateInfo" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 / Info -->
             <value xsi:nil="true"/>
             <info>
@@ -5479,7 +5479,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoDocName" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -5489,7 +5489,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPrefix" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -5499,7 +5499,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPath" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 8 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -5511,7 +5511,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Print">
           <prop oor:name="Sender" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 9 / -->
             <value xsi:nil="true"/>
             <info>
@@ -5543,7 +5543,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Logo" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 9 / Logo -->
             <value xsi:nil="true"/>
             <info>
@@ -5575,7 +5575,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Printer" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page 9 / Setup -->
             <value xsi:nil="true"/>
             <info>
@@ -5585,7 +5585,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Tray">
             <prop oor:name="Page1" oor:type="xs:string">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 9 / First page -->
               <!-- Notice: Constraints: Depends on the printer -->
               <value xsi:nil="true"/>
@@ -5596,7 +5596,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="ContinuationPage" oor:type="xs:string">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 9 / Continuation page -->
               <!-- Notice: Constraints: Depends on the printer -->
               <value xsi:nil="true"/>
@@ -5612,7 +5612,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Template">
           <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 1 -->
             <info>
               <desc xml:lang="en-US">Fax title</desc>
@@ -5629,13 +5629,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax/ Page1-->
           </node-ref>
           <group oor:name="Format">
             <prop oor:name="Width" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 1 -->
               <value xsi:nil="true"/>
               <info>
@@ -5645,7 +5645,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="Height" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 1 -->
               <value xsi:nil="true"/>
               <info>
@@ -5658,7 +5658,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Logo">
           <prop oor:name="Visible" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: ?? -->
             <value xsi:nil="true"/>
             <info>
@@ -5667,7 +5667,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="IsGraphic" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 2 / Logo -->
             <value xsi:nil="true"/>
             <info>
@@ -5677,7 +5677,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Text" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 2 / Logo -->
             <value xsi:nil="true"/>
             <info>
@@ -5687,7 +5687,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="GraphicFile" oor:node-type="FileType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!--File / AutoPilot / Fax / Page 2 / Logo   -->
             <info>
               <desc xml:lang="en-US">Filename, if the Logo is a graphic</desc>
@@ -5695,7 +5695,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 2 / Logo -->
             <info>
               <desc xml:lang="en-US">X,Y-Position of the Logo frame</desc>
@@ -5703,7 +5703,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Size" oor:node-type="SizeType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 2 / Logo -->
             <info>
               <desc xml:lang="en-US">Size of the Logo frame</desc>
@@ -5712,7 +5712,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Alignment">
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 2 / Logo -->
               <info>
                 <desc xml:lang="en-US">Alignment of the Logo frame</desc>
@@ -5720,7 +5720,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Position" oor:node-type="PositionType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 2 / Logo -->
               <info>
                 <desc xml:lang="en-US">Position of the Logo frame</desc>
@@ -5732,7 +5732,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Sender">
           <prop oor:name="Content" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 3 / Address field-->
             <value xsi:nil="true"/>
             <info>
@@ -5742,7 +5742,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TelNumber" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 3-->
             <value xsi:nil="true"/>
             <info>
@@ -5752,7 +5752,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="FaxNumber" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -5762,7 +5762,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 3 / Enter sender address -->
             <info>
               <desc xml:lang="en-US">X,Y-Position of the sender text frame</desc>
@@ -5770,7 +5770,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Size" oor:node-type="SizeType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 3 / Enter sender address -->
             <info>
               <desc xml:lang="en-US">Size of the sender text frame</desc>
@@ -5780,7 +5780,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Alignment">
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 3-->
               <info>
                 <desc xml:lang="en-US">Alignment of the sender text frame</desc>
@@ -5788,7 +5788,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Position" oor:node-type="PositionType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 3-->
               <info>
                 <desc xml:lang="en-US">Position of the sender text frame</desc>
@@ -5799,7 +5799,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Recipient">
           <prop oor:name="Database" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Database -->
             <value xsi:nil="true"/>
             <info>
@@ -5809,7 +5809,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DataTable" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Database -->
             <value xsi:nil="true"/>
             <info>
@@ -5819,7 +5819,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Content" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Address-->
             <value xsi:nil="true"/>
             <info>
@@ -5829,7 +5829,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TelNumber" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Salutation -->
             <value xsi:nil="true"/>
             <info>
@@ -5839,7 +5839,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="FaxNumber" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Salutation -->
             <value xsi:nil="true"/>
             <info>
@@ -5849,7 +5849,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Addressee -->
             <info>
               <desc xml:lang="en-US">X,Y - Position of the Addressee text frame</desc>
@@ -5857,7 +5857,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </node-ref>
           <node-ref oor:name="Size" oor:node-type="SizeType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 4 / Addressee -->
             <info>
               <desc xml:lang="en-US">Size of the Addressee text frame</desc>
@@ -5866,7 +5866,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Alignment">
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 4 / Addressee -->
               <info>
                 <desc xml:lang="en-US">Alignment of the Addressee text frame</desc>
@@ -5874,7 +5874,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </node-ref>
             <node-ref oor:name="Position" oor:node-type="PositionType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 4 / Addressee -->
               <info>
                 <desc xml:lang="en-US">Position of the Addressee text frame</desc>
@@ -5885,7 +5885,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Elements">
           <prop oor:name="Copy" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 5 -->
             <value xsi:nil="true"/>
             <info>
@@ -5896,7 +5896,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element1">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Which elements should the Fax contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 1 in the text</desc>
@@ -5907,7 +5907,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element2">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Which elements should the Fax contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 2 in the text</desc>
@@ -5918,7 +5918,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element3">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Which elements should the Fax contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 3 in the text</desc>
@@ -5929,7 +5929,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element4">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Which elements should the Fax contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 4 in the text</desc>
@@ -5940,7 +5940,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Date">
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Date -->
               <info>
                 <desc xml:lang="en-US">To insert a date as a field function</desc>
@@ -5951,7 +5951,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Time">
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Time -->
               <info>
                 <desc xml:lang="en-US">To insert a time as a field function</desc>
@@ -5962,7 +5962,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Subject">
             <node-ref oor:name="Value" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Fax / Page 5 / Subject line -->
               <info>
                 <desc xml:lang="en-US">To insert a subject line</desc>
@@ -5974,7 +5974,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Footer">
           <prop oor:name="Enable" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 6 -->
             <value xsi:nil="true"/>
             <info>
@@ -5984,7 +5984,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Separator" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 6 -->
             <value xsi:nil="true"/>
             <info>
@@ -5994,7 +5994,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 6 -->
             <info>
               <desc xml:lang="en-US">Text of the footer</desc>
@@ -6004,7 +6004,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="PageMargin">
           <prop oor:name="Left" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 6 -->
             <value xsi:nil="true"/>
             <info>
@@ -6014,7 +6014,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Right" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 6 -->
             <value xsi:nil="true"/>
             <info>
@@ -6026,7 +6026,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Save">
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / Info -->
             <value xsi:nil="true"/>
             <info>
@@ -6054,7 +6054,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / Info -->
             <info>
               <desc xml:lang="en-US">Subject for the properties</desc>
@@ -6081,7 +6081,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / Template -->
             <value xsi:nil="true"/>
             <info>
@@ -6091,7 +6091,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateInfo" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / Template -->
             <info>
               <desc xml:lang="en-US">Text for the description field in the properties dialog</desc>
@@ -6100,7 +6100,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoDocName" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -6110,7 +6110,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPrefix" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -6120,7 +6120,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPath" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -6134,13 +6134,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Template">
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page1-->
           </node-ref>
           <group oor:name="Title">
             <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 1 -->
               <info>
                 <desc xml:lang="en-US">Title of the memo</desc>
@@ -6153,7 +6153,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <prop oor:name="IsGraphic" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 1 -->
               <value xsi:nil="true"/>
               <info>
@@ -6163,7 +6163,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </prop>
             <node-ref oor:name="File" oor:node-type="FileType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page1-->
               <info>
                 <desc xml:lang="en-US">File name and filter name, if the title is a graphic</desc>
@@ -6174,7 +6174,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Elements">
           <prop oor:name="To" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 2 -->
             <value xsi:nil="true"/>
             <info>
@@ -6184,7 +6184,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Copy" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 2 -->
             <value xsi:nil="true"/>
             <info>
@@ -6194,7 +6194,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="From" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 2 -->
             <value xsi:nil="true"/>
             <info>
@@ -6205,7 +6205,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element1">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 2 / Which elements should the Memo contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 1 in the text</desc>
@@ -6216,7 +6216,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element2">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 2 / Which elements should the Memo contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 2 in the text</desc>
@@ -6227,7 +6227,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element3">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 2 / Which elements should the Memo contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 3 in the text</desc>
@@ -6238,7 +6238,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Element4">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 2 / Which elements should the Memo contain? -->
               <info>
                 <desc xml:lang="en-US">To include the standard element 4 in the text</desc>
@@ -6249,7 +6249,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Date">
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 2 / Date -->
               <info>
                 <desc xml:lang="en-US">To insert a date as a field function</desc>
@@ -6260,7 +6260,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <group oor:name="Subject">
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
-              <!-- Responsible: JP -->
+              <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 2 / Subject line -->
               <info>
                 <desc xml:lang="en-US">To insert a subject line</desc>
@@ -6272,7 +6272,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Header">
           <prop oor:name="Date" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6282,7 +6282,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Title" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6292,7 +6292,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="PageNumber" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6302,7 +6302,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Separator" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6314,7 +6314,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Footer">
           <prop oor:name="Date" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6324,7 +6324,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="PageNumber" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6334,7 +6334,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="Separator" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <value xsi:nil="true"/>
             <info>
@@ -6344,7 +6344,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <node-ref oor:name="ConfidentialLevel" oor:node-type="TextElementType">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 3 -->
             <info>
               <desc xml:lang="en-US">Confidential visible in the footer</desc>
@@ -6355,7 +6355,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="Save">
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / Info -->
             <value xsi:nil="true"/>
             <info>
@@ -6383,7 +6383,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / Info -->
             <info>
               <desc xml:lang="en-US">Subject for the properties</desc>
@@ -6410,7 +6410,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / Template -->
             <value xsi:nil="true"/>
             <info>
@@ -6420,7 +6420,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="TemplateInfo" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / Template -->
             <info>
               <desc xml:lang="en-US">Text for the description field in the properties dialog</desc>
@@ -6429,7 +6429,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPrefix" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -6439,7 +6439,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoDocName" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / File name -->
             <value xsi:nil="true"/>
             <info>
@@ -6449,7 +6449,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
           <prop oor:name="AutoPath" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 5 / Destination -->
             <value xsi:nil="true"/>
             <info>
@@ -6466,7 +6466,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="Load" oor:type="xs:boolean">
             <!-- OldPath: Filter/MS_Office/Basic/Word -->
             <!-- OldLocation: soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
             <value>true</value>
             <info>
@@ -6477,7 +6477,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <prop oor:name="Save" oor:type="xs:boolean">
             <!-- OldPath: Filter/MS_Office/Basic/Word -->
             <!-- OldLocation: soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
             <value>true</value>
             <info>
@@ -6492,7 +6492,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="Graphic">
         <prop oor:name="KeepRatio" oor:type="xs:boolean">
           <!--OldLocation: Soffice.cfg -->
-          <!--Responsible: OS-->
+          <!--Responsible: OS -->
           <!--UIHints: Numbering/Bullets dialog - Customize - Graphics - Keep Ratio-->
           <value>false</value>
           <info>
@@ -6505,7 +6505,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="WordNumber">
         <prop oor:name="Delimiter" oor:type="xs:string">
           <!--OldLocation: Soffice.cfg -->
-          <!--Responsible: OS-->
+          <!--Responsible: OS -->
           <!--UIHints: File - Properties - Statistics - Word number - Separator-->
           <value>() \t\n\xff</value>
           <info>
@@ -6517,7 +6517,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
     <group oor:name="Index">
       <prop oor:name="ShowPreview" oor:type="xs:boolean">
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP / OS-->
+        <!-- Responsible: OS -->
         <!--UIHints: Insert - Indexes - Show preview -->
         <value>true</value>
         <info>
@@ -6530,7 +6530,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="PrintOutput">
         <prop oor:name="SinglePrintJobs" oor:type="xs:boolean">
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP / OS-->
+          <!-- Responsible: OS -->
           <!-- UIHints: Form letter - Printer output - Single print jobs-->
           <value>false</value>
           <info>
@@ -6541,7 +6541,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="MailingOutput">
         <prop oor:name="Format" oor:type="xs:int">
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP/ OS -->
+          <!-- Responsible: OS -->
           <!--UIHints: Form letter - Mailing output - Mail format-->
           <info>
             <desc xml:lang="en-US">Specifies the mail format.</desc>
@@ -6573,7 +6573,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       <group oor:name="FileOutput">
         <prop oor:name="Path" oor:type="xs:string">
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP/ OS -->
+          <!-- Responsible: OS -->
           <!--UIHints: Form letter - File output - Path-->
           <info>
             <desc xml:lang="en-US">Specifies the path for the form letter file.</desc>
@@ -6582,7 +6582,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <group oor:name="FileName">
           <!-- OldLocation: Soffice.cfg -->
           <!-- OldPath: Writer/Insert/Tables -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
           <prop oor:name="Generation" oor:type="xs:boolean">
             <!--UI hints: Form letter - File output - Generate file name from - Database field / Manual setting-->
@@ -6609,7 +6609,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
     <group oor:name="Misc">
       <prop oor:name="GraphicToGalleryAsLink" oor:type="xs:boolean">
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP / OS-->
+        <!-- Responsible: OS -->
         <!--UIHints: context menu of readonly loaded documents-->
         <value>true</value>
         <info>
