@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace DOM
     class CNotation : public cppu::ImplInheritanceHelper1< CNode, XNotation >
     {
         friend class CNode;
-    private:    
+    private:
         xmlNotationPtr m_aNotationPtr;
 
     protected:
@@ -99,7 +99,7 @@ namespace DOM
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);        
+            throw (RuntimeException);
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
         throw (DOMException)
