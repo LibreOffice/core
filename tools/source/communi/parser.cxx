@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2001-12-14 16:31:37 $
+ *  last change: $Author: gh $ $Date: 2002-01-09 17:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,20 +109,25 @@ ByteString &InformationParser::ReadLine()
     else {
          if ( !pActStream->IsEof()) {
             pActStream->ReadLine( sLine );
-            ULONG nLen;
-            do {
-                nLen = sLine.Len();
-                sLine.EraseLeadingChars( 0x09 );
-                sLine.EraseLeadingChars( ' ' );
-            } while ( nLen != sLine.Len());
+            ULONG nStart = 0;
+            ULONG nEnd = sLine.Len()-1;
+            BOOL bCopy = FALSE;
+            while ( nStart <= nEnd && ( sLine.GetChar( nStart ) == ' ' || sLine.GetChar( nStart ) == 0x09 ) )
+            {
+                nStart++;
+                bCopy = TRUE;
+            }
 
-            do {
-                nLen = sLine.Len();
-                sLine.EraseTrailingChars( 0x09 );
-                sLine.EraseTrailingChars( ' ' );
-            } while ( nLen != sLine.Len());
+            while ( nStart <= nEnd && ( sLine.GetChar( nEnd ) == ' ' || sLine.GetChar( nEnd ) == 0x09 ) )
+            {
+                nEnd--;
+                bCopy = TRUE;
+            }
 
-            if (( sLine.Search( "#" ) == 0 ) || ( !sLine.Len())) {
+            if ( bCopy )
+                sLine = sLine.Copy( nStart, nEnd - nStart +1 );
+
+            if (( sLine.GetChar( 0 ) == '#' ) || ( !sLine.Len())) {
                 if ( sCurrentComment.Len())
                     sCurrentComment += "\n";
                 sCurrentComment += sLine;
@@ -130,8 +135,8 @@ ByteString &InformationParser::ReadLine()
             }
             else {
                 if ( bReplaceVariables ) {
-                    while( sLine.SearchAndReplace( "%UPD", sUPD ) != (USHORT)-1 );
-                    while( sLine.SearchAndReplace( "%VERSION", sVersion ) != (USHORT)-1 );
+                    sLine.SearchAndReplaceAll( "%UPD", sUPD );
+                    sLine.SearchAndReplaceAll( "%VERSION", sVersion );
                 }
             }
         }
