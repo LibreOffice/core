@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 15:26:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,12 +369,16 @@ SlideshowImpl::SlideshowImpl(
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
     mnLastPageNumber(-1),
-    mbIsPaused(false)
+    mbIsPaused(false),
+    mbInputFreeze(false)
 {
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
 
     maUpdateTimer.SetTimeoutHdl(LINK(this, SlideshowImpl, updateHdl));
+
+    maInputFreezeTimer.SetTimeoutHdl( LINK( this, SlideshowImpl, ReadyForNextInputHdl ) );
+    maInputFreezeTimer.SetTimeout( 20 );
 }
 
 SlideshowImpl::~SlideshowImpl()
@@ -433,21 +437,27 @@ bool SlideshowImpl::startPreview(
         xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nPageNumber;
         mpAnimationPageList->insertPageNumber( nPageNumber-1 );
 
-        if( (pParent == 0) && mpView )
-            pParent = dynamic_cast< ::Window* >( mpView->GetWin( 0 ) );
+        if( (pParent == 0) && mpViewShell )
+        {
+//          pParent = dynamic_cast< ::Window* >( mpView->GetWin( 0 ) );
+            pParent = mpViewShell->GetParentWindow();
+        }
 
         mpShowWindow = new ShowWindow( pParent );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
             mpShowWindow->SetViewShell (mpViewShell);
+            mpViewShell->ShowUIControls (false);
         }
 
         if( mpView )
             mpView->AddWin( mpShowWindow );
 
         // call resize handler
-        maPresSize = pParent->GetSizePixel();
+        const Rectangle& aContentRect = mpViewShell->GetViewShellBase().getClientRectangle();
+        maPresSize = aContentRect.GetSize();
+        mpShowWindow->SetPosPixel( aContentRect.TopLeft() );
         resize( maPresSize );
 
         sal_Int32 nPropertyCount = 1;
@@ -617,9 +627,9 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         maPresSize = pParent->GetSizePixel();
         if( !maPresSettings.mbFullScreen )
         {
-            // dirty hack, why do we have a window size that is 4 pixel to big?
-            maPresSize.Width() -= 4;
-            maPresSize.Height() -= 4;
+            const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
+            maPresSize = aClientRect.GetSize();
+            mpShowWindow->SetPosPixel( aClientRect.TopLeft() );
         }
 
         resize( maPresSize );
@@ -859,8 +869,17 @@ void SlideshowImpl::stopShow()
     }
 
     // aktuelle Fenster wieder einblenden
-    if( mpViewShell && ( meAnimationMode == ANIMATIONMODE_SHOW ) && !mpViewShell->ISA(PresentationViewShell))
-        mpViewShell->GetViewShellBase().ShowUIControls (true);
+    if( mpViewShell && !mpViewShell->ISA(PresentationViewShell))
+    {
+        if( meAnimationMode == ANIMATIONMODE_SHOW )
+        {
+            mpViewShell->GetViewShellBase().ShowUIControls (true);
+        }
+        else if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+        {
+            mpViewShell->ShowUIControls (true);
+        }
+    }
 
     if( mpTimeButton )
     {
@@ -906,7 +925,7 @@ void SlideshowImpl::stopShow()
             getViewFrame()->GetDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
 
-        mpViewShell->GetViewShellBase().UpdateBorder();
+        mpViewShell->GetViewShellBase().UpdateBorder(true);
     }
 }
 
@@ -942,6 +961,15 @@ void SlideshowImpl::slideChange()
     {
         (void)e;
         DBG_ERROR("sd::SlideshowImpl::slideChange(), exception caught!" );
+    }
+
+    // if this is a show, ignore user inputs and
+    // start 20ms timer to reenable inputs to fiter
+    // buffered inputs during slide transition
+    if( meAnimationMode == ANIMATIONMODE_SHOW )
+    {
+        mbInputFreeze = true;
+        maInputFreezeTimer.Start();
     }
 
     if( mpAnimationPageList.get() )
@@ -1158,15 +1186,15 @@ void SlideshowImpl::gotoNextSlide()
 
 void SlideshowImpl::gotoFirstSlide()
 {
-        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
-        {
-            if( mpAnimationPageList->getPageIndexCount() )
-                mpShowWindow->RestartShow( 0);
-        }
-        else
-        {
-            gotoSlideIndex( 0 );
-        }
+    if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
+    {
+        if( mpAnimationPageList->getPageIndexCount() )
+            mpShowWindow->RestartShow( 0);
+    }
+    else
+    {
+        gotoSlideIndex( 0 );
+    }
 }
 
 void SlideshowImpl::gotoLastSlide()
@@ -1518,6 +1546,16 @@ double SlideshowImpl::update()
     return fUpdate;
 }
 
+/** this timer is called 20ms after a new slide was displayed.
+    This is used to unfreeze user input that was disabled after
+    slide change to skip input that was buffered during slide
+    transition preperation */
+IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
+{
+    mbInputFreeze = false;
+    return 0;
+}
+
 /** if I catch someone someday who calls this method by hand
     and not by using the timer, I will personaly punish this
     person seriously, even if this person is me.
@@ -1556,7 +1594,7 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 
 bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
 {
-    if( !mxShow.is() )
+    if( !mxShow.is() || mbInputFreeze )
         return false;
 
     bool bRet = true;
