@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:15:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,8 +383,15 @@ Reference< XDataSource> getDataSource(
         _rxFactory->createInstance(
             ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext")),UNO_QUERY);
 
-    if (xDatabaseContext.is() && xDatabaseContext->hasByName(_rsTitleOrPath))
-        xDatabaseContext->getByName(_rsTitleOrPath) >>= xDatasource;
+    if ( xDatabaseContext.is() )
+    {
+        try
+        {
+            xDatabaseContext->getByName(_rsTitleOrPath) >>= xDatasource;
+        }
+        catch(Exception)
+        {} // no assertion needed
+    }
 
     return xDatasource;
 }
@@ -509,7 +516,7 @@ Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, cons
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
     {
-        Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) );
+        Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) );
         aConn >>= xReturn;
 
         if (!xReturn.is())
@@ -857,11 +864,15 @@ SQLContext prependContextInfo(const SQLException& _rException, const Reference< 
     return aContextDescription;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName,EComposeRule _eComposeRule)
+::rtl::OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta
+                               , const ::rtl::OUString& _rName
+                               , EComposeRule _eComposeRule
+                               , sal_Bool _bUseCatalogInSelect
+                               , sal_Bool _bUseSchemaInSelect)
 {
     ::rtl::OUString sCatalog,sSchema,sTable,sQuotedName;
     qualifiedNameComponents(_rxMeta,_rName,sCatalog,sSchema,sTable,_eComposeRule);
-    composeTableName(_rxMeta,sCatalog,sSchema,sTable,sQuotedName,sal_True,_eComposeRule);
+    composeTableName(_rxMeta,sCatalog,sSchema,sTable,sQuotedName,sal_True,_eComposeRule,_bUseCatalogInSelect,_bUseSchemaInSelect);
 
     return sQuotedName;
 }
@@ -1217,8 +1228,18 @@ sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::DELETE) != 0));
 }
-
-
+// -----------------------------------------------------------------------------
+Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
+{
+    Reference< XDataSource> xDataSource(_xParent, UNO_QUERY);
+    if (!xDataSource.is())
+    {
+        Reference< XChild> xChild(_xParent, UNO_QUERY);
+        if ( xChild.is() )
+            xDataSource = findDataSource(xChild->getParent());
+    }
+    return xDataSource;
+}
 //------------------------------------------------------------------------------
 ::rtl::OUString getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
                                    sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder, Reference< XSQLQueryComposer >* _pxComposer )
@@ -1271,8 +1292,10 @@ sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
                         if ( !sCommand.getLength() )
                             break;
 
-                        sStatement = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                        sStatement += quoteTableName( xConn->getMetaData(), sCommand, eInDataManipulation );
+                        sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                        sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConn,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                        sStatement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
+                        sStatement += quoteTableName(xConn->getMetaData(), sCommand,eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
                     }
                     break;
 
@@ -1468,7 +1491,9 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
                         const ::rtl::OUString& _rName,
                         ::rtl::OUString& _rComposedName,
                         sal_Bool _bQuote,
-                        EComposeRule _eComposeRule)
+                        EComposeRule _eComposeRule
+                        , sal_Bool _bUseCatalogInSelect
+                        , sal_Bool _bUseSchemaInSelect)
 {
     OSL_ENSURE(_rxMetaData.is(), "composeTableName : invalid meta data !");
     OSL_ENSURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
@@ -1507,7 +1532,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
     _rComposedName = sEmpty;
     ::rtl::OUString sCatalogSep;
     sal_Bool bCatlogAtStart = sal_True;
-    if ( _rCatalog.getLength() && aCatalogCall(&aWrapper) )
+    if ( _bUseCatalogInSelect && _rCatalog.getLength() && aCatalogCall(&aWrapper) )
     {
         sCatalogSep     = _rxMetaData->getCatalogSeparator();
         bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
@@ -1519,7 +1544,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
         }
     }
 
-    if ( _rSchema.getLength() && aSchemaCall(&aWrapper) )
+    if ( _bUseSchemaInSelect && _rSchema.getLength() && aSchemaCall(&aWrapper) )
     {
         QUOTE(_rComposedName,_rSchema);
         _rComposedName += sSeparator;
@@ -1527,7 +1552,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 
     QUOTE(_rComposedName,_rName);
 
-    if ( _rCatalog.getLength() && !bCatlogAtStart && sCatalogSep.getLength() && aCatalogCall(&aWrapper) )
+    if ( _bUseCatalogInSelect && _rCatalog.getLength() && !bCatlogAtStart && sCatalogSep.getLength() && aCatalogCall(&aWrapper) )
     {
         _rComposedName += sCatalogSep;
         QUOTE(_rComposedName,_rCatalog);
@@ -1560,10 +1585,14 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     if ( _bStartWithNumber )
         sName += ::rtl::OUString::valueOf(nPos);
 
-    while(_rxContainer->hasByName(sName))
+    OSL_ENSURE( _rxContainer.is() ,"No valid container!");
+    if ( _rxContainer.is() )
     {
-        sName = _rBaseName;
-        sName += ::rtl::OUString::valueOf(++nPos);
+        while(_rxContainer->hasByName(sName))
+        {
+            sName = _rBaseName;
+            sName += ::rtl::OUString::valueOf(++nPos);
+        }
     }
     return sName;
 }
