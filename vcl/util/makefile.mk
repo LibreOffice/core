@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: pl $ $Date: 2001-08-27 09:42:36 $
+#   last change: $Author: hjs $ $Date: 2001-08-27 15:28:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=VCL
+PRJNAME=vcl
 TARGET=vcl
 VERSION=$(UPD)
 
