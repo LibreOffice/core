@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refltype.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/14 09:37:08  jsc
+    remove vos dependencies
+
     Revision 1.3  2000/10/09 14:48:24  hr
     #65293#: syntax
 
@@ -163,6 +166,7 @@ enum RTTypeClass
     RT_TYPE_EXCEPTION,
     RT_TYPE_TYPEDEF,
     RT_TYPE_SERVICE,
+    RT_TYPE_SINGLETON,
     RT_TYPE_OBJECT,
     RT_TYPE_CONSTANTS,
     RT_TYPE_UNION
