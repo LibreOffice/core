@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:14:02 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,10 +549,6 @@ DdeService::~DdeService()
     // Bei Client/Server werden die Server nicht beendet, wenn mehr
     // als einer gestartet.
     // Weil keine System-Messagequeue ?!
-
-#ifndef VCL
-    DdeNameService( pInst->hDdeInstSvr, *pName, NULL, DNS_UNREGISTER );
-#endif
 
     delete pSysTopic;
     delete pName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,7 @@
 #endif
 
 #ifndef _SV_SVAPP_HXX
-#ifdef VCL
 #include <vcl/svapp.hxx>
-#else
-#include <vcl/svapp.hxx>
-#endif
 #endif
 #ifndef _POLY_HXX
 #include <vcl/poly.hxx>

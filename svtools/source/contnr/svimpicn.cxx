@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2448,10 +2448,6 @@ Rectangle SvImpIconView::CalcTextRect( SvLBoxEntry* pEntry,
 
                 // beim Inplace-Ed. darfs auch untere Eintraege ueberlappen
                 Rectangle aMaxGridTextRect = CalcMaxTextRect(pEntry, pViewData);
-#ifndef VCL
-                aMaxGridTextRect.Bottom() = LONG_MAX - 1;
-                aMaxGridTextRect = GetTextRect( pView, aMaxGridTextRect,pItem->GetText(), DRAWTEXT_FLAGS );
-#endif
                 Size aOptSize = aMaxGridTextRect.GetSize();
                 if( aOptSize.Height() > aTextSize.Height() )
                     aTextSize.Height() = aOptSize.Height();

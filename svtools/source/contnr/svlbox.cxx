@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-17 12:53:34 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,15 +277,7 @@ void MyEdit_Impl::LoseFocus()
 
 MyMultiEdit_Impl::MyMultiEdit_Impl( Window* pParent, SvInplaceEdit2* _pOwner )
     : MultiLineEdit( pParent,
-#if !defined(VCL)
-#if defined(WIN) || defined(WNT)
     WB_CENTER
-#else
-    WB_LEFT
-#endif
-#else
-    WB_CENTER
-#endif
     ), pOwner(_pOwner)
 {
 }
@@ -425,9 +417,7 @@ void SvInplaceEdit2::LoseFocus()
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     if ( !bAlreadyInCallBack
-#ifdef VCL
     && ((!Application::GetFocusWindow()) || !pEdit->IsChild( Application::GetFocusWindow()) )
-#endif
     )
     {
         bCanceled = FALSE;

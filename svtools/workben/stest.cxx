@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,7 @@
  *
  *
  ************************************************************************/
-#ifdef VCL
 #include <svmedit.hxx>
-#endif
 
 #ifndef _TXTCMP_HXX //autogen
 #include <txtcmp.hxx>
@@ -85,11 +83,7 @@
 class MyApp : public Application
 {
 public:
-#ifndef VCL
-    virtual void Main( int, char*[] );
-#else
     virtual void Main( );
-#endif
 };
 
 class SearchWindow : public WorkWindow
@@ -221,11 +215,7 @@ IMPL_LINK( SearchWindow, ClickHdl, Button *, pButton )
 
 // --- MyApp::Main() -----------------------------------------------
 
-#ifndef VCL
-void MyApp::Main( int, char*[] )
-#else
 void MyApp::Main( )
-#endif
 {
     SearchWindow*   pSearchWindow = new SearchWindow;
     pSearchWindow->Show();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 09:33:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,10 +1095,6 @@ void SvTreeListBox::SetFont( const Font& rFont )
     DBG_CHKTHIS(SvTreeListBox,0);
     Font aTempFont( rFont );
     aTempFont.SetTransparent( TRUE );
-#ifndef VCL
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    aTempFont.SetColor( rStyleSettings.GetFieldTextColor() );
-#endif
     Control::SetFont( aTempFont );
     AdjustEntryHeight( aTempFont );
     // immer Invalidieren, sonst fallen wir

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
-//#undef VCL
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -237,11 +235,7 @@ public:
 class App: public Application
 {
 protected:
-#ifdef VCL
     void            Main();
-#else
-    void            Main( int, char *[] );
-#endif
 
 public:
                     App();
@@ -866,11 +860,7 @@ App::~App()
 
 //------------------------------------------------------------------
 
-#ifdef VCL
 void App::Main( )
-#else
-void App::Main( int, char *[] )
-#endif
 {
     EnableSVLook();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddeml2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,8 @@
 #define DDEDATAFILE
 #include "ddemldeb.hxx"
 
-#ifdef VCL
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx> // fuer IsRemoteServer
-#endif
 #endif
 
 
@@ -858,10 +856,8 @@ BOOL ImpDdeMgr::OwnsConversationHandles()
 USHORT DdeInitialize(ULONG* pidInst, PFNCALLBACK pfnCallback,
     ULONG afCmd, ULONG ulRes)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return DMLERR_UNFOUND_QUEUE_ID;
-#endif
     if( (*pidInst)!=0 )
     {
         // Reinitialize wird noch nicht unterstuetzt
@@ -876,10 +872,8 @@ USHORT DdeInitialize(ULONG* pidInst, PFNCALLBACK pfnCallback,
 
 BOOL DdeUninitialize(ULONG idInst)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return TRUE;
-#endif
     if( !idInst )
         return FALSE;
     ImpDdeMgr* pMgr = (ImpDdeMgr*)idInst;
@@ -898,10 +892,8 @@ BOOL DdeUninitialize(ULONG idInst)
 HCONVLIST DdeConnectList(ULONG idInst, HSZ hszService, HSZ hszTopic,
     HCONVLIST hConvList, CONVCONTEXT* pCC)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeConnectList(hszService,hszTopic,
@@ -910,29 +902,23 @@ HCONVLIST DdeConnectList(ULONG idInst, HSZ hszService, HSZ hszTopic,
 
 HCONV DdeQueryNextServer(HCONVLIST hConvList, HCONV hConvPrev)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     return ImpDdeMgr::DdeQueryNextServer( hConvList, hConvPrev );
 }
 
 BOOL DdeDisconnectList(HCONVLIST hConvList)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     return ImpDdeMgr::DdeDisconnectList( hConvList );
 }
 
 HCONV DdeConnect(ULONG idInst, HSZ hszService, HSZ hszTopic,
     CONVCONTEXT* pCC)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeConnect( hszService, hszTopic, pCC );
@@ -940,47 +926,37 @@ HCONV DdeConnect(ULONG idInst, HSZ hszService, HSZ hszTopic,
 
 BOOL DdeDisconnect(HCONV hConv)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     return ImpDdeMgr::DdeDisconnect( hConv );
 }
 
 HCONV DdeReconnect(HCONV hConv)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     return ImpDdeMgr::DdeReconnect( hConv );
 }
 
 
 USHORT DdeQueryConvInfo(HCONV hConv, ULONG idTransact, CONVINFO* pCI )
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return DMLERR_DLL_NOT_INITIALIZED;
-#endif
     return ImpDdeMgr::DdeQueryConvInfo( hConv, idTransact, pCI );
 }
 
 BOOL DdeSetUserHandle(HCONV hConv, ULONG id, ULONG hUser)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return DMLERR_DLL_NOT_INITIALIZED;
-#endif
     return ImpDdeMgr::DdeSetUserHandle( hConv, id, hUser );
 }
 
 BOOL DdeAbandonTransaction(ULONG idInst, HCONV hConv, ULONG idTransaction)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     if( !idInst )
         return FALSE;
     return ((ImpDdeMgr*)idInst)->DdeAbandonTransaction(hConv,idTransaction);
@@ -988,10 +964,8 @@ BOOL DdeAbandonTransaction(ULONG idInst, HCONV hConv, ULONG idTransaction)
 
 BOOL DdePostAdvise(ULONG idInst, HSZ hszTopic, HSZ hszItem)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     if( !idInst )
         return FALSE;
     return ((ImpDdeMgr*)idInst)->DdePostAdvise( hszTopic, hszItem );
@@ -999,10 +973,8 @@ BOOL DdePostAdvise(ULONG idInst, HSZ hszTopic, HSZ hszItem)
 
 BOOL DdeEnableCallback(ULONG idInst, HCONV hConv, USHORT wCmd)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     if( !idInst )
         return FALSE;
     return ((ImpDdeMgr*)idInst)->DdeEnableCallback( hConv, wCmd );
@@ -1012,10 +984,8 @@ HDDEDATA DdeClientTransaction(void* pData, ULONG cbData,
         HCONV hConv, HSZ hszItem, USHORT wFmt, USHORT wType,
         ULONG dwTimeout, ULONG* pdwResult)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     return ImpDdeMgr::DdeClientTransaction( pData, cbData,
         hConv, hszItem, wFmt, wType, dwTimeout, pdwResult );
 }
@@ -1023,10 +993,8 @@ HDDEDATA DdeClientTransaction(void* pData, ULONG cbData,
 HDDEDATA DdeCreateDataHandle(ULONG idInst, void* pSrc, ULONG cb,
     ULONG cbOff, HSZ hszItem, USHORT wFmt, USHORT afCmd)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeCreateDataHandle( pSrc, cb,
@@ -1035,55 +1003,43 @@ HDDEDATA DdeCreateDataHandle(ULONG idInst, void* pSrc, ULONG cb,
 
 HDDEDATA DdeAddData(HDDEDATA hData, void* pSrc, ULONG cb, ULONG cbOff)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     return ImpDdeMgr::DdeAddData( hData, pSrc, cb, cbOff );
 }
 
 ULONG DdeGetData(HDDEDATA hData, void* pDst, ULONG cbMax, ULONG cbOff)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     return ImpDdeMgr::DdeGetData( hData, pDst, cbMax, cbOff );
 }
 
 BYTE* DdeAccessData(HDDEDATA hData, ULONG* pcbDataSize)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     return ImpDdeMgr::DdeAccessData( hData, pcbDataSize );
 }
 
 BOOL DdeUnaccessData(HDDEDATA hData)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     return ImpDdeMgr::DdeUnaccessData( hData );
 }
 
 BOOL DdeFreeDataHandle(HDDEDATA hData)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     return ImpDdeMgr::DdeFreeDataHandle( hData );
 }
 
 USHORT DdeGetLastError(ULONG idInst)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return DMLERR_DLL_NOT_INITIALIZED;
-#endif
     if( !idInst )
         return DMLERR_DLL_NOT_INITIALIZED;
     return ((ImpDdeMgr*)idInst)->DdeGetLastError();
@@ -1091,10 +1047,8 @@ USHORT DdeGetLastError(ULONG idInst)
 
 HSZ DdeCreateStringHandle(ULONG idInst, PSZ pszString,int iCodePage )
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeCreateStringHandle(pszString,iCodePage);
@@ -1103,10 +1057,8 @@ HSZ DdeCreateStringHandle(ULONG idInst, PSZ pszString,int iCodePage )
 ULONG DdeQueryString( ULONG idInst, HSZ hsz, PSZ pBuf,
     ULONG cchMax, int iCodePage )
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeQueryString( hsz,pBuf,cchMax,iCodePage);
@@ -1114,10 +1066,8 @@ ULONG DdeQueryString( ULONG idInst, HSZ hsz, PSZ pBuf,
 
 BOOL DdeFreeStringHandle( ULONG idInst, HSZ hsz)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     if( !idInst )
         return FALSE;
     return ((ImpDdeMgr*)idInst)->DdeFreeStringHandle( hsz );
@@ -1125,10 +1075,8 @@ BOOL DdeFreeStringHandle( ULONG idInst, HSZ hsz)
 
 BOOL DdeKeepStringHandle( ULONG idInst, HSZ hsz )
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return FALSE;
-#endif
     if( !idInst )
         return FALSE;
     return ((ImpDdeMgr*)idInst)->DdeKeepStringHandle( hsz );
@@ -1136,19 +1084,15 @@ BOOL DdeKeepStringHandle( ULONG idInst, HSZ hsz )
 
 int DdeCmpStringHandles(HSZ hsz1, HSZ hsz2)
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return -1;
-#endif
     return ImpDdeMgr::DdeCmpStringHandles( hsz1, hsz2 );
 }
 
 HDDEDATA DdeNameService( ULONG idInst, HSZ hsz1, HSZ hszRes, USHORT afCmd )
 {
-#ifdef VCL
     if( Application::IsRemoteServer() )
         return 0;
-#endif
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeNameService( hsz1, afCmd );

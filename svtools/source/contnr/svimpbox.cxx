@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-13 13:39:39 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2993,12 +2993,6 @@ void SvImpLBox::EndSelection()
 
 void SvImpLBox::RepaintScrollBars()
 {
-#ifndef VCL
-    aHorSBar.Invalidate();
-    aHorSBar.Update();
-    aVerSBar.Invalidate();
-    aVerSBar.Update();
-#endif
 }
 
 void SvImpLBox::SetUpdateMode( BOOL bMode )

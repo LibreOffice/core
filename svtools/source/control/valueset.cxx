@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-17 10:26:14 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,10 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifdef VCL
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#endif
 #ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
