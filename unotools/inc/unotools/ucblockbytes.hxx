@@ -17,6 +17,7 @@
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
 #include <tools/errcode.hxx>
+#include <tools/datetime.hxx>
 
 namespace utl
 {
@@ -59,21 +60,25 @@ SV_DECL_REF( UcbLockBytes );
 class CommandThread_Impl;
 class UcbLockBytes : public virtual SvLockBytes
 {
+    UCB_Link_HelperRef      m_aLinkList;
     vos::OCondition         m_aInitialized;
     vos::OCondition         m_aTerminated;
     vos::OMutex             m_aMutex;
+
+    String                  m_aContentType;
+    String                  m_aRealURL;
+    DateTime                m_aExpireDate;
+
     NS_UNO::Reference < NS_IO::XInputStream > m_xInputStream;
     CommandThread_Impl*     m_pCommandThread;
 
-    sal_Bool                m_bTerminated;
-    sal_Bool                m_bDontClose;
-
     sal_uInt32              m_nRead;
     sal_uInt32              m_nSize;
-
     ErrCode                 m_nError;
 
-    UCB_Link_HelperRef      m_aLinkList;
+    sal_Bool                m_bTerminated : 1;
+    sal_Bool                m_bDontClose : 1;
+    sal_Bool                m_bStreamValid : 1;
 
     DECL_LINK(              DataAvailHdl, void * );
 
@@ -85,16 +90,7 @@ public:
     static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, UCB_Link_HelperRef xLinkList );
     static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent, UCB_Link_HelperRef xLinkList );
 
-                            UcbLockBytes( UCB_Link_HelperRef xLink )
-                                : m_xInputStream (NULL)
-                                , m_pCommandThread( NULL )
-                                , m_bTerminated  (sal_False)
-                                , m_bDontClose( sal_False )
-                                , m_nRead (0)
-                                , m_nSize (0)
-                                , m_aLinkList( xLink )
-                                , m_nError( ERRCODE_NONE )
-                            {}
+                            UcbLockBytes( UCB_Link_HelperRef xLink );
 
     // SvLockBytes
     virtual void            SetSynchronMode (BOOL bSynchron);
@@ -111,6 +107,11 @@ public:
                             { return m_nError; }
 
     void                    Cancel();
+
+    // the following properties are available when and after the first DataAvailable callback has been executed
+    String                  GetContentType() const;
+    String                  GetRealURL() const;
+    DateTime                GetExpireDate() const;
 
 #if __PRIVATE
     sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream );
@@ -133,12 +134,17 @@ public:
 
     void                    setDontClose_Impl()
                             { m_bDontClose = sal_True; }
-#endif
-};
 
+    void                    SetContentType_Impl( const String& rType ) { m_aContentType = rType; }
+    void                    SetRealURL_Impl( const String& rURL )  { m_aRealURL = rURL; }
+    void                    SetExpireDate_Impl( const DateTime& rDateTime )  { m_aExpireDate = rDateTime; }
+    void                    SetStreamValid_Impl();
+#endif
 };
 
 //----------------------------------------------------------------------------
 SV_IMPL_REF( UcbLockBytes );
+
+};
 
 #endif

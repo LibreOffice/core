@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 16:04:32 $
+ *  last change: $Author: mba $ $Date: 2000-10-16 14:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include "unotools/ucblockbytes.hxx"
 
+#ifndef _COM_SUN_STAR_UCB_DOCUMENTHEADERFIELD_HPP_
+#include <com/sun/star/ucb/DocumentHeaderField.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #endif
@@ -85,6 +88,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGENOTIFIER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -106,6 +112,9 @@
 #ifndef  _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
+#ifndef _TOOLS_INETMSG_HXX
+#include <tools/inetmsg.hxx>
+#endif
 
 #include <ucbhelper/content.hxx>
 
@@ -115,6 +124,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 
 namespace utl
 {
@@ -191,37 +201,107 @@ public:
     { return m_xProgressHandler; }
 };
 
+
+class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper1< XPropertiesChangeListener >
+{
+public:
+    UcbLockBytesRef         m_xLockBytes;
+
+                            UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef );
+                            ~UcbPropertiesChangeListener_Impl();
+
+    virtual void SAL_CALL   disposing ( const EventObject &rEvent) throw(RuntimeException);
+    virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException);
+};
+
+UcbPropertiesChangeListener_Impl::UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef )
+    : m_xLockBytes( rRef )
+{
+}
+
+UcbPropertiesChangeListener_Impl::~UcbPropertiesChangeListener_Impl()
+{
+}
+
+void SAL_CALL UcbPropertiesChangeListener_Impl::disposing ( const EventObject &rEvent) throw(RuntimeException)
+{
+}
+
+void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException)
+{
+    sal_Int32 i, n = rEvent.getLength();
+    for (i = 0; i < n; i++)
+    {
+        PropertyChangeEvent evt (rEvent[i]);
+        if (evt.PropertyName == ::rtl::OUString::createFromAscii ("DocumentHeader"))
+        {
+            Sequence<DocumentHeaderField> aHead;
+            if (evt.NewValue >>= aHead)
+            {
+                sal_Int32 k, m = aHead.getLength();
+                for (k = 0; k < m; k++)
+                {
+                    String aName( aHead[k].Name );
+                    String aValue( aHead[k].Value );
+
+                    if (aName.CompareIgnoreCaseToAscii("Expires") == COMPARE_EQUAL)
+                    {
+                        DateTime aExpires (0, 0);
+                        if (INetRFC822Message::ParseDateField (aValue, aExpires))
+                        {
+                            aExpires.ConvertToLocalTime();
+                            m_xLockBytes->SetExpireDate_Impl( aExpires );
+                        }
+                    }
+                }
+            }
+
+            m_xLockBytes->SetStreamValid_Impl();
+        }
+        else if (evt.PropertyName == rtl::OUString::createFromAscii ("PresentationURL"))
+        {
+            ::rtl::OUString aUrl;
+            if (evt.NewValue >>= aUrl)
+            {
+                ::rtl::OUString aBad (::rtl::OUString::createFromAscii ("private:"));
+                if (!(aUrl.compareTo (aBad, aBad.getLength()) == 0))
+                {
+                    // URL changed (Redirection).
+                    m_xLockBytes->SetRealURL_Impl( aUrl );
+                }
+            }
+        }
+        else if (evt.PropertyName == ::rtl::OUString::createFromAscii ("MediaType"))
+        {
+            ::rtl::OUString aContentType;
+            if (evt.NewValue >>= aContentType)
+                m_xLockBytes->SetContentType_Impl( aContentType );
+        }
+    }
+}
+
 class CommandThread_Impl : public ::vos::OThread
 {
-    Reference< XContent >               m_xContent;
-    Reference< XInteractionHandler >    m_xInteract;
-    Reference< XProgressHandler >       m_xProgress;
-    ::ucb::Content*         m_pContent;
-
-    OpenCommandArgument2    m_aArgument;
-    UcbLockBytesRef         m_xLockBytes;
-    UCB_Link_HelperRef      m_xLink;
-    sal_Bool                m_bCanceled : 1;
-    sal_Bool                m_bRunning  : 1;
-    sal_Bool                m_bSimple   : 1;
-
 public:
-                    CommandThread_Impl( Reference < XContent > xContent,
+
+    Reference < XContent >                  m_xContent;
+    Reference < XInteractionHandler >       m_xInteract;
+    Reference < XProgressHandler >          m_xProgress;
+    Reference < XPropertiesChangeListener > m_xListener;
+    ::ucb::Content*                         m_pContent;
+    OpenCommandArgument2                    m_aArgument;
+    UcbLockBytesRef                         m_xLockBytes;
+    UCB_Link_HelperRef                      m_xLink;
+    sal_Bool                                m_bCanceled : 1;
+    sal_Bool                                m_bRunning  : 1;
+    sal_Bool                                m_bSimple   : 1;
+
+                    CommandThread_Impl( UcbLockBytesRef xLockBytes,
+                                        Reference < XContent > xContent,
                                         const OpenCommandArgument2& rArg,
                                         Reference < XInteractionHandler > xInteract,
                                         Reference < XProgressHandler > xProgress,
-                                        UCB_Link_HelperRef xLink )
-                        : m_xInteract( xInteract )
-                        , m_xContent( xContent )
-                        , m_xProgress( xProgress )
-                        , m_aArgument( rArg )
-                        , m_xLink( xLink )
-                        , m_bCanceled( sal_False )
-                        , m_bRunning( sal_False )
-                        , m_bSimple( sal_False )
-                    {
-                        m_pContent = new ::ucb::Content( xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
-                    }
+                                        UCB_Link_HelperRef xLink );
 
                     CommandThread_Impl( UcbLockBytesRef xLockBytes )
                         : m_xLockBytes( xLockBytes )
@@ -230,10 +310,7 @@ public:
                         , m_bSimple( sal_True )
                     {}
 
-                    ~CommandThread_Impl()
-                    {
-                        delete m_pContent;
-                    }
+                    ~CommandThread_Impl();
 
     virtual void SAL_CALL   onTerminated();
     virtual void SAL_CALL   run();
@@ -241,6 +318,42 @@ public:
 };
 
 //----------------------------------------------------------------------------
+CommandThread_Impl::CommandThread_Impl( UcbLockBytesRef xLockBytes,
+                    Reference < XContent > xContent,
+                    const OpenCommandArgument2& rArg,
+                    Reference < XInteractionHandler > xInteract,
+                    Reference < XProgressHandler > xProgress,
+                    UCB_Link_HelperRef xLink )
+    : m_xInteract( xInteract )
+    , m_xContent( xContent )
+    , m_xProgress( xProgress )
+    , m_xLockBytes( xLockBytes )
+    , m_aArgument( rArg )
+    , m_xLink( xLink )
+    , m_bCanceled( sal_False )
+    , m_bRunning( sal_False )
+    , m_bSimple( sal_False )
+{
+    m_pContent = new ::ucb::Content( xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
+    Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
+    ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
+    if ( aScheme.compareToAscii("http") != COMPARE_EQUAL )
+        m_xLockBytes->SetStreamValid_Impl();
+
+    m_xListener = new UcbPropertiesChangeListener_Impl( m_xLockBytes );
+    Reference< XPropertiesChangeNotifier > xProps ( xContent, UNO_QUERY );
+    if ( xProps.is() )
+        xProps->addPropertiesChangeListener( Sequence<::rtl::OUString>(), m_xListener );
+}
+
+CommandThread_Impl::~CommandThread_Impl()
+{
+    Reference< XPropertiesChangeNotifier > xProps ( m_pContent->get(), UNO_QUERY );
+    if ( xProps.is() )
+        xProps->removePropertiesChangeListener( Sequence<::rtl::OUString>(), m_xListener );
+    delete m_pContent;
+}
+
 void CommandThread_Impl::run()
 {
     if ( m_bSimple )
@@ -313,6 +426,20 @@ void CommandThread_Impl::Cancel()
 }
 
 //----------------------------------------------------------------------------
+UcbLockBytes::UcbLockBytes( UCB_Link_HelperRef xLink )
+    : m_xInputStream (NULL)
+    , m_pCommandThread( NULL )
+    , m_bTerminated  (sal_False)
+    , m_bStreamValid  (sal_False)
+    , m_bDontClose( sal_False )
+    , m_nRead (0)
+    , m_nSize (0)
+    , m_aLinkList( xLink )
+    , m_nError( ERRCODE_NONE )
+{
+}
+
+//----------------------------------------------------------------------------
 UcbLockBytes::~UcbLockBytes()
 {
     if ( !m_bDontClose && m_xInputStream.is() )
@@ -333,9 +460,17 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
     bRet = m_xInputStream.is();
     aGuard.clear();
 
-    m_aInitialized.set();
+    if ( m_bStreamValid )
+        m_aInitialized.set();
 
     return bRet;
+}
+
+void UcbLockBytes::SetStreamValid_Impl()
+{
+    m_bStreamValid = sal_True;
+    if ( m_xInputStream.is() )
+        m_aInitialized.set();
 }
 
 //----------------------------------------------------------------------------
@@ -596,10 +731,9 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent >
     Reference< XProgressHandler >    xProgressHdl = pProgressHdl;
     pProgressHdl->SetProgressLink( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
 
-    ::vos::OThread *pThread = new CommandThread_Impl( xContent, aArgument, xInteractionHandler, xProgressHdl, xLink );
-    xLockBytes->setCommandThread_Impl( (CommandThread_Impl*) pThread );
+    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, xLink );
+    xLockBytes->setCommandThread_Impl( pThread );
     pThread->create();
-
     return xLockBytes;
 }
 
@@ -618,9 +752,8 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
 
     // we have to create a thread here so ::terminate() will be called
     // asynchronously
-    ::vos::OThread *pThread = new CommandThread_Impl( xLockBytes );
+    CommandThread_Impl *pThread = new CommandThread_Impl( xLockBytes );
     pThread->create();
-
     return xLockBytes;
 }
 
