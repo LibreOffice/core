@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:35:52 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
+#endif
 #include <font.hxx>
 
 class SalBitmap;
