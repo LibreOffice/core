@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriReferenceFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:28:58 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
 #include "com/sun/star/uri/XUriSchemeParser.hpp"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -162,6 +163,94 @@ sal_Int32 parseScheme(rtl::OUString const & uriReference) {
     return -1;
 }
 
+class UriReference: public cppu::WeakImplHelper1< css::uri::XUriReference > {
+public:
+    UriReference(
+        rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
+        rtl::OUString const & authority, rtl::OUString const & path,
+        bool hasQuery, rtl::OUString const & query):
+        m_base(
+            scheme, isHierarchical, hasAuthority, authority, path, hasQuery,
+            query)
+    {}
+
+    virtual rtl::OUString SAL_CALL getUriReference()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getUriReference(); }
+
+    virtual sal_Bool SAL_CALL isAbsolute()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.isAbsolute(); }
+
+    virtual rtl::OUString SAL_CALL getScheme()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getScheme(); }
+
+    virtual rtl::OUString SAL_CALL getSchemeSpecificPart()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getSchemeSpecificPart(); }
+
+    virtual sal_Bool SAL_CALL isHierarchical()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.isHierarchical(); }
+
+    virtual sal_Bool SAL_CALL hasAuthority()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.hasAuthority(); }
+
+    virtual rtl::OUString SAL_CALL getAuthority()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getAuthority(); }
+
+    virtual rtl::OUString SAL_CALL getPath()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getPath(); }
+
+    virtual sal_Bool SAL_CALL hasRelativePath()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.hasRelativePath(); }
+
+    virtual sal_Int32 SAL_CALL getPathSegmentCount()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getPathSegmentCount(); }
+
+    virtual rtl::OUString SAL_CALL getPathSegment(sal_Int32 index)
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getPathSegment(index); }
+
+    virtual sal_Bool SAL_CALL hasQuery()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.hasQuery(); }
+
+    virtual rtl::OUString SAL_CALL getQuery()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getQuery(); }
+
+    virtual sal_Bool SAL_CALL hasFragment()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.hasFragment(); }
+
+    virtual rtl::OUString SAL_CALL getFragment()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_base.getFragment(); }
+
+    virtual void SAL_CALL setFragment(rtl::OUString const & fragment)
+        throw (com::sun::star::uno::RuntimeException)
+    { m_base.setFragment(fragment); }
+
+    virtual void SAL_CALL clearFragment()
+        throw (com::sun::star::uno::RuntimeException)
+    { m_base.clearFragment(); }
+
+private:
+    UriReference(UriReference &); // not implemented
+    void operator =(UriReference); // not implemented
+
+    virtual ~UriReference() {}
+
+    stoc::uriproc::UriReference m_base;
+};
+
 // throws std::bad_alloc
 css::uno::Reference< css::uri::XUriReference > parseGeneric(
     rtl::OUString const & scheme, rtl::OUString const & schemeSpecificPart)
@@ -207,7 +296,7 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
         }
         path = schemeSpecificPart;
     }
-    return new stoc::uriproc::UriReference(
+    return new UriReference(
         scheme, isHierarchical, hasAuthority, authority, path, hasQuery, query);
 }
 

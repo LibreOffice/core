@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriReference.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:28:41 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #define INCLUDED_stoc_source_uriproc_UriReference_hxx
 
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uri/XUriReference.hpp"
-#include "cppuhelper/implbase1.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -73,77 +71,53 @@ namespace rtl { class OUStringBuffer; }
 
 namespace stoc { namespace uriproc {
 
-class UriReference:
-    public cppu::WeakImplHelper1< com::sun::star::uri::XUriReference >
-{
+class UriReference {
 public:
     UriReference(
         rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
         rtl::OUString const & authority, rtl::OUString const & path,
         bool hasQuery, rtl::OUString const & query);
 
-    virtual rtl::OUString SAL_CALL getUriReference()
+    ~UriReference();
+
+    rtl::OUString getUriReference()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isAbsolute()
+    sal_Bool isAbsolute() throw (com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getScheme() throw (com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getSchemeSpecificPart()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getScheme()
+    sal_Bool isHierarchical() throw (com::sun::star::uno::RuntimeException);
+
+    sal_Bool hasAuthority() throw (com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getAuthority() throw (com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getPath() throw (com::sun::star::uno::RuntimeException);
+
+    sal_Bool hasRelativePath() throw (com::sun::star::uno::RuntimeException);
+
+    sal_Int32 getPathSegmentCount()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getSchemeSpecificPart()
+    rtl::OUString getPathSegment(sal_Int32 index)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isHierarchical()
+    sal_Bool hasQuery() throw (com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getQuery() throw (com::sun::star::uno::RuntimeException);
+
+    sal_Bool hasFragment() throw (com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getFragment() throw (com::sun::star::uno::RuntimeException);
+
+    void setFragment(rtl::OUString const & fragment)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasAuthority()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getAuthority()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getPath()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasRelativePath()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual sal_Int32 SAL_CALL getPathSegmentCount()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getPathSegment(sal_Int32 index)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasQuery()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getQuery()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasFragment()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getFragment()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL setFragment(rtl::OUString const & fragment)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL clearFragment()
-        throw (com::sun::star::uno::RuntimeException);
-
-protected:
-    UriReference();
-
-    virtual ~UriReference();
-
-    void initialize(
-        rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
-        rtl::OUString const & authority, rtl::OUString const & path,
-        bool hasQuery, rtl::OUString const & query);
-
-    void appendSchemeSpecificPart(rtl::OUStringBuffer & buffer) const;
+    void clearFragment() throw (com::sun::star::uno::RuntimeException);
 
     osl::Mutex m_mutex;
     rtl::OUString m_scheme;
@@ -159,6 +133,8 @@ protected:
 private:
     UriReference(UriReference &); // not implemented
     void operator =(UriReference); // not implemented
+
+    void appendSchemeSpecificPart(rtl::OUStringBuffer & buffer) const;
 };
 
 } }
