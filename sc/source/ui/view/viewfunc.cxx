@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:19:24 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SVDSURO_HXX
 
 // INCLUDE ---------------------------------------------------------------
 
