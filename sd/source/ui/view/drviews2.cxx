@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:30:54 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,260 +527,28 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     rReq,
                     pActualPage,
                     ePageKind);
-
-                /*
-                USHORT nPage = aTabControl.GetCurPageId() - 1;
-                pActualPage = GetDoc()->GetSdPage(nPage, ePageKind);
-                SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-                BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
-                BOOL bHandoutMode = FALSE;
-                SdPage* pHandoutMPage = NULL;
-                String aNewName;
-
-                // #95981#
-                String aOldName;
-
-                AutoLayout aNewAutoLayout;
-
-                // #95981#
-                AutoLayout aOldAutoLayout;
-
-                BOOL bBVisible;
-                BOOL bBObjsVisible;
-                const SfxItemSet* pArgs = rReq.GetArgs();
-
-                if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
-                {
-                    SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
-
-                    // #95981# keep old name
-                    aOldName = pActualPage->GetName();
-
-                    aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aOldName ) );
-                    aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
-                                               aVisibleLayers.IsSet(aBckgrnd) ) );
-                    aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
-                                               aVisibleLayers.IsSet(aBckgrndObj) ) );
-
-                    AutoLayout eNewAutoLayout = AUTOLAYOUT_NONE;
-
-                    if ( pArgs && pArgs->Count() == 2 )
-                    {
-                        SFX_REQUEST_ARG (rReq, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                        eNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue ();
-                    }
-                    else
-                    {
-                        if (ePageKind != PK_HANDOUT)
-                        {
-                            eNewAutoLayout = pActualPage->GetAutoLayout();
-                        }
-                        else
-                        {
-                            bHandoutMode = TRUE;
-                            pHandoutMPage = GetDoc()->GetMasterSdPage(0, PK_HANDOUT);
-                            eNewAutoLayout = pHandoutMPage->GetAutoLayout();
-                        }
-                    }
-
-                    // #95981# keep old AutoLayout
-                    aOldAutoLayout = eNewAutoLayout;
-
-                    aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT, aOldAutoLayout ) );
-
-                    //CHINA001 SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE);
-                    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-                    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                    AbstractSdNewFoilDlg* pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), TRUE );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-                    if (pDlg->Execute() == RET_OK)
-                    {
-                        pDlg->GetAttr( aAttrSet );
-
-                        aNewName       = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                        aNewAutoLayout = (AutoLayout) ((const SfxAllEnumItem &)
-                                             aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-                        bBVisible      = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
-                        bBObjsVisible  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue ();
-
-                        delete pDlg;
-
-                        // alles deselektieren, denn ein selektiertes Objekt
-                        // koennte gleich verschwinden
-                        pDrView->UnmarkAll();
-                    }
-                    else
-                    {
-                        SdPage* pPage = GetDoc()->GetSdPage(0, PK_STANDARD);
-                        if (GetDoc()->GetSdPageCount(PK_STANDARD) == 1 &&
-                            pPage->GetAutoLayout() == AUTOLAYOUT_TITLE &&
-                            pPage->GetPresObjList().empty())
-                        {
-                            // Nur eine Seite vorhanden
-                            pPage->SetAutoLayout(AUTOLAYOUT_NONE);
-                        }
-                        delete pDlg;
-                        rReq.Ignore ();
-                        Cancel ();
-                        break;
-                    }
-                }
-                else if (pArgs->Count() == 4)
-                {
-                    SFX_REQUEST_ARG (rReq, pNewName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
-                    SFX_REQUEST_ARG (rReq, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                    SFX_REQUEST_ARG (rReq, pBVisible, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
-                    SFX_REQUEST_ARG (rReq, pBObjsVisible, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
-
-                    if (CHECK_RANGE (AUTOLAYOUT_TITLE, (AutoLayout) pNewAutoLayout->GetValue (), AUTOLAYOUT_HANDOUT6))
-                    {
-                        aNewName        = pNewName->GetValue ();
-                        aNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue ();
-                        bBVisible       = pBVisible->GetValue ();
-                        bBObjsVisible   = pBObjsVisible->GetValue ();
-                    }
-                    else
-                    {
-                        StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-                        rReq.Ignore ();
-                        Cancel ();
-                        break;
-                    }
-                    if (ePageKind == PK_HANDOUT)
-                    {
-                        bHandoutMode = TRUE;
-                        pHandoutMPage = GetDoc()->GetMasterSdPage(0, PK_HANDOUT);
-                    }
-                }
-                else
-                {
-                    StarBASIC::FatalError (SbERR_WRONG_ARGS);
-                    rReq.Ignore ();
-                    Cancel ();
-                    break;
-                }
-
-                SdPage* pUndoPage =
-                            bHandoutMode ? pHandoutMPage : pActualPage;
-
-                // #67720#
-                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
-                DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
-
-                // #90356#
-                sal_uInt16 nActionCount(pUndoManager->GetUndoActionCount());
-                sal_Bool bContinue(sal_True);
-
-                if(nActionCount)
-                {
-                    // #90356# get SdOptions
-                    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
-                    sal_Bool bShowDialog(pOptions->IsShowUndoDeleteWarning());
-
-                    // #95981# If only name is changed do not show
-                    // ImpUndoDeleteWarning dialog
-                    if(bShowDialog)
-                    {
-                        sal_Bool bNameChanged(aNewName != aOldName);
-                        sal_Bool bLayoutChanged(aNewAutoLayout != aOldAutoLayout);
-
-                        if(bNameChanged && !bLayoutChanged)
-                            bShowDialog = sal_False;
-                    }
-
-                    if(bShowDialog)
-                    {
-                        // ask user if he wants to loose UNDO stack
-                        ImpUndoDeleteWarning aUndoDeleteDlg(GetActiveWindow());
-
-                        if(BUTTONID_OK == aUndoDeleteDlg.Execute())
-                        {
-                            pUndoManager->Clear();
-                        }
-                        else
-                        {
-                            bContinue = sal_False;
-                        }
-
-                        // #90356# write option flag back if change was done
-                        if(aUndoDeleteDlg.IsWarningDisabled())
-                        {
-                            pOptions->SetShowUndoDeleteWarning(FALSE);
-                        }
-                    }
-                }
-
-                if(bContinue)
-                {
-                    ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                        pUndoManager, GetDoc(), pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
-                    pUndoManager->AddUndoAction(pAction);
-
-                    SfxChildWindow* pPreviewChildWindow =
-                        GetViewFrame()->GetChildWindow(
-                            PreviewChildWindow::GetChildWindowId() );
-                    PreviewWindow* pPreviewWin = NULL;
-
-                    // notify preview slide show are changes are to be done
-                    if( pPreviewChildWindow!=NULL
-                        && (pPreviewWin = static_cast<PreviewWindow*>(
-                            pPreviewChildWindow->GetWindow()))!= NULL)
-                    {
-                        FuSlideShow* pShow = pPreviewWin->GetSlideShow();
-
-                        if( pShow )
-                            pShow->InitPageModify();
-                    }
-
-                    if (!bHandoutMode)
-                    {
-                        if (pActualPage->GetName() != aNewName)
-                        {
-                            pActualPage->SetName(aNewName);
-
-                            if (ePageKind == PK_STANDARD)
-                            {
-                                SdPage* pNotesPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
-                                pNotesPage->SetName(aNewName);
-                            }
-                        }
-
-                        pActualPage->SetAutoLayout(aNewAutoLayout, TRUE);
-
-                        aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                        aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                        aVisibleLayers.Set(aBckgrnd, bBVisible);
-                        aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
-                        pActualPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
-                    }
-                    else
-                    {
-                        pHandoutMPage->SetAutoLayout(aNewAutoLayout, TRUE);
-                    }
-                    // The list of presentation objects at the page
-                    // has been cleared by SetAutolayout().  We still
-                    // have to clear the list of removed presentation
-                    // objects held by the model which references the
-                    // former list.
-                    GetDoc()->ClearDeletedPresObjList();
-
-                    GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-
-                    BOOL bSetModified = TRUE;
-
-                    if (pArgs && pArgs->Count() == 1)
-                    {
-                        bSetModified = (BOOL) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
-                    }
-
-                    GetDoc()->SetChanged(bSetModified);
-                }
-                */
             }
 
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_ASSIGN_LAYOUT:
+        {
+            if (ePageKind==PK_STANDARD
+                || ePageKind==PK_NOTES
+                || (ePageKind==PK_HANDOUT && eEditMode==EM_MASTERPAGE))
+            {
+                if ( pDrView->IsTextEdit() )
+                    pDrView->EndTextEdit();
+
+                SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
+                SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+                mpImpl->AssignLayout (
+                    GetDoc()->GetSdPage((USHORT)pWhatPage->GetValue(), ePageKind),
+                    (AutoLayout)pWhatLayout->GetValue());
+            }
             Cancel();
             rReq.Done ();
         }
