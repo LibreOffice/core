@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:19:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,11 +372,42 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
 
 
 
-void PaneDockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
+void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
 {
-    SfxDockingWindow::DataChanged (rDCEvt);
-}
+    SfxDockingWindow::DataChanged (rEvent);
 
+    switch (rEvent.GetType())
+    {
+        case DATACHANGED_SETTINGS:
+            if ((rEvent.GetFlags() & SETTINGS_STYLE) == NULL)
+                break;
+            // else fall through.
+        case DATACHANGED_FONTS:
+        case DATACHANGED_FONTSUBSTITUTION:
+        {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+            // Font.
+            Font aFont = rStyleSettings.GetAppFont();
+            if (IsControlFont())
+                aFont.Merge(GetControlFont());
+            SetZoomedPointFont(aFont);
+
+            // Color.
+            Color aColor;
+            if (IsControlForeground())
+                aColor = GetControlForeground();
+            else
+                aColor = rStyleSettings.GetButtonTextColor();
+            SetTextColor(aColor);
+            SetTextFillColor();
+
+            Resize();
+            Invalidate();
+        }
+        break;
+    }
+}
 
 
 } // end of namespace ::sd
