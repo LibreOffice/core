@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,9 +157,6 @@
 #endif
 #ifndef XMLOFF_NUMEHELP_HXX
 #include <xmloff/numehelp.hxx>
-#endif
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include <xmloff/ProgressBarHelper.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -611,6 +608,9 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
             }
         }
     }
+    sal_Int32 nRef(nCellCount + (2 * nTableCount) + (2 * nShapesCount));
+    GetProgressBarHelper()->SetReference(nRef);
+    GetProgressBarHelper()->SetValue(0);
 }
 
 void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
@@ -694,9 +694,6 @@ void ScXMLExport::_ExportMeta()
     {
         SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True);
     }
-    sal_Int32 nRef(nCellCount + (2 * nTableCount) + (2 * nShapesCount));
-    GetProgressBarHelper()->SetReference(nRef);
-    GetProgressBarHelper()->SetValue(0);
 }
 
 void ScXMLExport::_ExportFontDecls()
