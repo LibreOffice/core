@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-20 17:23:44 $
+ *  last change: $Author: sj $ $Date: 2001-03-12 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,14 +693,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
         if ( !ImplGetPageByIndex( i, NORMAL ) )                 // sehr aufregend: noch einmal ueber alle seiten
             return FALSE;
 
-        sal_Int32 nLayout = 20;                                 // Default: blank Slide
-        if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ) )
-        {
-            nLayout = *( (sal_uInt16*)mAny.getValue() );
-            if ( nLayout > 20 )
-                nLayout = 20;
-        }
-        const PHLayout& rLayout = pPHLayout[ nLayout ];
+        const PHLayout& rLayout = ImplGetLayout( mXPagePropSet );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
             aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
@@ -1103,6 +1096,23 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     return TRUE;
 }
 
+PHLayout& PPTWriter::ImplGetLayout(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
+{
+    ::com::sun::star::uno::Any aAny;
+    sal_Int16 nLayout = 20;
+    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ), sal_True )
+        aAny >>= nLayout;
+
+    if ( ( nLayout >= 21 ) && ( nLayout <= 26 ) )   // NOTES _> HANDOUT6
+        nLayout = 20;
+    if ( ( nLayout >= 27 ) && ( nLayout <= 30 ) )   // VERTICAL LAYOUT
+        nLayout -= 6;
+    else if ( nLayout > 30 )
+        nLayout = 20;
+    return pPHLayout[ nLayout ];
+}
+
+
 // ---------------------------------------------------------------------------------------------
 
 sal_Bool PPTWriter::ImplCreateMainMaster()
@@ -1453,18 +1463,13 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
     if ( !bHasBackground )
         nMode |= 4;
 
-    mnLayout = 20;              // Default: blank Slide
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ) )
-    {
-        mnLayout = *( (sal_uInt16*)aAny.getValue() );
-        if ( mnLayout > 20 )
-            mnLayout = 20;
-    }
+    const PHLayout& rLayout = ImplGetLayout( mXPagePropSet );
+    mnLayout = rLayout.nLayout;
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Slide );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << pPHLayout[ mnLayout ].nLayout;
-    mpStrm->Write( pPHLayout[ mnLayout ].nPlaceHolder, 8 ); // placeholderIDs ( 8Stueck )
+    *mpStrm << mnLayout;
+    mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs ( 8Stueck )
     *mpStrm << (sal_uInt32)nMasterID                // master ID ( ist gleich 0x80000000 bei einer masterpage   )
             << (sal_uInt32)nPageNum + 0x100         // notes ID ( ist gleich null wenn keine notizen vorhanden )
             << nMode
