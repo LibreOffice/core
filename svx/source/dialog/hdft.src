@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:16:47 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SVXPAGE_HEADER
     Text [ italian ] = "Intestazione" ;
     Text [ portuguese_brazilian ] = "Cabeçalho" ;
     Text [ portuguese ] = "Cabeçalho" ;
-    Text [ finnish ] = "Yläteksti" ;
+    Text [ finnish ] = "Yläotsikko" ;
     Text [ danish ] = "Sidehoved" ;
     Text [ french ] = "En-tête" ;
     Text [ swedish ] = "Sidhuvud" ;
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "Attiva riga d'intestazione" ;
         Text [ portuguese_brazilian ] = "Cabeçalho, ~com distância" ;
         Text [ portuguese ] = "Activar ~cabeçalho" ;
-        Text [ finnish ] = "Yläteksti ~etäisyydellä" ;
+        Text [ finnish ] = "~Otsikko päällä" ;
         Text [ danish ] = "Aktiver sidehoved" ;
         Text [ french ] = "Activer l'~en-tête " ;
         Text [ swedish ] = "~Sidhuvud på" ;
@@ -122,7 +122,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
         Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
         Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
+        Text [ finnish ] = "~Sama sisältö vasemmalla/oikealla" ;
         Text [ danish ] = "Ens indhold venstre/højre" ;
         Text [ french ] = "~Contenu identique gauche/droite" ;
         Text [ swedish ] = "Samma ~innehåll till höger/vänster" ;
@@ -151,7 +151,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "Margine sinistro" ;
         Text [ portuguese_brazilian ] = "~Cabeçalho da Margem Esquerda" ;
         Text [ portuguese ] = "Margem ~esquerda" ;
-        Text [ finnish ] = "~Vasemman reunan yläteksti" ;
+        Text [ finnish ] = "~Vasen marginaali" ;
         Text [ danish ] = "Venstre margen" ;
         Text [ french ] = "Marge ~gauche" ;
         Text [ swedish ] = "Vänstermargina~l" ;
@@ -196,7 +196,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "~Margine destro" ;
         Text [ portuguese_brazilian ] = "Margem Direita Cabeçalho" ;
         Text [ portuguese ] = "Margem ~direita" ;
-        Text [ finnish ] = "~Oikean reunan yläteksti" ;
+        Text [ finnish ] = "~Oikea marginaali" ;
         Text [ danish ] = "Højre margen" ;
         Text [ french ] = "Marge ~droite" ;
         Text [ swedish ] = "Höge~rmarginal" ;
@@ -258,6 +258,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ turkish ] = "U~zaklýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Espacio";
+        Text[ finnish ] = "~Välit";
     };
     MetricField ED_DIST
     {
@@ -300,6 +301,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ turkish ] = "Y~ükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
+        Text[ finnish ] = "~Korkeus";
     };
     MetricField ED_HEIGHT
     {
@@ -346,6 +348,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ turkish ] = "Yüksekliði oto~matik olarak ayarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ajus~te dinámico de la altura";
+        Text[ finnish ] = "~Automaattinen korkeuden sovitus";
     };
     FixedLine FL_FRAME
     {
@@ -357,7 +360,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "Intestazione" ;
         Text [ portuguese_brazilian ] = "Cabeçalho" ;
         Text [ portuguese ] = "Cabeçalho" ;
-        Text [ finnish ] = "Yläteksti" ;
+        Text [ finnish ] = "Kopfzeile" ;
         Text [ danish ] = "Sidehoved" ;
         Text [ french ] = "En-tête" ;
         Text [ swedish ] = "Sidhuvud" ;
@@ -391,7 +394,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "E~xtra..." ;
         Text [ portuguese_brazilian ] = "Opçõe~s..." ;
         Text [ portuguese ] = "~Outros..." ;
-        Text [ finnish ] = "~Määritykset..." ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Flere..." ;
         Text [ french ] = "~Options..." ;
         Text [ swedish ] = "~Fler..." ;
@@ -433,7 +436,7 @@ TabPage RID_SVXPAGE_FOOTER
     Text [ italian ] = "Piè di pagina" ;
     Text [ portuguese_brazilian ] = "Rodapé" ;
     Text [ portuguese ] = "Rodapé" ;
-    Text [ finnish ] = "Alateksti" ;
+    Text [ finnish ] = "Alaselite" ;
     Text [ danish ] = "Sidefod" ;
     Text [ french ] = "Pied de page" ;
     Text [ swedish ] = "Sidfot" ;
@@ -451,7 +454,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "~Attiva piè di pagina" ;
         Text [ portuguese_brazilian ] = "~Rodapé com distância" ;
         Text [ portuguese ] = "Activar ~rodapé" ;
-        Text [ finnish ] = "~Alatekstin etäisyys" ;
+        Text [ finnish ] = "~Alaselite käytössä" ;
         Text [ danish ] = "Aktiver sidefod" ;
         Text [ french ] = "~Activer le pied de page" ;
         Text [ swedish ] = "Sid~fot på" ;
@@ -480,7 +483,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
         Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
         Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
+        Text [ finnish ] = "~Sama sisältö vasemmalla/oikealla" ;
         Text [ danish ] = "Ens indhold venstre/højre" ;
         Text [ french ] = "~Contenu identique gauche/droite" ;
         Text [ swedish ] = "Samma ~innehåll till höger/vänster" ;
@@ -509,7 +512,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "Margine sinistro" ;
         Text [ portuguese_brazilian ] = "~Rodapé da Margem Esquerda" ;
         Text [ portuguese ] = "Margem ~esquerda" ;
-        Text [ finnish ] = "~Vasemman reunan alateksti" ;
+        Text [ finnish ] = "~Vasen marginaali" ;
         Text [ danish ] = "Venstre margen" ;
         Text [ french ] = "Marge ~gauche" ;
         Text [ swedish ] = "Vänstermargina~l" ;
@@ -554,7 +557,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "Margine destro" ;
         Text [ portuguese_brazilian ] = "M~argem Direita Rodapé" ;
         Text [ portuguese ] = "Margem ~direita" ;
-        Text [ finnish ] = "~Oikean reunan alateksti" ;
+        Text [ finnish ] = "~Oikea marginaali" ;
         Text [ danish ] = "Højre margen" ;
         Text [ french ] = "Marge dro~ite" ;
         Text [ swedish ] = "Höge~rmarginal" ;
@@ -615,6 +618,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ turkish ] = "~Uzaklýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~pacio";
+        Text[ finnish ] = "~Välit";
     };
     MetricField ED_DIST
     {
@@ -658,6 +662,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ turkish ] = "Y~ükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
+        Text[ finnish ] = "~Korkeus";
     };
     MetricField ED_HEIGHT
     {
@@ -688,7 +693,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "Adatta altezza din~amicamente" ;
         Text [ portuguese_brazilian ] = "Rodapé dinâmica da ~altura" ;
         Text [ portuguese ] = "Ajuste dinâmico da altura" ;
-        Text [ finnish ] = "Alatekstin korkeus ~dynaaminen" ;
+        Text [ finnish ] = "~Automaattinen korkeuden sovitus" ;
         Text [ danish ] = "Juster højde dynamisk" ;
         Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
         Text [ swedish ] = "An~passa höjd dynamiskt" ;
@@ -718,7 +723,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "Piè di pagina" ;
         Text [ portuguese_brazilian ] = "Rodapé" ;
         Text [ portuguese ] = "Rodapé" ;
-        Text [ finnish ] = "Alateksti" ;
+        Text [ finnish ] = "Fußzeile" ;
         Text [ danish ] = "Sidefod" ;
         Text [ french ] = "Pied de page" ;
         Text [ swedish ] = "Sidfot" ;
@@ -752,7 +757,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "E~xtra..." ;
         Text [ portuguese_brazilian ] = "~Opções..." ;
         Text [ portuguese ] = "~Outros..." ;
-        Text [ finnish ] = "Määr~itykset..." ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Flere..." ;
         Text [ french ] = "~Options..." ;
         Text [ swedish ] = "~Fler..." ;
@@ -794,7 +799,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ italian ] = "Disattivando l'intestazione o il piè di pagina il testo esistente verrà cancellato.\nVolete cancellare il contenuto?" ;
     Message [ portuguese_brazilian ] = "Desativar o cabeçalho ou o rodapé apagar seu conteúdo.\nTem certeza que deseja apagar este texto?" ;
     Message [ portuguese ] = "Ao desactivar o cabeçalho ou o rodapé apaga o respectivo conteúdo.\nDeseja realmente eliminar o texto?" ;
-    Message [ finnish ] = "Jos poistat ylä/alatekstin, sen sisältö katoaa.\nHaluatko varmasti poistaa tämän tekstin?" ;
+    Message [ finnish ] = "Removing headers or footers deletes the contents.\nAre you sure you want to delete this text?" ;
     Message [ danish ] = "Hvis sidehoved eller sidefod deaktiveres, slettes indholdet.\nVil du slette indholdet?" ;
     Message [ french ] = "La désactivation de l'en-tête ou du pied de page en supprime le contenu.\nÊtes-vous sûr de vouloir supprimer ce texte ?" ;
     Message [ swedish ] = "Om du deaktiverar sidhuvuden eller sidfötter raderas innehållet. \nVill du radera innehållet?" ;
