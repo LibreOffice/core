@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:40:00 $
+ *  last change: $Author: ka $ $Date: 2000-10-30 12:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,24 +1490,27 @@ String SdPPTImport::ReadSound(UINT32 nSoundRef) const
                     // in unser lokales Sound-Verzeichnis.
                     BOOL    bSoundExists = FALSE;
                     List*   pSoundList = new List();
-                    if ( pSoundList )
+
+                    GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, *pSoundList );
+                    GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, *pSoundList );
+
+                    for( ULONG n = 0; ( n < pSoundList->Count() ) && !bSoundExists; n++ )
                     {
-                        GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, *pSoundList );
-                        for( UINT16 a = 0; a < pSoundList->Count(); a++ )
+                        INetURLObject aURL;
+                        aURL.SetSmartURL( *(String*)pSoundList->GetObject( n ) );
+                        String aSoundName( aURL.GetName() );
+                        if ( aSoundName == aRetval )
                         {
-                            INetURLObject aURL;
-                            aURL.SetSmartURL( *(String*)pSoundList->GetObject( a ) );
-                            String aSoundName( aURL.GetName() );
-                            if ( aSoundName == aRetval )
-                            {
-                                aRetval = *(String*)pSoundList->GetObject( a );
-                                bSoundExists = TRUE;
-                            }
+                            aRetval = *(String*)pSoundList->GetObject( n );
+                            bSoundExists = TRUE;
                         }
-                        for ( void* pPtr = pSoundList->First(); pPtr; pPtr = pSoundList->Next() )
-                            delete (String*)pPtr;
-                        delete pSoundList;
                     }
+
+                    for ( void* pPtr = pSoundList->First(); pPtr; pPtr = pSoundList->Next() )
+                        delete (String*)pPtr;
+
+                    delete pSoundList;
+
                     if ( !bSoundExists )
                     {
                         rStCtrl.Seek( nPosMerk2 );
@@ -1529,7 +1532,7 @@ String SdPPTImport::ReadSound(UINT32 nSoundRef) const
                             // Hat das Schreiben in die Gallery geklappt?
                             if ( nFileError == ERRCODE_NONE )
                             {
-                                GalleryExplorer::InsertURL( GALLERY_THEME_SOUNDS, aGalleryUserSound.PathToFileName() );
+                                GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.PathToFileName() );
                                 aRetval = aGalleryUserSound.GetFull();
                             }
                         }
