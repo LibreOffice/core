@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-09 11:57:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #endif
@@ -142,9 +145,12 @@ class SwXAutoTextContainer : public cppu::WeakImplHelper3
 >
 {
     SwGlossaries *pGlossaries;
+
+protected:
+    virtual ~SwXAutoTextContainer();    // ref-counted objects are not to be deleted from outside -> protected dtor
+
 public:
     SwXAutoTextContainer();
-    virtual ~SwXAutoTextContainer();
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -185,12 +191,14 @@ class SwXAutoTextGroup : public cppu::WeakImplHelper6
 {
     SfxItemPropertySet      aPropSet;
     SwGlossaries*           pGlossaries;
-    rtl::OUString                   sName;
-    String                  sGroupName;
+    rtl::OUString           sName;
+    String                  m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
+
+protected:
+    virtual ~SwXAutoTextGroup();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
         SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries*  pGloss/*SwTextBlocks* pGroup*/);
-        virtual ~SwXAutoTextGroup();
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -242,14 +250,16 @@ public:
 /* -----------------17.06.98 12:03-------------------
  *
  * --------------------------------------------------*/
-class SwXAutoTextEntry : public cppu::WeakImplHelper5
-<
-    ::com::sun::star::text::XAutoTextEntry,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XUnoTunnel,
-    ::com::sun::star::text::XText,
-    ::com::sun::star::document::XEventsSupplier
->
+class SwXAutoTextEntry
+        :public SfxListener
+        ,public cppu::WeakImplHelper5
+        <
+            ::com::sun::star::text::XAutoTextEntry,
+            ::com::sun::star::lang::XServiceInfo,
+            ::com::sun::star::lang::XUnoTunnel,
+            ::com::sun::star::text::XText,
+            ::com::sun::star::document::XEventsSupplier
+        >
 {
     SwGlossaries*   pGlossaries;
     String          sGroupName;
@@ -265,9 +275,28 @@ class SwXAutoTextEntry : public cppu::WeakImplHelper5
     }
     void GetBodyText ();
 
+protected:
+    /** ensure that the current content (which may only be in-memory so far) is flushed to the auto text group file
+
+        <p>If somebody modifies an auto text via this class, then this is not directly reflected to the respective
+        glossaries file (on disk), instead we hold a copy of this text (in [p|x]BodyText). On the other hand,
+        in applyTo, we do not work with this _copy_, but just tell the target for the application to insert
+        the content which we're responsible for - and this target doesn't know about our copy, but only
+        about the persistent version.</br>
+        So we need to ensure that before somebody else does something with our auto text, we flush our
+        (in-memory) copy to disk.</p>
+
+    */
+    void    implFlushDocument( bool _bCloseDoc = false );
+
+    // SfxListener overridables
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+protected:
+    virtual ~SwXAutoTextEntry();    // ref-counted objects are not to be deleted from outside -> protected dtor
+
 public:
     SwXAutoTextEntry(SwGlossaries* , const String& rGroupName, const String& rEntryName);
-    virtual ~SwXAutoTextEntry();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -304,7 +333,6 @@ public:
     const SwGlossaries* GetGlossaries() { return pGlossaries; }
     const String&   GetGroupName() {return sGroupName;}
     const String&   GetEntryName() {return sEntryName;}
-
 };
 
 
