@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,8 @@ sal_Int64 SAL_CALL ByteChucker::getLength(  )
 }
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 {
-    static uno::Sequence< sal_Int8 > aSequence (1);
-    static sal_Int8 *pArray = aSequence.getArray();
+    uno::Sequence< sal_Int8 > aSequence (1);
+    sal_Int8 *pArray = aSequence.getArray();
 
     *pArray     = nInt8  & 0xFF;
     xStream->writeBytes(aSequence);
@@ -138,8 +138,8 @@ ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 }
 ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 {
-    static uno::Sequence< sal_Int8 > aSequence (2);
-    static sal_Int8 *pArray = aSequence.getArray();
+    uno::Sequence< sal_Int8 > aSequence (2);
+    sal_Int8 *pArray = aSequence.getArray();
 
     *pArray     = (nInt16 >>  0 ) & 0xFF;
     *(pArray+1) = (nInt16 >>  8 ) & 0xFF;
@@ -148,8 +148,8 @@ ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 }
 ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
 {
-    static uno::Sequence< sal_Int8 > aSequence (4);
-    static sal_Int8 *pArray = aSequence.getArray();
+    uno::Sequence< sal_Int8 > aSequence (4);
+    sal_Int8 *pArray = aSequence.getArray();
 
     *pArray     = (nInt32 >>  0 ) & 0xFF;
     *(pArray+1) = (nInt32 >>  8 ) & 0xFF;
@@ -161,8 +161,8 @@ ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
 
 ByteChucker& ByteChucker::operator << (sal_uInt8 nuInt8)
 {
-    static uno::Sequence< sal_Int8 > aSequence (1);
-    static sal_Int8 *pArray = aSequence.getArray();
+    uno::Sequence< sal_Int8 > aSequence (1);
+    sal_Int8 *pArray = aSequence.getArray();
 
     *pArray     = nuInt8  & 0xFF;
     xStream->writeBytes(aSequence);
@@ -170,8 +170,8 @@ ByteChucker& ByteChucker::operator << (sal_uInt8 nuInt8)
 }
 ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 {
-    static uno::Sequence< sal_Int8 > aSequence (2);
-    static sal_Int8 *pArray = aSequence.getArray();
+    uno::Sequence< sal_Int8 > aSequence (2);
+    sal_Int8 *pArray = aSequence.getArray();
 
     *pArray     = (nuInt16 >>  0 ) & 0xFF;
     *(pArray+1) = (nuInt16 >>  8 ) & 0xFF;
@@ -180,8 +180,8 @@ ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 }
 ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
 {
-    static uno::Sequence< sal_Int8 > aSequence (4);
-    static sal_Int8 *pArray = aSequence.getArray();
+    uno::Sequence< sal_Int8 > aSequence (4);
+    sal_Int8 *pArray = aSequence.getArray();
 
     *pArray     = static_cast < sal_Int8 > ((nuInt32 >>  0 ) & 0xFF);
     *(pArray+1) = static_cast < sal_Int8 > ((nuInt32 >>  8 ) & 0xFF);

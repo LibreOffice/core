@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
 {
-    static uno::Sequence< sal_Int8 > aSequence (1);
+    uno::Sequence< sal_Int8 > aSequence (1);
 
     if (xStream->readBytes(aSequence,1) != 1)
     {
@@ -159,7 +159,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
 {
-    static uno::Sequence< sal_Int8 > aSequence (2);
+    uno::Sequence< sal_Int8 > aSequence (2);
 
     if (xStream->readBytes(aSequence, 2) != 2)
     {
@@ -174,7 +174,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
 {
-    static uno::Sequence< sal_Int8 > aSequence (4);
+    uno::Sequence< sal_Int8 > aSequence (4);
 
     if (xStream->readBytes(aSequence, 4) != 4)
     {
@@ -192,7 +192,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
 
 ByteGrabber& ByteGrabber::operator >> (sal_uInt8& ruInt8)
 {
-    static uno::Sequence< sal_Int8 > aSequence (1);
+    uno::Sequence< sal_Int8 > aSequence (1);
 
     if (xStream->readBytes(aSequence,1) != 1)
     {
@@ -205,7 +205,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt8& ruInt8)
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt16& ruInt16)
 {
-    static uno::Sequence< sal_Int8 > aSequence (2);
+    uno::Sequence< sal_Int8 > aSequence (2);
 
     if (xStream->readBytes(aSequence, 2) != 2)
     {
@@ -220,7 +220,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt16& ruInt16)
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
 {
-    static uno::Sequence< sal_Int8 > aSequence (4);
+    uno::Sequence< sal_Int8 > aSequence (4);
 
     if (xStream->readBytes(aSequence, 4) != 4)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,9 +265,9 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 i=0, nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
-    static uno::Sequence < sal_Int8 > aSequence (nCommentLength);
-    static sal_Int8 *pArray = aSequence.getArray();
-    static sal_Int16 nOldLength = nCommentLength;
+    uno::Sequence < sal_Int8 > aSequence (nCommentLength);
+    sal_Int8 *pArray = aSequence.getArray();
+    sal_Int16 nOldLength = nCommentLength;
 
     if (nOldLength != nCommentLength)
     {
@@ -299,9 +299,9 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
               nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
               nExtraLength      = static_cast < sal_Int16 > ( rEntry.extra.getLength() );
     sal_Int16 i = 0;
-    static uno::Sequence < sal_Int8 > aSequence (nNameLength);
-    static sal_Int8 *pArray = aSequence.getArray();
-    static sal_Int16 nOldLength=0;
+    uno::Sequence < sal_Int8 > aSequence (nNameLength);
+    sal_Int8 *pArray = aSequence.getArray();
+    sal_Int16 nOldLength=0;
 
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
@@ -373,9 +373,9 @@ void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
 {
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
 
-    static sal_Int16 nOldLength=nNameLength;
-    static uno::Sequence < sal_Int8 > aSequence(nNameLength);
-    static sal_Int8 *pArray = aSequence.getArray();
+    sal_Int16 nOldLength=nNameLength;
+    uno::Sequence < sal_Int8 > aSequence(nNameLength);
+    sal_Int8 *pArray = aSequence.getArray();
     if ( nNameLength != nOldLength)
     {
         nOldLength = nNameLength;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
+ *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ void SAL_CALL ZipPackageFolder::release(  )
 void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static OUString sName;
+    OUString sName;
     if (aName.indexOf('/', 0 ) == 0)
         sName = aName.copy(1, aName.getLength());
     else
@@ -165,7 +165,7 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
 void SAL_CALL ZipPackageFolder::removeByName( const ::rtl::OUString& Name )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static OUString sName;
+    OUString sName;
     if (Name.indexOf('/', 0 ) == 0)
         sName = Name.copy(1, Name.getLength());
     else
@@ -196,7 +196,7 @@ uno::Any SAL_CALL ZipPackageFolder::getByName( const ::rtl::OUString& aName )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    static OUString sName;
+    OUString sName;
     if (aName.indexOf('/', 0 ) == 0)
         sName = aName.copy(1, aName.getLength());
     else
@@ -220,7 +220,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 sal_Bool SAL_CALL ZipPackageFolder::hasByName( const ::rtl::OUString& aName )
         throw(uno::RuntimeException)
 {
-    static OUString sName;
+    OUString sName;
     if (aName.indexOf('/', 0 ) == 0)
         sName = aName.copy(1, aName.getLength());
     else
@@ -231,7 +231,7 @@ sal_Bool SAL_CALL ZipPackageFolder::hasByName( const ::rtl::OUString& aName )
 void SAL_CALL ZipPackageFolder::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static OUString sName;
+    OUString sName;
     if (aName.indexOf('/', 0 ) == 0)
         sName = aName.copy(1, aName.getLength());
     else

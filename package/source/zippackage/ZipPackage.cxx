@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
+ *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,91 +320,11 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         // File doesn't exist, we'll create it at commitChanges time
     }
 }
-/*
-// XHierarchicalNameAccess
-Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
-        throw(NoSuchElementException, RuntimeException)
-{
-    static OUString sClear = OUString::createFromAscii("");
-    if (hasByHierarchicalName(aName))
-    {
-        sLastSearch = sClear;
-        return aKinglyAny;
-    }
-    else
-        throw NoSuchElementException();
-}
-sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
-        throw(RuntimeException)
-{
-    sal_Int32 nOldIndex =0,nIndex = 0;
-
-    if (aName == sLastSearch)
-        return sal_True;
-    else
-        sLastSearch=aName;
-
-    Reference < XNameContainer > xCurrent  = Reference < XNameContainer > (pRootFolder);
-    if (aName[nOldIndex] == '/')
-        nOldIndex++;
-
-    if (aName == OUString::createFromAscii("/"))
-    {
-        aKinglyAny <<= Reference < XUnoTunnel > (pRootFolder);
-        return sal_True;
-    }
-    else if (aName.lastIndexOf('/') == aName.getLength()-1)
-    {
-        while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
-        {
-            OUString sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
-            if (nIndex == nOldIndex)
-                break;
-            if (xCurrent->hasByName(sTemp))
-            {
-                Reference < XUnoTunnel > xRef;
-                aKinglyAny = xCurrent->getByName(sTemp);
-                aKinglyAny >>= xRef;
-                xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
-            }
-            else
-                return sal_False;
-            nOldIndex = nIndex+1;
-        }
-    }
-    else
-    {
-        while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
-        {
-            OUString sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
-            if (nIndex == nOldIndex)
-                break;
-            if (xCurrent->hasByName(sTemp))
-            {
-                Reference < XUnoTunnel > xChildRef;
-                aKinglyAny = xCurrent->getByName(sTemp);
-                aKinglyAny >>= xChildRef;
-                xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
-            }
-            else
-                return sal_False;
-
-            nOldIndex = nIndex+1;
-        }
-        OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
-        if (xCurrent->hasByName(sStreamName))
-            aKinglyAny <<= xCurrent->getByName(sStreamName);
-        else
-            return sal_False;
-    }
-    return sal_True;
-}
-*/
 
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         throw(NoSuchElementException, RuntimeException)
 {
-    static OUString sTemp, sRoot = OUString::createFromAscii("/");
+    OUString sTemp, sRoot = OUString::createFromAscii("/");
     sal_Int32 nOldIndex =0, nIndex;
     Any aAny;
     Reference < XNameContainer > xCurrent  (xRootFolder);
@@ -489,7 +409,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         throw(RuntimeException)
 {
-    static OUString sTemp, sRoot = OUString::createFromAscii("/");
+    OUString sTemp, sRoot = OUString::createFromAscii("/");
     sal_Int32 nOldIndex = 0, nIndex;
     Any aAny;
     Reference < XNameContainer > xCurrent  (xRootFolder);
