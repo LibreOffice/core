@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:15:25 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ private:
     ScDocument*         pDoc;
     SfxPrinter*         pPrinter;
     OutputDevice*       pDev;
-
     FmFormView*         pDrawView;
 
     MapMode             aOldPrinterMode;    //  MapMode vor dem Aufruf
@@ -214,12 +213,15 @@ private:
     BOOL                bCenterHor;
     BOOL                bCenterVer;
     BOOL                bLandscape;
+    BOOL                bSourceRangeValid;
+
     USHORT              nPageUsage;
     Size                aPageSize;          //  Drucker-Twips
     const SvxBoxItem*   pBorderItem;
     const SvxBrushItem* pBackgroundItem;
     const SvxShadowItem* pShadowItem;
 
+    ScRange             aLastSourceRange;
     ScPrintHFParam      aHdr;
     ScPrintHFParam      aFtr;
     ScPageTableParam    aTableParam;
@@ -325,6 +327,7 @@ public:
     void            ResetBreaks( USHORT nTab );
 
     void            GetPrintState( ScPrintState& rState );
+    BOOL            GetLastSourceRange( ScRange& rRange ) const;
 
 #ifdef _PRINTFUN_CXX
 private:
