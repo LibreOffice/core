@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 15:33:14 $
+ *  last change: $Author: jp $ $Date: 2001-03-29 12:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,14 @@ enum CursorType
 /* -----------------26.06.98 16:18-------------------
  *
  * --------------------------------------------------*/
+
+SV_DECL_PTRARR(SwDependArr, SwDepend*, 2, 2);
+
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
+
+void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
+                            SwDependArr& rFrameArr, BOOL bSort );
 
 /* -----------------29.04.98 07:35-------------------
  *
@@ -1045,7 +1051,6 @@ public:
 /*-----------------07.04.98 08:15-------------------
 
 --------------------------------------------------*/
-SV_DECL_PTRARR(SwDependArr, SwDepend*, 2, 2);
 class SwXParagraph : public cppu::WeakImplHelper8
 <
     ::com::sun::star::text::XTextRange,

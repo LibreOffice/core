@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-20 18:33:13 $
+ *  last change: $Author: jp $ $Date: 2001-03-29 12:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #endif
 
 #pragma hdrstop
-
-#define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
 
 #ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
@@ -187,7 +184,9 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(SwPaM& rParaCrsr, uno::Refe
 
     //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // AM ZEICHEN gebunden sind
-
+    ::CollectFrameAtNode( *this, pUnoCrsr->GetPoint()->nNode,
+                            aFrameArr, TRUE );
+#if 0
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwNodeIndex& rOwnNode = pUnoCrsr->GetPoint()->nNode;
     const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
@@ -219,6 +218,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(SwPaM& rParaCrsr, uno::Refe
             aFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
         }
     }
+#endif
     CreatePortions();
 }
 /*-- 27.01.99 10:44:44---------------------------------------------------
@@ -820,10 +820,6 @@ void SwXTextPortionEnumeration::CreatePortions()
                     uno::Reference< XTextRange >  xRef;
                     if(!pUnoCrsr->GetCntntNode()->Len())
                     {
-                        if(pHints)
-                        {
-                            DBG_ERROR("hints not exported")
-                        }
                         lcl_ExportBkmAndRedline(aBkmArr, aRedArr, 0, pUnoCrsr, xParent, aPortionArr);
                         // der Absatz ist leer, also nur Portion erzeugen und raus
                         xRef = new SwXTextPortion(*pUnoCrsr, xParent, ePortionType);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 15:33:15 $
+ *  last change: $Author: jp $ $Date: 2001-03-29 12:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #endif
 
 #pragma hdrstop
-
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -299,6 +298,7 @@
 #endif
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
+#define _SVSTDARR_XUB_STRLEN
 #include <svtools/svstdarr.hxx>
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
@@ -315,6 +315,15 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -329,6 +338,82 @@ using namespace ::rtl;
 
 //collectn.cxx
 BOOL lcl_IsNumeric(const String&);
+
+void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
+                            SwDependArr& rFrameArr, BOOL bSort )
+{
+    // alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
+    // gebunden sind
+    SvXub_StrLens aSortArr( 8, 8 );
+    SwDoc* pDoc = rIdx.GetNode().GetDoc();
+
+    const SwCntntFrm* pCFrm;
+    const SwCntntNode* pCNd;
+    if( pDoc->GetRootFrm() &&
+        0 != (pCNd = rIdx.GetNode().GetCntntNode()) &&
+        0 != (pCFrm = pCNd->GetFrm()) )
+    {
+        const SwDrawObjs *pObjs = pCFrm->GetDrawObjs();
+        if( pObjs )
+            for( USHORT i = 0; i < pObjs->Count(); ++i )
+            {
+                const SdrObject *pO = (*pObjs)[ i ];
+                const SwFlyFrm *pFly;
+                if( pO->IsWriterFlyFrame() && (pFly =
+                    ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsAutoPos() )
+                {
+                    //jetzt einen SwDepend anlegen und in das Array einfuegen
+                    SwDepend* pNewDepend = new SwDepend( &rClnt,
+                                            (SwFrmFmt*)pFly->GetFmt() );
+
+                    USHORT nInsPos = rFrameArr.Count();
+                    if( bSort )
+                    {
+                        xub_StrLen nInsertIndex = pFly->GetFmt()->GetAnchor().
+                                    GetCntntAnchor()->nContent.GetIndex();
+
+                        USHORT nEnd = nInsPos;
+                        for( nInsPos = 0; nInsPos < nEnd; ++nInsPos )
+                            if( aSortArr[ nInsPos ] > nInsertIndex )
+                                break;
+                        aSortArr.Insert( nInsertIndex, nInsPos );
+                    }
+                    rFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
+                }
+            }
+    }
+    else
+    {
+        const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+        USHORT nSize = rFmts.Count();
+        for ( USHORT i = 0; i < nSize; i++)
+        {
+            const SwFrmFmt* pFmt = rFmts[ i ];
+            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+            const SwPosition* pAnchorPos;
+            if( rAnchor.GetAnchorId() == FLY_AT_CNTNT &&
+                0 != (pAnchorPos = rAnchor.GetCntntAnchor()) &&
+                    pAnchorPos->nNode == rIdx )
+            {
+                //jetzt einen SwDepend anlegen und in das Array einfuegen
+                SwDepend* pNewDepend = new SwDepend( &rClnt, (SwFrmFmt*)pFmt);
+                USHORT nInsPos = rFrameArr.Count();
+                if( bSort )
+                {
+                    xub_StrLen nInsertIndex = pAnchorPos->nContent.GetIndex();
+
+                    USHORT nEnd = nInsPos;
+                    for( nInsPos = 0; nInsPos < nEnd; ++nInsPos )
+                        if( aSortArr[ nInsPos ] > nInsertIndex )
+                            break;
+                    aSortArr.Insert( nInsertIndex, nInsPos );
+                }
+                rFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
+            }
+        }
+    }
+}
+
 
 /*-- 09.12.98 14:18:58---------------------------------------------------
 
@@ -2040,7 +2125,7 @@ uno::Any SwXTextRanges::getByIndex(sal_Int32 nIndex)
     XTextRangeArr* pArr = ((SwXTextRanges*)this)->GetRangesArray();
     if(pArr && pArr->Count() > nIndex)
     {
-        XTextRangeRefPtr pRef = pArr->GetObject(nIndex);
+        XTextRangeRefPtr pRef = pArr->GetObject( USHORT( nIndex ));
         aRef = *pRef;
     }
     else
@@ -2163,33 +2248,16 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
     pUnoCrsr->Add(this);
 
     if(PARAFRAME_PORTION_PARAGRAPH == nParaFrameMode)
-    {
-        const SwNodeIndex& rOwnNode = rUnoCrsr.GetPoint()->nNode;
-        //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz gebunden sind
-        const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-        USHORT nSize = rFmts.Count();
-        for ( USHORT i = 0; i < nSize; i++)
-        {
-            const SwFrmFmt* pFmt = rFmts[ i ];
-            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-            const SwPosition* pAnchorPos;
-            if( rAnchor.GetAnchorId() == FLY_AT_CNTNT &&
-                0 != (pAnchorPos = rAnchor.GetCntntAnchor()) &&
-                    pAnchorPos->nNode == rOwnNode)
-            {
-                //jetzt einen SwDepend anlegen und in das Array einfuegen
-                SwDepend* pNewDepend = new SwDepend(this, (SwFrmFmt*)pFmt);
-                aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
-            }
-        }
-    }
+        ::CollectFrameAtNode( *this, rUnoCrsr.GetPoint()->nNode,
+                                aFrameArr, FALSE );
     else if(pFmt)
     {
         //jetzt einen SwDepend anlegen und in das Array einfuegen
         SwDepend* pNewDepend = new SwDepend(this, pFmt);
         aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
     }
-    else if((PARAFRAME_PORTION_CHAR == nParaFrameMode) || (PARAFRAME_PORTION_TEXTRANGE == nParaFrameMode))
+    else if((PARAFRAME_PORTION_CHAR == nParaFrameMode) ||
+            (PARAFRAME_PORTION_TEXTRANGE == nParaFrameMode))
     {
         SwPosFlyFrms aFlyFrms;
         //get all frames that are bound at paragraph or at character
