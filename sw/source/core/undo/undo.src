@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:59:37 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,7 +744,7 @@ String STR_UNDO_NUMRULE_RENAME
 String STR_UNDO_BOOKMARK_RENAME
 {
     Text [ de ] = "Textmarke umbenennen: $1 $2 $3";
-    Text[ en-US ] = "bookmark renamed: $1 $2 $3";
+    Text[ en-US ] = "Rename bookmark: $1 $2 $3";
 };
 String STR_UNDO_INDEX_ENTRY_INSERT
 {
@@ -828,6 +828,11 @@ String STR_DRAWING_OBJECTS
 };
 String STR_TABLE_NAME
 {
-    Text [ de ] = "Tabelle $1$2$3";
-    Text[ en-US ] = "table $1$2$3";
+    Text [ de ] = "Tabelle: $1$2$3";
+    Text[ en-US ] = "table: $1$2$3";
+};
+String STR_PARAGRAPH_UNDO
+{
+    Text [ de ] = "Absatz";
+    Text[ en-US ] = "paragraph";
 };
