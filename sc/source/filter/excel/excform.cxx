@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:44:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
+#endif
+#ifndef SC_XINAME_HXX
+#include "xiname.hxx"
 #endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
@@ -594,7 +597,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                         DBG_ERROR(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
-                const XclImpName* pName = GetNameBuffer().GetNameFromIndex(nUINT16);
+                const XclImpName* pName = GetNameManager().GetName( nUINT16 );
                 if(pName && !pName->GetScRangeData())
                     aStack << aPool.Store( ocMacro, pName->GetXclName() );
                 else
