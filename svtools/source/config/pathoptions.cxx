@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 06:30:33 $
+ *  last change: $Author: pb $ $Date: 2000-10-13 09:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
 {
     ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
-    Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
+    Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
     OUString aOfficePath;
     if ( aAny >>= aOfficePath )
     {
@@ -735,7 +735,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         DBG_ERRORFILE( "wrong any type" );
     }
 
-    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
+    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
     OUString aUserPath;
     if ( aAny >>= aUserPath )
     {
