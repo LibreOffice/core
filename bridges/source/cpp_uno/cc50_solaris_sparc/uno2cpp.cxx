@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 20:05:04 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,9 +295,9 @@ static void cpp_call(
 }
 
 //==================================================================================================
-void SAL_CALL cppu_unoInterfaceProxy_dispatch(
+extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException )
+    void * pReturn, void * pArgs[], uno_Any ** ppException ) throw ()
 {
     // is my surrogate
     cppu_unoInterfaceProxy * pThis = (cppu_unoInterfaceProxy *)pUnoI;
