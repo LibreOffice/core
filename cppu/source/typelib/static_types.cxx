@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #else
 #include <stdarg.h>
 #endif
+
+#include <algorithm>
 
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>
@@ -491,6 +493,18 @@ void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference * pBaseType )
     SAL_THROW_EXTERN_C()
 {
+    typelib_static_mi_interface_type_init(
+        ppRef, pTypeName, pBaseType == 0 ? 0 : 1, &pBaseType);
+}
+
+//##################################################################################################
+void SAL_CALL typelib_static_mi_interface_type_init(
+    typelib_TypeDescriptionReference ** ppRef,
+    const sal_Char * pTypeName,
+    sal_Int32 nBaseTypes,
+    typelib_TypeDescriptionReference ** ppBaseTypes )
+    SAL_THROW_EXTERN_C()
+{
     if (! *ppRef)
     {
         MutexGuard aGuard( typelib_getStaticInitMutex() );
@@ -504,18 +518,29 @@ void SAL_CALL typelib_static_interface_type_init(
                 ::typelib_typedescription_newEmpty(
                     (typelib_TypeDescription **)&pIface, typelib_TypeClass_INTERFACE, aTypeName.pData );
 
-                if (pBaseType)
+                pIface->nBaseTypes = std::max< sal_Int32 >(nBaseTypes, 1);
+                pIface->ppBaseTypes = new typelib_InterfaceTypeDescription *[
+                    pIface->nBaseTypes];
+                if (nBaseTypes > 0)
                 {
-                    ::typelib_typedescriptionreference_getDescription(
-                        (typelib_TypeDescription **)&pIface->pBaseTypeDescription, pBaseType );
+                    for (sal_Int32 i = 0; i < nBaseTypes; ++i) {
+                        pIface->ppBaseTypes[i] = 0;
+                        ::typelib_typedescriptionreference_getDescription(
+                            (typelib_TypeDescription **)&pIface->ppBaseTypes[i], ppBaseTypes[i] );
+                        OSL_ASSERT( pIface->ppBaseTypes[i] );
+                    }
                 }
                 else
                 {
+                    pIface->ppBaseTypes[0] = 0;
                     ::typelib_typedescriptionreference_getDescription(
-                        (typelib_TypeDescription **)&pIface->pBaseTypeDescription,
+                        (typelib_TypeDescription **)&pIface->ppBaseTypes[0],
                         * ::typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ) );
+                    OSL_ASSERT( pIface->ppBaseTypes[0] );
                 }
-                OSL_ASSERT( pIface->pBaseTypeDescription );
+                pIface->pBaseTypeDescription = pIface->ppBaseTypes[0];
+                typelib_typedescription_acquire(
+                    &pIface->pBaseTypeDescription->aBase);
 
                 typelib_TypeDescription * pReg = (typelib_TypeDescription *)pIface;
                 pReg->pWeakRef = (typelib_TypeDescriptionReference *)pReg;
