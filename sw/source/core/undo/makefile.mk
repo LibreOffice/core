@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:37:15 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:51:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,36 +73,7 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:128
-.ENDIF
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        SwUndoTempAutoCorr.cxx \
-        docundo.cxx \
-        rolbck.cxx \
-        unattr.cxx \
-        unbkmk.cxx \
-        undel.cxx \
-        undobj.cxx \
-        undobj1.cxx \
-        undraw.cxx \
-        unfmco.cxx \
-        unins.cxx \
-        unmove.cxx \
-        unnum.cxx \
-        unoutl.cxx \
-        unovwr.cxx \
-        unredln.cxx \
-        unsect.cxx \
-        unsort.cxx \
-        unspnd.cxx \
-        untbl.cxx \
-        untblk.cxx
-
-
 
 SLOFILES =	\
         $(SLO)$/SwUndoTempAutoCorr.obj \
