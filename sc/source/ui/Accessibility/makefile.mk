@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: sab $ $Date: 2002-08-06 11:10:26 $
+#   last change: $Author: hjs $ $Date: 2002-08-14 12:59:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,7 @@ CXXFILES =						\
         AccessiblePageHeaderArea.cxx    \
         DrawModelBroadcaster.cxx        \
         AccessibleEditObject.cxx        \
-        AccessibleDataPilotControl
+        AccessibleDataPilotControl.cxx
 
 EXCEPTIONSFILES=\
         $(SLO)$/AccessibleContextBase.obj	\
