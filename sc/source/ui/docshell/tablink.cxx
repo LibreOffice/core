@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:30:37 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 12:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ String ScDocumentLoader::GetOptions( SfxMedium& rMedium )       // static
 }
 
 void ScDocumentLoader::GetFilterName( const String& rFileName,
-                                    String& rFilter, String& rOptions )         // static
+                                    String& rFilter, String& rOptions, BOOL bWithContent )  // static
 {
     TypeId aScType = TYPE(ScDocShell);
     SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( &aScType );
@@ -426,8 +426,17 @@ void ScDocumentLoader::GetFilterName( const String& rFileName,
     SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
-        SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer() );
-        aMatcher.GuessFilter( *pMedium, &pSfxFilter );
+        SfxFilterContainer* pContainer = ScDocShell::Factory().GetFilterContainer();
+        if ( bWithContent && pContainer )
+        {
+            // look at file content (call DetectFilter)
+            pContainer->GetFilter4Content( *pMedium, &pSfxFilter );
+        }
+        else
+        {
+            SfxFilterMatcher aMatcher( pContainer );
+            aMatcher.GuessFilter( *pMedium, &pSfxFilter );
+        }
     }
 
     if ( pSfxFilter )
