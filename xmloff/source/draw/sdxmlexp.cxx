@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-14 11:22:00 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 14:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmlmetae.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONSUPPLIER_HPP_
@@ -851,17 +855,23 @@ void SdXMLExport::ImpWriteObjGraphicStyleInfos()
 
     // write graphic family default style
     uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
-    if( !xFact.is() )
-        return;
+    if( xFact.is() )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), uno::UNO_QUERY );
+            if( xDefaults.is() )
+            {
+                aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef );
 
-    uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), uno::UNO_QUERY );
-    if( !xDefaults.is() )
-        return;
-
-    aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef );
-
-    // write graphic family styles
-    aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                // write graphic family styles
+                aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+            }
+        }
+        catch( lang::ServiceNotRegisteredException& )
+        {
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2432,6 +2442,25 @@ OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SdXMLExport( sal_True );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL DrawingLayerXMLExport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.DrawingLayer.XMLExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL DrawingLayerXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawingLayerXMLExport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL DrawingLayerXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 }
 
 //////////////////////////////////////////////////////////////////////////////
