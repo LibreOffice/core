@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 09:42:45 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 16:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,6 +603,8 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
     Any aHelper;
     aHelper <<= xSet;
     m_xEventAttacher->attach(_nIndex, xIfc, aHelper);
+
+    implReplaced(xOldElement, xNewElement);
 
     // benachrichtigen
     ContainerEvent aEvt;

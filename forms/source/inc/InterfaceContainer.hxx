@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 09:05:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 16:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ protected:
     virtual void implInserted(const InterfaceRef& _rxObject) { }
     // called after the object is removed, but before the "real listeners" are notified
     virtual void implRemoved(const InterfaceRef& _rxObject) { }
+    // called after an object was replaced, but before the "real listeners" are notified
+    virtual void implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject) { }
 
     void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream, sal_Int32 nCount);
