@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 12:27:36 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 17:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,14 +195,14 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, doub
 
     // svg: width
     if(!(nFeatures & SEF_EXPORT_WIDTH))
-        aTRScale.X() = 0.0;
+        aTRScale.X() = 1.0;
     rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.X()));
     aStr = sStringBuffer.makeStringAndClear();
     rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
 
     // svg: height
     if(!(nFeatures & SEF_EXPORT_HEIGHT))
-        aTRScale.Y() = 0.0;
+        aTRScale.Y() = 1.0;
     rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.Y()));
     aStr = sStringBuffer.makeStringAndClear();
     rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
