@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,26 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "~Rahmen anzeigen" ;
         Text [ ENGLISH ] = "Display ~border" ;
+        Text[ english_us ] = "Display border in";
+        Text[ portuguese ] = "Mostrar moldura em";
+        Text[ russian ] = "Ïîêàçàòü ğàìêè â öâåòå";
+        Text[ greek ] = "ÅìöÜíéóç ğëáéóßïõ óôï";
+        Text[ dutch ] = "Kader weergeven in";
+        Text[ french ] = "Afficher cadre dans";
+        Text[ spanish ] = "Mostrar borde en";
+        Text[ finnish ] = "Näytä reunus";
+        Text[ italian ] = "Mostra cornice in";
+        Text[ danish ] = "Vis ramme i";
+        Text[ swedish ] = "Visa ~ram i";
+        Text[ polish ] = "Poka¿ ramkê w k~olorze";
+        Text[ portuguese_brazilian ] = "Rahmen anzeigen in";
+        Text[ japanese ] = "˜g‚ğ•\\¦";
+        Text[ korean ] = "°æ°è¼± Ç¥½Ã";
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ß¿ò";
+        Text[ chinese_traditional ] = "Åã¥ÜÃä®Ø";
+        Text[ turkish ] = "Çerçeve rengi";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáßÇÏÑ ÈÇááæä";
+        Text[ catalan ] = "Mostrar borde en";
     };
     ListBox LB_COLOR
     {
@@ -169,7 +189,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "C~opy back" ;
         Text [ english_us ] = "Copy back" ;
         Text [ portuguese_brazilian ] = "Zur?ckkopieren" ;
-        Text [ swedish ] = "Kopiera tillbaka" ;
+        Text [ swedish ] = "Kopiera t~illbaka" ;
         Text [ danish ] = "Kopier tilbage" ;
         Text [ italian ] = "Ricopia all'indietro" ;
         Text [ spanish ] = "Actualizar escenario con valores modificados" ;
@@ -236,7 +256,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ portuguese ] = "Copiar só valores" ;
         Text[ chinese_simplified ] = "Ö»¸´ÖÆÊıÖµ";
         Text[ russian ] = "Êîïèğîâàòü òîëüêî çíà÷åíèÿ";
-        Text[ polish ] = "Kopiuj tylko warto?ci";
+        Text[ polish ] = "Kopiuj tylko wartoœci";
         Text[ japanese ] = "”’l‚Ì‚İºËß°";
         Text[ chinese_traditional ] = "¥u½Æ»s¼Æ­È";
         Text[ arabic ] = "äÓÎ ÇáŞíã İŞØ";
@@ -255,7 +275,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "Copy entire ~sheet" ;
         Text [ english_us ] = "Copy entire sheet" ;
         Text [ portuguese_brazilian ] = "Ganze Tabelle kopieren" ;
-        Text [ swedish ] = "Kopiera hel tabell" ;
+        Text [ swedish ] = "Kopiera hel ~tabell" ;
         Text [ danish ] = "Kopier hele arket" ;
         Text [ italian ] = "Copia intera tabella" ;
         Text [ spanish ] = "Copiar toda la hoja" ;
@@ -367,7 +387,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ portuguese ] = "Nome do cenário";
         Text[ danish ] = "Scenariets navn";
         Text[ french ] = "Nom du scénario";
-        Text[ swedish ] = "Namn på scenariot";
+        Text[ swedish ] = "~Namn på scenariot";
         Text[ dutch ] = "Naam van het scenario";
         Text[ spanish ] = "Nombre del escenario";
         Text[ chinese_simplified ] = "·½°¸Ãû³Æ";
@@ -395,7 +415,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ portuguese ] = "Comentário";
         Text[ danish ] = "Kommentar";
         Text[ french ] = "Commentaire";
-        Text[ swedish ] = "Kommentar";
+        Text[ swedish ] = "~Kommentar";
         Text[ dutch ] = "Commentaar";
         Text[ spanish ] = "Comentario";
         Text[ chinese_simplified ] = "×¢½â";
