@@ -51,18 +51,37 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:style="http://openoffice.org/2000/style" xmlns:table="http://openoffice.org/2000/table" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:svg="http://www.w3.org/2000/svg" xmlns:text="http://openoffice.org/2000/text" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" exclude-result-prefixes="w wx aml ">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
+    <xsl:template match="w:style[@w:type='table']" mode="table">
+        <style:style style:family="table">
+            <xsl:attribute name="style:name">
+                <xsl:value-of select="concat('w',translate(@w:styleId,' ','_'))"/>
+            </xsl:attribute>
+            <xsl:if test="w:basedOn">
+                <xsl:attribute name="style:parent-style-name">
+                    <xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ','_'))"/>
+                </xsl:attribute>
+            </xsl:if>
+            <style:table-properties table:align="margins"/>
+        </style:style>
+    </xsl:template>
     <xsl:template match="w:tblPr" mode="style">
         <xsl:element name="style:style">
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/></xsl:attribute>
+
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
+
             <xsl:attribute name="style:family">table</xsl:attribute>
             <xsl:if test="w:tblStyle">
-                <xsl:attribute name="style:parent-style-name"><xsl:value-of select="w:tblStyle/@w:val"/></xsl:attribute>
+                <xsl:attribute name="style:parent-style-name">
+                    <xsl:value-of select="concat('w',translate(w:tblStyle/@w:val,' ','_'))"/>
+                </xsl:attribute>
             </xsl:if>
-            <xsl:element name="style:properties">
+            <xsl:element name="style:table-properties">
                 <xsl:choose>
                     <xsl:when test="w:jc/@w:val = 'left' or w:jc/@w:val = 'center' or w:jc/@w:val = 'right'">
-                        <xsl:attribute name="table:align"><xsl:value-of select="w:jc/@w:val"/></xsl:attribute>
+                        <xsl:attribute name="table:align">
+                            <xsl:value-of select="w:jc/@w:val"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:attribute name="table:align">margins</xsl:attribute>
@@ -75,8 +94,9 @@
                 <xsl:variable name="page-right-mar" select="$sectPr/w:pgMar/@w:right"/>
                 <xsl:variable name="page-size-value" select="$total-page-size - $page-left-mar - $page-right-mar"/>
                 <xsl:variable name="page-size-inch">
-                    <xsl:call-template name="convert2in">
-                        <xsl:with-param name="value" select="concat($page-size-value, 'dxa') "/>
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="TargetMeasure" select="'in'"/>
+                        <xsl:with-param name="value" select="concat($page-size-value, 'twip') "/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:variable name="gridcols" select="../w:tblGrid/w:gridCol"/>
@@ -84,8 +104,9 @@
                 <xsl:variable name="table_indent">
                     <xsl:choose>
                         <xsl:when test="w:tblInd and  w:tblInd/@w:w &gt; 0 ">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat(w:tblInd/@w:w, 'dxa') "/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat(w:tblInd/@w:w, 'twip') "/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
@@ -99,13 +120,16 @@
                             <xsl:value-of select="(number(w:tblW/@w:w  ) div 5000) * $page-size-inch"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat($tblsize, 'dxa')"/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat($tblsize, 'twip')"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:attribute name="style:width"><xsl:value-of select="concat($rel-tblsize, 'inch' )"/></xsl:attribute>
+                <xsl:attribute name="style:width">
+                    <xsl:value-of select="concat($rel-tblsize, 'in' )"/>
+                </xsl:attribute>
                 <xsl:variable name="tbl_margin_left">
                     <xsl:choose>
                         <xsl:when test="not(w:tblpPr ) ">
@@ -156,8 +180,12 @@
                         </xsl:when>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:attribute name="fo:margin-left"><xsl:value-of select="concat( $tbl_margin_left, 'inch')"/></xsl:attribute>
-                <xsl:attribute name="fo:margin-right"><xsl:value-of select="concat($tbl_margin_right, 'inch')"/></xsl:attribute>
+                <xsl:attribute name="fo:margin-left">
+                    <xsl:value-of select="concat( $tbl_margin_left, 'in')"/>
+                </xsl:attribute>
+                <xsl:attribute name="fo:margin-right">
+                    <xsl:value-of select="concat($tbl_margin_right, 'in')"/>
+                </xsl:attribute>
                 <!-- If previous w:p has a page break, the table must have the page break attribute applied to it	 May need this for tables starting on new pages -->
                 <!--	<xsl:if test="parent::w:tbl/preceding-sibling::w:p[1][descendant::w:br/@w:type='page']">
 							<xsl:attribute name="fo:break-before">page</xsl:attribute></xsl:if>	-->
@@ -167,43 +195,60 @@
         <!-- the following style is for conveting Word table text wrapping to SO Writer. Since SO Writer has no table text wrapping feature, so we use the draw:text-box as a container and put the table in draw:text-box -->
         <xsl:if test="w:tblpPr">
             <xsl:element name="style:style">
-                <xsl:attribute name="style:name">TableFrame<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any"/></xsl:attribute>
-                <xsl:attribute name="style:family">graphics</xsl:attribute>
-                <xsl:attribute name="style:parent-style-name"><xsl:value-of select=" 'Frame' "/></xsl:attribute>
-                <xsl:element name="style:properties">
+
+                <xsl:attribute name="style:name">TableFrame<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
+                <xsl:attribute name="style:family">graphic</xsl:attribute>
+                <xsl:attribute name="style:parent-style-name">
+                    <xsl:value-of select=" 'Frame' "/>
+                </xsl:attribute>
+                <xsl:element name="style:graphic-properties">
                     <xsl:if test="w:tblpPr/@w:leftFromText">
                         <xsl:variable name="left_margin_from_text">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:leftFromText, 'dxa') "/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:leftFromText, 'twip') "/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="fo:margin-left"><xsl:value-of select="concat( $left_margin_from_text, 'inch') "/></xsl:attribute>
+                        <xsl:attribute name="fo:margin-left">
+                            <xsl:value-of select="concat( $left_margin_from_text, 'in') "/>
+                        </xsl:attribute>
                     </xsl:if>
                     <xsl:if test="w:tblpPr/@w:rightFromText">
                         <xsl:variable name="right_margin_from_text">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:rightFromText, 'dxa') "/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:rightFromText, 'twip') "/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="fo:margin-right"><xsl:value-of select="concat( $right_margin_from_text, 'inch') "/></xsl:attribute>
+                        <xsl:attribute name="fo:margin-right">
+                            <xsl:value-of select="concat( $right_margin_from_text, 'in') "/>
+                        </xsl:attribute>
                     </xsl:if>
                     <xsl:if test="w:tblpPr/@w:topFromText">
                         <xsl:variable name="top_margin_from_text">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:topFromText, 'dxa') "/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:topFromText, 'twip') "/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="fo:margin-top"><xsl:value-of select="concat( $top_margin_from_text, 'inch') "/></xsl:attribute>
+                        <xsl:attribute name="fo:margin-top">
+                            <xsl:value-of select="concat( $top_margin_from_text, 'in') "/>
+                        </xsl:attribute>
                     </xsl:if>
                     <xsl:if test="w:tblpPr/@w:bottomFromText">
                         <xsl:variable name="bottom_margin_from_text">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:bottomFromText, 'dxa') "/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat (w:tblpPr/@w:bottomFromText, 'twip') "/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="concat( $bottom_margin_from_text, 'inch') "/></xsl:attribute>
+                        <xsl:attribute name="fo:margin-bottom">
+                            <xsl:value-of select="concat( $bottom_margin_from_text, 'in') "/>
+                        </xsl:attribute>
                     </xsl:if>
-                    <xsl:attribute name="style:number-wrapped-paragraphs"><xsl:text>no-limit</xsl:text></xsl:attribute>
+                    <xsl:attribute name="style:number-wrapped-paragraphs">
+                        <xsl:text>no-limit</xsl:text>
+                    </xsl:attribute>
                     <!--xsl:if test="w:tblpPr/@w:tblpYSpec" to get the vertical alignment-->
                     <xsl:variable name="vertical_alignment">
                         <xsl:choose>
@@ -227,7 +272,9 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:attribute name="style:vertical-pos"><xsl:value-of select="$vertical_alignment"/></xsl:attribute>
+                    <xsl:attribute name="style:vertical-pos">
+                        <xsl:value-of select="$vertical_alignment"/>
+                    </xsl:attribute>
                     <!--/xsl:if-->
                     <!--xsl:if test="w:tblpPr/@w:vertAnchor" to get the vertical anchor related area type -->
                     <xsl:variable name="frame_v_anchor">
@@ -246,7 +293,9 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:attribute name="style:vertical-rel"><xsl:value-of select="$frame_v_anchor"/></xsl:attribute>
+                    <xsl:attribute name="style:vertical-rel">
+                        <xsl:value-of select="$frame_v_anchor"/>
+                    </xsl:attribute>
                     <!--/xsl:if-->
                     <!--xsl:if test="w:tblpPr/@w:tblpXSpec" to get the horizntal alignment-->
                     <xsl:variable name="horizental_alignment">
@@ -271,7 +320,9 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:attribute name="style:horizontal-pos"><xsl:value-of select="$horizental_alignment"/></xsl:attribute>
+                    <xsl:attribute name="style:horizontal-pos">
+                        <xsl:value-of select="$horizental_alignment"/>
+                    </xsl:attribute>
                     <!--/xsl:if-->
                     <!--xsl:if test="w:tblpPr/@w:horzAnchor" to get the horizental anchor related area type-->
                     <xsl:variable name="frame_h_anchor">
@@ -296,11 +347,17 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:attribute name="style:horizontal-rel"><xsl:value-of select="$frame_h_anchor"/></xsl:attribute>
+                    <xsl:attribute name="style:horizontal-rel">
+                        <xsl:value-of select="$frame_h_anchor"/>
+                    </xsl:attribute>
                     <!--/xsl:if-->
-                    <xsl:attribute name="fo:background-color"><xsl:text>#ffffff</xsl:text></xsl:attribute>
-                    <xsl:attribute name="style:background-transparency"><xsl:text>100%</xsl:text></xsl:attribute>
-                    <xsl:attribute name="style:wrap"><xsl:text>parallel</xsl:text></xsl:attribute>
+                    <xsl:attribute name="fo:background-color">
+                        <xsl:text>#ffffff</xsl:text>
+                    </xsl:attribute>
+                    <!-- xsl:attribute name="style:background-transparency"><xsl:text>100%</xsl:text></xsl:attribute -->
+                    <xsl:attribute name="style:wrap">
+                        <xsl:text>parallel</xsl:text>
+                    </xsl:attribute>
                 </xsl:element>
             </xsl:element>
         </xsl:if>
@@ -308,14 +365,18 @@
     <xsl:template match="w:gridCol" mode="style">
         <xsl:element name="style:style">
             <xsl:attribute name="style:family">table-column</xsl:attribute>
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single"/></xsl:attribute>
-            <xsl:element name="style:properties">
+
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:element name="style:table-column-properties">
                 <xsl:variable name="column_width">
-                    <xsl:call-template name="convert2in">
-                        <xsl:with-param name="value" select="concat(@w:w, 'dxa') "/>
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="TargetMeasure" select="'in'"/>
+                        <xsl:with-param name="value" select="concat(@w:w, 'twip') "/>
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:attribute name="style:column-width"><xsl:value-of select="concat($column_width,'inch') "/></xsl:attribute>
+                <xsl:attribute name="style:column-width">
+                    <xsl:value-of select="concat($column_width,'in') "/>
+                </xsl:attribute>
             </xsl:element>
         </xsl:element>
     </xsl:template>
@@ -323,16 +384,20 @@
         <!-- to generate style:style of table-row height.  -->
         <xsl:element name="style:style">
             <xsl:attribute name="style:family">table-row</xsl:attribute>
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single"/></xsl:attribute>
-            <xsl:element name="style:properties">
+
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:element name="style:table-row-properties">
                 <xsl:choose>
                     <xsl:when test="w:trHeight/@w:val">
                         <xsl:variable name="tbl_row_height">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat(w:trHeight/@w:val, 'dxa') "/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                <xsl:with-param name="value" select="concat(w:trHeight/@w:val, 'twip') "/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="style:row-height"><xsl:value-of select="concat($tbl_row_height, 'inch' )"/></xsl:attribute>
+                        <xsl:attribute name="style:min-row-height">
+                            <xsl:value-of select="concat($tbl_row_height, 'in' )"/>
+                        </xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
             </xsl:element>
@@ -340,11 +405,12 @@
     </xsl:template>
     <xsl:template match="w:tcPr" mode="style">
         <style:style>
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single"/></xsl:attribute>
+
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
             <xsl:attribute name="style:family">table-cell</xsl:attribute>
             <xsl:variable name="rootStyle" select="ancestor::w:tbl/w:tblPr/w:tblStyle/@w:val"/>
             <xsl:variable name="rootStyleNode" select="/w:wordDocument/w:styles/w:style[@w:styleId = $rootStyle]"/>
-            <xsl:element name="style:properties">
+            <xsl:element name="style:table-cell-properties">
                 <!-- cell background color start -->
                 <xsl:variable name="tbl_cell_background_color">
                     <xsl:choose>
@@ -356,7 +422,13 @@
                         </xsl:when>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:attribute name="fo:background-color"><xsl:value-of select="concat('#',$tbl_cell_background_color)"/></xsl:attribute>
+                <xsl:choose>
+                    <xsl:when test=" string-length($tbl_cell_background_color) &gt; 0 and not( $tbl_cell_background_color ='auto' )">
+                        <xsl:attribute name="fo:background-color">
+                            <xsl:value-of select="concat('#',$tbl_cell_background_color)"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                </xsl:choose>
                 <!--cell background color end -->
                 <!-- table cell vertical alignment start -->
                 <xsl:if test="w:vAlign">
@@ -376,20 +448,22 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:attribute name="fo:vertical-align"><xsl:value-of select="$tbl_cell_alignment"/></xsl:attribute>
+                    <xsl:attribute name="style:vertical-align">
+                        <xsl:value-of select="$tbl_cell_alignment"/>
+                    </xsl:attribute>
                 </xsl:if>
                 <!--table cell alignment end -->
                 <!-- cell margin start -->
                 <xsl:variable name="tblcell_leftmargin">
                     <xsl:choose>
                         <xsl:when test="w:tcMar/w:left">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat(w:tcMar/w:left/@w:w , w:tcMar/w:left/@w:type) "/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat(w:tcMar/w:left/@w:w , w:tcMar/w:left/@w:type) "/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="$rootStyleNode/w:tblPr/w:tblCellMar/w:left">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:left/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:left/@w:type)"/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:left/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:left/@w:type)"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
@@ -400,13 +474,13 @@
                 <xsl:variable name="tblcell_rightmargin">
                     <xsl:choose>
                         <xsl:when test="w:tcMar/w:right">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat(w:tcMar/w:right/@w:w , w:tcMar/w:right/@w:type) "/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat(w:tcMar/w:right/@w:w , w:tcMar/w:right/@w:type) "/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="$rootStyleNode/w:tblPr/w:tblCellMar/w:right">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:right/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:right/@w:type)"/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:right/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:right/@w:type)"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
@@ -417,13 +491,13 @@
                 <xsl:variable name="tblcell_topmargin">
                     <xsl:choose>
                         <xsl:when test="w:tcMar/w:top">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat(w:tcMar/w:top/@w:w , w:tcMar/w:top/@w:type) "/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat(w:tcMar/w:top/@w:w , w:tcMar/w:top/@w:type) "/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="$rootStyleNode/w:tblPr/w:tblCellMar/w:top">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:top/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:top/@w:type)"/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:top/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:top/@w:type)"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
@@ -434,13 +508,13 @@
                 <xsl:variable name="tblcell_bottommargin">
                     <xsl:choose>
                         <xsl:when test="w:tcMar/w:bottom">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat(w:tcMar/w:bottom/@w:w , w:tcMar/w:bottom/@w:type) "/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat(w:tcMar/w:bottom/@w:w , w:tcMar/w:bottom/@w:type) "/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="$rootStyleNode/w:tblPr/w:tblCellMar/w:bottom">
-                            <xsl:call-template name="convert2in">
-                                <xsl:with-param name="value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:bottom/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:bottom/@w:type)"/>
+                            <xsl:call-template name="convert2in_special">
+                                <xsl:with-param name="original_value" select="concat($rootStyleNode/w:tblPr/w:tblCellMar/w:bottom/@w:w , $rootStyleNode/w:tblPr/w:tblCellMar/w:bottom/@w:type)"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
@@ -448,13 +522,29 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:attribute name="fo:padding-left"><xsl:value-of select="concat($tblcell_leftmargin, 'inch' )"/></xsl:attribute>
-                <xsl:attribute name="fo:padding-right"><xsl:value-of select="concat($tblcell_rightmargin, 'inch' )"/></xsl:attribute>
-                <xsl:attribute name="fo:padding-top"><xsl:value-of select="concat($tblcell_topmargin, 'inch' )"/></xsl:attribute>
-                <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="concat($tblcell_bottommargin, 'inch' )"/></xsl:attribute>
+                <xsl:if test="string-length($tblcell_leftmargin) &gt; 0 ">
+                    <xsl:attribute name="fo:padding-left">
+                        <xsl:value-of select="concat($tblcell_leftmargin, 'in' )"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="string-length($tblcell_rightmargin) &gt; 0">
+                    <xsl:attribute name="fo:padding-right">
+                        <xsl:value-of select="concat($tblcell_rightmargin, 'in' )"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="string-length($tblcell_topmargin) &gt; 0 ">
+                    <xsl:attribute name="fo:padding-top">
+                        <xsl:value-of select="concat($tblcell_topmargin, 'in' )"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="string-length($tblcell_bottommargin) &gt;  0">
+                    <xsl:attribute name="fo:padding-bottom">
+                        <xsl:value-of select="concat($tblcell_bottommargin, 'in' )"/>
+                    </xsl:attribute>
+                </xsl:if>
                 <!-- cell margin end -->
                 <xsl:variable name="row-position">
-                    <xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single"/>
+                    <xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>
                 </xsl:variable>
                 <!-- cell borders should be carefully converted. a little complex. glu :( -->
                 <xsl:variable name="Borders" select="ancestor::w:tbl/w:tblPr/w:tblBorders"/>
@@ -602,38 +692,56 @@
             <xsl:when test="$border-style = 'single'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 7">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.002cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.002cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 20">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.035cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.035cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 30">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.088cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.088cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 40">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.141cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.141cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.176cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.176cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
             <xsl:when test="$border-style = 'double'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 10">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.039cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.039cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.035cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 15">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.092cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.092cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 20">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.106cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.106cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.035cm 0.035cm</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.265cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.265cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.088cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -641,19 +749,27 @@
             <xsl:when test="$border-style = 'triple'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 5">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.039cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.039cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.035cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 10">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.092cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.092cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">.002cm 0.088cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 15">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.106cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.106cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.035cm 0.035cm</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.265cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.265cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.088cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -663,21 +779,29 @@
                     <xsl:when test="($border-style = 'thin-thick-small-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-small-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
                         <xsl:choose>
                             <xsl:when test="$size-style &lt; 20">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.125cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.125cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:when test="$size-style &lt; 30">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.178cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.178cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.088cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.231cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.231cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.141cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -685,15 +809,21 @@
             <xsl:when test="$border-style = 'thin-thick-thin-small-gap'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 20">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.178cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.178cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.088cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 40">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.231cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.231cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.141cm</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.141cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -701,27 +831,37 @@
             <xsl:when test="$border-style = 'thin-thick-medium-gap' or $border-style = 'thick-thin-medium-gap'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 10">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.039cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.039cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.035cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 15">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.106cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.106cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.035cm 0.035cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 30">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-medium-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-medium-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.212cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.212cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.088cm 0.088cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-medium-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-medium-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.141cm</xsl:attribute>
@@ -736,27 +876,37 @@
             <xsl:when test="$border-style = 'thin-thick-thin-medium-gap'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 10">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.039cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.039cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.035cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 15">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.106cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.106cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.035cm 0.035cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 30">
                         <xsl:choose>
                             <xsl:when test="$style-pos = 'left' or $style-pos = 'top'">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.212cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.212cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.088cm 0.088cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:choose>
                             <xsl:when test="$style-pos = 'left' or $style-pos = 'top'">
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.141cm 0.088cm 0.088cm</xsl:attribute>
@@ -771,17 +921,23 @@
             <xsl:when test="$border-style = 'thin-thick-large-gap' or $border-style = 'thick-thin-large-gap'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 7">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.092cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.092cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 10">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-large-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-large-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.125cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.125cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.092cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.092cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.002cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -789,11 +945,15 @@
                     <xsl:when test="$size-style &lt; 15">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-large-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-large-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.125cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.125cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -801,11 +961,15 @@
                     <xsl:when test="$size-style &lt; 30">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-large-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-large-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.178cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.178cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.088cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -813,17 +977,23 @@
                     <xsl:when test="$size-style &lt; 40">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-large-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-large-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.231cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.231cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.141cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:choose>
                             <xsl:when test="($border-style = 'thin-thick-large-gap' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'thick-thin-large-gap' and ($style-pos = 'right' or $style-pos = 'bottom'))">
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.141cm</xsl:attribute>
@@ -838,44 +1008,64 @@
             <xsl:when test="$border-style = 'thin-thick-thin-large-gap'">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 5">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.125cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.125cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.035cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 10">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.178cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.178cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.088cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 20">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.231cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.231cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.141cm</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.141cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
             <xsl:when test="contains( $border-style, 'wave') or $border-style = 'dash-dot-stroked'">
-                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.106cm double #', $color-border)"/></xsl:attribute>
+                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                    <xsl:value-of select="concat('0.106cm double #', $color-border)"/>
+                </xsl:attribute>
                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.035cm 0.035cm 0.035cm</xsl:attribute>
             </xsl:when>
             <xsl:when test="contains( $border-style, 'three-d')">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 10">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.035cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.035cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 20">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.088cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.088cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 30">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.176cm solid #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.176cm solid #', $color-border)"/>
+                        </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 40">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.265cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.265cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.088cm</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.141cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -883,17 +1073,23 @@
             <xsl:when test="contains( $border-style, 'set')">
                 <xsl:choose>
                     <xsl:when test="$size-style &lt; 7">
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.092cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.092cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.002cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$size-style &lt; 10">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'outset' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'inset' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.092cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.092cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.002cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.125cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.125cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.035cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -901,11 +1097,15 @@
                     <xsl:when test="$size-style &lt; 15">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'outset' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'inset' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.125cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.125cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.035cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -913,11 +1113,15 @@
                     <xsl:when test="$size-style &lt; 30">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'outset' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'inset' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.178cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.178cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.088cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -925,23 +1129,31 @@
                     <xsl:when test="$size-style &lt; 40">
                         <xsl:choose>
                             <xsl:when test="($border-style = 'outset' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'inset' and ($style-pos = 'right' or $style-pos = 'bottom'))">
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.159cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.159cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.035cm 0.035cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.231cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.231cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.002cm 0.088cm 0.141cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.318cm double #', $color-border)"/></xsl:attribute>
+                        <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                            <xsl:value-of select="concat('0.318cm double #', $color-border)"/>
+                        </xsl:attribute>
                         <xsl:choose>
                             <xsl:when test="($border-style = 'outset' and ($style-pos = 'left' or $style-pos = 'top')) or ($border-style = 'inset' and ($style-pos = 'right' or $style-pos = 'bottom'))">
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.141cm 0.088cm 0.088cm</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="{concat('fo:border-', $style-pos)}"><xsl:value-of select="concat('0.231cm double #', $color-border)"/></xsl:attribute>
+                                <xsl:attribute name="{concat('fo:border-', $style-pos)}">
+                                    <xsl:value-of select="concat('0.231cm double #', $color-border)"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="{concat('style:border-line-width-',$style-pos)}">0.088cm 0.088cm 0.141cm</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -958,9 +1170,10 @@
             <xsl:when test="w:tblPr/w:tblpPr">
                 <!-- if the table is surrounded by text then put the table into a draw:text-box -->
                 <xsl:element name="text:p">
-                    <xsl:element name="draw:text-box">
-                        <xsl:attribute name="draw:style-name"><xsl:text>TableFrame</xsl:text><xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any"/></xsl:attribute>
-                        <xsl:attribute name="draw:name">TableFr<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any"/></xsl:attribute>
+                    <xsl:element name="draw:frame">
+
+                        <xsl:attribute name="draw:style-name"><xsl:text>TableFrame</xsl:text><xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
+                        <xsl:attribute name="draw:name">TableFr<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
                         <xsl:variable name="tbl_anchor_type">
                             <xsl:choose>
                                 <xsl:when test="name(..) = 'w:tc' ">
@@ -971,36 +1184,50 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:variable>
-                        <xsl:attribute name="text:anchor-type"><xsl:value-of select="$tbl_anchor_type"/></xsl:attribute>
+                        <xsl:attribute name="text:anchor-type">
+                            <xsl:value-of select="$tbl_anchor_type"/>
+                        </xsl:attribute>
                         <xsl:variable name="tbl_draw_textbox_width">
-                            <xsl:call-template name="convert2in">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
                                 <!--  adjust the width of draw:text-box containing a table with 20dxa + table-width -->
-                                <xsl:with-param name="value" select="concat(string(number(sum(w:tblGrid/w:gridCol/@w:w) +20)), 'dxa' )"/>
+                                <xsl:with-param name="value" select="concat(string(number(sum(w:tblGrid/w:gridCol/@w:w) +20)), 'twip' )"/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="svg:width"><xsl:value-of select="concat ($tbl_draw_textbox_width, 'inch') "/></xsl:attribute>
+                        <xsl:attribute name="svg:width">
+                            <xsl:value-of select="concat ($tbl_draw_textbox_width, 'in') "/>
+                        </xsl:attribute>
                         <xsl:if test="w:tblPr/w:tblpPr/@w:tblpX">
                             <xsl:variable name="x_distance_from_anchor">
-                                <xsl:call-template name="convert2in">
-                                    <xsl:with-param name="value" select="concat(w:tblPr/w:tblpPr/@w:tblpX, 'dxa' ) "/>
+                                <xsl:call-template name="ConvertMeasure">
+                                    <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                    <xsl:with-param name="value" select="concat(w:tblPr/w:tblpPr/@w:tblpX, 'twip' ) "/>
                                 </xsl:call-template>
                             </xsl:variable>
-                            <xsl:attribute name="svg:x"><xsl:value-of select="concat ($x_distance_from_anchor, 'inch' )"/></xsl:attribute>
+                            <xsl:attribute name="svg:x">
+                                <xsl:value-of select="concat ($x_distance_from_anchor, 'in' )"/>
+                            </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="w:tblPr/w:tblpPr/@w:tblpY">
                             <xsl:variable name="y_distance_from_anchor">
-                                <xsl:call-template name="convert2in">
-                                    <xsl:with-param name="value" select="concat(w:tblPr/w:tblpPr/@w:tblpY, 'dxa' ) "/>
+                                <xsl:call-template name="ConvertMeasure">
+                                    <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                    <xsl:with-param name="value" select="concat(w:tblPr/w:tblpPr/@w:tblpY, 'twip' ) "/>
                                 </xsl:call-template>
                             </xsl:variable>
-                            <xsl:attribute name="svg:y"><xsl:value-of select="concat ($y_distance_from_anchor, 'inch' )"/></xsl:attribute>
+                            <xsl:attribute name="svg:y">
+                                <xsl:value-of select="concat ($y_distance_from_anchor, 'in' )"/>
+                            </xsl:attribute>
                         </xsl:if>
                         <!--create table in draw:text-box to produce table wrapping text effect-->
+                        <xsl:element name="draw:text-box">
+
                         <xsl:element name="table:table">
                             <xsl:if test="w:tblPr">
-                                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/></xsl:attribute>
+                                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
                             </xsl:if>
                             <xsl:apply-templates select="w:tblGrid | w:tr"/>
+                        </xsl:element>
                         </xsl:element>
                     </xsl:element>
                     <!--draw:text-box end  -->
@@ -1011,7 +1238,8 @@
                 <!-- if the table is not surrounded by text then put the table into a draw:text-box -->
                 <xsl:element name="table:table">
                     <xsl:if test="w:tblPr">
-                        <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/></xsl:attribute>
+
+                        <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
                     </xsl:if>
                     <xsl:apply-templates select="w:tblGrid | w:tr"/>
                 </xsl:element>
@@ -1023,25 +1251,45 @@
     </xsl:template>
     <xsl:template match="w:gridCol">
         <xsl:element name="table:table-column">
-            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single"/></xsl:attribute>
+
+            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:tr">
         <xsl:element name="table:table-row">
             <!-- generate row in table and add attribute of table:style-name if the style:style exists. cp tom chen. -->
             <xsl:if test="w:trPr/w:trHeight">
-                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single"/></xsl:attribute>
+
+                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
             </xsl:if>
             <xsl:apply-templates select="w:tc"/>
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:tc">
         <xsl:element name="table:table-cell">
-            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single"/></xsl:attribute>
-            <xsl:if test="w:tcPr/w:gridSpan">
-                <xsl:attribute name="table:number-columns-spanned"><xsl:value-of select="w:tcPr/w:gridSpan/@w:val"/></xsl:attribute>
+
+            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:if test="w:tcPr/w:gridSpan and w:tcPr/w:gridSpan/@w:val &gt; 0">
+                <xsl:attribute name="table:number-columns-spanned">
+                    <xsl:value-of select="w:tcPr/w:gridSpan/@w:val"/>
+                </xsl:attribute>
             </xsl:if>
             <xsl:apply-templates select="w:p | w:tbl"/>
         </xsl:element>
+    </xsl:template>
+    <xsl:template name="convert2in_special">
+        <!-- this template is specially to  deal with w:type ='dxa' situation -->
+        <xsl:param name="orignal_value"/>
+        <xsl:choose>
+            <xsl:when test="contains($orignal_value, 'dxa') ">
+                <xsl:variable name="table_measurement_new_value">
+                    <xsl:value-of select="concat( substring-before($orignal_value,'dxa'), 'twip')"/>
+                </xsl:variable>
+                <xsl:call-template name="ConvertMeasure">
+                    <xsl:with-param name="TargetMeasure" select="'in'"/>
+                    <xsl:with-param name="value" select="$table_measurement_new_value"/>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
