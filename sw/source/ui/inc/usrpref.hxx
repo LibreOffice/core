@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:23:36 $
+ *  last change: $Author: os $ $Date: 2001-01-19 12:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,24 @@ class SwLayoutViewConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
+/* -----------------------------19.01.01 13:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwGridConfig : public utl::ConfigItem
+{
+    SwMasterUsrPref&    rParent;
+    BOOL                bWeb;
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    public:
+        SwGridConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        ~SwGridConfig();
+
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+    void                    Load();
+    void                    SetModified(){ConfigItem::SetModified();}
+};
 /* -----------------------------28.09.00 09:45--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -115,9 +133,11 @@ class SwMasterUsrPref : public SwViewOption
 {
     friend class SwContentViewConfig;
     friend class SwLayoutViewConfig;
+    friend class SwGridConfig;
 
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
+    SwGridConfig        aGridConfig;
 
     sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
     sal_Int32   nLinkUpdateMode;
@@ -134,11 +154,13 @@ public:
         {
             aContentConfig.Commit();
             aLayoutConfig.Commit();
+            aGridConfig.Commit();
         }
     void SetModified()
         {
             aContentConfig.SetModified();
             aLayoutConfig.SetModified();
+            aGridConfig.SetModified();
         }
 
     void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}

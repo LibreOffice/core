@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:37:07 $
+ *  last change: $Author: os $ $Date: 2001-01-19 12:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,12 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 
 SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aContentConfig(bWeb, *this),
-    aLayoutConfig(bWeb, *this)
+    aLayoutConfig(bWeb, *this),
+    aGridConfig(bWeb, *this)
 {
     aContentConfig.Load();
     aLayoutConfig.Load();
+    aGridConfig.Load();
 }
 /*-- 28.09.00 09:55:32---------------------------------------------------
 
@@ -407,3 +409,116 @@ void SwLayoutViewConfig::Load()
         }
     }
 }
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> SwGridConfig::GetPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Option/SnapToGrid",            // 0
+        "Option/VisibleGrid",           // 1
+        "Option/Synchronize",           // 2
+        "Resolution/XAxis",             // 3
+        "Resolution/YAxis",             // 4
+        "Subdivision/XAxis",            // 5
+        "Subdivision/YAxis"             // 6
+    };
+    const int nCount = 7;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+    {
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    }
+    return aNames;
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwGridConfig::SwGridConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
+    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid")),
+    rParent(rPar),
+    bWeb(bIsWeb)
+{
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwGridConfig::~SwGridConfig()
+{
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwGridConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+{
+    Load();
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwGridConfig::Commit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        sal_Bool bSet;
+        switch(nProp)
+        {
+            case  0: bSet = rParent.IsSnap(); break;//      "Option/SnapToGrid",
+            case  1: bSet = rParent.IsGridVisible(); break;//"Option/VisibleGrid",
+            case  2: bSet = rParent.IsSynchronize(); break;//  "Option/Synchronize",
+            case  3: pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(rParent.GetSnapSize().Width()); break;//      "Resolution/XAxis",
+            case  4: pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(rParent.GetSnapSize().Height()); break;//      "Resolution/YAxis",
+            case  5: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionX(); break;//   "Subdivision/XAxis",
+            case  6: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionY(); break;//   "Subdivision/YAxis"
+        }
+        if(nProp < 3)
+              pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
+    }
+    PutProperties(aNames, aValues);
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwGridConfig::Load()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        Size aSnap(rParent.GetSnapSize());
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                sal_Bool bSet = nProp < 3 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Int32 nSet;
+                if(nProp >= 3)
+                    pValues[nProp] >>= nSet;
+                switch(nProp)
+                {
+                    case  0: rParent.SetSnap(bSet); break;//        "Option/SnapToGrid",
+                    case  1: rParent.SetGridVisible(bSet); break;//"Option/VisibleGrid",
+                    case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
+                    case  3: aSnap.Width() = MM100_TO_TWIP(nSet); break;//      "Resolution/XAxis",
+                    case  4: aSnap.Height() = MM100_TO_TWIP(nSet); break;//      "Resolution/YAxis",
+                    case  5: rParent.SetDivisionX(nSet); break;//   "Subdivision/XAxis",
+                    case  6: rParent.SetDivisionY(nSet); break;//   "Subdivision/YAxis"
+                }
+            }
+        }
+        rParent.SetSnapSize(aSnap);
+    }
+}
+
