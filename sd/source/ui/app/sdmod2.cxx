@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-25 12:12:43 $
+ *  last change: $Author: thb $ $Date: 2001-09-27 09:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 {
     if (pInfo)
     {
-        const SvxFieldItem& rField = pInfo->GetField();
-        const SvxFieldData* pField = rField.GetField();
+        const SvxFieldData* pField = pInfo->GetField().GetField();
 
         if (pField && pField->ISA(SvxDateField))
         {
@@ -200,16 +199,15 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
                 if( pDocSh )
                 {
-                    SvxExtFileField aFileField( *pFileField );
-
                     String aName;
                     if( pDocSh->HasName() )
                         aName = pDocSh->GetMedium()->GetName();
                     else
                         aName = pDocSh->GetName();
 
-                    aFileField.SetFile( aName );
-                    aFile = aFileField.GetFormatted();
+                    // #92496# Set new content also for living field
+                    const_cast< SvxExtFileField* >(pFileField)->SetFile( aName );
+                    aFile = pFileField->GetFormatted();
                 }
             }
 
@@ -230,7 +228,10 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 SvxAddressItem aAdrItem;
                 SvxAuthorField aAuthorField( aAdrItem, pAuthorField->GetType(),
                                                 pAuthorField->GetFormat() );
-                aAuthor = aAuthorField.GetFormatted();
+
+                // #92496# Set new content also for living field
+                *(const_cast< SvxAuthorField* >(pAuthorField)) = aAuthorField;
+                aAuthor = pAuthorField->GetFormatted();
             }
             pInfo->SetRepresentation( aAuthor );
 
