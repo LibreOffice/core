@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ping.liao $ $Date: 2000-09-27 22:40:24 $
+#   last change: $Author: cl $ $Date: 2000-11-08 11:36:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,9 @@ CXXFILES = \
         xmlimp.cxx		\
         xmlkywd.cxx		\
         xmltkmap.cxx	\
-        xmluconv.cxx
+        xmluconv.cxx	\
+        pkgurl.cxx		\
+        PropertySetMerger.cxx
 
 SLOFILES =	\
         $(SLO)$/xmlcnitm.obj	\
@@ -108,7 +110,9 @@ SLOFILES =	\
         $(SLO)$/xmlimp.obj		\
         $(SLO)$/xmlkywd.obj		\
         $(SLO)$/xmltkmap.obj	\
-        $(SLO)$/xmluconv.obj	
+        $(SLO)$/xmluconv.obj	\
+        $(SLO)$/pkgurl.obj		\
+        $(SLO)$/PropertySetMerger.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
