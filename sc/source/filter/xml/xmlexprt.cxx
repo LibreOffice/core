@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 21:06:54 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,7 +1749,7 @@ void ScXMLExport::_ExportAutoStyles()
                                     uno::Reference<table::XTableColumns> xTableColumns = xColumnRowRange->getColumns();
                                     if (xTableColumns.is())
                                     {
-                                        sal_Int32 nColumns = pDoc->GetLastFlaggedCol(nTable);
+                                        sal_Int32 nColumns = pDoc->GetLastChangedCol(nTable);
                                         pSharedData->SetLastColumn(nTable, nColumns);
                                         table::CellRangeAddress aCellAddress = GetEndAddress(xTable, nTable);
                                         if (aCellAddress.EndColumn > nColumns)
@@ -1800,7 +1800,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                 }
                                             }
                                             sal_Int32 nOld = nColumn;
-                                            nColumn = pDoc->GetNextDifferentFlaggedCol(nTable, static_cast<USHORT>(nColumn));
+                                            nColumn = pDoc->GetNextDifferentChangedCol(nTable, static_cast<USHORT>(nColumn));
                                             if (nColumn == MAXCOL)
                                                 nColumn++;
                                             for (sal_Int32 i = nOld + 1; i < nColumn; i++)
@@ -1817,7 +1817,7 @@ void ScXMLExport::_ExportAutoStyles()
                                     uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
                                     if (xTableRows.is())
                                     {
-                                        sal_Int32 nRows = pDoc->GetLastFlaggedRow(nTable);
+                                        sal_Int32 nRows = pDoc->GetLastChangedRow(nTable);
                                         pSharedData->SetLastRow(nTable, nRows);
                                         table::CellRangeAddress aCellAddress = GetEndAddress(xTable, nTable);
                                         if (aCellAddress.EndRow > nRows)
@@ -1857,7 +1857,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                 }
                                             }
                                             sal_Int32 nOld = nRow;
-                                            nRow = pDoc->GetNextDifferentFlaggedRow(nTable, static_cast<USHORT>(nRow));
+                                            nRow = pDoc->GetNextDifferentChangedRow(nTable, static_cast<USHORT>(nRow));
                                             if (nRow == MAXROW)
                                                 nRow++;
                                             for (sal_Int32 i = nOld + 1; i < nRow; i++)
