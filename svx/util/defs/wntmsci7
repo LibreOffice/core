@@ -18875,3 +18875,4 @@ _real@8@40088000000000000000
 ?SetPath@SvxOpenGraphicDialog@@QAEXABVString@@E@Z
 ??1?$Reference@VXIdentifierContainer@container@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?query@?$Reference@VXIdentifierContainer@container@star@sun@com@@@uno@star@sun@com@@SA?AV12345@ABVBaseReference@2345@@Z
+?SetCharCompressType@SdrModel@@QAEXG@Z
