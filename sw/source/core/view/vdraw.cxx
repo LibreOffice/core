@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-01 14:22:37 $
+ *  last change: $Author: os $ $Date: 2002-06-26 09:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,15 @@
 #endif
 #ifndef _XOUTX_HXX //autogen
 #include <svx/xoutx.hxx>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX //autogen
@@ -219,13 +228,27 @@ void SwViewImp::UnlockPaint()
 
 void SwViewImp::PaintLayer( const BYTE nLayerID, const SwRect &rRect ) const
 {
-    Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
     if ( HasDrawView() )
     {
+        //change the draw mode in high contrast mode
+        OutputDevice* pOutDev = GetShell()->GetOut();
+        ULONG nOldDrawMode = pOutDev->GetDrawMode();
+        SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews();
+        if( GetShell()->GetWin() &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            (!GetShell()->IsPreView()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
+        {
+            pOutDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+                                DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+        }
+
+        Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
         GetPageView()->RedrawOneLayer( nLayerID, rRect.SVRect(),
-                        GetShell()->GetOut(),
+                        pOutDev,
                         GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0,
                         &aLnk );
+
+        pOutDev->SetDrawMode( nOldDrawMode );
     }
 }
 
@@ -473,139 +496,5 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     }
 }
 
-/****************************************************************************
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2002/01/22 10:05:31  ama
-    Fix #96779#: Fly frames in page styles with header/footer
-
-    Revision 1.1.1.1  2000/09/19 00:08:29  hr
-    initial import
-
-    Revision 1.117  2000/09/18 16:04:37  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.116  2000/03/16 21:27:20  jp
-    Bug #73920#: NotifySizeChg - SdrObject UserCall pointer can be zero
-
-    Revision 1.115  1999/09/09 15:04:06  hr
-    #65293#: added missing closing brace
-
-    Revision 1.114  1999/09/06 13:18:48  aw
-    changes due to support of new handles
-
-
-      Rev 1.112   13 Aug 1999 15:11:36   MA
-   adoption to new markers, but still inkomplete
-
-      Rev 1.111   23 Jul 1999 16:19:22   AW
-   changes for new markers
-
-      Rev 1.110   06 Jul 1999 19:11:22   JP
-   Bug #67439#: PaintFlyChilds - check for null pointer
-
-      Rev 1.109   08 Mar 1999 16:59:10   MA
-   #62907# Notify noch ein wenig toleranter
-
-      Rev 1.108   22 Feb 1999 08:35:12   MA
-   1949globale Shell entsorgt, Shells am RootFrm
-
-      Rev 1.107   07 Jan 1999 11:32:32   AMA
-   Fix #60246#: Linienstyle restaurieren
-
-      Rev 1.106   12 Nov 1998 14:17:24   MA
-   #59385# XOR und UserMarker bekommen die nie richtig hin
-
-      Rev 1.105   22 Oct 1998 14:00:14   MA
-   #58316# Assertion richtig formuliert
-
-      Rev 1.104   05 Oct 1998 11:09:18   MA
-   #67489# Keine Objekte clippen wenn der Anker nicht Valid ist
-
-      Rev 1.103   14 Sep 1998 13:49:00   MA
-   #56335# ChainMarker
-
-      Rev 1.102   29 Jun 1998 11:14:56   MA
-   Push/Pop au fVCL umgestellt
-
-      Rev 1.101   15 Jun 1998 11:04:10   AMA
-   Chg: Gruppenobjekte duerfen jetzt bearbeitet werden => GetUserCall-Umbau
-
-      Rev 1.100   10 Jun 1998 17:39:40   AMA
-   New: SdrUnoObj statt VControls
-
-      Rev 1.99   04 Jun 1998 18:21:26   AMA
-   Chg: UNO-Controls jetzt im eigenen Drawing-Layer
-
-      Rev 1.98   03 Jun 1998 09:25:24   MA
-   #50392# Handles und Xor aufgeraeumt
-
-      Rev 1.97   21 Nov 1997 15:59:48   TJ
-   include fuer SdrPageView
-
-      Rev 1.96   20 Nov 1997 12:37:30   MA
-   includes
-
-      Rev 1.95   03 Nov 1997 13:07:32   MA
-   precomp entfernt
-
-      Rev 1.94   29 Oct 1997 11:04:14   MA
-   opt: Link auf Dispatcher bei Gruppenobjekten temporaer entfernen
-
-      Rev 1.93   13 Oct 1997 10:30:36   MA
-   Umbau/Vereinfachung Paint
-
-      Rev 1.92   18 Aug 1997 10:37:06   OS
-   includes
-
-      Rev 1.91   15 Aug 1997 12:24:08   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.90   14 Apr 1997 11:30:32   MH
-   add: header
-
-      Rev 1.89   04 Apr 1997 16:55:00   MA
-   opt+includes
-
-      Rev 1.88   25 Feb 1997 08:45:44   MA
-   chg: SolidHdl ueberm Berg
-
-      Rev 1.87   16 Jan 1997 17:34:36   MA
-   chg: Paint oder nicht sagt uns jetzt SwFlyFrm::IsPaint
-
-      Rev 1.86   02 Dec 1996 19:38:52   MA
-   #33918#
-
-      Rev 1.85   02 Dec 1996 16:57:32   MA
-   #33630# PaintMode fuer PreView
-
-      Rev 1.84   02 Dec 1996 09:18:38   NF
-   PaintFlyChild() ohne BOOL-Parameter...
-
-      Rev 1.83   25 Nov 1996 12:09:26   MA
-   fix: PaintFlyChilds, keinen auslassen
-
-      Rev 1.82   20 Nov 1996 19:42:38   MA
-   #33447# Paint auf Background schalten wenn Zeichenobjekte im Spiel sind
-
-      Rev 1.81   20 Nov 1996 18:26:50   MA
-   BorderRect wieder herausrechnen fuer Zeichenobj
-
-      Rev 1.80   08 Nov 1996 13:00:14   HJS
-   include w.g. positivdefine
-
-      Rev 1.79   04 Nov 1996 20:01:36   MA
-   #32989#
-
-      Rev 1.78   25 Sep 1996 12:55:04   AMA
-   Opt: ::CalcClipRect-Methode statt aClipMove/aClipStretch-Member
-
-      Rev 1.77   25 Sep 1996 10:07:04   MA
-   fix: CurShell setzen
-
-      Rev 1.76   09 Sep 1996 09:55:56   MA
-   opt: Protect vom DrawObj
-
-**************************************************************************/
 
 
