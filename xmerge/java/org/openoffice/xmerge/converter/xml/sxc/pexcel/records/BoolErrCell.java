@@ -67,13 +67,29 @@ import org.openoffice.xmerge.util.EndianConverter;
 /**
  * Represents a BIFF Record that describes a Boolean or Error value
  */
-public class BoolErrCell implements BIFFRecord {
+public class BoolErrCell extends CellValue {
 
-    private byte[] row      = new byte[2];
-    private byte   col;
     private byte[] ixfe     = new byte[2];
     private byte   bBoolErr;
     private byte   fError;
+
+     /**
+     * Constructs a BoolErrCell from arguments
+      *
+     * @param row row number
+     * @param col column number
+     * @param ixfe font index
+     * @param bBoolErr Boolean value or error value
+     * @param fError Boolean error flag
+      */
+    public BoolErrCell(int row, int column, int ixfe, int bBoolErr, int fError) throws IOException {
+
+        this.ixfe = EndianConverter.writeShort((short)ixfe);
+        this.bBoolErr = (byte)bBoolErr;
+        this.fError = (byte)fError;
+        setRow(row);
+        setCol(column);
+    }
 
     /**
      * Constructs a BoolErrCell from the <code>InputStream</code>
@@ -96,11 +112,11 @@ public class BoolErrCell implements BIFFRecord {
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
-        output.write(fError);
-        output.write(row);
+        output.write(rw);
         output.write(col);
         output.write(ixfe);
         output.write(bBoolErr);
+        output.write(fError);
 
         Debug.log(Debug.TRACE,"Writing BoolErrCell record");
     }
@@ -112,18 +128,27 @@ public class BoolErrCell implements BIFFRecord {
       */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(row);
+        int numOfBytesRead  = input.read(rw);
         col                 = (byte) input.read();
         numOfBytesRead      += input.read(ixfe);
         bBoolErr            = (byte) input.read();
         fError              = (byte) input.read();
            numOfBytesRead += 3;
 
-        Debug.log(Debug.TRACE,"\tRow : "+ EndianConverter.readShort(row) +
+        Debug.log(Debug.TRACE,"\tRow : "+ EndianConverter.readShort(rw) +
                             " Column : " + col +
                             " ixfe : " + EndianConverter.readShort(ixfe) +
                             " bBoolErr : " + bBoolErr +
                             " fError : " + fError);
         return numOfBytesRead;
+    }
+
+    /**
+     * Gets the <code>String</code> representing the cells contents
+     *
+     * @return the <code>String</code> representing the cells contents
+     */
+    public String getString() throws IOException {
+        return ("Error Cell");
     }
 }
