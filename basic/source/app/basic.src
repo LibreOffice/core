@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:54:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,13 +146,13 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     Size = MAP_APPFONT( 120, 81 );
     SVLook = TRUE;
     MOVEABLE = TRUE;
-    Text [ de ] = "";
+    Text [ de ] = "Über VCLTestTool";
     FixedText 1 {
             Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT [ de ] = "StarTestTool";
+            TEXT [ de ] = "VCLTestTool";
             CENTER = TRUE;
-        TEXT[ en-US ] = "OpenOffice.org TestTool";
+        TEXT[ en-US ] = "VCLTestTool";
     };
     FixedText RID_VERSIONSTRING {
             Pos = MAP_APPFONT( 5, 25 );
@@ -163,16 +163,16 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     FixedText 4 {
             Pos = MAP_APPFONT( 5, 40 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT [ de ] = "©1995-2004 Sun Microsystems, Inc.";
+            TEXT [ de ] = "©1995-2005 Sun Microsystems, Inc.";
             CENTER = TRUE;
-        TEXT[ en-US ] = "©1995-2004 Sun Microsystems, Inc.";
+        TEXT[ en-US ] = "Â©1995-2005 Sun Microsystems, Inc.";
     };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 40, 60 );
             Size = MAP_APPFONT( 40, 14 );
             DefButton = TRUE;
         };
-    TEXT[ en-US ] = "About OpenOffice.org TestTool";
+    TEXT[ en-US ] = "About VCLTestTool";
 };
 
 ModalDialog IDD_FIND_DIALOG {
@@ -411,8 +411,8 @@ String IDS_APPNAME {
     TEXT[ en-US ] = "Testtool";
 };
 String IDS_APPNAME2 {
-    TEXT [ de ] = "StarTestTool";
-    TEXT[ en-US ] = "StarTestTool";
+    TEXT [ de ] = "VCLTestTool";
+    TEXT[ en-US ] = "VCLTestTool";
 };
 String IDS_APPMODE_BREAK {
     text [ de ] = "Break";
@@ -592,7 +592,8 @@ Menu RID_FILE {
     MenuItem  {
         Identifier = RID_FILECLOSE;
         TEXT [ de ] = "S~chließen";
-            TEXT[ en-US ] = "~Close";
+        TEXT[ en-US ] = "~Close";
+        AccelKey = KeyCode { Function = KEYFUNC_CLOSE; };
         };
     MenuItem  {
         Identifier = RID_FILESAVE;
@@ -1364,6 +1365,10 @@ Accelerator MAIN_ACCEL {
     AcceleratorItem  {
             Identifier = RID_FILEOPEN;
             Key = KeyCode { Function = KEYFUNC_OPEN; };
+        };
+    AcceleratorItem  {
+            Identifier = RID_FILECLOSE;
+            Key = KeyCode { Function = KEYFUNC_CLOSE; };
         };
     AcceleratorItem  {
             Identifier = RID_FILESAVE;
