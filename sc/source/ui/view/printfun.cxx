@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 07:57:40 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 14:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1909,11 +1909,13 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     {
         //! mit PrintPage zusammenfassen !!!
 
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        Color aBackgroundColor( COL_WHITE );
+        if ( bUseStyleColor )
+            aBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
-        pDev->SetFillColor(rStyleSettings.GetWindowColor());
+        pDev->SetFillColor(aBackgroundColor);
         pDev->DrawRect(Rectangle(Point(),
                 Size((long)(aPageSize.Width() * nScaleX * 100 / nZoom),
                      (long)(aPageSize.Height() * nScaleY * 100 / nZoom))));
@@ -1970,11 +1972,13 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
     {
         //  muss genau zum Zeichnen des Rahmens in preview.cxx passen !!!
 
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        Color aBackgroundColor( COL_WHITE );
+        if ( bUseStyleColor )
+            aBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
-        pDev->SetFillColor(rStyleSettings.GetWindowColor());
+        pDev->SetFillColor(aBackgroundColor);
         pDev->DrawRect(Rectangle(Point(),
                 Size((long)(aPageSize.Width() * nScaleX * 100 / nZoom),
                      (long)(aPageSize.Height() * nScaleY * 100 / nZoom))));

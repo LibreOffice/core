@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-18 17:06:21 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 14:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <svtools/itemset.hxx>
 #include <tools/multisel.hxx>
 #include <vcl/waitobj.hxx>
@@ -345,6 +346,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     BOOL bDoPrint = ( pFillLocation == NULL );
     BOOL bValidPage = ( nPageNo < nTotalPages );
 
+    ScModule* pScMod = SC_MOD();
+
     if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) && bValidPage )
     {
         SetMapMode( aMMMode );
@@ -361,7 +364,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     Size aPageSize;
     if ( bValidPage )
     {
-        ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+        ScPrintOptions aOptions = pScMod->GetPrintOptions();
 
         ScPrintFunc* pPrintFunc;
         if (bStateValid)
@@ -373,7 +376,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         pPrintFunc->SetManualZoom(nZoom);
         pPrintFunc->SetDateTime(aDate,aTime);
         pPrintFunc->SetClearFlag(TRUE);
-        pPrintFunc->SetUseStyleColor(TRUE);         //! configurable
+        pPrintFunc->SetUseStyleColor( pScMod->GetAccessOptions().GetIsForPagePreviews() );
 
         pPrintFunc->SetDrawView( pDrawView );
 
