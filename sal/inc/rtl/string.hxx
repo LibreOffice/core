@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:23:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #endif
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
+#endif
+
+#if !defined EXCEPTIONS_OFF
+#include <new>
 #endif
 
 class ByteString;
@@ -195,13 +199,22 @@ public:
                                 sequence should be converted.
       @param    convertFlags    flags which controls the conversion.
                                 see RTL_UNICODETOTEXT_FLAGS_...
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OString( const sal_Unicode * value, sal_Int32 length,
              rtl_TextEncoding encoding,
-             sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS ) SAL_THROW(())
+             sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS )
     {
         pData = 0;
         rtl_uString2String( &pData, value, length, encoding, convertFlags );
+#if defined EXCEPTIONS_OFF
+        OSL_ASSERT(pData != NULL);
+#else
+        if (pData == 0) {
+            throw std::bad_alloc();
+        }
+#endif
     }
 
     /** Convert a ByteString (from the tools module) into an OString.
