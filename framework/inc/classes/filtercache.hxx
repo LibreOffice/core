@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:32 $
+ *  last change: $Author: as $ $Date: 2001-04-05 13:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,14 @@
 
 #ifndef __SGI_STL_ITERATOR
 #include <iterator>
+#endif
+
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -514,16 +522,6 @@ typedef PreferredHash::const_iterator                               ConstPreferr
 typedef CheckedIterator< StringList >                               CheckedStringListIterator   ;
 typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator         ;
 
-//*****************************************************************************************************************
-// Describe type of current running office
-// used to create right configuration provider in impl_openConfiguration()!
-//*****************************************************************************************************************
-enum EOfficeType
-{
-    E_FATOFFICE ,
-    E_WEBTOP
-};
-
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
     @descr          Frameloader- and filterfactory need some informations about our current registered filters and types.
@@ -531,11 +529,13 @@ enum EOfficeType
 
     @implements     -
     @base           FairRWLockBase
+                    ConfigItem
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class FilterCache : private FairRWLockBase
+class FilterCache   :   private FairRWLockBase
+                    ,   public  ::utl::ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -578,6 +578,37 @@ class FilterCache : private FairRWLockBase
         virtual ~FilterCache();
 
         /*-****************************************************************************************************//**
+            @short      called for notify of configmanager
+            @descr      These method is called from the ConfigManager before application ends or from the
+                         PropertyChangeListener if the sub tree broadcasts changes. You must update your
+                        internal values.
+
+            @seealso    baseclass ConfigItem
+
+            @param      "lPropertyNames" is the list of properties which should be updated.
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        virtual void Notify( const css::uno::Sequence< ::rtl::OUString >& lPropertyNames );
+
+        /*-****************************************************************************************************//**
+            @short      write changes to configuration
+            @descr      These method writes the changed values into the sub tree
+                        and should always called in our destructor to guarantee consistency of config data.
+
+            @seealso    baseclass ConfigItem
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        virtual void Commit();
+
+        /*-****************************************************************************************************//**
             @short      get the current state of the cache
             @descr      Call this methods to get information about the state of the current cache.
 
@@ -595,22 +626,6 @@ class FilterCache : private FairRWLockBase
         sal_Bool hasFilters     () const;
         sal_Bool hasDetectors   () const;
         sal_Bool hasLoaders     () const;
-
-        /*-****************************************************************************************************//**
-            @short      flush changed data to configuration
-            @descr      We support read AND write access on this implementation.
-                        We should support flush of changed data too. Otherwise we will write these values
-                        at end of live autiomaticly! (see dtor)
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void flush();
 
         /*-****************************************************************************************************//**
             @short      search routines to find items which match given parameter
@@ -827,7 +842,7 @@ class FilterCache : private FairRWLockBase
             @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-        static void impl_correctExtensions( StringList& lExtensions );
+//obsolete      static void impl_correctExtensions( StringList& lExtensions );
 
         /*-****************************************************************************************************//**
             @short      fill our cache with values from configuration
@@ -845,21 +860,20 @@ class FilterCache : private FairRWLockBase
             @onerror    If an configuration item couldn't read we ignore it and warn programmer with an assertion.
         *//*-*****************************************************************************************************/
 
-        EOfficeType                                             impl_detectOfficeType   (                                           ) const;
-        css::uno::Reference< css::lang::XMultiServiceFactory >  impl_openConfiguration  (                                           ) const;
-        css::uno::Reference< css::uno::XInterface >             impl_openSet            (   const   ::rtl::OUString&    sSetName    ) const;
-        void                                                    impl_load               (                                           );
-        void                                                    impl_save               (                                           );
+        void impl_load              ();
+        void impl_save              ();
 
-        void impl_loadTypes         (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
-        void impl_loadFilters       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
-        void impl_loadDetectors     (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
-        void impl_loadLoaders       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_loadTypes         ();
+        void impl_loadFilters       ();
+        void impl_loadDetectors     ();
+        void impl_loadLoaders       ();
+        void impl_loadDefaults      ();
 
-        void impl_saveTypes         (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
-        void impl_saveFilters       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
-        void impl_saveDetectors     (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
-        void impl_saveLoaders       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_saveTypes         ();
+        void impl_saveFilters       ();
+        void impl_saveDetectors     ();
+        void impl_saveLoaders       ();
+        void impl_saveDefaults      ();
 
         void impl_addType           (   const   FileType&           aType       );
         void impl_replaceType       (   const   FileType&           aType       );
