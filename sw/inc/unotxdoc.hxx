@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:05:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _UNOTXDOC_HXX
 #define _UNOTXDOC_HXX
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -334,7 +338,7 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
