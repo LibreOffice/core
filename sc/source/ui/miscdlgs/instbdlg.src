@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:02:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     FixedText FT_COUNT
     {
         Pos = MAP_APPFONT ( 20 , 68 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text [ de ] = "An~zahl" ;
         Text [ en-US ] = "N~o. of sheets" ;
         Text [ x-comment ] = " ";
@@ -140,8 +140,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     NumericField NF_COUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 66 ) ;
-        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Pos = MAP_APPFONT ( 72 , 66 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         SpinSize = 1 ;
@@ -152,15 +152,15 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 20 , 84 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ de ] = "Na~me" ;
         Text [ en-US ] = "Na~me";
     };
     Edit ED_TABNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 82 ) ;
-        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Pos = MAP_APPFONT ( 72 , 82 ) ;
+        Size = MAP_APPFONT ( 137 , 12 ) ;
     };
     RadioButton RB_FROMFILE
     {
