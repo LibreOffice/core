@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-15 06:20:08 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 07:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,6 @@ void CertificateViewerDetailsTP::InsertElement( const String& _rField, const Str
 {
     SvLBoxEntry*    pEntry = maElementsLB.InsertEntry( _rField );
     maElementsLB.SetEntryText( _rValue, pEntry, 1 );
-//  pEntry->SetUserData( ( void* ) new String( _rDetails ) );       // extended view of value
     pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
 }
 
@@ -290,8 +289,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     ,maElementsLB           ( this, ResId( LB_ELEMENTS ) )
     ,maElementML            ( this, ResId( ML_ELEMENT ) )
     ,maStdFont              ( maElementML.GetFont() )
-    ,maFixedWidthFont       ( )
+    ,maFixedWidthFont       ( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
 {
+    // HACK! because Font sizes are definitely wrong!
+    maStdFont.SetHeight( 8 );
+    maFixedWidthFont.SetHeight( 8 );
+
     static long nTabs[] = { 2, 0, 40*CS_LB_WIDTH/100 };
     maElementsLB.SetTabs( &nTabs[ 0 ] );
     maElementsLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
@@ -305,27 +308,9 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = aDetails = String::CreateFromInt32( xCert->getVersion() );
     InsertElement( String( ResId( STR_VERSION ) ), aLBEntry, aDetails );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
-/*  const sal_Int8*         pSerNumSeq = aSerNumSeq.getConstArray();
-    int                     nCnt = aSerNumSeq.getLength();
-    String                  aSerNumStr;
-    const char              pHexDigs[ 17 ] = "0123456789ABCEDF";
-    char                    pBuffer[ 4 ] = "   ";
-    UINT8                   nNum;
-    for( int i = 0 ; i < nCnt ; ++i )
-    {
-        nNum = UINT8( pSerNumSeq[ i ] );
-        pBuffer[ 0 ] = pHexDigs[ nNum & 0x0F ];
-        nNum >>= 4;
-        pBuffer[ 1 ] = pHexDigs[ nNum ];
-//      aSerNumStr += String::CreateFromInt32( UINT8( pSerNumSeq[ i ] ), 16 );
-//      aSerNumStr.AppendAscii( " " );
-        aSerNumStr.AppendAscii( pBuffer );
-    }
-    InsertElement( String( ResId( STR_SERIALNUM ) ), aSerNumStr, aSerNumStr, true );*/
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_SERIALNUM ) ), aLBEntry, aDetails );
-//  InsertElement( String( ResId( STR_SIGALGORITHM ) ), String::CreateFromAscii( "n/a" ), String() );
+    InsertElement( String( ResId( STR_SERIALNUM ) ), aLBEntry, aDetails, true );
 
     aLBEntry = XmlSec::GetPureContent( xCert->getIssuerName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getIssuerName(), "\n", true );
@@ -333,7 +318,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aSeq = xCert->getIssuerUniqueID();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_ISSUER_ID ) ), aLBEntry, aDetails );
+    InsertElement( String( ResId( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = XmlSec::GetDateTimeString( xCert->getNotBefore() );
     InsertElement( String( ResId( STR_VALIDFROM ) ), aLBEntry, aDetails  );
@@ -346,13 +331,13 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aSeq = xCert->getSubjectUniqueID();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_SUBJECT_ID ) ), aLBEntry, aDetails );
+    InsertElement( String( ResId( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
     InsertElement( String( ResId( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_SUBJECT_PUBKEY_VAL ) ), aLBEntry, aDetails );
+    InsertElement( String( ResId( STR_SUBJECT_PUBKEY_VAL ) ), aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
     InsertElement( String( ResId( STR_SIGNATURE_ALGO ) ), aLBEntry, aDetails );
@@ -362,7 +347,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aSeq = xCert->getThumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_THUMBPRINT ) ), aLBEntry, aDetails );
+    InsertElement( String( ResId( STR_THUMBPRINT ) ), aLBEntry, aDetails, true );
 
     FreeResource();
 
@@ -385,7 +370,6 @@ IMPL_LINK( CertificateViewerDetailsTP, ElementSelectHdl, void*, EMPTYARG )
     bool            bFixedWidthFont;
     if( pEntry )
     {
-//      aElementText = *( ( String* ) pEntry->GetUserData() );
         const Details_UserDatat*    p = ( Details_UserDatat* ) pEntry->GetUserData();
         aElementText = p->maTxt;
         bFixedWidthFont = p->mbFixedWidthFont;
@@ -394,6 +378,7 @@ IMPL_LINK( CertificateViewerDetailsTP, ElementSelectHdl, void*, EMPTYARG )
         bFixedWidthFont = false;
 
     maElementML.SetFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
+    maElementML.SetControlFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
     maElementML.SetText( aElementText );
 
     return 0;
