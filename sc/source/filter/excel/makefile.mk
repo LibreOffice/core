@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-19 11:35:43 $
+#   last change: $Author: obo $ $Date: 2003-10-21 08:47:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,7 @@ SLOFILES =	\
         $(SLO)$/biffdump.obj
 
 EXCEPTIONSFILES = \
+        $(SLO)$/xlocx.obj					\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj
 
