@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 09:52:21 $
+ *  last change: $Author: mba $ $Date: 2000-11-15 11:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,13 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
     FileBase::getSystemPathFromNormalizedPath( aRet, aTmp );
     rReturn = aTmp;
     return sal_True;
+}
+
+sal_Bool LocalFileHelper::IsLocalFile( const String& rName )
+{
+    String aTmp;
+    ConvertURLToPhysicalName( rName, aTmp );
+    return aTmp.Len();
 }
 
 };
