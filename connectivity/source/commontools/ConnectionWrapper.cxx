@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:40:05 $
+ *  last change: $Author: kz $ $Date: 2002-08-13 13:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
 #endif
+#include <algorithm>
 
 using namespace connectivity;
 //------------------------------------------------------------------------------
