@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-15 13:51:47 $
+ *  last change: $Author: hr $ $Date: 2002-03-19 10:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@
 #include <functional>
 #include <algorithm>
 
-static Point ImplGetPos( const Window *w )
+// can't have static linkage because SUNPRO 5.2 complains
+Point ImplTaskPaneListGetPos( const Window *w )
 {
     Point pos;
     if( w->ImplIsDockingWindow() )
@@ -95,8 +96,8 @@ struct LTRSort : public ::std::binary_function< const Window*, const Window*, bo
 {
     bool operator()( const Window* w1, const Window* w2 ) const
     {
-        Point pos1(ImplGetPos( w1 ));
-        Point pos2(ImplGetPos( w2 ));
+        Point pos1(ImplTaskPaneListGetPos( w1 ));
+        Point pos2(ImplTaskPaneListGetPos( w2 ));
 
         if( pos1.X() == pos2.X() )
             return ( pos1.Y() < pos2.Y() );
@@ -108,8 +109,8 @@ struct LTRSortBackward : public ::std::binary_function< const Window*, const Win
 {
     bool operator()( const Window* w2, const Window* w1 ) const
     {
-        Point pos1(ImplGetPos( w1 ));
-        Point pos2(ImplGetPos( w2 ));
+        Point pos1(ImplTaskPaneListGetPos( w1 ));
+        Point pos2(ImplTaskPaneListGetPos( w2 ));
 
         if( pos1.X() == pos2.X() )
             return ( pos1.Y() < pos2.Y() );
