@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,6 @@
 #endif
 
 namespace css = ::com::sun::star;
-namespace dcss = ::drafts::com::sun::star;
 
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
@@ -461,7 +460,7 @@ VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::st
     ::com::sun::star::awt::XToolkit, ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::awt::XSystemChildFactory,
     ::com::sun::star::awt::XDataTransferProviderAccess,
-    ::drafts::com::sun::star::awt::XExtendedToolkit >( GetMutex() ),
+    ::com::sun::star::awt::XExtendedToolkit >( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),
     m_aKeyHandlers(rBHelper.rMutex),
     m_aFocusListeners(rBHelper.rMutex),
@@ -1165,7 +1164,7 @@ sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) thr
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >( &aServiceName, 1);
 }
 
-// dcss::awt::XExtendedToolkit:
+// css::awt::XExtendedToolkit:
 
 // virtual
 ::sal_Int32 SAL_CALL VCLXToolkit::getTopWindowCount()
@@ -1236,7 +1235,7 @@ void SAL_CALL VCLXToolkit::removeTopWindowListener(
 
 // virtual
 void SAL_CALL VCLXToolkit::addKeyHandler(
-    ::css::uno::Reference< ::dcss::awt::XKeyHandler > const & rHandler)
+    ::css::uno::Reference< ::css::awt::XKeyHandler > const & rHandler)
     throw (::css::uno::RuntimeException)
 {
     OSL_ENSURE(rHandler.is(), "Null rHandler");
@@ -1257,7 +1256,7 @@ void SAL_CALL VCLXToolkit::addKeyHandler(
 
 // virtual
 void SAL_CALL VCLXToolkit::removeKeyHandler(
-    ::css::uno::Reference< ::dcss::awt::XKeyHandler > const & rHandler)
+    ::css::uno::Reference< ::css::awt::XKeyHandler > const & rHandler)
     throw (::css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(rBHelper.rMutex);
@@ -1437,7 +1436,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             pKeyEvent->GetKeyCode().GetFunction());
         for (::sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
         {
-            ::css::uno::Reference< ::dcss::awt::XKeyHandler > xHandler(
+            ::css::uno::Reference< ::css::awt::XKeyHandler > xHandler(
                 aHandlers[i], ::css::uno::UNO_QUERY);
             try
             {
