@@ -2,9 +2,9 @@
  *
  *  $RCSfile: database.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: mba $ $Date: 2002-05-07 10:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@ class SvIdlDataBase
 
 protected:
 #ifdef IDL_COMPILER
-    SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
     ByteString                      aModulePrefix;
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
@@ -141,6 +140,7 @@ public:
     BOOL                      IsModified() const;
 
 
+    SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
     SvStringHashTable *       GetIdTable() { return pIdTable; }
     SvMetaTypeMemberList &    GetTypeList();
     SvMetaClassMemberList &   GetClassList()  { return aClassList; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-18 14:12:59 $
+ *  last change: $Author: mba $ $Date: 2002-05-07 10:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,16 +1128,12 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
     if( GetPseudoSlots() && pEnum && pEnum->Count() )
     {
         // Den MasterSlot clonen
-        SvMetaSlotRef xEnumSlot = Clone();
-        SvMetaSlot *pFirstEnumSlot = xEnumSlot;
+        SvMetaSlotRef xEnumSlot;
+        SvMetaSlot *pFirstEnumSlot = NULL;
         for( ULONG n = 0; n < pEnum->Count(); n++ )
         {
-            // Die Slaves sind kein Master !
-            xEnumSlot->aPseudoSlots = FALSE;
-
             // Die SlotId erzeugen
             SvMetaEnumValue *pEnumValue = pEnum->GetObject(n);
-            xEnumSlot->SetEnumValue(pEnumValue);
             ByteString aValName = pEnumValue->GetName();
             ByteString aSId( GetSlotId() );
             if( GetPseudoPrefix().Len() )
@@ -1146,30 +1142,44 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
             USHORT nLen = pEnum->GetPrefix().Len();
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
-            ULONG nValue;
-            if ( rBase.FindId(aSId , &nValue) )
+            xEnumSlot = NULL;
+            for( ULONG m=0; m<rBase.GetAttrList().Count(); m++ )
             {
-                SvNumberIdentifier aId;
-                *((SvIdentifier*)&aId) = aSId;
-                aId.SetValue(nValue);
-                xEnumSlot->SetSlotId(aId);
+                SvMetaAttribute * pAttr = rBase.GetAttrList().GetObject( m );
+                if( pAttr->GetSlotId() == aSId )
+                {
+                    SvMetaSlot* pSlot = PTR_CAST( SvMetaSlot, pAttr );
+                    xEnumSlot = pSlot->Clone();
+                    break;
+                }
             }
 
-            if ( xEnumSlot->GetSlotId().GetValue() <
-                 pFirstEnumSlot->GetSlotId().GetValue() )
+            if ( m == rBase.GetAttrList().Count() )
             {
-                pFirstEnumSlot = xEnumSlot;
+                DBG_ERROR("Invalid EnumSlot!");
+                xEnumSlot = Clone();
+                ULONG nValue;
+                if ( rBase.FindId(aSId , &nValue) )
+                {
+                    SvNumberIdentifier aId;
+                    *((SvIdentifier*)&aId) = aSId;
+                    aId.SetValue(nValue);
+                    xEnumSlot->SetSlotId(aId);
+                }
             }
+
+            // Die Slaves sind kein Master !
+            xEnumSlot->aPseudoSlots = FALSE;
+            xEnumSlot->SetEnumValue(pEnumValue);
+
+            if ( !pFirstEnumSlot || xEnumSlot->GetSlotId().GetValue() < pFirstEnumSlot->GetSlotId().GetValue() )
+                pFirstEnumSlot = xEnumSlot;
 
             // Den erzeugten Slave ebenfalls einf"ugen
             xEnumSlot->Insert( rList, rPrefix, rBase);
 
             // Die EnumSlots mit dem Master verketten
             xEnumSlot->pLinkedSlot = this;
-
-            // N"achster EnumSlot
-            if ( n != pEnum->Count() - 1 )
-                xEnumSlot = Clone();
         }
 
         // Master zeigt auf den ersten Slave
