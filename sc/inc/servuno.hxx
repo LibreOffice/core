@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 17:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,9 @@ class ScDocShell;
 #define SC_SERVICE_TRGRADTAB    16
 #define SC_SERVICE_MARKERTAB    17
 #define SC_SERVICE_DASHTAB      18
+#define SC_SERVICE_NUMRULES     19
 
-#define SC_SERVICE_COUNT        19
+#define SC_SERVICE_COUNT        20
 #define SC_SERVICE_INVALID      USHRT_MAX
 
 

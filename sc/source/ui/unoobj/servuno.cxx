@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 18:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include <tools/debug.hxx>
 #include <svx/unofill.hxx>
 
+#ifndef _SVX_UNONRULE_HXX
+#include <svx/unonrule.hxx>
+#endif
+
 #include "servuno.hxx"
 #include "cellsuno.hxx"
 #include "fielduno.hxx"
@@ -101,7 +105,8 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         "com.sun.star.drawing.BitmapTable",         // SC_SERVICE_BITMAPTAB
         "com.sun.star.drawing.TransparencyGradientTable",   // SC_SERVICE_TRGRADTAB
         "com.sun.star.drawing.MarkerTable",         // SC_SERVICE_MARKERTAB
-        "com.sun.star.drawing.DashTable"            // SC_SERVICE_DASHTAB
+        "com.sun.star.drawing.DashTable",           // SC_SERVICE_DASHTAB
+        "com.sun.star.text.NumberingRules"          // SC_SERVICE_NUMRULES
     };
 
 //
@@ -129,7 +134,8 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_BITMAPTAB
         "",                                         // SC_SERVICE_TRGRADTAB
         "",                                         // SC_SERVICE_MARKERTAB
-        ""                                          // SC_SERVICE_DASHTAB
+        "",                                         // SC_SERVICE_DASHTAB
+        ""                                          // SC_SERVICE_NUMRULES
     };
 
 
@@ -231,6 +237,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_DASHTAB:
             if (pDocShell)
                 xRet = SvxUnoDashTable_createInstance( pDocShell->MakeDrawLayer() );
+            break;
+        case SC_SERVICE_NUMRULES:
+            if (pDocShell)
+                xRet = SvxCreateNumRule( pDocShell->MakeDrawLayer() );
             break;
     }
     return xRet;
