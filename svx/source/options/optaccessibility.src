@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:09:55 $
+ *  last change: $Author: vg $ $Date: 2002-05-21 09:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Einstellungen für Kontrastdarstellung verwenden" ;
         Text [ English ] = "Use settings for high contrast appearance" ;
-        Text[ english_us ] = "Settings for high contrast appearance";
+        Text[ english_us ] = "Use settings for high contrast appearance";
         Text[ portuguese ] = "Settings for high contrast appearance";
         Text[ russian ] = "Settings for high contrast appearance";
         Text[ greek ] = "Settings for high contrast appearance";
