@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 14:05:55 $
+#   last change: $Author: kz $ $Date: 2004-08-31 14:54:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ TARGET=schema
 PACKAGE=org.openoffice
 
 XCSFILES= \
+    LDAP.xcs \
     Inet.xcs \
     Setup.xcs \
     System.xcs \
