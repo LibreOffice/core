@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 14:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ Sequence< Property > Content::getProperties(
             // New properties
             ///////////////////////////////////////////////////////////////
         };
-        return Sequence< Property >( aFolderPropertyInfoTable, 6 );
+        return Sequence< Property >( aFolderPropertyInfoTable, 5 );
     }
     else
     {
