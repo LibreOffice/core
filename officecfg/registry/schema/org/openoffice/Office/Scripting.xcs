@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Scripting.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:55:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,7 @@
 			</prop>
 			<prop oor:name="UseNewToolsConfigure" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">Use New Tools Configure dialog</desc>
-					<desc xml:lang="zh-CN">Use New Tools Configure dialog</desc>
+					<desc>Use New Tools Configure dialog</desc>
 				</info>
 				<value>true</value>
 			</prop>
