@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,6 @@
 #endif
 
 using namespace rtl;
-
-RegistryTypeReaderLoader & getRegistryTypeReaderLoader()
-{
-    static RegistryTypeReaderLoader aLoader;
-    return aLoader;
-}
 
 TypeManager::TypeManager()
 {
@@ -220,9 +214,7 @@ TypeReader RegistryTypeManager::getTypeReader(const OString& name)
             sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
             if (!key.getValue(OUString(), pBuffer))
             {
-                RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-                reader = TypeReader(rReaderLoader, pBuffer, valueSize, sal_True);
+                reader = TypeReader(pBuffer, valueSize, sal_True);
             }
             rtl_freeMemory(pBuffer);
         }
@@ -249,9 +241,7 @@ RTTypeClass RegistryTypeManager::getTypeClass(const OString& name)
                 sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
                 if (!key.getValue(OUString(), pBuffer))
                 {
-                    RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-                    TypeReader reader(rReaderLoader, pBuffer, valueSize, sal_False);
+                    TypeReader reader(pBuffer, valueSize, sal_False);
 
                     RTTypeClass ret = reader.getTypeClass();
 
