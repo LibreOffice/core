@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 11:07:53 $
+ *  last change: $Author: cd $ $Date: 2002-12-13 07:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         SetModified();
                         for ( USHORT n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
+                        Commit();
                     }
 
         void        SetFollowMouseState ( sal_Bool bState )
@@ -227,6 +228,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         SetModified();
                         for ( USHORT n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
+                        Commit();
                     }
 
         void        SetMenuIconsState ( sal_Bool bState )
@@ -235,6 +237,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         SetModified();
                         for ( USHORT n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
+                        Commit();
                     }
 
     //-------------------------------------------------------------------------------------------------------------
