@@ -7700,7 +7700,7 @@ SfxVoidItem WindowList SID_MDIWINDOWLIST
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ZoomIn SID_ZOOM_IN
+SfxVoidItem ZoomMinus SID_ZOOM_IN
 ()
 [
     /* flags: */
