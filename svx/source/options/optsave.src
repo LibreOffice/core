@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:52:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ finnish ] = "Dokument";
         Text[ italian ] = "Documento";
         Text[ danish ] = "Document";
-        Text[ swedish ] = "Dokumenttyp";
+        Text[ swedish ] = "~Dokumenttyp";
         Text[ polish ] = "Typ dokumentu";
         Text[ portuguese_brazilian ] = "Document";
         Text[ japanese ] = "ƒﬁ∑≠“›ƒÇÃéÌóﬁ";
@@ -435,7 +435,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ finnish ] = "Dateiformate";
         Text[ italian ] = "Formati file";
         Text[ danish ] = "File formats";
-        Text[ swedish ] = "Spara alltid som";
+        Text[ swedish ] = "Spara alltid s~om";
         Text[ polish ] = "Zapisuj zawsze jako";
         Text[ portuguese_brazilian ] = "File formats";
         Text[ japanese ] = "èÌÇ…éüÇÃå`éÆÇ≈ï€ë∂";
