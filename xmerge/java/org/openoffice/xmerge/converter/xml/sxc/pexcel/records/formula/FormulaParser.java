@@ -81,7 +81,6 @@ public class FormulaParser {
     private int index = 1;
     private TokenFactory tokenFactory;
     private Vector tokenVector;
-    private StringBuffer currentMatch = new StringBuffer("");
 
      /**
       * Default constructor
@@ -103,8 +102,10 @@ public class FormulaParser {
      */
     public Vector parse(String formula) throws FormulaParsingException {
 
-        if(formula.startsWith("=")){
-
+        index = 1;
+        look = ' ';
+        tokenVector.clear();
+        if(formula.startsWith("=")) {
             formulaStr = formula;
             Debug.log(Debug.TRACE,"Creating a Formula Parser");
             getChar();
@@ -287,10 +288,8 @@ public class FormulaParser {
 
          int numChars = symbol.length();
         boolean bContinue = true;
-        currentMatch.delete(0,currentMatch.length());
         for (int i=0;i<numChars && bContinue; i++) {
             if (look == symbol.charAt(i)) {
-                currentMatch.append(symbol.charAt(i));
                 bContinue = getChar();
                 skipWhite();
             } else {
