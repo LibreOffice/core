@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 10:18:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 11:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,25 +91,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-#define BEGIN_TRANS \
-        try         \
-        {           \
-            m_pConnection->createStatement()->execute(::rtl::OUString::createFromAscii("SUBTRANS BEGIN")); \
-        }           \
-        catch(Exception&) \
-        {                 \
-            printf("Exception occurced begin trans!\n");\
-        }
-
-#define END_TRANS   \
-        try         \
-        {           \
-            m_pConnection->createStatement()->execute(::rtl::OUString::createFromAscii("SUBTRANS END"));\
-        }           \
-        catch(Exception&) \
-        {                 \
-            printf("Exception occurced end trans!\n");\
-        }
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)
                         : ::connectivity::ODatabaseMetaDataBase(_pCon)
@@ -141,17 +122,17 @@ ODatabaseMetaData::~ODatabaseMetaData()
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openTypeInfo();
-    END_TRANS
+
     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     Reference< XResultSet > xRef;
     if(!m_bUseCatalog)
     {
@@ -165,7 +146,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
         xRef = pResult;
         pResult->openCatalogs();
     }
-    END_TRANS
+
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -181,76 +162,76 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openSchemas();
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openColumnPrivileges(m_bUseCatalog ? catalog : Any(),schema,table,columnNamePattern);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern,columnNamePattern);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openTables(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern,types);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openProcedureColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern,columnNamePattern);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openProcedures(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openVersionColumns(m_bUseCatalog ? catalog : Any(),schema,table);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -340,63 +321,63 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExceptio
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openExportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openImportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openPrimaryKeys(m_bUseCatalog ? catalog : Any(),schema,table);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openIndexInfo(m_bUseCatalog ? catalog : Any(),schema,table,unique,approximate);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
     sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openBestRowIdentifier(m_bUseCatalog ? catalog : Any(),schema,table,scope,nullable);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openTablePrivileges(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
@@ -404,12 +385,12 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
     const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     Reference< XResultSet > xRef = pResult;
     pResult->openForeignKeys(m_bUseCatalog ? primaryCatalog : Any(),primarySchema.toChar() == '%' ? &primarySchema : NULL,&primaryTable,
         m_bUseCatalog ? foreignCatalog : Any(), foreignSchema.toChar() == '%' ? &foreignSchema : NULL,&foreignTable);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
@@ -678,7 +659,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
-    BEGIN_TRANS
+
     // there exists no possibility to get table types so we have to check
     static ::rtl::OUString sTableTypes[] =
     {
@@ -709,7 +690,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
-    END_TRANS return xRef;
+     return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)

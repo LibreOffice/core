@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 14:55:06 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 11:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,8 +994,8 @@ void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeExcep
     m_bFreeHandle = sal_True;
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) SQL_ALL_CATALOGS,SQL_NTS,
-                            0,0,
-                            0,0,
+                            (SDB_ODBC_CHAR *) "",SQL_NTS,
+                            (SDB_ODBC_CHAR *) "",SQL_NTS,
                             (SDB_ODBC_CHAR *) "",SQL_NTS);
 
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -1011,9 +1011,9 @@ void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeExcept
 {
     m_bFreeHandle = sal_True;
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
-                            0,0,
+                            (SDB_ODBC_CHAR *) "",SQL_NTS,
                             (SDB_ODBC_CHAR *) SQL_ALL_SCHEMAS,SQL_NTS,
-                            0,0,
+                            (SDB_ODBC_CHAR *) "",SQL_NTS,
                             (SDB_ODBC_CHAR *) "",SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
