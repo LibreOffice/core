@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2003-11-07 14:52:30 $
+#   last change: $Author: hr $ $Date: 2004-03-09 11:07:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,9 @@ OBJFILES = \
         $(OBJ)$/checkinstall.obj			\
         $(OBJ)$/langselect.obj			    \
         $(OBJ)$/cmdlinehelp.obj             \
-        $(OBJ)$/userinstall.obj
+        $(OBJ)$/userinstall.obj             \
+        $(OBJ)$/license.obj
+
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "MACOSX"
