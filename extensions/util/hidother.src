@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:25:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,8 @@ hidspecial HID_PROP_SHOW_POSITION               { HelpId = HID_PROP_SHOW_POSITIO
 hidspecial HID_PROP_SHOW_NAVIGATION             { HelpId = HID_PROP_SHOW_NAVIGATION; }
 hidspecial HID_PROP_SHOW_RECORDACTIONS          { HelpId = HID_PROP_SHOW_RECORDACTIONS; }
 hidspecial HID_PROP_SHOW_FILTERSORT             { HelpId = HID_PROP_SHOW_FILTERSORT; }
+hidspecial HID_PROP_AUTOLINEBREAK               { HelpId = HID_PROP_AUTOLINEBREAK; }
+hidspecial HID_PROP_TEXTTYPE                    { HelpId = HID_PROP_TEXTTYPE; }
 
 hidspecial UID_PROP_DLG_FONT_TYPE               { HelpId = UID_PROP_DLG_FONT_TYPE; }
 hidspecial UID_PROP_DLG_IMAGE_URL               { HelpId = UID_PROP_DLG_IMAGE_URL; }
