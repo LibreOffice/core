@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 08:51:04 $
+ *  last change: $Author: os $ $Date: 2001-07-26 05:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,11 @@
 #include <svtools/transfer.hxx>
 #endif
 
-#ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
+#ifndef _OFA_HTMLCFG_HXX //autogen
+#include <offmgr/htmlcfg.hxx>
+#endif
+#ifndef _OFF_APP_HXX //autogen
+#include <offmgr/app.hxx>
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
@@ -178,6 +181,10 @@
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+
+#ifndef _SFXHTML_HXX
+#include <sfx2/sfxhtml.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -1082,9 +1089,16 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 --------------------------------------------------*/
 void SwSrcView::Load(SwDocShell* pDocShell)
 {
+    OfaHtmlOptions* pHtmlOptions = OFF_APP()->GetHtmlOptions();
     const sal_Char *pCharSet =
-        rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
+        rtl_getBestMimeCharsetFromTextEncoding( pHtmlOptions->GetTextEncoding() );
     rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+
+    rtl_TextEncoding eHeaderEnc = SfxHTMLParser::GetEncodingByHttpHeader(
+                                            pDocShell->GetHeaderAttributes() );
+    if( RTL_TEXTENCODING_DONTKNOW != eHeaderEnc )
+        eDestEnc = eHeaderEnc;
+
     aEditWin.SetReadonly(pDocShell->IsReadOnly());
     SfxMedium* pMedium = pDocShell->GetMedium();
 
