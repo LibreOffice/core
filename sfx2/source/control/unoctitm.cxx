@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:03:51 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,24 +518,20 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
         // Try to find call mode and frame name inside given arguments...
-        SfxCallMode nCall         = SFX_CALLMODE_SLOT;
+        SfxCallMode nCall         = SFX_CALLMODE_SYNCHRON;
         sal_Int32   nFileNameArg  = -1               ;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs( aArgs );
         sal_Int32 nCount = lNewArgs.getLength();
+        sal_Bool bTemp;
         for( sal_Int32 n=0; n<nCount; n++ )
         {
             const ::com::sun::star::beans::PropertyValue& rProp = lNewArgs[n];
-            sal_Bool bTemp;
-            if(
-                ( rProp.Name.compareToAscii("SynchronMode")== 0     )  &&
-                ( rProp.Value                              >>=bTemp )
-              )
+            if( rProp.Name.compareToAscii("SynchronMode")== 0 && ( rProp.Value >>=bTemp ) )
             {
-                nCall = SFX_CALLMODE_SYNCHRON;
+                nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
             }
-            else
-            if( rProp.Name.compareToAscii("FileName")== 0 )
+            else if( rProp.Name.compareToAscii("FileName")== 0 )
                 nFileNameArg = n;
         }
 

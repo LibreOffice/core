@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 08:21:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,15 +219,12 @@ const ::com::sun::star::frame::FeatureStateEvent& BindDispatch_Impl::GetStatus()
 void BindDispatch_Impl::Dispatch( sal_Bool bForceSynchron )
 {
     if ( xDisp.is() && aStatus.IsEnabled )
-        if ( bForceSynchron )
-        {
-            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps(1);
-            aProps.getArray()[0].Name = DEFINE_CONST_UNICODE("SynchronMode");
-            aProps.getArray()[0].Value <<= sal_True ;
-            xDisp->dispatch( aURL, aProps );
-        }
-        else
-            xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+    {
+        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps(1);
+        aProps.getArray()[0].Name = DEFINE_CONST_UNICODE("SynchronMode");
+        aProps.getArray()[0].Value <<= bForceSynchron ;
+        xDisp->dispatch( aURL, aProps );
+    }
 }
 
 //--------------------------------------------------------------------
