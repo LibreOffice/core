@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:09:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@ namespace connectivity
                                 public  ::cppu::OPropertySetHelper,
                                 public  ::comphelper::OPropertyArrayUsageHelper<java_sql_ResultSet>
     {
-                ::com::sun::star::uno::WeakReferenceHelper                                            m_aStatement;
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
         sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -174,7 +174,7 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_ResultSet( JNIEnv * pEnv, jobject myObj,java_sql_Statement_Base* pStmt=NULL ) :    java_sql_ResultSet_BASE(m_aMutex),
                                                                 OPropertySetHelper(java_sql_ResultSet_BASE::rBHelper),
-                                                                m_aStatement((::cppu::OWeakObject*)pStmt),
+                                                                m_xStatement(*pStmt),
                                                                 java_lang_Object( pEnv, myObj )
                                                                 {}
 
