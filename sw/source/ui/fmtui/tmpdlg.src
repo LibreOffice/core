@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:13:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ String STR_PAGE_STD
     Text[ chinese_traditional ] = "­¶";
     Text[ arabic ] = "ÕÝÍÉ";
     Text[ greek ] = "Óåëßäá";
-    Text[ korean ] = "ÂÊ";
+    Text[ korean ] = "ÆäÀÌÁö";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Página";
@@ -1129,7 +1129,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ chinese_traditional ] = "´«¦æ";
                 Text[ arabic ] = "ÇáÊÝÇÝ";
                 Text[ greek ] = "Áíáäßðëùóç";
-                Text[ korean ] = "¹®ÀÚ¿­¡¡¹èÄ¡";
+                Text[ korean ] = "¼øÈ¯";
                 Text[ turkish ] = "Metin daðýlýmý";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Ajuste";
@@ -1422,15 +1422,15 @@ TabDialog DLG_TEMPLATE_5
                 Identifier = RID_SVXPAGE_NUM_OPTIONS;
                 Text = "Optionen" ;
                 Text [ ENGLISH ] = "Customize" ;
-                Text [ portuguese ] = "Opções" ;
+                Text [ portuguese ] = "~Opções" ;
                 Text [ english_us ] = "Options" ;
-                Text [ portuguese_brazilian ] = "Optionen" ;
+                Text [ portuguese_brazilian ] = "~Optionen" ;
                 Text [ swedish ] = "Alternativ" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
-                Text [ spanish ] = "Opciones" ;
-                Text [ french ] = "Options" ;
-                Text [ dutch ] = "Opties" ;
+                Text [ spanish ] = "~Opciones" ;
+                Text [ french ] = "~Options" ;
+                Text [ dutch ] = "~Opties" ;
                 Text[ chinese_simplified ] = "Ñ¡Ïî";
                 Text[ russian ] = "Ïàðàìåòðû";
                 Text[ polish ] = "Opcje";
@@ -1441,7 +1441,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ greek ] = "ÅðéëïãÝò";
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
-                Text[ catalan ] = "Opciones";
+                Text[ catalan ] = "~Opciones";
                 Text[ finnish ] = "Asetukset";
             };
         };
@@ -1462,11 +1462,12 @@ TabDialog DLG_TEMPLATE_5
     Text[ chinese_traditional ] = "½s¸¹¼Ë¦¡";
     Text[ arabic ] = "äãØ ÊÑÞíã";
     Text[ greek ] = "Ðñüôõðï áñßèìçóçò";
-    Text[ korean ] = "¹øÈ£¸Å±â±â¡¡À¯Çü";
+    Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
     Text[ turkish ] = "Numaralama biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de numeración";
     Text[ finnish ] = "Numerointityyli";
 };
+
 
 
