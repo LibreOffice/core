@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-16 16:13:19 $
+#   last change: $Author: hjs $ $Date: 2001-05-16 16:32:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,7 +171,7 @@ SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=		$(SHL4TARGET)
 DEF4EXPORTFILE=	exports.dxp
 
-.ENDIF
+.ENDIF			# "$(GUI)"=="WNT"
 
 
 .INCLUDE :  target.mk
