@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:44:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@ struct ScHTMLTableStackEntry
     ScEEParseEntry*     pCellEntry;
     ScHTMLColOffset*    pLocalColOffset;
     ULONG               nFirstTableCell;
-    USHORT              nColCnt;
-    USHORT              nRowCnt;
-    USHORT              nColCntStart;
-    USHORT              nMaxCol;
+    SCCOL               nColCnt;
+    SCROW               nRowCnt;
+    SCCOL               nColCntStart;
+    SCCOL               nMaxCol;
     USHORT              nTable;
     USHORT              nTableWidth;
     USHORT              nColOffset;
@@ -123,8 +123,8 @@ struct ScHTMLTableStackEntry
                         ScHTMLTableStackEntry( ScEEParseEntry* pE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
                                 ULONG nFTC,
-                                USHORT nCol, USHORT nRow,
-                                USHORT nStart, USHORT nMax, USHORT nTab,
+                                SCCOL nCol, SCROW nRow,
+                                SCCOL nStart, SCCOL nMax, USHORT nTab,
                                 USHORT nTW, USHORT nCO, USHORT nCOS,
                                 BOOL bFR )
                             : pCellEntry( pE ), xLockedList( rL ),
@@ -142,11 +142,11 @@ DECLARE_STACK( ScHTMLTableStack, ScHTMLTableStackEntry* );
 
 struct ScHTMLAdjustStackEntry
 {
-    USHORT              nLastCol;
-    USHORT              nNextRow;
-    USHORT              nCurRow;
-                        ScHTMLAdjustStackEntry( USHORT nLCol, USHORT nNRow,
-                                USHORT nCRow )
+    SCCOL               nLastCol;
+    SCROW               nNextRow;
+    SCROW               nCurRow;
+                        ScHTMLAdjustStackEntry( SCCOL nLCol, SCROW nNRow,
+                                SCROW nCRow )
                             : nLastCol( nLCol ), nNextRow( nNRow ),
                             nCurRow( nCRow )
                             {}
@@ -174,8 +174,8 @@ private:
     short               nTableLevel;
     USHORT              nTable;
     USHORT              nMaxTable;
-    USHORT              nColCntStart;       // erste Col je Table
-    USHORT              nMaxCol;            // je Table
+    SCCOL               nColCntStart;       // erste Col je Table
+    SCCOL               nMaxCol;            // je Table
     USHORT              nTableWidth;        // je Table
     USHORT              nColOffset;         // aktuell, Pixel
     USHORT              nColOffsetStart;    // Startwert je Table, in Pixel
@@ -195,7 +195,7 @@ private:
     void                NextRow(  ImportInfo*  );
     void                SkipLocked( ScEEParseEntry*, BOOL bJoin = TRUE );
     static BOOL         SeekOffset( ScHTMLColOffset*, USHORT nOffset,
-                                    USHORT* pCol,
+                                    SCCOL* pCol,
                                     USHORT nOffsetTol = SC_HTML_OFFSET_TOL );
     static void         MakeCol( ScHTMLColOffset*, USHORT& nOffset,
                                 USHORT& nWidth,
@@ -256,21 +256,21 @@ const ScHTMLTableId SC_HTML_NO_TABLE = 0;
 /** A 2D cell position in an HTML table. */
 struct ScHTMLPos
 {
-    sal_uInt16                  mnCol;
-    sal_uInt16                  mnRow;
+    SCCOL                  mnCol;
+    SCROW                  mnRow;
 
     inline explicit             ScHTMLPos() : mnCol( 0 ), mnRow( 0 ) {}
-    inline explicit             ScHTMLPos( sal_uInt16 nCol, sal_uInt16 nRow ) :
+    inline explicit             ScHTMLPos( SCCOL nCol, SCROW nRow ) :
                                     mnCol( nCol ), mnRow( nRow ) {}
     inline explicit             ScHTMLPos( const ScAddress& rAddr ) { Set( rAddr ); }
 
-    inline sal_uInt16           Get( ScHTMLOrient eOrient ) const
-                                    { return (eOrient == tdCol) ? mnCol : mnRow; }
-    inline void                 Set( sal_uInt16 nCol, sal_uInt16 nRow )
+    inline SCCOLROW           Get( ScHTMLOrient eOrient ) const
+                                    { return (eOrient == tdCol) ? static_cast<SCCOLROW>(mnCol) : static_cast<SCCOLROW>(mnRow); }
+    inline void                 Set( SCCOL nCol, SCROW nRow )
                                     { mnCol = nCol; mnRow = nRow; }
     inline void                 Set( const ScAddress& rAddr )
                                     { Set( rAddr.Col(), rAddr.Row() ); }
-    inline void                 Move( sal_Int16 nColDiff, sal_Int16 nRowDiff )
+    inline void                 Move( SCsCOL nColDiff, SCsROW nRowDiff )
                                     { mnCol += nColDiff; mnRow += nRowDiff; }
     inline ScAddress            MakeAddr() const
                                     { return ScAddress( mnCol, mnRow, 0 ); }
@@ -292,18 +292,18 @@ inline bool operator<( const ScHTMLPos& rPos1, const ScHTMLPos& rPos2 )
 /** A 2D cell size in an HTML table. */
 struct ScHTMLSize
 {
-    sal_uInt16                  mnCols;
-    sal_uInt16                  mnRows;
+    SCCOL                  mnCols;
+    SCROW                  mnRows;
 
     inline explicit             ScHTMLSize() : mnCols( 0 ), mnRows( 0 ) {}
-    inline explicit             ScHTMLSize( sal_uInt16 nCols, sal_uInt16 nRows ) :
+    inline explicit             ScHTMLSize( SCCOL nCols, SCROW nRows ) :
                                     mnCols( nCols ), mnRows( nRows ) {}
 
-    inline sal_uInt16           Get( ScHTMLOrient eOrient ) const
-                                    { return (eOrient == tdCol) ? mnCols : mnRows; }
-    inline void                 Set( sal_uInt16 nCols, sal_uInt16 nRows )
+    inline SCCOLROW           Get( ScHTMLOrient eOrient ) const
+                                    { return (eOrient == tdCol) ? static_cast<SCCOLROW>(mnCols) : static_cast<SCCOLROW>(mnRows); }
+    inline void                 Set( SCCOL nCols, SCROW nRows )
                                     { mnCols = nCols; mnRows = nRows; }
-    inline void                 Expand( sal_Int16 nColDiff, sal_Int16 nRowDiff )
+    inline void                 Expand( SCsCOL nColDiff, SCsROW nRowDiff )
                                     { mnCols += nColDiff; mnRows += nRowDiff; }
 };
 
@@ -452,18 +452,18 @@ public:
     ScHTMLTable*                CloseTable( const ImportInfo& rInfo );
 
     /** Returns the resulting document row/column count of the specified HTML row/column. */
-    sal_uInt16                  GetDocSize( ScHTMLOrient eOrient, sal_uInt16 nCellPos ) const;
+    SCCOLROW                  GetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos ) const;
     /** Returns the resulting document row/column count in the range [nCellBegin, nCellEnd). */
-    sal_uInt16                  GetDocSize( ScHTMLOrient eOrient, sal_uInt16 nCellBegin, sal_uInt16 nCellEnd ) const;
+    SCCOLROW                  GetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellBegin, SCCOLROW nCellEnd ) const;
     /** Returns the total document row/column count in the specified direction. */
-    sal_uInt16                  GetDocSize( ScHTMLOrient eOrient ) const;
+    SCCOLROW                  GetDocSize( ScHTMLOrient eOrient ) const;
     /** Returns the total document row/column count of the specified HTML cell. */
     ScHTMLSize                  GetDocSize( const ScHTMLPos& rCellPos ) const;
 
     /** Returns the resulting Calc position of the top left edge of the table. */
     inline const ScHTMLPos&     GetDocPos() const { return maDocBasePos; }
     /** Calculates the resulting Calc position of the specified HTML column/row. */
-    sal_uInt16                  GetDocPos( ScHTMLOrient eOrient, sal_uInt16 nCellPos = 0 ) const;
+    SCCOLROW                  GetDocPos( ScHTMLOrient eOrient, SCCOLROW nCellPos = 0 ) const;
     /** Calculates the resulting Calc position of the specified HTML cell. */
     ScHTMLPos                   GetDocPos( const ScHTMLPos& rCellPos ) const;
 
@@ -493,7 +493,7 @@ protected:
 private:
     typedef ::std::auto_ptr< ScHTMLTableMap >           ScHTMLTableMapPtr;
     typedef ::std::auto_ptr< SfxItemSet >               SfxItemSetPtr;
-    typedef ::std::vector< sal_uInt16 >                 ScSizeVec;
+    typedef ::std::vector< SCCOLROW >                   ScSizeVec;
     typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
     typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
     typedef ::std::auto_ptr< ScHTMLEntry >              ScHTMLEntryPtr;
@@ -557,15 +557,15 @@ private:
 
     /** Updates the document column/row size of the specified column or row.
         @descr  Only increases the present count, never decreases. */
-    void                        SetDocSize( ScHTMLOrient eOrient, sal_uInt16 nCellPos, sal_uInt16 nSize );
+    void                        SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW nSize );
     /** Calculates and sets the resulting size the cell needs in the document.
         @descr  Reduces the needed size in merged cells.
         @param nCellPos  The first column/row position of the (merged) cell.
         @param nCellSpan  The cell spanning in the specified orientation.
         @param nRealDocSize  The raw document size of all entries of the cell. */
     void                        CalcNeededDocSize(
-                                    ScHTMLOrient eOrient, sal_uInt16 nCellPos,
-                                    sal_uInt16 nCellSpan, sal_uInt16 nRealDocSize );
+                                    ScHTMLOrient eOrient, SCCOLROW nCellPos,
+                                    SCCOLROW nCellSpan, SCCOLROW nRealDocSize );
 
 private:
     ScHTMLTable*                mpParentTable;      /// Pointer to parent table.
