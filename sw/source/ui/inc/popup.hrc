@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@
 #define MN_PPREVIEW_POPUPMENU       (RC_POPUPS_BEGIN + 7)
 #define MN_SRCVIEW_POPUPMENU        (RC_POPUPS_BEGIN + 8)
 #define MN_DRAWFORM_POPUPMENU       (RC_POPUPS_BEGIN + 9)
+#define MN_MEDIA_POPUPMENU          (RC_POPUPS_BEGIN + 10)
 
-#if MN_DRAWFORM_POPUPMENU > RC_POPUPS_END
+#if MN_MEDIA_POPUPMENU > RC_POPUPS_END
 
 #error Resource-Id Ueberlauf in #file, #line
 #endif
