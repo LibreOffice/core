@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 15:46:19 $
+ *  last change: $Author: vg $ $Date: 2001-06-01 19:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ polish ] = "Tabele";
     Text[ portuguese_brazilian ] = "Tables";
     Text[ japanese ] = "Ã°ÌŞÙ";
-    Text[ korean ] = "Ç¥";
+    Text[ korean ] = "Å×ÀÌºí";
     Text[ chinese_simplified ] = "±í¸ñ";
     Text[ chinese_traditional ] = "ªí®æ";
     Text[ turkish ] = "Tables";
@@ -661,12 +661,12 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text [ english_us ] = "Links";
     Text[ portuguese ] = "Ligações";
     Text[ russian ] = "Ññûëêè";
-    Text[ greek ] = "Bookmarks";
+    Text[ greek ] = "Óõíäİóåéò";
     Text[ dutch ] = "Koppelingen";
     Text[ french ] = "Liens";
     Text[ spanish ] = "Vínculos";
     Text[ finnish ] = "Linkit";
-    Text[ italian ] = "Bookmarks";
+    Text[ italian ] = "Collegamenti";
     Text[ danish ] = "Bookmarks";
     Text[ swedish ] = "Länkar";
     Text[ polish ] = "£¹cza";
@@ -695,7 +695,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ italian ] = "Amministra ~sorgente dati...";   \
     Text[ danish ] = "administrate ~data sources ...";  \
     Text[ swedish ] = "Administrera ~datakällor...";    \
-    Text[ polish ] = "~Administruj ?ród³a danych...";   \
+    Text[ polish ] = "~Administruj Ÿród³a danych...";   \
     Text[ portuguese_brazilian ] = "administrate ~data sources ...";    \
     Text[ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—(~D)...";  \
     Text[ korean ] = "a~dministrate data sources ...";  \
@@ -932,7 +932,26 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text = "Tabelle e~infügen..." ;
             Text [ english ] = "~insert table..." ;
             Text [ english_us ] = "~Insert Table..." ;
-        };
+            Text[ portuguese ] = "~Inserir tabela";
+                Text[ russian ] = "~Âñòàâèòü òàáëèöó...";
+                Text[ greek ] = "Å~éóáãùãŞ ğßíáêá";
+                Text[ dutch ] = "tabel ~invoegen";
+                Text[ french ] = "~Insérer une table...";
+                Text[ spanish ] = "~Insertar tabla";
+                Text[ finnish ] = "Tabelle e~infügen";
+                Text[ italian ] = "~Inserisci tabella...";
+                Text[ danish ] = "~insert table";
+                Text[ swedish ] = "~Infoga tabell...";
+                Text[ polish ] = "~Wstaw tabelê";
+                Text[ portuguese_brazilian ] = "~insert table";
+                Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘}“ü(~I)";
+                Text[ korean ] = "~insert table";
+                Text[ chinese_simplified ] = "²åÈë±í¸ñ(~I)...";
+                Text[ chinese_traditional ] = "¥[¤Jªí®æ(~I)";
+                Text[ turkish ] = "~insert table";
+                Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
+                Text[ catalan ] = "~Insert Table";
+            };
         MenuItem
         {
             Separator = TRUE;
@@ -986,22 +1005,22 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text = "Ansicht ~kopieren" ;
             Text [ english ] = "c~opy view" ;
             Text [ english_us ] = "C~opy View" ;
-            Text[ portuguese ] = "C~opy View";
-                Text[ russian ] = "C~opy View";
-                Text[ greek ] = "C~opy View";
-                Text[ dutch ] = "C~opy View";
-                Text[ french ] = "C~opy View";
-                Text[ spanish ] = "C~opy View";
+            Text[ portuguese ] = "C~opiar vista";
+                Text[ russian ] = "Êîïèğîâàòü âèä";
+                Text[ greek ] = "ÁíôéãñáöŞ ğñïâïëŞò";
+                Text[ dutch ] = "Beeld ~kopiëren";
+                Text[ french ] = "C~opier la vue";
+                Text[ spanish ] = "Copiar ~visualización";
                 Text[ finnish ] = "C~opy View";
-                Text[ italian ] = "C~opy View";
+                Text[ italian ] = "Copia vista";
                 Text[ danish ] = "C~opy View";
-                Text[ swedish ] = "C~opy View";
-                Text[ polish ] = "C~opy View";
+                Text[ swedish ] = "~Kopiera vy";
+                Text[ polish ] = "~Kopiuj widok";
                 Text[ portuguese_brazilian ] = "C~opy View";
-                Text[ japanese ] = "C~opy View";
+                Text[ japanese ] = "ËŞ­°‚ÌºËß°";
                 Text[ korean ] = "C~opy View";
-                Text[ chinese_simplified ] = "C~opy View";
-                Text[ chinese_traditional ] = "C~opy View";
+                Text[ chinese_simplified ] = "¸´ÖÆÊÓÍ¼";
+                Text[ chinese_traditional ] = "½Æ»sÀËµø";
                 Text[ turkish ] = "C~opy View";
                 Text[ arabic ] = "C~opy View";
                 Text[ catalan ] = "C~opy View";
@@ -1013,22 +1032,22 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text = "Ansicht e~infügen" ;
             Text [ english ] = "~insert view" ;
             Text [ english_us ] = "~Insert View" ;
-            Text[ portuguese ] = "~Insert View";
-                Text[ russian ] = "~Insert View";
+            Text[ portuguese ] = "~Inserir vista";
+                Text[ russian ] = "Âñòàâèòü âèä";
                 Text[ greek ] = "~Insert View";
-                Text[ dutch ] = "~Insert View";
-                Text[ french ] = "~Insert View";
-                Text[ spanish ] = "~Insert View";
+                Text[ dutch ] = "~Beeld invoegen";
+                Text[ french ] = "~Insérer une vue";
+                Text[ spanish ] = "~Insertar visualización";
                 Text[ finnish ] = "~Insert View";
-                Text[ italian ] = "~Insert View";
+                Text[ italian ] = "~Inserisci vista";
                 Text[ danish ] = "~Insert View";
-                Text[ swedish ] = "~Insert View";
-                Text[ polish ] = "~Insert View";
+                Text[ swedish ] = "~Infoga vy";
+                Text[ polish ] = "~Wstaw widok";
                 Text[ portuguese_brazilian ] = "~Insert View";
-                Text[ japanese ] = "~Insert View";
+                Text[ japanese ] = "ËŞ­°‚Ì‘}“ü";
                 Text[ korean ] = "~Insert View";
-                Text[ chinese_simplified ] = "~Insert View";
-                Text[ chinese_traditional ] = "~Insert View";
+                Text[ chinese_simplified ] = "²åÈëÊÓÍ¼";
+                Text[ chinese_traditional ] = "¶K¤WÀËµø";
                 Text[ turkish ] = "~Insert View";
                 Text[ arabic ] = "~Insert View";
                 Text[ catalan ] = "~Insert View";
@@ -1047,17 +1066,17 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ portuguese ] = "Es~boçar relação";
             Text[ russian ] = "Ïğîåêò ñâÿçåé";
             Text[ greek ] = "Ó÷åäéáóìüò åîÜñôçóçò";
-            Text[ dutch ] = "~ontwerp voor verbinding";
+            Text[ dutch ] = "~Relatie-ontwerp";
             Text[ french ] = "Ébauche de relatio~n";
-            Text[ spanish ] = "Diseño de relaciones";
+            Text[ spanish ] = "Diseño de rela~ciones";
             Text[ italian ] = "Struttura r~elazione";
             Text[ danish ] = "relatio~n design";
             Text[ swedish ] = "Relatio~nsutkast";
-            Text[ polish ] = "Projekt relacji";
+            Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
-            Text[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ(~A)";
+            Text[ japanese ] = "ØÚ°¼®İÃŞ»Ş²İ(~A)";
             Text[ korean ] = "rel~ation design";
-            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ(~A)";
+            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ";
             Text[ chinese_traditional ] = "ÃöÁp³]­p(~A)";
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
@@ -1076,13 +1095,13 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ portuguese ] = "Confirmar eliminação";
     Text[ russian ] = "Ïîäòâåğäèòü óäàëåíèå";
     Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
-    Text[ dutch ] = "wissen bevestigen";
+    Text[ dutch ] = "Wissen bevestigen";
     Text[ french ] = "Confirmation de suppression";
     Text[ spanish ] = "Confirmar eliminación";
     Text[ italian ] = "Conferma 'Elimina'";
     Text[ danish ] = "confirm deletion";
     Text[ swedish ] = "Bekräfta radering";
-    Text[ polish ] = "Potwierd? usuniêcie";
+    Text[ polish ] = "PotwierdŸ usuniêcie";
     Text[ portuguese_brazilian ] = "confirm deletion";
     Text[ japanese ] = "íœ‚ÌŠm”F";
     Text[ korean ] = "confirm deletion";
@@ -1101,11 +1120,11 @@ String STR_QUERY_DELETE_QUERY
     Text [ english_us ] = "Do you want to delete the query '$name$'?" ;
     Text[ portuguese ] = "Eliminar consulta '$name$'?";
     Text[ russian ] = "Óäàëèòü çàïğîñ '$name$'?";
-    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '%1';";
+    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '$name$';";
     Text[ dutch ] = "Wilt u query '$naam$' wissen?";
     Text[ french ] = "Voulez-vous supprimer la requête '$name$' ?";
     Text[ spanish ] = "¿Desea eliminar la consulta '$name$'?";
-    Text[ italian ] = "Volete eliminare la ricerca '%1'?";
+    Text[ italian ] = "Volete eliminare la ricerca '$name$'?";
     Text[ danish ] = "Do you want to delete the query '%1'?";
     Text[ swedish ] = "Ska sökningen '$name$' raderas?";
     Text[ polish ] = "Usun¹æ kwerendê'$name$'?";
@@ -1260,7 +1279,7 @@ String STR_CONNECTING_DATASOURCE
     Text[ portuguese ] = "A estabelecer ligação com \"$name$\" ...";
     Text[ russian ] = "Ïîäêëş÷åíèå ê \"$name$\" ...";
     Text[ greek ] = "connecting to \"$name$\" ...";
-    Text[ dutch ] = "Verbind met \"$name$\" ...";
+    Text[ dutch ] = "Bezig met verbinden met \"$name$\" ...";
     Text[ french ] = "Connexion à \"$name$\" ...";
     Text[ spanish ] = "Conectando a \"$name$\" ...";
     Text[ italian ] = "Collegamento a \"$name$\" ...";
@@ -1286,7 +1305,7 @@ String STR_LOADING_QUERY
     Text[ portuguese ] = "A carregar consulta $name$ ...";
     Text[ russian ] = "Çàãğóçêà çàïğîñà $name$ ...";
     Text[ greek ] = "loading query $name$ ...";
-    Text[ dutch ] = "laad query $name$ ...";
+    Text[ dutch ] = "Bezig met laden van query $name$ ...";
     Text[ french ] = "Chargement de la requête $name$ ...";
     Text[ spanish ] = "cargando consulta $name$ ...";
     Text[ italian ] = "Carica ricerca $name$ ...";
@@ -1312,7 +1331,7 @@ String STR_LOADING_TABLE
     Text[ portuguese ] = "A carregar tabela $name$ ...";
     Text[ russian ] = "Çàãğóçêà òàáëèöû $name$ ...";
     Text[ greek ] = "loading table $name$ ...";
-    Text[ dutch ] = "laad tabel $name$ ...";
+    Text[ dutch ] = "Bezig met laden van tabel $name$ ...";
     Text[ french ] = "Chargement de la table $name$ ...";
     Text[ spanish ] = "cargando tabla $name$ ...";
     Text[ italian ] = "Carica tabella $name$ ...";
