@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 09:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public:
     PropertyMapImpl() throw();
     virtual ~PropertyMapImpl() throw();
 
-    void add( PropertyMapEntry* pMap ) throw();
+    void add( PropertyMapEntry* pMap, sal_Int32 nCount = -1 ) throw();
     void remove( const OUString& aName ) throw();
 
     Sequence< Property > getProperties() throw();
@@ -100,9 +100,13 @@ PropertyMapImpl::~PropertyMapImpl() throw()
 {
 }
 
-void PropertyMapImpl::add( PropertyMapEntry* pMap ) throw()
+void PropertyMapImpl::add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw()
 {
-    while( pMap->mpName )
+    // nCount < 0   => add all
+    // nCount == 0  => add nothing
+    // nCount > 0   => add at most nCount entries
+
+    while( pMap->mpName && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
     {
         OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
 
@@ -208,6 +212,11 @@ PropertySetInfo::~PropertySetInfo() throw()
 void PropertySetInfo::add( PropertyMapEntry* pMap ) throw()
 {
     mpMap->add( pMap );
+}
+
+void PropertySetInfo::add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw()
+{
+    mpMap->add( pMap, nCount );
 }
 
 void PropertySetInfo::remove( const rtl::OUString& aName ) throw()

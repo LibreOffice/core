@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetinfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 15:52:37 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 09:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,18 @@ public:
     const PropertyMap* getPropertyMap() const throw();
 
     /** adds an array of PropertyMapEntry to this instance.<p>
-        The end is marked with a PropertyMapEntry where mpName equals NULL
+        The end is marked with a PropertyMapEntry where mpName equals NULL</p>
     */
     void add( PropertyMapEntry* pMap ) throw();
+
+    /** adds an array of PropertyMapEntry to this instance
+
+        <p>At most the number of entries given will be added, if no terminating entry (<code>mpName == <NULL/></code>) is encountered.</p>
+
+        <p>If <arg>nCount</arg> is less than 0, it is ignored and all entries (up to, but not including, the terminating
+        one) are added.</p>
+    */
+    void add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw();
 
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const rtl::OUString& aName ) throw();
