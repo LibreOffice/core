@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:13:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef CONFIGMGR_BINARYCACHE_HXX
+#include "binarycache.hxx"
+#endif //CONFIGMGR_BINARYWRITER_HXX
+
+
 namespace configmgr { namespace backend {
 
 namespace css = com::sun::star ;
@@ -129,26 +134,46 @@ class BackendAccess : public IMergedDataProvider {
             CFG_UNO_THROW_ALL() ;
         virtual bool isStrippingDefaults(void) CFG_NOTHROW() { return false ; }
 
-    protected :
-
     private :
-        /** Factory used for service invocation */
-        uno::Reference<lang::XMultiServiceFactory> mFactory ;
-        /** Backend being accessed */
-        uno::Reference<backenduno::XBackend> mBackend ;
 
         /**
           Retrieves the schema of a component.
-
           */
         uno::Reference< backenduno::XSchema > getSchema(const OUString& aComponent) ;
 
         /**
           Retrieves the layers for a request.
-
           */
-        void getLayers(const OUString& aComponent,const RequestOptions& aOptions,
-                uno::Sequence< uno::Reference<backenduno::XLayer> >& aLayers) ;
+        uno::Sequence< uno::Reference<backenduno::XLayer> > getLayers(const OUString& aComponent,const RequestOptions& aOptions) ;
+
+        /**
+          Reads merged default data with a given number of layers.
+          */
+        bool readDefaultData( MergedComponentData & aComponentData,
+                                OUString const & aComponent,
+                                RequestOptions const & aOptions,
+                                bool bIncludeTemplates,
+                                const uno::Reference<backenduno::XLayer> * pLayers,
+                                sal_Int32 nNumLayers,
+                                ITemplateDataProvider *aTemplateProvider)
+            CFG_UNO_THROW_ALL();
+        /**
+          Merges layers onto component data.
+          */
+        void merge(
+                MergedComponentData& aData,
+                const uno::Reference<backenduno::XLayer> * pLayers,
+                sal_Int32 aNumLayers,
+                RequestOptions const & aOptions,
+                ITemplateDataProvider *aTemplateProvider)
+            CFG_UNO_THROW_ALL();
+    private :
+        /** Factory used for service invocation */
+        uno::Reference<lang::XMultiServiceFactory> mFactory ;
+        /** Backend being accessed */
+        uno::Reference<backenduno::XBackend> mBackend ;
+        /** Binary cache of default data */
+        BinaryCache mBinaryCache;
 } ;
 
 } } // configmgr.backend
