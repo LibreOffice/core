@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:33:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Oříznout";
         Text[ hebrew ] = "Zuschneiden";
         Text[ hindi ] = "क्रॉप";
+        Text[ slovak ] = "Orezať";
     };
     FixedText FT_LEFT
     {
@@ -138,6 +139,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "~Links";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     MetricField MF_LEFT
     {
@@ -188,6 +190,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "~Rechts";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     MetricField MF_RIGHT
     {
@@ -236,6 +239,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "~Navrchu";
     };
     MetricField MF_TOP
     {
@@ -286,6 +290,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "~Unten";
         Text[ hindi ] = "~तल";
+        Text[ slovak ] = "Na~spodku";
     };
     MetricField MF_BOTTOM
     {
@@ -334,6 +339,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Zachovat velikost obrázku";
         Text[ hebrew ] = "Bildgröße beibehal~ten";
         Text[ hindi ] = "चित्र परि~माण रखो";
+        Text[ slovak ] = "~Zachovať veľkosť obrázku";
     };
     RadioButton RB_ZOOMCONST
     {
@@ -366,6 +372,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Zachovat měřítko";
         Text[ hebrew ] = "~Skalierung beibehalten";
         Text[ hindi ] = "~स्केल रखो";
+        Text[ slovak ] = "Zachovať š~kálu";
     };
     Window WN_BSP
     {
@@ -403,6 +410,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Měřítko";
         Text[ hebrew ] = "‮התאמת גודל‬";
         Text[ hindi ] = "स्केल";
+        Text[ slovak ] = "Škála";
     };
     FixedText FT_WIDTHZOOM
     {
@@ -436,6 +444,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~चौड़ाई";
+        Text[ slovak ] = "Ší~rka";
     };
     MetricField MF_WIDTHZOOM
     {
@@ -489,6 +498,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField MF_HEIGHTZOOM
     {
@@ -540,6 +550,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Velikost obrázku";
         Text[ hebrew ] = "Bildgröße";
         Text[ hindi ] = "चित्र परिमाण";
+        Text[ slovak ] = "Veľkosť obrázku";
     };
     FixedText FT_WIDTH
     {
@@ -573,6 +584,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
+        Text[ slovak ] = "Ší~rka";
     };
     MetricField MF_WIDTH
     {
@@ -624,6 +636,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField MF_HEIGHT
     {
@@ -678,8 +691,11 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ czech ] = "Původní velikost";
         Text[ hebrew ] = "Ori~ginalgröße";
         Text[ hindi ] = "~यथार्थ परिमाण";
+        Text[ slovak ] = "~Pôvodná veľkosť";
     };
 };
+
+
 
 
 
