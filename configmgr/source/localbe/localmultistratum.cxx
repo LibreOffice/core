@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localmultistratum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:08:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 16:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,9 @@ namespace configmgr { namespace localbe {
 
 //==============================================================================
 
-static inline rtl::OUString getDataSubPath()
-{ return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/data")); }
-//------------------------------------------------------------------------------
 static inline
-rtl::OUString impl_getLayerDataDirectory(rtl::OUString const & aLayerBaseUrl)
-{ return aLayerBaseUrl + getDataSubPath(); }
+rtl::OUString const & impl_getLayerDataDirectory(rtl::OUString const & aLayerBaseUrl)
+{ return aLayerBaseUrl; }
 //------------------------------------------------------------------------------
 static //inline
 rtl::OUString makeLayerId(rtl::OUString const & aComponent,rtl::OUString const & aParticleFile)
