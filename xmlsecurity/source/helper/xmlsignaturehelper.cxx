@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:59:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,59 +111,8 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
     ImplCreateSEInitializer();
 
-    rtl::OUString aTokenPath = rTokenPath;
-
-
-    //MM : search for the default profile
-    /*
-
-    if( tokenPath.getLength() == 0 )
-    {
-        rtl::OUString aDefaultCryptokenFileName = rtl::OUString::createFromAscii("cryptoken.default");
-        SvFileStream* pStream = new SvFileStream( aDefaultCryptokenFileName, STREAM_READ );
-        if (pStream != NULL)
-        {
-            pStream->Seek( STREAM_SEEK_TO_END );
-            ULONG nBytes = pStream->Tell();
-
-            if (nBytes > 0)
-            {
-                pStream->Seek( STREAM_SEEK_TO_BEGIN );
-                SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
-                uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
-
-                if (xInputStream.is())
-                {
-                    uno::Sequence< sal_Int8 > tokenFileName( 1024 );
-                    int numbers = xInputStream->readBytes( tokenFileName, 1024 );
-                    const sal_Int8* readBytes = ( const sal_Int8* )tokenFileName.getArray();
-
-                    sal_Char cToken[1024];
-
-                    for (int i=0; i<numbers; i++)
-                    {
-                        cToken[i] = (sal_Char)(*(readBytes+i));
-                    }
-
-                    xInputStream->closeInput();
-
-                    while (cToken[numbers-1] == 0x0a || cToken[numbers-1] == 0x0d ) numbers--;
-                    tokenPath = rtl::OStringToOUString(rtl::OString((const sal_Char*)cToken, numbers), RTL_TEXTENCODING_UTF8);
-                }
-            }
-        }
-    }
-    */
-
-/*
-#ifndef WNT
-    // MT: HACK for testing
-    if ( !aTokenPath.getLength() )
-        aTokenPath = rtl::OUString::createFromAscii("/tmp/nss");
-#endif
-*/
-
-    mxSecurityContext = mxSEInitializer->createSecurityContext( aTokenPath );
+    if ( mxSEInitializer.is() )
+        mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
 
     return mxSecurityContext.is();
 }
@@ -225,6 +174,19 @@ void XMLSignatureHelper::SetX509Certificate(
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
+        ouX509IssuerName,
+        ouX509SerialNumber);
+}
+
+void XMLSignatureHelper::SetX509Certificate(
+        sal_Int32 nSecurityId,
+        const sal_Int32 nSecurityEnvironmentIndex,
+        const rtl::OUString& ouX509IssuerName,
+        const rtl::OUString& ouX509SerialNumber)
+{
+    mpXSecController->setX509Certificate(
+        nSecurityId,
+        nSecurityEnvironmentIndex,
         ouX509IssuerName,
         ouX509SerialNumber);
 }
@@ -457,6 +419,17 @@ uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > XMLSignatu
 {
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >());
 }
+
+uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::GetSecurityEnvironmentByIndex(sal_Int32 nId)
+{
+    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentByIndex(nId)): uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >());
+}
+
+sal_Int32 XMLSignatureHelper::GetSecurityEnvironmentNumber()
+{
+    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentNumber()): 0);
+}
+
 
 /*
 void XMLSignatureHelper::createSecurityContext( rtl::OUString tokenPath )
