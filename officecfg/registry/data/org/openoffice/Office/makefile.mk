@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 12:16:20 $
+#   last change: $Author: obo $ $Date: 2004-11-16 16:55:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ MODULEFILES= \
     Common-cjk.xcu   \
     Common-ctl.xcu   \
     Common-korea.xcu   \
-    Writer-cjk.xcu
+    Writer-cjk.xcu \
+    Writer-javamail.xcu
 
 LOCALIZEDFILES= \
     Common.xcu \
