@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:01:43 $
+ *  last change:$Date: 2003-10-06 12:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,10 @@ public class APIDescGetter extends DescGetter{
         }
         DescEntry entry = null;
         if (descPath != null) {
+            System.out.println("## reading from File "+descPath);
             entry = getFromDirectory(descPath, job, debug);
         } else {
+            System.out.println("## reading from jar");
             entry = getFromClassPath(job, debug);
         }
         boolean foundInterface = false;
@@ -242,7 +244,29 @@ public class APIDescGetter extends DescGetter{
         ifcDesc.SubEntries=getDescArray(meth_names.toArray());
         ifcDesc.SubEntryCount=meth_names.size();
         ifc_names.add(ifcDesc);
-        return getDescArray(ifc_names.toArray());
+        return getDescArray(makeArray(ifc_names));
+    }
+
+    /**
+     * This method ensures that XComponent will be the last in the list of interfaces
+     */
+
+    protected static Object[] makeArray(ArrayList entries) {
+        Object[] entriesArray = entries.toArray();
+        ArrayList returnArray = new ArrayList();
+        Object addAtEnd = null;
+        for (int k=0;k<entriesArray.length;k++) {
+            DescEntry entry = (DescEntry) entriesArray[k];
+            if (entry.entryName.equals("ifc.lang._XComponent")){
+                addAtEnd = entry;
+            } else {
+                returnArray.add(entry);
+            }
+        }
+        if (addAtEnd != null) {
+            returnArray.add(addAtEnd);
+        }
+        return returnArray.toArray();
     }
 
     protected static DescEntry setErrorDescription(DescEntry entry, String ErrorMsg) {
