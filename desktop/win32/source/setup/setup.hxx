@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:53:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ class SetupAppX : public SetupApp
 
     boolean     m_bQuiet            : 1;
     boolean     m_bAdministrative   : 1;
+    boolean     m_bIgnoreAlreadyRunning : 1;
 
     FILE       *m_pLogFile;
 
