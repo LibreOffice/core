@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:16:02 $
+ *  last change: $Author: kz $ $Date: 2001-09-21 21:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,11 +241,11 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text = "Kurve" ;
                 Text [ ENGLISH ] = "Curve" ;
                 Text[ english_us ] = "Curve";
-                Text[ portuguese ] = "Bézier";
-                Text[ russian ] = "Áåçüå";
+                Text[ portuguese ] = "Curva";
+                Text[ russian ] = "Êğèâàÿ";
                 Text[ greek ] = "Bézier";
                 Text[ dutch ] = "Bézier";
-                Text[ french ] = "Bézier";
+                Text[ french ] = "Courbe";
                 Text[ spanish ] = "Curva";
                 Text[ finnish ] = "B?zier";
                 Text[ italian ] = "Curva";
@@ -253,7 +253,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ swedish ] = "Kurva";
                 Text[ polish ] = "Krzywa";
                 Text[ portuguese_brazilian ] = "Bezier";
-                Text[ japanese ] = "ï¾ï¾ï½¼ï¾ï½ªæ›²ç·š";
+                Text[ japanese ] = "æ›²ç·š";
                 Text[ korean ] = "ë² ì§€ì—";
                 Text[ chinese_simplified ] = "æ›²çº¿";
                 Text[ chinese_traditional ] = "æ›²ç·š";
@@ -269,11 +269,11 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text = "Freihandkurve" ;
                 Text [ ENGLISH ] = "Freeform Curve" ;
                 Text[ english_us ] = "Freeform Curve";
-                Text[ portuguese ] = "Forma livre";
-                Text[ russian ] = "Ğèñîâàííàÿ ôîğìà";
+                Text[ portuguese ] = "Curva livre";
+                Text[ russian ] = "Ğèñîâàííàÿ êğèâàÿ";
                 Text[ greek ] = "Åëåıèåñç ó÷åäßáóç";
                 Text[ dutch ] = "Vrije hand";
-                Text[ french ] = "À main levée";
+                Text[ french ] = "Courbe à main levée";
                 Text[ spanish ] = "Curva a mano alzada";
                 Text[ finnish ] = "Vapaamuoto";
                 Text[ italian ] = "Mano libera";
@@ -281,9 +281,9 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ swedish ] = "Frihandskurva";
                 Text[ polish ] = "Krzywa narysowana odrêcznie";
                 Text[ portuguese_brazilian ] = "Freihand";
-                Text[ japanese ] = "ï¾Œï¾˜ï½°ï¾Šï¾ï¾„ï¾";
+                Text[ japanese ] = "ï¾Œï¾˜ï½°ï¾Šï¾ï¾„ï¾ã®æ›²ç·š";
                 Text[ korean ] = "ììœ ì„œì‹";
-                Text[ chinese_simplified ] = "è‡ªç”±å½¢å¼";
+                Text[ chinese_simplified ] = "è‡ªç”±å½¢çº¿æ¡";
                 Text[ chinese_traditional ] = "è‡ªç”±å½¢";
                 Text[ turkish ] = "Serbest biçim";
                 Text[ arabic ] = "ÍÑ";
@@ -762,6 +762,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ catalan ] = "Alineación";
 };
  // ********************************************************************** EOF
+
 
 
 
