@@ -100,7 +100,7 @@ hedabu: ..\inc\HatchStyle.hxx %_DEST%\inc%_EXT%\xmloff\HatchStyle.hxx
 hedabu: ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
 hedabu: ..\inc\SettingsExportHelper.hxx %_DEST%inc%_EXT%\xmloff\SettingsExportHelper.hxx
 hedabu: ..\inc\DocumentSettingsContext.hxx %_DEST%inc%_EXT%\xmloff\DocumentSettingsContext.hxx
-
+hedabu: ..\inc\XMLGraphicsDefaultStyle.hxx %_DEST%inc%_EXT%\xmloff\XMLGraphicsDefaultStyle.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
