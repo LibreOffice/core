@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: kr $ $Date: 2000-11-28 14:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 14:47:05 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -318,7 +318,7 @@ public class JavaLoader implements XImplementationLoader,
         }
         catch ( InvocationTargetException e ) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.toString() );
+                        + implementationName + " because " + e.getTargetException().toString() );
         }
         // if no method is found make a factory wrapper for the implementation and return it
         if ( needFactoryWrapper ) {
@@ -425,7 +425,7 @@ public class JavaLoader implements XImplementationLoader,
  * the registration at a registry in a default manner. The class is used by the <code>JavaLoader</code> if the
  * a component does not comes with its own methods for creating a factory or for the registration.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 14:47:05 $
  * @author      Markus Herzog
  * @since       UDK1.0
  */
