@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
+ *  last change: $Author: mtg $ $Date: 2001-03-09 16:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@
 #ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
 #endif
+#ifndef _NDOLE_HXX
+#include <ndole.hxx>
+#endif
+
+#ifndef _NDNOTXT_HXX
+#include <ndnotxt.hxx>
+#endif
+
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -122,6 +131,20 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
+
+static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal_Int32 nWidth)
+{
+    if( nWidth > 0 && nHeight > 0 )
+    {
+        nWidth = MM100_TO_TWIP( nWidth );
+        if( nWidth < MINFLY )
+            nWidth = MINFLY;
+        nHeight = MM100_TO_TWIP( nHeight );
+        if( nHeight < MINFLY )
+            nHeight = MINFLY;
+        rItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    }
+}
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
@@ -187,21 +210,14 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
-    if( nWidth > 0 && nHeight > 0 )
-    {
-        nWidth = MM100_TO_TWIP( nWidth );
-        if( nWidth < MINFLY )
-            nWidth = MINFLY;
-        nHeight = MM100_TO_TWIP( nHeight );
-        if( nHeight < MINFLY )
-            nHeight = MINFLY;
-        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
-    }
+    lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
+
     SwFrmFmt *pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(),
                                          aObjName, &aItemSet );
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
+
 Reference< XPropertySet > SwXMLTextImportHelper::createApplet(
         const OUString &rCode,
         const OUString &rName,
@@ -219,21 +235,14 @@ Reference< XPropertySet > SwXMLTextImportHelper::createApplet(
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
-    if( nWidth > 0 && nHeight > 0 )
-    {
-        nWidth = MM100_TO_TWIP( nWidth );
-        if( nWidth < MINFLY )
-            nWidth = MINFLY;
-        nHeight = MM100_TO_TWIP( nHeight );
-        if( nHeight < MINFLY )
-            nHeight = MINFLY;
-        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
-    }
-    pAppletImpl = new SwApplet_Impl( aItemSet );
-    pAppletImpl->CreateApplet( rCode, rName, bMayScript, rHRef );
+    lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
+
+    SwApplet_Impl aAppletImpl ( aItemSet );
+    aAppletImpl.CreateApplet ( rCode, rName, bMayScript, rHRef );
+
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                       pAppletImpl->GetApplet(),
-                                       &pAppletImpl->GetItemSet());
+                                       aAppletImpl.GetApplet(),
+                                       &aAppletImpl.GetItemSet());
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
@@ -252,22 +261,14 @@ Reference< XPropertySet > SwXMLTextImportHelper::createPlugin(
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
-    if( nWidth > 0 && nHeight > 0 )
-    {
-        nWidth = MM100_TO_TWIP( nWidth );
-        if( nWidth < MINFLY )
-            nWidth = MINFLY;
-        nHeight = MM100_TO_TWIP( nHeight );
-        if( nHeight < MINFLY )
-            nHeight = MINFLY;
-        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
-    }
+    lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
+
        INetURLObject aURLObj;
     if( rHRef.getLength() && !aURLObj.SetURL( INetURLObject::RelToAbs(rHRef) ) )
         return xPropSet;
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
     SvFactory *pPlugInFactory = SvFactory::GetDefaultPlugInFactory();
-    xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
+    SvPlugInObjectRef xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
 
     xPlugin->EnableSetModified( FALSE );
     xPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
@@ -294,16 +295,9 @@ Reference< XPropertySet > SwXMLTextImportHelper::createFloatingFrame(
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
-    if( nWidth > 0 && nHeight > 0 )
-    {
-        nWidth = MM100_TO_TWIP( nWidth );
-        if( nWidth < MINFLY )
-            nWidth = MINFLY;
-        nHeight = MM100_TO_TWIP( nHeight );
-        if( nHeight < MINFLY )
-            nHeight = MINFLY;
-        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
-    }
+
+    lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
+
     SfxFrameDescriptor *pFrameDesc = new SfxFrameDescriptor( 0 );
 
     pFrameDesc->SetURL( INetURLObject::RelToAbs( rHRef ) );
@@ -322,45 +316,48 @@ Reference< XPropertySet > SwXMLTextImportHelper::createFloatingFrame(
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
-void SwXMLTextImportHelper::addParam(
-    const ::rtl::OUString &rName,
-    const ::rtl::OUString &rValue,
-    sal_Bool bApplet)
-{
-    if (bApplet)
-    {
-        if (!pAppletImpl)
-            return;
-        pAppletImpl->AppendParam( rName, rValue );
-    }
-    else
-    {
-        if (!xPlugin.Is())
-            return;
-        aCmdList.Append( rName, rValue );
-    }
-}
-void SwXMLTextImportHelper::setAlternateText(
-    const ::rtl::OUString &rAlt,
-    sal_Bool bApplet)
-{
-    if (bApplet)
-    {
-        if (!pAppletImpl)
-            return;
-        pAppletImpl->SetAltText( rAlt );
-    }
-    /*
-    else
-    {
-        if (!xPlugin.Is())
-            return;
-    }
-    */
-}
 
-void SwXMLTextImportHelper::endApplet()
+void SwXMLTextImportHelper::endAppletOrPlugin(
+        const Reference < XPropertySet > &rPropSet,
+        ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > &rParamMap)
 {
+    Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    SwXFrame *pFrame =
+                (SwXFrame *)xCrsrTunnel->getSomething(
+                                    SwXFrame::getUnoTunnelId() );
+    ASSERT( pFrame, "SwXFrame missing" );
+    SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
+    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
+    const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+    SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode()->GetOLENode();
+    SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
+
+       SvPlugInObjectRef xPlugin ( rOLEObj.GetOleRef() );
+    SvAppletObjectRef xApplet ( rOLEObj.GetOleRef() );
+    SvCommandList aCommandList;
+
+    ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > ::iterator aIter = rParamMap.begin();
+    ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > ::iterator aEnd = rParamMap.end();
+
+    while (aIter != aEnd )
+    {
+        aCommandList.Append( (*aIter).first, (*aIter).second);
+        aIter++;
+    }
+
+    if (xApplet.Is())
+    {
+        xApplet->SetCommandList( aCommandList );
+        xApplet->EnableSetModified ( TRUE );
+    }
+    else if (xPlugin.Is())
+    {
+        xPlugin->SetCommandList( aCommandList );
+        xPlugin->EnableSetModified ( TRUE );
+    }
+}
+/*
     if (!pAppletImpl)
         return;
     pAppletImpl->FinishApplet();
@@ -375,6 +372,7 @@ void SwXMLTextImportHelper::endPlugin()
     xPlugin.Clear();
     aCmdList.Clear();
 }
+*/
 
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {

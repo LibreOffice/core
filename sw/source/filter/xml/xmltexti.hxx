@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
+ *  last change: $Author: mtg $ $Date: 2001-03-09 16:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@ class SvPlugInObjectRef;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
-    SwApplet_Impl *pAppletImpl;
-    SvPlugInObjectRef xPlugin;
-    SvCommandList aCmdList;
     XMLRedlineImportHelper *pRedlineHelper;
 
 protected:
@@ -128,14 +125,9 @@ public:
             const ::rtl::OUString &rName,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
-    virtual void addParam(
-        const ::rtl::OUString &rName,
-        const ::rtl::OUString &rValue,
-        sal_Bool bApplet);
-    virtual void setAlternateText( const ::rtl::OUString &rAlt, sal_Bool bApplet );
-
-    virtual void endApplet( );
-    virtual void endPlugin( );
+    virtual void endAppletOrPlugin(
+        const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &rPropSet,
+        ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > &rParamMap);
 
     virtual sal_Bool IsInHeaderFooter() const;
 
