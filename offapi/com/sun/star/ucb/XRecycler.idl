@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRecycler.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module ucb {
     <p>This is an additional interface the XContent representing the trash
     can (URL: "vnd.sun.staroffice.trashcan:///") should support.
 */
-interface XRecycler : com::sun::star::uno::XInterface
+published interface XRecycler : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Notify the trash can that an <type>XContent</type> is deleting itself
