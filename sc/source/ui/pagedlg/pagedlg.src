@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:24:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,9 +164,9 @@ ModelessDialog RID_SCDLG_AREAS
         };
         StringList [ finnish ] =
         {
-            < "- keiner -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
-            < "- Selektion -" ; Default ; > ;
+            < "- Ei mitään -" ; Default ; > ;
+            < "- käyttäjän määrittämä -" ; Default ; > ;
+            < "- valinta -" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -303,6 +303,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     GroupBox GB_REPEATROW
     {
@@ -314,7 +315,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ DANISH ] = "Gentagelsesrække" ;
         Text [ ENGLISH_US ] = "Rows to repeat" ;
         Text [ SPANISH ] = "Fila ~a repetir" ;
-        Text [ FINNISH ] = "Ylhõõllõ toistettava rivi" ;
+        Text [ FINNISH ] = "Toistettavat rivit" ;
         Text [ FRENCH ] = "Ligne à répéter" ;
         Text [ ITALIAN ] = "Riga da ripetere" ;
         Text [ DUTCH ] = "Rij herhalen" ;
@@ -370,8 +371,8 @@ ModelessDialog RID_SCDLG_AREAS
         };
         StringList [ finnish ] =
         {
-            < "- keine -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- Ei mitään -" ; Default ; > ;
+            < "- käyttäjän määrittämä -" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -491,6 +492,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     GroupBox GB_REPEATCOL
     {
@@ -502,7 +504,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ DANISH ] = "Gentagelseskolonne" ;
         Text [ ENGLISH_US ] = "Repeat column" ;
         Text [ SPANISH ] = "~Columna a repetir" ;
-        Text [ FINNISH ] = "Vasemmalla toistettavat sarakkeet" ;
+        Text [ FINNISH ] = "Toista sarake" ;
         Text [ FRENCH ] = "Colonne à répéter" ;
         Text [ ITALIAN ] = "Colonna da ripetere" ;
         Text [ DUTCH ] = "Kolom herhalen" ;
@@ -558,8 +560,8 @@ ModelessDialog RID_SCDLG_AREAS
         };
         StringList [ finnish ] =
         {
-            < "- keine -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- Ei mitään -" ; Default ; > ;
+            < "- käyttäjän määrittämä -" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -679,6 +681,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     Text [ swedish ] = "Redigera utskriftsområden" ;
     Text [ danish ] = "Rediger udskriftsområde" ;
@@ -694,6 +697,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ korean ] = "ÀÎ¼â¹üÀ§ ÆíÁý";
     Text[ turkish ] = "Yazdýrma aralýklarýný düzenle";
     Text[ catalan ] = "Editar áreas de impresión";
+    Text[ finnish ] = "Muokkaa tulostusalueita";
 };
 TabPage RID_SCPAGE_TABLE
 {
@@ -713,7 +717,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Intestazioni colo~nna/riga" ;
         Text [ portuguese_brazilian ] = "Tí~tulos de Coluna- & fileira" ;
         Text [ portuguese ] = "Tí~tulos de colunas & linhas" ;
-        Text [ finnish ] = "Rivi- ja sarake~otsikot" ;
+        Text [ finnish ] = "~Sarake- ja riviotsikot" ;
         Text [ danish ] = "Række-/kolonneoverskrifter" ;
         Text [ french ] = "~En-têtes de colonnes/lignes" ;
         Text [ swedish ] = "Rad- och kolumnhu~vuden" ;
@@ -742,7 +746,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Griglia" ;
         Text [ portuguese_brazilian ] = "~Grade" ;
         Text [ portuguese ] = "~Grelha" ;
-        Text [ finnish ] = "Taustav~iivat" ;
+        Text [ finnish ] = "~Ruudukko" ;
         Text [ danish ] = "Tabelgitter" ;
         Text [ french ] = "~Grille" ;
         Text [ swedish ] = "Tabell~gitter" ;
@@ -800,7 +804,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "~Oggetti/immagini" ;
         Text [ portuguese_brazilian ] = "~Objects/Images" ;
         Text [ portuguese ] = "~Objectos/Imagens" ;
-        Text [ finnish ] = "~Objects/Images" ;
+        Text [ finnish ] = "~Objektit/grafiikka" ;
         Text [ danish ] = "Objekter/grafik" ;
         Text [ french ] = "~Objets/Images" ;
         Text [ swedish ] = "O~bjekt/grafik" ;
@@ -835,7 +839,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ swedish ] = "~Diagram" ;
         Text [ dutch ] = "~Diagrammen" ;
         Text [ spanish ] = "~Diagramas" ;
-        Text [ ENGLISH_US ] = "Ch~arts" ;
+        Text [ ENGLISH_US ] = "Cha~rts" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Í¼±í(~A)";
         Text[ russian ] = "Äèàãðàììà";
@@ -858,7 +862,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Oggetti di disegno" ;
         Text [ portuguese_brazilian ] = "Drawob~jects" ;
         Text [ portuguese ] = "Objectos de ~desenho" ;
-        Text [ finnish ] = "Drawob~jects" ;
+        Text [ finnish ] = "~Piirrosobjektit" ;
         Text [ danish ] = "Tegneobjekter" ;
         Text [ french ] = "~Objets de dessin" ;
         Text [ swedish ] = "Ritob~jekt" ;
@@ -916,13 +920,13 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Valori zero" ;
         Text [ portuguese_brazilian ] = "~Null values" ;
         Text [ portuguese ] = "~Valores zero" ;
-        Text [ finnish ] = "~Null values" ;
+        Text [ finnish ] = "~Nolla-arvot" ;
         Text [ danish ] = "Nulværdier" ;
         Text [ french ] = "Valeurs ~zéro" ;
         Text [ swedish ] = "N~ollvärden" ;
         Text [ dutch ] = "~Nulwaarden" ;
         Text [ spanish ] = "~Valores cero" ;
-        Text [ english_us ] = "~Zero values" ;
+        Text [ english_us ] = "Zero val~ues" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÁãÖµ(~Z)";
         Text[ russian ] = "Íóëåâûå çíà÷åíèÿ";
@@ -1002,7 +1006,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Da sinistra a d~estra" ;
         Text [ portuguese_brazilian ] = "Da esquerda para a di~reita" ;
         Text [ portuguese ] = "Da esquerda para a di~reita" ;
-        Text [ finnish ] = "Vase~mmalta oikealle" ;
+        Text [ finnish ] = "~Vasemmalta oikealle" ;
         Text [ danish ] = "Fra venstre til højre" ;
         Text [ french ] = "De gauche à dro~ite" ;
         Text [ swedish ] = "Från vänster till hög~er" ;
@@ -1041,7 +1045,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Primo numero di ~pagina" ;
         Text [ portuguese_brazilian ] = "Primeira página" ;
         Text [ portuguese ] = "~Número da primeira página" ;
-        Text [ finnish ] = "First ~page" ;
+        Text [ finnish ] = "Ensimmäisen sivun numero" ;
         Text [ danish ] = "Første sidetal" ;
         Text [ french ] = "~Premier numéro de page" ;
         Text [ swedish ] = "Första ~sidnummer" ;
@@ -1082,7 +1086,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Sequenza pagine" ;
         Text [ portuguese_brazilian ] = "Ordem das Páginas" ;
         Text [ portuguese ] = "Ordem das páginas" ;
-        Text [ finnish ] = "Sivujen järjestys" ;
+        Text [ finnish ] = "Sivujärjestys" ;
         Text [ danish ] = "Siderækkefølge" ;
         Text [ french ] = "Ordre des pages" ;
         Text [ swedish ] = "Sidordning" ;
@@ -1113,7 +1117,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ DANISH ] = "Alt til [%]" ;
         Text [ ENGLISH_US ] = "~All to [%]" ;
         Text [ SPANISH ] = "~Todo al [%]" ;
-        Text [ FINNISH ] = "~All pages to [%]" ;
+        Text [ FINNISH ] = "~Kaikki -> [%]" ;
         Text [ FRENCH ] = "~Tout à [%]" ;
         Text [ DUTCH ] = "~Alles naar [%]" ;
         Text [ SWEDISH ] = "A~llt till (%)" ;
@@ -1142,7 +1146,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ DANISH ] = "Maks. antal sider" ;
         Text [ ENGLISH_US ] = "~Max. no. of pages" ;
         Text [ SPANISH ] = "Núm. ~máx. de páginas" ;
-        Text [ FINNISH ] = "Sovita sivui~lle" ;
+        Text [ FINNISH ] = "~Sivujen enimmäismäärä" ;
         Text [ FRENCH ] = "Nbre ~max. de pages" ;
         Text [ DUTCH ] = "Hoogste ~paginanr." ;
         Text [ SWEDISH ] = "Ma~x antal sidor" ;
@@ -1208,5 +1212,6 @@ TabPage RID_SCPAGE_TABLE
         Text[ korean ] = "¹èÀ²";
         Text[ turkish ] = "Ölçek";
         Text[ catalan ] = "Escala";
+        Text[ finnish ] = "Skaalaa";
     };
 };
