@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-18 16:19:18 $
+ *  last change: $Author: sj $ $Date: 2000-10-24 11:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2098,12 +2098,17 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
 //  if ( nFlags & 1 )                                   // Koennen wir nicht: In umgekehrter Reihenfolge an
 }
 
-SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage, SfxStyleSheet* pSheet ) const
+SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage,
+                                        SfxStyleSheet* pSheet, SfxStyleSheet** ppStyleSheetAry ) const
 {
-    SdrTextObj* pText = pObj;
-    SdrObject* pRet = pText;
+    SfxStyleSheet*  pStyleSheetAry[ 9 ];
+    SdrTextObj*     pText = pObj;
+    SdrObject*      pRet = pText;
+
+    ppStyleSheetAry = NULL;
     PresObjKind ePresKind = PRESOBJ_NONE;
     PptOEPlaceholderAtom* pPlaceHolder = pTextObj->GetOEPlaceHolderAtom();
+
     switch ( pTextObj->GetInstance() )
     {
         case TSS_TYPE_PAGETITLE :
@@ -2138,10 +2143,12 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                 pSheet = (SfxStyleSheet*)pDoc->GetStyleSheetPool()->Find( aName, SD_LT_FAMILY );
                 if ( pSheet )
                     pText->StartListening( *pSheet );
+                pStyleSheetAry[ nLevel - 1 ] = pSheet;
             }
             DBG_ASSERT( pSheet, "SdPPTImport::ApplyTextObj -> could not get stylesheet for outlinerobject (SJ)" );
             if ( pSheet )
                 ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
+            ppStyleSheetAry = &pStyleSheetAry[ 0 ];
         }
         break;
         case TSS_TYPE_NOTES :
@@ -2170,7 +2177,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
             pSheet = (SfxStyleSheet*)pDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SFX_STYLE_FAMILY_PARA );
         break;
     }
-    pText = (SdrTextObj*)SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPage, pSheet );
+    pText = (SdrTextObj*)SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPage, pSheet, ppStyleSheetAry );
     if ( pPlaceHolder && pPlaceHolder->nPlaceholderId )
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
