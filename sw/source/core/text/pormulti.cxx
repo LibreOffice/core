@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:12:23 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 11:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,8 +971,12 @@ sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
     return sal_False;
 }
 
+#ifdef BIDI
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                                                 SwMultiPortion* pMulti ) const
+#else
+SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
+#endif
 {
 #ifdef BIDI
     SwScriptInfo& rSI = ((SwParaPortion*)GetParaPortion())->GetScriptInfo();
