@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 14:25:11 $
+ *  last change: $Author: os $ $Date: 2001-07-11 11:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #include <vcl/window.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
@@ -166,9 +163,7 @@ SvxNumberType::~SvxNumberType()
  ---------------------------------------------------------------------------*/
 String SvxNumberType::GetNumStr( ULONG nNo ) const
 {
-    LanguageType eLang = System::GetLanguage();
-    if(LANGUAGE_SYSTEM == eLang)
-        eLang = ::GetSystemLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguage();
     Locale aLocale = SvxCreateLocale(eLang);
     return GetNumStr( nNo, aLocale );
 }
@@ -641,9 +636,7 @@ SvxNumRule::SvxNumRule(ULONG nFeatures, USHORT nLevels, BOOL bCont, SvxNumRuleTy
     eNumberingType(eType)
 {
     ++nRefCount;
-    LanguageType eLang = System::GetLanguage();
-    if(LANGUAGE_SYSTEM == eLang)
-        eLang = ::GetSystemLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguage();
     aLocale = SvxCreateLocale(eLang);
     for(USHORT i = 0; i < SVX_MAX_NUM; i++)
     {
@@ -694,9 +687,7 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 SvxNumRule::SvxNumRule(SvStream &rStream)
 {
     ++nRefCount;
-    LanguageType eLang = System::GetLanguage();
-    if(LANGUAGE_SYSTEM == eLang)
-        eLang = ::GetSystemLanguage();
+    LanguageType eLang = Application::GetSettings().GetLanguage();
     aLocale = SvxCreateLocale(eLang);
     USHORT nVersion;
     USHORT nTemp;
