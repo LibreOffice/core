@@ -2,9 +2,9 @@
  *
  *  $RCSfile: address.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $  $Date: 2004-06-04 10:32:48 $
+ *  last change: $Author: rt $  $Date: 2005-03-29 13:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,23 @@ void ScRange::ExtendOne()
 }
 
 
+void ScRange::ExtendTo( const ScRange& rRange )
+{
+    DBG_ASSERT( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
+    if( IsValid() )
+    {
+        aStart.SetCol( ::std::min( aStart.Col(), rRange.aStart.Col() ) );
+        aStart.SetRow( ::std::min( aStart.Row(), rRange.aStart.Row() ) );
+        aStart.SetTab( ::std::min( aStart.Tab(), rRange.aStart.Tab() ) );
+        aEnd.SetCol(   ::std::max( aEnd.Col(),   rRange.aEnd.Col() ) );
+        aEnd.SetRow(   ::std::max( aEnd.Row(),   rRange.aEnd.Row() ) );
+        aEnd.SetTab(   ::std::max( aEnd.Tab(),   rRange.aEnd.Tab() ) );
+    }
+    else
+        *this = rRange;
+}
+
+
 USHORT ScRange::Parse( const String& r, ScDocument* pDoc )
 {
     USHORT nRes1 = 0, nRes2 = 0;
@@ -534,6 +551,7 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
     // Einfahces &, damit beides ausgefuehrt wird!!
     return aStart.Move( dx, dy, dz, pDoc ) & aEnd.Move( dx, dy, dz, pDoc );
 }
+
 
 // --- moved from ScTripel -----------------------------------------------
 
