@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:34:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,11 +251,17 @@ void SbiCodeGen::Save()
                     nFlags |= SBX_OPTIONAL;
 
                 pInfo->AddParam( pPar->GetName(), t, nFlags );
+
+                UINT32 nUserData = 0;
                 USHORT nDefaultId = pPar->GetDefaultId();
                 if( nDefaultId )
+                    nUserData |= nDefaultId;
+                if( pPar->IsParamArray() )
+                    nUserData |= PARAM_INFO_PARAMARRAY;
+                if( nUserData )
                 {
                     SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );
-                    pParam->nUserData = nDefaultId;
+                    pParam->nUserData = nUserData;
                 }
             }
             pMeth->SetInfo( pInfo );
