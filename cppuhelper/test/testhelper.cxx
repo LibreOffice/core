@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-07 11:10:14 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,11 @@ int __cdecl main( int argc, char * argv[] )
     aEntry.name = OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") );
     aEntry.value = makeAny( (sal_Int32)5 );
     Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
-    OSL_ASSERT( xContext->getServiceManager() == xMgr );
+    OSL_ASSERT( xContext->getServiceManager() != xMgr ); // must be wrapped one
+    OSL_ASSERT(
+        Reference< beans::XPropertySet >(
+            xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) != xInitialContext );
 
     sal_Bool bSucc = sal_False;
     try
@@ -134,7 +138,7 @@ int __cdecl main( int argc, char * argv[] )
         test_ImplHelper( x );
         testPropertyTypeHelper();
         testidlclass( x );
-//          test_PropertySetHelper();
+         test_PropertySetHelper();
         test_interfacecontainer();
     }
     catch (Exception & rExc)
@@ -147,8 +151,13 @@ int __cdecl main( int argc, char * argv[] )
     }
 
     OSL_VERIFY( xContext->getValueByName(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
+    OSL_VERIFY( ! xInitialContext->getValueByName(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ).hasValue() );
     Reference< XComponent >( xInitialContext, UNO_QUERY )->dispose();
+    xMgr.clear();
+    xContext.clear();
+    xInitialContext.clear();
 
     printf( "Test finished\n" );
     return 0;

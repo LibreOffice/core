@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,16 @@
  *
  ************************************************************************/
 
+// #if (__DIAGNOSE == all) || (__DIAGNOSE == context)
+// #define __CONTEXT_DIAG
+// #endif
+
 #ifdef _DEBUG
 #include <stdio.h>
 #endif
 
 #include <vector>
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
 #include <map>
 #endif
 
@@ -80,16 +84,17 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <hash_map>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
 #define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
+#define AC_POLICY "/singletons/com.sun.star.security.thePolicy"
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
@@ -101,7 +106,7 @@ using namespace ::com::sun::star;
 namespace cppu
 {
 
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
 //--------------------------------------------------------------------------------------------------
 static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * pTypeRef )
 {
@@ -306,9 +311,18 @@ static inline beans::PropertyValue createPropertyValue(
 }
 //--------------------------------------------------------------------------------------------------
 static inline void __dispose( Reference< XInterface > const & xInstance )
-    SAL_THROW( () )
+    SAL_THROW( (RuntimeException) )
 {
     Reference< lang::XComponent > xComp( xInstance, UNO_QUERY );
+    if (xComp.is())
+    {
+        xComp->dispose();
+    }
+}
+//--------------------------------------------------------------------------------------------------
+static inline void __dispose( Reference< lang::XComponent > const & xComp )
+    SAL_THROW( (RuntimeException) )
+{
     if (xComp.is())
     {
         xComp->dispose();
@@ -381,9 +395,6 @@ protected:
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;
-    // denotes if service manager has to be disposed by this context,
-    // else it was retieved from a delegate which itself has to dispose it
-    bool m_bDisposeSMgr;
 
 protected:
     void throw_RT(
@@ -452,7 +463,7 @@ Sequence< Any > ComponentContext::readInitialArguments(
     const OUString & rName )
     SAL_THROW( (RuntimeException) )
 {
-    Any args( ComponentContext::getValueByName( rName + OUSTR("/initial-arguments") ) );
+    Any args( ComponentContext::getValueByName( rName + OUSTR("/arguments") ) );
     if (::getCppuType( (Sequence< Any > const *)0 ) == args.getValueType())
     {
         return Sequence< Any >( *(Sequence< Any > const *)args.getValue() );
@@ -466,7 +477,7 @@ Sequence< Any > ComponentContext::readInitialArguments(
 Any ComponentContext::lookupMap( OUString const & rName )
     SAL_THROW( (RuntimeException) )
 {
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
     if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dump_maps") ))
     {
         ::fprintf( stderr, ">>> dumping out ComponentContext %p m_map:\n", this );
@@ -499,11 +510,11 @@ Any ComponentContext::lookupMap( OUString const & rName )
 
             try
             {
-                Any usedService( getValueByName( rName + OUSTR("/used-service") ) );
+                Any usesService( getValueByName( rName + OUSTR("/service") ) );
                 Sequence< Any > args( readInitialArguments( rName ) );
 
                 Reference< lang::XSingleComponentFactory > xFac;
-                if (usedService >>= xFac) // try via factory
+                if (usesService >>= xFac) // try via factory
                 {
                     xInstance = args.getLength()
                         ? xFac->createInstanceWithArgumentsAndContext( args, this )
@@ -512,7 +523,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
                 else
                 {
                     Reference< lang::XSingleServiceFactory > xFac;
-                    if (usedService >>= xFac) // try via old XSingleServiceFactory
+                    if (usesService >>= xFac) // try via old XSingleServiceFactory
                     {
 #ifdef _DEBUG
                         ::fprintf( stderr, "### omitting context for service instanciation!\n" );
@@ -524,7 +535,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
                     else if (m_xSMgr.is()) // optionally service name
                     {
                         OUString serviceName;
-                        if ((usedService >>= serviceName) && serviceName.getLength())
+                        if ((usesService >>= serviceName) && serviceName.getLength())
                         {
                             xInstance = args.getLength()
                                 ? m_xSMgr->createInstanceWithArgumentsAndContext( serviceName, args, this )
@@ -589,23 +600,23 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 ComponentContext::~ComponentContext()
     SAL_THROW( () )
 {
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
     ::fprintf( stderr, "> destructed context %p\n", this );
 #endif
 }
 //__________________________________________________________________________________________________
 void ComponentContext::disposing()
 {
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
     ::fprintf( stderr, "> disposing context %p\n", this );
 #endif
 
-    Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
+    Reference< lang::XComponent > xTDMgr, xAC, xPolicy; // to be disposed separately
 
-    // first dispose all context objects
+    // dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
     t_map::const_iterator iEnd( m_map.end() );
-    while (iPos != iEnd)
+    for ( ; iPos != iEnd; ++iPos )
     {
         ContextEntry * pEntry = iPos->second;
 
@@ -613,60 +624,51 @@ void ComponentContext::disposing()
         if (!m_xSMgr.is() ||
             !iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
         {
-            Reference< lang::XComponent > xComp;
-
             if (pEntry->lateInit)
             {
-                // may be in late init
+                // late init
                 MutexGuard guard( m_mutex );
-                pEntry->value >>= xComp;
-                pEntry->value.clear();
-                pEntry->lateInit = false;
-            }
-            else
-            {
-                pEntry->value >>= xComp;
+                if (pEntry->lateInit)
+                {
+                    pEntry->value.clear(); // release factory
+                    pEntry->lateInit = false;
+                    continue;
+                }
             }
 
+            Reference< lang::XComponent > xComp;
+            pEntry->value >>= xComp;
             if (xComp.is())
             {
                 if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_SINGLETON) ))
                 {
-                    // disposed separately
                     xTDMgr = xComp;
                 }
                 else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_SINGLETON) ))
                 {
-                    // disposed separately
                     xAC = xComp;
                 }
-                else
+                else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_POLICY) ))
+                {
+                    xPolicy = xComp;
+                }
+                else // dispose immediately
                 {
                     xComp->dispose();
                 }
             }
         }
-
-        ++iPos;
     }
 
-    // second dispose service manager
-    if (m_bDisposeSMgr)
-    {
-        __dispose( m_xSMgr );
-    }
-
-    // third dispose of ac
-    if (xAC.is())
-    {
-        xAC->dispose();
-    }
-
-    // last dispose of tdmgr: revoke callback from cppu runtime
-    if (xTDMgr.is())
-    {
-        xTDMgr->dispose();
-    }
+    // dispose service manager
+    __dispose( m_xSMgr );
+    m_xSMgr.clear();
+    // dispose ac
+    __dispose( xAC );
+    // dispose policy
+    __dispose( xPolicy );
+    // dispose tdmgr; revokes callback from cppu runtime
+    __dispose( xTDMgr );
 
     // everything is disposed, hopefully nobody accesses the context anymore...
     iPos = m_map.begin();
@@ -698,8 +700,8 @@ ComponentContext::ComponentContext(
         {
             // singleton entry
             m_map[ rEntry.name ] = new ContextEntry( Any(), true );
-            // /used-service
-            m_map[ rEntry.name + OUSTR("/used-service") ] = new ContextEntry( rEntry.value, false );
+            // /service
+            m_map[ rEntry.name + OUSTR("/service") ] = new ContextEntry( rEntry.value, false );
             // /initial-arguments are provided as optional context entry
         }
         else
@@ -709,12 +711,37 @@ ComponentContext::ComponentContext(
         }
     }
 
-    m_bDisposeSMgr = (m_xSMgr.is() != sal_False);
-
-    if (m_xDelegate.is() && !m_xSMgr.is())
+    if (!m_xSMgr.is() && m_xDelegate.is())
     {
-        m_xSMgr = m_xDelegate->getServiceManager();
-        m_bDisposeSMgr = false;
+        // wrap delegate's smgr XPropertySet into new smgr
+        Reference< lang::XMultiComponentFactory > xMgr( m_xDelegate->getServiceManager() );
+        if (xMgr.is())
+        {
+            osl_incrementInterlockedCount( &m_refCount );
+            try
+            {
+                // create new smgr based on delegate's one
+                m_xSMgr.set(
+                    xMgr->createInstanceWithContext(
+                        OUSTR("com.sun.star.comp.stoc.OServiceManagerWrapper"), xDelegate ),
+                    UNO_QUERY );
+                // patch DefaultContext property of new one
+                Reference< beans::XPropertySet > xProps( m_xSMgr, UNO_QUERY );
+                OSL_ASSERT( xProps.is() );
+                if (xProps.is())
+                {
+                    Reference< XComponentContext > xThis( this );
+                    xProps->setPropertyValue( OUSTR("DefaultContext"), makeAny( xThis ) );
+                }
+            }
+            catch (...)
+            {
+                osl_decrementInterlockedCount( &m_refCount );
+                throw;
+            }
+            osl_decrementInterlockedCount( &m_refCount );
+            OSL_ASSERT( m_xSMgr.is() );
+        }
     }
 }
 
@@ -798,7 +825,7 @@ Reference< container::XNameAccess > ConfigurationComponentContext::getCfgNode(
     }
     catch (Exception & exc)
     {
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
         OString str( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
         OString str2( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         ::fprintf( stderr, "### accessing node %s from cfg failed: %s\n", str.getStr(), str2.getStr() );
@@ -815,7 +842,7 @@ Sequence< Any > ConfigurationComponentContext::readInitialArguments(
     if (!args.getLength() && m_xCfgProvider.is()) // no recursion trouble
     {
         Reference< container::XNameAccess > xNA(
-            getCfgNode( rName + OUSTR("/initial-arguments") ) );
+            getCfgNode( rName + OUSTR("/arguments") ) );
         if (xNA.is())
         {
             ::std::vector< Any > ar;
@@ -857,10 +884,10 @@ Reference< XInterface > ConfigurationComponentContext::createSingletonFromCfg(
         return Reference< XInterface >();
     }
 
-    if (! (xNA->getByName( OUSTR("used-service") ) >>= serviceName))
+    if (! (xNA->getByName( OUSTR("service") ) >>= serviceName))
     {
         throw_RT(
-            OUSTR("missing \"used-service\" entry for singleton "), rName );
+            OUSTR("missing \"service\" entry for singleton "), rName );
     }
     if (! m_xSMgr.is())
     {
@@ -903,7 +930,7 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
         return ret;
     }
 
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
     if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dump_maps") ))
     {
         ::fprintf( stderr, ">>> dumping out ConfigurationComponentContext %p m_singletons:\n", this );
@@ -982,7 +1009,7 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
                 }
                 catch (Exception & exc)
                 {
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
                     OString str( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
                     OString str2( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
                     ::fprintf( stderr, "### accessing node %s from cfg failed: %s\n", str.getStr(), str2.getStr() );
@@ -1002,11 +1029,11 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
 //__________________________________________________________________________________________________
 void ConfigurationComponentContext::disposing()
 {
-#ifdef DEBUG
+#ifdef __CONTEXT_DIAG
     ::fprintf( stderr, "> disposing cfg context %p\n", this );
 #endif
 
-    Reference< XInterface > xSMgr, xTDMgr, xAC;
+    Reference< XInterface > xSMgr, xTDMgr, xAC, xPolicy;
 
     // first dispose all context objects
     t_singletons::const_iterator iPos( m_singletons.begin() );
@@ -1026,7 +1053,11 @@ void ConfigurationComponentContext::disposing()
         {
             xAC = iPos->second;
         }
-        else
+        else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_POLICY) ))
+        {
+            xPolicy = iPos->second;
+        }
+        else // dispose immediately
         {
             __dispose( iPos->second );
         }
@@ -1034,8 +1065,13 @@ void ConfigurationComponentContext::disposing()
     }
     m_singletons.clear();
 
+    // dispose service manager
     __dispose( xSMgr );
+    // dispose ac
     __dispose( xAC );
+    // dispose policy
+    __dispose( xPolicy );
+    // dispose tdmgr; revokes callback from cppu runtime
     __dispose( xTDMgr );
 
     // dispose context values map

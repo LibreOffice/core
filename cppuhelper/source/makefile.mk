@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
+#   last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ UNOTYPES= \
         com.sun.star.uno.XAggregation 			\
         com.sun.star.uno.XComponentContext		\
         com.sun.star.uno.XUnloadingPreference    	\
+        com.sun.star.uno.DeploymentException    	\
         com.sun.star.lang.XMultiServiceFactory 		\
         com.sun.star.lang.XSingleServiceFactory 	\
         com.sun.star.lang.XMultiComponentFactory 	\
@@ -125,12 +126,13 @@ UNOTYPES= \
         com.sun.star.security.XAccessController		\
         com.sun.star.security.RuntimePermission		\
         com.sun.star.io.FilePermission			\
-        com.sun.star.connection.SocketPermission
+        com.sun.star.connection.SocketPermission	\
+        com.sun.star.util.XMacroExpander
 
 .IF "$(debug)" != ""
 # msvc++: no inlining for debugging
 .IF "$(COM)" == "MSC"
-CFLAGS += /Ob0
+CFLAGS += -Ob0
 .ENDIF
 .ENDIF
 
@@ -151,7 +153,8 @@ SLOFILES= \
         $(SLO)$/shlib.obj		\
         $(SLO)$/tdmgr.obj		\
         $(SLO)$/implementationentry.obj	\
-        $(SLO)$/access_control.obj
+        $(SLO)$/access_control.obj	\
+        $(SLO)$/macro_expander.obj
 
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 
@@ -183,6 +186,10 @@ SHL1VERSIONMAP=gcc3_linux_intel.map
 .ENDIF
 
 # --- Targets ------------------------------------------------------
+
+.IF "$(diag)"!=""
+CFLAGS += -D__DIAGNOSE=$(diag)
+.ENDIF
 
 .INCLUDE :	target.mk
 

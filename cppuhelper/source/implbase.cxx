@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:29 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,16 @@ void WeakComponentImplHelperBase::release()
         {
             dispose();
         }
+#ifdef _DEBUG
+        catch (Exception & exc)
+        {
+            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, msg.getStr() );
+        }
+#endif
         catch (...)
         {
-            OSL_ENSURE( 0, "### unexpected exception caught!" );
+            OSL_ENSURE( 0, "### unexpected non-UNO exception caught!" );
         }
     }
     OWeakObject::release();
@@ -310,15 +317,36 @@ void WeakComponentImplHelperBase::dispose()
             lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
             rBHelper.aLC.disposeAndClear( aEvt );
             disposing();
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
         }
-        catch (...)
+        catch (RuntimeException &)
         {
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
             throw;
         }
-        rBHelper.bDisposed = sal_True;
-        rBHelper.bInDispose = sal_False;
+        catch (Exception & exc)
+        {
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+#ifdef _DEBUG
+            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, msg.getStr() );
+#endif
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected UNO exception caught: ") ) +
+                exc.Message, Reference< XInterface >() );
+        }
+        catch (...)
+        {
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+            OSL_ENSURE( 0, "### unexpected non-UNO exception caught!" );
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected non-UNO exception caught!") ),
+                Reference< XInterface >() );
+        }
     }
 }
 //__________________________________________________________________________________________________
@@ -394,6 +422,13 @@ void WeakAggComponentImplHelperBase::release()
         {
             dispose();
         }
+#ifdef _DEBUG
+        catch (Exception & exc)
+        {
+            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, msg.getStr() );
+        }
+#endif
         catch (...)
         {
             OSL_ENSURE( 0, "### unexpected exception caught!" );
@@ -415,15 +450,36 @@ void WeakAggComponentImplHelperBase::dispose()
             lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
             rBHelper.aLC.disposeAndClear( aEvt );
             disposing();
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
         }
-        catch (...)
+        catch (RuntimeException &)
         {
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
             throw;
         }
-        rBHelper.bDisposed = sal_True;
-        rBHelper.bInDispose = sal_False;
+        catch (Exception & exc)
+        {
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+#ifdef _DEBUG
+            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, msg.getStr() );
+#endif
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected UNO exception caught: ") ) +
+                exc.Message, Reference< XInterface >() );
+        }
+        catch (...)
+        {
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+            OSL_ENSURE( 0, "### unexpected non-UNO exception caught!" );
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected non-UNO exception caught!") ),
+                Reference< XInterface >() );
+        }
     }
 }
 //__________________________________________________________________________________________________

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testidlclass.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
     const OUString sImplName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.cpputest") ) );
 
     // this reference is static to test behaviour during exiting application
-    static Reference < XIdlClass > r =
+    Reference < XIdlClass > r =
                 ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
@@ -141,7 +141,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
 
 
     // Test all ten templates
-    ::cppu::createStandardClass(
+    Reference< XIdlClass > x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,
@@ -151,7 +151,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
                                             );
 
     // Test all ten templates
-    ::cppu::createStandardClass(
+    x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,
@@ -163,7 +163,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
 
 
     // Test all ten templates
-    ::cppu::createStandardClass(
+    x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,
@@ -177,7 +177,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
 
 
     // Test all ten templates
-    ::cppu::createStandardClass(
+    x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,
@@ -192,7 +192,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
 
 
     // Test all ten templates
-    ::cppu::createStandardClass(
+    x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,
@@ -207,25 +207,7 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
 
 
     // Test all ten templates
-    ::cppu::createStandardClass(
-                                rSMgr ,
-                                sImplName,
-                                Reference < XIdlClass > () ,
-                                (XMultiServiceFactory * ) 0 ,
-                                (XServiceInfo * ) 0  ,
-                                (XServiceInfo * ) 0  ,
-                                (XServiceInfo * ) 0  ,
-                                (XServiceInfo * ) 0  ,
-                                (XServiceInfo * ) 0  ,
-                                (XServiceInfo * ) 0  ,
-                                (XServiceInfo * ) 0
-                                            );
-
-
-
-
-    // Test all ten templates
-    ::cppu::createStandardClass(
+    x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,
@@ -236,12 +218,30 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
                                 (XServiceInfo * ) 0  ,
                                 (XServiceInfo * ) 0  ,
                                 (XServiceInfo * ) 0  ,
+                                (XServiceInfo * ) 0
+                                            );
+
+
+
+
+    // Test all ten templates
+    x = ::cppu::createStandardClass(
+                                rSMgr ,
+                                sImplName,
+                                Reference < XIdlClass > () ,
+                                (XMultiServiceFactory * ) 0 ,
+                                (XServiceInfo * ) 0  ,
+                                (XServiceInfo * ) 0  ,
+                                (XServiceInfo * ) 0  ,
+                                (XServiceInfo * ) 0  ,
+                                (XServiceInfo * ) 0  ,
+                                (XServiceInfo * ) 0  ,
                                 (XServiceInfo * ) 0  ,
                                 (XServiceInfo * ) 0
                                             );
 
     // Test all ten templates
-    ::cppu::createStandardClass(
+    x = ::cppu::createStandardClass(
                                 rSMgr ,
                                 sImplName,
                                 Reference < XIdlClass > () ,

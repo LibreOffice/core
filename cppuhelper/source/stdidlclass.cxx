@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 13:45:22 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,19 @@
  *
  ************************************************************************/
 
+#include <osl/mutex.hxx>
+
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/stdidlclass.hxx>
 
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
@@ -139,8 +145,53 @@ private:
     Sequence < OUString >                   m_seqSupportedInterface;
     Sequence < Reference < XIdlClass > >    m_seqSuperClasses;
     Reference < XMultiServiceFactory >      m_rSMgr;
+
+    Reference< XIdlReflection > m_xCorefl;
+    Reference< XIdlReflection > const & get_corefl() SAL_THROW( (RuntimeException) );
 };
 
+Reference< XIdlReflection > const & OStdIdlClass::get_corefl()
+    SAL_THROW( (RuntimeException) )
+{
+    if (! m_xCorefl.is())
+    {
+        if( m_rSMgr.is() )
+        {
+            Reference< beans::XPropertySet > xProps( m_rSMgr, UNO_QUERY );
+            OSL_ASSERT( xProps.is() );
+            if (xProps.is())
+            {
+                Reference< XComponentContext > xContext;
+                xProps->getPropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+                OSL_ASSERT( xContext.is() );
+                if (xContext.is())
+                {
+                    Reference < XIdlReflection > x;
+                    xContext->getValueByName(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection") ) ) >>= x;
+                    OSL_ENSURE( x.is(), "### CoreReflection singleton not accessable!?" );
+
+                    if (x.is())
+                    {
+                        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+                        if (! m_xCorefl.is())
+                        {
+                            m_xCorefl = x;
+                        }
+                    }
+                }
+            }
+        }
+        if (! m_xCorefl.is())
+        {
+            throw DeploymentException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+                Reference< XInterface >() );
+        }
+    }
+    return m_xCorefl;
+}
 
 OStdIdlClass::OStdIdlClass(
                     const Reference < XMultiServiceFactory > &rSMgr ,
@@ -171,21 +222,17 @@ Sequence< Reference< XIdlClass > > SAL_CALL OStdIdlClass::getInterfaces(  ) thro
 {
     int nMax = m_seqSupportedInterface.getLength();
 
-    if( m_rSMgr.is() ) {
-        Reference < XIdlReflection > rCoreRefl = Reference < XIdlReflection > (
-            m_rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection") ) ),
-            UNO_QUERY );
+    Reference< XIdlReflection > const & rCoreRefl = get_corefl();
+    if( rCoreRefl.is() )
+    {
+        Sequence< Reference< XIdlClass > > seqClasses( nMax );
 
-        if( rCoreRefl.is() ) {
-
-            Sequence< Reference< XIdlClass > > seqClasses( nMax );
-
-            for( int n = 0 ; n < nMax ; n++ ) {
-                seqClasses.getArray()[n] = rCoreRefl->forName( m_seqSupportedInterface.getArray()[n] );
-            }
-
-            return seqClasses;
+        for( int n = 0 ; n < nMax ; n++ )
+        {
+            seqClasses.getArray()[n] = rCoreRefl->forName( m_seqSupportedInterface.getArray()[n] );
         }
+
+        return seqClasses;
     }
     return Sequence< Reference< XIdlClass > > () ;
 }

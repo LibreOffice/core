@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-01 14:37:50 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -119,6 +120,8 @@ Reference< security::XAccessController > createDefaultAccessController() SAL_THR
 void * SAL_CALL parentThreadCallback(void) SAL_THROW_EXTERN_C();
 //--------------------------------------------------------------------------------------------------
 void SAL_CALL childThreadCallback( void * xParentContext ) SAL_THROW_EXTERN_C();
+//--------------------------------------------------------------------------------------------------
+Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW( () );
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL createInstance(
@@ -325,6 +328,7 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
 
     // write initial shared lib loader, simple registry, default registry, impl reg
     static char const * ar[] = {
+        "smgr", "com.sun.star.comp.stoc.OServiceManagerWrapper",
         "cpld", "com.sun.star.comp.stoc.DLLComponentLoader",
         "simreg", "com.sun.star.comp.stoc.SimpleRegistry",
         "defreg", "com.sun.star.comp.stoc.NestedRegistry",
@@ -361,7 +365,7 @@ Reference< XComponentContext > bootstrapInitialContext(
     // basic context values
     ContextEntry_Init entry;
     ::std::vector< ContextEntry_Init > context_values;
-    context_values.reserve( 12 );
+    context_values.reserve( 14 );
 
     // read out singleton infos from registry
     if (services_xRegistry.is())
@@ -411,6 +415,18 @@ Reference< XComponentContext > bootstrapInitialContext(
     entry.value <<= xSF;
     context_values.push_back( entry );
 
+    // macro expander singleton for loader
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.util.theMacroExpander");
+    entry.value <<= create_boostrap_macro_expander_factory();
+    context_values.push_back( entry );
+
+    // CoreReflection singleton
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.reflection.theCoreReflection");
+    entry.value <<= OUSTR("com.sun.star.reflection.CoreReflection");
+    context_values.push_back( entry );
+
     // ac, policy:
     add_access_control_entries( &context_values, bootstrap );
 
@@ -441,7 +457,16 @@ Reference< XComponentContext > bootstrapInitialContext(
         xContext = createComponentContext(
             &context_values[ 0 ], context_values.size(),
             Reference< XComponentContext >() );
+        // set default context
+        Reference< beans::XPropertySet > xProps( xSF, UNO_QUERY );
+        OSL_ASSERT( xProps.is() );
+        if (xProps.is())
+        {
+            xProps->setPropertyValue(
+                OUSTR("DefaultContext"), makeAny( xContext ) );
+        }
 
+        // get tdmgr singleton
         if (xContext->getValueByName(
             OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= xTDMgr)
         {
@@ -452,10 +477,11 @@ Reference< XComponentContext > bootstrapInitialContext(
                 Reference< lang::XMultiServiceFactory >( xSF, UNO_QUERY ),
                 Reference< registry::XRegistryKey >() ), UNO_QUERY );
             OSL_ASSERT( xFac.is() );
+
             // smgr
             Reference< container::XSet > xSet( xSF, UNO_QUERY );
             xSet->insert( makeAny( xFac ) );
-            OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering registry td provider!" );
+            OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering registry td provider at smgr!" );
             // tdmgr
             xSet.set( xTDMgr, UNO_QUERY );
             OSL_ASSERT( xSet.is() );
@@ -471,6 +497,15 @@ Reference< XComponentContext > bootstrapInitialContext(
         xContext = createComponentContext(
             &context_values[ 0 ], context_values.size(),
             Reference< XComponentContext >() );
+        // set default context
+        Reference< beans::XPropertySet > xProps( xSF, UNO_QUERY );
+        OSL_ASSERT( xProps.is() );
+        if (xProps.is())
+        {
+            xProps->setPropertyValue(
+                OUSTR("DefaultContext"), makeAny( xContext ) );
+        }
+        // get tdmgr singleton
         xContext->getValueByName(
             OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= xTDMgr;
     }
@@ -574,9 +609,8 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
     OSL_ASSERT( xInit.is() );
-    Sequence< Any > aSFInit( 2 );
+    Sequence< Any > aSFInit( 1 );
     aSFInit[ 0 ] <<= xRegistry;
-    aSFInit[ 1 ] <<= xContext; // default context
     xInit->initialize( aSFInit );
 
     return xSF;

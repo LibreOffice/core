@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-26 17:05:29 $
+ *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,16 +376,15 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
     return lastRegistry;
 }
 
-//==================================================================================================
-Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext(
-    OUString const & iniFile )
+//--------------------------------------------------------------------------------------------------
+static Reference< XComponentContext > SAL_CALL __defaultBootstrap_InitialComponentContext(
+    Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
 //      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
 
     OUString bootstrapPath;
     OUString iniDir;
-    Bootstrap bootstrap( iniFile );
 
     osl_getProcessWorkingDir(&iniDir.pData);
 
@@ -515,9 +514,8 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
         // initialize sf
         Reference< lang::XInitialization > xInit( smgr_XMultiComponentFactory, UNO_QUERY );
         OSL_ASSERT( xInit.is() );
-        Sequence< Any > aSFInit( 2 );
+        Sequence< Any > aSFInit( 1 );
         aSFInit[ 0 ] <<= createRegistryWrapper( xContext );
-        aSFInit[ 1 ] <<= xContext; // default context
         // for now the registry service manager works upon the wrapped config,
         // we will proceed implementing a config service manager when everything works fine...
         xInit->initialize( aSFInit );
@@ -548,27 +546,58 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
         // initialize sf
         Reference< lang::XInitialization > xInit( smgr_XMultiComponentFactory, UNO_QUERY );
         OSL_ASSERT( xInit.is() );
-        Sequence< Any > aSFInit( 2 );
+        Sequence< Any > aSFInit( 1 );
         aSFInit[ 0 ] <<= services_xRegistry;
-        aSFInit[ 1 ] <<= xContext; // default context
         xInit->initialize( aSFInit );
 
         return xContext;
     }
 }
 
+//##################################################################################################
+//##################################################################################################
+//##################################################################################################
+
 static void MyDummySymbolWithinLibrary(){}
+//--------------------------------------------------------------------------------------------------
+Bootstrap const & __get_unorc() SAL_THROW( () )
+{
+    static rtlBootstrapHandle s_bstrap = 0;
+    if (! s_bstrap)
+    {
+        OUString libraryFileUrl;
+        Module::getUrlFromAddress((void*)MyDummySymbolWithinLibrary, libraryFileUrl);
+
+        OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'/') + 1); // cut the library extension
+        iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
+        rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
+        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
+        if (s_bstrap)
+        {
+            guard.clear();
+            rtl_bootstrap_args_close( bstrap );
+        }
+        else
+        {
+            s_bstrap = bstrap;
+        }
+    }
+    return *(Bootstrap const *)&s_bstrap;
+}
+
+//==================================================================================================
+Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext(
+    OUString const & iniFile )
+    SAL_THROW( (Exception) )
+{
+    Bootstrap bootstrap( iniFile );
+    return __defaultBootstrap_InitialComponentContext( bootstrap );
+}
 //==================================================================================================
 Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
     SAL_THROW( (Exception) )
 {
-    OUString libraryFileUrl;
-    Module::getUrlFromAddress((void*)MyDummySymbolWithinLibrary, libraryFileUrl);
-
-    OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'/') + 1); // cut the library extension
-    iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
-
-    return defaultBootstrap_InitialComponentContext(iniName);
+    return __defaultBootstrap_InitialComponentContext( __get_unorc() );
 }
 
 } // namespace cppu
