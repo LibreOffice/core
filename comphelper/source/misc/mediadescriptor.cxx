@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:12:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP__
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef __COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP__
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP__
@@ -449,7 +453,9 @@ sal_Bool MediaDescriptor::addInputStream()
                     ::rtl::OUString::createFromAscii("Found no URL."),
                     css::uno::Reference< css::uno::XInterface >());
 
-        return impl_openStreamWithURL(sURL);
+        // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
+        ::rtl::OUString sNormalizedURL = impl_normalizeURL(sURL);
+        return impl_openStreamWithURL(sNormalizedURL);
     }
 #if OSL_DEBUG_LEVEL>0
     catch(const css::uno::Exception& ex)
@@ -715,6 +721,22 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
 
     // At least we need an input stream. The r/w stream is optional ...
     return xInputStream.is();
+}
+
+/*-----------------------------------------------
+    10.09.2004 10:51
+-----------------------------------------------*/
+::rtl::OUString MediaDescriptor::impl_normalizeURL(const ::rtl::OUString& sURL)
+{
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    css::uno::Reference< css::util::XURLTransformer > xParser(
+        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
+        css::uno::UNO_QUERY_THROW);
+
+    css::util::URL aURL;
+    aURL.Complete = sURL;
+    xParser->parseStrict(aURL);
+    return aURL.Main;
 }
 
 } // namespace comphelper
