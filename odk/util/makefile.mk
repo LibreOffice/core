@@ -108,7 +108,7 @@ BINDINGDLL=msci_uno
 docugen .SETDIR=$(DESTDIRDOC)$/.. .PHONY :
     +-$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME)
     +-$(COPY) $(UDKZIPPATH)$/$(UDKDOC).tar.gz .
-    +-gzip -d $(UDKDOC).tar.gz
+    +-gzip -df $(UDKDOC).tar.gz
     +-tar xvf $(UDKDOC).tar
     +-$(RM) $(UDKDOC).tar
     +-$(RENAME) udk* $(PRODUCT_NAME)
@@ -301,7 +301,7 @@ checkit .SETDIR=$(DESTDIR)$/.. .PHONY:
         +unzip -q -d $(CHECKDIR) $(PRODUCT_NAME).zip
     .ELIF "$(GUI)"=="UNX"
         +$(COPY) $(PRODUCT_NAME).tar.gz $(CHECKDIR)
-        +cd $(CHECKDIR); gzip -d $(PRODUCT_NAME).tar.gz
+        +cd $(CHECKDIR); gzip -df $(PRODUCT_NAME).tar.gz
         +cd $(CHECKDIR); tar xvf $(PRODUCT_NAME).tar
     .ENDIF
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/bin $(SOLARBINDIR) > $(TMP)$/odkcheck.txt
