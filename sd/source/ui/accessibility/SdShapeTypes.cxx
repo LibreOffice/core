@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:46:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@ AccessibleShape*
         case PRESENTATION_PAGE:
         case PRESENTATION_NOTES:
         case PRESENTATION_HANDOUT:
+        case PRESENTATION_HEADER:
+        case PRESENTATION_FOOTER:
+        case PRESENTATION_DATETIME:
+        case PRESENTATION_PAGENUMBER:
             return new AccessiblePresentationShape (rShapeInfo, rShapeTreeInfo);
 
         case PRESENTATION_GRAPHIC_OBJECT:
@@ -142,6 +146,22 @@ ShapeTypeDescriptor aSdShapeTypeList[] = {
     ShapeTypeDescriptor (
         PRESENTATION_HANDOUT,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HandoutShape"),
+        CreateSdAccessibleShape ),
+    ShapeTypeDescriptor (
+        PRESENTATION_HEADER,
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HeaderShape"),
+        CreateSdAccessibleShape ),
+    ShapeTypeDescriptor (
+        PRESENTATION_FOOTER,
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.FooterShape"),
+        CreateSdAccessibleShape ),
+    ShapeTypeDescriptor (
+        PRESENTATION_DATETIME,
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.DateTimeShape"),
+        CreateSdAccessibleShape ),
+    ShapeTypeDescriptor (
+        PRESENTATION_PAGENUMBER,
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SlideNumberShape"),
         CreateSdAccessibleShape )
 };
 
