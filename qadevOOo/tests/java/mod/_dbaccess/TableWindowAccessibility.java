@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccessibility.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-08-02 17:57:45 $
+ *  last change:$Date: 2005-03-01 20:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ import util.utils;
 /**
 * Object implements the following interfaces :
 * <ul>
-*   <li><code>drafts::com::sun::star::accessibility::XAccessible</code></li>
-*   <li><code>drafts::com::sun::star::accessibility::XAccessibleContext
+*   <li><code>::com::sun::star::accessibility::XAccessible</code></li>
+*   <li><code>::com::sun::star::accessibility::XAccessibleContext
 *   </code></li>
-*   <li><code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+*   <li><code>::com::sun::star::accessibility::XAccessibleEventBroadcaster
 *   </code></li>
 * </ul><p>
 * @see com.sun.star.accessibility.XAccessible
