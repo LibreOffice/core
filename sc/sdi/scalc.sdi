@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:18:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3466,6 +3466,31 @@ SfxUInt16Item InsCellsCtrl SID_TBXCTL_INSCELLS
 
 //--------------------------------------------------------------------------
 SfxVoidItem Insert FID_INS_TABLE
+(SfxStringItem Name FID_INS_TABLE,SfxUInt16Item Index FN_PARAM_1)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem InsertSheetFromFile FID_INS_TABLE_EXT
 (SfxStringItem Name FID_INS_TABLE,SfxUInt16Item Index FN_PARAM_1)
 [
     /* flags: */
