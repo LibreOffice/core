@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:19:43 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,21 @@ public:
     Size            MinCloseButtonSize();
 };
 
+static void ImplAddNWFSeparator( Window *pThis, const MenubarValue& rMenubarValue )
+{
+    // add a separator if
+    // - we have an adjacent docking area
+    // - and if toolbars would draw them as well (mbDockingAreaSeparateTB must not be set, see dockingarea.cxx)
+    if( rMenubarValue.maTopDockingAreaHeight && !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
+    {
+        // note: the menubar only provides the upper (dark) half of it, the rest (bright part) is drawn by the docking area
 
+        pThis->SetLineColor( pThis->GetSettings().GetStyleSettings().GetSeparatorColor() );
+        Point aPt;
+        Rectangle aRect( aPt, pThis->GetOutputSizePixel() );
+        pThis->DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+    }
+}
 
 static void ImplSetMenuItemData( MenuItemData* pData, USHORT nPos )
 {
@@ -918,7 +932,7 @@ void Menu::ImplLoadRes( const ResId& rResId )
             aTitleText = ReadStringRes();
     }
     if( nObjMask & RSC_MENU_DEFAULTITEMID )
-        SetDefaultItem( ReadShortRes() );
+        SetDefaultItem( ReadLongRes() );
 }
 
 void Menu::CreateAutoMnemonics()
@@ -4850,6 +4864,7 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                                            CTRL_STATE_ENABLED,
                                            aControlValue,
                                            OUString() );
+                        ImplAddNWFSeparator( this, aMenubarValue );
 
                         // draw selected item
                         DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
@@ -4873,12 +4888,14 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
                         aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
-                        Point aPt;
                         // use full window size to get proper gradient
                         // but clip accordingly
-                        Region              aCtrlRegion( Rectangle( aPt, GetOutputSizePixel() ) );
+                        Point aPt;
+                        Rectangle aRect( aPt, GetOutputSizePixel() );
+                        Region aCtrlRegion( aRect );
 
                         DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+                        ImplAddNWFSeparator( this, aMenubarValue );
                     }
                     else
                         Erase( aRect );
@@ -5094,6 +5111,7 @@ void MenuBarWindow::Paint( const Rectangle& rRect )
         aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
         DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+        ImplAddNWFSeparator( this, aMenubarValue );
     }
     SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
     pMenu->ImplPaint( this, 0 );
