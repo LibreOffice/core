@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 17:49:20 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,6 @@
 
 /* fuer Network Audio System */
 #define Sound       XLIB_Sound
-
-#if defined( MTF12 ) || defined( ALPHA )
-#define XLIB_ILLEGAL_ACCESS
-#endif
-#if defined( RS6000 ) || defined( ALPHA )
-struct _XDisplay;
-#endif
 
 #if defined __cplusplus
 extern "C" {
