@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:46:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 09:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace dbaui
 
         OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
 
-        void SetFieldType( const OTypeInfo* _pType );
+        void SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce = sal_False );
 
         void SetPrimaryKey( BOOL bSet );
         BOOL IsPrimaryKey() const;
