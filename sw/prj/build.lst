@@ -2,7 +2,7 @@ sw	sw	:	connectivity svx stoc uui sch NULL
 sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									get		-	all	sw_inc NULL
 sw	sw\prj									get		-	all	sw_prj NULL
-sw	sw\source\ui\inc						get		-	all	sw_uinc NULL
+sw	sw\source\ui\inc						nmake	-	all	sw_uinc NULL
 sw	sw\source\core\inc						get		-	all	sw_cinc NULL
 sw	sw\source\filter\inc					get		-	all	sw_finc NULL
 sw	sw\res									get		-	all	sw_res NULL
@@ -10,7 +10,7 @@ sw	sw\win\res								get		-	all	sw_wres NULL
 sw	sw\win\imglst							get		-	all	sw_wimg NULL
 sw	sw\sdi									nmake	-	all	sw_sdi NULL
 sw  sw\source\core\bastyp                   nmake   -   all sw_bast NULL
-sw	sw\source\ui\app						nmake	-	all	sw_app sw_sdi NULL
+sw	sw\source\ui\app						nmake	-	all	sw_app sw_sdi sw_uinc NULL
 sw	sw\source\ui\cctrl						nmake	-	all	sw_cctrl NULL
 sw	sw\source\ui\chrdlg						nmake	-	all	sw_chrdl NULL
 sw	sw\source\ui\config						nmake	-	all	sw_conf NULL
@@ -22,17 +22,17 @@ sw	sw\source\ui\envelp						nmake	-	all	sw_envlp NULL
 sw	sw\source\ui\fldui						nmake	-	all	sw_fldui NULL
 sw	sw\source\ui\fmtui						nmake	-	all	sw_fmtui NULL
 sw	sw\source\ui\frmdlg						nmake	-	all	sw_frmdl NULL
-sw	sw\source\ui\globdoc					nmake	-	all	sw_globd NULL
+sw	sw\source\ui\globdoc					nmake	-	all	sw_globd sw_uinc NULL
 sw	sw\source\ui\index						nmake	-	all	sw_index NULL
 sw	sw\source\ui\lingu						nmake	-	all	sw_ling NULL
 sw	sw\source\ui\misc						nmake	-	all	sw_misc sw_sdi NULL
 sw	sw\source\ui\ribbar						nmake	-	all	sw_rbbar NULL
-sw	sw\source\ui\shells						nmake	-	all	sw_shell sw_sdi NULL
+sw	sw\source\ui\shells						nmake	-	all	sw_shell sw_uinc sw_sdi NULL
 sw	sw\source\ui\table						nmake	-	all	sw_table NULL
 sw	sw\source\ui\uiview						nmake	-	all	sw_uivw sw_sdi NULL
 sw	sw\source\ui\uno						nmake	-	all	sw_uiuno sw_sdi NULL
 sw	sw\source\ui\utlui						nmake	-	all	sw_utlui NULL
-sw	sw\source\ui\web						nmake	-	all	sw_web sw_sdi NULL
+sw	sw\source\ui\web						nmake	-	all	sw_web sw_uinc sw_sdi NULL
 sw	sw\source\ui\wizard						nmake	-	all	sw_wiz NULL
 sw	sw\source\ui\wrtsh						nmake	-	all	sw_wrtsh NULL
 sw	sw\source\core\attr						nmake	-	all	sw_attr NULL
