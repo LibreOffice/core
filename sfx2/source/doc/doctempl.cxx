@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:35:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1885,10 +1885,11 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
                 delete pMed;
                 mbDidConvert=TRUE;
                 ULONG lErr;
-                if ( mxObjShell.Is() )
-                    if(lErr=(pSfxApp->LoadTemplate(
-                        mxObjShell,aTargetURL)!=ERRCODE_NONE))
+                if ( mxObjShell.Is() ) {
+                    lErr = pSfxApp->LoadTemplate( mxObjShell,aTargetURL);
+                    if( lErr != ERRCODE_NONE )
                         ErrorHandler::HandleError(lErr);
+                }
 
             }
             else if (pFilter)
@@ -2478,7 +2479,7 @@ long SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle,
     int     nCompVal = 1;
     long    nStart = 0;
     long    nEnd = maRegions.Count() - 1;
-    long    nMid;
+    long    nMid = 0;
 
     RegionData_Impl* pMid;
 
