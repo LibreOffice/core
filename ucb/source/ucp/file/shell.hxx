@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-03-02 12:08:24 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,16 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 #ifndef __SGI_STL_HASH_MAP
-#include <stl/hash_map>
+#include <hash_map>
 #endif
 #ifndef __SGI_STL_HASH_SET
-#include <stl/hash_set>
+#include <hash_set>
 #endif
 #ifndef _SGI_STL_LIST
-#include <stl/list>
+#include <list>
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>

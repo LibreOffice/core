@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 11:04:48 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include "DAVTypes.hxx"
 #include "DAVResource.hxx"
 #include <rtl/ustring.hxx>
-#include <stl/vector>
+#include <vector>
 
 namespace webdav_ucp
 {

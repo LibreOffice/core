@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 10:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <ucbhelper/resultset.hxx>
 #endif
 #ifndef __VECTOR__
-#include <stl/vector>
+#include <vector>
 #endif
 namespace webdav_ucp {
 

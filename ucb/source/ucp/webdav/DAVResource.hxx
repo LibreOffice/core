@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-20 16:20:44 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _DAVRESOURCE_HXX_
 #define _DAVRESOURCE_HXX_
 
-#include <stl/vector>
+#include <vector>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
