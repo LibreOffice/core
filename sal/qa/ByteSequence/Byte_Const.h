@@ -37,7 +37,7 @@ char kTestChar = 45;
 char kTestChar0 = 0;
 char kTestChar1 = 500;
 char kTestChar2 = 78;
-char kTestChar3 = 34;
+char kTestChar3 = -155;
 
 sal_Int32 kTestSeqLen0 = 0;
 sal_Int32 kTestSeqLen1 = 5;

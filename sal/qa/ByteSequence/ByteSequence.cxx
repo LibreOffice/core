@@ -32,12 +32,13 @@ class  ctor : public CppUnit::TestFixture
 
         void ctor_001()
         {
-            ::rtl::ByteSequence aByteSeq;
+            ::rtl::ByteSequence aByteSeq1;
+        ::rtl::ByteSequence aByteSeq2( &kTestEmptyByteSeq );
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates an empty sequence",
-                aByteSeq.getLength() == 0
-                //&& aByteSeq.getArray() == 0
+                aByteSeq1.getLength() == 0 &&
+                aByteSeq1 == aByteSeq2
             );
         }
 
@@ -45,7 +46,6 @@ class  ctor : public CppUnit::TestFixture
         {
             ::rtl::ByteSequence aByteSeq;
             ::rtl::ByteSequence aByteSeqtmp( aByteSeq );
-//printf("ctor002\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates a copy of given sequence",
@@ -57,22 +57,22 @@ class  ctor : public CppUnit::TestFixture
         void ctor_003()
         {
             ::rtl::ByteSequence aByteSeq( &kTestByteSeq1 );
-//printf("ctor003 %d, the length is %d\n",aByteSeq[0],aByteSeq.getLength());
+        sal_Int32 nNewLen = aByteSeq.getLength();
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Copy constructor Creates a copy from the C-Handle ",
-                aByteSeq.getLength() == kTestSeqLen1
+                nNewLen == kTestSeqLen1
         );
         }
 
     void ctor_003_1()
         {
             ::rtl::ByteSequence aByteSeq( &kTestByteSeq2 );
-//printf("ctor0031\n");
+        sal_Int32 nNewLen = aByteSeq.getLength();
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Copy constructor Creates a copy from the C-Handle: reference count > 1 ",
-                aByteSeq.getLength() == kTestSeqLen2
+                nNewLen == kTestSeqLen2
         );
         }
 
@@ -81,16 +81,16 @@ class  ctor : public CppUnit::TestFixture
             sal_Int8 * pElements = &kTestByte4;
         sal_Int32 len = kTestByteCount1;
         ::rtl::ByteSequence aByteSeq( pElements, len);
-    printf("# the kTestByte4 is %d\n", kTestByte4);
-    printf("# the aByteSeq[0] is %d\n", aByteSeq[0]);
-    printf("# the aByteSeq[1] is %d\n", aByteSeq[1]);
-    printf("# the aByteSeq[2] is %d\n", aByteSeq[2]);
-//printf("ctor004\n");
+        sal_Int32 nNewLen = aByteSeq.getLength();
+        printf("# the kTestByte4 is %d\n", kTestByte4);
+        printf("# the aByteSeq[0] is %d\n", aByteSeq[0]);
+        printf("# the aByteSeq[1] is %d\n", aByteSeq[1]);
+        printf("# the aByteSeq[2] is %d\n", aByteSeq[2]);
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates a copy of given data bytes",
                 aByteSeq[1] == pElements[1] &&
-                len == aByteSeq.getLength()
+                len == nNewLen
 
             );
         }
@@ -99,12 +99,18 @@ class  ctor : public CppUnit::TestFixture
         {
         sal_Int32 len = 50;
             ::rtl::ByteSequence aByteSeq( len );
-//printf("ctor005\n");
+        sal_Int32 nNewLen = aByteSeq.getLength();
+        sal_Bool res = sal_True;
+        for (sal_Int32 i=0; i<len; i++)
+        {
+                if (aByteSeq[i] != 0)
+                    res = sal_False;
+            }
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates sequence of given length and initializes all bytes to 0",
-                aByteSeq.getLength() == len &&
-                aByteSeq[1] == 0
+                nNewLen == len && res
+
             );
         }
 
@@ -112,12 +118,12 @@ class  ctor : public CppUnit::TestFixture
         {
         sal_Int32 len = 39;
             ::rtl::ByteSequence aByteSeq( len , BYTESEQ_NODEFAULT );
-//printf("ctor006\n");
+            sal_Int32 nNewLen = aByteSeq.getLength();
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates sequence of given length and does NOT initialize data",
-                aByteSeq.getLength() == len
-        //&& no data
+                nNewLen == len
+
             );
         }
 
@@ -128,12 +134,12 @@ class  ctor : public CppUnit::TestFixture
         //pSequence->nRefCount = 1;
         //pSequence->nElements = kTestByteCount1;
         //pSequence->elements[1] = kTestChar;
-            ::rtl::ByteSequence aByteSeq( &kTestByteSeq3 , BYTESEQ_NOACQUIRE );
-//printf("ctor007\n");
+            ::rtl::ByteSequence aByteSeq( &kTestByteSeq3, BYTESEQ_NOACQUIRE );
+        sal_Int32 nNewLen = aByteSeq.getLength();
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates a sequence from a C-Handle without acquiring the handle, thus taking over ownership",
-                aByteSeq.getLength() == kTestSeqLen3
+                nNewLen == kTestSeqLen3
             );
         }
 
@@ -170,11 +176,12 @@ public:
     ::rtl::ByteSequence aByteSeq1( pElements, len);
     ::rtl::ByteSequence aByteSeq2( pElements, len2);
     aByteSeq2 = aByteSeq1;
+    sal_Int32 nNewLen = aByteSeq2.getLength();
         CPPUNIT_ASSERT_MESSAGE
         (
             "Assignment operator: assign longer sequence to another",
             aByteSeq1 == aByteSeq2 &&
-            aByteSeq2.getLength() == len
+            nNewLen == len
         );
     }
 
@@ -185,11 +192,12 @@ public:
     sal_Int8 * pElements = &kTestByte1;
     ::rtl::ByteSequence aByteSeq2( pElements, len + 1);
     aByteSeq2 = aByteSeq1;
+    sal_Int32 nNewLen = aByteSeq2.getLength();
         CPPUNIT_ASSERT_MESSAGE
         (
             "Assignment operator: assign shorter sequence to another",
             aByteSeq1 == aByteSeq2 &&
-            aByteSeq2.getLength() == len
+            nNewLen == len
         );
     }
 
@@ -200,12 +208,12 @@ public:
         ::rtl::ByteSequence aByteSeq1( pElements, len + 1 );
     ::rtl::ByteSequence aByteSeq2( len, BYTESEQ_NODEFAULT );
     aByteSeq2 = aByteSeq1;
-//printf("assign003\n");
+    sal_Int32 nNewLen = aByteSeq2.getLength();
         CPPUNIT_ASSERT_MESSAGE
         (
             "Assignment operator: assign sequence to another sequence having no data initialized",
             aByteSeq1 == aByteSeq2 &&
-            aByteSeq2.getLength() == kTestByteCount1
+            nNewLen == kTestByteCount1
         );
     }
 
@@ -216,12 +224,12 @@ public:
     const sal_Int8 * pElements = &kTestByte;
     ::rtl::ByteSequence aByteSeq2( pElements, len);
     aByteSeq2 = aByteSeq1;
-//printf("assign004\n");
+    sal_Int32 nNewLen = aByteSeq2.getLength();
         CPPUNIT_ASSERT_MESSAGE
         (
             "Assignment operator: assign empty sequence to another not empty sequence",
             aByteSeq1 == aByteSeq2 &&
-            aByteSeq2.getLength() == 0
+        nNewLen == 0
         );
     }
 
@@ -429,14 +437,15 @@ public:
     //reference count > 1
     ::rtl::ByteSequence aByteSeq( &kTestByteSeq2 );  //34
     sal_Int32 nSize = kTestSeqLen2 + 5;
-    //sal_Int32 nElements = kTestSeqLen2;
+    sal_Int32 nElements = kTestSeqLen2;
     aByteSeq.realloc( nSize );
     sal_Int32 nNewLen = aByteSeq.getLength();
+    sal_Int8 nValue = aByteSeq[nElements + 1];
     CPPUNIT_ASSERT_MESSAGE
         (
             "Reallocates sequence: reference count > 1 && nSize > nElements",
             nNewLen == nSize
-        //&& aByteSeq[nElements + 1] == 0
+        && nValue == 0
         );
     }
 
