@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:13:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,8 +688,13 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         // TODO: copy encrypted element
         if ( !pElement->m_pStream->IsEncrypted() )
         {
+<<<<<<< xstorage.cxx
+            uno::Reference< io::XStream > xSubStr =
+                                        xDest->openStreamElement( pElement->m_aName,
+=======
             uno::Reference< io::XStream > xSubStr =
                                         xDest->openStreamElement( aName,
+>>>>>>> 1.9
                                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
 
@@ -697,8 +702,13 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         }
         else if ( pElement->m_pStream->HasCachedPassword() && pElement->m_pStream->IsModified() )
         {
+<<<<<<< xstorage.cxx
+            uno::Reference< io::XStream > xSubStr =
+                                        xDest->openEncryptedStreamElement( pElement->m_aName,
+=======
             uno::Reference< io::XStream > xSubStr =
                                         xDest->openEncryptedStreamElement( aName,
+>>>>>>> 1.9
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
                                             pElement->m_pStream->GetCachedPassword() );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
@@ -1591,8 +1601,15 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
 
     xComponent->addEventListener( uno::Reference< lang::XEventListener >(
         static_cast< ::cppu::OWeakObject* >( m_pData->m_pSubElDispListener ), uno::UNO_QUERY ) );
+<<<<<<< xstorage.cxx
+
+    sal_Int32 nLength = m_pData->m_aOpenSubComponentsList.getLength();
+    m_pData->m_aOpenSubComponentsList.realloc( nLength + 1 );
+    m_pData->m_aOpenSubComponentsList[nLength] = xComponent;
+=======
 
     m_pData->m_aOpenSubComponentsList.push_back( xComponent );
+>>>>>>> 1.9
 }
 
 //____________________________________________________________________________________________________
@@ -1918,30 +1935,21 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
         }
         else
         {
-            if ( ( nStorageMode & embed::ElementModes::WRITE )
-              && !( pElement->m_pStorage->m_nStorageMode & embed::ElementModes::WRITE ) )
-            {
-                delete pElement->m_pStorage;
-                pElement->m_pStorage = NULL;
-            }
-            else
-            {
-                // in case parent storage allows writing the readonly mode of the child storage is
-                // virtual, that means that it is just enough to change the flag to let it be writable
-                // and since there is no AntiImpl nobody should be notified about it
-                pElement->m_pStorage->m_nStorageMode = nStorageMode | embed::ElementModes::READ;
+            // in case parent storage allows writing the readonly mode of the child storage is
+            // virtual, that means that it is just enough to change the flag to let it be writable
+            // and since there is no AntiImpl nobody should be notified about it
+            pElement->m_pStorage->m_nStorageMode = nStorageMode | embed::ElementModes::READ;
 
-                if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
-                {
-                    for ( SotElementList_Impl::iterator pElementIter = pElement->m_pStorage->m_aChildrenList.begin();
-                           pElementIter != pElement->m_pStorage->m_aChildrenList.end(); )
-                    {
-                        SotElement_Impl* pElementToDel = (*pElementIter);
-                        pElementIter++;
+            if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
+            {
+                for ( SotElementList_Impl::iterator pElementIter = pElement->m_pStorage->m_aChildrenList.begin();
+                       pElementIter != pElement->m_pStorage->m_aChildrenList.end(); )
+                   {
+                    SotElement_Impl* pElementToDel = (*pElementIter);
+                    pElementIter++;
 
-                        m_pImpl->RemoveElement( pElementToDel );
-                    }
-                }
+                    m_pImpl->RemoveElement( pElementToDel );
+                   }
             }
         }
     }
@@ -2833,7 +2841,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
             return uno::makeAny( sal_False ); // RepairPackage
         }
-        else if ( aPropertyName.equalsAscii( "HasEncriptedEntries" ) )
+        else if ( aPropertyName.equalsAscii( "HasEncryptedEntries" ) )
         {
             try {
                 m_pImpl->ReadContents();
