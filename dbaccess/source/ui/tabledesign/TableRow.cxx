@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,11 @@ using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+
+#define DEFAULT_VARCHAR_PRECSION    50
+#define DEFAULT_OTHER_PRECSION      16
+#define DEFAULT_NUMERIC_PRECSION    5
+#define DEFAULT_NUMERIC_SCALE       0
 //========================================================================
 // class OTableRow
 //========================================================================
@@ -147,32 +152,36 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
         {
             m_pActFieldDescr = new OFieldDescription();
             m_bOwnsDescriptions = sal_True;
+        }
+
+        const OTypeInfo* pOldType = m_pActFieldDescr->getTypeInfo();
+        if(_pType != pOldType)
+        {
+            sal_Bool bForce = _bForce || pOldType == NULL || pOldType->nType != _pType->nType;
             switch(_pType->nType)
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                    m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),_pType->nPrecision));
+                    if(bForce)
+                        m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(DEFAULT_VARCHAR_PRECSION),_pType->nPrecision));
                     break;
                 default:
-                    if(_pType->nPrecision && _pType->nMaximumScale)
+                    if(bForce)
                     {
-                        m_pActFieldDescr->SetPrecision(5);
-                        m_pActFieldDescr->SetScale(0);
+                        if(_pType->nPrecision && _pType->nMaximumScale)
+                        {
+                            m_pActFieldDescr->SetPrecision(DEFAULT_NUMERIC_PRECSION);
+                            m_pActFieldDescr->SetScale(DEFAULT_NUMERIC_SCALE);
+                        }
+                        else if(_pType->nPrecision)
+                            m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(DEFAULT_OTHER_PRECSION),_pType->nPrecision));
                     }
-                    else if(_pType->nPrecision)
-                        m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),_pType->nPrecision));
             }
-        }
-
-        if(_pType != m_pActFieldDescr->getTypeInfo())
-        {
-            // type checking
-            if (_bForce || (m_pActFieldDescr->GetPrecision() > _pType->nPrecision))
+            if(!_pType->aCreateParams.getLength())
+            {
                 m_pActFieldDescr->SetPrecision(_pType->nPrecision);
-
-            if (_bForce || (m_pActFieldDescr->GetScale() > _pType->nMaximumScale))
                 m_pActFieldDescr->SetScale(_pType->nMinimumScale);
-
+            }
             if(!_pType->bNullable && m_pActFieldDescr->IsNullable())
                 m_pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
             if(!_pType->bAutoIncrement && m_pActFieldDescr->IsAutoIncrement())
