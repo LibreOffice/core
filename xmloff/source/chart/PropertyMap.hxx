@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:02:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 #define XML_SCH_TYPE_DATAROWSOURCE          ( XML_SCH_TYPES_START + 6 )
 #define XML_SCH_TYPE_TEXT_ORIENTATION       ( XML_SCH_TYPES_START + 7 )
 #define XML_SCH_TYPE_INTERPOLATION          ( XML_SCH_TYPES_START + 8 )
+#define XML_SCH_TYPE_SYMBOL_TYPE            ( XML_SCH_TYPES_START + 9 )
+#define XML_SCH_TYPE_NAMED_SYMBOL           ( XML_SCH_TYPES_START + 10 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
@@ -153,7 +155,7 @@
 const XMLPropertyMapEntry aXMLChartPropMap[] =
 {
     // chart subtypes
-    MAP_ENTRY( "UpDown", CHART, XML_STOCK_UPDOWN_BARS, XML_TYPE_BOOL ),
+    MAP_ENTRY( "UpDown", CHART, XML_JAPANESE_CANDLE_STICK, XML_TYPE_BOOL ), // formerly XML_STOCK_UPDOWN_BARS
     MAP_ENTRY( "Volume", CHART, XML_STOCK_WITH_VOLUME, XML_TYPE_BOOL ),
     MAP_ENTRY( "Dim3D", CHART, XML_THREE_DIMENSIONAL, XML_TYPE_BOOL ),
     MAP_ENTRY( "Deep", CHART, XML_DEEP, XML_TYPE_BOOL ),
@@ -162,12 +164,18 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "SolidType", CHART, XML_SOLID_TYPE, XML_SCH_TYPE_SOLID_TYPE ),
     MAP_ENTRY( "SplineType", CHART, XML_INTERPOLATION, XML_SCH_TYPE_INTERPOLATION ),
     MAP_ENTRY( "Stacked", CHART, XML_STACKED, XML_TYPE_BOOL ),
-    MAP_ENTRY( "SymbolType", CHART, XML_SYMBOL, XML_TYPE_NUMBER ),
+    // type: "none", "automatic", "named-symbol" or "image"
+    MAP_ENTRY( "SymbolType", CHART, XML_SYMBOL_TYPE, XML_SCH_TYPE_SYMBOL_TYPE | MID_FLAG_MULTI_PROPERTY ),
+    // if type=="named-symbol" => name of symbol (square, diamond, ...)
+    MAP_ENTRY( "SymbolType", CHART, XML_SYMBOL_NAME, XML_SCH_TYPE_NAMED_SYMBOL | MID_FLAG_MULTI_PROPERTY ),
+    // if type=="image" => an xlink:href element with a linked (package) URI
+    MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, SYMBOL_IMAGE ),
     MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_WIDTH, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
     MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_HEIGHT, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
-    MAP_SPECIAL( "SymbolBitmapURL", STYLE, XML_SYMBOL_IMAGE, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, SYMBOL_IMAGE ),
     MAP_ENTRY( "Vertical", CHART, XML_VERTICAL, XML_TYPE_BOOL ),
-    MAP_ENTRY( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER ),
+    // #i32368# property should no longer be used as XML-property (in OASIS
+    // format), but is still ex-/imported for compatibility with the OOo file format
+     MAP_ENTRY( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER ),
     MAP_ENTRY( "StackedBarsConnected", CHART, XML_CONNECT_BARS, XML_TYPE_BOOL ),
     // spline settings
     MAP_ENTRY( "SplineOrder", CHART, XML_SPLINE_ORDER, XML_TYPE_NUMBER ),
@@ -219,7 +227,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "StackedText", STYLE, XML_DIRECTION, XML_SCH_TYPE_TEXT_ORIENTATION ),
 
     // for compatability to pre 6.0beta documents
-    MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
+//     MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
 
     // changed for Oasis file-format
     // Oasis proposal, see http://lists.oasis-open.org/archives/office/200312/msg00000.html
@@ -285,7 +293,24 @@ SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
     // documented long property
     { ::xmloff::token::XML_NONE,         0 },
     { ::xmloff::token::XML_CUBIC_SPLINE, 1 },
-    { ::xmloff::token::XML_B_SPLINE,     2 }
+    { ::xmloff::token::XML_B_SPLINE,     2 },
+    { ::xmloff::token::XML_TOKEN_INVALID,0 }
+};
+
+SvXMLEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
+{
+    { ::xmloff::token::XML_NONE,                -3 },
+    { ::xmloff::token::XML_AUTOMATIC,           -2 },
+    { ::xmloff::token::XML_NAMED_SYMBOL,        -1 },
+    { ::xmloff::token::XML_GRADIENTSTYLE_SQUARE, 0 },  // "square"
+    { ::xmloff::token::XML_DIAMOND,              1 },
+    { ::xmloff::token::XML_ARROW_DOWN,           2 },
+    { ::xmloff::token::XML_ARROW_UP,             3 },
+    { ::xmloff::token::XML_ARROW_RIGHT,          4 },
+    { ::xmloff::token::XML_ARROW_LEFT,           5 },
+    { ::xmloff::token::XML_BOW_TIE,              6 },
+    { ::xmloff::token::XML_HOURGLASS,            7 },
+    { ::xmloff::token::XML_TOKEN_INVALID,        0 }
 };
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS
