@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:28:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2286,13 +2286,14 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
-
+/*
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if ( pImgMgr )
     {
         pImgMgr->RegisterToolBox( &m_aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
         pImgMgr->RegisterToolBox( &m_aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
     }
+*/
 }
 
 // ------------------------------------------------------------------------
@@ -2385,12 +2386,14 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
+/*
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if ( pImgMgr )
     {
         pImgMgr->ReleaseToolBox( &m_aActionTbL );
         pImgMgr->ReleaseToolBox( &m_aActionTbR );
     }
+*/
 }
 
 //-------------------------------------------------------------------------
