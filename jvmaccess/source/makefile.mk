@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:17:55 $
+#   last change: $Author: vg $ $Date: 2003-12-17 13:38:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,11 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(SOLAR_JAVA)"==""
+nojava:
+    @echo "Not building jvmaccess because Java is disabled"
+.ENDIF
+
 UNOTYPES= com.sun.star.uno.TypeClass com.sun.star.uno.XInterface
 
 UNOUCRDEP = $(SOLARBINDIR)$/udkapi.rdb
@@ -81,3 +86,4 @@ SLOFILES = \
     $(SLO)$/windows.obj
 
 .INCLUDE: target.mk
+
