@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
     {
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
-        String sGlosPath( aPathOpt.GetGlossaryPath() );
+        String sGlosPath( aPathOpt.GetAutoTextPath() );
         USHORT nPaths = sGlosPath.GetTokenCount(';');
         BOOL bIsWritable = FALSE;
         for(USHORT nPath = 0; nPath < nPaths; nPath++)
@@ -1255,14 +1255,14 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
 {
     SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pBtn);
     SvtPathOptions aPathOpt;
-    String sGlosPath( aPathOpt.GetGlossaryPath() );
+    String sGlosPath( aPathOpt.GetAutoTextPath() );
     pDlg->SetPath(sGlosPath);
     if(RET_OK == pDlg->Execute())
     {
         String sTmp(pDlg->GetPath());
         if(sTmp != sGlosPath)
         {
-            aPathOpt.SetGlossaryPath( sTmp );
+            aPathOpt.SetAutoTextPath( sTmp );
             ::GetGlossaries()->UpdateGlosPath( sal_True );
             Init();
         }

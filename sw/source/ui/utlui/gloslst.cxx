@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:39:19 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ SwGlossaryList::SwGlossaryList() :
     bFilled(FALSE)
 {
     SvtPathOptions aPathOpt;
-    sPath = aPathOpt.GetGlossaryPath();
+    sPath = aPathOpt.GetAutoTextPath();
     SetTimeout(GLOS_TIMEOUT);
 }
 
@@ -396,7 +396,7 @@ void SwGlossaryList::Update()
         Start();
 
     SvtPathOptions aPathOpt;
-    String sTemp( aPathOpt.GetGlossaryPath() );
+    String sTemp( aPathOpt.GetAutoTextPath() );
     if(sTemp != sPath)
     {
         sPath = sTemp;
@@ -631,11 +631,14 @@ void    SwGlossaryList::ClearGroups()
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.3 2000-10-06 13:39:19 jp Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.4 2000-11-06 09:04:23 jp Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/06 13:39:19  jp
+    should changes: don't use IniManager
+
     Revision 1.2  2000/09/27 12:27:59  jp
     use the new FileStatHelper class
 

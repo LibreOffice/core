@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:13:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
 void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 {
     SvtPathOptions aPathOpt;
-    String aNewPath( aPathOpt.GetGlossaryPath() );
+    String aNewPath( aPathOpt.GetAutoTextPath() );
     sal_Bool bPathChanged = aPath != aNewPath;
     if (bFull || bPathChanged)
     {
@@ -911,6 +911,10 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/31 10:13:27  kso
+    Fixed: Typo in XContentAccess::queryContentIdentifierString() - the
+           second 'i' was missing ( SUPD>611 ).
+
     Revision 1.3  2000/10/20 14:18:05  os
     use comphelper methods
 
