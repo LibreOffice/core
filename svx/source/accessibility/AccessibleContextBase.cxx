@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:53:32 $
+ *  last change: $Author: af $ $Date: 2002-07-11 13:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     {
         // We are already disposed!
         // Create a new state set that has only set the DEFUNC state.
-        pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
+        pStateSet = new ::utl::AccessibleStateSetHelper ();
         if (pStateSet != NULL)
             pStateSet->AddState (AccessibleStateType::DEFUNC);
     }
