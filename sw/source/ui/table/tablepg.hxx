@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 10:01:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #endif
 #include "prcntfld.hxx"
 #include "swtypes.hxx"
+#include "textcontrolcombo.hxx"
 
 class SwTabCols;
 class SwWrtShell;
@@ -229,6 +230,11 @@ class SwTextFlowPage : public SfxTabPage
     TriStateBox     aSplitRowCB;
     CheckBox        aKeepCB;
     CheckBox        aHeadLineCB;
+    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
+    FixedText       aRepeatHeaderBeforeFT;
+    NumericField    aRepeatHeaderNF;
+    FixedText       aRepeatHeaderAfterFT;
+    TextControlCombo    aRepeatHeaderCombo;
     FixedText       aTextDirectionFT;
     ListBox         aTextDirectionLB;
 
@@ -248,6 +254,7 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( PageBreakTypeHdl_Impl, RadioButton* );
     DECL_LINK( SplitHdl_Impl, CheckBox* );
     DECL_LINK( SplitRowHdl_Impl, TriStateBox* );
+    DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
 
 
     SwTextFlowPage( Window* pParent, const SfxItemSet& rSet );
