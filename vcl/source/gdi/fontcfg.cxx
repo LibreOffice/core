@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:45:55 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,78 +406,103 @@ const OUString& DefaultFontConfigItem::getDefaultFont( int nLanguage, int nType 
 
 const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) const
 {
-    #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Arial;Luxi Sans;Bitstream Vera Sans;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
-    #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
-    #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
-    #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Andale Sans UI"
-    #define FALLBACKFONT_UI_SANS_CHINESE "Andale Sans UI;Tahoma;Arial Unicode MS;Kai;Ming;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
-
     if( nLanguage == LANGUAGE_SYSTEM )
         nLanguage = Application::GetSettings().GetUILanguage();
     const OUString& aUIFont = getDefaultFont( nLanguage, DEFAULTFONT_UI_SANS );
 
     if( aUIFont.getLength() )
-    {
         return aUIFont;
-    }
-    else
+
+    // fallback mechanism (either no configuration or no entry in configuration
+
+    #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Arial;Luxi Sans;Bitstream Vera Sans;gnu-unifont;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
+    #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;clearlyU;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
+    #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
+    #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Andale Sans UI;gnu-unifont"
+    #define FALLBACKFONT_UI_SANS_CHINESE "Andale Sans UI;Arial Unicode MS;Fangsong;Hei;SimSun;Song;AR PL SungtiL GB;AR PL Mingti2L Big5;Kai;Ming;gnu-unifont;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Albany;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
+   #define FALLBACKFONT_UI_SANS_JAPANESE1 "Andale Sans UI;HG Mincho Light J;"
+   #define FALLBACKFONT_UI_SANS_JAPANESE2 "Kochi Gochi;Gothic"
+
+    static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
+    static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
+    static const OUString aFallBackThai (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
+
+    // we need localized names for korean fonts
+    static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0, 0 };
+    String aFallBackKoreanLocalized( aSunGulim );
+    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
+    static const OUString aFallBackKorean( aFallBackKoreanLocalized );
+    static const OUString aFallBackChinese( RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS_CHINESE) );
+
+    // we need localized names for japanese fonts
+    static sal_Unicode const aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+   static sal_Unicode const aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+   static sal_Unicode const aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+   static sal_Unicode const aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+   static sal_Unicode const aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+
+   String aFallBackJapaneseLocalized( RTL_CONSTASCII_USTRINGPARAM( "MS UI Gothic;" ) );
+   aFallBackJapaneseLocalized += String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE1 ) );
+   aFallBackJapaneseLocalized += String( aMSPGothic );
+   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+   aFallBackJapaneseLocalized += String( aMSGothic );
+   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+   aFallBackJapaneseLocalized += String( aTLPGothic );
+   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+   aFallBackJapaneseLocalized += String( aLXGothic );
+   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+   aFallBackJapaneseLocalized += String( aKochiGothic );
+   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE2 ) );
+   static const OUString aFallBackJapanese( aFallBackJapaneseLocalized );
+
+    // optimize font list for some locales, as long as Andale Sans UI does not support them
+    switch( nLanguage )
     {
-        static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
-        static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
-        static const OUString aFallBackThai (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
-
-        // we need localized names for korean fonts
-        static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0, 0 };
-        String aFallBackKoreanLocalized( aSunGulim );
-        aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-        aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
-        static const OUString aFallBackKorean( aFallBackKoreanLocalized );
-        static const OUString aFallBackChinese( RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS_CHINESE) );
-
-        // optimize font list for some locales, as long as Andale Sans UI does not support them
-        switch( nLanguage )
-        {
-            case LANGUAGE_ARABIC:
-            case LANGUAGE_ARABIC_SAUDI_ARABIA:
-            case LANGUAGE_ARABIC_IRAQ:
-            case LANGUAGE_ARABIC_EGYPT:
-            case LANGUAGE_ARABIC_LIBYA:
-            case LANGUAGE_ARABIC_ALGERIA:
-            case LANGUAGE_ARABIC_MOROCCO:
-            case LANGUAGE_ARABIC_TUNISIA:
-            case LANGUAGE_ARABIC_OMAN:
-            case LANGUAGE_ARABIC_YEMEN:
-            case LANGUAGE_ARABIC_SYRIA:
-            case LANGUAGE_ARABIC_JORDAN:
-            case LANGUAGE_ARABIC_LEBANON:
-            case LANGUAGE_ARABIC_KUWAIT:
-            case LANGUAGE_ARABIC_UAE:
-            case LANGUAGE_ARABIC_BAHRAIN:
-            case LANGUAGE_ARABIC_QATAR:
-            case LANGUAGE_HEBREW:
-                return aFallBackArabic;
-                break;
-            case LANGUAGE_THAI:
-                return aFallBackThai;
-                break;
+        case LANGUAGE_ARABIC:
+        case LANGUAGE_ARABIC_SAUDI_ARABIA:
+        case LANGUAGE_ARABIC_IRAQ:
+        case LANGUAGE_ARABIC_EGYPT:
+        case LANGUAGE_ARABIC_LIBYA:
+        case LANGUAGE_ARABIC_ALGERIA:
+        case LANGUAGE_ARABIC_MOROCCO:
+        case LANGUAGE_ARABIC_TUNISIA:
+        case LANGUAGE_ARABIC_OMAN:
+        case LANGUAGE_ARABIC_YEMEN:
+        case LANGUAGE_ARABIC_SYRIA:
+        case LANGUAGE_ARABIC_JORDAN:
+        case LANGUAGE_ARABIC_LEBANON:
+        case LANGUAGE_ARABIC_KUWAIT:
+        case LANGUAGE_ARABIC_UAE:
+        case LANGUAGE_ARABIC_BAHRAIN:
+        case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_HEBREW:
+            return aFallBackArabic;
+            break;
+        case LANGUAGE_THAI:
+            return aFallBackThai;
+            break;
             case LANGUAGE_KOREAN:
-            case LANGUAGE_KOREAN_JOHAB:
-                return aFallBackKorean;
-                break;
+        case LANGUAGE_KOREAN_JOHAB:
+            return aFallBackKorean;
+            break;
             case LANGUAGE_CHINESE:
-            case LANGUAGE_CHINESE_TRADITIONAL:
-            case LANGUAGE_CHINESE_SIMPLIFIED:
-            case LANGUAGE_CHINESE_HONGKONG:
-            case LANGUAGE_CHINESE_SINGAPORE:
-            case LANGUAGE_CHINESE_MACAU:
-                return aFallBackChinese;
-                break;
-            default:
-                break;
-        }
-
-        return aFallback;
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+            return aFallBackChinese;
+            break;
+        case LANGUAGE_JAPANESE:
+            return aFallBackJapanese;
+            break;
+        default:
+            break;
     }
+
+    return aFallback;
 }
 
 /*
