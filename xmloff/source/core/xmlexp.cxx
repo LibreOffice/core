@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:17:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,8 +552,6 @@ void SvXMLExport::ImplExportContent()
 {
     CheckAttrList();
 
-    _ExportChangeTracking();
-
     CheckAttrList();
 
     {
@@ -828,10 +826,6 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
         catch( lang::ServiceNotRegisteredException& )
         {}
     }
-}
-
-void SvXMLExport::_ExportChangeTracking()
-{
 }
 
 XMLTextParagraphExport* SvXMLExport::CreateTextParagraphExport()
