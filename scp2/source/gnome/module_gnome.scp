@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_gnome.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,11 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Gnome
-    MOD_NAME_DESC ( MODULE_OPTIONAL_GNOME );
     ParentID = gid_Module_Optional;
     Default = YES;
-    Files = (gid_File_Extra_Gnome_Icons, gid_File_Extra_Gnome_Apps, gid_File_Extra_Gnome2_Apps,
-             gid_File_Bin_Gnomeint);
-    Dirs = (gid_Dir_Share, gid_Dir_Home_Gnome, gid_Dir_Home_Gnome_Apps, gid_Dir_Home_Gnome_Apps_Product,
-            gid_Dir_Home_Gnome2, gid_Dir_Home_Gnome2_Vfolders, gid_Dir_Home_Gnome2_Vfolders_Applications,
-            gid_Dir_Home_Desktop);
+	Name = "gid_Module_Optional_Gnome";
+	Description = "gid_Module_Optional_Gnome";
+    Files = (gid_File_Lib_Gnomevfs, gid_File_Lib_Gconfbe);
+    Dirs = ();
 End
+
