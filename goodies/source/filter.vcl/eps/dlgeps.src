@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@ ModalDialog DLG_EXPORT_EPS
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ danish ] = "EPS eksportindstillinger";
     Text[ swedish ] = "EPS-exportalternativ";
-    Text[ polish ] = "Opcje eksportowe EPS";
+    Text[ polish ] = "Opcje eksportu EPS";
     Text[ english_us ] = "EPS Export Options";
-    Text[ portuguese_brazilian ] = "EPS Export Optionen";
+    Text[ portuguese_brazilian ] = "Opções de exportação EPS";
     Text[ japanese ] = "EPS ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_simplified ] = "EPS è¾“å‡ºé€‰é¡¹";
     Text[ chinese_traditional ] = "EPS åŒ¯å‡ºé¸é …";
@@ -110,7 +110,7 @@ ModalDialog DLG_EXPORT_EPS
         Text = "Vorschau";
         Text [ ENGLISH ] = "Preview";
         Text[ italian ] = "Anteprima";
-        Text[ portuguese_brazilian ] = "Vorschau";
+        Text[ portuguese_brazilian ] = "Visualizar";
         Text[ portuguese ] = "Previsualizar";
         Text[ danish ] = "Eksempel";
         Text[ french ] = "Aperçu";
@@ -127,11 +127,14 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Voorbeeld";
         Text[ chinese_simplified ] = "é¢„è§ˆ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
-        Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°";
+        Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°";
         Text[ turkish ] = "Önizleme";
         Text[ catalan ] = "Visualització prèvia";
         Text[ finnish ] = "Esikatselu";
         Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
+        Text[ czech ] = "NÃ¡hled";
+        Text[ hebrew ] = "â€®×ª×¦×•×’×” ××§×“×™××”â€¬";
+        Text[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯";
     };
     CheckBox CB_PREVIEW_TIFF
     {
@@ -141,7 +144,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "~Preview picture (Tiff)" ;
         TabStop = TRUE ;
         Text[ italian ] = "~Anteprima immagine (Tiff)";
-        Text[ portuguese_brazilian ] = "~Vorschau Bild (Tiff)";
+        Text[ portuguese_brazilian ] = "~Visualizar imagem (TIFF)";
         Text[ portuguese ] = "~Previzualizar imagem (Tiff)";
         Text[ danish ] = "~Vis billede (Tiff)";
         Text[ french ] = "Aperçu (Tiff)";
@@ -151,18 +154,21 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "Image ~preview (TIFF)";
         Text[ chinese_simplified ] = "å›¾åƒé¢„è§ˆ(TIFF)(~P)";
         Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ êàğòèíêè (TIFF)";
-        Text[ polish ] = "Podgl¹d rysunku (Tiff)";
+        Text[ polish ] = "~Podgl¹d obrazu (TIFF)";
         Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ (Tiff)(~P)";
         Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ(TIFF) ";
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
         Text[ chinese_simplified ] = "å›¾åƒé¢„è§ˆ(TIFF)(~P)";
         Text[ greek ] = "Ğñïåğéóêüğçóç åéêüíáò (TIFF)";
-        Text[ korean ] = "ê·¸ë¦¼ ë¯¸ë¦¬ë³´ê¸° (TIFF)(~P)";
+        Text[ korean ] = "ì´ë¯¸ì§€ ë¯¸ë¦¬ ë³´ê¸° (TIFF)(~P)";
         Text[ chinese_traditional ] = "åœ–ç‰‡é è¦½(TIFF)(~P)";
-        Text[ turkish ] = "Resim önizleme (TIFF)";
+        Text[ turkish ] = "Resim ~önizleme (TIFF)";
         Text[ finnish ] = "Kuvan ~esikatselu (TIFF)";
         Text[ catalan ] = "~Visualització prèvia d'imatge (TIFF)";
         Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡ (TIFF)";
+        Text[ czech ] = "NÃ¡hled obrÃ¡zku (TIFF)";
+        Text[ hebrew ] = "â€®×ª×¦×•×’×” ××§×“×™××” ×©×œ ×¦×œ× (Tiff)â€¬";
+        Text[ hindi ] = "à¤šà¤¿à¤¤à¥à¤° à¤•à¤¾ ~à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯ (TIFF)";
     };
     CheckBox CB_PREVIEW_EPSI
     {
@@ -181,17 +187,20 @@ ModalDialog DLG_EXPORT_EPS
         Text[ italian ] = "~Interchange (EPSI)";
         Text[ danish ] = "~Interchange (EPSI)";
         Text[ swedish ] = "Interchange (EPSI)";
-        Text[ polish ] = "~Interchange (EPSI)";
-        Text[ portuguese_brazilian ] = "~Interchange (EPSI)";
+        Text[ polish ] = "~Wymiana (EPSI)";
+        Text[ portuguese_brazilian ] = "~Intercâmbio (EPSI)";
         Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒã‚§ãƒ³ã‚¸(EPS~I)";
         Text[ korean ] = "ì¸í„°ì²´ì¸ì§€ (EPS~I)";
         Text[ chinese_simplified ] = "äº’æ¢(EPS~I)";
         Text[ chinese_traditional ] = "äº’æ›(EPS~I)";
         Text[ arabic ] = "~Interchange (EPSI)";
-        Text[ turkish ] = "Interchange (EPSI)";
+        Text[ turkish ] = "Değiş-tokuş (EPSI)";
         Text[ finnish ] = "~Siirto (EPSI)";
         Text[ catalan ] = "~Intercanvi (EPSI)";
         Text[ thai ] = "~à¸ªà¸±à¸šà¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™ (EPSI)";
+        Text[ czech ] = "Interchange (EPSI)";
+        Text[ hebrew ] = "â€®×”×¢×‘×¨×” (EPSI)â€¬";
+        Text[ hindi ] = "~à¤ªà¤°à¤¸à¥à¤ªà¤° à¤¬à¤¦à¤²à¥‹ (EPSI)";
     };
     FixedLine GRP_VERSION
     {
@@ -200,7 +209,7 @@ ModalDialog DLG_EXPORT_EPS
         Text = "Version";
         Text [ ENGLISH ] = "Version";
         Text[ italian ] = "Versione";
-        Text[ portuguese_brazilian ] = "Version";
+        Text[ portuguese_brazilian ] = "Versão";
         Text[ portuguese ] = "Versão";
         Text[ danish ] = "Version";
         Text[ french ] = "Version";
@@ -222,6 +231,9 @@ ModalDialog DLG_EXPORT_EPS
         Text[ catalan ] = "Versió";
         Text[ finnish ] = "Versio";
         Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™";
+        Text[ czech ] = "Verze";
+        Text[ hebrew ] = "â€®×’×™×¨×¡×”â€¬";
+        Text[ hindi ] = "à¤†à¤µà¤°à¥à¤¤à¤¨";
     };
     RadioButton RB_LEVEL1
     {
@@ -231,7 +243,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "Level ~1" ;
         TabStop = TRUE ;
         Text[ italian ] = "Livello ~1";
-        Text[ portuguese_brazilian ] = "Level ~1";
+        Text[ portuguese_brazilian ] = "Nível ~1";
         Text[ portuguese ] = "Nível ~1";
         Text[ danish ] = "Niveau ~1";
         Text[ french ] = "Niveau ~1";
@@ -241,7 +253,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "Level ~1";
         Text[ chinese_simplified ] = "çº§åˆ« ~1";
         Text[ russian ] = "Óğîâåíü 1";
-        Text[ polish ] = "Poziom 1";
+        Text[ polish ] = "Poziom ~1";
         Text[ japanese ] = "ãƒ¬ãƒ™ãƒ« ~1";
         Text[ chinese_traditional ] = "ç´šåˆ¥ ~1";
         Text[ arabic ] = "ÇáãÓÊæì 1";
@@ -253,6 +265,9 @@ ModalDialog DLG_EXPORT_EPS
         Text[ finnish ] = "Taso ~1";
         Text[ catalan ] = "Nivell ~1";
         Text[ thai ] = "à¸£à¸°à¸”à¸±à¸š ~1";
+        Text[ czech ] = "Level 1";
+        Text[ hebrew ] = "â€®×¨××” 1â€¬";
+        Text[ hindi ] = "à¤¸à¤¤à¤¹ ~1";
     };
     RadioButton RB_LEVEL2
     {
@@ -262,7 +277,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "Level ~2" ;
         TabStop = TRUE ;
         Text[ italian ] = "Livello ~2";
-        Text[ portuguese_brazilian ] = "Level ~2";
+        Text[ portuguese_brazilian ] = "Nível ~2";
         Text[ portuguese ] = "Nível ~2";
         Text[ danish ] = "Niveau ~2";
         Text[ french ] = "Niveau ~2";
@@ -272,7 +287,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "Level ~2";
         Text[ chinese_simplified ] = "çº§åˆ« ~2";
         Text[ russian ] = "Óğîâåíü 2";
-        Text[ polish ] = "Poziom 2";
+        Text[ polish ] = "Poziom ~2";
         Text[ japanese ] = "ãƒ¬ãƒ™ãƒ« ~2";
         Text[ chinese_traditional ] = "ç´šåˆ¥ ~2";
         Text[ arabic ] = "ÇáãÓÊæì 2";
@@ -284,6 +299,9 @@ ModalDialog DLG_EXPORT_EPS
         Text[ finnish ] = "Taso ~2";
         Text[ catalan ] = "Nivell ~2";
         Text[ thai ] = "à¸£à¸°à¸”à¸±à¸š ~2";
+        Text[ czech ] = "Level 2";
+        Text[ hebrew ] = "â€®×¨××” 2â€¬";
+        Text[ hindi ] = "à¤¸à¤¤à¤¹ ~2";
     };
 
     FixedLine GRP_COLOR
@@ -293,7 +311,7 @@ ModalDialog DLG_EXPORT_EPS
         Text = "Farb Format";
         Text [ ENGLISH ] = "Color Type";
         Text[ italian ] = "Formato colore";
-        Text[ portuguese_brazilian ] = "Farb Format";
+        Text[ portuguese_brazilian ] = "Formato de cores";
         Text[ portuguese ] = "Formato da cor";
         Text[ danish ] = "Farveformat";
         Text[ french ] = "Format de couleur";
@@ -311,10 +329,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "é¢œè‰²æ ¼å¼";
         Text[ greek ] = "ÌïñöŞ ÷ñşìáôïò";
         Text[ korean ] = "ìƒ‰ìƒ ì„œì‹";
-        Text[ turkish ] = "Renk formatı";
+        Text[ turkish ] = "Biçim Rengi";
         Text[ catalan ] = "Format del color";
         Text[ finnish ] = "Värimuoto";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸ªà¸µ";
+        Text[ czech ] = "BarevnÃ½ formÃ¡t";
+        Text[ hebrew ] = "â€®×©×™×˜×ª ×¦×‘×¢â€¬";
+        Text[ hindi ] = "à¤°à¤‚à¤— à¤°à¤šà¤¨à¤¾";
     };
     RadioButton RB_COLOR
     {
@@ -324,7 +345,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "~Color" ;
         TabStop = TRUE ;
         Text[ italian ] = "Colore";
-        Text[ portuguese_brazilian ] = "~Farbe";
+        Text[ portuguese_brazilian ] = "~Cor";
         Text[ portuguese ] = "~Cor";
         Text[ danish ] = "~Farve";
         Text[ french ] = "Couleur";
@@ -334,7 +355,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "~Color";
         Text[ chinese_simplified ] = "é¢œè‰²(~C)";
         Text[ russian ] = "Öâåò";
-        Text[ polish ] = "Kolor";
+        Text[ polish ] = "~Kolor";
         Text[ japanese ] = "è‰²(~C)";
         Text[ chinese_traditional ] = "é¡è‰²(~C)";
         Text[ arabic ] = "Çááæä";
@@ -342,10 +363,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "é¢œè‰²(~C)";
         Text[ greek ] = "×ñşìá";
         Text[ korean ] = "ìƒ‰ìƒ(~C)";
-        Text[ turkish ] = "Renk";
+        Text[ turkish ] = "~Renk";
         Text[ finnish ] = "~Väri";
         Text[ catalan ] = "~Color";
         Text[ thai ] = "~à¸ªà¸µ";
+        Text[ czech ] = "BarevnÃ½";
+        Text[ hebrew ] = "â€®×¦×‘×¢â€¬";
+        Text[ hindi ] = "~à¤°à¤‚à¤—";
     };
     RadioButton RB_GRAYSCALE
     {
@@ -355,7 +379,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "~Grayscale" ;
         TabStop = TRUE ;
         Text[ italian ] = "Toni di grigio";
-        Text[ portuguese_brazilian ] = "~Graustufen";
+        Text[ portuguese_brazilian ] = "~Escala de cinza";
         Text[ portuguese ] = "~Tons de cinzento";
         Text[ danish ] = "Gråtoner";
         Text[ french ] = "~Niveaux de gris";
@@ -365,7 +389,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ english_us ] = "~Grayscale";
         Text[ chinese_simplified ] = "ç°åº¦(~G)";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaroœci";
+        Text[ polish ] = "~Odcienie szaroœci";
         Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«(~G)";
         Text[ chinese_traditional ] = "ç°éš(~G)";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
@@ -373,10 +397,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "ç°åº¦(~G)";
         Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
         Text[ korean ] = "íšŒìƒ‰ì¡°(~G)";
-        Text[ turkish ] = "Gri tonları";
+        Text[ turkish ] = "~Gri tonları";
         Text[ finnish ] = "~Harmaasävy";
         Text[ catalan ] = "~Escala de grisos";
         Text[ thai ] = "~à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²";
+        Text[ czech ] = "OdstÃ­ny Å¡edi";
+        Text[ hebrew ] = "â€®×¡×•×œ× ×”××¤×•×¨â€¬";
+        Text[ hindi ] = "~à¤—à¥à¤°à¥‡à¤¸à¥à¤•à¥‡à¤²à¥";
     };
 
     FixedLine  GRP_COMPRESSION
@@ -386,7 +413,7 @@ ModalDialog DLG_EXPORT_EPS
         Text = "Kompression";
         Text [ ENGLISH ] = "Compression";
         Text[ italian ] = "Compressione";
-        Text[ portuguese_brazilian ] = "Kompression";
+        Text[ portuguese_brazilian ] = "Compressão";
         Text[ portuguese ] = "Compressão";
         Text[ danish ] = "Kompression";
         Text[ french ] = "Compression";
@@ -408,6 +435,9 @@ ModalDialog DLG_EXPORT_EPS
         Text[ catalan ] = "Compressió";
         Text[ finnish ] = "Pakkaus";
         Text[ thai ] = "à¸à¸²à¸£à¸šà¸µà¸šà¸­à¸±à¸”";
+        Text[ czech ] = "Komprese";
+        Text[ hebrew ] = "â€®×“×—×™×¡×”â€¬";
+        Text[ hindi ] = "à¤¦à¤¬à¤¾à¤µ";
     };
     RadioButton RB_COMPRESSION_LZW
     {
@@ -417,7 +447,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "LZW Compression" ;
         TabStop = TRUE ;
         Text[ italian ] = "Codifica LZW";
-        Text[ portuguese_brazilian ] = "LZW Kodierung";
+        Text[ portuguese_brazilian ] = "Codificação LZW";
         Text[ portuguese ] = "Codificação LZW";
         Text[ danish ] = "LZW kodning";
         Text[ french ] = "Encodage LZW";
@@ -439,6 +469,9 @@ ModalDialog DLG_EXPORT_EPS
         Text[ finnish ] = "LZW-koodaus";
         Text[ catalan ] = "Codificació LZW";
         Text[ thai ] = "à¹€à¸‚à¹‰à¸²à¸£à¸«à¸±à¸ª LZW ";
+        Text[ czech ] = "LZW kÃ³dovÃ¡nÃ­";
+        Text[ hebrew ] = "â€®×§×™×“×•×“ LZWâ€¬";
+        Text[ hindi ] = "LZW à¤à¤¨à¤•à¥‹à¤¡à¤¿à¤‚à¤—";
     };
     RadioButton RB_COMPRESSION_NONE
     {
@@ -448,7 +481,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "None" ;
         TabStop = TRUE ;
         Text[ italian ] = "Senza";
-        Text[ portuguese_brazilian ] = "Keine";
+        Text[ portuguese_brazilian ] = "Nenhum";
         Text[ portuguese ] = "Sem";
         Text[ danish ] = "Ingen";
         Text[ french ] = "Aucun(e)";
@@ -470,9 +503,12 @@ ModalDialog DLG_EXPORT_EPS
         Text[ finnish ] = "Ei pakkausta";
         Text[ catalan ] = "Cap";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µ";
+        Text[ czech ] = "Å½Ã¡dnÃ©";
+        Text[ hebrew ] = "â€®×œ×œ×â€¬";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
     };
     Text[ italian ] = "Opzioni d'esportazione EPS";
-    Text[ portuguese_brazilian ] = "EPS Export Optionen";
+    Text[ portuguese_brazilian ] = "Opções de exportação EPS";
     Text[ portuguese ] = "Opções exportação EPS";
     Text[ danish ] = "EPS eksportindstillinger";
     Text[ french ] = "Options d'export EPS";
@@ -482,7 +518,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ english_us ] = "EPS Export Options";
     Text[ chinese_simplified ] = "EPS è¾“å‡ºé€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû ıêñïîğòà EPS";
-    Text[ polish ] = "Opcje eksportowe EPS";
+    Text[ polish ] = "Opcje eksportu EPS";
     Text[ japanese ] = "EPS ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "EPS åŒ¯å‡ºé¸é …";
     Text[ arabic ] = "EPS ÎíÇÑÇÊ ÊÕÏíÑ";
@@ -494,7 +530,20 @@ ModalDialog DLG_EXPORT_EPS
     Text[ finnish ] = "EPS-vientiasetukset";
     Text[ catalan ] = "Opcions d'exportació EPS";
     Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸ªà¹ˆà¸‡ EPS à¸­à¸­à¸";
+    Text[ czech ] = "Volby pro export EPS";
+    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª ×™×¦××• ×œ EPSâ€¬";
+    Text[ hindi ] = "EPS à¤¨à¤¿à¤°à¥à¤¯à¤¾à¤¤ à¤µà¤¿à¤•à¤²à¥à¤ª";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
