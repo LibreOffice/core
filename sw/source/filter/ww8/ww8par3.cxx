@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-17 13:28:06 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,11 +333,11 @@ void SwWW8ImplReader::DeleteFormImpl()
 // Hilfs-Deklarationen ///////////////////////////////////////////////////////
 //
 // Style Id's for each level
-typedef sal_uInt16 WW8aIdSty[    nWW8MaxListLevel];
+typedef sal_uInt16 WW8aIdSty[WW8ListManager::nMaxLevel];
 // Zeichenattribute aus GrpprlChpx
-typedef SfxItemSet* WW8aISet[nWW8MaxListLevel];
+typedef SfxItemSet* WW8aISet[WW8ListManager::nMaxLevel];
 // Zeichen Style Pointer
-typedef SwCharFmt* WW8aCFmt[ nWW8MaxListLevel];
+typedef SwCharFmt* WW8aCFmt[WW8ListManager::nMaxLevel];
 
 struct WW8LST   // nur DIE Eintraege, die WIR benoetigen!
 {
@@ -372,7 +372,8 @@ struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
     short   nDxaLeft1;          // Erstzeilen-Einzug
 
     sal_uInt8   nNFC;               // number format code
-    sal_uInt8   aOfsNumsXCH[nWW8MaxListLevel];// Offset der Feldkodes im Num-X-String
+    // Offset der Feldkodes im Num-X-String
+    sal_uInt8   aOfsNumsXCH[WW8ListManager::nMaxLevel];
     sal_uInt8   nLenGrpprlChpx; // length, in bytes, of the LVL's grpprlChpx
     sal_uInt8   nLenGrpprlPapx; // length, in bytes, of the LVL's grpprlPapx
     sal_uInt8   nAlign: 2;  // alignment (left, right, centered) of the number
@@ -528,7 +529,7 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     if( aBits1 & 0x20 ) aLVL.bV6PrSp    = sal_True;
     if( aBits1 & 0x40 ) aLVL.bV6        = sal_True;
     sal_Bool bLVLOkB = sal_True;
-    for(sal_uInt8 nLevelB = 0; nLevelB < nWW8MaxListLevel; nLevelB++)
+    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; nLevelB++)
     {
         rSt >> aLVL.aOfsNumsXCH[ nLevelB ];
         if( 0 != rSt.GetError() )
@@ -548,7 +549,7 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     // ist die Liste voller Indices, d.h. alle Plaetze sind besetzt,
     // also sind alle Level anzuzeigen
     if( !nUpperLevel )
-        nUpperLevel = nWW8MaxListLevel;
+        nUpperLevel = nMaxLevel;
 
 
     rSt.SeekRel( 1 );
@@ -797,7 +798,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
 
     if( pThisLevelItemSet && pThisLevelItemSet->Count())
     {
-        nIdenticalItemSetLevel = nWW8MaxListLevel;
+        nIdenticalItemSetLevel = nMaxLevel;
         SfxItemIter aIter( *pThisLevelItemSet );
         for( sal_uInt8 nLowerLevel = 0; nLowerLevel < nLevel; nLowerLevel++)
         {
@@ -817,7 +818,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                     // falls kein Item mit gleicher nWhich gefunden oder Werte
                     // der Items ungleich, Ungleichheit merken und abbrechen!
                     {
-                        nIdenticalItemSetLevel = nWW8MaxListLevel;
+                        nIdenticalItemSetLevel = nMaxLevel;
                         break;
                     }
                     if( aIter.IsAtEnd() )
@@ -825,13 +826,13 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                     nWhich = aIter.NextItem()->Which();
                 }
 
-                if( nIdenticalItemSetLevel != nWW8MaxListLevel )
+                if( nIdenticalItemSetLevel != nMaxLevel )
                     break;
             }
         }
 
         SwCharFmt* pFmt;
-        if( nWW8MaxListLevel == nIdenticalItemSetLevel )
+        if (nMaxLevel == nIdenticalItemSetLevel)
         {
             // Style definieren
             String aName( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
@@ -888,10 +889,8 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
 {
     sal_Bool bRes = sal_False;
     WW8LSTInfo* pLSTInfo = GetLSTByListId( rLFOInfo.nIdLst );
-    if(    pLSTInfo
-        && pLSTInfo->pNumRule
-        && rLFOInfo.pNumRule
-        && (rLFOInfo.nLfoLvl <= (pLSTInfo->bSimpleList ? 1 : nWW8MaxListLevel)))
+    if (pLSTInfo && pLSTInfo->pNumRule && rLFOInfo.pNumRule &&
+       (rLFOInfo.nLfoLvl <= (pLSTInfo->bSimpleList ? nMinLevel : nMaxLevel)))
     {
         const SwNumRule& rLSTRule = *pLSTInfo->pNumRule;
         const SwNumRule& rLFORule = *rLFOInfo.pNumRule;
@@ -933,12 +932,11 @@ SwNumRule* WW8ListManager::CreateNextRule(BOOL bSimple)
 {
     // wird erstmal zur Bildung des Style Namens genommen
     String sPrefix(CREATE_CONST_ASC("WW8Num"));
-    sPrefix += String::CreateFromInt32( nUniqueList++ );
-    sal_uInt16 nRul =
-        rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &sPrefix ));
+    sPrefix += String::CreateFromInt32(nUniqueList++);
+    sal_uInt16 nRul = rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName(&sPrefix));
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
-    pMyNumRule->SetAutoRule( sal_False );
-    pMyNumRule->SetContinusNum( bSimple );
+    pMyNumRule->SetAutoRule(sal_False);
+    pMyNumRule->SetContinusNum(bSimple);
     return pMyNumRule;
 }
 
@@ -984,7 +982,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             //
             rSt >> aLST.nIdLst;
             rSt >> aLST.nTplC;
-            for(nLevel = 0; nLevel < nWW8MaxListLevel; nLevel++)
+            for(nLevel = 0; nLevel < nMaxLevel; nLevel++)
                 rSt >> aLST.aIdSty[ nLevel ];
 
 
@@ -1041,7 +1039,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             //
             // 1.2.1 betreffende(n) LVL(s) fuer diese aLST einlesen
             //
-            sal_uInt16 nLvlCount=pListInfo->bSimpleList ? 1 : nWW8MaxListLevel;
+            sal_uInt16 nLvlCount=pListInfo->bSimpleList ? nMinLevel : nMaxLevel;
             for(nLevel = 0; nLevel < nLvlCount; nLevel++)
             {
                 SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
@@ -1105,7 +1103,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             rSt >> aLFO.nLfoLvl;
             rSt.SeekRel( 3 );
             // soviele Overrides existieren
-            if( (nWW8MaxListLevel < aLFO.nLfoLvl) && rSt.GetError())
+            if ((nMaxLevel < aLFO.nLfoLvl) && rSt.GetError())
                 break;
 
             // die Parent NumRule der entsprechenden Liste ermitteln
@@ -1218,7 +1216,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     // WW8LFOInfo")
                     aLFOLVL.nLevel = aBits1 & 0x0F;
                     if( (0xFF > aBits1) && (0 <= aLFOLVL.nLevel)
-                        && (nWW8MaxListLevel > aLFOLVL.nLevel) )
+                        && (nMaxLevel > aLFOLVL.nLevel) )
                     {
                         if( aBits1 & 0x10 )
                             aLFOLVL.bStartAt = sal_True;
@@ -1380,24 +1378,9 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     return pLFOInfo->pNumRule;
 }
 
-sal_Bool WW8ListManager::IsSimpleList(sal_uInt16 nLFOPosition) const
-{
-    sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
-    if (nLFOInfos <= nLFOPosition)
-        return sal_False;
-
-    WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLFOPosition );
-
-    if( !pLFOInfo )
-        return sal_False;
-    return pLFOInfo->bSimpleList;
-}
-
 //----------------------------------------------------------------------------
 //          SwWW8ImplReader:  anhaengen einer Liste an einen Style oder Absatz
 //----------------------------------------------------------------------------
-
-
 sal_Bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     SwWW8StyInf& rStyleInfo)
 {
@@ -1414,7 +1397,7 @@ sal_Bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         {
             if (
                  (USHRT_MAX > rStyleInfo.nLFOIndex) &&
-                 (nWW8MaxListLevel > rStyleInfo.nListLevel)
+                 (WW8ListManager::nMaxLevel > rStyleInfo.nListLevel)
                )
             {
                 RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
@@ -1505,7 +1488,10 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
         {
             // jetzt nur die Parameter vermerken: die tatsaechliche Liste wird
             // spaeter drangehaengt, wenn die Listendefinitionen gelesen sind...
-            if( (USHRT_MAX > nActLFO) && (nWW8MaxListLevel > nActLevel))
+            if (
+                 (USHRT_MAX > nActLFO) &&
+                 (WW8ListManager::nMaxLevel > nActLevel)
+               )
             {
                 rStyleInf.nLFOIndex  = nActLFO;
                 rStyleInf.nListLevel = nActLevel;
@@ -1516,7 +1502,10 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
         {
             sal_uInt16 nLFO;
             sal_uInt8   nLevel;
-            if( (USHRT_MAX > nActLFO) && (nWW8MaxListLevel > nActLevel))
+            if (
+                 (USHRT_MAX > nActLFO) &&
+                 (WW8ListManager::nMaxLevel > nActLevel)
+               )
             {
                 // Plan A: die Werte fuer Listen- und Level-Nummer wurden
                 // uebergeben
@@ -1530,7 +1519,10 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
                 nLFO   = rStyleInf.nLFOIndex;
                 nLevel = rStyleInf.nListLevel;
             }
-            if( (USHRT_MAX > nLFO) && (nWW8MaxListLevel > nLevel))
+            if (
+                 (USHRT_MAX > nLFO) &&
+                 (WW8ListManager::nMaxLevel > nLevel)
+               )
             {
                 SwNumRule* pNmRule =
                     pLstManager->GetNumRuleForActivation(nLFO,nLevel);
@@ -1635,7 +1627,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     if( nLen < 0 )
     {
         // aktuelle Liste ist hier zu Ende, was ist zu tun ???
-        nListLevel = nWW8MaxListLevel;
+        nListLevel = WW8ListManager::nMaxLevel;
         if (pStyles && !bVer67)
             pStyles->nWwNumLevel = 0;
     }
@@ -1658,14 +1650,17 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
             pStyles->nWwNumLevel = nListLevel;
         }
 
-        if( nWW8MaxListLevel <= nListLevel )
-            nListLevel = nWW8MaxListLevel;
-        else
-        if( (USHRT_MAX > nLFOPosition) && (nWW8MaxListLevel > nListLevel))
+        if (WW8ListManager::nMaxLevel <= nListLevel )
+            nListLevel = WW8ListManager::nMaxLevel;
+        else if
+           (
+             (USHRT_MAX > nLFOPosition) &&
+             (WW8ListManager::nMaxLevel > nListLevel)
+           )
         {
             RegisterNumFmt(nLFOPosition, nListLevel);
             nLFOPosition = USHRT_MAX;
-            nListLevel   = nWW8MaxListLevel;
+            nListLevel  = WW8ListManager::nMaxLevel;
         }
     }
 }
@@ -1680,7 +1675,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     {
         // aktueller Level ist hier zu Ende, was ist zu tun ???
         nLFOPosition = USHRT_MAX;
-        nListLevel   = nWW8MaxListLevel;
+        nListLevel = WW8ListManager::nMaxLevel;
     }
     else
     {
@@ -1734,27 +1729,15 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 pCollA[nAktColl].bHasBrokenWW6List = TRUE;
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
-            if ( (USHRT_MAX > nLFOPosition) && (nLFOPosition != 2047-1) )
+            if ((USHRT_MAX > nLFOPosition) && (nLFOPosition != 2047-1))
             {
-                /*
-                    traurig: WW8 speichert manchmal keine Level-Attribute ab,
-                    auch wenn die Liste *nicht* bSimpleList hat.
-
-                    daher: nach Auftreten von sprmPIlfo sofort die Liste
-                    anklemmen, auch wenn kein sprmPIlvl vorher kam!
-
-                    schoener waere gewesen:
-                    if(    (nWW8MaxListLevel == nListLevel) && pLstManager
-                        && pLstManager->IsSimpleList(   nLFOPosition ) )
-                            nListLevel = 0;
-                */
-                if(nWW8MaxListLevel == nListLevel)
+                if (WW8ListManager::nMaxLevel == nListLevel)
                     nListLevel = 0;
-                if(nWW8MaxListLevel > nListLevel)
+                else if (WW8ListManager::nMaxLevel > nListLevel)
                 {
                     RegisterNumFmt(nLFOPosition, nListLevel);
                     nLFOPosition = USHRT_MAX;
-                    nListLevel   = nWW8MaxListLevel;
+                    nListLevel = WW8ListManager::nMaxLevel;
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1905,7 +1905,8 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     USHORT nOOIndex, USHORT nWWIndex, short *pSize=0 )
 {
     BYTE nCol;
-    short nIdx,nSpace;
+    short nSpace, nIdx;
+    WW8_BordersSO::eBorderCode eCodeIdx;
     short nLineThickness = rBor.DetermineBorderProperties(bVer67,&nSpace,&nCol,
         &nIdx);
 
@@ -1938,7 +1939,7 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     // thickness, or one of smaller thickness. If too small we
     // can make the defecit up in additional white space or
     // object size
-    switch( nIdx )
+    switch (nIdx)
     {
         // First the single lines
         case  1:
@@ -1954,121 +1955,121 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
         case 24:
         case 25:
             if( nLineThickness < 20)
-                nIdx = 0;//   1 Twip for us
-            else if( nLineThickness < 50)
-                nIdx = 1;//  20 Twips
-            else if( nLineThickness < 80)
-                nIdx = 2;//  50
-            else if( nLineThickness < 100)
-                nIdx = 3;//  80
-            else if( nLineThickness < 150)
-                nIdx = 4;// 100
+                eCodeIdx = WW8_BordersSO::single0;//   1 Twip for us
+            else if (nLineThickness < 50)
+                eCodeIdx = WW8_BordersSO::single1;//  20 Twips
+            else if (nLineThickness < 80)
+                eCodeIdx = WW8_BordersSO::single2;//  50
+            else if (nLineThickness < 100)
+                eCodeIdx = WW8_BordersSO::single3;//  80
+            else if (nLineThickness < 150)
+                eCodeIdx = WW8_BordersSO::single4;// 100
             // Hack: for the quite thick lines we must paint double lines,
             // because our singles lines don't come thicker than 5 points.
-            else if( nLineThickness < 180)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
+            else if (nLineThickness < 180)
+                eCodeIdx = WW8_BordersSO::double2;// 150
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
+                eCodeIdx = WW8_BordersSO::double5;// 180
         break;
         // then the shading beams which we represent by a double line
         case 23:
-            nIdx =  6;
+            eCodeIdx = WW8_BordersSO::double1;
         break;
         // then the double lines, for which we have good matches
         case  3:
         case 10: //Don't have tripple so use double
-            if( nLineThickness <  60)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;// 22 Twips for us
-            else if( nLineThickness < 135)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;// some more space
-            else if( nLineThickness < 180)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;// 60
+            if (nLineThickness < 60)
+                eCodeIdx = WW8_BordersSO::double0;// 22 Twips for us
+            else if (nLineThickness < 135)
+                eCodeIdx = WW8_BordersSO::double7;// some more space
+            else if (nLineThickness < 180)
+                eCodeIdx = WW8_BordersSO::double1;// 60
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+                eCodeIdx = WW8_BordersSO::double2;// 150
             break;
         case 11:
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90 Twips for us
+            eCodeIdx = WW8_BordersSO::double4;//  90 Twips for us
             break;
         case 12:
         case 13: //Don't have thin thick thin, so use thick thin
-            if( nLineThickness <  87)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71 Twips for us
-            else if( nLineThickness < 117)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
-            else if( nLineThickness < 166)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
+            if (nLineThickness < 87)
+                eCodeIdx = WW8_BordersSO::double8;//  71 Twips for us
+            else if (nLineThickness < 117)
+                eCodeIdx = WW8_BordersSO::double9;// 101
+            else if (nLineThickness < 166)
+                eCodeIdx = WW8_BordersSO::double10;// 131
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+                eCodeIdx = WW8_BordersSO::double5;// 180
             break;
         case 14:
-            if( nLineThickness <  46)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
-            else if( nLineThickness <  76)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-            else if( nLineThickness < 121)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90
-            else if( nLineThickness < 166)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+            if (nLineThickness < 46)
+                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
+            else if (nLineThickness < 76)
+                eCodeIdx = WW8_BordersSO::double1;//  60
+            else if (nLineThickness < 121)
+                eCodeIdx = WW8_BordersSO::double4;//  90
+            else if (nLineThickness < 166)
+                eCodeIdx = WW8_BordersSO::double2;// 150
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
+                eCodeIdx = WW8_BordersSO::double6;// 180
             break;
         case 15:
         case 16: //Don't have thin thick thin, so use thick thin
-            if( nLineThickness <  46)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
-            else if( nLineThickness <  76)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-            else if( nLineThickness < 121)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 3;//  90
-            else if( nLineThickness < 166)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+            if (nLineThickness < 46)
+                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
+            else if (nLineThickness < 76)
+                eCodeIdx = WW8_BordersSO::double1;//  60
+            else if (nLineThickness < 121)
+                eCodeIdx = WW8_BordersSO::double3;//  90
+            else if (nLineThickness < 166)
+                eCodeIdx = WW8_BordersSO::double2;// 150
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+                eCodeIdx = WW8_BordersSO::double5;// 180
             break;
         case 17:
-            if( nLineThickness <  46)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
-            else if( nLineThickness <  72)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;//  52
-            else if( nLineThickness < 137)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90
+            if (nLineThickness < 46)
+                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
+            else if (nLineThickness < 72)
+                eCodeIdx = WW8_BordersSO::double7;//  52
+            else if (nLineThickness < 137)
+                eCodeIdx = WW8_BordersSO::double4;//  90
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
+                eCodeIdx = WW8_BordersSO::double6;// 180
         break;
         case 18:
         case 19: //Don't have thin thick thin, so use thick thin
-            if( nLineThickness <  46)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
-            else if( nLineThickness <  62)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;//  52
-            else if( nLineThickness <  87)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71
-            else if( nLineThickness < 117)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
-            else if( nLineThickness < 156)
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
+            if (nLineThickness < 46)
+                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
+            else if (nLineThickness < 62)
+                eCodeIdx = WW8_BordersSO::double7;//  52
+            else if (nLineThickness < 87)
+                eCodeIdx = WW8_BordersSO::double8;//  71
+            else if (nLineThickness < 117)
+                eCodeIdx = WW8_BordersSO::double9;// 101
+            else if (nLineThickness < 156)
+                eCodeIdx = WW8_BordersSO::double10;// 131
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+                eCodeIdx = WW8_BordersSO::double5;// 180
             break;
         case 20:
-            if( nLineThickness <  46)
-                nIdx = 1; //  20 Twips for us
+            if (nLineThickness < 46)
+                eCodeIdx = WW8_BordersSO::single1; //  20 Twips for us
             else
-                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+                eCodeIdx = WW8_BordersSO::double1;//  60
             break;
         case 21:
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60 Twips for us
+            eCodeIdx = WW8_BordersSO::double1;//  60 Twips for us
             break;
         default:
-            nIdx = 0;
+            eCodeIdx = WW8_BordersSO::single0;
             break;
     }
 
-    const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(nIdx);
+    const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(eCodeIdx);
     SvxBorderLine aLine;
-    aLine.SetOutWidth( rBorders.Out  );
-    aLine.SetInWidth ( rBorders.In   );
-    aLine.SetDistance( rBorders.Dist );
+    aLine.SetOutWidth(rBorders.mnOut);
+    aLine.SetInWidth(rBorders.mnIn);
+    aLine.SetDistance(rBorders.mnDist);
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
     if (nCol == 0)
@@ -2079,8 +2080,8 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     if (pSize)
         pSize[nWWIndex] = nLineThickness+nSpace;
 
-    rBox.SetLine( &aLine, nOOIndex );
-    rBox.SetDistance( nSpace, nOOIndex );
+    rBox.SetLine(&aLine, nOOIndex);
+    rBox.SetDistance(nSpace, nOOIndex);
 }
 
 BOOL lcl_IsBorder( BOOL bVer67, const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-30 08:26:12 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,9 +175,6 @@
 #ifndef _SWRECT_HXX //autogen
 #include <swrect.hxx>
 #endif
-#ifndef _WRTWW8_HXX
-#include <wrtww8.hxx>
-#endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>           // SwPosFlyFrms
 #endif
@@ -210,6 +207,13 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+
+#ifndef _WRTWW8_HXX
+#include "wrtww8.hxx"
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -984,8 +988,8 @@ void WW8_SwAttrIter::OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart )
         {
             sTxt.InsertAscii( " INHALT \"", 0 );
             USHORT nLvl = rAttr.GetLevel();
-            if( nLvl > nWW8MaxListLevel )
-                nLvl = nWW8MaxListLevel;
+            if (nLvl > WW8ListManager::nMaxLevel)
+                nLvl = WW8ListManager::nMaxLevel;
 
             ((sTxt.APPEND_CONST_ASC( "\" \\l " ))
                 += String::CreateFromInt32( nLvl )) += ' ';

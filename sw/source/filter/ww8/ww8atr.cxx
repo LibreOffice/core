@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:11 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,10 @@
 #endif
 
 #ifndef _WRTWW8_HXX
-#include <wrtww8.hxx>
+#include "wrtww8.hxx"
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
 #endif
 
 /*
@@ -649,8 +652,8 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
                 const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get(nLvl);
                 if( bStyDef )
                 {
-                    if( nLvl >= nWW8MaxListLevel )
-                        nLvl = nWW8MaxListLevel-1;
+                    if (nLvl >= WW8ListManager::nMaxLevel)
+                        nLvl = WW8ListManager::nMaxLevel-1;
 
                     if( bWrtWW8 )
                     {
@@ -1422,8 +1425,8 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
 }
 
 
-void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
-                            const String& rFldCmd, BYTE nMode )
+void SwWW8Writer::OutField(const SwField* pFld, BYTE nFldType,
+    const String& rFldCmd, BYTE nMode)
 {
     BYTE aFld13[2] = { 0x13, 0x00 };  // will change
     static const BYTE aFld14[2] = { 0x14, 0xff };
@@ -1456,26 +1459,26 @@ void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
             return;
     }
 
-    if( WRITEFIELD_START & nMode )
+    if (WRITEFIELD_START & nMode)
     {
         aFld13[1] = nFldType;                           // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
         InsertSpecialChar( *this, 0x13 );
     }
-    if( WRITEFIELD_CMD_START & nMode )
+    if (WRITEFIELD_CMD_START & nMode)
     {
-        if( bUnicode )
+        if (bUnicode)
             SwWW8Writer::WriteString16( Strm(), rFldCmd, FALSE );
         else
             SwWW8Writer::WriteString8( Strm(), rFldCmd, FALSE,
                                                 RTL_TEXTENCODING_MS_1252 );
     }
-    if( WRITEFIELD_CMD_END & nMode )
+    if (WRITEFIELD_CMD_END & nMode)
     {
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
         InsertSpecialChar( *this, 0x14 );
     }
-    if( WRITEFIELD_END & nMode )
+    if (WRITEFIELD_END & nMode)
     {
         String sOut;
         if( pFld )
@@ -1493,7 +1496,7 @@ void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
             }
         }
     }
-    if( WRITEFIELD_CLOSE & nMode )
+    if (WRITEFIELD_CLOSE & nMode)
     {
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
         InsertSpecialChar( *this, 0x15 );
@@ -1687,8 +1690,8 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     if( nLvl )
                     {
                         USHORT nTmpLvl = nLvl + 1;
-                        if( nTmpLvl > nWW8MaxListLevel )
-                            nTmpLvl = nWW8MaxListLevel;
+                        if (nTmpLvl > WW8ListManager::nMaxLevel)
+                            nTmpLvl = WW8ListManager::nMaxLevel;
 
                         sStr.APPEND_CONST_ASC( "\\o \"1-" );
                         sStr += String::CreateFromInt32( nTmpLvl );
@@ -1768,8 +1771,8 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     }
                     if( MAXLEVEL != nNoPgStt )
                     {
-                        if( nWW8MaxListLevel < nNoPgEnd )
-                            nNoPgEnd = nWW8MaxListLevel;
+                        if (WW8ListManager::nMaxLevel < nNoPgEnd)
+                            nNoPgEnd = WW8ListManager::nMaxLevel;
                         sStr.APPEND_CONST_ASC( "\\n " );
                         sStr += String::CreateFromInt32( nNoPgStt );
                         sStr += '-';
@@ -2751,10 +2754,10 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
     else
         nNumId = 0;
 
-    if( USHRT_MAX != nNumId )
+    if (USHRT_MAX != nNumId)
     {
-        if( nLvl >= nWW8MaxListLevel )
-            nLvl = nWW8MaxListLevel-1;
+        if (nLvl >= WW8ListManager::nMaxLevel)
+            nLvl = WW8ListManager::nMaxLevel-1;
         if( rWW8Wrt.bWrtWW8 )
         {
             // write sprmPIlvl and sprmPIlfo

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:26 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
 SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const SfxItemSet &rFlySet)
 {
-    if( !pOleMap)
+    if (!pOleMap)
         pOleMap = new WW8OleMaps;
 
     SvInPlaceObjectRef xIPRef(rObject.GetObjRef());
@@ -313,15 +313,15 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const WW8OleMap *pEntry = pMap;
 
     USHORT nPos;
-    if ( pOleMap->Seek_Entry(pMap, &nPos) )
+    if (pOleMap->Seek_Entry(pMap, &nPos))
     {
-        pEntry = pOleMap->GetObject( nPos );
+        pEntry = pOleMap->GetObject(nPos);
         delete pMap;
     }
-    else if( 0 == pOleMap->Insert( pMap) )
+    else if (0 == pOleMap->Insert(pMap))
         delete pMap;
 
-    SwFlyFrmFmt *pFmt = rDoc.Insert(*pPaM, pEntry->pWriterRef, &rFlySet);
+    SwFlyFrmFmt *pFmt = rDoc.Insert(*pPaM, pEntry->mpWriterRef, &rFlySet);
 
     //JP 10.4.2001: Bug 85614 - don't remove in DTOR the object
     //from  our persist

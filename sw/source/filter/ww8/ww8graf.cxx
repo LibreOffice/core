@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1495,7 +1495,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     }
 }
 
-const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(USHORT nIdx)
+const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 {
     /*
     // Linien-Defaults in Twips: fruehere Writer-Defaults,
@@ -1573,10 +1573,10 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(USHORT nIdx)
 /*14*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },
 /*15*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST}
     };
-    ASSERT(nIdx < sizeof(aLineTabVer8), "Impossible");
-    if (nIdx >= sizeof(aLineTabVer8))
-        nIdx = sizeof(aLineTabVer8)-1;
-    return aLineTabVer8[nIdx];
+    ASSERT(eCode < sizeof(aLineTabVer8), "Impossible");
+    if (eCode >= sizeof(aLineTabVer8))
+        eCode = single0;
+    return aLineTabVer8[eCode];
 }
 
 INT32 SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
@@ -1646,7 +1646,7 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     if( !rLineThick )
         return nOutsideThick;
 
-    USHORT nIdx = USHRT_MAX;
+    WW8_BordersSO::eBorderCode nIdx = WW8_BordersSO::none;
 
     INT32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
@@ -1667,83 +1667,81 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        if( nLineThick < 20)
-            nIdx =            0;//   1 Twip bei uns
-        else if( nLineThick < 50)
-            nIdx =            1;//  20 Twips
-        else if( nLineThick < 80)
-            nIdx =            2;//  50
-        else if( nLineThick < 100)
-            nIdx =            3;//  80
-        else if( nLineThick <150)
-            nIdx =            4;// 100
+        if (nLineThick < 20)
+            nIdx = WW8_BordersSO::single0;//   1 Twip bei uns
+        else if (nLineThick < 50)
+            nIdx = WW8_BordersSO::single1;//  20 Twips
+        else if (nLineThick < 80)
+            nIdx = WW8_BordersSO::single2;//  50
+        else if (nLineThick < 100)
+            nIdx = WW8_BordersSO::single3;//  80
+        else if (nLineThick <150)
+            nIdx = WW8_BordersSO::single4;// 100
         // Pfusch: fuer die ganz dicken Linien muessen wir doppelte Linien
         // malen, weil unsere Einfach-Linie nicht dicker als 5 Punkt wird
-        else if( nLineThick <180)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
+        else if (nLineThick <180)
+            nIdx = WW8_BordersSO::double2;// 150
         else
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
+            nIdx = WW8_BordersSO::double5;// 180
     break;
     // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
     case mso_lineDouble:
-        if( nLineThick <  60)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-        else if( nLineThick < 135)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;// some more space
-        else if( nLineThick < 180)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+        if (nLineThick <  60)
+            nIdx = WW8_BordersSO::double0;//  22 Twips bei uns
+        else if (nLineThick < 135)
+            nIdx = WW8_BordersSO::double7;// some more space
+        else if (nLineThick < 180)
+            nIdx = WW8_BordersSO::double1;//  60
         else
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+            nIdx = WW8_BordersSO::double2;// 150
     break;
     case mso_lineThickThin:
-        if( nLineThick <  87)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71 Twips bei uns
-        else if( nLineThick < 117)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
-        else if( nLineThick < 166)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
+        if (nLineThick <  87)
+            nIdx = WW8_BordersSO::double8;//  71 Twips bei uns
+        else if (nLineThick < 117)
+            nIdx = WW8_BordersSO::double9;// 101
+        else if (nLineThick < 166)
+            nIdx = WW8_BordersSO::double10;// 131
         else
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+            nIdx = WW8_BordersSO::double5;// 180
     break;
     case mso_lineThinThick:
-        if( nLineThick < 137)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90 Twips bei uns
+        if (nLineThick < 137)
+            nIdx = WW8_BordersSO::double4;//  90 Twips bei uns
         else
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
+            nIdx = WW8_BordersSO::double6;// 180
     break;
     // zu guter Letzt die Dreifach-Linien, an deren Stelle wir eine
     // Doppel-Linie setzen
     case mso_lineTriple:
-        if( nLineThick <  46)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-        else if( nLineThick < 106)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-        else if( nLineThick < 166)
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+        if (nLineThick < 46)
+            nIdx = WW8_BordersSO::double0;//  22 Twips bei uns
+        else if (nLineThick < 106)
+            nIdx = WW8_BordersSO::double1;//  60
+        else if (nLineThick < 166)
+            nIdx = WW8_BordersSO::double2;// 150
         else
-            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+            nIdx = WW8_BordersSO::double5;// 180
     break;
     // no line style is set
     case (MSO_LineStyle)USHRT_MAX:
         break;
     // erroneously not implemented line style is set
     default:
-        ASSERT( !this, "eLineStyle is not (yet) implemented!" );
+        ASSERT(!this, "eLineStyle is not (yet) implemented!");
         break;
     }
 
-    if( USHRT_MAX != nIdx )
+    if (WW8_BordersSO::none != nIdx)
     {
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );
 
         const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(nIdx);
 
-        //rBorders = Get0x01LineMatch(nIdx);
-
-        aLine.SetOutWidth( rBorders.Out  );
-        aLine.SetInWidth ( rBorders.In   );
-        aLine.SetDistance( rBorders.Dist );
+        aLine.SetOutWidth(rBorders.mnOut);
+        aLine.SetInWidth (rBorders.mnIn);
+        aLine.SetDistance(rBorders.mnDist);
 
         for(USHORT nLine = 0; nLine < 4; ++nLine)
             rBox.SetLine(new SvxBorderLine( aLine ), nLine);
@@ -1751,7 +1749,6 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
     return nOutsideThick;
 }
-
 
 #define WW8ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -2554,14 +2551,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     {
         // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
         // positionieren usw.
-        if( pF->bRcaSimple )
+        if (pF->bRcaSimple)
         {
-            pF->nbx = nbxRelPageBorder;
-            pF->nby = nbyRelPageBorder;
+            pF->nbx = WW8_FSPA::RelPageBorder;
+            pF->nby = WW8_FSPA::RelPageBorder;
         }
 
         RndStdIds eAnchor = FLY_AT_CNTNT;  //FLY_PAGE
-        if( (nbyRelText != pF->nby) )
+        if (pF->nby != WW8_FSPA::RelText)
         {
             if( bIsHeader || bIsFooter)
                 pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();

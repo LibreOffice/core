@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:26 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,17 +175,15 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_ZSTYLES     4  // keine Zeichenstyles importieren
 #define WW8FL_NO_APO         8
-#define WW8FL_NO_HDFT     0x10
 #define WW8FL_NO_FTN      0x20
 #define WW8FL_NO_FLD      0x40  // keine Felder
 #define WW8FL_NO_GRAF     0x80
-#define WW8FL_NO_DEFTABS 0x100  // keine impliziten Tabs
 #define WW8FL_NO_LRUL    0x200
 
-
-#define WW8FL_NO_DEFSTYLES        0x400 // falls gestetzt, werden fuer Writer-Def-Styles
-                                        // neue Styles mit den WW8-Def-Style-Eigenschaften
-                                        // erzeugt, statt die Writer-Standards zu ueberschreiben
+// falls gestetzt, werden fuer Writer-Def-Styles neue Styles mit den
+// WW8-Def-Style-Eigenschaften erzeugt, statt die Writer-Standards zu
+// ueberschreiben
+#define WW8FL_NO_DEFSTYLES        0x400
 
 #define WW8FL_NO_TABLE            0x800
 #define WW8FL_NO_OUTLINE         0x1000
@@ -195,18 +193,12 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_COMPLEX        0x10000
 #define WW8FL_NO_OLE            0x20000
 #define WW8FL_OLE_TO_GRAF       0x40000
-#define WW8FL_NO_VCCONTROLS     0x80000
 #define WW8FL_NO_STD_STY_DYA   0x100000
 #define WW8FL_NO_COLS          0x200000
 #define WW8FL_NO_TOX           0x400000
-#define WW8FL_NO_IMPORT      0x20000000
-#define WW8FL_WRITE_TO_FILE  0x40000000
-#define WW8FL_NOWARN_COMPLEX 0x80000000
 
 // Zusatz-Filter-Flags, gueltig ab Winword 8
 #define WW8FL_NO_FLY_FOR_TXBX         1
-#define EQUAL_TAB_BORDERDISTS         2
-
 
 //-----------------------------------------
 //            Listen-Manager (ab Ver8)
@@ -214,10 +206,6 @@ namespace com{namespace sun {namespace star{
 
 struct WW8LFOInfo;
 typedef WW8LFOInfo* WW8LFOInfo_Ptr;
-// Zeichenattribute aus GrpprlChpx
-typedef SfxItemSet* WW8aISet[nWW8MaxListLevel ];
-// Zeichen Style Pointer
-typedef SwCharFmt* WW8aCFmt[ nWW8MaxListLevel ];
 // Redlining: match WinWord author ids to StarWriter author ids
 struct WW8AuthorInfo;
 typedef WW8AuthorInfo* WW8AuthorInfo_Ptr;
@@ -230,19 +218,19 @@ SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
 struct WW8OleMap
 {
-    UINT32 nWWid;
-    SvInPlaceObject *pWriterRef;
+    UINT32 mnWWid;
+    SvInPlaceObject *mpWriterRef;
 
-    WW8OleMap(UINT32 nWWid_ , SvInPlaceObject *pWriterRef_ = 0):
-        nWWid( nWWid_), pWriterRef (pWriterRef_) {}
+    WW8OleMap(UINT32 nWWid, SvInPlaceObject *pWriterRef = 0) :
+        mnWWid(nWWid), mpWriterRef(pWriterRef) {}
 
-    BOOL operator==( const WW8OleMap & rEntry ) const
+    bool operator==(const WW8OleMap & rEntry) const
     {
-        return (nWWid == rEntry.nWWid);
+        return (mnWWid == rEntry.mnWWid);
     }
-    BOOL operator<( const WW8OleMap & rEntry ) const
+    bool operator<(const WW8OleMap & rEntry) const
     {
-        return (nWWid < rEntry.nWWid);
+        return (mnWWid < rEntry.mnWWid);
     }
 };
 
@@ -250,6 +238,14 @@ class SwWW8ImplReader;
 struct WW8LSTInfo;
 class WW8ListManager
 {
+public:
+    WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_);
+    //Min and Max possible List Levels in Word
+    enum ListLevel {nMinLevel=1, nMaxLevel=9};
+    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel) const;
+    SwNumRule* CreateNextRule(BOOL bSimple);
+    ~WW8ListManager();
+private:
     wwSprmParser maSprmParser;
     SwWW8ImplReader& rReader;
     SwDoc&           rDoc;
@@ -262,6 +258,12 @@ class WW8ListManager
     WW8LSTInfo* GetLSTByListId(    ULONG  nIdLst     ) const;
     BOOL ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, USHORT nLevelStyle,
         BOOL bSetStartNo );
+
+    // Zeichenattribute aus GrpprlChpx
+    typedef SfxItemSet* WW8aISet[nMaxLevel];
+    // Zeichen Style Pointer
+    typedef SwCharFmt* WW8aCFmt[nMaxLevel];
+
     void AdjustLVL(BYTE nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
         WW8aCFmt& aCharFmt, BOOL& bNewCharFmtCreated,
         String aPrefix = aEmptyStr );
@@ -270,15 +272,7 @@ class WW8ListManager
     //No copying
     WW8ListManager(const WW8ListManager&);
     WW8ListManager& operator=(const WW8ListManager&);
-public:
-    WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_);
-    ~WW8ListManager();
-    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel) const;
-    BOOL IsSimpleList(USHORT nLFOPosition) const;
-    SwNumRule* CreateNextRule(BOOL bSimple);
 };
-
-
 
 //-----------------------------------------
 //            Stack
@@ -1106,9 +1100,7 @@ friend class WW8FormulaControl;
         RndStdIds eAnchor, WW8_FSPA *pF, SfxItemSet &rFlySet );
     void MungeTextIntoDrawBox(SdrObject* pTrueObject,
         SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrmFmt *pRetFrmFmt);
-#if 0
-    void EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,SwFrmFmt *pFrmFmt);
-#endif
+
     void GrafikCtor();
     void GrafikDtor();
 
@@ -1128,9 +1120,8 @@ friend class WW8FormulaControl;
     void RegisterNumFmtOnTxtNode(   USHORT nActLFO,
                                     BYTE   nActLevel,
                                     BOOL   bSetAttr = TRUE );
-    void RegisterNumFmtOnStyle(     USHORT nStyle,
-                                    USHORT nActLFO   = USHRT_MAX,
-                                    BYTE   nActLevel = nWW8MaxListLevel );
+    void RegisterNumFmtOnStyle(USHORT nStyle, USHORT nActLFO   = USHRT_MAX,
+        BYTE nActLevel = WW8ListManager::nMaxLevel);
     void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
 
     SwNumRule* SyncStyleIndentWithList(SwWW8StyInf &rStyleInfo,

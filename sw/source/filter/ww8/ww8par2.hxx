@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:07 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ public:
         nFollow( 0 ),
         nLFOIndex( USHRT_MAX ),
         eFontSrcCharSet( 0 ),
-        nListLevel( nWW8MaxListLevel ),
+        nListLevel(WW8ListManager::nMaxLevel),
         nOutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
@@ -296,7 +296,4 @@ public:
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
 WW8LvlType GetNumType(BYTE nWwLevelNo);
-
-#define STI_USER 0x0FFE
-
 #endif

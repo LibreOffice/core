@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:27 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,23 +750,16 @@ struct WW8PLCFManResult
     BYTE nFlags;        // Absatz- oder Section-Anfang
 };
 
-#define MAN_ANZ_PLCF 10
-
-#define MAN_MASK_NEW_PAP 1      // neue Zeile
-#define MAN_MASK_NEW_SEP 2      // neue Section
-
-
-#define MAN_MAINTEXT 0          // Defines fuer PLCFMan-ctor
-#define MAN_FTN 1
-#define MAN_EDN 2
-#define MAN_HDFT 3
-#define MAN_AND 4
-#define MAN_TXBX 5
-#define MAN_TXBX_HDFT 6
-
-struct WW8PLCFxSaveAll
+enum ManMaskTypes
 {
-    WW8PLCFxSave1 aS[MAN_ANZ_PLCF];
+    MAN_MASK_NEW_PAP = 1,       // neue Zeile
+    MAN_MASK_NEW_SEP = 2        // neue Section
+};
+
+enum ManTypes // enums for PLCFMan-ctor
+{
+    MAN_MAINTEXT = 0, MAN_FTN = 1, MAN_EDN = 2, MAN_HDFT = 3, MAN_AND = 4,
+    MAN_TXBX = 5, MAN_TXBX_HDFT = 6
 };
 
 /*
@@ -810,8 +803,11 @@ struct WW8PLCFxDesc
 
 #ifndef DUMP
 
+struct WW8PLCFxSaveAll;
 class WW8PLCFMan
 {
+public:
+    enum WW8PLCFManLimits {MAN_ANZ_PLCF = 10};
 private:
     wwSprmParser maSprmParser;
     long nCpO;                      // Origin Cp -- the basis for nNewCp
@@ -888,6 +884,11 @@ public:
     short GetManType() const { return nManType; }
     BOOL GetDoingDrawTextBox() const { return bDoingDrawTextBox; }
     void SetDoingDrawTextBox(BOOL bIn) { bDoingDrawTextBox = bIn; }
+};
+
+struct WW8PLCFxSaveAll
+{
+    WW8PLCFxSave1 aS[WW8PLCFMan::MAN_ANZ_PLCF];
 };
 
 #endif // !DUMP
@@ -1423,12 +1424,11 @@ public:
     USHORT GetMax() const { return nMax; }
 };
 
-#define WW8_HEADER_EVEN  0x01
-#define WW8_HEADER_ODD   0x02
-#define WW8_FOOTER_EVEN  0x04
-#define WW8_FOOTER_ODD   0x08
-#define WW8_HEADER_FIRST 0x10
-#define WW8_FOOTER_FIRST 0x20
+enum HdFtFlags
+{
+    WW8_HEADER_EVEN = 0x01, WW8_HEADER_ODD = 0x02, WW8_FOOTER_EVEN = 0x04,
+    WW8_FOOTER_ODD = 0x08, WW8_HEADER_FIRST = 0x10, WW8_FOOTER_FIRST = 0x20
+};
 
 class WW8Dop            // Document Properties
 {

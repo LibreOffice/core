@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2067,10 +2067,8 @@ void SwWW8ImplReader::ReadAttrs( long& rNext, long& rTxtPos, BOOL& rbStartLine )
 // nicht im Plcx.Fkp.papx eingetragen, d.h. ( nFlags & MAN_MASK_NEW_PAP )
 // ist FALSE. Deshalb muss als Sonderbehandlung hier die Vorlage gesetzt
 // werden.
-        if( !bCpxStyle )
-        {
-            SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nAktColl ] );
-        }
+        if (!bCpxStyle)
+            SetTxtFmtCollAndListLevel(*pPaM, pCollA[nAktColl]);
         rbStartLine = FALSE;
     }
 }
@@ -2299,7 +2297,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     nLastFlyNode = ULONG_MAX;
 
     nLFOPosition = USHRT_MAX;
-    nListLevel   = nWW8MaxListLevel;
+    nListLevel = WW8ListManager::nMaxLevel;
     mbRTLPgn = false;
     eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
     pPageDesc = 0;
@@ -2912,8 +2910,8 @@ void SwWW8ImplReader::SetOutLineStyles()
                     physical mapping into the list style reged on that outline
                     style.
                     */
-                    BYTE nFromLevel=rSI.nListLevel;
-                    BYTE nToLevel=rSI.nOutlineLevel;
+                    BYTE nFromLevel = rSI.nListLevel;
+                    BYTE nToLevel = rSI.nOutlineLevel;
                     const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
                     aOutlineRule.Set(nToLevel, rRule);
                     // Set my outline level

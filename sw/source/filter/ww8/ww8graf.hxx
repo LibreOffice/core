@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:55 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,22 +68,9 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-
-#define nbxRelPageBorder    1 // Blatt-Rand
-#define nbxRelPgMargin      0 // Page Print Area
-#define nbxRelText          2 // Spalten (Absatz) -Rand   = FRAME Print Area
-
-#define nbyRelPageBorder    1
-#define nbyRelPgMargin      0
-#define nbyRelText          2
-
-#if defined WNT || defined WIN || defined OS2
-#define __WW8_NEEDS_PACK
-#pragma pack(2)
-#endif
-
 struct WW8_FSPA
 {
+public:
     long nSpId;     //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
     long nXaLeft;   //left of rectangle enclosing shape relative to the origin of the shape
     long nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
@@ -127,6 +114,8 @@ struct WW8_FSPA
     //8000  1 anchor is locked
     //      0 anchor is not locked
     long nTxbx; //count of textboxes in shape (undo doc only)
+public:
+    enum FSPAOrient {RelPgMargin, RelPageBorder, RelText};
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-26 12:29:09 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,15 @@
 #ifndef _NDTXT_HXX //autogen wg. SwTxtNode
 #include <ndtxt.hxx>
 #endif
-#ifndef _WRTWW8_HXX
-#include <wrtww8.hxx>
-#endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+
+#ifndef _WRTWW8_HXX
+#include "wrtww8.hxx"
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
 #endif
 
 //#define DUMPSYMBOLS
@@ -187,7 +191,7 @@ void SwWW8Writer::OutListTab()
         SwWW8Writer::WriteLong( *pTableStrm, n + 1 );
 
         // mit keinen Styles verbunden
-        for( int i = 0; i < nWW8MaxListLevel; ++i )
+        for( int i = 0; i < WW8ListManager::nMaxLevel; ++i )
             SwWW8Writer::WriteShort( *pTableStrm, 0xFFF );
 
         BYTE nFlags = 0, nDummy = 0;
@@ -203,7 +207,7 @@ void SwWW8Writer::OutListTab()
 
     // prepare the NodeNum to generate the NumString
     SwNodeNum aNdNum( 0 );
-    for( n = 0; n < nWW8MaxListLevel; ++n )
+    for (n = 0; n < WW8ListManager::nMaxLevel; ++n)
         aNdNum.GetLevelVal()[ n ] = n;
 
     BYTE aPapSprms [] = {
@@ -215,12 +219,13 @@ void SwWW8Writer::OutListTab()
     for( n = 0; n < nCount; ++n )
     {
         const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
-        BYTE nLvl, nFlags,
-            nLevels = rRule.IsContinusNum() ? 1 : nWW8MaxListLevel;
+        BYTE nLvl, nFlags;
+        BYTE nLevels = rRule.IsContinusNum() ?
+            WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel;
         for( nLvl = 0; nLvl < nLevels; ++nLvl )
         {
             // write the static data of the SwNumFmt of this level
-            BYTE aNumLvlPos[ nWW8MaxListLevel ] = { 0,0,0,0,0,0,0,0,0 };
+            BYTE aNumLvlPos[WW8ListManager::nMaxLevel] = { 0,0,0,0,0,0,0,0,0 };
 
             const SwNumFmt& rFmt = rRule.Get( nLvl );
             SwWW8Writer::WriteLong( *pTableStrm, rFmt.GetStart() );
@@ -338,7 +343,7 @@ void SwWW8Writer::OutListTab()
             }
 
             // write the rgbxchNums[9]
-            pTableStrm->Write( aNumLvlPos, nWW8MaxListLevel );
+            pTableStrm->Write(aNumLvlPos, WW8ListManager::nMaxLevel);
 
             nFlags = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
             *pTableStrm << nFlags;
@@ -496,8 +501,7 @@ void SwWW8Writer::Out_Olst( const SwNumRule& rRule )
     BYTE* pChars = (BYTE*)pC;
     USHORT nCharLen = 64;
 
-    USHORT j;
-    for( j = 0; j < nWW8MaxListLevel; j++ ) // 9 variable ANLVs
+    for (USHORT j = 0; j < WW8ListManager::nMaxLevel; j++ ) // 9 variable ANLVs
     {
         memcpy( &aOlst.rganlv[j], aAnlvBase, sizeof( WW8_ANLV ) );  // Defaults
 
@@ -600,13 +604,13 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
 
     if( bInclUpper && !rRul.IsContinusNum() )
     {
-        if( (nSwLevel >= 1 )
-            && (nSwLevel<= nWW8MaxListLevel )
+        if( (nSwLevel >= WW8ListManager::nMinLevel )
+            && (nSwLevel<= WW8ListManager::nMaxLevel )
             && (rFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // UEberhaupt Nummerierung ?
         {                                               // -> suche, ob noch Zahlen davor
             BYTE nUpper = rFmt.GetIncludeUpperLevels();
             if( (nUpper >= 0 )
-                && (nUpper <= nWW8MaxListLevel )
+                && (nUpper <= WW8ListManager::nMaxLevel )
                 && (rRul.Get(nUpper).GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // Nummerierung drueber ?
             {
                                                     // dann Punkt einfuegen
@@ -661,7 +665,7 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
 {
     BYTE nSwLevel = pNd->GetNum()->GetLevel();
     const SwNumRule* pRul = pNd->GetNumRule();
-    if( !pRul || nSwLevel == nWW8MaxListLevel )
+    if( !pRul || nSwLevel == WW8ListManager::nMaxLevel )
         return FALSE;
 
     BOOL bNoNum = FALSE;
@@ -669,7 +673,7 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
         nSwLevel = NO_NUMLEVEL | 0 ;    // alte Codierung...
     if( ( nSwLevel & NO_NUMLEVEL ) != 0 )
     {
-        nSwLevel &= ~NO_NUMLEVEL;       // 0..nWW8MaxListLevel
+        nSwLevel &= ~NO_NUMLEVEL;       // 0..WW8ListManager::nMaxLevel
         bNoNum = TRUE;
     }
 

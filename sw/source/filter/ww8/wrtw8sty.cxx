@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:02 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ USHORT WW8WrtStyle::Build_GetWWSlot( const SwFmt& rFmt )
 
 USHORT WW8WrtStyle::GetWWId( const SwFmt& rFmt ) const
 {
-    USHORT nRet = 0xffe;        // User-Style als default
+    USHORT nRet = WW8_STD::STI_USER;    // User-Style als default
     USHORT nPoolId = rFmt.GetPoolFmtId();
     if( nPoolId == RES_POOLCOLL_STANDARD )
         nRet = 0;
@@ -589,33 +589,7 @@ void WW8WrtStyle::Out1Style( SwFmt* pFmt, USHORT nPos )
             rWrt.pTableStrm->Write( &aDefCharSty, sizeof( aDefCharSty ) );
         }
     }
-/*  else if( nPos == WW8_CSTY_FTN )     // Ftn-CharStyle ( nur WW )
-    {
-        if( rWrt.bWrtWW8 )
-        {
-            static BYTE __READONLY_DATA aFtnCharSty[] = {
-                0x32, 0x00,
-                0x26, 0x40, 0xA2, 0x00, 0x01, 0x01, 0x32, 0x00,
-                0x00, 0x00, 0x0F, 0x00, 0x46, 0x00, 0x75, 0x00,
-                0xDF, 0x00, 0x6E, 0x00, 0x6F, 0x00, 0x74, 0x00,
-                0x65, 0x00, 0x6E, 0x00, 0x7A, 0x00, 0x65, 0x00,
-                0x69, 0x00, 0x63, 0x00, 0x68, 0x00, 0x65, 0x00,
-                0x6E, 0x00, 0x00, 0x00, 0x03, 0x00, 0x48, 0x2A,
-                0x01, 0x00 };
-            rWrt.pTableStrm->Write( &aFtnCharSty, sizeof( aFtnCharSty ) );
-        }
-        else
-        {
-            static BYTE __READONLY_DATA aFtnCharSty[] = {
-                0x1E, 0x00,
-                0x26, 0x40, 0xA2, 0x00, 0x01, 0x01, 0x1E, 0x00,
-                0x0F, 0x46, 0x75, 0xDF, 0x6E, 0x6F, 0x74, 0x65,
-                0x6E, 0x7A, 0x65, 0x69, 0x63, 0x68, 0x65, 0x6E,
-                0x00, 0x00, 0x02, 0x00, 0x68, 0x01 };
-            rWrt.pTableStrm->Write( &aFtnCharSty, sizeof( aFtnCharSty ) );
-        }
-    }
-*/  else
+    else
     {
         UINT16 n = 0;
         rWrt.pTableStrm->Write( &n , 2 );   // leerer Style

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:13 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,41 +1232,24 @@ short WW8_BRC::DetermineBorderProperties( BOOL bVer67, short *pSpace,
         to figure out this extra width here and utilize the returned size in
         our calculations
     */
-
-    // Match-Table: Transforms word 6/7 types in version 8+
-    static const USHORT nTabBorderCode67ToCode8[] =
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 2, 2, 3, 0, 0, 0, 1, 2, 3,
-        4, 4, 1, 1,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0,
-        WW8_DECL_LINETAB_OFS_DOUBLE +1,
-        WW8_DECL_LINETAB_OFS_DOUBLE +2,
-        WW8_DECL_LINETAB_OFS_DOUBLE +2,
-        WW8_DECL_LINETAB_OFS_DOUBLE +3,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0
-    };
-
     short nMSTotalWidth;
     BYTE nCol;
     short nIdx,nSpace;
     if( bVer67 )
     {
-        UINT16 aBrc1 = SVBT16ToShort( aBits1 );
-        nIdx = nTabBorderCode67ToCode8[ aBrc1 & 0x1f ];
-        nCol = ( (aBrc1 >> 6) & 0x1f ); // aBor.ico
+        UINT16 aBrc1 = SVBT16ToShort(aBits1);
+        nCol = ((aBrc1 >> 6) & 0x1f);   // aBor.ico
         nSpace = (aBrc1 & 0xF800) >> 11;
 
         nMSTotalWidth = aBrc1 & 0x07;
-        short nScaling = (aBrc1 & 0x18) >> 3;
+        nIdx = (aBrc1 & 0x18) >> 3;
+        //Dashed/Dotted unsets double/thick
         if (nMSTotalWidth > 5)
         {
             nMSTotalWidth=1;
-            nScaling=1;
+            nIdx = 1;
         }
-        nMSTotalWidth *= nScaling;
+        nMSTotalWidth *= nIdx;
         nMSTotalWidth *= 15;
     }
     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-26 12:41:56 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3364,29 +3364,32 @@ SwCharFmt* WW8RStyle::MakeNewCharFmt( WW8_STD* pStd, const String& rName )
     String aName( rName );
     SwCharFmt* pFmt = 0;
 
-    if( pStd->sti != STI_USER           // eingebauter Style, den wir nicht kennen ?
-        || SearchCharFmt( aName ) ){    // oder Namen gibts schon ?
+    // eingebauter Style, den wir nicht kennen ? oder Namen gibts schon ?
+    if (pStd->sti != WW8_STD::STI_USER || SearchCharFmt(aName))
+    {
+        if (!aName.EqualsAscii("WW-", 0, 3))    // noch kein "WW-"
+            aName.InsertAscii("WW-", 0);        // dann aender ihn
 
-        if( !aName.EqualsAscii( "WW-", 0, 3 ) ) // noch kein "WW-"
-            aName.InsertAscii( "WW-", 0 );      // dann aender ihn
-
-        if( SearchCharFmt( aName ) )                // Namen gibt's immer noch ?
-            for( USHORT n = 1; n < 1000; n++ ){     // dann bastel neuen
+        if (SearchCharFmt(aName))               // Namen gibt's immer noch ?
+        {
+            for (USHORT n = 1; n < 1000; ++n)
+            {
                 String aName1( aName );
                 aName1 += String::CreateFromInt32( n );
-                if( ( pFmt = SearchCharFmt( aName1 ) ) == 0 ){
+                if ((pFmt = SearchCharFmt(aName1)) == 0)
+                {
                     aName = aName1;
-                    break;                          // unbenutzten Namen gefunden
+                    break;   // unbenutzten Namen gefunden
                 }
             }
+        }
     }
-    if( !pFmt )   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
-        pFmt = pIo->rDoc.MakeCharFmt( aName,
-            ( SwCharFmt*)pIo->rDoc.GetDfltCharFmt() ); // const Wegcasten
+
+    if (!pFmt)   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
+        pFmt = pIo->rDoc.MakeCharFmt(aName, pIo->rDoc.GetDfltCharFmt());
 
     return pFmt;
 }
-
 
 SwCharFmt* WW8RStyle::MakeOrGetCharFmt( BOOL* pbStyExist, WW8_STD* pStd, const String& rName )
 {
@@ -3456,20 +3459,20 @@ SwTxtFmtColl* WW8RStyle::MakeNewFmtColl( WW8_STD* pStd, const String& rName )
 
     // eingebauter Style, den wir nicht kennen
     // oder Namen gibts schon ?
-    if( pStd->sti != STI_USER || SearchFmtColl( aName ) )
+    if (pStd->sti != WW8_STD::STI_USER || SearchFmtColl(aName))
     {
-        if( !aName.EqualsIgnoreCaseAscii( "WW-", 0, 3 ) )   // noch kein "WW-"
+        if (!aName.EqualsIgnoreCaseAscii("WW-", 0, 3))  // noch kein "WW-"
             aName.InsertAscii("WW-" , 0);   // dann AEnder ihn
 
         // Namen gibt's immer noch ?
-        if( SearchFmtColl( aName ) )
+        if (SearchFmtColl(aName))
         {
-            for( USHORT n = 1; n < 1000; n++ )
+            for (USHORT n = 1; n < 1000; ++n)
             {
                 // dann bastel neuen
-                String aName1( aName );
-                aName += String::CreateFromInt32( n );
-                if( ( pColl = SearchFmtColl( aName1 ) ) == 0 )
+                String aName1(aName);
+                aName += String::CreateFromInt32(n);
+                if ((pColl = SearchFmtColl(aName1)) == 0)
                 {
                     aName = aName1;
                     // unbenutzten Namen gefunden
@@ -3478,10 +3481,11 @@ SwTxtFmtColl* WW8RStyle::MakeNewFmtColl( WW8_STD* pStd, const String& rName )
             }
         }
     }
-    if( !pColl )   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
+
+    if (!pColl)   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
     {
-        pColl = pIo->rDoc.MakeTxtFmtColl( aName,
-            ( SwTxtFmtColl*)pIo->rDoc.GetDfltTxtFmtColl() ); // const Wegcasten
+        pColl = pIo->rDoc.MakeTxtFmtColl(aName,
+            const_cast<SwTxtFmtColl *>(pIo->rDoc.GetDfltTxtFmtColl()));
     }
 
     return pColl;
@@ -3675,7 +3679,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
     // rasch nochmal die Listen-Merk-Felder zuruecksetzen,
     // fuer den Fall dass sie beim einlesen des Styles verwendet wurden
     pIo->nLFOPosition = USHRT_MAX;
-    pIo->nListLevel   = nWW8MaxListLevel;
+    pIo->nListLevel = WW8ListManager::nMaxLevel;
 
     pStStrm->Seek( nPos+nSkip );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:13 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-
-
-// max. Anzahl der Listen-Level in WW8: 1..9
-#define nWW8MaxListLevel 9
 
 inline void Set_UInt8( BYTE *& p, UINT8 n )
 {
@@ -137,6 +133,8 @@ struct WW8_STD
             // the UPEs are not stored on the file; they are a cache of the based-on
         // chain
     // char grupe[];
+public:
+    enum Limits {STI_USER = 0x0FFE};
 };
 
 /*
@@ -209,23 +207,27 @@ struct WW8_BRC      // Border Code
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
 
-#define WW8_TOP 0
-#define WW8_LEFT 1
-#define WW8_BOT 2
-#define WW8_RIGHT 3
-#define WW8_BETW 4
-
-class WW8_BordersSO         // fuer StarOffice-Border Code
+enum BRC_Sides
 {
-public:
-    USHORT Out;
-    USHORT In;
-    USHORT Dist;
-    static const WW8_BordersSO &Get0x01LineMatch(USHORT nIdx);
+    WW8_TOP = 0, WW8_LEFT = 1, WW8_BOT = 2, WW8_RIGHT = 3, WW8_BETW = 4
 };
 
-// Beginn des DOUBLE_LINE Abschnitts in meiner Liste
-#define WW8_DECL_LINETAB_OFS_DOUBLE 5
+class WW8_BordersSO         // for StarOffice-Border Code
+{
+public:
+    USHORT mnOut;
+    USHORT mnIn;
+    USHORT mnDist;
+public:
+    enum eBorderCode
+    {
+        single0, single1, single2, single3, single4,
+        double0, double1, double2, double3, double4, double5, double6,
+        double7, double8, double9, double10,
+        none
+    };
+    static const WW8_BordersSO &Get0x01LineMatch(eBorderCode nIdx);
+};
 
 /*
 Document Typography Info (DOPTYPOGRAPHY) These options are Far East only,

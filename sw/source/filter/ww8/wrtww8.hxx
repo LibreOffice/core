@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:04 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 #ifndef _WRTWW8_HXX
 #define _WRTWW8_HXX
 
-#ifndef __SGI_STL_VECTOR
-#include <vector>
-#endif
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>        // UINTXX
 #endif
@@ -81,6 +77,9 @@
 #ifndef __SGI_STL_MAP
 #include <map>
 #endif
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
 
 #ifndef SHELLIO_HXX
 #include <shellio.hxx>
@@ -91,11 +90,12 @@
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
 #endif
+
 #ifndef WW8STRUC_HXX
-#include <ww8struc.hxx>
+#include "ww8struc.hxx"
 #endif
 #ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>
+#include "ww8scan.hxx"
 #endif
 
 // einige Forward Deklarationen
@@ -169,43 +169,29 @@ class SwMSConvertControls;
 class WW8OleMaps;
 class SvStorageRef;
 struct WW8_PdAttrDesc;
-struct WW8_SHD;
-
 
 #define WWFL_ULSPACE_LIKE_SWG   0x00000001
 #define WWFL_NO_GRAF            0x00000080
 #define WWFL_NO_OLE             0x00020000
 #define WWFL_KA_DEBUG           0x08000000
-#define WWFL_READ_FROM_FILE     0x40000000
-
-
-#define WW8_CSTY_FTN 15     // Slot# fuer C-Format Fussnotenzeichen
 
 #define GRF_MAGIC_1 0x12    // 3 magic Bytes fuer PicLocFc-Attribute
 #define GRF_MAGIC_2 0x34
 #define GRF_MAGIC_3 0x56
 #define GRF_MAGIC_321 0x563412L
 
-// defines for InsertField- Method
-#define WRITEFIELD_ALL              0xFF
-#define WRITEFIELD_START            0x01
-#define WRITEFIELD_CMD_START        0x02
-#define WRITEFIELD_CMD_END          0x04
-#define WRITEFIELD_END              0x10
-#define WRITEFIELD_CLOSE            0x20
+enum FieldFlags // enums for InsertField- Method
+{
+    WRITEFIELD_START = 0x01, WRITEFIELD_CMD_START = 0x02,
+    WRITEFIELD_CMD_END = 0x04, WRITEFIELD_END = 0x10, WRITEFIELD_CLOSE = 0x20,
+    WRITEFIELD_ALL = 0xFF
+};
 
-#define TXT_MAINTEXT    0           // Defines fuer TextTyp
-//!!#define TXT_FTNEDN 1
-#define TXT_HDFT        2
-#define TXT_FTN         3
-#define TXT_EDN         4
-#define TXT_ATN         5
-#define TXT_TXTBOX      6
-#define TXT_HFTXTBOX    7
-
-// special Atom (no property!) to store extended WW9 frame Anchor data
-#define ESCHER_UDefProp 0xF122
-
+enum TxtTypes  //enums for TextTypes
+{
+    TXT_MAINTEXT = 0, /*TXT_FTNEDN = 1,*/ TXT_HDFT = 2, TXT_FTN = 3,
+    TXT_EDN = 4, TXT_ATN = 5, TXT_TXTBOX = 6, TXT_HFTXTBOX= 7
+};
 
 extern SwNodeFnTab aWW8NodeFnTab;
 extern SwAttrFnTab aWW8AttrFnTab;
@@ -553,8 +539,8 @@ public:
     void Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
                     BOOL bFlyFmt = FALSE );
     BOOL GetNumberFmt( const SwField& rFld, String& rStr );
-    void OutField( const SwField* pFld, BYTE nFldType,
-                    const String& rFldCmd, BYTE nMode = WRITEFIELD_ALL );
+    void OutField( const SwField* pFld, BYTE nFldType, const String& rFldCmd,
+        BYTE nMode = WRITEFIELD_ALL );
     void StartCommentOutput( const String& rName );
     void EndCommentOutput(   const String& rName );
     void OutGrf( const SwNoTxtNode* pNd );

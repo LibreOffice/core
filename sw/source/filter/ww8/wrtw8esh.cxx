@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-08 09:59:41 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,7 +1131,7 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
     //use the defaults
     if( rEx.GetGroupLevel() <= 1 )
     {
-        rEx.AddAtom(24, ESCHER_UDefProp, 3, 4 );
+        rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
         SvStream& rSt = rEx.GetStream();
         rSt << (UINT16)0x038F << nXAlign;
         rSt << (UINT16)0x0390 << nXRelTo;
