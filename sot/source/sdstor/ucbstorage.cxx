@@ -441,7 +441,7 @@ BaseStorage* UCBStorageStream_Impl::CreateStorage()
 {
     // create an OLEStorage on a SvStream ( = this )
     // it gets the root attribute because otherwise it would probably not write before my root is commited
-    Storage *pStorage = new Storage( *this, TRUE );
+    Storage *pStorage = new Storage( *this, m_bDirect );
     m_bIsOLEStorage = !pStorage->GetError();
     return pStorage;
 }
