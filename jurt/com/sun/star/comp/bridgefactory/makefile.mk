@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+#   last change: $Author: jbu $ $Date: 2000-10-09 07:31:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,8 @@ GENJAVAFILES = 																\
     $(MISC)$/java$/com$/sun$/star$/bridge$/XBridgeFactory.java				\
     $(MISC)$/java$/com$/sun$/star$/bridge$/XBridge.java						\
     $(MISC)$/java$/com$/sun$/star$/bridge$/XInstanceProvider.java			\
+    $(MISC)$/java$/com$/sun$/star$/lang$/XEventListener.java			\
+    $(MISC)$/java$/com$/sun$/star$/lang$/XComponent.java			\
     $(MISC)$/java$/com$/sun$/star$/container$/NoSuchElementException.java	\
     $(MISC)$/java$/com$/sun$/star$/uno$/Exception.java						\
     $(MISC)$/java$/com$/sun$/star$/io$/IOException.java						\
