@@ -2,9 +2,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:29:00 $
+#   last change: $Author: obo $ $Date: 2004-08-17 13:51:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -710,7 +710,8 @@ sub create_java_installer
 
         # setting the class name in the java file ( "MyResources_TEMPLATE" -> "MyResources_en" )
 
-        $onelanguage =~ s/en-US/en/;     # java file name and class name contain only "_en"
+        if ( $onelanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $onelanguage = $1; }
+        # $onelanguage =~ s/en-US/en/;   # java file name and class name contain only "_en"
         my $classfilename = "MyResources_" . $onelanguage;
         set_classfilename($templatefile, $classfilename, "MyResources_TEMPLATE");
 
@@ -728,7 +729,8 @@ sub create_java_installer
     # renaming one language java file to "MyResources.java"
 
     my $baselanguage = installer::languages::get_default_language($languagesarrayref);
-    $baselanguage =~ s/en-US/en/;    # java file name and class name contain only "_en"
+    if ( $baselanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $baselanguage = $1; }   # java file name and class name contain only "_en"
+    # $baselanguage =~ s/en-US/en/;  # java file name and class name contain only "_en"
     my $baselanguagefilename = $javadir . $installer::globals::separator . "locale/resources/MyResources_" . $baselanguage . "\.java";
     my $basedestfilename = $javadir . $installer::globals::separator . "locale/resources/MyResources.java";
     installer::systemactions::copy_one_file($baselanguagefilename, $basedestfilename);
