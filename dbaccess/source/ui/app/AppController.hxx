@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:30:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
+#ifndef _DBAUI_DSNTYPES_HXX_
+#include "dsntypes.hxx"
+#endif
+
 #include <memory>
 
 class ListBox;
@@ -169,6 +173,7 @@ namespace dbaui
                                 m_xCurrentContainer;        // the container we listen on at the moment
         TContainerVector        m_aCurrentSubContainers;    // the sub container of our current container
         TDocuments              m_aDocuments;
+        ODsnTypeCollection      m_aTypeCollection;
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         mutable ::rtl::OUString m_sDatabaseName;
