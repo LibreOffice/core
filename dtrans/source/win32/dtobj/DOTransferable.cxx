@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-15 12:36:32 $
+ *  last change: $Author: jl $ $Date: 2001-08-07 11:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,3 +619,17 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
 
     return bRet;
 }
+
+::com::sun::star::uno::Any SAL_CALL CDOTransferable::getData(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    Any retVal;
+    if( m_rDataObject)
+    {
+        IDataObject * pObj= static_cast<IDataObject*>( m_rDataObject) ;
+        pObj->AddRef();
+        retVal.setValue( & pObj, getCppuType( (sal_uInt32*)0));
+    }
+    return retVal;
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
+ *  last change: $Author: jl $ $Date: 2001-08-07 11:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 #ifndef _DATAFMTTRANSL_HXX_
@@ -87,6 +87,10 @@
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_XSYSTEMTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XSystemTransferable.hpp>
+#endif
+
 #include <comdef.h>
 
 //------------------------------------------------------------------------
@@ -97,7 +101,8 @@
 class CDTransObjFactory;
 class CFormatEtc;
 
-class CDOTransferable : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::XTransferable >
+class CDOTransferable : public ::cppu::WeakImplHelper2< ::com::sun::star::datatransfer::XTransferable,
+                        ::com::sun::star::datatransfer::XSystemTransferable>
 {
 public:
     typedef com::sun::star::uno::Sequence< sal_Int8 > ByteSequence_t;
@@ -114,6 +119,12 @@ public:
 
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
         throw( ::com::sun::star::uno::RuntimeException );
+    //------------------------------------------------------------------------
+    // XSystemTransferable
+    //------------------------------------------------------------------------
+    virtual ::com::sun::star::uno::Any SAL_CALL getData(  ) throw
+    (::com::sun::star::uno::RuntimeException);
+
 
 private:
     // should be created only by CDTransObjFactory
