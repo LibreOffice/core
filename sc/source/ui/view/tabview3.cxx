@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:55:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1763,6 +1763,8 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
     if (pDrawView)
         DrawEnableAnim( FALSE );
 
+    EditView* pSpellingView = aViewData.GetSpellingView();
+
     for (USHORT i=0; i<4; i++)
         if (pGridWin[i])
             if ( pGridWin[i]->IsVisible() && !aViewData.HasEditView((ScSplitPos)i) )
@@ -1779,7 +1781,9 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 //  #102421# for the active part, create edit view even if outside the visible area,
                 //  so input isn't lost (and the edit view may be scrolled into the visible area)
 
-                if ( bPosVisible || aViewData.GetActivePart() == (ScSplitPos) i )
+                //  #i26433# during spelling, the spelling view must be active
+                if ( bPosVisible || aViewData.GetActivePart() == (ScSplitPos) i ||
+                     ( pSpellingView && aViewData.GetEditView((ScSplitPos) i) == pSpellingView ) )
                 {
                     pGridWin[i]->HideCursor();
 
