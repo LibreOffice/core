@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-22 13:16:10 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,76 +62,83 @@
 #ifndef SC_VALIDATE_HXX
 #define SC_VALIDATE_HXX
 
-
-#ifndef _SFXTABDLG_HXX //autogen
+#ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-
-#ifndef _SV_EDIT_HXX //autogen
+#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-
-#ifndef _SV_FIXED_HXX //autogen
+#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-
-#ifndef _SV_LSTBOX_HXX //autogen
+#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-
-#ifndef _SVEDIT_HXX //autogen
+#ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
 
 
-//==================================================================
+// ============================================================================
 
+/** The "Validity" tab dialog. */
 class ScValidationDlg : public SfxTabDialog
 {
 public:
-                ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet );
-                ~ScValidationDlg();
-
+    explicit                    ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet );
+    virtual                     ~ScValidationDlg();
 };
 
-//==================================================================
 
+// ============================================================================
+
+/** The tab page "Criteria" from the Validation dialog. */
 class ScTPValidationValue : public SfxTabPage
 {
-private:
-    FixedText   aFtAllow;
-    ListBox     aLbAllow;
-    TriStateBox aTsbAllow;
-    FixedText   aFtValue;
-    ListBox     aLbValue;
-    FixedText   aFtMin;
-    Edit        aEdtMin;
-    FixedText   aFtMax;
-    Edit        aEdtMax;
-
-    String      aStrMin;
-    String      aStrMax;
-    String      aStrValue;
-
-    const SfxItemSet& rSet;
-
-#ifdef _VALIDATE_CXX
-    void    Init();
-
-    // Handler ------------------------
-    DECL_LINK( SelectAllowHdl, ListBox * );
-    DECL_LINK( SelectValueHdl, ListBox * );
-#endif
-
 public:
-            ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
-            ~ScTPValidationValue();
+    explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
+    virtual                     ~ScTPValidationValue();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rArgSet );
+    static USHORT*              GetRanges();
+
+    virtual BOOL                FillItemSet( SfxItemSet& rArgSet );
+    virtual void                Reset( const SfxItemSet& rArgSet );
+
+private:
+    void                        Init();
+
+    String                      GetFirstFormula() const;
+    String                      GetSecondFormula() const;
+
+    void                        SetFirstFormula( const String& rFmlaStr );
+    void                        SetSecondFormula( const String& rFmlaStr );
+
+                                DECL_LINK( SelectHdl, ListBox* );
+                                DECL_LINK( CheckHdl, CheckBox* );
+
+    FixedText                   maFtAllow;
+    ListBox                     maLbAllow;
+    CheckBox                    maCbAllow;      /// Allow blank cells.
+    CheckBox                    maCbShow;       /// Show selection list in cell.
+    CheckBox                    maCbSort;       /// Sort selection list in cell.
+    FixedText                   maFtValue;
+    ListBox                     maLbValue;
+    FixedText                   maFtMin;
+    Edit                        maEdMin;
+    MultiLineEdit               maEdList;       /// Entries for explicit list
+    FixedText                   maFtMax;
+    Edit                        maEdMax;
+    FixedText                   maFtHint;       /// Hint text for cell range validity.
+
+    String                      maStrMin;
+    String                      maStrMax;
+    String                      maStrValue;
+    String                      maStrRange;
+    String                      maStrList;
+    sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 };
+
 
 //==================================================================
 
@@ -145,14 +152,12 @@ private:
     FixedText       aFtInputHelp;
     MultiLineEdit   aEdInputHelp;
 
-    const SfxItemSet& rSet;
+    const SfxItemSet& mrArgSet;
 
-#ifdef _VALIDATE_CXX
     void    Init();
 
     // Handler ------------------------
     // DECL_LINK( SelectHdl, ListBox * );
-#endif
 
 public:
             ScTPValidationHelp( Window* pParent, const SfxItemSet& rArgSet );
@@ -179,15 +184,13 @@ private:
     FixedText       aFtError;
     MultiLineEdit   aEdError;
 
-    const SfxItemSet& rSet;
+    const SfxItemSet& mrArgSet;
 
-#ifdef _VALIDATE_CXX
     void    Init();
 
     // Handler ------------------------
     DECL_LINK( SelectActionHdl, ListBox * );
     DECL_LINK( ClickSearchHdl, PushButton * );
-#endif
 
 public:
             ScTPValidationError( Window* pParent, const SfxItemSet& rArgSet );
@@ -201,5 +204,4 @@ public:
 
 
 #endif // SC_VALIDATE_HXX
-
 
