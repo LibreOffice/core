@@ -16,6 +16,18 @@ setsolar  -cwsname qadev16 -sourceroot -src680 -ver m25 -jdk14   unxlngi5
 # ----- CLEAN OLD COVERAGE INFOS -----
 
 setenv SALDIR /cws/so-cwsserv06/qadev16/SRC680/src.m25/sal
+
+# this is a patch for sal, to see also "ustr" in string
+cd $SALDIR/rtl/source
+
+# strtmpl.c contains code, which is used for strings and ustrings. This file contain lot of makros
+# which unpacked at compile time. Due to the fact, gcov has some problems with such things, an idea is
+# to copy strtmpl.c to ustrtmpl.c and replace the include command in ustring.c
+# this is done be the follows lines.
+
+# cat ustring.c | sed -e "s/strtmpl.c/ustrtmpl.c/" > ustring.c.new ; mv -f ustring.c.new ustring.c
+# cp strtmpl.c ustrtmpl.c
+
 cd $SALDIR
 
 rm -f `find . -type f -name '*.bb' -print`
