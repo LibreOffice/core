@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-19 10:57:05 $
+ *  last change: $Author: jp $ $Date: 2000-10-19 13:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,12 +1068,12 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
                 {
                     USHORT nFamily = (USHORT)p->GetFamily();
                     String* pName = new String( p->GetName() );
-                    pName->Insert( (sal_Unicode)nFamily, 0 );
-
                     ByteString* pConvName = new ByteString( *pName, eCharSet );
+
+                    pName->Insert( (sal_Unicode)nFamily, 0 );
                     pConvName->Insert( "  ", 0 );
                     pConvName->SetChar( 0, (0xff & (nFamily >> 8)) );
-                    pConvName->SetChar( 0, (0xff & nFamily) );
+                    pConvName->SetChar( 1, (0xff & nFamily) );
 
                     USHORT nInsPos, nAdd = aSortConvNames.Count();
                     while( !aSortConvNames.Insert( pConvName, nInsPos ) )
