@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-27 10:44:57 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 11:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
 //  XInterface
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::acquire() throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::acquire() throw( )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -375,7 +375,7 @@ void SAL_CALL SfxBaseModel::acquire() throw( RUNTIMEEXCEPTION )
 //  XInterface
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::release() throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::release() throw( )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
