@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 19:23:16 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,9 +653,7 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatch
 // -----------------------------------------------------------------------
 void OGenericUnoController::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
-    if (aIter != m_aSupportedFeatures.end())
-        Execute((sal_uInt16)aIter->second);
+    executeUnChecked(_aURL);
 }
 
 // -----------------------------------------------------------------------
@@ -1006,6 +1004,24 @@ void SAL_CALL OGenericUnoController::restoreViewData(const Any& Data) throw( Run
 sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
 {
     return sal_False;
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& _rCommand)
+{
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
+    if (aIter != m_aSupportedFeatures.end())
+        Execute( static_cast<sal_uInt16>(aIter->second) );
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _rCommand)
+{
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
+    if (aIter != m_aSupportedFeatures.end())
+    {
+        sal_uInt16 nSlotId = static_cast<sal_uInt16>(aIter->second);
+        if ( GetState( nSlotId ).bEnabled )
+            Execute( nSlotId );
+    }
 }
 // -----------------------------------------------------------------------------
 

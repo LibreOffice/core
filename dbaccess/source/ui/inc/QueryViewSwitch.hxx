@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,12 @@ namespace dbaui
         void clearDesignView();
         void GetFocus();
         void reset();
+        void GrabFocus();
 
         OQueryDesignView*       getDesignView() const { return m_pDesignView; }
         OQueryContainerWindow*  getContainer() const;
+
+        Window* getActive() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
