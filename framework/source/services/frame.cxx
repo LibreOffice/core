@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 14:06:05 $
+ *  last change: $Author: as $ $Date: 2002-07-31 11:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
 #include <com/sun/star/mozilla/XPluginInstance.hpp>
@@ -2381,6 +2385,58 @@ IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
     {
     }
     return 0;
+}
+
+/*-****************************************************************************************************//**
+    @short      react for a show event for the internal container window
+    @descr      Normaly we doesn't need this information realy. But we can use it to
+                implement the special feature "trigger first visible task".
+
+                Algorithm: - first we have to check if we are a top (task) frame
+                             It's not enough to be a top frame! Because we MUST have the desktop as parent.
+                             But frames without a parent are top too. So it's not possible to check isTop() here!
+                             We have to look for the type of our parent.
+                           - if we are a task frame, then we have to check if we are the first one.
+                             We use a static variable to do so. They will be reset to afterwards be shure
+                             that further calls of this method doesn't do anything then.
+                           - Then we have to trigger the right event string on the global job executor.
+
+    @seealso    css::task::JobExecutor
+
+    @param      aEvent
+                    describes the source of this event
+                    We are not interested on this information. We are interested on the visible state only.
+
+    @threadsafe yes
+    @modified   31.07.2002 07:56, as96863
+*//*-*****************************************************************************************************/
+void SAL_CALL Frame::windowShown( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+{
+    static sal_Bool bFirstVisibleTask = sal_True;
+
+    /* SAFE { */
+    css::uno::Reference< css::frame::XDesktop >             xDesktopCheck( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XMultiServiceFactory >  xFactory     = m_xFactory;
+    /* } SAFE */
+
+    if (xDesktopCheck.is())
+    {
+        /* STATIC SAFE { */
+        WriteGuard aStaticWriteLock( LockHelper::getGlobalLock() );
+        sal_Bool bMustBeTriggered  = bFirstVisibleTask;
+                 bFirstVisibleTask = sal_False;
+        aStaticWriteLock.unlock();
+        /* } STATIC SAFE */
+
+        if (bMustBeTriggered)
+        {
+            css::uno::Reference< css::task::XJobExecutor > xExecutor( xFactory->createInstance( SERVICENAME_JOBEXECUTOR ), css::uno::UNO_QUERY );
+            if (xExecutor.is())
+            {
+                xExecutor->trigger( DECLARE_ASCII("onFirstVisibleTask") );
+            }
+        }
+    }
 }
 
 /*-****************************************************************************************************//**

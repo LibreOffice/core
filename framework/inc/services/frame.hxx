@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:22:46 $
+ *  last change: $Author: as $ $Date: 2002-07-31 11:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,11 +404,11 @@ class Frame :   // interfaces
 
         //---------------------------------------------------------------------------------------------------------
         //  XWindowListener
-        //  Attention: windowResized() is implement only! All other are empty!
+        //  Attention: windowResized() and windowShown() are implement only! All other are empty!
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL windowResized                      (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowMoved                        (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException ) {};
-        virtual void                                                SAL_CALL windowShown                        (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowShown                        (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowHidden                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
 
         //---------------------------------------------------------------------------------------------------------

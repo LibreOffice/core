@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:23:46 $
+ *  last change: $Author: as $ $Date: 2002-07-31 11:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,13 +834,204 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                                                                                                                                                         css::lang::IllegalArgumentException ,
                                                                                                                                                                         css::uno::RuntimeException          )
 {
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    ComponentLoader aLoader(m_xFactory,this);
-    aReadLock.unlock();
-    /* } SAFE */
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Register transaction and reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    return aLoader.loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
+    RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::Desktop::loadComponentFromURL" );
+
+    // CHeck incoming parameter and throw an exception for wrong values!
+    if(
+        ( &sURL                              == NULL ) ||
+        ( sURL.getLength()                   <  1    ) ||
+        ( sURL.compareToAscii( ".uno"  , 4 ) == 0    ) ||
+        ( sURL.compareToAscii( "slot:" , 5 ) == 0    )
+      )
+    {
+        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer, empty AND not loadable URL's are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 1 );
+    }
+    // Attention: An empty target name is equal to "_self"!
+    if(
+        ( &sTargetFrameName                               == NULL )   ||
+        ( sTargetFrameName.getLength()                    <  1    )   ||
+        (
+            // is it a special target && ( not _blank || _default ) ...
+            // These two ones are supported only!
+            ( sTargetFrameName.indexOf( (sal_Unicode)'_' ) == 0                     )    &&
+            ( sTargetFrameName                             != SPECIALTARGET_BLANK   )    &&
+            ( sTargetFrameName                             != SPECIALTARGET_DEFAULT )
+        )
+      )
+    {
+        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Unsupported target name found!"), static_cast< ::cppu::OWeakObject* >(this), 2 );
+    }
+    /* TODO: How can I test the search flags?! */
+    // Attention: Arguments are optional!
+    if( &lArguments == NULL )
+    {
+        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 4 );
+    }
+
+    // Set default return value, if method failed.
+    css::uno::Reference< css::lang::XComponent > xComponent;
+
+    // Attention: URL must be parsed full. Otherwise some detections on it will fail!
+    // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
+    css::util::URL aURL;
+    aURL.Complete = sURL;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    css::uno::Reference< css::util::XURLTransformer > xParser( m_xFactory->createInstance( SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
+    aWriteLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    if( xParser.is() == sal_True )
+    {
+        xParser->parseStrict( aURL );
+    }
+
+    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    css::uno::Reference< css::frame::XDispatchProvider > xSysTask;
+    sal_Bool bPlugin = impl_checkPlugInState();
+    // webtop mode
+    if( bPlugin )
+    {
+        // "_default" isn't allowed for webtop
+        // force using of "_blank"
+        ::rtl::OUString sTarget = sTargetFrameName;
+        if(sTarget==SPECIALTARGET_DEFAULT)
+            sTarget=SPECIALTARGET_BLANK;
+
+        // We can't guarantee synchronous functionality inside the webtop environment.
+        // We create a system task every time!
+        xSysTask = css::uno::Reference< css::frame::XDispatchProvider >( findFrame(sTarget,nSearchFlags), css::uno::UNO_QUERY );
+        if(xSysTask.is())
+            xDispatcher= xSysTask->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+    }
+    // FATOffice
+    else
+        xDispatcher = queryDispatch(aURL,sTargetFrameName,nSearchFlags);
+
+    if( xDispatcher.is() == sal_True )
+    {
+        // ... dispatch URL at this dispatcher.
+        // Set us as listener for status events from this dispatcher.
+
+        // We should set us as interaction handler for possible exceptions during load proccess ...
+        // But we shouldn't do that - if anyone already is set!
+        // Our interaction handler is called back in method "handle()". We set right condition there
+        // to break following loop and throw detected exception from here again!
+        css::uno::Sequence< css::beans::PropertyValue > lOwnArguments( lArguments    );
+        ArgumentAnalyzer                                aAnalyzer    ( lOwnArguments, (sal_Bool)sal_False );
+        if( aAnalyzer.existArgument( E_INTERACTIONHANDLER ) == sal_False )
+        {
+            css::uno::Reference< css::task::XInteractionHandler > xHandler( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+            aAnalyzer.setArgument( E_INTERACTIONHANDLER, &xHandler );
+        }
+
+        if( !aAnalyzer.existArgument( E_MACROEXECUTIONMODE ) )
+            aAnalyzer.setArgument( E_MACROEXECUTIONMODE, &(css::document::MacroExecMode::NEVER_EXECUTE) );
+
+        if( !aAnalyzer.existArgument( E_UPDATEDOCMODE ) )
+            aAnalyzer.setArgument( E_UPDATEDOCMODE, &(css::document::UpdateDocMode::NO_UPDATE) );
+
+        // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
+        // And we must do it before we call dispatch!
+        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+        aWriteLock.lock();
+        m_eLoadState = E_NOTSET;
+        aWriteLock.unlock();
+        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+
+        css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyer( xDispatcher, css::uno::UNO_QUERY );
+        if ( xNotifyer.is() )
+            xNotifyer->dispatchWithNotification( aURL, lOwnArguments, this );
+        else
+        {
+            // We can't work without any notification!
+            // Don't forget to dispose possible new created system task.
+            // But do it for "_blank" created ones inside a webtop environment only. Otherwise we can't be shure
+            // that variable xSysTask doesn't mean any found task for other target names or flags!!!
+            // Case of "blubber" and CREATE flag can be detected here right and will produce ZOMBIE tasks
+            // ... but nothing is perfect here ... it's a hack currently and shouldn't occure in current
+            // implementation.
+            LOG_WARNING("Desktop::loadComponentFromURL()", "Missing interface XNotifyingDispatch. Return NULL!")
+            css::uno::Reference< css::util::XCloseable > xClosable( xSysTask, css::uno::UNO_QUERY );
+            if(
+                    bPlugin &&
+                    xClosable.is() &&
+                    (
+                        sTargetFrameName==SPECIALTARGET_BLANK ||
+                        sTargetFrameName==SPECIALTARGET_DEFAULT
+                    )
+              )
+            {
+                try
+                {
+                    xClosable->close(sal_True);
+                }
+                catch( css::util::CloseVetoException& )
+                {
+                }
+            }
+            return xComponent;
+        }
+
+        // ... we must wait for asynchron result of this dispatch()-operation!
+        // Attention: Don't use lock here ... dispatcher call us back!
+        while( m_eLoadState == E_NOTSET )
+        {
+            Application::Yield();
+        }
+
+        // Which reaction was detected ... interaction request or loading state?
+        // Test it ...
+
+        // But - first make snapshot of our asynchron status informations by using a lock.
+        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+        ReadGuard aReadLock( m_aLock );
+        ELoadState                                eState                = m_eLoadState;
+                                                  m_eLoadState          = E_NOTSET;
+
+        css::uno::Reference< css::frame::XFrame > xLoadTarget           = m_xLastFrame;
+                                                  m_xLastFrame          = css::uno::Reference< css::frame::XFrame >(); // Don't hold last frame for ever - or he can't die!
+
+        css::uno::Any                             aRequest              = m_aInteractionRequest;
+                                                  m_aInteractionRequest = css::uno::Any();
+        aReadLock.unlock();
+        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+
+        switch( eState )
+        {
+            //case E_FAILED     :   ... nothing to do here ... we must return our default ... NULL!
+            case E_SUCCESSFUL   :   {
+                                        // Try to get new current component.
+                                        if( xLoadTarget.is() == sal_True )
+                                        {
+                                            xComponent = impl_getFrameComponent( xLoadTarget );
+                                        }
+                                    }
+                                    break;
+            case E_INTERACTION  :   {
+                                        // Interaction indicates throwed exception during load proccess.
+                                        // Forward io exceptions to user ...
+                                        css::ucb::InteractiveIOException           exIOInteractive ;
+                                        css::ucb::InteractiveAugmentedIOException  exIOAugmented   ;
+
+                                        if( m_aInteractionRequest >>= exIOInteractive )
+                                            throw css::io::IOException( exIOInteractive.Message, static_cast< ::cppu::OWeakObject* >(this) );
+                                        else
+                                        if( m_aInteractionRequest >>= exIOAugmented )
+                                            throw css::io::IOException( exIOAugmented.Message, static_cast< ::cppu::OWeakObject* >(this) );
+
+                                        // ... but unknown exceptions shouldnt be forwarded. Use default return value of NULL to
+                                        // tell user failed state of load operation!
+                                    }
+                                    break;
+        }
+    }
+    // Return result of this operation.
+    return xComponent;
 }
 
 /*-************************************************************************************************************//**
