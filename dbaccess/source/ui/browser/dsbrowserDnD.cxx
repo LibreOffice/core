@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 07:09:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 15:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,27 +632,8 @@ namespace dbaui
             ::rtl::OUString aName = getEntryText( _pApplyTo );
             ::rtl::OUString aDSName = getEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
-            Sequence<PropertyValue> aSeq(4);
-            aSeq[0].Name    = PROPERTY_DATASOURCENAME;
-            aSeq[0].Value <<= aDSName;
-            aSeq[1].Name    = PROPERTY_ACTIVECONNECTION;;
-            aSeq[1].Value <<= xConnection;
-            aSeq[2].Name    = PROPERTY_COMMANDTYPE;
-            aSeq[2].Value <<= _nCommandType;
-            aSeq[3].Name    = PROPERTY_COMMAND;
-            aSeq[3].Value <<= aName;
-
-            // the rtf format
-            ORTFImportExport* pRtf = new ORTFImportExport(aSeq,getORB(),getNumberFormatter());
-            Reference< XInterface> xRTF = *pRtf;
-            pRtf->initialize();
-            // the html format
-            OHTMLImportExport* pHtml = new OHTMLImportExport(aSeq,getORB(),getNumberFormatter());
-            Reference< XInterface> xHTML = *pHtml;
-            pHtml->initialize();
-            // the sdbc format
             // the owner ship goes to ODataClipboard
-            ODataClipboard* pData = new ODataClipboard(aSeq,pHtml,pRtf);
+            ODataClipboard* pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
             return pData;
         }
         catch(SQLException& e)
@@ -817,6 +798,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/27 07:09:19  oj
+ *  use of new initialize
+ *
  *  Revision 1.1  2001/03/23 10:59:09  fs
  *  initial checkin - DnD related implementations for the data source browser controller
  *
