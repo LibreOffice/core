@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-27 13:13:38 $
+ *  last change: $Author: cd $ $Date: 2002-10-22 06:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ struct SfxPrintProgress_Impl
     BOOL                    bOldFlag;
     BOOL                    bRestoreFlag;
     svtools::AsynchronLink  aDeleteLink;
+    Link                    aCancelHdl;
 
 private:
     DECL_LINK( CancelHdl, Button * );
@@ -226,6 +227,10 @@ IMPL_LINK_INLINE_START( SfxPrintProgress_Impl, CancelHdl, Button *, pButton )
         pMonitor->Hide();
     pViewShell->GetPrinter()->AbortJob();
     bCancel = TRUE;
+
+    if ( aCancelHdl.IsSet() )
+        aCancelHdl.Call( this );
+
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxPrintProgress_Impl, CancelHdl, Button *, pButton )
@@ -420,4 +425,9 @@ void SfxPrintProgress::RestoreOnEndPrint( SfxPrinter *pOldPrinter )
     RestoreOnEndPrint( pOldPrinter, FALSE );
 }
 
+//------------------------------------------------------------------------
 
+void SfxPrintProgress::SetCancelHdl( const Link& aCancelHdl )
+{
+    pImp->aCancelHdl = aCancelHdl;
+}
