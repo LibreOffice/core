@@ -2,9 +2,9 @@
  *
  *  $RCSfile: caption.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:09:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     nNumType(SVX_NUM_ARABIC),
     nPos(1),
     nLevel(0),
-    cSeparator('.'),
+    sSeparator( String::CreateFromAscii( ": " ) ),
     bIgnoreSeqOpts(FALSE),
     bCopyAttributes(FALSE)
 {
@@ -121,8 +121,9 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     sCaption = rOpt.sCaption;
     nPos = rOpt.nPos;
     nLevel = rOpt.nLevel;
-    cSeparator = rOpt.cSeparator;
+    sSeparator = rOpt.sSeparator;
     bIgnoreSeqOpts = rOpt.bIgnoreSeqOpts;
+    sCharacterStyle = rOpt.sCharacterStyle;
     bCopyAttributes = rOpt.bCopyAttributes;
 
     return *this;
@@ -156,7 +157,7 @@ BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 |*
 *************************************************************************/
 
-SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
+/*SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
 {
     rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
     UINT16 nVal;
@@ -175,12 +176,12 @@ SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
     rIStream >> nVal;               rCapOpt.nLevel = nVal;
 
     rIStream >> cVal;
-    rCapOpt.cSeparator = UniString(
+    rCapOpt.sSeparator = UniString(
         ByteString(static_cast< char >(cVal)) , eEncoding).GetChar(0);
 
     return rIStream;
 }
-
+*/
 /*************************************************************************
 |*
 |*    InsCaptionOpt::operator<<()
@@ -189,7 +190,7 @@ SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
 |*
 *************************************************************************/
 
-SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
+/*SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
 {
     rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
     rOStream    << (BYTE)CAPTION_VERSION
@@ -203,12 +204,12 @@ SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
 
     rOStream.WriteByteString( rCapOpt.sCaption, eEncoding );
 
-    BYTE cSep = ByteString(UniString(rCapOpt.cSeparator), eEncoding).GetChar(0);
+    BYTE cSep = ByteString(rCapOpt.sSeparator, eEncoding).GetChar(0);
     rOStream    << (UINT16)rCapOpt.nPos
                 << (UINT16)rCapOpt.nLevel
                 << cSep;
 
     return rOStream;
 }
-
+*/
 
