@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2002-09-04 15:28:21 $
+#   last change: $Author: vg $ $Date: 2002-09-10 10:30:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=so_curl
 TARFILE_NAME=curl-7.9.8
 
 .IF "$(GUI)"=="UNX"
-PATCH_FILE_NAME=unx-curl-7.9.8.patch
+PATCH_FILE_NAME=unx1-curl-7.9.8.patch
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
