@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: SchXMLExport.hxx,v $
+ *  $RCSfile: SchXMLAutoStylePoolP.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:13:17 $
+ *  last change: $Author: bm $ $Date: 2001-02-14 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,72 +58,31 @@
  *
  *
  ************************************************************************/
-#ifndef SCH_XMLEXPORT_HXX_
-#define SCH_XMLEXPORT_HXX_
-
-#ifndef _XMLOFF_SCH_XMLEXPORTHELPER_HXX_
-#include "SchXMLExportHelper.hxx"
-#endif
 #ifndef _SCH_XMLAUTOSTYLEPOOLP_HXX_
-#include "SchXMLAutoStylePoolP.hxx"
-#endif
-#ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
-#endif
-#ifndef _UNIVERSALL_REFERENCE_HXX
-#include "uniref.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include "prhdlfac.hxx"
+#define _SCH_XMLAUTOSTYLEPOOLP_HXX_
+
+#ifndef _XMLOFF_XMLASTPLP_HXX
+#include "xmlaustp.hxx"
 #endif
 
-namespace com { namespace sun { namespace star {
-    namespace chart {
-        class XDiagram;
-        class XChartDocument;
-        class XChartDataArray;
-        struct ChartSeriesAddress;
-    }
-    namespace drawing {
-        class XShape;
-    }
-    namespace task {
-        class XStatusIndicator;
-    }
-}}}
+class SchXMLExport;
 
-class SvXMLAutoStylePoolP;
-class SvXMLUnitConverter;
-class XMLChartExportPropertyMapper;
-
-// ------------------------------------------
-// export class for a complete chart document
-// ------------------------------------------
-
-class SchXMLExport : public SvXMLExport
+class SchXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
-private:
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
-    SchXMLAutoStylePoolP maAutoStylePool;
-
-    SchXMLExportHelper maExportHelper;
-
 protected:
-    virtual void _ExportStyles( sal_Bool bUsed );
-    virtual void _ExportAutoStyles();
-    virtual void _ExportMasterStyles();
-    virtual void _ExportContent();
+    SchXMLExport& mrSchXMLExport;
+
+    virtual void exportStyleAttributes(
+        SvXMLAttributeList& rAttrList,
+        sal_Int32 nFamily,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        const SvXMLExportPropertyMapper& rPropExp,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap ) const;
 
 public:
-    SchXMLExport();
-    virtual ~SchXMLExport();
-
-    void SetProgress( sal_Int32 nPercentage );
-
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return maExportHelper.GetPropertySetMapper(); }
+    SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport );
+    virtual ~SchXMLAutoStylePoolP();
 };
 
-#endif  // SCH_XMLEXPORT_HXX_
+#endif  // _SCH_XMLAUTOSTYLEPOOLP_HXX_

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-01-31 18:16:31 $
+#   last change: $Author: bm $ $Date: 2001-02-14 17:15:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ SLOFILES =	$(SLO)$/SchXMLExport.obj \
             $(SLO)$/SchXMLParagraphContext.obj \
             $(SLO)$/PropertyMaps.obj \
             $(SLO)$/XMLChartStyleContext.obj \
-            $(SLO)$/XMLErrorIndicatorPropertyHdl.obj
+            $(SLO)$/XMLErrorIndicatorPropertyHdl.obj \
+            $(SLO)$/SchXMLAutoStylePoolP.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: SchXMLExport.hxx,v $
+ *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:13:17 $
+ *  last change: $Author: bm $ $Date: 2001-02-14 17:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,72 +58,64 @@
  *
  *
  ************************************************************************/
-#ifndef SCH_XMLEXPORT_HXX_
-#define SCH_XMLEXPORT_HXX_
-
-#ifndef _XMLOFF_SCH_XMLEXPORTHELPER_HXX_
-#include "SchXMLExportHelper.hxx"
-#endif
-#ifndef _SCH_XMLAUTOSTYLEPOOLP_HXX_
 #include "SchXMLAutoStylePoolP.hxx"
+#include "PropertyMap.hxx"
+
+#ifndef SCH_XMLEXPORT_HXX_
+#include "SchXMLExport.hxx"
 #endif
-#ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#ifndef _XMLOFF_CHARTPROPERTYSETMAPPER_HXX_
+#include "XMLChartPropertySetMapper.hxx"
 #endif
-#ifndef _UNIVERSALL_REFERENCE_HXX
-#include "uniref.hxx"
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
 #endif
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include "prhdlfac.hxx"
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
 #endif
 
-namespace com { namespace sun { namespace star {
-    namespace chart {
-        class XDiagram;
-        class XChartDocument;
-        class XChartDataArray;
-        struct ChartSeriesAddress;
-    }
-    namespace drawing {
-        class XShape;
-    }
-    namespace task {
-        class XStatusIndicator;
-    }
-}}}
+SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :
+        mrSchXMLExport( rSchXMLExport )
+{}
 
-class SvXMLAutoStylePoolP;
-class SvXMLUnitConverter;
-class XMLChartExportPropertyMapper;
+SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP()
+{}
 
-// ------------------------------------------
-// export class for a complete chart document
-// ------------------------------------------
-
-class SchXMLExport : public SvXMLExport
+void SchXMLAutoStylePoolP::exportStyleAttributes(
+    SvXMLAttributeList& rAttrList,
+    sal_Int32 nFamily,
+    const ::std::vector< XMLPropertyState >& rProperties,
+    const SvXMLExportPropertyMapper& rPropExp,
+    const SvXMLUnitConverter& rUnitConverter,
+    const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-private:
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
-    SchXMLAutoStylePoolP maAutoStylePool;
+    const rtl::OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ));
+    SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties,
+                                                rPropExp, rUnitConverter, rNamespaceMap );
 
-    SchXMLExportHelper maExportHelper;
-
-protected:
-    virtual void _ExportStyles( sal_Bool bUsed );
-    virtual void _ExportAutoStyles();
-    virtual void _ExportMasterStyles();
-    virtual void _ExportContent();
-
-public:
-    SchXMLExport();
-    virtual ~SchXMLExport();
-
-    void SetProgress( sal_Int32 nPercentage );
-
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return maExportHelper.GetPropertySetMapper(); }
-};
-
-#endif  // SCH_XMLEXPORT_HXX_
+    if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
+    {
+        ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
+        for( iter; (iter != rProperties.end()); iter++ )
+        {
+            UniReference< XMLPropertySetMapper > aPropMapper =
+                mrSchXMLExport.GetPropertySetMapper();
+            sal_Int16 nContextID = aPropMapper->GetEntryContextId( iter->mnIndex );
+            if( nContextID == XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT )
+            {
+                sal_Int32 nNumberFormat;
+                if( iter->maValue >>= nNumberFormat )
+                {
+                    rtl::OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
+                    if( sAttrValue.getLength() )
+                    {
+                        rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
+                            aPropMapper->GetEntryNameSpace( iter->mnIndex ),
+                            aPropMapper->GetEntryXMLName( iter->mnIndex ) ));
+                        rAttrList.AddAttribute( sAttrName, sCDATA, sAttrValue );
+                    }
+                }
+            }
+        }
+    }
+}
