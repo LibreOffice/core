@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
+ *  last change: $Author: fs $ $Date: 2001-04-17 08:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,8 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     Reference< XInterface > xExistent;
 
     ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
-    if (aExistent != m_aDatabaseObjects.end())
+    sal_Bool bAlreadyAccessed = aExistent != m_aDatabaseObjects.end();
+    if (bAlreadyAccessed)
     {
         xExistent = aExistent->second.get();
         if (xExistent.is())
@@ -511,17 +512,11 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
                 pObjectImpl->removed();
         }
         m_aDatabaseObjects.erase(aExistent);
-
-        // the configuration does not support different types of operations in one transaction, so we must commit
-        // before and after we create the new node, to ensure, that every transaction we ever do contains only
-        // one type of operation (insert, remove, update)
-        OSL_VERIFY(m_aRootNode.commit());
-        if (!m_aRootNode.removeNode(_rName))
-            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
-        OSL_VERIFY(m_aRootNode.commit());
     }
-    else
-        DBG_ERROR("ODatabaseContext::revokeObject: inconsistent state!");
+
+    if (!m_aRootNode.removeNode(_rName))
+        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
+    OSL_VERIFY(m_aRootNode.commit());
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), Any(), makeAny(xExistent));
