@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_File.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:48:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 08:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,15 +318,38 @@ inline void printTime( TimeValue *tv )
 #   define delta 1800                    //time precision, 1.8s
 #endif
 
-inline sal_Bool compareTime( TimeValue *tv1,  TimeValue *tv2, sal_uInt64 nDelta)
+inline sal_Int64 t_abs64(sal_Int64 _nValue)
 {
-    sal_uInt64 uTimeValue;
-        sal_Int64 iTimeValue;
+    // std::abs() seems to have some ambiguity problems (so-texas)
+    // return abs(_nValue);
+    t_print("t_abs64(%ld)\n", _nValue);
+    // CPPUNIT_ASSERT(_nValue < 2147483647);
 
-        iTimeValue = abs(( tv1->Seconds - tv2->Seconds) * 1000000000 + tv1->Nanosec - tv2->Nanosec) ;
-        uTimeValue = ( iTimeValue / 1000000 );
+    if (_nValue < 0)
+    {
+        _nValue = -_nValue;
+    }
+    return _nValue;
+}
 
-    return ( uTimeValue < nDelta );
+inline sal_Bool t_compareTime( TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_Int32 nDelta)
+{
+    // sal_uInt64 uTimeValue;
+    // sal_Int64 iTimeValue;
+    //
+    // iTimeValue = t_abs64(( tv1->Seconds - tv2->Seconds) * 1000000000 + tv1->Nanosec - tv2->Nanosec);
+    // uTimeValue = ( iTimeValue / 1000000 );
+
+    sal_Int32 nDeltaSeconds = m_aEndTime->Seconds - m_aStartTime->Seconds;
+    sal_Int32 nDeltaNanoSec = sal_Int32(m_aEndTime->Nanosec) - sal_Int32(m_aStartTime->Nanosec);
+    if (nDeltaNanoSec < 0)
+    {
+        nDeltaNanoSec = 1000000000 + nDeltaNanoSec;
+        nDeltaSeconds--;
+    }
+
+    sal_Int32 nDeltaMilliSec = (nDeltaSeconds * 1000) + (nDeltaNanoSec / 1000000);
+    return ( nDeltaMilliSec < nDelta );
 }
 
 /** compare two OUString file name.
@@ -410,11 +433,17 @@ inline void createTestFile( const ::rtl::OUString filename )
     if ( !isURL( filename ) )
         ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
 
-    ::std::auto_ptr<File> pFile( new File( aPathURL ) );
-    nError = pFile->open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
+    //::std::auto_ptr<File> pFile( new File( aPathURL ) );
+    File aFile(aPathURL);
+    //nError = pFile->open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
+    nError = aFile.open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
     //CPPUNIT_ASSERT_MESSAGE( "In createTestFile Function: creation ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
-      t_print("createTestFile failed!\n");
+    {
+        t_print("createTestFile failed!\n");
+    }
+    aFile.close();
+
 }
 
 /** create a temp test file using OUString name of full qualified URL or system path in a base directory.
@@ -644,8 +673,9 @@ inline sal_Bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheck
     FileBase::RC    rc;
     sal_Bool        bCheckResult= sal_False;
 
-    ::std::auto_ptr<Directory> pDir( new Directory( str ) );
-    rc = pDir->open( );
+    //::std::auto_ptr<Directory> pDir( new Directory( str ) );
+    Directory aDir( str );
+    rc = aDir.open( );
 
     if ( ( ::osl::FileBase::E_NOENT != rc ) && ( ::osl::FileBase::E_ACCES != rc ) ){
 
@@ -659,7 +689,8 @@ inline sal_Bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheck
                     bCheckResult = sal_True;
                 break;
             case osl_Check_Mode_ReadAccess:
-                rc = pDir->getNextItem( rItem, 0 );
+                //rc = pDir->getNextItem( rItem, 0 );
+                rc = aDir.getNextItem( rItem, 0 );
                 if ( ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT ) )
                     bCheckResult = sal_True;
                 else
@@ -667,10 +698,12 @@ inline sal_Bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheck
                 break;
             case osl_Check_Mode_WriteAccess:
                 ( ( aUString += str ) += aSlashURL ) += aTmpName2;
-                if ( ( rc = pDir->create( aUString ) ) == ::osl::FileBase::E_None )
+                //if ( ( rc = pDir->create( aUString ) ) == ::osl::FileBase::E_None )
+                if ( ( rc = Directory::create( aUString ) ) == ::osl::FileBase::E_None )
                 {
                     bCheckResult = sal_True;
-                    rc = pDir->remove( aUString );
+                    //rc = pDir->remove( aUString );
+                    rc = Directory::remove( aUString );
                     CPPUNIT_ASSERT( rc == ::osl::FileBase::E_None );
                 }
                 else
@@ -681,10 +714,10 @@ inline sal_Bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheck
                 bCheckResult = sal_False;
         }// switch
 
-        rc = pDir->close( );
+        rc = aDir.close( );
         CPPUNIT_ASSERT( rc == FileBase::E_None );
 
-    }
+    }//if
 
     return bCheckResult;
 }
@@ -797,9 +830,9 @@ namespace osl_FileBase
 
     class getAbsoluteFileURL:public CppUnit::TestFixture
     {
-        ::osl::FileBase     aFileBase;
-        ::rtl::OUString     aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
-        ::osl::FileBase::RC nError;
+        //::osl::FileBase       aFileBase;
+            ::rtl::OUString     aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
+            // ::osl::FileBase::RC  nError;
         sal_Bool        bOk;
 
         public:
@@ -994,7 +1027,7 @@ namespace osl_FileBase
         rtl::OUString suRelativeURL = rtl::OStringToOUString(_sRelativeURL, RTL_TEXTENCODING_UTF8);
         rtl::OString sBaseURL = rtl::OUStringToOString(_suBaseURL, RTL_TEXTENCODING_UTF8);
         rtl::OUString suResultURL;
-        osl::FileBase::RC nError = aFileBase.getAbsoluteFileURL( _suBaseURL,  suRelativeURL, suResultURL );
+        osl::FileBase::RC nError = FileBase::getAbsoluteFileURL( _suBaseURL,  suRelativeURL, suResultURL );
         rtl::OString sResultURL = rtl::OUStringToOString( suResultURL, RTL_TEXTENCODING_UTF8);
         rtl::OString sError = errorToString(nError);
         t_print("getAbsoluteFileURL('%s','%s') deliver absolute URL: '%s', error '%s'\n", sBaseURL.getStr(), _sRelativeURL.getStr(),sResultURL.getStr(), sError.getStr() );
@@ -1108,7 +1141,7 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     class SystemPath_FileURL:public CppUnit::TestFixture
     {
-        ::osl::FileBase aFileBase;
+        //::osl::FileBase aFileBase;
         // ::rtl::OUString aUStr;
         // ::osl::FileBase::RC nError;
 
@@ -1534,7 +1567,7 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     class searchFileURL:public CppUnit::TestFixture
     {
-        ::osl::FileBase aFileBase;
+        //::osl::FileBase aFileBase;
         ::rtl::OUString aUStr;
         ::osl::FileBase::RC nError1, nError2, nError3,nError4;
 
@@ -1630,7 +1663,7 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     class getTempDirURL:public CppUnit::TestFixture
     {
-        ::osl::FileBase aFileBase;
+        //::osl::FileBase aFileBase;
         ::rtl::OUString aUStr;
         ::osl::FileBase::RC nError;
 
@@ -1638,7 +1671,7 @@ namespace osl_FileBase
         // initialization
         void setUp( )
         {
-             nError = aFileBase.getTempDirURL( aUStr );
+             nError = FileBase::getTempDirURL( aUStr );
         }
 
         void tearDown( )
@@ -1676,7 +1709,7 @@ namespace osl_FileBase
     //---------------------------------------------------------------------
     class createTempFile:public CppUnit::TestFixture
     {
-        ::osl::FileBase aFileBase;
+        //::osl::FileBase aFileBase;
         ::osl::FileBase::RC nError1, nError2;
         sal_Bool bOK;
 
@@ -1685,25 +1718,27 @@ namespace osl_FileBase
         ::rtl::OUString *pUStr_FileURL;
 
         public:
+
         // initialization
         void setUp( )
         {
             pHandle = new oslFileHandle();
-            pUStr_DirURL = new ::rtl::OUString();
+            pUStr_DirURL = new ::rtl::OUString( aUserDirectoryURL );
             pUStr_FileURL = new ::rtl::OUString();
-            *pUStr_DirURL = aUserDirectoryURL;                /// create temp file in /tmp/PID or c:\temp\PID.
+            //*pUStr_DirURL = aUserDirectoryURL;                /// create temp file in /tmp/PID or c:\temp\PID.*/
         }
 
         void tearDown( )
         {
             delete pUStr_DirURL;
             delete pUStr_FileURL;
+            delete pHandle;
         }
 
         // test code.
         void createTempFile_001( )
         {
-            nError1 = aFileBase.createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
+            nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
             ::osl::File testFile( *pUStr_FileURL );
             //printFileName(*pUStr_FileURL);
             nError2 = testFile.open( OpenFlag_Create );
@@ -1719,7 +1754,7 @@ namespace osl_FileBase
         void createTempFile_002( )
         {
             bOK = sal_False;
-            nError1 = aFileBase.createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
+            nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
             ::osl::File testFile( *pUStr_FileURL );
             nError2 = testFile.open( OpenFlag_Create );
 
@@ -1740,7 +1775,7 @@ namespace osl_FileBase
 
         void createTempFile_003( )
         {
-            nError1 = aFileBase.createTempFile( pUStr_DirURL, pHandle, 0 );
+            nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, 0 );
             //the temp file will be removed when return from createTempFile
             bOK = ( pHandle != NULL && pHandle != 0);
             if ( sal_True == bOK )
@@ -1751,7 +1786,7 @@ namespace osl_FileBase
         }
         void createTempFile_004( )
         {
-            nError1 = aFileBase.createTempFile( pUStr_DirURL, 0, pUStr_FileURL );
+            nError1 = FileBase::createTempFile( pUStr_DirURL, 0, pUStr_FileURL );
             bOK = ( pUStr_FileURL != 0);
             ::osl::File testFile( *pUStr_FileURL );
             nError2 = testFile.open( OpenFlag_Create );
@@ -2836,6 +2871,15 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = pDir->getNextItem( rItem, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
+            pDir->close();
+            /*
+            Directory aDir( aTmpName3 );
+            nError1 = aDir.open();
+            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
+            nError1 = aDir.getNextItem( rItem, 0 );
+            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
+            aDir.close();
+            */
         }
 
         void tearDown( )
@@ -2894,7 +2938,8 @@ namespace osl_FileStatus
             createTestFile( aTmpName4 );
 
             pDir = new Directory( aTmpName3 );
-                ::osl::FileBase::RC nError1 = pDir->open( );
+            //::std::auto_ptr<Directory> pDir( new Directory( aTmpName3 ) );
+                    ::osl::FileBase::RC nError1 = pDir->open( );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = pDir->getNextItem( rItem_file, 1 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -2902,9 +2947,9 @@ namespace osl_FileStatus
 
         void tearDown( )
         {
-                ::osl::FileBase::RC nError1 = pDir->close( );
+                    ::osl::FileBase::RC nError1 = pDir->close( );
+                    delete pDir;
             CPPUNIT_ASSERT_MESSAGE( errorToStr(nError1), ::osl::FileBase::E_None == nError1 );
-            delete pDir;
 
             // remove the tempfile in $TEMP/tmpdir/tmpname.
             deleteTestFile( aTmpName4 );
@@ -3107,12 +3152,12 @@ namespace osl_FileStatus
             nError1 = pDir->open( );
             CPPUNIT_ASSERT_MESSAGE("open aTmpName3 failed!", ::osl::FileBase::E_None == nError1 );
             //getNextItem can not assure which item retrieved
-            nError1 = pDir->getNextItem( m_aItem_1, 1 );
+                    nError1 = pDir->getNextItem( m_aItem_1, 1 );
             CPPUNIT_ASSERT_MESSAGE("get first item failed!", ::osl::FileBase::E_None == nError1 );
 
-            nError1 = pDir->getNextItem( m_aItem_2 );
+                    nError1 = pDir->getNextItem( m_aItem_2 );
             CPPUNIT_ASSERT_MESSAGE("get second item failed!", ::osl::FileBase::E_None == nError1 );
-
+            pDir->close();
             //mindy: failed on my RH9,so removed temporaly
             //nError1 = ::osl::DirectoryItem::get( aVolURL2, m_aVolumeItem );
             //CPPUNIT_ASSERT_MESSAGE("get volume item failed!", ::osl::FileBase::E_None == nError1 );
@@ -3480,7 +3525,7 @@ namespace osl_FileStatus
 
             *pTV_access = rFileStatus.getAccessTime( );
 
-            sal_Bool bOK = compareTime( pTV_access, pTV_current, delta );
+            sal_Bool bOK = t_compareTime( pTV_access, pTV_current, delta );
             free( pTV_current );
             free( pTV_access );
 
@@ -3532,7 +3577,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( ( pTV_modify = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
             *pTV_modify = rFileStatus.getModifyTime( );
 
-            sal_Bool bOK = compareTime( pTV_modify, pTV_current, delta );
+            sal_Bool bOK = t_compareTime( pTV_modify, pTV_current, delta );
             //delete file
             deleteTestFile( aTypeURL );
             free( pTV_current );
@@ -5181,15 +5226,15 @@ namespace osl_File
             *pTV_modify = rFileStatus2.getModifyTime( );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set access time then get it. time precision is still a problem for it cut off the nanosec.",
-                sal_True == compareTime( pTV_access, pTV_current, delta ) );
+                sal_True == t_compareTime( pTV_access, pTV_current, delta ) );
 #if defined ( WNT )
             //Unfortunately there is no way to get the creation time of a file under Unix (its a Windows only feature).
             //That means the flag osl_FileStatus_Mask_CreationTime should be deprecated under Unix.
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set creation time then get it. ",
-                sal_True == compareTime( pTV_creation, pTV_current, delta ) ) ;
+                sal_True == t_compareTime( pTV_creation, pTV_current, delta ) ) ;
 #endif
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set modify time then get it. ",
-                sal_True == compareTime( pTV_modify, pTV_current, delta ) );
+                sal_True == t_compareTime( pTV_modify, pTV_current, delta ) );
             free( pTV_current );
             free( pTV_creation );
             free( pTV_access );
@@ -6533,7 +6578,6 @@ namespace osl_Directory
             int i;
     };
 
-    char* buff = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     //########################################
     class createPath : public CppUnit::TestFixture
@@ -6580,23 +6624,24 @@ namespace osl_Directory
             rm_test_path(tp_url);
 
             DirCreatedObserver* observer = new DirCreatedObserver;
-
             FileBase::RC rc = Directory::createPath(tp_url, observer);
-
+            int nDirs = observer->number_of_dirs_created();
+            delete observer;
             CPPUNIT_ASSERT_MESSAGE
             (
                 "osl_createDirectoryPath failed",
-                (rc == FileBase::E_None) && (observer->number_of_dirs_created() > 0)
+                (rc == FileBase::E_None) && (nDirs > 0)
             );
 
-            delete observer;
         }
 
-    #ifdef WNT
+#ifdef WNT
 
         //##########################################
         char* get_unused_drive_letter()
         {
+            static char m_aBuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
             DWORD ld = GetLogicalDrives();
             DWORD i = 4;
             DWORD j = 2;
@@ -6605,7 +6650,7 @@ namespace osl_Directory
             { i = i << 1; j++; }
 
             if (i > 2)
-                return buff + j;
+                return m_aBuff + j;
 
             return NULL;
         }
@@ -6651,7 +6696,7 @@ namespace osl_Directory
             );
         }
 
-    #endif /* WNT */
+#endif /* WNT */
 
     CPPUNIT_TEST_SUITE(createPath);
     CPPUNIT_TEST(with_relative_path);
