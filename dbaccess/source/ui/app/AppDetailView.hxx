@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:07:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,13 +108,38 @@ namespace dbaui
 
     class OCreationList : public SvTreeListBox
     {
-        OTasksWindow* m_pTaskWindow;
+        OTasksWindow*   m_pTaskWindow;
+
+        // members related to drawing the currently hovered/selected entry
+        SvLBoxEntry*        m_pMouseDownEntry;
+        SvLBoxEntry*        m_pLastActiveEntry;
+        Color               m_aOriginalBackgroundColor;
+        Font                m_aOriginalFont;
+
     public:
         OCreationList(OTasksWindow* _pParent);
         // window overloads
         virtual void MouseMove( const MouseEvent& rMEvt );
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void MouseButtonUp( const MouseEvent& rMEvt );
         virtual void KeyInput( const KeyEvent& rKEvt );
+        virtual void Paint( const Rectangle& rRect );
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual void GetFocus();
+        virtual void LoseFocus();
+
+        void    updateHelpText();
+
+    protected:
+        virtual void        PreparePaint( SvLBoxEntry* _pEntry );
+        virtual Rectangle   GetFocusRect( SvLBoxEntry* _pEntry, long _nLine );
+
+    private:
+        void    onSelected( SvLBoxEntry* _pEntry ) const;
+        /** sets a new current entry, and invalidates the old and the new one, if necessary
+            @return <TRUE/> if and only if the "current entry" changed
+        */
+        bool    setCurrentEntryInvalidate( SvLBoxEntry* _pEntry );
     };
 
     typedef ::std::pair< ::rtl::OUString,USHORT>                TResourcePair;
