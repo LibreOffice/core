@@ -1,0 +1,17 @@
+mkdir: %_DEST%\inc%_EXT%\scripting
+mkdir: %_DEST%\inc%_EXT%\scripting\storage
+
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
+
+..\source\module-description.dtd %_DEST%\xml%_EXT%\module-description.dtd
+
+..\source\storage\storage.xml %_DEST%\xml%_EXT%\storage.xml
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
