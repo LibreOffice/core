@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:59:43 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 12:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2976,7 +2976,7 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 sal_Int16 n;
                 if ( Value >>= n )
-                    ((DateField*)GetWindow())->SetExtFormat( (ExtDateFieldFormat) n );
+                    ((DateField*)GetWindow())->SetExtDateFormat( (ExtDateFieldFormat) n );
             }
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
