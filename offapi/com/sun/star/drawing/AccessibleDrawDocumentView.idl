@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:08:14 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ module com {  module sun {  module star {  module drawing {
     outside the currently visible area, the user has to issue these requests
     manually or programmatically through the usual chanels, e.g. pressing
     keys or selecting menu entries.</li>
-    <li>The hierarchy exposed through the <type>XAccessibleContext</type>
+    <li>The hierarchy exposed through the
+    <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
     interface does not necessarily correspond directly to the underlying
     draw page structure.  Internal nodes in this hierarchy are introduced
     by group shapes, 3D scenes, and OLE objects.</li>
@@ -107,7 +108,8 @@ module com {  module sun {  module star {  module drawing {
 service AccessibleDrawDocumentView
 {
     /** Base interface for being accessible.  It gives access to the
-        <type>XAccessibleContext</type> interface.
+        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;
 
