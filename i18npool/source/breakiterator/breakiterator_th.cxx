@@ -1,0 +1,196 @@
+/*************************************************************************
+ *
+ *  $RCSfile: breakiterator_th.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 06:26:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <breakiterator_th.hxx>
+#include <wtt.h>
+
+#include <string.h> // for memset
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::rtl;
+
+namespace com { namespace sun { namespace star { namespace i18n {
+
+//  ----------------------------------------------------
+//  class Breakiterator_th
+//  ----------------------------------------------------;
+BreakIterator_th::BreakIterator_th()
+{
+    dict = new xdictionary("th");
+    cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
+    dict->setCellBoundary(nextCellIndex);
+}
+
+BreakIterator_th::~BreakIterator_th()
+{
+    delete dict;
+}
+
+Boundary SAL_CALL
+BreakIterator_th::previousWord(const OUString& text, sal_Int32 anyPos,
+    const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
+{
+    makeIndex(text, anyPos);
+    return dict->previousWord(text.getStr(), anyPos, text.getLength());
+}
+
+Boundary SAL_CALL
+BreakIterator_th::nextWord(const OUString& text, sal_Int32 anyPos,
+    const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
+{
+    makeIndex(text, anyPos);
+    return dict->nextWord(text.getStr(), anyPos, text.getLength());
+}
+
+Boundary SAL_CALL
+BreakIterator_th::getWordBoundary( const OUString& text, sal_Int32 anyPos,
+    const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
+    throw(RuntimeException)
+{
+    makeIndex(text, anyPos);
+    return dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), bDirection);
+}
+
+#define SARA_AM 0x0E33
+
+/*
+ * cell composition states
+ */
+
+#define ST_COM  1   // Compose the following character with leading char and display in the same cell
+#define ST_NXT  2   // display the following character in the next cell
+#define ST_NDP  3   // non-display
+
+static const sal_Int16 thaiCompRel[MAX_CT][MAX_CT] = {
+    //  C  N  C  L  F  F  F  B  B  B  T  A  A  A  A  A  A
+    //  T  O  O  V  V  V  V  V  V  D  O  D  D  D  V  V  V
+    //  R  N  N     1  2  3  1  2     N  1  2  3  1  2  3
+    //  L     S                       E
+    //  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // CTRL 0
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // NON  1
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM   }, // CONS 2
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // LV   3
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // FV1  4
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // FV2  5
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // FV3  6
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // BV1  7
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // BV2  8
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // BD   9
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // TONE 10
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AD1  11
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AD2  12
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AD3  13
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AV1  14
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AV2  15
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT   } // AV3  16
+
+};
+
+const sal_uInt32 is_ST_COM = (1<<CT_CTRL)|(1<<CT_NON)|(1<<CT_CONS)|(1<<CT_TONE);
+
+static sal_uInt16 SAL_CALL getCombState(const sal_Unicode *text, sal_Int32 pos)
+{
+    sal_uInt16 ch1 = getCharType(text[pos]);
+    sal_uInt16 ch2 = getCharType(text[pos+1]);
+
+    if (text[pos+1] == SARA_AM) {
+        if ((1 << ch1) & is_ST_COM)
+        return  ST_COM;
+        else
+        ch2 = CT_AD1;
+    }
+
+    return thaiCompRel[ch1][ch2];
+}
+
+
+static sal_Int32 SAL_CALL getACell(const sal_Unicode *text, sal_Int32 pos, sal_Int32 len)
+{
+    sal_uInt32 curr = 1;
+    for (; pos + 1 < len && getCombState(text, pos) == ST_COM; curr++, pos++) {}
+    return curr;
+}
+
+#define is_Thai(c)  (0x0e00 <= c && c <= 0x0e7f) // Unicode definition for Thai
+
+void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStartPos)
+    throw(RuntimeException)
+{
+    if (Text != cachedText) {
+        cachedText = Text;
+        if (cellIndexSize < cachedText.getLength()) {
+        cellIndexSize = cachedText.getLength();
+        free(nextCellIndex);
+        free(previousCellIndex);
+        nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
+        previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
+        // for finding correct word boundary
+        dict->setCellBoundary(nextCellIndex);
+        }
+        // reset nextCell for new Text
+        memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));
+    }
+    else if (nextCellIndex[nStartPos] > 0 || ! is_Thai(Text[nStartPos]))
+        return;
+
+    const sal_Unicode* str = cachedText.getStr();
+    sal_Int32 len = cachedText.getLength(), startPos, endPos;
+
+    startPos = nStartPos;
+    while (startPos > 0 && is_Thai(str[startPos-1])) startPos--;
+    endPos = nStartPos+1;
+    while (endPos < len && is_Thai(str[endPos])) endPos++;
+
+    sal_Int32 start, end, pos;
+    pos = start = end = startPos;
+
+    while (pos < endPos) {
+        end += getACell(str, start, endPos);
+        while (pos < end) {
+        nextCellIndex[pos] = end;
+        previousCellIndex[pos] = start;
+        pos++;
+        }
+        start = end;
+    }
+}
+
+} } } }
