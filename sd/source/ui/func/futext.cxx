@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:23:07 $
+ *  last change: $Author: af $ $Date: 2002-12-03 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,7 +1500,10 @@ void FuText::DoubleClick(const MouseEvent& rMEvt)
     // Nichts zu tun
 }
 
-// #97016#
+/** #97016#
+    #105815# Removed the insertion of default text and putting a new text
+    object directly into edit mode.
+*/
 SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_TEXTEDIT:   // BASIC ???
@@ -1523,9 +1526,6 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             sal_Bool bVertical = (SID_ATTR_CHAR_VERTICAL == nID || SID_TEXT_FITTOSIZE_VERTICAL == nID);
             pText->SetVerticalWriting(bVertical);
 
-            String aText(SdResId(STR_POOLSHEET_TEXT));
-            pText->SetText(aText);
-
             // #97016#
             ImpSetAttributesForNewTextObject(pText);
 
@@ -1544,6 +1544,10 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
                 // #97016#
                 ImpSetAttributesFitCommon(pText);
             }
+
+            // Put text object into edit mode.
+            SdrPageView* pPV = pView->GetPageViewPvNum(0);
+            pView->BegTextEdit (pText, pPV);
         }
         else
         {
