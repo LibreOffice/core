@@ -12,8 +12,6 @@
  <toolbar:toolbaritem xlink:href=".uno:AddField" toolbar:helpid="helpid:10623" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:AutoControlFocus" toolbar:helpid="helpid:10763" toolbar:text="" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="helpid:20349" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
