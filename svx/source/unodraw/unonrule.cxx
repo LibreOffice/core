@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 09:28:44 $
+ *  last change: $Author: cl $ $Date: 2000-12-08 17:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,9 +547,23 @@ uno::Reference< container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) 
 {
     SvxNumRule* pDefaultRule = NULL;
     if( pModel )
-        pDefaultRule = ((SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
+    {
+        SvxNumBulletItem* pItem = (SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+        if( pItem )
+        {
+            pDefaultRule = pItem->GetNumRule();
+        }
+    }
 
-    return SvxCreateNumRule( pDefaultRule );
+    if( pDefaultRule )
+    {
+        return SvxCreateNumRule( pDefaultRule );
+    }
+    else
+    {
+        SvxNumRule aTempRule( 0, 10, false );
+        return SvxCreateNumRule( &aTempRule );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
