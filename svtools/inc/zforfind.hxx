@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 21:46:08 $
+ *  last change: $Author: er $ $Date: 2001-05-04 16:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,14 @@ private:
 
     void InitText();                            // Init of months and days of week
 
-    double StringToDouble(                      // Convert string to double
-            const String& rStr );
+    // Convert string to double.
+    // Only simple unsigned floating point values without any error detection,
+    // decimal separator has to be '.'
+    // If bForceFraction==TRUE the string is taken to be the fractional part
+    // of 0.1234 without the leading 0. (thus being just "1234").
+    double StringToDouble(
+            const String& rStr,
+            BOOL bForceFraction = FALSE );
 
     BOOL NextNumberStringSymbol(                // Next number/string symbol
             const sal_Unicode*& pStr,
