@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:33:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
         uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
 
         xExtendedIndexEntrySupplier =
-            uno::Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > (
+            uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier > (
                     xMSF->createInstance( C2U("com.sun.star.i18n.IndexEntrySupplier") ),
                                                                         uno::UNO_QUERY );
     }
