@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:31:31 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,13 +1126,6 @@ void FmSearchEngine::SearchNextImpl()
         nFieldPos = iterFieldCheck - iterBegin;
     }
 
-    // ---------------------
-    // die eigentliche Suche
-#ifndef NOOLDSV
-    if (m_eMode == FmSearchDialog::SM_BRUTE)
-        Application::EnterWait();
-#endif
-
     PropagateProgress(sal_True);
     SEARCH_RESULT srResult;
     if (m_eSearchForType != SEARCHFOR_STRING)
@@ -1142,12 +1135,6 @@ void FmSearchEngine::SearchNextImpl()
     else
         srResult = SearchRegularApprox(strSearchExpression, nFieldPos, iterFieldCheck, iterBegin, iterEnd);
 
-#ifndef NOOLDSV
-    if (m_eMode == FmSearchDialog::SM_BRUTE)
-        Application::LeaveWait();
-#endif
-
-    // ---------------------
     m_srResult = srResult;
 
     if (SR_ERROR == m_srResult)
