@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:16:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,6 @@
 #include <scriptinfo.hxx>
 #endif
 
-
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
 TYPEINIT1( SwTxtNode, SwCntntNode )
@@ -343,7 +342,7 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       SwTxtFmtColl *pTxtColl,
                       SwAttrSet* pAutoAttr )
     : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
-      pSwpHints( 0 ), pWrong( 0 ), pNdNum( 0 ), pNdOutl( 0 )
+      pSwpHints( 0 ), pWrong( 0 ), pNdNum( 0 )
 {
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
@@ -388,7 +387,6 @@ SwTxtNode::~SwTxtNode()
     pWrong = NULL; // hier nicht wegoptimieren!
 
     delete pNdNum, pNdNum = 0;      // ggfs. wird in der BasisKlasse noch
-    delete pNdOutl, pNdOutl = 0;    // darauf zugegriffen??
 }
 
 SwCntntFrm *SwTxtNode::MakeFrm()
@@ -1046,15 +1044,18 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     SwNodes& rNds = GetNodes();
     if( nOldLevel != nNewLevel )
     {
-        delete pNdOutl, pNdOutl = 0;
         // Numerierung aufheben, falls sie aus der Vorlage kommt
         // und nicht nicht aus der neuen
-        if( NO_NUMBERING != nNewLevel && pNdNum && ( !GetpSwAttrSet() ||
-            SFX_ITEM_SET != GetpSwAttrSet()->GetItemState(
-                RES_PARATR_NUMRULE, FALSE )) &&
-            (!pNewColl || SFX_ITEM_SET != pNewColl->GetItemState(
-                RES_PARATR_NUMRULE )) )
-            delete pNdNum, pNdNum = 0;
+        if( NO_NUMBERING != nNewLevel && pNdNum &&
+            ( !GetpSwAttrSet() ||
+              SFX_ITEM_SET !=
+              GetpSwAttrSet()->GetItemState(RES_PARATR_NUMRULE, FALSE )))
+        {
+            if ((!pNewColl ||
+                 SFX_ITEM_SET != pNewColl->GetItemState(RES_PARATR_NUMRULE )) )
+                delete pNdNum, pNdNum = 0;
+        }
+
         if( rNds.IsDocNodes() )
             rNds.UpdateOutlineNode( *this, nOldLevel, nNewLevel );
     }
@@ -2250,9 +2251,11 @@ const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
             *pNdNum = rNum;
     }
 
+#if 0 // #115901#
     // #111955#
     if ((0 == pOldNum || 0 == pNdNum) && pOldNum != pNdNum)
         GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
+#endif
 
     NumRuleChgd();
     return pNdNum;
@@ -2291,31 +2294,22 @@ void SwTxtNode::NumRuleChgd()
 #endif
 }
 
-const SwNodeNum* SwTxtNode::UpdateOutlineNum( const SwNodeNum& rNum )
-{
-    if( NO_NUMBERING == rNum.GetLevel() )       // kein Nummerierung mehr ?
-    {
-        if( !pNdOutl )
-            return 0;
-        delete pNdOutl, pNdOutl = 0;
-    }
-    else
-    {
-        if( !pNdOutl )
-            pNdOutl = new SwNodeNum( rNum );
-        else if( !( *pNdOutl == rNum ))
-            *pNdOutl = rNum;
-    }
-
-    // 6969: Aktualisierung der NumPortions auch bei leeren Zeilen!
-    NumRuleChgd();
-    return pNdOutl;
-}
-
-// #111955#
+// #111955#, #115901#
 BOOL SwTxtNode::IsOutlineNum() const
 {
-    return pNdOutl != NULL && pNdNum == NULL;
+    BOOL bResult = FALSE;
+
+    SwNumRule * pRule = GetNumRule();
+
+    if (pRule && pRule->IsOutlineRule())
+        bResult = TRUE;
+
+    return bResult;
+}
+
+BOOL SwTxtNode::MayBeNumbered() const
+{
+    return ! pNdNum || pNdNum->IsNum();
 }
 
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
@@ -2354,7 +2348,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         delete pNewAttrSet;
 
     const SwNumRule* pRule = GetNumRule();
-    if( pRule && rNds.IsDocNodes() )
+    if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() ) // #115901#
     {
         // ist am Node eine Nummerierung gesetzt und wird dieser vor dem
         // alten eingefuegt, so kopiere die Nummer
@@ -2908,4 +2902,13 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 }
 
 
+const SwNodeNum * SwTxtNode::GetOutlineNum() const
+{
+    const SwNodeNum * pResult = NULL;
+    const SwNumRule * pRule = GetNumRule();
 
+    if (pRule && pRule->IsOutlineRule())
+        pResult = GetNum();
+
+    return pResult;
+}
