@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XURLTransformer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:32:30 $
+ *  last change:$Date: 2003-10-06 13:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,9 @@
 
 package ifc.util;
 
-import lib.MultiMethodTest;
-
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.util.XURLTransformer</code>
@@ -213,7 +212,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (!url[0].Path.equals(path)) {
+        if ((!url[0].Path.equals(path)) && (!url[0].Path.equals(path + "/"))) {
             log.println("parseStrict works wrong");
             log.println("path field : " + url[0].Path);
             log.println("expected : " + path);
@@ -284,7 +283,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (!url[0].Path.equals(path)) {
+        if ((!url[0].Path.equals(path)) && (!url[0].Path.equals(path + "/"))) {
             log.println("parseStrict works wrong");
             log.println("path field : " + url[0].Path);
             log.println("expected : " + path);
@@ -353,7 +352,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (!url[0].Path.equals(path)) {
+        if ((!url[0].Path.equals(path)) && (!url[0].Path.equals(path + "/"))) {
             log.println("parseSmart works wrong");
             log.println("path field : " + url[0].Path);
             log.println("expected : " + path);
@@ -426,7 +425,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (!url[0].Path.equals(path)) {
+        if ((!url[0].Path.equals(path)) && (!url[0].Path.equals(path + "/"))) {
             log.println("parseSmart works wrong");
             log.println("path field : " + url[0].Path);
             log.println("expected : " + path);
@@ -455,35 +454,47 @@ public class _XURLTransformer extends MultiMethodTest {
 
         log.println("getPresentation('" + expectedCompleteHTTP + "', true): ");
         String presentation = oObj.getPresentation(url, true);
-        log.println(presentation);
-        log.println("Expected presentation: " + expectedCompleteHTTP);
         boolean res = presentation.equals(expectedCompleteHTTP);
+        log.println("Resulted presentation: " + presentation);
+        log.println("Expected presentation: " + expectedCompleteHTTP);
+        log.println("Result: " + res);
 
         url.Complete = expectedCompleteFTP;
         log.println("getPresentation('" + expectedCompleteFTP + "', false): ");
+        // the password must be masqurade with <****>
+        String asterix = "";
+        for (int n = 0 ; n < password.length(); n++){
+            asterix += "*";
+        }
+        asterix = "<" + asterix.substring(1,asterix.length());
+        asterix = asterix.substring(0,asterix.length()-1) + ">";
+
         presentation = oObj.getPresentation(url, false);
-        log.println(presentation);
-        String expectedPresentation = "ftp://" + user + "@" + server + ":" +
-            port + path + "/" + name;
+        String expectedPresentation = "ftp://" + user + ":" + asterix + "@" +
+            server + ":" + port + path + "/" + name;
         res &= presentation.equals(expectedPresentation);
+        log.println("Resulted presentation: " + presentation);
         log.println("Expected presentation: " + expectedPresentation);
+        log.println("Result: " + res);
 
         log.println("getPresentation('" + expectedCompleteFTP + "', true): ");
         presentation = oObj.getPresentation(url, true);
-        log.println(presentation);
         expectedPresentation = "ftp://" + user + ":" + password + "@" +
             server + ":" + port + path + "/" + name;
         res &= presentation.equals(expectedPresentation);
+        log.println("Resulted presentation: " + presentation);
         log.println("Expected presentation: " + expectedPresentation);
+        log.println("Result: " + res);
 
         String incorrectURL = "*bla-bla*";
         url.Complete = incorrectURL;
         log.println("getPresentation('" + incorrectURL + "', false): ");
         presentation = oObj.getPresentation(url, false);
-        log.println(presentation);
         expectedPresentation = "";
         res &= presentation.equals(expectedPresentation);
+        log.println("Resulted presentation: " + presentation);
         log.println("Expected presentation: " + expectedPresentation);
+        log.println("Result: " + res);
 
         tRes.tested("getPresentation()", res);
     }
