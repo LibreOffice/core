@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ka $ $Date: 2001-03-20 16:53:05 $
+#   last change: $Author: kz $ $Date: 2001-05-16 11:11:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ USE_LDUMP2=TRUE
 .INCLUDE :	sv.mk
 .INCLUDE :	makefile.pmk
 
-LDUMP=ldump2.exe
+LDUMP=ldump4.exe
 
 # --- Allgemein ----------------------------------------------------------
 
