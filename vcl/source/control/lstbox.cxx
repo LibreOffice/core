@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-21 10:44:32 $
+ *  last change: $Author: pl $ $Date: 2002-04-16 16:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
     {
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( TRUE );
+        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         mpFloatWin->StartFloat( TRUE );
     }
 
@@ -343,8 +344,27 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, p )
 {
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     mpBtn->SetPressed( FALSE );
     return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::ToggleDropDown()
+{
+    if( IsDropDownBox() )
+    {
+        if( mpFloatWin->IsInPopupMode() )
+            mpFloatWin->EndPopupMode();
+        else
+        {
+            mpImplWin->GrabFocus();
+            mpBtn->SetPressed( TRUE );
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+            mpFloatWin->StartFloat( TRUE );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -680,6 +700,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
                         mpBtn->SetPressed( TRUE );
+                        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                         mpFloatWin->StartFloat( FALSE );
                         nDone = 1;
                     }
@@ -1239,6 +1260,13 @@ void ListBox::SetMaxMRUCount( USHORT n )
 USHORT ListBox::GetMaxMRUCount() const
 {
     return mpImplLB->GetMaxMRUCount();
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ListBox::GetDisplayLineCount() const
+{
+    return mpImplLB->GetDisplayLineCount();
 }
 
 // =======================================================================

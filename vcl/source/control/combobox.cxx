@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-21 10:44:32 $
+ *  last change: $Author: pl $ $Date: 2002-04-16 16:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
         mpImplLB->SelectEntry( 0 , TRUE );
     mpBtn->SetPressed( TRUE );
     SetSelection( Selection( 0, SELECTION_MAX ) );
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
     mpFloatWin->StartFloat( TRUE );
     return 0;
 }
@@ -336,6 +337,7 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, p )
 {
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     mpBtn->SetPressed( FALSE );
     return 0;
 }
@@ -513,6 +515,29 @@ IMPL_LINK( ComboBox, ImplDoubleClickHdl, void*, EMPTYARG )
 {
     DoubleClick();
     return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void ComboBox::ToggleDropDown()
+{
+    if( IsDropDownBox() )
+    {
+        if( mpFloatWin->IsInPopupMode() )
+            mpFloatWin->EndPopupMode();
+        else
+        {
+            mpSubEdit->GrabFocus();
+            if ( !mpImplLB->GetEntryList()->GetMRUCount() )
+                ImplUpdateFloatSelection();
+            else
+                mpImplLB->SelectEntry( 0 , TRUE );
+            mpBtn->SetPressed( TRUE );
+            SetSelection( Selection( 0, SELECTION_MAX ) );
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+            mpFloatWin->StartFloat( TRUE );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -724,6 +749,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                     if ( mpImplLB->GetEntryList()->GetMRUCount() )
                         mpImplLB->SelectEntry( 0 , TRUE );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
+                    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                     mpFloatWin->StartFloat( FALSE );
                     nDone = 1;
                 }
@@ -1247,6 +1273,13 @@ void ComboBox::SetMaxMRUCount( USHORT n )
 USHORT ComboBox::GetMaxMRUCount() const
 {
     return mpImplLB->GetMaxMRUCount();
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ComboBox::GetDisplayLineCount() const
+{
+    return mpImplLB->GetDisplayLineCount();
 }
 
 // -----------------------------------------------------------------------

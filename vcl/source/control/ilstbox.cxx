@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
+ *  last change: $Author: pl $ $Date: 2002-04-16 16:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1653,6 +1653,19 @@ void ImplListBoxWindow::Paint( const Rectangle& rRect )
     maFocusRect.SetPos( Point( 0, ( mnCurrentPos - mnTop ) * mnMaxHeight ) );
     if( HasFocus() && bShowFocusRect )
         ImplShowFocusRect();
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ImplListBoxWindow::GetDisplayLineCount() const
+{
+    USHORT nCount = mpEntryList->GetEntryCount();
+    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    USHORT nEntries = (nHeight + mnMaxHeight-1)/mnMaxHeight;
+    if( nEntries > nCount-mnTop )
+        nEntries = nCount-mnTop;
+
+    return nEntries;
 }
 
 // -----------------------------------------------------------------------
