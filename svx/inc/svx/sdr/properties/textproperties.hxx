@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:32:24 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace sdr
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
 
             // pre/post-process saving
-            virtual void PreProcessSave();
+            //BFS01virtual void PreProcessSave();
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
