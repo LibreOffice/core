@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-03 06:38:52 $
+ *  last change: $Author: af $ $Date: 2002-12-03 17:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,6 +1136,10 @@
 				</prop>
 			</group>
 			<group oor:name="GraphicManager">
+				<info>
+					<desc xml:lang="en-US">Group of graphic manager cache options.</desc>
+					<label xml:lang="en-US">Graphic Manager Cache</label>
+				</info>
 				<prop oor:name="TotalCacheSize" oor:type="xs:int">
 					<info>
 						<author>AF</author>
@@ -1591,6 +1595,8 @@
 		<group oor:name="Gallery">
 			<info>
 				<author>AF</author>
+				<desc xml:lang="en-US">Gallery options.</desc>
+				<label xml:lang="en-US">Gallery Options</label>
 			</info>
 			<prop oor:name="ID_Dialog" oor:type="xs:boolean">
 				<!-- OldPath: Common/Peets-ID-Dialog -->
@@ -1599,6 +1605,7 @@
 				<info>
 					<deprecated/>
 					<author>AF</author>
+					<desc xml:lang="en-US">Deprecated.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2695,6 +2702,10 @@
 					</prop>
 				</group>
 				<group oor:name="File">
+					<info>
+						<desc xml:lang="en-US">Options for printing into a file.</desc>
+						<label xml:lang="en-US">Print File</label>
+					</info>
 					<prop oor:name="ReduceTransparency" oor:type="xs:boolean">
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrintFileOptions-->
 						<info>
@@ -3001,8 +3012,18 @@
 					<label xml:lang="en-US">Number of colors</label>
 				</info>
 				<constraints>
-					<minInclusive oor:value="8"/>
-					<maxInclusive oor:value="32"/>
+					<minInclusive oor:value="8">
+						<info>
+							<desc xml:lang="en-US">Minimal number that can be used to create 
+							a vector graphic is 8.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="32">
+						<info>
+							<desc xml:lang="en-US">Minimal number that can be used to create
+							 a vector graphic is 32.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>8</value>
 			</prop>
@@ -3018,8 +3039,16 @@
 					<label xml:lang="en-US">Point reduction</label>
 				</info>
 				<constraints>
-					<minInclusive oor:value="0"/>
-					<maxInclusive oor:value="32"/>
+					<minInclusive oor:value="0">
+						<info>
+							<desc xml:lang="en-US">Minimal value to reduce pount are 0 pixels.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="32">
+						<info>
+							<desc xml:lang="en-US">Maximal value to reduce pount are 32 pixels.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>0</value>
 			</prop>
@@ -3046,8 +3075,16 @@
 					<label xml:lang="en-US">Tile extent</label>
 				</info>
 				<constraints>
-					<minInclusive oor:value="8"/>
-					<maxInclusive oor:value="128"/>
+					<minInclusive oor:value="8">
+						<info>
+							<desc xml:lang="en-US">Minimal extent are 8 pixels.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="128">
+						<info>
+							<desc xml:lang="en-US">Maximal extent are 128 pixels.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>32</value>
 			</prop>
@@ -3055,8 +3092,14 @@
 		<group oor:name="Image">
 			<info>
 				<author>AF</author>
+				<desc xml:lang="en-US">Image options.</desc>
+				<label xml:lang="en-US">Image</label>
 			</info>
 			<group oor:name="Color">
+				<info>
+					<desc xml:lang="en-US">Image color options.</desc>
+					<label xml:lang="en-US">Image Color</label>
+				</info>
 				<prop oor:name="Grayscale" oor:type="xs:short">
 					<!-- OldPath: Image/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
@@ -3064,11 +3107,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Number</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="4"/>
-						<maxInclusive oor:value="256"/>
+						<minInclusive oor:value="4">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="256">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>256</value>
 				</prop>
@@ -3079,11 +3131,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Number</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="64"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="64">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>16</value>
 				</prop>
@@ -3094,11 +3155,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Brightness</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="100"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>10</value>
 				</prop>
@@ -3109,11 +3179,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Contrast</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="100"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>10</value>
 				</prop>
@@ -3124,11 +3203,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Angle</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="36000"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="36000">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>4500</value>
 				</prop>
@@ -3139,6 +3227,7 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">To the left / To the right</label>
 					</info>
 					<value>true</value>
@@ -3150,15 +3239,28 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Threshold value</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="100"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>50</value>
 				</prop>
 				<group oor:name="RGB">
+					<info>
+						<desc xml:lang="en-US">Image options regarding colors in RGB format.</desc>
+						<label xml:lang="en-US">Image RGB Color</label>
+					</info>
 					<prop oor:name="Red" oor:type="xs:int">
 						<!-- OldPath: Image/Colors/RGB -->
 						<!-- OldLocation: Soffice.cfg -->
@@ -3166,11 +3268,20 @@
 						<info>
 							<deprecated/>
 							<author>AF</author>
+							<desc xml:lang="en-US">Deprecated.</desc>
 							<label xml:lang="en-US">Red</label>
 						</info>
 						<constraints>
-							<minInclusive oor:value="0"/>
-							<maxInclusive oor:value="100"/>
+							<minInclusive oor:value="0">
+								<info>
+									<desc xml:lang="en-US">Deprecated.</desc>
+								</info>
+							</minInclusive>
+							<maxInclusive oor:value="100">
+								<info>
+									<desc xml:lang="en-US">Deprecated.</desc>
+								</info>
+							</maxInclusive>
 						</constraints>
 						<value>10</value>
 					</prop>
@@ -3180,11 +3291,21 @@
 						<!-- UIHints: Tools  Options - Picture  Colors - [Section] RGB values -->
 						<info>
 							<deprecated/>
+							<author>AF</author>
+							<desc xml:lang="en-US">Deprecated.</desc>
 							<label xml:lang="en-US">Green</label>
 						</info>
 						<constraints>
-							<minInclusive oor:value="0"/>
-							<maxInclusive oor:value="100"/>
+							<minInclusive oor:value="0">
+								<info>
+									<desc xml:lang="en-US">Deprecated.</desc>
+								</info>
+							</minInclusive>
+							<maxInclusive oor:value="100">
+								<info>
+									<desc xml:lang="en-US">Deprecated.</desc>
+								</info>
+							</maxInclusive>
 						</constraints>
 						<value>10</value>
 					</prop>
@@ -3195,17 +3316,30 @@
 						<info>
 							<deprecated/>
 							<author>AF</author>
+							<desc xml:lang="en-US">Deprecated.</desc>
 							<label xml:lang="en-US">Blue</label>
 						</info>
 						<constraints>
-							<minInclusive oor:value="0"/>
-							<maxInclusive oor:value="100"/>
+							<minInclusive oor:value="0">
+								<info>
+									<desc xml:lang="en-US">Deprecated.</desc>
+								</info>
+							</minInclusive>
+							<maxInclusive oor:value="100">
+								<info>
+									<desc xml:lang="en-US">Deprecated.</desc>
+								</info>
+							</maxInclusive>
 						</constraints>
 						<value>10</value>
 					</prop>
 				</group>
 			</group>
 			<group oor:name="Effect">
+				<info>
+					<desc xml:lang="en-US">Image effects options.</desc>
+					<label xml:lang="en-US">Image Effects</label>
+				</info>
 				<prop oor:name="MosaicX_Tile" oor:type="xs:short">
 					<!-- OldPath: Image/Effects -->
 					<!-- OldLocation: Soffice.cfg -->
@@ -3213,11 +3347,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">X Tile</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="999"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="999">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>4</value>
 				</prop>
@@ -3228,11 +3371,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Y Tile</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="999"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="999">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>4</value>
 				</prop>
@@ -3243,13 +3395,30 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Definition</label>
 					</info>
 					<constraints>
-						<enumeration oor:value="0"/>
-						<enumeration oor:value="1"/>
-						<enumeration oor:value="2"/>
-						<enumeration oor:value="3"/>
+						<enumeration oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
+						<enumeration oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
+						<enumeration oor:value="2">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
+						<enumeration oor:value="3">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
 					</constraints>
 					<value>2</value>
 				</prop>
@@ -3260,11 +3429,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Threshold value</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="100"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>10</value>
 				</prop>
@@ -3275,6 +3453,7 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Invert</label>
 					</info>
 					<value>false</value>
@@ -3286,11 +3465,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">X Tile</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="999"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="999">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>4</value>
 				</prop>
@@ -3301,11 +3489,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Y Tile</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="999"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="999">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>4</value>
 				</prop>
@@ -3317,13 +3514,30 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Degree</label>
 					</info>
 					<constraints>
-						<enumeration oor:value="0"/>
-						<enumeration oor:value="1"/>
-						<enumeration oor:value="2"/>
-						<enumeration oor:value="3"/>
+						<enumeration oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
+						<enumeration oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
+						<enumeration oor:value="2">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
+						<enumeration oor:value="3">
+							<info>
+								<desc xml:lang="en-US">Deprecated.</desc>
+							</info>
+						</enumeration>
 					</constraints>
 					<value>2</value>
 				</prop>
@@ -3334,11 +3548,20 @@
 					<info>
 						<deprecated/>
 						<author>AF</author>
+						<desc xml:lang="en-US">Deprecated.</desc>
 						<label xml:lang="en-US">Intensity</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="100"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Minimal intensity is 0.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Maximum intensity is 100.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>10</value>
 				</prop>
