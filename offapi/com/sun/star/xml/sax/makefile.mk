@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:45:43 $
+#   last change: $Author: sab $ $Date: 2001-11-26 09:24:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ PACKAGE=com$/sun$/star$/xml$/sax
 IDLFILES=\
     InputSource.idl\
     SAXException.idl\
+    SAXInvalidCharacterException.idl\
     SAXParseException.idl\
     XAttributeList.idl\
     XDocumentHandler.idl\
