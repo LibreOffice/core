@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace package_ucp {
 //=========================================================================
 
 #define PACKAGE_URL_SCHEME          "vnd.sun.star.pkg"
-#define PACKAGE_URL_SCHEME_LENGTH   20
+#define PACKAGE_URL_SCHEME_LENGTH   16
 
 //=========================================================================
 

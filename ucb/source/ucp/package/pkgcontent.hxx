@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-22 08:12:34 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ namespace com { namespace sun { namespace star {
     }
     namespace ucb
     {
-        struct InsertCommandArgument;
         struct OpenCommandArgument2;
+        struct TransferInfo;
     }
 } } }
 
@@ -184,9 +184,9 @@ private:
                      ::com::sun::star::beans::PropertyValue >& rValues );
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XHierarchicalNameAccess >
+            ::com::sun::star::container::XHierarchicalNameAccess >
     getPackage( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                    ::com::sun::star::lang::XMultiServiceFactory > & rxSMgr,
                 const PackageUri& rURI );
     static sal_Bool
     loadData( const ::com::sun::star::uno::Reference<
@@ -225,10 +225,15 @@ private:
                       ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
-    void insert( const ::com::sun::star::ucb::InsertCommandArgument& rArg )
+    void insert( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::io::XInputStream >& xStream,
+                 sal_Int32 nNameClashResolve )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
     void destroy( sal_Bool bDeletePhysical )
+        throw( ::com::sun::star::ucb::CommandAbortedException );
+
+    void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "pkguri.hxx"
 #endif
 
+using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
@@ -172,20 +173,10 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     if ( !Identifier->getContentProviderScheme().equalsIgnoreCase( aScheme ) )
         throw IllegalIdentifierException();
 
-    // Normalize URL. Internally ids have no trailing slash. However,
-    // the client may append a slash to indicate that he wants a folder
-    // object, not a stream. Content::create below will fail, in case
-    // the referenced resource is a stream.
-
-    Reference< XContentIdentifier > xId = Identifier;
-    OUString aURL = xId->getContentIdentifier();
-    sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
-    if ( ( nLastSlash + 1 ) == aURL.getLength() )
-    {
-        // Remove trailing slash and create new identifier.
-        aURL = aURL.copy( 0, nLastSlash );
-        xId = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
-    }
+    // Normalize URL...
+    PackageUri aUri( Identifier->getContentIdentifier() );
+    Reference< XContentIdentifier > xId
+                = new ::ucb::ContentIdentifier( m_xSMgr, aUri.getUri() );
 
     // Check, if a content with given id already exists...
     Reference< XContent > xContent = queryExistingContent( xId ).getBodyPtr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,14 +111,28 @@ void PackageUri::init() const
             if ( nEnd == -1 )
             {
                 // root folder.
-                m_aPackage = decodeSegment( m_aUri.copy( nStart ) );
+
+                // Note: toLowerCase needs no locale, because the string is
+                //       escaped and does never contain special chars.
+                OUString aNormPackage = m_aUri.copy( nStart ).toLowerCase();
+
+                m_aUri = m_aUri.replaceAt(
+                            nStart, m_aUri.getLength() - nStart, aNormPackage );
+                m_aPackage = decodeSegment( aNormPackage );
                 m_aPath = rtl::OUString::createFromAscii( "/" );
             }
             else
             {
-                m_aPackage = decodeSegment(
-                                    m_aUri.copy( nStart, nEnd - nStart ) );
-                m_aPath = m_aUri.copy( nEnd );
+                // Note: toLowerCase needs no locale, because the string is
+                //       escaped and does never contain special chars.
+                OUString aNormPackage
+                    = m_aUri.copy( nStart, nEnd - nStart ).toLowerCase();
+
+                m_aUri = m_aUri.replaceAt(
+                            nStart, nEnd - nStart, aNormPackage );
+                m_aPackage = decodeSegment( aNormPackage );
+//              m_aPath = m_aUri.copy( nEnd );
+                m_aPath = m_aUri.copy( nEnd + 1 );
 
                 sal_Int32 nLastSlash = m_aPath.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )

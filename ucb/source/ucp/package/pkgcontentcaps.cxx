@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-20 12:25:04 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,14 +262,11 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
                 -1,
                 &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
             },
-#if 0
-    N.Y.I.
             {
                 "transfer",
                 -1,
                 &getCppuType( static_cast< TransferInfo * >( 0 ) )
             },
-#endif
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-20 12:25:04 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 /**************************************************************************
                                 TODO
  **************************************************************************
-
- - transfer command
-
  *************************************************************************/
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -99,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -495,7 +495,10 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         InsertCommandArgument aArg;
         if ( aCommand.Argument >>= aArg )
         {
-            insert( aArg );
+            sal_Int32 nNameClash = aArg.ReplaceExisting
+                                 ? NameClash::OVERWRITE
+                                 : NameClash::ERROR;
+            insert( aArg.Data, nNameClash );
         }
         else
         {
@@ -520,9 +523,6 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
-#if 0
-    N.Y.I.
-
     else if ( aCommand.Name.compareToAscii( "transfer" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
@@ -533,8 +533,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         TransferInfo aInfo;
         if ( aCommand.Argument >>= aInfo )
         {
-// @@@
-//          transfer( aInfo );
+            transfer( aInfo );
         }
         else
         {
@@ -543,7 +542,6 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             throw CommandAbortedException();
         }
     }
-#endif
     else if ( aCommand.Name.compareToAscii( "flush" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
@@ -551,8 +549,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //  ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
-// @@@
-
+        flushData();
     }
     else
     {
@@ -1121,7 +1118,8 @@ Any Content::open( const OpenCommandArgument2& rArg,
 }
 
 //=========================================================================
-void Content::insert( const InsertCommandArgument& rArg )
+void Content::insert(
+        const Reference< XInputStream >& xStream, sal_Int32 nNameClashResolve )
     throw( CommandAbortedException )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1142,7 +1140,7 @@ void Content::insert( const InsertCommandArgument& rArg )
     {
         // Required: rArg.Data
 
-        if ( !rArg.Data.is() )
+        if ( !xStream.is() )
         {
             VOS_ENSURE( sal_False,
                         "Content::insert - input stream missing!" );
@@ -1163,16 +1161,62 @@ void Content::insert( const InsertCommandArgument& rArg )
     aNewURL += m_aProps.aTitle;
     PackageUri aNewUri( aNewURL );
 
-    if ( !rArg.ReplaceExisting )
+    // Handle possible name clash...
+    switch ( nNameClashResolve )
     {
-        if ( hasData( m_xSMgr, aNewUri ) )
+        // fail.
+        case NameClash::ERROR:
+            if ( hasData( m_xSMgr, aNewUri ) )
+                throw CommandAbortedException();
+
+            break;
+
+        // replace (possibly) existing object.
+        case NameClash::OVERWRITE:
+            break;
+
+        // "invent" a new valid title.
+        case NameClash::RENAME:
+            if ( hasData( m_xSMgr, aNewUri ) )
+            {
+                sal_Int32 nTry = 0;
+
+                do
+                {
+                    OUString aNew = aNewUri.getUri();
+                    aNew += OUString::createFromAscii( "_" );
+                    aNew += OUString::valueOf( ++nTry );
+                    aNewUri.setUri( aNew );
+                }
+                while ( hasData( m_xSMgr, aNewUri ) && ( nTry < 100000 ) );
+
+                if ( nTry == 100000 )
+                {
+                    VOS_ENSURE( sal_False,
+                                "Content::insert - "
+                                "Unable to resolve name clash" );
+                    throw CommandAbortedException();
+                }
+                else
+                {
+                    m_aProps.aTitle += OUString::createFromAscii( "_" );
+                    m_aProps.aTitle += OUString::valueOf( nTry );
+                }
+            }
+            break;
+
+        // keep existing sub-objects, transfer non-clashing sub-objects.
+        case NameClash::KEEP:
+            // @@@
+
+        default:
             throw CommandAbortedException();
     }
 
     m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
     m_aUri = aNewUri;
 
-    storeData( rArg.Data );
+    storeData( xStream );
 
     if ( m_eState == TRANSIENT )
     {
@@ -1220,6 +1264,247 @@ void Content::destroy( sal_Bool bDeletePhysical )
             (*it)->destroy( bDeletePhysical );
             ++it;
         }
+    }
+}
+
+//=========================================================================
+void Content::transfer( const TransferInfo& rInfo )
+    throw( CommandAbortedException )
+{
+    // targeturl->XNamed::setParent( this )
+
+    // setParent hat weder returnwert noch wirft es exceptions
+    // --> nach setparent checken, ob neues elem existiert und
+    //     by move checken, ob altes elem weg ist.
+
+    // dynamische props nicht vergessen!
+
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+
+    // Persistent?
+    if ( m_eState != PERSISTENT )
+    {
+        VOS_ENSURE( sal_False, "Content::transfer - Not persistent!" );
+        throw CommandAbortedException();
+    }
+
+    if ( rInfo.SourceURL.getLength() == 0 )
+        throw CommandAbortedException();
+
+    // Is source a hierarchy content?
+    if ( rInfo.SourceURL.compareToAscii(
+            PACKAGE_URL_SCHEME "://", PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 )
+        throw CommandAbortedException();
+
+    // Is source not a parent of me / not me?
+    OUString aId = m_xIdentifier->getContentIdentifier();
+    sal_Int32 nPos = aId.lastIndexOf( '/' );
+    if ( nPos != ( aId.getLength() - 1 ) )
+    {
+        // No trailing slash found. Append.
+        aId += OUString::createFromAscii( "/" );
+    }
+
+    if ( rInfo.SourceURL.getLength() <= aId.getLength() )
+    {
+        if ( aId.compareTo(
+                rInfo.SourceURL, rInfo.SourceURL.getLength() ) == 0 )
+            throw CommandAbortedException();
+    }
+
+    try
+    {
+        //////////////////////////////////////////////////////////////////
+        // 0) Obtain content object for source.
+        //////////////////////////////////////////////////////////////////
+
+        Reference< XContentIdentifier > xId =
+                    new ::ucb::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
+
+        // Note: The static cast is okay here, because its sure that
+        //       m_xProvider is always the PackageContentProvider.
+        vos::ORef< Content > xSource
+            = static_cast< Content * >(
+                m_xProvider->queryContent( xId ).get() );
+        if ( !xSource.isValid() )
+            throw CommandAbortedException();
+
+        //////////////////////////////////////////////////////////////////
+        // 1) Create new child content.
+        //////////////////////////////////////////////////////////////////
+
+        OUString aType = xSource->isFolder()
+                       ? OUString::createFromAscii(
+                               PACKAGE_FOLDER_CONTENT_SERVICE_NAME )
+                       : OUString::createFromAscii(
+                               PACKAGE_STREAM_CONTENT_SERVICE_NAME );
+        ContentInfo aInfo;
+        aInfo.Type = aType;
+        aInfo.Attributes = 0;
+
+        // Note: The static cast is okay here, because its sure that
+        //       createNewContent always creates a Content.
+        vos::ORef< Content > xTarget = static_cast< Content * >(
+                                            createNewContent( aInfo ).get() );
+        if ( !xTarget.isValid() )
+            throw CommandAbortedException();
+
+        //////////////////////////////////////////////////////////////////
+        // 2) Copy data from source content to child content.
+        //////////////////////////////////////////////////////////////////
+
+        Sequence< Property > aProps
+                        = xSource->getPropertySetInfo()->getProperties();
+        sal_Int32 nCount = aProps.getLength();
+
+        if ( nCount )
+        {
+            sal_Bool bHadTitle = ( rInfo.NewTitle.getLength() == 0 );
+
+            // Get all source values.
+            Reference< XRow > xRow = xSource->getPropertyValues( aProps );
+
+            Sequence< PropertyValue > aValues( nCount );
+            PropertyValue* pValues = aValues.getArray();
+
+            const Property* pProps = aProps.getConstArray();
+            for ( sal_Int32 n = 0; n < nCount; ++n )
+            {
+                const Property& rProp  = pProps[ n ];
+                PropertyValue&  rValue = pValues[ n ];
+
+                rValue.Name   = rProp.Name;
+                rValue.Handle = rProp.Handle;
+
+                if ( !bHadTitle && rProp.Name.compareToAscii( "Title" ) == 0 )
+                {
+                    // Set new title instead of original.
+                    bHadTitle = sal_True;
+                    rValue.Value <<= rInfo.NewTitle;
+                }
+                else
+                    rValue.Value
+                        = xRow->getObject( n + 1, Reference< XNameAccess >() );
+
+                rValue.State = PropertyState_DIRECT_VALUE;
+
+                if ( rProp.Attributes & PropertyAttribute::REMOVABLE )
+                {
+                    // Add Additional Core Property.
+                    try
+                    {
+                        xTarget->addProperty( rProp.Name,
+                                              rProp.Attributes,
+                                              rValue.Value );
+                    }
+                    catch ( PropertyExistException & )
+                    {
+                    }
+                    catch ( IllegalTypeException & )
+                    {
+                    }
+                    catch ( IllegalArgumentException & )
+                    {
+                    }
+                }
+            }
+
+            // Set target values.
+            xTarget->setPropertyValues( aValues );
+        }
+
+        //////////////////////////////////////////////////////////////////
+        // 3) Commit (insert) child.
+        //////////////////////////////////////////////////////////////////
+
+        xTarget->insert( xSource->getInputStream(), rInfo.NameClash );
+
+        //////////////////////////////////////////////////////////////////
+        // 4) Transfer (copy) children of source.
+        //////////////////////////////////////////////////////////////////
+
+        if ( xSource->isFolder() )
+        {
+            Reference< XEnumeration > xIter = xSource->getIterator();
+            if ( xIter.is() )
+            {
+                while ( xIter->hasMoreElements() )
+                {
+                    try
+                    {
+                        Reference< XNamed > xNamed;
+                        xIter->nextElement() >>= xNamed;
+
+                        if ( !xNamed.is() )
+                        {
+                            VOS_ENSURE( sal_False,
+                                        "Content::transfer - Got no XNamed!" );
+                            break;
+                        }
+
+                        OUString aName = xNamed->getName();
+
+                        if ( !aName.getLength() )
+                        {
+                            VOS_ENSURE( sal_False,
+                                        "Content::transfer - Empty name!" );
+                            break;
+                        }
+
+                        OUString aChildId = xId->getContentIdentifier();
+                        if ( ( aChildId.lastIndexOf( '/' ) + 1 )
+                                                    != aChildId.getLength() )
+                            aChildId += OUString::createFromAscii( "/" );
+
+                        aChildId += aName;
+
+                        Reference< XContentIdentifier > xChildId
+                            = new ::ucb::ContentIdentifier( m_xSMgr, aChildId );
+
+                        vos::ORef< Content > xChild
+                            = static_cast< Content * >(
+                                m_xProvider->queryContent( xChildId ).get() );
+
+                        TransferInfo aInfo;
+                        aInfo.MoveData  = sal_False;
+                        aInfo.NewTitle  = OUString();
+                        aInfo.SourceURL = aChildId;
+                        aInfo.NameClash = rInfo.NameClash;
+
+                        // Transfer child to target.
+                        xTarget->transfer( aInfo );
+                    }
+                    catch ( NoSuchElementException & )
+                    {
+                    }
+                    catch ( WrappedTargetException & )
+                    {
+                    }
+                }
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////
+        // 5) Destroy source ( when moving only ) .
+        //////////////////////////////////////////////////////////////////
+
+        if ( rInfo.MoveData )
+        {
+            xSource->destroy( sal_True );
+
+            // Remove all persistent data of source and its children.
+            xSource->removeData();
+
+            // Remove own and all children's Additional Core Properties.
+            xSource->removeAdditionalPropertySet( sal_True );
+        }
+    }
+    catch ( IllegalIdentifierException & )
+    {
+        // queryContent
+        VOS_ENSURE( sal_False, "Content::transfer - "
+                               "Caught IllegalIdentifierException!" );
+        throw CommandAbortedException();
     }
 }
 
@@ -1343,8 +1628,8 @@ void Content::queryChildren( ContentRefList& rChildren )
 //=========================================================================
 // static
 Reference< XHierarchicalNameAccess > Content::getPackage(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
-                        const PackageUri& rURI )
+                             const Reference< XMultiServiceFactory > & rxSMgr,
+                            const PackageUri& rURI )
 {
     Reference< XHierarchicalNameAccess > xNameAccess;
 
@@ -1371,7 +1656,8 @@ Reference< XHierarchicalNameAccess > Content::getPackage(
                 = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
 
             VOS_ENSURE( xNameAccess.is(),
-                        "Content::getPackage - Got no hierarchical name access!" );
+                        "Content::getPackage - "
+                        "Got no hierarchical name access!" );
         }
     }
     catch ( RuntimeException & )
@@ -1498,7 +1784,6 @@ sal_Bool Content::loadData( const Reference< XMultiServiceFactory >& rxSMgr,
                 rProps.bIsDocument = sal_True;
                 rProps.bIsFolder = sal_False;
             }
-
 
             return sal_True;
         }

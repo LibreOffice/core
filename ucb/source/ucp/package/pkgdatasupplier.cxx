@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-21 17:04:47 $
+ *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,8 @@
 
  *************************************************************************/
 
-#ifndef __VECTOR__
-#include <stl/vector>
-#endif
+#include <vector>
+
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
