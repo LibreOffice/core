@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-13 14:28:49 $
+ *  last change: $Author: gt $ $Date: 2002-04-04 09:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     pTree = pLBTree;
     aSelEng.SetFunctionSet( (FunctionSet*)&aFctSet );
     aSelEng.ExpandSelectionOnMouseMove( FALSE );
+    aSelEng.EnableListBoxMode();
     SetWindowBits( nWinStyle );
     SetSelectionMode( SINGLE_SELECTION );
     SetDragDropMode( 0 );
@@ -2162,13 +2163,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( pNewCursor )
             {
                 aSelEng.CursorPosChanging( bShift, bMod1 );
-                if( IsEntryInView( pNewCursor ) )
-                    SetCursor( pNewCursor );
-                else
-                {
-                    SetCursor( pNewCursor );
+                SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
+                if( !IsEntryInView( pNewCursor ) )
                     KeyUp( FALSE );
-                }
             }
             break;
 
@@ -2188,13 +2185,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             {
                 aSelEng.CursorPosChanging( bShift, bMod1 );
                 if( IsEntryInView( pNewCursor ) )
-                    SetCursor( pNewCursor );
+                    SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 else
                 {
                     if( pCursor )
                         pView->Select( pCursor, FALSE );
                     KeyDown( FALSE );
-                    SetCursor( pNewCursor );
+                    SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 }
             }
             else
@@ -2301,16 +2298,17 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_SPACE:
-            if ( !bShift && !bMod1 )
+            if ( bMod1 )
+            {
+                if ( pView->GetSelectionMode() == MULTIPLE_SELECTION && !bShift )
+                    // toggle selection
+                    pView->Select( pCursor, !pView->IsSelected( pCursor ) );
+            }
+            else if ( !bShift /*&& !bMod1*/ )
             {
                 if ( aSelEng.IsAddMode() )
-                {
                     // toggle selection
-                    BOOL bSel = TRUE;
-                    if ( pView->IsSelected( pCursor ) )
-                        bSel = FALSE;
-                    pView->Select( pCursor, bSel );
-                }
+                    pView->Select( pCursor, !pView->IsSelected( pCursor ) );
                 else
                 {
                     SelAllDestrAnch( FALSE );
