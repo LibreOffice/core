@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2002-12-12 16:48:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,5 +359,7 @@ extern RTLFUNC(ConvertToUrl);
 extern RTLFUNC(ConvertFromUrl);
 extern RTLFUNC(CDateToIso);
 extern RTLFUNC(CDateFromIso);
+extern RTLFUNC(CompatibilityMode);
+extern RTLFUNC(CDec);
 
 
