@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:04:31 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,6 +661,11 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 
     // #103834# Set Application Background color for usage in SdrPaintView(s)
     pDrView->SetApplicationBackgroundColor(aFillColor);
+
+    /* #97517#  This is done before each text edit, so why not do it before every paint.
+                The default language is only used if the outliner only contains one
+                character in a symbol font */
+    pDoc->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
     pDrView->InitRedraw( pWin, Region( rRect ) );
 
