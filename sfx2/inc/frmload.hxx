@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-07-10 11:14:12 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,33 +196,6 @@ public:
                             SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 protected:
     virtual SfxObjectFactory&   GetFactory();
-};
-
-class SfxFrameLoaderFactory : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XSingleServiceFactory >
-{
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::rtl::OUString                     aImplementationName;
-    ::cppu::ComponentInstantiation      pCreateFunction;
-
-public:
-    SfxFrameLoaderFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
-            ::cppu::ComponentInstantiation pCreateFunction_, const ::rtl::OUString& rImplementationName_ )
-        : xSMgr( rServiceManager )
-        , aImplementationName( rImplementationName_ )
-        , pCreateFunction( pCreateFunction_ )
-    {}
-
-    // XSingleServiceFactory
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(void)
-                throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& Arguments)
-                throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif
