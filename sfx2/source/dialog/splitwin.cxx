@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:26:06 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "splitwin.hxx"
 #include "workwin.hxx"
@@ -129,8 +131,8 @@ friend class SfxSplitWindow;
                             , pOwner( pParent )
                             , bFadeIn( FALSE )
                             , bAutoHide( FALSE )
-                            , bEndAutoHide( FALSE )
                             , bSplit( FALSE )
+                            , bEndAutoHide( FALSE )
                             , nState( 1 )
                         {
                             aTimer.SetTimeoutHdl(
@@ -256,6 +258,9 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
             eTbxAlign = WINDOWALIGN_BOTTOM;
             bPinned = TRUE;
             break;
+        default:
+            eTbxAlign = WINDOWALIGN_TOP;  // some sort of default...
+            break;  // -Wall lots not handled..
     }
 
     SetAlign (eTbxAlign);
@@ -382,7 +387,7 @@ void SfxSplitWindow::SaveConfig_Impl()
 
 void SfxSplitWindow::StartSplit()
 {
-    long nSize;
+    long nSize = 0;
     Size aSize = GetSizePixel();
 
     if ( pEmptyWin )
@@ -834,7 +839,6 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, BOOL bHide )
 
     SfxDock_Impl *pDock=0;
     USHORT nCount = pDockArr->Count();
-    BOOL bFound = FALSE;
     for ( USHORT n=0; n<nCount; n++ )
     {
         pDock = (*pDockArr)[n];
