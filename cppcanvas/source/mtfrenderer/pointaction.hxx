@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pointaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <tools/gen.hxx>
 #endif
 
-#include "action.hxx"
+#include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
 class Color;
@@ -95,7 +95,7 @@ namespace cppcanvas
                          const ::Color&     );
             virtual ~PointAction();
 
-            virtual bool render() const;
+            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
 
         private:
             // default: disabled copy/assignment
