@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:02:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,7 +1595,7 @@ SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
             FALSE - otherwhise.
 */
 BOOL Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
-                          const String    &sURL      ,
+                                String    &sURL      ,
                                 String    *pFallback ,
                                 Image     *pImage    )
 {
@@ -1614,8 +1614,9 @@ BOOL Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
                 bValidFallback = TRUE;
             }
 
-            if (sURL.Equals(aCmd))
+            if (aCmd.Search(sURL)==0)//match even if the menu command is more detailed (maybe an additional query) #i28667#
             {
+                sURL = aCmd;
                 *pImage = pMenu->GetItemImage( nId );
                 return TRUE;
             }
