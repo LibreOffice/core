@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:58:20 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ ODocumentContainer::~ODocumentContainer()
 //--------------------------------------------------------------------------
 Reference< XPropertySet > ODocumentContainer::createObject()
 {
-    return new ODocumentDefinition(ODocumentDefinition::AccessControl());
+    ODocumentDefinition::AccessControl aAccessControl;
+    return new ODocumentDefinition(aAccessControl);
 }
 
 //--------------------------------------------------------------------------
