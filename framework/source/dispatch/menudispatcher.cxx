@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:52:25 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
                                             const   Sequence< PropertyValue >&  seqProperties   ) throw( RuntimeException )
 {
     const char RESOURCE_URL[] = "private:resource/";
+    const char ACCEL_PARAM[]  = "?accel=";
 
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -261,11 +262,14 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
             // check for the right url syntax
             OUString aResourceString = aURL.Complete.copy( aResourceURLCommand.getLength() );
 
-            int nResIdIndex = aResourceString.indexOf( '/' );
-            int         nResId        = 0;
-            MenuBar*    pMenuBar      = NULL;
-            ResMgr*     pResManager   = NULL;
-            ResMgr*     pGlobalResMgr = NULL;
+            int             nResIdIndex   = aResourceString.indexOf( '/' );
+            int             nResAccIndex  = aResourceString.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( ACCEL_PARAM )));
+            int             nResId        = 0;
+            MenuBar*        pMenuBar      = NULL;
+            ResMgr*         pResManager   = NULL;
+            ResMgr*         pAccResManager= NULL;
+            ResMgr*         pGlobalResMgr = NULL;
+            Accelerator*    pAccel        = NULL;
 
             aGuard.unlock();
             OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -297,14 +301,56 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
 
                 if (bAvailable)
                 {
+                    ResId* pAccResId = NULL;
+
+                    if (( nResAccIndex > 0 ) && (( nResAccIndex + sizeof( ACCEL_PARAM )) < aResourceString.getLength() ))
+                    {
+                        int      index         = nResAccIndex + sizeof( ACCEL_PARAM )-1;
+                        OUString aAccResString = aResourceString.copy( index, aResourceString.getLength()-index );
+                        int      nResIdIndex   = aAccResString.indexOf( '/' )+1;
+                        int      nAccResId     = 0;
+
+                        if ( nResIdIndex < aAccResString.getLength() )
+                        {
+                            nAccResId     = aAccResString.copy( nResIdIndex ).toInt32();
+                            aAccResString = aAccResString.copy( 0, nResIdIndex-1 );
+                        }
+
+                        if ( nAccResId > 0 && aAccResString.getLength() > 0 )
+                        {
+                            pAccResManager = new ResMgr( aAccResString );
+                            if ( pAccResManager )
+                            {
+                                pAccResId = new ResId( nAccResId, pAccResManager );
+                                pAccResId->SetRT( RSC_ACCEL );
+                                if ( !pAccResManager->IsAvailable( *pAccResId ))
+                                {
+                                    delete pAccResId;
+                                    pAccResId = NULL;
+                                }
+                            }
+                        }
+                    }
+
                     pMenuBar = new MenuBar( aMenuBarResId );
                     pMenuBar->SetCloserHdl( LINK( this, MenuDispatcher, Close_Impl ) );
+
+                    if ( pAccResId )
+                    {
+                        pAccel = new Accelerator( *pAccResId );
+                        delete pAccResId;
+                    }
                 }
 
                 if (pResManager)
                 {
                     delete pResManager;
                     pResManager = NULL;
+                }
+                if (pAccResManager)
+                {
+                    delete pAccResManager;
+                    pAccResManager = NULL;
                 }
                 pGlobalResMgr = NULL;
             }
@@ -314,8 +360,13 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
                 // set new menu bar if there is an old one delete it before!
                 if ( !impl_setMenuBar( pMenuBar, sal_True ))
                 {
-                    OGuard aSolarGuard( Application::GetSolarMutex() );
                     delete pMenuBar;
+                }
+                else if ( pAccel )
+                {
+                    // set accelerators from resource
+                    impl_setAccelerators( (Menu *)pMenuBar, *pAccel );
+                    delete pAccel;
                 }
             }
         }
@@ -541,6 +592,28 @@ void MenuDispatcher::impl_sendStatusEvent( const   Reference< XFrame >&    xEven
             {
                 aIterator.remove();
             }
+        }
+    }
+}
+
+//*****************************************************************************************************************
+//  private method
+//
+//
+//*****************************************************************************************************************
+void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
+{
+    for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
+    {
+        USHORT     nId    = pMenu->GetItemId(nPos);
+        PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
+        if ( pPopup )
+            impl_setAccelerators( (Menu *)pPopup, aAccel );
+        else if ( nId && !pMenu->GetPopupMenu(nId))
+        {
+            KeyCode aCode = aAccel.GetKeyCode( nId );
+            if ( aCode.GetCode() )
+                pMenu->SetAccelKey( nId, aCode );
         }
     }
 }
