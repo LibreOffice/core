@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallableStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:23:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace connectivity
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
-        virtual void createStatement();
+        virtual void createStatement(JNIEnv* _pEnv);
 
         virtual ~java_sql_CallableStatement();
     public:
