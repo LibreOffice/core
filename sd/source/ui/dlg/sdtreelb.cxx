@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:02:54 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,42 +59,59 @@
  *
  ************************************************************************/
 
-#ifndef _SOT_FORMATS_HXX //autogen
+#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
+#ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef _SV_MSGBOX_HXX //autogen
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _SVDITER_HXX //autogen
+#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
 #endif
-#ifndef _SFXDOCFILE_HXX //autogen
+#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SVDOOLE2_HXX //autogen
+#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SD_CUSSHOW_HXX
 #include "cusshow.hxx"
 #endif
+#ifndef _SFX_CHILDWIN_HXX
+#include <sfx2/childwin.hxx>
+#endif
 
 #include "strmname.h"
+#ifndef _SDTREELB_HXX
 #include "sdtreelb.hxx"
-#include "viewshel.hxx"
-#include "docshell.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
+#endif
+#ifndef _SDPAGE_HXX
 #include "sdpage.hxx"
-#include "sdview.hxx"
+#endif
+#ifndef SD_RESID_HXX
 #include "sdresid.hxx"
-#include "navichld.hxx"
+#endif
+#ifndef SD_NAVIGATOR_HXX
 #include "navigatr.hxx"
+#endif
+#ifndef _SD_CFGID_HXX
 #include "strings.hrc"
+#endif
 #include "res_bmp.hrc"
 
 
@@ -132,7 +149,7 @@ void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 
 // -----------------------------------------------------------------------------
 
-SdDrawDocShell& SdPageObjsTLB::SdPageObjsTransferable::GetDocShell() const
+::sd::DrawDocShell& SdPageObjsTLB::SdPageObjsTransferable::GetDocShell() const
 {
     return mrDocShell;
 }
@@ -873,7 +890,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
             {
                 // Da das Medium der SdTreeLb gehoert, gehoert auch die
                 // nun zu erzeugende DocShell der SdTreeLb
-                xBookmarkDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
+                xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
                 if (xBookmarkDocShRef->DoLoad(pMed))
                     pBookmarkDoc = xBookmarkDocShRef->GetDoc();
@@ -1005,7 +1022,7 @@ void SdPageObjsTLB::DoDrag()
 
     if( pDropNavWin )
     {
-        SdDrawDocShell*     pDocShell = ( (SdDrawDocument*) pDoc )->GetDocSh();
+        ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
         String              aURL( pDocShell->GetMedium()->GetPhysicalName() );
         NavigatorDragType   eDragType = pDropNavWin->GetNavigatorDragType();
 
