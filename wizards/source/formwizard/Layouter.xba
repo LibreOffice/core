@@ -152,12 +152,13 @@ Dim oTBShape as Object
 Dim aTBSize As New com.sun.star.awt.Size
 Dim aLabelSize As New com.sun.star.awt.Size
 Dim aPoint As New com.sun.star.awt.Point
+Dim aSize As New com.sun.star.awt.Size
 Dim oLocControl as Object
 Dim oLocPeer as Object
 	oLabelModel =  CreateUnoService(&quot;com.sun.star.form.component.FixedText&quot;)
 	oTBModel =  CreateUnoService(&quot;com.sun.star.form.component.TextField&quot;)
 
-	Set oLabelShape = InsertControl(oDrawPage, oLabelModel, aPoint, aSize)
+	Set oLabelShape = InsertControl(oDrawPage, oLabelModel, aPoint, aLabelSize)
 	Set oTBShape = InsertControl(oDrawPage, oTBModel, aPoint, aSize)
 
 	oLocPeer = oController.GetControl(oLabelModel).Peer

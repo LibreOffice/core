@@ -179,7 +179,7 @@ Sub InitializeWidthList()
 	WidthList(8,2) = False
 	WidthList(8,3) = &quot;FormattedField&quot;
 	
-	WidthList(9,0) = com.sun.star.sdbc.DataType.DECIMAL			&apos; =   3;  (mit Nachkommastellen)
+	WidthList(9,0) = com.sun.star.sdbc.DataType.DECIMAL			&apos; =   3;  (including decimal places)
 	WidthList(9,1) = cNumericBox
 	WidthList(9,2) = False
 	WidthList(9,3) = &quot;FormattedField&quot;

@@ -281,7 +281,6 @@ Sub GetCurrentMetaValues(Index as Integer)
 	CurDefaultValue = FieldMetaValues(Index,5)
 	CurIsCurrency = FieldMetaValues(Index,6)
 	CurScale = FieldMetaValues(Index,7)
-&apos; Todo: Is this really the HelpText?
 	CurHelpText = FieldMetaValues(Index,8)
     CurFieldName = FieldNames(Index)
 End Sub</script:module>

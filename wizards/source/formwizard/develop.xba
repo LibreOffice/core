@@ -163,9 +163,6 @@ Dim aSize As New com.sun.star.awt.Size
 		End If
 	Else
 		oModel = CreateUnoService(oModelService(cLabel))
-&apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
-&apos; own. therefor the model should be inserted before the shape
-&apos;		oDBForm.InsertByName(oModel.Name, oModel)
 		aPoint = GetPoint(nXTCPos, nYTCPos)
 		aSize = GetSize(nTCWidth,nTCHeight)
 		Set oShape = InsertControl(oDrawPage, oModel, aPoint, aSize)
@@ -222,9 +219,6 @@ Dim iColRightX as Long
 		If CurControlType = cCheckBox Then
 			oDBModelList(i).Label = &quot;&quot;
 		End If
-		&apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
-		&apos; own. therefor the model should be inserted before the shape
-		&apos; oDBForm.InsertByName(oDBModel.Name, oDBModel)
 		oDBModelList(i).DataField = CurFieldName
 	End If
 	nDBHeight = GetDBHeight(oDBModelList(i))
@@ -283,7 +277,7 @@ Dim oGroupShape as Object
 End Function
 
 
-&apos; Note on all Controls except for the checkbox the Label has to be set
+&apos; Note: on all Controls except for the checkbox the Label has to be set
 &apos; a bit under the DBControl because its Height is also smaller 
 Sub GetLabelDiffHeight(Index as Integer)
 	If (CurArrangement = cLeftJustified) Or (CurArrangement = cColumnarLeft) Then
