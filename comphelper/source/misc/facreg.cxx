@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:19:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include <string.h>
 
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
@@ -100,17 +104,7 @@ extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonServiceName()
 extern uno::Reference< uno::XInterface > SAL_CALL OfficeInstallationDirectories_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
 //
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
+static void writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
 {
     uno::Reference< registry::XRegistryKey > xNewKey(
         pRegistryKey->createKey(
@@ -120,7 +114,7 @@ void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& 
         xNewKey->createKey( rServices.getConstArray()[i]);
 }
 
-void SAL_CALL registerSingleton( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const OUString& rSingletonName, const OUString& rServiceName )
+static void registerSingleton( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const OUString& rSingletonName, const OUString& rServiceName )
 {
     OUStringBuffer aSingletonKeyName;
     aSingletonKeyName.appendAscii( "/" );
@@ -134,7 +128,16 @@ void SAL_CALL registerSingleton( registry::XRegistryKey * pRegistryKey, const OU
     xNewKey->setStringValue( rServiceName );
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+//
+extern "C"
+{
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -160,7 +163,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
     return sal_True;
 }
 
-void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
     if( pServiceManager )
