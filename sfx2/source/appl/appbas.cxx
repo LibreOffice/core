@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:10:06 $
+ *  last change: $Author: ab $ $Date: 2001-04-23 11:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,7 @@ SbxVariable* SfxConstants_Impl::Find
 //=========================================================================
 sal_uInt16 SfxApplication::SaveBasicManager() const
 {
+    /* AB, 19.4.2001: No sbl files stored any more -> new library containers
     // MT: #47347# AppBasicDir ist jetzt ein PATH!
     // Ncht den vom BasicManager, falls inzwischen der Pfad geaendert wurde !?
     // So wird natuerlich auch das erste Dir genommen, wenn der BasicManager
@@ -560,6 +561,9 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     }
 
     return (sal_uInt16)aStor->GetError();
+    */
+
+    return 0;
 }
 
 //--------------------------------------------------------------------
