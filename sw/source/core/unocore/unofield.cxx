@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:07:07 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,8 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aMacroFieldPropMap        [] =
             {
                 {SW_PROP_NAME(UNO_NAME_HINT), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_MACRO),FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_MACRO_NAME),FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_MACRO_LIBRARY),FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
             pRet = aMacroFieldPropMap;
@@ -2244,8 +2245,11 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_MACRO:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_MACROFLD);
-                pFld = new SwMacroField((SwMacroFieldType*)pFldType,
-                            m_pProps->sPar1, m_pProps->sPar2);
+                String aName;
+                SwMacroField::CreateMacroString(
+                    aName, m_pProps->sPar1, m_pProps->sPar3 );
+                pFld = new SwMacroField((SwMacroFieldType*)pFldType, aName,
+                                        m_pProps->sPar2);
             }
             break;
             case SW_SERVICE_FIELDTYPE_PAGE_COUNT            :

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0277 LEVEL */                        {MAP_CHAR_LEN("Level")},
 /* 0278 INTERVAL */                     {MAP_CHAR_LEN("Interval")},
 /* 0279 LINK_REGION */                  {MAP_CHAR_LEN("LinkRegion")},
-/* 0280 MACRO */                        {MAP_CHAR_LEN("Macro")},
+/* 0280 MACRO_NAME */                   {MAP_CHAR_LEN("MacroName")},
 /* 0281 SPLIT */                        {MAP_CHAR_LEN("Split")},
 /* 0282 PARA_SPLIT */                   {MAP_CHAR_LEN("ParaSplit")},
 /* 0283 NUMBER_FORMAT */                {MAP_CHAR_LEN("NumberFormat")},
@@ -690,7 +690,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0608 PARA_STYLELEVEL7 */             {MAP_CHAR_LEN("ParaStyleLevel7")},
 /* 0609 PARA_STYLELEVEL8 */             {MAP_CHAR_LEN("ParaStyleLevel8")},
 /* 0610 PARA_STYLELEVEL9 */             {MAP_CHAR_LEN("ParaStyleLevel9")},
-/* 0611 PARA_STYLESEPARATOR */          {MAP_CHAR_LEN("ParaStyleSeparator")}
+/* 0611 PARA_STYLESEPARATOR */          {MAP_CHAR_LEN("ParaStyleSeparator")},
+/* 0612 MACRO_LIBRARY */                {MAP_CHAR_LEN("MacroLibrary")}
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,10 @@ public:
     virtual void    SetPar2(const String& rStr);
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+
+    static void CreateMacroString( String& rMacro,
+                                   const String& rMacroName,
+                                   const String& rLibraryName );
 };
 
 

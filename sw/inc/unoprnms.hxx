@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 10:46:14 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ enum SwPropNameIds
 /* 0277 */  UNO_NAME_LEVEL,
 /* 0278 */  UNO_NAME_INTERVAL,
 /* 0279 */  UNO_NAME_LINK_REGION,
-/* 0280 */  UNO_NAME_MACRO,
+/* 0280 */  UNO_NAME_MACRO_NAME,
 /* 0281 */  UNO_NAME_SPLIT,
 /* 0282 */  UNO_NAME_PARA_SPLIT,
 /* 0283 */  UNO_NAME_NUMBER_FORMAT,
@@ -689,8 +689,9 @@ enum SwPropNameIds
 /* 0609 */  UNO_NAME_PARA_STYLELEVEL8,
 /* 0610 */  UNO_NAME_PARA_STYLELEVEL9,
 /* 0611 */  UNO_NAME_PARA_STYLESEPARATOR,
+/* 0612 */  UNO_NAME_MACRO_LIBRARY,
 
-/* 0612 */  SW_PROPNAME_END
+/* 0613 */  SW_PROPNAME_END
 };
 
 

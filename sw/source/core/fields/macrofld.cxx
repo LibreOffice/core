@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,10 @@ String SwMacroField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwMacroField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO)))
-        rAny <<= OUString(aMacro);
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_NAME)))
+        rAny <<= OUString(GetMacroName());
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_LIBRARY)))
+        rAny <<= OUString(GetLibName());
     else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
         rAny <<= OUString(aText);
 
@@ -205,11 +207,17 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, const String& rProperty ) const
 --------------------------------------------------*/
 BOOL SwMacroField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO)))
+    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_NAME)))
     {
         OUString uTmp;
         rAny >>= uTmp;
-        aMacro = String(uTmp);
+        CreateMacroString(aMacro, String(uTmp), GetLibName());
+    }
+    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_LIBRARY)))
+    {
+        OUString uTmp;
+        rAny >>= uTmp;
+        CreateMacroString(aMacro, GetMacroName(), String(uTmp));
     }
     else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
     {
@@ -222,5 +230,18 @@ BOOL SwMacroField::PutValue( const uno::Any& rAny, const String& rProperty )
         DBG_ERROR("Welches Property?")
 #endif
     return TRUE;
+}
+
+// create an internally used macro name from the library and macro name parts
+void SwMacroField::CreateMacroString(
+    String& rMacro,
+    const String& rMacroName,
+    const String& rLibraryName )
+{
+    // concatenate library and name; use dot only if both strings have content
+    rMacro = rLibraryName;
+    if ( rLibraryName.Len() > 0 && rMacroName.Len() > 0 )
+        rMacro += '.';
+    rMacro += rMacroName;
 }
 

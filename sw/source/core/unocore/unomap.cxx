@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: os $ $Date: 2001-07-30 12:18:19 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1823,7 +1823,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aMacroFieldPropMap        [] =
                 {
                     {SW_PROP_NAME(UNO_NAME_HINT), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_MACRO),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_MACRO_NAME),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_MACRO_LIBRARY),FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 pRet = aMacroFieldPropMap;
