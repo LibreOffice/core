@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:52:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,25 @@
 #include <sfx2/viewsh.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_SCDLL_HXX
 #include "scdll.hxx"
 #endif
 
+#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
+#endif
+
+#ifndef SC_SHELLIDS_HXX
 #include "shellids.hxx"
+#endif
+
+#ifndef SC_REFRESHTIMER_HXX
 #include "refreshtimer.hxx"
+#endif
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -122,7 +133,7 @@ class ScDocShellModificator;
 #define SC_PF_TESTMERGE     2
 #define SC_PF_WHOLEROWS     4
 
-class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxListener
+class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxListener
 {
     static const sal_Char __FAR_DATA pStarCalcDoc[];
     static const sal_Char __FAR_DATA pStyleName[];
@@ -162,34 +173,34 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
-    void            InitItems();
-    void            DoEnterHandler();
-    void            InitOptions();
-    void            ResetDrawObjectShell();
+    SC_DLLPRIVATE void          InitItems();
+    SC_DLLPRIVATE void          DoEnterHandler();
+    SC_DLLPRIVATE void          InitOptions();
+    SC_DLLPRIVATE void          ResetDrawObjectShell();
 
-    BOOL            GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab );
-    BOOL            LoadCalc( SvStorage* pStor );
-    BOOL            SaveCalc( SvStorage* pStor );
-    BOOL            LoadXML( SfxMedium* pMedium, SvStorage* pStor );
-    BOOL            SaveXML( SfxMedium* pMedium, SvStorage* pStor );
-    SCTAB           GetSaveTab();
-    void            UpdateAllRowHeights();
+    SC_DLLPRIVATE BOOL          GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab );
+    SC_DLLPRIVATE BOOL          LoadCalc( SvStorage* pStor );
+    SC_DLLPRIVATE BOOL          SaveCalc( SvStorage* pStor );
+    SC_DLLPRIVATE BOOL          LoadXML( SfxMedium* pMedium, SvStorage* pStor );
+    SC_DLLPRIVATE BOOL          SaveXML( SfxMedium* pMedium, SvStorage* pStor );
+    SC_DLLPRIVATE SCTAB         GetSaveTab();
+    SC_DLLPRIVATE void          UpdateAllRowHeights();
 
-    void            RemoveUnknownObjects();
+    SC_DLLPRIVATE void          RemoveUnknownObjects();
 
-    ULONG           DBaseImport( const String& rFullFileName, CharSet eCharSet,
+    SC_DLLPRIVATE ULONG         DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                  BOOL bSimpleColWidth[MAXCOLCOUNT] );
-    ULONG           DBaseExport( const String& rFullFileName, CharSet eCharSet,
+    SC_DLLPRIVATE ULONG         DBaseExport( const String& rFullFileName, CharSet eCharSet,
                                  BOOL& bHasMemo );
 
-    static BOOL     MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
-    static BOOL     KillFile( const INetURLObject& rURL );
-    static BOOL     IsDocument( const INetURLObject& rURL );
+    SC_DLLPRIVATE static BOOL       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
+    SC_DLLPRIVATE static BOOL       KillFile( const INetURLObject& rURL );
+    SC_DLLPRIVATE static BOOL       IsDocument( const INetURLObject& rURL );
 
-    void            LockPaint_Impl(BOOL bDoc);
-    void            UnlockPaint_Impl(BOOL bDoc);
-    void            LockDocument_Impl(USHORT nNew);
-    void            UnlockDocument_Impl(USHORT nNew);
+    SC_DLLPRIVATE void          LockPaint_Impl(BOOL bDoc);
+    SC_DLLPRIVATE void          UnlockPaint_Impl(BOOL bDoc);
+    SC_DLLPRIVATE void          LockDocument_Impl(USHORT nNew);
+    SC_DLLPRIVATE void          UnlockDocument_Impl(USHORT nNew);
 
 protected:
 
