@@ -4,18 +4,19 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.bin
-..\%__SRC%\bin\so\soffice.exe %_DEST%\bin%_EXT%\so\soffice.exe
-..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
+..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\soremote.exe %_DEST%\bin%_EXT%\remote\soffice.exe
-..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\soffice.exe
-
-..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\soremote.exe %_DEST%\bin%_EXT%\remote2\soffice.exe
 
 ..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\soffice.exe
 ..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\setup.exe
 ..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\sclient.exe
 ..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\jvmsetup.exe
+
+..\%__SRC%\bin\soffice_oo.exe %_DEST%\bin%_EXT%\soffice_oo.exe
+..\%__SRC%\bin\soffice_so.exe %_DEST%\bin%_EXT%\soffice_so.exe
+..\%__SRC%\bin\soffice_oo %_DEST%\bin%_EXT%\soffice_oo.bin
+..\%__SRC%\bin\soffice_so %_DEST%\bin%_EXT%\soffice_so.bin
 
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\*.exe.manifest %_DEST%\bin%_EXT%\*.exe.manifest
@@ -32,8 +33,6 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\lib\liboffacc*.so %_DEST%\lib%_EXT%\liboffacc*.so
 ..\%__SRC%\lib\liboffacc*.dylib %_DEST%\lib%_EXT%\liboffacc*.dylib
 
-..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
-..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 
