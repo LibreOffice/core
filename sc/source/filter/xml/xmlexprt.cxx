@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-25 14:47:10 $
+ *  last change: $Author: sab $ $Date: 2001-01-31 11:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
+#endif
+#ifndef _SCH_MEMCHRT_HXX
+#include <sch/memchrt.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -2042,7 +2045,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     rtl::OUString sOUName ( xNamed->getName() );
                     String sName(sOUName);
                     SchMemChart* pMemChart = pDoc->FindChartData(sName);
-                    if (pMemChart)
+                    if (pMemChart && pMemChart->GetSeriesAddresses().getLength())
                     {
                         bMemChart = sal_True;
                         GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
