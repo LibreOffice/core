@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: obo $ $Date: 2001-07-04 09:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@
 #include <connectivity/dbexception.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
