@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:33 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,7 @@
 
 <!-- Parameter -->
 <xsl:param name="root">../registry/schema</xsl:param>
-<xsl:param name="pathSeparator">/</xsl:param>
-<xsl:param name="file"/>
-<xsl:variable name="componentName"><xsl:value-of select="translate($file,$pathSeparator,'.')"/></xsl:variable>
+<xsl:param name="componentName"/>
 
 	<xsl:template match = "/">
 		<xsl:message terminate="no">CHECKING CONSISTENCY ...</xsl:message>
