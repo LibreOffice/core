@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:04:43 $
+ *  last change: $Author: ama $ $Date: 2000-12-18 10:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
 #endif
@@ -111,6 +114,11 @@
 #ifndef _PORGLUE_HXX
 #include <porglue.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+
+using namespace ::com::sun::star;
 
 /*-----------------10.10.00 15:23-------------------
  *  class SwMultiPortion
@@ -164,6 +172,20 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine )
             Width( pLay->Width() );
         pLay = pLay->GetNext();
     } while ( pLay );
+    if( HasBrackets() )
+    {
+        KSHORT nTmp = ((SwDoubleLinePortion*)this)->GetBrackets()->nHeight;
+        if( nTmp > Height() )
+        {
+            KSHORT nAdd = ( nTmp - Height() ) / 2;
+            GetRoot().SetAscent( GetRoot().GetAscent() + nAdd );
+            GetRoot().Height( GetRoot().Height() + nAdd );
+            Height( nTmp );
+        }
+        nTmp = ((SwDoubleLinePortion*)this)->GetBrackets()->nAscent;
+        if( nTmp > GetAscent() )
+            SetAscent( nTmp );
+    }
 }
 
 long SwMultiPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf )
@@ -265,6 +287,31 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
             pBracket->cPost = 0;
          }
     }
+    BYTE nTmp = SW_SCRIPTS;
+    if( pBracket->cPre )
+    {
+        String aTxt( pBracket->cPre );
+        USHORT nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
+        switch ( nScript ) {
+            case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
+            case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
+            case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
+        }
+    }
+    pBracket->nPreScript = nTmp;
+    nTmp = SW_SCRIPTS;
+    if( pBracket->cPost )
+    {
+        String aTxt( pBracket->cPost );
+        USHORT nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
+        switch ( nScript ) {
+            case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
+            case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
+            case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
+        }
+    }
+    pBracket->nPostScript = nTmp;
+
     if( !pBracket->cPre && !pBracket->cPost )
     {
         delete pBracket;
@@ -300,6 +347,9 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
     aBlank.Height( pBracket->nHeight );
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+        BYTE nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
+        if( SW_SCRIPTS > nAct )
+            pTmpFnt->SetActual( nAct );
         pTmpFnt->SetProportion( 100 );
         SwFontSave aSave( rInf, pTmpFnt );
         aBlank.Paint( rInf );
@@ -321,6 +371,8 @@ void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
         pBracket = new SwBracket;
         pBracket->cPre = rDouble.pBracket->cPre;
         pBracket->cPost = rDouble.pBracket->cPost;
+        pBracket->nPreScript = rDouble.pBracket->nPreScript;
+        pBracket->nPostScript = rDouble.pBracket->nPostScript;
         pBracket->nStart = rDouble.pBracket->nStart;
     }
 }
@@ -337,13 +389,19 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     nMaxWidth -= rInf.X();
     SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
     pTmpFnt->SetProportion( 100 );
-    SwFontSave aSave( rInf, pTmpFnt );
-    pBracket->nAscent = rInf.GetAscent();
+    pBracket->nAscent = 0;
+    pBracket->nHeight = 0;
     if( pBracket->cPre )
     {
         String aStr( pBracket->cPre );
+        BYTE nActualScr = pTmpFnt->GetActual();
+        if( SW_SCRIPTS > pBracket->nPreScript )
+            pTmpFnt->SetActual( pBracket->nPreScript );
+        SwFontSave aSave( rInf, pTmpFnt );
         SwPosSize aSize = rInf.GetTxtSize( aStr );
+        pBracket->nAscent = rInf.GetAscent();
         pBracket->nHeight = aSize.Height();
+        pTmpFnt->SetActual( nActualScr );
         if( nMaxWidth > aSize.Width() )
         {
             pBracket->nPreWidth = aSize.Width();
@@ -361,8 +419,18 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     if( pBracket->cPost )
     {
         String aStr( pBracket->cPost );
+        if( SW_SCRIPTS > pBracket->nPostScript )
+            pTmpFnt->SetActual( pBracket->nPostScript );
+        SwFontSave aSave( rInf, pTmpFnt );
         SwPosSize aSize = rInf.GetTxtSize( aStr );
-        pBracket->nHeight = aSize.Height();
+        KSHORT nTmpAsc = rInf.GetAscent();
+        if( nTmpAsc > pBracket->nAscent )
+        {
+            pBracket->nHeight += nTmpAsc - pBracket->nAscent;
+            pBracket->nAscent = nTmpAsc;
+        }
+        if( aSize.Height() > pBracket->nHeight )
+            pBracket->nHeight = aSize.Height();
         if( nMaxWidth > aSize.Width() )
         {
             pBracket->nPostWidth = aSize.Width();
@@ -493,9 +561,16 @@ SwRubyPortion::SwRubyPortion( const SwTxtAttr& rAttr,  const SwFont& rFnt,
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
     SetTop( !rRuby.GetPosition() );
-    const SwAttrSet& rSet = ((SwTxtRuby&)rAttr).GetCharFmt()->GetAttrSet();
-    SwFont *pRubyFont = new SwFont( rFnt );
-    pRubyFont->SetDiffFnt( &rSet );
+    const SwCharFmt* pFmt = ((SwTxtRuby&)rAttr).GetCharFmt();
+    SwFont *pRubyFont;
+    if( pFmt )
+    {
+        const SwAttrSet& rSet = pFmt->GetAttrSet();
+         pRubyFont = new SwFont( rFnt );
+        pRubyFont->SetDiffFnt( &rSet );
+    }
+    else
+        pRubyFont = NULL;
     String aStr( rRuby.GetText(), nOffs, STRING_LEN );
     SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
     pFld->SetFollow( sal_True );
@@ -943,6 +1018,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         pTmpFnt = new SwFont( *GetInfo().GetFont() );
         SetPropFont( 50 );
         pTmpFnt->SetProportion( GetPropFont() );
+        pTmpFnt->SetVertical( rMulti.GetRotation() );
         pFontSave = new SwFontSave( GetInfo(), pTmpFnt, this );
     }
     else
@@ -967,7 +1043,13 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     // GetInfo().Y() is the baseline from the surrounding line. We must switch
     // this temporary to the baseline of the inner lines of the multiportion.
-    GetInfo().Y( nOldY - rMulti.GetAscent() + pLay->GetAscent() );
+    if( rMulti.GetRotation() )
+    {
+        GetInfo().Y( nOldY - rMulti.GetAscent() );
+        GetInfo().X( nTmpX + rMulti.Width() - pLay->GetAscent() );
+    }
+    else
+        GetInfo().Y( nOldY - rMulti.GetAscent() + pLay->GetAscent() );
     sal_Bool bRest = pLay->IsRest();
     sal_Bool bFirst = sal_True;
     do
@@ -1023,10 +1105,18 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
             aManip.SecondLine();
-            GetInfo().X( nTmpX );
-            // We switch to the baseline of the next inner line
-            GetInfo().Y( GetInfo().Y() + rMulti.GetRoot().Height()
-                - rMulti.GetRoot().GetAscent() + pLay->GetAscent() );
+            if( rMulti.GetRotation() )
+            {
+                GetInfo().X( nTmpX + pLay->Height() - pLay->GetAscent() );
+                GetInfo().Y( nOldY - rMulti.GetAscent() );
+            }
+            else
+            {
+                GetInfo().X( nTmpX );
+                // We switch to the baseline of the next inner line
+                GetInfo().Y( GetInfo().Y() + rMulti.GetRoot().Height()
+                    - rMulti.GetRoot().GetAscent() + pLay->GetAscent() );
+            }
         }
     } while( pPor );
 
@@ -1263,6 +1353,14 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         if( ((SwDoubleLinePortion&)rMulti).GetBrackets() )
             rMulti.Width( rMulti.Width() +
                 ((SwDoubleLinePortion&)rMulti).BracketWidth() );
+        if( rMulti.GetRotation() )
+        {
+            SwTwips nH = rMulti.Width();
+            rMulti.Width( rMulti.Height() );
+            rMulti.Height( nH );
+            if( rMulti.GetAscent() > nH )
+                rMulti.SetAscent( nH );
+        }
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:05:15 $
+ *  last change: $Author: ama $ $Date: 2000-12-18 10:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,10 @@ struct SwBracket
     KSHORT nHeight;         // Height of them
     KSHORT nPreWidth;       // Width of the opening bracket
     KSHORT nPostWidth;      // Width of the closing bracket
-    sal_Unicode cPre;       // Opening character, e.g. '('
-    sal_Unicode cPost;      // Closing character, e.g. ')'
+    sal_Unicode cPre;       // Initial character, e.g. '('
+    sal_Unicode cPost;      // Final character, e.g. ')'
+    BYTE nPreScript;        // Script of the initial character
+    BYTE nPostScript;       // Script of the final character
 };
 
 /*-----------------16.10.00 12:45-------------------
