@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
+ *  last change: $Author: cmc $ $Date: 2002-11-20 17:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ void SwWW8Writer::OutListTab()
                 bWriteBullet = true;
 
                 pBulletFont = rFmt.GetBulletFont();
-                if( !pBulletFont )
+                if (!pBulletFont)
                     pBulletFont = &SwNumRule::GetDefBulletFont();
 
                 eChrSet = pBulletFont->GetCharSet();
@@ -261,57 +261,12 @@ void SwWW8Writer::OutListTab()
                 eFamily = pBulletFont->GetFamily();
 
                 if (wwFont::IsStarSymbol(sFontName))
-                {
-                    if (!pConvert)
-                    {
-                        pConvert = CreateStarSymbolToMSMultiFont();
-#ifdef DUMPSYMBOLS
-                        ::std::ofstream output("fontdebug");
-                        for (sal_Unicode i=0xE000;i<0xF8FF;i++)
-                        {
-                            String sFont = pConvert->ConvertChar(i);
-                            if (sFont.Len())
-                                output << ::std::hex << i << std::endl;
-                        }
-#endif
-                    }
-                    sal_Unicode cChar = sNumStr.GetChar(0);
-                    String sFont = pConvert->ConvertChar(cChar);
-                    if (sFont.Len())
-                    {
-                        sNumStr = cChar;
-                        sFontName = sFont;
-                        eChrSet = RTL_TEXTENCODING_SYMBOL;
-                    }
-                    else if (sNumStr.GetChar(0) < 0xE000 ||
-                        sNumStr.GetChar(0) > 0xF8FF)
-                    {
-                        /*
-                        Ok we can't fit into a known windows unicode font, but
-                        we are not in the private area, so we are a
-                        standardized symbol, so turn off the symbol bit and
-                        let words own font substitution kick in
-                        */
-                        eChrSet = RTL_TEXTENCODING_UNICODE;
-                        eFamily = FAMILY_SWISS;
-                        sFontName = ::GetFontToken(sFontName, 0);
-                    }
-                    else
-                    {
-                        /*
-                        Well we don't have an available substition, and we're
-                        in our private area, so give up and show a standard
-                        bullet symbol
-                        */
-                        sFontName.ASSIGN_CONST_ASC("Wingdings");
-                        sNumStr = 0x6C;
-                    }
-                }
+                    SubstituteBullet(sNumStr,eChrSet,sFontName);
                 else if (eChrSet == RTL_TEXTENCODING_SYMBOL)
                 {
                     sal_Unicode cChar = sNumStr.GetChar(0);
-                    if (cChar>= 0xF000 && cChar<=0xF0FF)
-                        sNumStr.SetChar(0, cChar-0xF000);
+                    if (cChar >= 0xF000 && cChar <= 0xF0FF)
+                        sNumStr.SetChar(0, cChar - 0xF000);
                 }
             }
             else
@@ -525,39 +480,118 @@ void SwWW8Writer::Out_SwNumLvl( BYTE nSwLevel )
     Out_WwNumLvl( ( nSwLevel == NO_NUM ) ? 0 : nSwLevel + 1 );
 }
 
-void SwWW8Writer::BuildAnlvBulletBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
-                                    USHORT& rCharLen, const SwNumFmt& rFmt )
+void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
+    USHORT& rCharLen, const SwNumFmt& rFmt)
 {
+    ByteToSVBT8(11, rAnlv.nfc);
+
     BYTE nb = 0;                                // Zahlentyp
-    ByteToSVBT8( 11, rAnlv.nfc );
-
-    switch( rFmt.GetNumAdjust() )
+    switch (rFmt.GetNumAdjust())
     {
-    case SVX_ADJUST_RIGHT:      nb = 2; break;
-    case SVX_ADJUST_CENTER:     nb = 1; break;
-    case SVX_ADJUST_BLOCK:
-    case SVX_ADJUST_BLOCKLINE:  nb = 3; break;
+        case SVX_ADJUST_RIGHT:
+            nb = 2;
+            break;
+        case SVX_ADJUST_CENTER:
+            nb = 1;
+            break;
+        case SVX_ADJUST_BLOCK:
+        case SVX_ADJUST_BLOCKLINE:
+            nb = 3;
+            break;
     }
-    if( rFmt.GetFirstLineOffset() < 0 )
-        nb |= 0x8;          // number will be displayed using a hanging indent
-    ByteToSVBT8( nb, rAnlv.aBits1 );
 
-    if( 1 < rCharLen )
+    if (rFmt.GetFirstLineOffset() < 0)
+        nb |= 0x8;          // number will be displayed using a hanging indent
+    ByteToSVBT8(nb, rAnlv.aBits1);
+
+    if (1 < rCharLen)
     {
         const Font& rFont = rFmt.GetBulletFont() ? *rFmt.GetBulletFont()
             : SwNumRule::GetDefBulletFont();
+        String sNumStr = rFmt.GetBulletChar();
+        rtl_TextEncoding eChrSet = rFont.GetCharSet();
+        String sFontName = rFont.GetName();
 
-        USHORT nFontId = maFontHelper.GetId(rFont);
-        ShortToSVBT16( nFontId, rAnlv.ftc );
-        *rpCh = ByteString::ConvertFromUnicode( rFmt.GetBulletChar(),
-            rFont.GetCharSet() );
+        USHORT nFontId;
+        if (wwFont::IsStarSymbol(sFontName))
+        {
+            SubstituteBullet(sNumStr, eChrSet, sFontName);
+            wwFont aPseudoFont(sFontName, rFont.GetPitch(), rFont.GetFamily(),
+                eChrSet, bWrtWW8);
+            nFontId = maFontHelper.GetId(aPseudoFont);
+        }
+        else
+            nFontId = maFontHelper.GetId(rFont);
+        ShortToSVBT16(nFontId, rAnlv.ftc);
 
+        if (eChrSet == RTL_TEXTENCODING_SYMBOL)
+        {
+            sal_Unicode cChar = sNumStr.GetChar(0);
+            if (cChar >= 0xF000 && cChar <= 0xF0FF)
+                sNumStr.SetChar(0, cChar - 0xF000);
+        }
+
+        *rpCh =  ByteString::ConvertFromUnicode(sNumStr.GetChar(0), eChrSet);
         rpCh++;
         rCharLen--;
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
     }
     ShortToSVBT16( -rFmt.GetFirstLineOffset(), rAnlv.dxaIndent );
     ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+}
+
+void SwWW8Writer::SubstituteBullet(String& rNumStr,
+    rtl_TextEncoding& rChrSet, String& rFontName) const
+{
+    StarSymbolToMSMultiFont *pConvert = 0;
+    FontFamily eFamily = FAMILY_DECORATIVE;
+
+    if (!pConvert)
+    {
+        pConvert = CreateStarSymbolToMSMultiFont();
+#ifdef DUMPSYMBOLS
+        ::std::ofstream output("fontdebug");
+        for (sal_Unicode i=0xE000;i<0xF8FF;i++)
+        {
+            String sFont = pConvert->ConvertChar(i);
+            if (sFont.Len())
+                 output << ::std::hex << i << std::endl;
+        }
+#endif
+    }
+    sal_Unicode cChar = rNumStr.GetChar(0);
+    String sFont = pConvert->ConvertChar(cChar);
+
+    if (sFont.Len())
+    {
+        rNumStr = cChar;
+        rFontName = sFont;
+        rChrSet = RTL_TEXTENCODING_SYMBOL;
+    }
+    else if ( bWrtWW8 &&
+        (rNumStr.GetChar(0) < 0xE000 || rNumStr.GetChar(0) > 0xF8FF) )
+    {
+        /*
+        Ok we can't fit into a known windows unicode font, but
+        we are not in the private area, so we are a
+        standardized symbol, so turn off the symbol bit and
+        let words own font substitution kick in
+        */
+        rChrSet = RTL_TEXTENCODING_UNICODE;
+        eFamily = FAMILY_SWISS;
+        rFontName = ::GetFontToken(rFontName, 0);
+     }
+     else
+     {
+        /*
+        Well we don't have an available substition, and we're
+        in our private area, so give up and show a standard
+        bullet symbol
+        */
+        rFontName.ASSIGN_CONST_ASC("Wingdings");
+        rNumStr = 0x6C;
+     }
+     delete pConvert;
 }
 
 static void SwWw8_InsertAnlText( const String& rStr, BYTE*& rpCh,

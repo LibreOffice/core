@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
+ *  last change: $Author: cmc $ $Date: 2002-11-20 17:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,9 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
                           BYTE nSwLevel );
     void BuildAnlvBulletBase( WW8_ANLV& rAnlv, BYTE*& rpCh, USHORT& rCharLen,
                               const SwNumFmt& rFmt );
+    void SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet,
+        String& rFontName) const;
+
     static void BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh, USHORT& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, BYTE nSwLevel );
 
