@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfltopt.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 13:02:23 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 19:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,15 @@
 class SwFilterOptions : public utl::ConfigItem
 {
 public:
+    SwFilterOptions();
     SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
-                                  sal_uInt32* pValues );
+                      sal_uInt32* pValues );
+
+    sal_Bool CheckNodeContentExist( const sal_Char* pNode,
+                                  const sal_Char* pCntnt );
+
+    void GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
+                     sal_uInt32* pValues );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-26 08:24:19 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 19:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,10 +549,23 @@ BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
 </FilterFlags>
 */
 
+#define FILTER_OPTION_ROOT      String::CreateFromAscii( \
+                RTL_CONSTASCII_STRINGPARAM( "Office.Writer/FilterFlags" ) )
+
+SwFilterOptions::SwFilterOptions()
+    : ConfigItem( FILTER_OPTION_ROOT )
+{
+}
+
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
-                                                      sal_uInt32* pValues )
-    : ConfigItem( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                                "Office.Writer/FilterFlags" ) ))
+                                  sal_uInt32* pValues )
+    : ConfigItem( FILTER_OPTION_ROOT )
+{
+    GetValues( nCnt, ppNames, pValues );
+}
+
+void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
+                                      sal_uInt32* pValues )
 {
     Sequence<OUString> aNames( nCnt );
     OUString* pNames = aNames.getArray();
@@ -571,6 +584,22 @@ SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
     else
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = 0;
+}
+
+sal_Bool SwFilterOptions::CheckNodeContentExist( const sal_Char* pNode,
+                                                   const sal_Char* pCntnt )
+{
+    Sequence<OUString> aNames( GetNodeNames(
+                                        OUString::createFromAscii( pNode )));
+    sal_Bool bExist = sal_False;
+    const OUString* pNames = aNames.getConstArray();
+    for( long n = 0, nEnd = aNames.getLength(); n < nEnd; ++n, ++pNames )
+        if( !pNames->compareToAscii( pCntnt ))
+        {
+            bExist = sal_True;
+            break;
+        }
+    return bExist;
 }
 
 /*  */
@@ -1549,6 +1578,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/26 08:24:19  mib
+      xml filters for templates and global docs
+
       Revision 1.7  2001/02/05 16:31:12  cmc
       #83154# Negative Indent Number Style buglet
 
