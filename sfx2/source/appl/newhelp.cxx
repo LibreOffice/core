@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-05 12:41:11 $
+ *  last change: $Author: os $ $Date: 2002-09-05 11:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2238,6 +2238,22 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_SELECTIONMODE, String( SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ) ) );
             aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
+            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            URL aURL;
+            aURL.Complete = DEFINE_CONST_UNICODE(".uno:SelectTextMode");
+            PARSE_URL( aURL );
+            Reference < XDispatch > xDisp = xProv.is() ?
+                    xProv->queryDispatch( aURL, rtl::OUString(), 0 ) : Reference < XDispatch >();
+            if(xDisp.is())
+            {
+                HelpStatusListener_Impl* pStateListener;
+                Reference<XStatusListener>xStateListener = pStateListener =
+                                        new HelpStatusListener_Impl(xDisp, aURL );
+                FeatureStateEvent rEvent = pStateListener->GetStateEvent();
+                sal_Bool bCheck = sal_False;
+                rEvent.State >>= bCheck;
+                aMenu.CheckItem(TBI_SELECTIONMODE, bCheck);
+            }
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ),
                 Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_COPY : IMG_HELP_TOOLBOX_COPY ) ) );

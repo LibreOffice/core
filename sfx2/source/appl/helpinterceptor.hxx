@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-01 16:02:22 $
+ *  last change: $Author: os $ $Date: 2002-09-05 11:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,29 @@ public:
     void                    SetChangeHdl( const Link& rLink ) { aChangeLink = rLink; }
     String                  GetFactory() const { return aFactory; }
 };
+// HelpStatusListener_Impl -----------------------------------------------------
+
+class HelpStatusListener_Impl : public
+::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+{
+private:
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDispatch;
+    ::com::sun::star::frame::FeatureStateEvent                              aStateEvent;
+
+public:
+    HelpStatusListener_Impl(
+        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDispatch,
+        com::sun::star::util::URL& rURL);
+    ~HelpStatusListener_Impl();
+
+    virtual void SAL_CALL   statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+                                throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& obj )
+                                throw( ::com::sun::star::uno::RuntimeException );
+    const ::com::sun::star::frame::FeatureStateEvent&
+                            GetStateEvent() const {return aStateEvent;}
+};
+
 
 #endif // #ifndef INCLUDED_SFX_HELPINTERCEPTOR_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-30 14:34:24 $
+ *  last change: $Author: os $ $Date: 2002-09-05 11:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
 
 extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
 
@@ -424,4 +425,35 @@ void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventO
     pInterceptor->removeStatusListener( this, ::com::sun::star::util::URL() );
     pInterceptor = NULL;
 }
+/*-- 05.09.2002 12:17:59---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+HelpStatusListener_Impl::HelpStatusListener_Impl(
+        Reference < XDispatch > xDispatch, URL& rURL)
+{
+    xDispatch->addStatusListener(this, rURL);
+}
+/*-- 05.09.2002 12:17:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+HelpStatusListener_Impl::~HelpStatusListener_Impl()
+{
+    if(xDispatch.is())
+        xDispatch->removeStatusListener(this, com::sun::star::util::URL());
+}
+/*-- 05.09.2002 12:17:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void HelpStatusListener_Impl::statusChanged(
+    const FeatureStateEvent& rEvent ) throw( RuntimeException )
+{
+    aStateEvent = rEvent;
+}
+/*-- 05.09.2002 12:18:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void HelpStatusListener_Impl::disposing( const EventObject& obj ) throw( RuntimeException )
+{
+    xDispatch->removeStatusListener(this, com::sun::star::util::URL());
+    xDispatch = 0;
+}
