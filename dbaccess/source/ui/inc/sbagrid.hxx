@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-10 09:11:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,8 @@ namespace dbaui
         virtual void SelectionChanged() = 0;
         virtual void CellActivated()    = 0;
         virtual void CellDeactivated()  = 0;
+        virtual void BeforeDrop()       = 0;
+        virtual void AfterDrop()        = 0;
     };
 
     //==================================================================
@@ -352,6 +354,8 @@ namespace dbaui
         // my own overridables
         virtual void RowChanged();  // the default implementation calls the according link (if set)
         virtual void ColChanged();
+        virtual void BeforeDrop();
+        virtual void AfterDrop();
 
         // get a fields property set from a model pos
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
