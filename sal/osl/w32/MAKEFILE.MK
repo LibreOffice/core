@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tra $ $Date: 2000-11-22 13:50:41 $
+#   last change: $Author: tra $ $Date: 2000-12-11 16:59:34 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -28,8 +28,6 @@ MULTITHREAD_OBJ=TRUE
 
 # --- Files --------------------------------------------------------
 
-CFLAGS+=/DSAL_EXPORT_SYSTOOLS	
-
 .IF "$(header)" == ""
 
 SLOFILES=   $(SLO)$/conditn.obj  \
@@ -50,9 +48,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj \
             $(SLO)$/dir.obj \
-            $(SLO)$/dirw9x.obj \
-            $(SLO)$/systoolinit.obj
-
+            $(SLO)$/dirw9x.obj
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
@@ -72,8 +68,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj \
             $(OBJ)$/dir.obj \
-            $(OBJ)$/dirw9x.obj\
-            $(OBJ)$/systoolinit.obj
+            $(OBJ)$/dirw9x.obj
 
 .ENDIF
 
