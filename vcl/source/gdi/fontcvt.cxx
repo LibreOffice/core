@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-08-03 16:38:09 $
+ *  last change: $Author: hdu $ $Date: 2001-08-10 14:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,27 +1025,27 @@ struct RecodeTable { const char* pOrgName; ImplCvtChar aCvt;};
 static RecodeTable aRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
-    {"starbats",        {aStarBatsTab,  "starsymbol", NULL}},
-    {"starmath",        {aStarMathTab,  "starsymbol", NULL}},
+    {"starbats",        {aStarBatsTab,  "StarSymbol", NULL}},
+    {"starmath",        {aStarMathTab,  "StarSymbol", NULL}},
 
-    {"symbol",          {aAdobeSymbolTab, "starsymbol", NULL}},
-    {"standardsymbols", {aAdobeSymbolTab, "starsymbol", NULL}},
-    {"standardsymbolsl",{aAdobeSymbolTab, "starsymbol", NULL}},
+    {"symbol",          {aAdobeSymbolTab, "StarSymbol", NULL}},
+    {"standardsymbols", {aAdobeSymbolTab, "StarSymbol", NULL}},
+    {"standardsymbolsl",{aAdobeSymbolTab, "StarSymbol", NULL}},
 
-    {"monotypesorts",   {aMonotypeSortsTab, "starsymbol", NULL}},
-//  {"monotypesorts2",  {aMonotypeSorts2Tab, "starsymbol", NULL}}
-    {"zapfdingbats",    {aMonotypeSortsTab, "starsymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
-    {"itczapfdingbats", {aMonotypeSortsTab, "starsymbol", NULL}},
-    {"dingbats",        {aMonotypeSortsTab, "starsymbol", NULL}},
+    {"monotypesorts",   {aMonotypeSortsTab, "StarSymbol", NULL}},
+//  {"monotypesorts2",  {aMonotypeSorts2Tab, "StarSymbol", NULL}}
+    {"zapfdingbats",    {aMonotypeSortsTab, "StarSymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
+    {"itczapfdingbats", {aMonotypeSortsTab, "StarSymbol", NULL}},
+    {"dingbats",        {aMonotypeSortsTab, "StarSymbol", NULL}},
 
-    {"webdings",        {aWebDingsTab,   "starsymbol", NULL}},
-    {"wingdings",       {aWingDingsTab,  "starsymbol", NULL}},
-    {"wingdings2",      {aWingDings2Tab, "starsymbol", NULL}},
-    {"wingdings3",      {aWingDings3Tab, "starsymbol", NULL}},
+    {"webdings",        {aWebDingsTab,   "StarSymbol", NULL}},
+    {"wingdings",       {aWingDingsTab,  "StarSymbol", NULL}},
+    {"wingdings2",      {aWingDings2Tab, "StarSymbol", NULL}},
+    {"wingdings3",      {aWingDings3Tab, "StarSymbol", NULL}},
 };
 
-static ImplCvtChar aImplStarSymbolCvt = { NULL, "starbats", ImplStarSymbolToStarBats };
-static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "starsymbol", NULL };
+static ImplCvtChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
+static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "StarSymbol", NULL };
 
 // -----------------------------------------------------------------------
 
@@ -1135,11 +1135,9 @@ sal_Unicode ConvertFontToSubsFontChar(
 
 String GetFontToSubsFontName( FontToSubsFontConverter hConverter )
 {
-    if ( hConverter )
-    {
-        const char* pName = ((ImplCvtChar*)hConverter)->mpSubsFontName;
-        return String::CreateFromAscii( pName );
-    }
-    else
+    if ( !hConverter )
         return String();
+
+    const char* pName = ((ImplCvtChar*)hConverter)->mpSubsFontName;
+    return String::CreateFromAscii( pName );
 }
