@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.61 2004-07-06 13:16:25 rt Exp $
+	$Id: style.mod,v 1.62 2005-01-27 11:07:42 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -240,6 +240,8 @@
 <!ATTLIST style:properties fo:text-align-last (start|center|justify) #IMPLIED>
 <!ATTLIST style:properties style:text-align-source (fix|value-type) #IMPLIED>
 <!ATTLIST style:properties style:justify-single-word %boolean; #IMPLIED>
+<!-- fo:keep-together is new in OOo 2.0 -->
+<!ATTLIST style:properties fo:keep-together (auto|always) #IMPLIED>
 <!ATTLIST style:properties style:break-inside (auto|avoid) #IMPLIED>
 <!ATTLIST style:properties fo:widows %nonNegativeInteger; #IMPLIED>
 <!ATTLIST style:properties fo:orphans %nonNegativeInteger; #IMPLIED>
@@ -376,7 +378,7 @@
 <!ATTLIST style:column-sep style:style (none|solid|dotted|dashed|dot-dashed)
 																	"solid">
 <!ATTLIST style:column-sep style:width %length; #REQUIRED>
-<!ATTLIST style:column-sep style:height %percentage; "100%">
+<!ATTLIST style:column-sep style:height %percentage; "100&#37;">
 <!ATTLIST style:column-sep style:vertical-align (top|middle|bottom) "top">
 <!ATTLIST style:column-sep style:color %color; "#000000">
 
