@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:12:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,10 +540,17 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
                     ::CheckNodesRange( GetMark()->nNode,
                                        GetPoint()->nNode, TRUE ))
                 {
-                    SwCntntNode* pCNd = (SwCntntNode*)pNd;
-                    xub_StrLen nTmpPos = bSelTop ? pCNd->Len() : 0;
-                    GetPoint()->nContent.Assign( pCNd, nTmpPos );
-                    return FALSE;
+                    // TABLE IN TABLE
+                    const SwTableNode* pOuterTableNd = pNd->FindTableNode();
+                    if ( pOuterTableNd )
+                        pNd = pOuterTableNd;
+                    else
+                    {
+                        SwCntntNode* pCNd = (SwCntntNode*)pNd;
+                        xub_StrLen nTmpPos = bSelTop ? pCNd->Len() : 0;
+                        GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                        return FALSE;
+                    }
                 }
                 if( bSelTop
                     ? ( !pNd->IsEndNode() || 0 == ( pPtNd = pNd->FindTableNode() ))
