@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-11-07 17:20:06 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 17:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,18 @@
 // - Lib-Name -
 // ------------
 
+#ifdef MACOSX
+#define OGL_LIBNAME "libGL.dylib"
+#else
 #define OGL_LIBNAME "libGL.so"
+#endif
+
 // ----------
 // - Macros -
 // ----------
 
-// NETBSD has neither RTLD_GLOBAL nor RTLD_NOW
-#ifdef NETBSD
+// NetBSD has neither RTLD_GLOBAL nor RTLD_NOW
+#if defined NETBSD
 #define DLOPEN_MODE 0
 #else
 #define DLOPEN_MODE (RTLD_NOW | RTLD_GLOBAL)
