@@ -3825,31 +3825,6 @@ SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertBusinessCard FN_BUSINESS_CARD
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem InsertCaptionDialog FN_INSERT_CAPTION
 ()
 [
@@ -4421,31 +4396,6 @@ SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertIndexesEntry FN_INSERT_IDX_ENTRY_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem InsertLabels FN_LABEL
 ()
 [
     /* flags: */
