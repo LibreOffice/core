@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:09:17 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ ModalDialog DLG_PRESLT
         Text[ korean ] = "½½¶óÀÌµå µðÀÚÀÎÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Elija un estil~o de página";
     };
     Control VS_LAYOUT
     {
@@ -144,6 +145,7 @@ ModalDialog DLG_PRESLT
         Text[ korean ] = "¹è°æÂÊ ¹Ù²Ù±â(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Artalan sayfasýný deðiþtir";
+        Text[ catalan ] = "~Intercambiar página de fondo";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -171,6 +173,7 @@ ModalDialog DLG_PRESLT
         Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÂÊ »èÁ¦(~D)";
         Text[ turkish ] = "Kullanýlmayan artalan sayfalarýný sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar páginas de fondo no usadas";
     };
     PushButton BTN_LOAD
     {
@@ -198,6 +201,7 @@ ModalDialog DLG_PRESLT
         Text[ korean ] = "·Îµå(~L)...";
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cargar...";
     };
     HelpButton BTN_HELP
     {
@@ -224,4 +228,5 @@ ModalDialog DLG_PRESLT
     Text[ korean ] = "½½¶óÀÌµå µðÀÚÀÎ";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de página";
 };
