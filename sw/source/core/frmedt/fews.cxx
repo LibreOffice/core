@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:57:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@
 // OD 27.11.2003 #112045#
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
+#endif
+// OD 2004-03-29 #i26791#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
 #endif
 
 TYPEINIT1(SwFEShell,SwEditShell)
@@ -400,7 +404,7 @@ bool SwFEShell::IsDirectlyInSection() const
 USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
 {
     USHORT nReturn = FRMTYPE_NONE;
-    SwFrm *pFrm;
+    const SwFrm *pFrm;
     if ( pPt )
     {
         SwPosition aPos( *GetCrsr()->GetPoint() );
@@ -457,7 +461,7 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
             default:            /* do nothing */                break;
         }
         if ( pFrm->IsFlyFrm() )
-            pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
+            pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
         else
             pFrm = pFrm->GetUpper();
     }
@@ -886,18 +890,18 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                Point* _opRef,
                                Size* _opPercent ) const
 {
-    SwFrm* pFrm;
-    SwFlyFrm* pFly;
+    const SwFrm* pFrm;
+    const SwFlyFrm* pFly;
     if( _opRef )
     {
         pFrm = GetCurrFrm();
         if( 0 != ( pFly = pFrm->FindFlyFrm() ) )
-            pFrm = pFly->GetAnchor();
+            pFrm = pFly->GetAnchorFrm();
     }
     else
     {
         pFly = FindFlyFrm();
-        pFrm = pFly ? pFly->GetAnchor() : GetCurrFrm();
+        pFrm = pFly ? pFly->GetAnchorFrm() : GetCurrFrm();
     }
 
     sal_Bool bWrapThrough = sal_False;
@@ -908,7 +912,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
     }
 
-    SwPageFrm* pPage = pFrm->FindPageFrm();
+    const SwPageFrm* pPage = pFrm->FindPageFrm();
     _bMirror = _bMirror && !pPage->OnRightPage();
 
     Point aPos;
@@ -917,7 +921,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
     if( FLY_PAGE == _nAnchorId || FLY_AT_FLY == _nAnchorId ) // LAYER_IMPL
     {
-        SwFrm *pTmp = pFrm;
+        const SwFrm* pTmp = pFrm;
         // OD 06.11.2003 #i22305#
         if ( FLY_PAGE == _nAnchorId ||
              ( FLY_AT_FLY == _nAnchorId && !_bFollowTextFlow ) )
@@ -991,8 +995,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     }
     else
     {
-        SwFrm* pUpper = ( pFrm->IsPageFrm() || pFrm->IsFlyFrm() ) ?
-                        pFrm : pFrm->GetUpper();
+        const SwFrm* pUpper = ( pFrm->IsPageFrm() || pFrm->IsFlyFrm() ) ?
+                              pFrm : pFrm->GetUpper();
         SWRECTFN( pUpper );
         if ( _opPercent )
             *_opPercent = pUpper->Prt().SSize();
@@ -1084,7 +1088,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 ASSERT( pFrm->ISA(SwTxtFrm),
                         "<SwFEShell::CalcBoundRect(..)> - wrong anchor frame." )
-                SwTxtFrm* pTxtFrm = static_cast<SwTxtFrm*>(pFrm);
+                const SwTxtFrm* pTxtFrm = static_cast<const SwTxtFrm*>(pFrm);
                 SwTwips nTop = 0L;
                 if ( _eVertRelOrient == REL_CHAR )
                 {
@@ -1151,7 +1155,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 _orRect.SSize( pUpper->Prt().SSize() );
                 if ( pUpper->IsCellFrm() )//MA_FLY_HEIGHT
                 {
-                    SwFrm *pTab = pUpper->FindTabFrm();
+                    const SwFrm* pTab = pUpper->FindTabFrm();
                     long nBottom = (pTab->GetUpper()->*fnRect->fnGetPrtBottom)();
                     (_orRect.*fnRect->fnSetBottom)( nBottom );
                 }
@@ -1278,11 +1282,11 @@ Size SwFEShell::GetGraphicDefaultSize() const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( pFly )
     {
-        aRet = pFly->GetAnchor()->Prt().SSize();
+        aRet = pFly->GetAnchorFrm()->Prt().SSize();
 
         SwRect aBound;
         CalcBoundRect( aBound, pFly->GetFmt()->GetAnchor().GetAnchorId());
-        if ( pFly->GetAnchor()->IsVertical() )
+        if ( pFly->GetAnchorFrm()->IsVertical() )
             aRet.Width() = aBound.Width();
         else
             aRet.Height() = aBound.Height();
@@ -1294,16 +1298,27 @@ Size SwFEShell::GetGraphicDefaultSize() const
  ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
 {
-    SwFlyFrm *pFly = FindFlyFrm();
     BOOL bVert = FALSE;
-    if ( pFly )
+    bRTL = FALSE;
+
+    if ( Imp()->HasDrawView() )
     {
-        const SwFrm *pFrm = pFly->GetAnchor();
-        bVert = bEnvironment ? pFrm->IsVertical() : pFly->IsVertical();
-        bRTL = bEnvironment ? pFrm->IsRightToLeft() : pFly->IsRightToLeft();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        if( rMrkList.GetMarkCount() != 1 )
+            return bVert;
+
+        SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
+        // OD 2004-03-29 #i26791#
+        SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
+        const SwFrm* pRef = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
+
+        if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
+            pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+
+        bVert = pRef->IsVertical();
+        bRTL = pRef->IsRightToLeft();
     }
-    else
-        bRTL = FALSE;
+
     return bVert;
 }
 
