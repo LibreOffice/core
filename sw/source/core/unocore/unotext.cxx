@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
     const uno::Type& rXTypeProviderType = ::getCppuType((uno::Reference< lang::XTypeProvider >*)0);
     const uno::Type& rXTextContentInsert = ::getCppuType((uno::Reference< XRelativeTextContentInsert >*)0);
     const uno::Type& rXTextContentRemove = ::getCppuType((uno::Reference< XRelativeTextContentRemove >*)0);
+    const uno::Type& rXUnoTunnel = ::getCppuType((uno::Reference< XUnoTunnel >*)0);
 
     uno::Any aRet;
     if(rType == rXTextType)
@@ -202,6 +203,11 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
         uno::Reference< XRelativeTextContentRemove > xRet = this;
         aRet.setValue(&xRet, rXTextContentRemove);
     }
+    else if(rType == rXUnoTunnel )
+    {
+        uno::Reference< XUnoTunnel > xRet = this;
+        aRet.setValue(&xRet, rXUnoTunnel);
+    }
     return aRet;
 }
 /* -----------------------------15.03.00 17:42--------------------------------
@@ -209,12 +215,13 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
  ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SwXText::getTypes() throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aRet(4);
+    uno::Sequence< uno::Type > aRet(5);
     uno::Type* pTypes = aRet.getArray();
     pTypes[0] = ::getCppuType((uno::Reference< XText >*)0);
     pTypes[1] = ::getCppuType((uno::Reference< XTextRangeCompare >*)0);
     pTypes[2] = ::getCppuType((uno::Reference< XRelativeTextContentInsert >*)0);
     pTypes[3] = ::getCppuType((uno::Reference< XRelativeTextContentRemove >*)0);
+    pTypes[4] = ::getCppuType((uno::Reference< XUnoTunnel >*)0);
 
     return aRet;
 }
@@ -1115,6 +1122,29 @@ sal_Int16 SwXText::compareRegionEnds(
 
     return ComparePositions(xEnd1, xEnd2);
 }
+/* -----------------------------08.01.01 09:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+/* -----------------------------08.01.01 09:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int64 SAL_CALL SwXText::getSomething( const uno::Sequence< sal_Int8 >& rId )
+    throw(uno::RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return 0;
+}
+
 /******************************************************************
  * SwXBodyText
  ******************************************************************/
@@ -1189,6 +1219,7 @@ uno::Any SAL_CALL SwXBodyText::queryAggregation(
         aRet = OWeakAggObject::queryAggregation( rType );
     return aRet;
 }
+
 /*-- 10.12.98 11:17:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:43:02 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,8 @@ class SwXText : public ::com::sun::star::text::XText,
                 ::com::sun::star::lang::XTypeProvider,
                 ::com::sun::star::text::XTextRangeCompare,
                 ::com::sun::star::text::XRelativeTextContentInsert,
-                ::com::sun::star::text::XRelativeTextContentRemove
-
+                ::com::sun::star::text::XRelativeTextContentRemove,
+                ::com::sun::star::lang::XUnoTunnel
 {
     SwDoc*              pDoc;
     BOOL                bObjectValid;
@@ -353,6 +353,11 @@ public:
     //XRelativeTextContentRemove
     virtual void SAL_CALL removeTextContentBefore(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent>& xSuccessor) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTextContentAfter(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent>& xPredecessor) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+
+    //XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     //
     INT16   ComparePositions(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos1, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos2) throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
