@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:45:59 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1461,7 +1461,7 @@ TabPage RID_SVXPAGE_AREA
         TabStop = TRUE ;
         Text [ english_us ] = "~Tile" ;
         Text [ italian ] = "Affianca" ;
-        Text [ spanish ] = "A~zulejar" ;
+        Text [ spanish ] = "~Embaldosado" ;
         Text [ french ] = "Carrelage" ;
         Text [ dutch ] = "~Tegelen" ;
         Text [ swedish ] = "Sid~a vid sida" ;
