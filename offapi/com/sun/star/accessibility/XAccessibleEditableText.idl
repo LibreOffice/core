@@ -1,0 +1,272 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAccessibleEditableText.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:34:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleEditableText_idl__
+#define __com_sun_star_accessibility_XAccessibleEditableText_idl__
+
+#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
+#include <com/sun/star/accessibility/XAccessibleText.idl>
+#endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to give read and write access to a text
+    representation.
+
+    <p>This interface is typically used in conjunction with the
+    <type>XAccessibleText</type> interface and extents it about the ability
+    to modify the text represented by that interface.</p>
+*/
+interface XAccessibleEditableText
+    : ::com::sun::star::accessibility::XAccessibleText
+{
+    /** Copies the text range into the clipboard.
+
+        <p>The specified text between and including the two given indices is
+        copied into the system clipboard and is deleted afterwards from the
+        text represented by this object.  This is equivalent to calling
+        first <member>XAccessibleText::copyText</member> and then
+        <member>XAccessibleEditableText::deleteText</member> with the given
+        start and end indices.</p>
+
+        <p>The text indices are interpreted like those in the
+        <member>XAccessibleText::getTextRange</member> method. </p>
+
+        @param nStartIndex
+            Start index of the text to moved into the clipboard.
+            The valid range is 0..length.
+
+        @param nEndIndex
+            End index of the text to moved into the clipboard.
+            The valid range is 0..length.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean cutText ([in] long nStartIndex, [in] long nEndIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Pastes text from the clipboard.
+
+        <p>The text in the system clipboard is pasted into the text
+        represented by this object at the given index.  This method is
+        similar to the <member>XAccessibleEditableText::insertText</member>
+        method.  If the index is not valid then the system clipboard text is
+        not inserted.</p>
+
+        @param nIndex
+            Index at which to insert the text from the system clipboard into
+            the text represented by this object.
+            The valid range is 0..length.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+    */
+    boolean pasteText ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Deletes a range of text.
+
+        <p>The text between and including the two given indices is deleted
+        from the text represented by this object.</p>
+
+        <p>The text indices are interpreted like those in the
+        <member>XAccessibleText::getTextRange</member> method. </p>
+
+        @param nStartIndex
+            Start index of the text to be deleted.
+            The valid range is 0..length.
+
+        @param nEndIndex
+            End index of the text to be deleted.
+            The valid range is 0..length.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean deleteText ([in] long nStartIndex, [in] long nEndIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Inserts text at the specified position.
+
+        <p>The specified string is inserted at the given index into the text
+        represented by this object.</p>
+
+        @param sText
+            Text that is inserted.
+
+        @param nIndex
+            Index at which to insert the text.
+            The valid range is 0..length.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean insertText ([in] string sText, [in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Replaces text.
+
+        <p>The text between the two given indices is replaced
+        by the specified replacement string. This method is
+        equivalent to calling first
+        <member>XAccessibleEditableText::deleteText</member> with the two
+        indices and afterwards calling
+        <member>XAccessibleEditableText::insertText</member> with the
+        replacement text and the start index.</p>
+
+        <p>The text indices are interpreted like those in the
+        <member>XAccessibleText::getTextRange</member> method. </p>
+
+        @param nStartIndex
+            Start index of the text to be replaced.
+            The valid range is 0..length.
+
+        @param nEndIndex
+            Start index of the text to be replaced.
+            The valid range is 0..length.
+
+        @param sReplacement
+            The Text that replaces the text between the given indices.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean replaceText ([in] long nStartIndex, [in] long nEndIndex,
+        [in] string sReplacement)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Replaces the attributes of a text range by the given set of
+        attributes.
+
+        <p>Sets the attributes for the text between and including the two
+        given indices to those given.  The old attributes of this text
+        portion are replaced by the new list of attributes.</p>
+
+        <p>The text indices are interpreted like those in the
+        <member>XAccessibleText::getTextRange</member> method. </p>
+
+        @param nStartIndex
+            Start index of the text whose attributes are modified.
+            The valid range is 0..length.
+
+        @param nEndIndex
+            Start index of the text whose attributes are modified.
+            The valid range is 0..length.
+
+        @param aAttributeSet
+            Set of attributes that replaces the old list of attributes of
+            the specified text portion.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean setAttributes ([in] long nStartIndex, [in] long nEndIndex,
+        [in] sequence<::com::sun::star::beans::PropertyValue> aAttributeSet)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Replaces the whole text with the given text.
+
+        <p>The text content of this object is set to the given string.</p>
+
+        @param sText
+            The new text that replaces the old text.
+
+        @return
+            Returns a flag that indicates whether the operation has been
+            executed successfully.
+    */
+    boolean setText ([in] string sText);
+};
+
+}; }; }; };
+
+#endif
