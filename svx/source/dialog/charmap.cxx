@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-22 12:32:20 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 10:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 
 #include <stdio.h>
 
+#define _SVX_CHARMAP_CXX_
+
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
@@ -98,6 +100,22 @@
 #include "charmap.hxx"
 #include "dialmgr.hxx"
 
+#include "charmapacc.hxx"
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::uno;
 // class SvxShowText =====================================================
 
 class SvxShowText : public Control
@@ -164,9 +182,11 @@ friend class SvxCharacterMap;
 
 
 // -----------------------------------------------------------------------
-
-long SvxShowCharSet::nSelectedIndex = -1;// TODO: remove "static" at next incompatible build
-static sal_Unicode cSelectedChar = ' '; // keeps selected character over app livetime
+sal_Unicode& getSelectedChar()
+{
+    static sal_Unicode cSelectedChar = ' '; // keeps selected character over app livetime
+    return cSelectedChar;
+}
 
 // -----------------------------------------------------------------------
 
@@ -212,8 +232,9 @@ static sal_UCS4 MapIndexToUnicode( const FontCharMap& rMap, unsigned nIndex )
 #define SBWIDTH 16
 
 SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    aVscrollSB( this, WB_VERT)
+    Control( pParent, rResId )
+    ,aVscrollSB( this, WB_VERT)
+    ,m_pAccessible(NULL)
 {
     nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
 
@@ -335,7 +356,7 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-inline int SvxShowCharSet::FirstInView( void ) const
+int SvxShowCharSet::FirstInView( void ) const
 {
     int nIndex = 0;
     if( aVscrollSB.IsVisible() )
@@ -345,7 +366,7 @@ inline int SvxShowCharSet::FirstInView( void ) const
 
 // -----------------------------------------------------------------------
 
-inline int SvxShowCharSet::LastInView( void ) const
+int SvxShowCharSet::LastInView( void ) const
 {
     ULONG nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT;
@@ -361,10 +382,8 @@ inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
     int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
     return Point( x, y );
 }
-
-// -----------------------------------------------------------------------
-
-int SvxShowCharSet::PixelToMapIndex( const Point point) const
+// -----------------------------------------------------------------------------
+int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
     int nBase = FirstInView();
     return (nBase + (point.X()/nX) + (point.Y()/nY) * COLUMN_COUNT);
@@ -445,7 +464,11 @@ void SvxShowCharSet::Paint( const Rectangle& )
 {
     DrawChars_Impl( FirstInView(), LastInView() );
 }
-
+// -----------------------------------------------------------------------------
+void SvxShowCharSet::DeSelect()
+{
+    DrawChars_Impl(nSelectedIndex,nSelectedIndex);
+}
 // -----------------------------------------------------------------------
 
 void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
@@ -555,8 +578,8 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
     if( nSelectedIndex >= 0 )
-        cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
-    return cSelectedChar;
+        getSelectedChar() = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+    return getSelectedChar();
 }
 
 // -----------------------------------------------------------------------
@@ -565,7 +588,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 {
     // save last selected unicode
     if( nSelectedIndex >= 0 )
-        cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+        getSelectedChar() = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
 
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
@@ -593,7 +616,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     }
 
     // restore last selected unicode
-    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cSelectedChar );
+    int nMapIndex = UnicodeToMapIndex( maFontCharMap, getSelectedChar() );
     SelectIndex( nMapIndex );
 
     // rearrange CharSet element in sync with nX- and nY-multiples
@@ -613,7 +636,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
     if( nNewIndex < 0 )
     {
         // need to scroll see closest unicode
-        sal_Unicode cPrev = maFontCharMap.GetPrevChar( cSelectedChar );
+        sal_Unicode cPrev = maFontCharMap.GetPrevChar( getSelectedChar() );
         int nMapIndex = UnicodeToMapIndex( maFontCharMap, cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nNewPos );
@@ -670,7 +693,23 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
     }
 
     if( nSelectedIndex >= 0 )
-        cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+    {
+        getSelectedChar() = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+        if( m_pAccessible )
+        {
+            ::svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
+            m_pAccessible->fireEvent( AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
+
+            OSL_ENSURE(pItem->m_pItem,"No accessible created!");
+            Any aOldAny, aNewAny;
+            aNewAny <<= AccessibleStateType::FOCUSED;
+            pItem->m_pItem->fireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+
+            aNewAny <<= AccessibleStateType::SELECTED;
+            pItem->m_pItem->fireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+        }
+    }
+
 
     aHighHdl.Call( this );
 }
@@ -697,9 +736,23 @@ void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
 {
     if( nSelectedIndex < FirstInView() )
+    {
         SelectIndex( FirstInView() + (nSelectedIndex % COLUMN_COUNT) );
+    }
     else if( nSelectedIndex > LastInView() )
+    {
+        if( m_pAccessible )
+        {
+            ::com::sun::star::uno::Any aOldAny, aNewAny;
+            sal_Int32 nLast = LastInView();
+            for ( ; nLast != nSelectedIndex; ++nLast)
+            {
+                aOldAny <<= ImplGetItem(nLast)->GetAccessible();
+                m_pAccessible ->fireEvent( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+            }
+        }
         SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
+    }
 
     Invalidate();
     return 0;
@@ -708,8 +761,56 @@ IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
 // -----------------------------------------------------------------------
 
 SvxShowCharSet::~SvxShowCharSet()
-{}
+{
+    if ( m_pAccessible )
+        ReleaseAccessible();
+}
+// -----------------------------------------------------------------------------
+void SvxShowCharSet::ReleaseAccessible()
+{
+    m_aItems.clear();
+    m_pAccessible = NULL;
+    m_xAccessible = NULL;
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
+{
+    OSL_ENSURE(!m_pAccessible,"Accessible already created!");
+    m_pAccessible = new ::svx::SvxShowCharSetVirtualAcc(this);
+    m_xAccessible = m_pAccessible;
+    return m_xAccessible;
+}
+// -----------------------------------------------------------------------------
+::svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( USHORT _nPos )
+{
+    ItemsMap::iterator aFind = m_aItems.find(_nPos);
+    if ( aFind == m_aItems.end() )
+    {
+        OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
+        aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),_nPos))).first;
+        aFind->second->maText = MapIndexToUnicode(maFontCharMap,_nPos);
+        Point pix = MapIndexToPixel( _nPos );
+        aFind->second->maRect = Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
+    }
 
+    return aFind->second;
+}
+// -----------------------------------------------------------------------------
+void SvxShowCharSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
+{
+    if( m_pAccessible )
+        m_pAccessible->fireEvent( nEventId, rOldValue, rNewValue );
+}
+// -----------------------------------------------------------------------------
+ScrollBar* SvxShowCharSet::getScrollBar()
+{
+    return &aVscrollSB;
+}
+// -----------------------------------------------------------------------
+sal_Int32 SvxShowCharSet::getMaxCharCount() const
+{
+    return maFontCharMap.GetCharCount();
+}
 // class SvxShowText =====================================================
 
 SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter )
@@ -1318,3 +1419,15 @@ void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
 
     mnSubsets = nDst;
 }
+// -----------------------------------------------------------------------------
+USHORT SvxShowCharSet::GetRowPos(USHORT _nPos) const
+{
+    return _nPos / COLUMN_COUNT ;
+}
+// -----------------------------------------------------------------------------
+USHORT SvxShowCharSet::GetColumnPos(USHORT _nPos) const
+{
+    return _nPos % COLUMN_COUNT ;
+}
+// -----------------------------------------------------------------------------
+
