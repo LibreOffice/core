@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 16:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ DataObject* StrData::Clone() const
 
 short StrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 {
-    StringCompare eComp = ((StrData*)pKey2)->aStr.CompareTo(((StrData*)pKey1)->aStr);
+    StringCompare eComp = ((StrData*)pKey1)->aStr.CompareTo(((StrData*)pKey2)->aStr);
     if (eComp == COMPARE_EQUAL)
         return 0;
     else if (eComp == COMPARE_LESS)
