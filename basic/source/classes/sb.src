@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:12:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 17:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ Resource RID_BASIC_START
         Text[ polish ] = "Niepoprawny wpis, proszκ ponowiζ";
         Text[ japanese ] = "“ό—Ν‚ª³‚µ‚­‚ ‚θ‚ά‚Ή‚ρB‚ΰ‚¤κ“x“ό—Ν‚µ’Ό‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "Ώι¤JµL®Δ΅M½Π­«½Ζ΅C";
-        Text[ arabic ] = "ΕΟΞΗα ΞΗΨΖ ΊΗαΡΜΗΑ ΕΪΗΟΙ ΗαγΝΗζαΙ";
+        Text[ arabic ] = "ΕΟΞΗα ΞΗΨΖ΅ ΗαΡΜΗΑ ΕΪΗΟΙ ΗαγΝΗζαΙ";
         Text[ dutch ] = "Incorrecte gegevens, herhalen a.u.b.";
         Text[ chinese_simplified ] = "ΚδΘλΞήΠ§£¬ΗλΦΨΈ΄΅£";
         Text[ greek ] = "Λανθασμένη εισαγωγή, παρακαλώ ξαναπροσπαθήστε";
@@ -370,7 +370,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Οεπεμεννΰÿ νε ξοπεδελενΰ";
         Text[ polish ] = "Zmienna nie zdefiniowana";
         Text[ japanese ] = "•Ο”‚Μ–Ά’θ‹`";
-        Text[ chinese_traditional ] = "¨S¦³©wΈqΕάΌΖ";
+        Text[ chinese_traditional ] = "¨S¦³³]©wΕά¶q";
         Text[ arabic ] = "ΗαγΚΫνΡΙ ΫνΡ γΝΟΟΙ";
         Text[ dutch ] = "Een variabele is niet gedefinieerd";
         Text[ chinese_simplified ] = "Γ»ΣΠ¶¨Òε±δΚύ";
@@ -824,7 +824,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Νεοπΰβθλόνΰÿ δλθνΰ ηΰοθρθ δΰννϋυ";
         Text[ polish ] = "Niepoprawna d³ugoζ rekordσw";
         Text[ japanese ] = "³‚µ‚­‚Θ‚ΆΪΊ°Δή‚Μ’·‚³";
-        Text[ chinese_traditional ] = "Ώω»~ªΊΈκ®Ζ¶µ¥Ψªψ«Χ";
+        Text[ chinese_traditional ] = "Ώω»~ªΊΈκ®Ζ±ψ¥Ψªψ«Χ";
         Text[ arabic ] = "Ψζα ΣΜαΗΚ ΗαΘνΗδΗΚ ΫνΡ ΥΝνΝ";
         Text[ dutch ] = "Onjuiste record-lengte";
         Text[ chinese_simplified ] = "ΚύΎέΜυΔΏ³¤¶Θ΄νΞσ";
@@ -909,7 +909,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Νεοπΰβθλόνϋι νξμεπ πεγθρςπΰφθθ δΰννϋυ";
         Text[ polish ] = "Niepoprawna d³ugoζ rekordσw";
         Text[ japanese ] = "ΪΊ°Δή”Τ†‚ª•s“KΨ";
-        Text[ chinese_traditional ] = "Έκ®Ζ¶µ¥ΨΈΉ½XΏω»~";
+        Text[ chinese_traditional ] = "Έκ®Ζ±ψ¥ΨΈΉ½XΏω»~";
         Text[ arabic ] = "Ρήγ ΣΜαΗΚ ΗαΘνΗδΗΚ ΫνΡ ΥΝνΝ";
         Text[ dutch ] = "Onjuist record-nummer";
         Text[ chinese_simplified ] = "ΚύΎέΜυΔΏΊΕΒλ΄νΞσ";
@@ -3529,7 +3529,7 @@ String IDS_SBERR_TERMINATED
     Text[ arabic ] = "ΚγΚ γήΗΨΪΙ ΗαγΗίΡζ ΗαγΣΚΞΟγ ΝΗανΗπ";
     Text[ dutch ] = "Actuele macro werd onderbroken";
     Text[ chinese_simplified ] = "ΦΠ¶ΟΤΛΠΠΊκ΅£";
-    Text[ greek ] = "Η μακροεντολή διακόπηκε στη διάρκεια της εκτέλεσης";
+    Text[ greek ] = "Η εκτελούμενη μακροεντολή διακόπηκε";
     Text[ korean ] = "ΈΕΕ©·Ξ ½ΗΗΰΐΜ Αί΄άµΗΎξΑ³½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Yόrόtόlen makro kesildi";
     Text[ language_user1 ] = " ";
