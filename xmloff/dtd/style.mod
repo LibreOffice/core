@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.49 2002-02-28 14:23:57 dvo Exp $
+	$Id: style.mod,v 1.50 2002-04-04 13:45:03 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -401,6 +401,7 @@
 <!ATTLIST style:properties style:layout-grid-ruby-below %boolean; #IMPLIED>
 <!ATTLIST style:properties style:layout-grid-print %boolean; #IMPLIED>
 <!ATTLIST style:properties style:layout-grid-display %boolean; #IMPLIED>
+<!ATTLIST style:properties style:snap-to-layout-grid %boolean; #IMPLIED>
 
 <!ELEMENT style:footnote-sep EMPTY>
 <!ATTLIST style:footnote-sep style:width %length; #IMPLIED>
