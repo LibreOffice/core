@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 14:18:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ SvxPageWindow::SvxPageWindow( Window* pParent, const ResId& rId ) :
     aWinSize.Width() -= 4;
 
     aWinSize = PixelToLogic( aWinSize );
+    SetBackground();
 }
 
 // -----------------------------------------------------------------------
