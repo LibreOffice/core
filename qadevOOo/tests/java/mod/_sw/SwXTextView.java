@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:22 $
+ *  last change:$Date: 2003-05-27 13:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import java.io.PrintWriter;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.util.Comparator;
 
 import com.sun.star.container.XIndexAccess;
@@ -108,7 +109,7 @@ public class SwXTextView extends TestCase {
      *
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -162,7 +163,7 @@ public class SwXTextView extends TestCase {
 
         util.dbg.getSuppServices(xContr);
 
-        SOfficeFactory SOF=SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF=SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         XTextFrame first =null;
         XTextFrame second =null;
 
