@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-07 13:33:09 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 10:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3508,6 +3508,15 @@ void Svx3DWin::UpdatePreview()
     GetAttr( aSet );
     aCtlPreview.Set3DAttributes( aSet );
     aCtlFavorites.SetNoSelection();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// document is to be reloaded, destroy remembered ItemSet (#83951#)
+void Svx3DWin::DocumentReload()
+{
+    if(mpRemember2DAttributes)
+        delete mpRemember2DAttributes;
+    mpRemember2DAttributes = 0L;
 }
 
 // -----------------------------------------------------------------------
