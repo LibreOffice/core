@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-25 15:41:57 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 13:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
-#include "svx/frmdiritem.hxx"
 #endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
@@ -2749,7 +2746,8 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
             {
                 if( USHRT_MAX != nPgDscPos )
                 {
-                    pTargetFmt->ResetAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
+                    m_pDoc->_GetPageDesc(nPgDscPos).ResetAllMasterAttr();
+
                     SvxLRSpaceItem aLR;
                     sal_Int32 nSize = GetMetricVal ( CM_1) * 2;
                     aLR.SetLeft ( nSize );
@@ -2769,7 +2767,6 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                         aFrmSz.SetWidth( nTmp );
                     }
                     pTargetFmt->SetAttr( aFrmSz );
-                    pTargetFmt->SetAttr( SvxFrameDirectionItem() );
                 }
                 else
                     pTargetFmt->ResetAllAttr();
