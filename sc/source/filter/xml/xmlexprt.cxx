@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 08:12:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 14:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1507,7 +1507,7 @@ void ScXMLExport::_ExportAutoStyles()
                     sal_Int32 nShapesCount(0);
                     sal_Int32 nCellCount(pDoc->GetCellCount());
                     CollectSharedData(nTableCount, nShapesCount, nCellCount);
-                    DBG_ERROR("no shared data setted");
+                    //DBG_ERROR("no shared data setted");
                 }
                 pSharedData->nOldProgressValue = pSharedData->nProgressValue;
                 rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
