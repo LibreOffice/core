@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.59 2001-06-12 15:44:20 cl Exp $
+	$Id: drawing.mod,v 1.60 2001-06-14 17:03:08 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -583,8 +583,14 @@
 <!ATTLIST draw:image draw:layer %layerName; #IMPLIED>
 
 <!-- objects -->
+<!ELEMENT draw:thumbnail EMPTY>
+<!ATTLIST draw:thumbnail xlink:href %uriReference; #REQUIRED>
+<!ATTLIST draw:thumbnail xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:thumbnail xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:thumbnail xlink:actuate (onLoad) #IMPLIED>
+
 <!ELEMENT math:math ANY> <!-- dummy (we have no MathML DTD currently)-->
-<!ELEMENT draw:object ((office:document|math:math)?,office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:object (draw:thumbnail?,(office:document|math:math)?,office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object %draw-style-name;>
 <!ATTLIST draw:object draw:name %string; #IMPLIED>
 <!ATTLIST draw:object xlink:href %uriReference; #IMPLIED>
@@ -603,7 +609,7 @@
 <!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
 
 <!-- one of the elements is allowed only, but this cannot be expressed by DTDs -->
-<!ELEMENT draw:object-ole (#PCDATA|office:events|draw:image-map|svg:desc|draw:contour-polygon|draw:contour-path)*>
+<!ELEMENT draw:object-ole (#PCDATA|office:events|draw:image-map|svg:desc|draw:contour-polygon|draw:contour-path|draw:thumbnail)*>
 <!ATTLIST draw:object-ole draw:class-id CDATA #IMPLIED>
 <!ATTLIST draw:object-ole %draw-style-name;>
 <!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
@@ -766,7 +772,7 @@
 <!ATTLIST presentation:event presentation:verb %nonNegativeInteger; #IMPLIED>
 
 <!-- applets -->
-<!ELEMENT draw:applet (draw:param*, svg:desc?)>
+<!ELEMENT draw:applet (draw:thumbnail?, draw:param*, svg:desc?)>
 <!ATTLIST draw:applet xlink:href %uriReference; #IMPLIED>
 <!ATTLIST draw:applet xlink:type (simple) #IMPLIED>
 <!ATTLIST draw:applet xlink:show (embed) #IMPLIED>
@@ -785,12 +791,12 @@
 <!ATTLIST draw:applet %draw-end-position; >
 
 <!-- plugins -->
-<!ELEMENT draw:plugin (draw:param*, svg:desc?)>
+<!ELEMENT draw:plugin (draw:thumbnail?, draw:param*, svg:desc?)>
 <!ATTLIST draw:plugin xlink:href %uriReference; #IMPLIED>
 <!ATTLIST draw:plugin xlink:type (simple) #IMPLIED>
 <!ATTLIST draw:plugin xlink:show (embed) #IMPLIED>
 <!ATTLIST draw:plugin xlink:actuate (onLoad) #IMPLIED>
-<!ATTLIST draw:plugin draw:mime-type CDATA #REQUIRED>
+<!ATTLIST draw:plugin draw:mime-type CDATA #IMPLIED>
 <!ATTLIST draw:plugin draw:name CDATA #IMPLIED>
 <!ATTLIST draw:plugin %draw-style-name;>
 <!ATTLIST draw:plugin svg:width %lengthOrPercentage; #IMPLIED>
@@ -806,7 +812,7 @@
 <!ATTLIST draw:param draw:value CDATA #IMPLIED>
 
 <!-- Floating Frames -->
-<!ELEMENT draw:floating-frame (svg:desc?)>
+<!ELEMENT draw:floating-frame (draw:thumbnail?, svg:desc?)>
 <!ATTLIST draw:floating-frame xlink:href %uriReference; #IMPLIED>
 <!ATTLIST draw:floating-frame xlink:type (simple) #IMPLIED>
 <!ATTLIST draw:floating-frame xlink:show (embed) #IMPLIED>
