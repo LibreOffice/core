@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 16:15:23 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 10:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ XML_CONSTASCII_ACTION( sXML_cell_range_source, "cell-range-source");
 XML_CONSTASCII_ACTION( sXML_center, "center" );
 XML_CONSTASCII_ACTION( sXML_chain_next_name, "chain-next-name" );
 XML_CONSTASCII_ACTION( sXML_change, "change" );
+XML_CONSTASCII_ACTION( sXML_change_deletion, "change-deletion" );
 XML_CONSTASCII_ACTION( sXML_change_end, "change-end" );
 XML_CONSTASCII_ACTION( sXML_change_id, "change-id" );
 XML_CONSTASCII_ACTION( sXML_change_info, "change-info" );
@@ -506,6 +507,7 @@ XML_CONSTASCII_ACTION( sXML_default_style_name, "default-style-name" );
 XML_CONSTASCII_ACTION( sXML_degree, "degree" );
 XML_CONSTASCII_ACTION( sXML_delay, "delay" );
 XML_CONSTASCII_ACTION( sXML_deletion, "deletion" );
+XML_CONSTASCII_ACTION( sXML_deletions, "deletions" );
 XML_CONSTASCII_ACTION( sXML_depth, "depth" );
 XML_CONSTASCII_ACTION( sXML_desc, "desc" );
 XML_CONSTASCII_ACTION( sXML_descending, "descending");
