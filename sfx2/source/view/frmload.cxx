@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:41:54 $
+ *  last change: $Author: obo $ $Date: 2002-10-09 11:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,8 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
 
                     if ( xInteraction.is() )
                     {
-                        InteractiveAppException xException( OUString(),
+                        OUString empty;
+                        InteractiveAppException xException( empty,
                                                             REFERENCE< XInterface >(),
                                                             InteractionClassification_ERROR,
                                                             aMedium.GetError() );
