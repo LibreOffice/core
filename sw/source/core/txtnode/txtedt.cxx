@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 09:06:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,12 +551,13 @@ void SwTxtNode::SetWrong( SwWrongList *pNew )
 }
 
 SwScanner::SwScanner( const SwTxtNode& rNd,
-                      USHORT nType, xub_StrLen nStart, xub_StrLen nEnde )
+                      USHORT nType, xub_StrLen nStart, xub_StrLen nEnde, BOOL bClp )
     : rNode( rNd ), nWordType( nType ), nLen( 0 ),
+      bClip( bClp ),
       bStart( TRUE )
 {
     ASSERT( rNd.GetTxt().Len(), "SwScanner: EmptyString" );
-    nBegin = nStart;
+    nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
     aCurrLang = rNd.GetLang( nBegin );
@@ -829,7 +830,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         // the words in the wrong list have to be checked
         SwScanner aScanner( *this,
                             WordType::DICTIONARY_WORD,
-                            nBegin, nEnd );
+                            nBegin, nEnd, TRUE /*clip == true*/ );
         while( !rArgs.bConvTextFound && aScanner.NextWord() )
         {
             const XubString& rWord = aScanner.GetWord();
