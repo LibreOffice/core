@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:42:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <ftnidx.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
