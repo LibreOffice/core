@@ -83,15 +83,17 @@ public class JavaCanvas
     extends CanvasBase
     implements com.sun.star.awt.XWindow,
                drafts.com.sun.star.rendering.XSpriteCanvas,
+               drafts.com.sun.star.rendering.XIntegerBitmap,
                com.sun.star.lang.XServiceInfo,
                com.sun.star.lang.XInitialization
 {
     private WindowAdapter                   dummyFrame;
-    private BackBuffer                      backBuffer;
+    public BackBuffer                       backBuffer;
     private java.awt.image.BufferStrategy   bufferStrategy;
 
     private java.awt.Font                   fpsFont;
     private long                            lastTime;
+    private com.sun.star.awt.Rectangle      boundRect;
 
     public Graphics2D getGraphics()
     {
@@ -121,20 +123,20 @@ public class JavaCanvas
         CanvasUtils.printLog( "System detected: " + os );
 
         // tweak some speed knobs...
-        if( os.startsWith("Windows") )
-        {
-            System.setProperty("sun.java2d.translaccel", "true");
-            System.setProperty("sun.java2d.ddforcevram", "true");
-            //System.setProperty("sun.java2d.accthreshold", "0");
+//         if( os.startsWith("Windows") )
+//         {
+//             System.setProperty("sun.java2d.translaccel", "true");
+//             System.setProperty("sun.java2d.ddforcevram", "true");
+//             //System.setProperty("sun.java2d.accthreshold", "0");
 
-            CanvasUtils.printLog( "Optimizing for Windows" );
-        }
-        else
-        {
-            System.setProperty("sun.java2d.opengl", "true");
+//             CanvasUtils.printLog( "Optimizing for Windows" );
+//         }
+//         else
+//         {
+//             System.setProperty("sun.java2d.opengl", "true");
 
-            CanvasUtils.printLog( "Optimizing for Unix" );
-        }
+//             CanvasUtils.printLog( "Optimizing for Unix" );
+//         }
 
         /* we're initialized with the following array of anys:
 
@@ -148,7 +150,7 @@ public class JavaCanvas
         */
         try
         {
-            com.sun.star.awt.Rectangle boundRect = (com.sun.star.awt.Rectangle) arguments[2];
+            boundRect = (com.sun.star.awt.Rectangle) arguments[2];
 
             //boolean isFullScreen = arguments[1];
             boolean isFullScreen = true;
@@ -427,7 +429,7 @@ public class JavaCanvas
     }
 
     public synchronized XAnimatedSprite createSpriteFromBitmaps( drafts.com.sun.star.rendering.XBitmap[] animationBitmaps,
-                                                                 short interpolationMode )
+                                                                 byte interpolationMode )
     {
         return null;
     }
@@ -444,11 +446,99 @@ public class JavaCanvas
         return new CanvasClonedSprite( this, original );
     }
 
-    public synchronized boolean updateScreen()
+    public synchronized boolean updateScreen( boolean bUpdateAll )
     {
         redrawAllLayers();
 
         return true;
+    }
+
+    //
+    // XBitmap implementation
+    // ======================
+    //
+
+    public synchronized IntegerSize2D getSize()
+    {
+        return new IntegerSize2D( boundRect.Width,
+                                  boundRect.Height );
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized XBitmapCanvas queryBitmapCanvas()
+    {
+        return this;
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized drafts.com.sun.star.rendering.XBitmap getScaledBitmap( RealSize2D newSize, boolean beFast ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
+    {
+        // TODO
+        return null;
+    }
+
+    //----------------------------------------------------------------------------------
+
+    //
+    // XIntegerBitmap implementation
+    // =============================
+    //
+
+    public synchronized byte[] getData( IntegerRectangle2D rect )
+    {
+        // TODO
+        return null;
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized void setData( byte[] data, IntegerBitmapLayout bitmapLayout, drafts.com.sun.star.geometry.IntegerRectangle2D rect )
+    {
+        // TODO
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized void setPixel( byte[] color, IntegerBitmapLayout bitmapLayout, drafts.com.sun.star.geometry.IntegerPoint2D pos )
+    {
+        // TODO
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized byte[] getPixel( IntegerPoint2D pos )
+    {
+        // TODO
+        return null;
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized XBitmapPalette getPalette()
+    {
+        // TODO
+        return null;
+    }
+
+    //----------------------------------------------------------------------------------
+
+    public synchronized IntegerBitmapLayout getMemoryLayout()
+    {
+        // TODO: finish that one
+        IntegerBitmapLayout layout = new IntegerBitmapLayout();
+
+        layout.ScanLines = boundRect.Width;
+        layout.ScanLineBytes = boundRect.Width*4;
+        layout.ScanLineStride = layout.ScanLineBytes;
+        layout.Format = 0;
+        layout.NumComponents = 4;
+        layout.ComponentMasks = null;
+        layout.Endianness = 0;
+        layout.IsPseudoColor = false;
+
+        return layout;
     }
 
     //----------------------------------------------------------------------------------
@@ -533,7 +623,7 @@ public class JavaCanvas
             CanvasUtils.printLog( "Available vram: " + device.getAvailableAcceleratedMemory() );
 
             // repaint background
-            //backBuffer.redraw( graph );
+            backBuffer.redraw( graph );
 
             // repaint all active sprites
             java.util.Set entries = activeSprites.entrySet();
@@ -579,7 +669,7 @@ public class JavaCanvas
     //----------------------------------------------------------------------------------
 
     private static final String s_implName = "XCanvas.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.Canvas";
+    private static final String s_serviceName = "drafts.com.sun.star.rendering.JavaCanvas";
 
     //----------------------------------------------------------------------------------
 
