@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:06:49 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,7 +803,7 @@ TabDialog DLG_TAB_OUTLINE
     Text[ chinese_simplified ] = "ΥΒ±ΰΊΕ";
     Text[ russian ] = "Νσμεπΰφθÿ γλΰβ";
     Text[ polish ] = "Numeracja rozdzia³σw";
-    Text[ japanese ] = "Ν‚Μ”Τ†•t‚―";
+    Text[ japanese ] = "Ν”Τ†•t‚―";
     Text[ chinese_traditional ] = "³Ή½sΈΉ";
     Text[ arabic ] = "ΚΡήνγ ΗαέΥζα";
     Text[ greek ] = "Αρίθμηση κεφαλαίων";
