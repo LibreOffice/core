@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSentenceCursor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:35:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,50 +72,61 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XSentenceCursor
 /** makes it possible to perform cursor movements through sentences.
  */
 published interface XSentenceCursor: com::sun::star::text::XTextCursor
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSentenceCursor::isStartOfSentence
     /** determines if the cursor is positioned at the start of a sentence.
      */
     boolean isStartOfSentence();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSentenceCursor::isEndOfSentence
     /** determines if the cursor is positioned at the end of a sentence.
      */
     boolean isEndOfSentence();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSentenceCursor::gotoNextSentence
     /** moves the cursor to the start of the next sentence.
+
+        @returns
+            <true/> if the cursor was moved. It returns <false/> it the
+            cursor can not advance further.
      */
     boolean gotoNextSentence( [in] boolean Expand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSentenceCursor::gotoPreviousSentence
     /** moves the cursor to the start of the previous sentence.
+
+        @returns
+            <true/> if the cursor was moved. It returns <false/> it the
+            cursor can not advance further.
      */
     boolean gotoPreviousSentence( [in] boolean Expand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSentenceCursor::gotoStartOfSentence
     /** moves the cursor to the start of the current sentence.
+
+        @returns
+            <true/> if the cursor is now at the start of a sentence,
+            <false/> otherwise. If <false/> was returned the cursor
+            will remain at its original position.
      */
     boolean gotoStartOfSentence( [in] boolean Expand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XSentenceCursor::gotoEndOfSentence
     /** moves the cursor to the end of the current sentence.
+
+        @returns
+            <true/> if the cursor is now at the end of a sentence,
+            <false/> otherwise. If <false/> was returned the cursor
+            will remain at its original position.
      */
     boolean gotoEndOfSentence( [in] boolean Expand );
 
