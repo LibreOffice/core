@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MutableAttrList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:53:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,9 @@ sal_Int16 XMLMutableAttributeList::GetIndexByName( const OUString& rName ) const
     else
     {
         sal_Int16 nCount = m_xAttrList->getLength();
-        for( sal_Int16 i=0; nIndex!=-1 && i<nCount ; ++i )
+        for( sal_Int16 i=0; nIndex==-1 && i<nCount ; ++i )
         {
-            if( m_xAttrList->getValueByIndex(i) == rName )
+            if( m_xAttrList->getNameByIndex(i) == rName )
                 nIndex = i;
         }
     }
