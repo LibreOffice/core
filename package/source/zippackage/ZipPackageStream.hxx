@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:01:44 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,9 @@ public:
                         const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual ~ZipPackageStream( void );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > TryToGetRawFromDataStream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > TryToGetRawFromDataStream(
+                                                                                    sal_Bool bAddHeaderForEncr );
 
     sal_Bool ParsePackageRawStream();
 
@@ -203,7 +205,10 @@ public:
         throw ( ::com::sun::star::packages::EncryptionNotAllowedException,
                 ::com::sun::star::packages::NoRawFormatException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getPlainRawStream()
+        throw ( ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException );
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
