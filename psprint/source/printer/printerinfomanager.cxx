@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 14:11:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/config.hxx>
-#include <psprint/printerinfomanager.hxx>
+#include <cupsmgr.hxx>
 #include <psprint/fontmanager.hxx>
 
 #include <osl/thread.hxx>
@@ -123,17 +123,29 @@ class SystemQueueInfo : public Thread
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    static PrinterInfoManager aManager;
+    static PrinterInfoManager* pManager = NULL;
 
-    return aManager;
+    if( ! pManager )
+    {
+        pManager = CUPSManager::tryLoadCUPS();
+        if( ! pManager )
+            pManager = new PrinterInfoManager();
+
+        if( pManager )
+            pManager->initialize();
+    }
+
+    return *pManager;
 }
 
 // -----------------------------------------------------------------
 
-PrinterInfoManager::PrinterInfoManager()
+PrinterInfoManager::PrinterInfoManager( Type eType ) :
+        m_pQueueInfo( NULL ),
+        m_eType( eType )
 {
-    m_pQueueInfo = new SystemQueueInfo();
-    initialize();
+    if( eType == Default )
+        m_pQueueInfo = new SystemQueueInfo();
 }
 
 // -----------------------------------------------------------------
@@ -172,7 +184,7 @@ bool PrinterInfoManager::checkPrintersChanged()
             }
         }
     }
-    if( ! bChanged )
+    if( ! bChanged && m_pQueueInfo )
         bChanged = m_pQueueInfo->hasChanged();
     if( bChanged )
     {
@@ -254,8 +266,12 @@ void PrinterInfoManager::initialize()
             m_aGlobalDefaults.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
 
             aValue = aConfig.ReadKey( "Scale" );
-          if ( aValue.Len() )
+            if( aValue.Len() )
+            {
                 m_aGlobalDefaults.m_nScale = aValue.ToInt32();
+                if( (m_aGlobalDefaults.m_nScale < 1) || (m_aGlobalDefaults.m_nScale > 1000) )
+                    m_aGlobalDefaults.m_nScale = 100;
+            }
 
             aValue = aConfig.ReadKey( "MarginAdjust" );
             m_aGlobalDefaults.m_nLeftMarginAdjust   = aValue.GetToken( 0, ',' ).ToInt32();
@@ -415,64 +431,71 @@ void PrinterInfoManager::initialize()
                 aPrinterName = String( aValue.Copy( nNamePos+1 ), RTL_TEXTENCODING_UTF8 );
                 aPrinter.m_aInfo.m_aPrinterName     = aPrinterName;
                 aPrinter.m_aInfo.m_aDriverName      = String( aValue.Copy( 0, nNamePos ), RTL_TEXTENCODING_UTF8 );
-                aPrinter.m_aInfo.m_pParser          = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
-                aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
-                // note: setParser also purges the context
 
-                // ignore this printer if its driver is not found
-                if( ! aPrinter.m_aInfo.m_pParser )
-                    continue;
-
-                // merge the ppd context keys if the printer has the same keys and values
-                // this is a bit tricky, since it involves mixing two PPDs
-                // without constraints which might end up badly
-                // this feature should be use with caution
-                // it is mainly to select default paper sizes for new printers
-                for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
+                // set parser, merge settings
+                // don't do this for CUPS printers as this is done
+                // by the CUPS system itself
+                if( aPrinter.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) != 0 )
                 {
-                    const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
-                    const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
-                    const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
-                    if( pDefKey && pPrinterKey )
-                        // at least the options exist in both PPDs
+                    aPrinter.m_aInfo.m_pParser          = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
+                    aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
+                    // note: setParser also purges the context
+
+                    // ignore this printer if its driver is not found
+                    if( ! aPrinter.m_aInfo.m_pParser )
+                        continue;
+
+                    // merge the ppd context keys if the printer has the same keys and values
+                    // this is a bit tricky, since it involves mixing two PPDs
+                    // without constraints which might end up badly
+                    // this feature should be use with caution
+                    // it is mainly to select default paper sizes for new printers
+                    for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
                     {
-                        if( pDefValue )
+                        const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
+                        const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
+                        const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
+                        if( pDefKey && pPrinterKey )
+                            // at least the options exist in both PPDs
                         {
-                            const PPDValue* pPrinterValue = pPrinterKey->getValue( pDefValue->m_aOption );
-                            if( pPrinterValue )
-                                // the printer has a corresponding option for the key
-                                aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
-                        }
+                            if( pDefValue )
+                            {
+                                const PPDValue* pPrinterValue = pPrinterKey->getValue( pDefValue->m_aOption );
+                                if( pPrinterValue )
+                                    // the printer has a corresponding option for the key
+                                    aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
+                            }
                         else
                             aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, NULL );
+                        }
                     }
-                }
 
-                aValue = aConfig.ReadKey( "Command" );
-                // no printer without a command
-                if( ! aValue.Len() )
-                {
-                    /*  TODO:
-                     *  porters: please append your platform to the Solaris
-                     *  case if your platform has SystemV printing per default.
-                     */
-#if defined SOLARIS || defined(IRIX)
-                    aValue = "lp";
-#elif defined(MACOSX)
-                    if ( applePrintSystem == kApplePrintingCUPS )
-                        aValue = "lp";
-                    else if ( applePrintSystem == kApplePrintingPrintCenter )
-                        aValue = kApplePCPrintCommand;
-                    else
+                    aValue = aConfig.ReadKey( "Command" );
+                    // no printer without a command
+                    if( ! aValue.Len() )
                     {
-                        // Fallback case is kApplePrintingLPR
-                        aValue = "lpr";
-                    }
+                        /*  TODO:
+                         *  porters: please append your platform to the Solaris
+                         *  case if your platform has SystemV printing per default.
+                         */
+#if defined SOLARIS || defined(IRIX)
+                        aValue = "lp";
+#elif defined(MACOSX)
+                        if ( applePrintSystem == kApplePrintingCUPS )
+                            aValue = "lp";
+                        else if ( applePrintSystem == kApplePrintingPrintCenter )
+                            aValue = kApplePCPrintCommand;
+                        else
+                        {
+                            // Fallback case is kApplePrintingLPR
+                            aValue = "lpr";
+                        }
 #else
-                    aValue = "lpr";
+                        aValue = "lpr";
 #endif
+                    }
+                    aPrinter.m_aInfo.m_aCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
                 }
-                aPrinter.m_aInfo.m_aCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
 
                 aValue = aConfig.ReadKey( "Features" );
                 aPrinter.m_aInfo.m_aFeatures = String( aValue, RTL_TEXTENCODING_UTF8 );
@@ -498,7 +521,11 @@ void PrinterInfoManager::initialize()
 
                 aValue = aConfig.ReadKey( "Scale" );
                 if( aValue.Len() )
+                {
                     aPrinter.m_aInfo.m_nScale = aValue.ToInt32();
+                    if( (aPrinter.m_aInfo.m_nScale < 1) || (aPrinter.m_aInfo.m_nScale > 1000) )
+                        aPrinter.m_aInfo.m_nScale = 100;
+                }
 
                 aValue = aConfig.ReadKey( "MarginAdjust" );
                 if( aValue.Len() )
@@ -533,7 +560,7 @@ void PrinterInfoManager::initialize()
                 for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
                 {
                     ByteString aKey( aConfig.GetKeyName( nKey ) );
-                    if( aKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL )
+                    if( aKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
                         const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey( String( aKey.Copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -569,6 +596,9 @@ void PrinterInfoManager::initialize()
             }
         }
     }
+
+    if( m_eType != Default )
+        return;
 
     // set default printer
     if( m_aPrinters.size() )
@@ -898,16 +928,19 @@ bool PrinterInfoManager::writePrinterConfig()
             aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nBottomMarginAdjust );
             pConfig->WriteKey( "MarginAdjust", aValue );
 
-            // write PPDContext
-            for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
+            if( it->second.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) != 0 )
             {
-                const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
-                ByteString aKey( "PPD_" );
-                aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
+                // write PPDContext (not for CUPS)
+                for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
+                {
+                    const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
+                    ByteString aKey( "PPD_" );
+                    aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
 
-                const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
-                aValue = pValue ? ByteString( pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ) : ByteString( "*nil" );
-                pConfig->WriteKey( aKey, aValue );
+                    const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
+                    aValue = pValue ? ByteString( pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ) : ByteString( "*nil" );
+                    pConfig->WriteKey( aKey, aValue );
+                }
             }
 
             // write font substitution table
@@ -970,6 +1003,14 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
 
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "new printer %s, level = %d, scale = %d, colordevice = %d, depth = %d\n",
+                 OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
+                 m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
+                 m_aPrinters[rPrinterName].m_aInfo.m_nScale,
+                 m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
+                 m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
+#endif
     }
     return bSuccess;
 }
@@ -1147,7 +1188,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
 
 void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommands )
 {
-    if( m_pQueueInfo->hasChanged() )
+    if( m_pQueueInfo && m_pQueueInfo->hasChanged() )
     {
         m_aSystemPrintCommand = m_pQueueInfo->getCommand();
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
@@ -1166,13 +1207,39 @@ void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommand
 
 const std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
 {
-    if( m_pQueueInfo->hasChanged() )
+    if( m_pQueueInfo && m_pQueueInfo->hasChanged() )
     {
         m_aSystemPrintCommand = m_pQueueInfo->getCommand();
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
     }
 
     return m_aSystemPrintQueues;
+}
+
+FILE* PrinterInfoManager::startSpool( const OUString& rPrintername )
+{
+    const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
+    const rtl::OUString& rCommand       = rPrinterInfo.m_aCommand;
+    const rtl::OString aShellCommand    = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
+
+    return popen (aShellCommand.getStr(), "w");
+}
+
+int PrinterInfoManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile )
+{
+    pclose( pFile );
+    return 0; // job id ?
+}
+
+void PrinterInfoManager::setupJobContextData( JobData& rData )
+{
+    std::hash_map< OUString, Printer, OUStringHash >::iterator it =
+        m_aPrinters.find( rData.m_aPrinterName );
+    if( it != m_aPrinters.end() )
+    {
+        rData.m_pParser     = it->second.m_aInfo.m_pParser;
+        rData.m_aContext    = it->second.m_aInfo.m_aContext;
+    }
 }
 
 // -----------------------------------------------------------------
@@ -1245,8 +1312,7 @@ void SystemQueueInfo::run()
 {
     char pBuffer[1024];
     ByteString aPrtQueueCmd, aForeToken, aAftToken, aString;
-    int nForeTokenCount = 0;
-    int i;
+    int nForeTokenCount = 0, i;
     FILE *pPipe;
     bool bSuccess = false;
     std::list< ByteString > aLines;
@@ -1272,22 +1338,22 @@ void SystemQueueInfo::run()
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
 #endif
-      #ifdef MACOSX
+#ifdef MACOSX
         /* For Mac OS X 10.1 Print Center printing, we only use the default queue.  We do not
          * need to discover it.  So when it comes up in the list of possible queues,
          * recognize it and declare success.
          */
         if ( applePrintSysType == kApplePrintingPrintCenter )
         {
-             if ( strstr(aPrtQueueCmd.GetBuffer(), kApplePCQueueName) != NULL )
-                 bSuccess = TRUE;
-           #ifdef DEBUG
-             else
-                 fprintf( stderr, "Ignoring print queue command \"%s\" because using 10.1 Print Center printing.\n", aParms[i].pQueueCommand );
-           #endif
+            if ( strstr(aPrtQueueCmd.GetBuffer(), kApplePCQueueName) != NULL )
+                bSuccess = TRUE;
+#ifdef DEBUG
+            else
+                fprintf( stderr, "Ignoring print queue command \"%s\" because using 10.1 Print Center printing.\n", aParms[i].pQueueCommand );
+#endif
         }
         else
-      #endif
+#endif
         {
             if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
             {
