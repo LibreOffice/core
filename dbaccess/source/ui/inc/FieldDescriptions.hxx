@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:47:10 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 09:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace dbaui
         //  void SetTypeName(const ::rtl::OUString& _rTypeName)         { m_sTypeName = _rTypeName; }
         void SetDescription(const ::rtl::OUString& _rDescription)   { m_sDescription = _rDescription; }
         void SetDefaultValue(const ::rtl::OUString& _rDefaultValue) { m_sDefaultValue = _rDefaultValue; }
-        void SetType(const OTypeInfo* _pType)                       { m_pType = _pType; }
+        void SetType(const OTypeInfo* _pType)                       { m_pType = _pType; if (m_pType) m_nType = m_pType->nType; }
         void SetTypeValue(sal_Int32 _nType)                         { m_nType = _nType; OSL_ENSURE(!m_pType,"Invalid call here!");}
         void SetPrecision(const sal_Int32& _rPrecision)             { m_nPrecision = _rPrecision; }
         void SetScale(const sal_Int32& _rScale)                     { m_nScale = _rScale; }
