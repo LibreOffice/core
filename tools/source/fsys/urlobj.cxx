@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 10:22:59 $
+ *  last change: $Author: sb $ $Date: 2001-05-11 07:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
 
    ; RFC 1738, RFC 2396
-   http-url = "HTTP://" hostport ["/" segment *("/" segment) ["?" *uric]]
+   http-url = "HTTP://" hostport ["/" segment *("/" segment) ["?" *pchar]]
    segment = *(pchar / ";")
 
 
@@ -472,103 +472,104 @@ enum
     pW = INetURLObject::PART_CREATEFRAGMENT,
     pX = INetURLObject::PART_UNO_PARAM_VALUE,
     pY = INetURLObject::PART_UNAMBIGUOUS,
-    pZ = INetURLObject::PART_URIC_NO_SLASH
+    pZ = INetURLObject::PART_URIC_NO_SLASH,
+    p1 = INetURLObject::PART_HTTP_QUERY
 };
 
 static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                                                         pY,
-/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* " */                                                             pU+pV      +pY,
 /* # */                                                             pU,
-/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* % */                                                             pU,
-/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX   +pZ,
-/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ,
-/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ,
-/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX   +pZ+p1,
+/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1,
+/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ+p1,
+/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* / */ pA+pB+pC+pH+pJ                  +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX,
-/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ,
-/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW      +pZ,
+/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1,
+/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW      +pZ+p1,
 /* < */       pC                                 +pO+pP            +pU+pV      +pY,
-/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW      +pZ,
+/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW      +pZ+p1,
 /* > */       pC                                 +pO+pP            +pU+pV      +pY,
 /* ? */       pC                        +pL                     +pT+pU   +pW+pX   +pZ,
-/* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* [ */                                  pL                        +pU+pV   +pX,
 /* \ */    pB                                                      +pU+pV      +pY,
 /* ] */                                  pL                        +pU+pV   +pX,
 /* ^ */                                                             pU+pV      +pY,
-/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* ` */                                                             pU+pV      +pY,
-/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
-/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
 /* { */                                                             pU+pV      +pY,
 /* | */    pB+pC                              +pN               +pT+pU+pV      +pY,
 /* } */                                                             pU+pV      +pY,
@@ -1240,13 +1241,15 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
     {
         aSynAbsURIRef += '?';
         UniString aSynQuery;
+        Part ePart
+            = m_eScheme == INET_PROT_HTTP ? PART_HTTP_QUERY : PART_URIC;
         for (++pPos; pPos < pEnd && *pPos != nFragmentDelimiter;)
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, cEscapePrefix,
                                          eMechanism, eCharset, eEscapeType);
             appendUCS4(aSynQuery, nUTF32, eEscapeType, bOctets,
-                       PART_URIC, cEscapePrefix, eCharset, true);
+                       ePart, cEscapePrefix, eCharset, true);
         }
         m_aQuery.set(aSynAbsURIRef, aSynQuery, aSynAbsURIRef.Len());
     }
@@ -2739,7 +2742,9 @@ bool INetURLObject::setQuery(UniString const & rTheQuery, bool bOctets,
 {
     if (!getSchemeInfo().m_bQuery)
         return false;
-    UniString aNewQuery(encodeText(rTheQuery, bOctets, PART_URIC,
+    UniString aNewQuery(encodeText(rTheQuery, bOctets,
+                                   m_eScheme == INET_PROT_HTTP ?
+                                       PART_HTTP_QUERY : PART_URIC,
                                    getEscapePrefix(), eMechanism, eCharset,
                                    true));
     sal_Int32 nDelta;
