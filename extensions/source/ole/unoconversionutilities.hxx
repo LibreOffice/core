@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 11:05:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-24 09:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1703,6 +1703,8 @@ sal_Bool UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG*
     typelib_typedescription_release( pDesc);
     return retVal;
 }
+
+
 template<class T>
 Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, long* index, VARTYPE type)
 {
@@ -1711,21 +1713,21 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
     long uBound;
     long nCountElements;
 
-    SafeArrayGetLBound(pArray, actDim + 1, &lBound);
-    SafeArrayGetUBound(pArray, actDim + 1, &uBound);
+    SafeArrayGetLBound(pArray, actDim, &lBound);
+    SafeArrayGetUBound(pArray, actDim, &uBound);
     nCountElements= uBound - lBound +1;
 
 
     Sequence<Any>   anySeq(nCountElements);
     Any*            pUnoArray = anySeq.getArray();
 
-    for (index[actDim] = lBound; index[actDim] < nCountElements; index[actDim]++)
+    for (index[actDim - 1] = lBound; index[actDim - 1] < nCountElements; index[actDim - 1]++)
     {
-        if (actDim < (dimCount - 1))
+        if (actDim > 1 )
         {
-            Sequence<Any> element = createOleArrayWrapperOfDim(pArray, dimCount, actDim + 1, index, type);
+            Sequence<Any> element = createOleArrayWrapperOfDim(pArray, dimCount, actDim - 1, index, type);
 
-            pUnoArray[index[actDim] - lBound].setValue(&element, getCppuType(&element));
+            pUnoArray[index[actDim - 1] - lBound].setValue(&element, getCppuType(&element));
         }
         else
         {
@@ -1789,7 +1791,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
                     break;
             }
 
-            variantToAny(&variant, pUnoArray[index[actDim] - lBound], sal_False);
+            variantToAny(&variant, pUnoArray[index[actDim - 1] - lBound], sal_False);
 
             VariantClear(&variant);
         }
@@ -1813,7 +1815,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray
             index[i] = 0;
         }
 
-        ret = createOleArrayWrapperOfDim(pArray, dim, 0, index, type);
+        ret = createOleArrayWrapperOfDim(pArray, dim, dim, index, type);
 
         delete[] index;
     }
