@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:28:00 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
 #include "eventdlg.hrc"
+#include "helpid.hrc"
 #include "selector.hxx"
 #include "cfg.hxx"
 
@@ -129,6 +130,8 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
 
     // must be done after FreeResource is called
     InitResources();
+
+    mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
 
     aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
