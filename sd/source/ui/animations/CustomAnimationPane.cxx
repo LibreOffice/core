@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:29:34 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@
 #include "drawdoc.hxx"
 
 #include <memory>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -542,12 +543,24 @@ void CustomAnimationPane::updateLayout()
 
     aCursor.Y() += aSize.Height() + aOffset.Y();
 
+    // ---------------------------------------------------------------------------
     // place the properties controls
+
+    // calc minimum width for fixedtext
+
+    Size aFixedTextSize( mpFTStart->CalcMinimumSize() );
+    long nWidth = aFixedTextSize.Width();
+    aFixedTextSize = mpFTProperty->CalcMinimumSize();
+    nWidth = std::max( nWidth, aFixedTextSize.Width() );
+    aFixedTextSize = mpFTSpeed->CalcMinimumSize();
+    aFixedTextSize.Width() = std::max( nWidth, aFixedTextSize.Width() ) + aOffset.X();
+    mpFTStart->SetSizePixel(aFixedTextSize);
+    mpFTProperty->SetSizePixel(aFixedTextSize);
+    mpFTSpeed->SetSizePixel(aFixedTextSize);
 
     aSize = mpPBPropertyMore->GetSizePixel();
 
     // place the "start" fixed text
-    Size aFixedTextSize( mpFTStart->GetSizePixel() );
 
     Point aFTPos( aCursor );
     Point aLBPos( aCursor );
@@ -561,12 +574,17 @@ void CustomAnimationPane::updateLayout()
         aLBPos.Y() += aFixedTextSize.Height() + aOffset.Y();
 
         // height of fixed text + list box + something = 2 * list box
-        nDeltaY <<= 1;
+        nDeltaY = aListBoxSize.Height() +  aFixedTextSize.Height() + 2*aOffset.Y();
     }
     else
     {
         // x position for list box is right of fixed text
         aLBPos.X() += aFixedTextSize.Width() + aOffset.X();
+
+        if( aListBoxSize.Height() > aFixedTextSize.Height() )
+            aFTPos.Y() = aLBPos.Y() + ((aListBoxSize.Height() - aFixedTextSize.Height()) >> 1);
+        else
+            aLBPos.Y() = aFTPos.Y() + ((aFixedTextSize.Height() - aListBoxSize.Height()) >> 1);
     }
 
     // width of the listbox is from its left side until end of pane
@@ -590,7 +608,7 @@ void CustomAnimationPane::updateLayout()
     mpFTSpeed->SetPosPixel( aFTPos );
     mpCBSpeed->SetPosSizePixel( aLBPos, aListBoxSize );
 
-    aFTPos.Y() += nDeltaY; aLBPos.Y() += nDeltaY + aOffset.Y();
+    aFTPos.Y() += nDeltaY + aOffset.Y();
 
     Point aListPos( aFTPos );
 
@@ -601,7 +619,7 @@ void CustomAnimationPane::updateLayout()
     mpCBAutoPreview->SetPosPixel( aCursor );
 
     // place the seperator 2 fixed line
-    aCursor.Y() -= aOffset.Y() + mpFLSeperator2->GetSizePixel().Height();
+    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeperator2->GetSizePixel().Height();
     aSize = mpFLSeperator2->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
     mpFLSeperator2->SetPosSizePixel( aCursor, aSize );
@@ -613,7 +631,7 @@ void CustomAnimationPane::updateLayout()
     Size aPlaySize( mpPBPlay->GetSizePixel() );
     aPlaySize.setWidth( mpPBPlay->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
 
-    aCursor.Y() -= aCtrlSize.Height() + aOffset.Y();
+    aCursor.Y() -= aCtrlSize.Height() /* + aOffset.Y() */;
 
     // do we need two lines for the buttons?
     int aTestWidth = aCursor.X() + mpPBPlay->GetSizePixel().Width() + 2 * aOffset.X() + mpPBSlideShow->GetSizePixel().Width();
@@ -632,7 +650,7 @@ void CustomAnimationPane::updateLayout()
 
     // place the seperator 1 fixed line
     aCursor.X() = aOffset.X();
-    aCursor.Y() -= aOffset.Y() + mpFLSeperator1->GetSizePixel().Height();
+    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeperator1->GetSizePixel().Height();
     aSize = mpFLSeperator1->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
     mpFLSeperator1->SetPosSizePixel( aCursor, aSize );
@@ -652,15 +670,8 @@ void CustomAnimationPane::updateLayout()
     // displayed flush right without having too much space to the buttons
     // with some languages or truncated text with others.
     {
-        Size aOriginalTextSize (mpFTChangeOrder->GetSizePixel());
-        Rectangle aTextBox = GetTextRect (
-            Rectangle(
-                Point(0,aCursor.Y()),
-                Size(aCursor.X(),aOriginalTextSize.Height())),
-            mpFTChangeOrder->GetText());
-        // Don't make the fixed text smaller than specified in the resource.
-        int aTextWidth = ::std::max(aTextBox.GetWidth(),aOriginalTextSize.Width());
-        mpFTChangeOrder->SetSizePixel(Size(aTextWidth, aOriginalTextSize.Height()));
+        Size aSize (mpFTChangeOrder->CalcMinimumSize());
+        mpFTChangeOrder->SetSizePixel(aSize);
     }
     aCursor.X() -= aOffset.X() + mpFTChangeOrder->GetSizePixel().Width();
     aCursor.Y() += (aSize.Height() - mpFTChangeOrder->GetSizePixel().Height()) >> 1;
