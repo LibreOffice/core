@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:16:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,6 @@
 #ifndef _XTABLE_HXX //autogen
 #include <svx/xtable.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
