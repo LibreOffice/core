@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
+ *  last change: $Author: obo $ $Date: 2000-11-28 16:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL ZipEnumeration::hasMoreElements() throw (uno::RuntimeException
 uno::Any SAL_CALL ZipEnumeration::nextElement() throw (uno::RuntimeException)
 {
     if (hasMoreElements() == sal_False)
-        throw (container::NoSuchElementException() );
+        throw container::NoSuchElementException();
     uno::Any aElement;
     //aElement <<= uno::Reference < package::ZipEntry > (static_cast <package::ZipEntry > (xZipList[nCurrent++]));
     aElement <<= xZipList[nCurrent++];
