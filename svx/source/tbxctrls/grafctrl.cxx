@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:39:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,15 +390,19 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
     maImage.SetImage( aImage );
     maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     maImage.SetSizePixel( aImgSize );
+    // we want to see the backbround of the toolbox, not of the FixedImage or Control
+    maImage.SetBackground( Wallpaper( Color( COL_TRANSPARENT ) ) );
+    SetBackground( Wallpaper( Color( COL_TRANSPARENT ) ) );
 
     if( aImgSize.Height() > aFldSize.Height() )
         nImgY = 0, nFldY = ( aImgSize.Height() - aFldSize.Height() ) >> 1;
     else
         nFldY = 0, nImgY = ( aFldSize.Height() - aImgSize.Height() ) >> 1;
 
-    maImage.SetPosPixel( Point( 0, nImgY ) );
+    long nOffset = SYMBOL_TO_FIELD_OFFSET / 2;
+    maImage.SetPosPixel( Point( nOffset, nImgY ) );
     maField.SetPosPixel( Point( aImgSize.Width() + SYMBOL_TO_FIELD_OFFSET, nFldY ) );
-    SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET,
+    SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET + nOffset,
                   Max( aImgSize.Height(), aFldSize.Height() ) ) );
 
     maImage.Show();
