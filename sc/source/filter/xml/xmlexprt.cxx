@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-01 14:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@
 #include "unonames.hxx"
 #include "XMLTableMasterPageExport.hxx"
 #include "olinetab.hxx"
+#include "rangeutl.hxx"
 
 const sal_Int8 SC_MAXDIGITSCOUNT_TIME = 11;
 
@@ -2674,6 +2675,7 @@ void ScXMLExport::_ExportContent()
         WriteNamedExpressions(xSpreadDoc);
         WriteDatabaseRanges(xSpreadDoc);
         WriteDataPilots(xSpreadDoc);
+        WriteConsolidation();
     }
 }
 
@@ -3663,17 +3665,25 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
     return bIsEqual;
 }
 
+
+void ScXMLExport::GetStringFromAddress(const ScAddress& rAddress, rtl::OUString& rString) const
+{
+    String sAddress;
+    rAddress.Format( sAddress, SCA_VALID | SCA_TAB_3D, pDoc );
+    rString = sAddress;
+}
+
 void ScXMLExport::GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const
 {
-    ScAddress aStartAddress(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab());
-    ScAddress aEndAddress(aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab());
+    ScAddress aStartAddress( aRange.aStart );
+    ScAddress aEndAddress( aRange.aEnd );
     String sStartAddress;
     String sEndAddress;
-    aStartAddress.Format(sStartAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-    aEndAddress.Format(sEndAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-    rtl::OUString sOUStartAddress(sStartAddress);
-    sOUStartAddress += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"));
-    rtl::OUString sOUEndAddress(sEndAddress);
+    aStartAddress.Format( sStartAddress, SCA_VALID | SCA_TAB_3D, pDoc );
+    aEndAddress.Format( sEndAddress, SCA_VALID | SCA_TAB_3D, pDoc );
+    rtl::OUString sOUStartAddress( sStartAddress );
+    sOUStartAddress += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
+    rtl::OUString sOUEndAddress( sEndAddress );
     sOUStartAddress += sOUEndAddress;
     rString = sOUStartAddress;
 }
@@ -3681,11 +3691,11 @@ void ScXMLExport::GetStringFromRange(const ScRange& aRange, rtl::OUString& rStri
 void ScXMLExport::AddStringFromRange(const ScRange& aRange, rtl::OUString& rString) const
 {
     rtl::OUString sRangeStr;
-    GetStringFromRange(aRange, sRangeStr);
-    if (sRangeStr.getLength())
+    GetStringFromRange( aRange, sRangeStr );
+    if( sRangeStr.getLength() )
     {
-        if (rString.getLength())
-            rString += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        if( rString.getLength() )
+            rString += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
         rString += sRangeStr;
     }
 }
@@ -3693,30 +3703,44 @@ void ScXMLExport::AddStringFromRange(const ScRange& aRange, rtl::OUString& rStri
 void ScXMLExport::GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const
 {
     rtl::OUString sRangeListStr;
-    if (pRangeList)
+    if( pRangeList )
     {
-        sal_Int32 nCount(pRangeList->Count());
-        for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+        sal_Int32 nCount = pRangeList->Count();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            const ScRange* pRange = pRangeList->GetObject(nIndex);
-            if (pRange)
-                AddStringFromRange(*pRange, sRangeListStr);
+            const ScRange* pRange = pRangeList->GetObject( nIndex );
+            if( pRange )
+                AddStringFromRange( *pRange, sRangeListStr );
         }
     }
     rString = sRangeListStr;
 }
 
+
+void ScXMLExport::GetStringFromArea(const ScArea& aArea, rtl::OUString& rString) const
+{
+    ScRange aRange( aArea.nColStart, aArea.nRowStart, aArea.nTab, aArea.nColEnd, aArea.nRowEnd, aArea.nTab );
+    GetStringFromRange( aRange, rString );
+}
+
+void ScXMLExport::AddStringFromArea(const ScArea& aArea, rtl::OUString& rString) const
+{
+    ScRange aRange( aArea.nColStart, aArea.nRowStart, aArea.nTab, aArea.nColEnd, aArea.nRowEnd, aArea.nTab );
+    AddStringFromRange( aRange, rString );
+}
+
+
 void ScXMLExport::GetStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
 {
-    ScAddress aStartAddress(aRange.StartColumn, aRange.StartRow, aRange.Sheet);
-    ScAddress aEndAddress(aRange.EndColumn, aRange.EndRow, aRange.Sheet);
+    ScAddress aStartAddress( aRange.StartColumn, aRange.StartRow, aRange.Sheet );
+    ScAddress aEndAddress( aRange.EndColumn, aRange.EndRow, aRange.Sheet );
     String sStartAddress;
     String sEndAddress;
-    aStartAddress.Format(sStartAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-    aEndAddress.Format(sEndAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-    rtl::OUString sOUStartAddress(sStartAddress);
-    sOUStartAddress += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"));
-    rtl::OUString sOUEndAddress(sEndAddress);
+    aStartAddress.Format( sStartAddress, SCA_VALID | SCA_TAB_3D, pDoc );
+    aEndAddress.Format( sEndAddress, SCA_VALID | SCA_TAB_3D, pDoc );
+    rtl::OUString sOUStartAddress( sStartAddress );
+    sOUStartAddress += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
+    rtl::OUString sOUEndAddress( sEndAddress );
     sOUStartAddress += sOUEndAddress;
     rString = sOUStartAddress;
 }
@@ -3724,16 +3748,17 @@ void ScXMLExport::GetStringFromRange(const table::CellRangeAddress& aRange, rtl:
 void ScXMLExport::AddStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
 {
     rtl::OUString sRangeStr;
-    GetStringFromRange( aRange, sRangeStr);
-    if (sRangeStr.getLength())
+    GetStringFromRange( aRange, sRangeStr );
+    if( sRangeStr.getLength() )
     {
-        if (rString.getLength())
-            rString += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        if( rString.getLength() )
+            rString += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
         rString += sRangeStr;
     }
 }
 
-void ScXMLExport::GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const
+
+void ScXMLExport::GetStringOfFunction(sheet::GeneralFunction nFunction, rtl::OUString& rString) const
 {
     switch (nFunction)
     {
@@ -3753,6 +3778,27 @@ void ScXMLExport::GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& 
     }
 }
 
+// core implementation
+void ScXMLExport::GetStringOfFunction(ScSubTotalFunc eFunction, rtl::OUString& rString) const
+{
+    switch( eFunction )
+    {
+        case SUBTOTAL_FUNC_NONE:    GetStringOfFunction( sheet::GeneralFunction_AUTO, rString );        break;
+        case SUBTOTAL_FUNC_AVE:     GetStringOfFunction( sheet::GeneralFunction_AVERAGE, rString );     break;
+        case SUBTOTAL_FUNC_CNT:     GetStringOfFunction( sheet::GeneralFunction_COUNT, rString );       break;
+        case SUBTOTAL_FUNC_CNT2:    GetStringOfFunction( sheet::GeneralFunction_COUNTNUMS, rString );   break;
+        case SUBTOTAL_FUNC_MAX:     GetStringOfFunction( sheet::GeneralFunction_MAX, rString );         break;
+        case SUBTOTAL_FUNC_MIN:     GetStringOfFunction( sheet::GeneralFunction_MIN, rString );         break;
+        case SUBTOTAL_FUNC_PROD:    GetStringOfFunction( sheet::GeneralFunction_PRODUCT, rString );     break;
+        case SUBTOTAL_FUNC_STD:     GetStringOfFunction( sheet::GeneralFunction_STDEV, rString );       break;
+        case SUBTOTAL_FUNC_STDP:    GetStringOfFunction( sheet::GeneralFunction_STDEVP, rString );      break;
+        case SUBTOTAL_FUNC_SUM:     GetStringOfFunction( sheet::GeneralFunction_SUM, rString );         break;
+        case SUBTOTAL_FUNC_VAR:     GetStringOfFunction( sheet::GeneralFunction_VAR, rString );         break;
+        case SUBTOTAL_FUNC_VARP:    GetStringOfFunction( sheet::GeneralFunction_VARP, rString );        break;
+    }
+}
+
+// core implementation
 void ScXMLExport::WriteScenario()
 {
     if (pDoc->IsScenario(nCurrentTable))
@@ -4849,7 +4895,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                                 AddAttribute(XML_NAMESPACE_TABLE, sXML_used_hierarchy, sBuffer.makeStringAndClear());
                             }
                             rtl::OUString sFunction;
-                            GetStringOfFunction(pDim->GetFunction(), sFunction);
+                            GetStringOfFunction((sheet::GeneralFunction)pDim->GetFunction(), sFunction);
                             AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
                             SvXMLElementExport aElemDPF(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_field, sal_True, sal_True);
                             CheckAttrList();
@@ -4867,7 +4913,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                                     for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
                                     {
                                         rtl::OUString sFunction;
-                                        GetStringOfFunction(pDim->GetSubTotalFunc(nSubTotal), sFunction);
+                                        GetStringOfFunction((sheet::GeneralFunction)pDim->GetSubTotalFunc(nSubTotal), sFunction);
                                         AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
                                         SvXMLElementExport aElemST(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_subtotal, sal_True, sal_True);
                                     }
@@ -4886,8 +4932,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                                         AddAttribute(XML_NAMESPACE_TABLE, sXML_display, sBuffer.makeStringAndClear());
                                         SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetShowDetails());
                                         AddAttribute(XML_NAMESPACE_TABLE, sXML_display_details, sBuffer.makeStringAndClear());
-                                        SvXMLElementExport aElemDPM(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_member, sal_True, sal_True);
-                                        CheckAttrList();
+                                        SvXMLElementExport aElemDPM(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_member, sal_True, sal_True);                                        CheckAttrList();
                                     }
                                 }
                             }
@@ -4896,6 +4941,39 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                 }
             }
         }
+    }
+}
+
+// core implementation
+void ScXMLExport::WriteConsolidation()
+{
+    const ScConsolidateParam* pCons = pDoc->GetConsolidateDlgData();
+    if( pCons )
+    {
+        OUString aStrData;
+
+        GetStringOfFunction( pCons->eFunction, aStrData );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_function, aStrData );
+
+        aStrData = OUString();
+        for( sal_Int32 nIndex = 0; nIndex < pCons->nDataAreaCount; nIndex++ )
+            AddStringFromArea( *pCons->ppDataAreas[ nIndex ], aStrData );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_source_cell_range_addresses, aStrData );
+
+        GetStringFromAddress( ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), aStrData );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_target_cell_address, aStrData );
+
+        if( pCons->bByCol && !pCons->bByRow )
+            AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_use_label, sXML_column );
+        else if( !pCons->bByCol && pCons->bByRow )
+            AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_use_label, sXML_row );
+        else if( pCons->bByCol && pCons->bByRow )
+            AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_use_label, sXML_both );
+
+        if( pCons->bReferenceData )
+            AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_link_to_source_data, sXML_true );
+
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_consolidation, sal_True, sal_True );
     }
 }
 

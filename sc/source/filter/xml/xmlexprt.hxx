@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-01 14:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
+#include <com/sun/star/sheet/GeneralFunction.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -140,6 +143,7 @@ class SvXMLNumFmtExport;
 class ScDocument;
 class ScRange;
 class ScRangeList;
+class ScArea;
 class ScHorizontalCellIterator;
 struct ScQueryEntry;
 struct ScQueryParam;
@@ -516,14 +520,22 @@ class ScXMLExport : public SvXMLExport
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
 
+    // core implementation
+    void GetStringFromAddress(const ScAddress& rAddress, rtl::OUString& rString) const;
     void GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
     void AddStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
     void GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const;
+
+    void GetStringFromArea(const ScArea& aArea, rtl::OUString& rString) const;
+    void AddStringFromArea(const ScArea& aArea, rtl::OUString& rString) const;
+
     void GetStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
     void AddStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
 
-    void GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const;
-    void WriteScenario();
+    void GetStringOfFunction(::com::sun::star::sheet::GeneralFunction eFunction, rtl::OUString& rString) const;
+    void GetStringOfFunction(ScSubTotalFunc eFunction, rtl::OUString& rString) const;   // core implementation
+
+    void WriteScenario();   // core implementation
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
@@ -539,6 +551,7 @@ class ScXMLExport : public SvXMLExport
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
     void WriteDataPilots(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreaDoc);
+    void WriteConsolidation();  // core implementation
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
     virtual XMLPageExport* CreatePageExport();
