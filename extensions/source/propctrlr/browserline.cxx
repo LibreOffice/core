@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:59:54 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,10 @@ namespace pcr
         String aText(rString);
         // #99102# --------------
         m_aFtTitle.SetText(aText);
+        if ( m_pBrowserControl )
+            m_pBrowserControl->GetMe()->SetAccessibleName( rString );
+        if ( m_pBrowseButton )
+            m_pBrowseButton->SetAccessibleName( rString );
         FullFillTitleString();
     }
 
