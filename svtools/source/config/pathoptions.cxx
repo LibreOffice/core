@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: as $ $Date: 2001-07-25 10:10:31 $
+ *  last change: $Author: jp $ $Date: 2001-08-17 15:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,9 +1471,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 
                 if ( bRet )
                 {
-                    rIniFile = aObj.GetMainURL();
                     if ( !bIsURL )
-                        ::utl::LocalFileHelper::ConvertURLToPhysicalName( rIniFile, rIniFile );
+                        ::utl::LocalFileHelper::ConvertURLToPhysicalName(
+                                            aObj.GetMainURL(), rIniFile );
+                    else
+                        rIniFile = aObj.GetMainURL();
                     break;
                 }
             }
