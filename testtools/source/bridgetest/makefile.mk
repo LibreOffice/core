@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-05 12:58:56 $
+#   last change: $Author: hr $ $Date: 2004-02-02 20:33:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,11 @@ GIVE_EXEC_RIGHTS=@echo
 WINTARGETS=$(DESTDIR)$/regcomp.exe $(DESTDIR)$/uno.exe 
 
 .ELSE
+.IF "$(OS)"=="MACOSX"
+MY_DLLPOSTFIX=.dylib
+.ELSE
 MY_DLLPOSTFIX=.so
+.ENDIF
 DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
