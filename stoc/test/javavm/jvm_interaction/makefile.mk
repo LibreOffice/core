@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2002-07-23 14:02:26 $
+#   last change: $Author: kz $ $Date: 2005-01-13 19:03:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,8 +68,8 @@ LIBTARGET=	NO
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=	TRUE
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=	$(OUT)$/inc$
 INCPRE+=	$(OUT)$/inc$
 
