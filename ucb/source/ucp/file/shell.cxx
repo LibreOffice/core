@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-16 16:31:35 $
+ *  last change: $Author: hro $ $Date: 2000-11-22 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3353,35 +3353,31 @@ sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
         return true;
     }
 
-#ifdef UNX
-    rtl::OUString   aRealUnqPath;
-#endif
-
     for( sal_Int32 j = 0; j < numMp; ++j )
     {
         rtl::OUString aAlias = m_vecMountPoint[j].m_aMountPoint;
         rtl::OUString aDir   = m_vecMountPoint[j].m_aDirectory;
         sal_Int32 nL = aAlias.getLength();
-        if( aUnqPath.compareTo( aAlias,nL ) == 0 )
+
+#ifdef UNX
+        rtl::OUString   aRealUnqPath;
+        oslFileError    error = osl_File_E_None;
+
+        if ( !aRealUnqPath.pData->length )
+            error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
+
+        if ( osl_File_E_None == error && aRealUnqPath.compareTo( aAlias,nL ) == 0 )
         {
             aRedirectedPath = aDir;
             aRedirectedPath += aUnqPath.copy( nL );
             return true;
         }
-#ifdef UNX
-        else
+#else
+        if( aUnqPath.compareTo( aAlias,nL ) == 0 )
         {
-            oslFileError    error = osl_File_E_None;
-
-            if ( !aRealUnqPath.pData->length )
-                error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
-
-            if ( osl_File_E_None == error && aRealUnqPath.compareTo( aAlias,nL ) == 0 )
-            {
-                aRedirectedPath = aDir;
-                aRedirectedPath += aUnqPath.copy( nL );
-                return true;
-            }
+            aRedirectedPath = aDir;
+            aRedirectedPath += aUnqPath.copy( nL );
+            return true;
         }
 #endif
     }
@@ -3410,33 +3406,30 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
         return true;
     }
 
-#ifdef UNX
-    rtl::OUString   aRealUnqPath;
-#endif
 
     for( sal_Int32 j = 0; j < numMp; ++j )
     {
         sal_Int32 nL = m_vecMountPoint[j].m_aDirectory.getLength();
-        if( aUnqPath.compareTo( m_vecMountPoint[j].m_aDirectory,nL ) == 0 )
+
+#ifdef UNX
+        rtl::OUString   aRealUnqPath;
+        oslFileError    error = osl_File_E_None;
+
+        if ( !aRealUnqPath.pData->length )
+            error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
+
+        if ( osl_File_E_None == error && aRealUnqPath.compareTo(  m_vecMountPoint[j].m_aDirectory,nL ) == 0 )
         {
             aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
             aRedirectedPath += aUnqPath.copy( nL );
             return true;
         }
-#ifdef UNX
-        else
+#else
+        if( aUnqPath.compareTo( m_vecMountPoint[j].m_aDirectory,nL ) == 0 )
         {
-            oslFileError    error = osl_File_E_None;
-
-            if ( !aRealUnqPath.pData->length )
-                error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
-
-            if ( osl_File_E_None == error && aRealUnqPath.compareTo(  m_vecMountPoint[j].m_aDirectory,nL ) == 0 )
-            {
-                aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
-                aRedirectedPath += aUnqPath.copy( nL );
-                return true;
-            }
+            aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
+            aRedirectedPath += aUnqPath.copy( nL );
+            return true;
         }
 #endif
     }

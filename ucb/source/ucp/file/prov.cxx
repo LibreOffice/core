@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-17 10:42:04 $
+ *  last change: $Author: hro $ $Date: 2000-11-22 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,13 +299,6 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
                 if ( !aUnqAl.getLength() )
                     m_pMyShell->getUnqFromUrl( aAliasName,aUnqAl );
 
-                if ( aUnqDir.getLength() && aUnqAl.getLength() )
-                {
-                    m_pMyShell->m_vecMountPoint.push_back(
-                        shell::MountPoint( aUnqAl, aUnqDir ) );
-                    m_pMyShell->m_bFaked = true;
-                }
-
 #ifdef UNX
                 rtl::OUString aRealUnqDir;
                 rtl::OUString aRealUnqAlias;
@@ -322,6 +315,14 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
                         shell::MountPoint( aRealUnqAlias, aRealUnqDir ) );
                     m_pMyShell->m_bFaked = true;
                 }
+#else
+                if ( aUnqDir.getLength() && aUnqAl.getLength() )
+                {
+                    m_pMyShell->m_vecMountPoint.push_back(
+                        shell::MountPoint( aUnqAl, aUnqDir ) );
+                    m_pMyShell->m_bFaked = true;
+                }
+
 #endif
 
             }
