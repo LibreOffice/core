@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:24:18 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:56:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,14 +189,11 @@ SRC1FILES=			propres.src	 \
                     formlinkdialog.src \
                     listselectiondlg.src
 
-RESLIB1NAME=pcr
-RESLIB1SRSFILES= $(SRS)$/pcr.srs
 #RESLIB1DEPN= pcr.src pcr.hrc
 
 RESLIB1NAME=$(TARGET)
+RESLIB1IMAGES=$(SRS)$/$(TARGET).srs 
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
-
-IMGLST_SRS=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
