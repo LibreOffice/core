@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-04 17:42:49 $
+ *  last change: $Author: cl $ $Date: 2002-11-26 15:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,6 +437,50 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
         {
             GetViewFrame()->GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
 
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OPEN_HYPERLINK:
+        {
+            OutlinerView* pOutView = pDrView->GetTextEditOutlinerView();
+            if ( pOutView )
+            {
+                const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
+                if ( pFieldItem )
+                {
+                    const SvxFieldData* pField = pFieldItem->GetField();
+                    if( pField && pField->ISA( SvxURLField ) )
+                    {
+                        const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
+
+                        SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
+                        SfxStringItem aTarget( SID_TARGETNAME, pURLField->GetTargetFrame() );
+
+                        String aReferName;
+                        SfxViewFrame* pFrame = GetViewFrame();
+                        SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
+                        if (pMed)
+                            aReferName = pMed->GetName();
+
+                        SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
+                        SfxStringItem aReferer( SID_REFERER, aReferName );
+
+                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
+                        SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
+
+                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                        if (pViewFrm)
+                            pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
+                                                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                                        &aUrl, &aTarget,
+                                                        &aFrm, &aReferer,
+                                                        &aNewView, &aBrowsing,
+                                                        0L );
+                    }
+                }
+            }
             Cancel();
             rReq.Done ();
         }

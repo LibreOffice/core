@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: af $ $Date: 2002-11-19 15:49:43 $
+ *  last change: $Author: cl $ $Date: 2002-11-26 15:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,6 +1556,9 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     if ( bDisableEditHyperlink || pDocSh->IsReadOnly() )
         rSet.DisableItem( SID_EDIT_HYPERLINK );
+
+    if ( bDisableEditHyperlink )
+        rSet.DisableItem( SID_OPEN_HYPERLINK );
 
 #if defined WIN || defined WNT || defined UNX
     if( Application::IsRemoteServer() || !mxScannerManager.is() )
