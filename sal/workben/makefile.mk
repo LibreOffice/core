@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tra $ $Date: 2000-11-22 14:17:20 $
+#   last change: $Author: tra $ $Date: 2001-05-15 12:11:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,8 +67,9 @@ TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
 
+TESTAPP=getlocaleinfotest
 #TESTAPP=salstattest
-TESTAPP=saldyntest
+#TESTAPP=saldyntest
 
 #TESTAPP=t_cipher
 #TESTAPP=t_digest
@@ -91,6 +92,24 @@ TESTAPP=saldyntest
 .INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(TESTAPP)" == "getlocaleinfotest"
+
+    OBJFILES=$(OBJ)$/getlocaleinfotest.obj
+
+    APP1TARGET=	getlitest
+    APP1OBJS=$(OBJFILES)
+
+    APP1STDLIBS=\
+                kernel32.lib
+
+    APP1LIBS=\
+            $(LB)$/kernel9x.lib\
+            $(LB)$/isal.lib
+
+    APP1DEPN=$(LB)$/isal.lib
+
+.ENDIF
 
 .IF "$(TESTAPP)" == "salstattest"
 
