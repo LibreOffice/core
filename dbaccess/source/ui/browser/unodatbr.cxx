@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 16:55:19 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 11:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,8 +339,12 @@ void SAL_CALL SbaTableQueryBrowser::dispose()
     while (pEntryLoop)
     {
         DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
-         delete pData;
-         pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+        if(pData)
+        {
+            ::comphelper::disposeComponent(pData->xObject);
+            delete pData;
+        }
+        pEntryLoop = m_pTreeModel->Next(pEntryLoop);
     }
     // clear the tree model
     delete m_pTreeModel;
