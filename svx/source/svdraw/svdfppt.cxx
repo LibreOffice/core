@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: sj $ $Date: 2000-11-06 17:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,9 +257,6 @@
 #endif
 #include <vcl/virdev.hxx>
 #pragma hdrstop
-
-SvInPlaceObjectRef lcl_CheckForConvertToSOObj( UINT32 nConvertFlags,
-                        SvStorage& rSrcStg, SvStorage& rDestStorage );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1740,7 +1737,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                             if ( nSvxMSDffOLEConvFlags )
                             {
                                 SvStorageRef xDestStorage( pOe->pShell->GetStorage() );
-                                SvInPlaceObjectRef xIPObj( ::lcl_CheckForConvertToSOObj(
+                                SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
                                             nSvxMSDffOLEConvFlags, *xObjStor, *xDestStorage ));
                                 if( xIPObj.Is() )
                                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:00:01 $
+ *  last change: $Author: sj $ $Date: 2000-11-06 17:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef SVX_LIGHT
-#define _IPOBJ_HXX
-#endif
 
 #include <math.h>
 
@@ -124,9 +121,6 @@
 #endif
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -4855,7 +4849,7 @@ const GDIMetaFile* SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl( const Graphic& 
 }
 
 #ifndef SVX_LIGHT
-SvInPlaceObjectRef lcl_CheckForConvertToSOObj( UINT32 nConvertFlags,
+const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
                         SvStorage& rSrcStg, SvStorage& rDestStorage )
 {
     static struct _ObjImpType
@@ -4972,7 +4966,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
                 if( bValidStorage && nConvertFlags )
                 {
-                    SvInPlaceObjectRef xIPObj( ::lcl_CheckForConvertToSOObj(
+                    SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
                                 nConvertFlags, *xObjStg, *rDestStorage ));
                     if( xIPObj.Is() )
                     {
