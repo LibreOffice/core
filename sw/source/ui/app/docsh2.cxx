@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-07-03 14:06:10 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 16:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,35 +1444,6 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
 {
     return pDoc->CreateLinkSource( rItem );
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void SwDocShell::FillRegInfo( SvEmbeddedRegistryInfo*  pInfo )
-{
-    SfxInPlaceObject::FillRegInfo( pInfo );
-    pInfo->aObjName.AssignAscii( "StarWriterDocument" );
-    pInfo->nMajorVers = 6;
-    pInfo->nMinorVers = 0;
-    pInfo->aHumanShortTypeName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
-    pInfo->nIconResId = REG_ICON_RESID_WRITER;
-/*
-
-JP 25.11.96: das sollte der SFX erledigen!
-
-    SwFilterNms& rFltNms = *GetFilterNames();
-    pInfo->aFilterList.Insert( SvFilter( Exchange::RegisterFormatName(
-                                    rFltNms.GetSW4FltName()->aFilterName )) );
-
-    SvFilter aFlt( Exchange::RegisterFormatName(
-                                    rFltNms.GetSW3FltName()->aFilterName ));
-    aFlt.SetExport( FALSE );
-    pInfo->aFilterList.Insert( aFlt );
-*/
-}
-
 
 /*--------------------------------------------------------------------
     Beschreibung:
