@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 16:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,4 +294,13 @@ sal_Int32 XMLShapeExport::getShapeId( const uno::Reference < drawing::XShape >& 
         return (*aId).second;
 
     return -1;
+}
+
+/// returns the export property mapper for external chaining
+SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
+    SvXMLExport& rExport )
+{
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel() );
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
+    return new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(), rExport );
 }
