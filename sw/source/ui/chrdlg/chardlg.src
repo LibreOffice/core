@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 08:58:45 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ TabPage TP_CHAR_URL
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "H~inweis";
         Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "¸Þ¸ð(~O)";
+        Text[ korean ] = "ÅØ½ºÆ®(~O)";
         Text[ chinese_simplified ] = "ÎÄ×Ö";
         Text[ chinese_traditional ] = "¤å¦r";
         Text[ turkish ] = "B~ilgi";
