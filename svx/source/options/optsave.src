@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:16:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,28 +220,31 @@ TabPage RID_SFXPAGE_SAVE
         {
             < "Textdokument" ;     APP_WRITER    ; > ;
             < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+            < "Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
             < "Tabellendokument" ; APP_CALC      ; > ;
             < "Präsentation" ;     APP_IMPRESS   ; > ;
             < "Zeichnung" ;        APP_DRAW      ; > ;
             < "Formel" ;           APP_MATH      ; > ;
         };
-    StringList [ x-comment ] =
-    {
+        StringList [ x-comment ] =
+        {
             < "; Textdokument" ;     APP_WRITER    ; > ;
-        < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
-        < "; Tabellendokument" ; APP_CALC      ; > ;
-        < "; Präsentation" ;     APP_IMPRESS   ; > ;
-        < "; Zeichnung" ;        APP_DRAW      ; > ;
-        < "; Formel" ;           APP_MATH      ; > ;
+            < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+            < "; Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
+            < "; Tabellendokument" ; APP_CALC      ; > ;
+            < "; Präsentation" ;     APP_IMPRESS   ; > ;
+            < "; Zeichnung" ;        APP_DRAW      ; > ;
+            < "; Formel" ;           APP_MATH      ; > ;
         };
-    StringList [ en-US ] =
-    {
+        StringList [ en-US ] =
+        {
             < "Text document" ;     APP_WRITER    ; > ;
-        < "HTML document" ;    APP_WRITER_WEB;  > ;
-        < "Spreadsheet" ; APP_CALC      ; > ;
-        < "Presentation" ;     APP_IMPRESS   ; > ;
-        < "Drawing" ;        APP_DRAW      ; > ;
-        < "Formula" ;           APP_MATH      ; > ;
+            < "HTML document" ;    APP_WRITER_WEB;  > ;
+            < "Master document" ;    APP_WRITER_GLOBAL;  > ;
+            < "Spreadsheet" ; APP_CALC      ; > ;
+            < "Presentation" ;     APP_IMPRESS   ; > ;
+            < "Drawing" ;        APP_DRAW      ; > ;
+            < "Formula" ;           APP_MATH      ; > ;
         };
     };
     FixedImage FI_FILTER
