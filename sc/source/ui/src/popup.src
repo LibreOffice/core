@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:16:01 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ Menu RID_POPUP_CELLS
             Text[ chinese_simplified ] = "±ê×¼(~D)";
             Text[ language_user1 ] = " ";
             Text[ russian ] = "~Ïî óìîë÷àíèş";
-            Text[ polish ] = "~Domy?lnie";
+            Text[ polish ] = "~Domyœlnie";
             Text[ japanese ] = "•W€(~D)";
             Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
             Text[ arabic ] = "ÇİÊÑÇÖí~";
@@ -269,7 +269,7 @@ Menu RID_POPUP_CELLS
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
             Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~O)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
-            Text[ polish ] = "Usuñ zawarto?ci...";
+            Text[ polish ] = "Usuñ zawartoœci...";
             Text[ japanese ] = "“à—e‚Ìíœ(~O)...";
             Text[ chinese_traditional ] = "§R°£¤º®e(~O)...";
             Text[ arabic ] = "...ÍĞİ ãÍÊæíÇÊ";
@@ -391,7 +391,7 @@ Menu RID_POPUP_CELLS
             Text [ english_us ] = "P~aste Special..." ;
             Text[ chinese_simplified ] = "²åÈëÄÚÈİ(~A)...";
             Text[ russian ] = "Ñï~åöèàëüíàÿ âñòàâêà...";
-            Text[ polish ] = "~Wklej zawarto?æ...";
+            Text[ polish ] = "~Wklej zawartoœæ...";
             Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~A)...";
             Text[ chinese_traditional ] = "´¡¤J¤º®e(~A)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
@@ -651,7 +651,7 @@ Menu RID_POPUP_TAB
             Text[ chinese_traditional ] = "¿ï¾Ü¥ş³¡ªº¤u§@ªí(~H)";
             Text[ arabic ] = "ÊÍÏíÏ ßá ÇáÌÏÇæá";
             Text[ greek ] = "ÅğéëïãŞ üëùí ôùí ~ğéíÜêùí";
-            Text[ korean ] = "¸ğµç ½ÃÆ® ¼±ÅÃ(~H)";
+            Text[ korean ] = "¸ğµç Å×ÀÌºí ¼±ÅÃ";
             Text[ turkish ] = "Tüm tabloları seç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Seleccionar todas";
@@ -1003,7 +1003,7 @@ Menu RID_POPUP_EDIT
             Text [ portuguese ] = "~Padrão" ;
             Text[ chinese_simplified ] = "±ê×¼(~D)";
             Text[ russian ] = "~Ïî óìîë÷àíèş";
-            Text[ polish ] = "~Domy?lnie";
+            Text[ polish ] = "~Domyœlnie";
             Text[ japanese ] = "•W€(~D)";
             Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
             Text[ arabic ] = "~ŞíÇÓí";
@@ -1082,7 +1082,7 @@ Menu RID_POPUP_EDIT
                         Text [ portuguese ] = "Sublinhado ~duplo" ;
                         Text[ chinese_simplified ] = "Ë«ÏÂ»®Ïß(~U)";
                         Text[ russian ] = "Äâîéíîå ïîä÷åğêèâàíèå";
-                        Text[ polish ] = "Podwójne podkre?lenie";
+                        Text[ polish ] = "Podwójne podkreœlenie";
                         Text[ japanese ] = "“ñd‰ºü(~U)";
                         Text[ chinese_traditional ] = "Âù©³½u(~U)";
                         Text[ arabic ] = "ÊÍÊå ÎØ ãÒÏæÌ";
@@ -1256,7 +1256,7 @@ Menu RID_POPUP_AUDIT
             Text [ english_us ] = "Trace ~Precedent" ;
             Text[ chinese_simplified ] = "ÏòÇ°µÄ×·×Ù¼ıÍ·(~P)";
             Text[ russian ] = "Âëèÿşùèå ÿ÷åéêè";
-            Text[ polish ] = "?led? poprzedniki";
+            Text[ polish ] = "ŒledŸ poprzedniki";
             Text[ japanese ] = "QÆŒ³ÄÚ°½(~P)";
             Text[ chinese_traditional ] = "Àx¦s®æ«e¾É°Ñ·Ó(~P)";
             Text[ arabic ] = "ÊÊÈÚ ÇáÓÇÈŞÇÊ";
@@ -1321,7 +1321,7 @@ Menu RID_POPUP_AUDIT
             Text [ english_us ] = "~Trace Dependent" ;
             Text[ chinese_simplified ] = "ÏòºóµÄ×·×Ù¼ıÍ·(~T)";
             Text[ russian ] = "Çàâèñèìûå ÿ÷åéêè";
-            Text[ polish ] = "?led? zale¿no?ci";
+            Text[ polish ] = "ŒledŸ zale¿noœci";
             Text[ japanese ] = "QÆæÄÚ°½(~T)";
             Text[ chinese_traditional ] = "Àx¦s®æ±qÄİ°Ñ·Ó(~T)";
             Text[ arabic ] = "ÊÊÈÚ ÇáÊæÇÈÚ";
@@ -1353,7 +1353,7 @@ Menu RID_POPUP_AUDIT
             Text [ english_us ] = "Remove Dependent" ;
             Text[ chinese_simplified ] = "É¾³ıÏòºóµÄ×·×Ù¼ıÍ·";
             Text[ russian ] = "Óáğàòü ñòğåëêè ê çàâèñèìûì ÿ÷åéêàì";
-            Text[ polish ] = "Usuñ strza³ki zale¿no?ci";
+            Text[ polish ] = "Usuñ strza³ki zale¿noœci";
             Text[ japanese ] = "QÆæÄÚ°½‚Ìíœ";
             Text[ chinese_traditional ] = "§R°£Àx¦s®æ±qÄİ°Ñ·Ó";
             Text[ arabic ] = "ÅÒÇáÉ ÇáÊæÇÈÚ";
@@ -1476,7 +1476,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ portuguese ] = "~Padrão" ;
             Text[ chinese_simplified ] = "±ê×¼(~D)";
             Text[ russian ] = "~Ïî óìîë÷àíèş";
-            Text[ polish ] = "~Domy?lnie";
+            Text[ polish ] = "~Domyœlnie";
             Text[ japanese ] = "•W€(~D)";
             Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
             Text[ arabic ] = "~ŞíÇÓí";
