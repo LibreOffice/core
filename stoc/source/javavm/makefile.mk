@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
+#   last change: $Author: kr $ $Date: 2001-09-11 14:33:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,11 +68,16 @@ USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST=$(TARGET)
 
+
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+
+
+.IF "$(SOLAR_JAVA)" == "TRUE"
 
 # Kollision zwischen bool.h aus Java und bool.h aus der STL.
 # Das Problem tritt fuer alle Plattformen auf, aber anscheinend stolpert nur der
@@ -86,7 +91,7 @@ CDEFS += -D__SGI_STL_BOOL_H
 SLOFILES= \
         $(SLO)$/javavm.obj		\
         $(SLO)$/jvmargs.obj	
-                
+
 SHL1TARGET= $(TARGET)
 SHL1VERSIONMAP=$(TARGET).map
 SHL1STDLIBS= \
@@ -106,7 +111,10 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
+
 
 .INCLUDE :	target.mk
 

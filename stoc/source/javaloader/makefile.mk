@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
+#   last change: $Author: kr $ $Date: 2001-09-11 14:33:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ COMP1TYPELIST=$(TARGET)
 
 # ------------------------------------------------------------------
 
+.IF "$(SOLAR_JAVA)" == "TRUE"
+
 .INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= 	$(SLO)$/javaloader.obj
@@ -92,6 +94,8 @@ SHL1LIBS= 		$(SLB)$/$(TARGET).lib
 SHL1DEF= 		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
