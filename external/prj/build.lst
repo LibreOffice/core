@@ -23,5 +23,4 @@ es      external\twain		nmake	-	all	es_twain NULL
 es      external\w4w		nmake	-	u	es_w4w NULL
 es      external\zlib		nmake	-	all	es_zlib NULL
 es	external\zlib\rtufiles	nmake	-	all	es_zlibrtu es_zlib NULL
-es      external\neon		nmake	-	all	es_neon es_expat NULL
 es	external\neon\rtufiles	nmake	-	all	es_neonrtu es_neon NULL
