@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:53:10 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,17 +135,8 @@
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPECALLOUTDROP_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeCalloutDrop.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPECALLOUTTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeCalloutType.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEXTRUSIONPLANE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeExtrusionPlane.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEXTRUSIONRENDERMODE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeExtrusionRenderMode.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEQUATION_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
@@ -173,6 +164,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -229,6 +223,8 @@ void ExportParameter( rtl::OUStringBuffer& rStrBuffer, const drafts::com::sun::s
                 rStrBuffer.append( GetXMLToken( XML_TOP ) ); break;
             case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
                 rStrBuffer.append( GetXMLToken( XML_LEFT ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::CENTER :
+                rStrBuffer.append( GetXMLToken( XML_CENTER ) ); break;
             default :
                 rStrBuffer.append( rtl::OUString::valueOf( nValue ) );
         }
@@ -613,23 +609,13 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                 bMirroredY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                     }
                     break;
-                    case EAS_CoordinateOrigin :
+                    case EAS_ViewBox :
                     {
-                        awt::Point aCoordinateOrigin;
-                        if ( rProp.Value >>= aCoordinateOrigin )
+                        awt::Rectangle aRect;
+                        if ( rProp.Value >>= aRect )
                         {
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COORDINATE_ORIGIN_X, rtl::OUString::valueOf( aCoordinateOrigin.X ) );
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COORDINATE_ORIGIN_Y, rtl::OUString::valueOf( aCoordinateOrigin.Y ) );
-                        }
-                    }
-                    break;
-                    case EAS_CoordinateSize :
-                    {
-                        awt::Size aCoordinateSize;
-                        if ( rProp.Value >>= aCoordinateSize )
-                        {
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COORDINATE_WIDTH, rtl::OUString::valueOf( aCoordinateSize.Width ) );
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COORDINATE_HEIGHT, rtl::OUString::valueOf( aCoordinateSize.Height ) );
+                            SdXMLImExViewBox aViewBox( aRect.X, aRect.Y, aRect.Width, aRect.Height );
+                            rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString( rExport.GetMM100UnitConverter() ) );
                         }
                     }
                     break;
@@ -644,155 +630,6 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         }
                     }
                     break;
-                    case EAS_Callout :
-                    {
-                        uno::Sequence< beans::PropertyValue > aCalloutPropSeq;
-                        if ( rProp.Value >>= aCalloutPropSeq )
-                        {
-                            sal_Int32 i, nCount = aCalloutPropSeq.getLength();
-                            for ( i = 0; i < nCount; i++ )
-                            {
-                                const beans::PropertyValue& rProp = aCalloutPropSeq[ i ];
-                                switch( EASGet( rProp.Name ) )
-                                {
-                                    case EAS_On :
-                                    {
-                                        sal_Bool bCalloutOn;
-                                        if ( rProp.Value >>= bCalloutOn )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT,
-                                                bCalloutOn ? GetXMLToken( XML_ON ) : GetXMLToken( XML_OFF ) );
-                                    }
-                                    break;
-                                    case EAS_AccentBar :
-                                    {
-                                        sal_Bool bAccentBar;
-                                        if ( rProp.Value >>= bAccentBar )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_ACCENT_BAR,
-                                                bAccentBar ? GetXMLToken( XML_ON ) : GetXMLToken( XML_OFF ) );
-                                    }
-                                    break;
-                                    case EAS_Angle :
-                                    {
-                                        double fAngle;
-                                        if ( rProp.Value >>= fAngle )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fAngle );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_ANGLE, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_Distance :
-                                    {
-                                        sal_Int32 nDistance;
-                                        if ( rProp.Value >>= nDistance )
-                                        {
-                                            rUnitConverter.convertMeasure( aStrBuffer, nDistance );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_DROP_DISTANCE, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_Drop :
-                                    {
-                                        sal_Int16 nDrop;
-                                        if ( rProp.Value >>= nDrop )
-                                        {
-                                            switch ( nDrop )
-                                            {
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutDrop::TOP :    aStr = GetXMLToken( XML_TOP );    break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutDrop::CENTER : aStr = GetXMLToken( XML_CENTER ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutDrop::BOTTOM : aStr = GetXMLToken( XML_BOTTOM ); break;
-                                            }
-                                            if ( aStr.getLength() )
-                                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_DROP, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_DropAuto :
-                                    {
-                                        sal_Bool bDropAuto;
-                                        if ( rProp.Value >>= bDropAuto )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_DROP_AUTOMATIC,
-                                                bDropAuto ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_Gap :
-                                    {
-                                        sal_Int32 nGap;
-                                        if ( rProp.Value >>= nGap )
-                                        {
-                                            rUnitConverter.convertMeasure( aStrBuffer, nGap );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_GAP, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_Length :
-                                    {
-                                        sal_Int32 nLength;
-                                        if ( rProp.Value >>= nLength )
-                                        {
-                                            rUnitConverter.convertMeasure( aStrBuffer, nLength );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_LENGTH, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_LengthSpecified :
-                                    {
-                                        sal_Bool bLengthSpecified;
-                                        if ( rProp.Value >>= bLengthSpecified )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_LENGTH_SPECIFIED,
-                                                bLengthSpecified ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_FlipX :
-                                    {
-                                        sal_Bool bFlipX;
-                                        if ( rProp.Value >>= bFlipX )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_FLIP_X,
-                                                bFlipX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_FlipY :
-                                    {
-                                        sal_Bool bFlipY;
-                                        if ( rProp.Value >>= bFlipY )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_FLIP_Y,
-                                                bFlipY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_TextBorder :
-                                    {
-                                        sal_Bool bTextBorder;
-                                        if ( rProp.Value >>= bTextBorder )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_TEXT_BORDER,
-                                                bTextBorder ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_Type :
-                                    {
-                                        sal_Int16 nType;
-                                        if ( rProp.Value >>= nType )
-                                        {
-                                            switch ( nType )
-                                            {
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutType::RECTANGLE      : aStr = GetXMLToken( XML_RECTANGLE ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutType::ROUNDRECTANGLE : aStr = GetXMLToken( XML_ROUNDRECTANGLE ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutType::OVAL         : aStr = GetXMLToken( XML_OVAL ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeCalloutType::CLOUD          : aStr = GetXMLToken( XML_CLOUD ); break;
-                                            }
-                                            if ( aStr.getLength() )
-                                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CALLOUT_TYPE, aStr );
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    break;
                     case EAS_Extrusion :
                     {
                         uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
@@ -804,31 +641,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                 const beans::PropertyValue& rProp = aExtrusionPropSeq[ i ];
                                 switch( EASGet( rProp.Name ) )
                                 {
-                                    case EAS_On :
+                                    case EAS_Extrusion :
                                     {
                                         sal_Bool bExtrusionOn;
                                         if ( rProp.Value >>= bExtrusionOn )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION,
-                                                bExtrusionOn ? GetXMLToken( XML_ON ) : GetXMLToken( XML_OFF ) );
-                                    }
-                                    break;
-                                    case EAS_AutoRotationCenter :
-                                    {
-                                        sal_Bool bExtusionAutoRotationCenter;
-                                        if ( rProp.Value >>= bExtusionAutoRotationCenter )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_AUTO_ROTATION_CENTER,
-                                                bExtusionAutoRotationCenter ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_BackwardDepth :
-                                    {
-                                        double fExtrusionBackwardDepth;
-                                        if ( rProp.Value >>= fExtrusionBackwardDepth )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionBackwardDepth, sal_True );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_BACKWARD_DEPTH, aStr );
-                                        }
+                                                bExtrusionOn ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
                                     case EAS_Brightness :
@@ -843,41 +661,39 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         }
                                     }
                                     break;
-                                    case EAS_Diffusity :
+                                    case EAS_Depth :
                                     {
-                                        double fExtrusionDiffusity;
-                                        if ( rProp.Value >>= fExtrusionDiffusity )
+                                        drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+                                        if ( rProp.Value >>= aDepthParaPair )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionDiffusity, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            double fDepth;
+                                            if ( aDepthParaPair.First.Value >>= fDepth )
+                                            {
+                                                rExport.GetMM100UnitConverter().convertDouble( aStrBuffer, fDepth, sal_True );
+                                                ExportParameter( aStrBuffer, aDepthParaPair.Second );
+                                                aStr = aStrBuffer.makeStringAndClear();
+                                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DEPTH, aStr );
+                                            }
+                                        }
+                                    }
+                                    break;
+                                    case EAS_Diffusion :
+                                    {
+                                        double fExtrusionDiffusion;
+                                        if ( rProp.Value >>= fExtrusionDiffusion )
+                                        {
+                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionDiffusion, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DIFFUSITY, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DIFFUSION, aStr );
                                         }
                                     }
                                     break;
-                                    case EAS_Edge :
+                                    case EAS_NumberOfLineSegments :
                                     {
-                                        sal_Int32 nExtrusionEdge;
-                                        if ( rProp.Value >>= nExtrusionEdge )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_EDGE, rtl::OUString::valueOf( nExtrusionEdge ) );
-                                    }
-                                    break;
-                                    case EAS_Facet :
-                                    {
-                                        sal_Int32 nExtrusionFacet;
-                                        if ( rProp.Value >>= nExtrusionFacet )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FACET, rtl::OUString::valueOf( nExtrusionFacet ) );
-                                    }
-                                    break;
-                                    case EAS_ForewardDepth :
-                                    {
-                                        double fExtrusionForewardDepth;
-                                        if ( rProp.Value >>= fExtrusionForewardDepth )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionForewardDepth, sal_True );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FOREWARD_DEPTH, aStr );
-                                        }
+                                        sal_Int32 nExtrusionNumberOfLineSegments;
+                                        if ( rProp.Value >>= nExtrusionNumberOfLineSegments )
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_NUMBER_OF_LINE_SEGMENTS, rtl::OUString::valueOf( nExtrusionNumberOfLineSegments ) );
                                     }
                                     break;
                                     case EAS_LightFace :
@@ -888,69 +704,69 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 bExtrusionLightFace ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
-                                    case EAS_LightHarsh1 :
+                                    case EAS_FirstLightHarsh :
                                     {
-                                        sal_Bool bExtrusionLightHarsh1;
-                                        if ( rProp.Value >>= bExtrusionLightHarsh1 )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_HARSH1,
-                                                bExtrusionLightHarsh1 ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                                        sal_Bool bExtrusionFirstLightHarsh;
+                                        if ( rProp.Value >>= bExtrusionFirstLightHarsh )
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_HARSH,
+                                                bExtrusionFirstLightHarsh ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
-                                    case EAS_LightHarsh2 :
+                                    case EAS_SecondLightHarsh :
                                     {
-                                        sal_Bool bExtrusionLightHarsh2;
-                                        if ( rProp.Value >>= bExtrusionLightHarsh2 )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_HARSH2,
-                                                bExtrusionLightHarsh2 ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                                        sal_Bool bExtrusionSecondLightHarsh;
+                                        if ( rProp.Value >>= bExtrusionSecondLightHarsh )
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_HARSH,
+                                                bExtrusionSecondLightHarsh ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
-                                    case EAS_LightLevel1 :
+                                    case EAS_FirstLightLevel :
                                     {
-                                        double fExtrusionLightLevel1;
-                                        if ( rProp.Value >>= fExtrusionLightLevel1 )
+                                        double fExtrusionFirstLightLevel;
+                                        if ( rProp.Value >>= fExtrusionFirstLightLevel )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionLightLevel1, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionFirstLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_LEVEL1, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_LEVEL, aStr );
                                         }
                                     }
                                     break;
-                                    case EAS_LightLevel2 :
+                                    case EAS_SecondLightLevel :
                                     {
-                                        double fExtrusionLightLevel2;
-                                        if ( rProp.Value >>= fExtrusionLightLevel2 )
+                                        double fExtrusionSecondLightLevel;
+                                        if ( rProp.Value >>= fExtrusionSecondLightLevel )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionLightLevel2, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSecondLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_LEVEL2, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_LEVEL, aStr );
                                         }
                                     }
                                     break;
-                                    case EAS_LightDirection1 :
+                                    case EAS_FirstLightDirection :
                                     {
-                                        drawing::Direction3D aExtrusionLightDirection1;
-                                        if ( rProp.Value >>= aExtrusionLightDirection1 )
+                                        drawing::Direction3D aExtrusionFirstLightDirection;
+                                        if ( rProp.Value >>= aExtrusionFirstLightDirection )
                                         {
-                                            Vector3D aVec3D( aExtrusionLightDirection1.DirectionX, aExtrusionLightDirection1.DirectionY,
-                                                aExtrusionLightDirection1.DirectionZ );
+                                            Vector3D aVec3D( aExtrusionFirstLightDirection.DirectionX, aExtrusionFirstLightDirection.DirectionY,
+                                                aExtrusionFirstLightDirection.DirectionZ );
                                             rUnitConverter.convertVector3D( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_DIRECTION1, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_DIRECTION, aStr );
                                         }
                                     }
                                     break;
-                                    case EAS_LightDirection2 :
+                                    case EAS_SecondLightDirection :
                                     {
-                                        drawing::Direction3D aExtrusionLightDirection2;
-                                        if ( rProp.Value >>= aExtrusionLightDirection2 )
+                                        drawing::Direction3D aExtrusionSecondLightDirection;
+                                        if ( rProp.Value >>= aExtrusionSecondLightDirection )
                                         {
-                                            Vector3D aVec3D( aExtrusionLightDirection2.DirectionX, aExtrusionLightDirection2.DirectionY,
-                                                aExtrusionLightDirection2.DirectionZ );
+                                            Vector3D aVec3D( aExtrusionSecondLightDirection.DirectionX, aExtrusionSecondLightDirection.DirectionY,
+                                                aExtrusionSecondLightDirection.DirectionZ );
                                             rUnitConverter.convertVector3D( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_DIRECTION2, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_DIRECTION, aStr );
                                         }
                                     }
                                     break;
@@ -962,93 +778,51 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 bExtrusionMetal ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
-                                    case EAS_Plane :
+                                    case EAS_ShadeMode :
                                     {
-                                        sal_Int16 nExtrusionPlane;
-                                        if ( rProp.Value >>= nExtrusionPlane )
+                                        // shadeMode
+                                        drawing::ShadeMode eShadeMode;
+                                        if( rProp.Value >>= eShadeMode )
                                         {
-                                            switch ( nExtrusionPlane )
-                                            {
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeExtrusionPlane::XY : aStr = GetXMLToken( XML_XY ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeExtrusionPlane::ZX : aStr = GetXMLToken( XML_ZX ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeExtrusionPlane::YZ : aStr = GetXMLToken( XML_YZ ); break;
-                                            }
-                                            if ( aStr.getLength() )
-                                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_PLANE, aStr );
+                                            if( eShadeMode == drawing::ShadeMode_FLAT )
+                                                aStr = GetXMLToken( XML_FLAT );
+                                            else if( eShadeMode == drawing::ShadeMode_PHONG )
+                                                aStr = GetXMLToken( XML_PHONG );
+                                            else if( eShadeMode == drawing::ShadeMode_SMOOTH )
+                                                aStr = GetXMLToken( XML_GOURAUD );
+                                            else
+                                                aStr = GetXMLToken( XML_DRAFT );
                                         }
+                                        else
+                                        {
+                                            // ShadeMode enum not there, write default
+                                            aStr = GetXMLToken( XML_FLAT);
+                                        }
+                                        rExport.AddAttribute( XML_NAMESPACE_DR3D, XML_SHADE_MODE, aStr );
                                     }
                                     break;
-                                    case EAS_RenderMode :
+                                    case EAS_RotateAngle :
                                     {
-                                        sal_Int16 nExtrusionRenderMode;
-                                        if ( rProp.Value >>= nExtrusionRenderMode )
+                                        drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
+                                        if ( rProp.Value >>= aRotateAngleParaPair )
                                         {
-                                            switch ( nExtrusionRenderMode )
-                                            {
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeExtrusionRenderMode::SOLID : aStr = GetXMLToken( XML_SOLID ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeExtrusionRenderMode::WIREFRAME : aStr = GetXMLToken( XML_WIREFRAME ); break;
-                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeExtrusionRenderMode::BOUNDINGCUBE : aStr = GetXMLToken( XML_BOUNDINGCUBE ); break;
-                                            }
-                                            if ( aStr.getLength() )
-                                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_RENDER_MODE, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_AngleX :
-                                    {
-                                        double fExtrusionAngleX;
-                                        if ( rProp.Value >>= fExtrusionAngleX )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionAngleX );
+                                            ExportParameter( aStrBuffer, aRotateAngleParaPair.First );
+                                            ExportParameter( aStrBuffer, aRotateAngleParaPair.Second );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_ANGLE_X, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_ANGLE, aStr );
                                         }
                                     }
                                     break;
-                                    case EAS_AngleY :
+                                    case EAS_RotationCenter :
                                     {
-                                        double fExtrusionAngleY;
-                                        if ( rProp.Value >>= fExtrusionAngleY )
+                                        drawing::Direction3D aExtrusionRotationCenter;
+                                        if ( rProp.Value >>= aExtrusionRotationCenter )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionAngleY );
+                                            Vector3D aVec3D( aExtrusionRotationCenter.DirectionX, aExtrusionRotationCenter.DirectionY,
+                                                aExtrusionRotationCenter.DirectionZ );
+                                            rUnitConverter.convertVector3D( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_ANGLE_Y, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_RotationCenterX :
-                                    {
-                                        double fExtrusionRotationCenterX;
-                                        if ( rProp.Value >>= fExtrusionRotationCenterX )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionRotationCenterX, sal_False );
-                                            aStrBuffer.append( (sal_Unicode)'%' );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_CENTER_X, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_RotationCenterY :
-                                    {
-                                        double fExtrusionRotationCenterY;
-                                        if ( rProp.Value >>= fExtrusionRotationCenterY )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionRotationCenterY, sal_False );
-                                            aStrBuffer.append( (sal_Unicode)'%' );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_CENTER_Y, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_RotationCenterZ :
-                                    {
-                                        double fExtrusionRotationCenterZ;
-                                        if ( rProp.Value >>= fExtrusionRotationCenterZ )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionRotationCenterZ, sal_False );
-                                            aStrBuffer.append( (sal_Unicode)'%' );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_CENTER_Z, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_CENTER, aStr );
                                         }
                                     }
                                     break;
@@ -1066,24 +840,13 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Skew :
                                     {
-                                        double fExtrusionSkew;
-                                        if ( rProp.Value >>= fExtrusionSkew )
+                                        drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+                                        if ( rProp.Value >>= aSkewParaPair )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSkew, sal_False, MAP_RELATIVE, MAP_RELATIVE );
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            ExportParameter( aStrBuffer, aSkewParaPair.First );
+                                            ExportParameter( aStrBuffer, aSkewParaPair.Second );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SKEW, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_SkewAngle :
-                                    {
-                                        double fExtrusionSkewAngle;
-                                        if ( rProp.Value >>= fExtrusionSkewAngle )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSkewAngle );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SKEW_ANGLE, aStr );
                                         }
                                     }
                                     break;
@@ -1099,12 +862,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         }
                                     }
                                     break;
-                                    case EAS_Parallel :
+                                    case EAS_ProjectionMode :
                                     {
-                                        sal_Bool bExtrusionParallel;
-                                        if ( rProp.Value >>= bExtrusionParallel )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_PARALLEL,
-                                                bExtrusionParallel ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                                        drawing::ProjectionMode eProjectionMode;
+                                        if ( rProp.Value >>= eProjectionMode )
+                                            rExport.AddAttribute( XML_NAMESPACE_DR3D, XML_PROJECTION,
+                                                eProjectionMode == drawing::ProjectionMode_PARALLEL ? GetXMLToken( XML_PARALLEL ) : GetXMLToken( XML_PERSPECTIVE ) );
                                     }
                                     break;
                                     case EAS_ViewPoint :
@@ -1118,27 +881,15 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         }
                                     }
                                     break;
-                                    case EAS_OriginX :
+                                    case EAS_Origin :
                                     {
-                                        double fOriginX;
-                                        if ( rProp.Value >>= fOriginX )
+                                        drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
+                                        if ( rProp.Value >>= aOriginParaPair )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fOriginX, sal_False );
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            ExportParameter( aStrBuffer, aOriginParaPair.First );
+                                            ExportParameter( aStrBuffer, aOriginParaPair.Second );
                                             aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ORIGIN_X, aStr );
-                                        }
-                                    }
-                                    break;
-                                    case EAS_OriginY :
-                                    {
-                                        double fOriginY;
-                                        if ( rProp.Value >>= fOriginY )
-                                        {
-                                            rUnitConverter.convertDouble( aStrBuffer, fOriginY, sal_False );
-                                            aStrBuffer.append( (sal_Unicode)'%' );
-                                            aStr = aStrBuffer.makeStringAndClear();
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ORIGIN_Y, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ORIGIN, aStr );
                                         }
                                     }
                                     break;
@@ -1168,28 +919,28 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                 const beans::PropertyValue& rProp = aTextPathPropSeq[ i ];
                                 switch( EASGet( rProp.Name ) )
                                 {
-                                    case EAS_On :
+                                    case EAS_TextPath :
                                     {
                                         sal_Bool bTextPathOn;
                                         if ( rProp.Value >>= bTextPathOn )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH,
-                                                bTextPathOn ? GetXMLToken( XML_ON ) : GetXMLToken( XML_OFF ) );
+                                                bTextPathOn ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
-                                    case EAS_FitPath :
+                                    case EAS_TextPathMode :
                                     {
-                                        sal_Bool bTextPathFitPath;
-                                        if ( rProp.Value >>= bTextPathFitPath )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_FIT_TEXT,
-                                                bTextPathFitPath ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                                    }
-                                    break;
-                                    case EAS_FitShape :
-                                    {
-                                        sal_Bool bTextPathFitShape;
-                                        if ( rProp.Value >>= bTextPathFitShape )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_FIT_SHAPE,
-                                                bTextPathFitShape ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                                        drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
+                                        if ( rProp.Value >>= eTextPathMode )
+                                        {
+                                            switch ( eTextPathMode )
+                                            {
+                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL: aStr = GetXMLToken( XML_NORMAL ); break;
+                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH  : aStr = GetXMLToken( XML_PATH );   break;
+                                                case drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE : aStr = GetXMLToken( XML_SHAPE );  break;
+                                            }
+                                            if ( aStr.getLength() )
+                                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_MODE, aStr );
+                                        }
                                     }
                                     break;
                                     case EAS_ScaleX :
