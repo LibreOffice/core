@@ -71,7 +71,7 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-SAL1VERSIONMAP=$(SOLARENV)$/src$/component.map
+SHL1VERSIONMAP=$(SOLARENV)$/src$/component.map
 
 # ---- test object ----
 
@@ -88,7 +88,7 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-SAL2VERSIONMAP=$(SOLARENV)$/src$/component.map
+SHL2VERSIONMAP=$(SOLARENV)$/src$/component.map
 
 # --- Targets ------------------------------------------------------
 ALL : \
