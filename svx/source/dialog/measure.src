@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:02:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¼± °£°Ý(~D)";
         Text[ turkish ] = "~Nesneye uzaklýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "D~istancia entre líneas";
     };
     MetricField MTR_LINE_DIST
     {
@@ -149,6 +150,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¾È³»¼± µ¹Ãâ(~O)";
         Text[ turkish ] = "Kýlavuz çizgi ~taþmasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Guías ~sobresalientes";
     };
     MetricField MTR_FLD_HELPLINE_OVERHANG
     {
@@ -191,6 +193,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¾È³»¼± °£°Ý(~G)";
         Text[ turkish ] = "Kýlavuz çizgi uzakl~ýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Distancia entre guías";
     };
     MetricField MTR_FLD_HELPLINE_DIST
     {
@@ -233,6 +236,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¿ÞÂÊ ¾È³»¼±(~L)";
         Text[ turkish ] = "~Sol kýlavuz çizgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea auxiliar i~zquierda";
     };
     MetricField MTR_FLD_HELPLINE1_LEN
     {
@@ -275,6 +279,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¿À¸¥ÂÊ ¾È³»¼±(~R)";
         Text[ turkish ] = "Sa~ð kýlavuz çizgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea au~xiliar derecha";
     };
     MetricField MTR_FLD_HELPLINE2_LEN
     {
@@ -318,6 +323,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "´ÜÀ§ Ç¥½Ã(~M)";
         Text[ turkish ] = "~Ölçüm birimlerini görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mostrar métrica";
     };
     ListBox LB_UNIT
     {
@@ -354,6 +360,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¾Æ·¡¿¡ Ç¥½Ã(~B)";
         Text[ turkish ] = "Altta ~görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar ~abajo";
     };
     TriStateBox TSB_PARALLEL
     {
@@ -381,6 +388,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "ÆòÇàÀ¸·Î Ç¥½Ã(~P)";
         Text[ turkish ] = "Paralel ~görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "M~ostrar paralelamente";
     };
     GroupBox GRP_ATTRIBUTES
     {
@@ -407,6 +415,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¼Ó¼º";
         Text[ turkish ] = "Öznitelikler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Atributos";
     };
     Control CTL_POSITION
     {
@@ -442,6 +451,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ arabic ] = "ÚãæÏí ÊáÞÇÆíÇð";
         Text[ turkish ] = "~Otomatik dikey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vertical automáticamente";
     };
     TriStateBox TSB_AUTOPOSH
     {
@@ -469,6 +479,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ arabic ] = "ÃÝÞí ÊáÞÇÆíÇð";
         Text[ turkish ] = "O~tomatik yatay";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Horizontal automáticamente";
     };
     GroupBox GRP_POSITION
     {
@@ -495,6 +506,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "ÅØ½ºÆ® À§Ä¡";
         Text[ turkish ] = "Metin konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición del texto";
     };
     Control CTL_PREVIEW
     {
@@ -529,6 +541,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     String STR_MEASURE_AUTOMATIC
     {
@@ -553,6 +566,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ korean ] = "ÀÚµ¿";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Automático";
     };
     Text[ chinese_simplified ] = "¶¨³ß´ç";
     Text[ russian ] = "Ðàçìåðû";
@@ -564,6 +578,7 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ korean ] = "Ä¡¼ö";
     Text[ turkish ] = "Boyutlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Dimensiones";
 };
  // ********************************************************************** EOF
 
