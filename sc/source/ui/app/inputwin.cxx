@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:13:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,6 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
 {
     //  wird im Activate der View gerufen...
 
-    DBG_ASSERT(pNew,"SetInputHandler: NULL");
     if ( pNew != pInputHdl )
     {
         //  Bei Reload (letzte Version) ist pInputHdl der Input-Handler der alten,
