@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-22 10:24:23 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:58:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,11 +110,11 @@ sub replace_all_ziplistvariables_in_file
 
 sub resolving_scpzip_replace_flag
 {
-    my ($filesarrayref, $variablesref, $item) = @_;
+    my ($filesarrayref, $variablesref, $item, $languagestringref) = @_;
 
     my $diritem = lc($item);
 
-    my $replacedirbase = installer::systemactions::create_directories("replace_$diritem", "");
+    my $replacedirbase = installer::systemactions::create_directories("replace_$diritem", $languagestringref);
 
     installer::logger::include_header_into_logfile("$item with flag SCPZIP:");
 
