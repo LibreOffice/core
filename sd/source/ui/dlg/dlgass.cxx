@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:01:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,6 +690,46 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     mpWindowUpdater->RegisterWindow (&m_aPreview);
 
     UpdatePreview( TRUE );
+
+    //check wether we should start with a template document initialy and preselect it
+    const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
+    String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
+    if( aStandardTemplate.Len() )
+    {
+        ProvideTemplates();
+
+        //find aStandardTemplate in m_aPresentList
+        TemplateDir*   pStandardTemplateDir = 0;
+        TemplateEntry* pStandardTemplateEntry = 0;
+
+        std::vector<TemplateDir*>::iterator I;
+        for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+        {
+            TemplateDir* pDir = *I;
+            std::vector<TemplateEntry*>::iterator   J;
+            for (J=pDir->m_aEntries.begin(); J!=pDir->m_aEntries.end(); J++)
+            {
+                TemplateEntry* pEntry = *J;
+                if(pEntry->m_aPath == aStandardTemplate)
+                {
+                    pStandardTemplateDir = pDir;
+                    pStandardTemplateEntry = pEntry;
+                    break;
+                }
+            }
+            if(pStandardTemplateDir)
+                break;
+        }
+
+        //preselect template
+        if( pStandardTemplateDir && pStandardTemplateEntry )
+        {
+            m_pPage1RegionLB->SelectEntry( pStandardTemplateDir->m_aRegion );
+            SelectTemplateRegion( pStandardTemplateDir->m_aRegion );
+            m_pPage1TemplateLB->SelectEntry( pStandardTemplateEntry->m_aTitle );
+            SelectTemplateHdl(m_pPage1TemplateLB);
+        }
+    }
 }
 
 
