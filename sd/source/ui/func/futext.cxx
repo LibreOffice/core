@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-20 11:26:17 $
+ *  last change: $Author: aw $ $Date: 2002-03-04 16:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,10 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextMinFrameWidthItem(0));
             aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
             aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+
+            // #91853# Needs to be set since default is SDRTEXTHORZADJUST_BLOCK
+            aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
             pTxtObj->SetItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(SdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
