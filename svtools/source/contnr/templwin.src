@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String STR_SVT_NEWDOC
     Text [ english_us ] = "New Document";
     Text[ portuguese ] = "Novo documento";
     Text[ russian ] = "������� ��������";
-    Text[ greek ] = "New Document";
+    Text[ greek ] = "���������� ��������";
     Text[ dutch ] = "Nieuw document";
     Text[ french ] = "Nouveau document";
     Text[ spanish ] = "Documento nuevo";
@@ -89,15 +89,18 @@ String STR_SVT_NEWDOC
     Text[ danish ] = "Nyt dokument";
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
-    Text[ portuguese_brazilian ] = "New Document";
+    Text[ portuguese_brazilian ] = "Novo documento";
     Text[ japanese ] = "新しいドキュメント";
     Text[ korean ] = "새 문서";
     Text[ chinese_simplified ] = "新建文档";
     Text[ chinese_traditional ] = "新增文件";
-    Text[ turkish ] = "New Document";
-    Text[ arabic ] = "New Document";
+    Text[ turkish ] = "Yeni d�k�man";
+    Text[ arabic ] = "����� ����";
     Text[ catalan ] = "Document nou";
     Text[ thai ] = "เอกสารใหม่";
+    Text[ czech ] = "Nový dokument";
+    Text[ hebrew ] = "‮מסמך חדש‬";
+    Text[ hindi ] = "नया लेखपत्र";
 };
 
 Image IMG_SVT_NEWDOC
@@ -118,7 +121,7 @@ String STR_SVT_MYDOCS
     Text [ english_us ] = "My Documents";
     Text[ portuguese ] = "Meus documentos";
     Text[ russian ] = "��� ���������";
-    Text[ greek ] = "My Documents";
+    Text[ greek ] = "�� ������� ���";
     Text[ dutch ] = "Eigen bestanden";
     Text[ french ] = "Mes documents";
     Text[ spanish ] = "Mis documentos";
@@ -127,15 +130,18 @@ String STR_SVT_MYDOCS
     Text[ danish ] = "Egne filer";
     Text[ swedish ] = "Mina dokument";
     Text[ polish ] = "Moje dokumenty";
-    Text[ portuguese_brazilian ] = "My Documents";
+    Text[ portuguese_brazilian ] = "Meus documentos";
     Text[ japanese ] = "マイドキュメント";
     Text[ korean ] = "내 문서";
     Text[ chinese_simplified ] = "我的文档";
     Text[ chinese_traditional ] = "我的文件夾";
-    Text[ turkish ] = "My Documents";
-    Text[ arabic ] = "My Documents";
+    Text[ turkish ] = "Belgelerim";
+    Text[ arabic ] = "��������";
     Text[ catalan ] = "Els meus documents";
     Text[ thai ] = "My Documents";
+    Text[ czech ] = "Moje dokumenty";
+    Text[ hebrew ] = "‮המסמכים שלי‬";
+    Text[ hindi ] = "My Documents";
 };
 
 Image IMG_SVT_MYDOCS
@@ -156,7 +162,7 @@ String STR_SVT_TEMPLATES
     Text [ english_us ] = "Templates";
     Text[ portuguese ] = "Modelos";
     Text[ russian ] = "�������";
-    Text[ greek ] = "Templates";
+    Text[ greek ] = "�������";
     Text[ dutch ] = "Sjablonen";
     Text[ french ] = "Mod�les";
     Text[ spanish ] = "Plantillas";
@@ -165,15 +171,18 @@ String STR_SVT_TEMPLATES
     Text[ danish ] = "Typografier";
     Text[ swedish ] = "Mallar";
     Text[ polish ] = "Szablony";
-    Text[ portuguese_brazilian ] = "Templates";
+    Text[ portuguese_brazilian ] = "Modelos";
     Text[ japanese ] = "テンプレート";
     Text[ korean ] = "서식 파일";
     Text[ chinese_simplified ] = "样式";
     Text[ chinese_traditional ] = "樣式";
-    Text[ turkish ] = "Templates";
-    Text[ arabic ] = "Templates";
+    Text[ turkish ] = "�ablonlar";
+    Text[ arabic ] = "�����";
     Text[ catalan ] = "Plantilles";
     Text[ thai ] = "แม่แบบ";
+    Text[ czech ] = "Šablony";
+    Text[ hebrew ] = "‮תבניות‬";
+    Text[ hindi ] = "नमूने";
 };
 
 Image IMG_SVT_TEMPLATES
@@ -194,7 +203,7 @@ String STR_SVT_SAMPLES
     Text [ english_us ] = "Samples";
     Text[ portuguese ] = "Exemplos";
     Text[ russian ] = "�������";
-    Text[ greek ] = "Samples";
+    Text[ greek ] = "������������";
     Text[ dutch ] = "Voorbeelden";
     Text[ french ] = "Exemples";
     Text[ spanish ] = "Ejemplos";
@@ -202,16 +211,19 @@ String STR_SVT_SAMPLES
     Text[ danish ] = "Eksempler:";
     Text[ swedish ] = "Exempel";
     Text[ polish ] = "Przyk�ady";
-    Text[ portuguese_brazilian ] = "Samples";
+    Text[ portuguese_brazilian ] = "Amostras";
     Text[ japanese ] = "サンプル文書";
-    Text[ korean ] = "샘플 문서";
+    Text[ korean ] = "샘플";
     Text[ chinese_simplified ] = "示例文档";
     Text[ chinese_traditional ] = "示例";
-    Text[ turkish ] = "Samples";
-    Text[ arabic ] = "Samples";
+    Text[ turkish ] = "�rnekler";
+    Text[ arabic ] = "�����";
     Text[ catalan ] = "Mostres";
     Text[ finnish ] = "Esimerkit";
     Text[ thai ] = "ตัวอย่าง";
+    Text[ czech ] = "Příklady";
+    Text[ hebrew ] = "‮דוגמאות‬";
+    Text[ hindi ] = "नमूनें";
 };
 
 Image IMG_SVT_SAMPLES
@@ -241,7 +253,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Anterior";
             Text[ russian ] = "�����";
-            Text[ greek ] = "Back";
+            Text[ greek ] = "���������";
             Text[ dutch ] = "Vorige";
             Text[ french ] = "Pr�c�dent";
             Text[ spanish ] = "Regresar";
@@ -249,16 +261,19 @@ ToolBox TB_SVT_FILEVIEW
             Text[ danish ] = "Tilbage";
             Text[ swedish ] = "Tillbaka";
             Text[ polish ] = "Wstecz";
-            Text[ portuguese_brazilian ] = "Back";
+            Text[ portuguese_brazilian ] = "Voltar";
             Text[ japanese ] = "戻る";
             Text[ korean ] = "뒤로";
             Text[ chinese_simplified ] = "返回";
             Text[ chinese_traditional ] = "返回";
-            Text[ turkish ] = "Back";
-            Text[ arabic ] = "Back";
+            Text[ turkish ] = "Geri";
+            Text[ arabic ] = "�����";
             Text[ catalan ] = "Cap enrere";
             Text[ finnish ] = "Edellinen";
             Text[ thai ] = "กลับไป";
+            Text[ czech ] = "Zpět";
+            Text[ hebrew ] = "‮הקודם‬";
+            Text[ hindi ] = "पीछे";
         };
         ToolBoxItem
         {
@@ -276,17 +291,20 @@ ToolBox TB_SVT_FILEVIEW
             Text[ italian ] = "Alla cartella superiore";
             Text[ danish ] = "Et bibliotek op";
             Text[ swedish ] = "Upp en niv�";
-            Text[ polish ] = "Katalog wy�ej";
-            Text[ portuguese_brazilian ] = "Higher";
+            Text[ polish ] = "Jeden poziom wy�ej";
+            Text[ portuguese_brazilian ] = "Um N�vel Acima";
             Text[ japanese ] = "１つ上のフォルダへ";
             Text[ korean ] = "한 수준 위로";
             Text[ chinese_simplified ] = "目录向上一层";
             Text[ chinese_traditional ] = "目錄向上一層";
-            Text[ turkish ] = "Higher";
+            Text[ turkish ] = "Bir Seviye Yukar�";
             Text[ arabic ] = "Higher";
             Text[ catalan ] = "Un nivell amunt";
             Text[ finnish ] = "Tasoa ylemm�s";
             Text[ thai ] = "ขึ้นหนึ่งระดับ";
+            Text[ czech ] = "O úroveň výše";
+            Text[ hebrew ] = "‮רמה אחת למעלה‬";
+            Text[ hindi ] = "एक स्तर ऊपर";
         };
         ToolBoxItem
         {
@@ -301,7 +319,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ language_user1 ] = " ";
             Text[ portuguese ] = "Imprimir";
             Text[ russian ] = "������";
-            Text[ greek ] = "Print";
+            Text[ greek ] = "��������";
             Text[ dutch ] = "Afdrukken";
             Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
@@ -309,16 +327,19 @@ ToolBox TB_SVT_FILEVIEW
             Text[ danish ] = "Udskriv";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
-            Text[ portuguese_brazilian ] = "Print";
+            Text[ portuguese_brazilian ] = "Imprimir";
             Text[ japanese ] = "印刷";
             Text[ korean ] = "인쇄";
             Text[ chinese_simplified ] = "打印";
             Text[ chinese_traditional ] = "列印";
-            Text[ turkish ] = "Print";
-            Text[ arabic ] = "Print";
+            Text[ turkish ] = "Yazd�r";
+            Text[ arabic ] = "�����";
             Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
             Text[ thai ] = "พิมพ์";
+            Text[ czech ] = "Tisk";
+            Text[ hebrew ] = "‮הדפסה‬";
+            Text[ hindi ] = "छपाई";
         };
     };
 };
@@ -409,15 +430,18 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ danish ] = "Dokumentegenskaber";
             Text[ swedish ] = "Dokumentegenskaper";
             Text[ polish ] = "W�a�ciwo�ci dokumentu";
-            Text[ portuguese_brazilian ] = "Docinfo";
+            Text[ portuguese_brazilian ] = "Propriedades do Documento";
             Text[ japanese ] = "ドキュメントのプロパティ";
             Text[ korean ] = "문서 등록 정보";
             Text[ chinese_simplified ] = "文档属性";
             Text[ chinese_traditional ] = "文件屬性";
-            Text[ turkish ] = "Docinfo";
+            Text[ turkish ] = "Belge �zellikleri";
             Text[ arabic ] = "Docinfo";
             Text[ catalan ] = "Propietats del document";
             Text[ thai ] = "คุณสมบัติเอกสาร";
+            Text[ czech ] = "Vlastnosti dokumentu";
+            Text[ hebrew ] = "‮תכונות קובץ‬";
+            Text[ hindi ] = "Document Properties";
         };
         ToolBoxItem
         {
@@ -429,7 +453,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text [ english_us ] = "Preview" ;
             Text[ portuguese ] = "Previsualizar";
             Text[ russian ] = "��������������� ��������";
-            Text[ greek ] = "Preview";
+            Text[ greek ] = "�������������";
             Text[ dutch ] = "Voorbeeld";
             Text[ french ] = "Aper�u";
             Text[ spanish ] = "Previsualizaci�n";
@@ -438,15 +462,18 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ danish ] = "Eksempel";
             Text[ swedish ] = "F�rhandsvisning";
             Text[ polish ] = "Podgl�d";
-            Text[ portuguese_brazilian ] = "Preview";
+            Text[ portuguese_brazilian ] = "Visualizar";
             Text[ japanese ] = "プレビュー";
-            Text[ korean ] = "미리보기";
+            Text[ korean ] = "미리 보기";
             Text[ chinese_simplified ] = "预览";
             Text[ chinese_traditional ] = "預覽";
-            Text[ turkish ] = "Preview";
-            Text[ arabic ] = "Preview";
+            Text[ turkish ] = "�nizleme";
+            Text[ arabic ] = "������";
             Text[ catalan ] = "Previsualiza";
             Text[ thai ] = "แสดงตัวอย่าง";
+            Text[ czech ] = "Náhled";
+            Text[ hebrew ] = "‮תצוגה מקדימה‬";
+            Text[ hindi ] = "पूर्वदृश्य";
         };
     };
 };
@@ -510,12 +537,12 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ danish ] = "Skabeloner og dokumenter";
     Text[ swedish ] = "Mallar och dokument";
     Text[ polish ] = "Szablony i dokumenty";
-    Text[ portuguese_brazilian ] = "Templates and Documents";
+    Text[ portuguese_brazilian ] = "Modelos e documentos";
     Text[ japanese ] = "テンプレートとドキュメント";
     Text[ korean ] = "서식 파일 및 문서";
     Text[ chinese_simplified ] = "样式和文档";
     Text[ chinese_traditional ] = "樣式和文件";
-    Text[ turkish ] = "Templates and Documents";
+    Text[ turkish ] = "�ablonlar ve d�k�manlar";
     Text[ arabic ] = "Templates and Documents";
     Text[ catalan ] = "Templates and Documents";
     Text[ finnish ] = "Mallit ja asiakirjat";
@@ -540,17 +567,20 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ italian ] = "Gestisci...";
         Text[ danish ] = "~Administrer...";
         Text[ swedish ] = "~Administrera...";
-        Text[ polish ] = "Zarz�dzaj...";
-        Text[ portuguese_brazilian ] = "Manage...";
+        Text[ polish ] = "Organi~zator...";
+        Text[ portuguese_brazilian ] = "~Organizar...";
         Text[ japanese ] = "管理(~Z)...";
         Text[ korean ] = "관리(~Z)...";
         Text[ chinese_simplified ] = "管理(~Z)...";
         Text[ chinese_traditional ] = "管理(~Z)...";
-        Text[ turkish ] = "Manage...";
+        Text[ turkish ] = "Y�net...";
         Text[ arabic ] = "Manage...";
         Text[ catalan ] = "~Organitza...";
         Text[ finnish ] = "~J�rjest�...";
         Text[ thai ] = "จัดระเบี~ยบ...";
+        Text[ czech ] = "Uspořádat...";
+        Text[ hebrew ] = "‮סידור...‬";
+        Text[ hindi ] = "व्यवस्था ~करो...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
@@ -568,16 +598,19 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ danish ] = "~Rediger";
         Text[ swedish ] = "~Redigera";
         Text[ polish ] = "~Edytuj";
-        Text[ portuguese_brazilian ] = "Edit";
+        Text[ portuguese_brazilian ] = "~Editar";
         Text[ japanese ] = "編集(~E)";
         Text[ korean ] = "편집(~E)";
         Text[ chinese_simplified ] = "编辑(~E)";
         Text[ chinese_traditional ] = "編輯(~E)";
-        Text[ turkish ] = "Edit";
+        Text[ turkish ] = "D�zenle";
         Text[ arabic ] = "Edit";
         Text[ catalan ] = "~Edita";
         Text[ finnish ] = "~Muokkaa";
         Text[ thai ] = "แ~ก้ไข";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‮עריכה‬";
+        Text[ hindi ] = "~संपादन";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
@@ -595,17 +628,20 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ italian ] = "~Apri";
         Text[ danish ] = "�~bn";
         Text[ swedish ] = "�~ppna";
-        Text[ polish ] = "Otw�rz";
-        Text[ portuguese_brazilian ] = "Open";
+        Text[ polish ] = "~Otw�rz";
+        Text[ portuguese_brazilian ] = "~Abrir";
         Text[ japanese ] = "開く(~O)";
         Text[ korean ] = "열기(~O)";
         Text[ chinese_simplified ] = "打开(~O)";
         Text[ chinese_traditional ] = "開啟舊檔(~O)";
-        Text[ turkish ] = "Open";
+        Text[ turkish ] = "A�";
         Text[ arabic ] = "Open";
-        Text[ catalan ] = "Open";
+        Text[ catalan ] = "~Open";
         Text[ finnish ] = "~Avaa";
         Text[ thai ] = "เ~ปิด";
+        Text[ czech ] = "Otevřít";
+        Text[ hebrew ] = "‮פתיחה‬";
+        Text[ hindi ] = "~खोलो";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
@@ -618,6 +654,9 @@ ModalDialog DLG_DOCTEMPLATE
         Size = MAP_APPFONT( 50, 14 );
     };
     Text[ thai ] = "Templates and Documents";
+    Text[ czech ] = "Šablony a dokumenty";
+    Text[ hebrew ] = "‮תבניות ומסמכים‬";
+    Text[ hindi ] = "नमूनें और लेखपत्रें";
 };
 
 StringArray STRARY_SVT_DOCINFO
@@ -704,11 +743,11 @@ StringArray STRARY_SVT_DOCINFO
         < "����������" ; DI_DATE ; > ;
         < "Schl�sselw�rter" ; DI_KEYWORDS ; > ;
         < "���������" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
         < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Printed on" ; DI_PRINTDATE ; > ;
+        < "Printed by" ; DI_PRINTBY ; > ;
         < "����" ; DI_THEME ; > ;
         < "Gr��e" ; DI_SIZE ; > ;
     };
@@ -824,7 +863,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Data" ; DI_DATE ; > ;
         < "S�owa kluczowe" ; DI_KEYWORDS ; > ;
         < "Opis" ; DI_DESCRIPTION ; > ;
-        < "Typ zawarto�ci" ; DI_MIMETYPE ; > ;
+        < "Typ" ; DI_MIMETYPE ; > ;
         < "Data modyfikacji" ; DI_MODIFIEDDATE ; > ;
         < "Zmodyfikowa�(a)" ; DI_MODIFIEDBY ; > ;
         < "Data wydruku" ; DI_PRINTDATE ; > ;
@@ -834,18 +873,18 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ portuguese_brazilian ] =
     {
-        < "Titel" ; DI_TITLE ; > ;
-        < "Von" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "Schl�sselw�rter" ; DI_KEYWORDS ; > ;
-        < "Beschreibung" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
-        < "Thema" ; DI_THEME ; > ;
-        < "Gr��e" ; DI_SIZE ; > ;
+        < "T�tulo" ; DI_TITLE ; > ;
+        < "Por" ; DI_FROM ; > ;
+        < "Data" ; DI_DATE ; > ;
+        < "Palavras-chave" ; DI_KEYWORDS ; > ;
+        < "Descri��o" ; DI_DESCRIPTION ; > ;
+        < "Tipo" ; DI_MIMETYPE ; > ;
+        < "Modificado em" ; DI_MODIFIEDDATE ; > ;
+        < "Modificado por" ; DI_MODIFIEDBY ; > ;
+        < "Impresso em" ; DI_PRINTDATE ; > ;
+        < "Impresso por" ; DI_PRINTBY ; > ;
+        < "Assunto" ; DI_THEME ; > ;
+        < "Tamanho" ; DI_SIZE ; > ;
     };
     ItemList [ japanese ] =
     {
@@ -871,7 +910,7 @@ StringArray STRARY_SVT_DOCINFO
         < "설명" ; DI_DESCRIPTION ; > ;
         < "유형" ; DI_MIMETYPE ; > ;
         < "변경 날짜" ; DI_MODIFIEDDATE ; > ;
-        < "변경 날짜" ; DI_MODIFIEDBY ; > ;
+        < "변경자" ; DI_MODIFIEDBY ; > ;
         < "인쇄 날짜" ; DI_PRINTDATE ; > ;
         < "인쇄 날짜" ; DI_PRINTBY ; > ;
         < "주제" ; DI_THEME ; > ;
@@ -909,16 +948,16 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ turkish ] =
     {
-        < "B�l�m ba�l���" ; DI_TITLE ; > ;
-        < "Yazd�ran" ; DI_FROM ; > ;
+        < "Ba�l�k" ; DI_TITLE ; > ;
+        < "Haz�rlayan" ; DI_FROM ; > ;
         < "Tarih" ; DI_DATE ; > ;
-        < "Anahtar s�zc�k" ; DI_KEYWORDS ; > ;
+        < "Anahtar Kelimeler" ; DI_KEYWORDS ; > ;
         < "A��klama" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "T�r" ; DI_MIMETYPE ; > ;
+        < "De�i�tirildi" ; DI_MODIFIEDDATE ; > ;
+        < "De�i�tiren" ; DI_MODIFIEDBY ; > ;
+        < "Bast�r�ld�" ; DI_PRINTDATE ; > ;
+        < "Bast�ran" ; DI_PRINTBY ; > ;
         < "Konu" ; DI_THEME ; > ;
         < "Boyut" ; DI_SIZE ; > ;
     };
@@ -929,28 +968,28 @@ StringArray STRARY_SVT_DOCINFO
         < "�������" ; DI_DATE ; > ;
         < "Schl�sselw�rter" ; DI_KEYWORDS ; > ;
         < "�����" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
         < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Printed on" ; DI_PRINTDATE ; > ;
+        < "Printed by" ; DI_PRINTBY ; > ;
         < "�������" ; DI_THEME ; > ;
         < "Gr��e" ; DI_SIZE ; > ;
     };
     ItemList [ catalan ] =
     {
-         < "T�tol" ; DI_TITLE ; > ;
-        < "per" ; DI_FROM ; > ;
-        < "Data" ; DI_DATE ; > ;
-        < "Paraules clau" ; DI_KEYWORDS ; > ;
-        < "Descripci�" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
-        < "Assumpte" ; DI_THEME ; > ;
-        < "Mida" ; DI_SIZE ; > ;
+         < "Title" ; DI_TITLE ; > ;
+        < "By" ; DI_FROM ; > ;
+        < "Date" ; DI_DATE ; > ;
+        < "Keywords" ; DI_KEYWORDS ; > ;
+        < "Description" ; DI_DESCRIPTION ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
+        < "Modified on" ; DI_MODIFIEDDATE ; > ;
+        < "Modified by" ; DI_MODIFIEDBY ; > ;
+        < "Printed on" ; DI_PRINTDATE ; > ;
+        < "Printed by" ; DI_PRINTBY ; > ;
+        < "Subject" ; DI_THEME ; > ;
+        < "Size" ; DI_SIZE ; > ;
     };
     ItemList [ thai ] =
     {
@@ -967,7 +1006,52 @@ StringArray STRARY_SVT_DOCINFO
         < "Subject" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
-};
+ItemList [ czech ] =
+    {
+         < "Název" ; DI_TITLE ; > ;
+        < "Autor" ; DI_FROM ; > ;
+        < "Datum" ; DI_DATE ; > ;
+        < "Klíčová slova" ; DI_KEYWORDS ; > ;
+        < "Popis" ; DI_DESCRIPTION ; > ;
+        < "Typ" ; DI_MIMETYPE ; > ;
+        < "Upraveno" ; DI_MODIFIEDDATE ; > ;
+        < "Upravil" ; DI_MODIFIEDBY ; > ;
+        < "Vytištěno" ; DI_PRINTDATE ; > ;
+        < "Vytiskl" ; DI_PRINTBY ; > ;
+        < "Předmět" ; DI_THEME ; > ;
+        < "Velikost" ; DI_SIZE ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮כותרת‬" ; DI_TITLE ; > ;
+        < "‮מאת‬" ; DI_FROM ; > ;
+        < "‮תאריך‬" ; DI_DATE ; > ;
+        < "‮מילות מפתח‬" ; DI_KEYWORDS ; > ;
+        < "‮תיאור‬" ; DI_DESCRIPTION ; > ;
+        < "‮סוג‬" ; DI_MIMETYPE ; > ;
+        < "‮תאריך שינוי אחרון‬" ; DI_MODIFIEDDATE ; > ;
+        < "‮שונה על ידי‬" ; DI_MODIFIEDBY ; > ;
+        < "‮תאריך הדפסה אחרונה‬" ; DI_PRINTDATE ; > ;
+        < "‮הודפס על ידי‬" ; DI_PRINTBY ; > ;
+        < "‮נושא‬" ; DI_THEME ; > ;
+        < "‮גודל‬" ; DI_SIZE ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "शीर्षक" ; DI_TITLE ; > ;
+        < "से" ; DI_FROM ; > ;
+        < "दिनांक" ; DI_DATE ; > ;
+        < "प्रधान शब्द" ; DI_KEYWORDS ; > ;
+        < "विवरण" ; DI_DESCRIPTION ; > ;
+        < "वर्ग" ; DI_MIMETYPE ; > ;
+        < "में सुधार किया" ; DI_MODIFIEDDATE ; > ;
+        < "ने सुधार किया" ; DI_MODIFIEDBY ; > ;
+        < "में छपाई किया" ; DI_PRINTDATE ; > ;
+        < "ने छपाई किया" ; DI_PRINTBY ; > ;
+        < "विषय" ; DI_THEME ; > ;
+        < "परिमाण" ; DI_SIZE ; > ;
+    };
+    };
 
 String STR_SVT_NEWDOC_HELP
 {
@@ -988,8 +1072,14 @@ String STR_SVT_NEWDOC_HELP
     Text[ korean ] = "새 문서를 만들려면 여기를 클릭해주십시오.";
     Text[ chinese_simplified ] = "在这里您能够建立新的文档。";
     Text[ chinese_traditional ] = "您在此能夠建立新的文件。";
-    Text[ turkish ] = "Click here to create new documents.";
+    Text[ turkish ] = "Yeni belge olu�turmak i�in buraya t�klay�n";
     Text[ arabic ] = "Click here to create new documents.";
+    Text[ czech ] = "Kliknutím zde vytvoříte nový dokument.";
+    Text[ hebrew ] = "‮לחיצה כאן יוצרת מסמכים חדשים.‬";
+    Text[ catalan ] = "Click here to create new documents.";
+    Text[ portuguese_brazilian ] = "Click here to create new documents.";
+    Text[ thai ] = "Click here to create new documents.";
+    Text[ hindi ] = "Click here to create new documents.";
 };
 String STR_SVT_MYDOCS_HELP
 {
@@ -1010,8 +1100,14 @@ String STR_SVT_MYDOCS_HELP
     Text[ korean ] = "사용자의 편지, 보고서 및 기타 문서가 수록되어 있습니다.";
     Text[ chinese_simplified ] = "存放您的信件、报表及其它文档";
     Text[ chinese_traditional ] = "存放您的信件、報表及其它文件";
-    Text[ turkish ] = "Contains your letters, reports and other documents";
+    Text[ turkish ] = "Size ait mektuplar�, raporlar� ve di�er belgeleri i�erir";
     Text[ arabic ] = "Contains your letters, reports and other documents";
+    Text[ czech ] = "Obsahuje vaše dopisy, reporty a ostatní dokumenty";
+    Text[ hebrew ] = "‮מכיל מכתבים, דו\"חות ומסמכים אחרים‬";
+    Text[ catalan ] = "Contains your letters, reports and other documents";
+    Text[ portuguese_brazilian ] = "Contains your letters, reports and other documents";
+    Text[ thai ] = "Contains your letters, reports and other documents";
+    Text[ hindi ] = "Contains your letters, reports and other documents";
 };
 String STR_SVT_TEMPLATES_HELP
 {
@@ -1032,8 +1128,14 @@ String STR_SVT_TEMPLATES_HELP
     Text[ korean ] = "새 문서 만들기용 서식 파일이 수록되어 있습니다.";
     Text[ chinese_simplified ] = "存放用来新增文档的样式文档";
     Text[ chinese_traditional ] = "存放用來新增文件的樣式文件";
-    Text[ turkish ] = "Contains templates for creating new documents";
+    Text[ turkish ] = "Yeni belge olu�turmak i�in gereken �ablonlar? i�erir";
     Text[ arabic ] = "Contains templates for creating new documents";
+    Text[ czech ] = "Obsahuje šablony pro vytváření nových dokumentů";
+    Text[ hebrew ] = "‮מכיל תבניות ליצירת מסמכים חדשים.‬";
+    Text[ catalan ] = "Contains templates for creating new documents";
+    Text[ portuguese_brazilian ] = "Contains templates for creating new documents";
+    Text[ thai ] = "Contains templates for creating new documents";
+    Text[ hindi ] = "Contains templates for creating new documents";
 };
 String STR_SVT_SAMPLES_HELP
 {
@@ -1054,9 +1156,24 @@ String STR_SVT_SAMPLES_HELP
     Text[ korean ] = "편지, 보고서 및 기타 문서용의 샘플 문서가 수록되어 있습니다.";
     Text[ chinese_simplified ] = "存放一套信件、报表及其他文档的事例文档";
     Text[ chinese_traditional ] = "存放一套信件、報表及其它文件的範例文件";
-    Text[ turkish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ turkish ] = "�rnek mektuplardan, raporlardan ve di�er d�k�manlardan se�im i�erir";
     Text[ arabic ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ czech ] = "Obsahuje výběr ukázkových dopisů, reportů a jiných dokumentů";
+    Text[ hebrew ] = "‮מכיל מבחר מכתבים לדוגמה, דו\"חות ומסמכים אחרים.‬";
+    Text[ catalan ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ portuguese_brazilian ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ thai ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ hindi ] = "Contains a selection of sample letters, reports and other documents";
 };
+
+
+
+
+
+
+
+
+
 
 
 
