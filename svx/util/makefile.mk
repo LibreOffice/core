@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: aw $ $Date: 2003-05-23 08:21:27 $
+#   last change: $Author: aw $ $Date: 2003-05-23 08:30:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,7 +184,6 @@ DEF2DES     =SvDraw, Form, Fmcomp, Engine3D, XOutDev, MSFilter
 .ENDIF
 
 LIBEXTRAFILES=\
-        $(LIBPRE) $(SLB)$/properties.lib \
         $(LIBPRE) $(SLB)$/svdraw.lib \
         $(LIBPRE) $(SLB)$/form.lib \
         $(LIBPRE) $(SLB)$/fmcomp.lib \
