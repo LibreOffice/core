@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-12 17:32:31 $
+ *  last change: $Author: sj $ $Date: 2000-12-13 16:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                                     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                             sal_Int64 nVal;
 
-                            ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "size" ) ) ) );
+                            ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
                             sal_uInt32 nSizeOfSound = (sal_uInt32) nVal;
 
                             if ( nSizeOfSound )
@@ -920,14 +920,23 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                     if ( '.' == pSoundFile->GetChar( nStringLen - 4 ) )
                                         nSound += 16;           // Type Of Sound ( instance 1 )
                                 }
-                                String aString = UniString::CreateFromInt32( i + 1 );
+                                String aString( String::CreateFromInt32( i + 1 ) );
                                 nSound += 2 * aString.Len() + 8;// reference Id  ( instance 2 )
                                 nSound += nSizeOfSound + 8;     // SoundData Atom;
                                 nValidSoundCount++;
                             }
                         }
-                        catch( ... )
+                        catch( const ::com::sun::star::ucb::ContentCreationException& )
                         {
+
+                        }
+                        catch( const ::com::sun::star::uno::RuntimeException& )
+                        {
+
+                        }
+                        catch( const ::com::sun::star::lang::IllegalArgumentException& )
+                        {
+
                         }
                     }
                 }
@@ -1027,7 +1036,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                             sal_Int64 nVal;
 
-                            ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "size" ) ) ) );
+                            ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
                             sal_uInt32 nSizeOfSound = (sal_uInt32) nVal;
 
                             if ( nSizeOfSound )
@@ -1038,7 +1047,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
 
                                 mpPptEscherEx->AddAtom( nStringLen * 2, EPP_CString );        // Name Of Sound ( instance 0 )
                                 for ( USHORT k = 0; k < nStringLen; k++ )
-                                    *mpStrm << pSoundFile->GetChar( k ) << (sal_uInt8)0;
+                                    *mpStrm << pSoundFile->GetChar( k );
 
                                 if ( nStringLen > 4 )
                                 {
@@ -1046,13 +1055,13 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                     {
                                         mpPptEscherEx->AddAtom( 8, EPP_CString, 0, 1 );   // Type Of Sound ( instance 1 )
                                         for ( k = nStringLen - 4; k < nStringLen; k++ )
-                                            *mpStrm << pSoundFile->GetChar( k ) << (sal_uInt8)0;
+                                            *mpStrm << pSoundFile->GetChar( k );
                                     }
                                 }
-                                ByteString aString( ByteString::CreateFromInt32( i + 1 ) );
+                                String aString( String::CreateFromInt32( i + 1 ) );
                                 mpPptEscherEx->AddAtom( aString.Len() * 2, EPP_CString, 0, 2 );
                                 for ( k = 0; k < aString.Len(); k++ )
-                                    *mpStrm << aString.GetChar( k ) << (sal_uInt8)0;
+                                    *mpStrm << aString.GetChar( k );
                                 mpPptEscherEx->AddAtom( nSizeOfSound, EPP_SoundData );
 
                                 sal_uInt32 nBytesLeft = nSizeOfSound;
