@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:45:45 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,8 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
     }
 
     pUndoTxt = GetTxtFromDoc();
+
+    bCacheComment = false;
 }
 
 // #111827#
@@ -571,12 +573,9 @@ SwRewriter SwUndoInsert::GetRewriter() const
 
     if (pStr)
     {
-        String aString;
-
-        aString += String(SW_RES(STR_START_QUOTE));
-        aString += ShortenString(*pStr, nUndoStringLength,
-                                 String(SW_RES(STR_LDOTS)));
-        aString += String(SW_RES(STR_END_QUOTE));
+        String aString = ShortenString(DenoteSpecialCharacters(*pStr),
+                                       nUndoStringLength,
+                                       String(SW_RES(STR_LDOTS)));
 
         aResult.AddRule(UNDO_ARG1, aString);
 
