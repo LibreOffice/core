@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_excp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,6 @@ PE_Exception::ReceiveData()
     Stati().pCurStatus->On_SubPE_Left();
 }
 
-const bool C_bIsExceptionElement = true; // Means:Yes, is an ExceptionElement.
-
 PE_Exception::S_Work::S_Work()
     :   sData_Name(),
         bIsPreDeclaration(false),
@@ -147,7 +145,7 @@ PE_Exception::S_Work::S_Work()
         nCurParsed_Base(0)
 
 {
-    pPE_Element = new PE_StructElement(nCurParsed_ElementRef,nCurStruct,C_bIsExceptionElement);
+    pPE_Element = new PE_StructElement(nCurParsed_ElementRef,nCurStruct);
     pPE_Type = new PE_Type(nCurParsed_Base);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_selem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 // NOT FULLY DECLARED SERVICES
 #include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_struct.hxx>
 #include <ary/idl/i_structelem.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
@@ -77,17 +78,36 @@ namespace csi
 namespace uidl
 {
 
+namespace
+{
+    const String  C_sNone;
+}
 
 PE_StructElement::PE_StructElement( RStructElement &    o_rResult,
                                     const RStruct &     i_rCurStruct,
-                                    bool                i_IsExceptionElement )
+                                    const String &      i_rCurStructTemplateParam )
     :   eState(e_none),
         pResult(&o_rResult),
         pCurStruct(&i_rCurStruct),
+        bIsExceptionElement(false),
         pPE_Type(0),
         nType(0),
         sName(),
-        bIsExceptionElement(i_IsExceptionElement)
+        pCurStructTemplateParam(&i_rCurStructTemplateParam)
+{
+    pPE_Type = new PE_Type(nType);
+}
+
+PE_StructElement::PE_StructElement( RStructElement &    o_rResult,
+                                    const RStruct &     i_rCurExc )
+    :   eState(e_none),
+        pResult(&o_rResult),
+        pCurStruct(&i_rCurExc),
+        bIsExceptionElement(true),
+        pPE_Type(0),
+        nType(0),
+        sName(),
+        pCurStructTemplateParam(&C_sNone)
 {
     pPE_Type = new PE_Type(nType);
 }
@@ -111,7 +131,6 @@ PE_StructElement::ProcessToken( const Token & i_rToken )
     i_rToken.Trigger(*this);
 }
 
-
 void
 PE_StructElement::Process_Default()
 {
@@ -127,10 +146,21 @@ PE_StructElement::Process_Default()
 void
 PE_StructElement::Process_Identifier( const TokIdentifier & i_rToken )
 {
+    csv_assert(*i_rToken.Text() != 0);
+
     if (eState == expect_type)
     {
-        SetResult( not_done, push_sure, pPE_Type.Ptr() );
-        eState = expect_name;
+        if ( *pCurStructTemplateParam == i_rToken.Text() )
+        {
+            nType = lhf_FindTemplateParamType();
+               SetResult( done, stay );
+            eState = expect_name;
+        }
+        else    // No template parameter type existing, or not matching:
+        {
+               SetResult( not_done, push_sure, pPE_Type.Ptr() );
+            eState = expect_name;
+        }
     }
     else if (eState == expect_name)
     {
@@ -195,6 +225,16 @@ PE_StructElement::MyPE()
     return *this;
 }
 
+ary::idl::Type_id
+PE_StructElement::lhf_FindTemplateParamType() const
+{
+    const ary::idl::CodeEntity &
+        rCe = Gate().Ces().Find_Ce(*pCurStruct);
+    const ary::idl::Struct &
+        rStruct = static_cast< const ary::idl::Struct& >(rCe);
+    return rStruct.TemplateParameterType();
+}
+
+
 }   // namespace uidl
 }   // namespace csi
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_struc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,9 @@ PE_Struct::ReceiveData()
     Stati().pCurStatus->On_SubPE_Left();
 }
 
-const bool C_bIsStructElement = false; // Means: not ExceptionElement.
-
 PE_Struct::S_Work::S_Work()
     :   sData_Name(),
+        sData_TemplateParam(),
         bIsPreDeclaration(false),
         nCurStruct(0),
         pPE_Element(0),
@@ -146,7 +145,7 @@ PE_Struct::S_Work::S_Work()
         nCurParsed_Base(0)
 
 {
-    pPE_Element = new PE_StructElement(nCurParsed_ElementRef,nCurStruct,C_bIsStructElement);
+    pPE_Element = new PE_StructElement(nCurParsed_ElementRef,nCurStruct,sData_TemplateParam);
     pPE_Type = new PE_Type(nCurParsed_Base);
 }
 
@@ -154,6 +153,7 @@ void
 PE_Struct::S_Work::InitData()
 {
     sData_Name.clear();
+    sData_TemplateParam.clear();
     bIsPreDeclaration = false;
     nCurStruct = 0;
     nCurParsed_ElementRef = 0;
@@ -178,10 +178,18 @@ PE_Struct::S_Work::Data_Set_Name( const char * i_sName )
     sData_Name = i_sName;
 }
 
+void
+PE_Struct::S_Work::Data_Set_TemplateParam( const char * i_sTemplateParam )
+{
+    sData_TemplateParam = i_sTemplateParam;
+}
+
 PE_Struct::S_Stati::S_Stati(PE_Struct & io_rStruct)
     :   aNone(io_rStruct),
         aWaitForName(io_rStruct),
         aGotName(io_rStruct),
+        aWaitForTemplateParam(io_rStruct),
+        aWaitForTemplateEnd(io_rStruct),
         aWaitForBase(io_rStruct),
         aGotBase(io_rStruct),
         aWaitForElement(io_rStruct),
@@ -227,6 +235,10 @@ PE_Struct::State_GotName::Process_Punctuation( const TokPunctuation & i_rToken )
                 MoveState( Stati().aWaitForElement );
                 SetResult(done,stay);
                 break;
+            case TokPunctuation::Lesser:
+                MoveState( Stati().aWaitForTemplateParam );
+                SetResult(done,stay);
+                break;
             default:
                 SetResult(not_done,pop_failure);
         }   // end switch
@@ -236,6 +248,22 @@ PE_Struct::State_GotName::Process_Punctuation( const TokPunctuation & i_rToken )
         Work().sData_Name.clear();
         SetResult(done,pop_success);
     }
+}
+
+void
+PE_Struct::State_WaitForTemplateParam::Process_Identifier( const TokIdentifier & i_rToken )
+{
+    Work().Data_Set_TemplateParam(i_rToken.Text());
+    MoveState( Stati().aWaitForTemplateEnd );
+    SetResult(done,stay);
+}
+
+void
+PE_Struct::State_WaitForTemplateEnd::Process_Punctuation( const TokPunctuation & i_rToken )
+{
+    // Assume:  TokPunctuation::Greater
+    MoveState( Stati().aGotName );
+    SetResult(done,stay);
 }
 
 void
@@ -322,7 +350,8 @@ PE_Struct::store_Struct()
         rCe = Gate().Ces().Store_Struct(
                         CurNamespace().CeId(),
                         Work().sData_Name,
-                        Work().nCurParsed_Base );
+                        Work().nCurParsed_Base,
+                        Work().sData_TemplateParam );
     PassDocuAt(rCe);
     Work().nCurStruct = rCe.CeId();
 }
@@ -330,4 +359,3 @@ PE_Struct::store_Struct()
 
 }   // namespace uidl
 }   // namespace csi
-
