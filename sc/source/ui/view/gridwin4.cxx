@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-15 14:19:21 $
+ *  last change: $Author: nn $ $Date: 2001-02-22 19:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,6 +1251,7 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     BOOL bWasHidden = FALSE;
     for (USHORT nY=nY1; nY<=nY2; nY++)
     {
+        BOOL bFirstRow = ( nY == nPosY );                       // first visible row?
         BOOL bDoHidden = FALSE;                                 // versteckte nachholen ?
         USHORT nHeightTwips = pDoc->GetRowHeight( nY,nTab );
         BOOL bDoRow = ( nHeightTwips != 0 );
@@ -1301,10 +1302,10 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                         const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
                         const ScMergeFlagAttr* pMergeFlag = (const ScMergeFlagAttr*) &pPattern->
                                                                         GetItem(ATTR_MERGE_FLAG);
-                        if ( pMergeFlag->IsVerOverlapped() && bDoHidden )
+                        if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                         {
-                            while ( pMergeFlag->IsVerOverlapped() ?
-                                        (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) : FALSE )
+                            while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
+                                        ( (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) || bFirstRow ) )
                             {
                                 --nThisY;
                                 pPattern = pDoc->GetPattern( nX, nThisY, nTab );
