@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:34:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< 
     int nResult = 0;
 
     // 1st: compare all elements of the vectors
-    typedef ::std::vector< Type >::const_iterator CIT;
+    typedef typename ::std::vector< Type >::const_iterator CIT;
     CIT aEndL = rLeft.end(), aEndR = rRight.end();
     for( CIT aItL = rLeft.begin(), aItR = rRight.begin(); !nResult && (aItL != aEndL) && (aItR != aEndR); ++aItL, ++aItR )
         nResult = lclCompare( *aItL, *aItR );
@@ -148,7 +148,7 @@ template< typename Type, typename ValueHasher >
 sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& rHasher )
 {
     sal_uInt32 nHash = rVec.size();
-    for( ::std::vector< Type >::const_iterator aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
+    for( typename ::std::vector< Type >::const_iterator aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
         (nHash *= 31) += rHasher( *aIt );
     return static_cast< sal_uInt16 >( nHash ^ (nHash >> 16) );
 }
