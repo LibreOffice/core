@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: ssa $ $Date: 2002-05-21 11:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
+#ifndef _SV_SYSWIN_HXX
+#include <syswin.hxx>
+#endif
+#ifndef _SV_TASKPANELIST_HXX
+#include <taskpanelist.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -116,6 +122,9 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
 
     SetPointer( Pointer( ePointerStyle ) );
     SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+
+    //TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
+    //pTList->AddWindow( this );
 }
 
 // -----------------------------------------------------------------------
@@ -186,6 +195,8 @@ Splitter::Splitter( Window* pParent, const ResId& rResId ) :
 
 Splitter::~Splitter()
 {
+    //TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
+    //pTList->RemoveWindow( this );
 }
 
 // -----------------------------------------------------------------------
@@ -363,3 +374,34 @@ void Splitter::StartDrag()
     if ( !mbDragFull )
         ImplDrawSplitter();
 }
+
+
+// -----------------------------------------------------------------------
+
+void Splitter::GetFocus()
+{
+    //SetBackground( Wallpaper( Color( COL_RED ) ) );
+    //Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void Splitter::LoseFocus()
+{
+    //SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+    //Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void Splitter::KeyInput( const KeyEvent& rKEvt )
+{
+}
+
+// -----------------------------------------------------------------------
+
+long Splitter::Notify( NotifyEvent& rNEvt )
+{
+    return Window::Notify( rNEvt );
+}
+
