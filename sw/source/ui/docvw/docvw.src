@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:57:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1535,3 +1535,15 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ hungarian ] = "Csak olvasható tartalom.\nVáltoztatás nem lehetséges.";
     MESSAGE[ slovenian ] = "Vsebine, ki je samo za branje, ni mogoče spreminjati.\nSpremembe ne bodo sprejete.";
 };
+
+String STR_TABLE_COL_ADJUST
+{
+    Text = "Tabellenspalte �ndern" ;
+    Text [ english_us ] = "Adjust table column" ;
+};
+String STR_TABLE_ROW_ADJUST
+{
+    Text = "Tabellenzeile �ndern" ;
+    Text [ english_us ] = "Adjust table row" ;
+};
+
