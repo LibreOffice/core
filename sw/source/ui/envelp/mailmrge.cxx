@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 09:54:00 $
+ *  last change: $Author: os $ $Date: 2001-05-09 08:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,13 +155,6 @@ using namespace com::sun::star::frame;
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
-void  lcl_MoveWin(Window& rWin, long nDiff)
-{
-    Point aPos(rWin.GetPosPixel());
-    aPos.Y() -= nDiff;
-    rWin.SetPosPixel(aPos);
-}
-
 SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
          const String& rSourceName,
         const String& rTblName,
@@ -226,37 +219,58 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         Size aSize = GetSizePixel();
         aSize.Height() -= nDiff;
         SetSizePixel(aSize);
-        lcl_MoveWin(aAllRB       , nDiff);
-        lcl_MoveWin(aMarkedRB    , nDiff);
-        lcl_MoveWin(aFromRB      , nDiff);
-        lcl_MoveWin(aFromNF      , nDiff);
-        lcl_MoveWin(aBisFT       , nDiff);
-        lcl_MoveWin(aToNF        , nDiff);
-        lcl_MoveWin(aRecordGB    , nDiff);
-        lcl_MoveWin(aPrinterRB   , nDiff);
-        lcl_MoveWin(aMailingRB   , nDiff);
-        lcl_MoveWin(aFileRB      , nDiff);
-        lcl_MoveWin(aSingleJobsCB, nDiff);
-        lcl_MoveWin(aPathFT      , nDiff);
-        lcl_MoveWin(aPathED      , nDiff);
-        lcl_MoveWin(aPathPB      , nDiff);
-        lcl_MoveWin(aFilenameFT  , nDiff);
-        lcl_MoveWin(aColumnRB    , nDiff);
-        lcl_MoveWin(aFilenameRB  , nDiff);
-        lcl_MoveWin(aColumnLB    , nDiff);
-        lcl_MoveWin(aFilenameED  , nDiff);
-        lcl_MoveWin(aAddressFT   , nDiff);
-        lcl_MoveWin(aAddressFldLB, nDiff);
-        lcl_MoveWin(aSubjectFT   , nDiff);
-        lcl_MoveWin(aSubjectED   , nDiff);
-        lcl_MoveWin(aFormatFT    , nDiff);
-        lcl_MoveWin(aAttachFT    , nDiff);
-        lcl_MoveWin(aAttachED    , nDiff);
-        lcl_MoveWin(aAttachPB    , nDiff);
-        lcl_MoveWin(aFormatHtmlCB, nDiff);
-        lcl_MoveWin(aFormatRtfCB , nDiff);
-        lcl_MoveWin(aFormatSwCB  , nDiff);
-        lcl_MoveWin(aDestGB      , nDiff);
+        Window* aCntrlArr[] = {
+            &aAllRB       ,
+            &aMarkedRB    ,
+            &aFromRB      ,
+            &aFromNF      ,
+            &aBisFT       ,
+            &aToNF        ,
+            &aRecordGB    ,
+            &aPrinterRB   ,
+            &aMailingRB   ,
+            &aFileRB      ,
+            &aSingleJobsCB,
+            &aPathFT      ,
+            &aPathED      ,
+            &aPathPB      ,
+            &aFilenameFT  ,
+            &aColumnRB    ,
+            &aFilenameRB  ,
+            &aColumnLB    ,
+            &aFilenameED  ,
+            &aAddressFT   ,
+            &aAddressFldLB,
+            &aSubjectFT   ,
+            &aSubjectED   ,
+            &aFormatFT    ,
+            &aAttachFT    ,
+            &aAttachED    ,
+            &aAttachPB    ,
+            &aFormatHtmlCB,
+            &aFormatRtfCB ,
+            &aFormatSwCB  ,
+            &aDestGB      ,
+            0};
+
+        for( Window** ppW = aCntrlArr; *ppW; ++ppW )
+        {
+            Point aPnt( (*ppW)->GetPosPixel() );
+            aPnt.Y() -= nDiff;
+            (*ppW)->SetPosPixel( aPnt );
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
     else
     {

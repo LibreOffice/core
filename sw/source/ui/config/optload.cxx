@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 12:05:45 $
+ *  last change: $Author: os $ $Date: 2001-05-09 08:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,12 +300,6 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 /*-----------------18.01.97 12.42-------------------
 
 --------------------------------------------------*/
-inline void lcl_MoveWin(Window& rWin, long nDiff)
-{
-    Point aPos(rWin.GetPosPixel());
-    aPos.Y() -= nDiff;
-    rWin.SetPosPixel(aPos);
-}
 void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(FALSE);
@@ -393,14 +387,24 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         aCaptionPB.Hide();
 
         long nDiff = aSettingsGB.GetPosPixel().Y() - aCaptionGB.GetPosPixel().Y();
-        lcl_MoveWin(aSettingsGB, nDiff);
-        lcl_MoveWin(aMetricFT, nDiff);
-        lcl_MoveWin(aMetricLB, nDiff);
-        lcl_MoveWin(aTabFT, nDiff);
-        lcl_MoveWin(aTabMF, nDiff);
-        lcl_MoveWin(aCompatGB, nDiff);
-        lcl_MoveWin(aMergeDistCB, nDiff);
-        lcl_MoveWin(aMergeDistPageStartCB, nDiff);
+
+        Window* aCntrlArr[] = {
+            &aSettingsGB,
+            &aMetricFT,
+            &aMetricLB,
+            &aTabFT,
+            &aTabMF,
+            &aCompatGB,
+            &aMergeDistCB,
+            &aMergeDistPageStartCB,
+            0};
+
+        for( Window** ppW = aCntrlArr; *ppW; ++ppW )
+        {
+            Point aPnt( (*ppW)->GetPosPixel() );
+            aPnt.Y() -= nDiff;
+            (*ppW)->SetPosPixel( aPnt );
+        }
     }
 }
 /*-----------------13.01.97 14.44-------------------
