@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:53:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <svx/eeitem.hxx>
 
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
