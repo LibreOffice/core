@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WebDAVFolderContent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ module com { module sun { module star { module ucb {
     @see com::sun::star::ucb::WebDAVContentProvider
     @see com::sun::star::ucb::WebDAVDocumentContent
 */
-service WebDAVFolderContent
+published service WebDAVFolderContent
 {
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
