@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:32:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #endif
 
@@ -117,13 +117,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpSdrObjTextLink: public ::so3::SvBaseLink
+class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 {
     SdrTextObj*                 pSdrObj;
 
 public:
     ImpSdrObjTextLink( SdrTextObj* pObj1 )
-        : ::so3::SvBaseLink( ::so3::LINKUPDATE_ONCALL, FORMAT_FILE ),
+        : ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE ),
             pSdrObj( pObj1 )
     {}
     virtual ~ImpSdrObjTextLink();
