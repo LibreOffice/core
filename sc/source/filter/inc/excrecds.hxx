@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:27:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,9 +402,7 @@ public:
 };
 
 
-//--------------------------------------------------------- class ExcDummy_02 -
-// sheet dummies: CALCMODE to SETUP
-
+// sheet dummies: GRIDSET
 class ExcDummy_02b : public ExcDummyRec
 {
 private:
@@ -416,9 +414,7 @@ public:
 };
 
 
-//--------------------------------------------------------- class ExcDummy_02 -
-// sheet dummies: CALCMODE to SETUP
-
+// sheet dummies: DEFAULTROWHEIGHT
 class ExcDummy_02c : public ExcDummyRec
 {
 private:
@@ -427,6 +423,23 @@ private:
 public:
     virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** This record contains the Windows country IDs for the UI and document language. */
+class XclExpCountry : public XclExpRecord
+{
+public:
+    explicit                    XclExpCountry( const XclExpRoot& rRoot );
+
+private:
+    sal_uInt16                  mnUICountry;        /// The UI country ID.
+    sal_uInt16                  mnDocCountry;       /// The document country ID.
+
+    /** Writes the body of the COUNTRY record. */
+    virtual void                WriteBody( XclExpStream& rStrm );
 };
 
 
