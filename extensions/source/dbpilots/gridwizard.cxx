@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:59:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ namespace dbp
             switch (nFieldType)
             {
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("CheckBox"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
