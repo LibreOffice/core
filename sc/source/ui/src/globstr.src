@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:23:33 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,7 +854,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¿ï¾Ü¤jºõ¯Å";
         Text[ arabic ] = "ÊÍÏíÏ ãÓÊæì ÇáÊŞÓíã";
         Text[ greek ] = "ÅğéëïãŞ åğéğİäïõ äéÜñèñùóçò";
-        Text[ korean ] = "¿Ü°û¼±ÀÇ ¼öÁØÀ» ¼±ÅÃÇÏ¼¼¿ä";
+        Text[ korean ] = "°³·«  ·¹º§ ¼±ÅÃ";
         Text[ turkish ] = "Anahat düzeyini seç";
         Text[ language_user1 ] = " ";
     };
@@ -1843,7 +1843,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½s¿è³Æª`";
         Text[ arabic ] = "ÊÍÑíÑ ãáÇÍÙÉ";
         Text[ greek ] = "Åğåîåñãáóßá óçìåßùóçò";
-        Text[ korean ] = "¸Ş¸ğ ÆíÁı";
+        Text[ korean ] = "¸Ş¸ğ  ÆíÁı";
         Text[ turkish ] = "Notu düzenle";
         Text[ language_user1 ] = " ";
     };
@@ -1990,7 +1990,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨ú®ø«OÅ@¤å¥ó";
         Text[ arabic ] = "ÅÒÇáÉ ÍãÇíÉ ÇáãÓÊäÏ";
         Text[ greek ] = "ÊáôÜñãçóç ğñïóôáóßáò åããñÜöïõ";
-        Text[ korean ] = "¹®¼­ º¸È£ ÇØÁ¦";
+        Text[ korean ] = "¹®¼­º¸È£ Á¦°Å";
         Text[ turkish ] = "Belge korumasını kaldır";
         Text[ language_user1 ] = " ";
     };
@@ -2296,7 +2296,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ï°ì¨S¦³¦C¼ĞÃD¡C\n­n¥Î²Ä¤@¦Cªº¤º®e·í§@¦C¼ĞÃD¡H";
         Text[ arabic ] = "åĞÇ ÇáäØÇŞ áÇ íÍÊæí Úáì ÑÄæÓ ÃÚãÏÉ.\nåá ÊÑíÏ ÇÓÊÎÏÇã ÇáÓØÑ ÇáÃæá ßÑÄæÓ ÃÚãÏÉ.";
         Text[ greek ] = "Ç ğåñéï÷Ş äåí ğåñéİ÷åé êåöáëßäá óôçëşí.\nÈİëåôå íá ÷ñçóéìïğïéçèåß ç ğñşôç óôŞëç ùò êåöáëßäá óôçëşí;";
-        Text[ korean ] = "ÀÌ ¹üÀ§¿¡´Â ¿­ ¸Ó¸´±ÛÀÌ Æ÷ÇÔµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÃ¹¹øÂ° ÇàÀ» ¿­ ¸Ó¸®±Û·Î¼­ »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ korean ] = "ÀÌ ¹üÀ§¿¡´Â ¿­ ¸Ó¸®±ÛÀÌ Æ÷ÇÔµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÃ¹¹øÂ° ÇàÀ» ¿­ ¸Ó¸®±Û·Î¼­ »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Bu aralık, sütun başlıkları içermiyor.\nİlk satır sütun başlığı olarak kullanılsın mı?";
         Text[ language_user1 ] = " ";
     };
@@ -7251,7 +7251,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íÊ×¶Ë¡£Òª×Ô¹¤×÷±íÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
         Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íà÷àëå ëèñòà. Ïğîäîëæèòü ïîèñê â êîíöå ëèñòà?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do pocz¹tku arkusza. Czy chcesz kontynuowaæ wyszukiwanie na koñcu arkusza?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do pocz¹tku arkusza. Czy kontynuowaæ wyszukiwanie od koñca arkusza?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚Í•\\‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•\\‚ÌI‚è‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤u§@ªí­ººİ¡C­nÄ~Äò´M§ä¨ì¤u§@ªí§Àºİ¡H";
         Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì ÈÏÇíÉ ÇáÌÏæá. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáÌÏæá¿";
@@ -7276,7 +7276,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íµÄÎ²¶Ë¡£Òª×Ô¹¤×÷±íÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
         Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â êîíöå ëèñòà. Ïğîäîëæèòü ïîèñê â íà÷àëå ëèñòà?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koñca arkusza. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku arkusza?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koñca arkusza. Czy kontynuowaæ wyszukiwanie od pocz¹tku arkusza?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚Í•\\‚ÌI‚è‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•\\‚Ìn‚ß‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤u§@ªíªº§Àºİ¡C­nÄ~Äò¦b¤u§@ªí­ººİ´M§ä¡H";
         Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì äåÇíÉ ÇáÌÏæá. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáÌÏæá¿";
@@ -7324,7 +7324,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het begin van het document. Wilt u het zoeken aan het einde van het document voortzetten?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½ÎÄµµµÄÊ×¶Ë¡£Òª×ÔÎÄµµÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
         Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íàïğàâëåíèè ê íà÷àëó äîêóìåíòà. Ïğîäîëæèòü ïîèñê â íàïğàâëåíèè ê êîíöó äîêóìåíòà?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do pocz¹tku dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do pocz¹tku dokumentu. Czy kontynuowaæ wyszukiwanie od koñca dokumentu?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚ÍÄŞ·­ÒİÄ‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÄŞ·­ÒİÄ‚ÌI‚è‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤å¥ó­ººİ¡C­nÄ~Äò¦b¤å¥ó§Àºİ´M§ä¡H";
         Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
@@ -7348,7 +7348,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het einde van het document. Wilt u het zoeken aan het begin van het document voortzetten?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½ÎÄµµµÄÎ²¶Ë¡£Òª×ÔÎÄµµÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
         Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íàïğàâëåíèè ê êîíöó äîêóìåíòà. Ïğîäîëæèòü ïîèñê â íàïğàâëåíèè ê íà÷àëó äîêóìåíòà?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koñca dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koñca dokumentu. Czy kontynuowaæ wyszukiwanie od pocz¹tku dokumentu?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚ÍÄŞ·­ÒİÄ‚ÌI‚è‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÄŞ·­ÒİÄ‚Ìn‚ß‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤å¥ó§Àºİ¡C­nÄ~Äò¦b¤å¥ó­ººİ´M§ä¡H";
         Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
@@ -8178,7 +8178,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µû»y";
         Text[ arabic ] = "ãáÇÍÙÇÊ";
         Text[ greek ] = "ĞáñáôçñŞóåéò";
-        Text[ korean ] = "¸Ş¸ğ";
+        Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Açıklamalar";
         Text[ language_user1 ] = " ";
     };
