@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:00:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@ namespace presentation
         public:
             SimpleContinuousActivityBase( const ActivityParameters& rParms );
 
+            virtual double calcTimeLag() const;
+
+            virtual bool perform();
+            virtual void dequeued();
+
+        protected:
             /** Hook for derived classes
 
                 This method will be called from perform().
@@ -96,11 +102,9 @@ namespace presentation
             */
             virtual void simplePerform( double nSimpleTime, sal_uInt32 nRepeatCount ) const = 0;
 
-            virtual void start();
+            virtual void startAnimation();
 
-            virtual bool perform();
-
-        protected:
+        private:
             /// Time elapsed since activity started
             ::canvas::tools::ElapsedTime    maTimer;
 
