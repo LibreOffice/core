@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-04 09:50:19 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #include <svapp.hxx>
 #endif
 
+#include <vos/mutex.hxx>
+
+
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
@@ -121,7 +124,6 @@
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
-
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -139,6 +141,20 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#endif
+
+
+
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
@@ -153,6 +169,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
+
+// =======================================================================
 
 class TextDataObject :  public ::com::sun::star::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
@@ -220,6 +238,11 @@ sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
 }
 
 
+
+
+
+
+
 // - Redo
 // - Bei Tracking-Cancel DefaultSelection wieder herstellen
 
@@ -255,6 +278,7 @@ static uno::Reference < i18n::XBreakIterator > ImplGetBreakIterator()
 struct DDInfo
 {
     Cursor          aCursor;
+    Selection       aDndStartSel;
     xub_StrLen      nDropPos;
     BOOL            bStarterOfDD;
     BOOL            bDroppedInMe;
@@ -371,6 +395,9 @@ Edit::~Edit()
 
     if ( mpUpdateDataTimer )
         delete mpUpdateDataTimer;
+
+//    GetDragGestureRecognizer()->removeDragGestureListener( this );
+//    GetDropTarget()->removeDropTargetListener( this );
 }
 
 // -----------------------------------------------------------------------
@@ -394,6 +421,9 @@ void Edit::ImplInitData()
     mpDDInfo                = NULL;
     mpIMEInfos              = NULL;
     mcEchoChar              = 0;
+
+    vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
+    mxDnDListener = pDnDWrapper;
 }
 
 // -----------------------------------------------------------------------
@@ -421,6 +451,17 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
 
     SetPointer( Pointer( POINTER_TEXT ) );
     ImplInitSettings( TRUE, TRUE, TRUE );
+
+    uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
+    uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
+    if ( xDGR.is() )
+    {
+        xDGR->addDragGestureListener( xDGL );
+        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( mxDnDListener, uno::UNO_QUERY );
+        GetDropTarget()->addDropTargetListener( xDTL );
+        GetDropTarget()->setActive( sal_True );
+        GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1407,56 +1448,6 @@ void Edit::LoseFocus()
 
 void Edit::Command( const CommandEvent& rCEvt )
 {
-#ifndef TF_SVDATA
-    if ( (rCEvt.GetCommand() == COMMAND_STARTDRAG) &&
-         !IsTracking() && maSelection.Len() &&
-         !(GetStyle() & WB_PASSWORD) &&
-         (!mpDDInfo || mpDDInfo->bStarterOfDD == FALSE) ) // Kein Mehrfach D&D
-    {
-        Selection aSel( maSelection );
-        aSel.Justify();
-
-        // Nur wenn Maus in der Selektion...
-        xub_StrLen nChar = ImplGetCharPos( rCEvt.GetMousePosPixel() );
-        if ( (nChar >= aSel.Min()) && (nChar < aSel.Max()) )
-        {
-            if ( !mpDDInfo )
-                mpDDInfo = new DDInfo;
-
-            mpDDInfo->bStarterOfDD = TRUE;
-
-            Region* pDDRegion = NULL;
-            Cursor* pCursor = GetCursor();
-            if ( pCursor )
-                pCursor->Hide();
-
-            SotDataObjectRef xData = new StringDataObject( GetSelected() );
-            if ( IsTracking() )
-                EndTracking();  // Vor D&D Tracking ausschalten
-            DropAction aAction = DragManager::ExecuteDrag( xData, DRAG_ALL );
-
-            if ( aAction == DROP_MOVE )
-            {
-                if ( mpDDInfo->bDroppedInMe )
-                {
-                    if ( aSel.Max() > mpDDInfo->nDropPos )
-                    {
-                        long nLen = aSel.Len();
-                        aSel.Min() += nLen;
-                        aSel.Max() += nLen;
-                    }
-                }
-                ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
-                ImplModified();
-            }
-
-            ImplHideDDCursor();
-            delete mpDDInfo;
-            mpDDInfo = 0;
-        }
-    }
-    else
-#endif
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
@@ -1780,111 +1771,6 @@ void Edit::ImplHideDDCursor()
         mpDDInfo->bVisCursor = FALSE;
     }
 }
-
-// -----------------------------------------------------------------------
-
-#ifndef TF_SVDATA
-
-BOOL Edit::QueryDrop( DropEvent& rDEvt )
-{
-    if ( rDEvt.IsLeaveWindow() )
-    {
-        ImplHideDDCursor();
-        return FALSE;
-    }
-
-    // Daten holen
-    SotDataObjectRef xDataObj = ((DropEvent&)rDEvt).GetData();
-    BOOL bString = xDataObj.Is() && NULL != xDataObj->GetTypeList().Get( FORMAT_STRING );
-
-    BOOL bDrop = FALSE;
-    if ( !mbReadOnly && bString &&
-        ( ( rDEvt.GetAction() == DROP_COPY ) || ( rDEvt.GetAction() == DROP_MOVE ) || ( rDEvt.GetAction() == DROP_LINK ) ) )
-    {
-        if ( !mpDDInfo )
-            mpDDInfo = new DDInfo;
-
-        Point aMousePos( rDEvt.GetPosPixel() );
-
-        xub_StrLen nPrevDropPos = mpDDInfo->nDropPos;
-        mpDDInfo->nDropPos = ImplGetCharPos( aMousePos );
-
-        Size aOutSize = GetOutputSizePixel();
-        if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) )
-        {
-            // Scrollen ?
-        }
-
-        Selection aSel( maSelection );
-        aSel.Justify();
-
-        // Nicht in Selektion droppen:
-        if ( aSel.IsInside( mpDDInfo->nDropPos ) )
-        {
-            ImplHideDDCursor();
-            return FALSE;
-        }
-
-        // Alten Cursor wegzeichnen...
-        if ( !mpDDInfo->bVisCursor || ( nPrevDropPos != mpDDInfo->nDropPos ) )
-        {
-            ImplHideDDCursor();
-            ImplShowDDCursor();
-        }
-        bDrop = TRUE;
-    }
-
-    return bDrop;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Edit::Drop( const DropEvent& rDEvt )
-{
-    mbInternModified = FALSE;
-
-    BOOL bDone = TRUE;
-    if ( !mbReadOnly && mpDDInfo )
-    {
-        ImplHideDDCursor();
-        Point aMousePos( rDEvt.GetPosPixel() );
-
-        Selection aSel( maSelection );
-        aSel.Justify();
-
-        if ( aSel.Len() && !mpDDInfo->bStarterOfDD )
-            ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
-
-        mpDDInfo->bDroppedInMe = TRUE;
-
-        aSel.Min() = mpDDInfo->nDropPos;
-        aSel.Max() = mpDDInfo->nDropPos;
-        ImplSetSelection( aSel );
-
-        // Daten holen
-        SotDataObjectRef xDataObj = ((DropEvent&)rDEvt).GetData();
-        SvData aData( FORMAT_STRING );
-        if( xDataObj->GetData( &aData ) )
-        {
-            XubString aStr;
-            aData.GetData( aStr );
-            ImplInsertText( aStr );
-        }
-
-        if ( !mpDDInfo->bStarterOfDD )
-        {
-            delete mpDDInfo;
-            mpDDInfo = 0;
-        }
-    }
-
-    if ( mbInternModified )
-        ImplModified();
-
-    return bDone;
-}
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -2307,6 +2193,172 @@ PopupMenu* Edit::CreatePopupMenu()
 void Edit::DeletePopupMenu( PopupMenu* pMenu )
 {
     delete pMenu;
+}
+
+// ::com::sun::star::datatransfer::dnd::XDragGestureListener
+void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    if ( !IsTracking() && maSelection.Len() &&
+         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == FALSE) ) // Kein Mehrfach D&D
+    {
+        Selection aSel( maSelection );
+        aSel.Justify();
+
+        // Nur wenn Maus in der Selektion...
+        Point aMousePos( rDGE.DragOriginX, rDGE.DragOriginY );
+        xub_StrLen nChar = ImplGetCharPos( aMousePos );
+        if ( (nChar >= aSel.Min()) && (nChar < aSel.Max()) )
+        {
+            if ( !mpDDInfo )
+                mpDDInfo = new DDInfo;
+
+            mpDDInfo->bStarterOfDD = TRUE;
+            mpDDInfo->aDndStartSel = aSel;
+
+            if ( GetCursor() )
+                GetCursor()->Hide();
+
+            if ( IsTracking() )
+                EndTracking();  // Vor D&D Tracking ausschalten
+
+            TextDataObject* pDataObj = new TextDataObject( GetSelected() );
+            rDGE.DragSource->startDrag( rDGE, datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
+        }
+    }
+}
+
+// ::com::sun::star::datatransfer::dnd::XDragSourceListener
+void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    if ( rDSDE.DropSuccess && ( rDSDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    {
+        Selection aSel( mpDDInfo->aDndStartSel );
+        if ( mpDDInfo->bDroppedInMe )
+        {
+            if ( aSel.Max() > mpDDInfo->nDropPos )
+            {
+                long nLen = aSel.Len();
+                aSel.Min() += nLen;
+                aSel.Max() += nLen;
+            }
+        }
+        ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
+        ImplModified();
+    }
+
+    ImplHideDDCursor();
+    delete mpDDInfo;
+    mpDDInfo = NULL;
+}
+
+// ::com::sun::star::datatransfer::dnd::XDropTargetListener
+void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    BOOL bChanges = FALSE;
+    if ( !mbReadOnly && mpDDInfo )
+    {
+        ImplHideDDCursor();
+        Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
+
+        Selection aSel( maSelection );
+        aSel.Justify();
+
+        if ( aSel.Len() && !mpDDInfo->bStarterOfDD )
+            ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
+
+        mpDDInfo->bDroppedInMe = TRUE;
+
+        aSel.Min() = mpDDInfo->nDropPos;
+        aSel.Max() = mpDDInfo->nDropPos;
+        ImplSetSelection( aSel );
+
+        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        if ( xDataObj.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aText;
+                aData >>= aText;
+                ImplInsertText( aText );
+                bChanges = TRUE;
+                ImplModified();
+            }
+        }
+
+        if ( !mpDDInfo->bStarterOfDD )
+        {
+            delete mpDDInfo;
+            mpDDInfo = NULL;
+        }
+    }
+
+    rDTDE.Context->dropComplete( bChanges );
+}
+
+void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
+//    if ( bTextContent )
+//        rDTDEE.Context->acceptDrop(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
+//    else
+//        rDTDEE.Context->rejectDrop();
+}
+
+void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    ImplHideDDCursor();
+}
+
+void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    BOOL bDrop = FALSE;
+
+    if ( !mpDDInfo )
+        mpDDInfo = new DDInfo;
+
+    Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
+
+    xub_StrLen nPrevDropPos = mpDDInfo->nDropPos;
+    mpDDInfo->nDropPos = ImplGetCharPos( aMousePos );
+
+    Size aOutSize = GetOutputSizePixel();
+    if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) )
+    {
+        // Scrollen ?
+    }
+
+    Selection aSel( maSelection );
+    aSel.Justify();
+
+    // Nicht in Selektion droppen:
+    if ( aSel.IsInside( mpDDInfo->nDropPos ) )
+    {
+        ImplHideDDCursor();
+        rDTDE.Context->rejectDrag();
+    }
+    else
+    {
+        // Alten Cursor wegzeichnen...
+        if ( !mpDDInfo->bVisCursor || ( nPrevDropPos != mpDDInfo->nDropPos ) )
+        {
+            ImplHideDDCursor();
+            ImplShowDDCursor();
+        }
+        rDTDE.Context->acceptDrag(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
+    }
 }
 
 ImplSubEdit::ImplSubEdit( Edit* pParent, WinBits nStyle ) :
