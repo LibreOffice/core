@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:38:16 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 13:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XOTHERLINGU_HPP_
-#include <com/sun/star/linguistic2/XOtherLingu.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -240,82 +237,47 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
 
     bEnable = FALSE;    // enable MN_INSERT?
 
-    sal_Int16 nOtherIndex       = -1;
-    sal_Bool  bHasOtherFunc     = FALSE;
-    sal_Bool  bIsStandardSpell  = TRUE;
-    Reference< beans::XPropertySet > xProp( SvxGetLinguPropertySet() );
-    if (xProp.is())
+    Reference< XDictionaryList >    xDicList( SvxGetDictionaryList() );
+    if (xDicList.is())
     {
-        nOtherIndex = *(sal_Int16*)xProp->getPropertyValue(C2U(UPN_OTHER_LINGU_INDEX) ).getValue();
-        bIsStandardSpell = *(sal_Bool*)xProp->getPropertyValue(
-                            C2U(UPN_IS_STANDARD_SPELL_CHECKER) ).getValue();
-    }
+        // add active, positive dictionary to dic-list (if not already done).
+        // This is to ensure that there is at least on dictionary to which
+        // words could be added.
+        Reference< XDictionary1 >  xDic( SvxGetOrCreatePosDic( xDicList ) );
+        if (xDic.is())
+            xDic->setActive( sal_True );
 
-    if (nOtherIndex >= 0)
-    {
+        aDics = xDicList->getDictionaries();
+        const Reference< XDictionary >  *pDic = aDics.getConstArray();
+        sal_Int32 nDicCount = aDics.getLength();
 
-        Reference< lang::XMultiServiceFactory >
-                                    xMgr = comphelper::getProcessServiceFactory();
-        xOther = Reference< XOtherLingu >( xMgr->createInstance(
-                            C2U("com.sun.star.linguistic2.OtherLingu") ), UNO_QUERY );
-        if (xOther.is())
+        sal_Int16 nLanguage = LANGUAGE_NONE;
+        if (xSpellAlt.is())
+            nLanguage = SvxLocaleToLanguage( xSpellAlt->getLocale() );
+
+        for( sal_Int32 i = 0; i < nDicCount; i++ )
         {
-            bHasOtherFunc = xOther->hasSpellChecker( nOtherIndex );
-            if (/*nOtherIndex >= 0  &&*/  bHasOtherFunc)
+            Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
+            if (!xDic.is() || SvxGetIgnoreAllList() == xDic)
+                continue;
+
+            Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
+            LanguageType nActLanguage = xDic->getLanguage();
+            if( xDic->isActive()
+                &&  xDic->getDictionaryType() != DictionaryType_NEGATIVE
+                && (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
+                && (!xStor.is() || !xStor->isReadonly()) )
             {
-                bEnable = TRUE;
-                pMenu->InsertItem( MN_INSERT_START,
-                    xOther->getIdentifier( nOtherIndex ) );
-                pMenu->SetHelpId( MN_INSERT_START, HID_LINGU_ADD_WORD);
-            }
-        }
-    }
-
-    if (nOtherIndex < 0  ||  bIsStandardSpell)
-    {
-        Reference< XDictionaryList >    xDicList( SvxGetDictionaryList() );
-        if (xDicList.is())
-        {
-            // add active, positive dictionary to dic-list (if not already done).
-            // This is to ensure that there is at least on dictionary to which
-            // words could be added.
-            Reference< XDictionary1 >  xDic( SvxGetOrCreatePosDic( xDicList ) );
-            if (xDic.is())
-                xDic->setActive( sal_True );
-
-            aDics = xDicList->getDictionaries();
-            const Reference< XDictionary >  *pDic = aDics.getConstArray();
-            sal_Int32 nDicCount = aDics.getLength();
-
-            sal_Int16 nLanguage = LANGUAGE_NONE;
-            if (xSpellAlt.is())
-                nLanguage = SvxLocaleToLanguage( xSpellAlt->getLocale() );
-
-            for( sal_Int32 i = 0; i < nDicCount; i++ )
-            {
-                Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
-                if (!xDic.is() || SvxGetIgnoreAllList() == xDic)
-                    continue;
-
-                Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
-                LanguageType nActLanguage = xDic->getLanguage();
-                if( xDic->isActive()
-                    &&  xDic->getDictionaryType() != DictionaryType_NEGATIVE
-                    && (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
-                    && (!xStor.is() || !xStor->isReadonly()) )
-                {
-                    // the extra 1 is because of the (possible) external
-                    // linguistic entry above
-                    pMenu->InsertItem( MN_INSERT_START + i + 1, xDic->getName() );
-                    bEnable = sal_True;
-                }
+                // the extra 1 is because of the (possible) external
+                // linguistic entry above
+                pMenu->InsertItem( MN_INSERT_START + i + 1, xDic->getName() );
+                bEnable = sal_True;
             }
         }
     }
     EnableItem( MN_INSERT, bEnable );
 
     RemoveDisabledEntries( TRUE, TRUE );
-
 }
 
 /*--------------------------------------------------------------------------
@@ -447,36 +409,20 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
                     if(nRet >= MN_INSERT_START )
                     {
                         OUString aWord( xSpellAlt->getWord() );
-                        if (MN_INSERT_START == nRet)
-                        {
-                            if (xOther.is())
-                            {
-                                xOther->addWord( 0, aWord,
-                                    SvxLocaleToLanguage( xSpellAlt->getLocale() ) );
+                        INT32 nDicIdx = nRet - MN_INSERT_START - 1;
+                        DBG_ASSERT( nDicIdx < aDics.getLength(),
+                                    "dictionary index out of range" );
+                        Reference< XDictionary > xDic =
+                            aDics.getConstArray()[nDicIdx];
+                        INT16 nAddRes = SvxAddEntryToDic( xDic,
+                            aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
 
-                                // first parameter is TRUE since this menue
-                                // is only invoked while online-spelling is
-                                // active
-                                SW_MOD()->CheckSpellChanges( TRUE, TRUE, FALSE );
-                            }
-                        }
-                        else
+                        if (DIC_ERR_NONE != nAddRes
+                            && !xDic->getEntry( aWord ).is())
                         {
-                            INT32 nDicIdx = nRet - MN_INSERT_START - 1;
-                            DBG_ASSERT( nDicIdx < aDics.getLength(),
-                                        "dictionary index out of range" );
-                            Reference< XDictionary > xDic =
-                                aDics.getConstArray()[nDicIdx];
-                            INT16 nAddRes = SvxAddEntryToDic( xDic,
-                                aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
-
-                            if (DIC_ERR_NONE != nAddRes
-                                 && !xDic->getEntry( aWord ).is())
-                            {
-                                SvxDicError(
-                                    &pSh->GetView().GetViewFrame()->GetWindow(),
-                                    nAddRes );
-                            }
+                            SvxDicError(
+                                &pSh->GetView().GetViewFrame()->GetWindow(),
+                                nAddRes );
                         }
                     }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:17:04 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 13:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XOTHERLINGU_HPP_
-#include <com/sun/star/linguistic2/XOtherLingu.hpp>
-#endif
 
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
@@ -85,8 +82,7 @@ class SwSpellPopup : public PopupMenu
         ::com::sun::star::linguistic2::XDictionary >  >     aDics;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XOtherLingu>         xOther;
+
     LanguageType                nCorrLang;
 
 public:
