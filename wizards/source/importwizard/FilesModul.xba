@@ -91,7 +91,9 @@ Dim bAssignFileName as Boolean
 					If a &lt; MaxIndex And a &gt; -1 Then
 						ReDim Preserve NewList(a, 1) as String
 					End If
-					AddListtoFilesList(FilesList(), NewList(), NewContentList())
+					If a &gt; -1 Then
+						AddListtoFilesList(FilesList(), NewList(), NewContentList())
+					End If
 				End If
 			Else
 				MaxIndex = Ubound(NewList())
@@ -242,6 +244,7 @@ Dim MaxFileIndex as Integer
 Dim bContainsBasicMacro as Boolean
 Dim bIsPassWordProtected as Boolean
 Dim iOverwrite as Integer
+Dim sMimeTypeorExtension as String
 	bConversionisrunning = True
 	InteractionTypes(0) = com.sun.star.task.PasswordRequestMode.PASSWORD_REENTER
 	oInteractionHandler = createUnoService(&quot;com.sun.star.task.InteractionHandler&quot;)
@@ -286,7 +289,8 @@ Dim iOverwrite as Integer
 			End If
 			bDoSave = True
 			sSourceUrl = FilesList(i,0)
-			CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
+			sMimeTypeorExtension = FilesList(i,1)
+			CurFiltername =	GetFilterName(sMimeTypeorExtension, sFilterName(), sExtension, FilterIndex)
 			ApplIndex = FilesList(i,2)
 			If ApplIndex &gt; Ubound(Applications) or (ApplIndex &lt; 0) Then
 				Msgbox &quot;Applicationindex out of bounds:&quot; &amp; sSourcUrl
@@ -344,7 +348,6 @@ Dim iOverwrite as Integer
 						bIsPassWordProtected = CheckPassWordProtection(oDocument)
 						CheckIfMacroExists(oDocument.BasicLibraries, sComment)
 						On Local Error Goto NOSAVING
-						&apos; Todo: Due to bug #93651 the handling of the fileProperties has to be handled without Redimensioning
 						If bIsPassWordProtected Then
 							PWFileProperties(0).Name = &quot;FilterName&quot;
 							PWFileProperties(0).Value = CurFilterName
