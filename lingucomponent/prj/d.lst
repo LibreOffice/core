@@ -1,3 +1,9 @@
 ..\%__SRC%\bin\*.dat %_DEST%\bin%_EXT%\*.dat
 ..\%__SRC%\bin\*.idx %_DEST%\bin%_EXT%\*.idx
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+
+..\%__SRC%\bin\lth* %_DEST%\bin%_EXT%\lth*
+..\%__SRC%\lib\ilth* %_DEST%\lib%_EXT%\ilth*
+..\%__SRC%\lib\liblth.a %_DEST%\lib%_EXT%\liblth.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\liblth*.so %_DEST%\lib%_EXT%\liblth*.so
+
