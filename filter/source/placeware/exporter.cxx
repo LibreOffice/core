@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-25 14:03:33 $
+ *  last change: $Author: cl $ $Date: 2002-11-05 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,15 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -357,6 +366,25 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
     mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ) );
 
+    Reference< com::sun::star::task::XStatusIndicator> xStatusIndicator;
+
+    // create the status indicator
+    Reference< com::sun::star::frame::XModel > xModel( xDoc, UNO_QUERY );
+    if( xModel.is() )
+    {
+        Reference< com::sun::star::frame::XController >xController(xModel->getCurrentController());
+        if(xController.is())
+        {
+            Reference < com::sun::star::frame::XFrame >xFrame(xController->getFrame());
+            if(xFrame.is())
+            {
+                Reference<com::sun::star::task::XStatusIndicatorFactory> xFactory(xFrame,UNO_QUERY);
+                if (xFactory.is())
+                    xStatusIndicator = xFactory->createStatusIndicator();
+            }
+        }
+    }
+
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         return sal_False;
@@ -364,6 +392,11 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
     if(!xDrawPages.is())
         return sal_False;
+
+    if(xStatusIndicator.is())
+    {
+        xStatusIndicator->start(OUString(  RTL_CONSTASCII_USTRINGPARAM( "PlaceWare:" )),xDrawPages->getCount());
+    }
 
     Reference< XDrawPage > xDrawPage;
 
@@ -394,6 +427,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
         const sal_Int32 nPageCount = xDrawPages->getCount();
         sal_Int32 nPage;
+
         for( nPage = 0; nPage < nPageCount; nPage++)
         {
             xDrawPages->getByIndex(nPage) >>= xDrawPage;
@@ -408,6 +442,11 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
             aName += OUString::valueOf( nPage );
             aName += OUString( RTL_CONSTASCII_USTRINGPARAM(".gif") );
             pEntry->setURL( aName );
+
+            if(xStatusIndicator.is())
+            {
+                xStatusIndicator->setValue( nPage + 1 );
+            }
         }
 
         // create the slide.txt file
@@ -448,6 +487,9 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     {
         delete (*aIter++);
     }
+
+    if( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return bRet;
 }
