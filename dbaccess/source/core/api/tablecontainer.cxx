@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:04:40 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 13:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,10 +875,13 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && !hasByName(sName) && m_xMasterTables->hasByName(sName))
+    if((Event.Accessor >>= sName) && !hasByName(sName))
     {
-        Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
-        OCollection::appendByDescriptor(xProp);
+        if(!m_xMasterTables.is() || m_xMasterTables->hasByName(sName))
+        {
+            Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
+            OCollection::appendByDescriptor(xProp);
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -886,8 +889,13 @@ void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) thr
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && hasByName(sName) && !m_xMasterTables->hasByName(sName))
-        OCollection::dropByName(sName);
+    if((Event.Accessor >>= sName) && hasByName(sName))
+    {
+        if(!m_xMasterTables.is() || !m_xMasterTables->hasByName(sName))
+        {
+            OCollection::dropByName(sName);
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
