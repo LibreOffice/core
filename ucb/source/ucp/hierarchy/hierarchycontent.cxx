@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-27 15:12:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
     - root has no parent.
 
  *************************************************************************/
+
+#include "osl/getglobalmutex.hxx"
+#include "rtl/instance.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -313,20 +316,14 @@ uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
 
 //=========================================================================
-// virtual
-uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
-    throw( uno::RuntimeException )
-{
-    static cppu::OTypeCollection* pCollection = NULL;
 
-    if ( !pCollection )
+namespace
+{
+    struct InitFolderTypes
     {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pCollection )
-          {
-            if ( isFolder() && !isReadOnly() )
-            {
-                static cppu::OTypeCollection aCollection(
+        cppu::OTypeCollection * operator()()
+        {
+            static cppu::OTypeCollection aInstance(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -338,11 +335,15 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
                     CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
-                pCollection = &aCollection;
-            }
-            else
-            {
-                static cppu::OTypeCollection aCollection(
+            return &aInstance;
+        }
+    };
+
+    struct InitDocTypes
+    {
+        cppu::OTypeCollection * operator()()
+        {
+            static cppu::OTypeCollection aInstance(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -353,12 +354,34 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ) );
-                pCollection = &aCollection;
-            }
+            return &aInstance;
         }
-    }
+    };
+}
 
-    return (*pCollection).getTypes();
+//=========================================================================
+// virtual
+uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
+    throw( uno::RuntimeException )
+{
+    if ( isFolder() && !isReadOnly() )
+    {
+        return (*rtl_Instance< cppu::OTypeCollection,
+                               InitFolderTypes,
+                               ::osl::MutexGuard,
+                               ::osl::GetGlobalMutex >::create(
+                                    InitFolderTypes(),
+                                    ::osl::GetGlobalMutex() ) ).getTypes();
+    }
+    else
+    {
+        return (*rtl_Instance< cppu::OTypeCollection,
+                               InitDocTypes,
+                               ::osl::MutexGuard,
+                               ::osl::GetGlobalMutex >::create(
+                                    InitDocTypes(),
+                                    ::osl::GetGlobalMutex() ) ).getTypes();
+    }
 }
 
 //=========================================================================
