@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:09:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,8 +1167,7 @@ String STR_QUERY_DELETE_GROUP2
 };
 String STR_GLOSSARY
 {
-    Text = "Textbaustein : " ;
-    Text [ English ] = "Textblock : " ;
+    Text = "AutoText :" ;
     Text [ norwegian ] = "Textblock : " ;
     Text [ italian ] = "Modulo di testo: " ;
     Text [ portuguese_brazilian ] = "AutoTexto: " ;
@@ -1179,7 +1178,7 @@ String STR_GLOSSARY
     Text [ danish ] = "AutoTekst: " ;
     Text [ swedish ] = "Textblock :  " ;
     Text [ finnish ] = "Automaattinen teksti : " ;
-    Text [ english_us ] = "AutoText : " ;
+    Text [ english_us ] = "AutoText :" ;
     Text[ chinese_simplified ] = "Ëá™Âä®ÂõæÊñáÈõÜÊù°ÁõÆ: ";
     Text[ russian ] = "¿‚ÚÓÚÂÍÒÚ : ";
     Text[ polish ] = "Autotekst: ";
@@ -1204,8 +1203,7 @@ ModalDialog DLG_RENAME_GLOS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 287 , 47 ) ;
-    Text = "Textbaustein umbenennen" ;
-    Text [ ENGLISH ] = "Rename textblock" ;
+    Text = "AutoText umbenennen" ;
     Moveable = TRUE ;
     HelpID = HID_RENAME_GLOSSARY ;
     OKButton BT_OKNEW
@@ -1430,7 +1428,7 @@ ModalDialog DLG_RENAME_GLOS
 };
 String STR_SAVE_GLOSSARY
 {
-    Text= "Textbaustein speichern";
+    Text= "AutoText speichern";
     Text[ italian ] = "Salva modulo di testo";
     Text[ portuguese_brazilian ] = "Salvar AutoTexto";
     Text[ portuguese ] = "Guardar mÛdulo de texto";
@@ -1463,7 +1461,7 @@ String STR_SAVE_GLOSSARY
 };
 InfoBox MSG_NO_GLOSSARIES
 {
-    MESSAGE = "Diese Datei enth‰lt keine Textbausteine." ;
+    MESSAGE = "Diese Datei enth‰lt keinen AutoText." ;
     MESSAGE [ ENGLISH ] = "There are no textblocks in this file." ;
     MESSAGE[ english_us ] = "There is no AutoText in this file.";
     MESSAGE[ portuguese ] = "Este ficheiro n„o contÈm mÛdulos de texto.";
