@@ -1,5 +1,6 @@
-lc	lingucomponent	:	linguistic pspell NULL
-lc	lingucomponent								usr1	-	all	lg_mkout NULL
+lc	lingucomponent	:	linguistic lingu NULL
+lc	lingucomponent								usr1	-	all	lc_mkout NULL
 lc	lingucomponent\source\thesaurus\parser					nmake	-	all	lc_parser NULL
 lc	lingucomponent\source\thesaurus\libth					nmake	-	all	lc_libth NULL
-lc	lingucomponent\source\spellcheck\pspell_en_US				nmake	-	u	lc_spellus NULL
+lc	lingucomponent\source\spellcheck\myspell				nmake	-	all	lc_myspell NULL
+lc	lingucomponent\source\spellcheck\spell					nmake	-	all	lc_libspell lc_myspell NULL

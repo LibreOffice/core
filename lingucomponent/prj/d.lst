@@ -1,14 +1,16 @@
 ..\%__SRC%\bin\*.dat %_DEST%\bin%_EXT%\*.dat
 ..\%__SRC%\bin\*.idx %_DEST%\bin%_EXT%\*.idx
+..\%__SRC%\bin\*.aff %_DEST%\bin%_EXT%\*.aff
+..\%__SRC%\bin\*.dic %_DEST%\bin%_EXT%\*.dic
 
 ..\%__SRC%\bin\lth* %_DEST%\bin%_EXT%\lth*
 ..\%__SRC%\lib\ilth* %_DEST%\lib%_EXT%\ilth*
 ..\%__SRC%\lib\liblth.a %_DEST%\lib%_EXT%\liblth.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\liblth*.so %_DEST%\lib%_EXT%\liblth*.so
-..\%__SRC%\bin\lexps* %_DEST%\bin%_EXT%\lexps*
-..\%__SRC%\lib\ilexps* %_DEST%\lib%_EXT%\illexps*
-..\%__SRC%\lib\liblexps.a %_DEST%\lib%_EXT%\liblexps.a
+..\%__SRC%\bin\lspell* %_DEST%\bin%_EXT%\lspell*
+..\%__SRC%\lib\ilspell* %_DEST%\lib%_EXT%\ilspell*
+..\%__SRC%\lib\libspell.a %_DEST%\lib%_EXT%\libspell.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\lib\liblexps*.so %_DEST%\lib%_EXT%\liblexps*.so
+..\%__SRC%\lib\libspell*.so %_DEST%\lib%_EXT%\libspell*.so
 
