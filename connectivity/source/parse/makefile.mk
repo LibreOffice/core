@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+#   last change: $Author: fs $ $Date: 2000-10-05 08:49:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,20 +79,14 @@ SLOFILES =  \
         $(SLO)$/PColumn.obj			\
         $(SLO)$/sqliterator.obj		\
         $(SLO)$/sqlnode.obj			\
-        $(SLO)$/fcode.obj			\
-        $(SLO)$/fcomp.obj			\
-        $(SLO)$/fanalyzer.obj		\
         $(SLO)$/internalnode.obj
-        
+
 
 EXCEPTIONSFILES=	\
         $(SLO)$/sqlbison.obj		\
         $(SLO)$/PColumn.obj			\
         $(SLO)$/sqliterator.obj		\
         $(SLO)$/internalnode.obj	\
-        $(SLO)$/fcode.obj			\
-        $(SLO)$/fcomp.obj			\
-        $(SLO)$/fanalyzer.obj		\
         $(SLO)$/sqlnode.obj
 
 all: \
