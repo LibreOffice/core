@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:48:48 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _TOOLS_RCID_H
 #include <rcid.h>
 #endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
@@ -122,6 +125,28 @@
 #endif
 
 #define SEARCH_PATH_DELIMITER_STRING ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SEARCH_PATH_DELIMITER_CHAR_STRING ) )
+
+#ifdef OSL_BIGENDIAN
+static inline sal_Int16 NTOHS( sal_Int16 x )
+{
+    return x;
+}
+static inline sal_Int32 NTOHL( sal_Int32 x )
+{
+    return x;
+}
+#else
+static inline sal_Int16 NTOHS( sal_Int16 x )
+{
+    return SWAPSHORT(x);
+}
+static inline sal_Int32 NTOHL( sal_Int32 x )
+{
+    return SWAPLONG(x);
+}
+#endif
+
+// =======================================================================
 
 // =======================================================================
 
@@ -1064,25 +1089,14 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
 
 INT16 ResMgr::GetShort( void * pShort )
 {
-#ifdef __BIGENDIAN
-    return *(UINT16*)pShort;
-#else
-    return SWAPSHORT( *(UINT16*)pShort );
-#endif
+    return NTOHS( *((sal_Int16 *)pShort) );
 }
 
 // ------------------------------------------------------------------
 
 INT32 ResMgr::GetLong( void * pLong )
 {
-#ifdef __BIGENDIAN
-    return (long)(((INT32)(*(UINT16*)pLong) << 16) | *(((UINT16*)pLong) + 1));
-#else
-    return ((INT32)(*(BYTE*)pLong) << 24)
-            | ((INT32)(*((BYTE*)pLong +1)) << 16)
-            | ((INT32)(*((BYTE*)pLong +2)) << 8)
-            | (INT32)(*((BYTE*)pLong +3));
-#endif
+    return NTOHL( *((sal_Int32 *)pLong) );
 }
 
 // -----------------------------------------------------------------------
