@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:32:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_STR_STANDARD
     Text [ dutch ] = "Standaard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ greek ] = "ĞñïåğéëïãŞ";
@@ -149,7 +149,7 @@ String RID_STR_BOOL
     Text [ french ] = "Non;Oui" ;
     Text [ dutch ] = "Nee;Ja" ;
     Text[ chinese_simplified ] = "·ñ;ÊÇ";
-    Text[ russian ] = "Äà;Íåò";
+    Text[ russian ] = "Íåò;Äà";
     Text[ polish ] = "Nie;Tak";
     Text[ japanese ] = "‚¢‚¢‚¦;‚Í‚¢";
     Text[ chinese_traditional ] = "§_;¬O";
@@ -163,6 +163,9 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:32:26  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
