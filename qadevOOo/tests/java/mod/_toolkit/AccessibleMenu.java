@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenu.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-03-26 13:40:44 $
+ *  last change: $Date: 2003-03-26 14:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,11 @@ public class AccessibleMenu extends TestCase {
     }
 
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        xTextDoc.dispose();
+        try {
+            xTextDoc.dispose();
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("Object already disposed");
+        }
     }
 
     /**
