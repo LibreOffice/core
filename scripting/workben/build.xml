@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-06 10:22:35 $
+#   last change: $Author: dfoster $ $Date: 2003-01-07 15:28:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,8 +140,13 @@
   <target name="buildunopackage_win9" depends="build.conditions" if="win9.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <copy file="${prj}/../offapi/unxsols3${proext}/ucr/offapi.db"
-        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <exec executable="regmerge">
+        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
+        <arg value="/"/>
+        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcssscriptframework.db"/>
+        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfprovider.db"/>
+        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfstorage.db"/>
+    </exec>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
@@ -157,8 +162,13 @@
   <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <copy file="${prj}/../offapi/wntmsci7${proext}/ucr/offapi.db"
-        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <exec executable="regmerge">
+        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
+        <arg value="/"/>
+        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcssscriptframework.db"/>
+        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfprovider.db"/>
+        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfstorage.db"/>
+    </exec>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
@@ -174,8 +184,13 @@
   <target name="buildunopackage_linux" depends="build.conditions" if="linx86.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <copy file="${prj}/../offapi/unxlngi4${proext}/ucr/offapi.db"
-        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <exec executable="regmerge">
+        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
+        <arg value="/"/>
+        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcssscriptframework.db"/>
+        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfprovider.db"/>
+        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfstorage.db"/>
+    </exec>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
@@ -191,8 +206,13 @@
   <target name="buildunopackage_solaris" depends="build.conditions" if="solsparc.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <copy file="${prj}/../offapi/unxsols3${proext}/ucr/offapi.db"
-        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <exec executable="regmerge">
+        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
+        <arg value="/"/>
+        <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcssscriptframework.db"/>
+        <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfprovider.db"/>
+        <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfstorage.db"/>
+    </exec>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/solaris_sparc.plt"/>
