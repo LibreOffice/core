@@ -1,0 +1,1027 @@
+<html>
+<head>
+  <title>[TITLE] SDK-Development Tools</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="AUTHOR" content="J&uuml;rgen Schmidt">
+  <meta name="CREATED" content="20020311;11245374">
+  <meta name="CHANGEDBY" content="J&uuml;rgen Schmidt">
+  <meta name="CHANGED" content="20020311;11420968">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="15" colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1"  width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left"><img src="images/sdk_logo.gif" width="328" height="121"></div>
+    </td>
+    <td><img src="images/black_dot.gif" width="1" height="121"></td>
+    <td width="222"> 
+      <div align="left"><img src="images/logo.gif" width="222" height="121"></div>
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#99CCFF" height="12"></td>
+    <td bgcolor="#99CCFF" height="12"><img src="images/black_dot.gif" width="1" height="12"></td>
+    <td bgcolor="#003399" height="12" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8">
+      <table width="100%" border="0" cellpadding="4">
+        <tr>
+          <td colspan="4" align=center><a name="tools"/><font size="6"><b>Development Tools</b></font></td>
+        </tr>
+        <tr> 
+          <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#idlc">idlc</a></font>
+          </td>
+          <td width=86%>
+            The UNOIDL compiler, generates a common binary type library format as base for all codemaker 
+            tools and the UNO runtime type library.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#cppumaker">cppumaker</a></font>
+          </td>
+          <td width=86%>
+            Tool for generating C++ code for the UNOIDL types stored in a type library.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#javamaker">javamaker</a></font>
+          </td>
+          <td width=86%>
+            Tool for generating Java code for the UNOIDL types stored in a type library.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#rdbmaker">rdbmaker</a></font>
+          </td>
+          <td width=86%>
+            Tool for building type libraries with only a specified set of types and their dependencies.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#regcomp">regcomp</a></font>
+          </td>
+          <td width=86%>
+            The UNO component registration tool.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#regmerge">regmerge</a></font>
+          </td>
+          <td width=86%>
+            Tool to merge several registry (type libraries) files into one file.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#regview">regview</a></font>
+          </td>
+          <td width=86%>
+            Tool to view the content of a registry key (type node).
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#xml2cmp">xml2cmp</a></font>
+          </td>
+          <td width=86%>
+            A small helper tool to extract different information from xml module description files.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#unoexe">uno</a></font>
+          </td>
+          <td width=86%>
+            Tool to start UNO components and provide a UNO runtime environment.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+        <tr>
+	  <td width=2%></td>
+          <td width=10%>
+             <font size="3"><a href="#autodoc">autodoc</a></font>
+          </td>
+          <td width=86%>
+            Tool to generate javadoc like documentation for C/C++ and UNOIDL files.
+          </td>
+	  <td width=2%></td>
+        </tr> 
+      </table>	      
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="idlc">idlc</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>'idlc' is the UNOIDL compiler, a full featured compiler to check UNODL type definitions and
+         transform valid type definitions into a binary type library format which is later used of all
+         codemaker tools, and is used as a dynamic type library for UNO at runtime.<br>
+         You can find a syntax description for UNOIDL <a href="notsupported.html">here</a>.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>idlc [-options] file_1 ... file_n | @&lt;filename&gt;</code></b>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td widht=15%><code>file_1 ... file_n</code></td>
+          <td width=85%>
+            specifies one or more idl files. Only files with the extension '.idl' are valid.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>@&lt;filename&gt;</code></td>
+          <td width=85%>
+            filename specifies the name of a command file.
+          </td>
+        </tr>
+      </table>
+      </p>
+      <p><b>Options:</b></p>
+      <p>
+      <TABLE width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-O&lt;path&gt;</code></td>
+          <td width=85%>
+            path describes the output directory. The generated output is a registry file with the same
+            name as the idl input file.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-I&lt;path&gt;</code></td>
+          <td width=85%>
+            path specifies a directory where include files are located, that will be searched by the
+            preprocessor. Multiple directories can be combined with ';'.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-D&lt;name&gt;</code></td>
+          <td width=85%>
+            name defines a macro for the preprocessor.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-C</code></td>
+          <td width=85%>
+            generate complete type information, including additional service information and documentation.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-h|?</code></td>
+          <td width=85%>
+            print this help message and exit.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="cppumaker">cppumaker</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>The cppumaker generates a C++ representation for idl types. The cppumaker works on a typelibrary
+      	 which is generated by the unoidl. It generates the output for all specified types and for all types
+         the specified types depend on.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>cppumaker [-options] file_1 ... file_n</code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-O&lt;path&gt;</code></td>
+          <td width=85%>
+            path describes the root directory for the generated output. The output directory 
+            tree is generated under this directory.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-T&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies a type or a list of types. The output for this [t1;...] type is generated. 
+            If no '-T' option is specified, then output for all types is generated.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-B&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies the base node. All types are searched under this node. Default is the
+            root '/' of the registry files.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-L|-C</code></td>
+          <td width=85%>
+            In general, the cppumaker tool generates getCppuType() functions in three ways:
+            <p>
+              <ol>
+                <li>no option (default)<br>
+                  This generates headers so that UNO runs correctly as long as: 
+                  <dl> 
+                    <dt style="margin-right: 1cm; margin-bottom: 0.5cm">
+                      -- one compiler compiled all code (no bridging needed for inter-component communication)
+                    </dt>
+                    <dt style="margin-right: 1cm; margin-bottom: 0.5cm">
+                      -- no marshaling is needed (no bridging needed for interprocess communication)
+                    </dt>
+                    <dt style="margin-right: 1cm; margin-bottom: 0.5cm">
+                      -- no scripting is needed (in general, this needs full type description support) 
+                    </dt>
+                  </dl>
+                <li>-L (_ONLY_ usable on Windows!)<br>
+                  This option generates the shortest getCppuType() functions, but 
+                  needs a running type description manager (+provider) reading all 
+                  type information from the applicat.rdb! ==> !! Cannot be used 
+                  at setup startup, because no applicat.rdb is involved at this 
+                  early stage!! 
+                <li>-C (fully comprehensive type information)<br>
+                  This options generates the longest form of getCppuType() functions, 
+                  including a comprehensive description of a type, thus there is 
+                  no need for a type description manager (+provider) reading types 
+                  from applicat.rdb: 
+                  <dl> 
+                    <dt style="margin-right: 1cm; margin-bottom: 0.5cm">
+                      -- limitation: only previously used types are provided by the runtime (i.e., only types
+                      which were previously registered due to a getCppuType() call are accessible by name)
+                    </dt>
+                  </dl>
+              </ol>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-G</code></td>
+          <td width=85%>
+            generate only target files which do not exist.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-Gc</code></td>
+          <td width=85%>
+            generate only target files whose content will be changed.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+      </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="javamaker">javamaker</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>The javamaker generates the appropriate java file for each idl type. The javamaker works
+         on a typelibrary which is generated by the unoidl. It generates the output for all specified
+         types and for all types the specified types depend on.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>javamaker [-options] file_1 ... file_n</code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-O&lt;path&gt;</code></td>
+          <td width=85%>
+            path describes the root directory for the generated output. The output directory
+            tree is generated under this directory.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-T&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies a type or a list of types. The output for this [t1;...] type is generated.
+            If no '-T' option is specified, then output for all types is generated.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-B&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies the base node. All types are searched under this node. Default is the
+            root '/' of the registry files.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="rdbmaker">rdbmaker</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>The rdbmaker generates subsets of the typelibrary. The rdbmaker works on a typelibrary which
+         is generated by the unoidl. It generates a subset of the typelibrary which contains all specified
+         types and all types the specified types depend on. This could be used to provide all types and
+         only the necessary types for a component.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>rdbmaker [-options] file_1 ... file_n</code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-O&lt;fileName&gt;</code></td>
+          <td width=85%>
+            filename specifies the name of the generated registry or text file.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-L</code></td>
+          <td width=85%>
+            specifies that only a text file is generated with the names of the specified types
+            and their dependencies. Default is that a registry file will be created.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-T&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies a type or a list of types. The output for this [t1;...] type is generated.
+            If no '-T' option is specified, then output for all types is generated.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-FT&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies a type or a list of types. For these types, nothing will be generated.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-F&lt;file&gt;</code></td>
+          <td width=85%>
+            file specifies a text file. For the specified types in this file, nothing will be generated.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-B&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies the base node. All types are searched under this node. Default is the
+            root '/' of the registry files.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><A name="regcomp">regcomp</A></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>'regcomp' is a tool to register|revoke external UNO components into|from 
+         a registry which is used for a UNO environment.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>regcomp -revoke [-br&lt;registryfile&gt;] -r &lt;registryfile&gt; -c &lt;locationUrl&gt;
+               [-l&lt;componentLoaderName&gt;]</code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-register|revoke</code></td>
+          <td width=85%>
+            register means that the components will be installed and revoke means that they will be removed.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-br&lt;registryfile&gt;</code></td>
+          <td width=85%>
+            the name of the registry used for bootstrapping the program. If the bootstrap registry is
+            specified and has the same name as the registration registry, '-r' is optional.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-r&lt;registryfile&gt;</code></td>
+          <td width=85%>
+            the name of the registry (will be created if it does not exist) where the component should
+            be registered.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-c&lt;locationUrls&gt;</code></td>
+          <td width=85%>
+            the location of a component (DLL, Class name, or an url of a jar file) or a list of urls
+            separated by ';'s. Note, if a list of urls is specified, the components must all need the
+            same loader.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-l&lt;componentLoaderName&gt;</code></td>
+          <td width=85%>
+            the name of the needed loader, if no loader is specified the 'com.sun.star.loader.SharedLibrary'
+            is used. Supported loaders: 'com.sun.star.loader.SharedLibrary' | 'com.sun.star.loader.Java'.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><A name="regmerge">regmerge</A></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>'regmerge' is a small tool to merge different registry files under a specified
+         key into another registry file. If a value already exists in the targetfile
+         the value would be overwritten by the value of the sourcefile.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>regmerge &lt;mergefile&gt; mergeKeyName &tg;regfile_1&gt; ... &lt;regfile_n&gt;</code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-register|revoke</code></td>
+          <td width=85%>
+            register means that the components will be installed and revoke means that they will be removed.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-br&lt;registryfile&gt;</code></td>
+          <td width=85%>
+            the name of the registry used for bootstrapping the program. If the bootstrap registry is
+            specified and has the same name as the registration registry, '-r' is optional.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-r&lt;registryfile&gt;</code></td>
+          <td width=85%>
+            the name of the registry (will be created if it does not exist) where the component should
+            be registered.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-c&lt;locationUrls&gt;</code></td>
+          <td width=85%>
+            the location of an component (DLL, Class name, or an url of a jar file) or a list of urls
+            seperated by ';'s. Note, if a list of urls is specified, the components must all need the
+            same loader.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-l&lt;componentLoaderName&gt;</code></td>
+          <td width=85%>
+            the name of the needed loader, if no loader is specified the 'com.sun.star.loader.SharedLibrary'
+            is used. Supported loaders: 'com.sun.star.loader.SharedLibrary' | 'com.sun.star.loader.Java'.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><A name="regview">regview</A></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>'regview' is a tool to show the contents of a registry file. The tool dumps the hierarchical
+         structure and the values of the nodes to stdout in a human readable form.</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>regview &lt;registryfile&gt; [&lt;keyName&gt;]</code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-br&lt;registryfile&gt;</code></td>
+	  <td width=85%>
+            the name of the registry whose contents should be viewed.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>&lt;keyName&gt;</code></td>
+          <td width=85%>
+            the name of a registry key. The name must be full qualified, for example, '/' means the root key 
+            and '/UCR/com/sun/star/uno/XInterface' shows the type specification of the XInterface type.
+            If no key is specified the tool dumps the whole content of the registry file.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="xml2cmp">xml2cmp</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>The tool xml2cmp parses .xml files, which contain the descriptions of components that implement
+         UNO services. Each .xml file refers to one library. The library may contain one or more component 
+         descriptions. <br>
+         There are two ways of using xml2cmp:</p>
+      <p><b>Usage:</b></p>
+      <ul>
+        <li> 
+          <b><code>xml2cmp [-func &lt;funcFile&gt;] [-html &lt;htmlFile&gt;] [-types &lt;typeFile&gt;] 
+                   &lt;Xml_FileName&gt;</code></b>
+          <p>This version parses the file &lt;xml_filename&gt; and produces three possible types of output, each of
+             which is optional, but there must be at least one of them.</p>
+          <p><b>Options:</b></p>
+          <p>
+          <table width=100% border=1 cellpadding=4 cellspacing=0>
+            <tr>
+              <td width=15%><code>-func &lt;funcFile&gt;</code></td>
+              <td width=85%>
+                produces a file with the name <code>&lt;funcfile&gt;</code>. This should be .c|.cxx|.cpp or similar 
+                kind of source code file. This file contains the definition of the function 'const sal_Char *
+                SAL_CALL component_getDescriptionFunc();' which returns the parsed file as ASCII text.
+              </td>
+            </tr>
+            <tr>
+              <td width=15%><code>-html &lt;htmlFile&gt;</code></td>
+              <td width=85%>
+                produces a file with the name <code>&lt;htmlfile&gt;</code>. It should be a .htm|.html file. That file
+                contains the contents of the parsed file in HTML-readable form.
+              </td>
+            </tr>
+            <tr>
+              <td width=15%><code>-types &lt;typeFile&gt;</code></td>
+              <td width=85%>
+                produces a textfile with the name <code>&lt;typefile&gt;</code>. This textfile is intended to be 
+                included in a makefile and contains the definition of a variable<br><br>
+		<code>
+                &lt;libraryName&gt;_XML2CMPTYPES= \<br>
+                &lt;type_used_by_LibraryName_1&gt; \<br>
+                &lt;type_used_by_LibraryName_2&gt; \<br>
+                ... <br>
+		</code>
+                <br>
+                So, the variable &lt;libraryName&gt;_XML2CMPTYPES contains a list of the types,
+                used by that library.
+              </td>
+            </tr>
+          </table>
+          </p>
+          <p>All output of this first version of xml2cmp is put into the working directory.</p>
+        </li>
+      </ul>
+      <ul>
+        <li> 
+          <b><code>xml2cmp -ix &lt;sourcedirectory&gt; &lt;outputdirectory&gt; [&lt;tagname1&gt; 
+                   [&lt;tagname2&gt; ...]]</code></b>
+          <p>This version parses all .xml files which are found in <code>&lt;sourcedirectory&gt;</code> or its 
+             subdirectories. It produces the .html output of all parsed .xml files (as in version 1 above). Also, 
+             it produces a file, named xmlindex.html. This is an HTML file which contains tables alphabetically 
+             ordered on the left side, which allows assigning, from one 'XML-tags' contents to another (of all 
+             original parsed .xml files). The following tables are produced („Module“ refers to a library):
+          </p>
+          <p>
+            SupportedService -> ModuleName<br>
+            ModuleName -> SupportedService<br>
+            &lt;tagname1&gt; -> ComponentName<br>
+            &lt;tagname2&gt; -> ComponentName<br>
+            ...
+          </p>
+          <p>All output files of the second version of xml2cmp are put to the &lt;outputDirectory&gt;</p>
+        </li>
+      </ul>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="unoexe">uno</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>The UNO-starter is for running a component or service process, providing a runtime environment.
+         Raising a component might look like this </p>
+      <p><code>[c:\] uno.exe -c MyComponent -l mycomp.dll -r myregistry.rdb -- foo bar </code> </p>
+      <p>or</p>
+      <p><code>[c:\] uno.exe -s foo.bar.FooBarService -r myregistry.rdb -- foo bar </code> </p>
+      <p>The starter loads the component and instantiates it. The component must export the interface
+         <a href="common/ref/com/sun/star/lang/XMain.html">com.sun.star.lang.XMain</a>:</p>
+      <p><code>interface XMain : com::sun::star::uno::XInterface <br>
+               { <br>
+                 &nbsp;&nbsp;&nbsp; /** This method is called to run the component.<br>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @param aArguments command line arguments <br>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @return process error code to be returned to system <br>
+                 &nbsp;&nbsp;&nbsp; */ <br>
+                 &nbsp;&nbsp;&nbsp; long run( [in] sequence&lt; string &gt; arguments ); <br>
+               };
+         </code>
+       </p>
+       <p>Method run() will be called and returns the error code given, back to the system. If the uno starter
+          is executed with the -u (URL) option, then XInitialization is used instead of XMain. The -u option is
+          described later.</p>
+       <p><b>Usage:</b></p>
+       <blockquote> 
+       <b><code>uno (-c&lt;ComponentImplementationName&gt; -l &lt;LocationUrl&gt; 
+                | -s &lt;ServiceName&gt;) <br>
+                [-ro &lt;ReadOnlyRegistry1&gt;] [-ro &lt;ReadOnlyRegistry2&gt;] ... [-rw &lt;ReadWriteRegistry&gt;]<br>
+                [-u uno:(socket[,host=&lt;HostName&gt;][,port=&lt;nnn&gt;]|pipe[,name=&lt;PipeName&gt;]);iiop|urp;
+                &lt;Name&gt;<br>
+                [--singleaccept] [--singleinstance]] <br>
+                [-- &lt;Argument1 Argument2 ...&gt;]
+          </code></b>
+        <p><b>Options:</b></p>
+        <p>
+        <table width=100% border=1 cellpadding=4 cellspacing=0>
+          <tr>
+            <td width=15%><code>&lt;HostName&gt;</code></td>
+            <td width=85%>
+              Specifying a host name might be necessary to distinguish the network interface to be used,
+              if a machine is part of two networks.
+            </td>
+          </tr>
+          <tr>
+            <td width=15%><code>&lt;PipeName&gt;</code></td>
+            <td width=85%>
+              Name of a named pipe.
+            </td>
+          </tr>
+          <tr>
+            <td width=15%><code>&lt;Name&gt;</code></td>
+            <td width=85%>
+              Identifier for demanded called component instances.
+            </td>
+          </tr>
+          <tr>
+            <td width=15%><code>&lt;Registries&gt;</code></td>
+            <td width=85%>
+              The optional <code>&lt;Registries&gt;</code>(e.g., c:\myreg.rdb) are used by the ServiceManager.
+              The <font face="Courier New, Courier, mono">ro</font> ones are opened for reading only;
+              whereas, a single <font face="Courier New, Courier, mono">rw</font> one will be opened for
+              reading and writing. If the <font face="Courier New, Courier, mono">rw</font> one does not
+              exist, then it may be created. Components may read and write to store their persistent state.
+            </td>
+          </tr>
+          <tr>
+            <td width=15%><code>--singleaccept</code></td>
+            <td width=85%>
+              The uno starter will accept one connection, provide the component instance and die.
+            </td>
+          </tr>
+          <tr>
+            <td width=15%><code>--singleinstance</code></td>
+            <td width=85%>
+              The uno starter will accept any number of connections, but will provide the same single
+              component instance any time instead of creating a new instance for each connection.
+            </td>
+          </tr>
+        </table>
+        <p><b>Service <a href="common/ref/com/sun/star/bridge/UnoUrlResolver.html">
+                         com.sun.star.bridge.UnoUrlResolver</a></b></p>
+        <p>You can easily connect to a server started with the -u (url) option by using this service giving
+	   the same url to resolve. The service provides you an instance from remote.</p>
+        </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="autodoc">autodoc</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
+      </p>
+      <p>The autodoc tools ...</p>
+      <p><b>Usage:</b></p>
+      <blockquote> 
+      <b><code>autodoc ... </code></b>
+      <p><b>Options:</b></p>
+      <p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr>
+          <td width=15%><code>-O&lt;path&gt;</code></td>
+          <td width=85%>
+            path describes the root directory for the generated output. The output directory
+            tree is generated under this directory.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-T&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies a type or a list of types. The output for this [t1;...] type is generated.
+            If no '-T' option is specified, then output for all types is generated.
+          </td>
+        </tr>
+        <tr>
+          <td width=15%><code>-B&lt;name&gt;</code></td>
+          <td width=85%>
+            name specifies the base node. All types are searched under this node. Default is the
+            root '/' of the registry files.
+          </td>
+        </tr>
+      </table>
+      </p>
+      </blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <p align=center><font size=2><b>Copyright 2002 Sun Microsystems,
+        Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</b></font>
+      </p>
+      &nbsp
+    </td>
+  </tr>
+</table>
+</body>
+</html>

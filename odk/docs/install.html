@@ -1,0 +1,221 @@
+<html>
+<head>
+  <title>[TITLE] SDK-Installation guide</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="AUTHOR" content="J&uuml;rgen Schmidt">
+  <meta name="CREATED" content="20020311;11245374">
+  <meta name="CHANGEDBY" content="J&uuml;rgen Schmidt">
+  <meta name="CHANGED" content="20020311;11420968">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="15" colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1"  width="1"><img src="../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left"><img src="../docs/images/sdk_logo.gif" width="328" height="121"></div>
+    </td>
+    <td><img src="../docs/images/black_dot.gif" width="1" height="121"></td>
+    <td width="222"> 
+      <div align="left"><img src="../docs/images/logo.gif" width="222" height="121"></div>
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td><img src="../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#99CCFF" height="12"></td>
+    <td bgcolor="#99CCFF" height="12"><img src="../docs/images/black_dot.gif" width="1" height="12"></td>
+    <td bgcolor="#003399" height="12" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8">
+      <blockquote>
+      <table width="100%" border="0" cellpadding="4">
+        <tr>
+          <td colspan="4" align=center><a name="examples"/><font size="6"><b>Installation guide</b></font>
+             &nbsp;&nbsp;<a href="../index.html">SDK home</a>
+          </td>
+        </tr>
+        <tr> 
+          <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td colspan="4">
+            <p>The [PRODUCTNAME] SDK comes with a set of development tools, base libraries and jar files which 
+               can be used to develop Java/C++ components, to embed [PRODUCTNAME] application in your own programs
+	       or to use the API (scripting or remote control the office). For a complete working 
+               environment we have some additional requirements.
+            </p>
+            <dl>
+              <dt><b>StarOffice&#153 or OpenOffice.org installation</b>
+              <dd>The SDK works on top of an existing office installation and uses the same libraries as the office.  
+              <dt><b>JDK (1.3.1_02 or higher)</b>
+              <dd>A JDK is necessary for developing Java components or applications
+              <dt><b>C++ compiler</b>
+              <dd>A C++ compler is necessary for developing C++ components or applications. UNO depends
+                  on a compiler dependent language binding so that we use the appropriate compiler where a 
+                  language binsing exists:<br>
+                  Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11<br>
+                  Linux, GNU C++ compiler, gcc vwersion 3.0.1<br>
+                  Windows, Microsoft C++ Compiler, Microsoft Developer Studio 6.0 (cl, version 12.00.8168)<br> 
+              <dt><b>GNU make (3.79.1 or higher)</b>
+              <dd>GNU make is used to build the examples of the SDK.
+            </dl>
+            <p>The SDK provides a shell script (Windows and UNIX) to set the necessary environment variables 
+               for using the SDK and the required tools.
+            </p>
+            <ul>
+              <li><a href="../setsdkenv_unix">setsdkenv_unix</a>
+              <li><a href="../setsdkenv_windows.bat">setsdkenv_windows.bat</a>
+            </ul>
+            <p>The first time you use the script you have have to prepare it for your environment. Edit the script
+               and set the following variabels:
+            </p>
+            <p> 
+               <table width="100%" border=1 cellpadding=4 cellspacing=0>
+                 <tr> 
+                   <td widht=35%><b>OFFICE_HOME</b></td>
+                   <td widht=65%>path to an exisiting StarOffice&#153 or OpenOffice.org installation, e.g.  
+                       "/usr/local/StarOffice6.0"</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%><b>SDK_HOME</b></td>
+                   <td widht=65%>path to the SDK root directory, e.g "/usr/local/StarOffice6.0SDK"</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%><b>SDK_JAVA_HOME</b></td>
+                   <td widht=65%>path to the JDK</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%><b>SDK_CPP_HOME</b></td>
+                   <td widht=65%>path to the C++ compiler (under windows the directory where the vcvar32.bat file
+                       can be found)</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%><b>SDK_MAKE</b></td>
+                   <td widht=65%>path to GNU make</td>
+                 </tr>
+               </table>
+            </p>
+            <p>If you don't want to use the script to set your working environment you have to set the appropriate 
+               environment variables by yourself. The script sets the following environment variables.
+            </p>
+            <p><b>Environment variables for UNIX</b></p>
+            <p> 
+               <table width="100%" border=1 cellpadding=4 cellspacing=0>
+                 <tr> 
+                   <td widht=35%>OFFICE_PROGRAM_PATH</td>
+                   <td widht=65%><b>=<i>$OFFICE_HOME/program</i></b><br>
+                       This variable is used to register example components
+                       automatically in your Office installation. If you don't want automatic registration,
+                       pleace comment this variable out in the script.</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%>LD_LIBRARY_PATH</td>
+                   <td widht=65%><b>=<i>$LD_LIBRARY_PATH/$OFFICE_PROGRAM_PATH:$SDK_HOM/solsparc/lib</i></b><br>
+                       The LD_LIBRARY_PATH will be set or will be extended by the office program path and the platform 
+                       dependent lib directory for some additional libraries.
+                   </td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%>PATH</td>
+                   <td widht=65%><b>=<i>$PATH:$SDK_HOM/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin</i></b><br>
+                       The PATH variable will be extended by the pathes for the SDK development tools, the compiler,
+                       the JDK, GNU make.
+                   </td>
+                 </tr>
+               </table>
+            </p>
+            <p><b>Environment variables for Windows</b></p>
+            <p> Additionally to setting these environment varibales the script calls the "vcvar32.bat" batch file 
+               which is provided by the Microsoft Develper Studio to set the necessary environment varibales for 
+               the compiler.
+               <table width="100%" border=1 cellpadding=4 cellspacing=0>
+                 <tr> 
+                   <td widht=35%>OFFICE_PROGRAM_PATH</td>
+                   <td widht=65%><b>=<i>$OFFICE_HOME/program</i></b><br>
+                       This variable is used to register example components
+                       automatically in your Office installation. If you don't want automatic registration,
+                       pleace comment this variable out in the script.</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%>PATH</td>
+                   <td widht=65%><b>=<i>$PATH:$SDK_HOME/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin
+                       :$OFFICE_PROGRAM_PATH</i></b><br>                    
+                       The PATH variable will be extended by the pathes for the SDK development tools, the compiler,
+                       the JDK, GNU make and the $OFFICE_PROGRAM_PATH.
+                   </td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%>LIB</td>
+                   <td widht=65%><b>=<i>$LIB:$SDK_HOME/windows/lib</i></b><br>                    
+                       The LIB variable will be extended by the path to the import libraries which are necessary 
+                       for winsows.
+                   </td>
+                 </tr>
+                 <tr> 
+                   <td colspan="2">Additionally to setting these environment varibales the script calls the 
+                      "vcvar32.bat" batch file which is provided by the Microsoft Develper Studio to set the 
+                      necessary environment varibales for the compiler.</td>
+                 </tr>
+               </table>    
+            </p>
+          </td>
+        </tr>
+        <tr> 
+          <td colspan="4">&nbsp;</td>
+        </tr>
+      </table>
+      </blockquote>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#003399" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td bgcolor="#99CCFF" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <p align=center><font size=2><b>Copyright 2002 Sun Microsystems,
+        Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</b></font>
+      </p>
+      &nbsp
+    </td>
+  </tr>
+</table>
+</body>
+</html>
