@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 09:01:21 $
+#   last change: $Author: rt $ $Date: 2004-04-02 10:57:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,15 @@ TARGET=fm_cppugen
 # --- Types -------------------------------------
 
 UNOTYPES+=	\
-        drafts.com.sun.star.form.XBindableValue \
-        drafts.com.sun.star.form.XValueBinding \
-        drafts.com.sun.star.form.XListEntrySink \
-        drafts.com.sun.star.form.XListEntrySource \
-        drafts.com.sun.star.form.XListEntryListener \
+        com.sun.star.form.binding.XBindableValue \
+        com.sun.star.form.binding.XValueBinding \
+        com.sun.star.form.binding.XListEntrySink \
+        com.sun.star.form.binding.XListEntrySource \
+        com.sun.star.form.binding.XListEntryListener \
+        com.sun.star.form.validation.XValidator \
+        com.sun.star.form.validation.XValidatable \
+        com.sun.star.form.validation.XValidityConstraintListener \
+        com.sun.star.form.validation.XValidatableFormComponent \
 
 # --- Targets ----------------------------------
 
