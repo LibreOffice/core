@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 14:31:57 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #endif
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
-#endif
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
