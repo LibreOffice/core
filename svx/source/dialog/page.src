@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 08:44:31 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,27 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         Text = "~Textfluss" ;
         Text [ ENGLISH ] = "~Text flow" ;
+        Text[ language_user1 ] = "ZL: this definition is wrong. It should be \"direction of text\". This definition will be changed soon.";
+        Text[ english_us ] = "~Text direction";
+        Text[ portuguese ] = "~Text flow";
+        Text[ russian ] = "~Text flow";
+        Text[ greek ] = "~Text flow";
+        Text[ dutch ] = "~Text flow";
+        Text[ french ] = "Encha�nements";
+        Text[ spanish ] = "Flujo de texto";
+        Text[ finnish ] = "~Text flow";
+        Text[ italian ] = "Testo";
+        Text[ danish ] = "~Text flow";
+        Text[ swedish ] = "Textriktning";
+        Text[ polish ] = "~Text flow";
+        Text[ portuguese_brazilian ] = "~Text flow";
+        Text[ japanese ] = "文字方向";
+        Text[ korean ] = "텍스트 방향";
+        Text[ chinese_simplified ] = "文字方向";
+        Text[ chinese_traditional ] = "文字方向";
+        Text[ turkish ] = "~Text flow";
+        Text[ arabic ] = "~Text flow";
+        Text[ catalan ] = "~Text flow";
     };
     ListBox LB_TEXT_FLOW
     {
@@ -346,6 +367,153 @@ TabPage RID_SVXPAGE_PAGE
             < "Left-to-right (vertical)" ; 3; > ;
 //          < "Like the environment" ; 4; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ english_us ] =
+    {
+         < "Left-to-right (horizontal)" ; 0; > ;
+        < "Right-to-left (horizontal)" ; 1; > ;
+        < "Right-to-left (vertical)" ; 2; > ;
+        < "Left-to-right (vertical)" ; 3; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ french ] =
+    {
+         < "De gauche � droite (horizontal)" ; 0; > ;
+        < "De droite � gauche (horizontal)" ; 1; > ;
+        < "De droite � gauche (vertical)" ; 2; > ;
+        < "De gauche � droite (vertical)" ; 3; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "Izquierda-hacia-derecha (horizontal)" ; 0; > ;
+        < "Derecha-hacia-izquierda (horizontal)" ; 1; > ;
+        < "Derecha-hacia-izquierda (vertical)" ; 2; > ;
+        < "Izquierda-hacia-derecha (vertical)" ; 3; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Sinistra-verso-destra (orizzontale)" ; 0; > ;
+        < "Destra-verso-sinistra (orizzontale)" ; 1; > ;
+        < "Destra-verso-sinistra (verticale)" ; 2; > ;
+        < "Sinistra-verso-destra (verticale)" ; 3; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "V�nster-till-h�ger (horisontellt)" ; 0; > ;
+        < "H�ger-till-v�nster (horisontellt)" ; 1; > ;
+        < "H�ger-till-v�nster (vertikalt)" ; 2; > ;
+        < "V�nster-till-h�ger (vertikalt)" ; 3; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "左から右へ (横書き)" ; 0; > ;
+        < "右から左へ (横書き)" ; 1; > ;
+        < "右から左へ (縦書き)" ; 2; > ;
+        < "左から右へ (縦書き)" ; 3; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "왼쪽에서 오른쪽으로 (가로)" ; 0; > ;
+        < "오른쪽에서 왼쪽으로 (가로)" ; 1; > ;
+        < "오른쪽에서 왼쪽으로 (세로)" ; 2; > ;
+        < "왼쪽에서 오른쪽으로(세로)" ; 3; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "从左向右(横写)" ; 0; > ;
+        < "从右向左(横写)" ; 1; > ;
+        < "从右向左(竖写)" ; 2; > ;
+        < "从左向右(竖写)" ; 3; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "從左向右(橫書)" ; 0; > ;
+        < "從右向左(橫書)" ; 1; > ;
+        < "從右向左(直書)" ; 2; > ;
+        < "從左向右(直書)" ; 3; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Links-nach-rechts (horizontal)" ; 0; > ;
+        < "Rechts-nach-links (horizontal)" ; 1; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Links-nach-rechts (vertikal)" ; 3; > ;
+    };
     };
 
     FixedText FT_PAPER_TRAY
