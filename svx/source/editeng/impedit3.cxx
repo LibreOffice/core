@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-31 16:06:02 $
+ *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3147,7 +3147,7 @@ sal_Bool ImpEditEngine::Drop( const DropEvent& rEvt, EditView* pCurView )
     // Durch QueryDrop ist sichergestellt, dass Move oder Copy.
     // Bei Move wird die Selection nach ExecuteDrag geloescht.
 
-    DBG_ASSERT( HasData( EXCHANGE_DRAGSERVER, aStatus.AllowPasteSpecial()), "Drop ohne brauchbare Daten ?!" );
+    DBG_ASSERT( HasData( EXCHANGE_DRAGSERVER ), "Drop ohne brauchbare Daten ?!" );
     DBG_ASSERT( pDragAndDropInfo->aDropDest.GetNode(), "Drop: PaM nicht initialisiert!" );
     if ( !pDragAndDropInfo->aDropDest.GetNode() )
         return sal_False;   // Unerlaubter Drop-Aufruf.
@@ -3203,7 +3203,7 @@ sal_Bool ImpEditEngine::QueryDrop( const DropEvent& rEvt, EditView* pCurView )
     if ( ( rEvt.GetAction() != DROP_COPY ) && ( rEvt.GetAction() != DROP_MOVE ) )
         return sal_False;
     // Wenn ich das Format nicht kann....
-    if ( !HasData( EXCHANGE_DRAGSERVER, aStatus.AllowPasteSpecial() ) )
+    if ( !HasData( EXCHANGE_DRAGSERVER ) )
         return sal_False;
 
     Point aMousePos( rEvt.GetPosPixel() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-07 10:35:11 $
+ *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,17 +323,27 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
     // Immer die Intersect-Methode, weil beim Metafile ein Muss!
     if ( bClip )
     {
-        // Einige Druckertreiber bereiten Probleme, wenn Buchstaben die
-        // ClipRegion streifen, deshalb lieber ein Pixel mehr...
-        Rectangle aClipRect( aOutRect );
-        if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
+        // Clip only if neccesary...
+        if ( !rStartDocPos.X() && !rStartDocPos.Y() &&
+             ( rOutRect.GetHeight() >= (long)GetTextHeight() ) &&
+             ( rOutRect.GetWidth() >= (long)CalcTextWidth() ) )
         {
-            Size aPixSz( 1, 0 );
-            aPixSz = pOutDev->PixelToLogic( aPixSz );
-            aClipRect.Right() += aPixSz.Width();
-            aClipRect.Bottom() += aPixSz.Width();
+            bClip = FALSE;
         }
-        pOutDev->IntersectClipRegion( aClipRect );
+        else
+        {
+            // Einige Druckertreiber bereiten Probleme, wenn Buchstaben die
+            // ClipRegion streifen, deshalb lieber ein Pixel mehr...
+            Rectangle aClipRect( aOutRect );
+            if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
+            {
+                Size aPixSz( 1, 0 );
+                aPixSz = pOutDev->PixelToLogic( aPixSz );
+                aClipRect.Right() += aPixSz.Width();
+                aClipRect.Bottom() += aPixSz.Width();
+            }
+            pOutDev->IntersectClipRegion( aClipRect );
+        }
     }
 
     pImpEditEngine->Paint( pOutDev, aOutRect, aStartPos );
@@ -1737,14 +1747,14 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
 void EditEngine::SetDefaultLanguage( LanguageType eLang )
 {
 #if SUPD >= 630
-    DBG_ERROR( "DefaultLanguage not longer supported" );
+//  DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
 }
 
 LanguageType EditEngine::GetDefaultLanguage() const
 {
 #if SUPD >= 630
-    DBG_ERROR( "DefaultLanguage not longer supported" );
+//  DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
     return pImpEditEngine->GetLanguage( EditPaM( pImpEditEngine->GetEditDoc().SaveGetObject( 0 ), 0 ) );
 }
@@ -1758,7 +1768,7 @@ sal_Bool __EXPORT EditEngine::SpellNextDocument()
 EESpellState EditEngine::HasSpellErrors( LanguageType eLang )
 {
 #if SUPD >= 630
-    DBG_ERROR( "DefaultLanguage not longer supported" );
+//  DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
     return HasSpellErrors();
 }
@@ -1896,7 +1906,7 @@ sal_Bool EditEngine::CopyClipboard( const ESelection& rSel ) const
 sal_Bool EditEngine::PasteClipboard()
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    if ( !pImpEditEngine->HasData( EXCHANGE_CLIPBOARD, sal_True ) )
+    if ( !pImpEditEngine->HasData( EXCHANGE_CLIPBOARD ) )
         return sal_False;
     SetText( String() );
     EditPaM aPaM = pImpEditEngine->GetEditDoc().GetStartPaM();
@@ -1936,7 +1946,7 @@ sal_Bool EditEngine::CopyDragServer( const ESelection& rSel ) const
 sal_Bool EditEngine::PasteDragServer( sal_uInt16 nItem )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    if ( !pImpEditEngine->HasData( EXCHANGE_DRAGSERVER, sal_True ) )
+    if ( !pImpEditEngine->HasData( EXCHANGE_DRAGSERVER ) )
         return sal_False;
     SetText( String() );
     EditPaM aPaM = pImpEditEngine->GetEditDoc().GetStartPaM();

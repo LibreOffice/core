@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-30 16:58:25 $
+ *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <eerdll2.hxx>
 #include <eerdll.hxx>
 #include <edtspell.hxx>
+#include <eeobj.hxx>
 #include <txtrange.hxx>
 #include <svtools/urlbmk.hxx>
 
@@ -130,6 +131,16 @@
 #ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+
+#include <comphelper/processfactory.hxx>
+
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+
 
 #define LINE_SEP    0x0A
 
@@ -702,7 +713,7 @@ EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
     EditSelection aSel( pView->pImpEditView->GetEditSelection() );
 
     // Wenn keine Datan, dann auch nicht Selektion loeschen:
-    if ( !HasData( EXCHANGE_CLIPBOARD, bUseSpecial ) )
+    if ( !HasData( EXCHANGE_CLIPBOARD ) )
         return aSel;
 
     if ( aSel.HasRange() )
@@ -713,13 +724,33 @@ EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
 
     if ( pView->pImpEditView->DoSingleLinePaste() )
     {
-        XubString aText( Clipboard::PasteString() );
-        aText.ConvertLineEnd( LINEEND_LF );
-        aText.SearchAndReplaceAll( LINE_SEP, ' ' );
-        aSel = ImpInsertText( aSel, aText );
+        uno::Reference< datatransfer::XTransferable > xDataObj;
+
+        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        if ( xClipboard.is() )
+            xDataObj = xClipboard->getContents();
+
+        if ( xDataObj.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aTmpText;
+                aData >>= aTmpText;
+                String aText( aTmpText );
+                aText.ConvertLineEnd( LINEEND_LF );
+                aText.SearchAndReplaceAll( LINE_SEP, ' ' );
+                aSel = ImpInsertText( aSel, aText );
+            }
+        }
     }
     else
+    {
         aSel = PasteData( aSel.Min(), EXCHANGE_CLIPBOARD, bUseSpecial );
+    }
 
     return aSel;
 }
@@ -2933,47 +2964,47 @@ void ImpEditEngine::SetActiveView( EditView* pView )
     }
 }
 
-BOOL ImpEditEngine::HasData( ExchangeType eExchange, BOOL bAllowSpecial )
+BOOL ImpEditEngine::HasData( ExchangeType eExchange )
 {
-    ULONG nBinReg = EditEngine::RegisterClipboardFormatName();
+    BOOL bData = FALSE;
 
-    BOOL bSpecial, bText;
     if ( eExchange == EXCHANGE_CLIPBOARD )
     {
-        bSpecial =  Clipboard::HasFormat ( nBinReg ) ||
-                    Clipboard::HasFormat ( FORMAT_RTF );
-        bText =     Clipboard::HasFormat ( FORMAT_STRING );
+        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        if ( xClipboard.is() )
+        {
+            uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+            if ( xDataObj.is() )
+            {
+                datatransfer::DataFlavor aFlavor;
+                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                bData = xDataObj->isDataFlavorSupported( aFlavor );
+            }
+        }
     }
     else
     {
-        bSpecial =  DragServer::HasFormat ( 0, nBinReg ) ||
-                    DragServer::HasFormat ( 0, FORMAT_RTF );
-        bText =     DragServer::HasFormat ( 0, FORMAT_STRING );
+        bData = DragServer::HasFormat ( 0, SOT_FORMAT_STRING );
     }
 
-    return ( bAllowSpecial ? ( bSpecial || bText ) : bText );
+    return bData;
 }
 
 void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) const
 {
     aSelection.Adjust( GetEditDoc() );
 
+    EditDataObject* pDataObj = new EditDataObject;
+    uno::Reference< datatransfer::XTransferable > xDataObj;
+    xDataObj = pDataObj;
+
     XubString aText( GetSelected( aSelection ) );
     aText.ConvertLineEnd(); // Systemspezifisch
+    pDataObj->GetString() = aText;
 
-    SvMemoryStream aRTFStream( aText.Len()*2, 512 );    // Len*2: geschaetzte Groesse.
-    ((ImpEditEngine*)this)->WriteRTF( aRTFStream, aSelection );
-    ULONG nRTFLen = aRTFStream.Seek( STREAM_SEEK_TO_END );
-    aRTFStream.Seek( 0 );
-
-    SvMemoryStream aBinStream( aText.Len()*2, 512 );
-    WriteBin( aBinStream, aSelection, TRUE );
-    ULONG nBinLen   = (USHORT)aBinStream.Seek( STREAM_SEEK_TO_END );
-    aBinStream.Seek( 0 );
-
-    sal_Unicode* pNetscapeBookmark = NULL;
-    INetBookmark* pOfficeBookmark = NULL;
-    const SvxFieldItem* pField = NULL;
+    WriteBin( pDataObj->GetStream(), aSelection, TRUE );
+    pDataObj->GetStream().Seek( 0 );
 
     if ( ( aSelection.Min().GetNode() == aSelection.Max().GetNode() )
             && ( aSelection.Max().GetIndex() == (aSelection.Min().GetIndex()+1) ) )
@@ -2984,182 +3015,160 @@ void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) con
             ( pAttr->GetStart() == aSelection.Min().GetIndex() ) &&
             ( pAttr->Which() == EE_FEATURE_FIELD ) )
         {
-            pField = (const SvxFieldItem*)pAttr->GetItem();
-        }
-
-    }
-
-    if ( pField )
-    {
-        const SvxFieldData* pFld = pField->GetField();
-        if ( pFld && pFld->ISA( SvxURLField ) )
-        {
-            // Office-Bookmark
-            String aURL( ((const SvxURLField*)pFld)->GetURL() );
-            String aTxt( ((const SvxURLField*)pFld)->GetRepresentation() );
-            pOfficeBookmark = new INetBookmark( aURL, aTxt );
-
-            // Netscape-Bookmark???
-            // Muss mal auf INetURLObject oder so umgestellt werden.
+            const SvxFieldItem* pField = (const SvxFieldItem*)pAttr->GetItem();
+            const SvxFieldData* pFld = pField->GetField();
+            if ( pFld && pFld->ISA( SvxURLField ) )
+            {
+                // Office-Bookmark
+                String aURL( ((const SvxURLField*)pFld)->GetURL() );
+                String aTxt( ((const SvxURLField*)pFld)->GetRepresentation() );
+                pDataObj->GetURL() = aURL;
+            }
         }
     }
-
-    ULONG nBinReg = EditEngine::RegisterClipboardFormatName();
-    ULONG nNetscapeFmt = Exchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "Netscape Bookmark" ) ) );
 
     if ( nType == EXCHANGE_CLIPBOARD )
     {
-        Clipboard::Clear();
-        Clipboard::CopyData( aBinStream.GetData(), nBinLen, nBinReg );
-        Clipboard::CopyData( aRTFStream.GetData(), nRTFLen, FORMAT_RTF );
-        Clipboard::CopyString( aText );
-        if ( pOfficeBookmark )
-            pOfficeBookmark->CopyClipboard();
-        if ( pNetscapeBookmark )
-            Clipboard::CopyData( pNetscapeBookmark, 2048, nNetscapeFmt );
+        // HACK: Hold Ref to System Clipboard
+        static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+        if ( !xClipboard.is() )
+        {
+            uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+            xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        }
+        xClipboard->setContents( pDataObj, NULL );
     }
     else // DRAGSERVER
     {
+        // OLD, remove when new D&D is finished...
         DragServer::Clear();
-        DragServer::CopyData( aBinStream.GetData(), nBinLen, nBinReg );
-        DragServer::CopyData( aRTFStream.GetData(), nRTFLen, FORMAT_RTF );
-        DragServer::CopyString( aText );
-        if ( pOfficeBookmark )
-            pOfficeBookmark->CopyDragServer();
-        if ( pNetscapeBookmark )
-            DragServer::CopyData( pNetscapeBookmark, 2048, nNetscapeFmt );
+        pDataObj->GetStream().Seek( STREAM_SEEK_TO_END );
+        long nBinLen = pDataObj->GetStream().Tell();
+        pDataObj->GetStream().Seek( 0 );
+        DragServer::CopyData( pDataObj->GetStream().GetData(), nBinLen, EditEngine::RegisterClipboardFormatName() );
+        DragServer::CopyString( pDataObj->GetString() );
     }
-
-    delete pOfficeBookmark;
-    delete pNetscapeBookmark;
 }
 
 EditSelection ImpEditEngine::PasteData( EditPaM aPaM, ExchangeType eExchange, BOOL bSpecial )
 {
-    EditSelection aNewSelection;
+    EditSelection aNewSelection( aPaM, aPaM );
 
-    ULONG nBinReg = EditEngine::RegisterClipboardFormatName();
-    ULONG nNetscapeFmt = Exchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "Netscape Bookmark" ) ) );
-
-    BOOL bText = ( eExchange == EXCHANGE_CLIPBOARD ) ?
-                    Clipboard::HasFormat ( FORMAT_STRING ) :
-                    DragServer::HasFormat ( 0, FORMAT_STRING );
-    BOOL bRTF = ( eExchange == EXCHANGE_CLIPBOARD ) ?
-                    Clipboard::HasFormat ( FORMAT_RTF ) :
-                    DragServer::HasFormat ( 0, FORMAT_RTF );
-    BOOL bBin = ( eExchange == EXCHANGE_CLIPBOARD ) ?
-                    Clipboard::HasFormat ( nBinReg ) :
-                    DragServer::HasFormat ( 0, nBinReg );
-    BOOL bOffBkmrk = ( eExchange == EXCHANGE_CLIPBOARD ) ?
-                    INetBookmark::ClipboardHasFormat() :
-                    INetBookmark::DragServerHasFormat( 0 );
-    BOOL bNetscape = ( eExchange == EXCHANGE_CLIPBOARD ) ?
-                    Clipboard::HasFormat ( nNetscapeFmt ) :
-                    DragServer::HasFormat ( 0, nNetscapeFmt );
-
-    if ( bSpecial && bBin )
+    if ( eExchange == EXCHANGE_CLIPBOARD )
     {
-        ULONG nLen; BYTE* pData;
-        if( eExchange == EXCHANGE_CLIPBOARD )
+        uno::Reference< datatransfer::XTransferable > xDataObj;
+
+        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        if ( xClipboard.is() )
+            xDataObj = xClipboard->getContents();
+
+        if ( xDataObj.is() )
         {
-            nLen = Clipboard::GetDataLen( nBinReg );
-            pData = new BYTE[ nLen ];
-            Clipboard::PasteData( pData, nLen, nBinReg );
-        }
-        else
-        {
-            nLen = DragServer::GetDataLen( 0, nBinReg );
-            pData = new BYTE[ nLen ];
-            DragServer::PasteData( 0, pData, nLen, nBinReg );
-        }
-        SvMemoryStream aStream( pData, nLen, STREAM_READ );
-        aNewSelection = ReadBin( aStream, aPaM );
-        delete pData;
-    }
-    else if ( bSpecial && bNetscape )
-    {
-        ULONG nLen; BYTE* pData;
-        if( eExchange == EXCHANGE_CLIPBOARD )
-        {
-            nLen = Clipboard::GetDataLen( nNetscapeFmt );
-            pData = new BYTE[ nLen ];
-            Clipboard::PasteData( pData, nLen, nNetscapeFmt );
-        }
-        else
-        {
-            nLen = DragServer::GetDataLen( 0, nNetscapeFmt );
-            pData = new BYTE[ nLen ];
-            DragServer::PasteData( 0, pData, nLen, nNetscapeFmt );
-        }
-        if ( nLen == 2048 ) // sonst weiss ich nicht weiter...
-        {
-            String aURL = (const sal_Unicode*)pData;
-            String aTxt = (const sal_Unicode*)(pData+1024);
-            // Feld nur einfuegen, wenn Factory vorhanden.
-            if ( ITEMDATA() && ITEMDATA()->GetClassManager().Get( SVX_URLFIELD ) )
+            datatransfer::DataFlavor aFlavor;
+            BOOL bDone = FALSE;
+
+            if ( bSpecial )
             {
-                SvxFieldItem aField( SvxURLField( aURL, aTxt, SVXURLFORMAT_URL ), EE_FEATURE_FIELD  );
-                aNewSelection = InsertField( aPaM, aField );
-                UpdateFields();
-            }
-            else
-                aNewSelection = ImpInsertText( aPaM, aURL );
-            delete pData;
-        }
-    }
-    else if ( bSpecial && bOffBkmrk )
-    {
-        INetBookmark aOfficeBkmrk;
-        if( eExchange == EXCHANGE_CLIPBOARD )
-            aOfficeBkmrk.PasteClipboard();
-        else
-            aOfficeBkmrk.PasteDragServer( 0 );
+                // BIN
+                SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aFlavor );
+                if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+                {
+                    uno::Any aData = xDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                        aNewSelection = ReadBin( aBinStream, aPaM );
+                    }
+                    bDone = TRUE;
+                }
 
-        // Feld nur einfuegen, wenn Factory vorhanden.
-        if ( ITEMDATA() && ITEMDATA()->GetClassManager().Get( SVX_URLFIELD ) )
-        {
-            SvxFieldItem aField( SvxURLField( aOfficeBkmrk.GetURL(), aOfficeBkmrk.GetDescription(), SVXURLFORMAT_URL ), EE_FEATURE_FIELD  );
-            aNewSelection = InsertField( aPaM, aField );
-            UpdateFields();
+                if ( !bDone )
+                {
+                    // Bookmark
+                    /*
+                    String aURL = ...;
+                    String aTxt = ...;
+                    // Feld nur einfuegen, wenn Factory vorhanden.
+                    if ( ITEMDATA() && ITEMDATA()->GetClassManager().Get( SVX_URLFIELD ) )
+                    {
+                        SvxFieldItem aField( SvxURLField( aURL, aTxt, SVXURLFORMAT_URL ), EE_FEATURE_FIELD  );
+                        aNewSelection = InsertField( aPaM, aField );
+                        UpdateFields();
+                    }
+                    else
+                        aNewSelection = ImpInsertText( aPaM, aURL );
+                    }
+                    */
+                }
+                if ( !bDone )
+                {
+                    // RTF
+                    SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aFlavor );
+                    if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+                    {
+                        uno::Any aData = xDataObj->getTransferData( aFlavor );
+                        uno::Sequence< sal_Int8 > aSeq;
+                        aData >>= aSeq;
+                        {
+                            SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                            aNewSelection = ReadRTF( aRTFStream, aPaM );
+                        }
+                        bDone = TRUE;
+                    }
+                }
+            }
+            if ( !bDone )
+            {
+                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+                {
+                    uno::Any aData = xDataObj->getTransferData( aFlavor );
+                    ::rtl::OUString aText;
+                    aData >>= aText;
+                    aNewSelection = ImpInsertText( aPaM, aText );
+                    bDone = TRUE;
+                }
+            }
         }
-        else
-            aNewSelection = ImpInsertText( aPaM, aOfficeBkmrk.GetURL() );
-    }
-    else if ( bSpecial && bRTF )
-    {
-        ULONG nLen; BYTE* pData;
-        if( eExchange == EXCHANGE_CLIPBOARD )
-        {
-            nLen = Clipboard::GetDataLen( FORMAT_RTF );
-            pData = new BYTE[ nLen+1 ];
-            Clipboard::PasteData( pData, nLen, FORMAT_RTF );
-        }
-        else
-        {
-            nLen = DragServer::GetDataLen( 0, FORMAT_RTF );
-            pData = new BYTE[ nLen+1 ];
-            DragServer::PasteData( 0, pData, nLen, FORMAT_RTF );
-        }
-        *( pData + nLen ) = '\0';   // Falls RTF kaputt
-        SvMemoryStream aStream( pData, nLen, STREAM_READ );
-        aNewSelection = ReadRTF( aStream, aPaM );
-        delete pData;
-    }
-    else if ( bText )
-    {
-        XubString aText;
-        if( eExchange == EXCHANGE_CLIPBOARD )
-            aText = Clipboard::PasteString();
-        else
-            aText = DragServer::PasteString( 0 );
-        aNewSelection = ImpInsertText( aPaM, aText );
+
     }
     else
     {
-        DBG_ERROR( "PasteData: Keine Daten" );
-        return EditSelection( aPaM, aPaM );
-    }
+        ULONG nBinReg = EditEngine::RegisterClipboardFormatName();
 
+        if ( bSpecial && DragServer::HasFormat ( 0, nBinReg ) )
+        {
+            ULONG nLen; BYTE* pData;
+            nLen = DragServer::GetDataLen( 0, nBinReg );
+            pData = new BYTE[ nLen ];
+            DragServer::PasteData( 0, pData, nLen, nBinReg );
+            SvMemoryStream aStream( pData, nLen, STREAM_READ );
+            aNewSelection = ReadBin( aStream, aPaM );
+            delete pData;
+        }
+        else if ( bSpecial && DragServer::HasFormat ( 0, SOT_FORMAT_RTF ) )
+        {
+            ULONG nLen; BYTE* pData;
+            nLen = DragServer::GetDataLen( 0, SOT_FORMAT_RTF );
+            pData = new BYTE[ nLen+1 ];
+            DragServer::PasteData( 0, pData, nLen, FORMAT_RTF );
+            *( pData + nLen ) = '\0';   // Falls RTF kaputt
+            SvMemoryStream aStream( pData, nLen, STREAM_READ );
+            aNewSelection = ReadRTF( aStream, aPaM );
+            delete pData;
+        }
+        else if ( DragServer::HasFormat ( 0, FORMAT_STRING ) )
+        {
+            XubString aText;
+            if( eExchange == EXCHANGE_CLIPBOARD )
+                aText = Clipboard::PasteString();
+            else
+                aText = DragServer::PasteString( 0 );
+            aNewSelection = ImpInsertText( aPaM, aText );
+        }
+    }
     return aNewSelection;
 }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2000-10-24 15:46:19 $
+#   last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,32 +88,6 @@ CDEFS+=-DEDITDEBUG
 
 .IF "$(header)" == ""
 
-CXXFILES=	\
-            txtrange.cxx	\
-            svxacorr.cxx	\
-            swafopt.cxx		\
-            editattr.cxx	\
-            editdbg.cxx 	\
-            editdoc.cxx 	\
-            editdoc2.cxx	\
-            editeng.cxx 	\
-            editobj.cxx 	\
-            editsel.cxx 	\
-            editundo.cxx	\
-            editview.cxx	\
-            edtspell.cxx	\
-            eeng_pch.cxx	\
-            eehtml.cxx		\
-            eerdll.cxx		\
-            eertfpar.cxx	\
-            impedit.cxx 	\
-            impedit2.cxx	\
-            impedit3.cxx	\
-            impedit4.cxx	\
-            impedit5.cxx	\
-            textconv.cxx	\
-            unolingu.cxx
-
 SLOFILES =	\
             $(SLO)$/txtrange.obj \
             $(SLO)$/svxacorr.obj \
@@ -130,6 +104,7 @@ SLOFILES =	\
             $(SLO)$/edtspell.obj \
             $(SLO)$/eehtml.obj \
             $(SLO)$/eerdll.obj	\
+            $(SLO)$/eeobj.obj \
             $(SLO)$/eertfpar.obj \
             $(SLO)$/impedit.obj	\
             $(SLO)$/impedit2.obj \
@@ -152,6 +127,7 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/editundo.obj \
             $(OBJ)$/editview.obj  \
             $(OBJ)$/eerdll.obj	\
+            $(OBJ)$/eeobj.obj	\
             $(OBJ)$/impedit.obj	\
             $(OBJ)$/impedit2.obj \
             $(OBJ)$/impedit3.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-30 16:58:25 $
+ *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,7 @@ private:
 
     inline ParaPortion* FindParaPortion( ContentNode* pNode ) const;
 
-    sal_Bool            HasData( ExchangeType eExchange, sal_Bool bAllowSpecial );
+    sal_Bool            HasData( ExchangeType eExchange );
     void                CopyData( EditSelection aSelection, ExchangeType eExchange ) const;
     EditSelection       PasteData( EditPaM aPaM, ExchangeType eExchange, sal_Bool bSPeacial );
 
