@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 09:24:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ jclass java_util_Date::getMyClass()
 
 void java_util_Date::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==NULL  )
+    if( pClass==NULL  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
