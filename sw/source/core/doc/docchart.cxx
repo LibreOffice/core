@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-07 10:05:20 $
+ *  last change: $Author: jp $ $Date: 2001-05-15 07:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX //autogen
+#ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
 #ifndef _SCH_DLL_HXX
@@ -80,9 +80,6 @@
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTSERIESADDRESS_HPP_
-#include <com/sun/star/chart/ChartSeriesAddress.hpp>
-#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -90,43 +87,43 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _NDINDEX_HXX //autogen
+#ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
-#ifndef _NDTXT_HXX //autogen
+#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
 #ifndef _CALC_HXX
 #include <calc.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-#ifndef _CELLFML_HXX //autogen
+#ifndef _CELLFML_HXX
 #include <cellfml.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
-#ifndef _NDOLE_HXX //autogen
+#ifndef _NDOLE_HXX
 #include <ndole.hxx>
 #endif
-#ifndef _CALBCK_HXX //autogen
+#ifndef _CALBCK_HXX
 #include <calbck.hxx>
 #endif
-#ifndef _CNTFRM_HXX //autogen
+#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
 #endif
-#ifndef _SWTBLFMT_HXX //autogen
+#ifndef _SWTBLFMT_HXX
 #include <swtblfmt.hxx>
 #endif
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
 #endif
-#ifndef _CELLATR_HXX //autogen wg. SwTblBoxNumFormat
+#ifndef _CELLATR_HXX
 #include <cellatr.hxx>
 #endif
 
@@ -136,16 +133,32 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
 {
     SwCalc aCalc( *GetFrmFmt()->GetDoc() );
     SwTblCalcPara aCalcPara( aCalc, *this );
-    String aSelection;
+    String sSelection, sRowColInfo;
+    BOOL bSetChartRange = TRUE;
 
     // worauf bezieht sich das Chart?
     if( pData && pData->SomeData1().Len() )
-        aSelection = pData->SomeData1();
+    {
+        sSelection = pData->SomeData1();
+        sRowColInfo = pData->SomeData2();
+    }
+    else if( pData && pData->GetChartRange().maRanges.size() )
+    {
+        SchDLL::ConvertChartRangeForWriter( *pData, FALSE );
+        sSelection = pData->SomeData1();
+        sRowColInfo = pData->SomeData2();
+        pData->SomeData1() = aEmptyStr;
+        pData->SomeData2() = aEmptyStr;
+        bSetChartRange = FALSE;
+    }
     else if( pSelection )
-        aSelection = *pSelection;
+    {
+        sSelection = *pSelection;
+        sRowColInfo.AssignAscii( RTL_CONSTASCII_STRINGPARAM("11") );
+    }
 
     SwChartLines aLines;
-    if( !IsTblComplexForChart( aSelection, &aLines ))
+    if( !IsTblComplexForChart( sSelection, &aLines ))
     {
         USHORT nLines = aLines.Count(), nBoxes = aLines[0]->Count();
 
@@ -160,42 +173,24 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
             pData->SetZAxisTitle( aEmptyStr );
         }
 
-        if( !pData->SomeData1().Len() )
-        {
-            pData->SomeData2().AssignAscii( RTL_CONSTASCII_STRINGPARAM("11") );
-
-            //Den Title nur beim erzeugen setzen. Hinterher darf der Titel nicht
-            //mehr angepasst werden, weil der Anwender diesen evtl. Geaendert hat.
-            pData->SetMainTitle( GetFrmFmt()->GetName() );
-
-            // dann mal den Namen setzen:
-            const SwTableBox* pBox = (*aLines[0])[ 0 ];
-
-            String &rStr = pData->SomeData1();
-            rStr.Assign( '<' ).Append( pBox->GetName() ).Append( ':' );
-
-            pBox = (*aLines[ nLines - 1 ])[ nBoxes - 1 ];
-            rStr.Append( pBox->GetName() ).Append( '>' );
-        }
-
         USHORT nRowStt = 0, nColStt = 0;
-        if( pData->SomeData2().Len() )
+        if( sRowColInfo.Len() )
         {
-            if( '1' == pData->SomeData2().GetChar( 0 ))
+            if( '1' == sRowColInfo.GetChar( 0 ))
                 ++nRowStt;
-            if( '1' == pData->SomeData2().GetChar( 1 ))
+            if( '1' == sRowColInfo.GetChar( 1 ))
                 ++nColStt;
         }
 
         if( (nBoxes - nColStt) > pData->GetColCount() )
-            pData->InsertCols( 0, (nBoxes - nColStt) - pData->GetColCount() );
+            SchDLL::MemChartInsertCols( *pData, 0, (nBoxes - nColStt) - pData->GetColCount() );
         else if( (nBoxes - nColStt) < pData->GetColCount() )
-            pData->RemoveCols( 0, pData->GetColCount() - (nBoxes - nColStt) );
+            SchDLL::MemChartRemoveCols( *pData, 0, pData->GetColCount() - (nBoxes - nColStt) );
 
         if( (nLines - nRowStt) > pData->GetRowCount() )
-            pData->InsertRows( 0, (nLines - nRowStt) - pData->GetRowCount() );
+            SchDLL::MemChartInsertRows( *pData, 0, (nLines - nRowStt) - pData->GetRowCount() );
         else if( (nLines - nRowStt) < pData->GetRowCount() )
-            pData->RemoveRows( 0, pData->GetRowCount() - (nLines - nRowStt) );
+            SchDLL::MemChartRemoveRows( *pData, 0, pData->GetRowCount() - (nLines - nRowStt) );
 
 
         ASSERT( pData->GetRowCount() >= (nLines - nRowStt ) &&
@@ -291,32 +286,21 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
             }
             bFirstRow = FALSE;
         }
-
-        {
-            com::sun::star::uno::Sequence< com::sun::star::chart::
-                        ChartSeriesAddress > aSeriesSeq( nBoxes - nColStt );
-
-            for( USHORT i = nColStt; i < nBoxes; ++i )
-            {
-                const SwTableBox* pSttBox = (*aLines[ nRowStt ])[ i ],
-                                * pEndBox = (*aLines[ nLines-1])[ i ];
-                String sSeries( GetFrmFmt()->GetName() );
-                (sSeries.Insert( '<', 0 ) += '.' ) += pSttBox->GetName();
-                ((sSeries += ':' ) += pEndBox->GetName() ) += '>';
-
-                com::sun::star::chart::ChartSeriesAddress aSeries;
-                aSeries.DataRangeAddress = sSeries;
-                aSeriesSeq[ i - nColStt ] = aSeries;
-            }
-            pData->SetSeriesAddresses( aSeriesSeq );
-        }
     }
     else if( pData )
     {
         if( pData->GetColCount() )
-            pData->RemoveCols( 0, pData->GetColCount() );
+            SchDLL::MemChartRemoveCols( *pData, 0, pData->GetColCount() );
         if( pData->GetRowCount() )
-            pData->RemoveRows( 0, pData->GetRowCount() );
+            SchDLL::MemChartRemoveRows( *pData, 0, pData->GetRowCount() );
+    }
+
+    if( bSetChartRange )
+    {
+        // convert the selection string to the SchartRanges
+        pData->SomeData1() = sSelection;
+        pData->SomeData2() = sRowColInfo;
+        SchDLL::ConvertChartRangeForWriter( *pData, TRUE );
     }
 
     return pData;
@@ -410,7 +394,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
             ASSERT( pData, "UpdateChart ohne irgendwelche Daten?" );
             pData = rTbl.UpdateData( pData );
 
-            if( !rTbl.IsTblComplexForChart( pData->SomeData1() ) )
+            if( pData->GetColCount() && pData->GetRowCount() )
             {
                 SchDLL::Update( rOObj.GetOleRef(), pData, rVSh.GetWin() );
 
