@@ -2,9 +2,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-28 10:02:58 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,10 +253,10 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
     int nPos = url.lastIndexOf( (sal_Unicode)'.' );
     if( nPos != -1 )
     {
-        ::rtl::OUString aExt = url.copy( nPos ).toLowerCase();
+        ::rtl::OUString aExt = url.copy( nPos ).toAsciiLowerCase();
         for( int i = 0; i < aDescrs.getLength(); i++ )
         {
-            if( pDescrs[ i ].Extension.equalsIgnoreCase( aExt ) != STRING_NOTFOUND )
+            if( pDescrs[ i ].Extension.equalsIgnoreAsciiCase( aExt ) != STRING_NOTFOUND )
             {
                 nDescr = i;
                 break;

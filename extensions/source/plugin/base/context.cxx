@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-07 19:29:01 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     if( ! xInst.is() )
         return;
 
-    if( ! target.len() )
+    if( ! target.getLength() )
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
