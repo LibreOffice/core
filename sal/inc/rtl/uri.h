@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-31 11:23:58 $
+ *  last change: $Author: sb $ $Date: 2001-10-29 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,15 +261,15 @@ sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     When Unicode characters from the input text have to be written using
     escape sequences (because they are either outside the ASCII range or do
     not belong to the given char class), they are first translated into this
-    charset, before being encoded using escape sequences.
+    charset before being encoded using escape sequences.
 
     Also, if the encode mechanism is rtl_UriEncodeCheckEscapes, all escape
     sequences already present in the input text are interpreted as characters
-    of this charset.
+    from this charset.
 
     @param pResult
-    An encoded representation of the input text.  Must itself not be null, and
-    must point to either null or a valid string.
+    Returns an encoded representation of the input text.  Must itself not be
+    null, and must point to either null or a valid string.
  */
 void rtl_uriEncode(rtl_uString * pText,
                    sal_Bool const * pCharClass,
@@ -291,17 +291,17 @@ void rtl_uriEncode(rtl_uString * pText,
 
     @param eCharset
     When the decode mechanism is rtl_UriDecodeWithCharset, all escape
-    sequences in the input text are interpreted as characters of this charset.
-    Those characters are translated to Unicode characters in the resulting
-    output, if possible.
+    sequences in the input text are interpreted as characters from this
+    charset.  Those characters are translated to Unicode characters in the
+    resulting output, if possible.
 
     When the decode mechanism is rtl_UriDecodeNone or rtl_UriDecodeToIuri,
     this parameter is ignored (and is best specified as
     RTL_TEXTENCODING_UTF8).
 
     @param pResult
-    A decoded representation of the input text.  Must itself not be null, and
-    must point to either null or a valid string.
+    Returns a decoded representation of the input text.  Must itself not be
+    null, and must point to either null or a valid string.
  */
 void rtl_uriDecode(rtl_uString * pText,
                    rtl_UriDecodeMechanism eMechanism,

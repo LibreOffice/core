@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-09 12:45:20 $
+ *  last change: $Author: sb $ $Date: 2001-10-29 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,21 @@ public:
         SAL_THROW(());
 
 private:
-    Uri(); // not implemented
-    Uri(Uri &); // not implemented
-    ~Uri(); // not implemented
-    void operator =(Uri); // not implemented
+    /** not implemented
+        @internal */
+    Uri();
+
+    /** not implemented
+        @internal */
+    Uri(Uri &);
+
+    /** not implemented
+        @internal */
+    ~Uri();
+
+    /** not implemented
+        @internal */
+    void operator =(Uri);
 };
 
 inline rtl::OUString Uri::encode(rtl::OUString const & rText,
