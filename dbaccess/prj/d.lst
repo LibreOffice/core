@@ -1,3 +1,5 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
@@ -6,8 +8,6 @@
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 *.xml %_DEST%\xml%_EXT%\*.xml
-
-touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
