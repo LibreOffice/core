@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:29:00 $
+ *  last change: $Author: gh $ $Date: 2002-11-27 12:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,6 +958,7 @@ void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt )
 {
     if ( !Application::CallAccel( aKEvnt.GetKeyCode() ) )
         CALL_EVENT_WITH_NOTIFY( EVENT_KEYINPUT, aKEvnt, pWin, KeyInput )
+    CALL_EVENT_WITH_NOTIFY( EVENT_KEYUP, aKEvnt, pWin, KeyUp )
 };
 
 void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt )
