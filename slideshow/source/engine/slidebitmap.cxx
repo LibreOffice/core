@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slidebitmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:44:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+// must be first
+#include <canvas/debug.hxx>
+#include <slidebitmap.hxx>
 
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
 #include <drafts/com/sun/star/rendering/XCanvas.hpp>
@@ -70,10 +70,12 @@
 #include <drafts/com/sun/star/rendering/XBitmap.hpp>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 #include <canvas/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
-
-#include "slidebitmap.hxx"
 
 
 using namespace ::drafts::com::sun::star;
@@ -85,24 +87,45 @@ namespace presentation
     {
 
         SlideBitmap::SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap ) :
-            mxBitmap( rBitmap.get() != NULL ? rBitmap->getUNOBitmap() : NULL )
+            maOutputPos(),
+            maClipPoly(),
+            mxBitmap()
         {
-            OSL_ENSURE( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
+            if( rBitmap.get() )
+                mxBitmap = rBitmap->getUNOBitmap();
+
+            ENSURE_AND_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
         }
 
         bool SlideBitmap::draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const
         {
-            OSL_ENSURE( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
-                        "SlideBitmap::draw(): Invalid canvas" );
+            ENSURE_AND_RETURN( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
+                               "SlideBitmap::draw(): Invalid canvas" );
 
-            if( rCanvas.get() == NULL || !rCanvas->getUNOCanvas().is() )
-                return false;
+            // selectively only copy the transformation from current viewstate,
+            // don't want no clipping here.
+            rendering::ViewState aViewState;
+            aViewState.AffineTransform = rCanvas->getViewState().AffineTransform;
 
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState( aRenderState );
 
+            ::basegfx::B2DHomMatrix aTranslation;
+            aTranslation.translate( maOutputPos.getX(),
+                                    maOutputPos.getY() );
+            ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
+
+            if( maClipPoly.count() )
+            {
+                // TODO(P1): Buffer the clip polygon
+                aRenderState.Clip =
+                    ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        maClipPoly );
+            }
+
             rCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                 rCanvas->getViewState(),
+                                                 aViewState,
                                                  aRenderState );
             return true;
         }
@@ -110,6 +133,16 @@ namespace presentation
         ::basegfx::B2ISize SlideBitmap::getSize() const
         {
             return ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBitmap->getSize() );
+        }
+
+        void SlideBitmap::move( const ::basegfx::B2DPoint& rNewPos )
+        {
+            maOutputPos = rNewPos;
+        }
+
+        void SlideBitmap::clip( const ::basegfx::B2DPolyPolygon& rClipPoly )
+        {
+            maClipPoly = rClipPoly;
         }
 
     }
