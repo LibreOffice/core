@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:51:55 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,6 +1534,26 @@ sal_Bool TransferableDataHelper::GetBitmap( const DataFlavor& rFlavor, Bitmap& r
     {
         *xStm >> rBmp;
         bRet = ( xStm->GetError() == ERRCODE_NONE );
+
+        /* SJ: #110748# At the moment we are having problems with DDB inserted as DIB. The
+           problem is, that some graphics are inserted much too big because the nXPelsPerMeter
+           and nYPelsPerMeter of the bitmap fileheader isn't including the correct value.
+           Due to this reason the following code assumes that bitmaps with a logical size
+           greater than 50 cm aren't having the correct mapmode set.
+
+           The following code should be removed if DDBs and DIBs are supported via clipboard
+           properly.
+        */
+        if ( bRet )
+        {
+            MapMode aMapMode = rBmp.GetPrefMapMode();
+            if ( aMapMode.GetMapUnit() != MAP_PIXEL )
+            {
+                Size aSize = OutputDevice::LogicToLogic( rBmp.GetPrefSize(), aMapMode, MAP_100TH_MM );
+                if ( ( aSize.Width() > 5000 ) || ( aSize.Height() > 5000 ) )
+                    rBmp.SetPrefMapMode( MAP_PIXEL );
+            }
+        }
     }
 
     if( !bRet &&
