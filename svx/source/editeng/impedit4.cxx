@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:16:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ void SwapUSHORTs( sal_uInt16& rX, sal_uInt16& rY )
     rY = n;
 }
 
-EditPaM ImpEditEngine::Read( SvStream& rInput, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditPaM ImpEditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Bool bUpdate = GetUpdateMode();
     SetUpdateMode( sal_False );
@@ -172,7 +172,7 @@ EditPaM ImpEditEngine::Read( SvStream& rInput, EETextFormat eFormat, EditSelecti
     else if ( eFormat == EE_FORMAT_XML )
         aPaM = ReadXML( rInput, aSel );
     else if ( eFormat == EE_FORMAT_HTML )
-        aPaM = ReadHTML( rInput, aSel, pHTTPHeaderAttrs );
+        aPaM = ReadHTML( rInput, rBaseURL, aSel, pHTTPHeaderAttrs );
     else if ( eFormat == EE_FORMAT_BIN)
         aPaM = ReadBin( rInput, aSel );
     else
@@ -257,7 +257,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 #endif
 }
 
-EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
 #ifndef SVX_LIGHT
 
@@ -267,7 +267,7 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, EditSelection aSel, SvKeyValu
     sal_Bool bCharsBeforeInsertPos = ( aSel.Min().GetIndex() ) ? sal_True : sal_False;
     sal_Bool bCharsBehindInsertPos = ( aSel.Min().GetIndex() < aSel.Min().GetNode()->Len() ) ? sal_True : sal_False;
 
-    EditHTMLParserRef xPrsr = new EditHTMLParser( rInput, pHTTPHeaderAttrs );
+    EditHTMLParserRef xPrsr = new EditHTMLParser( rInput, rBaseURL, pHTTPHeaderAttrs );
     SvParserState eState = xPrsr->CallParser( this, aSel.Max() );
     if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
     {
