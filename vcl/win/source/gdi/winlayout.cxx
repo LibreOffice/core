@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-06 10:16:39 $
+ *  last change: $Author: hdu $ $Date: 2002-08-07 14:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,11 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
     mpGlyphs2Chars( NULL ),
     mnNotdefWidth( -1 ),
     mnWidth( 0 )
-{}
+{
+    // Win32 glyph APIs have serious problems with vertical layout
+    // => workaround is to use the unicode methods then
+    mbEnableGlyphs &= !(rArgs.mnFlags & SAL_LAYOUT_VERTICAL);
+}
 
 // -----------------------------------------------------------------------
 
@@ -416,34 +420,6 @@ void SimpleWinLayout::Draw() const
     }
 #endif // DEBUG_GETNEXTGLYPHS
 }
-
-// -----------------------------------------------------------------------
-
-/* TODO: remove because of SalLayout::GetOutline
-bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
-{
-    bool bRet = false;
-    Point aPos;
-
-    for( int i = 0; i < mnGlyphCount; ++i )
-    {
-        long nLGlyph = mpOutGlyphs[i];
-
-        // get outline of individual glyph
-        PolyPolygon aGlyphOutline;
-        if( rSalGraphics.GetGlyphOutline( nLGlyph, mbEnableGlyphs, aGlyphOutline ) )
-            bRet = true;
-
-        // insert outline at correct position
-        aGlyphOutline.Move( aPos.X(), aPos.Y() );
-        aPos.X() += mpGlyphAdvances[i];
-        for( int j = 0; j < aGlyphOutline.Count(); ++j )
-            rPolyPoly.Insert( aGlyphOutline[j] );
-    }
-
-    return bRet;
-}
-*/
 
 // -----------------------------------------------------------------------
 
@@ -1147,57 +1123,6 @@ void UniscribeLayout::Draw() const
 
 // -----------------------------------------------------------------------
 
-/* TODO: remove because of SalLayout::GetOutline
-bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
-{
-    Point aRelPos = Point(0,0);
-
-    int nGlyphsProcessed = 0;
-    for( int nItem = 0; nItem < mnItemCount; ++nItem )
-    {
-        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-
-        // skip if there is nothing to display
-        int nStartIndex, nEndIndex;
-        if( !GetItemSubrange( rVisualItem, nStartIndex, nEndIndex ) )
-            continue;
-
-        // adjust draw position relative to cluster start
-        int i = mnFirstCharIndex;
-        if( !rVisualItem.mpScriptItem->a.fRTL )
-        {
-            int nTmpIndex = mpLogClusters[ nEndIndex - 1 ];
-            while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
-                aRelPos.X() -= mpCharWidths[i];
-        }
-        else
-        {
-            int nTmpIndex = mpLogClusters[ nEndIndex - 1 ];
-            while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
-                aRelPos.X() += mpCharWidths[i];
-        }
-
-        for( i = nStartIndex; i < nEndIndex; ++i )
-        {
-            // get outline of individual glyph
-            PolyPolygon aGlyphOutline;
-            if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], true, aGlyphOutline ) )
-                return false;
-
-            // insert outline at correct position
-            aGlyphOutline.Move( aRelPos.X(), aRelPos.Y() );
-            aRelPos.X() += mpGlyphAdvances[ i ];
-            for( int j = 0; j < aGlyphOutline.Count(); ++j )
-                rPolyPoly.Insert( aGlyphOutline[j] );
-        }
-    }
-
-    return true;
-}
-*/
-
-// -----------------------------------------------------------------------
-
 long UniscribeLayout::FillDXArray( long* pDXArray ) const
 {
     long nWidth = 0;
@@ -1411,7 +1336,7 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
         if( !bEnableGlyphs )
         {
             TEXTMETRICA aTextMetricA;
-            if(  GetTextMetricsA( maGraphicsData.mhDC, &aTextMetricA )
+            if( GetTextMetricsA( maGraphicsData.mhDC, &aTextMetricA )
             &&  (aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE )
             && !(aTextMetricA.tmPitchAndFamily & TMPF_DEVICE ) )
                 bEnableGlyphs = true;
