@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:40:13 $
+ *  last change: $Author: os $ $Date: 2001-03-14 09:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
             nStart = nZw;
         }
 
-        aSelection.realloc(nStart - nEnd + 1);
+        aSelection.realloc(nEnd - nStart + 1);
         sal_Int32* pSelection = aSelection.getArray();
         sal_Int32 nPos = 0;
         for (ULONG i = nStart; i <= nEnd; i++, nPos++)
