@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:39:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,17 +193,6 @@ USHORT SwNumRule::GetBullIndent( BYTE nLvl )
     return aDefNumIndents[ nLvl ];
 }
 
-sal_Unicode SwNumRule::GetBulletChar( const SwNodeNum& rNum ) const
-{
-    return Get( rNum.GetRealLevel()).GetBulletChar();
-}
-const Font* SwNumRule::GetBulletFont( const SwNodeNum& rNum ) const
-{
-    return Get( rNum.GetRealLevel() ).GetBulletFont();
-}
-
-
-
 SwNodeNum::SwNodeNum( BYTE nLevel, USHORT nSetVal )
     : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE ),
       bContNum(FALSE)
@@ -222,7 +211,7 @@ SwNodeNum& SwNodeNum::operator=( const SwNodeNum& rCpy )
     return *this;
 }
 
-void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
+static void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 {
     if( rNd.GetNum() &&
         rNd.GetNum()->GetRealLevel() == nLevel )
@@ -667,7 +656,7 @@ void SwNumRule::CheckCharFmts( SwDoc* pDoc )
 
     // setzt Num oder NoNum fuer den Level am TextNode UND setzt die
     // richtige Attributierung
-
+#ifndef NUM_RELSPACE
 BOOL SwNumRule::IsRuleLSpace( SwTxtNode& rNd ) const
 {
     const SfxPoolItem* pItem;
@@ -686,6 +675,7 @@ BOOL SwNumRule::IsRuleLSpace( SwTxtNode& rNd ) const
 
     return bRet;
 }
+#endif
 
 SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
 {
