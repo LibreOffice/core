@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:20:37 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isA(const staruno::Type& _rType, TYPE* pDummy)
     {
-        return  _rType.equals(::getCppuType(pDummy));
+        return  _rType.equals(getCppuType(pDummy));
     }
 
     //-------------------------------------------------------------------------
@@ -143,7 +143,7 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isA(const staruno::Any& _rVal, TYPE* pDummy)
     {
-        return  _rVal.getValueType().equals(::getCppuType(pDummy));
+        return  _rVal.getValueType().equals(getCppuType(pDummy));
     }
 
     //-------------------------------------------------------------------------
@@ -152,7 +152,7 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isAReference(const staruno::Type& _rType, TYPE* pDummy)
     {
-        return  _rType.equals(::getCppuType(reinterpret_cast<staruno::Reference<TYPE>*>(NULL)));
+        return  _rType.equals(getCppuType(reinterpret_cast<staruno::Reference<TYPE>*>(NULL)));
     }
 
     //-------------------------------------------------------------------------
@@ -161,7 +161,7 @@ namespace comphelper
     template <class TYPE>
     sal_Bool isAReference(const staruno::Any& _rVal, TYPE* pDummy)
     {
-        return  _rVal.getValueType().equals(::getCppuType(reinterpret_cast<staruno::Reference<TYPE>*>(NULL)));
+        return  _rVal.getValueType().equals(getCppuType(reinterpret_cast<staruno::Reference<TYPE>*>(NULL)));
     }
 
     //-------------------------------------------------------------------------
@@ -179,10 +179,10 @@ namespace comphelper
     }
     //-------------------------------------------------------------------------
     template <class TYPE>
-    sal_Bool getImplementation(TYPE*& _pObject, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace)
+    sal_Bool getImplementation(TYPE*& _pObject, const staruno::Reference< staruno::XInterface >& _rxIFace)
     {
         _pObject = NULL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(_rxIFace, UNO_QUERY);
+        staruno::Reference< starlang::XUnoTunnel > xTunnel(_rxIFace, staruno::UNO_QUERY);
         if (xTunnel.is())
             _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
 
@@ -199,7 +199,7 @@ namespace comphelper
 
     /** examine a sequence for the <type scope="com.sun.star.uno">Type</type> of it's elements.
     */
-    ::com::sun::star::uno::Type getSequenceElementType(const ::com::sun::star::uno::Type& _rSequenceType);
+    staruno::Type getSequenceElementType(const staruno::Type& _rSequenceType);
 
 //=========================================================================
 //= replacement of the former UsrAny.getXXX methods
