@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:32:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
