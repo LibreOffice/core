@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:40:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@ const sal_Char sAPI_user_text[]         = "UserText";
 const sal_Char sAPI_numbering_type[]    = "NumberingType";
 const sal_Char sAPI_offset[]            = "Offset";
 const sal_Char sAPI_data_base_name[]    = "DataBaseName";
+const sal_Char sAPI_data_base_u_r_l[]   = "DataBaseURL";
 const sal_Char sAPI_data_table_name[]   = "DataTableName";
 const sal_Char sAPI_condition[]         = "Condition";
 const sal_Char sAPI_set_number[]        = "SetNumber";
@@ -1552,8 +1553,10 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     const OUString& sLocalName, bool bUseDisply) :
         XMLTextFieldImportContext(rImport, rHlp, pServiceName,
                                   nPrfx, sLocalName),
-        sPropertyDatabaseName(
+        sPropertyDataBaseName(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_name)),
+        sPropertyDataBaseURL(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_u_r_l)),
         sPropertyTableName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_table_name)),
         sPropertyDataCommandType(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_data_command_type)),
@@ -1563,6 +1566,8 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
         sTableName(),
         nCommandType( sdb::CommandType::TABLE ),
         bDatabaseOK(sal_False),
+        bDatabaseNameOK(sal_False),
+        bDatabaseURLOK(sal_False),
         bCommandTypeOK(sal_False),
         bTableOK(sal_False),
         bUseDisplay( bUseDisply ),
@@ -1579,6 +1584,7 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_DATABASE_NAME:
             sDatabaseName = sAttrValue;
             bDatabaseOK = sal_True;
+            bDatabaseNameOK = sal_True;
             break;
         case XML_TOK_TEXTFIELD_TABLE_NAME:
             sTableName = sAttrValue;
@@ -1616,6 +1622,42 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
     }
 }
 
+SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList>& xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    if( ( nPrefix == XML_NAMESPACE_FORM ) &&
+        IsXMLToken( rLocalName, XML_CONNECTION_RESOURCE ) )
+    {
+        // process attribute list directly
+        sal_Int16 nLength = xAttrList->getLength();
+        for( sal_Int16 n = 0; n < nLength; n++ )
+        {
+            OUString sLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                GetKeyByAttrName( xAttrList->getNameByIndex(n), &sLocalName );
+
+            if( ( nPrefix == XML_NAMESPACE_XLINK ) &&
+                IsXMLToken( sLocalName, XML_HREF ) )
+            {
+                sDatabaseURL = xAttrList->getValueByIndex(n);
+                bDatabaseOK = sal_True;
+                bDatabaseURLOK = sal_True;
+            }
+        }
+
+        // we call ProcessAttribute in order to set bValid appropriatly
+        ProcessAttribute( XML_TOKEN_INVALID, OUString() );
+    }
+
+    return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+                                                  xAttrList);
+}
+
+
 void XMLDatabaseFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
@@ -1624,8 +1666,16 @@ void XMLDatabaseFieldImportContext::PrepareField(
     aAny <<= sTableName;
     xPropertySet->setPropertyValue(sPropertyTableName, aAny);
 
-    aAny <<= sDatabaseName;
-    xPropertySet->setPropertyValue(sPropertyDatabaseName, aAny);
+    if( bDatabaseNameOK )
+    {
+        aAny <<= sDatabaseName;
+        xPropertySet->setPropertyValue(sPropertyDataBaseName, aAny);
+    }
+    else if( bDatabaseURLOK )
+    {
+        aAny <<= sDatabaseURL;
+        xPropertySet->setPropertyValue(sPropertyDataBaseURL, aAny);
+    }
 
     // #99980# load/save command type for all fields; also load
     //         old documents without command type
