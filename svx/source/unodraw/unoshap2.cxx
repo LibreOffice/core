@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 14:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
-    if( pObj != NULL && pPage != NULL || pShape != NULL )
+    if( pObj != NULL && pPage != NULL && pShape != NULL )
     {
         SdrObject* pSdrShape = pShape->GetSdrObject();
         if( pSdrShape == NULL )
@@ -300,7 +300,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
         if( pSdrShape->IsInserted() )
             pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
-        pObj->GetSubList()->NbcInsertObject( pSdrShape );
+        pObj->GetSubList()->InsertObject( pSdrShape );
 
         // #85922# It makes no sense to set the layer asked
         // from the group object since these is an iteration
