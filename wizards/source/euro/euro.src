@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-25 21:22:09 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ Text[ english_us ] = "~Help";
     Text[ russian ] = "Ñï~ğàâêà";
     Text[ greek ] = "~ÂïŞèåéá";
     Text[ dutch ] = "~Help";
-    Text[ french ] = "~Aide";
+    Text[ french ] = "Aide";
     Text[ spanish ] = "~Ayuda";
     Text[ italian ] = "~Guida";
     Text[ danish ] = "~Hjælp";
