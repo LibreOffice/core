@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:24:25 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,9 @@ void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCR
     ScDocShellModificator aModificator( *this );
     aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, SC_MF_AUTO );
     PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PAINT_GRID );
-    aModificator.SetDocumentModified();
+    // No SetDocumentModified, as the unnamed database range might have to be restored later.
+    // The UNO hint is broadcast directly instead, to keep UNO objects in valid state.
+    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 }
 
 ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -403,6 +405,13 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
         {
             pNoNameData = (*pColl)[nNoNameIndex];
 
+            if ( !pOldAutoDBRange )
+            {
+                // store the old unnamed database range with its settings for undo
+                // (store at the first change, get the state before all changes)
+                pOldAutoDBRange = new ScDBData( *pNoNameData );
+            }
+
             SCCOL nOldX1;                                   // alten Bereich sauber wegnehmen
             SCROW nOldY1;                                   //! (UNDO ???)
             SCCOL nOldX2;
@@ -469,6 +478,48 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
 //      MarkRange( ScRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab ), FALSE );
 
     return pData;
+}
+
+ScDBData* ScDocShell::GetOldAutoDBRange()
+{
+    ScDBData* pRet = pOldAutoDBRange;
+    pOldAutoDBRange = NULL;
+    return pRet;                    // has to be deleted by caller!
+}
+
+void ScDocShell::CancelAutoDBRange()
+{
+    // called when dialog is cancelled
+    if ( pOldAutoDBRange )
+    {
+        USHORT nNoNameIndex;
+        ScDBCollection* pColl = aDocument.GetDBCollection();
+        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        {
+            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
+
+            SCCOL nRangeX1;
+            SCROW nRangeY1;
+            SCCOL nRangeX2;
+            SCROW nRangeY2;
+            SCTAB nRangeTab;
+            pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+
+            *pNoNameData = *pOldAutoDBRange;    // restore old settings
+
+            if ( pOldAutoDBRange->HasAutoFilter() )
+            {
+                // restore AutoFilter buttons
+                pOldAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+                aDocument.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
+                PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
+            }
+        }
+
+        delete pOldAutoDBRange;
+        pOldAutoDBRange = NULL;
+    }
 }
 
 
