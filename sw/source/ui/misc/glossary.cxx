@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:16:50 $
+ *  last change: $Author: os $ $Date: 2001-10-30 10:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,17 +474,19 @@ SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
 {
     //evtl. vorhandenen Eintrag in der TreeListBox suchen
     SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
-    DBG_ASSERT(pEntry, "keine Selektion?")
-    if(aCategoryBox.GetParent(pEntry))
-        pEntry = aCategoryBox.GetParent(pEntry);
-    sal_uInt32 nChildCount = aCategoryBox.GetChildCount( pEntry );
-    for(sal_uInt32 i = 0; i < nChildCount; i++)
+    if(pEntry)
     {
-        SvLBoxEntry* pChild = aCategoryBox.GetEntry( pEntry, i );
-        if(rBlock == aCategoryBox.GetEntryText(pChild) &&
-            (!rShort.Len() || rShort == *(String*)pChild->GetUserData()))
+        if(aCategoryBox.GetParent(pEntry))
+            pEntry = aCategoryBox.GetParent(pEntry);
+        sal_uInt32 nChildCount = aCategoryBox.GetChildCount( pEntry );
+        for(sal_uInt32 i = 0; i < nChildCount; i++)
         {
-            return pChild;
+            SvLBoxEntry* pChild = aCategoryBox.GetEntry( pEntry, i );
+            if(rBlock == aCategoryBox.GetEntryText(pChild) &&
+                (!rShort.Len() || rShort == *(String*)pChild->GetUserData()))
+            {
+                return pChild;
+            }
         }
     }
     return 0;
