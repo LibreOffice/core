@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 16:45:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@ public:
     // #107645#
     // New local var to avoid repeated loading if load of OLE2 fails
     sal_Bool        mbLoadingOLEObjectFailed;
+
+    bool    mbConnected;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,6 +272,8 @@ void SdrOle2Obj::Init()
     // #107645#
     // init to start situation, loading did not fail
     mpImpl->mbLoadingOLEObjectFailed = sal_False;
+
+    mpImpl->mbConnected = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -406,6 +411,8 @@ void SdrOle2Obj::Connect()
             uno::Reference< util::XModifyListener > xListener( pModifyListener );
             xBC->addModifyListener( xListener );
         }
+
+        mpImpl->mbConnected = true;
     }
 }
 
@@ -413,6 +420,9 @@ void SdrOle2Obj::Connect()
 
 void SdrOle2Obj::Disconnect()
 {
+    if( !mpImpl->mbConnected )
+        return;
+
     if( !IsEmpty() && mpImpl->aPersistName.Len() )
     {
         uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
@@ -454,6 +464,8 @@ void SdrOle2Obj::Disconnect()
         if ( ppObjRef->Is() )
             ppObjRef->Clear();
     }
+
+    mpImpl->mbConnected = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -500,6 +512,9 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 
 void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
 {
+    if( rNewObjRef == *ppObjRef )
+        return;
+
     Disconnect();
 
     *ppObjRef=rNewObjRef;
