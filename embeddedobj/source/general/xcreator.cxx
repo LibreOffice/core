@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:53:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,11 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         }
     }
 
-    ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByMediaType( aMediaType );
+    OSL_ENSURE( aMediaType.getLength(), "No media type is specified for the object!" );
+    ::rtl::OUString aEmbedFactory;
+    if ( aMediaType.getLength() )
+        aEmbedFactory = m_aConfigHelper.GetFactoryNameByMediaType( aMediaType );
+
     if ( !aEmbedFactory.getLength() )
     {
         // use system fallback
