@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 11:38:13 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 09:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,10 +284,9 @@ void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
     if (pDrView->GetSnapGridWidthX() != pView->GetSnapGridWidthX() || pDrView->GetSnapGridWidthY() != pView->GetSnapGridWidthY())
         pDrView->SetSnapGridWidth(pView->GetSnapGridWidthX(), pView->GetSnapGridWidthY());
 
-/* now in svx::ColorConfig
     if (pDrView->IsGridVisible() != pView->IsGridVisible())
         pDrView->SetGridVisible( pView->IsGridVisible() );
-*/
+
     if (pDrView->IsGridFront() != pView->IsGridFront())
         pDrView->SetGridFront( pView->IsGridFront() );
 
@@ -458,9 +457,7 @@ void SdDrawViewShell::WriteFrameViewData()
     pFrameView->SetGridFine( pDrView->GetGridFine() );
     pFrameView->SetSnapGrid( pDrView->GetSnapGrid() );
     pFrameView->SetSnapGridWidth(pDrView->GetSnapGridWidthX(), pDrView->GetSnapGridWidthY());
-/* now in svx::ColorConfig
     pFrameView->SetGridVisible( pDrView->IsGridVisible() );
-*/
     pFrameView->SetGridFront( pDrView->IsGridFront() );
     pFrameView->SetSnapAngle( pDrView->GetSnapAngle() );
     pFrameView->SetGridSnap( pDrView->IsGridSnap() );
