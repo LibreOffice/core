@@ -7251,3 +7251,5 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?release@?$WeakComponentImplHelper2@VXTerminateListener@frame@star@sun@com@@VXServiceInfo@lang@345@@cppu@@WCM@AAXXZ
 ?supportsService@ShutdownIcon@@UAAEABVOUString@rtl@@@Z
 ?GetGraphic@FileDialogHelper@sfx2@@QBEKAAVGraphic@@@Z
+?GetOrCreatePropertyHandler@@YAPAVSfxPropertyHandler@@XZ
+?Property@SfxPropertyHandler@@EAEXAAVApplicationProperty@@@Z
