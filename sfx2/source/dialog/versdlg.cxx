@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:28:23 $
+ *  last change: $Author: pb $ $Date: 2001-10-30 14:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,30 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pFrame, Window *pParent )
     Init_Impl();
 }
 
+String ConvertWhiteSpaces_Impl( const String& rText )
+{
+    // converted linebreaks and tabs to blanks; it's necessary for the display
+    String sConverted;
+    const sal_Unicode* pChars = rText.GetBuffer();
+    while ( *pChars )
+    {
+        switch ( *pChars )
+        {
+            case '\n' :
+            case '\t' :
+                sConverted += ' ';
+                break;
+
+            default:
+                sConverted += *pChars;
+        }
+
+        ++pChars;
+    }
+
+    return sConverted;
+}
+
 void SfxVersionDialog::Init_Impl()
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
@@ -174,7 +198,7 @@ void SfxVersionDialog::Init_Impl()
             aEntry += '\t';
             aEntry += pInfo->aCreateStamp.GetName();
             aEntry += '\t';
-            aEntry += pInfo->aComment;
+            aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
             SvLBoxEntry *pEntry = aVersionBox.InsertEntry( aEntry );
             pEntry->SetUserData( pInfo );
         }
@@ -208,7 +232,7 @@ void SfxVersionDialog::Open_Impl()
 
     SvLBoxEntry *pEntry = aVersionBox.FirstSelected();
     ULONG nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
-    SfxInt16Item aItem( SID_VERSION, nPos+1 );
+    SfxInt16Item aItem( SID_VERSION, (short)nPos+1 );
     SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
     SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
@@ -294,7 +318,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         SfxAllItemSet aSet( pObjShell->GetPool() );
         ULONG nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
-        aSet.Put( SfxInt16Item( SID_VERSION, nPos+1 ) );
+        aSet.Put( SfxInt16Item( SID_VERSION, (short)nPos+1 ) );
         aSet.Put( SfxStringItem( SID_FILE_NAME, pObjShell->GetMedium()->GetName() ) );
 
         SfxItemSet* pSet = pObjShell->GetMedium()->GetItemSet();
