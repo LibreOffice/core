@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-29 13:12:39 $
+ *  last change: $Author: os $ $Date: 2001-10-02 10:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@
 extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
                            const SwTxtNode& rBehindNd, xub_StrLen nSttPos );
 
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
 /*--------------------------------------------------------------------
     Beschreibung: Strings initialisieren
  --------------------------------------------------------------------*/
@@ -188,6 +190,13 @@ void SwTOXInternational::Init()
     pCollator = new CollatorWrapper( xMSF );
     pIgnCsCollator = new CollatorWrapper( xMSF );
 
+    if(!sSortAlgorithm.Len())
+    {
+        Sequence < OUString > aSeq(
+                                pCollator->listCollatorAlgorithms( aLcl ));
+        if(aSeq.getLength())
+            sSortAlgorithm = aSeq.getConstArray()[0];
+    }
     pCollator->loadCollatorAlgorithm( sSortAlgorithm, aLcl, 0 );
     pIgnCsCollator->loadCollatorAlgorithm( sSortAlgorithm, aLcl, SW_COLLATOR_IGNORES  );
 
