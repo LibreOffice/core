@@ -481,7 +481,7 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
 ]
 
 //--------------------------------------------------------------------------
-SfxObjectItem Add SID_NEWDOC
+SfxObjectItem NewDoc SID_NEWDOC
 (SfxStringItem Region SID_TEMPLATE_REGIONNAME,SfxStringItem Name SID_TEMPLATE_NAME)
 [
     /* flags: */
@@ -1343,7 +1343,7 @@ SfxUInt32Item BuildVersion SID_BUILD_VERSION
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Cancel SID_BROWSE_STOP
+SfxVoidItem StopBrowse SID_BROWSE_STOP
 ()
 [
     /* flags: */
@@ -1577,7 +1577,7 @@ SfxVoidItem ClearMemCache SID_CLEARMEMCACHE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Close SID_CLOSEWINS
+SfxBoolItem CloseWins SID_CLOSEWINS
 ()
 [
     /* flags: */
@@ -1602,7 +1602,7 @@ SfxBoolItem Close SID_CLOSEWINS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Close SID_CLOSEDOCS
+SfxVoidItem CloseDocs SID_CLOSEDOCS
 ()
 [
     /* flags: */
@@ -1627,7 +1627,7 @@ SfxVoidItem Close SID_CLOSEDOCS
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Close SID_CLOSEDOC
+SfxBoolItem CloseDoc SID_CLOSEDOC
 (SfxBoolItem saveChanges SID_CLOSEDOC_SAVE,SfxStringItem fileName SID_CLOSEDOC_FILENAME)
 [
     /* flags: */
@@ -1655,7 +1655,7 @@ SfxBoolItem Close SID_CLOSEDOC
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Close SID_CLOSEWIN
+SfxVoidItem CloseWin SID_CLOSEWIN
 ()
 [
     /* flags: */
@@ -1680,7 +1680,7 @@ SfxVoidItem Close SID_CLOSEWIN
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Close SID_CLOSETASK
+SfxVoidItem CloseTask SID_CLOSETASK
 ()
 [
     /* flags: */
@@ -4028,7 +4028,7 @@ SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem InsertFile SID_INSERTDOC
+SfxBoolItem InsertDoc SID_INSERTDOC
 (SfxStringItem Name SID_INSERTDOC,SfxStringItem Filter FN_PARAM_1)
 [
     /* flags: */
@@ -5893,7 +5893,7 @@ SfxObjectItem Open SID_OPENDOC
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem Open SID_DOCINFO_TITLE
+SfxStringItem DocInfoTitle SID_DOCINFO_TITLE
 
 [
     /* flags: */
@@ -8566,7 +8566,7 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Visible SID_WIN_VISIBLE
+SfxBoolItem WinVisible SID_WIN_VISIBLE
 
 [
     /* flags: */
