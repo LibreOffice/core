@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:41:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,12 @@ void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
     DoSheetConversion( SC_CONVERSION_HANGULHANJA, bRecord );
 }
 
-void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord )
+void ScViewFunc::DoChineseTranslation( const ChineseTranslationParams &rParams, BOOL bRecord )
+{
+    DoSheetConversion( SC_CONVERSION_CHINESE_TRANSLATION, bRecord, &rParams );
+}
+
+void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, const ChineseTranslationParams *pChParams )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -461,7 +466,21 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord )
         case SC_CONVERSION_HANGULHANJA:
             pEngine = new ScTextConversionEngine(
                 pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
-                nCol, nRow, nTab, bMarked, LANGUAGE_KOREAN );
+                nCol, nRow, nTab, bMarked,
+                LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
+        break;
+        case SC_CONVERSION_CHINESE_TRANSLATION:
+        {
+            DBG_ASSERT( pChParams, "paramter for Chinese translation missing" );
+            if (pChParams)
+            {
+                pEngine = new ScTextConversionEngine(
+                    pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
+                    nCol, nRow, nTab, bMarked,
+                    pChParams->nSourceLang, pChParams->nTargetLang, &pChParams->aTargetFont,
+                    pChParams->nOptions, sal_False );
+            }
+        }
         break;
         default:
             DBG_ERRORFILE( "ScViewFunc::DoSheetConversion - unknown conversion type" );
