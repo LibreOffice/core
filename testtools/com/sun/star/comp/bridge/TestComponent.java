@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:14:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,29 +762,134 @@ public class TestComponent {
 
         public XMulti getMulti() {
             return new XMulti() {
-                    public int f1() { return 1; }
+                    public double getatt1() {
+                        return attribute1;
+                    }
 
-                    public int f2() { return 2; }
+                    public void setatt1(double value) {
+                        attribute1 = value;
+                    }
 
-                    public int f3() { return 3; }
+                    public int fn11(int arg) {
+                        return 11 * arg;
+                    }
 
-                    public int geta() { return a; }
+                    public String fn12(String arg) {
+                        return "12" + arg;
+                    }
 
-                    public void seta(int value) { a = value; }
+                    public int fn21(int arg) {
+                        return 21 * arg;
+                    }
 
-                    private int a;
+                    public String fn22(String arg) {
+                        return "22" + arg;
+                    }
+
+                    public double getatt3() {
+                        return attribute3;
+                    }
+
+                    public void setatt3(double value) {
+                        attribute3 = value;
+                    }
+
+                    public int fn31(int arg) {
+                        return 31 * arg;
+                    }
+
+                    public String fn32(String arg) {
+                        return "32" + arg;
+                    }
+
+                    public int fn33() {
+                        return 33;
+                    }
+
+                    public int fn41(int arg) {
+                        return 41 * arg;
+                    }
+
+                    public int fn61(int arg) {
+                        return 61 * arg;
+                    }
+
+                    public String fn62(String arg) {
+                        return "62" + arg;
+                    }
+
+                    public int fn71(int arg) {
+                        return 71 * arg;
+                    }
+
+                    public String fn72(String arg) {
+                        return "72" + arg;
+                    }
+
+                    public int fn73() {
+                        return 73;
+                    }
+
+                    private double attribute1 = 0.0;
+                    private double attribute3 = 0.0;
                 };
         }
 
-        public int testMultiF1(XMulti multi) { return multi.f1(); }
+        private static final class CheckFailed extends Exception {
+            CheckFailed(String message) {
+                super(message);
+            }
+        }
 
-        public int testMultiF2(XMulti multi) { return multi.f2(); }
+        private static void checkEqual(int value, int argument)
+            throws CheckFailed
+        {
+            if (argument != value) {
+                throw new CheckFailed(value + " != " + argument);
+            }
+        }
 
-        public int testMultiF3(XMulti multi) { return multi.f3(); }
+        private static void checkEqual(double value, double argument)
+            throws CheckFailed
+        {
+            if (argument != value) {
+                throw new CheckFailed(value + " != " + argument);
+            }
+        }
 
-        public int testMultiA(XMulti multi, int value) {
-            multi.seta(value);
-            return multi.geta();
+        private static void checkEqual(String value, String argument)
+            throws CheckFailed
+        {
+            if (!argument.equals(value)) {
+                throw new CheckFailed(value + " != " + argument);
+            }
+        }
+
+        public String testMulti(XMulti multi) {
+            try {
+                checkEqual(0.0, multi.getatt1());
+                multi.setatt1(0.1);
+                checkEqual(0.1, multi.getatt1());
+                checkEqual(11 * 1, multi.fn11(1));
+                checkEqual("12" + "abc", multi.fn12("abc"));
+                checkEqual(21 * 2, multi.fn21(2));
+                checkEqual("22" + "de", multi.fn22("de"));
+                checkEqual(0.0, multi.getatt3());
+                multi.setatt3(0.3);
+                checkEqual(0.3, multi.getatt3());
+                checkEqual(31 * 3, multi.fn31(3));
+                checkEqual("32" + "f", multi.fn32("f"));
+                checkEqual(33, multi.fn33());
+                checkEqual(41 * 4, multi.fn41(4));
+                checkEqual(61 * 6, multi.fn61(6));
+                checkEqual("62" + "", multi.fn62(""));
+                checkEqual(71 * 7, multi.fn71(7));
+                checkEqual("72" + "g", multi.fn72("g"));
+                checkEqual(73, multi.fn73());
+            } catch (CheckFailed f) {
+                return f.getMessage();
+            }
+            return "";
         }
 
         // XBridgeTest
