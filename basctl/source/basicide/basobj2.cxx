@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:47:42 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,12 +511,11 @@ void BasicIDE::RenameModule( SfxObjectShell* pShell, const String& rLibName, con
         IDEBaseWindow* pWin = pIDEShell->FindWindow( pShell, rLibName, rOldName, BASICIDE_TYPE_MODULE, FALSE );
         if ( pWin )
         {
-            ModulWindow* pModWin = (ModulWindow*)pWin;
-
-            // set new name in module window
-            pModWin->SetModuleName( rNewName );
+            // set new name in window
+            pWin->SetName( rNewName );
 
             // set new module in module window
+            ModulWindow* pModWin = (ModulWindow*)pWin;
             pModWin->SetSbModule( (SbModule*)pWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter

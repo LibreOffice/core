@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 14:00:04 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, Window * ):
         SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) )
+        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
+        m_bAppBasicModified( FALSE )
 {
     Init();
 }
@@ -154,7 +155,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, const BasicIDEShell & rView)
         SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) )
+        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
+        m_bAppBasicModified( FALSE )
 {
     DBG_ERROR( "Zweite Ansicht auf Debugger nicht moeglich!" );
 }
@@ -165,7 +167,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame, SfxViewShell* /* pOldShell *
         SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) )
+        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
+        m_bAppBasicModified( FALSE )
 {
     Init();
 }
@@ -268,11 +271,9 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
 
     if ( bPersistent  )
     {
-        if ( SFX_APP()->GetBasicManager()->IsModified() )
-            SFX_APP()->SaveBasicManager();
-
         SFX_APP()->SaveBasicContainer();
         SFX_APP()->SaveDialogContainer();
+        SetAppBasicModified( FALSE );
 
         SfxBindings& rBindings = BasicIDE::GetBindings();
         rBindings.Invalidate( SID_SAVEDOC );

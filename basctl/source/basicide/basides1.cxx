@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 13:59:00 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,10 +123,9 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             if ( pCurWin->ISA( ModulWindow ) )
             {
                 // module
-                ModulWindow* pWin = (ModulWindow*)pCurWin;
-                SfxObjectShell* pShell = pWin->GetShell();
-                String aLibName = pWin->GetLibName();
-                String aName = pWin->GetModuleName();
+                SfxObjectShell* pShell = pCurWin->GetShell();
+                String aLibName = pCurWin->GetLibName();
+                String aName = pCurWin->GetName();
                 if ( QueryDelModule( aName, pCurWin ) )
                 {
                     try
@@ -145,10 +144,9 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             else
             {
                 // dialog
-                DialogWindow* pWin = (DialogWindow*)pCurWin;
-                SfxObjectShell* pShell = pWin->GetShell();
-                String aLibName = pWin->GetLibName();
-                String aName = pWin->GetDialogName();
+                SfxObjectShell* pShell = pCurWin->GetShell();
+                String aLibName = pCurWin->GetLibName();
+                String aName = pCurWin->GetName();
                 if ( QueryDelDialog( aName, pCurWin ) )
                 {
                     try
@@ -315,27 +313,10 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 // Daten ins BASIC zurueckschreiben
                 StoreAllWindowData();
 
-                // Doc-Basic?
-                SfxApplication* pSfxApp = SFX_APP();
-                BasicManager* pAppBasMgr = pSfxApp->GetBasicManager();
-                BasicManager *pBasMgr = BasicIDE::FindBasicManager( pCurWin->GetBasic() );
-                if ( pBasMgr != pAppBasMgr )
-                {
-                    // Doc-Basic suchen
-                    BOOL bFound = FALSE;
-                    for ( SfxObjectShell *pDocSh = SfxObjectShell::GetFirst();
-                          !bFound && pDocSh;
-                          pDocSh = SfxObjectShell::GetNext(*pDocSh) )
-                    {
-                        if ( pDocSh->GetBasicManager() == pBasMgr )
-                        {
-                            // auch das Doc speichern
-                            pDocSh->ExecuteSlot( rReq );
-                            bFound = TRUE;
-                        }
-                    }
-                    DBG_ASSERT( bFound, "unknown basic" );
-                }
+                // document basic
+                SfxObjectShell* pShell = pCurWin->GetShell();
+                if ( pShell )
+                    pShell->ExecuteSlot( rReq );
 
                 SfxBindings &rBindings = BasicIDE::GetBindings();
                 rBindings.Invalidate( SID_DOC_MODIFIED );
@@ -502,7 +483,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     DBG_ASSERT( nId, "No entry in Tabbar!" );
                     if ( nId )
                     {
-                        pTabBar->SetPageText( nId, pEditWin->GetModuleName() );
+                        pTabBar->SetPageText( nId, pEditWin->GetName() );
                     }
                 }
             }
@@ -516,7 +497,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     DBG_ASSERT( nId, "No entry in Tabbar!" );
                     if ( nId )
                     {
-                        pTabBar->SetPageText( nId, pViewWin->GetDialogName() );
+                        pTabBar->SetPageText( nId, pViewWin->GetName() );
                     }
                 }
             }
@@ -774,34 +755,34 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_SAVEDOC:
             {
-/*
-                BasicManager* pAppBasMgr = SFX_APP()->GetBasicManager();
-                // Wenn nicht modifiert, sowieso disablen...
-                if ( pCurWin && ( pCurWin->IsModified() ) &&
-                    ( BasicIDE::FindBasicManager( pCurWin->GetBasic() ) == pAppBasMgr ) )
-                {
-                    break;  // Also enabled
-                }
-                if ( !pAppBasMgr->IsModified() )
-                    rSet.DisableItem( nWh );
-                // ansonsten disablen, wenn ein anderes Basic dargestellt wird.
-                else if ( pCurBasic && ( BasicIDE::FindBasicManager( pCurBasic ) != pAppBasMgr ) )
-                    rSet.DisableItem( nWh );
-                else if ( !pCurBasic && pCurWin )
-                {
-                    StarBASIC* pBasic = pCurWin->GetBasic();
-                    BasicManager* pMgr = BasicIDE::FindBasicManager( pBasic );
-                    if ( pMgr != pAppBasMgr )
-                        rSet.DisableItem( nWh );
-                }
-*/
+                BOOL bDisable = FALSE;
 
-                BasicManager* pMgr = pCurWin ? BasicIDE::FindBasicManager( pCurWin->GetBasic() ) : 0;
-                if ( !pCurWin || !pMgr ||
-                    ( !pCurWin->IsModified() && !pMgr->IsModified() ) )
+                if ( pCurWin )
                 {
-                    rSet.DisableItem( nWh );
+                    if ( !pCurWin->IsModified() )
+                    {
+                        SfxObjectShell* pShell = pCurWin->GetShell();
+                        if ( pShell )
+                        {
+                            // document
+                            if ( !pShell->IsModified() )
+                                bDisable = TRUE;
+                        }
+                        else
+                        {
+                            // application
+                            if ( !IsAppBasicModified() )
+                                bDisable = TRUE;
+                        }
+                    }
                 }
+                else
+                {
+                    bDisable = TRUE;
+                }
+
+                if ( bDisable )
+                    rSet.DisableItem( nWh );
             }
             break;
             case SID_NEWWINDOW:
@@ -917,11 +898,31 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_DOC_MODIFIED:
             {
                 String aModifiedMarker;
-                BasicManager* pBasMgr = pCurWin ? BasicIDE::FindBasicManager( pCurWin->GetBasic() ) : 0;
-                if ( pCurWin && ( pCurWin->IsModified() || ( pBasMgr && pBasMgr->IsModified() ) ) )
+                BOOL bModified = FALSE;
+
+                if ( pCurWin )
                 {
-                    aModifiedMarker = '*';
+                    if ( pCurWin->IsModified() )
+                        bModified = TRUE;
+
+                    SfxObjectShell* pShell = pCurWin->GetShell();
+                    if ( pShell )
+                    {
+                        // document
+                        if ( pShell->IsModified() )
+                            bModified = TRUE;
+                    }
+                    else
+                    {
+                        // application
+                        if ( IsAppBasicModified() )
+                            bModified = TRUE;
+                    }
                 }
+
+                if ( bModified )
+                    aModifiedMarker = '*';
+
                 SfxStringItem aItem( SID_DOC_MODIFIED, aModifiedMarker );
                 rSet.Put( aItem );
             }
@@ -1113,21 +1114,13 @@ IDEBaseWindow* BasicIDEShell::FindWindow( SfxObjectShell* pShell, const String& 
     {
         if ( !pWin->IsSuspended() || bFindSuspended )
         {
-            if ( pWin->IsA( TYPE( ModulWindow ) ) )
+            if ( pWin->GetShell() == pShell &&
+                 pWin->GetLibName() == rLibName &&
+                 pWin->GetName() == rName &&
+                 ( ( pWin->IsA( TYPE( ModulWindow ) )  && nType == BASICIDE_TYPE_MODULE ) ||
+                   ( pWin->IsA( TYPE( DialogWindow ) ) && nType == BASICIDE_TYPE_DIALOG ) ) )
             {
-                if ( ((ModulWindow*)pWin)->GetShell() == pShell &&
-                     ((ModulWindow*)pWin)->GetLibName() == rLibName &&
-                     ((ModulWindow*)pWin)->GetModuleName() == rName &&
-                     nType == BASICIDE_TYPE_MODULE )
-                    return pWin;
-            }
-            else if ( pWin->IsA( TYPE( DialogWindow ) ) )
-            {
-                if ( ((DialogWindow*)pWin)->GetShell() == pShell &&
-                     ((DialogWindow*)pWin)->GetLibName() == rLibName &&
-                     ((DialogWindow*)pWin)->GetDialogName() == rName &&
-                     nType == BASICIDE_TYPE_DIALOG )
-                    return pWin;
+                return pWin;
             }
         }
         pWin = aIDEWindowTable.Next();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 09:04:21 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,13 +116,10 @@ using namespace ::com::sun::star::io;
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
 DialogWindow::DialogWindow( Window* pParent, StarBASIC* pBasic,
-    SfxObjectShell* pShell, String aLibName, String aDlgName,
+    SfxObjectShell* pShell, String aLibName, String aName,
     const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel )
-        :IDEBaseWindow( pParent, pBasic )
+        :IDEBaseWindow( pParent, pBasic, pShell, aLibName, aName )
         ,pUndoMgr(NULL)
-        ,m_pShell( pShell )
-        ,m_aLibName( aLibName )
-        ,m_aDlgName( aDlgName )
 {
     InitSettings( TRUE, TRUE, TRUE );
 
@@ -142,7 +139,7 @@ DialogWindow::DialogWindow( Window* pParent, StarBASIC* pBasic,
 }
 
 DialogWindow::DialogWindow( DialogWindow* pOrgWin ) :
-        IDEBaseWindow( pOrgWin->GetParent(), pOrgWin->GetBasic() )
+        IDEBaseWindow( pOrgWin->GetParent(), pOrgWin->GetBasic(), pOrgWin->GetShell(), pOrgWin->GetLibName(), pOrgWin->GetName() )
 {
     DBG_ERROR( "Dieser CTOR ist nicht erlaubt!" );
 }
@@ -157,12 +154,9 @@ DialogWindow::~DialogWindow()
 
 void DialogWindow::LoseFocus()
 {
-    if( pEditor->IsModified() )
-    {
+    if ( IsModified() )
         StoreData();
-        //BasicIDE::MarkDocShellModified( m_pShell );   // also done in StoreData
-        //pEditor->ClearModifyFlag();                   // also done in StoreData
-    }
+
     Window::LoseFocus();
 }
 
@@ -565,7 +559,7 @@ BOOL DialogWindow::RenameDialog( const String& rNewName )
 
     try
     {
-        BasicIDE::RenameDialog( m_pShell, m_aLibName, m_aDlgName, rNewName );
+        BasicIDE::RenameDialog( GetShell(), GetLibName(), GetName(), rNewName );
         BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
     }
     catch ( container::ElementExistException& )
@@ -618,16 +612,16 @@ SfxUndoManager* __EXPORT DialogWindow::GetUndoManager()
 
 String DialogWindow::GetTitle()
 {
-    return GetDialogName();
+    return GetName();
 }
 
 void DialogWindow::StoreData()
 {
-    if( pEditor->IsModified() )
+    if ( IsModified() )
     {
         try
         {
-            Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( m_pShell, m_aLibName, TRUE );
+            Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( GetShell(), GetLibName(), TRUE );
 
             if( xLib.is() )
             {
@@ -642,9 +636,9 @@ void DialogWindow::StoreData()
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
                     Any aAny;
                     aAny <<= xISP;
-                    xLib->replaceByName( ::rtl::OUString( m_aDlgName ), aAny );
+                    xLib->replaceByName( ::rtl::OUString( GetName() ), aAny );
 
-                    BasicIDE::MarkDocShellModified( m_pShell );
+                    BasicIDE::MarkDocShellModified( GetShell() );
                     pEditor->ClearModifyFlag();
                 }
             }
@@ -659,7 +653,7 @@ void DialogWindow::StoreData()
 
 void DialogWindow::Deactivating()
 {
-    if( pEditor->IsModified() )
+    if ( IsModified() )
         BasicIDE::MarkDocShellModified( GetBasic() );
 }
 

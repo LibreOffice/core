@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:16:57 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,11 +366,6 @@ private:
     SbModuleRef         xModule;
     ModulWindowLayout*  pLayout;
     String              aCurPath;
-
-    // new
-    SfxObjectShell*     m_pShell;
-    String              m_aLibName;
-    String              m_aModName;
     ::rtl::OUString     m_aModule;
 
     DECL_LINK( BasicErrorHdl, StarBASIC * );
@@ -394,7 +389,7 @@ public:
                     TYPEINFO();
 
                     ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBasic,
-                            SfxObjectShell* pShell, String aLibName, String aModName, ::rtl::OUString& aModule );
+                            SfxObjectShell* pShell, String aLibName, String aName, ::rtl::OUString& aModule );
 
                     ~ModulWindow();
 
@@ -459,16 +454,6 @@ public:
     virtual void        BasicStopped();
 
     virtual SfxUndoManager* GetUndoManager();
-
-    // new
-    SfxObjectShell*         GetShell() const { return m_pShell; }
-    void                    SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
-
-    const String&           GetLibName() const { return m_aLibName; }
-    void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
-
-    const String&           GetModuleName() const { return m_aModName; }
-    void                    SetModuleName( const String& aName ) { m_aModName = aName; }
 
     const ::rtl::OUString&  GetModule() const { return m_aModule; }
     void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }

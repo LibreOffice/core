@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 09:04:21 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,8 +533,8 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
         IDEBaseWindow* pWin = pIDEShell->FindWindow( pShell, rLibName, rOldName, BASICIDE_TYPE_DIALOG, FALSE );
         if ( pWin )
         {
-            // set new name in dialog window
-            ((DialogWindow*)pWin)->SetDialogName( rNewName );
+            // set new name in window
+            pWin->SetName( rNewName );
 
             // get dialog model from dialog editor and set new name as property
             Reference< container::XNameContainer > xDlgModel = ((DialogWindow*)pWin)->GetEditor()->GetDialog();
@@ -735,13 +735,13 @@ void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             // Muss ja nicht aus einem Document kommen...
             if ( pShell )
-            {
                 pShell->SetModified();
-                SfxBindings& rBindings = BasicIDE::GetBindings();
-                rBindings.Invalidate( SID_SAVEDOC );
-                rBindings.Update( SID_SAVEDOC );
+            else
+                IDE_DLL()->GetShell()->SetAppBasicModified();
 
-            }
+            SfxBindings& rBindings = BasicIDE::GetBindings();
+            rBindings.Invalidate( SID_SAVEDOC );
+            rBindings.Update( SID_SAVEDOC );
         }
 
         // Objectcatalog updaten...
@@ -757,13 +757,13 @@ void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
 {
     // Muss ja nicht aus einem Document kommen...
     if ( pShell )
-    {
         pShell->SetModified();
-        SfxBindings& rBindings = BasicIDE::GetBindings();
-        rBindings.Invalidate( SID_SAVEDOC );
-        rBindings.Update( SID_SAVEDOC );
+    else
+        IDE_DLL()->GetShell()->SetAppBasicModified();
 
-    }
+    SfxBindings& rBindings = BasicIDE::GetBindings();
+    rBindings.Invalidate( SID_SAVEDOC );
+    rBindings.Update( SID_SAVEDOC );
 
     // Objectcatalog updaten...
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();

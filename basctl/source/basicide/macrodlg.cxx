@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ MacroChooser::~MacroChooser()
 {
     if ( bForceStoreBasic )
     {
-        SFX_APP()->SaveBasicManager();
         SFX_APP()->SaveBasicContainer();
         SFX_APP()->SaveDialogContainer();
     }
@@ -806,7 +805,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             return 0;
         }
 
-        if ( SFX_APP()->GetBasicManager()->IsModified() )
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        if ( pIDEShell && pIDEShell->IsAppBasicModified() )
             bForceStoreBasic = TRUE;
 
         aBasicBox.Clear();

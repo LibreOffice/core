@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -1019,7 +1022,32 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
         }
         USHORT nLib = pBasMgr->GetLibId( aCurText );
         DBG_ASSERT( nLib != LIB_NOTFOUND, "Lib nicht gefunden!" );
-        pBasMgr->SetLibName( nLib, rNewText );
+        //pBasMgr->SetLibName( nLib, rNewText );
+
+        // new
+
+        /*
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+        ::rtl::OUString aOUOldName( aCurText );
+        ::rtl::OUString aOUNewName( rNewText );
+
+        Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOUOldName ) && !xModLibContainer->hasByName( aOUNewName ) )
+        {
+            xModLibContainer->renameLibrary( aOUOldName, aOUNewName );
+        }
+
+        Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOUOldName ) && !xDlgLibContainer->hasByName( aOUNewName ) )
+        {
+            xDlgLibContainer->renameLibrary( aOUOldName, aOUNewName );
+        }
+        */
+
+        // end of new
+
+
         BasicIDE::MarkDocShellModified( pBasMgr->GetStdLib() );
         BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
         BasicIDE::GetBindings().Update( SID_BASICIDE_LIBSELECTOR );

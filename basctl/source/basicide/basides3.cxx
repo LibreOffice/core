@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 09:04:21 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( StarBASIC* pBasic, const String& rDlgNa
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
         {
-            String aDlgStr( ((DialogWindow*)pWin)->GetDialogName() );
+            String aDlgStr( pWin->GetName() );
             if ( !pBasic )  // nur irgendeins finden...
                 pDlgWin = (DialogWindow*)pWin;
             else if ( ( pWin->GetBasic() == pBasic ) && ( aDlgStr == rDlgName ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:19:15 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ ModulWindow* BasicIDEShell::FindBasWin( StarBASIC* pBasic, const String& rModNam
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
-            String aMod( ((ModulWindow*)pWin)->GetModuleName() );
+            String aMod( pWin->GetName() );
             if ( !pBasic )  // nur irgendeins finden...
                 pModWin = (ModulWindow*)pWin;
             else if ( ( pWin->GetBasic() == pBasic ) && ( aMod == rModName ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,19 +235,16 @@ void lcl_ConvertTabsToSpaces( String& rLine )
 
 
 ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas,
-                           SfxObjectShell* pShell, String aLibName, String aModName, ::rtl::OUString& aModule )
-        :IDEBaseWindow( pParent, pBas )
+                           SfxObjectShell* pShell, String aLibName, String aName, ::rtl::OUString& aModule )
+        :IDEBaseWindow( pParent, pBas, pShell, aLibName, aName )
         ,aXEditorWindow( this )
-        ,m_pShell( pShell )
-        ,m_aLibName( aLibName )
-        ,m_aModName( aModName )
         ,m_aModule( aModule )
 {
     DBG_CTOR( ModulWindow, 0 );
     nValid = VALIDWINDOW;
     pLayout = pParent;
     aXEditorWindow.Show();
-    xModule = (SbModule*)pBas->FindModule( aModName );
+    xModule = (SbModule*)pBas->FindModule( aName );
     SetBackground();
 }
 
@@ -1125,7 +1122,7 @@ BOOL ModulWindow::RenameModule( const String& rNewName )
 
     try
     {
-        BasicIDE::RenameModule( m_pShell, m_aLibName, m_aModName, rNewName );
+        BasicIDE::RenameModule( GetShell(), GetLibName(), GetName(), rNewName );
         BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
     }
     catch ( container::ElementExistException& )

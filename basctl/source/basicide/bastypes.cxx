@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 09:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,11 @@ const char* pRegName = "BasicIDETabBar";
 TYPEINIT0( IDEBaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-IDEBaseWindow::IDEBaseWindow( Window* pParent, StarBASIC* pBas ) :
-    Window( pParent, WinBits( WB_3DLOOK ) )
+IDEBaseWindow::IDEBaseWindow( Window* pParent, StarBASIC* pBas, SfxObjectShell* pShell, String aLibName, String aName )
+    :Window( pParent, WinBits( WB_3DLOOK ) )
+    ,m_pShell( pShell )
+    ,m_aLibName( aLibName )
+    ,m_aName( aName )
 {
     DBG_CTOR( IDEBaseWindow, 0 );
     xBasic = pBas;
