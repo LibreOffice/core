@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:29:47 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 11:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_CONDITIONAL_FORMAT :
             case SID_CELL_FORMAT_RESET :
             case FID_CELL_FORMAT :
+            case SID_ENABLE_HYPHENATION :
                 // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
                 if ( !bEditable && bOnlyNotBecauseOfMatrix )
                     bNeedEdit = FALSE;
@@ -250,6 +251,11 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 
         if (bDisable)
             rSet.DisableItem(nWhich);
+        else if (nWhich == SID_ENABLE_HYPHENATION)
+        {
+            // toggle slots need a bool item
+            rSet.Put( SfxBoolItem( nWhich, FALSE ) );
+        }
         nWhich = aIter.NextWhich();
     }
 }

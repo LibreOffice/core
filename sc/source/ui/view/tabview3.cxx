@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:31:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 11:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_DELETE_CONTENTS );
     rBindings.Invalidate( FID_DELETE_CELL );
     rBindings.Invalidate( FID_CELL_FORMAT );
+    rBindings.Invalidate( SID_ENABLE_HYPHENATION );
     rBindings.Invalidate( SID_INSERT_POSTIT );
     rBindings.Invalidate( SID_CHARMAP );
     rBindings.Invalidate( SID_OPENDLG_FUNCTION );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:33:31 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 11:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "cellsh.hxx"
+#include "attrdlg.hrc"      // TP_ALIGNMENT
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
@@ -120,6 +121,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     // kein break
 
             case FID_CELL_FORMAT:
+            case SID_ENABLE_HYPHENATION:
             case SID_DATA_SELECT:
             case SID_OPENDLG_CONSOLIDATE:
             case SID_OPENDLG_SOLVE:
@@ -372,6 +374,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pTabViewShell->ExecuteCellFormatDlg( rReq );
                 }
             }
+            break;
+
+        case SID_ENABLE_HYPHENATION:
+            pTabViewShell->ExecuteCellFormatDlg( rReq, TP_ALIGNMENT );
             break;
 
         case SID_OPENDLG_SOLVE:

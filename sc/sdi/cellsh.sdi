@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-04-27 19:27:02 $ $Revision: 1.5 $
+ // $Author: nn $ $Date: 2001-05-21 11:01:09 $ $Revision: 1.6 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ interface CellSelection : Selection
     SID_MARKAREA            [ ExecMethod = Execute; ]
     SID_SELECT_SCENARIO     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_CELL_FORMAT         [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    SID_ENABLE_HYPHENATION  [ ExecMethod = Execute; StateMethod = GetBlockState; ]
     FID_ROW_HEIGHT          [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_ROW_OPT_HEIGHT      [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_ROW_HIDE            [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -378,6 +379,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/04/27 19:27:02  nn
+    user interface for linked areas / external data sources
+
     Revision 1.4  2001/04/23 11:43:56  nn
     slot for clipboard controller
 
