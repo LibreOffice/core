@@ -58,6 +58,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -236,6 +237,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -414,6 +416,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -592,6 +595,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -770,6 +774,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -948,6 +953,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1126,6 +1132,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1304,6 +1311,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1482,6 +1490,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1660,6 +1669,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
