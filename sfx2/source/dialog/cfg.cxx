@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:44:07 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,42 @@
 #include "workwin.hxx"
 #include "filedlghelper.hxx"
 #include "request.hxx"
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
+#ifndef _UNOTOOLS_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+
+#ifndef  _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
+#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#endif
+
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#endif
+
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
+#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#endif
+
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
+#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::drafts::com::sun::star::script;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -243,12 +279,24 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     for ( USHORT i=0; i<nCount; i++ )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
-        if ( pData->nKind == SFX_CFGFUNCTION_MACRO )
+
+        if ( pData->nKind == SFX_CFGFUNCTION_MACRO ||
+                 pData->nKind == SFX_CFGFUNCTION_SCRIPT )
         {
             SfxMacroInfo *pInfo = (SfxMacroInfo*) pData->pObject;
             SFX_APP()->GetMacroConfig()->ReleaseSlotId( pInfo->GetSlotId() );
             delete pInfo;
         }
+
+        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        {
+            XInterface* xi = static_cast<XInterface *>(pData->pObject);
+            if (xi != NULL)
+            {
+                xi->release();
+            }
+        }
+
         delete pData;
     }
 
@@ -299,7 +347,8 @@ SfxMacroInfo* SfxConfigFunctionListBox_Impl::GetMacroInfo()
     if ( pEntry )
     {
         SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData && pData->nKind == SFX_CFGFUNCTION_MACRO )
+        if ( pData && ( pData->nKind == SFX_CFGFUNCTION_MACRO ||
+                                        pData->nKind == SFX_CFGFUNCTION_SCRIPT ) )
             return (SfxMacroInfo*) pData->pObject;
     }
 
@@ -360,7 +409,7 @@ void SfxConfigFunctionListBox_Impl::FunctionSelected()
 SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
-        , nMode( nConfigMode )
+        , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE )
 /*  Beschreibung
     Diese Listbox zeigt alle Funktionsgruppen und Basics an, die zur Konfiguration
     zur Verf"ugung stehen. Basics werden noch in Bibliotheken und Module untergliedert.
@@ -370,6 +419,37 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) , BMP_COLOR_NORMAL );
     SetNodeBitmaps( Image( BMP_COLLAPSED_HC ), Image( BMP_EXPANDED_HC ), BMP_COLOR_HIGHCONTRAST );
+
+    // Check configuration to see whether only Basic macros,
+  // only Scripting Framework scripts, or both should be listed
+    Any value;
+    sal_Bool tmp;
+
+    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+        ::rtl::OUString::createFromAscii(
+            "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
+
+    value >>= tmp;
+
+    if (tmp == sal_True) {
+        bShowBasic = TRUE;
+    }
+    else {
+        bShowBasic = FALSE;
+    }
+
+    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+        ::rtl::OUString::createFromAscii(
+            "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
+
+    value >>= tmp;
+
+    if (tmp == sal_True) {
+        bShowSF = TRUE;
+    }
+    else {
+        bShowSF = FALSE;
+    }
 }
 
 
@@ -500,56 +580,22 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
         }
     }
 
-    // Basics einsammeln
-    pSfxApp->EnterBasicCall();
-    String aMacroName(' ');
-    aMacroName += String(SfxResId(STR_BASICMACROS));
-
-    // Zuerst AppBasic
-    BasicManager *pAppBasicMgr = pSfxApp->GetBasicManager();
-    BOOL bInsert = TRUE;
-    if ( pArr )
+    if ( bShowBasic )
     {
-        bInsert = FALSE;
-        for ( USHORT n=0; n<pArr->Count(); n++ )
-        {
-            if ( *(*pArr)[n] == pSfxApp->GetName() )
-            {
-                bInsert = TRUE;
-                break;
-            }
-        }
-    }
+        // Basics einsammeln
+        pSfxApp->EnterBasicCall();
+        String aMacroName(' ');
+        aMacroName += String(SfxResId(STR_BASICMACROS));
 
-    if ( bInsert )
-    {
-        pAppBasicMgr->SetName( pSfxApp->GetName() );
-        if ( pAppBasicMgr->GetLibCount() )
-        {
-            // Nur einf"ugen, wenn Bibliotheken vorhanden
-            String aAppBasTitle( SfxResId( STR_HUMAN_APPNAME ) );
-            aAppBasTitle += aMacroName;
-            SvLBoxEntry *pEntry = InsertEntry( aAppBasTitle, 0 );
-            SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_BASICMGR, 0, pAppBasicMgr );
-            aArr.Insert( pInfo, aArr.Count() );
-            pEntry->SetUserData( pInfo );
-            pEntry->EnableChildsOnDemand( TRUE );
-//          Expand( pEntry );
-        }
-    }
-
-    //SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
-    SfxObjectShell *pDoc = SfxObjectShell::GetWorkingDocument();
-    //while ( pDoc )
-    if ( pDoc )
-    {
+        // Zuerst AppBasic
+        BasicManager *pAppBasicMgr = pSfxApp->GetBasicManager();
         BOOL bInsert = TRUE;
         if ( pArr )
         {
             bInsert = FALSE;
             for ( USHORT n=0; n<pArr->Count(); n++ )
             {
-                if ( *(*pArr)[n] == pDoc->GetTitle() )
+                if ( *(*pArr)[n] == pSfxApp->GetName() )
                 {
                     bInsert = TRUE;
                     break;
@@ -559,26 +605,127 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
 
         if ( bInsert )
         {
-            BasicManager *pBasicMgr = pDoc->GetBasicManager();
-            if ( pBasicMgr != pAppBasicMgr && pBasicMgr->GetLibCount() )
+            pAppBasicMgr->SetName( pSfxApp->GetName() );
+            if ( pAppBasicMgr->GetLibCount() )
             {
-                pBasicMgr->SetName( pDoc->GetTitle() );
-
-                // Nur einf"ugen, wenn eigenes Basic mit Bibliotheken
-                SvLBoxEntry *pEntry = InsertEntry( pDoc->GetTitle().Append(aMacroName), NULL );
-                SfxGroupInfo_Impl *pInfo =
-                    new SfxGroupInfo_Impl( SFX_CFGGROUP_DOCBASICMGR, 0, pDoc );
+                // Nur einf"ugen, wenn Bibliotheken vorhanden
+                String aAppBasTitle( SfxResId( STR_HUMAN_APPNAME ) );
+                aAppBasTitle += aMacroName;
+                SvLBoxEntry *pEntry = InsertEntry( aAppBasTitle, 0 );
+                SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_BASICMGR, 0, pAppBasicMgr );
                 aArr.Insert( pInfo, aArr.Count() );
                 pEntry->SetUserData( pInfo );
                 pEntry->EnableChildsOnDemand( TRUE );
-//              Expand( pEntry );
+    //          Expand( pEntry );
             }
         }
 
-        //pDoc = SfxObjectShell::GetNext(*pDoc);
+        //SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
+        SfxObjectShell *pDoc = SfxObjectShell::GetWorkingDocument();
+        //while ( pDoc )
+        if ( pDoc )
+        {
+            BOOL bInsert = TRUE;
+            if ( pArr )
+            {
+                bInsert = FALSE;
+                for ( USHORT n=0; n<pArr->Count(); n++ )
+                {
+                    if ( *(*pArr)[n] == pDoc->GetTitle() )
+                    {
+                        bInsert = TRUE;
+                        break;
+                    }
+                }
+            }
+
+            if ( bInsert )
+            {
+                BasicManager *pBasicMgr = pDoc->GetBasicManager();
+                if ( pBasicMgr != pAppBasicMgr && pBasicMgr->GetLibCount() )
+                {
+                    pBasicMgr->SetName( pDoc->GetTitle() );
+
+                    // Nur einf"ugen, wenn eigenes Basic mit Bibliotheken
+                    SvLBoxEntry *pEntry = InsertEntry( pDoc->GetTitle().Append(aMacroName), NULL );
+                    SfxGroupInfo_Impl *pInfo =
+                        new SfxGroupInfo_Impl( SFX_CFGGROUP_DOCBASICMGR, 0, pDoc );
+                    aArr.Insert( pInfo, aArr.Count() );
+                    pEntry->SetUserData( pInfo );
+                    pEntry->EnableChildsOnDemand( TRUE );
+    //              Expand( pEntry );
+                }
+            }
+
+            //pDoc = SfxObjectShell::GetNext(*pDoc);
+        }
+
+        pSfxApp->LeaveBasicCall();
     }
 
-    pSfxApp->LeaveBasicCall();
+    SfxObjectShell *tmp = SfxObjectShell::GetWorkingDocument();
+    OSL_TRACE("** ** About to initialise SF Scripts");
+    if ( bShowSF )
+    {
+        OSL_TRACE("** ** bShowSF");
+        // Add Scripting Framework entries
+        Reference< browse::XBrowseNode > rootNode;
+        if ( tmp )
+        {
+            OSL_TRACE("** ** Have working doc");
+            Reference< provider::XScriptProviderSupplier > xSPS =
+                Reference< provider::XScriptProviderSupplier >
+                    ( tmp->GetModel(), UNO_QUERY );
+
+            if( xSPS.is() )
+            {
+                OSL_TRACE("** ** Have MasterScriptProvider from doc");
+                Reference< provider::XScriptProvider > xScriptProvider =
+                    xSPS->getScriptProvider();
+                rootNode = Reference< browse::XBrowseNode >( xScriptProvider, UNO_QUERY );
+            }
+        }
+        else
+        {
+            OSL_TRACE("** ** Creating MSP on the fly");
+            Reference < lang::XMultiServiceFactory > xMgr =
+        ::comphelper::getProcessServiceFactory();
+            if ( xMgr.is() )
+            {
+                ::rtl::OUString name( RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.script.provider.MasterScriptProvider"));
+
+                Sequence< Any > args(1);
+                SfxObjectShell *tmp = SfxObjectShell::GetFirst();
+                args[ 0 ] <<= tmp->GetModel();
+
+                rootNode = Reference< browse::XBrowseNode >(
+                    xMgr->createInstanceWithArguments( name, args ), UNO_QUERY );
+            }
+        }
+
+
+
+        if ( rootNode.is() )
+        {
+            /*
+                We call acquire on the XBrowseNode so that it does not
+                get autodestructed and become invalid when accessed later.
+            */
+            rootNode->acquire();
+
+            SfxGroupInfo_Impl *pInfo =
+                new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
+                    static_cast<void *>(rootNode.get()));
+
+            String aTitle( SfxResId( STR_HUMAN_APPNAME ) );
+            aTitle += String::CreateFromAscii( " Scripts" );
+            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            pNewEntry->SetUserData( pInfo );
+            pNewEntry->EnableChildsOnDemand( TRUE );
+            aArr.Insert( pInfo, aArr.Count() );
+        }
+    }
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( TRUE );
 }
@@ -594,7 +741,8 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
     pFunctionListBox->SetUpdateMode(FALSE);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
-         pInfo->nKind != SFX_CFGGROUP_BASICMOD )
+             pInfo->nKind != SFX_CFGGROUP_BASICMOD &&
+             pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER )
     {
         pFunctionListBox->SetUpdateMode(TRUE);
         return;
@@ -673,6 +821,62 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                 pFuncEntry->SetUserData( pInfo );
             }
 
+            break;
+        }
+
+        case SFX_CFGGROUP_SCRIPTCONTAINER:
+        {
+            if ( !GetChildCount( pEntry ) )
+            {
+                Reference< browse::XBrowseNode > rootNode(
+                    reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+
+                try {
+                    if ( rootNode->hasChildNodes() )
+                    {
+                        Sequence< Reference< browse::XBrowseNode > > children =
+                            rootNode->getChildNodes();
+
+                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        {
+                            if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
+                            {
+                                ::rtl::OUString uri;
+
+                                Reference < beans::XPropertySet >xPropSet( children[n], UNO_QUERY );
+                                if (!xPropSet.is())
+                                {
+                                    continue;
+                                }
+
+                                Any value =
+                                    xPropSet->getPropertyValue( String::CreateFromAscii( "URI" ) );
+                                value >>= uri;
+
+                                SfxMacroInfo* aInfo = new SfxMacroInfo( uri );
+                                aInfo->SetHelpText( uri );
+                                SFX_APP()->GetMacroConfig()->GetSlotId( aInfo );
+
+                                SfxGroupInfo_Impl* pInfo =
+                                    new SfxGroupInfo_Impl(SFX_CFGFUNCTION_SCRIPT,
+                                        aInfo->GetSlotId(), aInfo);
+
+                                SvLBoxEntry* pNewEntry =
+                                    pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
+
+                                pNewEntry->SetUserData( pInfo );
+
+                                pFunctionListBox->aArr.Insert(
+                                    pInfo, pFunctionListBox->aArr.Count() );
+
+                            }
+                        }
+                    }
+                }
+                catch (RuntimeException &e) {
+                    // do nothing, the entry will not be displayed in the UI
+                }
+            }
             break;
         }
 
@@ -802,6 +1006,94 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 }
             }
 
+            break;
+        }
+
+        case SFX_CFGGROUP_SCRIPTCONTAINER:
+        {
+            if ( !GetChildCount( pEntry ) )
+            {
+                Reference< browse::XBrowseNode > rootNode(
+                    reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+
+                try {
+                    if ( rootNode->hasChildNodes() )
+                    {
+                        Sequence< Reference< browse::XBrowseNode > > children =
+                            rootNode->getChildNodes();
+                        BOOL bIsRootNode = FALSE;
+
+                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
+                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
+                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
+                        {
+                            bIsRootNode = TRUE;
+                        }
+
+                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        {
+                            Reference< browse::XBrowseNode >& theChild = children[n];
+                            BOOL bDisplay = TRUE;
+                            /* To mimic current starbasic behaviour we
+                            need to make sure that only the current document
+                            is displayed in the config tree. Tests below
+                            set the bDisplay flag to FALSE if the current
+                            node is a first level child of the Root and is NOT
+                            either the current document, user or share */
+                            ::rtl::OUString currentDocTitle;
+                               if ( SfxObjectShell::GetWorkingDocument() )
+                            {
+                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
+                            }
+                            if ( bIsRootNode )
+                            {
+                                if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
+                                    theChild->getName().equals( currentDocTitle ) ) ) )
+                                {
+                                    bDisplay=FALSE;
+                                }
+                            }
+                            if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
+                            {
+
+                                /*
+                                    We call acquire on the XBrowseNode so that it does not
+                                    get autodestructed and become invalid when accessed later.
+                                */
+                                theChild->acquire();
+
+                                SfxGroupInfo_Impl* pInfo =
+                                    new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                        0, static_cast<void *>( theChild.get()));
+
+                                SvLBoxEntry* pNewEntry =
+                                    InsertEntry( theChild->getName(), pEntry );
+
+                                pNewEntry->SetUserData( pInfo );
+                                aArr.Insert( pInfo, aArr.Count() );
+
+                                if ( children[n]->hasChildNodes() )
+                                {
+                                    Sequence< Reference< browse::XBrowseNode > > grandchildren =
+                                        children[n]->getChildNodes();
+
+                                    for ( ULONG m = 0; m < grandchildren.getLength(); m++ )
+                                    {
+                                        if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
+                                        {
+                                            pNewEntry->EnableChildsOnDemand( TRUE );
+                                            m = grandchildren.getLength();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (RuntimeException &e) {
+                    // do nothing, the entry will not be displayed in the UI
+                }
+            }
             break;
         }
 
