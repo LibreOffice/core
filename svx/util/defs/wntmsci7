@@ -24098,3 +24098,16 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?replaceAt@OUString@rtl@@QBE?AV12@JJABV12@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx1875410192@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
 ?XOutCreatePolyPolygonBezier@@YA?AVPolyPolygon@@ABVXPolyPolygon@@PAVOutputDevice@@@Z
+??C?$Reference@VXSpellAlternatives@linguistic2@star@sun@com@@@uno@star@sun@com@@QBAPAVXSpellAlternatives@linguistic2@234@XZ
+?calcFontInfo@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx24412785@@YA?AVFontInfo@@AAVSvxFont@@PAVSvxCharNamePage@@PBVFontNameBox@@PBVFontStyleBox@@PBVFontSizeBox@@PBVFontList@@GG@Z
+?enableRelativeMode@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx24412785@@YAXPAVSvxCharNamePage@@PAVFontSizeBox@@G@Z
+?setPrevFontEscapement@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx24412785@@YAXAAVSvxFont@@EEF@Z
+?Resize@SvxRectCtl@@UAEXXZ
+?calcFontHeightAnyAscent@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx3045910146@@YAXPAVOutputDevice@@AAVFont@@AAJ2@Z
+?initFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx3045910146@@YAXAAVFont@@@Z
+?scaleFontWidth@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx3045910146@@YAXAAVFont@@ABVOutputDevice@@AAJ@Z
+?setFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx3045910146@@YAXABVSvxFont@@AAV2@@Z
+?setFontSize@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx3045910146@@YAXAAVFont@@@Z
+?EnableDynamicSpacing@SvxHFPage@@QAEXXZ
+?UpdateTextRTL@SvxRuler@@AAEXPBVSfxBoolItem@@@Z
+??1?$auto_ptr@VSfxPoolItem@@@_STL@@QAE@XZ
