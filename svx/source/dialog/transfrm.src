@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:45:46 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,13 +269,13 @@ TabPage RID_SVXPAGE_POSITION
         Text = "Sch~ützen" ;
         Text [ ENGLISH ] = "~Protect" ;
         Text [ norwegian ] = "~Beskytte" ;
-        Text [ italian ] = "~Proteggi" ;
+        Text [ italian ] = "Proteggi" ;
         Text [ portuguese_brazilian ] = "~Proteger" ;
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojaa" ;
         Text [ danish ] = "Beskyt" ;
-        Text [ french ] = "~Protéger" ;
-        Text [ swedish ] = "Sk~ydda" ;
+        Text [ french ] = "Protéger" ;
+        Text [ swedish ] = "S~kydda" ;
         Text [ dutch ] = "~Beveiligen" ;
         Text [ spanish ] = "~Proteger" ;
         Text [ english_us ] = "Pr~otect" ;
@@ -531,10 +531,10 @@ TabPage RID_SVXPAGE_POSITION
         Text[ russian ] = "~Ïîçèöèÿ";
         Text[ greek ] = "ÈÝóç";
         Text[ dutch ] = "~Positie";
-        Text[ french ] = "~Position";
-        Text[ spanish ] = "~Posición";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "Posición";
         Text[ finnish ] = "~Sijainti";
-        Text[ italian ] = "~Posizione";
+        Text[ italian ] = "Posizione";
         Text[ danish ] = "Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "~Pozycja";
@@ -920,15 +920,15 @@ TabPage RID_SVXPAGE_SIZE
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "~Largh." ;
+        Text [ italian ] = "Larghezza" ;
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "Le~veys" ;
         Text [ danish ] = "Bredde" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "~Breedte" ;
-        Text [ spanish ] = "A~ncho" ;
+        Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "Wi~dth" ;
         Text[ chinese_simplified ] = "å®½åº¦(~D)";
         Text[ russian ] = "Øèðèíà";
@@ -1070,7 +1070,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ english_us ] = "~Keep ratio" ;
         Text [ italian ] = "Adatta" ;
         Text [ spanish ] = "~Igualar" ;
-        Text [ french ] = "~Proportionnel" ;
+        Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Synchroniseren" ;
         Text [ swedish ] = "Anpassa proportionellt" ;
         Text [ danish ] = "Proportional" ;
@@ -1096,13 +1096,13 @@ TabPage RID_SVXPAGE_SIZE
         Text = "Sch~ützen" ;
         Text [ ENGLISH ] = "~Protect" ;
         Text [ norwegian ] = "~Beskytte" ;
-        Text [ italian ] = "~Proteggi" ;
+        Text [ italian ] = "Proteggi" ;
         Text [ portuguese_brazilian ] = "~Proteger" ;
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojaa" ;
         Text [ danish ] = "Beskyt" ;
-        Text [ french ] = "~Protéger" ;
-        Text [ swedish ] = "Sk~ydda" ;
+        Text [ french ] = "Protéger" ;
+        Text [ swedish ] = "S~kydda" ;
         Text [ dutch ] = "~Beveiligen" ;
         Text [ spanish ] = "~Proteger" ;
         Text [ english_us ] = "Pr~otect" ;
@@ -1158,7 +1158,7 @@ TabPage RID_SVXPAGE_SIZE
         TabStop = TRUE ;
         Text [ dutch ] = "Br~eedte aan tekst aanpassen" ;
         Text [ italian ] = "~Adatta la larghezza al testo" ;
-        Text [ spanish ] = "Ajustar ~ancho al texto" ;
+        Text [ spanish ] = "Ajustar ancho al texto" ;
         Text [ french ] = "Adapter la lar~geur au texte" ;
         Text [ swedish ] = "Anpassa br~edd till text" ;
         Text [ danish ] = "Tilpas bredde til tekst" ;
@@ -1454,7 +1454,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ portuguese ] = "~Ângulo" ;
         Text [ finnish ] = "~Kulma" ;
         Text [ danish ] = "Vinkel" ;
-        Text [ french ] = "~Angle" ;
+        Text [ french ] = "Angle" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ spanish ] = "Án~gulo" ;
@@ -1633,7 +1633,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ english_us ] = "~Radius" ;
         Text [ italian ] = "Raggio" ;
         Text [ spanish ] = "Ra~dio" ;
-        Text [ french ] = "~Rayon" ;
+        Text [ french ] = "Rayon" ;
         Text [ swedish ] = "~Radie" ;
         Text [ danish ] = "Radius" ;
         Text [ portuguese_brazilian ] = "~Radius" ;
@@ -1704,7 +1704,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ english_us ] = "~Angle" ;
         Text [ italian ] = "Angolo" ;
         Text [ spanish ] = "Á~ngulo" ;
-        Text [ french ] = "~Angle" ;
+        Text [ french ] = "Angle" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ danish ] = "Vinkel" ;
         Text [ portuguese ] = "~Ângulo" ;
