@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:46:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,18 @@
 #define HID_POPUP_FONTWORK_CHARSPACE                (HID_SVX_EXT0_START + 159)
 
 
+#define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 160)
+
+#define HID_SVX_TABDLG_DOCRECOVERY                  (HID_SVX_EXT0_START + 161)
+#define HID_SVX_TP_DOCRECOVERY_SAVE                 (HID_SVX_EXT0_START + 162)
+#define HID_SVX_MDLG_DOCRECOVERY_PROGR              (HID_SVX_EXT0_START + 163)
+#define HID_SVX_TP_DOCRECOVERY_RECOVER              (HID_SVX_EXT0_START + 164)
+#define HID_SVX_MDLG_DOCRECOVERY_BROKEN             (HID_SVX_EXT0_START + 165)
+#define HID_SVX_TP_ERR_REP_WELCOME                  (HID_SVX_EXT0_START + 166)
+#define HID_SVX_TP_ERR_REP_SEND                     (HID_SVX_EXT0_START + 167)
+#define HID_SVX_MDLG_ERR_REP_OPTIONS                (HID_SVX_EXT0_START + 168)
+#define HID_SVX_MDLG_ERR_REP_PREVIEW                (HID_SVX_EXT0_START + 169)
+
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
@@ -778,7 +790,8 @@
 #endif
 
 // overrun check 2
-#define ACT_SVX_HID_END2        HID_POPUP_FONTWORK_CHARSPACE
+
+#define ACT_SVX_HID_END2        HID_SVX_MDLG_ERR_REP_PREVIEW
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
