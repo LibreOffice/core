@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WeakBase_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:43:14 $
+ *  last change: $Author: jl $ $Date: 2002-04-17 11:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,13 @@ public class WeakBase_Test
                 r[i++]= false;
 
         }
+
+        Foo1 f1= new Foo1();
+        Foo1 f2= new Foo1();
+        Type[] t1= f1.getTypes();
+        Type[] t2= f2.getTypes();
+        r[i++]= t1.equals(t2);
+        Foo2 f3= new Foo2();
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -125,8 +132,15 @@ public class WeakBase_Test
         }
         String retStr= buff.toString();
         r[i++]= retStr.equals("com.sun.star.lib.uno.helper.SomeClass");
-        System.out.println(buff.toString());
+//        System.out.println(buff.toString());
 
+        Foo1 f1= new Foo1();
+        Foo1 f2= new Foo1();
+        r[i++]= f1.getImplementationId().equals(f2.getImplementationId());
+        Foo2 f3= new Foo2();
+        r[i++]= ! f1.getImplementationId().equals(f3.getImplementationId());
+        Foo3 f4= new Foo3();
+        r[i++]= ! f1.getImplementationId().equals(f4.getImplementationId());
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -256,4 +270,16 @@ class MyRef implements XReference
     {
         nDisposeCalled++;
     }
+}
+
+class Foo1 extends WeakBase
+{
+}
+
+class Foo2 extends WeakBase
+{
+}
+
+class Foo3 extends Foo1
+{
 }
