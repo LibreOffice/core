@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-19 17:28:32 $
+#   last change: $Author: jl $ $Date: 2001-04-12 12:02:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,10 +100,11 @@ SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1EXPORTFILE=	exports.dxp
 
 DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME=	$(TARGET)
+#DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
+#DEFLIB1NAME=	$(TARGET)
 
 # --- Targets ------------------------------------------------------
 
