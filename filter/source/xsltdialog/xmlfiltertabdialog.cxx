@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:35:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,11 +129,11 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
     maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_BASIC, mpBasicPage );
 
     Size aSiz = mpBasicPage->GetSizePixel();
-    Size aCtrlSiz = maTabCtrl.GetOutputSizePixel();
+    Size aCtrlSiz = maTabCtrl.GetTabPageSizePixel();
     // set size on TabControl only if smaller than TabPage
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
     {
-        maTabCtrl.SetOutputSizePixel( aSiz );
+        maTabCtrl.SetTabPageSizePixel( aSiz );
         aCtrlSiz = aSiz;
     }
 
@@ -145,7 +145,7 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
     aSiz = mpXSLTPage->GetSizePixel();
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
     {
-        maTabCtrl.SetOutputSizePixel( aSiz );
+        maTabCtrl.SetTabPageSizePixel( aSiz );
         aCtrlSiz = aSiz;
     }
 
