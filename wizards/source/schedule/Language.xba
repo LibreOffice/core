@@ -12,6 +12,7 @@ Public Const cLANGUAGE_SPANISH = &quot;es&quot;, cLANGUAGE_SWEDISH = &quot;sv&qu
 
 Public BLNameList(0 To 16) as String
 
+
 &apos; R e s o u r c e   s t r i n g   c o n s t a n t s
 &apos; -------------------------------------------------
 &apos; Dialog labels start at 1000
@@ -71,8 +72,8 @@ Const dlgShortMonth = 1225
 			.lblEvent.Label = GetResText(1019)
 			.lblEventDay.Label = GetResText(1021)
 			.lblEventMonth.Label = GetResText(1022)
-			.lblEventYear.Label = GetResText(1023)
-			.chkEventOnce.Label = GetResText(1020)
+&apos;			.lblEventYear.Label = GetResText(1023)
+&apos;			.chkEventOnce.Label = GetResText(1020)
 			.cmdInsert.Label = GetResText(1016)
 			.cmdDelete.Label = GetResText(1017)
 			&apos; Load long month names
