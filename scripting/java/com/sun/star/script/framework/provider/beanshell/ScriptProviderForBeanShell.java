@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 13:27:41 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:11:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -100,12 +100,14 @@ import drafts.com.sun.star.script.provider.XScript;
 
 import com.sun.star.script.framework.provider.*;
 import com.sun.star.script.framework.log.*;
-import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.container.ScriptMetaData;
 
 public class ScriptProviderForBeanShell
 {
     public static class _ScriptProviderForBeanShell extends ScriptProvider
     {
+        private static ScriptEditorForBeanShell myScriptEditorForBeanShell;
+
         public _ScriptProviderForBeanShell(XComponentContext ctx)
         {
             super (ctx, "BeanShell");
@@ -127,7 +129,18 @@ public class ScriptProviderForBeanShell
                 return script;
             }
         }
+
+        public boolean hasScriptEditor()
+        {
+            return true;
+        }
+
+        public ScriptEditor getScriptEditor()
+        {
+            return ScriptEditorForBeanShell.getEditor();
+        }
     }
+
     /**
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -214,7 +227,7 @@ class ScriptImpl implements XScript
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
             throw new com.sun.star.uno.RuntimeException(
                 "Error constructing  ScriptImpl [beanshell]: "
                 + e.getMessage() );
@@ -259,12 +272,6 @@ class ScriptImpl implements XScript
             aOutParamIndex[0] = new short[0];
             aOutParam[0] = new Object[0];
 
-            String parcelURI = metaData.getParcelLocation();
-
-            if ( !parcelURI.endsWith( "/" ) )
-            {
-                parcelURI += "/";
-            }
 
             ClassLoader cl = null;
             try {
@@ -283,29 +290,36 @@ class ScriptImpl implements XScript
                 interpreter.set("context",
                     ScriptContext.createContext(m_oInvokeContext,
                         m_xContext, m_xMultiComponentFactory));
+
+                interpreter.set("ARGUMENTS", aParams);
             }
             catch (bsh.EvalError e) {
                 throw new InvocationTargetException(e.getMessage());
             }
 
-            InputStream is = null;;
             try {
-                String script = parcelURI + metaData.getLanguageName();
+                String source = null;
                 Object result = null;
 
+                ScriptEditorForBeanShell editor =
+                    ScriptEditorForBeanShell.getEditor(
+                        metaData.getSourceURL() );
 
-                try {
-                    is = PathUtils.getScriptFileStream( script );
+                if (editor != null && editor.isModified())
+                {
+                    source = editor.getText();
                 }
-                catch (IOException ioe) {
-                    throw new InvocationTargetException(ioe.getMessage());
+                else
+                {
+                    source = metaData.getSource();
+
                 }
 
-                if (is == null)
+                if ( source == null || source.length() == 0 )
                     throw new InvocationTargetException(
-                        "Couldn't read script: " + script);
+                        "Couldn't read script: " + metaData.getSourceURL()  );
 
-                result = interpreter.eval(new InputStreamReader(is));
+                result = interpreter.eval( source );
 
                 if (result == null)
                     return new Any(new Type(), null);
@@ -313,19 +327,6 @@ class ScriptImpl implements XScript
             }
             catch (Exception ex) {
                 throw new InvocationTargetException(ex.getMessage());
-            }
-            finally
-            {
-                if ( is != null )
-                {
-                    try
-                    {
-                        is.close();
-                    }
-                    catch ( Exception e )
-                    {
-                    }
-                }
             }
         }
 
