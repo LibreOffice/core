@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:20:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 
@@ -525,6 +526,87 @@ OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rO
     return pRet;
 }
 
+bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& rTargetRect,
+                        bool& rIsSheet, ScDocument* pDoc, SCTAB nSourceTab )
+{
+    // test in same order as in SID_CURRENTCELL execute
+
+    ScAddress aAddress;
+    ScRangeUtil aRangeUtil;
+    SCTAB nNameTab;
+    sal_Int32 nNumeric;
+
+    bool bRangeValid = false;
+    bool bRectValid = false;
+
+    if ( rTargetRange.Parse( rTarget, pDoc ) & SCA_VALID )
+    {
+        bRangeValid = true;             // range reference
+    }
+    else if ( aAddress.Parse( rTarget, pDoc ) & SCA_VALID )
+    {
+        rTargetRange = aAddress;
+        bRangeValid = true;             // cell reference
+    }
+    else if ( aRangeUtil.MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_NAMES ) ||
+              aRangeUtil.MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
+    {
+        bRangeValid = true;             // named range or database range
+    }
+    else if ( ByteString( rTarget, RTL_TEXTENCODING_ASCII_US ).IsNumericAscii() &&
+              ( nNumeric = rTarget.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
+    {
+        // row number is always mapped to cell A(row) on the same sheet
+        rTargetRange = ScAddress( 0, (SCROW)(nNumeric-1), nSourceTab );     // target row number is 1-based
+        bRangeValid = true;             // row number
+    }
+    else if ( pDoc->GetTable( rTarget, nNameTab ) )
+    {
+        rTargetRange = ScAddress(0,0,nNameTab);
+        bRangeValid = true;             // sheet name
+        rIsSheet = true;                // needs special handling (first page of the sheet)
+    }
+    else
+    {
+        // look for named drawing object
+
+        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        if ( pDrawLayer )
+        {
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB i=0; i<nTabCount && !bRangeValid; i++)
+            {
+                SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
+                DBG_ASSERT(pPage,"Page ?");
+                if (pPage)
+                {
+                    SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+                    SdrObject* pObject = aIter.Next();
+                    while (pObject && !bRangeValid)
+                    {
+                        if ( ScDrawLayer::GetVisibleName( pObject ) == rTarget )
+                        {
+                            rTargetRect = pObject->GetLogicRect();              // 1/100th mm
+                            rTargetRange = pDoc->GetRange( i, rTargetRect );    // underlying cells
+                            bRangeValid = bRectValid = true;                    // rectangle is valid
+                        }
+                        pObject = aIter.Next();
+                    }
+                }
+            }
+        }
+    }
+    if ( bRangeValid && !bRectValid )
+    {
+        //  get rectangle for cell range
+        rTargetRect = pDoc->GetMMRect( rTargetRange.aStart.Col(), rTargetRange.aStart.Row(),
+                                       rTargetRange.aEnd.Col(),   rTargetRange.aEnd.Row(),
+                                       rTargetRange.aStart.Tab() );
+    }
+
+    return bRangeValid;
+}
+
 BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMark,
                                      ScPrintSelectionStatus& rStatus ) const
 {
@@ -757,6 +839,100 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     }
 
     long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
+
+    //  resolve the hyperlinks for PDF export
+
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    if ( pPDFData )
+    {
+        //  iterate over the hyperlinks that were output for this page
+
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIter = rBookmarks.begin();
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIEnd = rBookmarks.end();
+        while ( aIter != aIEnd )
+        {
+            rtl::OUString aBookmark = aIter->aBookmark;
+            if ( aBookmark.toChar() == (sal_Unicode) '#' )
+            {
+                //  try to resolve internal link
+
+                String aTarget( aBookmark.copy( 1 ) );
+
+                ScRange aTargetRange;
+                Rectangle aTargetRect;      // 1/100th mm
+                bool bIsSheet = false;
+                bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, pDoc, nTab );
+
+                if ( bValid )
+                {
+                    sal_Int32 nPage = -1;
+                    Rectangle aArea;
+                    if ( bIsSheet )
+                    {
+                        //  Get first page for sheet (if nothing from that sheet is printed,
+                        //  this page can show a different sheet)
+                        nPage = pPrintFuncCache->GetTabStart( aTargetRange.aStart.Tab() );
+                        aArea = pDev->PixelToLogic( Rectangle( 0,0,0,0 ) );
+                    }
+                    else
+                    {
+                        pPrintFuncCache->InitLocations( aMark, pDev );      // does nothing if already initialized
+
+                        ScPrintPageLocation aLocation;
+                        if ( pPrintFuncCache->FindLocation( aTargetRange.aStart, aLocation ) )
+                        {
+                            nPage = aLocation.nPage;
+
+                            // get the rectangle of the page's cell range in 1/100th mm
+                            ScRange aLocRange = aLocation.aCellRange;
+                            Rectangle aLocationMM = pDoc->GetMMRect(
+                                       aLocRange.aStart.Col(), aLocRange.aStart.Row(),
+                                       aLocRange.aEnd.Col(),   aLocRange.aEnd.Row(),
+                                       aLocRange.aStart.Tab() );
+                            Rectangle aLocationPixel = aLocation.aRectangle;
+
+                            // Scale and move the target rectangle from aLocationMM to aLocationPixel,
+                            // to get the target rectangle in pixels.
+
+                            Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
+                            Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
+
+                            long nX1 = aLocationPixel.Left() + (long)
+                                ( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
+                            long nX2 = aLocationPixel.Left() + (long)
+                                ( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
+                            long nY1 = aLocationPixel.Top() + (long)
+                                ( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
+                            long nY2 = aLocationPixel.Top() + (long)
+                                ( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
+
+                            if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
+                            if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();
+                            if ( nY1 > aLocationPixel.Bottom() ) nY1 = aLocationPixel.Bottom();
+                            if ( nY2 > aLocationPixel.Bottom() ) nY2 = aLocationPixel.Bottom();
+
+                            // The link target area is interpreted using the device's MapMode at
+                            // the time of the CreateDest call, so PixelToLogic can be used here,
+                            // regardless of the MapMode that is actually selected.
+
+                            aArea = pDev->PixelToLogic( Rectangle( nX1, nY1, nX2, nY2 ) );
+                        }
+                    }
+
+                    if ( nPage >= 0 )
+                        pPDFData->SetLinkDest( aIter->nLinkId, pPDFData->CreateDest( aArea, nPage ) );
+                }
+            }
+            else
+            {
+                //  external link, use as-is
+                pPDFData->SetLinkURL( aIter->nLinkId, aBookmark );
+            }
+            aIter++;
+        }
+        rBookmarks.clear();
+    }
 
     delete pDrawView;
 }
