@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 05:50:13 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "¿ÚË·ÛÚ˚";
         Text[ greek ] = "…‰È¸~ÙÁÙÂÚ";
         Text[ dutch ] = "Attributes";
-        Text[ french ] = "Attributes";
+        Text[ french ] = "A~ttributs";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
@@ -169,15 +169,267 @@ TabPage TP_REDLINE_OPT
             < "[None]" ; > ;
             < "Bold" ; > ;
             < "Italic" ; > ;
-            < "Underline" ; > ;
-            < "Underline: double" ; > ;
+            < "Underlined" ; > ;
+            < "Underlined: double" ; > ;
             < "Strikethrough" ; > ;
-            < "Caps" ; > ;
-            < "Lower case" ; > ;
+            < "Uppercase" ; > ;
+            < "Lowercase" ; > ;
             < "Small caps" ; > ;
             < "Title font" ; > ;
             < "Background color" ; > ;
         };
+    StringList [ language_user1 ] =
+    {
+            < "[Keine]" ; > ;
+        < "Fett" ; > ;
+        < "Kursiv" ; > ;
+        < "Unterstrichen" ; > ;
+        < "Doppelt unterstrichen" ; > ;
+        < "Durchstreichen" ; > ;
+        < "Versalien" ; > ;
+        < "Gemeine" ; > ;
+        < "Kapit‰lchen" ; > ;
+        < "Titelschrift" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "[nenhum]" ; > ;
+        < "Negrito" ; > ;
+        < "It·lico" ; > ;
+        < "Sublinhado" ; > ;
+        < "Sublinhado duplo" ; > ;
+        < "Mai˙sculas" ; > ;
+        < "Min˙sculas" ; > ;
+        < "Versaletes" ; > ;
+        < "Caracteres do tÌtulo" ; > ;
+        < "Cor do plano de fundo" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "[¡ÂÁ]" ; > ;
+        < "∆ËÌ˚È" ; > ;
+        < " ÛÒË‚" ; > ;
+        < "œÓ‰˜ÂÍÌÛÚ˚È" ; > ;
+        < "ƒ‚ÓÈÌÓÂ ÔÓ‰˜ÂÍË‚‡ÌËÂ" ; > ;
+        < "«‡˜ÂÍÌÛÚ¸" ; > ;
+        < "œÓÔËÒÌ˚Â" ; > ;
+        < "—ÚÓ˜Ì˚Â" ; > ;
+        < " ‡ÔËÚÂÎ¸" ; > ;
+        < "«‡„Î‡‚Ì˚È ¯ËÙÚ" ; > ;
+        < "÷‚ÂÚ ÙÓÌ‡" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "[ ·Ì›Ì·]" ; > ;
+        < "∏ÌÙÔÌÔ" ; > ;
+        < "–Î‹„È·" ; > ;
+        < "’Ô„Ò‹ÏÏÈÛÁ" ; > ;
+        < "ƒÈÎﬁ ıÔ„Ò‹ÏÏÈÛÁ" ; > ;
+        < " Âˆ·Î·ﬂ·" ; > ;
+        < "–ÂÊÔﬂ ˜·Ò·ÍÙﬁÒÂÚ" ; > ;
+        < "ÃÈÍÒ‹ ÍÂˆ·Î·ﬂ·" ; > ;
+        < "√Ò·ÏÏ·ÙÔÛÂÈÒ‹ ÙﬂÙÎÔı" ; > ;
+        < "◊Ò˛Ï· ˆ¸ÌÙÔı" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "[Geen]" ; > ;
+        < "Vet" ; > ;
+        < "Cursief" ; > ;
+        < "Onderstrepen" ; > ;
+        < "Dubbel onderstrepen" ; > ;
+        < "Hoofdletters" ; > ;
+        < "Kleine letters" ; > ;
+        < "Kapitalen" ; > ;
+        < "Titelschrift" ; > ;
+        < "Achtergrondkleur" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "[Aucun(e)]" ; > ;
+        < "Gras" ; > ;
+        < "Italique" ; > ;
+        < "Soulignage" ; > ;
+        < "Soulignage : double" ; > ;
+        < "BarrÈ" ; > ;
+        < "Majuscules" ; > ;
+        < "Minuscules" ; > ;
+        < "Petites majuscules" ; > ;
+        < "CaractËres du titre" ; > ;
+        < "Couleur d'arriËre-plan" ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "[Ninguno]" ; > ;
+        < "Negrita" ; > ;
+        < "Cursiva" ; > ;
+        < "Subrayado" ; > ;
+        < "Subrayado doble" ; > ;
+        < "May˙sculas" ; > ;
+        < "Min˙sculas" ; > ;
+        < "Versalitas" ; > ;
+        < "Caracteres del tÌtulo" ; > ;
+        < "Color de fondo" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "[nessuno]" ; > ;
+        < "Grassetto" ; > ;
+        < "Corsivo" ; > ;
+        < "Sottolineato" ; > ;
+        < "Sottolineatura doppia" ; > ;
+        < "Maiuscolo" ; > ;
+        < "Minuscolo" ; > ;
+        < "Maiuscoletto" ; > ;
+        < "Carattere del titolo" ; > ;
+        < "Colore di sfondo" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "[Ingen]" ; > ;
+        < "Fed" ; > ;
+        < "Kursiv" ; > ;
+        < "Understreget" ; > ;
+        < "Dobbelt understreget" ; > ;
+        < "Store bogstaver" ; > ;
+        < "SmÂ bogstaver" ; > ;
+        < "KapitÊler" ; > ;
+        < "Titelskrift" ; > ;
+        < "Baggrundsfarve" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "[Inget]" ; > ;
+        < "Fet" ; > ;
+        < "Kursiv" ; > ;
+        < "Understruken" ; > ;
+        < "Dubbelt understruken" ; > ;
+        < "Genomstruken" ; > ;
+        < "Versaler" ; > ;
+        < "Gemener" ; > ;
+        < "Kapit‰ler" ; > ;
+        < "Titel" ; > ;
+        < "Bakgrundsf‰rg" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "[Brak]" ; > ;
+        < "Pogrubienie" ; > ;
+        < "Kursywa" ; > ;
+        < "Podkreúlenie" ; > ;
+        < "PodwÛjne podkreúlenie" ; > ;
+        < "Wersaliki" ; > ;
+        < "Ma≥e litery" ; > ;
+        < "Kapitaliki" ; > ;
+        < "Czcionka tytu≥owa" ; > ;
+        < "Kolor t≥a" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "[Keine]" ; > ;
+        < "Fett" ; > ;
+        < "Kursiv" ; > ;
+        < "Unterstrichen" ; > ;
+        < "Doppelt unterstrichen" ; > ;
+        < "Versalien" ; > ;
+        < "Gemeine" ; > ;
+        < "Kapit‰lchen" ; > ;
+        < "Titelschrift" ; > ;
+        < "Hintergrundfarbe" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "[Ç»Çµ]" ; > ;
+        < "ëæéö" ; > ;
+        < "éŒëÃ" ; > ;
+        < "â∫ê¸" ; > ;
+        < "ìÒèdâ∫ê¸" ; > ;
+        < "éÊÇËè¡Çµê¸" ; > ;
+        < "ëÂï∂éö" ; > ;
+        < "è¨ï∂éö" ; > ;
+        < "è¨å^ëÂï∂éö" ; > ;
+        < "¿≤ƒŸï∂éö" ; > ;
+        < "îwåiêF" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "[æ¯¿Ω]" ; > ;
+        < "±Ω∞‘" ; > ;
+        < "¿Ã≈≈∏Ø√º" ; > ;
+        < "πÿ¡Ÿ" ; > ;
+        < "¿Ã¡ﬂ πÿ¡Ÿ" ; > ;
+        < "¥ÎπÆ¿⁄" ; > ;
+        < "º“πÆ¿⁄" ; > ;
+        < "Ω∫∏Ùƒ∏" ; > ;
+        < "¡¶∏Ò ±€≤√" ; > ;
+        < "πË∞Êªˆ" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "[Œﬁ]" ; > ;
+        < "¥÷ÃÂ" ; > ;
+        < "–±ÃÂ" ; > ;
+        < "œ¬ªÆœﬂ" ; > ;
+        < "À´œ¬ªÆœﬂ" ; > ;
+        < "…æ≥˝œﬂ" ; > ;
+        < "¥Û–¥◊÷ƒ∏" ; > ;
+        < "–°–¥◊÷ƒ∏" ; > ;
+        < "–°–Õ¥Û–¥◊÷ÃÂ" ; > ;
+        < "±ÍÃ‚◊÷ÃÂ" ; > ;
+        < "±≥æ∞—’…´" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "[µL]" ; > ;
+        < "≤ ≈È" ; > ;
+        < "±◊≈È" ; > ;
+        < "©≥Ωu" ; > ;
+        < "¬˘©≥Ωu" ; > ;
+        < "ßR∞£Ωu" ; > ;
+        < "§jºg¶r•¿" ; > ;
+        < "§pºg¶r•¿" ; > ;
+        < "§p´¨§jºg¶r•¿" ; > ;
+        < "º–√D¶r´¨" ; > ;
+        < "≠I¥∫√C¶‚" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "[Yok]" ; > ;
+        < "Kal˝n" ; > ;
+        < "›talik" ; > ;
+        < "Alt˝ Áizili" ; > ;
+        < "Alt˝ Áift Áizili" ; > ;
+        < "B¸y¸k harflerle" ; > ;
+        < "K¸Á¸k harflerle" ; > ;
+        < "K¸Á¸k b¸y¸k harf" ; > ;
+        < "Ba˛l˝k yaz˝tipi" ; > ;
+        < "Artalan rengi" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "[»œÊ‰]" ; > ;
+        < "⁄—Ì÷" ; > ;
+        < "„«∆·" ; > ;
+        < " Õ Â Œÿ" ; > ;
+        < "Œÿ  Õ Ì „“œÊÃ" ; > ;
+        < "√Õ—› ﬂ»Ì—…" ; > ;
+        < "√Õ—› ’€Ì—…" ; > ;
+        < "Õ—› »œ«Ì… √ﬂ»—" ; > ;
+        < "Œÿ «·⁄‰Ê«‰" ; > ;
+        < "·Ê‰ «·Œ·›Ì…" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
     };
     FixedText FT_INS_COL
     {
@@ -192,7 +444,7 @@ TabPage TP_REDLINE_OPT
         Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
         Text [ spanish ] = "~Color" ;
-        Text [ french ] = "Couleur" ;
+        Text [ french ] = "~Couleur" ;
         Text [ dutch ] = "~Kleur" ;
         Text[ chinese_simplified ] = "—’…´";
         Text[ russian ] = "÷‚ÂÚ";
@@ -224,7 +476,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "¬ÒÚ‡‚ËÚ¸";
         Text[ greek ] = "≈ÈÛ·„˘„ﬁ";
         Text[ dutch ] = "Insert";
-        Text[ french ] = "Insert";
+        Text[ french ] = "InsÈrer";
         Text[ spanish ] = "Insert";
         Text[ italian ] = "Insert";
         Text[ danish ] = "Insert";
@@ -249,7 +501,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "¿ÚË·ÛÚ˚";
         Text[ greek ] = "…‰È¸~ÙÁÙÂÚ";
         Text[ dutch ] = "Attributes";
-        Text[ french ] = "Attributes";
+        Text[ french ] = "A~ttributs";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
@@ -281,7 +533,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "÷‚ÂÚ";
         Text[ greek ] = "◊Ò˛Ï·";
         Text[ dutch ] = "Color";
-        Text[ french ] = "Color";
+        Text[ french ] = "~Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Color";
         Text[ danish ] = "Color";
@@ -314,7 +566,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "”‰‡ÎËÚ¸";
         Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
         Text[ dutch ] = "Delete";
-        Text[ french ] = "Delete";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "Delete";
         Text[ italian ] = "Delete";
         Text[ danish ] = "Delete";
@@ -339,7 +591,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "¿ÚË·ÛÚ˚";
         Text[ greek ] = "…‰È¸~ÙÁÙÂÚ";
         Text[ dutch ] = "Attributes";
-        Text[ french ] = "Attributes";
+        Text[ french ] = "A~ttributs";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
@@ -371,7 +623,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "÷‚ÂÚ";
         Text[ greek ] = "◊Ò˛Ï·";
         Text[ dutch ] = "Color";
-        Text[ french ] = "Color";
+        Text[ french ] = "~Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Color";
         Text[ danish ] = "Color";
@@ -404,7 +656,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "¿ÚË·ÛÚ˚";
         Text[ greek ] = "…‰È¸ÙÁÙÂÚ";
         Text[ dutch ] = "Attributes";
-        Text[ french ] = "Attributes";
+        Text[ french ] = "Attributs";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
