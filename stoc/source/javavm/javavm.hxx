@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 09:03:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "cppuhelper/compbase5.hxx"
-#include "osl/module.hxx"
 #include "osl/thread.hxx"
 #include "rtl/ref.hxx"
 
@@ -195,7 +194,6 @@ private:
         m_xInetConfiguration;
     com::sun::star::uno::Reference< com::sun::star::container::XContainer >
         m_xJavaConfiguration; // for Java settings
-    osl::Module m_aJavaLib;
 
     osl::ThreadData m_aAttachGuards;
 };
