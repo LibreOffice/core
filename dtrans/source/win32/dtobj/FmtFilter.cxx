@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,67 +99,68 @@ struct METAFILEHEADER
 
 Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
 {
-    OSL_ASSERT( aMetaFilePict.getLength( ) );
+    OSL_ASSERT( aMetaFilePict.getLength( ) == sizeof( METAFILEPICT ) );
 
+    Sequence< sal_Int8 > mfpictStream;
     METAFILEPICT* pMFPict = reinterpret_cast< METAFILEPICT* >( aMetaFilePict.getArray( ) );
-
-    OSL_ASSERT( pMFPict );
-    OSL_ASSERT( !IsBadReadPtr( pMFPict, sizeof( METAFILEPICT ) ) );
-
     HMETAFILE hMf = pMFPict->hMF;
     sal_uInt32 nCount = GetMetaFileBitsEx( hMf, 0, NULL );
-    Sequence< sal_Int8 > mfpictStream( nCount + sizeof( METAFILEHEADER ) );
 
-    METAFILEHEADER* pMFHeader = (METAFILEHEADER*)mfpictStream.getArray( );
-    SMALL_RECT aRect = { 0,
-                         0,
-                         static_cast< short >( pMFPict->xExt ),
-                         static_cast< short >( pMFPict->yExt ) };
-    USHORT nInch;
-
-    switch( pMFPict->mm )
+    if ( nCount > 0 )
     {
-    case MM_TEXT:
-        nInch = 72;
-        break;
+        mfpictStream.realloc( nCount + sizeof( METAFILEHEADER ) );
 
-    case MM_LOMETRIC:
-        nInch = 100;
-        break;
+        METAFILEHEADER* pMFHeader = reinterpret_cast< METAFILEHEADER* >( mfpictStream.getArray( ) );
+        SMALL_RECT aRect = { 0,
+                             0,
+                             static_cast< short >( pMFPict->xExt ),
+                             static_cast< short >( pMFPict->yExt ) };
+        USHORT nInch;
 
-    case MM_HIMETRIC:
-        nInch = 1000;
-        break;
+        switch( pMFPict->mm )
+        {
+        case MM_TEXT:
+            nInch = 72;
+            break;
 
-    case MM_LOENGLISH:
-        nInch = 254;
-        break;
+        case MM_LOMETRIC:
+            nInch = 100;
+            break;
 
-    case MM_HIENGLISH:
-    case MM_ISOTROPIC:
-    case MM_ANISOTROPIC:
-        nInch = 2540;
-        break;
+        case MM_HIMETRIC:
+            nInch = 1000;
+            break;
 
-    case MM_TWIPS:
-        nInch = 1440;
-        break;
+        case MM_LOENGLISH:
+            nInch = 254;
+            break;
 
-    default:
-        nInch = 576;
+        case MM_HIENGLISH:
+        case MM_ISOTROPIC:
+        case MM_ANISOTROPIC:
+            nInch = 2540;
+            break;
+
+        case MM_TWIPS:
+            nInch = 1440;
+            break;
+
+        default:
+            nInch = 576;
+        }
+
+        pMFHeader->key      = 0x9AC6CDD7L;
+        pMFHeader->hmf      = 0;
+        pMFHeader->bbox     = aRect;
+        pMFHeader->inch     = nInch;
+        pMFHeader->reserved = 0;
+        pMFHeader->checksum = 0;
+
+        char* pMFBuff = reinterpret_cast< char* >( mfpictStream.getArray( ) );
+
+        nCount = GetMetaFileBitsEx( pMFPict->hMF, nCount, pMFBuff + sizeof( METAFILEHEADER ) );
+        OSL_ASSERT( nCount > 0 );
     }
-
-    pMFHeader->key      = 0x9AC6CDD7L;
-    pMFHeader->hmf      = 0;
-    pMFHeader->bbox     = aRect;
-    pMFHeader->inch     = nInch;
-    pMFHeader->reserved = 0;
-    pMFHeader->checksum = 0;
-
-    char* pMFBuff = reinterpret_cast< char* >( mfpictStream.getArray( ) );
-
-    nCount = GetMetaFileBitsEx( pMFPict->hMF, nCount, pMFBuff + sizeof( METAFILEHEADER ) );
-    OSL_ASSERT( nCount );
 
     return mfpictStream;
 }
@@ -170,10 +171,11 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
 
 HMETAFILE SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
-    OSL_ASSERT( aOOMetaFilePict.getLength( ) );
+    OSL_ASSERT( aOOMetaFilePict.getLength( ) > sizeof( METAFILEHEADER ) );
 
-    return SetMetaFileBitsEx( aOOMetaFilePict.getLength( ) - sizeof( METAFILEHEADER ),
-                              reinterpret_cast< BYTE* >( aOOMetaFilePict.getArray( ) ) + sizeof( METAFILEHEADER ) );
+    return SetMetaFileBitsEx(
+        aOOMetaFilePict.getLength( ) - sizeof( METAFILEHEADER ),
+        reinterpret_cast< BYTE* >( aOOMetaFilePict.getArray( ) ) + sizeof( METAFILEHEADER ) );
 }
 
 //------------------------------------------------------------------------
@@ -182,10 +184,14 @@ HMETAFILE SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 
 Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
-    Sequence< sal_Int8 > ooBmpStream( aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER) );
+    OSL_ASSERT( aWinDIB.getLength( ) > sizeof( BITMAPINFOHEADER ) );
+
+    Sequence< sal_Int8 > ooBmpStream;
+
+    ooBmpStream.realloc( aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER) );
 
     const BITMAPINFOHEADER  *pBmpInfoHdr = (const BITMAPINFOHEADER*)aWinDIB.getConstArray();
-    BITMAPFILEHEADER        *pBmpFileHdr = (BITMAPFILEHEADER*)ooBmpStream.getArray();
+    BITMAPFILEHEADER        *pBmpFileHdr = reinterpret_cast< BITMAPFILEHEADER* >( ooBmpStream.getArray() );
     DWORD                   nOffset      = sizeof( BITMAPFILEHEADER ) + sizeof( BITMAPINFOHEADER );
 
     rtl_copyMemory( pBmpFileHdr + 1, pBmpInfoHdr, aWinDIB.getLength( ) );
@@ -208,11 +214,14 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
 
 Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 {
-    Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof(BITMAPFILEHEADER) );
+    OSL_ASSERT( aOOBmp.getLength( ) >
+                ( sizeof( BITMAPFILEHEADER ) + sizeof( BITMAPINFOHEADER ) ) );
+
+    Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
     rtl_copyMemory( winDIBStream.getArray( ),
-                    aOOBmp.getArray( ) + sizeof(BITMAPFILEHEADER),
-                    aOOBmp.getLength( ) - sizeof(BITMAPFILEHEADER) );
+                    aOOBmp.getArray( )  + sizeof( BITMAPFILEHEADER ),
+                    aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
     return winDIBStream;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,6 @@ public:
     // necessary so that we have all data
     // when we flush the clipboard
     void SAL_CALL GetAllDataFromSource( );
-
-    // sometimes we need to lock objects of this
-    // class for instance during clipboard shutdown
-    // it should not be possible to do specific
-    // things etc.
-    //Lock( );
-    //Unlock( );
 
 private:
     void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;

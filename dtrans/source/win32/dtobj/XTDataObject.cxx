@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 17:40:28 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
+using CStgTransferHelper::CStgTransferException;
 
 //------------------------------------------------------------------------
 // a helper class that will be thrown by the function validateFormatEtc
@@ -393,19 +394,27 @@ void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium(
 STDMETHODIMP CXTDataObject::EnumFormatEtc(
     DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
-    if ( ( NULL == ppenumFormatetc ) || ( DATADIR_SET == dwDirection ) )
+    if ( NULL == ppenumFormatetc )
         return E_INVALIDARG;
+
+    if ( DATADIR_SET == dwDirection )
+        return E_NOTIMPL;
 
     *ppenumFormatetc = NULL;
 
+    HRESULT hr;
     if ( DATADIR_GET == dwDirection )
     {
         *ppenumFormatetc = new CEnumFormatEtc( this, m_FormatEtcContainer );
         if ( NULL != *ppenumFormatetc )
             static_cast< LPUNKNOWN >( *ppenumFormatetc )->AddRef( );
-    }
 
-    return ( NULL != *ppenumFormatetc ) ? S_OK : E_OUTOFMEMORY;
+        hr = ( NULL != *ppenumFormatetc ) ? S_OK : E_OUTOFMEMORY;
+    }
+    else
+        hr = E_INVALIDARG;
+
+    return hr;
 }
 
 //------------------------------------------------------------------------
@@ -414,12 +423,10 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc(
 
 STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
-    HRESULT hr = E_INVALIDARG;
+    if ( (NULL == pFormatetc) || IsBadReadPtr( pFormatetc, sizeof( FORMATETC ) ) )
+        return E_INVALIDARG;
 
-    if ( NULL != pFormatetc )
-        hr = m_FormatEtcContainer.hasFormatEtc( *pFormatetc ) ? S_OK : S_FALSE;
-
-    return hr;
+    return m_FormatEtcContainer.hasFormatEtc( *pFormatetc ) ? S_OK : S_FALSE;
 }
 
 //------------------------------------------------------------------------
@@ -714,16 +721,17 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* lpFetched )
 {
-    if ( (( 0 != nRequested ) && ( NULL == lpDest )) ||
+    if ( ( nRequested < 1 ) ||
+         (( nRequested > 1 ) && ( NULL == lpFetched )) ||
          IsBadWritePtr( lpDest, sizeof( FORMATETC ) * nRequested ) )
         return E_INVALIDARG;
 
     sal_uInt32 nFetched = m_FormatEtcContainer.nextFormatEtc( lpDest, nRequested );
 
-    if ( lpFetched )
+    if ( NULL != lpFetched )
         *lpFetched = nFetched;
 
-    return nFetched == nRequested ? S_OK : S_FALSE;
+    return (nFetched == nRequested) ? S_OK : S_FALSE;
 }
 
 //----------------------------------------------------------------------------
@@ -754,15 +762,9 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
     if ( NULL == ppenum )
         return E_INVALIDARG;
 
-    *ppenum = NULL;
-
-    CEnumFormatEtc* pCEnumFEtc =
-        new CEnumFormatEtc( m_lpUnkOuter, m_FormatEtcContainer );
-    if ( NULL != pCEnumFEtc )
-    {
-        *ppenum = static_cast< IEnumFORMATETC* >( pCEnumFEtc );
+    *ppenum = new CEnumFormatEtc( m_lpUnkOuter, m_FormatEtcContainer );
+    if ( NULL != ppenum )
         static_cast< LPUNKNOWN >( *ppenum )->AddRef( );
-    }
 
     return ( NULL != *ppenum ) ? S_OK : E_OUTOFMEMORY;
 }

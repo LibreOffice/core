@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:45:14 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+using CStgTransferHelper::CStgTransferException;
 
 //------------------------------------------------------------------------
 //
@@ -162,10 +163,22 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 
     MutexGuard aGuard( m_aMutex );
 
+    //------------------------------------------------
+    // convert dataflavor to formatetc
+    //------------------------------------------------
+
     CFormatEtc fetc = dataFlavorToFormatEtc( aFlavor );
     OSL_ASSERT( CF_INVALID != fetc.getClipformat() );
 
+    //------------------------------------------------
+    //  get the data from clipboard in a byte stream
+    //------------------------------------------------
+
     ByteSequence_t clipDataStream = getClipboardData( fetc );
+
+    //------------------------------------------------
+    // return the data as any
+    //------------------------------------------------
 
     return byteStreamToAny( clipDataStream, aFlavor.DataType );
 }
@@ -182,6 +195,8 @@ Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
 
 //------------------------------------------------------------------------
 // isDataFlavorSupported
+// returns true if we find a DataFlavor with the same MimeType and
+// DataType
 //------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
@@ -312,10 +327,6 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
     {
         ReleaseStgMedium( &stgmedium );
         throw IOException( );
-    }
-    catch(...)
-    {
-        OSL_ENSURE( sal_False, "Unexpected error" );
     }
 
     return byteStream;

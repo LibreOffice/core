@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:46:11 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ CFormatEtcContainer::CFormatEtcContainer( )
 //
 //------------------------------------------------------------------------
 
-void CFormatEtcContainer::addFormatEtc( const FORMATETC& fetc )
+void CFormatEtcContainer::addFormatEtc( const CFormatEtc& fetc )
 {
     m_FormatMap.push_back( CFormatEtc( fetc ) );
 }
@@ -136,10 +136,10 @@ void CFormatEtcContainer::addFormatEtc( const FORMATETC& fetc )
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFormatEtcContainer::removeFormatEtc( const FORMATETC& fetc )
+void SAL_CALL CFormatEtcContainer::removeFormatEtc( const CFormatEtc& fetc )
 {
     FormatEtcMap_t::iterator iter =
-        find( m_FormatMap.begin(), m_FormatMap.end(), CFormatEtc( fetc ) );
+        find( m_FormatMap.begin(), m_FormatMap.end(), fetc );
 
     if ( iter != m_FormatMap.end( ) )
         m_FormatMap.erase( iter );
@@ -158,14 +158,14 @@ void SAL_CALL CFormatEtcContainer::removeAllFormatEtc( )
 //
 //------------------------------------------------------------------------
 
-sal_Bool CFormatEtcContainer::hasFormatEtc( const FORMATETC& fetc ) const
+sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
 {
     FormatEtcMap_t::const_iterator iter =
-        find( m_FormatMap.begin(), m_FormatMap.end(), CFormatEtc( fetc ) );
+        find( m_FormatMap.begin(), m_FormatMap.end(), fetc );
 
     if ( iter != m_FormatMap.end( ) )
     {
-        return ( (CFormatEtc( fetc ) == CFormatEtc( *iter )) == 1  );
+        return ( ( fetc == CFormatEtc( *iter )) == 1  );
     }
 
     return sal_False;
@@ -274,20 +274,20 @@ void SAL_CALL CFormatRegistrar::RegisterFormats( const Sequence< DataFlavor >& a
     for( sal_Int32 i = 0; i < nFlavors; i++ )
     {
         aFlavor = aFlavorList[i];
-        FORMATETC fetc = dataFlavorToFormatEtc( aFlavor );
+        CFormatEtc fetc = dataFlavorToFormatEtc( aFlavor );
 
         if ( needsToSynthesizeAccompanyFormats( fetc ) )
         {
 
 #ifdef _DEBUG
-            FORMATETC fetcdbg;
+            CFormatEtc fetcdbg;
 
-            if ( fetc.cfFormat == CF_TEXT )
+            if ( fetc.getClipformat() == CF_TEXT )
             {
                 fetcdbg = getFormatEtcForClipformat( CF_OEMTEXT );
                 OSL_ASSERT( !aFormatEtcContainer.hasFormatEtc( fetcdbg ) );
             }
-            else if ( fetc.cfFormat == CF_OEMTEXT )
+            else if ( fetc.getClipformat() == CF_OEMTEXT )
             {
                 fetcdbg = getFormatEtcForClipformat( CF_TEXT );
                 OSL_ASSERT( !aFormatEtcContainer.hasFormatEtc( fetcdbg ) );
@@ -363,7 +363,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isTextFormat( CLIPFORMAT cf ) const
 //
 //------------------------------------------------------------------------
 
-FORMATETC SAL_CALL CFormatRegistrar::dataFlavorToFormatEtc( const DataFlavor& aFlavor ) const
+CFormatEtc SAL_CALL CFormatRegistrar::dataFlavorToFormatEtc( const DataFlavor& aFlavor ) const
 {
     return m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
 }
@@ -373,10 +373,10 @@ FORMATETC SAL_CALL CFormatRegistrar::dataFlavorToFormatEtc( const DataFlavor& aF
 //------------------------------------------------------------------------
 
 inline
-sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const FORMATETC& aFormatEtc ) const
+sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const
 {
-    return ( isOemOrAnsiTextFormat( aFormatEtc.cfFormat ) ||
-             isUnicodeTextFormat( aFormatEtc.cfFormat ) );
+    return ( isOemOrAnsiTextFormat( aFormatEtc.getClipformat() ) ||
+             isUnicodeTextFormat( aFormatEtc.getClipformat() ) );
 }
 
 //------------------------------------------------------------------------
@@ -384,12 +384,12 @@ sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const FOR
 //------------------------------------------------------------------------
 
 void SAL_CALL CFormatRegistrar::synthesizeAndRegisterAccompanyFormats(
-    FORMATETC& aFormatEtc, const DataFlavor& aFlavor, CFormatEtcContainer& aFormatEtcContainer )
+    CFormatEtc& aFormatEtc, const DataFlavor& aFlavor, CFormatEtcContainer& aFormatEtcContainer )
 {
-    CLIPFORMAT cf = aFormatEtc.cfFormat;
+    CLIPFORMAT cf = aFormatEtc.getClipformat();
     OSL_ASSERT( isOemOrAnsiTextFormat(cf) || isUnicodeTextFormat(cf) );
 
-    FORMATETC fetc;
+    CFormatEtc fetc;
 
     if ( isOemOrAnsiTextFormat( cf ) )
     {
@@ -464,7 +464,7 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
 //------------------------------------------------------------------------
 
 inline
-FORMATETC SAL_CALL CFormatRegistrar::getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const
+CFormatEtc SAL_CALL CFormatRegistrar::getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const
 {
     return m_DataFormatTranslator.getFormatEtcForClipformat( aClipformat );
 }

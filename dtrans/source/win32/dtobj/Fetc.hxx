@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Fetc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 14:30:54 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ class CFormatEtc
 {
 public:
     CFormatEtc( );
-    explicit CFormatEtc( const FORMATETC& aFormatEtc );
+    CFormatEtc( const FORMATETC& aFormatEtc );
     CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd = NULL, DWORD dwAspect = DVASPECT_CONTENT, LONG lindex = -1 );
     CFormatEtc( const CFormatEtc& theOther );
 

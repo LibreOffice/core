@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,16 @@
 
 CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
                                         HGLOBAL hGlob,
-                                        sal_Bool bDeleteStorageOnRelease,
-                                        sal_Bool bReleaseStreamOnDestruction ) :
+                                        sal_Bool bDelStgOnRelease,
+                                        sal_Bool bReleaseStreamOnDestr ) :
     m_lpStream( NULL ),
-    m_bDelStgOnRelease( bDeleteStorageOnRelease ),
-    m_bReleaseStreamOnDestr( bReleaseStreamOnDestruction )
+    m_bDelStgOnRelease( bDelStgOnRelease ),
+    m_bReleaseStreamOnDestr( bReleaseStreamOnDestr )
 {
-    OSL_ASSERT( !(bDeleteStorageOnRelease && !bReleaseStreamOnDestruction) );
+    OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
 
     if ( bAutoInit )
-        init( hGlob, bDeleteStorageOnRelease, bReleaseStreamOnDestruction );
+        init( hGlob, m_bDelStgOnRelease, m_bReleaseStreamOnDestr );
 }
 
 //------------------------------------------------------------------------
@@ -104,7 +104,7 @@ CStgTransferHelper::~CStgTransferHelper( )
 // TransferData into the
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cbWritten )
+void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cbWritten )
 {
     HRESULT hr = E_FAIL;
 
@@ -113,15 +113,13 @@ sal_Bool SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG
 
     if ( FAILED( hr ) )
         throw CStgTransferException( hr );
-
-    return SUCCEEDED( hr );
 }
 
 //------------------------------------------------------------------------
 // read
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead )
+void SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead )
 {
     HRESULT hr = E_FAIL;
 
@@ -130,8 +128,6 @@ sal_Bool SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead 
 
     if ( FAILED( hr ) )
         throw CStgTransferException( hr );
-
-    return SUCCEEDED( hr );
 }
 
 //------------------------------------------------------------------------
@@ -168,45 +164,46 @@ void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
 // Init
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
-                                            UINT uiFlags,
-                                            sal_Bool bDeleteStorageOnRelease,
-                                            sal_Bool bReleaseStreamOnDestruction )
+void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
+                                        sal_uInt32 uiFlags,
+                                        sal_Bool bDelStgOnRelease,
+                                        sal_Bool bReleaseStreamOnDestr )
 {
-    OSL_ASSERT( !(bDeleteStorageOnRelease && !bReleaseStreamOnDestruction) );
+    OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
 
     cleanup( );
+
+    m_bDelStgOnRelease      = bDelStgOnRelease;
+    m_bReleaseStreamOnDestr = bReleaseStreamOnDestr;
+
     HGLOBAL hGlob = GlobalAlloc( uiFlags, newSize );
     if ( NULL == hGlob )
         throw CStgTransferException( STG_E_MEDIUMFULL );
 
-    HRESULT hr = CreateStreamOnHGlobal( hGlob, bDeleteStorageOnRelease, &m_lpStream );
+    HRESULT hr = CreateStreamOnHGlobal( hGlob, m_bDelStgOnRelease, &m_lpStream );
 
-    m_bDelStgOnRelease      = bDeleteStorageOnRelease;
-    m_bReleaseStreamOnDestr = bReleaseStreamOnDestruction;
-
-    return SUCCEEDED( hr );
+    if ( FAILED( hr ) )
+        throw CStgTransferException( hr );
 }
 
 //------------------------------------------------------------------------
 // Init
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
-                                             sal_Bool bDeleteStorageOnRelease,
-                                            sal_Bool bReleaseStreamOnDestruction )
+void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
+                                             sal_Bool bDelStgOnRelease,
+                                            sal_Bool bReleaseStreamOnDestr )
 {
-    OSL_ASSERT( !(bDeleteStorageOnRelease && !bReleaseStreamOnDestruction) );
+    OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
 
     cleanup( );
-    HRESULT hr = CreateStreamOnHGlobal( hGlob, bDeleteStorageOnRelease, &m_lpStream );
-    if ( hr == E_OUTOFMEMORY )
-        throw CStgTransferException( STG_E_MEDIUMFULL );
 
-    m_bDelStgOnRelease      = bDeleteStorageOnRelease;
-    m_bReleaseStreamOnDestr = bReleaseStreamOnDestruction;
+    m_bDelStgOnRelease      = bDelStgOnRelease;
+    m_bReleaseStreamOnDestr = bReleaseStreamOnDestr;
 
-    return SUCCEEDED( hr );
+    HRESULT hr = CreateStreamOnHGlobal( hGlob, m_bDelStgOnRelease, &m_lpStream );
+    if ( FAILED( hr ) )
+        throw CStgTransferException( hr );
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,6 @@
 // deklarations
 //------------------------------------------------------------------------
 
-// will be thrown in case of failures
-class CStgTransferException
-{
-public:
-    HRESULT m_hr;
-    CStgTransferException( HRESULT hr ) : m_hr( hr ) {};
-};
 
 //-------------------------------------------------------------------------
 // a helper class to manage a global memory area, the clients can write
@@ -99,27 +92,39 @@ public:
 class CStgTransferHelper
 {
 public:
-    CStgTransferHelper( sal_Bool bAutoInit = sal_False,
-                    HGLOBAL  hGlob = NULL,
-                    sal_Bool bDeleteStorageOnRelease = sal_False,
-                    sal_Bool bReleaseStreamOnDestruction = sal_True );
+    // will be thrown in case of failures
+    class CStgTransferException
+    {
+    public:
+        HRESULT m_hr;
+        CStgTransferException( HRESULT hr ) : m_hr( hr ) {};
+    };
+
+public:
+    CStgTransferHelper(
+        sal_Bool bAutoInit = sal_False,
+        HGLOBAL  hGlob = NULL,
+        sal_Bool bDelStgOnRelease = sal_False,
+        sal_Bool bReleaseStreamOnDestr = sal_True );
 
     ~CStgTransferHelper( );
 
-    sal_Bool SAL_CALL write( const void* lpData, ULONG cb, ULONG* cbWritten = NULL );
-    sal_Bool SAL_CALL read( LPVOID pv, ULONG cb, ULONG* pcbRead = NULL );
+    void SAL_CALL write( const void* lpData, ULONG cb, ULONG* cbWritten = NULL );
+    void SAL_CALL read( LPVOID pv, ULONG cb, ULONG* pcbRead = NULL );
 
     HGLOBAL SAL_CALL getHGlobal( ) const;
-    void SAL_CALL getIStream( LPSTREAM* ppStream );
+    void    SAL_CALL getIStream( LPSTREAM* ppStream );
 
-    sal_Bool SAL_CALL init( SIZE_T newSize,
-                   UINT uiFlags = GMEM_MOVEABLE | GMEM_ZEROINIT,
-                   sal_Bool bDeleteStorageOnRelease = sal_False,
-                   sal_Bool bReleasStreamOnDestruction = sal_True );
+    void SAL_CALL init(
+        SIZE_T newSize,
+        sal_uInt32 uiFlags = GMEM_MOVEABLE | GMEM_ZEROINIT,
+        sal_Bool bDelStgOnRelease = sal_False,
+        sal_Bool bReleasStreamOnDestr = sal_True );
 
-    sal_Bool SAL_CALL init( HGLOBAL hGlob,
-                   sal_Bool bDeleteStorageOnRelease = sal_False,
-                   sal_Bool bReleaseStreamOnDestruction = sal_True );
+    void SAL_CALL init(
+        HGLOBAL hGlob,
+        sal_Bool bDelStgOnRelease = sal_False,
+        sal_Bool bReleaseStreamOnDestr = sal_True );
 
     // returns the size of the managed memory
     sal_uInt32 SAL_CALL memSize( ) const;

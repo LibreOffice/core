@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:46:11 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 06:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,15 @@ public:
     CFormatEtcContainer( );
 
     // duplicates not allowed
-    void SAL_CALL addFormatEtc( const FORMATETC& fetc );
+    void SAL_CALL addFormatEtc( const CFormatEtc& fetc );
 
     // removes the specified formatetc
-    void SAL_CALL removeFormatEtc( const FORMATETC& fetc );
+    void SAL_CALL removeFormatEtc( const CFormatEtc& fetc );
 
     // removes the formatetc at pos
     void SAL_CALL removeAllFormatEtc( );
 
-    sal_Bool SAL_CALL hasFormatEtc( const FORMATETC& fetc ) const;
+    sal_Bool SAL_CALL hasFormatEtc( const CFormatEtc& fetc ) const;
 
     sal_Bool SAL_CALL hasElements( ) const;
 
@@ -125,7 +125,6 @@ protected:
     typedef std::vector< CFormatEtc > FormatEtcMap_t;
 
 private:
-    sal_uInt32               m_nCurrentEnumPos;
     FormatEtcMap_t           m_FormatMap;
     FormatEtcMap_t::iterator m_EnumIterator;
 };
@@ -162,14 +161,14 @@ private:
     sal_Bool  SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf ) const;
     sal_Bool  SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf ) const;
     sal_Bool  SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
-    FORMATETC SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
-    sal_Bool  SAL_CALL needsToSynthesizeAccompanyFormats( const FORMATETC& aFormatEtc ) const;
-    void      SAL_CALL synthesizeAndRegisterAccompanyFormats( FORMATETC& aFormatEtc,
+    CFormatEtc SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
+    sal_Bool  SAL_CALL needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const;
+    void      SAL_CALL synthesizeAndRegisterAccompanyFormats( CFormatEtc& aFormatEtc,
                                                      const com::sun::star::datatransfer::DataFlavor& aFlavor,
                                                      CFormatEtcContainer& aFormatEtcContainer );
     sal_Bool SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
     rtl::OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
-    FORMATETC SAL_CALL getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const;
+    CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const;
 
     void SAL_CALL FindLocaleForTextCodePage( );
 
