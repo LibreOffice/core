@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:22:17 $
+ *  last change: $Author: mba $ $Date: 2001-07-12 10:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,10 +665,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 sal_Bool bHandsOff = pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE;
 
-                // Files schliessen, damit wir Reloaden koennen.
-                if( bHandsOff )
-                    xOldObj->DoHandsOff();
-
                 // bestehende SfxMDIFrames f"ur dieses Doc leeren
                 // eigenes Format oder R/O jetzt editierbar "offnen?
                 SfxViewNotificatedFrameList_Impl aFrames;
@@ -711,6 +707,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         rCache.RemoveObject( pSh );
                     }
                 }
+
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
 
                 // Medium mit angepa\stem Open-Mode
@@ -790,6 +787,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( !pURLItem || pURLItem->GetValue() ==
                     xOldObj->GetMedium()->GetName() )
                     xOldObj->Get_Impl()->bForbidCaching = sal_True;
+
+                // Files schliessen, damit wir Reloaden koennen.
+                if( bHandsOff )
+                    xOldObj->DoHandsOff();
+
                 xLoader->Start();
                 while( xLoader->GetState() != LoadEnvironment_Impl::DONE )
                     Application::Yield();
