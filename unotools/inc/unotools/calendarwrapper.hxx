@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-08-27 15:18:38 $
+ *  last change: $Author: er $ $Date: 2002-07-25 09:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,16 +83,19 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
     }
-    namespace i18n {
-        class XCalendar;
-    }
 }}}
+
+namespace drafts { namespace com { namespace sun { namespace star {
+    namespace i18n {
+        class XExtendedCalendar;
+    }
+}}}}
 
 
 class CalendarWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar >   xC;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::i18n::XExtendedCalendar >   xC;
 
             DateTime            aEpochStart;        // 1Jan1970
 
@@ -125,6 +128,10 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDays() const;
     String getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
+
+    // wrapper implementations of XExtendedCalendar
+
+    String getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
 
 
     // convenience methods

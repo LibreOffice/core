@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-03-08 16:56:32 $
+ *  last change: $Author: er $ $Date: 2002-07-25 09:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_I18N_XCALENDAR_HPP_
-#include <com/sun/star/i18n/XCalendar.hpp>
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDCALENDAR_HPP_
+#include <drafts/com/sun/star/i18n/XExtendedCalendar.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -87,6 +87,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
+using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
 
@@ -101,7 +102,7 @@ CalendarWrapper::CalendarWrapper(
     {
         try
         {
-            xC = Reference< XCalendar > ( xSMgr->createInstance(
+            xC = Reference< XExtendedCalendar > ( xSMgr->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CALENDAR_SERVICENAME ) ) ),
                 uno::UNO_QUERY );
         }
@@ -124,7 +125,7 @@ CalendarWrapper::CalendarWrapper(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CALENDAR_SERVICENAME ) ) );
             if ( xI.is() )
             {
-                Any x = xI->queryInterface( ::getCppuType((const Reference< XCalendar >*)0) );
+                Any x = xI->queryInterface( ::getCppuType((const Reference< XExtendedCalendar >*)0) );
                 x >>= xC;
             }
         }
@@ -522,4 +523,24 @@ String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int
     return String();
 }
 
+
+// --- XExtendedCalendar -----------------------------------------------------
+
+String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const
+{
+    try
+    {
+        if ( xC.is() )
+            return xC->getDisplayString( nCalendarDisplayCode, nNativeNumberMode );
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "getDisplayString: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return String();
+}
 
