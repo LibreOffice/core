@@ -365,6 +365,9 @@ sub convert_licenstring
     for ( my $i = 0; $i <= $#{$licensefile}; $i++ )
     {
         my $oneline = ${$licensefile}[$i];
+
+        if ($i == 0) { $oneline =~ s/^\s*\ï\»\¿//; }
+
         $oneline =~ s/\s*$//;
         $oneline =~ s/\"/\\\"/g;    # masquerading the "
         $oneline =~ s/\'/\\\'/g;    # masquerading the '
@@ -945,6 +948,146 @@ sub put_loader_into_installset
     system($localcall);
 }
 
+#################################################################
+# Setting for Solaris the package names in the Java translation
+# file. The name is used for the
+# This name is displayed tools like prodreg.
+# Unfortunately this name in the component is also used
+# in the translation template file for the module name
+# and module description translations.
+#################################################################
+
+sub replace_component_name_in_java_file
+{
+    my ($alljavafiles, $oldname, $newname) = @_;
+
+    # The new name must not contain white spaces
+
+    $newname =~ s/ /\_/g;
+
+    for ( my $i = 0; $i <= $#{$alljavafiles}; $i++ )
+    {
+        my $javafilename = ${$alljavafiles}[$i];
+        my $javafile = installer::files::read_file($javafilename);
+
+        my $oldstring = "ComponentDescription-" . $oldname;
+        my $newstring = "ComponentDescription-" . $newname;
+
+        for ( my $j = 0; $j <= $#{$javafile}; $j++ ) { ${$javafile}[$j] =~ s/\b$oldstring\b/$newstring/; }
+
+        $oldstring = $oldname . "-install-DisplayName";
+        $newstring = $newname . "-install-DisplayName";
+
+        for ( my $j = 0; $j <= $#{$javafile}; $j++ ) { ${$javafile}[$j] =~ s/\b$oldstring\b/$newstring/; }
+
+        $oldstring = $oldname . "-uninstall-DisplayName";
+        $newstring = $newname . "-uninstall-DisplayName";
+
+        for ( my $j = 0; $j <= $#{$javafile}; $j++ ) { ${$javafile}[$j] =~ s/\b$oldstring\b/$newstring/; }
+
+        installer::files::save_file($javafilename, $javafile);
+        $infoline = "Changes in Java file: $javafilename : $oldname \-\> $newname\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+#################################################################
+# Some module names are not defined in the scp project.
+# The names for this modules are searched in the base Java
+# translation file.
+#################################################################
+
+sub get_module_name_from_basejavafile
+{
+    my ($componentname, $javatemplateorigfile, $ulffile) = @_;
+
+    my $searchname = $componentname . "-install-DisplayName";
+    my $modulename = "";
+    my $replacename = "";
+
+    # line content: { "coremodule-install-DisplayName", "OOO_INSTALLSDK_117" },
+
+    for ( my $i = 0; $i <= $#{$javatemplateorigfile}; $i++ )
+    {
+        if ( ${$javatemplateorigfile}[$i] =~ /\"\s*\Q$searchname\E\s*\"\s*\,\s*\"\s*(.*?)\s*\"\s*\}\s*\,\s*$/ )
+        {
+            $replacename = $1;
+            last;
+        }
+    }
+
+    if ( $replacename ne "" )
+    {
+        my $language_block = get_language_block_from_language_file($replacename, $ulffile);
+        $modulename = get_language_string_from_language_block($language_block, "en-US", $replacename);
+    }
+
+    return $modulename;
+}
+
+#################################################################
+# Setting for Solaris the package names in the xml file.
+# This name is displayed tools like prodreg.
+# Unfortunately this name in the component is also used
+# in the translation template file for the module name
+# and module description translations.
+#################################################################
+
+sub replace_component_names
+{
+    my ($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile) = @_;
+
+    # path in which all java languages files are located
+
+    my $javafilesdir = $templatefilename;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$javafilesdir);
+    my $alljavafiles = installer::systemactions::find_file_with_file_extension("java", $javafilesdir);
+    for ( my $i = 0; $i <= $#{$alljavafiles}; $i++ ) { ${$alljavafiles}[$i] = $javafilesdir . ${$alljavafiles}[$i]; }
+
+    # analyzing the xml file
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        my $newstring = "";
+        my $componentname = "";
+
+        if ( ${$xmlfile}[$i] =~ /\bcomponent\b.*\bname\s*\=\'\s*(.*?)\s*\'/ )
+        {
+            $componentname = $1;
+
+            # Getting module name from the scp files in $modulesarrayref
+
+            my $onelanguage = "en-US";
+            my $gid = $componentname;
+            my $type = "Name";
+
+            my $modulename = get_module_name_description($modulesarrayref, $onelanguage, $gid, $type);
+
+            if ( $modulename eq "" ) # the modulename can also be set in the Java ulf file
+            {
+                $modulename = get_module_name_from_basejavafile($componentname, $javatemplateorigfile, $ulffile);
+            }
+
+            if ( $modulename ne "" )    # only do something, if the modulename was found
+            {
+                ${$xmlfile}[$i] =~ s/$componentname/$modulename/;
+
+                $infoline = "Replacement in xml file (Solaris): $componentname \-\> $modulename\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                # Replacement has to be done in all Java language files
+                replace_component_name_in_java_file($alljavafiles, $componentname, $modulename);
+            }
+
+            if ( $modulename eq "" ) # the modulename can also be set in the Java ulf file
+            {
+                $infoline = "WARNING: No replacement in xml file for component: $componentname\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+}
+
 #######################################################
 # Creating the java installer class file dynamically
 #######################################################
@@ -975,6 +1118,10 @@ sub create_java_installer
     # determining the java template file
 
     my $templatefilename = $javadir . $installer::globals::separator . "locale/resources/MyResources_template.java";
+
+    # Saving the content of the template file. It is used in the xml files
+
+    my $javatemplateorigfile = installer::files::read_file($templatefilename);
 
     # determining the ulf language file
 
@@ -1070,12 +1217,7 @@ sub create_java_installer
     $infoline = "Deleted template Java resource file: $templatefilename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    # Setting the classpath
-
-    set_classpath_for_install_sdk($javadir);
-
-    # creating class files:
-    # language class file, dialog class files, installer class file
+    # changing into Java directory
 
     my $from = cwd();
 
@@ -1084,17 +1226,7 @@ sub create_java_installer
     $infoline = "Changing into directory: $javadir\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    my $jdkpath = "";
-    if ( $ENV{'JDKPATH'} ) { $jdkpath = $ENV{'JDKPATH'}; }
-
-    my $javac = "javac";
-    if ( $jdkpath ) { $javac = $jdkpath . $installer::globals::separator . $javac; }
-
-    my $systemcall = "$javac locale\/resources\/\*\.java 2\>\&1 |";
-    make_systemcall($systemcall);
-
-    $systemcall = "$javac com\/sun\/staroffice\/install\/\*\.java 2\>\&1 |";
-    make_systemcall($systemcall);
+    # preparing the xml file
 
     my $xmlfilename = "";
     my $subdir = "";
@@ -1120,9 +1252,29 @@ sub create_java_installer
     substitute_variables($xmlfile, $allvariableshashref);
     if ( $installer::globals::issolarisx86build ) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
+    replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
     installer::files::save_file($xmlfilename, $xmlfile);
     $infoline = "Saving xml file: $xmlfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
+
+    # Setting the classpath and starting compiler
+
+    set_classpath_for_install_sdk($javadir);
+
+    # creating class files:
+    # language class file, dialog class files, installer class file
+
+    my $jdkpath = "";
+    if ( $ENV{'JDKPATH'} ) { $jdkpath = $ENV{'JDKPATH'}; }
+
+    my $javac = "javac";
+    if ( $jdkpath ) { $javac = $jdkpath . $installer::globals::separator . $javac; }
+
+    my $systemcall = "$javac locale\/resources\/\*\.java 2\>\&1 |";
+    make_systemcall($systemcall);
+
+    $systemcall = "$javac com\/sun\/staroffice\/install\/\*\.java 2\>\&1 |";
+    make_systemcall($systemcall);
 
     # making subdirectory creating empty packages
     create_empty_packages($xmlfile);
