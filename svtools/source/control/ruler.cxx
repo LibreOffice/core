@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:46:57 $
+ *  last change: $Author: os $ $Date: 2002-05-22 14:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
 // =======================================================================
 
-#define RULER_OFF           2
+#define RULER_OFF           3
 #define RULER_TEXTOFF       2
 #define RULER_RESIZE_OFF    4
 #define RULER_LINE_WIDTH    7
@@ -1316,10 +1316,12 @@ void Ruler::ImplFormat()
         maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
     else
         maVirDev.SetLineColor( rStyleSettings.GetWindowTextColor() );
-    ImplVDrawLine( nVirLeft, nVirTop, nP2, nVirTop );
+    ImplVDrawLine( nVirLeft, nVirTop, nM1, nVirTop );
+    ImplVDrawLine( nM2, nVirTop, nP2, nVirTop );
     if ( b3DLook )
         maVirDev.SetLineColor( rStyleSettings.GetLightColor() );
-    ImplVDrawLine( nVirLeft, nVirBottom, nP2, nVirBottom );
+    ImplVDrawLine( nVirLeft, nVirBottom, nM1, nVirBottom );
+    ImplVDrawLine( nM2, nVirBottom, nP2, nVirBottom );
 
     // Jetzt wird zwischen dem Schatten ausgegeben
     nVirTop++;
@@ -1342,26 +1344,6 @@ void Ruler::ImplFormat()
     }
     if ( b3DLook )
     {
-        maVirDev.SetLineColor( rStyleSettings.GetLightColor() );
-        if ( nM1 > nVirLeft )
-        {
-            ImplVDrawLine( nP1+1, nVirTop, nM1-1, nVirTop );
-            if ( nP1 >= nVirLeft )
-            {
-                ImplVDrawLine( nP1+1, nVirTop, nP1+1, nVirBottom );
-                ImplVDrawLine( nP1, nVirBottom+1, nP1+1, nVirBottom+1 );
-            }
-        }
-        if ( nM2 < nP2 )
-        {
-            ImplVDrawLine( nM2+1, nVirTop, nM2+1, nVirBottom );
-            ImplVDrawLine( nM2+1, nVirTop, nP2, nVirTop );
-            if ( nP2 <= nVirRight+1 )
-            {
-                ImplVDrawLine( nP2, nVirTop-1, nP2, nVirBottom );
-                ImplVDrawLine( nP2-1, nVirBottom+1, nP2, nVirBottom+1 );
-            }
-        }
         maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
         if ( nM1 > nVirLeft )
         {
@@ -1378,17 +1360,6 @@ void Ruler::ImplFormat()
             ImplVDrawLine( nM2+1, nVirBottom, nP2-1, nVirBottom );
             if ( nP2 <= nVirRight+1 )
                 ImplVDrawLine( nP2-1, nVirTop, nP2-1, nVirBottom );
-        }
-        if ( nM2-nM1 > 0 )
-        {
-            maVirDev.SetLineColor( rStyleSettings.GetDarkShadowColor() );
-            if ( nM1 >= nVirLeft )
-                ImplVDrawLine( nM1, nVirTop, nM1, nVirBottom );
-            ImplVDrawLine( nM1, nVirTop, nM2-1, nVirTop );
-            maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-            ImplVDrawLine( nM1, nVirBottom, nM2-1, nVirBottom );
-            if ( nM2 <= nVirRight )
-                ImplVDrawLine( nM2, nVirTop, nM2, nVirBottom );
         }
     }
     else
