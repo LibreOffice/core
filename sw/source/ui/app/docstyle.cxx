@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:02:31 $
+ *  last change: $Author: os $ $Date: 2004-09-28 15:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,8 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
             FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,
             SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,
             SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
-            SID_SWREGISTER_MODE,    SID_SWREGISTER_COLLECTION,
+            SID_SWREGISTER_MODE,    SID_SWREGISTER_MODE,
+            SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,
             FN_COND_COLL,           FN_COND_COLL,
             SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
             SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,
