@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:26 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 09:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ interface XResultSetAccess;
 
 
     <p>Depending on the ResultSetConcurrency, the RowSet caches all data or uses
-    a optimized way for retieving the data like refetching rows by their keys or
+    a optimized way for retrieving the data like refetching rows by their keys or
     if provided by their bookmarks.
     </p>
     <p>In addition, it provides events for RowSet navigation and RowSet modifications
@@ -116,7 +116,10 @@ service RowSet
 
 
     // DocMerge from xml: service com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::RowSet: interface com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::XResultSetAccess
-    /** creates a second Resultset which is based on the same data.
+    /** creates a second result set which is based on the same data.
+        <p>The new result set is interoperable with the row set which created it, e.g., you can exchange bookmarks between
+        both sets.</p>
+        <p>If the row set is not alive (i.e. it was not executed before), <NULL/> is returned.</p>
      */
     interface XResultSetAccess;
 
@@ -239,6 +242,9 @@ service RowSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/23 10:08:26  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.4  2000/12/14 12:53:38  mi
     <true></true> -> <TRUE/> and same with FALSE
 
