@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 08:33:59 $
+ *  last change: $Author: er $ $Date: 2002-12-05 15:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2274,6 +2274,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
         else
         {
             SetDocumentModifiedPending( FALSE );
+            aDocument.InvalidateStyleSheetUsage();
             aDocument.InvalidateTableArea();
             aDocument.Broadcast( SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS, NULL );
             if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
