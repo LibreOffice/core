@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:55:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_FLD_DOKINF
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Felttype" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~F�lttyp" ;
         Text [ dutch ] = "~Veldtype" ;
@@ -104,6 +104,8 @@ TabPage TP_FLD_DOKINF
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     Control TLB_DOKINFTYPE
     {
@@ -146,6 +148,8 @@ TabPage TP_FLD_DOKINF
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चु~नो";
         Text[ slovak ] = "Vy~brať";
+        Text[ hungarian ] = "~Kijelölés";
+        Text[ slovenian ] = "Izb~eri";
     };
     ListBox LB_DOKINFSELECTION
     {
@@ -342,6 +346,20 @@ TabPage TP_FLD_DOKINF
         < "Dátum" ; > ;
         < "Dátum, čas a autor" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Szerző" ; > ;
+        < "Idő" ; > ;
+        < "Dátum" ; > ;
+        < "Dátum Idő Szerző" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Avtor" ; > ;
+        < "Čas" ; > ;
+        < "Datum" ; > ;
+        < "Datum Čas Avtor" ; > ;
+    };
     };
     FixedText FT_DOKINFFORMAT
     {
@@ -353,7 +371,7 @@ TabPage TP_FLD_DOKINF
         Text [ english_us ] = "F~ormat" ;
         Text [ portuguese_brazilian ] = "F~ormato" ;
         Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "~Format" ;
         Text [ italian ] = "F~ormato" ;
         Text [ spanish ] = "F~ormato" ;
         Text [ french ] = "F~ormat" ;
@@ -376,6 +394,8 @@ TabPage TP_FLD_DOKINF
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "F~ormátum";
+        Text[ slovenian ] = "O~blika";
     };
     ListBox LB_DOKINFFORMAT
     {
@@ -418,6 +438,8 @@ TabPage TP_FLD_DOKINF
         Text[ hebrew ] = "~Inhalt fixieren";
         Text[ hindi ] = "~स्थिर विषय";
         Text[ slovak ] = "Pe~vný obsah";
+        Text[ hungarian ] = "~Rögzített tartalom";
+        Text[ slovenian ] = "~Fiksna vsebina";
     };
     Bitmap BMP_DOKINFROOT_OPENED
     {
@@ -457,11 +479,13 @@ TabPage TP_FLD_DOKINF
         Text[ hebrew ] = "Info";
         Text[ hindi ] = "जानकारी";
         Text[ slovak ] = "Informácie";
+        Text[ hungarian ] = "Egyéb mezők";
+        Text[ slovenian ] = "Podatki";
     };
     Text [ english_us ] = "DocInformation" ;
     Text [ portuguese_brazilian ] = "Info. do Doc." ;
     Text [ swedish ] = "Dokumentinfo" ;
-    Text [ danish ] = "Dokumentinfo" ;
+    Text [ danish ] = "Dokumentinformation" ;
     Text [ italian ] = "Info documento" ;
     Text [ spanish ] = "Informaci�n del documento" ;
     Text [ french ] = "Info document" ;
@@ -484,7 +508,10 @@ TabPage TP_FLD_DOKINF
     Text[ hebrew ] = "Dokumentinfo";
     Text[ hindi ] = "DocInformation";
     Text[ slovak ] = "Informácie o dokumente";
+    Text[ hungarian ] = "Dokumentum-információ";
+    Text[ slovenian ] = "Podatki o dokumentu";
 };
+
 
 
 
