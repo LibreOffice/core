@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ *  $RCSfile: UpdatableLayer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:17:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_configuration_backend_UpdatableLayer_idl__
+#define __com_sun_star_configuration_backend_UpdatableLayer_idl__
+
+#ifndef __com_sun_star_configuration_backend_Layer_idl__
+#include <com/sun/star/configuration/backend/Layer.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XUpdatableLayer_idl__
+#include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
+#endif
+
+//==============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//==============================================================================
+
+/**
+  provides read/write access to a configuration data layer.
+
+  <p>A layer contains the configuration setting changes to be performed
+  on a default layer (or schema) to obtain the values of those settings
+  for a given entity and component.
+  </p>
+  <p>An updatable layer can be read or replaced with another layer.
+  </p>
+
+  @since #107956#
+  */
+service UpdatableLayer
+{
+    //--------------------------------------------------------------------------
+
+    /**
+        handles read access to the contents of the layer.
+
+        <p> If the implementation supports
+         <type scope="com::sun::star::util">XTimeStamped</type>,
+         then after executing <member>XUpdatableLayer::replaceWith()</member>
+         the timestamp will be the one for the replaced contents and
+         if reading after updates is supported the next read will reproduce the
+         replaced data.
+        </p>
+      */
+    service Layer ;
+
+    //--------------------------------------------------------------------------
+
+    /**
+      provides write access to the contents of the layer.
+
+       <p> Depending of the actual type (simple, i.e pure <type>XLayer</type> or
+       composite, i.e <type>XCompositeLayer</type>) of the current layer and
+       the provided replacement layer, the operation performed
+       by <member>XUpdatableLayer::replaceWith()</member>, will vary.
+       </p>
+       <p> For the different current/replacement layer combinations, we have:
+       <dl>
+           <dt>Simple/Simple<dt>
+           <dd>the provided layer's contents replace the current one's.</dd>
+
+           <dt>Composite/Composite<dt>
+           <dd>all layers (main and sub) present in the
+               provided layer are used to replace the corresponding current
+               layer contents. Sublayers present in the current layer but
+               not in the provided one are left untouched. Sublayers present
+               in the provided layer but not in the current one are added to
+               the current layer.
+            </dd>
+
+           <dt>Simple/Composite<dt>
+           <dd>the main layer and sublayers of the provided layer
+               are merged into one whose contents replace the current layer.
+           </dd>
+
+           <dt>Composite/Simple<dt>
+           <dd>the provided layer is split into a composite one whose contents
+               are then used to replace the current layer as described above.
+           </dd>
+
+       </dl>
+       <em> Not all implementations of <type>XUpdatableLayer</type>
+            support conversions of the replacement layer.
+            In such a case the sublayers of the provided layer may be ignored
+            or all simple data be merged into the main layer.
+       </em>
+       </p>
+      */
+    interface XUpdatableLayer ;
+
+    //--------------------------------------------------------------------------
+
+} ;
+
+//==============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif
+
