@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokens.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2002-05-07 09:00:07 $
+ *  last change: $Author: nf $ $Date: 2002-05-07 09:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #define XRM_TEXT_END                508
 #define XRM_LIST_START              509
 #define XRM_LIST_END                510
+#define XML_TEXTCHAR                600
 
 
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: nf $ $Date: 2002-05-07 09:00:08 $
+#   last change: $Author: nf $ $Date: 2002-05-07 09:31:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,8 +165,8 @@ DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OB
 $(MISC)$/src_yy.c : srclex.l
     +flex -l -8 -o$(MISC)$/src_yy.c srclex.l
 
-$(MISC)$/xml_yy.c : xmllex.l
-    +flex -l -8 -o$(MISC)$/xml_yy.c xmllex.l
+$(MISC)$/xrm_yy.c : xrmlex.l
+    +flex -l -8 -o$(MISC)$/xrm_yy.c xrmlex.l
 
 $(MISC)$/cfg_yy.c : cfglex.l
     +flex -l -8 -o$(MISC)$/cfg_yy.c cfglex.l
