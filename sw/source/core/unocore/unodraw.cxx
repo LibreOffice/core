@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-24 10:29:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,10 +217,11 @@ class SwShapeDescriptor_Impl
 
 public:
     SwShapeDescriptor_Impl() :
-     // OD 2004-06-03 #i26791# - set default value of <SwFmtHoriOrient>
-     pHOrient( new SwFmtHoriOrient( 0, HORI_NONE, FRAME ) ),
-     // OD 2004-04-21 #i26791# - set default value of <SwFmtVertOrient>
-     pVOrient( new SwFmtVertOrient( 0, VERT_NONE, FRAME ) ),
+     // --> OD 2004-08-18 #i32349# - no defaults, in order to determine on
+     // adding a shape, if positioning attributes are set or not.
+     pHOrient( 0L ),
+     pVOrient( 0L ),
+     // <--
      pAnchor(0),
      pSurround(0),
      pULSpace(0),
@@ -718,13 +719,27 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if(pDesc->GetAnchor())
             aAnchor = *pDesc->GetAnchor();
 
-        if(pDesc->GetHOrient())
+        // --> OD 2004-08-18 #i32349# - if no horizontal position exists, create one
+        if ( !pDesc->GetHOrient() )
+        {
+            SwFmtHoriOrient* pHori = pDesc->GetHOrient( sal_True );
+            SwTwips nHoriPos = MM100_TO_TWIP(aMM100Pos.X);
+            pHori->SetPos( nHoriPos );
+        }
+        // <--
         {
             if(pDesc->GetHOrient()->GetHoriOrient() == HORI_NONE)
                 aMM100Pos.X = TWIP_TO_MM100(pDesc->GetHOrient()->GetPos());
             aSet.Put( *pDesc->GetHOrient() );
         }
-        if(pDesc->GetVOrient())
+        // --> OD 2004-08-18 #i32349# - if no vertical position exists, create one
+        if ( !pDesc->GetVOrient() )
+        {
+            SwFmtVertOrient* pVert = pDesc->GetVOrient( sal_True );
+            SwTwips nVertPos = MM100_TO_TWIP(aMM100Pos.Y);
+            pVert->SetPos( nVertPos );
+        }
+        // <--
         {
             if(pDesc->GetVOrient()->GetVertOrient() == VERT_NONE)
                 aMM100Pos.Y = TWIP_TO_MM100(pDesc->GetVOrient()->GetPos());
@@ -781,19 +796,15 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         pDoc->GetRootFrm()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
-        aSet.Put( SwFmtVertOrient( 0, VERT_TOP ) );
+        // --> OD 2004-08-18 #i32349# - adjustment of vertical positioning
+        // attributes no longer needed, because its already got a default.
     }
     else
     {
         aAnchor.SetType(FLY_PAGE);
-         awt::Size aDescSize(xShape->getSize());
 
-        Point aTmp(MM100_TO_TWIP(aMM100Pos.X), MM100_TO_TWIP(aMM100Pos.Y));
-         Rectangle aRect( aTmp, Size(MM100_TO_TWIP(aDescSize.Width),
-                                    MM100_TO_TWIP(aDescSize.Height)));
-        pObj->SetLogicRect( aRect );
-        aSet.Put( SwFmtHoriOrient( aTmp.X(), HORI_NONE, FRAME ) );
-        aSet.Put( SwFmtVertOrient( aTmp.Y(), VERT_NONE, FRAME ) );
+        // --> OD 2004-08-18 #i32349# - adjustment of vertical positioning
+        // attributes no longer needed, because its already got a default.
     }
     aSet.Put(aAnchor);
     SwPaM* pTemp = pInternalPam;
@@ -2064,25 +2075,53 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException )
         SdrObject* pTopGroupObj = _GetTopGroupObj( pSvxShape );
         if ( pTopGroupObj )
         {
+            // --> OD 2004-10-01 #i34750# - get attribute position of top group
+            // shape and add offset between top group object and group member
+            uno::Reference< drawing::XShape > xGroupShape =
+                    uno::Reference< drawing::XShape >( pTopGroupObj->getUnoShape(),
+                                                       uno::UNO_QUERY );
+            aPos = xGroupShape->getPosition();
             // add offset between top group object and group member
             // to the determined attribute position
-            uno::Reference< lang::XUnoTunnel > xGrpShapeTunnel(
-                                                    pTopGroupObj->getUnoShape(),
-                                                    uno::UNO_QUERY );
-            if ( xGrpShapeTunnel.is() )
+            // --> OD 2004-10-01 #i34750# - correction:
+            // consider the layout direction
+            const Rectangle aMemberObjRect = GetSvxShape()->GetSdrObject()->GetSnapRect();
+            const Rectangle aGroupObjRect = pTopGroupObj->GetSnapRect();
+            const SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt()
+                                                    ? GetFrmFmt()->GetLayoutDir()
+                                                    : SwFrmFmt::HORI_L2R;
+            awt::Point aOffset( 0, 0 );
+            switch ( eLayoutDir )
             {
-                SvxShape* pSvxGroupShape =
-                    (SvxShape*)xGrpShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
-                if ( pSvxGroupShape )
+                case SwFrmFmt::HORI_L2R:
                 {
-                    awt::Point aGroupObjPos = pSvxGroupShape->getPosition();
-                    awt::Point aMemberObjPos = mxShape->getPosition();
-                    awt::Point aOffset( aMemberObjPos.X - aGroupObjPos.X,
-                                        aMemberObjPos.Y - aGroupObjPos.Y );
-                    aPos.X += aOffset.X;
-                    aPos.Y += aOffset.Y;
+                    aOffset.X = ( aMemberObjRect.Left() - aGroupObjRect.Left() );
+                    aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
+                }
+                break;
+                case SwFrmFmt::HORI_R2L:
+                {
+                    aOffset.X = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
+                    aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
+                }
+                break;
+                case SwFrmFmt::VERT_R2L:
+                {
+                    aOffset.X = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
+                    aOffset.Y = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
+                }
+                break;
+                default:
+                {
+                    ASSERT( false,
+                            "<SwXShape::getPosition()> - unsupported layout direction" );
                 }
             }
+            aOffset.X = TWIP_TO_MM100(aOffset.X);
+            aOffset.Y = TWIP_TO_MM100(aOffset.Y);
+            aPos.X += aOffset.X;
+            aPos.Y += aOffset.Y;
+            // <--
         }
     }
 
@@ -2096,6 +2135,23 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
     {
         // shape isn't a group member. Thus, set positioning attributes
         _AdjustPositionProperties( aPosition );
+        // --> OD 2004-10-19 #i35798# - apply position also to drawing object,
+        // if drawing object has no anchor position set.
+        if ( mxShape.is() )
+        {
+            SvxShape* pSvxShape = GetSvxShape();
+            if ( pSvxShape )
+            {
+                const SdrObject* pObj = pSvxShape->GetSdrObject();
+                if ( pObj &&
+                     pObj->GetAnchorPos().X() == 0 &&
+                     pObj->GetAnchorPos().Y() == 0 )
+                {
+                    mxShape->setPosition( aPosition );
+                }
+            }
+        }
+        // <--
     }
     else if ( mxShape.is() )
     {
@@ -2104,29 +2160,42 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
         // The given position is given in the according layout direction. Thus,
         // it has to be converted to a position in horizontal left-to-right
         // layout.
-        // convert given absolute position in layout direction into
+        // convert given absolute attribute position in layout direction into
         // position in horizontal left-to-right layout.
         {
             aNewPos = _ConvertPositionToHoriL2R( aNewPos, getSize() );
         }
-        // Convert given absolute position in horizontal left-to-right layout
-        // into relative position in horizontal left-to-right layout.
+        // Convert given absolute position in horizontal left-to-right
+        // layout into relative position in horizontal left-to-right layout.
         uno::Reference< drawing::XShape > xGroupShape =
                 uno::Reference< drawing::XShape >( pTopGroupObj->getUnoShape(),
                                                    uno::UNO_QUERY );
         {
+            // --> OD 2004-09-29 #i34750# - correction:
+            // use method <xGroupShape->getPosition()> to get the correct
+            // position of the top group object.
             awt::Point aAttrPosInHoriL2R(
-                    _ConvertPositionToHoriL2R( _GetAttrPosition(),
+                    _ConvertPositionToHoriL2R( xGroupShape->getPosition(),
                                                xGroupShape->getSize() ) );
+            // <--
             aNewPos.X -= aAttrPosInHoriL2R.X;
             aNewPos.Y -= aAttrPosInHoriL2R.Y;
         }
         // convert relative position in horizontal left-to-right layout into
         // absolute position in horizontal left-to-right layout
         {
-            awt::Point aGroupPos = xGroupShape->getPosition();
+            // --> OD 2004-10-01 #i34750# - correction:
+            // use method <SvxShape->getPosition()> to get the correct
+            // 'Drawing layer' position of the top group shape.
+            uno::Reference< lang::XUnoTunnel > xGrpShapeTunnel(
+                                                    pTopGroupObj->getUnoShape(),
+                                                    uno::UNO_QUERY );
+            SvxShape* pSvxGroupShape =
+                (SvxShape*)xGrpShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
+            const awt::Point aGroupPos = pSvxGroupShape->getPosition();
             aNewPos.X += aGroupPos.X;
             aNewPos.Y += aGroupPos.Y;
+            // <--
         }
         // set position
         mxShape->setPosition( aNewPos );
@@ -2204,6 +2273,23 @@ awt::Point SwXShape::_GetAttrPosition()
     aHoriPos >>= aAttrPos.X;
     uno::Any aVertPos( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")) ) );
     aVertPos >>= aAttrPos.Y;
+    // --> OD 2004-10-19 #i35798# - fallback, if attribute position is (0,0)
+    // and no anchor position is applied to the drawing object
+    SvxShape* pSvxShape = GetSvxShape();
+    if ( pSvxShape )
+    {
+        const SdrObject* pObj = pSvxShape->GetSdrObject();
+        if ( pObj &&
+             pObj->GetAnchorPos().X() == 0 &&
+             pObj->GetAnchorPos().Y() == 0 &&
+             aAttrPos.X == 0 && aAttrPos.Y == 0 )
+        {
+            const Rectangle aObjRect = pObj->GetSnapRect();
+            aAttrPos.X = TWIP_TO_MM100(aObjRect.Left());
+            aAttrPos.Y = TWIP_TO_MM100(aObjRect.Top());
+        }
+    }
+    // <--
 
     return aAttrPos;
 }
