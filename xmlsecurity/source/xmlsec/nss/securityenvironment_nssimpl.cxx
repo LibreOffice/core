@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-02 03:32:02 $
+ *  last change: $Author: mmi $ $Date: 2004-08-05 06:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,7 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
     characters = 0x00000000 ;
 
     //Firstly, make sentence whether or not the cert is self-signed.
-    if( SECITEM_CompareItem( &(cert->derIssuer), &(cert->derSubject) ) ) {
+    if( SECITEM_CompareItem( &(cert->derIssuer), &(cert->derSubject) ) == SECEqual ) {
         characters |= ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
     } else {
         characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
