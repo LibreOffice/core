@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:57 $
+ *  last change: $Author: ab $ $Date: 2001-05-22 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,13 @@ SAL_CALL exportLibraryContainer(
         SAL_THROW( (Exception) )
 {
     xOut->startDocument();
+
+    OUString aDocTypeStr( RTL_CONSTASCII_USTRINGPARAM(
+        "<!DOCTYPE library:libraries PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"libraries.dtd\">" ) );
+    xOut->unknown( aDocTypeStr );
+    xOut->ignorableWhitespace( OUString() );
+
 
     OUString aLibrariesName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":libraries") );
     XMLElement* pLibsElement = new XMLElement( aLibrariesName );

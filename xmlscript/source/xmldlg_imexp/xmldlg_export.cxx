@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-15 13:16:52 $
+ *  last change: $Author: ab $ $Date: 2001-05-22 14:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,6 +1127,12 @@ void SAL_CALL exportDialogModel(
     }
 
     xOut->startDocument();
+
+    OUString aDocTypeStr( RTL_CONSTASCII_USTRINGPARAM(
+        "<!DOCTYPE dlg:window PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"dialog.dtd\">" ) );
+    xOut->unknown( aDocTypeStr );
+    xOut->ignorableWhitespace( OUString() );
 
     // window
     Reference< beans::XPropertySet > xProps( xDialogModel, UNO_QUERY );
