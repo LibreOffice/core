@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 19:28:15 $
+ *  last change: $Author: mib $ $Date: 2001-11-26 11:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,8 +668,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
 }
 
 void SwXMLTextImportHelper::endAppletOrPlugin(
-        const Reference < XPropertySet > &rPropSet,
-        ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > &rParamMap)
+        Reference < XPropertySet > &rPropSet,
+        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -690,8 +690,8 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     SvAppletObjectRef xApplet ( rOLEObj.GetOleRef() );
     SvCommandList aCommandList;
 
-    ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > ::iterator aIter = rParamMap.begin();
-    ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > ::iterator aEnd = rParamMap.end();
+    ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aIter = rParamMap.begin();
+    ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aEnd = rParamMap.end();
 
     while (aIter != aEnd )
     {

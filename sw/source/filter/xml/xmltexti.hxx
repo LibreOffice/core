@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:31:29 $
+ *  last change: $Author: mib $ $Date: 2001-11-26 11:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ public:
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual void endAppletOrPlugin(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &rPropSet,
-        ::std::map < const ::rtl::OUString, const ::rtl::OUString, less_functor > &rParamMap);
+        ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &rPropSet,
+        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess> &rParamMap);
 
     virtual sal_Bool IsInHeaderFooter() const;
 

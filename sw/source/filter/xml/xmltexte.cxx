@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 13:51:39 $
+ *  last change: $Author: mib $ $Date: 2001-11-26 11:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 USHORT nType = SwApplet_Impl::GetOptionType( rName, TRUE );
                 if ( nType == SWHTML_OPTTYPE_TAG)
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, rName, rCommand.GetArgument());
-                else if (SWHTML_OPTTYPE_PARAM == nType )
+                else if (SWHTML_OPTTYPE_PARAM == nType ||
+                            SWHTML_OPTTYPE_SIZE == nType )
                     aParams.Insert( i, aParams.Count() );
             }
 

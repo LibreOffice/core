@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-27 17:04:33 $
+ *  last change: $Author: mib $ $Date: 2001-11-26 11:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,9 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'H':
     case 'h':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) ||
-            rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
+        if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) )
+            nType = SWHTML_OPTTYPE_SIZE;
+        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
             (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
@@ -140,7 +141,7 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
     case 'W':
     case 'w':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_width ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SWHTML_OPTTYPE_SIZE;
         break;
     }
 
