@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-02-21 15:16:34 $
+dnl * Date: $Date: 2005-02-24 14:44:42 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.98 $ )
+AC_REVISION( $Revision: 1.99 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -883,12 +883,13 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
    _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+   GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" = "3"; then
-      if test "$_gcc_longver"  -eq "030203"; then
-	if test "$ENABLE_SYMBOLS" = "SMALL"; then
+      if test "$GCCVER" -eq "030203"; then
+	    if test "$ENABLE_SYMBOLS" = "SMALL"; then
            AC_MSG_ERROR([version "$_gcc_version" gives internal error with small.])
-	fi
+	    fi
       fi
    else
       AC_MSG_ERROR([found version "$_gcc_version", use version 3+ of the gcc compiler])
@@ -901,7 +902,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
       fi
       AC_MSG_RESULT([ok (GNU ld)])
    fi
-fi  
+fi 
+AC_SUBST(GCCVER)
 
 if test "$GCC" = "yes"; then
    AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
