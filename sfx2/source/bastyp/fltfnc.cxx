@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:30:07 $
+ *  last change: $Author: as $ $Date: 2001-07-16 09:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _RTL_USTRING_HXX //autogen
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -234,6 +237,8 @@
 #include <tools/l2txtenc.hxx>
 #endif
 
+#include <rtl/logfile.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
@@ -295,6 +300,7 @@ struct FlagMapping_Impl
     SfxFilterFlags nValue;
 };
 
+/*OBSOLETE
 #ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
 #endif
@@ -862,6 +868,7 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
     }
     return sOldName;
 }
+*/
 
 //----------------------------------------------------------------
 inline String ToUpper_Impl( const String &rStr )
@@ -892,8 +899,8 @@ SfxFilterContainer::SfxFilterContainer( const String& rName )
     pImpl->eFlags = 0;
     pImpl->aName = rName;
 
-    impl_initFilterHashOld2New( aConverterOld2New );
-    impl_initFilterHashNew2Old( aConverterNew2Old );
+//AS    impl_initFilterHashOld2New( aConverterOld2New );
+//AS    impl_initFilterHashNew2Old( aConverterNew2Old );
 }
 
 //----------------------------------------------------------------
@@ -2017,169 +2024,245 @@ const SfxFilter* SfxExecutableFilterContainer::GetChooserFilter()
     return NULL;
 }
 
+/*---------------------------------------------------------------
+    helper to build own formated string from given stringlist by
+    using given seperator
+  ---------------------------------------------------------------*/
+::rtl::OUString implc_convertStringlistToString( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& lList     ,
+                                                 const sal_Unicode&                                        cSeperator,
+                                                 const ::rtl::OUString&                                    sPrefix   )
+{
+    ::rtl::OUStringBuffer   sString ( 1000 )           ;
+    sal_Int32               nCount  = lList.getLength();
+    sal_Int32               nItem   = 0                ;
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        if( sPrefix.getLength() > 0 )
+        {
+            sString.append( sPrefix );
+        }
+        sString.append( lList[nItem] );
+        if( nItem+1<nCount )
+        {
+            sString.append( cSeperator );
+        }
+    }
+    return sString.makeStringAndClear();
+}
+
 void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 {
+    RTL_LOGFILE_CONTEXT( aMeasure, "SfxFilterContainer::ReadExternalFilters()" );
+
     try
     {
-        // get the FilterFactory service to access the registered filters
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-        ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xFilters (
-                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-        // get the TypeDetection service to access all registered types
-        ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xTypes (
-                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-        // get names of all registered filters
-        ::com::sun::star::uno::Sequence < ::rtl::OUString > aNames = xFilters->getElementNames();
-        sal_Int32 nLength = aNames.getLength();
-        for ( sal_Int32 nName=0; nName<nLength; nName++ )
+        // get the FilterFactory service to access the registered filters ... and types!
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xFilterCFG                                                ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xTypeCFG                                                  ;
+        if( xServiceManager.is() == sal_True )
         {
-            // iterate filters; each filter is described by a property value sequence
-            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps;
-            ::rtl::OUString aName( aNames[nName] );
-            if ( xFilters->hasByName( aName ) )
-                xFilters->getByName( aName ) >>= aProps;
+            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
+            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" ) ), ::com::sun::star::uno::UNO_QUERY );
+        }
 
-            sal_Int32 nFilterFlags = 0, nClipId = 0, nDocIconId = 0, nVersion = 0;
-            ::rtl::OUString aMimeType, aType, aUIName, aDefaultTemplate, aHumanName;
-            String aFilterName, aUserData;
-            String aExtension, aWildCard( DEFINE_CONST_UNICODE("*.") );
-            BOOL bMatches = FALSE;
+        if(
+            ( xFilterCFG.is() == sal_True ) &&
+            ( xTypeCFG.is()   == sal_True )
+          )
+        {
+            // select right query to get right set of filters for search modul
+            ::rtl::OUString sQuery;
+            if( rDocServiceName.EqualsAscii("com.sun.star.text.TextDocument"                ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_textdocument_withdefault"           ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.text.WebDocument"                 ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_webdocument_withdefault"            ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.text.GlobalDocument"              ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_globaldocument_withdefault"         ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.chart.ChartDocument"              ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_chartdocument_withdefault"          ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.sheet.SpreadsheetDocument"        ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_spreadsheetdocument_withdefault"    ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.presentation.PresentationDocument") == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_presentationdocument_withdefault"   ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.drawing.DrawingDocument"          ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_drawingdocument_withdefault"        ); else
+            if( rDocServiceName.EqualsAscii("com.sun.star.formula.FormulaProperties"        ) == TRUE ) sQuery = DEFINE_CONST_UNICODE("_filterquery_formulaproperties_withdefault"      );
 
-            // evaluate properties : get document service name
-            sal_Int32 nFilterProps = aProps.getLength();
-            for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
+            DBG_ASSERT( !(sQuery.getLength()<1), "SfxFilterContainer::ReadExternalFilters()\nCouldn't find right filter query for given modul! Filters will be ignored ...\n" );
+
+            if( sQuery.getLength() > 0 )
             {
-                const ::com::sun::star::beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-                if ( rFilterProp.Name.compareToAscii("DocumentService") == COMPARE_EQUAL )
+                // get all internal filter names, which are match given doc service name (modul)
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > lFilterNames;
+                ::com::sun::star::uno::Any                         aResult     ;
+
+                aResult = xFilterCFG->getByName( sQuery );
+                if( aResult >>= lFilterNames )
                 {
-                    ::rtl::OUString aTmp;
-                    rFilterProp.Value >>= aTmp;
-                    if ( aTmp.equals( rDocServiceName ) )
-                        // it's me!
-                        bMatches = TRUE;
-                    else
-                        break;
-                }
-                else if ( rFilterProp.Name.compareToAscii("Type") == COMPARE_EQUAL )
-                {
-                    if ( ( rFilterProp.Value >>= aType ) && aType.getLength() )
+                    // get all properties of filters ... put it into the filter container
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lFilterProperties                           ;
+                    sal_Int32                                                                 nFilterCount      = lFilterNames.getLength();
+                    sal_Int32                                                                 nFilter           = 0                       ;
+
+                    for( nFilter=0; nFilter<nFilterCount; ++nFilter )
                     {
-                        // get the Type; each type is described by a property value sequence too
-                        ::com::sun::star::uno::Any aTmp;
-                        if ( !xTypes->hasByName( aType ) || !( xTypes->getByName( aType ) >>= aTmp ) )
-                            break;
-
-                        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
-                        if ( aTmp >>= aTypeProps )
+                        // Try to get filter .. but look for any exceptions!
+                        // May be filter was deleted by another thread ...
+                        ::rtl::OUString sFilterName = lFilterNames[nFilter];
+                        try
                         {
-                            sal_Int32 nLength = aTypeProps.getLength();
-                            for ( sal_Int32 nProp = 0; nProp<nLength; nProp++ )
-                            {
-                                const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[nProp];
+                            aResult = xFilterCFG->getByName( sFilterName );
+                        }
+                        catch( ::com::sun::star::container::NoSuchElementException& )
+                        {
+                            aResult = ::com::sun::star::uno::Any();
+                        }
 
-                                if ( rProp.Name.compareToAscii("MediaType") == COMPARE_EQUAL )
-                                    rProp.Value >>= aMimeType;
-                                else if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
+                        if( aResult >>= lFilterProperties )
+                        {
+                            // collect informations to add filter to container
+                            // (attention: some informations aren't available on filter directly ... you must search for corresponding type too!)
+                            sal_Int32       nFlags          = 0 ;
+                            sal_Int32       nClipboardId    = 0 ;
+                            sal_Int32       nDocumentIconId = 0 ;
+                            sal_Int32       nFormatVersion  = 0 ;
+                            ::rtl::OUString sMimeType           ;
+                            ::rtl::OUString sType               ;
+                            ::rtl::OUString sUIName             ;
+                            ::rtl::OUString sHumanName          ;
+                            ::rtl::OUString sDefaultTemplate    ;
+                            ::rtl::OUString sUserData           ;
+                            ::rtl::OUString sExtension          ;
+
+                            // first get directly available properties
+                            sal_Int32 nFilterPropertyCount = lFilterProperties.getLength();
+                            sal_Int32 nFilterProperty      = 0                            ;
+                            for( nFilterProperty=0; nFilterProperty<nFilterPropertyCount; ++nFilterProperty )
+                            {
+                                if( lFilterProperties[nFilterProperty].Name.compareToAscii( "FileFormatVersion" ) == 0 )
                                 {
-                                    ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
-                                    if ( rProp.Value >>= aExtensions )
+                                    lFilterProperties[nFilterProperty].Value >>= nFormatVersion;
+                                }
+                                else if( lFilterProperties[nFilterProperty].Name.compareToAscii( "TemplateName" ) == 0 )
+                                {
+                                    lFilterProperties[nFilterProperty].Value >>= sDefaultTemplate;
+                                }
+                                else if( lFilterProperties[nFilterProperty].Name.compareToAscii( "Flags" ) == 0 )
+                                {
+                                    lFilterProperties[nFilterProperty].Value >>= nFlags;
+                                }
+                                else if( lFilterProperties[nFilterProperty].Name.compareToAscii( "UIName" ) == 0 )
+                                {
+                                    lFilterProperties[nFilterProperty].Value >>= sUIName;
+                                }
+                                else if( lFilterProperties[nFilterProperty].Name.compareToAscii( "UserData" ) == 0 )
+                                {
+                                    ::com::sun::star::uno::Sequence< ::rtl::OUString > lUserData;
+                                    lFilterProperties[nFilterProperty].Value >>= lUserData;
+                                    sUserData = implc_convertStringlistToString( lUserData, ',', ::rtl::OUString() );
+                                }
+                                else if( lFilterProperties[nFilterProperty].Name.compareToAscii( "Type" ) == 0 )
+                                {
+                                    lFilterProperties[nFilterProperty].Value >>= sType;
+                                    // Try to get filter .. but look for any exceptions!
+                                    // May be filter was deleted by another thread ...
+                                    try
                                     {
-                                        sal_Int32 nExtensions = aExtensions.getLength();
-                                        const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
-                                        for ( sal_Int32 nExt=0; nExt<nExtensions; nExt++ )
+                                        aResult = xTypeCFG->getByName( sType );
+                                    }
+                                    catch( ::com::sun::star::container::NoSuchElementException& )
+                                    {
+                                        aResult = ::com::sun::star::uno::Any();
+                                    }
+
+                                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lTypeProperties;
+                                    if( aResult >>= lTypeProperties )
+                                    {
+                                        // get indirect available properties then (types)
+                                        sal_Int32 nTypePropertyCount = lTypeProperties.getLength();
+                                        sal_Int32 nTypeProperty      = 0                          ;
+                                        for( nTypeProperty=0; nTypeProperty<nTypePropertyCount; ++nTypeProperty )
                                         {
-                                            aExtension += aWildCard;
-                                            aExtension += (String) pExtensions[nExt];
-                                            if ( nExt+1 < nExtensions )
-                                                aExtension += ';';
+                                            if( lTypeProperties[nTypeProperty].Name.compareToAscii( "ClipboardFormat" ) == 0 )
+                                            {
+                                                lTypeProperties[nTypeProperty].Value >>= sHumanName;
+                                            }
+                                            else if( lTypeProperties[nTypeProperty].Name.compareToAscii( "DocumentIconID" ) == 0 )
+                                            {
+                                                lTypeProperties[nTypeProperty].Value >>= nDocumentIconId;
+                                            }
+                                            else if( lTypeProperties[nTypeProperty].Name.compareToAscii( "MediaType" ) == 0 )
+                                            {
+                                                lTypeProperties[nTypeProperty].Value >>= sMimeType;
+                                            }
+                                            else if( lTypeProperties[nTypeProperty].Name.compareToAscii( "Extensions" ) == 0 )
+                                            {
+                                                ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensions;
+                                                lTypeProperties[nTypeProperty].Value >>= lExtensions;
+                                                sExtension = implc_convertStringlistToString( lExtensions, ';', DEFINE_CONST_UNICODE("*.") );
+                                            }
+                                            else if( lTypeProperties[nTypeProperty].Name.compareToAscii( "URLPattern" ) == 0 )
+                                            {
+                                                lTypeProperties[nTypeProperty].Value >>= nFormatVersion;
+                                            }
                                         }
                                     }
                                 }
-                                else if ( rProp.Name.compareToAscii("ClipboardFormat") == COMPARE_EQUAL )
-                                    rProp.Value >>= aHumanName;
-                                else if ( rProp.Name.compareToAscii("DocumentIconId") == COMPARE_EQUAL )
-                                    rProp.Value >>= nClipId;
+                            }
+                            // old formats are found ... using HumanPresentableName!
+                            if( sHumanName.getLength() )
+                            {
+                                nClipboardId = SotExchange::RegisterFormatName( sHumanName );
+                            }
+                            // register SfxFilter
+                            // first erase module name from old filter names!
+                            // e.g: "scalc: DIF" => "DIF"
+                            sal_Int32 nStartRealName = sFilterName.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
+                            if( nStartRealName != -1 )
+                            {
+                                sFilterName = sFilterName.copy( nStartRealName+2 );
+                            }
+
+                            SfxFilter *pFilter = new SfxFilter( sFilterName             ,
+                                                                sExtension              ,
+                                                                nFlags                  ,
+                                                                nClipboardId            ,
+                                                                sType                   ,
+                                                                sType                   ,
+                                                                (USHORT)nDocumentIconId ,
+                                                                sMimeType               ,
+                                                                this                    ,
+                                                                sUserData               );
+
+                            pFilter->SetUIName( sUIName );
+                            pFilter->SetDefaultTemplate( sDefaultTemplate );
+                            if( nFormatVersion )
+                            {
+                                pFilter->SetVersion( nFormatVersion );
+                            }
+                            if( (( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT ) == TRUE )
+                            {
+                                AddFilter( pFilter, 0 );
+                            }
+                            else
+                            {
+                                AddFilter( pFilter, GetFilterCount() );
                             }
                         }
                     }
                 }
-                else if ( rFilterProp.Name.compareToAscii("UIName") == COMPARE_EQUAL )
-                    rFilterProp.Value >>= aUIName;
-                else if ( rFilterProp.Name.compareToAscii("TemplateName") == COMPARE_EQUAL )
-                    rFilterProp.Value >>= aDefaultTemplate;
-                else if ( rFilterProp.Name.compareToAscii("FileFormatVersion") == COMPARE_EQUAL )
-                    rFilterProp.Value >>= nVersion;
-                else if ( rFilterProp.Name.compareToAscii("UserData") == COMPARE_EQUAL )
-                {
-                    Sequence < ::rtl::OUString > aUserDataList;
-                    if ( rFilterProp.Value >>= aUserDataList )
-                    {
-                        sal_Int32 nStrings = aUserDataList.getLength();
-                        for ( sal_Int32 nString=0; nString<nStrings; nString++ )
-                        {
-                            aUserData += String( aUserDataList[nString] );
-                            if ( nString+1 < nStrings )
-                                aUserData += ',';
-                        }
-                    }
-                }
-                else if ( rFilterProp.Name.compareToAscii("Flags") == COMPARE_EQUAL )
-                    rFilterProp.Value >>= nFilterFlags;
-            }
-
-            if ( bMatches && aType.getLength() )
-            {
-/*
-                ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
-                aDataFlavor.MimeType = aMimeType;
-                nClipId = SotExchange::GetFormat( aDataFlavor );
- */
-                if ( !nClipId && aHumanName.getLength() )
-                {
-                    // old formats are found using HumanPresentableName
-                    nClipId = SotExchange::RegisterFormatName( aHumanName );
-                }
-
-                // register SfxFilter
-/*OBSOLETE
-    old filter names are enabled in cfg
-                 aFilterName = impl_getOldFilterName( aName );
-*/
-                aFilterName = aName;
-                if ( aFilterName.Len() )
-                {
-                    USHORT nPos = aFilterName.Search( ':' );
-                    aFilterName.Erase( 0, nPos+2 );
-                }
-                else
-                    aFilterName = aName;
-
-                SfxFilter *pFilter = new SfxFilter( aFilterName, aExtension, nFilterFlags, nClipId, aType,
-                        aType, (USHORT) nDocIconId, aMimeType, this, aUserData );
-
-                pFilter->SetUIName( aUIName );
-                pFilter->SetDefaultTemplate( aDefaultTemplate );
-                if( nVersion )
-                    pFilter->SetVersion( nVersion );
-                BOOL bIsDefault = (( nFilterFlags & SFX_FILTER_DEFAULT ) != 0 );
-                AddFilter( pFilter, bIsDefault ? 0 : GetFilterCount() );
             }
         }
     }
-
-    catch ( ::com::sun::star::uno::Exception& )
+    catch( ::com::sun::star::uno::Exception& )
     {
+        DBG_ASSERT( sal_False, "SfxFilterContainer::ReadExternalFilter()\nException detected. Possible not all filters could be cached.\n" );
     }
 }
-
+/*
 String SfxFilterContainer::ConvertToOldFilterName( const String& aNew )
 {
-    return impl_getOldFilterName( aNew );
+    //AS return impl_getOldFilterName( aNew );
+    return aNew;
 }
 
 String SfxFilterContainer::ConvertToNewFilterName( const String& aOld )
 {
-    return impl_getNewFilterName( aOld );
+    //AS return impl_getNewFilterName( aOld );
+    return aOld;
 }
+*/
