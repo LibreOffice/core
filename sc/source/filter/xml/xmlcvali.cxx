@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,25 +367,22 @@ void ScXMLContentValidationContext::EndElement()
 {
     ScMyImportValidation aValidation;
     sal_Int32 nOffset(0);
-    if (ScXMLConverter::GetAddressFromString(
-        aValidation.aBaseCellAddress, sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
-    {
-        aValidation.sName = sName;
-        aValidation.sImputTitle = sHelpTitle;
-        aValidation.sImputMessage = sHelpMessage;
-        aValidation.sErrorTitle = sErrorTitle;
-        aValidation.sErrorMessage = sErrorMessage;
-        GetCondition(sCondition, aValidation.sFormula1, aValidation.sFormula2, aValidation.aValidationType, aValidation.aOperator);
-        if (aValidation.sFormula1.getLength())
-            ScXMLConverter::ParseFormula(aValidation.sFormula1);
-        if (aValidation.sFormula2.getLength())
-            ScXMLConverter::ParseFormula(aValidation.sFormula2);
-        GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
-        aValidation.bShowErrorMessage = bDisplayError;
-        aValidation.bShowImputMessage = bDisplayHelp;
-        aValidation.bIgnoreBlanks = bAllowEmptyCell;
-        GetScImport().AddValidation(aValidation);
-    }
+    aValidation.sName = sName;
+    aValidation.sBaseCellAddress = sBaseCellAddress;
+    aValidation.sImputTitle = sHelpTitle;
+    aValidation.sImputMessage = sHelpMessage;
+    aValidation.sErrorTitle = sErrorTitle;
+    aValidation.sErrorMessage = sErrorMessage;
+    GetCondition(sCondition, aValidation.sFormula1, aValidation.sFormula2, aValidation.aValidationType, aValidation.aOperator);
+    if (aValidation.sFormula1.getLength())
+        ScXMLConverter::ParseFormula(aValidation.sFormula1);
+    if (aValidation.sFormula2.getLength())
+        ScXMLConverter::ParseFormula(aValidation.sFormula2);
+    GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
+    aValidation.bShowErrorMessage = bDisplayError;
+    aValidation.bShowImputMessage = bDisplayHelp;
+    aValidation.bIgnoreBlanks = bAllowEmptyCell;
+    GetScImport().AddValidation(aValidation);
 }
 
 void ScXMLContentValidationContext::SetHelpMessage(const rtl::OUString& sTitle, const rtl::OUString& sMessage, const sal_Bool bDisplay)

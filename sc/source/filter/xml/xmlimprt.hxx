@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,7 @@ struct ScMyImportValidation
     rtl::OUString                                   sErrorMessage;
     rtl::OUString                                   sFormula1;
     rtl::OUString                                   sFormula2;
+    rtl::OUString                                   sBaseCellAddress;
     com::sun::star::table::CellAddress              aBaseCellAddress;
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1663,11 +1663,21 @@ XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
 sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
 {
     sal_Bool bFound(sal_False);
+    rtl::OUString sEmpty;
     ScMyImportValidations::iterator aItr = aValidations.begin();
     while(aItr != aValidations.end() && !bFound)
     {
         if (aItr->sName == sName)
+        {
+            if (aItr->sBaseCellAddress.getLength())
+            {
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetAddressFromString(
+                    aItr->aBaseCellAddress, aItr->sBaseCellAddress, GetDocument(), nOffset ))
+                    aItr->sBaseCellAddress = sEmpty;
+            }
             bFound = sal_True;
+        }
         else
             aItr++;
     }
