@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-19 11:27:04 $
+#   last change: $Author: dfoster $ $Date: 2002-09-19 12:13:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,7 +172,7 @@ ALL : ALLDEP
 ALLTAR: $(REGISTRYCHECKFLAG)
 
 $(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
-    +(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
-    +(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
+    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
+    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
