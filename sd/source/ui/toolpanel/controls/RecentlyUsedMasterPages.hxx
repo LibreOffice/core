@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:10:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ public:
     int GetMasterPageCount (void) const;
     String GetURL (int nIndex) const;
     String GetMasterPageName (int nIndex) const;
+    String GetMasterPageStyleName (int nIndex) const;
     SdPage* GetSlide (int nIndex) const;
     SdPage* GetMasterPage (int nIndex) const;
     Image GetMasterPagePreview (int nIndex, int nWidth) const;
