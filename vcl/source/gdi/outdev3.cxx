@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 11:37:26 $
+ *  last change: $Author: ssa $ $Date: 2002-02-21 10:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1728,7 +1728,11 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         }
 
         if ( !pFoundData && bSymbolEncoding )
-            pFoundData = pFontList->ImplFindFontFromToken( DefaultFontConfigItem::get()->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SYMBOL ) );
+        {
+            String aFontname = DefaultFontConfigItem::get()->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SYMBOL );
+            ImplGetEnglishSearchFontName( aFontname );
+            pFoundData = pFontList->ImplFindFontFromToken( aFontname );
+        }
 
         // If we haven't found a font, we try this with the other Font Token names, if availble
         if ( !pFoundData && (nToken > 1) )
@@ -2183,15 +2187,26 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             // Try to use a Standard Unicode or a Standard Font to get
             // as max as possible characters
             DefaultFontConfigItem* pDefaults = DefaultFontConfigItem::get();
-            pFoundData = pFontList->ImplFindFontFromToken( pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SANS_UNICODE ) );
+            String aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SANS_UNICODE );
+            ImplGetEnglishSearchFontName( aFontname );
+
+            pFoundData = pFontList->ImplFindFontFromToken( aFontname );
             if ( !pFoundData )
             {
-                pFoundData = pFontList->ImplFindFontFromToken( pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SANS ) );
+                aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SANS );
+                ImplGetEnglishSearchFontName( aFontname );
+                pFoundData = pFontList->ImplFindFontFromToken( aFontname );
                 if ( !pFoundData )
                 {
-                    pFoundData = pFontList->ImplFindFontFromToken( pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SERIF ) );
+                    aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_SERIF );
+                    ImplGetEnglishSearchFontName( aFontname );
+                    pFoundData = pFontList->ImplFindFontFromToken( aFontname );
                     if ( !pFoundData )
-                        pFoundData = pFontList->ImplFindFontFromToken( pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_FIXED ) );
+                    {
+                        aFontname = pDefaults->getDefaultFont( LANGUAGE_ENGLISH, DEFAULTFONT_FIXED );
+                        ImplGetEnglishSearchFontName( aFontname );
+                        pFoundData = pFontList->ImplFindFontFromToken( aFontname );
+                    }
                 }
             }
 
