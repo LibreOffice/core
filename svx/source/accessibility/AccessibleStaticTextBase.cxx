@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 13:41:41 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,16 +160,20 @@ namespace accessibility
     public:
 
         // receive pointer to our frontend class and view window
-        AccessibleStaticTextBase_Impl( const uno::Reference< XAccessible >& xThis );
+        AccessibleStaticTextBase_Impl();
         ~AccessibleStaticTextBase_Impl();
 
-        SvxEditSourceAdapter& GetEditSource() const throw (uno::RuntimeException) { return maEditSource; }
-        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (uno::RuntimeException);
+        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException)) { return maEditSource; }
+        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
+
+        void SetEventSource( const uno::Reference< XAccessible >& rInterface ) { mxThis = rInterface; }
+        uno::Reference< XAccessible > GetEventSource() const { return mxThis; }
 
         void SetOffset( const Point& );
         Point GetOffset() const { ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset ); return aPoint; }
 
         void UpdateChildren();
+        void Dispose() { mxThis = NULL; }
 
 #ifdef DBG_UTIL
         void CheckInvariants() const;
@@ -188,7 +192,7 @@ namespace accessibility
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
         // pointer
-        const uno::Reference< XAccessible > mxThis;
+        uno::Reference< XAccessible > mxThis;
 
         // implements our functionality, we're just an adapter (guarded by solar mutex)
         mutable AccessibleEditableTextPara maTextParagraph;
@@ -210,13 +214,16 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl( const uno::Reference< XAccessible >& xThis ) :
-        mxThis( xThis ),
-        maTextParagraph( xThis ),
+    AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
+        mxThis( NULL ),
+        maTextParagraph( NULL ),
         maEditSource(),
         maMutex(),
         maOffset(0,0)
     {
+        // TODO: this is still somewhat of a hack, all the more since
+        // now the maTextParagraph has an empty parent reference set
+
         // prevent automatic release of member variable
         maTextParagraph.acquire();
     }
@@ -225,7 +232,7 @@ namespace accessibility
     {
     }
 
-    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (uno::RuntimeException)
+    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
         maEditSource.SetEditSource( pEditSource );
         maTextParagraph.SetEditSource( &maEditSource );
@@ -331,9 +338,8 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    AccessibleStaticTextBase::AccessibleStaticTextBase( const uno::Reference< XAccessible >&    xThis,
-                                                        ::std::auto_ptr< SvxEditSource >        pEditSource ) :
-        mpImpl( new AccessibleStaticTextBase_Impl( xThis ) )
+    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
+        mpImpl( new AccessibleStaticTextBase_Impl() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -344,7 +350,7 @@ namespace accessibility
     {
     }
 
-    const SvxEditSource& AccessibleStaticTextBase::GetEditSource() const throw (::com::sun::star::uno::RuntimeException)
+    const SvxEditSource& AccessibleStaticTextBase::GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -359,7 +365,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -372,6 +378,34 @@ namespace accessibility
         mpImpl->CheckInvariants();
 #else
         mpImpl->SetEditSource( pEditSource );
+#endif
+    }
+
+    void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+
+        mpImpl->SetEventSource( rInterface );
+
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+    }
+
+    uno::Reference< XAccessible > AccessibleStaticTextBase::GetEventSource() const
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+
+        uno::Reference< XAccessible > xRet( mpImpl->GetEventSource() );
+
+        mpImpl->CheckInvariants();
+
+        return xRet;
+#else
+        return mpImpl->GetEventSource();
 #endif
     }
 
@@ -406,7 +440,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleStaticTextBase::UpdateChildren() throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleStaticTextBase::UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -419,6 +453,19 @@ namespace accessibility
         mpImpl->CheckInvariants();
 #else
         mpImpl->UpdateChildren();
+#endif
+    }
+
+    void AccessibleStaticTextBase::Dispose()
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+
+        mpImpl->Dispose();
+
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
 #endif
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-14 13:00:00 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,28 +190,31 @@ namespace accessibility
     public:
 
         // receive pointer to our frontend class and view window
-        AccessibleTextHelper_Impl( const uno::Reference< XAccessible >& rInterface );
+        AccessibleTextHelper_Impl();
         ~AccessibleTextHelper_Impl();
 
         // XAccessibleContext child handling methods
-        sal_Int32 SAL_CALL getAccessibleChildCount() throw (uno::RuntimeException);
-        uno::Reference< XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
+        sal_Int32 SAL_CALL getAccessibleChildCount() SAL_THROW((uno::RuntimeException));
+        uno::Reference< XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException));
 
         // XAccessibleEventBroadcaster child related methods
-        void SAL_CALL addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException);
-        void SAL_CALL removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException);
+        void SAL_CALL addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
+        void SAL_CALL removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
 
         // XAccessibleComponent child related methods
-        uno::Reference< XAccessible > SAL_CALL getAccessibleAt( const awt::Point& aPoint ) throw (uno::RuntimeException);
+        uno::Reference< XAccessible > SAL_CALL getAccessibleAt( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException));
 
-        SvxEditSourceAdapter& GetEditSource() const throw (uno::RuntimeException);
-        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (uno::RuntimeException);
+        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException));
+        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
+
+        void SetEventSource( const uno::Reference< XAccessible >& rInterface ) { mxFrontEnd = rInterface; }
+        uno::Reference< XAccessible > GetEventSource() const { return mxFrontEnd; }
 
         void SetOffset( const Point& );
         Point GetOffset() const { ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset ); return aPoint; }
 
-        void SetChildrenOffset( sal_Int32 nOffset );
-        sal_Int32 GetChildrenOffset() const
+        void SetStartIndex( sal_Int32 nOffset );
+        sal_Int32 GetStartIndex() const
         {
             // Strictly correct only with locked solar mutex, // but
             // here we rely on the fact that sal_Int32 access is
@@ -221,15 +224,17 @@ namespace accessibility
 
         sal_Bool IsSelected() const;
 
+        void Dispose();
+
         // do NOT hold object mutex when calling this! Danger of deadlock
         void FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue = uno::Any(), const uno::Any& rOldValue = uno::Any() ) const;
         void FireEvent( const AccessibleEventObject& rEvent ) const;
 
-        void SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
-        sal_Bool HaveFocus() throw (::com::sun::star::uno::RuntimeException);
-        void SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
-        void SetShapeFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
-        void ChangeChildFocus( sal_Int32 nNewChild ) throw (::com::sun::star::uno::RuntimeException);
+        void SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        sal_Bool HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException));
+        void SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        void SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        void ChangeChildFocus( sal_Int32 nNewChild ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
 #ifdef DBG_UTIL
         void CheckInvariants() const;
@@ -252,7 +257,7 @@ namespace accessibility
         void LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const { FireEvent( nEventId, uno::Any(), rOldValue ); }
 
         // shutdown usage of current edit source on myself and the children.
-        void ShutdownEditSource() throw (uno::RuntimeException);
+        void ShutdownEditSource() SAL_THROW((uno::RuntimeException));
 
         void ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast );
         void ParagraphsInserted( sal_Int32 nFirst );
@@ -261,19 +266,19 @@ namespace accessibility
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
         // lock solar mutex before
-        SvxTextForwarder& GetTextForwarder() const throw (uno::RuntimeException);
+        SvxTextForwarder& GetTextForwarder() const SAL_THROW((uno::RuntimeException));
         // lock solar mutex before
-        SvxViewForwarder& GetViewForwarder() const throw (uno::RuntimeException);
+        SvxViewForwarder& GetViewForwarder() const SAL_THROW((uno::RuntimeException));
         // lock solar mutex before
-        SvxEditViewForwarder& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const throw (uno::RuntimeException);
+        SvxEditViewForwarder& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const SAL_THROW((uno::RuntimeException));
 
         // are we in edit mode?
-        sal_Bool IsActive() const throw (uno::RuntimeException);
+        sal_Bool IsActive() const SAL_THROW((uno::RuntimeException));
 
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
         // pointer!
-        const uno::Reference< XAccessible > mxFrontEnd;
+        uno::Reference< XAccessible > mxFrontEnd;
 
         // a wrapper for the text forwarders (guarded by solar mutex)
         mutable SvxEditSourceAdapter maEditSource;
@@ -324,8 +329,8 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    AccessibleTextHelper_Impl::AccessibleTextHelper_Impl( const uno::Reference< XAccessible >& rInterface ) :
-        mxFrontEnd( rInterface ),
+    AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
+        mxFrontEnd( NULL ),
         maLastSelection( EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
@@ -354,7 +359,7 @@ namespace accessibility
         // owner is responsible for dispose and clear on listeners
     }
 
-    SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const throw (uno::RuntimeException)
+    SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
     {
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown edit source")), mxFrontEnd);
@@ -370,7 +375,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text forwarder is invalid, model might be dead")), mxFrontEnd);
     }
 
-    SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const throw (uno::RuntimeException)
+    SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
     {
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown edit source")), mxFrontEnd);
@@ -386,7 +391,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, model might be dead")), mxFrontEnd);
     }
 
-    SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( sal_Bool bCreate ) const throw (uno::RuntimeException)
+    SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( sal_Bool bCreate ) const SAL_THROW((uno::RuntimeException))
     {
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown edit source")), mxFrontEnd);
@@ -412,7 +417,7 @@ namespace accessibility
         }
     }
 
-    SvxEditSourceAdapter& AccessibleTextHelper_Impl::GetEditSource() const throw (uno::RuntimeException)
+    SvxEditSourceAdapter& AccessibleTextHelper_Impl::GetEditSource() const SAL_THROW((uno::RuntimeException))
     {
         if( maEditSource.IsValid() )
             return maEditSource;
@@ -448,7 +453,7 @@ namespace accessibility
         const sal_Int32 mnDifference;
     };
 
-    void AccessibleTextHelper_Impl::SetChildrenOffset( sal_Int32 nOffset )
+    void AccessibleTextHelper_Impl::SetStartIndex( sal_Int32 nOffset )
     {
         sal_Int32 nOldOffset( mnStartIndex );
 
@@ -464,7 +469,7 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
         if( bHaveFocus )
         {
@@ -485,7 +490,7 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::ChangeChildFocus( sal_Int32 nNewChild ) throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleTextHelper_Impl::ChangeChildFocus( sal_Int32 nNewChild ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
         if( mbThisHasFocus )
             SetShapeFocus( sal_False );
@@ -494,7 +499,7 @@ namespace accessibility
         maParaManager.SetFocus( nNewChild );
     }
 
-    void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
         sal_Bool bOldFocus( mbThisHasFocus );
 
@@ -509,7 +514,7 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleTextHelper_Impl::SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
         sal_Bool bOldFocus( mbGroupHasFocus );
 
@@ -532,14 +537,14 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleTextHelper_Impl::HaveFocus() throw (::com::sun::star::uno::RuntimeException)
+    sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
         // No locking of solar mutex here, since we rely on the fact
         // that sal_Bool access is atomic
         return mbThisHasFocus;
     }
 
-    sal_Bool AccessibleTextHelper_Impl::IsActive() const throw (uno::RuntimeException)
+    sal_Bool AccessibleTextHelper_Impl::IsActive() const SAL_THROW((uno::RuntimeException))
     {
         try
         {
@@ -627,7 +632,7 @@ namespace accessibility
         AccessibleTextHelper_Impl&  mrImpl;
     };
 
-    void AccessibleTextHelper_Impl::ShutdownEditSource() throw (uno::RuntimeException)
+    void AccessibleTextHelper_Impl::ShutdownEditSource() SAL_THROW((uno::RuntimeException))
     {
         // This should only be called with solar mutex locked, i.e. from the main office thread
 
@@ -652,7 +657,7 @@ namespace accessibility
         maEditSource.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
     }
 
-    void AccessibleTextHelper_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (uno::RuntimeException)
+    void AccessibleTextHelper_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
         // This should only be called with solar mutex locked, i.e. from the main office thread
 
@@ -740,7 +745,8 @@ namespace accessibility
                     // child not yet created?
                     accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
                     if( aChild.second.Width == 0 &&
-                        aChild.second.Height == 0 )
+                        aChild.second.Height == 0 &&
+                        mxFrontEnd.is() )
                     {
                         GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
@@ -822,9 +828,6 @@ namespace accessibility
 #ifdef DBG_UTIL
     void AccessibleTextHelper_Impl::CheckInvariants() const
     {
-        if( !mxFrontEnd.is() )
-            DBG_ERROR( "AccessibleTextHelper: no frontend" );
-
         if( mnFirstVisibleChild >= 0 &&
             mnFirstVisibleChild > mnLastVisibleChild )
         {
@@ -1162,12 +1165,20 @@ namespace accessibility
         mbInNotify = sal_False;
     }
 
+    void AccessibleTextHelper_Impl::Dispose()
+    {
+        ShutdownEditSource(); // also disposes children
+        mxFrontEnd = NULL;
+    }
+
     void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
     {
         // -- object locked --
         ::osl::ClearableMutexGuard aGuard( maMutex );
 
         AccessibleEventObject aEvent;
+
+        DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set" );
 
         if( mxFrontEnd.is() )
             aEvent = AccessibleEventObject(mxFrontEnd->getAccessibleContext(), nEventId, rNewValue, rOldValue);
@@ -1228,14 +1239,14 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL AccessibleTextHelper_Impl::getAccessibleChildCount() throw (uno::RuntimeException)
+    sal_Int32 SAL_CALL AccessibleTextHelper_Impl::getAccessibleChildCount() SAL_THROW((uno::RuntimeException))
     {
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
     {
-        i -= GetChildrenOffset();
+        i -= GetStartIndex();
 
         if( 0 > i || i > getAccessibleChildCount() ||
             GetTextForwarder().GetParagraphCount() <= i )
@@ -1243,20 +1254,25 @@ namespace accessibility
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid child index")), mxFrontEnd);
         }
 
-        return maParaManager.CreateChild( i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i ).first;
+        DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper_Impl::UpdateVisibleChildren: no frontend set");
+
+        if( mxFrontEnd.is() )
+            return maParaManager.CreateChild( i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i ).first;
+        else
+            return NULL;
     }
 
-    void SAL_CALL AccessibleTextHelper_Impl::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    void SAL_CALL AccessibleTextHelper_Impl::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
         maStateListeners.addInterface( xListener );
     }
 
-    void SAL_CALL AccessibleTextHelper_Impl::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    void SAL_CALL AccessibleTextHelper_Impl::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
         maStateListeners.removeInterface( xListener );
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleAt( const awt::Point& _aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleAt( const awt::Point& _aPoint ) SAL_THROW((uno::RuntimeException))
     {
         // make given position relative
         if( !mxFrontEnd.is() )
@@ -1303,7 +1319,7 @@ namespace accessibility
         }
 
         // found none
-        return uno::Reference< XAccessible >();
+        return NULL;
     }
 
     //------------------------------------------------------------------------
@@ -1312,9 +1328,8 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    AccessibleTextHelper::AccessibleTextHelper( const uno::Reference< XAccessible >&    rInterface,
-                                                      ::std::auto_ptr< SvxEditSource >      pEditSource ) :
-        mpImpl( new AccessibleTextHelper_Impl( rInterface ) )
+    AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
+        mpImpl( new AccessibleTextHelper_Impl() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1325,7 +1340,7 @@ namespace accessibility
     {
     }
 
-    const SvxEditSource& AccessibleTextHelper::GetEditSource() const throw (uno::RuntimeException)
+    const SvxEditSource& AccessibleTextHelper::GetEditSource() const SAL_THROW((uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1340,7 +1355,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (uno::RuntimeException)
+    void AccessibleTextHelper::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -1356,7 +1371,35 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleTextHelper::SetEventSource( const uno::Reference< XAccessible >& rInterface )
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+
+        mpImpl->SetEventSource( rInterface );
+
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+    }
+
+    uno::Reference< XAccessible > AccessibleTextHelper::GetEventSource() const
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+
+        uno::Reference< XAccessible > xRet( mpImpl->GetEventSource() );
+
+        mpImpl->CheckInvariants();
+
+        return xRet;
+#else
+        return mpImpl->GetEventSource();
+#endif
+    }
+
+    void AccessibleTextHelper::SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -1372,7 +1415,7 @@ namespace accessibility
 #endif
     }
 
-    sal_Bool AccessibleTextHelper::HaveFocus() throw (::com::sun::star::uno::RuntimeException)
+    sal_Bool AccessibleTextHelper::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1444,7 +1487,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::SetChildrenOffset( sal_Int32 nOffset )
+    void AccessibleTextHelper::SetStartIndex( sal_Int32 nOffset )
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -1453,29 +1496,29 @@ namespace accessibility
         mpImpl->CheckInvariants();
 #endif
 
-        mpImpl->SetChildrenOffset( nOffset );
+        mpImpl->SetStartIndex( nOffset );
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 #endif
     }
 
-    sal_Int32 AccessibleTextHelper::GetChildrenOffset() const
+    sal_Int32 AccessibleTextHelper::GetStartIndex() const
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        sal_Int32 nOffset = mpImpl->GetChildrenOffset();
+        sal_Int32 nOffset = mpImpl->GetStartIndex();
 
         mpImpl->CheckInvariants();
 
         return nOffset;
 #else
-        return mpImpl->GetChildrenOffset();
+        return mpImpl->GetStartIndex();
 #endif
     }
 
-    void AccessibleTextHelper::UpdateChildren() throw (::com::sun::star::uno::RuntimeException)
+    void AccessibleTextHelper::UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -1488,6 +1531,19 @@ namespace accessibility
         mpImpl->UpdateVisibleData();
 
         mpImpl->UpdateSelection();
+
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+    }
+
+    void AccessibleTextHelper::Dispose()
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+
+        mpImpl->Dispose();
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1512,7 +1568,7 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 AccessibleTextHelper::GetChildCount() throw (uno::RuntimeException)
+    sal_Int32 AccessibleTextHelper::GetChildCount() SAL_THROW((uno::RuntimeException))
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1529,7 +1585,7 @@ namespace accessibility
 #endif
     }
 
-    uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1546,7 +1602,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::AddEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    void AccessibleTextHelper::AddEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1559,7 +1615,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::RemoveEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    void AccessibleTextHelper::RemoveEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1573,7 +1629,7 @@ namespace accessibility
     }
 
     // XAccessibleComponent
-    uno::Reference< XAccessible > AccessibleTextHelper::GetAt( const awt::Point& aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > AccessibleTextHelper::GetAt( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException))
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-25 12:21:28 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,12 +556,12 @@ namespace accessibility
         catch( const uno::Exception& ) {} // optional behaviour
     }
 
-    sal_Int32 AccessibleImageBullet::GetParagraphIndex() const throw (uno::RuntimeException)
+    sal_Int32 AccessibleImageBullet::GetParagraphIndex() const SAL_THROW((uno::RuntimeException))
     {
         return mnParagraphIndex;
     }
 
-    SvxEditSource& AccessibleImageBullet::GetEditSource() const throw (uno::RuntimeException)
+    SvxEditSource& AccessibleImageBullet::GetEditSource() const SAL_THROW((uno::RuntimeException))
     {
         if( mpEditSource )
             return *mpEditSource;
@@ -572,7 +572,7 @@ namespace accessibility
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
     }
 
-    SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const throw (uno::RuntimeException)
+    SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
     {
         SvxEditSource& rEditSource = GetEditSource();
         SvxTextForwarder* pTextForwarder = rEditSource.GetTextForwarder();
@@ -592,7 +592,7 @@ namespace accessibility
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
     }
 
-    SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const throw (uno::RuntimeException)
+    SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
     {
         SvxEditSource& rEditSource = GetEditSource();
         SvxViewForwarder* pViewForwarder = rEditSource.GetViewForwarder();

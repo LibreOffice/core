@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-07 12:13:15 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Int32 GetParagraphIndex() const throw (::com::sun::star::uno::RuntimeException);
+        sal_Int32 GetParagraphIndex() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Set the edit engine offset
 
@@ -280,7 +280,7 @@ namespace accessibility
 
         static Rectangle LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder );
 
-        SvxEditSourceAdapter& GetEditSource() const throw (::com::sun::star::uno::RuntimeException);
+        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Query the SvxTextForwarder for EditEngine access.
 
@@ -289,7 +289,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxAccessibleTextAdapter&   GetTextForwarder() const throw (::com::sun::star::uno::RuntimeException);
+        SvxAccessibleTextAdapter&   GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Query the SvxViewForwarder for EditEngine access.
 
@@ -298,7 +298,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxViewForwarder&   GetViewForwarder() const throw (::com::sun::star::uno::RuntimeException);
+        SvxViewForwarder&   GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Query whether a GetEditViewForwarder( sal_False ) will return a forwarder
 
@@ -316,7 +316,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const throw (::com::sun::star::uno::RuntimeException);
+        SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
     private:
 
@@ -346,20 +346,20 @@ namespace accessibility
         sal_Bool HaveChildren();
 
         /// Is the underlying object in edit mode
-        sal_Bool IsActive() const throw (::com::sun::star::uno::RuntimeException);
+        sal_Bool IsActive() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         const Point& GetEEOffset() const;
 
         // Get text from forwarder
-        String GetText( sal_Int32 nIndex ) throw (::com::sun::star::uno::RuntimeException);
-        String GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::uno::RuntimeException);
-        USHORT GetTextLen() const throw (::com::sun::star::uno::RuntimeException);
+        String GetText( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        String GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        USHORT GetTextLen() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Get the current selection of this paragraph
 
             @return sal_False, if nothing in this paragraph is selected
          */
-        sal_Bool GetSelection( USHORT& nStartPos, USHORT& nEndPos ) throw (::com::sun::star::uno::RuntimeException);
+        sal_Bool GetSelection( USHORT& nStartPos, USHORT& nEndPos ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** create selection from Accessible selection.
 
@@ -370,11 +370,11 @@ namespace accessibility
         // check whether index value is within permitted range
 
         /// Check whether 0<=nIndex<=n-1
-        void CheckIndex( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        void CheckIndex( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
         /// Check whether 0<=nIndex<=n
-        void CheckPosition( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        void CheckPosition( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
         /// Check whether 0<=nStart<=n and 0<=nEnd<=n
-        void CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        void CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
 
         // the paragraph index in the edit engine (guarded by solar mutex)
         sal_Int32   mnParagraphIndex;
