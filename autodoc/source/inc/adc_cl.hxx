@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:37:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ namespace autodoc
 namespace command
 {
     class Command;
+    class CreateHtml;
     class SinceTagTransformationData;
 }
 
@@ -161,6 +162,8 @@ class CommandLine : public csv::CommandLine_Ifc
     bool                bInitOk;
     static CommandLine *
                         pTheInstance_;
+    command::CreateHtml *
+                        pCommand_CreateHtml;
 };
 
 
