@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-26 14:55:49 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 16:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,8 @@ using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
+
+#define LOGFILE_AUTHOR "mb93740"
 
 #define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
 #define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
@@ -524,7 +526,8 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 // XFilter
 sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLogContext, "SvXMLExport::filter" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", LOGFILE_AUTHOR,
+                                "SvXMLExport::filter" );
 
     // check for xHandler first... should have been supplied in initialize
     if( !xHandler.is() )
@@ -544,24 +547,22 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             {
                 if( !(rValue >>= sOrigFileName ) )
                     return sal_False;
-#ifdef TIMELOG
-                // file URL (if found) to identify the stream:
-                ByteString aString( (String)sOrigFileName,
-                                    RTL_TEXTENCODING_ASCII_US );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "URL: %s",
-                                            aString.GetBuffer() );
-#endif
-
             }
         }
 
 #ifdef TIMELOG
+        // print a trace message with the URL
+        ByteString aUrl( (String) GetModel()->getURL(),
+                         RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.GetBuffer() );
+
         // we also want a trace message with the document class
-        ByteString aString( (String)GetXMLToken(meClass),
-                            RTL_TEXTENCODING_ASCII_US );
-        RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class: %s",
-                                    aString.GetBuffer() );
+        ByteString aClass( (String)GetXMLToken(meClass),
+                           RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
+                                    aClass.GetBuffer() );
 #endif
+
         exportDoc( meClass );
 
         return sal_True;
