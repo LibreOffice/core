@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
-<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:helpid="helpid:5552" toolbar:text="" />
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:helpid="5552"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:helpid="helpid:20472" toolbar:text="" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:helpid="helpid:20473" toolbar:text="" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:helpid="helpid:20563" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:helpid="helpid:20572" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:helpid="helpid:20573" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:helpid="helpid:20474" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:helpid="20475"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:helpid="20477"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="20476"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:WrapContour" toolbar:helpid="helpid:20584" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ContourDialog" toolbar:helpid="helpid:10334" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:helpid="helpid:10371" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:helpid="20478"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter" toolbar:helpid="20480"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:helpid="20479"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:helpid="helpid:20475" toolbar:text="" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:helpid="helpid:20477" toolbar:text="" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="helpid:20476" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false" toolbar:helpid="20572"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false" toolbar:helpid="20573"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:helpid="20472"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:helpid="20473"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:helpid="20474"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:visible="false" toolbar:helpid="20563"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:helpid="helpid:20478" toolbar:text="" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter" toolbar:helpid="helpid:20480" toolbar:text="" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:helpid="helpid:20479" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20456"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="helpid:10187" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="helpid:10200" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="helpid:10201" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="10286"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="10287"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="helpid:20456" toolbar:text="" />
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="helpid:20349" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="10187"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="10200"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="10201"/>
 </toolbar:toolbar>
