@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:40:32 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ swedish ] = "Sakregister huvudpost";
     Text[ polish ] = "Zestaw hase³ Wpis g³ówny";
     Text[ portuguese_brazilian ] = "Main index entry";
-    Text[ japanese ] = "õˆø‚Ìå“ü—Í";
+    Text[ japanese ] = "õˆø‚Ìå€–Ú";
     Text[ korean ] = "Ç¥Á¦¾î»öÀÎ¡¡ÁÖ¡¡Ç×¸ñ";
     Text[ chinese_simplified ] = "Ë÷ÒıÖ÷ÌõÄ¿";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı¥D±ø¥Ø";
@@ -759,7 +759,7 @@ String STR_POOLFRM_FRAME
     Text[ chinese_simplified ] = "¿ò";
     Text[ russian ] = "Ğàìêà";
     Text[ polish ] = "Ramka";
-    Text[ japanese ] = "˜g";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ";
@@ -2682,7 +2682,7 @@ String STR_POOLCOLL_FRAME
     Text[ chinese_simplified ] = "¿òÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå ğàìêè";
     Text[ polish ] = "Zawartoœæ ramki";
-    Text[ japanese ] = "˜g‚Ì“à—e";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì“à—e";
     Text[ chinese_traditional ] = "°T®Ø¤º®e";
     Text[ arabic ] = "ãÍÊæíÇÊ ÇáßÇÏÑ";
     Text[ greek ] = "Ğåñéå÷üìåíá ğëáéóßïõ";
@@ -4469,7 +4469,7 @@ String STR_POOLPAGE_LEFT
     Text [ spanish ] = "Página izquierda" ;
     Text [ french ] = "Page gauche" ;
     Text [ dutch ] = "Linkerpagina" ;
-    Text [ swedish ] = "Vänster sida" ;
+    Text [ swedish ] = "Vänstersida" ;
     Text [ danish ] = "Venstre side" ;
     Text [ portuguese ] = "Página esquerda" ;
     Text [ portuguese_brazilian ] = "Linke Seite" ;
