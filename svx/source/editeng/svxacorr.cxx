@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 14:40:39 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,12 +1361,11 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         pVFrame->GetFrame() )
     {
         ULONG nHelpId = 0;
-//      if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd|ChgToEnEmDash ) )
-        if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd) )
+        if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd|ChgToEnEmDash ) )
         {
             // von 0 - 15
-//          if( nRet & ChgToEnEmDash )
-//              nHelpId += 8;
+            if( nRet & ChgToEnEmDash )
+                nHelpId += 8;
             if( nRet & Autocorrect )
                 nHelpId += 4;
             if( nRet & CptlSttSntnc )
@@ -1376,14 +1375,13 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         }
         else
         {
-                 if( nRet & ChgQuotes)          nHelpId =  8;
-            else if( nRet & ChgSglQuotes)       nHelpId =  9;
-            else if( nRet & SetINetAttr)        nHelpId = 10;
-            else if( nRet & IngnoreDoubleSpace) nHelpId = 11;
-            else if( nRet & ChgWeightUnderl)    nHelpId = 12;
-            else if( nRet & ChgFractionSymbol ) nHelpId = 13;
-            else if( nRet & ChgToEnEmDash )     nHelpId = 14;
-            else if( nRet & ChgOrdinalNumber)   nHelpId = 15;
+                 if( nRet & ChgQuotes)          nHelpId = 16;
+            else if( nRet & ChgSglQuotes)       nHelpId = 17;
+            else if( nRet & SetINetAttr)        nHelpId = 18;
+            else if( nRet & IngnoreDoubleSpace) nHelpId = 19;
+            else if( nRet & ChgWeightUnderl)    nHelpId = 20;
+            else if( nRet & ChgFractionSymbol ) nHelpId = 21;
+            else if( nRet & ChgOrdinalNumber)   nHelpId = 22;
         }
 
         DBG_ASSERT( nHelpId && nHelpId < (HID_AUTOCORR_HELP_END -

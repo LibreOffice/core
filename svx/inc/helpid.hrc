@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-27 09:46:15 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 08:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,63 +432,63 @@
 #define HID_HYPERLINK_MARKWND_TREE              (HID_SVX_START + 329)
 
 #define HID_AUTOCORR_HELP_START                 (HID_SVX_START + 331)
-#define HID_AUTOCORR_HELP_END                   (HID_SVX_START + 350)
+#define HID_AUTOCORR_HELP_END                   (HID_SVX_START + 370)
 
-#define HID_SVXPAGE_GRFCROP                     (HID_SVX_START + 355)
+#define HID_SVXPAGE_GRFCROP                     (HID_SVX_START + 375)
 
-#define HID_GRFFILTER                           (HID_SVX_START + 360)
-#define HID_GRFFILTER_INVERT                    (HID_SVX_START + 361)
-#define HID_GRFFILTER_SMOOTH                    (HID_SVX_START + 362)
-#define HID_GRFFILTER_SHARPEN                   (HID_SVX_START + 363)
-#define HID_GRFFILTER_REMOVENOISE               (HID_SVX_START + 364)
-#define HID_GRFFILTER_SOBEL                     (HID_SVX_START + 365)
-#define HID_GRFFILTER_MOSAIC                    (HID_SVX_START + 366)
-#define HID_GRFFILTER_EMBOSS                    (HID_SVX_START + 367)
-#define HID_GRFFILTER_POSTER                    (HID_SVX_START + 368)
-#define HID_GRFFILTER_POPART                    (HID_SVX_START + 369)
-#define HID_GRFFILTER_SEPIA                     (HID_SVX_START + 370)
-#define HID_GRFFILTER_SOLARIZE                  (HID_SVX_START + 371)
+#define HID_GRFFILTER                           (HID_SVX_START + 380)
+#define HID_GRFFILTER_INVERT                    (HID_SVX_START + 381)
+#define HID_GRFFILTER_SMOOTH                    (HID_SVX_START + 382)
+#define HID_GRFFILTER_SHARPEN                   (HID_SVX_START + 383)
+#define HID_GRFFILTER_REMOVENOISE               (HID_SVX_START + 384)
+#define HID_GRFFILTER_SOBEL                     (HID_SVX_START + 385)
+#define HID_GRFFILTER_MOSAIC                    (HID_SVX_START + 386)
+#define HID_GRFFILTER_EMBOSS                    (HID_SVX_START + 387)
+#define HID_GRFFILTER_POSTER                    (HID_SVX_START + 388)
+#define HID_GRFFILTER_POPART                    (HID_SVX_START + 389)
+#define HID_GRFFILTER_SEPIA                     (HID_SVX_START + 390)
+#define HID_GRFFILTER_SOLARIZE                  (HID_SVX_START + 391)
 
-#define HID_SVXPAGE_CHAR_NAME                   (HID_SVX_START + 372)
-#define HID_SVXPAGE_CHAR_EFFECTS                (HID_SVX_START + 373)
-#define HID_SVXPAGE_CHAR_POSITION               (HID_SVX_START + 374)
-#define HID_SVXPAGE_CHAR_TWOLINES               (HID_SVX_START + 375)
-#define HID_SVXPAGE_CHAR_EFFECTS_CTRL           (HID_SVX_START + 376)
+#define HID_SVXPAGE_CHAR_NAME                   (HID_SVX_START + 392)
+#define HID_SVXPAGE_CHAR_EFFECTS                (HID_SVX_START + 393)
+#define HID_SVXPAGE_CHAR_POSITION               (HID_SVX_START + 394)
+#define HID_SVXPAGE_CHAR_TWOLINES               (HID_SVX_START + 395)
+#define HID_SVXPAGE_CHAR_EFFECTS_CTRL           (HID_SVX_START + 396)
 
-#define HID_LNGDLG_NUM_PREBREAK                 (HID_SVX_START + 380)
+#define HID_LNGDLG_NUM_PREBREAK                 (HID_SVX_START + 400)
 
-#define HID_EDIT_MODULES                        (HID_SVX_START + 381)
-#define HID_CLB_EDIT_MODULES_DICS               (HID_SVX_START + 382)
-#define HID_CLB_EDIT_MODULES_MODULES            (HID_SVX_START + 383)
-#define HID_CLB_LINGU_MODULES                   (HID_SVX_START + 384)
-#define HID_CLB_LINGU_OPTIONS                   (HID_SVX_START + 385)
+#define HID_EDIT_MODULES                        (HID_SVX_START + 401)
+#define HID_CLB_EDIT_MODULES_DICS               (HID_SVX_START + 402)
+#define HID_CLB_EDIT_MODULES_MODULES            (HID_SVX_START + 403)
+#define HID_CLB_LINGU_MODULES                   (HID_SVX_START + 404)
+#define HID_CLB_LINGU_OPTIONS                   (HID_SVX_START + 405)
 
-#define HID_SVXPAGE_PARA_ASIAN                  (HID_SVX_START + 386)
+#define HID_SVXPAGE_PARA_ASIAN                  (HID_SVX_START + 406)
 
-#define HID_GALLERY_NEWTHEME                    (HID_SVX_START + 390)
-#define HID_GALLERY_THEMELIST                   (HID_SVX_START + 391)
+#define HID_GALLERY_NEWTHEME                    (HID_SVX_START + 410)
+#define HID_GALLERY_THEMELIST                   (HID_SVX_START + 411)
 
-#define HID_SVX_PROPBRW                         (HID_SVX_START + 392)
-#define HID_SVXDLG_PROPBRW                      (HID_SVX_START + 393)
-#define HID_SVX_DLG_LABELCONTROL                (HID_SVX_START + 394)
+#define HID_SVX_PROPBRW                         (HID_SVX_START + 412)
+#define HID_SVXDLG_PROPBRW                      (HID_SVX_START + 413)
+#define HID_SVX_DLG_LABELCONTROL                (HID_SVX_START + 414)
 
-#define HID_OPTIONS_ASIAN_LAYOUT                (HID_SVX_START + 395)
-#define HID_SVXTBX_FORM                         (HID_SVX_START + 396)
+#define HID_OPTIONS_ASIAN_LAYOUT                (HID_SVX_START + 415)
+#define HID_SVXTBX_FORM                         (HID_SVX_START + 416)
 
-#define HID_WARN_NAME_DUPLICATE                 (HID_SVX_START + 397)
-#define HID_POPUP_COLOR_CTRL                    (HID_SVX_START + 398)
+#define HID_WARN_NAME_DUPLICATE                 (HID_SVX_START + 417)
+#define HID_POPUP_COLOR_CTRL                    (HID_SVX_START + 418)
 
-#define HID_RUBY_DIALOG                         (HID_SVX_START + 399)
+#define HID_RUBY_DIALOG                         (HID_SVX_START + 419)
 
-#define HID_SVXPAGE_JSEARCH_OPTIONS             (HID_SVX_START + 400)
+#define HID_SVXPAGE_JSEARCH_OPTIONS             (HID_SVX_START + 420)
 
-#define HID_SVXTBX_UNDO_REDO_CTRL               (HID_SVX_START + 401)
+#define HID_SVXTBX_UNDO_REDO_CTRL               (HID_SVX_START + 421)
 
-#define HID_GALLERY_MN_COPYCLIPBOARD            (HID_SVX_START + 402)
-#define HID_GALLERY_MN_PASTECLIPBOARD           (HID_SVX_START + 403)
-#define HID_GALLERY_PREVIEW                     (HID_SVX_START + 404)
-#define HID_GALLERY_ICONVIEW                    (HID_SVX_START + 405)
-#define HID_GALLERY_LISTVIEW                    (HID_SVX_START + 406)
+#define HID_GALLERY_MN_COPYCLIPBOARD            (HID_SVX_START + 422)
+#define HID_GALLERY_MN_PASTECLIPBOARD           (HID_SVX_START + 423)
+#define HID_GALLERY_PREVIEW                     (HID_SVX_START + 424)
+#define HID_GALLERY_ICONVIEW                    (HID_SVX_START + 425)
+#define HID_GALLERY_LISTVIEW                    (HID_SVX_START + 426)
 
 
 // -----------------------------------------------------------------------
