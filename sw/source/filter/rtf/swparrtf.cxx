@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:25 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,9 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 // einige Hilfs-Funktionen
 // char
@@ -2497,7 +2499,7 @@ void SwRTFParser::ReadPageDescTbl()
 
             {
                 // sollte es eine Vorlage aus dem Pool sein ??
-                USHORT n = pDoc->GetPoolId( aToken, GET_POOLID_PAGEDESC );
+                USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aToken, GET_POOLID_PAGEDESC );
                 if( USHRT_MAX != n )
                     // dann setze bei der Neuen die entsp. PoolId
                     pPg->SetPoolFmtId( n );
@@ -2979,7 +2981,7 @@ SwTxtFmtColl* SwRTFParser::MakeColl( const String& rName, USHORT nPos,
                     pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
     // sollte es eine Vorlage aus dem Pool sein ??
-    USHORT n = pDoc->GetPoolId( aNm, GET_POOLID_TXTCOLL );
+    USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aNm, GET_POOLID_TXTCOLL );
     if( USHRT_MAX != n )
         // dann setze bei der Neuen die entsp. PoolId
         pColl->SetPoolFmtId( n );
@@ -3016,7 +3018,7 @@ SwCharFmt* SwRTFParser::MakeCharFmt( const String& rName, USHORT nPos,
     pFmt = pDoc->MakeCharFmt( aNm, pDoc->GetDfltCharFmt() );
 
     // sollte es eine Vorlage aus dem Pool sein ??
-    USHORT n = pDoc->GetPoolId( aNm, GET_POOLID_CHRFMT );
+    USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aNm, GET_POOLID_CHRFMT );
     if( USHRT_MAX != n )
         // dann setze bei der Neuen die entsp. PoolId
         pFmt->SetPoolFmtId( n );
