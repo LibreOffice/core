@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:00:39 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,8 +545,11 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_FILL_ORDER
     // TODO: not required???
     // RES_FRM_SIZE
-    M_ED( "Width",          SVG, WIDTH,             XML_TYPE_MEASURE, 0 ),
-    M_ED( "RelativeWidth",  STYLE, REL_WIDTH,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT, 0 ),
+    M_ED( "Width",          SVG, WIDTH,             XML_TYPE_MEASURE, CTF_FRAMEWIDTH_ABS ),
+    M_ED( "Width",          FO,  MIN_WIDTH,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEWIDTH_MIN_ABS ),
+    M_ED( "RelativeWidth",  FO,  MIN_WIDTH,         XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEWIDTH_MIN_REL ),
+    M_ED( "RelativeWidth",  STYLE, REL_WIDTH,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEWIDTH_REL ),
+    M_ED( "WidthType",      FO, TEXT_BOX,           XML_TYPE_NUMBER16|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FRAMEWIDTH_TYPE ),
 //  M_ED( "RelativeWidth",  STYLE, REL_WIDTH,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, 0 ),
 //  M_ED( "IsSyncWidthToHeight",STYLE, REL_WIDTH,   XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, 0 ),
 
@@ -814,7 +817,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         pMap = aXMLFramePropMap;
         break;
     case TEXT_PROP_MAP_AUTO_FRAME:
-        pMap = &(aXMLFramePropMap[10]);
+        pMap = &(aXMLFramePropMap[13]);
         DBG_ASSERT( pMap->meXMLName == XML_MARGIN_LEFT, "frame map changed" );
         break;
     case TEXT_PROP_MAP_SHAPE:
