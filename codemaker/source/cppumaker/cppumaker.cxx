@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppumaker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:11:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,26 +71,36 @@
 
 using namespace rtl;
 
-sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager const & typeMgr,
-                         codemaker::GeneratedTypeSet & generated,
-                         CppuOptions* pOptions,
-                         sal_Bool bFullScope)
-    throw( CannotDumpException )
+namespace {
+
+void failed(rtl::OString const & typeName, CppuOptions * options) {
+    fprintf(stderr, "%s ERROR: %s\n", options->getProgramName().getStr(),
+            rtl::OString("cannot dump Type '" + typeName + "'").getStr());
+    exit(99);
+}
+
+void produce(
+    rtl::OString const & typeName, TypeManager const & typeMgr,
+    codemaker::GeneratedTypeSet & generated, CppuOptions * options)
 {
-    if (!produceType(typeName, typeMgr, generated, pOptions))
-    {
-        fprintf(stderr, "%s ERROR: %s\n",
-                pOptions->getProgramName().getStr(),
-                OString("cannot dump Type '" + typeName + "'").getStr());
-        exit(99);
+    if (!produceType(typeName, typeMgr, generated, options)) {
+        failed(typeName, options);
     }
+}
+
+void produceAllTypes(
+    rtl::OString const & typeName, TypeManager const & typeMgr,
+    codemaker::GeneratedTypeSet & generated, CppuOptions * pOptions,
+    bool fullScope)
+{
+    produce(typeName, typeMgr, generated, pOptions);
 
     RegistryKey typeKey = typeMgr.getTypeKey(typeName);
     RegistryKeyNames subKeys;
 
-    if (typeKey.getKeyNames(OUString(), subKeys))
-        return sal_False;
+    if (typeKey.getKeyNames(OUString(), subKeys)) {
+        failed(typeName, pOptions);
+    }
 
     OString tmpName;
     for (sal_uInt32 i=0; i < subKeys.getLength(); i++)
@@ -102,19 +112,14 @@ sal_Bool produceAllTypes(const OString& typeName,
         else
             tmpName = tmpName.copy(1);
 
-        if (bFullScope)
-        {
-            if (!produceAllTypes(
-                    tmpName, typeMgr, generated, pOptions, sal_True))
-                return sal_False;
-        } else
-        {
-            if (!produceType(tmpName, typeMgr, generated, pOptions))
-                return sal_False;
+        if (fullScope) {
+            produceAllTypes(tmpName, typeMgr, generated, pOptions, true);
+        } else {
+            produce(tmpName, typeMgr, generated, pOptions);
         }
     }
+}
 
-    return sal_True;
 }
 
 #if (defined UNX) || (defined OS2)
@@ -151,15 +156,14 @@ int _cdecl main( int argc, char * argv[] )
         typeMgr.setBase(options.getOption("-B"));
     }
 
+    codemaker::GeneratedTypeSet generated;
     try
     {
         if (options.isValid("-T"))
         {
             OString tOption(options.getOption("-T"));
 
-            codemaker::GeneratedTypeSet generated;
             OString typeName, tmpName;
-            sal_Bool ret = sal_False;
             sal_Int32 nIndex = 0;
             do
             {
@@ -181,36 +185,28 @@ int _cdecl main( int argc, char * argv[] )
                         else
                             tmpName.replace('.', '/');
                     }
-                    ret = produceAllTypes(
-                        tmpName, typeMgr, generated, &options, sal_False);
+                    produceAllTypes(
+                        tmpName, typeMgr, generated, &options, false);
                 } else
                 {
                     // produce only this type
-                    ret = produceType(
+                    produce(
                         typeName.replace('.', '/'), typeMgr, generated,
                         &options);
-                }
-
-                if (!ret)
-                {
-                    fprintf(stderr, "%s ERROR: %s\n",
-                            options.getProgramName().getStr(),
-                            OString("cannot dump Type '" + typeName + "'").getStr());
-                    exit(99);
                 }
             } while( nIndex != -1 );
         } else
         {
             // produce all types
-            codemaker::GeneratedTypeSet generated;
-            if (!produceAllTypes("/", typeMgr, generated, &options, sal_True))
-            {
-                fprintf(stderr, "%s ERROR: %s\n",
-                        options.getProgramName().getStr(),
-                        "an error occurs while dumping all types.");
-                exit(99);
-            }
+            produceAllTypes("/", typeMgr, generated, &options, true);
         }
+        // C++ header files generated for the following UNO types are included
+        // in header files in cppu/inc/com/sun/star/uno (Any.hxx, Reference.hxx,
+        // Type.h), so it seems best to always generate those C++ header files:
+        produce(
+            "com/sun/star/uno/RuntimeException", typeMgr, generated, &options);
+        produce("com/sun/star/uno/TypeClass", typeMgr, generated, &options);
+        produce("com/sun/star/uno/XInterface", typeMgr, generated, &options);
     }
     catch( CannotDumpException& e)
     {
