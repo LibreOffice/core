@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:55:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,8 @@ inline bool IsControlChar( sal_Unicode cChar )
         return true;
     if( (0x2028 <= cChar) && (cChar <= 0x202E) )
         return true;
+    if( (0xFEFF == cChar) || (0xFFFE <= cChar) )
+        return true;
     return false;
 }
 
@@ -316,6 +318,9 @@ bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 
 bool ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 {
+    if( nCharPos0 == nCharPos1 )
+        return false;
+
     // swap if needed
     if( bRTL == (nCharPos0 < nCharPos1) )
     {
@@ -482,14 +487,13 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
         // workaround for #110273# (probably ICU problem TODO: analyze there)
         bool bRTL = ((pParaLevels[ nPos0 ] & 1) != 0);
 
-        // remove control characters from runs by splitting it up
+        // remove control characters from runs by splitting them up
         if( !bRTL )
         {
             for( int j = nPos0; j < nPos1; ++j )
                 if( IsControlChar( mpStr[j] ) )
                 {
-                    if( nPos0 != j )
-                        maRuns.AddRun( nPos0, j, bRTL );
+                    maRuns.AddRun( nPos0, j, bRTL );
                     nPos0 = j + 1;
                 }
         }
@@ -498,8 +502,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
             for( int j = nPos1; --j >= nPos0; )
                 if( IsControlChar( mpStr[j] ) )
                 {
-                    if( nPos1 != j+1 )
-                        maRuns.AddRun( j+1, nPos1, bRTL );
+                    maRuns.AddRun( j+1, nPos1, bRTL );
                     nPos1 = j;
                 }
         }
@@ -1380,10 +1383,13 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
     {
         // for MultiSalLayout justification needs to be converted
-        // to individual adjustments of virtual character widths
+        // to individual adjustments of virtual character widths.
+        // First prepare character measurements in unadjusted layouts
+        aMultiArgs.mnLayoutWidth = 0;
+        for( int n = 0; n < mnLevel; ++n )
+            mpLayouts[n]->AdjustLayout( aMultiArgs );
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
         long* pJustificationArray = (long*)alloca( nCharCount * sizeof(long) );
-
         long nOrigWidth = FillDXArray( pJustificationArray );
         if( nOrigWidth && (rArgs.mnLayoutWidth != nOrigWidth) )
         {
@@ -1623,12 +1629,12 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
-            // TODO: fix exotic cases like partly fallback
+            long nDivisor = mpLayouts[n]->GetUnitsPerPixel();
             for( int i = 0; i < nMaxIndex; ++i )
                 if( pTempPos[i] >= 0 )
                 {
-                    long w = pTempPos[i] * mnUnitsPerPixel;
-                    w /= mpLayouts[n]->GetUnitsPerPixel();
+                    long w = pTempPos[i];
+                    w = (w  * mnUnitsPerPixel) / nDivisor;
                     pCaretXArray[i] = w;
                 }
         }
