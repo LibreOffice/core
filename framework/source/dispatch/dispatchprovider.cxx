@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-07-25 12:54:35 $
+ *  last change: $Author: sb $ $Date: 2001-07-31 10:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,29 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+#ifndef _RTL_STRING_H_
+#include <rtl/string.h>
+#endif
+
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -247,6 +267,10 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
 
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                       "private:factory/sync")))
+        return implts_getOrCreateDispatchHelper(E_SYNCDISPATCHER);
 
     if( xOwner.is() == sal_True )
     {
@@ -525,6 +549,8 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xAppDispatchProvider  = css::uno::Reference< css::frame::XDispatchProvider >()  ;
 
+        m_xSyncDispatcher = 0;
+
         // Forget all other references too.
         m_xFactory              = css::uno::Reference< css::lang::XMultiServiceFactory >();
         m_xFrame                = css::uno::WeakReference< css::frame::XFrame >()         ;
@@ -641,6 +667,31 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 LOG_WARNING( "DispatchProvider::implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER )", "Not implemented yet!" )
                                             }
                                             break;
+
+            case E_SYNCDISPATCHER:
+                if (!m_xSyncDispatcher.is())
+                {
+                    LOG_ASSERT2( m_xFactory.is()==sal_False, "DispatchProvider::getOrCreateDispatchHelper( E_SYNCDISPATCHER )", "unexpected situation")
+                    if (m_xFactory.is())
+                        try
+                        {
+                            m_xSyncDispatcher
+                                = css::uno::Reference<
+                                          css::frame::XDispatch >(
+                                      m_xFactory->
+                                          createInstance(
+                                              rtl::OUString(
+                                                  RTL_CONSTASCII_USTRINGPARAM(
+                                     "com.sun.star.syncaccess.ui.Dispatch"))),
+                                      css::uno::UNO_QUERY);
+                        }
+                        catch (css::uno::Exception const &)
+                        {
+                            LOG_ERROR( "DispatchProvider::getOrCreateDispatchHelper( E_SYNCDISPATCHER )", "unexpected situation")
+                        }
+                }
+                xDispatchHelper = m_xSyncDispatcher;
+                break;
         }
     }
     return xDispatchHelper;
