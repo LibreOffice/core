@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:22:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,30 +225,7 @@
 #define LB_PROFILES                 7
 #define ED_MAILERURL                8
 #define PB_MAILERURL                9
-#define FL_LINK                    10
-#define FT_HTTP                    11
-#define ED_HTTP                    12
-#define PB_HTTP                    13
-#define FT_HTTPS                   14
-#define ED_HTTPS                   15
-#define PB_HTTPS                   16
-#define FT_FTP                     17
-#define ED_FTP                     18
-#define PB_FTP                     19
-#define FT_MAILER                  20
-#define ED_MAILER                  21
-#define PB_MAILER                  22
-#define FL_DOCMANAGER              23
-#define FT_DOCMANAGER              24
-#define ED_DOCMANAGER              25
-#define PB_DOCMANAGER              26
-#define STR_DEFAULT_FILENAME       27
-#define FI_PROGRAM                 28
-#define FI_HTTP                    29
-#define FI_HTTPS                   30
-#define FI_FTP                     31
-#define FI_MAILER                  32
-#define FI_DOCMANAGER              33
+#define STR_DEFAULT_FILENAME       10
 
 #endif // #ifndef _OFA_OPTGDLG_HRC
 
