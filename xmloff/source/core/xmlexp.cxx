@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 10:37:39 $
+ *  last change: $Author: cl $ $Date: 2001-04-20 14:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,6 +819,9 @@ void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsEx
             aProp.Value <<= xIndexAccess;
             aProps[nOldLength] = aProp;
         }
+
+        xIndexAccess = NULL;
+        xViewDataSupplier->setViewData( xIndexAccess );
     }
     OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_view_settings));
     rSettingsExportHelper.exportSettings(aProps, sViewSettings);
