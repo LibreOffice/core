@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:17:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,12 @@ public:
         {
             // add nCount copies of rValue
             CoordinateData2DVector::iterator aIndex(maVector.begin());
-            aIndex += nIndex;
+
+            if( maVector.size() == nIndex )
+                aIndex = maVector.end();
+            else
+                aIndex += nIndex+1; // vector::insert inserts _before_ the given iterator
+
             maVector.insert(aIndex, nCount, rValue);
         }
     }
@@ -169,7 +174,12 @@ public:
         {
             // insert data
             CoordinateData2DVector::iterator aIndex(maVector.begin());
-            aIndex += nIndex;
+
+            if( maVector.size() == nIndex )
+                aIndex = maVector.end();
+            else
+                aIndex += nIndex+1; // vector::insert inserts _before_ the given iterator
+
             CoordinateData2DVector::const_iterator aStart(rSource.maVector.begin());
             CoordinateData2DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
