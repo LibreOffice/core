@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2002-03-01 12:15:58 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 15:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ ScAccessibilityEditSource::~ScAccessibilityEditSource()
 
 SvxEditSource* ScAccessibilityEditSource::Clone() const
 {
-    return new ScAccessibilityEditSource(mpAccessibleCellTextData);
+    return new ScAccessibilityEditSource(::std::auto_ptr < ScAccessibleCellTextData > (mpAccessibleCellTextData->Clone()));
 }
 
 SvxTextForwarder* ScAccessibilityEditSource::GetTextForwarder()
