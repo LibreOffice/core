@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,7 +911,7 @@
 #define HID_MERGE_SOURCE_UNAVAILABLE                (HID_BASE + 2182 )
 #define HID_DATA_SOURCES_UNAVAILABLE                (HID_BASE + 2183 )
 #define HID_MODULE_TOOLBOX                          (HID_BASE + 2184 )
-
+#define HID_SECTION_INDENTS_PAGE                    (HID_BASE + 2185 )
 
 
 
