@@ -610,6 +610,16 @@ if test "$_os" = "SunOS"; then
 fi
 
 dnl ===================================================================
+dnl When using Sun Workshop compiler, there is a bug with the cc
+dnl preprocessor, so use CC preprocessor for the following tests.
+dnl See Issuezilla #445.
+dnl ===================================================================
+if test "$_os" = "SunOS"; then
+AC_LANG_CPLUSPLUS
+AC_TRY_CPP("", , )
+fi
+
+dnl ===================================================================
 dnl Checks for STLPORT4
 dnl ===================================================================
 AC_MSG_CHECKING([for STLport4 headers])
@@ -629,25 +639,25 @@ if test -d "$with_stlport4_home"; then
 		AC_MSG_CHECKING([for STLport4 libraries])
 		if test "$_os" = "SunOS"; then
 			if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
-				AC_MSG_RESULT([Checked])
+				AC_MSG_RESULT([checked])
 			else
 				AC_MSG_ERROR([STLport4 libraries not found])
 			fi
 		elif test "$_os" = "Darwin"; then
 			if test -f "$STLPORT4/lib/libstlport_gcc.dylib"; then
-				AC_MSG_RESULT([Checked])
+				AC_MSG_RESULT([checked])
 			else
 				AC_MSG_ERROR([STLport4 libraries not found])
 			fi
 		elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
 			if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
-				AC_MSG_RESULT([Checked])
+				AC_MSG_RESULT([checked])
 			else
 				AC_MSG_ERROR([STLport4 libraries not found])
 			fi
 		else
 			if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-				AC_MSG_RESULT([Checked])
+				AC_MSG_RESULT([checked])
 			else
 				AC_MSG_ERROR([STLport4 libraries not found])
 			fi
