@@ -99,3 +99,9 @@ hedabu: ..\inc\MarkerStyle.hxx %_DEST%\inc%_EXT%\xmloff\MarkerStyle.hxx
 hedabu: ..\inc\HatchStyle.hxx %_DEST%\inc%_EXT%\xmloff\HatchStyle.hxx
 hedabu: ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
 
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"

@@ -2,3 +2,9 @@
 ..\%__SRC%\bin\uui*.res %_DEST%\bin%_EXT%\uui*.res
 ..\%__SRC%\lib\libuui*.* %_DEST%\lib%_EXT%\libuui*.*
 ..\%__SRC%\lib\iuui.lib %_DEST%\lib%_EXT%\iuui.lib
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
