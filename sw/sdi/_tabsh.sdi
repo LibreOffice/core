@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _tabsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:27:11 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,13 @@ interface BaseTextTable : Selection
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
-    FN_TABLE_OPTIMAL_HEIGHT // status(final|play)
+        FN_TABLE_ROW_SPLIT
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+        FN_TABLE_OPTIMAL_HEIGHT // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
