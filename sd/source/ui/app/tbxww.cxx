@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:24:44 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,10 +277,6 @@ SfxPopupWindow* SdTbxControl::CreatePopupWindow()
         break;
         case SID_DRAWTBX_TEXT:
             aTbxResName.appendAscii( "textbar" );
-            aToolBarResStr = aTbxResName.makeStringAndClear();
-        break;
-        case SID_DRAWTBX_RECTANGLES:
-            aTbxResName.appendAscii( "rectanglesbar" );
             aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
         case SID_DRAWTBX_ELLIPSES:
