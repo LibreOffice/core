@@ -35,8 +35,10 @@ public interface LetterWizardDialogConst {
     public static final String CHKUSEGREETING_ITEM_CHANGED = "chkUseGreetingItemChanged";
     public static final String LSTSALUTATION_ACTION_PERFORMED = null;
     public static final String LSTSALUTATION_ITEM_CHANGED = "lstSalutationItemChanged";
+    public static final String LSTSALUTATION_TEXT_CHANGED = "lstSalutationTextChanged";
     public static final String LSTGREETING_ACTION_PERFORMED = null;
     public static final String LSTGREETING_ITEM_CHANGED = "lstGreetingItemChanged";
+    public static final String LSTGREETING_TEXT_CHANGED = "lstGreetingTextChanged";
     public static final String OPTSENDERPLACEHOLDER_ITEM_CHANGED = "optSenderPlaceholderItemChanged";
     public static final String OPTSENDERDEFINE_ITEM_CHANGED = "optSenderDefineItemChanged";
     public static final String OPTRECEIVERPLACEHOLDER_ITEM_CHANGED = "optReceiverPlaceholderItemChanged";
