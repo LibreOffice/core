@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 13:45:00 $
+ *  last change: $Author: os $ $Date: 2002-04-10 15:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -525,8 +528,6 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
             aLineColor.Invert();
         }
         SetLineColor(aLineColor);
-//        Size aWinSize(GetSizePixel());
-
         long nL = GetLeft();
         long nR = GetRight();
 
@@ -550,45 +551,65 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
 
         //detect height of rectangles
-        Rectangle aRubyRect(aRect.TopLeft(), Size(aRect.GetWidth(), nRubyHeight));
-        Rectangle aCharRect(aRect.TopLeft(), Size(aRect.GetWidth(), nBaseHeight));
+        Rectangle aRubyRect(aRect.TopLeft(),
+                    m_bVertical ?
+                    Size(nRubyHeight, aRect.GetHeight()) :
+                    Size(aRect.GetWidth(), nRubyHeight));
+        Rectangle aCharRect(aRect.TopLeft(),
+                    m_bVertical ?
+                    Size(nBaseHeight, aRect.GetHeight()) :
+                    Size(aRect.GetWidth(), nBaseHeight));
+
         sal_Int32 nLineHeight = nBaseHeight + nRubyHeight;
 
         //detect count of rectangles
-        sal_Int32 nLines = aRect.GetHeight() / nLineHeight;
-        if(nLines >pGridItem->GetLines())
+        sal_Int32 nLines = (m_bVertical ? aRect.GetWidth(): aRect.GetHeight()) / nLineHeight;
+        if(nLines > pGridItem->GetLines())
             nLines = pGridItem->GetLines();
 
         // determine start position
-        sal_Int16 nYStart = aRect.GetHeight() / 2 - nLineHeight * nLines /2;
-        aRubyRect.Move(0, nYStart);
-        aCharRect.Move(0, nYStart);
-        if(pGridItem->IsRubyTextBelow())
-            aRubyRect.Move(0, nBaseHeight);
+        if(m_bVertical)
+        {
+            sal_Int16 nXStart = aRect.GetWidth() / 2 - nLineHeight * nLines /2;
+            aRubyRect.Move(nXStart, 0);
+            aCharRect.Move(nXStart, 0);
+        }
         else
-            aCharRect.Move(0, nRubyHeight);
+        {
+            sal_Int16 nYStart = aRect.GetHeight() / 2 - nLineHeight * nLines /2;
+            aRubyRect.Move(0, nYStart);
+            aCharRect.Move(0, nYStart);
+        }
+
+        if(pGridItem->IsRubyTextBelow())
+            m_bVertical ? aRubyRect.Move(nBaseHeight, 0) : aRubyRect.Move(0, nBaseHeight);
+        else
+            m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
 
         //vertical lines
-        sal_Bool bVertical = pGridItem->GetGridType() == GRID_LINES_CHARS;
-
-
+        sal_Bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
         SetFillColor( Color( COL_TRANSPARENT ) );
+        sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
+        sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;
         for(sal_Int32 nLine = 0; nLine < nLines; nLine++)
         {
             DrawRect(aRubyRect);
             DrawRect(aCharRect);
-            if(bVertical)
+            if(bBothLines)
             {
-                Point aTop = aCharRect.TopLeft();
-                Point aBottom = aCharRect.BottomLeft();
-                while(aTop.X() < aRect.Right())
+                Point aStart = aCharRect.TopLeft();
+                Point aEnd = m_bVertical ? aCharRect.TopRight() : aCharRect.BottomLeft();
+                while(m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
                 {
-                    DrawLine(aTop, aBottom);
-                    aTop.X() = aBottom.X() += nBaseHeight;
+                    DrawLine(aStart, aEnd);
+                    if(m_bVertical)
+                        aStart.Y() = aEnd.Y() += nBaseHeight;
+                    else
+                        aStart.X() = aEnd.X() += nBaseHeight;
                 }
             }
-            aRubyRect.Move(0, nLineHeight);
-            aCharRect.Move(0, nLineHeight);
+            aRubyRect.Move(nXMove, nYMove);
+            aCharRect.Move(nXMove, nYMove);
         }
     }
 }
@@ -601,6 +622,13 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     //get the grid information
     if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, TRUE))
         pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR, TRUE ))
+    {
+        const SvxFrameDirectionItem& rDirItem =
+                    (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
+        m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
+                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+    }
     SwPageExample::UpdateExample(rSet);
 }
 
