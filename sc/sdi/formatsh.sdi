@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:34:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,8 @@ interface FormatForSelection : Selection
     SID_TEXTDIRECTION_TOP_TO_BOTTOM [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
     SID_ATTR_PARA_LEFT_TO_RIGHT     [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
     SID_ATTR_PARA_RIGHT_TO_LEFT     [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
+    SID_VERTICALTEXT_STATE          [ StateMethod = GetTextDirectionState ; Export = FALSE; ]
+    SID_CTLFONT_STATE               [ StateMethod = GetTextDirectionState ; Export = FALSE; ]
 
     SID_ATTR_NUMBERFORMAT_VALUE       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
     SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
