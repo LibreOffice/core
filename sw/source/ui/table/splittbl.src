@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:49:55 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "½Æ»s¼ĞÃD(~C)";
         Text[ arabic ] = "äÓÎ ÇáÚäæÇä";
         Text[ greek ] = "ÁíôéãñáöŞ åğéêåöáëßäáò";
-        Text[ korean ] = "Ç¥Á¦ º¹»ç";
+        Text[ korean ] = "Ç¥Á¦ º¹»ç(~C)";
         Text[ turkish ] = "B~aşlığı kopyala";
         Text[ language_user1 ] = " ";
     };
@@ -160,14 +160,14 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ spanish ] = "~Encabezado propio, con estilos" ;
         Text [ french ] = "Titre personnalisé, avec ~style" ;
         Text [ dutch ] = "~Eigen kop, met opmaakprofiel" ;
-        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ£¬´øÑùÊ½(~S)";
+        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ£¬´øÑùÊ½(~U)";
         Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ ñî ñòèëåì";
         Text[ polish ] = "Tytu³ u¿ytkownika, z szablonem";
-        Text[ japanese ] = "½À²Ù•t‚«Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~S)";
-        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD¡A±a¼Ë¦¡(~S)";
+        Text[ japanese ] = "½À²Ù•t‚«Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~U)";
+        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD¡A±a¼Ë¦¡(~U)";
         Text[ arabic ] = "ÚäæÇä ÎÇÕ (ÊØÈíŞ ÇáäãØ)";
         Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá (ìå óôõë)";
-        Text[ korean ] = "°íÀ¯  Ç¥Á¦£¨À¯Çü Àû¿ë£©";
+        Text[ korean ] = "°íÀ¯  Ç¥Á¦£¨À¯Çü Àû¿ë£©(~U)";
         Text[ turkish ] = "~Özel başlık (biçim uygula)";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
@@ -186,14 +186,14 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ spanish ] = "Encabezado ~propio" ;
         Text [ french ] = "Titre ~personnalisé" ;
         Text [ dutch ] = "E~igen kop" ;
-        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ(~H)";
+        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ(~S)";
         Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ";
         Text[ polish ] = "Tytu³ u¿ytkownika";
-        Text[ japanese ] = "Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~H)";
-        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD(~H)";
+        Text[ japanese ] = "Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~S)";
+        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD(~S)";
         Text[ arabic ] = "ÚäæÇä ÎÇÕ";
         Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá";
-        Text[ korean ] = "»ç¿ëÀÚ Ç¥Á¦";
+        Text[ korean ] = "»ç¿ëÀÚ Ç¥Á¦(~S)";
         Text[ turkish ] = "Ö~zel başlık";
         Text[ language_user1 ] = " ";
     };
@@ -219,7 +219,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "µL¼ĞÃD(~N)";
         Text[ arabic ] = "ÈÏæä ÚäæÇä";
         Text[ greek ] = "×ùñßò åğéêåöáëßäá";
-        Text[ korean ] = "Ç¥Á¦ ¾øÀ½";
+        Text[ korean ] = "Ç¥Á¦ ¾øÀ½(~N)";
         Text[ turkish ] = "~Başlık yok";
         Text[ language_user1 ] = " ";
     };
