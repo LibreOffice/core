@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:14:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -136,93 +139,6 @@ namespace xmloff
     // need a tools Date/Time/DateTime below, which would conflict with the uno types then
 
     using namespace ::comphelper;
-
-    //=====================================================================
-    //= iterating through sequences
-    //=====================================================================
-    class IIterator
-    {
-    public:
-        virtual sal_Bool hasMoreElements() const = 0;
-        virtual Any nextElement() = 0;
-
-        virtual ~IIterator() { }
-    };
-
-    /** a helper class for iterating through a sequence
-    */
-    template <class TYPE>
-    class OSequenceIterator : public IIterator
-    {
-        const TYPE* m_pElements;
-        sal_Int32   m_nLen;
-        const TYPE* m_pCurrent;
-
-    public:
-        /** contrcuct a sequence iterator from a sequence
-        */
-        OSequenceIterator(const Sequence< TYPE >& _rSeq);
-        /** contrcuct a sequence iterator from a Any containing a sequence
-        */
-        OSequenceIterator(const Any& _rSequenceAny);
-
-        virtual sal_Bool hasMoreElements() const;
-        virtual Any nextElement();
-
-    protected:
-        void construct(const Sequence< TYPE >& _rSeq);
-    };
-
-    //---------------------------------------------------------------------
-    template <class TYPE>
-    OSequenceIterator<TYPE>::OSequenceIterator(const Sequence< TYPE >& _rSeq)
-        :m_pElements(NULL)
-        ,m_nLen(0)
-        ,m_pCurrent(NULL)
-    {
-        construct(_rSeq);
-    }
-
-    //---------------------------------------------------------------------
-    template <class TYPE>
-    OSequenceIterator<TYPE>::OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny)
-        :m_pElements(NULL)
-        ,m_nLen(0)
-        ,m_pCurrent(NULL)
-    {
-        ::com::sun::star::uno::Sequence< TYPE > aContainer;
-    #ifdef DBG_UTIL
-        sal_Bool bSuccess =
-    #endif
-        _rSequenceAny >>= aContainer;
-    #ifdef DBG_UTIL
-        OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
-    #endif
-        construct(aContainer);
-    }
-
-    //---------------------------------------------------------------------
-    template <class TYPE>
-    void OSequenceIterator<TYPE>::construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq)
-    {
-        m_pElements = _rSeq.getConstArray();
-        m_nLen = _rSeq.getLength();
-        m_pCurrent = m_pElements;
-    }
-
-    //---------------------------------------------------------------------
-    template <class TYPE>
-    sal_Bool OSequenceIterator<TYPE>::hasMoreElements() const
-    {
-        return m_pCurrent - m_pElements < m_nLen;
-    }
-
-    //---------------------------------------------------------------------
-    template <class TYPE>
-    ::com::sun::star::uno::Any OSequenceIterator<TYPE>::nextElement()
-    {
-        return ::com::sun::star::uno::makeAny(*m_pCurrent++);
-    }
 
     //=====================================================================
     //= OPropertyExport
@@ -561,7 +477,9 @@ namespace xmloff
         ::rtl::OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
         if (0 != sTargetFrame.compareToAscii("_blank"))
         {   // an empty string and "_blank" have the same meaning and don't have to be written
-            AddAttribute(getCommonControlAttributeNamespace(CCA_TARGET_FRAME), getCommonControlAttributeName(CCA_TARGET_FRAME), sTargetFrame);
+            AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(CCA_TARGET_FRAME)
+                        ,OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME)
+                        ,sTargetFrame);
         }
 
         exportedProperty(PROPERTY_TARGETFRAME);
@@ -575,7 +493,9 @@ namespace xmloff
         ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
         if ( sTargetLocation.getLength() )
             sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
-        AddAttribute(getCommonControlAttributeNamespace(_nProperty), getCommonControlAttributeName(_nProperty), sTargetLocation);
+        AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(_nProperty)
+                    ,OAttributeMetaData::getCommonControlAttributeName(_nProperty)
+                    , sTargetLocation);
 
         exportedProperty(_sPropertyName);
     }
