@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void CGM::ImplDoClass2()
         case 0xfa : ComOut( CGM_GDSF_ONLY, "inquire Font Selection Mode" ) break;
         case 0xf9 : ComOut( CGM_GDSF_ONLY, "set Char Height Spec Mode" )
         {
-            sal_uInt32 nType = ImplGetUI16();
+            ImplGetUI16(); // -Wall is this really needed?
         }
         break;
         case 0xf8 : ComOut( CGM_GDSF_ONLY, "set Background Style" ) break;
