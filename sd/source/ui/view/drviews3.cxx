@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-05 06:43:59 $
+ *  last change: $Author: dl $ $Date: 2001-10-05 13:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,11 +743,16 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
     Point aPagePos = pWindow->GetViewOrigin();
     Size aPageSize = pActualPage->GetSize();
 
-    Rectangle aRect(aPagePos, Point(
-                    aViewSize.Width() - (aPagePos.X() + aPageSize.Width()),
-                    aViewSize.Height() - (aPagePos.Y() + aPageSize.Height())));
-    SfxRectangleItem aMinMax(SID_RULER_LR_MIN_MAX, aRect);
-    rSet.Put(aMinMax);
+    Rectangle aRect(aPagePos, Point( aViewSize.Width() - (aPagePos.X() + aPageSize.Width()),
+                                     aViewSize.Height() - (aPagePos.Y() + aPageSize.Height())));
+
+    if( pDrView->IsTextEdit() )
+    {
+        Point aPnt1 = pWindow->GetWinViewPos();
+        Point aPnt2 = pWindow->GetViewOrigin();
+        Rectangle aMinMaxRect = Rectangle( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
+        rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
+    }
 
     SvxLongLRSpaceItem aLRSpace(aPagePos.X() + pActualPage->GetLftBorder(),
                                 aRect.Right() + pActualPage->GetRgtBorder(),
