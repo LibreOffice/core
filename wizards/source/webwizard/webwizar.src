@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:53:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ String WEBDIALOG
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "~सहायता";
     Text[ slovak ] = "~Pomocník";
+    Text[ hungarian ] = "~Súgó";
+    Text[ slovenian ] = "~Pomoč";
 };
 
 
@@ -123,6 +125,8 @@ String WEBDIALOG + 1
     Text[ hebrew ] = "‮טייס אוטומטי דף אינטרנט‬";
     Text[ hindi ] = "ओटोपैलट् वेब पृष्ठ";
     Text[ slovak ] = "Sprievodca webovou stránkou";
+    Text[ hungarian ] = "Webhelytündér";
+    Text[ slovenian ] = "Avtopilot za spletne strani";
 };
 
 
@@ -141,7 +145,7 @@ String WEBDIALOG + 2
     Text[ swedish ] = "Av~bryt";
     Text[ greek ] = "�����";
     Text[ russian ] = "~��������";
-    Text[ danish ] = "A~nnuller";
+    Text[ danish ] = "~Annuller";
     Text[ polish ] = "~Anuluj";
     Text[ portuguese_brazilian ] = "C~ancelar";
     Text[ japanese ] = "キャンセル(~C)";
@@ -158,6 +162,8 @@ String WEBDIALOG + 2
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
     Text[ slovak ] = "~Zrušiť";
+    Text[ hungarian ] = "~Mégsem";
+    Text[ slovenian ] = "Pre~kliči";
 };
 
 String WEBDIALOG + 3
@@ -173,7 +179,7 @@ String WEBDIALOG + 3
     Text[ swedish ] = "~F�rdigst�ll";
     Text[ greek ] = "�~���������";
     Text[ russian ] = "~�������";
-    Text[ danish ] = "~Udf�r";
+    Text[ danish ] = "~Opret";
     Text[ polish ] = "~Utw�rz";
     Text[ portuguese_brazilian ] = "~Criar";
     Text[ japanese ] = "完了(~R)";
@@ -189,6 +195,8 @@ String WEBDIALOG + 3
     Text[ hebrew ] = "‮יצירה‬";
     Text[ hindi ] = "उ~त्पन्न करो";
     Text[ slovak ] = "Vytvo~riť";
+    Text[ hungarian ] = "~Létrehozás";
+    Text[ slovenian ] = "Ustva~ri";
 };
 
 
@@ -201,10 +209,10 @@ String WEBDIALOG + 4
     Text[ italian ] = "Quale modello si intende usare ?";
     Text[ spanish ] = "�Qu� plantilla desea utilizar?";
     Text[ portuguese ] = "Qual o modelo que deseja utilizar ?";
-    Text[ dutch ] = "Welke sjabloon wilt u gebruiken?";
+    Text[ dutch ] = "Welk sjabloon wilt u gebruiken?";
     Text[ swedish ] = "Vilken mall ska anv�ndas ?";
     Text[ greek ] = "�������� ��� �������";
-    Text[ dutch ] = "Welke sjabloon wilt u gebruiken?";
+    Text[ dutch ] = "Welk sjabloon wilt u gebruiken?";
     Text[ swedish ] = "Vilken mall ska anv�ndas ?";
     Text[ russian ] = "����� ������ ���������?";
     Text[ danish ] = "Hvilken skabelon skal anvendes ?";
@@ -223,6 +231,8 @@ String WEBDIALOG + 4
     Text[ hebrew ] = "‮באיזו תבנית להשתמש?‬";
     Text[ hindi ] = "कौनसी नमूने को उपयोग करना है?";
     Text[ slovak ] = "Ktorú šablónu chcete použiť?";
+    Text[ hungarian ] = "Melyik sablont szeretné használni?";
+    Text[ slovenian ] = "Katera predloga naj bo uporabljena?";
 };
 
 String WEBDIALOG + 5
@@ -238,7 +248,7 @@ String WEBDIALOG + 5
     Text[ swedish ] = "Vilken stil ska anv�ndas ?";
     Text[ greek ] = "�������� ��� ����";
     Text[ russian ] = "����� ����� ������� ������������?";
-    Text[ danish ] = "Hvilken typografi skal anvendes ?";
+    Text[ danish ] = "Hvilket layout skal anvendes ?";
     Text[ polish ] = "Kt�rego uk�adu u�y�?";
     Text[ portuguese_brazilian ] = "Que layout deve ser usado?";
     Text[ japanese ] = "どのレイアウトを使用しますか。";
@@ -255,6 +265,8 @@ String WEBDIALOG + 5
     Text[ hebrew ] = "‮באיזה פריסה להשתמש?‬";
     Text[ hindi ] = "कौनसी अभिन्यास को उपयोग करना है?";
     Text[ slovak ] = "Aký vzhľad by mal byť použitý?";
+    Text[ hungarian ] = "Melyik elrendezést szeretné használni?";
+    Text[ slovenian ] = "Katera postavitev naj bo uporabljena?";
 };
 
 
@@ -287,6 +299,8 @@ String WEBDIALOG + 6
     Text[ hebrew ] = "‮צלם הרקע‬";
     Text[ hindi ] = "पृष्ठभाग चित्र";
     Text[ slovak ] = "Pozadie";
+    Text[ hungarian ] = "Háttérkép";
+    Text[ slovenian ] = "Slika za ozadje";
 };
 
 
@@ -320,6 +334,8 @@ String WEBDIALOG + 7
     Text[ hebrew ] = "‮פריסה ללא חפיפה‬";
     Text[ hindi ] = "~टइल किया हुआ";
     Text[ slovak ] = "~Dláždený";
+    Text[ hungarian ] = "~Mozaik";
+    Text[ slovenian ] = "Razpos~tavljeno";
 };
 
 
@@ -352,6 +368,8 @@ String WEBDIALOG + 8
     Text[ hebrew ] = "‮התאמה לגודל‬";
     Text[ hindi ] = "~स्केल किया हुआ";
     Text[ slovak ] = "~Roztiahnutý";
+    Text[ hungarian ] = "Mé~retezett";
+    Text[ slovenian ] = "Pr~ilagojeno";
 };
 
 
@@ -384,6 +402,8 @@ String WEBDIALOG + 9
     Text[ hebrew ] = "‮עריכת מסמך‬";
     Text[ hindi ] = "लेखपत्र संपादन";
     Text[ slovak ] = "Upraviť dokument";
+    Text[ hungarian ] = "Dokumentum szerkesztése";
+    Text[ slovenian ] = "Uredi dokument";
 };
 
 String WEBDIALOG + 10
@@ -418,6 +438,8 @@ String WEBDIALOG + 10
     Text[ hebrew ] = "‮יצירת תבנית‬";
     Text[ hindi ] = "नमूना उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť šablónu";
+    Text[ hungarian ] = "Sablon készítése";
+    Text[ slovenian ] = "Ustvari predlogo";
 };
 
 
@@ -450,6 +472,8 @@ String WEBERROR + 1
     Text[ hebrew ] = "‮אין תבנית למבנה דף זה.‬";
     Text[ hindi ] = "पृष्ठ सेटप् केलिए नमूना नहीं मिला ।";
     Text[ slovak ] = "Šablóna pre túto stránku nebola nájdená.";
+    Text[ hungarian ] = "Nem található sablon az oldalbeállításhoz.";
+    Text[ slovenian ] = "Predloge za pripravo strani ni mogoče najti.";
 };
 
 String WEBERROR + 2
@@ -482,6 +506,8 @@ String WEBERROR + 2
     Text[ hebrew ] = "‮אין סגנון לסגנון דף זה.‬";
     Text[ hindi ] = "पृष्ठ शैली केलिए शैली नहीं मिला ।";
     Text[ slovak ] = "Nemôžem nájsť štýlu pre stránku.";
+    Text[ hungarian ] = "Nem található az oldalstílushoz megfelelő stílus.";
+    Text[ slovenian ] = "Sloga za oblikovanje sloga strani ni mogoče najti.";
 };
 
 String WEBERROR + 3
@@ -494,7 +520,7 @@ String WEBERROR + 3
     Text[ spanish ] = "Ha ocurrido un error al verificar las plantillas.";
     Text[ portuguese ] = "Surgiu um erro ao verificar o modelo.";
     Text[ greek ] = "������������� ������ ���� ��� ������� ��� ��������.";
-    Text[ dutch ] = "Bij het verwerken van de sjabloon is een fout opgetreden.";
+    Text[ dutch ] = "Bij het verwerken van het sjabloon is een fout opgetreden.";
     Text[ swedish ] = "Ett fel uppstod vid utv�rderingen av mallarna.";
     Text[ russian ] = "������ ������������� ��������.";
     Text[ danish ] = "Der opstod en fejl under analyse af skabelonerne.";
@@ -513,6 +539,8 @@ String WEBERROR + 3
     Text[ hebrew ] = "‮ארעה שגיאה בעת קליטת התבניות.‬";
     Text[ hindi ] = "नमूनों को रोकने के कारण गलती घटित हुआ ।";
     Text[ slovak ] = "Pri spracovaní šablóny sa vyskytla chyba.";
+    Text[ hungarian ] = "Hiba történt a sablon feldolgozása közben.";
+    Text[ slovenian ] = "Med tolmačenjem predlog je prišlo do napake.";
 };
 
 String WEBERROR + 4
@@ -524,7 +552,7 @@ String WEBERROR + 4
     Text[ italian ] = "Durante l'aggiornamento di uno stile si � verificato un errore.";
     Text[ spanish ] = "Ha ocurido un error al actualizar la plantilla.";
     Text[ portuguese ] = "Surgiu um erro ao actualizar o modelo.";
-    Text[ dutch ] = "Bij het bijwerken van de sjabloon is een fout opgetreden.";
+    Text[ dutch ] = "Bij het bijwerken van het sjabloon is een fout opgetreden.";
     Text[ swedish ] = "Ett fel uppstod vid uppdateringen av mallen.";
     Text[ greek ] = "������������� ������ ���� ��� ��������� ��� ��������.";
     Text[ russian ] = "������ ���������� �������.";
@@ -544,6 +572,8 @@ String WEBERROR + 4
     Text[ hebrew ] = "‮ארעה שגיאה בעת ריענון התבנית‬";
     Text[ hindi ] = "नमूनों को नवीकरण करने के कारण गलती घटित हुआ ।";
     Text[ slovak ] = "Pri obnove šablóny sa vyskytla chyba.";
+    Text[ hungarian ] = "Hiba történt a sablon frissítése közben.";
+    Text[ slovenian ] = "Med osveževanjem predloge je prišlo do napake.";
 };
 
 String WEBERROR + 5
@@ -559,7 +589,7 @@ String WEBERROR + 5
     Text[ swedish ] = "Ett fel uppstod vid tilldelningen av formatmallar.";
     Text[ greek ] = "������������� ������ ���� ��� �������� ��� �������� ������������.";
     Text[ russian ] = "������ ���������� ������.";
-    Text[ danish ] = "Der opstod en fejl under tildeling af formattypografierne.";
+    Text[ danish ] = "Der opstod en fejl under tildeling af typografierne.";
     Text[ polish ] = "Wyst�pi� b��d podczas stosowania styl�w.";
     Text[ portuguese_brazilian ] = "Ocorreu um erro enquanto aplicava os estilos.";
     Text[ japanese ] = "書式スタイルの適用中に、エラーが発生しました。";
@@ -576,6 +606,8 @@ String WEBERROR + 5
     Text[ hebrew ] = "‮ארעה שגיאה בעת יישום הסגנונות.‬";
     Text[ hindi ] = "लेखपत्रों को परीक्षा करने के समय गलती घटित हुआ ।";
     Text[ slovak ] = "Chyba sa vyskytla pri použití štýlov.";
+    Text[ hungarian ] = "Hiba történt a stílus alkalmazása közben.";
+    Text[ slovenian ] = "Pri nanašanju slogov je prišlo do napake.";
 };
 
 String WEBERROR + 6
@@ -607,6 +639,8 @@ String WEBERROR + 6
     Text[ hebrew ] = "‮ארעה שגיאה בעת הערכת המסמכים‬";
     Text[ hindi ] = "लेखपत्रों को परीक्षा करने के समय गलती घटित हुआ ।";
     Text[ slovak ] = "Pri vyhodnocovaní dokumentu sa vyskytla chyba.";
+    Text[ hungarian ] = "Hiba történt a dokumentumok kiértékelése közben.";
+    Text[ slovenian ] = "Pri vrednotenju dokumentov je prišlo do napake.";
 };
 
 String WEBERROR + 7
@@ -622,7 +656,7 @@ String WEBERROR + 7
     Text[ swedish ] = "Ett fel uppstod n�r AutoPiloten k�rdes.";
     Text[ greek ] = "������������� ������ ���� ��� �������� ��� ��������� �������.";
     Text[ russian ] = "������ ������ �������.";
-    Text[ danish ] = "Der opstod en fejl under udf�relse af AutoPilot.";
+    Text[ danish ] = "Der opstod en fejl under udf�relse af AutoPiloten.";
     Text[ polish ] = "Wyst�pi� b��d podczas uruchamiania AutoPilota.";
     Text[ portuguese_brazilian ] = "Ocorreu um erro durante a execu��o do Assistente.";
     Text[ japanese ] = "オートパイロットの実行中に、エラーが発生しました。";
@@ -638,7 +672,10 @@ String WEBERROR + 7
     Text[ hebrew ] = "‮ארעה שגיאה בעת הפעלת הטייס האוטומטי.‬";
     Text[ hindi ] = "ओटोपैलट् को चलाने के समय गलती घटित हुआ ।";
     Text[ slovak ] = "Počas behu Sprievodcu sa vyskytla chyba.";
+    Text[ hungarian ] = "A Tündér futásakor hiba lépett fel.";
+    Text[ slovenian ] = "Pri izvajanju Avtopilota je prišlo do napake.";
 };
+
 
 
 
