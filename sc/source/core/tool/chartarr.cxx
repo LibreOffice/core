@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:33:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,9 +562,8 @@ void ScChartArray::CheckColRowHeaders()
         while ( nCol1 <= nCol2 && (pDocument->GetColFlags(
                 nCol1, nTab1) & CR_HIDDEN) != 0 )
             nCol1++;
-        while ( nRow1 <= nRow2 && (pDocument->GetRowFlags(
-                nRow1, nTab1) & CR_HIDDEN) != 0 )
-            nRow1++;
+        nRow1 = pDocument->GetRowFlagsArray( nTab1).GetFirstForCondition(
+                nRow1, nRow2, CR_HIDDEN, 0);
         if ( nCol1 > nCol2 || nRow1 > nRow2 )
             bColStrings = bRowStrings = FALSE;
         else
@@ -599,9 +598,8 @@ void ScChartArray::CheckColRowHeaders()
                 while ( nCol1 <= nCol2 && (pDocument->GetColFlags(
                         nCol1, nTab1) & CR_HIDDEN) != 0 )
                     nCol1++;
-                while ( nRow1 <= nRow2 && (pDocument->GetRowFlags(
-                        nRow1, nTab1) & CR_HIDDEN) != 0 )
-                    nRow1++;
+                nRow1 = pDocument->GetRowFlagsArray(
+                        nTab1).GetFirstForCondition( nRow1, nRow2, CR_HIDDEN, 0);
                 if ( nCol1 <= nCol2 )
                     for (SCROW i=nRow1; i<=nRow2 && bRowStrings; i++)
                     {
@@ -620,9 +618,8 @@ void ScChartArray::CheckColRowHeaders()
                     while ( nCol1 <= nCol2 && (pDocument->GetColFlags(
                             nCol1, nTab1) & CR_HIDDEN) != 0 )
                         nCol1++;
-                    while ( nRow1 <= nRow2 && (pDocument->GetRowFlags(
-                            nRow1, nTab1) & CR_HIDDEN) != 0 )
-                        nRow1++;
+                    nRow1 = pDocument->GetRowFlagsArray(
+                            nTab1).GetFirstForCondition( nRow1, nRow2, CR_HIDDEN, 0);
                 }
                 if ( nRow1 <= nRow2 )
                     for (SCCOL i=nCol1; i<=nCol2 && bColStrings; i++)
@@ -684,8 +681,8 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
     // Beschriftungen auch nach HiddenCols finden
     while ( (pDocument->GetColFlags( nCol1, nTab1) & CR_HIDDEN) != 0 )
         nCol1++;
-    while ( (pDocument->GetRowFlags( nRow1, nTab1) & CR_HIDDEN) != 0 )
-        nRow1++;
+    nRow1 = pDocument->GetRowFlagsArray( nTab1).GetFirstForCondition( nRow1,
+            nRow2, CR_HIDDEN, 0);
     // falls alles hidden ist, bleibt die Beschriftung am Anfang
     if ( nCol1 <= nCol2 )
     {
@@ -707,10 +704,9 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
 
     SCSIZE nTotalRows = ( nRow1 <= nRow2 ? nRow2 - nRow1 + 1 : 0 );
     SCROW* pRows = new SCROW[nTotalRows > 0 ? nTotalRows : 1];
-    SCSIZE nRowCount = 0;
-    for (SCSIZE j=0; j<nTotalRows; j++)
-        if ((pDocument->GetRowFlags(nRow1+j,nTab1)&CR_HIDDEN)==0)
-            pRows[nRowCount++] = nRow1+j;
+    SCSIZE nRowCount = (nTotalRows ?
+            pDocument->GetRowFlagsArray( nTab1).FillArrayForCondition( nRow1,
+                nRow2, CR_HIDDEN, 0, pRows, nTotalRows) : 0);
 
     // May happen at least with more than 32k rows.
     if (nColCount > SHRT_MAX || nRowCount > SHRT_MAX)
