@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-15 14:37:10 $
+ *  last change: $Author: tbe $ $Date: 2002-11-18 14:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_BUTTON_CLICK:
+        case VCLEVENT_CHECKBOX_TOGGLE:
         {
             CheckBox* pCheckBox = (CheckBox*)GetWindow();
             if ( pCheckBox )
