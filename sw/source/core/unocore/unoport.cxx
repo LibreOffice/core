@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:36:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 12:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ void SwXTextPortion::GetPropertyValue(
         Any &rVal,
         const SfxItemPropertyMap *pEntry,
         SwUnoCrsr *pUnoCrsr,
-        SfxItemSet *pSet )
+        SfxItemSet *&pSet )
 {
     DBG_ASSERT( pUnoCrsr, "UNO cursor missing" );
     if (!pUnoCrsr)
