@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSettingsImporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:14:59 $
+ *  last change:$Date: 2003-09-08 13:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,21 @@
 
 package mod._xmloff.Impress;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XImporter;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 /**
  * Test for object which is represented by service
@@ -155,7 +156,6 @@ public class XMLSettingsImporter extends TestCase {
 
         XInterface oObj = null;
         Object oInt = null ;
-        final String impValue = "XMLImporter_test" ;
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -166,9 +166,7 @@ public class XMLSettingsImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Impress.XMLSettingsImporter") ;
-            XImporter imp = (XImporter)
-                UnoRuntime.queryInterface(XImporter.class, oInt) ;
-            //imp.setTargetDocument(xImpressDoc);
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
