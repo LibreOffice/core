@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:14:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -551,12 +548,15 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     }
 
     SwDocShell* pDocShell = GetView().GetDocShell();
-    SvInPlaceEnvironment *pIpEnv =  pDocShell ?
+
+    //TODO/LATER: what's the replacement for this? Do we need it?
+/*  SvInPlaceEnvironment *pIpEnv =  pDocShell ?
                                   pDocShell->GetIPEnv() : 0;
     if ( pIpEnv && pIpEnv->GetRectsChangedLockCount() )
         //Wir stehen in Groessenverhandlungen (MM), Paint verzoegern
         Invalidate( rRect );
-    else if ( GetView().GetVisArea().GetWidth()  <= 0 ||
+    else */
+    if ( GetView().GetVisArea().GetWidth()  <= 0 ||
               GetView().GetVisArea().GetHeight() <= 0 )
         Invalidate( rRect );
     else
