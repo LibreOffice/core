@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 11:13:50 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 15:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #define STR_ACCESS_ENDNOTE_DESC             (RC_ACCESS_BEGIN + 15)
 #define STR_ACCESS_REPLACEMENT_POSTIT       (RC_ACCESS_BEGIN + 16)
 #define STR_ACCESS_REPLACEMENT_FRAME        (RC_ACCESS_BEGIN + 17)
+#define STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS (RC_ACCESS_BEGIN + 18)
 
 #define ACCESS_ACT_END  STR_ACCESS_REPLACEMENT_FRAME
 
