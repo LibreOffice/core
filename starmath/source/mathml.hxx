@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 14:59:20 $
+ *  last change: $Author: cmc $ $Date: 2001-08-01 14:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,18 +113,22 @@ private:
         const sal_Char* pFilterName );
 
     sal_Bool WriteThroughComponent(
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+            xOutputStream,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            xComponent,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pComponentName );
     sal_Bool WriteThroughComponent(
         SvStorage* pStorage,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            xComponent,
         const sal_Char* pStreamName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
         const sal_Char* pComponentName,
         sal_Bool bCompress=sal_True );
-
 };
 
 

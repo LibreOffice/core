@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-26 11:37:39 $
+ *  last change: $Author: cmc $ $Date: 2001-08-01 14:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,10 +141,13 @@ one go*/
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
-
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -156,6 +159,10 @@ using namespace ::xmloff::token;
 
 #ifndef MATHTYPE_HXX
 #include "mathtype.hxx"
+#endif
+
+#ifndef STARMATH_HRC
+#include <starmath.hrc>
 #endif
 
 #define IMPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLImportFilter")
@@ -299,23 +306,65 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
     uno::Reference< lang::XComponent > xModelComp( xModel, uno::UNO_QUERY );
     DBG_ASSERT( xModelComp.is(), "XMLReader::Read: got no model" );
 
+    // try to get an XStatusIndicator from the Medium
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    SfxItemSet* pSet = rMedium.GetItemSet();
+    if (pSet)
+    {
+        const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+            pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+        if (pItem)
+        {
+            pItem->GetValue() >>= xStatusIndicator;
+        }
+    }
+
+    sal_Int32 nSteps=3;
+    if( !(rMedium.IsStorage()))
+        nSteps = 1;
+
+    sal_Int32 nProgressRange(nSteps);
+    if (xStatusIndicator.is())
+    {
+#if 0
+        rtl::OUString sLoading(RTL_CONSTASCII_USTRINGPARAM("Loading ..."));
+        xStatusIndicator->start(sLoading, nProgressRange);
+#else
+        xStatusIndicator->start(String(SmResId(STR_STATSTR_READING)),
+            nProgressRange);
+#endif
+    }
+
+    nSteps=0;
+    if (xStatusIndicator.is())
+        xStatusIndicator->setValue(nSteps++);
+
     if( rMedium.IsStorage())
     {
-        ReadThroughComponent(
-            rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-            "com.sun.star.comp.Math.XMLMetaImporter" );
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(nSteps++);
 
         ReadThroughComponent(
-            rMedium.GetStorage(), xModelComp, "settings.xml", 0, xServiceFactory,
-            "com.sun.star.comp.Math.XMLSettingsImporter" );
+            rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
+            xServiceFactory, "com.sun.star.comp.Math.XMLMetaImporter" );
+
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(nSteps++);
+
+        ReadThroughComponent(
+            rMedium.GetStorage(), xModelComp, "settings.xml", 0,
+            xServiceFactory, "com.sun.star.comp.Math.XMLSettingsImporter" );
+
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent(
-           rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml", xServiceFactory,
-           "com.sun.star.comp.Math.XMLImporter" );
+           rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml",
+           xServiceFactory, "com.sun.star.comp.Math.XMLImporter" );
     }
     else
     {
-        uno::Reference<io::XActiveDataSource> xSource( rMedium.GetDataSource() );
+        uno::Reference<io::XActiveDataSource> xSource(rMedium.GetDataSource());
         DBG_ASSERT(xSource.is(),"XMLReader::Read: data source missing");
 
         // get a pipe for connecting the data source to the parser
@@ -333,11 +382,15 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
             xSource,uno::UNO_QUERY);
         xSourceControl->start();
 
-        nError = ReadThroughComponent(
-            xInputStream, xModelComp, xServiceFactory,
-            "com.sun.star.comp.Math.XMLImporter", FALSE );
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(nSteps++);
+
+        nError = ReadThroughComponent( xInputStream, xModelComp,
+            xServiceFactory, "com.sun.star.comp.Math.XMLImporter", FALSE );
     }
 
+    if (xStatusIndicator.is())
+        xStatusIndicator->end();
     return nError;
 }
 
@@ -564,7 +617,8 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     Reference<io::XOutputStream> xOutputStream,
     Reference<XComponent> xComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
-    const sal_Char* pComponentName )
+    const sal_Char* pComponentName
+    )
 {
     DBG_ASSERT(xOutputStream.is(), "I really need an output stream!");
     DBG_ASSERT(xComponent.is(), "Need component!");
@@ -584,6 +638,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
 
     // prepare arguments (prepend doc handler to given arguments)
     Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
+
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= xDocHandler;
 
@@ -620,7 +675,8 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     const sal_Char* pStreamName,
     Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pComponentName,
-    sal_Bool bCompress )
+    sal_Bool bCompress
+    )
 {
     DBG_ASSERT(NULL != pStorage, "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Need stream name!");
@@ -664,8 +720,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
 
     // write the stuff
-    sal_Bool bRet = WriteThroughComponent(
-        xOutputStream, xComponent, rFactory,
+    sal_Bool bRet = WriteThroughComponent( xOutputStream, xComponent, rFactory,
         pComponentName );
 
     // finally, commit stream.
@@ -685,44 +740,104 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     //Get model
     uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
 
+    sal_Bool bEmbedded = sal_False;
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+    if (pModel)
+    {
+        SmDocShell *pDocShell =
+            static_cast<SmDocShell*>(pModel->GetObjectShell());
+        if( pDocShell &&
+            SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+            bEmbedded = sal_True;
+    }
+
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    if (!bEmbedded)
+    {
+        uno::Reference<frame::XController> xController(
+            xModel->getCurrentController());
+        if( xController.is())
+        {
+            uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+            if( xFrame.is())
+            {
+                uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame,
+                    uno::UNO_QUERY );
+            if( xFactory.is())
+                xStatusIndicator = xFactory->createStatusIndicator();
+            }
+        }
+
+        // set progress range and start status indicator
+        sal_Int32 nSteps=3;
+        if (bFlat)
+            nSteps = 1;
+
+        sal_Int32 nProgressRange(nSteps);
+        if (xStatusIndicator.is())
+        {
+    //        xStatusIndicator->start(SW_RESSTR( STR_STATSTR_SWGWRITE),
+            rtl::OUString sSaving(RTL_CONSTASCII_USTRINGPARAM("Saving ..."));
+            xStatusIndicator->start(sSaving, nProgressRange);
+        }
+    }
+
+    sal_Int32 nSteps=0;
+    if (xStatusIndicator.is())
+            xStatusIndicator->setValue(nSteps++);
     if (!bFlat) //Storage (Package) of Stream
     {
-        sal_Bool bEmbedded = sal_False;
-        uno::Reference <lang::XUnoTunnel> xTunnel;
-        xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
-        SmModel *pModel = reinterpret_cast<SmModel *>
-            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
-
-        if (pModel)
-        {
-            SmDocShell *pDocShell =
-                static_cast<SmDocShell*>(pModel->GetObjectShell());
-            if( pDocShell &&
-                SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
-                bEmbedded = sal_True;
-        }
         SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
+
         if( !bEmbedded )
+        {
+            if (xStatusIndicator.is())
+                xStatusIndicator->setValue(nSteps++);
+
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "meta.xml", xServiceFactory,
-                    "com.sun.star.comp.Math.XMLMetaExporter", sal_False );
+                    "com.sun.star.comp.Math.XMLMetaExporter",sal_False);
+        }
         if( bRet )
+        {
+           if (xStatusIndicator.is())
+                xStatusIndicator->setValue(nSteps++);
+
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "content.xml", xServiceFactory,
-                    "com.sun.star.comp.Math.XMLExporter" );
+                    "com.sun.star.comp.Math.XMLExporter");
+        }
+
         if( bRet && !bEmbedded )
+        {
+            if (xStatusIndicator.is())
+                xStatusIndicator->setValue(nSteps++);
+
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "settings.xml", xServiceFactory,
-                    "com.sun.star.comp.Math.XMLSettingsExporter" );
+                    "com.sun.star.comp.Math.XMLSettingsExporter");
+        }
     }
     else
     {
         SvStream *pStream = rMedium.GetOutStream();
-        uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper(*pStream) );
+        uno::Reference<io::XOutputStream> xOut(
+            new utl::OOutputStreamWrapper(*pStream) );
+
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(nSteps++);
+
         bRet = WriteThroughComponent(
             xOut, xModelComp, xServiceFactory,
-            "com.sun.star.comp.Math.XMLExporter" );
+            "com.sun.star.comp.Math.XMLExporter");
     }
+
+    if (xStatusIndicator.is())
+        xStatusIndicator->end();
 
     return bRet;
 }
@@ -765,6 +880,9 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         _ExportContent();
         GetDocHandler()->endDocument();
     }
+
+    //ProgressBarHelper *pProgress = GetProgressBarHelper();
+    //pProgress->SetValue( pProgress->GetValue() + 1 );
 
     bSuccess=sal_True;
     return 0;
