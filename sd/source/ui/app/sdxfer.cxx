@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:57 $
+ *  last change: $Author: cl $ $Date: 2002-12-12 13:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@
 
 #include <so3/outplace.hxx>
 #include <svx/unomodel.hxx>
+#include <svx/svditer.hxx>
 
 #include "docshell.hxx"
 #include "sdview.hxx"
@@ -409,6 +410,38 @@ void SdTransferable::CreateData()
 
 // -----------------------------------------------------------------------------
 
+BOOL lcl_HasOnlyControls( SdrModel* pModel )
+{
+    BOOL bOnlyControls = FALSE;         // default if there are no objects
+
+    if ( pModel )
+    {
+        SdrPage* pPage = pModel->GetPage(0);
+        if (pPage)
+        {
+            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObject* pObj = aIter.Next();
+            if ( pObj )
+            {
+                bOnlyControls = TRUE;   // only set if there are any objects at all
+                while ( pObj )
+                {
+                    if (!pObj->ISA(SdrUnoObj))
+                    {
+                        bOnlyControls = FALSE;
+                        break;
+                    }
+                    pObj = aIter.Next();
+                }
+            }
+        }
+    }
+
+    return bOnlyControls;
+}
+
+// -----------------------------------------------------------------------------
+
 void SdTransferable::AddSupportedFormats()
 {
     if( !bPageTransferable || bPageTransferablePersistent )
@@ -453,7 +486,7 @@ void SdTransferable::AddSupportedFormats()
         {
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            if( !mbIsUnoObj )
+            if( !pSdDrawDocument || !lcl_HasOnlyControls( pSdDrawDocument ) )
             {
                 AddFormat( SOT_FORMAT_GDIMETAFILE );
                 AddFormat( SOT_FORMAT_BITMAP );
