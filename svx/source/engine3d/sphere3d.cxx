@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:38:07 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,14 @@
 #include <svx/sdr/properties/e3dsphereproperties.hxx>
 #endif
 
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
@@ -175,75 +183,91 @@ void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-void E3dSphereObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+::basegfx::B3DPolyPolygon E3dSphereObj::Get3DLineGeometry() const
 {
+    ::basegfx::B3DPolyPolygon aRetval;
+
     // add geometry describing polygons to rLinePolyPolygon
-    sal_uInt16 nCntHor = (sal_uInt16)GetHorizontalSegments();
-    sal_uInt16 nCntVer = (sal_uInt16)GetVerticalSegments();
-    const Vector3D aRadius = aSize / 2;
-    const double fHInc = (double)DEG2RAD(360) / nCntHor;
-    const double fVInc = (double)DEG2RAD(180) / nCntVer;
-    sal_uInt16 nCntHorPoly = nCntVer - 1;
-    sal_uInt16 nIndHorPoly = rLinePolyPolygon.Count();
-    sal_uInt16 a;
-    double fHAng = 0.0;
+    const sal_uInt32 nCntHor((sal_uInt32)GetHorizontalSegments());
+    const sal_uInt32 nCntVer((sal_uInt32)GetVerticalSegments());
+    const sal_Bool bCreateHorizontal(sal_True);
+    const sal_Bool bCreateVertical(sal_True);
 
-    for(a = 0; a < nCntHorPoly; a++)
+    if(nCntHor && nCntVer && (bCreateHorizontal || bCreateVertical))
     {
-        Polygon3D aNewHor(nCntHor + 1);
-        //aNewHor.SetClosed(TRUE);
-        rLinePolyPolygon.Insert(aNewHor);
-    }
+        const double fHInc((double)DEG2RAD(360) / nCntHor);
+        const double fVInc((double)DEG2RAD(180) / nCntVer);
+        const ::basegfx::B3DVector aRadius(aSize.X() / 2.0, aSize.Y() / 2.0, aSize.Z() / 2.0);
+        ::basegfx::B3DPoint aCenterPos(aCenter.X(), aCenter.Y(), aCenter.Z());
+        double fHAng(0.0);
+        ::basegfx::B3DPolygon aAllPoints;
 
-    for(sal_uInt16 nH(0); nH < nCntHor; nH++)
-    {
-        double fHSin = sin(fHAng);
-        double fHCos = cos(fHAng);
-        fHAng += fHInc;
-        double fVAng = DEG2RAD(90);
-        Polygon3D aNewVer(nCntVer + 1);
-
-        for(sal_uInt16 nV(0); nV <= nCntVer; nV++)
+        // create all sphere points
+        for(sal_uInt32 nH(0L); nH < nCntHor; nH++)
         {
-            double fVSin = sin(fVAng);
-            double fVCos = cos(fVAng);
-            fVAng -= fVInc;
+            const double fHSin(sin(fHAng));
+            const double fHCos(cos(fHAng));
+            fHAng += fHInc;
+            double fVAng(DEG2RAD(90) - fVInc);
 
-            Vector3D aPos = aCenter;
-            double fRx = aRadius.X() * fVCos;
-            double fRz = aRadius.Z() * fVCos;
-            aPos.X() += fRx * fHCos;
-            aPos.Y() += aRadius.Y() * fVSin;
-            aPos.Z() += fRz * fHSin;
+            for(sal_uInt32 nV(1L); nV < nCntVer; nV++)
+            {
+                const double fVSin(sin(fVAng));
+                const double fVCos(cos(fVAng));
+                fVAng -= fVInc;
 
-            if(nV == 0)
-            {
-                // top position, only interesting for vertical line
-                aNewVer[0] = aPos;
-            }
-            else if(nV == nCntVer)
-            {
-                // bottom position, only interesting for vertical line
-                aNewVer[nCntVer] = aPos;
-            }
-            else
-            {
-                // normal position, insert vertical
-                aNewVer[nV] = aPos;
+                ::basegfx::B3DPoint aNewPos(
+                    aCenterPos.getX() + (aRadius.getX() * fVCos) * fHCos,
+                    aCenterPos.getY() + aRadius.getY() * fVSin,
+                    aCenterPos.getZ() + (aRadius.getZ() * fVCos) * fHSin);
 
-                // insert horizontal
-                rLinePolyPolygon[nIndHorPoly + (nV - 1)][nH] = aPos;
-                if(!nH)
-                    rLinePolyPolygon[nIndHorPoly + (nV - 1)][nCntHor] = aPos;
+                aAllPoints.append(aNewPos);
             }
         }
 
-        /// insert new vertical poly
-        rLinePolyPolygon.Insert(aNewVer);
+        // create horizontal lines
+        if(bCreateHorizontal)
+        {
+            for(sal_uInt32 a(1L); a < nCntVer; a++)
+            {
+                ::basegfx::B3DPolygon aNewHor;
+                sal_uInt32 nStartIndex(a - 1L);
+
+                for(sal_uInt32 b(0L); b < nCntHor; b++)
+                {
+                    aNewHor.append(aAllPoints.getB3DPoint(nStartIndex));
+                    nStartIndex += (nCntVer - 1L);
+                }
+
+                aNewHor.append(aNewHor.getB3DPoint(0L));
+                aRetval.append(aNewHor);
+            }
+        }
+
+        // create vertical lines
+        if(bCreateVertical)
+        {
+            const ::basegfx::B3DPoint aTopPos(aCenterPos.getX(), aCenterPos.getY() + aRadius.getY(), aCenterPos.getZ());
+            const ::basegfx::B3DPoint aBottomPos(aCenterPos.getX(), aCenterPos.getY() - aRadius.getY(), aCenterPos.getZ());
+
+            for(sal_uInt32 a(0L); a < nCntHor; a++)
+            {
+                ::basegfx::B3DPolygon aNewVer;
+                aNewVer.append(aTopPos);
+                sal_uInt32 nStartIndex(a * (nCntVer - 1L));
+
+                for(sal_uInt32 b(1L); b < nCntVer; b++, nStartIndex++)
+                {
+                    aNewVer.append(aAllPoints.getB3DPoint(nStartIndex));
+                }
+
+                aNewVer.append(aBottomPos);
+                aRetval.append(aNewVer);
+            }
+        }
     }
 
-    // don't call parent
-    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    return aRetval;
 }
 
 /*************************************************************************
@@ -400,20 +424,20 @@ UINT16 E3dSphereObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-void E3dSphereObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
-    E3dDragDetail eDetail)
-{
-    if ( eDetail == E3DDETAIL_ALLLINES ||
-        (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
-    {
-        // Detailliert erzeugen
-    }
-    else
-    {
-        // call parent
-        E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
-    }
-}
+//BFS01void E3dSphereObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
+//BFS01 E3dDragDetail eDetail)
+//BFS01{
+//BFS01 if ( eDetail == E3DDETAIL_ALLLINES ||
+//BFS01     (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
+//BFS01 {
+//BFS01     // Detailliert erzeugen
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // call parent
+//BFS01     E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -450,171 +474,126 @@ void E3dSphereObj::ReSegment(long nHSegs, long nVSegs)
 |*
 \************************************************************************/
 
-void E3dSphereObj::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-    if(nVersion < 3800)
-    {
-        // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
-        ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
-    }
-
-    // call parent
-    SdrAttrObj::WriteData(rOut);
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dSphereObj");
-#endif
-
-    if (rOut.GetVersion() < 3560) // FG: kleiner als die Final Beta der Version 4.0
-    {
-        pSub->Save(rOut);
-    }
-    else
-    {
-        // [FG] Jetzt wird die Kindliste abgeklapptert, allerdings weiss ich im Gegensatz zu
-        // Joe dass es nur E3dPolyObj - Kindobjekte sein koennen.
-        // Jedes dieser Objekte frage ich ob es eigene Attribute enthaelt.  Falls OwnStyle ()
-        // true liefert, werde ich das Polygon nicht wegspeichern.
-
-        SdrObjListIter aIter(*pSub,IM_FLAT);
-        while (aIter.IsMore()) {
-            E3dPolyObj* pObj=(E3dPolyObj *) aIter.Next();
-            if ((!pObj->IsNotPersistent()) && (pObj->OwnAttrs() || pObj->OwnStyle()))
-            {
-                rOut<<*pObj;
-            }
-            if (pSub->GetModel()!=NULL) pSub->GetModel()->IncProgress();
-        }
-        SdrIOHeader(rOut,STREAM_WRITE,SdrIOEndeID); // Endemarke
-    }
-
-    // Daß hier gehört zum E3dObject (ohne Basisklassen);
-    if (rOut.GetVersion() < 3560)
-    {
-        rOut << aLocalBoundVol;
-
-        Old_Matrix3D aMat3D;
-        aMat3D = aTfMatrix;
-        rOut << aMat3D;
-
-        rOut << nLogicalGroup;
-        rOut << nObjTreeLevel;
-        rOut << nPartOfParent;
-        rOut << UINT16(eDragDetail);
-    }
-    else
-    {
-        E3dObject::WriteOnlyOwnMembers(rOut);
-    }
-    // Das gehört zu E3dSphere
-    rOut << GetHorizontalSegments();
-
-    rOut << GetVerticalSegments();
-
-    rOut << aCenter;
-    rOut << aSize;
-
-    // Das hier ist ein Merkmal eines Compound-Objektes
-    rOut << GetDoubleSided();
-
-    // Ab Version 395 (8.6.98): Parameter aus dem Objekt
-    // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
-    // hierarchie beim FileFormat unterbrochen hat, wurden diese Attribute
-    // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
-    // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
-    // E3dCompoundObject oder E3dObject aendern.
-    rOut << GetDoubleSided();
-
-    rOut << BOOL(bCreateNormals);
-    rOut << BOOL(bCreateTexture);
-
-    sal_uInt16 nVal = GetNormalsKind();
-    rOut << BOOL(nVal > 0);
-    rOut << BOOL(nVal > 1);
-
-    nVal = GetTextureProjectionX();
-    rOut << BOOL(nVal > 0);
-    rOut << BOOL(nVal > 1);
-
-    nVal = GetTextureProjectionY();
-    rOut << BOOL(nVal > 0);
-    rOut << BOOL(nVal > 1);
-
-    rOut << BOOL(GetShadow3D());
-
-    rOut << GetMaterialAmbientColor();
-    rOut << GetMaterialColor();
-    rOut << GetMaterialSpecular();
-    rOut << GetMaterialEmission();
-    rOut << GetMaterialSpecularIntensity();
-
-    aBackMaterial.WriteData(rOut);
-
-    rOut << (UINT16)GetTextureKind();
-
-    rOut << (UINT16)GetTextureMode();
-
-    rOut << BOOL(GetNormalsInvert());
-
-    // neu ab 534: (hat noch gefehlt)
-    rOut << BOOL(GetTextureFilter());
-
-    if(nVersion < 3800)
-    {
-        // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
-        ((E3dCompoundObject*)this)->ReCreateGeometry();
-    }
-#endif
-}
-
-/*************************************************************************
-|*
-|* Objektdaten aus Stream laden
-|*
-\************************************************************************/
-
-void E3dSphereObj::ReadData31(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dSphereObj");
-#endif
-    // dann die Member
-    UINT16  nTmp16;
-    sal_Int32 nTmp32;
-
-    pSub->Load(rIn, *pPage);
-    // FG: Die Daten des 3D-Objektes
-    rIn >> aLocalBoundVol;
-
-    Old_Matrix3D aMat3D;
-    rIn >> aMat3D;
-    aTfMatrix = Matrix4D(aMat3D);
-
-    rIn >> nLogicalGroup;
-    rIn >> nObjTreeLevel;
-    rIn >> nPartOfParent;
-    rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
-    // FG: Die Daten der Kugel
-
-    rIn >> nTmp32;
-    GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nTmp32));
-
-    rIn >> nTmp32;
-    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nTmp32));
-
-    rIn >> aCenter;
-    rIn >> aSize;
-
-    bBoundVolValid = FALSE;
-
-    // Geometrie neu erzeugen
-    ReCreateGeometry();
-}
+//BFS01void E3dSphereObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
+//BFS01 }
+//BFS01
+//BFS01 // call parent
+//BFS01 SdrAttrObj::WriteData(rOut);
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dSphereObj");
+//BFS01#endif
+//BFS01
+//BFS01 if (rOut.GetVersion() < 3560) // FG: kleiner als die Final Beta der Version 4.0
+//BFS01 {
+//BFS01     pSub->Save(rOut);
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // [FG] Jetzt wird die Kindliste abgeklapptert, allerdings weiss ich im Gegensatz zu
+//BFS01     // Joe dass es nur E3dPolyObj - Kindobjekte sein koennen.
+//BFS01     // Jedes dieser Objekte frage ich ob es eigene Attribute enthaelt.  Falls OwnStyle ()
+//BFS01     // true liefert, werde ich das Polygon nicht wegspeichern.
+//BFS01
+//BFS01     SdrObjListIter aIter(*pSub,IM_FLAT);
+//BFS01     while (aIter.IsMore()) {
+//BFS01         E3dPolyObj* pObj=(E3dPolyObj *) aIter.Next();
+//BFS01         if ((!pObj->IsNotPersistent()) && (pObj->OwnAttrs() || pObj->OwnStyle()))
+//BFS01         {
+//BFS01             rOut<<*pObj;
+//BFS01         }
+//BFS01         if (pSub->GetModel()!=NULL) pSub->GetModel()->IncProgress();
+//BFS01     }
+//BFS01     SdrIOHeader(rOut,STREAM_WRITE,SdrIOEndeID); // Endemarke
+//BFS01 }
+//BFS01
+//BFS01 // Daß hier gehört zum E3dObject (ohne Basisklassen);
+//BFS01 if (rOut.GetVersion() < 3560)
+//BFS01 {
+//BFS01     rOut << aLocalBoundVol;
+//BFS01
+//BFS01     Old_Matrix3D aMat3D;
+//BFS01     aMat3D = aTfMatrix;
+//BFS01     rOut << aMat3D;
+//BFS01
+//BFS01     rOut << nLogicalGroup;
+//BFS01     rOut << nObjTreeLevel;
+//BFS01     rOut << nPartOfParent;
+//BFS01     rOut << UINT16(eDragDetail);
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     E3dObject::WriteOnlyOwnMembers(rOut);
+//BFS01 }
+//BFS01 // Das gehört zu E3dSphere
+//BFS01 rOut << GetHorizontalSegments();
+//BFS01
+//BFS01 rOut << GetVerticalSegments();
+//BFS01
+//BFS01 rOut << aCenter;
+//BFS01 rOut << aSize;
+//BFS01
+//BFS01 // Das hier ist ein Merkmal eines Compound-Objektes
+//BFS01 rOut << GetDoubleSided();
+//BFS01
+//BFS01 // Ab Version 395 (8.6.98): Parameter aus dem Objekt
+//BFS01 // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
+//BFS01 // hierarchie beim FileFormat unterbrochen hat, wurden diese Attribute
+//BFS01 // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
+//BFS01 // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
+//BFS01 // E3dCompoundObject oder E3dObject aendern.
+//BFS01 rOut << GetDoubleSided();
+//BFS01
+//BFS01 rOut << BOOL(bCreateNormals);
+//BFS01 rOut << BOOL(bCreateTexture);
+//BFS01
+//BFS01 sal_uInt16 nVal = GetNormalsKind();
+//BFS01 rOut << BOOL(nVal > 0);
+//BFS01 rOut << BOOL(nVal > 1);
+//BFS01
+//BFS01 nVal = GetTextureProjectionX();
+//BFS01 rOut << BOOL(nVal > 0);
+//BFS01 rOut << BOOL(nVal > 1);
+//BFS01
+//BFS01 nVal = GetTextureProjectionY();
+//BFS01 rOut << BOOL(nVal > 0);
+//BFS01 rOut << BOOL(nVal > 1);
+//BFS01
+//BFS01 rOut << BOOL(GetShadow3D());
+//BFS01
+//BFS01 rOut << GetMaterialAmbientColor();
+//BFS01 rOut << GetMaterialColor();
+//BFS01 rOut << GetMaterialSpecular();
+//BFS01 rOut << GetMaterialEmission();
+//BFS01 rOut << GetMaterialSpecularIntensity();
+//BFS01
+//BFS01 aBackMaterial.WriteData(rOut);
+//BFS01
+//BFS01 rOut << (UINT16)GetTextureKind();
+//BFS01
+//BFS01 rOut << (UINT16)GetTextureMode();
+//BFS01
+//BFS01 rOut << BOOL(GetNormalsInvert());
+//BFS01
+//BFS01 // neu ab 534: (hat noch gefehlt)
+//BFS01 rOut << BOOL(GetTextureFilter());
+//BFS01
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry();
+//BFS01 }
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -622,162 +601,207 @@ void E3dSphereObj::ReadData31(const SdrObjIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
-void E3dSphereObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    // FG (10.2.97) Der Pointer ist ein Kunstgriff er wird in der ReadData-Routine erzeugt dort werden
-    //    die abgespeicherten attributierten Flaechen abgelegt. Danach wird eine Kugel mit Default-Paramtern
-    //    erzeugt und dann werden die per Default erzeugten einfach, falls noetig mit denen aus dieser Liste
-    //    ausgetauscht. Am Ende von ReadData wird die Liste wieder zerstoert.
-    E3dObjList *pLoadedE3dPolyObjs;
+//BFS01void E3dSphereObj::ReadData31(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dSphereObj");
+//BFS01#endif
+//BFS01 // dann die Member
+//BFS01 UINT16  nTmp16;
+//BFS01 sal_Int32 nTmp32;
+//BFS01
+//BFS01 pSub->Load(rIn, *pPage);
+//BFS01 // FG: Die Daten des 3D-Objektes
+//BFS01 rIn >> aLocalBoundVol;
+//BFS01
+//BFS01 Old_Matrix3D aMat3D;
+//BFS01 rIn >> aMat3D;
+//BFS01 aTfMatrix = Matrix4D(aMat3D);
+//BFS01
+//BFS01 rIn >> nLogicalGroup;
+//BFS01 rIn >> nObjTreeLevel;
+//BFS01 rIn >> nPartOfParent;
+//BFS01 rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
+//BFS01 // FG: Die Daten der Kugel
+//BFS01
+//BFS01 rIn >> nTmp32;
+//BFS01 GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nTmp32));
+//BFS01
+//BFS01 rIn >> nTmp32;
+//BFS01 GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nTmp32));
+//BFS01
+//BFS01 rIn >> aCenter;
+//BFS01 rIn >> aSize;
+//BFS01
+//BFS01 bBoundVolValid = FALSE;
+//BFS01
+//BFS01 // Geometrie neu erzeugen
+//BFS01 ReCreateGeometry();
+//BFS01}
 
-    if (ImpCheckSubRecords (rHead, rIn))
-    {
-        // leider kann das E3dLatheObj nicht auf E3dObject abgestuetzt werden,
-        // da neue Member hinzugekommen sind und die Kompatibilitaet erhalten
-        // bleiben muss.
-        SdrAttrObj::ReadData(rHead, rIn);
-        if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
-        {
-            ReadData31(rHead, rIn);
-            return;
-        }
+/*************************************************************************
+|*
+|* Objektdaten aus Stream laden
+|*
+\************************************************************************/
 
-
-        // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-        SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-        aCompat.SetID("E3dSphereObj");
-#endif
-        // dann die Member
-        BOOL    bMyDoubleSided;
-
-        // [FG]: Es wird erstmal gelesen was da ist, ob es vollstaendig ist zeigt sich bei
-        // dem Aufruf von CreateSphere, dort werden die fehlenden Flaechen einfach
-        // erzeugt.
-        pLoadedE3dPolyObjs = new E3dObjList(NULL, NULL);
-        pLoadedE3dPolyObjs->SetOwnerObj(this);
-        pLoadedE3dPolyObjs->SetListKind(SDROBJLIST_GROUPOBJ);
-        pLoadedE3dPolyObjs->Load(rIn, *pPage);
-        E3dObject::ReadOnlyOwnMembers(rHead, rIn);
-
-        if (aCompat.GetBytesLeft ())
-        {
-            // neue Member
-            sal_Int32 nTmp32;
-
-            rIn >> nTmp32;
-            GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nTmp32));
-
-            rIn >> nTmp32;
-            GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nTmp32));
-
-            rIn >> aCenter;
-            rIn >> aSize;
-            if (aCompat.GetBytesLeft ())
-            {
-                rIn >> bMyDoubleSided;
-                GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bMyDoubleSided));
-            }
-
-            if (aCompat.GetBytesLeft())
-            {
-                // Ab Version 395 (8.6.98): Parameter aus dem Objekt
-                // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
-                // hierarchie beim FileFormat unterbrochen hat, wurden diese Attribute
-                // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
-                // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
-                // E3dCompoundObject oder E3dObject aendern.
-                BOOL bTmp, bTmp2;
-                sal_uInt16 nTmp;
-
-                rIn >> bTmp;
-                GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
-
-                rIn >> bTmp; bCreateNormals = bTmp;
-                rIn >> bTmp; bCreateTexture = bTmp;
-
-                rIn >> bTmp;
-                rIn >> bTmp2;
-                if(bTmp == FALSE && bTmp2 == FALSE)
-                    nTmp = 0;
-                else if(bTmp == TRUE && bTmp2 == FALSE)
-                    nTmp = 1;
-                else
-                    nTmp = 2;
-                GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
-
-                rIn >> bTmp;
-                rIn >> bTmp2;
-                if(bTmp == FALSE && bTmp2 == FALSE)
-                    nTmp = 0;
-                else if(bTmp == TRUE && bTmp2 == FALSE)
-                    nTmp = 1;
-                else
-                    nTmp = 2;
-                GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
-
-                rIn >> bTmp;
-                rIn >> bTmp2;
-                if(bTmp == FALSE && bTmp2 == FALSE)
-                    nTmp = 0;
-                else if(bTmp == TRUE && bTmp2 == FALSE)
-                    nTmp = 1;
-                else
-                    nTmp = 2;
-                GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
-
-                rIn >> bTmp;
-                GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
-
-                Color aCol;
-
-                rIn >> aCol;
-                SetMaterialAmbientColor(aCol);
-
-                rIn >> aCol;
-                // do NOT use, this is the old 3D-Color(!)
-                // SetItem(XFillColorItem(String(), aCol));
-
-                rIn >> aCol;
-                GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
-
-                rIn >> aCol;
-                GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
-
-                rIn >> nTmp;
-                GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
-
-                aBackMaterial.ReadData(rIn);
-
-                rIn >> nTmp;
-                GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
-
-                rIn >> nTmp;
-                GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
-
-                rIn >> bTmp;
-                GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
-            }
-
-            // neu ab 534: (hat noch gefehlt)
-            if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-            {
-                BOOL bTmp;
-                rIn >> bTmp;
-                GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
-            }
-        }
-        else
-        {
-            DBG_ERROR("AW: Kugel laden: nicht vorgesehener Fall");
-        }
-        pLoadedE3dPolyObjs->Clear();
-        delete pLoadedE3dPolyObjs;
-    }
-
-    // Geometrie neu erzeugen
-    ReCreateGeometry();
-}
+//BFS01void E3dSphereObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 // FG (10.2.97) Der Pointer ist ein Kunstgriff er wird in der ReadData-Routine erzeugt dort werden
+//BFS01 //    die abgespeicherten attributierten Flaechen abgelegt. Danach wird eine Kugel mit Default-Paramtern
+//BFS01 //    erzeugt und dann werden die per Default erzeugten einfach, falls noetig mit denen aus dieser Liste
+//BFS01 //    ausgetauscht. Am Ende von ReadData wird die Liste wieder zerstoert.
+//BFS01 E3dObjList *pLoadedE3dPolyObjs;
+//BFS01
+//BFS01 if (ImpCheckSubRecords (rHead, rIn))
+//BFS01 {
+//BFS01     // leider kann das E3dLatheObj nicht auf E3dObject abgestuetzt werden,
+//BFS01     // da neue Member hinzugekommen sind und die Kompatibilitaet erhalten
+//BFS01     // bleiben muss.
+//BFS01     SdrAttrObj::ReadData(rHead, rIn);
+//BFS01     if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
+//BFS01     {
+//BFS01         ReadData31(rHead, rIn);
+//BFS01         return;
+//BFS01     }
+//BFS01
+//BFS01
+//BFS01     // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("E3dSphereObj");
+//BFS01#endif
+//BFS01     // dann die Member
+//BFS01     BOOL    bMyDoubleSided;
+//BFS01
+//BFS01     // [FG]: Es wird erstmal gelesen was da ist, ob es vollstaendig ist zeigt sich bei
+//BFS01     // dem Aufruf von CreateSphere, dort werden die fehlenden Flaechen einfach
+//BFS01     // erzeugt.
+//BFS01     pLoadedE3dPolyObjs = new E3dObjList(NULL, NULL);
+//BFS01     pLoadedE3dPolyObjs->SetOwnerObj(this);
+//BFS01     pLoadedE3dPolyObjs->SetListKind(SDROBJLIST_GROUPOBJ);
+//BFS01     pLoadedE3dPolyObjs->Load(rIn, *pPage);
+//BFS01     E3dObject::ReadOnlyOwnMembers(rHead, rIn);
+//BFS01
+//BFS01     if (aCompat.GetBytesLeft ())
+//BFS01     {
+//BFS01         // neue Member
+//BFS01         sal_Int32 nTmp32;
+//BFS01
+//BFS01         rIn >> nTmp32;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nTmp32));
+//BFS01
+//BFS01         rIn >> nTmp32;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nTmp32));
+//BFS01
+//BFS01         rIn >> aCenter;
+//BFS01         rIn >> aSize;
+//BFS01         if (aCompat.GetBytesLeft ())
+//BFS01         {
+//BFS01             rIn >> bMyDoubleSided;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bMyDoubleSided));
+//BFS01         }
+//BFS01
+//BFS01         if (aCompat.GetBytesLeft())
+//BFS01         {
+//BFS01             // Ab Version 395 (8.6.98): Parameter aus dem Objekt
+//BFS01             // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
+//BFS01             // hierarchie beim FileFormat unterbrochen hat, wurden diese Attribute
+//BFS01             // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
+//BFS01             // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
+//BFS01             // E3dCompoundObject oder E3dObject aendern.
+//BFS01             BOOL bTmp, bTmp2;
+//BFS01             sal_uInt16 nTmp;
+//BFS01
+//BFS01             rIn >> bTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
+//BFS01
+//BFS01             rIn >> bTmp; bCreateNormals = bTmp;
+//BFS01             rIn >> bTmp; bCreateTexture = bTmp;
+//BFS01
+//BFS01             rIn >> bTmp;
+//BFS01             rIn >> bTmp2;
+//BFS01             if(bTmp == FALSE && bTmp2 == FALSE)
+//BFS01                 nTmp = 0;
+//BFS01             else if(bTmp == TRUE && bTmp2 == FALSE)
+//BFS01                 nTmp = 1;
+//BFS01             else
+//BFS01                 nTmp = 2;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
+//BFS01
+//BFS01             rIn >> bTmp;
+//BFS01             rIn >> bTmp2;
+//BFS01             if(bTmp == FALSE && bTmp2 == FALSE)
+//BFS01                 nTmp = 0;
+//BFS01             else if(bTmp == TRUE && bTmp2 == FALSE)
+//BFS01                 nTmp = 1;
+//BFS01             else
+//BFS01                 nTmp = 2;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
+//BFS01
+//BFS01             rIn >> bTmp;
+//BFS01             rIn >> bTmp2;
+//BFS01             if(bTmp == FALSE && bTmp2 == FALSE)
+//BFS01                 nTmp = 0;
+//BFS01             else if(bTmp == TRUE && bTmp2 == FALSE)
+//BFS01                 nTmp = 1;
+//BFS01             else
+//BFS01                 nTmp = 2;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
+//BFS01
+//BFS01             rIn >> bTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
+//BFS01
+//BFS01             Color aCol;
+//BFS01
+//BFS01             rIn >> aCol;
+//BFS01             SetMaterialAmbientColor(aCol);
+//BFS01
+//BFS01             rIn >> aCol;
+//BFS01             // do NOT use, this is the old 3D-Color(!)
+//BFS01             // SetItem(XFillColorItem(String(), aCol));
+//BFS01
+//BFS01             rIn >> aCol;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
+//BFS01
+//BFS01             rIn >> aCol;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
+//BFS01
+//BFS01             rIn >> nTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
+//BFS01
+//BFS01             aBackMaterial.ReadData(rIn);
+//BFS01
+//BFS01             rIn >> nTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
+//BFS01
+//BFS01             rIn >> nTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
+//BFS01
+//BFS01             rIn >> bTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
+//BFS01         }
+//BFS01
+//BFS01         // neu ab 534: (hat noch gefehlt)
+//BFS01         if (aCompat.GetBytesLeft () >= sizeof (BOOL))
+//BFS01         {
+//BFS01             BOOL bTmp;
+//BFS01             rIn >> bTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
+//BFS01         }
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         DBG_ERROR("AW: Kugel laden: nicht vorgesehener Fall");
+//BFS01     }
+//BFS01     pLoadedE3dPolyObjs->Clear();
+//BFS01     delete pLoadedE3dPolyObjs;
+//BFS01 }
+//BFS01
+//BFS01 // Geometrie neu erzeugen
+//BFS01 ReCreateGeometry();
+//BFS01}
 
 /*************************************************************************
 |*
@@ -852,4 +876,4 @@ void E3dSphereObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralSphere3d);
 }
 
-// EOF
+// eof
