@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:45:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,11 @@
 #include "ToolPanelChildWindow.hxx"
 #include "ToolPanel.hxx"
 #include "TitledControl.hxx"
-#include "SubToolPanel.hxx"
 #include "LayoutMenu.hxx"
 #include "TaskPaneFocusManager.hxx"
-#include "ScrollPanel.hxx"
+#include "taskpane/SubToolPanel.hxx"
+#include "taskpane/ScrollPanel.hxx"
+#include "taskpane/TaskPaneControlFactory.hxx"
 #include "controls/MasterPagesPanel.hxx"
 #include "controls/MasterPagesSelector.hxx"
 #include "controls/CustomAnimationPanel.hxx"
@@ -133,11 +134,11 @@ using namespace ::sd::toolpanel;
 
 
 //#define SHOW_TEST_PANEL
-//#ifdef SHOW_TEST_PANEL
+#ifdef SHOW_TEST_PANEL
 #include "TestPanel.hxx"
-//#endif
-//#define SHOW_TEST_MENU
-#ifdef SHOW_TEST_MENU
+#endif
+//#define SHOW_COLOR_MENU
+#ifdef SHOW_COLOR_MENU
 #include "TestMenu.hxx"
 #endif
 
@@ -207,6 +208,21 @@ enum MenuId {
     MID_FIRST_CONTROL = 4,
 };
 
+/** This control is used for extracting the title string from the resource
+    of some dialogs that are displayed in the task pane.  With this the
+    actual controls can be created on demand.  This class only loads (a part
+    of) their resource.
+*/
+class DummyControl : public Control
+{
+public:
+    DummyControl (::Window* pParent, const ResId& rResId)
+        : Control(pParent,rResId)
+    {
+        FreeResource();
+    }
+};
+
 } // end of anonymouse namespace
 
 
@@ -218,76 +234,65 @@ void TaskPaneViewShell::Implementation::Setup (
     ViewShellBase& rBase)
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
+    sal_uInt32 nId;
+    sal_uInt32 nIdOfControlToExpand;
 
-    // A sub tool panel with slide sorters.
-    TreeNode* pSubPanel = new controls::MasterPagesPanel (pToolPanel, rBase);
-    sal_uInt32 nId = pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pSubPanel),
+    // The master page controls.
+    nId = pToolPanel->AddControl (
+        controls::MasterPagesPanel::CreateControlFactory(rBase),
         SdResId(STR_TASKPANEL_MASTER_PAGE_TITLE),
         HID_SD_SLIDE_DESIGNS);
     AddPanel (nId, PID_MASTER_PAGES);
 
     // Layout Menu.
-    ScrollPanel* pScrollPanel = new ScrollPanel (pToolPanel);
-    LayoutMenu* pMenu = new LayoutMenu (
-        pScrollPanel,
-        *pDocument->GetDocSh(),
-        rBase,
-        false);
-    pMenu->Expand(true);
-    pScrollPanel->AddControl (::std::auto_ptr<TreeNode>(pMenu));
     nId = pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pScrollPanel),
+        LayoutMenu::CreateControlFactory(rBase, *pDocument->GetDocSh()),
         SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE),
         HID_SD_SLIDE_LAYOUTS);
     AddPanel (nId, PID_LAYOUT);
-    pMenu->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS) );
+    nIdOfControlToExpand = nId;
 
-/*
-    // AnimationSchemesPanel
-    TreeNode* pAnimationSchemesPanel = new controls::AnimationSchemesPanel(pToolPanel, rBase );
-    nId = pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pAnimationSchemesPanel),
-        pAnimationSchemesPanel->GetWindow()->GetText());
-    AddPanel (nId, PID_ANIMATION_SCHEMES);
-*/
-    // CustomAnimationPanel
-    TreeNode* pCustomAnimationPanel = new controls::CustomAnimationPanel(pToolPanel, rBase );
-    nId = pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pCustomAnimationPanel),
-        pCustomAnimationPanel->GetWindow()->GetText(),
-        HID_SD_CUSTOM_ANIMATIONS);
+    {
+        DummyControl aControl (pToolPanel, SdResId(RID_CUSTOMANIMATION_START+0));
 
-    AddPanel (nId, PID_CUSTOM_ANIMATION);
+        // CustomAnimationPanel
+        nId = pToolPanel->AddControl (
+            controls::CustomAnimationPanel::CreateControlFactory(rBase),
+            aControl.GetText(),
+            HID_SD_CUSTOM_ANIMATIONS);
+        AddPanel (nId, PID_CUSTOM_ANIMATION);
+    }
 
     // SlideTransitionPanel
-    TreeNode* pSlideTransitionPanel = new controls::SlideTransitionPanel(pToolPanel, rBase );
-    nId = pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pSlideTransitionPanel),
-        pSlideTransitionPanel->GetWindow()->GetText(),
-        HID_SD_SLIDE_TRANSITIONS);
+    {
+        DummyControl aControl (pToolPanel, SdResId(RID_CUSTOMANIMATION_START+3));
 
-    AddPanel (nId, PID_SLIDE_TRANSITION);
+        nId = pToolPanel->AddControl (
+            controls::SlideTransitionPanel::CreateControlFactory(rBase),
+            aControl.GetText(),
+            HID_SD_SLIDE_TRANSITIONS);
+        AddPanel (nId, PID_SLIDE_TRANSITION);
+    }
 
 #ifdef SHOW_COLOR_MENU
     // Test Menu.
-    TestMenu* pTestMenu = new TestMenu (pToolPanel);
     pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pTestMenu),
-        String::CreateFromAscii ("Color Test Menu"));
+        ColorMenu::CreateControlFactory(),
+        String::CreateFromAscii ("Color Test Menu"),
+        0);
 #endif
 
 #ifdef SHOW_TEST_PANEL
     // Test Panel.
-    TestPanel* pTestPanel = new TestPanel (pToolPanel);
     pToolPanel->AddControl (
-        ::std::auto_ptr<TreeNode>(pTestPanel),
-        String::CreateFromAscii ("Test Panel"));
+        TestPanel::CreateControlFactory(),
+        String::CreateFromAscii ("Test Panel"),
+        0);
 #endif
 
-    // Make the first control visible.
+    // Expand the layout menu.
     pToolPanel->GetControlContainer().SetExpansionState (
-        sal_uInt32(0),
+        nIdOfControlToExpand,
         ControlContainer::ES_EXPAND);
 
     pToolPanel->GetWindow()->Show();
