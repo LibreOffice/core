@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-04 13:11:51 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 11:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_TXTATR_HARDBLANK
     // TODO
     // RES_UNKNOWNATR_CONTAINER
-    M_E( "UserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    M_E( "TextUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     M_ED( "ParaIsCharacterDistance", STYLE, TEXT_AUTOSPACE, XML_TYPE_TEXT_AUTOSPACE, 0 ),
     M_ED( "ParaIsHangingPunctuation", STYLE, PUNCTUATION_WRAP, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
     M_ED( "ParaIsForbiddenRules", STYLE, LINE_BREAK, XML_TYPE_TEXT_LINE_BREAK, 0 ),
