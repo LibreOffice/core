@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #ifdef __hpux
 #   define _HPUX_SOURCE
 #endif
@@ -99,7 +98,7 @@ void
     {
         if (comparetokens(def, np->vp)
             || (np->ap == NULL) != (args == NULL)
-            || np->ap && comparetokens(args, np->ap))
+            || (np->ap && comparetokens(args, np->ap)))
         {
             if ( np->loc )
                 error(ERROR,
@@ -479,7 +478,8 @@ int
             parens--;
         if (lp->type == DSHARP)
             lp->type = DSHARP1;         /* ## not special in arg */
-        if (lp->type == COMMA && parens == 0 || parens < 0 && (lp - 1)->type != LP)
+        if ((lp->type == COMMA && parens == 0) ||
+                ( parens < 0 && ((lp - 1)->type != LP)))
         {
             if (*narg >= NARG - 1)
                 error(FATAL, "Sorry, too many macro arguments");
