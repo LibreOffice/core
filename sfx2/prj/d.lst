@@ -1,7 +1,8 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\inc%_EXT%\sfx2
 
-touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
-
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\inc\sfxslots.ilb %_DEST%\inc%_EXT%\sfxslots.ilb
 ..\%__SRC%\inc\sfxslots.ilb* %_DEST%\inc%_EXT%\sfxslots.ilb*
 ..\%__SRC%\lib\sfx.lib %_DEST%\lib%_EXT%\sfx.lib
@@ -18,8 +19,9 @@ touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 ..\%__SRC%\misc\sfx?????.map %_DEST%\bin%_EXT%\sfx?????.map
 ..\%__SRC%\bin\elc?????.dll %_DEST%\bin%_EXT%\elc?????.dll
 ..\%__SRC%\srs\sfx.srs %_DEST%\res%_EXT%\sfx.srs
+..\%COMMON_OUTDIR%\srs\sfx_srs.hid %COMMON_DEST%\res%_EXT%\sfx_srs.hid
 ..\%__SRC%\srs\sfxslots.srs %_DEST%\res%_EXT%\sfxslots.srs
-..\%__SRC%\res\sfx.srs %_DEST%\res%_EXT%\sfx.srs
+..\%COMMON_OUTDIR%\srs\sfxslots_srs.hid %COMMON_DEST%\res%_EXT%\sfxslots_srs.hid
 ..\util\svdbt.dll %_DEST%\bin%_EXT%\svdbt.dll
 ..\util\sfx.xml %_DEST%\xml%_EXT%\sfx.xml
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
