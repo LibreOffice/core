@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:57:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2438,7 +2438,7 @@ void SAL_CALL ScXMLImport::endDocument(void)
                                 if(aSeq[i].Value >>= sName)
                                 {
                                     String sTabName(sName);
-                                    sal_uInt16 nTab(0);
+                                    SCTAB nTab(0);
                                     if (pDoc->GetTable(sTabName, nTab))
                                     {
                                         pDoc->SetVisibleTab(nTab);
