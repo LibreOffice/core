@@ -63,8 +63,8 @@
                     <value xml:lang="en-US">Anchor to Character</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="de">Als Zeichen</value>
-                    <value xml:lang="en-US">As C~haracter</value>
+                    <value xml:lang="de">Am Zeichen</value>
+                    <value xml:lang="en-US">To ~Character</value>
                 </prop>
             </node>
             <node oor:name=".uno:PageOffsetDialog" oor:op="replace">
@@ -508,8 +508,8 @@
                     <value xml:lang="en-US">Anchor as Character</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="de">Am Zeichen</value>
-                    <value xml:lang="en-US">To ~Character</value>
+                    <value xml:lang="de">Als Zeichen</value>
+                    <value xml:lang="en-US">As C~haracter</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
