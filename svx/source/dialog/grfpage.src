@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:32:47 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïðîñìîòð";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËÞ­°";
