@@ -2,9 +2,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "manager.hxx"
 #include "player.hxx"
 
+#include <tools/urlobj.hxx>
+
 #define AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_DirectX"
 #define AVMEDIA_WIN_MANAGER_SERVICENAME "com.sun.star.media.Manager"
 
@@ -85,13 +87,14 @@ Manager::~Manager()
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& aURL )
+uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
     throw (uno::RuntimeException)
 {
-    Player*                              pPlayer( new Player );
+    Player*                             pPlayer( new Player( mxMgr ) );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
+    const INetURLObject                 aURL( rURL );
 
-    if( !pPlayer->create( aURL )  )
+    if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) )  )
         xRet = uno::Reference< media::XPlayer >();
 
     return xRet;
