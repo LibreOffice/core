@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,10 +1185,8 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     Window WN_EXAMPLE
     {
-//        Pos = MAP_APPFONT ( 185 , 7 ) ;
-//        Size = MAP_APPFONT ( 68 , 112 ) ;
         Pos = MAP_APPFONT ( 185 , 7 ) ;
-        Size = MAP_APPFONT ( 56 , 128 ) ;
+        Size = MAP_APPFONT ( 68 , 112 ) ;
     };
     FixedLine FL_VERTALIGN
     {

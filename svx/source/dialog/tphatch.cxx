@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,16 +137,13 @@ SvxHatchTabPage::SvxHatchTabPage
     aMtrAngle           ( this, ResId( MTR_FLD_ANGLE ) ),
     aCtlAngle           ( this, ResId( CTL_ANGLE ),
                                     RP_RB, 200, 80, CS_ANGLE ),
-    aGrpDefinition      ( this, ResId( GRP_DEFINITION ) ),
+    aFlProp             ( this, ResId( FL_PROP ) ),
     aFtLineType         ( this, ResId( FT_LINE_TYPE ) ),
     aLbLineType         ( this, ResId( LB_LINE_TYPE ) ),
     aFtLineColor        ( this, ResId( FT_LINE_COLOR ) ),
     aLbLineColor        ( this, ResId( LB_LINE_COLOR ) ),
-    aGrpLine            ( this, ResId( GRP_LINE ) ),
     aLbHatchings        ( this, ResId( LB_HATCHINGS ) ),
-    aGrpHatchings       ( this, ResId( GRP_HATCHINGS ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     aBtnAdd             ( this, ResId( BTN_ADD ) ),
     aBtnModify          ( this, ResId( BTN_MODIFY ) ),
     aBtnDelete          ( this, ResId( BTN_DELETE ) ),
@@ -182,9 +179,10 @@ SvxHatchTabPage::SvxHatchTabPage
     rXFSet.Put( aXHatchItem );
     XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
-    // Setzen der Linie auf None im OutputDevice
+    // Set line at the OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
+    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
+    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aLbHatchings.SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
@@ -268,8 +266,6 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             }
             else
                 aString += aURL.getBase();
-
-            aGrpHatchings.SetText( aString );
 
             if( *pPageType == PT_HATCH && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -811,8 +807,6 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
                     else
                         aString += aURL.getBase();
 
-                    aGrpHatchings.SetText( aString );
-
                     // Flag fuer gewechselt setzen
                     *pnHatchingListState |= CT_CHANGED;
                     // Flag fuer modifiziert entfernen
@@ -889,8 +883,6 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
             }
             else
                 aString += aURL.getBase();
-
-            aGrpHatchings.SetText( aString );
 
             // Flag fuer gespeichert setzen
             *pnHatchingListState |= CT_SAVED;

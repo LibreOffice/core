@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 14:21:57 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,6 +1859,11 @@ void SvxXShadowPreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
 void SvxXShadowPreview::Paint( const Rectangle& rRect )
 {
+    SetFillColor( Color( COL_WHITE ) );
+    SetLineColor(Color( COL_BLACK) );
+    pXOutDev->DrawRect( rRect );
+    SetLineColor();
+
     aShadow.SetPos( aShadowPos + Point( aRect.GetWidth(), aRect.GetHeight() ) );
     if ( pShadowItem )
         pXOutDev->SetFillAttr( pShadowItem->GetItemSet() );

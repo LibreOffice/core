@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     FixedLine FL_TABPOS_VERT
     {
-        Pos = MAP_APPFONT ( 63 , 14 ) ;
+        Pos = MAP_APPFONT ( 64 , 14 ) ;
         Size = MAP_APPFONT ( 4 , 101 ) ;
     };
     RadioButton BTN_TABTYPE_LEFT
@@ -330,7 +330,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     FixedLine FL_TABTYPE_VERT
     {
-        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Pos = MAP_APPFONT ( 131 , 14 ) ;
         Size = MAP_APPFONT ( 4  , 101) ;
     };
     RadioButton BTN_FILLCHAR_NO

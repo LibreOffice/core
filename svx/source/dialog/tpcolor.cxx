@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 11:03:29 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ SvxColorTabPage::SvxColorTabPage
     aXFStyleItem        ( XFILL_SOLID ),
     aXFillColorItem     ( String(), Color( COL_BLACK ) ),
 
+    aFlProp             ( this, ResId( FL_PROP ) ),
     aValSetColorTable   ( this, ResId( CTL_COLORTABLE ) ),
 //    aGrpColorTable      ( this, ResId( GRP_COLORTABLE ) ),
     aTableNameFT        ( this, ResId( FT_TABLE_NAME ) ),

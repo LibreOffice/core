@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,9 @@ SvxGradientTabPage::SvxGradientTabPage
     aFtColorTo          ( this, ResId( FT_COLOR_TO ) ),
     aMtrColorTo         ( this, ResId( MTR_COLOR_TO ) ),
     aLbColorTo          ( this, ResId( LB_COLOR_TO ) ),
-    aGrpColor           ( this, ResId( GRP_COLOR ) ),
     aLbGradients        ( this, ResId( LB_GRADIENTS ) ),
-    aGrpGradients       ( this, ResId( GRP_GRADIENTS ) ),
+    aFlProp             ( this, ResId( FL_PROP ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     aBtnAdd             ( this, ResId( BTN_ADD ) ),
     aBtnModify          ( this, ResId( BTN_MODIFY ) ),
     aBtnDelete          ( this, ResId( BTN_DELETE ) ),
@@ -175,9 +173,10 @@ SvxGradientTabPage::SvxGradientTabPage
     rXFSet.Put( aXGradientItem );
     XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
-    // Setzen der Linie auf None im OutputDevice
+    // Set line at the OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
+    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
+    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // Handler ueberladen
@@ -283,8 +282,6 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
             }
             else
                 aString += aURL.getBase();
-
-            aGrpGradients.SetText( aString );
 
             if ( *pPageType == PT_GRADIENT && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -758,9 +755,6 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
                     else
                         aString += aURL.getBase();
 
-                    aGrpGradients.SetText( aString );
-
-
                     // Flag fuer gewechselt setzen
                     *pnGradientListState |= CT_CHANGED;
                     // Flag fuer modifiziert entfernen
@@ -843,8 +837,6 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
             }
             else
                 aString += aURL.getBase();
-
-            aGrpGradients.SetText( aString );
 
             // Flag fuer gespeichert setzen
             *pnGradientListState |= CT_SAVED;

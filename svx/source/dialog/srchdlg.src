@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:28:19 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,11 +227,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Sort = TRUE ;
     };
-    GroupBox GB_SEARCH_ATTR
-    {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
-        Size = MAP_APPFONT ( 179 , 24 ) ;
-    };
     FixedText FT_SEARCH_ATTR
     {
         Pos = MAP_APPFONT ( 10 , 26 ) ;
@@ -292,11 +287,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         DropDown = TRUE ;
         Hide = TRUE ;
         Sort = TRUE ;
-    };
-    GroupBox GB_REPLACE_ATTR
-    {
-        Pos = MAP_APPFONT ( 6 , 62 ) ;
-        Size = MAP_APPFONT ( 179 , 24 ) ;
     };
     FixedText FT_REPLACE_ATTR
     {
@@ -592,10 +582,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text = "..." ;
         TabStop = TRUE ;
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 91 ) ;
-        Size = MAP_APPFONT ( 290 , 55 ) ;
+        Size = MAP_APPFONT ( 290 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -711,10 +701,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Not~as";
     };
-    GroupBox GB_SEARCH
+    FixedLine FL_SEARCH
     {
         Pos = MAP_APPFONT ( 6 , 152 ) ;
-        Size = MAP_APPFONT ( 86 , 54 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
         Text = "Suchen in" ;
         Text [ ENGLISH ] = "Search In" ;
         Text [ norwegian ] = "Søk i" ;
@@ -740,6 +730,11 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "Bakýlacak yerler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar en";
+    };
+    FixedLine FL_SEARCHDIR_VERT
+    {
+        Pos = MAP_APPFONT ( 93, 163 ) ;
+        Size = MAP_APPFONT ( 4,  43 ) ;
     };
     RadioButton BTN_ROWS
     {
@@ -801,10 +796,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Por columna~s";
     };
-    GroupBox GB_SEARCHDIR
+    FixedLine FL_SEARCHDIR
     {
         Pos = MAP_APPFONT ( 98 , 152 ) ;
-        Size = MAP_APPFONT ( 87 , 54 ) ;
+        Size = MAP_APPFONT ( 87 , 8 ) ;
         Text = "Suchrichtung" ;
         Text [ ENGLISH ] = "Search Direction" ;
         Text [ norwegian ] = "Søk Retning" ;
@@ -830,6 +825,11 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "Arama yönü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dirección de búsqueda";
+    };
+    FixedLine FL_SEARCH_VERT
+    {
+        Pos = MAP_APPFONT ( 186, 163 ) ;
+        Size = MAP_APPFONT ( 4,  43 ) ;
     };
     CheckBox CB_ALLTABLES
     {
@@ -860,10 +860,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ catalan ] = "~Buscar en todas las hojas";
         Text[ finnish ] = "~Etsi kaikista lomakkeista";
     };
-    GroupBox GB_CALCEXTRAS
+    FixedLine FL_CALCEXTRAS
     {
         Pos = MAP_APPFONT ( 191 , 152 ) ;
-        Size = MAP_APPFONT ( 105 , 54 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "Extras" ;
         Text [ ENGLISH ] = "Extras" ;
         Hide = TRUE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
     };
     Control VS_VALUES
     {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 167 ) ;
         TabStop = TRUE ;
     };
@@ -150,7 +150,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
     };
     Control VS_VALUES
     {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 167 ) ;
         TabStop = TRUE ;
     };
@@ -196,7 +196,7 @@ TabPage RID_SVXPAGE_PICK_NUM
     };
     Control VS_VALUES
     {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 167 ) ;
         TabStop = TRUE ;
     };
@@ -242,7 +242,7 @@ TabPage RID_SVXPAGE_PICK_BMP
     };
     Control VS_VALUES
     {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 152 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -251,7 +251,7 @@ TabPage RID_SVXPAGE_PICK_BMP
     {
         Text = "Grafiken ~verknüpfen" ;
         Text [ ENGLISH ] = "~Link bitmaps" ;
-        Pos = MAP_APPFONT ( 9 , 167 ) ;
+        Pos = MAP_APPFONT ( 9 , 169 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text[ english_us ] = "~Link graphics";
@@ -278,7 +278,7 @@ TabPage RID_SVXPAGE_PICK_BMP
     };
     FixedText FT_ERROR
     {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 30 ) ;
         Text = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden." ;
         Text [ English ] = "Thera are no bitmaps in the Gallery theme 'Bullets'." ;

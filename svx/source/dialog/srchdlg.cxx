@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-04-18 09:08:05 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,14 +365,12 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     aSearchTmplLB   ( this, ResId( LB_SEARCH ) ),
     aSearchAttrText ( this, ResId( FT_SEARCH_ATTR ) ),
     aSearchFormatsED( this, ResId( ED_SEARCH_FORMATS ) ),
-    aSearchAttrBox  ( this, ResId( GB_SEARCH_ATTR ) ),
 
     aReplaceText    ( this, ResId( FT_REPLACE ) ),
     aReplaceLB      ( this, ResId( ED_REPLACE ) ),
     aReplaceTmplLB  ( this, ResId( LB_REPLACE ) ),
     aReplaceAttrText( this, ResId( FT_REPLACE_ATTR ) ),
     aReplaceFormatsED( this, ResId( ED_REPLACE_FORMATS ) ),
-    aReplaceAttrBox ( this, ResId( GB_REPLACE_ATTR ) ),
 
     aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),
     aSearchBtn      ( this, ResId( BTN_SEARCH ) ),
@@ -396,19 +394,21 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),
     aJapOptionsCB   ( this, ResId( CB_JAP_SOUNDS_LIKE ) ),
     aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),
-    aOptionsBox     ( this, ResId( GB_OPTIONS ) ),
+    aOptionsFL      ( this, ResId( FL_OPTIONS ) ),
 
     aFormulasBtn    ( this, ResId( BTN_FORMULAS ) ),
     aValuesBtn      ( this, ResId( BTN_VALUES ) ),
     aNotesBtn       ( this, ResId( BTN_NOTES ) ),
-    aSearchBox      ( this, ResId( GB_SEARCH ) ),
+    aSearchFL       ( this, ResId( FL_SEARCH ) ),
+    aSearchVertFL   ( this, ResId( FL_SEARCH_VERT ) ),
 
     aRowsBtn        ( this, ResId( BTN_ROWS ) ),
     aColumnsBtn     ( this, ResId( BTN_COLUMNS ) ),
-    aSearchDirBox   ( this, ResId( GB_SEARCHDIR ) ),
+    aSearchDirFL    ( this, ResId( FL_SEARCHDIR ) ),
+    aSearchDirVertFL ( this, ResId( FL_SEARCHDIR_VERT ) ),
 
     aAllTablesCB    ( this, ResId( CB_ALLTABLES ) ),
-    aCalcExtrasBox  ( this, ResId( GB_CALCEXTRAS ) ),
+    aCalcExtrasFL   ( this, ResId( FL_CALCEXTRAS ) ),
 
     aCalcStr        (       ResId( STR_WORDCALC ) ),
 
@@ -435,6 +435,9 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     nTransliterationFlags   ( 0x00000000 )
 
 {
+    aSearchVertFL.SetStyle( aSearchVertFL.GetStyle() | WB_VERT );
+    aSearchDirVertFL.SetStyle( aSearchDirVertFL.GetStyle() | WB_VERT );
+
     Wallpaper aBackground = GetBackground();
     aSearchFormatsED.SetBackground( aBackground );
     aReplaceFormatsED.SetBackground( aBackground );
@@ -765,12 +768,14 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         pMoreBtn->AddWindow( &aFormulasBtn );
         pMoreBtn->AddWindow( &aNotesBtn );
         pMoreBtn->AddWindow( &aValuesBtn );
-        pMoreBtn->AddWindow( &aSearchBox );
+        pMoreBtn->AddWindow( &aSearchFL );
+        pMoreBtn->AddWindow( &aSearchVertFL );
         pMoreBtn->AddWindow( &aRowsBtn );
         pMoreBtn->AddWindow( &aColumnsBtn );
-        pMoreBtn->AddWindow( &aSearchDirBox );
+        pMoreBtn->AddWindow( &aSearchDirFL );
+        pMoreBtn->AddWindow( &aSearchDirVertFL );
         pMoreBtn->AddWindow( &aAllTablesCB );
-        pMoreBtn->AddWindow( &aCalcExtrasBox );
+        pMoreBtn->AddWindow( &aCalcExtrasFL );
         pMoreBtn->Show();
         pMoreBtn->Enable();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-18 13:08:21 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,16 +143,14 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aXBitmapItem        ( String(), XOBitmap() ),
 
     aCtlPixel           ( this, ResId( CTL_PIXEL ) ),
-    aGrpPixelEdit       ( this, ResId( GRP_PIXEL_EDIT ) ),
+    aFtPixelEdit        ( this, ResId( FT_PIXEL_EDIT ) ),
     aFtColor            ( this, ResId( FT_COLOR ) ),
     aLbColor            ( this, ResId( LB_COLOR ) ),
     aFtBackgroundColor  ( this, ResId( FT_BACKGROUND_COLOR ) ),
     aLbBackgroundColor  ( this, ResId( LB_BACKGROUND_COLOR ) ),
-    aGrpColor           ( this, ResId( GRP_COLOR ) ),
     aLbBitmaps          ( this, ResId( LB_BITMAPS ) ),
-    aGrpBitmaps         ( this, ResId( GRP_BITMAPS ) ),
+    aFlProp             ( this, ResId( FL_PROP ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     aBtnAdd             ( this, ResId( BTN_ADD ) ),
     aBtnImport          ( this, ResId( BTN_IMPORT ) ),
     aBtnModify          ( this, ResId( BTN_MODIFY ) ),
@@ -173,9 +171,10 @@ SvxBitmapTabPage::SvxBitmapTabPage
     rXFSet.Put( aXBitmapItem );
     //XOut.SetFillAttr( aXFillAttr );
 
-    // Setzen der Linie auf None im OutputDevice
+    // Set line at the OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
+    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
+    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aBtnAdd.SetClickHdl( LINK( this, SvxBitmapTabPage, ClickAddHdl_Impl ) );
@@ -274,8 +273,6 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
             }
             else
                 aString += aURL.getBase();
-
-            aGrpBitmaps.SetText( aString );
 
             if( *pPageType == PT_BITMAP && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -522,10 +519,9 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
             aCtlPixel.Reset();
             aCtlPixel.SetPaintable( FALSE );
             aCtlPixel.Disable();
-            aGrpPixelEdit.Disable();
+            aFtPixelEdit.Disable();
             aFtColor.Disable();
             aLbColor.Disable();
-            aGrpColor.Disable();
             aFtBackgroundColor.Disable();
             aLbBackgroundColor.Disable();
             aBtnModify.Disable();
@@ -535,10 +531,9 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
         {
             aCtlPixel.SetPaintable( TRUE );
             aCtlPixel.Enable();
-            aGrpPixelEdit.Enable();
+            aFtPixelEdit.Enable();
             aFtColor.Enable();
             aLbColor.Enable();
-            aGrpColor.Enable();
             aFtBackgroundColor.Enable();
             aLbBackgroundColor.Enable();
             aBtnModify.Enable();
@@ -1043,8 +1038,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, p )
                     else
                         aString += aURL.getBase();
 
-                    aGrpBitmaps.SetText( aString );
-
                     // Flag fuer gewechselt setzen
                     *pnBitmapListState |= CT_CHANGED;
                     // Flag fuer modifiziert entfernen
@@ -1126,8 +1119,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
             }
             else
                 aString += aURL.getBase();
-
-            aGrpBitmaps.SetText( aString );
 
             // Flag fuer gespeichert setzen
             *pnBitmapListState |= CT_SAVED;

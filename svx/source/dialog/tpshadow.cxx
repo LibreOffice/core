@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #define _SVX_TPSHADOW_CXX
 
+#include "xattr.hxx"
 #include "xpool.hxx"
 #include "dialogs.hrc"
 #include "tabarea.hrc"
@@ -119,6 +120,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() ),
 
+    aFlProp             ( this, ResId( FL_PROP ) ),
     aFtPosition         ( this, ResId( FT_POSITION ) ),
     aCtlPosition        ( this, ResId( CTL_POSITION ),
                                     RP_RM, 200, 80, CS_SHADOW ),
@@ -129,10 +131,8 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
     aMtrTransparent      ( this, ResId( MTR_SHADOW_TRANSPARENT ) ),
     aTsbShowShadow      ( this, ResId( TSB_SHOW_SHADOW ) ),
-    aGrpShadow          ( this, ResId( GRP_SHADOW ) ),
     aCtlXRectPreview    ( this, ResId( CTL_COLOR_PREVIEW ), &XOut,
                                     (XOutdevItemPool*) rInAttrs.GetPool() ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     rOutAttrs           ( rInAttrs ),
     bDisable            ( FALSE )
 
@@ -216,9 +216,10 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aCtlXRectPreview.SetRectAttr( &aXFillAttr );
     //XOut.SetFillAttr( aXFillAttr );
 
-    // Setzen der Linie auf None im OutputDevice
+    // Set line at the OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
+    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
+    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aTsbShowShadow.SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
