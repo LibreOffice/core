@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:36:57 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ italian ] = "I modelli del documento non corrispondono ai modelli attuali.\nApplicare i modelli attuali al documento?";
     MESSAGE[ danish ] = "Dette dokuments formattypografi svarer ikke til din aktuelle skabelon. Skal den aktuelle skabelon anvendes pе dette dokument?";
     MESSAGE[ swedish ] = "Det hдr dokumentets formatmall stдmmer inte цverens med den aktuella mallen. Skall Din aktuella mall anvдndas i det hдr dokumentet?";
-    MESSAGE[ polish ] = "Style formatu w tym dokumencie nie zgadzajє siк z aktualnymi szablonami.\nCzy zastosowaж twoje aktualne szablony do tego dokumentu?";
+    MESSAGE[ polish ] = "Style uњyte w tym dokumencie nie zgadzajє siк z aktualnymi stylami.\nCzy zastosowaж w dokumencie aktualne style?";
     MESSAGE[ portuguese_brazilian ] = "O modelo do documento foi modificado.\nDeseja atualizar o modelo no documento?";
     MESSAGE[ japanese ] = "В±ВћƒёЈ≠“ЁƒВћПСОЃљј≤ўВЌМїНЁВћљј≤ўВ∆ИкТvВµВ№ВєВсБB\nМїНЁВћљј≤ўВрВ±ВћƒёЈ≠“ЁƒВ…УKЧpВµВ№ВЈВ©БH";
     MESSAGE[ chinese_simplified ] = "’вЄцќƒµµµƒЄс љ—щ љ“—Њ≠±їЄьЄƒ°£\nƒъ“™”√µ±«∞µƒ–¬—щ љјіЄ≤–і’вЄцќƒµµ¬р£њ";
@@ -202,7 +202,7 @@ String STR_DELETE_TEMPLATE
     Text[ arabic ] = "еб  —нѕ »«бЁЏб Ќ–Ё «б≈ѕќ«б \"$1\"њ";
     Text[ dutch ] = "Wilt u item \"$1\" wissen?";
     Text[ chinese_simplified ] = "“™…Њ≥эћхƒњ°∞ $1°± £њ";
-    Text[ greek ] = "»Ёлефе рсбгмбфйк№ нб дйбгсбцея з еггсбцё $1;";
+    Text[ greek ] = "»Ёлефе рсбгмбфйк№ нб дйбгсбцея з кбфбчюсйуз $1;";
     Text[ korean ] = "«„Єс$1јї їиЅ¶«ѕљ√∞Џљјіѕ±о?";
     Text[ turkish ] = "\"$1\" giriюi silinsin mi?";
     Text[ language_user1 ] = " ";
@@ -255,7 +255,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ chinese_simplified ] = "ќƒµµ°∞$(DOC)°±“—Њ≠±ї–ёЄƒ°£\nƒъ“™іж≈ћ’в–©ЄьЄƒ¬р£њ";
     Text[ russian ] = "ƒокумент '$(DOC)' изменен.\n—охранить эти изменени€?";
     Text[ polish ] = "Zmieniono dokument \"$(DOC)\".\nCzy zapisaж zmiany?";
-    Text[ japanese ] = "ƒёЈ≠“Ёƒ\"$(DOC)\"ВЌХѕНXВ≥ВкВƒВҐВ№ВЈБB\nХѕНXВрХџСґВµВ№ВЈВ©?";
+    Text[ japanese ] = "\"$(DOC)\" ƒёЈ≠“ЁƒВЌХѕНXВ≥ВкВƒВҐВ№ВЈБB\nХѕНXВрХџСґВµВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "≥o≠”§е•у°І$(DOC)°®§wЄg≈№Іу°C\n≠nјx¶s≥o®«≈№Іу°H";
     Text[ arabic ] = " г  џнн— «бг” дѕ \"$(DOC)\".\nеб  —нѕ ЌЁў «б џнн—« њ";
     Text[ dutch ] = "Het document \"$(DOC)\" is gewijzigd.\nWilt u uw wijzigingen opslaan?";
@@ -1030,7 +1030,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ chinese_simplified ] = "’вЄцќƒµµњ…ƒ№Їђ”–“ї–©ќёЈ®”√ $(FORMAT) Єс љіж≈ћµƒЄс љЇЌ–≈ѕҐ°£\nƒъ“™ є”√ $(OWNFORMAT) Єс љіж≈ћќƒµµµƒЄьЄƒ¬р£њ";
     Text[ russian ] = "¬озможно, что в этом документе содержатс€ форматировани€ и информаци€, которые невозможно сохранить в формате $(FORMAT). ¬ы хотите сохранить изменени€ в\nформате$(OWNFORMAT)?";
     Text[ polish ] = "Dokument ten moњe zawieraж formatowania\ni informacje, ktуrych nie bкdzie moњna zapisaж\nw formacie $(FORMAT). Czy chcesz zapisaж\nzmiany w formacie $(OWNFORMAT)?";
-    Text[ japanese ] = "В±ВћƒёЈ≠“ЁƒВЌ $(FORMAT) ПСОЃВ≈ХџСґВ≈ВЂВ»ВҐПСОЃРЁТиВ∆ПоХсВр\nК№ВсВ≈ВҐВ№ВЈБBХѕНXВр\n$(OWNFORMAT) ПСОЃВ…ХџСґВµВ№ВЈВ©?";
+    Text[ japanese ] = "В±ВћƒёЈ≠“ЁƒВЌ $(FORMAT) ПСОЃВ≈ХџСґВ≈ВЂВ»ВҐПСОЃРЁТиВ∆ПоХсВр\nК№ВсВ≈ВҐВ№ВЈБBХѕНXВр\n$(OWNFORMAT) ПСОЃВ…ХџСґВµВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "≥o≠”§е•у•iѓаІt¶≥§@®«µL™k•ќ $(FORMAT) Ѓж¶°јx¶s™ЇЃж¶°°C\n±z≠n®ѕ•ќ $(OWNFORMAT) Ѓж¶°јx¶s§е•у™Ї≈№Іу°H";
     Text[ arabic ] = "гд «бггяд √д «б д”нё«  ж«бгЏбжг« ° «б н нЌ жн Џбне« е–« «бг” дѕ°\nџн— ё«»б… ббЌЁў »«б д”нё $(FORMAT). еб  —нѕ ЌЁў «б џнн—« \n»«б д”нё $(OWNFORMAT)њ";
     Text[ dutch ] = "Dit document kan opmaakattributen en gegevens \nbevatten die niet in $(FORMAT) formaat opgeslagen\nkunnen worden. Wilt u deze wijzigingen in\n$(OWNFORMAT) formaat opslaan?";
@@ -1054,9 +1054,9 @@ String STR_QUERY_MUSTOWNFORMAT
     Text [ portuguese_brazilian ] = "Dokumente kцnnen nicht im $(FORMAT) Format gespeichert\nwerden. Mцchten Sie das Dokument im $(OWNFORMAT) Format\nspeichern?" ;
     Text [ portuguese ] = "Impossнvel guardar documentos no formato $(FORMAT).\nDeseja guardar o documento no formato $(OWNFORMAT)?" ;
     Text[ chinese_simplified ] = "ќёЈ®”√ $(FORMAT) Єс љіж≈ћќƒµµ°£\nƒъ“™ є”√ $(OWNFORMAT) Єс љіж≈ћ¬р£њ";
-    Text[ russian ] = "—охранить документы в формате $(FORMAT) не удаетс€.\n ¬ы хотите сохранить этот документ в\nформате $(OWNFORMAT)?";
+    Text[ russian ] = "—охранить документы в формате $(FORMAT) не удаетс€.\n¬ы хотите сохранить этот документ в\nформате $(OWNFORMAT)?";
     Text[ polish ] = "Nie moњna zapisaж dokumentуw w formacie $(FORMAT).\nCzy chcesz zapisaж dokument\nw formacie $(OWNFORMAT) ?";
-    Text[ japanese ] = "ƒёЈ≠“ЁƒВЌ $(FORMAT) ПСОЃВ…\nХџСґВ≈ВЂВ№ВєВсВ≈ВµВљБBƒёЈ≠“ЁƒВр $(OWNFORMAT) ПСОЃВ…\nХџСґВµВ№ВЈВ©БH";
+    Text[ japanese ] = "ƒёЈ≠“ЁƒВЌ $(FORMAT) ПСОЃВ…\nХџСґВ≈ВЂВ№ВєВсВ≈ВµВљБBƒёЈ≠“ЁƒВр $(OWNFORMAT) ПСОЃВ…\nХџСґВµВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "µL™k•ќ $(FORMAT) Ѓж¶°јx¶s§е•у°C\n±z≠n®ѕ•ќ $(OWNFORMAT) Ѓж¶°јx¶s°H";
     Text[ arabic ] = "б« нгяд ЌЁў «бг” дѕ«  »«б д”нё $(FORMAT).\nеб  —нѕ ЌЁў «бг” дѕ »«б д”нё\n$(OWNFORMAT)";
     Text[ dutch ] = "Documenten kunnen niet in $(FORMAT) formaat worden \nopgeslagen. Wilt u het document in $(OWNFORMAT) formaat\nopslaan?";
@@ -1595,7 +1595,7 @@ String STR_FSET_FILTERNAME0
     Text [ portuguese ] = "HTML (FrameSet)" ;
     Text[ chinese_simplified ] = "HTML (њтЉ№)";
     Text[ russian ] = "HTML (Ќабор кадров)";
-    Text[ polish ] = "HTML (Zestaw ramek)";
+    Text[ polish ] = "HTML (FrameSet)";
     Text[ japanese ] = "HTML(ћЏ∞—Њѓƒ)";
     Text[ chinese_traditional ] = "HTML (∞TЃЎђ[)";
     Text[ arabic ] = "HTML (FrameSet)";
