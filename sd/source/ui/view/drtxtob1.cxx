@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:48:08 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "TextObjectBar.hxx"
 
 #define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
 
@@ -155,13 +157,24 @@
 #include "app.hrc"
 
 #include "eetext.hxx"
-#include "viewshel.hxx"
-#include "drtxtob.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "outlview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
+#endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -169,7 +182,7 @@
 |*
 \************************************************************************/
 
-void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
+void TextObjectBar::Execute( SfxRequest &rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pPoolItem = NULL;
@@ -177,10 +190,11 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
     BOOL bOutlineMode = FALSE;
     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
-    if (pView->ISA(SdOutlineView))
+    if (pView->ISA(OutlineView))
     {
         bOutlineMode = TRUE;
-        pOLV = ((SdOutlineView*) pView)->GetViewByWindow(pViewShell->GetActiveWindow());
+        pOLV = static_cast<OutlineView*>(pView)
+            ->GetViewByWindow(pViewShell->GetActiveWindow());
     }
 
     switch (nSlot)
@@ -190,9 +204,11 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             if( pArgs )
             {
                 SdDrawDocument* pDoc = pView->GetDoc();
+                OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
                 FuPoor* pFuActual = new FuTemplate( pViewShell,
-                                    (SdWindow*) pViewShell->GetWindow(),
-                                    pView, pDoc, rReq );
+                    static_cast< ::sd::Window*>(
+                        pViewShell->GetViewShell()->GetWindow()),
+                    pView, pDoc, rReq );
 
                 if (pFuActual)
                 {
@@ -621,3 +637,4 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
     Invalidate( SID_OUTLINE_DOWN );
 }
 
+} // end of namespace sd
