@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:16:05 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,8 +706,24 @@ public class TestComponent {
             throw new com.sun.star.uno.RuntimeException(rMsg, xContext);
         }
 
-        public int getRuntimeException() throws com.sun.star.uno.RuntimeException {
-            throw new com.sun.star.uno.RuntimeException(_string, _xInterface);
+        private void dothrow( com.sun.star.uno.RuntimeException t )
+            throws com.sun.star.uno.RuntimeException
+        {
+            throw t;
+        }
+        public int getRuntimeException()
+            throws com.sun.star.uno.RuntimeException
+        {
+            try
+            {
+                dothrow( new com.sun.star.uno.RuntimeException(
+                             _string, _xInterface ) );
+                return 0; // dummy
+            }
+            catch (com.sun.star.uno.RuntimeException t)
+            {
+                throw t;
+            }
         }
 
         public void setRuntimeException(int _runtimeexception) throws com.sun.star.uno.RuntimeException {
