@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:51:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String RID_SVXTBX_FORM_FILTER
     Text[ turkish ] = "Filtre çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de filtros";
+    Text[ finnish ] = "Suodatinpalkki";
 };
 
  //------------------------------------------------------------------------
@@ -149,6 +150,7 @@ ToolBox RID_SVXTBX_FORM_FILTER
     Text[ turkish ] = "Filtre çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de filtros";
+    Text[ finnish ] = "Suodatinpalkki";
 };
 
 String RID_SVXTBX_FORM_NAVIGATION
@@ -175,6 +177,7 @@ String RID_SVXTBX_FORM_NAVIGATION
     Text[ turkish ] = "Veritabaný çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de base de datos";
+    Text[ finnish ] = "Tietokantapalkki";
 };
 
  //------------------------------------------------------------------------
@@ -329,6 +332,7 @@ ToolBox RID_SVXTBX_FORM_NAVIGATION
     Text[ turkish ] = "Veritabaný çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de base de datos";
+    Text[ finnish ] = "Tietokantapalkki";
 };
 
  //------------------------------------------------------------------------
@@ -549,6 +553,7 @@ FloatingWindow RID_SVXTBX_FORM
     Text[ turkish ] = "Form iþlevleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciones formulario";
+    Text[ finnish ] = "Lomakkeen funktiot";
 };
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO
@@ -599,6 +604,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ arabic ] = "ÇáÇäÊÞÇá Åáì ÇáÓÌá";
         Text[ turkish ] = "Veri kümesine git";
         Text[ catalan ] = "ir a registro";
+        Text[ finnish ] = "siirry tietueeseen";
     };
     NumericField 1
     {
@@ -626,5 +632,6 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ arabic ] = "ÑÞã ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi no.";
     Text[ catalan ] = "Número de registro";
+    Text[ finnish ] = "Tietueen numero";
 };
 
