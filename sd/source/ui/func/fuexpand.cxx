@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:12:37 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuexpand.hxx"
+
 #ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
 #endif
@@ -83,15 +85,22 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "fuexpand.hxx"
 #include "pres.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdpage.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "viewshel.hxx"
-#include "docshell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#include "DrawDocShell.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
 #include "sdmod.hxx"
@@ -103,6 +112,8 @@
 #include <svx/eeitem.hxx>
 #endif
 
+namespace sd {
+
 TYPEINIT1( FuExpandPage, FuPoor );
 
 /*************************************************************************
@@ -111,9 +122,13 @@ TYPEINIT1( FuExpandPage, FuPoor );
 |*
 \************************************************************************/
 
-FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuExpandPage::FuExpandPage (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     // Selektierte Seite finden (nur Standard-Seiten)
     SdPage* pActualPage = NULL;
@@ -132,7 +147,8 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
     if (pActualPage)
     {
-        SdOutliner* pOutl = new SdOutliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
+        ::sd::Outliner* pOutl =
+              new ::sd::Outliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
         pOutl->SetUpdateMode(FALSE);
         pOutl->EnableUndo(FALSE);
 
@@ -266,7 +282,9 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         ULONG nPara;
                         for( nPara = 0; nPara < nParaCount; nPara++ )
                         {
-                            pTempOutl->SetDepth( pTempOutl->GetParagraph( nPara ), pTempOutl->GetDepth( nPara ) - 1 );
+                            pTempOutl->SetDepth (
+                                pTempOutl->GetParagraph( nPara ),
+                                pTempOutl->GetDepth((USHORT) nPara ) - 1);
                         }
 
                         delete pOutlinerParaObject;
@@ -297,3 +315,4 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     }
 }
 
+} // end of namespace sd
