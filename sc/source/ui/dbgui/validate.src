@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:34:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,7 @@ TabDialog TAB_DLG_VALIDATION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Gültigkeit" ;
-    Text [ ENGLISH ] = "Validation" ;
+    Text [ de ] = "Gültigkeit" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -80,133 +79,26 @@ TabDialog TAB_DLG_VALIDATION
             {
                 Identifier = TP_VALIDATION_VALUES ;
                 PageResID = TP_VALIDATION_VALUES ;
-                Text = "Kriterien" ;
-                Text [ ENGLISH ] = "Criteria" ;
-                Text[ english_us ] = "Criteria";
-                Text[ portuguese ] = "Critérios";
-                Text[ russian ] = "Êğèòåğèé";
-                Text[ greek ] = "ÊñéôŞñéá";
-                Text[ dutch ] = "Criteria";
-                Text[ french ] = "Critères";
-                Text[ spanish ] = "Criterios";
-                Text[ finnish ] = "Ehto";
-                Text[ italian ] = "Criteri";
-                Text[ danish ] = "Kriterier";
-                Text[ swedish ] = "Kriterier";
-                Text[ polish ] = "Kryteria";
-                Text[ portuguese_brazilian ] = "Critérios";
-                Text[ japanese ] = "æ¡ä»¶";
-                Text[ korean ] = "ê¸°ì¤€";
-                Text[ chinese_simplified ] = "æ¡ä»¶";
-                Text[ chinese_traditional ] = "æ¢ä»¶";
-                Text[ turkish ] = "Kriterler";
-                Text[ arabic ] = "ÇáŞíã";
-                Text[ catalan ] = "Valors";
-                Text[ thai ] = "à¸„à¹ˆà¸²";
-                Text[ czech ] = "PodmÃ­nky";
-                Text[ hebrew ] = "Kriterien";
-                Text[ hindi ] = "à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤";
-                Text[ slovak ] = "KritÃ©rium";
-                Text[ hungarian ] = "FeltÃ©telek";
-                Text[ slovenian ] = "Pogoji";
+                Text [ de ] = "Kriterien" ;
+                Text [ en-US ] = "Criteria";
             };
             PageItem
             {
                 Identifier = TP_VALIDATION_INPUTHELP ;
                 PageResID = TP_VALIDATION_INPUTHELP ;
-                Text = "Eingabehilfe" ;
-                Text [ ENGLISH ] = "Input help" ;
-                Text [ english_us ] = "Input Help" ;
-                Text [ swedish ] = "Inmatningshjälp" ;
-                Text [ danish ] = "Inputhjælp" ;
-                Text [ italian ] = "Aiuto per la digitazione" ;
-                Text [ spanish ] = "Ayuda de entrada" ;
-                Text [ french ] = "Aide à la saisie" ;
-                Text [ dutch ] = "Invoerhulp" ;
-                Text [ portuguese ] = "Ajuda de entrada" ;
-                Text [ portuguese_brazilian ] = "Ajuda de Entrada" ;
-                Text[ chinese_simplified ] = "è¾“å…¥å¸®åŠ©";
-                Text[ russian ] = "Ïîìîùü ïğè ââîäå";
-                Text[ polish ] = "Pomoc przy wprowadzaniu";
-                Text[ japanese ] = "å…¥åŠ›æ™‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "è¼¸å…¥èªªæ˜";
-                Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
-                Text[ greek ] = "ÂïŞèåéá åéóáãùãŞò";
-                Text[ korean ] = "ë„ì›€ë§ ì‚½ì…";
-                Text[ turkish ] = "Giriş yardımı";
-                Text[ catalan ] = "Ajuda de l'entrada";
-                Text[ finnish ] = "Syöttöohje";
-                Text[ thai ] = "à¸›à¹‰à¸­à¸™à¸•à¸±à¸§à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
-                Text[ czech ] = "NÃ¡povÄ›da pÅ™i vstupu";
-                Text[ hebrew ] = "Eingabehilfe";
-                Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾";
-                Text[ slovak ] = "PomocnÃ­k pri vstupe";
-                Text[ hungarian ] = "SegÃ©dszÃ¶veg";
-                Text[ slovenian ] = "PomoÄ pri vnosu";
+                Text [ de ] = "Eingabehilfe" ;
+                Text [ en-US ] = "Input Help" ;
             };
             PageItem
             {
                 Identifier = TP_VALIDATION_ERROR ;
                 PageResID = TP_VALIDATION_ERROR ;
-                Text = "Fehlermeldung" ;
-                Text [ ENGLISH ] = "Error message" ;
-                Text [ english_us ] = "Error Alert" ;
-                Text [ swedish ] = "Felmeddelande" ;
-                Text [ danish ] = "Fejlmelding" ;
-                Text [ italian ] = "Messaggio di errore" ;
-                Text [ spanish ] = "Mensaje de error" ;
-                Text [ french ] = "Message d'erreur" ;
-                Text [ dutch ] = "Foutmelding" ;
-                Text [ portuguese ] = "Mensagem de erro" ;
-                Text [ portuguese_brazilian ] = "Aviso de Erro" ;
-                Text[ chinese_simplified ] = "é”™è¯¯æŠ¥å‘Š";
-                Text[ russian ] = "Äåéñòâèÿ ïğè îøèáêå";
-                Text[ polish ] = "Komunikat o b³êdzie";
-                Text[ japanese ] = "ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "éŒ¯èª¤å ±å‘Š";
-                Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
-                Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
-                Text[ korean ] = "ì˜¤ë¥˜ ë©”ì‹œì§€";
-                Text[ turkish ] = "Hata iletisi";
-                Text[ catalan ] = "Avís d'error";
-                Text[ finnish ] = "Virhehälytys";
-                Text[ thai ] = "à¹€à¸•à¸·à¸­à¸™à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
-                Text[ czech ] = "ChybovÃ© hlÃ¡Å¡enÃ­";
-                Text[ hebrew ] = "Fehlermeldung";
-                Text[ hindi ] = "à¤—à¤²à¤¤à¥€ à¤•à¤¾ à¤¸à¤¾à¤µà¤§à¤¾à¤¨";
-                Text[ slovak ] = "ChybovÃ© hlÃ¡senie";
-                Text[ hungarian ] = "FigyelmeztetÃ©s hibÃ¡ra";
-                Text[ slovenian ] = "Opozorilo o napaki";
+                Text [ de ] = "Fehlermeldung" ;
+                Text [ en-US ] = "Error Alert" ;
             };
         };
     };
-    Text [ english_us ] = "Validity" ;
-    Text [ swedish ] = "Validitet" ;
-    Text [ danish ] = "Validitet" ;
-    Text [ italian ] = "Validità" ;
-    Text [ spanish ] = "Validez" ;
-    Text [ french ] = "Validité" ;
-    Text [ dutch ] = "Geldigheid" ;
-    Text [ portuguese ] = "Validade" ;
-    Text [ portuguese_brazilian ] = "Validade" ;
-    Text[ chinese_simplified ] = "æœ‰æ•ˆæ€§";
-    Text[ russian ] = "Ïğîâåğêà ââîäèìûõ çíà÷åíèé";
-    Text[ polish ] = "Poprawnoœæ danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®å…¥åŠ›è¦å‰‡";
-    Text[ chinese_traditional ] = "æœ‰æ•ˆ";
-    Text[ arabic ] = "ÇáÕáÇÍíÉ";
-    Text[ greek ] = "Åãêõñüôçôá";
-    Text[ korean ] = "ìœ íš¨ì„±";
-    Text[ turkish ] = "Geçerlilik";
-    Text[ catalan ] = "Validesa";
-    Text[ finnish ] = "Kelpoisuus";
-    Text[ thai ] = "à¹ƒà¸Šà¹‰à¹„à¸”à¹‰";
-    Text[ czech ] = "Platnost";
-    Text[ hebrew ] = "GÃ¼ltigkeit";
-    Text[ hindi ] = "à¤µà¥ˆà¤§à¤¤à¤¾";
-    Text[ slovak ] = "PlatnosÅ¥";
-    Text[ hungarian ] = "Ã‰rvÃ©nyessÃ©g";
-    Text[ slovenian ] = "Veljavnost";
+    Text [ en-US ] = "Validity" ;
 };
 
 TabPage TP_VALIDATION_VALUES
@@ -214,40 +106,14 @@ TabPage TP_VALIDATION_VALUES
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Werte" ;
-    Text [ ENGLISH ] = "Values" ;
+    Text [ de ] = "Werte" ;
+    Text [ en-US ] = "Values" ;
     FixedText FT_ALLOW
     {
         Pos = MAP_APPFONT ( 6 , 16 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Z~ulassen" ;
-        Text [ dutch ] = "~Toestaan" ;
-        Text [ english_us ] = "~Allow" ;
-        Text [ swedish ] = "T~illåt" ;
-        Text [ danish ] = "T~illad" ;
-        Text [ italian ] = "Permetti" ;
-        Text [ spanish ] = "Per~mitir" ;
-        Text [ french ] = "~Autoriser" ;
-        Text [ portuguese_brazilian ] = "~Permitir" ;
-        Text [ portuguese ] = "~Permitir" ;
-        Text[ chinese_simplified ] = "å…è®¸(~A)";
-        Text[ russian ] = "Äîïóñòèìûé òèï äàííûõ";
-        Text[ polish ] = "~Zezwalaj";
-        Text[ japanese ] = "å…¥åŠ›å€¤ã®ç¨®é¡(~A)";
-        Text[ chinese_traditional ] = "å…è¨±(~A)";
-        Text[ arabic ] = "ÓãÇÍ";
-        Text[ greek ] = "Íá åğéôñáğåß";
-        Text[ korean ] = "í—ˆìš©(~A)";
-        Text[ turkish ] = "~Geçerli";
-        Text[ catalan ] = "~Permet";
-        Text[ finnish ] = "~Salli";
-        Text[ thai ] = "~à¸­à¸™à¸¸à¸à¸²à¸•";
-        Text[ czech ] = "Povolit";
-        Text[ hebrew ] = "~Zulassen";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¥€à¤•à¥ƒà¤¤";
-        Text[ slovak ] = "Povol~iÅ¥";
-        Text[ hungarian ] = "~EngedÃ©lyezÃ©s";
-        Text[ slovenian ] = "~Dopusti";
+        Text [ de ] = "Z~ulassen" ;
+        Text [ en-US ] = "~Allow" ;
     };
     ListBox LB_ALLOW
     {
@@ -256,7 +122,7 @@ TabPage TP_VALIDATION_VALUES
         Size = MAP_APPFONT ( 90 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Jeden Wert" ; SC_VALIDDLG_ALLOW_ANY ; > ;
             < "Ganze Zahl" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
@@ -267,18 +133,7 @@ TabPage TP_VALIDATION_VALUES
             < "Liste" ; SC_VALIDDLG_ALLOW_LIST ; > ;
             < "Textlänge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
-        stringlist [ portuguese ] =
-        {
-            < "Todos os valores" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Números inteiros" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Comprimento do texto" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "All values" ; SC_VALIDDLG_ALLOW_ANY ; > ;
             < "Whole Numbers" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
@@ -289,293 +144,13 @@ TabPage TP_VALIDATION_VALUES
             < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
             < "Text length" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Todos os valores" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Número inteiro" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Número decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Tamanho do texto" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Alla värden" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Heltal" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Tid" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Textlängd" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Vilkårlig værdi" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Helt tal" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Dato" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Tid" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Tekstlængde" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Ogni valore" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Numero intero" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimale" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Orario" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Lunghezza testo" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Todos los valores" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Entero" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Fecha" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Longitud del texto" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Toutes les valeurs" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Nombre entier" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Nombre décimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Date" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Heure" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Longueur du texte" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Elke waarde" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Geheel getal" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimaal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Tijd" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Tekstlengte" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ chinese_simplified ] =
-        {
-            < "æ‰€æœ‰çš„æ•°å€¼" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "æ•´æ•°" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "åè¿›åˆ¶" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "æ—¥æœŸ" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "æ—¶é—´" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "å•å…ƒæ ¼åŒºåŸŸ" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "åˆ—è¡¨" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "æ–‡å­—é•¿åº¦" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ russian ] =
-        {
-            < "Âñå çíà÷åíèÿ" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Öåëîå ÷èñëî" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Äåñÿòè÷íûé" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Äàòà" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Âğåìÿ" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Äëèíà òåêñòà" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ polish ] =
-        {
-            < "Wszystkie wartoœci" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Liczba ca³kowita" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Dziesiêtny" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Czas" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "D³ugoœæ tekstu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ japanese ] =
-        {
-            < "ã™ã¹ã¦ã®å€¤" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "æ•´æ•°" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "å°æ•°" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "æ—¥ä»˜" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "æ™‚åˆ»" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "ãƒ†ã‚­ã‚¹ãƒˆã®é•·ã•" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ chinese_traditional ] =
-        {
-            < "æ‰€æœ‰çš„æ•¸å€¼" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "æ•´æ•¸" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "åé€²ä½" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "æ—¥æœŸ" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "æ™‚é–“" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "æ–‡å­—é•·åº¦" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ arabic ] =
-        {
-            < "ßá ÇáŞíã" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "ÃÑŞÇã ßÇãáÉ" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "ÚÔÑíÉ" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "ÇáÊÇÑíÎ" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "ÇáæŞÊ" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Øæá ÇáäÕ" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ greek ] =
-        {
-            < "¼ëåò ôéò ôéìİò" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Áêİñáéïé áñéèìïß" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Äåêáäéêü" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Çìåñïìçíßá" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "¿ñá" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "ÌŞêïò êåéìİíïõ" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ korean ] =
-        {
-            < "ëª¨ë“  ê°’" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "ì „ì²´ ê°’" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "ì†Œìˆ˜" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "ë‚ ì§œ" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "ì‹œê°„" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "í…ìŠ¤íŠ¸ ê¸¸ì´" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ turkish ] =
-        {
-            < "Tüm değerler" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Tüm sayılar" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Ondalık" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Tarih" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Saat" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Metin uzunluğu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ catalan ] =
-        {
-            < "Tots els valors" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Números complets" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Longitud del text" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Kaikki arvot" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Kokonaiset luvut" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Desimaali" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "PÄIVÄYS" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Aika" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Tekstin pituus" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ thai ] =
-        {
-            < "à¸„à¹ˆà¸²à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "à¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "à¸—à¸¨à¸™à¸´à¸¢à¸¡" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "à¸§à¸±à¸™à¸—à¸µà¹ˆ" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "à¹€à¸§à¸¥à¸²" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "à¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ czech ] =
-        {
-            < "VÅ¡echny hodnoty" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "CelÃ¡ ÄÃ­sla" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "DesetinnÃ¡" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "ÄŒas" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "DÃ©lka textu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ hebrew ] =
-        {
-            < "Jeden Wert" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Ganze Zahl" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Dezimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "â€®×ª××¨×™×šâ€¬" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "â€®×©×¢×”â€¬" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "TextlÃ¤nge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ hindi ] =
-        {
-            < "à¤¸à¤¬ à¤®à¥‚à¤²à¥à¤¯" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "à¤ªà¥‚à¤°à¥à¤£ à¤¸à¤‚à¤–à¥à¤¯à¤¾à¤à¤" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "à¤¦à¤¶à¤¾à¤‚à¤¶" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "à¤¸à¤®à¤¯" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤²à¤®à¥à¤¬à¤¾à¤ˆ" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
-        StringList [ slovak ] =
-        {
-            < "VÅ¡etky hodnoty" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "CelÃ© ÄÃ­sla" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "DesatinnÃ©" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "DÃ¡tum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "ÄŒas" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "DÄºÅ¾ka textu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
     };
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "~Daten" ;
-        Text [ ENGLISH ] = "~Data" ;
-        Text [ english_us ] = "~Data" ;
-        Text [ swedish ] = "~Data" ;
-        Text [ danish ] = "~Data" ;
-        Text [ italian ] = "~Dati" ;
-        Text [ spanish ] = "~Datos" ;
-        Text [ french ] = "Données" ;
-        Text [ dutch ] = "~Gegevens" ;
-        Text [ portuguese ] = "~Dados" ;
-        Text [ portuguese_brazilian ] = "~Dados" ;
-        Text[ chinese_simplified ] = "æ•°æ®(~D)";
-        Text[ russian ] = "Óñëîâèå";
-        Text[ polish ] = "~Dane";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿(~D)";
-        Text[ chinese_traditional ] = "è³‡æ–™(~D)";
-        Text[ arabic ] = "ÈíÇäÇÊ";
-        Text[ greek ] = "Äåäïìİíá";
-        Text[ korean ] = "ë°ì´í„°(~D)";
-        Text[ turkish ] = "~Veriler";
-        Text[ catalan ] = "~Dades";
-        Text[ finnish ] = "Tie~dot";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Data";
-        Text[ hebrew ] = "~Daten";
-        Text[ hindi ] = "~à¤¡à¤¼à¥‰à¤Ÿà¤¾";
-        Text[ slovak ] = "~DÃ¡ta";
-        Text[ hungarian ] = "~Adat";
-        Text[ slovenian ] = "Pod~atki";
+        Text [ de ] = "~Daten" ;
+        Text [ en-US ] = "~Data" ;
     };
     ListBox LB_VALUE
     {
@@ -585,7 +160,7 @@ TabPage TP_VALIDATION_VALUES
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScConditionMode
-        StringList =
+        StringList [ de ] =
         {
             < "gleich" ; SC_VALIDDLG_DATA_EQUAL ; > ;
             < "kleiner als" ; SC_VALIDDLG_DATA_LESS ; > ;
@@ -596,7 +171,7 @@ TabPage TP_VALIDATION_VALUES
             < "zwischen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
             < "nicht zwischen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "equal" ; SC_VALIDDLG_DATA_EQUAL ; > ;
             < "less than" ; SC_VALIDDLG_DATA_LESS ; > ;
@@ -607,326 +182,13 @@ TabPage TP_VALIDATION_VALUES
             < "between" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
             < "not between" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "igual a" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "menor que" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "maior que" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "menor ou igual a" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "maior ou igual a" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "diferente" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "não incluso em" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "lika med" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "mindre än" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "större än" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "mindre än eller lika med" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "större än eller lika med" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "inte lika med" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "mellan" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "inte mellan" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "lig med" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "mindre end" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "større end" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "mindre end eller lig med" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "større end eller lig med" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "forskellig fra" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "mellem" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "ikke mellem" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "uguale" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "più piccolo di" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "maggiore di" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "minore o uguale" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "maggiore o uguale" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "diverso" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "tra" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "non tra" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "igual" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "menor que" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "mayor que" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "menor o igual que" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "mayor o igual" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "distinto de" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "no entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "égal à" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "inférieur à" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "supérieur à" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "inférieur ou égal à" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "supérieur ou égal à" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "différent" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "non compris entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "gelijk aan" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "kleiner dan" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "groter dan" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "kleiner dan of gelijk aan" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "groter dan of gelijk aan" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "niet gelijk aan" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "tussen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "niet tussen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "igual" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "menor" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "maior" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "menor ou igual a" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "maior ou igual a" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "desigual" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "não entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "ç­‰äº" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "å°äº" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "å¤§äº" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "å°äºæˆ–ç­‰äº" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "å¤§äºæˆ–ç­‰äº" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "ä¸ç­‰äº" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "åœ¨ä¹‹é—´" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "ä¸åœ¨ä¹‹é—´" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "ğàâíî" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "ìåíüøå ÷åì" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "áîëüøå ÷åì" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "ìåíüøå èëè ğàâíî" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "áîëüøå èëè ğàâíî" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "íå ğàâíî" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "ìåæäó" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "âíå" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "równy" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "mniejsze ni¿" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "wiêkszy ni¿" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "mniejsze lub równe" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "wiêksza ni¿ lub równa" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "nie równy" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "miêdzy" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "nie miêdzy" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "æ¬¡ã®å€¤ã«ç­‰ã—ã„" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "æ¬¡ã®å€¤ã‚ˆã‚Šå°ã•ã„" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "æ¬¡ã®å€¤ã‚ˆã‚Šå¤§ãã„" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "æ¬¡ã®å€¤ä»¥ä¸‹" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "æ¬¡ã®å€¤ä»¥ä¸Š" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "æ¬¡ã®å€¤ã«ç­‰ã—ããªã„" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "æ¬¡ã®å€¤ã®é–“" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "æ¬¡ã®å€¤ã®é–“ã§ãªã„" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ç­‰æ–¼" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "å°æ–¼" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "å¤§æ–¼" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "å°æ–¼æˆ–ç­‰æ–¼" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "å¤§æ–¼æˆ–ç­‰æ–¼" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "ä¸ç­‰æ–¼" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "åœ¨ä¹‹é–“" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "ä¸åœ¨ä¹‹é–“" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "íÓÇæí" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "ÃŞá ãä" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "ÃßÈÑ ãä" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "ÃÕÛÑ ãä Ãæ íÓÇæí" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "ÃßÈÑ ãä Ãæ íÓÇæí" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "áÇ íÓÇæí" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "Èíä" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "áíÓ Èíä" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "ºóïí" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "ìéêñüôåñï áğü" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "ìåãáëıôåñï áğü" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "ìéêñüôåñï Ş ßóï" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "ìåãáëıôåñï Ş ßóï" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "ÄéÜöïñï" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "ìåôáîı" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "ü÷é ìåôáîı" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ì§€ì •í•œ ê°’ê³¼ ê°™ìŒ" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "ë¯¸ë§Œ" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "ì´ˆê³¼" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "ì´í•˜" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "ë‹¤ìŒ ê°’ ì´ìƒ" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "ì§€ì •í•œ ì¡°ê±´ê³¼ ë‹¤ë¦„" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "ë‹¤ìŒ ë‚ ì§œ ì‚¬ì´" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "ë‹¤ìŒ ê°’ ì‚¬ì´ì— ì—†ìŒ" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "eşittir" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "küçüktür" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "büyüktür" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "küçük ya da eşittir" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "büyüktür veya eşittir" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "eşit değil" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "arasında" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "arasında değil" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "igual" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "més petit que" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "més gran que" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "més petit o igual" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "més gran o igual" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "diferent" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "no entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "yhtä suuri" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "pienempi kuin" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "suurempi kuin" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "pienempi tai yhtä suuri kuin" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "suurempi tai yhtä suuri kuin" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "eri suuri" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "välillä" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "ei väliltä" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹€à¸—à¹ˆà¸²à¸à¸±à¸š" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "à¸™à¹‰à¸­à¸¢à¸à¸§à¹ˆà¸²" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "à¸¡à¸²à¸à¸à¸§à¹ˆà¸²" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "à¸™à¹‰à¸­à¸¢à¸à¸§à¹ˆà¸²à¸«à¸£à¸·à¸­à¹€à¸—à¹ˆà¸²à¸à¸±à¸š" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "à¸¡à¸²à¸à¸à¸§à¹ˆà¸²à¸«à¸£à¸·à¸­à¹€à¸—à¹ˆà¸²à¸à¸±à¸š" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "à¹„à¸¡à¹ˆà¹€à¸—à¹ˆà¸²à¸à¸±à¸š" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "à¹„à¸¡à¹ˆà¸­à¸¢à¸¹à¹ˆà¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "je rovno" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "je menÅ¡Ã­ neÅ¾" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "je vÄ›tÅ¡Ã­ neÅ¾" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "je menÅ¡Ã­ nebo rovno" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "je vÄ›tÅ¡Ã­ nebo se rovnÃ¡" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "nenÃ­ rovno" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "leÅ¾Ã­ mezi" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "nenÃ­ mezi" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "gleich" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "kleiner als" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "grÃ¶ÃŸer als" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "kleiner oder gleich" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "grÃ¶ÃŸer oder gleich" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "ungleich" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "zwischen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "nicht zwischen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤¸à¤®à¤¾à¤¨" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "à¤¸à¥‡ à¤•à¤®" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "à¤¸à¥‡ à¤…à¤§à¤¿à¤•" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "à¤¸à¥‡ à¤•à¤® à¤…à¤¥à¤µà¤¾ à¤¸à¤®à¤¾à¤¨ " ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "à¤¸à¥‡ à¤…à¤§à¤¿à¤• à¤…à¤¥à¤µà¤¾ à¤¸à¤®à¤¾à¤¨" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "à¤¸à¤®à¤¾à¤¨ à¤¨à¤¹à¥€à¤‚" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "à¤¬à¥€à¤š à¤®à¥‡à¤‚" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "à¤¬à¥€à¤š à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "je rovnÃ©" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-        < "je menÅ¡ie ako" ; SC_VALIDDLG_DATA_LESS ; > ;
-        < "je vÃ¤ÄÅ¡Ã­ ako" ; SC_VALIDDLG_DATA_GREATER ; > ;
-        < "je menÅ¡ie alebo rovnÃ©" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-        < "je vÃ¤ÄÅ¡ie alebo sa rovnÃ¡" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-        < "nie je rovnÃ©" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-        < "medzi" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-        < "nie je medzi" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "egyenlÅ‘" ; Default ; > ;
-        < "kisebb mint" ; Default ; > ;
-        < "nagyobb mint" ; Default ; > ;
-        < "kisebb vagy egyenlÅ‘" ; Default ; > ;
-        < "nagyobb vagy egyenlÅ‘" ; Default ; > ;
-        < "nem egyenlÅ‘" ; Default ; > ;
-        < "kÃ¶zÃ¶tt" ; Default ; > ;
-        < "nincs kÃ¶zÃ¶tte" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "enako" ; Default ; > ;
-        < "manjÅ¡e kot" ; Default ; > ;
-        < "veÄje kot" ; Default ; > ;
-        < "manjÅ¡e ali enako" ; Default ; > ;
-        < "veÄje ali enako" ; Default ; > ;
-        < "ni enako" ; Default ; > ;
-        < "med" ; Default ; > ;
-        < "ni med" ; Default ; > ;
-    };
     };
     FixedText FT_MIN
     {
         Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "~Minimum" ;
-        Text [ ENGLISH ] = "~Minimum" ;
-        Text [ english_us ] = "~Minimum" ;
-        Text [ swedish ] = "~Minimum" ;
-        Text [ danish ] = "~Minimum" ;
-        Text [ italian ] = "~Minimo" ;
-        Text [ spanish ] = "~Mínimo" ;
-        Text [ french ] = "~Minimum" ;
-        Text [ dutch ] = "~Minimum" ;
-        Text [ portuguese ] = "~Mínimo" ;
-        Text [ portuguese_brazilian ] = "~Mínimo" ;
-        Text[ chinese_simplified ] = "æœ€å°(~M)";
-        Text[ russian ] = "Ìèíèìóì";
-        Text[ polish ] = "~Minimum";
-        Text[ japanese ] = "æœ€å°å€¤(~M)";
-        Text[ chinese_traditional ] = "æœ€å°(~M)";
-        Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
-        Text[ greek ] = "ÅëÜ÷éóôï";
-        Text[ korean ] = "ìµœì†Œ(~M)";
-        Text[ turkish ] = "~Minimum";
-        Text[ catalan ] = "~Mínim";
-        Text[ finnish ] = "~Vähintään";
-        Text[ thai ] = "~à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "Minimum";
-        Text[ hebrew ] = "~Minimum";
-        Text[ hindi ] = "~à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®";
-        Text[ slovak ] = "~Minimum";
-        Text[ hungarian ] = "~Minimum";
-        Text[ slovenian ] = "N~ajmanj";
+        Text [ de ] = "~Minimum" ;
+        Text [ en-US ] = "~Minimum" ;
     };
     Edit EDT_MIN
     {
@@ -947,34 +209,8 @@ TabPage TP_VALIDATION_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Ma~ximum" ;
-        Text [ english_us ] = "Ma~ximum" ;
-        Text [ swedish ] = "M~aximum" ;
-        Text [ danish ] = "Ma~ksimum" ;
-        Text [ italian ] = "M~assimo" ;
-        Text [ spanish ] = "M~áximo" ;
-        Text [ french ] = "M~aximum" ;
-        Text [ dutch ] = "M~aximum" ;
-        Text [ portuguese ] = "M~áximo" ;
-        Text [ portuguese_brazilian ] = "Má~ximo" ;
-        Text[ chinese_simplified ] = "æœ€å¤§å€¼(~X)";
-        Text[ russian ] = "Ìàêñèìóì";
-        Text[ polish ] = "Ma~ksimum";
-        Text[ japanese ] = "æœ€å¤§å€¤(~X)";
-        Text[ chinese_traditional ] = "æœ€å¤§(~X)";
-        Text[ arabic ] = "ÇáÃŞÕì";
-        Text[ greek ] = "Ìİãéóôï";
-        Text[ korean ] = "ìµœëŒ€(~X)";
-        Text[ turkish ] = "Ma~ximum";
-        Text[ catalan ] = "Mà~xim";
-        Text[ finnish ] = "~Enintään";
-        Text[ thai ] = "à¸¡à¸²~à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "Maximum";
-        Text[ hebrew ] = "M~aximum";
-        Text[ hindi ] = "à¤…~à¤§à¤¿à¤•à¤¤à¤®";
-        Text[ slovak ] = "Ma~ximum";
-        Text[ hungarian ] = "Ma~ximum";
-        Text[ slovenian ] = "Na~jveÄ";
+        Text [ de ] = "Ma~ximum" ;
+        Text [ en-US ] = "Ma~ximum" ;
     };
     Edit EDT_MAX
     {
@@ -988,89 +224,33 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 , 30 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Leerzellen zulassen" ;
-        Text[ english_us ] = "Allow ~blank cells" ;
-        Text [ dutch ] = "~Lege cellen toestaan" ;
-        Text [ swedish ] = "Tillåt tomma ce~ller" ;
-        Text [ danish ] = "~Tillad tomme pladser" ;
-        Text [ italian ] = "Permetti celle vuote" ;
-        Text [ spanish ] = "~Permitir celdas vacías" ;
-        Text [ french ] = "Autoriser ~cellules vides" ;
-        Text [ portuguese_brazilian ] = "~Permitir células vazias" ;
-        Text [ portuguese ] = "~Permitir células vazias" ;
-        Text[ chinese_simplified ] = "å…è®¸ç©ºå•å…ƒæ ¼";
-        Text[ russian ] = "Äîïóñêàòü ïóñòûå";
-        Text[ polish ] = "Zezwalaj na ~puste komórki";
-        Text[ japanese ] = "ç©ºç™½ã‚»ãƒ«ã‚’è¨±å¯ã™ã‚‹(~B)";
-        Text[ chinese_traditional ] = "å…è¨±ç©ºæ ¼(~B)";
-        Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÎáÇíÇ ÇáİÇÑÛÉ";
-        Text[ greek ] = "Íá åğéôñáğïıí êåíÜ êåëéÜ";
-        Text[ korean ] = "ê³µë°± í—ˆìš©(~B)";
-        Text[ turkish ] = "~Boş hücreler geçerli";
-        Text[ catalan ] = "Permet espais en ~blanc";
-        Text[ finnish ] = "Sa~lli tyhjät merkit";
-        Text[ thai ] = "à¹ƒà¸«à¹‰à¸¡à¸µ~à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Povolit mezery";
-        Text[ hebrew ] = "~Leerzellen zulassen";
-        Text[ hindi ] = "~à¤–à¤¾à¤²à¥€ à¤¸à¥à¤µà¥€à¤•à¥ƒà¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "PovoliÅ¥ prÃ¡z~dne";
-        Text[ hungarian ] = "Ãœres ~helyek engedÃ©lyezÃ©se";
-        Text[ slovenian ] = "Dovoli ~prazna mesta";
+        Text [ de ] = "~Leerzellen zulassen" ;
+        Text [ en-US ] = "Allow ~blank cells" ;
     };
     CheckBox CB_SHOWLIST
     {
         Pos = MAP_APPFONT ( 80 , 44 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Auswahlliste anzeigen" ;
-        Text[ english_us ] = "Show selection ~list" ;
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºé€‰æ‹©åˆ—è¡¨";
+        Text [ de ] = "~Auswahlliste anzeigen" ;
+        Text [ en-US ] = "Show selection ~list" ;
     };
     CheckBox CB_SORTLIST
     {
         Pos = MAP_APPFONT ( 90 , 58 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Ein~träge aufsteigend sortieren" ;
-        Text[ english_us ] = "Sor~t entries ascending" ;
-        Text[ chinese_simplified ] = "æŒ‰å‡åºæ’åˆ—é¡¹ç›®";
+        Text [ de ] = "Ein~träge aufsteigend sortieren" ;
+        Text [ en-US ] = "Sor~t entries ascending" ;
     };
     FixedText FT_SOURCEHINT
     {
         Pos = MAP_APPFONT ( 80 , 90 ) ;
         Size = MAP_APPFONT ( 174 , 64 ) ;
         WordBreak = TRUE ;
-        Text = "Als Quelle ist nur eine zusammenhängende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgewählten Bereichs zur Auswertung herangezogen." ;
-        Text[ english_us ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
-        Text[ chinese_simplified ] = "æœ‰æ•ˆçš„æºç”±ä¸´è¿‘å•ä¸€è¡Œæˆ–å•ä¸€åˆ—çš„é€‰é¡¹ç»„æˆã€‚å¦‚æœæœ‰å‡ ä¸ªé€‰é¡¹ï¼Œåªæœ‰ç¬¬ä¸€æ¬¡é€‰æ‹©çš„åŒºåŸŸä¸­çš„ç¬¬ä¸€ä¸ªåˆ—æ‰è¢«ç”¨äºéªŒè¯ã€‚";
+        Text [ de ] = "Als Quelle ist nur eine zusammenhängende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgewählten Bereichs zur Auswertung herangezogen." ;
+        Text [ en-US ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
     };
-    Text [ dutch ] = "Waarden" ;
-    Text [ english_us ] = "Values" ;
-    Text [ swedish ] = "Värden" ;
-    Text [ danish ] = "Værdier" ;
-    Text [ italian ] = "Valori" ;
-    Text [ spanish ] = "Valores" ;
-    Text [ french ] = "Valeurs" ;
-    Text [ portuguese_brazilian ] = "Valores" ;
-    Text [ portuguese ] = "Valores" ;
-    Text[ chinese_simplified ] = "æ•°å€¼";
-    Text[ russian ] = "Çíà÷åíèÿ";
-    Text[ polish ] = "Wartoœci";
-    Text[ japanese ] = "å€¤";
-    Text[ chinese_traditional ] = "æ•¸å€¼";
-    Text[ arabic ] = "ÇáŞíã";
-    Text[ greek ] = "Ôéìİò";
-    Text[ korean ] = "ê°’";
-    Text[ turkish ] = "Değerler";
-    Text[ catalan ] = "Valors";
-    Text[ finnish ] = "Arvot";
-    Text[ thai ] = "à¸„à¹ˆà¸²";
-    Text[ czech ] = "Hodnoty";
-    Text[ hebrew ] = "Werte";
-    Text[ hindi ] = "à¤®à¥‚à¤²à¥à¤¯";
-    Text[ slovak ] = "Hodnoty";
-    Text[ hungarian ] = "Ã‰rtÃ©kek";
-    Text[ slovenian ] = "Vrednosti";
 };
 
 TabPage TP_VALIDATION_INPUTHELP
@@ -1083,138 +263,30 @@ TabPage TP_VALIDATION_INPUTHELP
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
-        Text [ ENGLISH ] = "~Show input help when cell is selected" ;
+        Text [ de ] = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
         TabStop = TRUE ;
-        Text [ dutch ] = "I~nvoerhulp bij selectie van een cel aanbieden" ;
-        Text [ english_us ] = "~Show input help when cell is selected" ;
-        Text [ swedish ] = "Erbjud ~inmatningshjälp vid markering av en cell" ;
-        Text [ danish ] = "~Vis inputhjælp ved markering af en celle" ;
-        Text [ italian ] = "Offri aiuti per la digitazione nella cella" ;
-        Text [ spanish ] = "~Mostrar Ayuda de entrada al seleccionar una celda" ;
-        Text [ french ] = "Aide à la saisie si sélection d'une cellule" ;
-        Text [ portuguese_brazilian ] = "~Mostrar ajuda de entrada ao selecionar célula" ;
-        Text [ portuguese ] = "~Mostrar ajuda de entrada quando seleccionar célula" ;
-        Text[ chinese_simplified ] = "åœ¨é€‰ä¸­å•å…ƒæ ¼æ—¶æ˜¾ç¤ºè¾“å…¥å¸®åŠ©(~S)";
-        Text[ russian ] = "Ïîêàçûâàòü ïîìîùü ïğè ââîäå ïğè âûäåëåíèè ÿ÷åéêè";
-        Text[ polish ] = "~Poka¿ pomoc po zaznaczeniu komórki";
-        Text[ japanese ] = "ã‚»ãƒ«ã®é¸æŠæ™‚ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹(~S)";
-        Text[ chinese_traditional ] = "åœ¨é¸å–å„²å­˜æ ¼æ™‚é¡¯ç¤ºè¼¸å…¥èªªæ˜(~S)";
-        Text[ arabic ] = "ÅÙåÇÑ ãÓÇÚÏÉ ÇáÅÏÎÇá ÚäÏ ÊÍÏíÏ ÇáÎáíÉ";
-        Text[ greek ] = "ÅìöÜí~éóç âïŞèåéáò åéóáãùãŞò êáôÜ ôçí åğéëïãŞ åíüò êåëéïı";
-        Text[ korean ] = "ì…€ ì„ íƒì‹œ ë„ì›€ë§ ì…ë ¥ ì œê³µ(~S)";
-        Text[ turkish ] = "Hücre se~çildiğinde giriş yardımı öner";
-        Text[ catalan ] = "Mo~stra l'ajuda d'entrada quan se seleccioni la cel.la";
-        Text[ finnish ] = "~Näytä syöttöohje, kun solu on valittuna";
-        Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸à¸²à¸£à¸›à¹‰à¸­à¸™à¸•à¸±à¸§à¸Šà¹ˆà¸§à¸¢à¹€à¸¡à¸·à¹ˆà¸­à¹€à¸¥à¸·à¸­à¸à¹€à¸‹à¸¥à¸¥à¹Œ";
-        Text[ czech ] = "Zobrazit nÃ¡povÄ›du k zadÃ¡vÃ¡nÃ­ ÃºdajÅ¯, pokud je buÅˆka vybrÃ¡na";
-        Text[ hebrew ] = "E~ingabehilfen bei Selektion einer Zelle anbieten";
-        Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤  à¤•à¥‹ à¤šà¥à¤¨à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾ à¤•à¥‹ ~à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "ZobraziÅ¥ v~stupnÃ©ho pomocnÃ­ka, pri vybratÃ­ bunky";
-        Text[ hungarian ] = "~SegÃ©dszÃ¶veg megjelenÃ­tÃ©se a cella kijelÃ¶lÃ©sekor";
-        Text[ slovenian ] = "~PokaÅ¾i pomoÄ pri vnosu, kadar je izbrana celica";
+        Text [ en-US ] = "~Show input help when cell is selected" ;
     };
     FixedLine FL_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Inhalt" ;
-        Text [ ENGLISH ] = "Content" ;
-        Text [ english_us ] = "Contents" ;
-        Text [ swedish ] = "Innehåll" ;
-        Text [ danish ] = "Indhold" ;
-        Text [ italian ] = "Contenuto" ;
-        Text [ spanish ] = "Contenido" ;
-        Text [ french ] = "Contenu" ;
-        Text [ dutch ] = "Inhoud" ;
-        Text [ portuguese ] = "Conteúdo" ;
-        Text [ portuguese_brazilian ] = "Conteúdo" ;
-        Text[ chinese_simplified ] = "å†…å®¹";
-        Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "å†…å®¹";
-        Text[ chinese_traditional ] = "å…§å®¹";
-        Text[ arabic ] = "ÇáãÍÊæíÇÊ";
-        Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "ë‚´ìš©";
-        Text[ turkish ] = "İçerikler";
-        Text[ catalan ] = "Contingut";
-        Text[ finnish ] = "Sisältö";
-        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
-        Text[ czech ] = "Obsah";
-        Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
-        Text[ slovak ] = "Obsah";
-        Text[ hungarian ] = "Tartalom";
-        Text[ slovenian ] = "Vsebina";
+        Text [ de ] = "Inhalt" ;
+        Text [ en-US ] = "Contents" ;
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 35 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Titel" ;
-        Text [ ENGLISH ] = "~Title" ;
-        Text [ english_us ] = "~Title" ;
-        Text [ swedish ] = "~Rubrik" ;
-        Text [ danish ] = "~Titel" ;
-        Text [ italian ] = "~Titolo" ;
-        Text [ spanish ] = "~Título" ;
-        Text [ french ] = "Titre" ;
-        Text [ dutch ] = "~Titel" ;
-        Text [ portuguese ] = "~Título" ;
-        Text [ portuguese_brazilian ] = "~Título" ;
-        Text[ chinese_simplified ] = "æ ‡é¢˜(~T)";
-        Text[ russian ] = "Çàãîëîâîê";
-        Text[ polish ] = "~Tytu³";
-        Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«(~T)";
-        Text[ chinese_traditional ] = "æ¨™é¡Œ(~T)";
-        Text[ arabic ] = "ÇáÚäæÇä";
-        Text[ greek ] = "~Ôßôëïò";
-        Text[ korean ] = "ì œëª©(~T)";
-        Text[ turkish ] = "~Başlık";
-        Text[ catalan ] = "~Títol";
-        Text[ finnish ] = "~Otsikko";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
-        Text[ czech ] = "Nadpis";
-        Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
-        Text[ hindi ] = "~à¤¶à¥€à¤°à¥à¤·à¤•";
-        Text[ slovak ] = "~Nadpis";
-        Text[ hungarian ] = "~CÃ­m";
-        Text[ slovenian ] = "~Naslov";
+        Text [ de ] = "~Titel" ;
+        Text [ en-US ] = "~Title" ;
     };
     FixedText FT_INPUTHELP
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Eingabehilfe" ;
-        Text [ ENGLISH ] = "~Input help" ;
-        Text [ dutch ] = "~Invoerhulp" ;
-        Text [ english_us ] = "~Input help" ;
-        Text [ swedish ] = "In~matningshjälp" ;
-        Text [ danish ] = "Input~hjælp" ;
-        Text [ italian ] = "Aiuto per la digitazione" ;
-        Text [ spanish ] = "Ayuda de ~entrada" ;
-        Text [ french ] = "Aide à la saisie" ;
-        Text [ portuguese_brazilian ] = "~Ajuda de entrada" ;
-        Text [ portuguese ] = "~Ajuda de entradas" ;
-        Text[ chinese_simplified ] = "è¾“å…¥å¸®åŠ©(~I)";
-        Text[ russian ] = "Ïîìî~ùü ïğè ââîäå";
-        Text[ polish ] = "Pomoc przy ~wprowadzaniu";
-        Text[ japanese ] = "å…¥åŠ›æ™‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸(~I)";
-        Text[ chinese_traditional ] = "è¼¸å…¥èªªæ˜(~I)";
-        Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
-        Text[ greek ] = "ÂïŞèåéá ~åéóáãùãŞò";
-        Text[ korean ] = "ë„ì›€ë§ ì‚½ì…(~I)";
-        Text[ turkish ] = "~Giriş yardımı";
-        Text[ catalan ] = "~Ajuda de l'entrada";
-        Text[ finnish ] = "~Syöttöohje";
-        Text[ thai ] = "~à¸›à¹‰à¸­à¸™à¸•à¸±à¸§à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
-        Text[ czech ] = "Obsah nÃ¡povÄ›dy";
-        Text[ hebrew ] = "~Eingabehilfe";
-        Text[ hindi ] = "~à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾";
-        Text[ slovak ] = "VstupnÃ½ po~mocnÃ­k";
-        Text[ hungarian ] = "~SegÃ©dszÃ¶veg";
-        Text[ slovenian ] = "~PomoÄ pri vnosu";
+        Text [ de ] = "~Eingabehilfe" ;
+        Text [ en-US ] = "~Input help" ;
     };
     Edit EDT_TITLE
     {
@@ -1239,76 +311,21 @@ TabPage TP_VALIDATION_ERROR
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Fehlermeldung" ;
-    Text [ ENGLISH ] = "Error message" ;
+    Text [ de ] = "Fehlermeldung" ;
     FixedLine FL_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Inhalt" ;
-        Text [ ENGLISH ] = "Content" ;
-        Text [ english_us ] = "Contents" ;
-        Text [ swedish ] = "Innehåll" ;
-        Text [ danish ] = "Indhold" ;
-        Text [ italian ] = "Contenuto" ;
-        Text [ spanish ] = "Contenido" ;
-        Text [ french ] = "Contenu" ;
-        Text [ dutch ] = "Inhoud" ;
-        Text [ portuguese ] = "Conteúdo" ;
-        Text [ portuguese_brazilian ] = "Conteúdo" ;
-        Text[ chinese_simplified ] = "å†…å®¹";
-        Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "å†…å®¹";
-        Text[ chinese_traditional ] = "å…§å®¹";
-        Text[ arabic ] = "ÇáãÍÊæíÇÊ";
-        Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "ë‚´ìš©";
-        Text[ turkish ] = "İçerikler";
-        Text[ catalan ] = "Contingut";
-        Text[ finnish ] = "Sisältö";
-        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
-        Text[ czech ] = "Obsah";
-        Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
-        Text[ slovak ] = "Obsah";
-        Text[ hungarian ] = "Tartalom";
-        Text[ slovenian ] = "Vsebina";
+        Text [ de ] = "Inhalt" ;
+        Text [ en-US ] = "Contents" ;
     };
     TriStateBox TSB_SHOW
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "Fehler~meldung bei Eingabe ungültiger Werte anzeigen" ;
-        Text [ ENGLISH ] = "Show error ~message after invalid values are entered" ;
+        Text [ de ] = "Fehler~meldung bei Eingabe ungültiger Werte anzeigen" ;
         TabStop = TRUE ;
-        Text [ dutch ] = "Fout~melding bij invoer van ongeldige gegevens weergeven" ;
-        Text [ english_us ] = "Show error ~message when invalid values are entered" ;
-        Text [ swedish ] = "Visa fel~meddelande när ogiltiga värden matas in" ;
-        Text [ danish ] = "Vis fejl~meddelelse ved indtastning af ugyldige værdier" ;
-        Text [ italian ] = "~Mostra messaggio di errore se si digitano dei valori non validi" ;
-        Text [ spanish ] = "Mostrar mensaje de ~error al introducir valores incorrectos" ;
-        Text [ french ] = "Message d'erreur en cas de saisie de valeurs incorrectes" ;
-        Text [ portuguese_brazilian ] = "~Mostrar mensagem de erro ao digitar valores incorretos" ;
-        Text [ portuguese ] = "~Mostrar mensagem de erro ao introduzir valores incorrectos" ;
-        Text[ chinese_simplified ] = "è¾“å…¥æ— æ•ˆæ•°å€¼æ—¶æ˜¾ç¤ºé”™è¯¯æŠ¥å‘Š(~M)";
-        Text[ russian ] = "Ïîêàçûâàòü ñîîáùåíèå îá îøèáêå ïğè ââîäå íåäîïóñòèìûõ çíà÷åíèé";
-        Text[ polish ] = "~Gdy zostan¹ wpisane nieprawid³owe wartoœci, poka¿ komunikat o b³êdzie";
-        Text[ japanese ] = "ç„¡åŠ¹ãªå€¤ã®å…¥åŠ›æ™‚ã«ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹(~M)";
-        Text[ chinese_traditional ] = "åœ¨è¼¸å…¥ç„¡æ•ˆæ•¸å€¼æ™‚é¡¯ç¤ºéŒ¯èª¤å ±å‘Š(~M)";
-        Text[ arabic ] = "ÅÙåÇÑ ÑÓÇáÉ ÎØÃ ÚäÏ ÅÏÎÇá Şíã ÛíÑ ÕÇáÍÉ";
-        Text[ greek ] = "Å~ìöÜíéóç ìçíıìáôïò óöÜëìáôïò óå ğåñßğôùóç åéóáãùãŞò ìç İãêõñùí ôéìşí";
-        Text[ korean ] = "ì˜ëª»ëœ ê°’ì„ ì…ë ¥í•  ë•Œ ì˜¤ë¥˜ ë©”ì‹œì§€ë¥¼ í‘œì‹œ(~M)";
-        Text[ turkish ] = "~Geçersiz değerler girildiği zaman hata mesajlarını göster";
-        Text[ catalan ] = "Mostra un ~missatge d'error quan s'introdueixen valors no vàlids";
-        Text[ finnish ] = "Näytä virhe~sanoma virheellisten arvojen syöttämisestä";
-        Text[ thai ] = "à¹à¸ªà¸”à¸‡~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆà¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹€à¸¡à¸·à¹ˆà¸­à¹ƒà¸ªà¹ˆà¸„à¹ˆà¸²à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
-        Text[ czech ] = "Zobrazit chybovÃ© hlÃ¡Å¡enÃ­ pokud jsou zadÃ¡ny neplatnÃ© hodnoty";
-        Text[ hebrew ] = "Fehler~meldung bei Eingabe ungÃ¼ltiger Werte anzeigen";
-        Text[ hindi ] = "à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤®à¥‚à¤²à¥à¤¯à¥‹à¤‚ à¤•à¥‹ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤—à¤²à¤¤à¥€ à¤•à¤¾ ~à¤¸à¤‚à¤¦à¥‡à¤¶ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "ZobraziÅ¥ chybovÃº sprÃ¡vu pri zada~nÃ­ chybnÃ½ch hodnÃ´t";
-        Text[ hungarian ] = "~HibaÃ¼zenet megjelenÃ­tÃ©se Ã©rvÃ©nytelen Ã©rtÃ©k bevitele esetÃ©n";
-        Text[ slovenian ] = "PokaÅ¾i ~sporoÄilo o napaki, kadar so vneÅ¡ene neveljavne vrednosti";
+        Text [ en-US ] = "Show error ~message when invalid values are entered" ;
     };
     MultiLineEdit EDT_ERROR
     {
@@ -1330,103 +347,22 @@ TabPage TP_VALIDATION_ERROR
     {
         Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Fehlermeldung" ;
-        Text [ ENGLISH ] = "~Error message" ;
-        Text [ english_us ] = "~Error message" ;
-        Text [ swedish ] = "~Felmeddelande" ;
-        Text [ danish ] = "~Fejlmeddelelse" ;
-        Text [ italian ] = "Messaggio di errore" ;
-        Text [ spanish ] = "~Mensaje de error" ;
-        Text [ french ] = "Message d'erreur" ;
-        Text [ dutch ] = "~Foutmelding" ;
-        Text [ portuguese ] = "~Mensagem de erro" ;
-        Text [ portuguese_brazilian ] = "~Mensagem de erro" ;
-        Text[ chinese_simplified ] = "é”™è¯¯æŠ¥å‘Š(~E)";
-        Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
-        Text[ polish ] = "Komunikat o ~b³êdzie";
-        Text[ japanese ] = "ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸(~E)";
-        Text[ chinese_traditional ] = "éŒ¯èª¤å ±å‘Š(~E)";
-        Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
-        Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
-        Text[ korean ] = "ì˜¤ë¥˜ ë©”ì‹œì§€(~E)";
-        Text[ turkish ] = "~Hata iletisi";
-        Text[ catalan ] = "~Missatge d'error";
-        Text[ finnish ] = "~Virhesanoma";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡~à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
-        Text[ czech ] = "ChybovÃ© hlÃ¡Å¡enÃ­";
-        Text[ hebrew ] = "~Fehlermeldung";
-        Text[ hindi ] = "~à¤—à¤²à¤¤à¥€ à¤•à¤¾ à¤¸à¤‚à¤¦à¥‡à¤¶";
-        Text[ slovak ] = "ChybovÃ¡ sprÃ¡v~a";
-        Text[ hungarian ] = "~HibaÃ¼zenet";
-        Text[ slovenian ] = "S~poroÄilo o napaki";
+        Text [ de ] = "~Fehlermeldung" ;
+        Text [ en-US ] = "~Error message" ;
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Titel" ;
-        Text [ ENGLISH ] = "~Title" ;
-        Text [ english_us ] = "~Title" ;
-        Text [ swedish ] = "~Rubrik" ;
-        Text [ danish ] = "~Titel" ;
-        Text [ italian ] = "~Titolo" ;
-        Text [ spanish ] = "~Título" ;
-        Text [ french ] = "Titre" ;
-        Text [ dutch ] = "~Titel" ;
-        Text [ portuguese ] = "~Título" ;
-        Text [ portuguese_brazilian ] = "~Título" ;
-        Text[ chinese_simplified ] = "æ ‡é¢˜(~T)";
-        Text[ russian ] = "Çàãîëîâîê";
-        Text[ polish ] = "~Tytu³";
-        Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«(~T)";
-        Text[ chinese_traditional ] = "æ¨™é¡Œ(~T)";
-        Text[ arabic ] = "ÇáÚäæÇä";
-        Text[ greek ] = "~Ôßôëïò";
-        Text[ korean ] = "ì œëª©(~T)";
-        Text[ turkish ] = "~Başlık";
-        Text[ catalan ] = "~Títol";
-        Text[ finnish ] = "~Otsikko";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
-        Text[ czech ] = "Nadpis";
-        Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
-        Text[ hindi ] = "~à¤¶à¥€à¤°à¥à¤·à¤•";
-        Text[ slovak ] = "~Titulok";
-        Text[ hungarian ] = "~CÃ­m";
-        Text[ slovenian ] = "~Naslov";
+        Text [ de ] = "~Titel" ;
+        Text [ en-US ] = "~Title" ;
     };
     FixedText FT_ACTION
     {
         Pos = MAP_APPFONT ( 12 , 35 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Aktion" ;
-        Text [ ENGLISH ] = "~Action" ;
-        Text [ english_us ] = "~Action" ;
-        Text [ swedish ] = "~Åtgärd" ;
-        Text [ danish ] = "H~andling" ;
-        Text [ italian ] = "Oper~azione" ;
-        Text [ spanish ] = "~Acción" ;
-        Text [ french ] = "~Action" ;
-        Text [ dutch ] = "~Activiteit" ;
-        Text [ portuguese ] = "~Acção" ;
-        Text [ portuguese_brazilian ] = "~Ação" ;
-        Text[ chinese_simplified ] = "æ“ä½œ(~A)";
-        Text[ russian ] = "Äåéñòâèå";
-        Text[ polish ] = "~Akcja";
-        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³(~A)";
-        Text[ chinese_traditional ] = "å‹•ä½œ(~A)";
-        Text[ arabic ] = "ÅÌÑÇÁ";
-        Text[ greek ] = "~Åíİñãåéá";
-        Text[ korean ] = "ì‘ë™(~A)";
-        Text[ turkish ] = "~İşlem";
-        Text[ catalan ] = "~Acció";
-        Text[ finnish ] = "~Toiminto";
-        Text[ thai ] = "~à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³";
-        Text[ czech ] = "Akce";
-        Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
-        Text[ hindi ] = "~à¤•à¤¾à¤°à¥à¤¯";
-        Text[ slovak ] = "~Akcia";
-        Text[ hungarian ] = "~MÅ±velet";
-        Text[ slovenian ] = "~Dejanje";
+        Text [ de ] = "~Aktion" ;
+        Text [ en-US ] = "~Action" ;
     };
     ListBox LB_ACTION
     {
@@ -1436,279 +372,37 @@ TabPage TP_VALIDATION_ERROR
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScValidErrorStyle
-        StringList =
+        StringList [ de ] =
         {
             < "Stopp" ; Default ; > ;
             < "Warnung" ; Default ; > ;
             < "Information" ; Default ; > ;
             < "Makro" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Stop" ; Default ; > ;
-            < "Warnung" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Makro" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Stop" ; Default ; > ;
-            < "Advertência" ; Default ; > ;
-            < "Informação" ; Default ; > ;
-            < "Macro" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Stop" ; Default ; > ;
             < "Warning" ; Default ; > ;
             < "Information" ; Default ; > ;
             < "Macro" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Parar" ; Default ; > ;
-            < "Aviso" ; Default ; > ;
-            < "Informação" ; Default ; > ;
-            < "Macro" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Stopp" ; Default ; > ;
-            < "Varning" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Makro" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Stop" ; Default ; > ;
-            < "Advarsel" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Makro" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Stop" ; Default ; > ;
-            < "Avviso" ; Default ; > ;
-            < "Informazione" ; Default ; > ;
-            < "Macro" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Detener" ; Default ; > ;
-            < "Advertencia" ; Default ; > ;
-            < "Información" ; Default ; > ;
-            < "Macro" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Stop" ; Default ; > ;
-            < "Avertissement" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Macro" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Stop" ; Default ; > ;
-            < "Waarschuwing" ; Default ; > ;
-            < "Informatie" ; Default ; > ;
-            < "Macro" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "æš‚åœ" ; Default ; > ;
-        < "è­¦å‘Š" ; Default ; > ;
-        < "ä¿¡æ¯" ; Default ; > ;
-        < "å®" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Ñòîï" ; Default ; > ;
-        < "Ïğåäóïğåæäåíèå" ; Default ; > ;
-        < "Èíôîğìàöèÿ" ; Default ; > ;
-        < "Ìàêğîñ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Zatrzymaj" ; Default ; > ;
-        < "Ostrze¿enie" ; Default ; > ;
-        < "Informacja" ; Default ; > ;
-        < "Makro" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ä¸­æ­¢" ; Default ; > ;
-        < "è­¦å‘Š" ; Default ; > ;
-        < "æƒ…å ±" ; Default ; > ;
-        < "ãƒã‚¯ãƒ­" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "æš«åœ" ; Default ; > ;
-        < "è­¦å‘Š" ; Default ; > ;
-        < "è³‡è¨Š" ; Default ; > ;
-        < "å·¨é›†" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ÅíŞÇİ" ; Default ; > ;
-        < "ÊÍĞíÑ" ; Default ; > ;
-        < "ãÚáæãÉ" ; Default ; > ;
-        < "ãÇßÑæ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "ÄéáêïğŞ" ; Default ; > ;
-        < "Ğñïåéäïğïßçóç" ; Default ; > ;
-        < "Ğëçñïöïñßåò" ; Default ; > ;
-        < "ÌáêñïåíôïëŞ" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ì •ì§€" ; Default ; > ;
-        < "ê²½ê³ " ; Default ; > ;
-        < "ì •ë³´" ; Default ; > ;
-        < "ë§¤í¬ë¡œ" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < "; Stopp" ; Default ; > ;
         < "; Warnung" ; Default ; > ;
         < "; Information" ; Default ; > ;
         < "; Makro" ; Default ; > ;
     };
-    StringList [ turkish ] =
-    {
-            < "Dur" ; Default ; > ;
-        < "Uyarı" ; Default ; > ;
-        < "Bilgi" ; Default ; > ;
-        < "Makro" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Atura" ; Default ; > ;
-        < "Advertiment" ; Default ; > ;
-        < "Informació" ; Default ; > ;
-        < "Macro" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Seis" ; Default ; > ;
-        < "Varoitus" ; Default ; > ;
-        < "Tiedot" ; Default ; > ;
-        < "Makro" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¸«à¸¢à¸¸à¸”" ; Default ; > ;
-        < "à¸„à¸³à¹€à¸•à¸·à¸­à¸™" ; Default ; > ;
-        < "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥" ; Default ; > ;
-        < "à¸¡à¸²à¹‚à¸„à¸£" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Zastavit" ; Default ; > ;
-        < "UpozornÄ›nÃ­" ; Default ; > ;
-        < "Informace" ; Default ; > ;
-        < "Makro" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Stopp" ; Default ; > ;
-        < "Warnung" ; Default ; > ;
-        < "Information" ; Default ; > ;
-        < "â€®×”×¤×¢×œ×ª ×××§×¨×•â€¬" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤°à¥‹à¤•à¥‹" ; Default ; > ;
-        < "Warnung" ; Default ; > ;
-        < "à¤¸à¥‚à¤šà¤¨à¤¾" ; Default ; > ;
-        < "à¤®à¥‰à¤•à¥à¤°à¥‹" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "ZastaviÅ¥" ; Default ; > ;
-        < "Upozornenie" ; Default ; > ;
-        < "InformÃ¡cia" ; Default ; > ;
-        < "Makro" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "LeÃ¡llÃ­tÃ¡s" ; Default ; > ;
-        < "FigyelmeztetÃ©s" ; Default ; > ;
-        < "InformÃ¡ciÃ³" ; Default ; > ;
-        < "MakrÃ³" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Konec" ; Default ; > ;
-        < "Opozorilo" ; Default ; > ;
-        < "Informacije" ; Default ; > ;
-        < "Makro" ; Default ; > ;
-    };
     };
     PushButton BTN_SEARCH
     {
         Pos = MAP_APPFONT ( 191 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Durchsuchen..." ;
-        Text [ ENGLISH ] = "~Search..." ;
+        Text [ de ] = "~Durchsuchen..." ;
         TabStop = TRUE ;
-        Text [ dutch ] = "~Bladeren..." ;
-        Text [ english_us ] = "~Browse..." ;
-        Text [ swedish ] = "~Genomsök..." ;
-        Text [ danish ] = "~Gennemse..." ;
-        Text [ italian ] = "~Sfoglia..." ;
-        Text [ spanish ] = "~Buscar..." ;
-        Text [ french ] = "~Parcourir..." ;
-        Text [ portuguese_brazilian ] = "~Navegar..." ;
-        Text [ portuguese ] = "~Pesquisar..." ;
-        Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
-        Text[ russian ] = "Îáçîğ...";
-        Text[ polish ] = "~Przegl¹daj...";
-        Text[ japanese ] = "æ¤œç´¢(~B)...";
-        Text[ chinese_traditional ] = "ç€è¦½(~B)...";
-        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
-        Text[ greek ] = "ÁíáæŞôçóç...";
-        Text[ korean ] = "ì°¾ì•„ë³´ê¸°(~B)...";
-        Text[ turkish ] = "~Tara...";
-        Text[ catalan ] = "~Navega...";
-        Text[ finnish ] = "~Selaa...";
-        Text[ thai ] = "à¹€~à¸£à¸µà¸¢à¸à¸”à¸¹...";
-        Text[ czech ] = "ProchÃ¡zet...";
-        Text[ hebrew ] = "â€®×¢×™×•×Ÿ...â€¬";
-        Text[ hindi ] = "~à¤¬à¥à¤°à¤‰à¤œà¤¼...";
-        Text[ slovak ] = "~ListovaÅ¥...";
-        Text[ hungarian ] = "~TallÃ³zÃ¡s...";
-        Text[ slovenian ] = "Pre~brskaj...";
+        Text [ en-US ] = "~Browse..." ;
     };
-    Text [ dutch ] = "Foutmelding" ;
-    Text [ english_us ] = "Error Alert" ;
-    Text [ swedish ] = "Felmeddelande" ;
-    Text [ danish ] = "Fejlmelding" ;
-    Text [ italian ] = "Messaggio di errore" ;
-    Text [ spanish ] = "Mensaje de error" ;
-    Text [ french ] = "Message d'erreur" ;
-    Text [ portuguese_brazilian ] = "Aviso de Erro" ;
-    Text [ portuguese ] = "Mensagem de erro" ;
-    Text[ chinese_simplified ] = "é”™è¯¯æŠ¥å‘Š";
-    Text[ russian ] = "Äåéñòâèÿ ïğè îøèáêå";
-    Text[ polish ] = "Komunikat o b³êdzie";
-    Text[ japanese ] = "ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
-    Text[ chinese_traditional ] = "éŒ¯èª¤å ±å‘Š";
-    Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
-    Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
-    Text[ korean ] = "ì˜¤ë¥˜ ë©”ì‹œì§€";
-    Text[ turkish ] = "Hata iletisi";
-    Text[ catalan ] = "Avís d'error";
-    Text[ finnish ] = "Virhehälytys";
-    Text[ thai ] = "à¹€à¸•à¸·à¸­à¸™à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
-    Text[ czech ] = "ChybovÃ© hlÃ¡Å¡enÃ­";
-    Text[ hebrew ] = "Fehlermeldung";
-    Text[ hindi ] = "à¤—à¤²à¤¤à¥€ à¤•à¤¾ à¤¸à¤¾à¤µà¤§à¤¾à¤¨";
-    Text[ slovak ] = "ChybovÃ© hlÃ¡senie";
-    Text[ hungarian ] = "FigyelmeztetÃ©s hibÃ¡ra";
-    Text[ slovenian ] = "Opozorilo o napaki";
+    Text [ en-US ] = "Error Alert" ;
 };
 
 
