@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:07:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,22 @@ SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImp
     if (!pFontDecls)
         pFontDecls = const_cast<XMLFontStylesContext*>(rImport.GetFontDecls());
     return new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls );
+}
+
+SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaDefaultExtPropMapper(SvXMLImport& rImport, XMLFontStylesContext* pFontDecls)
+{
+    if (!pFontDecls)
+        pFontDecls = const_cast<XMLFontStylesContext*>(rImport.GetFontDecls());
+
+    XMLPropertySetMapper* pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
+    SvXMLImportPropertyMapper* pImportMapper = new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls );
+
+    pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
+    pImportMapper->ChainImportMapper( new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls ) );
+
+    return pImportMapper;
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
