@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: os $ $Date: 2002-02-01 11:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,14 +163,21 @@ private:
     CheckBox            aCbxUseGridsnap;
     CheckBox            aCbxGridVisible;
 
-    FixedText           aFtResolution;
+    FixedLine           aFlResolution;
     FixedText           aFtDrawX;
     MetricField         aMtrFldDrawX;
     FixedText           aFtDrawY;
     MetricField         aMtrFldDrawY;
-    FixedText           aFtDivision;
-    MetricField         aMtrFldDivisionX;
-    MetricField         aMtrFldDivisionY;
+
+    FixedLine           aFlDivision;
+    FixedText           aFtDivisionX;
+    NumericField        aNumFldDivisionX;
+    FixedText           aDivisionPointX;
+
+    FixedText           aFtDivisionY;
+    NumericField        aNumFldDivisionY;
+    FixedText           aDivisionPointY;
+
     CheckBox            aCbxSynchronize;
     FixedLine           aGrpDrawGrid; // Neu
 
@@ -200,17 +207,10 @@ private:
 
 #ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );
-    DECL_LINK( ChangeDrawXHdl_Impl, void * );
-    DECL_LINK( ChangeDrawYHdl_Impl, void * );
-    DECL_LINK( ChangeSnapXHdl_Impl, void * );
-    DECL_LINK( ChangeSnapYHdl_Impl, void * );
+    DECL_LINK( ChangeDrawHdl_Impl, MetricField * );
     DECL_LINK( ChangeGridsnapHdl_Impl, void * );
-    DECL_LINK( ChangeDivisionXHdl_Impl, void * );
-    DECL_LINK( ChangeDivisionYHdl_Impl, void * );
+    DECL_LINK( ChangeDivisionHdl_Impl, NumericField * );
 
-    //void      Init();
-    //void      AutoClickHdl(CheckBox* pBox);
-    //void      ModifyHdl(Edit* );
 #endif
 };
 

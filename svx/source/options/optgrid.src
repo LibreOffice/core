@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-18 11:39:41 $
+ *  last change: $Author: os $ $Date: 2002-02-01 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "Snap to ~Grid" ;
         Text [ NORWEGIAN ] = "Snap to ~Grid" ;
         Text [ DANISH ] = "Fastg¯r til gitter" ;
-        Text [ ENGLISH_US ] = "Sn~ap to grid" ;
+        Text [ ENGLISH_US ] = "Snap to ~grid" ;
         Text [ SPANISH ] = "~Usar cuadrÌcula de captura" ;
         Text [ FINNISH ] = "~Kohdista ruudukkoon" ;
         Text [ FRENCH ] = "Utiliser la ~grille de capture" ;
@@ -160,16 +160,15 @@ TabPage RID_SVXPAGE_GRID
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~CuadrÌcula visible";
     };
-    FixedText FT_RESOLUTION
+    FixedLine FL_RESOLUTION
     {
-        Pos = MAP_APPFONT ( 89 , 41 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
-        Center = TRUE;
-        Text = "Aufl~ˆsung" ;
-        Text [ ENGLISH ] = "~Resolution" ;
+        Pos = MAP_APPFONT ( 6 , 45 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Auflˆsung" ;
+        Text [ ENGLISH ] = "Resolution" ;
         Text [ NORWEGIAN ] = "~Resolution" ;
         Text [ DANISH ] = "Opl¯sning" ;
-        Text [ ENGLISH_US ] = "~Resolution" ;
+        Text [ ENGLISH_US ] = "Resolution" ;
         Text [ SPANISH ] = "R~esoluciÛn" ;
         Text [ FINNISH ] = "~Tarkkuus" ;
         Text [ FRENCH ] = "~RÈsolution" ;
@@ -190,40 +189,10 @@ TabPage RID_SVXPAGE_GRID
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "R~esoluciÛn";
     };
-    FixedText FT_DIVISION
-    {
-        Pos = MAP_APPFONT ( 171 , 41 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
-        Center = TRUE;
-        Text = "~Unterteilung" ;
-        Text [ ENGLISH ] = "~Division" ;
-        Text [ NORWEGIAN ] = "~Division" ;
-        Text [ DANISH ] = "Inddeling" ;
-        Text [ ENGLISH_US ] = "S~ubdivision" ;
-        Text [ SPANISH ] = "S~ubdivisiÛn" ;
-        Text [ FINNISH ] = "~Alaosasto" ;
-        Text [ FRENCH ] = "~Finesse" ;
-        Text [ ITALIAN ] = "Suddivisione" ;
-        Text [ DUTCH ] = "~Onderverdeling" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Divis?o" ;
-        Text [ SWEDISH ] = "Indelning" ;
-        Text [ PORTUGUESE ] = "~Subdivis„o" ;
-        Text[ chinese_simplified ] = "Á∫øÁÇπÈó¥Èöî(~U)";
-        Text[ russian ] = "–‡Á‰ÂÎÂÌËÂ";
-        Text[ polish ] = "Podzia≥";
-        Text[ japanese ] = "ÁÇπ„ÅÆÈñìÈöî(~U)";
-        Text[ chinese_traditional ] = "Á∑öÈªûÈñìÈöî(~U)";
-        Text[ arabic ] = "«· ﬁ”Ì„ «·›—⁄Ì";
-        Text[ greek ] = "~’Ô‰È·ﬂÒÂÛÁ";
-        Text[ korean ] = "ÏÑ∏Î∂ÑÌôî(~U)";
-        Text[ turkish ] = "Bˆl¸mleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~ubdivisiÛn";
-    };
     FixedText FT_DRAW_X
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "H~orizontal" ;
         Text [ ENGLISH ] = "Horizontal" ;
         Text[ english_us ] = "H~orizontal";
@@ -251,7 +220,7 @@ TabPage RID_SVXPAGE_GRID
     FixedText FT_DRAW_Y
     {
         Pos = MAP_APPFONT ( 12 , 71 ) ;
-        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "Vertical" ;
         Text[ english_us ] = "~Vertical";
@@ -279,7 +248,7 @@ TabPage RID_SVXPAGE_GRID
     MetricField MTR_FLD_DRAW_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 89 , 54 ) ;
+        Pos = MAP_APPFONT ( 75 , 54 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -296,7 +265,7 @@ TabPage RID_SVXPAGE_GRID
     MetricField MTR_FLD_DRAW_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 89 , 69 ) ;
+        Pos = MAP_APPFONT ( 75 , 69 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -310,85 +279,155 @@ TabPage RID_SVXPAGE_GRID
         Unit = FUNIT_MM ;
         SpinSize = 50 ;
     };
-    MetricField MTR_FLD_DIVISION_X
+    FixedLine FL_DIVISION
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 171 , 54 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 99 ;
-        Last = 99 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Punkte" ;
-        CustomUnitText [ ENGLISH ] = " Points" ;
-        CustomUnitText [ NORWEGIAN ] = " Punkter" ;
-        CustomUnitText [ DANISH ] = "punkter" ;
-        CustomUnitText [ ENGLISH_US ] = " points" ;
-        CustomUnitText [ SPANISH ] = "Puntos" ;
-        CustomUnitText [ FINNISH ] = " pisteet" ;
-        CustomUnitText [ FRENCH ] = " Points" ;
-        CustomUnitText [ ITALIAN ] = "Punti" ;
-        CustomUnitText [ DUTCH ] = "Punten" ;
-        CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
-        CustomUnitText [ SWEDISH ] = " punkter" ;
-        CustomUnitText [ PORTUGUESE ] = "Pontos" ;
-        SpinSize = 1 ;
-        CustomUnitText[ chinese_simplified ] = " Êé•ÁÇπ";
-        CustomUnitText[ russian ] = "œÛÌÍÚ˚";
-        CustomUnitText[ polish ] = "Punkty";
-        CustomUnitText[ japanese ] = "„Éù„Ç§„É≥„Éà";
-        CustomUnitText[ chinese_traditional ] = " Êé•Èªû";
-        CustomUnitText[ arabic ] = "‰ﬁÿ…/‰ﬁ«ÿ";
-        CustomUnitText[ greek ] = "”ÁÏÂﬂ·";
-        CustomUnitText[ korean ] = "Ï†ê";
-        CustomUnitText[ turkish ] = "Nokta";
-        CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "Puntos";
+        Pos = MAP_APPFONT ( 130 , 45 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Text = "Unterteilung" ;
+        Text [ ENGLISH ] = "Division" ;
+        Text [ NORWEGIAN ] = "~Division" ;
+        Text [ DANISH ] = "Inddeling" ;
+        Text [ ENGLISH_US ] = "Subdivision" ;
+        Text [ SPANISH ] = "S~ubdivisiÛn" ;
+        Text [ FINNISH ] = "~Alaosasto" ;
+        Text [ FRENCH ] = "~Finesse" ;
+        Text [ ITALIAN ] = "Suddivisione" ;
+        Text [ DUTCH ] = "~Onderverdeling" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Divis?o" ;
+        Text [ SWEDISH ] = "Indelning" ;
+        Text [ PORTUGUESE ] = "~Subdivis„o" ;
+        Text[ chinese_simplified ] = "Á∫øÁÇπÈó¥Èöî(~U)";
+        Text[ russian ] = "–‡Á‰ÂÎÂÌËÂ";
+        Text[ polish ] = "Podzia≥";
+        Text[ japanese ] = "ÁÇπ„ÅÆÈñìÈöî(~U)";
+        Text[ chinese_traditional ] = "Á∑öÈªûÈñìÈöî(~U)";
+        Text[ arabic ] = "«· ﬁ”Ì„ «·›—⁄Ì";
+        Text[ greek ] = "~’Ô‰È·ﬂÒÂÛÁ";
+        Text[ korean ] = "ÏÑ∏Î∂ÑÌôî(~U)";
+        Text[ turkish ] = "Bˆl¸mleme";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "S~ubdivisiÛn";
     };
-    MetricField MTR_FLD_DIVISION_Y
+    FixedText FT_DIVISION_X
+    {
+        Pos = MAP_APPFONT ( 136 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Ho~rizontal" ;
+        Text [ ENGLISH ] = "Horizontal" ;
+        Text[ english_us ] = "Horizont~al";
+        Text[ portuguese ] = "~Horizontal";
+        Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
+        Text[ greek ] = "œÒÈÊ¸ÌÙÈ·";
+        Text[ dutch ] = "H~orizontaal";
+        Text[ french ] = "H~orizontal";
+        Text[ spanish ] = "~Horizontal";
+        Text[ italian ] = "~Orizzontale";
+        Text[ danish ] = "X-akse";
+        Text[ swedish ] = "H~orisontellt";
+        Text[ polish ] = "Poziomo";
+        Text[ portuguese_brazilian ] = "~Eixo X";
+        Text[ japanese ] = "Ê®™„Å´(~O)";
+        Text[ korean ] = "ÏàòÌèâ(~O)";
+        Text[ chinese_simplified ] = "Ê∞¥Âπ≥ÊñπÂêë(~O)";
+        Text[ chinese_traditional ] = "Ê∞¥Âπ≥ÊñπÂêë(~O)";
+        Text[ turkish ] = "X ekseni";
+        Text[ arabic ] = "√›ﬁÌ";
+        Text[ finnish ] = "~Vaakataso";
+        Text[ catalan ] = "Eje ~X";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DIVISION_Y
+    {
+        Pos = MAP_APPFONT ( 136 , 71 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "V~ertikal" ;
+        Text [ ENGLISH ] = "Vertical" ;
+        Text[ english_us ] = "V~ertical";
+        Text[ portuguese ] = "~Vertical";
+        Text[ russian ] = "¬ÂÚËÍ‡Î¸ÌÓ";
+        Text[ greek ] = " ·Ù·Í¸Ò~ıˆ·";
+        Text[ dutch ] = "~Verticaal";
+        Text[ french ] = "~Vertical";
+        Text[ spanish ] = "~Vertical";
+        Text[ italian ] = "~Verticale";
+        Text[ danish ] = "Y-akse";
+        Text[ swedish ] = "~Vertikalt";
+        Text[ polish ] = "~Pionowo";
+        Text[ portuguese_brazilian ] = "~Eixo Y";
+        Text[ japanese ] = "Á∏¶„Å´(~V)";
+        Text[ korean ] = "ÏàòÏßÅ(~V)";
+        Text[ chinese_simplified ] = "ÂûÇÁõ¥ÊñπÂêë(~V)";
+        Text[ chinese_traditional ] = "ÂûÇÁõ¥ÊñπÂêë(~V)";
+        Text[ turkish ] = "Y ekseni";
+        Text[ arabic ] = "~—√”Ì";
+        Text[ finnish ] = "~Pystytaso";
+        Text[ catalan ] = "Eje ~Y";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_FLD_DIVISION_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 171 , 69 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 54 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 99 ;
         Last = 99 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Punkte" ;
-        CustomUnitText [ ENGLISH ] = " Points" ;
-        CustomUnitText [ NORWEGIAN ] = " Punkter" ;
-        CustomUnitText [ DANISH ] = "punkter" ;
-        CustomUnitText [ ENGLISH_US ] = " points" ;
-        CustomUnitText [ SPANISH ] = "Puntos" ;
-        CustomUnitText [ FINNISH ] = " pisteet" ;
-        CustomUnitText [ FRENCH ] = " Points" ;
-        CustomUnitText [ ITALIAN ] = "Punti" ;
-        CustomUnitText [ DUTCH ] = "Punten" ;
-        CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
-        CustomUnitText [ SWEDISH ] = " punkter" ;
-        CustomUnitText [ PORTUGUESE ] = "Pontos" ;
         SpinSize = 1 ;
-        CustomUnitText[ chinese_simplified ] = " Êé•ÁÇπ";
-        CustomUnitText[ russian ] = "œÛÌÍÚ˚";
-        CustomUnitText[ polish ] = "Punkty";
-        CustomUnitText[ japanese ] = "„Éù„Ç§„É≥„Éà";
-        CustomUnitText[ chinese_traditional ] = " Êé•Èªû";
-        CustomUnitText[ arabic ] = "‰ﬁÿ…/‰ﬁ«ÿ";
-        CustomUnitText[ greek ] = "”ÁÏÂﬂ·";
-        CustomUnitText[ korean ] = "Ï†ê";
-        CustomUnitText[ turkish ] = "Nokta";
-        CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "Puntos";
+    };
+    FixedText FT_HORZ_POINTS
+    {
+        Pos = MAP_APPFONT ( 227 , 56 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Text = "Punkte" ;
+        Text [ ENGLISH ] = "Points" ;
+        Text [ NORWEGIAN ] = "Punkter" ;
+        Text [ DANISH ] = "punkter" ;
+        Text [ ENGLISH_US ] = "points" ;
+        Text [ SPANISH ] = "Puntos" ;
+        Text [ FINNISH ] = "pisteet" ;
+        Text [ FRENCH ] = "Points" ;
+        Text [ ITALIAN ] = "Punti" ;
+        Text [ DUTCH ] = "Punten" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
+        Text [ SWEDISH ] = "punkter" ;
+        Text [ PORTUGUESE ] = "Pontos" ;
+        Text[ chinese_simplified ] = " Êé•ÁÇπ";
+        Text[ russian ] = "œÛÌÍÚ˚";
+        Text[ polish ] = "Punkty";
+        Text[ japanese ] = "„Éù„Ç§„É≥„Éà";
+        Text[ chinese_traditional ] = " Êé•Èªû";
+        Text[ arabic ] = "‰ﬁÿ…/‰ﬁ«ÿ";
+        Text[ greek ] = "”ÁÏÂﬂ·";
+        Text[ korean ] = "Ï†ê";
+        Text[ turkish ] = "Nokta";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Puntos";
+    };
+    NumericField NUM_FLD_DIVISION_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 199 , 69 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        StrictFormat = TRUE ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_VERT_POINTS
+    {
+        Pos = MAP_APPFONT ( 227 , 71 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
+
     };
     CheckBox CBX_SYNCHRONIZE
     {
-        Pos = MAP_APPFONT ( 89 , 84 ) ;
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 127 , 10 ) ;
         TabStop = TRUE ;
         Text = "Achsen ~synchronisieren" ;

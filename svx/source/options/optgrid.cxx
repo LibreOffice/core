@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:21:57 $
+ *  last change: $Author: os $ $Date: 2002-02-01 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,14 +211,24 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),
 
-    aFtResolution   ( this, ResId( FT_RESOLUTION ) ),
+    aFlResolution   ( this, ResId( FL_RESOLUTION ) ),
+
     aFtDrawX        ( this, ResId( FT_DRAW_X ) ),
     aMtrFldDrawX    ( this, ResId( MTR_FLD_DRAW_X ) ),
-    aFtDivision     ( this, ResId( FT_DIVISION ) ),
-    aMtrFldDivisionX( this, ResId( MTR_FLD_DIVISION_X ) ),
+
     aFtDrawY        ( this, ResId( FT_DRAW_Y ) ),
     aMtrFldDrawY    ( this, ResId( MTR_FLD_DRAW_Y ) ),
-    aMtrFldDivisionY( this, ResId( MTR_FLD_DIVISION_Y ) ),
+
+    aFlDivision     ( this, ResId( FL_DIVISION ) ),
+
+    aFtDivisionX(     this, ResId( FT_DIVISION_X) ),
+    aNumFldDivisionX( this, ResId( NUM_FLD_DIVISION_X ) ),
+    aDivisionPointX(  this, ResId( FT_HORZ_POINTS) ),
+
+    aFtDivisionY(     this, ResId( FT_DIVISION_Y) ),
+    aNumFldDivisionY( this, ResId( NUM_FLD_DIVISION_Y ) ),
+    aDivisionPointY(  this, ResId( FT_VERT_POINTS) ),
+
     aGrpDrawGrid    ( this, ResId( GRP_DRAWGRID ) ),
     aCbxUseGridsnap ( this, ResId( CBX_USE_GRIDSNAP ) ),
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
@@ -245,6 +255,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     FreeResource();
 
+    aDivisionPointY.SetText(aDivisionPointX.GetText());
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rCoreSet );
     long nFirst, nLast, nMin, nMax;
@@ -264,13 +275,13 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aCbxSynchronize.SetClickHdl( aLink );
     aCbxGridVisible.SetClickHdl( aLink );
     aMtrFldDrawX.SetModifyHdl(
-        LINK( this, SvxGridTabPage, ChangeDrawXHdl_Impl ) );
+        LINK( this, SvxGridTabPage, ChangeDrawHdl_Impl ) );
     aMtrFldDrawY.SetModifyHdl(
-        LINK( this, SvxGridTabPage, ChangeDrawYHdl_Impl ) );
-    aMtrFldDivisionX.SetModifyHdl(
-        LINK( this, SvxGridTabPage, ChangeDivisionXHdl_Impl ) );
-    aMtrFldDivisionY.SetModifyHdl(
-        LINK( this, SvxGridTabPage, ChangeDivisionYHdl_Impl ) );
+        LINK( this, SvxGridTabPage, ChangeDrawHdl_Impl ) );
+    aNumFldDivisionX.SetModifyHdl(
+        LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
+    aNumFldDivisionY.SetModifyHdl(
+        LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
 }
 
 //------------------------------------------------------------------------
@@ -299,8 +310,8 @@ BOOL SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         aGridItem.nFldDrawX    = (UINT32) nX;
         aGridItem.nFldDrawY    = (UINT32) nY;
-        aGridItem.nFldDivisionX = aMtrFldDivisionX.GetValue();
-        aGridItem.nFldDivisionY = aMtrFldDivisionY.GetValue();
+        aGridItem.nFldDivisionX = aNumFldDivisionX.GetValue();
+        aGridItem.nFldDivisionY = aNumFldDivisionY.GetValue();
 
         rCoreSet.Put( aGridItem );
     }
@@ -328,10 +339,10 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
 
 //      UINT32 nFineX = pGridAttr->nFldDivisionX;
 //      UINT32 nFineY = pGridAttr->nFldDivisionY;
-//      aMtrFldDivisionX.SetValue( nFineX ? (pGridAttr->nFldDrawX / nFineX - 1) : 0 );
-//      aMtrFldDivisionY.SetValue( nFineY ? (pGridAttr->nFldDrawY / nFineY - 1) : 0 );
-        aMtrFldDivisionX.SetValue( pGridAttr->nFldDivisionX );
-        aMtrFldDivisionY.SetValue( pGridAttr->nFldDivisionY );
+//      aNumFldDivisionX.SetValue( nFineX ? (pGridAttr->nFldDrawX / nFineX - 1) : 0 );
+//      aNumFldDivisionY.SetValue( nFineY ? (pGridAttr->nFldDrawY / nFineY - 1) : 0 );
+        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX );
+        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY );
     }
 
     ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
@@ -386,22 +397,22 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 // -----------------------------------------------------------------------
-
 int SvxGridTabPage::DeactivatePage( SfxItemSet* pSet )
 {
     if ( pSet )
         FillItemSet( *pSet );
     return( LEAVE_PAGE );
 }
-
 //------------------------------------------------------------------------
-
-IMPL_LINK( SvxGridTabPage, ChangeDrawXHdl_Impl, void *, EMPTYARG )
+IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
     bAttrModified = TRUE;
     if( aCbxSynchronize.IsChecked() )
     {
-        aMtrFldDrawY.SetValue( aMtrFldDrawX.GetValue() );
+        if(pField == &aMtrFldDrawX)
+            aMtrFldDrawY.SetValue( aMtrFldDrawX.GetValue() );
+        else
+            aMtrFldDrawX.SetValue( aMtrFldDrawY.GetValue() );
     }
     return 0;
 }
@@ -419,56 +430,18 @@ IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, p )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGridTabPage, ChangeDrawYHdl_Impl, void *, EMPTYARG )
+IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
     bAttrModified = TRUE;
     if( aCbxSynchronize.IsChecked() )
     {
-        aMtrFldDrawX.SetValue( aMtrFldDrawY.GetValue() );
+        if(&aNumFldDivisionX == pField)
+            aNumFldDivisionY.SetValue( aNumFldDivisionX.GetValue() );
+        else
+            aNumFldDivisionX.SetValue( aNumFldDivisionY.GetValue() );
     }
     return 0;
 }
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxGridTabPage, ChangeDivisionXHdl_Impl, void *, EMPTYARG )
-{
-    bAttrModified = TRUE;
-    if( aCbxSynchronize.IsChecked() )
-    {
-        aMtrFldDivisionY.SetValue( aMtrFldDivisionX.GetValue() );
-    }
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxGridTabPage, ChangeDivisionYHdl_Impl, void *, EMPTYARG )
-{
-    bAttrModified = TRUE;
-    if( aCbxSynchronize.IsChecked() )
-    {
-        aMtrFldDivisionX.SetValue( aMtrFldDivisionY.GetValue() );
-    }
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxGridTabPage, ChangeSnapXHdl_Impl, void *, EMPTYARG )
-{
-    bAttrModified = TRUE;
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxGridTabPage, ChangeSnapYHdl_Impl, void *, EMPTYARG )
-{
-    bAttrModified = TRUE;
-    return 0;
-}
-
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, p )
