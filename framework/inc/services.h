@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:49:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_HEADERMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.HeaderMenuController"    )
 #define IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.FooterMenuController"    )
 #define IMPLEMENTATIONNAME_CONTROLMENUCONTROLLER                DECLARE_ASCII("com.sun.star.comp.framework.ControlMenuController"   )
+#define IMPLEMENTATIONNAME_NEWMENUCONTROLLER                    DECLARE_ASCII("com.sun.star.comp.framework.NewMenuController"       )
 #define IMPLEMENTATIONNAME_UICOMMANDDESCRIPTION                 DECLARE_ASCII("com.sun.star.comp.framework.UICommandDescription"    )
 #define IMPLEMENTATIONNAME_UIELEMENTFACTORYMANAGER              DECLARE_ASCII("com.sun.star.comp.framework.UIElementFactoryManager" )
 #define IMPLEMENTATIONNAME_MODULEMANAGER                        DECLARE_ASCII("com.sun.star.comp.framework.ModuleManager"           )
