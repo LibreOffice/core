@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:38:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,18 +450,17 @@ void MacroChooser::DeleteMacro()
 
         SbModule* pModule = pMethod->GetModule();
         DBG_ASSERT( pModule, "DeleteMacro: Kein Modul?!" );
-        String aSource( pModule->GetSource() );
+        ::rtl::OUString aSource( pModule->GetSource32() );
         USHORT nStart, nEnd;
         pMethod->GetLineRange( nStart, nEnd );
         pModule->GetMethods()->Remove( pMethod );
         CutLines( aSource, nStart-1, nEnd-nStart+1, TRUE );
-        pModule->SetSource( aSource );
+        pModule->SetSource32( aSource );
 
         // update module in library
         String aLibName = pBasic->GetName();
         String aModName = pModule->GetName();
-        ::rtl::OUString aModule = pModule->GetSource();
-        BasicIDE::UpdateModule( pShell, aLibName, aModName, aModule );
+        BasicIDE::UpdateModule( pShell, aLibName, aModName, aSource );
 
         SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
         DBG_ASSERT( pEntry, "DeleteMacro: Entry ?!" );
