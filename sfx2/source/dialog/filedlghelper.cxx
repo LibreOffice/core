@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-15 10:48:13 $
+ *  last change: $Author: dv $ $Date: 2001-06-15 14:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ public:
 
     OUString                getPath() const { return maPath; }
     OUString                getFilter() const;
+    OUString                getRealFilter() const;
 };
 
 // ------------------------------------------------------------------------
@@ -342,15 +343,18 @@ void FileDialogHelper_Impl::enablePasswordBox()
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
     OUString aFilterName = xFltMgr->getCurrentFilter();
 
-    const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
-                        aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
+    if ( mpMatcher )
+    {
+        const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
+                            aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
-    BOOL bEnablePasswd = pFilter && pFilter->UsesStorage() &&
-                         pFilter->IsOwnFormat();
+        BOOL bEnablePasswd = pFilter && pFilter->UsesStorage() &&
+                             pFilter->IsOwnFormat();
 
-    Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-    xCtrlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, bEnablePasswd );
+        xCtrlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, bEnablePasswd );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -506,6 +510,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mbHasLink       = sal_False;
     mbDeleteMatcher = sal_False;
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
+
+    mpMatcher = NULL;
 
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
@@ -694,7 +700,7 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
         }
 
         // set the filter
-        rFilter = getFilter();
+        rFilter = getRealFilter();
 
         // fill the rpURLList
         Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
@@ -768,11 +774,25 @@ OUString FileDialogHelper_Impl::getFilter() const
 
     if ( xFltMgr.is() )
         aFilter = xFltMgr->getCurrentFilter();
+    else
+        aFilter = maCurFilter;
+
+    return aFilter;
+}
+
+// ------------------------------------------------------------------------
+OUString FileDialogHelper_Impl::getRealFilter() const
+{
+    OUString aFilter;
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if ( xFltMgr.is() )
+        aFilter = xFltMgr->getCurrentFilter();
 
     if ( ! aFilter.getLength() )
         aFilter = maCurFilter;
 
-    if ( aFilter.getLength() )
+    if ( aFilter.getLength() && mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
                                         aFilter, 0, SFX_FILTER_NOTINFILEDLG );
@@ -788,7 +808,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 {
     maCurFilter = rFilter;
 
-    if ( rFilter.getLength() )
+    if ( rFilter.getLength() && mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter(
                                         rFilter, 0, SFX_FILTER_NOTINFILEDLG );
@@ -926,7 +946,7 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview || mbHasLink )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData;// = aDlgOpt.GetUserData();
+        String aUserData( ';' );// = aDlgOpt.GetUserData();
 
         aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
         sal_Bool bValue = sal_False;
