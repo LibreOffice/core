@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:05:18 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 15:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,8 +246,6 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent ) :
     bCallingDropCallback( FALSE ),
     nUpdateLock( 0 ),
     nCursorHidden( 0 ),
-    pDtorNotify( 0 ),
-    bCallingDropCallback( FALSE ),
     m_nDragRowDividerLimit( 0 ),
     m_nDragRowDividerOffset( 0 )
 {
