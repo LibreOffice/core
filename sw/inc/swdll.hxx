@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:41:26 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class SfxFilter;
 #include <sfx2/module.hxx>
 #endif
 
-//#include <sal/types.h>
+#include <tools/shl.hxx>
 
 //-------------------------------------------------------------------------
 
@@ -102,70 +102,15 @@ public:
                     SwDLL();
                     ~SwDLL();
 
-                    // static-init/exit-code must be linked to the application
-    static void     LibInit();  // called from SfxApplication-subclass::Init()
-    static void     LibExit();  // called from SfxApplication-subclass::Exit()
-    static void     PreExit();  // muss vor LibExit gerufen werden
-
-                    // DLL-init/exit-code must be linked to the DLL only
     static void     Init();     // called directly after loading the DLL
     static void     Exit();     // called directly befor unloading the DLL
 
-
     static void     FillStatusBar(StatusBar &rBar);
-
-    static ULONG    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
-                                    SfxFilterFlags nMust, SfxFilterFlags nDont );
-    static ULONG    GlobDetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
-                                    SfxFilterFlags nMust, SfxFilterFlags nDont );
-
-    static sal_Bool RegisterFrameLoaders( void* pServiceManager, void* pRegistryKey );
-    static void*    CreateFrameLoader( const sal_Char* pImplementationName, void* pServiceManager, void *pRegistryKey );
 };
 
 //-------------------------------------------------------------------------
 
-class SwModuleDummy : public SfxModule
-
-/*  [Description]
-
-    This tricky class keeps pointers to the SvFactories while
-    the DLL isn`t loaded. A pointer to the one instance is available
-    through SXX_MOD() (shared-lib-app-data).
-*/
-
-{
-public:
-    virtual ~SwModuleDummy();
-    TYPEINFO();
-                    // SvFactory name convention:
-                    // 'p' + SfxObjectShell-subclass + 'Factory'
-    SotFactory*     pSwDocShellFactory;
-    SotFactory*     pSwWebDocShellFactory;
-    SotFactory*     pSwGlobalDocShellFactory;
-
-                    SwModuleDummy( ResMgr *pResMgr, BOOL bDummy,
-                                    SotFactory* pWebFact,
-                                    SotFactory* pFact,
-                                    SotFactory* pGlobalFact )
-                    :   SfxModule(pResMgr, bDummy,
-                                (SfxObjectFactory*)pFact,
-                                (SfxObjectFactory*)pWebFact,
-                                (SfxObjectFactory*)pGlobalFact, 0L),
-                        pSwDocShellFactory( pFact ),
-                        pSwWebDocShellFactory( pWebFact ),
-                        pSwGlobalDocShellFactory( pGlobalFact )
-                    {}
-
-    virtual SfxModule* Load();
-
-    static SvGlobalName GetID(USHORT nFileFormat);
-    static USHORT       HasID(const SvGlobalName& rName);
-};
-
-//-------------------------------------------------------------------------
-
-#define SW_DLL() ( *(SwModuleDummy**) GetAppData(SHL_WRITER) )
+#define SW_DLL() ( *(SwModule**) GetAppData(SHL_WRITER) )
 
 #endif
 
