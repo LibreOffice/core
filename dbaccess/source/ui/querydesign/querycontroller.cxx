@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:30:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,24 +965,25 @@ OJoinDesignView* OQueryController::getJoinView()
     return getContainer()->getDesignView();
 }
 // -----------------------------------------------------------------------------
-void OQueryController::AddSupportedFeatures()
+void OQueryController::describeSupportedFeatures()
 {
-    OJoinController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAs")]              = SID_SAVEASDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SbaNativeSql")]        = ID_BROWSER_ESACPEPROCESSING;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBViewFunctions")]     = SID_QUERY_VIEW_FUNCTIONS;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBViewTableNames")]    = SID_QUERY_VIEW_TABLES;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBViewAliases")]       = SID_QUERY_VIEW_ALIASES;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBDistinctValues")]    = SID_QUERY_DISTINCT_VALUES;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBChangeDesignMode")]  = ID_BROWSER_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBClearQuery")]        = SID_BROWSER_CLEAR_QUERY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SbaExecuteSql")]       = ID_BROWSER_QUERY_EXECUTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddRelation")]       = SID_RELATION_ADD_RELATION;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddTable")]          = ID_BROWSER_ADDTABLE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBQueryPreview")]      = SID_DB_QUERY_PREVIEW;
+    OJoinController::describeSupportedFeatures();
+    implDescribeSupportedFeature( ".uno:SaveAs",            SID_SAVEASDOC,              CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SbaNativeSql",      ID_BROWSER_ESACPEPROCESSING,CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DBViewFunctions",   SID_QUERY_VIEW_FUNCTIONS,   CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBViewTableNames",  SID_QUERY_VIEW_TABLES,      CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBViewAliases",     SID_QUERY_VIEW_ALIASES,     CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBDistinctValues",  SID_QUERY_DISTINCT_VALUES,  CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DBChangeDesignMode",ID_BROWSER_SQL,             CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBClearQuery",      SID_BROWSER_CLEAR_QUERY,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:SbaExecuteSql",     ID_BROWSER_QUERY_EXECUTE,   CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBAddRelation",     SID_RELATION_ADD_RELATION,  CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBAddTable",        ID_BROWSER_ADDTABLE,        CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBQueryPreview",    SID_DB_QUERY_PREVIEW,       CommandGroup::VIEW );
+
 #if OSL_DEBUG_LEVEL > 1
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBShowParseTree")] = ID_EDIT_QUERY_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBMakeDisjunct")]      = ID_EDIT_QUERY_DESIGN;
+    implDescribeSupportedFeature( ".uno:DBShowParseTree",   ID_EDIT_QUERY_SQL );
+    implDescribeSupportedFeature( ".uno:DBMakeDisjunct",    ID_EDIT_QUERY_DESIGN );
 #endif
 }
 // -----------------------------------------------------------------------------
