@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:41:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ int main( int argc, char * argv[])
 #include <string.h>
 #include <time.h>
 #include <memory>
-#include "external/boost/scoped_array.hpp"
+#include "boost/scoped_array.hpp"
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 // Properties of the javavm can be put
