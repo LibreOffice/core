@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-03 12:29:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
 #include <com/sun/star/util/XStringEscape.hpp>
@@ -111,6 +114,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include <rtl/ustrbuf.hxx>
 
 using namespace utl;
 using rtl::OUString;
@@ -559,6 +564,91 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
         }
     }
 }
+/* -----------------------------03.02.2003 14:44------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+{
+    // size of return list is fix!
+    // Every item must match to length of incoming name list.
+    sal_Int32 nCount = rNames.getLength();
+    Sequence< sal_Bool > lStates(nCount);
+
+    // We must be shure to return a valid information everytime!
+    // Set default to non readonly ... similar to the configuration handling of this property.
+    for (sal_Int32 i=0; i<nCount; ++i)
+        lStates[i] = sal_False;
+
+    // no access - no informations ...
+    Reference< XHierarchicalNameAccess > xHierarchyAccess = GetTree();
+    if (!xHierarchyAccess.is())
+        return lStates;
+
+    for (i=0; i<nCount; ++i)
+    {
+        try
+        {
+            if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, rNames[i]))
+            {
+                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nlocal mode seams to be used!?\n");
+                continue;
+            }
+
+            OUString sName = rNames[i];
+            OUString sPath;
+            OUString sProperty;
+
+            ::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
+            if (!sPath.getLength() && !sProperty.getLength())
+            {
+                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nsplitt failed\n");
+                continue;
+            }
+
+            Reference< XInterface >       xNode;
+            Reference< XPropertySet >     xSet ;
+            Reference< XPropertySetInfo > xInfo;
+            if (sPath.getLength())
+            {
+                Any aNode = xHierarchyAccess->getByHierarchicalName(sPath);
+                if (!(aNode >>= xNode) || !xNode.is())
+                {
+                    OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nno set available\n");
+                    continue;
+                }
+            }
+            else
+            {
+                xNode = Reference< XInterface >(xHierarchyAccess, UNO_QUERY);
+            }
+
+        xSet = Reference< XPropertySet >(xNode, UNO_QUERY);
+            if (xSet.is())
+        {
+            xInfo = xSet->getPropertySetInfo();
+                OSL_ENSURE(xInfo.is(), "ConfigItem::IsReadonly()\ngetPropertySetInfo failed ...\n");
+        }
+            else
+        {
+               xInfo = Reference< XPropertySetInfo >(xNode, UNO_QUERY);
+                OSL_ENSURE(xInfo.is(), "ConfigItem::IsReadonly()\nUNO_QUERY failed ...\n");
+        }
+
+            if (!xInfo.is())
+            {
+                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nno prop info available\n");
+                continue;
+            }
+
+            Property aProp = xInfo->getPropertyByName(sProperty);
+            lStates[i] = ((aProp.Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY);
+        }
+        catch(Exception&){}
+    }
+
+    return lStates;
+}
+
 /* -----------------------------29.08.00 15:10--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1390,4 +1480,6 @@ void ConfigItem::UnlockTree()
     if(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE))
         m_xHierarchyAccess = 0;
 }
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2002-09-18 14:41:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,12 @@ void LocaleDataWrapper::invalidateData()
             DBG_ERRORFILE( aMsg.GetBuffer() );
         }
 #endif
+        switch ( eLang )
+        {
+            case LANGUAGE_NORWEGIAN :       // no_NO, not Bokmal (nb_NO), not Nynorsk (nn_NO)
+                eLang = LANGUAGE_DONTKNOW;  // don't offer "Unknown" language
+                break;
+        }
         if ( eLang != LANGUAGE_DONTKNOW )
         {
             String aLanguage, aCountry;

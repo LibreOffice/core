@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mh $ $Date: 2001-11-06 21:09:39 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:39:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings common for the whole project -----
 
+#UNOTYPES=
 #.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
@@ -85,8 +86,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Types -------------------------------------
 
-UNOTYPES+=     \
-               com.sun.star.sdbc.XRow
+#UNOTYPES+=     \
+#               com.sun.star.container.XInputStream
 
 
 # --- Files -------------------------------------
@@ -97,7 +98,8 @@ SLOFILES=\
                         $(SLO)$/ucbhelper.obj 		\
                         $(SLO)$/ucbstreamhelper.obj \
                         $(SLO)$/tempfile.obj		\
-                        $(SLO)$/xtempfile.obj
+                        $(SLO)$/xtempfile.obj		\
+                        $(SLO)$/progresshandlerwrap.obj
 
 # --- Targets ----------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:33:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,11 @@ namespace utl
         static sal_Bool             MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash = com::sun::star::ucb::NameClash::ERROR );
 
         static sal_Bool             CanMakeFolder( const String& rFolder );
-        static sal_Bool             MakeFolder( const String& rFolder );
-        static sal_Bool             MakeFolder( ::ucb::Content& rParent, const String& rTitle, ::ucb::Content& rNewFolder );
+        static sal_Bool             MakeFolder( const String& rFolder, sal_Bool bNewOnly = sal_False );
+        static sal_Bool             MakeFolder( ::ucb::Content& rParent,
+                                                const String& rTitle,
+                                                ::ucb::Content& rNewFolder,
+                                                sal_Bool bNewOnly = sal_False );
         static sal_Bool             HasParentFolder( const String& rFolder );
 
         static ULONG                GetSize( const String& rContent );

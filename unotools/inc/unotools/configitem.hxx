@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-03 12:29:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@ namespace utl
 
             com::sun::star::uno::Sequence< com::sun::star::uno::Any>
                                     GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
+
+            com::sun::star::uno::Sequence< sal_Bool >
+                                    GetReadOnlyStates(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
 
             sal_Bool                PutProperties(
                                         const com::sun::star::uno::Sequence< rtl::OUString >& rNames,

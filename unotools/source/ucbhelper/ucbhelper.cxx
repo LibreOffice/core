@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2002-12-09 16:29:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ sal_Bool UCBContentHelper::CanMakeFolder( const String& rFolder )
 
 // -----------------------------------------------------------------------
 
-sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
+sal_Bool UCBContentHelper::MakeFolder( const String& rFolder, sal_Bool bNewOnly )
 {
     INetURLObject aURL( rFolder );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -600,14 +600,14 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
     if ( Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ), new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ), aCnt ) )
-        return MakeFolder( aCnt, aTitle, aNew );
+        return MakeFolder( aCnt, aTitle, aNew, bNewOnly );
     else
         return sal_False;
 }
 
-sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Content& rNew )
+sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Content& rNew, sal_Bool bNewOnly )
 {
-    sal_Bool bRecover = sal_False;
+    sal_Bool bAlreadyExists = sal_False;
 
     try
     {
@@ -653,12 +653,12 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
     {
         if ( r.Code == IOErrorCode_ALREADY_EXISTING )
         {
-            bRecover = sal_True;
+            bAlreadyExists = sal_True;
         }
     }
     catch ( NameClashException& )
     {
-        bRecover = sal_True;
+        bAlreadyExists = sal_True;
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
@@ -670,7 +670,7 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
     {
     }
 
-    if( bRecover )
+    if( bAlreadyExists && !bNewOnly )
     {
         INetURLObject aObj( aCnt.getURL() );
         aObj.Append( aTitle );
@@ -806,19 +806,10 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
         ::rtl::OUString sIn( sObjectPhysicalName ), sOut;
         if ( osl_File_E_None == osl_getFileURLFromSystemPath( sIn.pData, &sOut.pData ) )
         {
-            ::osl::FileBase::RC eResult = FileBase::E_None;
-
+            // #106526 osl_getDirectoryItem is an existence check
+            // no further osl_getFileStatus call necessary
             DirectoryItem aItem;
-            if ( FileBase::E_None == DirectoryItem::get( sOut, aItem ) )
-            {
-                FileStatus aStatus( FileStatusMask_FileName );
-                eResult = aItem.getFileStatus( aStatus );
-                if ( FileBase::E_NOENT == eResult )
-                {   // there is no such entry
-                    return sal_False;
-                }
-                return sal_True;
-            }
+            return (FileBase::E_None == DirectoryItem::get(sOut, aItem));
         }
         return sal_False;
     }
