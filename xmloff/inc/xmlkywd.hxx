@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 19:10:58 $
+ *  last change: $Author: sab $ $Date: 2001-03-11 15:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ XML_CONSTASCII_ACTION( sXML_config_item_map_indexed, "config-item-item-map-index
 XML_CONSTASCII_ACTION( sXML_config_item_map_named, "config-item-item-map-named" );
 XML_CONSTASCII_ACTION( sXML_config_item_map_entry, "config-item-item-map-entry" );
 XML_CONSTASCII_ACTION( sXML_config_item_set, "config-item-set" );
+XML_CONSTASCII_ACTION( sXML_configuration_settings, "configuration-settings" );
 XML_CONSTASCII_ACTION( sXML_conjugate, "conjugate" );
 XML_CONSTASCII_ACTION( sXML_connect_bars, "connect-bars" );
 XML_CONSTASCII_ACTION( sXML_connection_name, "connection-name" );
