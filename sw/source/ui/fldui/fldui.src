@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:55:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4263,6 +4263,7 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ hindi ] = "संपादन";
     Text[ slovak ] = "Upraviť";
 };
+
 
 
 
