@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testpropshlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:55:51 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 16:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,18 +394,18 @@ public:
                     }
 
     // XInterface
-    Any             SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
+    Any             SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(RuntimeException)
                     {
                         Any aRet( OPropertySetHelper::queryInterface( rType ) );
                         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
                     }
-    void            SAL_CALL acquire()
+    void            SAL_CALL acquire() throw()
                             { OWeakObject::acquire(); }
-    void            SAL_CALL release()
+    void            SAL_CALL release() throw()
                             { OWeakObject::release(); }
 
     // XPropertySet
-    Reference < XPropertySetInfo >  SAL_CALL getPropertySetInfo();
+    Reference < XPropertySetInfo >  SAL_CALL getPropertySetInfo()throw(RuntimeException);
 
     sal_Bool                    bBOOL;
     sal_Int16                   nINT16;
@@ -413,11 +413,12 @@ public:
     Property *                  pBasicProps;
     sal_Int32                   nPropCount;
 protected:
-    IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    IPropertyArrayHelper & SAL_CALL getInfoHelper() throw(RuntimeException);
     sal_Bool SAL_CALL convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue,
-                                        sal_Int32 nHandle, const Any& rValue );
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue );
-    void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
+                                                sal_Int32 nHandle, const Any& rValue )
+        throw(IllegalArgumentException);
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(RuntimeException);
+    void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw(RuntimeException);
 };
 
 //----------------------------------------------------------------------
@@ -672,7 +673,7 @@ public:
 /**
  * Create a table that map names to index values.
  */
-IPropertyArrayHelper & test_OPropertySetHelper::getInfoHelper()
+IPropertyArrayHelper & test_OPropertySetHelper::getInfoHelper() throw(RuntimeException)
 {
     // no multi thread protection
     static OPropertyArrayHelper aInfo( pBasicProps, nPropCount );
@@ -681,6 +682,7 @@ IPropertyArrayHelper & test_OPropertySetHelper::getInfoHelper()
 
 // XPropertySet
 Reference < XPropertySetInfo >  test_OPropertySetHelper::getPropertySetInfo()
+    throw(RuntimeException)
 {
     // no multi thread protection
     static Reference < XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -694,7 +696,7 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
     Any & rOldValue,
     sal_Int32 nHandle,
     const Any& rValue
-)
+)throw(IllegalArgumentException)
 {
     switch( nHandle )
     {
@@ -758,7 +760,7 @@ void test_OPropertySetHelper::setFastPropertyValue_NoBroadcast
 (
     sal_Int32 nHandle,
     const Any& rValue
-)
+)throw(RuntimeException)
 {
     switch( nHandle )
     {
@@ -784,6 +786,7 @@ void test_OPropertySetHelper::setFastPropertyValue_NoBroadcast
 
 //--------------------------
 void test_OPropertySetHelper::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
+    throw(RuntimeException)
 {
     switch( nHandle )
     {

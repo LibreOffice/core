@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:09 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 16:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,11 @@ struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
     virtual ~TestImpl()
         { OSL_TRACE( "> TestImpl dtor called... <\n" ); }
 
-    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException)
         { return ImplHelper4< CA, DBA, FE, G >::queryInterface( rType ); }
-    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL acquire(  ) throw()
         { ++nRef; }
-    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL release(  ) throw()
         { if (! --nRef) delete this; }
 
     // A
