@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 16:27:43 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)";
             Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
-            Text[ greek ] = "~Ìåôïíïìáóßá";
+            Text[ greek ] = "Ìåôïíïìáóßá";
             Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
             Text[ turkish ] = "Yeniden adlandır";
             Text[ language_user1 ] = " ";
@@ -311,7 +311,24 @@ Menu RID_FMEXPLORER_POPUPMENU
             HelpID = SID_FM_AUTOCONTROLFOCUS ;
             Text = "Automatischer Kontrollelement-Fokus";
             Text [ english ] =  "Automatic control focus";
-            Text [ english_us ] = "Automatic control focus";
+            Text [ english_us ] = "Automatic Control Focus";
+            Text[ portuguese ] = "Automatic control focus";
+            Text[ russian ] = "Automatic control focus";
+            Text[ greek ] = "Automatic control focus";
+            Text[ dutch ] = "Automatic control focus";
+            Text[ french ] = "Focalisation automatique sur l'élément de contrôle";
+            Text[ spanish ] = "Foco automático de control";
+            Text[ italian ] = "Automatic control focus";
+            Text[ danish ] = "Automatic control focus";
+            Text[ swedish ] = "Automatisk fokus för kontrollelement";
+            Text[ polish ] = "Automatyczne ognisko kontrolne";
+            Text[ portuguese_brazilian ] = "Automatic control focus";
+            Text[ japanese ] = "µ°ÄºİÄÛ°ÙÌ«°¶½";
+            Text[ korean ] = "Automatic control focus";
+            Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆ";
+            Text[ chinese_traditional ] = "Automatic control focus";
+            Text[ turkish ] = "Automatic control focus";
+            Text[ arabic ] = "ÊÑßíÒ ÊáŞÇÆí áÚäÕÑ ÇáÊÍßã";
         };
     };
 };
@@ -379,7 +396,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text [ ENGLISH ] = "~Label" ;
             Text[ english_us ] = "La~bel field";
             Text[ portuguese ] = "Campo de ~rótulo";
-            Text[ russian ] = "~Íàäïèñü";
+            Text[ russian ] = "~Ïîëå ïîäïèñè";
             Text[ greek ] = "Ğåäßï å~ğéãñáöŞò";
             Text[ dutch ] = "~Titelveld";
             Text[ french ] = "~Champ d'étiquette";
