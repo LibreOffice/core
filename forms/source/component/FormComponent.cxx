@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:52:14 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,13 @@ void OControlModel::doSetDelegator()
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     decrement(m_refCount);
+}
+
+//------------------------------------------------------------------------------
+void OControlModel::ensureAlive() SAL_THROW( ( DisposedException ) )
+{
+    if ( OComponentHelper::rBHelper.bDisposed || OComponentHelper::rBHelper.bInDispose )
+        throw DisposedException();
 }
 
 // XChild
