@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 20:25:17 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 11:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,25 @@ ModalDialog DLG_SAVE_AS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_SAVE_AS ;
-    Size = MAP_APPFONT ( 174 , 56 ) ;
+    Size = MAP_APPFONT ( 174 , 75 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Speichern unter" ;
     Text [ ENGLISH ] = "Save as" ;
     Text [ english_us ] = "Save As" ;
 
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 174 - 12 , 16 ) ;
+        Text = "Bitte geben Sie einen Namen für das anzulegende Object an:";
+        Text [ english ] = "Please enter the name of the object to be created:";
+        Text [ english_us ] = "Please enter the name of the object to be created:";
+    };
+
     FixedText FT_CATALOG
     {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Catalog" ;
         Text[ENGLISH] = "~Catalog" ;
@@ -109,14 +118,14 @@ ModalDialog DLG_SAVE_AS
     Edit ET_CATALOG
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 77 , 6 ) ;
+        Pos = MAP_APPFONT ( 77 , 25 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
         Text = "" ;
         TabStop = TRUE ;
     };
     FixedText FT_SCHEMA
     {
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Schema" ;
         Text[ENGLISH] = "~Schema" ;
@@ -142,41 +151,41 @@ ModalDialog DLG_SAVE_AS
     Edit ET_SCHEMA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 77 , 23 ) ;
+        Pos = MAP_APPFONT ( 77 , 42 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
         Text = "" ;
         TabStop = TRUE ;
     };
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "" ;
     };
     Edit ET_TITLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 77 , 40 ) ;
+        Pos = MAP_APPFONT ( 77 , 59 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
         Text = "" ;
         TabStop = TRUE ;
     };
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 62 , 58 ) ;
+        Pos = MAP_APPFONT ( 62 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 118 , 58 ) ;
+        Pos = MAP_APPFONT ( 118 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
@@ -343,6 +352,12 @@ ModalDialog DLG_SAVE_AS
         Text[ chinese_traditional ] = "³o­Ó¦WºÙ '$Name: not supported by cvs2svn $' ¤w¸g¦s¦b¡C\n­nÂÐ¼g¡H";
         Text[ turkish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
         Text[ arabic ] = "ÇáÇÓã '$Name: not supported by cvs2svn $' ãæÌæÏ ÈÇáÝÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ ÝæÞå¿";
+    };
+    String STR_TITLE_PASTE_AS
+    {
+        Text = "Einfügen als";
+        Text [ english ] = "Paste as";
+        Text [ english_us ] = "Paste as";
     };
     Text [ portuguese_brazilian ] = "Speichern unter" ;
     Text [ swedish ] = "Spara som" ;

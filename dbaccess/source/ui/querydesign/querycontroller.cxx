@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-21 13:22:51 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 10:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,11 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         Reference<XDatabaseMetaData> xMeta;
                         if(m_xConnection.is())
                             xMeta = m_xConnection->getMetaData();
-                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,xMeta,aDefaultName,(ID_BROWSER_SAVEASDOC == _nId));
+                        OSaveAsDlg aDlg(
+                                getView(), CommandType::QUERY, xQueries,
+                                xMeta, aDefaultName,
+                                (ID_BROWSER_SAVEASDOC == _nId) ? SAD_OVERWRITE : SAD_DEFAULT);
+
                         if(aDlg.Execute() == RET_OK)
                             m_sName = aDlg.getName();
                     }

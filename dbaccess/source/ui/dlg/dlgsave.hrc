@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 11:43:45 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 11:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,20 @@
 #define ET_CATALOG                  1
 #define ET_SCHEMA                   2
 #define ET_TITLE                    3
-#define FT_CATALOG                  1
-#define FT_SCHEMA                   2
-#define FT_TITLE                    3
 
-#define STR_TBL_LABEL               1
-#define STR_VW_LABEL                2
-#define STR_QRY_LABEL               3
-#define STR_FRM_LABEL               4
-#define STR_RPT_LABEL               5
-#define STR_OBJECT_EXISTS_ALREADY   6
+#define FT_DESCRIPTION              1
+#define FT_CATALOG                  2
+#define FT_SCHEMA                   3
+#define FT_TITLE                    4
+
+#define STR_TBL_LABEL                       1
+#define STR_VW_LABEL                        2
+#define STR_QRY_LABEL                       3
+#define STR_FRM_LABEL                       4
+#define STR_RPT_LABEL                       5
+#define STR_OBJECT_EXISTS_ALREADY           6
 #define STR_OBJECT_EXISTS_ALREADY_OVERWRITE 7
+#define STR_TITLE_PASTE_AS                  8
 
 #endif // DBAUI_DLGSAVE_HRC
 

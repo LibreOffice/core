@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 11:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,9 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const Reference<XNameAccess>& _rxNames,
                         const Reference< XDatabaseMetaData>& _rxMetaData,
                         const String& rDefault,
-                        sal_Bool _bOverWrite)
+                        sal_Int32 _nFlags)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
+             ,m_aDescription(this, ResId (FT_DESCRIPTION))
              ,m_aCatalogLbl(this, ResId (FT_CATALOG))
              ,m_aCatalog(this, ResId (ET_CATALOG))
              ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
@@ -117,7 +118,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_xNames(_rxNames)
              ,m_xMetaData(_rxMetaData)
              ,m_nType(_rType)
-             ,m_bOverWrite(_bOverWrite)
+             ,m_nFlags(_nFlags)
 {
     switch (_rType)
     {
@@ -137,7 +138,11 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
-                SetSizePixel(Size(GetSizePixel().Width(),aPos.Y()+m_aPB_OK.GetSizePixel().Height()+m_aTitle.GetSizePixel().Height()*0.5));
+                sal_Int32 nNewHeight =
+                    aPos.Y() + m_aPB_OK.GetSizePixel().Height() + m_aTitle.GetSizePixel().Height() / 2;
+
+                SetSizePixel(Size(GetSizePixel().Width(), nNewHeight));
+
                 m_aTitle.SetText(m_aName);
             }
             break;
@@ -191,13 +196,46 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
-                SetSizePixel(Size(GetSizePixel().Width(),aPos.Y()+m_aPB_OK.GetSizePixel().Height()+m_aTitle.GetSizePixel().Height()*0.5));
+                Size aSize = GetSizePixel();
+                aSize.Height() =
+                    aPos.Y() + m_aPB_OK.GetSizePixel().Height() + m_aTitle.GetSizePixel().Height() / 2;
+                SetSizePixel(aSize);
             }
             break;
         default:
             OSL_ENSURE(0,"Type not supported yet!");
     }
 
+    if ( 0 == ( m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) )
+    {
+        // hide the description window
+        m_aDescription.Hide();
+
+        // the number of pixels we have to move the other controls
+        sal_Int32 nMoveUp = m_aCatalog.GetPosPixel().Y() - m_aDescription.GetPosPixel().Y();
+
+        // loop to all controls and move them ...
+        for (   Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
+                pChildControl;
+                pChildControl= pChildControl->GetWindow( WINDOW_NEXT )
+            )
+        {
+            if ( &m_aDescription != pChildControl )
+            {
+                Point aPos = pChildControl->GetPosPixel();
+                aPos.Y() -= nMoveUp;
+                pChildControl->SetPosPixel(aPos);
+            }
+        }
+
+        // change our own size accordingly
+        Size aSize = GetSizePixel();
+        aSize.Height() -= nMoveUp;
+        SetSizePixel(aSize);
+    }
+
+    if ( SAD_TITLE_PASTE_AS == ( m_nFlags & SAD_TITLE_PASTE_AS ) )
+        SetText( String( ModuleRes( STR_TITLE_PASTE_AS ) ) );
 
     m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
     m_aTitle.SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));
@@ -222,9 +260,12 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
         if(bError)
         {
             m_aTitle.GrabFocus();
-            String aText(m_bOverWrite ? m_aExistsOverwrite : m_aExists);
+
+            sal_Bool bOverwrite = ( (m_nFlags & SAD_OVERWRITE) == SAD_OVERWRITE );
+            String aText( bOverwrite ? m_aExistsOverwrite : m_aExists);
             aText.SearchAndReplace(String::CreateFromAscii("$Name: not supported by cvs2svn $"),m_aName);
-            OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, m_bOverWrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Query);
+            OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, bOverwrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Query);
+
             if(aDlg.Execute() == RET_YES)
                 EndDialog(RET_OK);
         }
@@ -238,7 +279,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
 {
     if (pEdit == &m_aTitle)
-        m_aPB_OK.Enable(m_aTitle.GetText().Len());
+        m_aPB_OK.Enable(0 != m_aTitle.GetText().Len());
     return 0;
 }
 // -----------------------------------------------------------------------------
