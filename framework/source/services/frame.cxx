@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 14:12:01 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 14:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,6 +1382,25 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     aReadLock.unlock();
     /* } SAFE */
 
+    // Before dispose() of this window we must search another def modal dialog parent.
+    // Set the container window of this frame as the new one - but do it only if our old
+    // component window was this special dialog parent realy.
+    /* SOLAR SAFE { */
+    ::vos::OClearableGuard aGlobalSolarLock( Application::GetSolarMutex() );
+    Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow    );
+    Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow );
+    if (
+        ( pOldComponentWindow                    != NULL                )   &&
+        ( Application::GetDefModalDialogParent() == pOldComponentWindow ) &&
+        isTop()
+        )
+    {
+        Application::SetDefModalDialogParent( pContainerWindow );
+    }
+
+    aGlobalSolarLock.clear();
+    /* } SAFE */
+
     //_____________________________________________________________________________________________________
     // stop listening on old window
     // May it produce some trouble.
@@ -1433,24 +1452,6 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         (xOldComponentWindow != xComponentWindow)
        )
     {
-        // Before dispose() of this window we must search another def modal dialog parent.
-        // Set the container window of this frame as the new one - but do it only if our old
-        // component window was this special dialog parent realy.
-        /* SOLAR SAFE { */
-        ::vos::OClearableGuard aGlobalSolarLock( Application::GetSolarMutex() );
-        Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow    );
-        Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow );
-        if (
-            ( pOldComponentWindow                    != NULL                )   &&
-            ( Application::GetDefModalDialogParent() == pOldComponentWindow ) &&
-            isTop()
-           )
-        {
-            Application::SetDefModalDialogParent( pContainerWindow );
-        }
-        aGlobalSolarLock.clear();
-        /* } SAFE */
-
         /* SAFE { */
         WriteGuard aWriteLock( m_aLock );
         m_xComponentWindow = NULL;
