@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:18:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,7 +1700,7 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     {
         SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
         SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-        com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
+        //com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
 
         /*
         #i5970#
