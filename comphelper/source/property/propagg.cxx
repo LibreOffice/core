@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:03:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+
 #include <algorithm>
+#include <set>
 
 //.........................................................................
 namespace comphelper
@@ -239,6 +241,18 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
 }
 
 //------------------------------------------------------------------------------
+sal_Bool OPropertyArrayAggregationHelper::getPropertyByHandle( sal_Int32 _nHandle, Property& _rProperty ) const
+{
+    ConstPropertyAccessorMapIterator pos = m_aPropertyAccessors.find(_nHandle);
+    if ( pos != m_aPropertyAccessors.end() )
+    {
+        _rProperty = m_aProperties[ pos->second.nPos ];
+        return sal_True;
+    }
+    return sal_False;
+}
+
+//------------------------------------------------------------------------------
 sal_Bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             ::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle, sal_Int32 _nHandle) const
 {
@@ -363,8 +377,108 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
 }
 
 //==================================================================
+//= PropertyForwarder
+//==================================================================
+namespace internal
+{
+    class PropertyForwarder
+    {
+    private:
+        OPropertySetAggregationHelper&  m_rAggregationHelper;
+        ::std::set< sal_Int32 >         m_aProperties;
+        sal_Int32                       m_nCurrentlyForwarding;
+
+    public:
+        PropertyForwarder( OPropertySetAggregationHelper& _rAggregationHelper );
+        ~PropertyForwarder();
+
+        /** declares that the forwarder should be responsible for the given property
+
+        @param _nHandle
+            the public handle (<em>not</em> the original handle!) of the property
+        */
+        void    takeResponsibilityFor( sal_Int32 _nHandle );
+
+        /** checks whether the forwarder is responsible for the given property
+        */
+        bool    isResponsibleFor( sal_Int32 _nHandle );
+
+        /// actually forwards a property value to the aggregate
+        void    doForward( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception );
+
+        sal_Int32 getCurrentlyForwardedProperty( ) const { return m_nCurrentlyForwarding; }
+    };
+
+    //--------------------------------------------------------------------------
+    PropertyForwarder::PropertyForwarder( OPropertySetAggregationHelper& _rAggregationHelper )
+        :m_rAggregationHelper( _rAggregationHelper )
+        ,m_nCurrentlyForwarding( -1 )
+    {
+    }
+
+    //--------------------------------------------------------------------------
+    PropertyForwarder::~PropertyForwarder()
+    {
+    }
+
+    //--------------------------------------------------------------------------
+    void PropertyForwarder::takeResponsibilityFor( sal_Int32 _nHandle )
+    {
+        m_aProperties.insert( _nHandle );
+    }
+
+    //--------------------------------------------------------------------------
+    bool PropertyForwarder::isResponsibleFor( sal_Int32 _nHandle )
+    {
+        return m_aProperties.find( _nHandle ) != m_aProperties.end();
+    }
+
+    //--------------------------------------------------------------------------
+    void PropertyForwarder::doForward( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
+    {
+        OSL_ENSURE( m_rAggregationHelper.m_xAggregateSet.is(), "PropertyForwarder::doForward: no property set!" );
+        if ( m_rAggregationHelper.m_xAggregateSet.is() )
+        {
+            m_rAggregationHelper.forwardingPropertyValue( _nHandle );
+
+            OSL_ENSURE( m_nCurrentlyForwarding == -1, "PropertyForwarder::doForward: reentrance?" );
+            m_nCurrentlyForwarding = _nHandle;
+
+            try
+            {
+                m_rAggregationHelper.m_xAggregateSet->setPropertyValue( m_rAggregationHelper.getPropertyName( _nHandle ), _rValue );
+                    // TODO: cache the property name? (it's a O(log n) search)
+            }
+            catch( const Exception& )
+            {
+                m_rAggregationHelper.forwardedPropertyValue( _nHandle, false );
+                throw;
+            }
+
+            m_nCurrentlyForwarding = -1;
+
+            m_rAggregationHelper.forwardedPropertyValue( _nHandle, true );
+        }
+    }
+}
+
+//==================================================================
 //= OPropertySetAggregationHelper
 //==================================================================
+
+//------------------------------------------------------------------------------
+OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper )
+    :OPropertyStateHelper( rBHelper )
+    ,m_bListening( sal_False )
+    ,m_pForwarder( new PropertyForwarder( *this ) )
+{
+}
+
+//------------------------------------------------------------------------------
+OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
+{
+    delete m_pForwarder;
+}
 
 //------------------------------------------------------------------------------
  ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
@@ -419,9 +533,14 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
         OSL_ENSURE(evt.PropertyName.getLength() > 0, "OPropertySetAggregationHelper::propertiesChange : invalid event !");
             // we had a bug where this assertion would have us saved a whole day :) (72514)
         sal_Int32 nHandle = rPH.getHandleByName( evt.PropertyName );
-        if (nHandle != -1)
+
+        // If nHandle is -1 the event marks a (aggregate) property which we hide to callers
+        // If isCurrentlyForwardingProperty( nHandle ) is <TRUE/>, then we ourself triggered
+        // setting this property. In this case, it will be notified later (by the OPropertySetHelper
+        // implementation)
+
+        if ( ( nHandle != -1 ) && !isCurrentlyForwardingProperty( nHandle ) )
             fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, sal_False);
-        // if nHandle is -1 the event marks for a (aggregate) property which we hide to callers
     }
     else
     {
@@ -434,7 +553,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
         for (sal_Int32 nSource=0; nSource<nLen; ++nSource, ++pEvents)
         {
             sal_Int32 nHandle = rPH.getHandleByName(pEvents->PropertyName);
-            if (nHandle != -1)
+            if ( ( nHandle != -1 ) && !isCurrentlyForwardingProperty( nHandle ) )
             {   // same as above : -1 is valid (73247) ...
                 pHandles[nDest] = nHandle;
                 pNewValues[nDest] = pEvents->NewValue;
@@ -476,16 +595,14 @@ void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno:
         m_bListening = sal_False;
     }
 
-    m_xAggregateState       =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
-    m_xAggregateSet         =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
-    m_xAggregateMultiSet    =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
-    m_xAggregateFastSet     =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
+    m_xAggregateState       =  m_xAggregateState.query( _rxDelegate );
+    m_xAggregateSet         =  m_xAggregateSet.query( _rxDelegate );
+    m_xAggregateMultiSet    =  m_xAggregateMultiSet.query( _rxDelegate );
+    m_xAggregateFastSet     =  m_xAggregateFastSet.query( _rxDelegate );
 
     // must support XPropertySet and XMultiPropertySet
-    if (m_xAggregateSet.is() && !m_xAggregateMultiSet.is())
-    {
+    if ( m_xAggregateSet.is() && !m_xAggregateMultiSet.is() )
         throw  ::com::sun::star::lang::IllegalArgumentException();
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -543,6 +660,15 @@ sal_Int32 OPropertySetAggregationHelper::getOriginalHandle(sal_Int32 nHandle) co
     return nOriginalHandle;
 }
 
+//--------------------------------------------------------------------------
+::rtl::OUString OPropertySetAggregationHelper::getPropertyName( sal_Int32 _nHandle ) const
+{
+    OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper() );
+    Property aProperty;
+    OSL_VERIFY( rPH.getPropertyByHandle( _nHandle, aProperty ) );
+    return aProperty.Name;
+}
+
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  ::com::sun::star::uno::Any& _rValue)
         throw(   ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::beans::PropertyVetoException,
@@ -576,6 +702,12 @@ void OPropertySetAggregationHelper::getFastPropertyValue( ::com::sun::star::uno:
             rValue = m_xAggregateFastSet->getFastPropertyValue(nOriginalHandle);
         else
             rValue = m_xAggregateSet->getPropertyValue(aPropName);
+    }
+    else if ( m_pForwarder->isResponsibleFor( nHandle ) )
+    {
+        // this is a property which has been "overwritten" in our instance (thus
+        // fillAggregatePropertyInfoByHandle didn't find it)
+        rValue = m_xAggregateSet->getPropertyValue( getPropertyName( nHandle ) );
     }
 }
 
@@ -837,10 +969,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::O
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
-    if (nHandle == -1)
-    {
+    if ( nHandle == -1 )
         throw  ::com::sun::star::beans::UnknownPropertyException();
-    }
 
     ::rtl::OUString aPropName;
     sal_Int32   nOriginalHandle = -1;
@@ -853,6 +983,60 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::O
     }
     else
         return getPropertyDefaultByHandle(nHandle);
+}
+
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
+{
+    sal_Bool bModified = sal_False;
+
+    OSL_ENSURE( m_pForwarder->isResponsibleFor( _nHandle ), "OPropertySetAggregationHelper::convertFastPropertyValue: this is no forwarded property - did you use declareForwardedProperty for it?" );
+    if ( m_pForwarder->isResponsibleFor( _nHandle ) )
+    {
+        // need to determine the type of the property for conversion
+        OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
+        Property aProperty;
+        OSL_VERIFY( rPH.getPropertyByHandle( _nHandle, aProperty ) );
+
+        Any aCurrentValue;
+        getFastPropertyValue( aCurrentValue, _nHandle );
+        bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, aCurrentValue, aProperty.Type );
+    }
+
+    return bModified;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
+{
+    OSL_ENSURE( m_pForwarder->isResponsibleFor( _nHandle ), "OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast: this is no forwarded property - did you use declareForwardedProperty for it?" );
+    if ( m_pForwarder->isResponsibleFor( _nHandle ) )
+        m_pForwarder->doForward( _nHandle, _rValue );
+}
+
+//------------------------------------------------------------------------------
+void OPropertySetAggregationHelper::declareForwardedProperty( sal_Int32 _nHandle )
+{
+    OSL_ENSURE( !m_pForwarder->isResponsibleFor( _nHandle ), "OPropertySetAggregationHelper::declareForwardedProperty: already declared!" );
+    m_pForwarder->takeResponsibilityFor( _nHandle );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OPropertySetAggregationHelper::forwardingPropertyValue( sal_Int32 nHandle )
+{
+    // not interested in
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OPropertySetAggregationHelper::forwardedPropertyValue( sal_Int32 nHandle, bool _bSuccess )
+{
+    // not interested in
+}
+
+//------------------------------------------------------------------------------
+bool OPropertySetAggregationHelper::isCurrentlyForwardingProperty( sal_Int32 _nHandle ) const
+{
+    return m_pForwarder->getCurrentlyForwardedProperty() == _nHandle;
 }
 
 //.........................................................................
