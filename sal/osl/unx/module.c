@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pliao $ $Date: 2001-05-15 20:07:25 $
+ *  last change: $Author: obr $ $Date: 2001-05-18 07:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
     if( ustrTmp )
     {
-        char *buffer[PATH_MAX];
+        char buffer[PATH_MAX];
 
         if( UnicodeToText( buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length ) )
             pModule = osl_psz_loadModule( buffer, nRtldMode );
