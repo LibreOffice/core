@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:45:12 $
+ *  last change: $Author: ama $ $Date: 2001-04-26 12:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,7 +1072,7 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes )
 
             } while ( pFtn );
         }
-        else if( !pBoss->IsInSct() )
+        if( !pBoss->IsInSct() )
         {
             // A sectionframe with the Ftn/EndnAtEnd-flags may contain
             // foot/endnotes. If the last lower frame of the bodyframe is
