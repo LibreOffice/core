@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-30 10:51:29 $
+ *  last change: $Author: tl $ $Date: 2001-08-09 12:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,27 +144,77 @@
 // Da der FontStyle besser über die Attribute gesetzt/abgefragt wird als über
 // den StyleName bauen wir uns hier unsere eigene Übersetzung
 // Attribute <-> StyleName
-// Die Bits des Index stellen die Attribute dar:
-// Bit 0 : italic
-// Bit 1 : bold
 //
 
-static XubString __READONLY_DATA  aStyleName[4] =
+class SmFontStyles
 {
-    C2S("normal"),  C2S("italic"),
-    C2S("bold"),    C2S("bold italic")
+    String  aNormal;
+    String  aBold;
+    String  aItalic;
+    String  aBoldItalic;
+    String  aEmpty;
+
+public:
+    SmFontStyles();
+
+    USHORT          GetCount() const    { return 4; }
+    const String &  GetStyleName( const Font &rFont ) const;
+    const String &  GetStyleName( USHORT nIdx ) const;
 };
 
-USHORT aStyleNameCount = sizeof(aStyleName) / sizeof(aStyleName[0]);
 
-
-const XubString GetFontStyleName(const Font &rFont)
+SmFontStyles::SmFontStyles() :
+    aNormal ( ResId( RID_FONTREGULAR, SM_MOD()->GetResMgr() ) ),
+    aBold   ( ResId( RID_FONTBOLD,    SM_MOD()->GetResMgr() ) ),
+    aItalic ( ResId( RID_FONTITALIC,  SM_MOD()->GetResMgr() ) )
 {
-    USHORT  nIndex =  2 * (rFont.GetWeight() == WEIGHT_BOLD)
-                    + 1 * (rFont.GetItalic() == ITALIC_NORMAL);
-    return aStyleName[nIndex];
+//    SM_MOD()->GetResMgr().FreeResource();
+
+    aBoldItalic = aBold;
+    aBoldItalic.AppendAscii( ", " );
+    aBoldItalic += aItalic;
 }
 
+
+const String & SmFontStyles::GetStyleName( const Font &rFont ) const
+{
+    BOOL bBold   = rFont.GetWeight() == WEIGHT_BOLD,
+         bItalic = rFont.GetItalic() == ITALIC_NORMAL;
+    if (bBold && bItalic)
+        return aBoldItalic;
+    else if (bItalic)
+        return aItalic;
+    else if (bBold)
+        return aBold;
+    else
+        return aNormal;
+}
+
+
+const String & SmFontStyles::GetStyleName( USHORT nIdx ) const
+{
+    // 0 = "normal",  1 = "italic",
+    // 2 = "bold",    3 = "bold italic"
+
+    DBG_ASSERT( nIdx < GetCount(), "index out of range" );
+    switch (nIdx)
+    {
+        case 0 : return aNormal;
+        case 1 : return aItalic;
+        case 2 : return aBold;
+        case 3 : return aBoldItalic;
+    }
+    return aEmpty;
+}
+
+
+const SmFontStyles & GetFontStyles()
+{
+    static const SmFontStyles aImpl;
+    return aImpl;
+}
+
+/////////////////////////////////////////////////////////////////
 
 void SetFontStyle(const XubString &rStyleName, Font &rFont)
 {
@@ -174,10 +224,11 @@ void SetFontStyle(const XubString &rStyleName, Font &rFont)
     if (rStyleName.Len())
     {
         USHORT i;
-        for (i = 0;  i < aStyleNameCount;  i++)
-            if (rStyleName.CompareTo(aStyleName[i]) == COMPARE_EQUAL)
+        const SmFontStyles &rStyles = GetFontStyles();
+        for (i = 0;  i < rStyles.GetCount();  i++)
+            if (rStyleName.CompareTo( rStyles.GetStyleName(i) ) == COMPARE_EQUAL)
                 break;
-        DBG_ASSERT(i < aStyleNameCount, "Sm : StyleName unbekannt");
+        DBG_ASSERT(i < rStyles.GetCount(), "style-name unknown");
         nIndex = i;
     }
 
@@ -1614,8 +1665,9 @@ void SmSymDefineDialog::FillStyles(BOOL bDeleteText)
     {
         //aStyles.Fill(aText, &aFontList);
         // eigene StyleName's verwenden
-        for (USHORT i = 0;  i < aStyleNameCount;  i++)
-            aStyles.InsertEntry( aStyleName[i] );
+        const SmFontStyles &rStyles = GetFontStyles();
+        for (USHORT i = 0;  i < rStyles.GetCount();  i++)
+            aStyles.InsertEntry( rStyles.GetStyleName(i) );
 
         DBG_ASSERT(aStyles.GetEntryCount() > 0, "Sm : keine Styles vorhanden");
         aStyles.SetText( aStyles.GetEntry(0) );
@@ -1886,8 +1938,10 @@ void SmSymDefineDialog::UpdateButtons()
         bEqual = pOrigSymbol
                     && aSymbolSetName.EqualsIgnoreCaseAscii(aOldSymbolSetName.GetText())
                     && aSymbolName.Equals(pOrigSymbol->GetName())
-                    && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(pOrigSymbol->GetFace().GetName())
-                    && aStyles.GetText().EqualsIgnoreCaseAscii(GetFontStyleName(pOrigSymbol->GetFace()))
+                    && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(
+                            pOrigSymbol->GetFace().GetName())
+                    && aStyles.GetText().EqualsIgnoreCaseAscii(
+                            GetFontStyles().GetStyleName(pOrigSymbol->GetFace()))
                     && aCharsetDisplay.GetSelectCharacter() == pOrigSymbol->GetCharacter();
 
         // hinzufügen nur wenn es noch kein Symbol desgleichen Namens gibt
@@ -2147,7 +2201,7 @@ BOOL SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
                 // Font und Style entsprechend wählen
                 const Font &rFont = pSymbol->GetFace();
                 SelectFont(rFont.GetName(), FALSE);
-                SelectStyle(GetFontStyleName(rFont), FALSE);
+                SelectStyle(GetFontStyles().GetStyleName(rFont), FALSE);
 
                 // da das setzen des Fonts über den Style Namen des SymbolsFonts nicht
                 // so gut klappt (er kann zB leer sein obwohl der Font selbst 'bold' und

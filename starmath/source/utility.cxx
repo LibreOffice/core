@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
+ *  last change: $Author: tl $ $Date: 2001-08-09 12:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,15 +556,22 @@ String SmFontPickList::GetStringItem(void *pItem)
 {
     Font   *pFont;
     String  aString;
+    const sal_Char *pDelim = ", ";
 
     pFont = (Font *)pItem;
 
     aString = pFont->GetName();
 
     if (pFont->GetItalic() != ITALIC_NONE)
+    {
+        aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTITALIC));
+    }
     if (pFont->GetWeight() == WEIGHT_BOLD)
+    {
+        aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTBOLD));
+    }
 
     return (aString);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-08 10:13:58 $
+ *  last change: $Author: tl $ $Date: 2001-08-09 12:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3515,84 +3515,84 @@ QueryBox RID_DEFAULTSAVEQUERY
 
 String RID_FONTREGULAR
 {
-    Text = ", Normal" ;
+    Text = "Normal" ;
     Text [ ENGLISH ] = "Standard" ;
     Text [ norwegian ] = "Standard" ;
     Text [ italian ] = "Standard" ;
     Text [ portuguese_brazilian ] = "Padr?o" ;
-    Text [ portuguese ] = ", Padrão" ;
-    Text [ finnish ] = ", Vakio" ;
-    Text [ danish ] = ", Normal" ;
+    Text [ portuguese ] = "Padrão" ;
+    Text [ finnish ] = "Vakio" ;
+    Text [ danish ] = "Normal" ;
     Text [ french ] = "Par défaut" ;
-    Text [ swedish ] = ", Normal" ;
-    Text [ dutch ] = ", Normaal" ;
-    Text [ spanish ] = ", Predeterminado" ;
-    Text [ english_us ] = ", Standard" ;
-    Text[ chinese_simplified ] = ", æ™®é€š";
-    Text[ russian ] = ", Îáû÷íûé";
-    Text[ polish ] = ", Domyœlnie";
-    Text[ japanese ] = ",é€šå¸¸";
+    Text [ swedish ] = "Normal" ;
+    Text [ dutch ] = "Normaal" ;
+    Text [ spanish ] = "Predeterminado" ;
+    Text [ english_us ] = "Standard" ;
+    Text[ chinese_simplified ] = "æ™®é€š";
+    Text[ russian ] = "Îáû÷íûé";
+    Text[ polish ] = "Domyœlnie";
+    Text[ japanese ] = "é€šå¸¸";
     Text[ chinese_traditional ] = "ï¼Œæ™®é€š";
-    Text[ arabic ] = "ÚÇÏí ,";
-    Text[ greek ] = ", ÊáíïíéêÜ";
-    Text[ korean ] = ", ë³´í†µ";
-    Text[ turkish ] = ", standart";
+    Text[ arabic ] = "ÚÇÏí";
+    Text[ greek ] = "ÊáíïíéêÜ";
+    Text[ korean ] = "ë³´í†µ";
+    Text[ turkish ] = "standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ", Estándar";
+    Text[ catalan ] = "Estándar";
 };
 String RID_FONTITALIC
 {
-    Text = ", Kursiv" ;
+    Text = "Kursiv" ;
     Text [ ENGLISH ] = "Italic" ;
     Text [ norwegian ] = "Kursiv" ;
-    Text [ italian ] = ", Corsivo" ;
+    Text [ italian ] = "Corsivo" ;
     Text [ portuguese_brazilian ] = "It?lico" ;
-    Text [ portuguese ] = ", Itálico" ;
-    Text [ finnish ] = ", Kursivoi" ;
-    Text [ danish ] = ", Kursiv" ;
+    Text [ portuguese ] = "Itálico" ;
+    Text [ finnish ] = "Kursivoi" ;
+    Text [ danish ] = "Kursiv" ;
     Text [ french ] = "Italique" ;
-    Text [ swedish ] = ", Kursiv" ;
-    Text [ dutch ] = ", Cursief" ;
-    Text [ spanish ] = ", Cursiva" ;
-    Text [ english_us ] = ", Italic" ;
-    Text[ chinese_simplified ] = ", æ–œä½“";
-    Text[ russian ] = ", Íàêëîííûé";
+    Text [ swedish ] = "Kursiv" ;
+    Text [ dutch ] = "Cursief" ;
+    Text [ spanish ] = "Cursiva" ;
+    Text [ english_us ] = "Italic" ;
+    Text[ chinese_simplified ] = "æ–œä½“";
+    Text[ russian ] = "Íàêëîííûé";
     Text[ polish ] = "Kursywa";
-    Text[ japanese ] = ",æ–œä½“";
-    Text[ chinese_traditional ] = ", æ–œé«”";
+    Text[ japanese ] = "æ–œä½“";
+    Text[ chinese_traditional ] = "æ–œé«”";
     Text[ arabic ] = "ãÇÆá";
-    Text[ greek ] = ", ĞëÜãéá";
+    Text[ greek ] = "ĞëÜãéá";
     Text[ korean ] = "ì´íƒ¤ë¦­ì²´";
-    Text[ turkish ] = ", italik";
+    Text[ turkish ] = "italik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ", Cursiva";
+    Text[ catalan ] = "Cursiva";
 };
 String RID_FONTBOLD
 {
-    Text = ", Fett" ;
+    Text = "Fett" ;
     Text [ ENGLISH ] = "Bold" ;
     Text [ norwegian ] = "Fet" ;
     Text [ italian ] = "Grassetto" ;
     Text [ portuguese_brazilian ] = "Negrito" ;
-    Text [ portuguese ] = ", Negrito" ;
-    Text [ finnish ] = ", Lihavoi" ;
-    Text [ danish ] = ", Fed" ;
+    Text [ portuguese ] = "Negrito" ;
+    Text [ finnish ] = "Lihavoi" ;
+    Text [ danish ] = "Fed" ;
     Text [ french ] = "Gras" ;
-    Text [ swedish ] = ", Fett" ;
-    Text [ dutch ] = ", Vet" ;
-    Text [ spanish ] = ", Negrita" ;
-    Text [ english_us ] = ", Bold" ;
-    Text[ chinese_simplified ] = ", ç²—ä½“";
-    Text[ russian ] = ", Æèğíûé";
-    Text[ polish ] = ", Pogrubienie";
-    Text[ japanese ] = ",å¤ªå­—";
-    Text[ chinese_traditional ] = ", ç²—é«”";
+    Text [ swedish ] = "Fett" ;
+    Text [ dutch ] = "Vet" ;
+    Text [ spanish ] = "Negrita" ;
+    Text [ english_us ] = "Bold" ;
+    Text[ chinese_simplified ] = "ç²—ä½“";
+    Text[ russian ] = "Æèğíûé";
+    Text[ polish ] = "Pogrubienie";
+    Text[ japanese ] = "å¤ªå­—";
+    Text[ chinese_traditional ] = "ç²—é«”";
     Text[ arabic ] = "ÚÑíÖ";
-    Text[ greek ] = ";¸íôïíï";
-    Text[ korean ] = ", êµµê²Œ";
-    Text[ turkish ] = ", kalın";
+    Text[ greek ] = "¸íôïíï";
+    Text[ korean ] = "êµµê²Œ";
+    Text[ turkish ] = "kalın";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ", Negrita";
+    Text[ catalan ] = "Negrita";
 };
 String RID_APPLICATION
 {
