@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 17:42:18 $
+ *  last change: $Author: jp $ $Date: 2001-04-10 12:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,73 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
     if( !HasFormat( nFormat ) )
         return sal_False;
+
+    if( !pClpDocFac )
+    {
+        USHORT nSelectionType = pWrtShell->GetSelectionType();
+
+// SEL_GRF kommt vom ContentType der editsh
+        if( (SwWrtShell::SEL_GRF | SwWrtShell::SEL_DRW_FORM) & nSelectionType )
+        {
+            pClpGraphic = new Graphic;
+            if( !pWrtShell->GetDrawObjGraphic( FORMAT_GDIMETAFILE, *pClpGraphic ))
+                pOrigGrf = pClpGraphic;
+            pClpBitmap = new Graphic;
+            if( !pWrtShell->GetDrawObjGraphic( FORMAT_BITMAP, *pClpBitmap ))
+                pOrigGrf = pClpBitmap;
+
+            // ist es ein URL-Button ?
+            String sURL, sDesc;
+            if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
+            {
+                pBkmk = new INetBookmark( sURL, sDesc );
+                eBufferType = TRNSFR_INETFLD;
+            }
+        }
+
+        pClpDocFac = new SwDocFac;
+        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+        pTmpDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
+        pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
+        pWrtShell->Copy( pTmpDoc );
+
+        // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+        if( aDocShellRef.Is() )
+            SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
+        pTmpDoc->SetRefForDocShell( 0 );
+
+        if( nSelectionType & SwWrtShell::SEL_TXT && !pWrtShell->HasMark() )
+        {
+            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
+
+            Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
+
+            BOOL bSelect = bExecuteDrag &&
+                            pWrtShell->GetView().GetDocShell() &&
+                            !pWrtShell->GetView().GetDocShell()->IsReadOnly();
+            if( pWrtShell->GetContentAtPos( aPos, aCntntAtPos, bSelect ) )
+            {
+                pBkmk = new INetBookmark(
+                        ((SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr)->GetValue(),
+                        aCntntAtPos.sStr );
+                eBufferType = TRNSFR_INETFLD;
+                if( bSelect )
+                    pWrtShell->SelectTxtAttr( RES_TXTATR_INETFMT );
+            }
+        }
+        if( pWrtShell->IsFrmSelected() )
+        {
+            SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_URL, RES_URL );
+            pWrtShell->GetFlyFrmAttr( aSet );
+            const SwFmtURL& rURL = (SwFmtURL&)aSet.Get( RES_URL );
+            if( rURL.GetMap() )
+                pImageMap = new ImageMap( *rURL.GetMap() );
+            else if( rURL.GetURL().Len() )
+                pTargetURL = new INetImage( aEmptyStr, rURL.GetURL(),
+                                            rURL.GetTargetFrameName(),
+                                            aEmptyStr, Size() );
+        }
+    }
 
     sal_Bool    bOK = sal_False;
     if( TRNSFR_OLE == eBufferType )
