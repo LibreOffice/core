@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 10:15:13 $
+ *  last change: $Author: af $ $Date: 2002-11-20 16:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 
 #include "valueimp.hxx"
 
@@ -157,6 +160,11 @@ ValueSet::ValueSet( Window* pParent, const ResId& rResId ) :
 
 ValueSet::~ValueSet()
 {
+    ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent>
+          xComponent (GetAccessible(), ::com::sun::star::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose ();
+
     if ( mpScrBar )
         delete mpScrBar;
 
