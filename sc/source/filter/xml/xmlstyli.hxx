@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:41:37 $
+ *  last change: $Author: sab $ $Date: 2000-10-27 04:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ public:
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
 
     virtual ~ScXMLMasterStylesContext();
+    virtual void EndElement();
 };
 
 namespace com { namespace sun { namespace star {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 11:47:44 $
+ *  last change: $Author: sab $ $Date: 2000-10-27 04:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITIONALENTRIES_HPP_
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
+#include <com/sun/star/table/BorderLine.hpp>
+#endif
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include <xmloff/xmlprcon.hxx>
 #endif
@@ -109,6 +112,10 @@
 
 #define SC_NUMBERFORMAT "NumberFormat"
 #define SC_CONDITIONALFORMAT "ConditionalFormat"
+#define XML_LINE_LEFT 0
+#define XML_LINE_RIGHT 0
+#define XML_LINE_TOP 0
+#define XML_LINE_BOTTOM 0
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -154,59 +161,75 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
 {
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty = NULL;
+    XMLPropertyState* pPadding[4] = { NULL, NULL, NULL, NULL };
+    XMLPropertyState* pNewPadding[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pAllBorderProperty = NULL;
+    XMLPropertyState* pBorders[4] = { NULL, NULL, NULL, NULL };
+    XMLPropertyState* pNewBorders[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pAllBorderWidthProperty = NULL;
-    ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
-    for (i; i != rProperties.end(); i++)
+    XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
+    ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+    for (property; property != rProperties.end(); property++)
     {
-        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(i->mnIndex);
+        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
         switch (nContextID)
         {
-            case CTF_ALLPADDING :
-            {
-                pAllPaddingProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_ALLBORDER :
-            {
-                pAllBorderProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_ALLBORDERWIDTH :
-            {
-                pAllBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
+            case CTF_ALLPADDING                 : pAllPaddingProperty = property; break;
+            case CTF_LEFTPADDING                : pPadding[XML_LINE_LEFT] = property; break;
+            case CTF_RIGHTPADDING               : pPadding[XML_LINE_RIGHT] = property; break;
+            case CTF_TOPPADDING                 : pPadding[XML_LINE_TOP] = property; break;
+            case CTF_BOTTOMPADDING              : pPadding[XML_LINE_BOTTOM] = property; break;
+            case CTF_ALLBORDER                  : pAllBorderProperty = property; break;
+            case CTF_LEFTBORDER                 : pBorders[XML_LINE_LEFT] = property; break;
+            case CTF_RIGHTBORDER                : pBorders[XML_LINE_RIGHT] = property; break;
+            case CTF_TOPBORDER                  : pBorders[XML_LINE_TOP] = property; break;
+            case CTF_BOTTOMBORDER               : pBorders[XML_LINE_BOTTOM] = property; break;
+            case CTF_ALLBORDERWIDTH             : pAllBorderWidthProperty = property; break;
+            case CTF_LEFTBORDERWIDTH            : pBorderWidths[XML_LINE_LEFT] = property; break;
+            case CTF_RIGHTBORDERWIDTH           : pBorderWidths[XML_LINE_RIGHT] = property; break;
+            case CTF_TOPBORDERWIDTH             : pBorderWidths[XML_LINE_TOP] = property; break;
+            case CTF_BOTTOMBORDERWIDTH          : pBorderWidths[XML_LINE_BOTTOM] = property; break;
         }
     }
-    if (pAllPaddingProperty)
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
-        sal_Int32 nIndex = pAllPaddingProperty->mnIndex + 2;
-        XMLPropertyState aNewProperty (nIndex, pAllPaddingProperty->maValue);
-        for (sal_Int16 j = 0; j < 3; j++)
+        if (pAllPaddingProperty && !pPadding[i])
+            pNewPadding[i] = new XMLPropertyState(pAllPaddingProperty->mnIndex + 1 + i, pAllPaddingProperty->maValue);
+        if (pAllBorderProperty && !pBorders[i])
         {
-            aNewProperty.mnIndex = nIndex++;
-            rProperties.push_back(aNewProperty);
+            pNewBorders[i] = new XMLPropertyState(pAllBorderProperty->mnIndex + 1 + i, pAllBorderProperty->maValue);
+            pBorders[i] = pNewBorders[i];
+        }
+        if( !pBorderWidths[i] )
+            pBorderWidths[i] = pAllBorderWidthProperty;
+        else
+            pBorderWidths[i]->mnIndex = -1;
+        if( pBorders[i] )
+        {
+            table::BorderLine aBorderLine;
+            pBorders[i]->maValue >>= aBorderLine;
+             if( pBorderWidths[i] )
+            {
+                table::BorderLine aBorderLineWidth;
+                pBorderWidths[i]->maValue >>= aBorderLineWidth;
+                aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
+                aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
+                aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+                pBorders[i]->maValue <<= aBorderLine;
+            }
         }
     }
-    if (pAllBorderProperty)
+    for (i = 0; i < 4; i++)
     {
-        sal_Int32 nIndex = pAllBorderProperty->mnIndex + 2;
-        XMLPropertyState aNewProperty (nIndex, pAllBorderProperty->maValue);
-        for (sal_Int16 j = 0; j < 3; j++)
+        if (pNewPadding[i])
         {
-            aNewProperty.mnIndex = nIndex++;
-            rProperties.push_back(aNewProperty);
+            rProperties.push_back(*pNewPadding[i]);
+            delete pNewPadding[i];
         }
-    }
-    if (pAllBorderWidthProperty)
-    {
-        sal_Int32 nIndex = pAllBorderWidthProperty->mnIndex + 2;
-        XMLPropertyState aNewProperty (nIndex, pAllBorderWidthProperty->maValue);
-        for (sal_Int16 j = 0; j < 3; j++)
+        if (pNewBorders[i])
         {
-            aNewProperty.mnIndex = nIndex++;
-            rProperties.push_back(aNewProperty);
+            rProperties.push_back(*pNewBorders[i]);
+            delete pNewBorders[i];
         }
     }
 }
@@ -867,6 +890,11 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     return 0;
+}
+
+void ScXMLMasterStylesContext::EndElement()
+{
+    FinishStyles(sal_True);
 }
 
 TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
