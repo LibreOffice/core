@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.18 2001-01-12 18:26:52 dvo Exp $
+	$Id: text.mod,v 1.19 2001-01-15 17:17:24 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -127,7 +127,9 @@
 				   text:character-count |
 				   text:table-count |
 				   text:image-count |
-				   text:object-count" >
+				   text:object-count |
+				   office:annotation |
+				   text:script" >
 
 
 <!ENTITY % inline-text "(#PCDATA|
@@ -1049,3 +1051,7 @@ indices, and there may be only one text:index-title element.
 <!ELEMENT text:linenumbering-separator (#PCDATA)>
 <!ATTLIST text:linenumbering-separator text:increment %nonNegativeInteger; #IMPLIED>
 
+<!ELEMENT text:script (#PCDATA)>
+<!ATTLIST text:script script:language CDATA #REQUIRED>
+<!ATTLIST text:script xlink:href CDATA #IMPLIED>
+<!ATTLIST text:script xlink:type (simple) #FIXED "simple">

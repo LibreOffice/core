@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.20 2000-12-15 14:04:20 mib Exp $
+	$Id: table.mod,v 1.21 2001-01-15 17:17:24 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -241,13 +241,6 @@
 	table:filter-options %string; #IMPLIED
 	table:last-column-spanned %positiveInteger; #REQUIRED
 	table:last-row-spanned %positiveInteger; #REQUIRED
->
-<!ELEMENT office:annotation (%cString;)>
-<!ATTLIST office:annotation
-	office:author %string; #REQUIRED
-	office:create-date %date; #IMPLIED
-	office:create-date-string %string; #IMPLIED
-	office:display %boolean; "true"
 >
 <!ELEMENT table:detective (table:highlighted-range*,table:operation*)>
 <!ELEMENT table:highlighted-range EMPTY>

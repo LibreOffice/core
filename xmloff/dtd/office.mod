@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.23 2001-01-05 10:23:08 mib Exp $
+	$Id: office.mod,v 1.24 2001-01-15 17:17:24 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -158,3 +158,11 @@
 <!ATTLIST office:dde-source office:name CDATA #IMPLIED>
 <!ATTLIST office:dde-source table:conversion-mode (into-default-style-data-style|into-english-number|let-text) "into-default-style-data-style" >
 
+<!-- annotations -->
+<!-- limitation: in the current implementation, only plain text inside of 
+     paragraphs is supported -->
+<!ELEMENT office:annotation (text:p)*>
+<!ATTLIST office:annotation office:author %string; #REQUIRED>
+<!ATTLIST office:annotation office:create-date %date; #IMPLIED>
+<!ATTLIST office:annotation office:create-date-string %string; #IMPLIED>
+<!ATTLIST office:annotation office:display %boolean; "false">
