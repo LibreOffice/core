@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-01-16 15:41:30 $
+ *  last change: $Author: er $ $Date: 2001-01-19 11:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ void LocaleDataWrapper::invalidateData()
 {
     if ( !xInstalledLocales.getLength() )
     {
-        LocaleDataWrapper aLDW( ::utl::getProcessServiceFactory(), lang::Locale() );
+        LocaleDataWrapper aLDW( ::comphelper::getProcessServiceFactory(), lang::Locale() );
         aLDW.getAllInstalledLocaleNames();
     }
     return xInstalledLocales;
