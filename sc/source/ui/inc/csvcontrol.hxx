@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-12 09:04:03 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 15:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ typedef ::std::vector< sal_uInt8 >          ScCsvExtColTypeVec;
 // ----------------------------------------------------------------------------
 
 /** Minimum character count for a column in separators mode. */
-const sal_Int32 CSV_MINCOLWIDTH         = 5;
+const sal_Int32 CSV_MINCOLWIDTH         = 8;
 /** Maximum length of a cell string. */
 const xub_StrLen CSV_MAXSTRLEN          = 0x7FFF;
 /** Transparency for header color of selected columns. */
