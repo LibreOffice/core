@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-06 11:08:57 $
+ *  last change: $Author: dbo $ $Date: 2001-08-22 09:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,8 @@ Any Test_CContext::getValueByName( OUString const & rName )
 //==================================================================================================
 static void testCurrentContext()
 {
-    setCurrentContext( new Test_CContext(
+    {
+    ContextLayer layer( new Test_CContext(
         5, OUString( RTL_CONSTASCII_USTRINGPARAM("Value1") ),
         Reference< XCurrentContext >() ) );
     Reference< XCurrentContext > xCC( getCurrentContext() );
@@ -917,10 +918,13 @@ static void testCurrentContext()
         xCC.is() &&
         xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("Value1") ) ) == (sal_Int16)5 &&
         !xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("Value2") ) ).hasValue() );
+    OSL_ASSERT( ! layer.getPreviousContext().is() );
 
-    setCurrentContext( new Test_CContext(
+    {
+    ContextLayer layer2( new Test_CContext(
         7, OUString( RTL_CONSTASCII_USTRINGPARAM("Value2") ),
         xCC ) );
+    OSL_ASSERT( layer2.getPreviousContext() == xCC );
     xCC = getCurrentContext();
     OSL_ASSERT(
         xCC.is() &&
@@ -932,7 +936,10 @@ static void testCurrentContext()
     OUString aEnvName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
     OSL_VERIFY( ::uno_getCurrentContext( (void **)&pContext, aEnvName.pData, 0 ) );
     (*pContext->release)( pContext );
-    setCurrentContext( Reference< XCurrentContext >() );
+    }
+    OSL_ASSERT( ! layer.getPreviousContext().is() );
+    }
+    OSL_ASSERT( ! getCurrentContext().is() );
 }
 
 void testArray(void)

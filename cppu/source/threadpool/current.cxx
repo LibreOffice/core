@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-02 11:43:50 $
+ *  last change: $Author: dbo $ $Date: 2001-08-22 09:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,10 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
         {
             (*pTargetEnv->release)( pTargetEnv );
         }
+    }
+    else // get null-ref is ok
+    {
+        bRet = sal_True;
     }
 
     return bRet;
