@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:13:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,10 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     Size = MAP_APPFONT ( 312 , 131 ) ;
     Text = "Druckoptionen" ;
     Text [ ENGLISH ] = "Print options" ;
-    GroupBox GB_ROWCOL
+    FixedLine FL_ROWCOL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 150 , 26 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
         Text = "Aufteilung" ;
         Text [ English ] = "Aufteilung" ;
 
@@ -195,10 +195,10 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         First = PVIEW_MIN_COL ;
         Last = PVIEW_MAX_COL ;
     };
-    GroupBox GB_MARGINS
+    FixedLine FL_MARGINS
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 150 , 41 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
         Text = "R‰nder" ;
         Text [ English ] = "Margins" ;
 
@@ -414,10 +414,10 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         First = 0 ;
         Last = 2000 ;
     };
-    GroupBox GB_DISTANCE
+    FixedLine FL_DISTANCE
     {
         Pos = MAP_APPFONT ( 6 , 76 ) ;
-        Size = MAP_APPFONT ( 150 , 26 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
         Text = "Abstand" ;
         Text [ English ] = "Distance" ;
 
@@ -430,7 +430,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Afstand";
         TEXT[ spanish ] = "Espacio";
         TEXT[ english_us ] = "Spacing";
-    TEXT[ chinese_simplified ] = "º‰∏Ù";
+        TEXT[ chinese_simplified ] = "º‰∏Ù";
         TEXT[ russian ] = "–‡ÒÒÚÓˇÌËÂ";
         TEXT[ polish ] = "OdstÍp";
         TEXT[ japanese ] = "ä‘äu";
@@ -461,7 +461,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Horizontaal";
         TEXT[ spanish ] = "~Horizontal";
         TEXT[ english_us ] = "Hori~zontal";
-    TEXT[ chinese_simplified ] = "∫·œÚ(~H)";
+        TEXT[ chinese_simplified ] = "∫·œÚ(~H)";
         TEXT[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
         TEXT[ polish ] = "Poziomo";
         TEXT[ japanese ] = "â°(~H)";
@@ -496,7 +496,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     FixedText FT_VMARGIN
     {
         Pos = MAP_APPFONT ( 84 , 88 ) ;
-        Size = MAP_APPFONT ( 36 , 10 ) ;
+        Size = MAP_APPFONT ( 32 , 10 ) ;
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Left = TRUE ;
@@ -509,7 +509,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Verticaal";
         TEXT[ spanish ] = "~Vertical";
         TEXT[ english_us ] = "~Vertically";
-    TEXT[ chinese_simplified ] = "◊›œÚ(~V)";
+        TEXT[ chinese_simplified ] = "◊›œÚ(~V)";
         TEXT[ russian ] = "¬ÂÚËÍ‡Î¸ÌÓ";
         TEXT[ polish ] = "Pionowo";
         TEXT[ japanese ] = "èc(~V)";
@@ -541,10 +541,10 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         First = 0 ;
         Last = 2000 ;
     };
-    GroupBox GB_ORIENTATION
+    FixedLine FL_ORIENTATION
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 150 , 26 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
         Text = "Format" ;
         Text [ English ] = "Format" ;
             TEXT[ italian ] = "Formato";
@@ -633,39 +633,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "~Vertical";
         TEXT[ finnish ] = "~Pysty";
     };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 159 , 3 ) ;
-        Size = MAP_APPFONT ( 96 , 125 ) ;
-        Text = "Vorschau" ;
-        Text [ English ] = "Preview" ;
-            TEXT[ italian ] = "Anteprima";
-        TEXT[ portuguese_brazilian ] = "Vorschau";
-        TEXT[ portuguese ] = "Previsualizar";
-        TEXT[ danish ] = "Eksempel";
-        TEXT[ french ] = "AperÁu";
-        TEXT[ swedish ] = "Fˆrhandsvisning";
-        TEXT[ dutch ] = "Voorbeeld";
-        TEXT[ spanish ] = "PrevisualizaciÛn";
-        TEXT[ english_us ] = "Preview";
-    TEXT[ chinese_simplified ] = "‘§¿¿";
-        TEXT[ russian ] = "œÓÒÏÓÚ";
-        TEXT[ polish ] = "Podglπd";
-        TEXT[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
-        TEXT[ chinese_traditional ] = "πwƒ˝";
-        TEXT[ arabic ] = "„⁄«Ì‰…";
-        TEXT[ dutch ] = "Voorbeeld";
-        TEXT[ chinese_simplified ] = "‘§¿¿";
-        TEXT[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
-        TEXT[ korean ] = "πÃ∏Æ∫∏±‚";
-        TEXT[ turkish ] = "÷nizleme";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "PrevisualizaciÛn";
-        TEXT[ finnish ] = "Esikatselu";
-    };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 162 , 12 ) ;
+        Pos = MAP_APPFONT ( 162 , 7 ) ;
         Size = MAP_APPFONT ( 90 , 113 ) ;
     };
 
@@ -876,37 +846,6 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Pos = MAP_APPFONT ( 88 , 49 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-    };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 50 ) ;
-        Text = "Ansicht" ;
-        Text [ English ] = "View" ;
-        Text [ norwegian ] = "View" ;
-        Text [ italian ] = "Vista" ;
-        Text [ portuguese_brazilian ] = "Ver" ;
-        Text [ portuguese ] = "Ver" ;
-        Text [ finnish ] = "N‰yt‰" ;
-        Text [ danish ] = "Vis" ;
-        Text [ french ] = "Affichage" ;
-        Text [ swedish ] = "Visa" ;
-        Text [ dutch ] = "Beeld" ;
-        Text [ spanish ] = "Ver" ;
-        Text [ english_us ] = "View" ;
-        Text[ chinese_simplified ] = " ”Õº";
-        Text[ russian ] = "¬Ë‰";
-        Text[ polish ] = "Widok";
-        Text[ japanese ] = "ï\\é¶";
-        Text[ chinese_traditional ] = "¿Àµ¯";
-        Text[ arabic ] = "ÿ—Ìﬁ… «·⁄—÷";
-        Text[ dutch ] = "Beeld";
-        Text[ chinese_simplified ] = " ”Õº";
-        Text[ greek ] = "–ÒÔ‚ÔÎﬁ";
-        Text[ korean ] = "∫∏±‚";
-        Text[ turkish ] = "Gˆr¸n¸m";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ver";
     };
     Text[ chinese_simplified ] = "œ‘ æ±»¡–";
     Text[ russian ] = "Ã‡Ò¯Ú‡·";

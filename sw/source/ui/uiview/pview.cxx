@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-17 09:32:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,6 @@
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
@@ -218,7 +215,6 @@ class SwPreViewZoomDlg : public SvxStandardDialog
     FixedText       aColLbl;
     NumericField    aColEdit;
 
-    GroupBox        aFrm;
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
@@ -241,7 +237,6 @@ SwPreViewZoomDlg::SwPreViewZoomDlg( SwPagePreViewWin& rParent ) :
     aColEdit(this,SW_RES(ED_COL)),
     aRowLbl(this,SW_RES(FT_ROW)),
     aRowEdit(this,SW_RES(ED_ROW)),
-    aFrm(this,SW_RES(GB_PREVIEW)),
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this,SW_RES(BT_HELP))
@@ -307,13 +302,13 @@ struct PrintSettingsStruct
 
 class SwPreviewPrintOptionsDialog : public SvxStandardDialog
 {
-    GroupBox            aRowColGB;
+    FixedLine            aRowColFL;
     FixedText           aRowsFT;
     NumericField        aRowsNF;
     FixedText           aColsFT;
     NumericField        aColsNF;
 
-    GroupBox            aMarginGB;
+    FixedLine            aMarginFL;
     FixedText           aLSpaceFT;
     MetricField         aLSpaceMF;
     FixedText           aRSpaceFT;
@@ -322,7 +317,7 @@ class SwPreviewPrintOptionsDialog : public SvxStandardDialog
     MetricField         aTSpaceMF;
     FixedText           aBSpaceFT;
     MetricField         aBSpaceMF;
-    GroupBox            aDistanceGB;
+    FixedLine            aDistanceFL;
     FixedText           aHSpaceFT;
     MetricField         aHSpaceMF;
     FixedText           aVSpaceFT;
@@ -330,9 +325,8 @@ class SwPreviewPrintOptionsDialog : public SvxStandardDialog
 
     RadioButton         aLandscapeRB;
     RadioButton         aPortraitRB;
-    GroupBox            aOrientationGB;
+    FixedLine            aOrientationFL;
 
-    GroupBox            aPreviewGB;
     PrtPrvWindow        aPreviewWin;
 
     OKButton            aOkBtn;
@@ -366,12 +360,12 @@ public:
  * --------------------------------------------------*/
 SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rParent, SwPagePreView& rView ) :
     SvxStandardDialog( &rParent, SW_RES(DLG_PAGEPREVIEW_PRINTOPTIONS) ),
-    aRowColGB(this,SW_RES(  GB_ROWCOL)),
+    aRowColFL(this,SW_RES(  FL_ROWCOL)),
     aRowsFT(this,SW_RES(    FT_ROWS)),
     aRowsNF(this,SW_RES(    NF_ROWS)),
     aColsFT(this,SW_RES(    FT_COLS)),
     aColsNF(this,SW_RES(    NF_COLS)),
-    aMarginGB(this,SW_RES(  GB_MARGINS)),
+    aMarginFL(this,SW_RES(  FL_MARGINS)),
     aLSpaceFT(this,SW_RES(  FT_LMARGIN)),
     aLSpaceMF(this,SW_RES(  MF_LMARGIN)),
     aRSpaceFT(this,SW_RES(  FT_RMARGIN)),
@@ -380,15 +374,14 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     aTSpaceMF(this,SW_RES(  MF_TMARGIN)),
     aBSpaceFT(this,SW_RES(  FT_BMARGIN)),
     aBSpaceMF(this,SW_RES(  MF_BMARGIN)),
-    aDistanceGB(this,SW_RES(GB_DISTANCE)),
+    aDistanceFL(this,SW_RES(FL_DISTANCE)),
     aHSpaceFT(this,SW_RES(  FT_HMARGIN)),
     aHSpaceMF(this,SW_RES(  MF_HMARGIN)),
     aVSpaceFT(this,SW_RES(  FT_VMARGIN)),
     aVSpaceMF(this,SW_RES(  MF_VMARGIN)),
-    aOrientationGB(this,SW_RES( GB_ORIENTATION)),
+    aOrientationFL(this,SW_RES( FL_ORIENTATION)),
     aLandscapeRB(this,SW_RES(   RB_LANDSCAPE)),
     aPortraitRB(this,SW_RES(    RB_PORTRAIT)),
-    aPreviewGB(this,SW_RES(     GB_PREVIEW)),
     aPreviewWin(this,SW_RES(    WIN_PREVIEW), aSettings),
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
@@ -2227,6 +2220,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/05/17 09:32:40  jp
+      Bug #80651#: call InitJob at the printer
+
       Revision 1.6  2001/05/10 08:48:50  os
       store print options at the document
 

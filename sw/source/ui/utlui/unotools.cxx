@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:06:00 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
    xNameAccess(xNA),
    aNewNameFT(this, ResId(FT_NEW_NAME)),
    aNewNameED(this, ResId(ED_NEW_NAME)),
-   aNameGB(this, ResId(GB_NAME)),
+   aNameFL(this, ResId(FL_NAME)),
    aOk(this, ResId(PB_OK)),
    aCancel(this, ResId(PB_CANCEL)),
    aHelp(this, ResId(PB_HELP))

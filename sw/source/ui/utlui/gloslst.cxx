@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:50:25 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
+#endif
+#ifndef _FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -179,7 +179,7 @@ class SwGlossDecideDlg : public ModalDialog
     CancelButton    aCancel;
     HelpButton      aHelp;
     ListBox         aListLB;
-    GroupBox        aGroup;
+    FixedLine       aFL;
 
     DECL_LINK(DoubleClickHdl, ListBox*);
     DECL_LINK(SelectHdl, ListBox*);
@@ -199,7 +199,7 @@ SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     aCancel(this,   ResId(PB_CANCEL)),
     aHelp(this,     ResId(PB_HELP)),
     aListLB(this,   ResId(LB_LIST)),
-    aGroup(this,    ResId(GB_GLOSS))
+    aFL(this,    ResId(FL_GLOSS))
 {
     FreeResource();
     aListLB.SetDoubleClickHdl(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
@@ -632,11 +632,14 @@ void    SwGlossaryList::ClearGroups()
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.5 2001-04-27 17:50:25 jp Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.6 2001-06-01 11:25:06 fme Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/04/27 17:50:25  jp
+    use Collator for international string compare
+
     Revision 1.4  2000/11/06 09:04:23  jp
     must changes: GlossaryPath -> AutoTextPath
 

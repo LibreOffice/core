@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:38:39 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,13 +103,13 @@ ModalDialog DLG_RENAME_XNAMED
     Edit ED_NEW_NAME
     {
         Pos = MAP_APPFONT ( 65 , 13 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Size = MAP_APPFONT ( 87 , 12 ) ;
         Border = TRUE;
     };
-    GroupBox GB_NAME
+    FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 155 , 54 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
         Text = "Name ändern";
         Text [ ENGLISH ] = "Change name" ;
         Text[ english_us ] = "Change name";
