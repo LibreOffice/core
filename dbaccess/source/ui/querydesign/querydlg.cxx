@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:20:50 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ DBG_NAME(DlgQryJoin);
 DlgQryJoin::DlgQryJoin( Window * pParent,OQueryTableConnectionData* pData,
                        const Reference< XDatabaseMetaData >& _rxMetaData)
     : ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) ),
-    aGB_Join( this, ResId( GB_JOIN ) ),
+    aFL_Join( this, ResId( FL_JOIN ) ),
     aRB_Inner( this, ResId( RB_INNER ) ),
     aRB_Left( this, ResId( RB_LEFT ) ),
     aRB_Right( this, ResId( RB_RIGHT ) ),

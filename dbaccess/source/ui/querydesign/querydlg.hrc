@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:24:50 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef DBAUI_QUERYDLG_HRC
 #define DBAUI_QUERYDLG_HRC
 
-#define GB_JOIN         1
+#define FL_JOIN                 1
 
 #define RB_INNER        1
 #define RB_LEFT         2

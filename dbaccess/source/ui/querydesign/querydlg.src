@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:20:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@ ModalDialog DLG_QRY_JOIN
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    GroupBox GB_JOIN
+    FixedLine FL_JOIN
     {
     Pos = MAP_APPFONT ( 6 , 3 ) ;
-    Size = MAP_APPFONT ( 191 , 78 ) ;
+    Size = MAP_APPFONT ( 191 , 8 ) ;
     Text = "Optionen" ;
     Text [ ENGLISH ] = "Options" ;
         Text[ english_us ] = "Options";

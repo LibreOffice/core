@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:33:54 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #include <vcl/dialog.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -92,7 +88,7 @@ namespace dbaui
     class DlgQryJoin : public ModalDialog
     {
     protected:
-        GroupBox            aGB_Join;
+        FixedLine           aFL_Join;
         RadioButton         aRB_Inner;
         RadioButton         aRB_Left;
         RadioButton         aRB_Right;
