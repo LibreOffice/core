@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-29 14:09:44 $
+ *  last change: $Author: cp $ $Date: 2001-06-12 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,28 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
     return a_dstlist != NULL ? a_dstlist : a_srclist ;
 }
 
+// ----------------------------------------------------------------------------
+// convenience routine to create a fontset
+// ----------------------------------------------------------------------------
+
+static XFontSet
+get_font_set( Display *p_display )
+{
+    static XFontSet p_font_set = NULL;
+
+    if (p_font_set == NULL)
+    {
+        char **pp_missing_list;
+        int    n_missing_count;
+        char  *p_default_string;
+
+        p_font_set = XCreateFontSet(p_display, "-*",
+                        &pp_missing_list, &n_missing_count, &p_default_string);
+    }
+
+    return p_font_set;
+}
+
 // ---------------------------------------------------------------------------
 //
 // Constructor for a InputContext (IC)
@@ -165,11 +187,8 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
     pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
     mbMultiLingual = pInputMethod->IsMultiLingual();
 
-    mnSupportedPreeditStyle = (aIsOnTheSpot?
-                               XIMPreeditCallbacks |
-                               XIMPreeditNothing | XIMPreeditNone :
-                               XIMPreeditCallbacks |
-                               XIMPreeditNothing | XIMPreeditNone);
+    mnSupportedPreeditStyle =   XIMPreeditCallbacks | XIMPreeditPosition
+                              | XIMPreeditNothing   | XIMPreeditNone;
     if (pInputMethod->UseMethod()
         && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
@@ -186,11 +205,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
           maClientData.aText.nLength            = 0;
           maClientData.aText.nSize              = 0;
 
-        // set status attributes
-        // only none and nothing are supported which do not need special
-        // arguments, area and position are just hacks, preedit callback
-        // does work but cannot be connected without unicode/multibyte
-        // support of independent vcl layer
+        //
+        // Status attributes
+        //
 
         switch ( mnStatusStyle )
         {
@@ -218,26 +235,13 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
             }
 
             case XIMStatusArea:
-            {
-                XRectangle *pStatusArea = new XRectangle;
-                pStatusArea->x      = 0;
-                pStatusArea->y      = 64;
-                pStatusArea->width  = 256;
-                pStatusArea->height = 64;
-
-                mpStatusAttributes = XVaCreateNestedList (
-                        0,
-                        XNAreaNeeded, pStatusArea,
-                        XNArea,       pStatusArea,
-                        0 );
-
+                /* not supported */
                 break;
-            }
 
             case XIMStatusNone:
             case XIMStatusNothing:
             default:
-
+                /* no arguments needed */
                 break;
         }
 
@@ -268,25 +272,37 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
 
                 break;
 
-            case XIMPreeditPosition:
             case XIMPreeditArea:
+                /* not supported */
+                break;
+
+            case XIMPreeditPosition:
             {
-                XRectangle *pPreeditArea  = new XRectangle;
-                XPoint     *pSpotLocation = new XPoint;
+                // spot location
+                SalExtTextInputPosEvent aPosEvent;
+                  pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
 
-                pSpotLocation->x     = 16;
-                pSpotLocation->y     = 32;
+                static XPoint aSpot;
+                  aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
+                  aSpot.y = aPosEvent.mnY + aPosEvent.mnHeight;
 
-                pPreeditArea->x      = 0;
-                pPreeditArea->y      = 0;
-                pPreeditArea->width  = 256;
-                pPreeditArea->height = 64;
-
+                // create attributes for preedit position style
                 mpPreeditAttributes = XVaCreateNestedList (
                         0,
-                        XNArea,         pPreeditArea,
-                        XNSpotLocation, pSpotLocation,
+                        XNSpotLocation, &aSpot,
                         0 );
+
+                // XCreateIC() fails on Redflag Linux 2.0 if there is no
+                // fontset though the data itself is not evaluated nor is
+                // it required according to the X specs.
+                Display* pDisplay = pFrame->maFrameData.GetDisplay()->GetDisplay();
+                XFontSet pFontSet = get_font_set(pDisplay);
+
+                if (pFontSet != NULL)
+                {
+                    mpPreeditAttributes = XVaAddToNestedList( mpPreeditAttributes,
+                        XNFontSet, (XPointer)pFontSet);
+                }
 
                 break;
             }
@@ -294,11 +310,11 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
             case XIMPreeditNone:
             case XIMPreeditNothing:
             default:
-
+                /* no arguments needed */
                 break;
         }
 
-        // Create the InputContext by given it exact the information it
+        // Create the InputContext by giving it exactly the information it
         // deserves, because inappropriate attributes
         // let XCreateIC fail on Solaris (eg. for C locale)
 
@@ -311,17 +327,17 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD || defined(NETBSD)
+            #if defined LINUX || defined FREEBSD || defined NETBSD
             if ( mpPreeditAttributes != NULL )
-#endif
+            #endif
             mpAttributes = XVaAddToNestedList( mpAttributes,
                     XNPreeditAttributes, (XPointer)mpPreeditAttributes );
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD || defined(NETBSD)
+            #if defined LINUX || defined FREEBSD || defined NETBSD
             if ( mpStatusAttributes != NULL )
-#endif
+            #endif
             mpAttributes = XVaAddToNestedList( mpAttributes,
                     XNStatusAttributes, (XPointer)mpStatusAttributes );
         }
@@ -529,8 +545,14 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
     return (mnPreeditStyle != 0) && (mnStatusStyle != 0) ;
 }
 
+// ---------------------------------------------------------------------------
+//
+// handle extended and normal key input
+//
+// ---------------------------------------------------------------------------
+
 int
-SalI18N_InputContext::CommitStringCallback( sal_Unicode* pText, sal_Size nLength )
+SalI18N_InputContext::CommitStringCallback (sal_Unicode* pText, sal_Size nLength)
 {
     XIMUnicodeText call_data;
 
@@ -542,6 +564,45 @@ SalI18N_InputContext::CommitStringCallback( sal_Unicode* pText, sal_Size nLength
 
     return ::CommitStringCallback( maContext,
                     (XPointer)&maClientData, (XPointer)&call_data );
+}
+
+int
+SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
+{
+    SalExtTextInputEvent aTextEvent;
+
+    aTextEvent.mnTime        = 0;
+    aTextEvent.mpTextAttr    = 0;
+    aTextEvent.mnCursorPos   = nLength;
+    aTextEvent.maText        = UniString(pText, nLength);
+    aTextEvent.mnCursorFlags = 0;
+    aTextEvent.mnDeltaStart  = 0;
+    aTextEvent.mbOnlyCursor  = False;
+
+    maClientData.pFrame->maFrameData.Call (SALEVENT_EXTTEXTINPUT,    (void*)&aTextEvent);
+    maClientData.pFrame->maFrameData.Call (SALEVENT_ENDEXTTEXTINPUT, (void*)NULL);
+
+    return 0;
+}
+
+int
+SalI18N_InputContext::UpdateSpotLocation()
+{
+    if (maContext == 0)
+        return -1;
+
+    SalExtTextInputPosEvent aPosEvent;
+    maClientData.pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+
+    XPoint aSpot;
+    aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
+    aSpot.y = aPosEvent.mnY + aPosEvent.mnHeight;
+
+    XVaNestedList preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &aSpot, 0);
+    XSetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL);
+    XFree(preedit_attr);
+
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -573,36 +634,39 @@ SalI18N_InputContext::UnsetICFocus()
 // ---------------------------------------------------------------------------
 
 void
-SalI18N_InputContext::SetPreeditState(Bool aPreeditState) {
-#if XlibSpecificationRelease >= 6
-  XIMPreeditState preedit_state = XIMPreeditUnKnown;
-  XVaNestedList preedit_attr;
+SalI18N_InputContext::SetPreeditState(Bool aPreeditState)
+{
+    #if XlibSpecificationRelease >= 6
+    XIMPreeditState preedit_state = XIMPreeditUnKnown;
+    XVaNestedList preedit_attr;
 
-  preedit_attr = XVaCreateNestedList(0,
-                                     XNPreeditState, &preedit_state,
-                                     0);
-  if (!XGetICValues(maContext,
-                    XNPreeditAttributes, preedit_attr,
-                    NULL)) {
+    preedit_attr = XVaCreateNestedList(
+            0,
+            XNPreeditState, &preedit_state,
+            0);
+    if (!XGetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL))
+    {
+        XFree(preedit_attr);
+
+        preedit_state = aPreeditState? XIMPreeditEnable : XIMPreeditDisable;
+        preedit_attr = XVaCreateNestedList(
+                0,
+                XNPreeditState, preedit_state,
+                0);
+        XSetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL);
+    }
+
     XFree(preedit_attr);
+    #endif
 
-    preedit_state = (aPreeditState? XIMPreeditEnable : XIMPreeditDisable);
-    preedit_attr = XVaCreateNestedList(0,
-                                       XNPreeditState, preedit_state,
-                                       0);
-    XSetICValues(maContext,
-                 XNPreeditAttributes, preedit_attr,
-                 NULL);
-  }
-  XFree(preedit_attr);
-#endif
-  return;
+    return;
 }
 
 void
-SalI18N_InputContext::SetLanguage(LanguageType aInputLanguage) {
-  // not yet implemented
-  return;
+SalI18N_InputContext::SetLanguage(LanguageType aInputLanguage)
+{
+    // not yet implemented
+    return;
 }
 
 void

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-29 14:09:44 $
+ *  last change: $Author: cp $ $Date: 2001-06-12 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
       point.y = mPosEvent.mnY + mPosEvent.mnHeight;
 
       XVaNestedList preedit_attr;
-      preedit_attr = XVaCreateNestedList(0, XNSpotLocation, point, 0);
+      preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, 0);
       XSetICValues(ic, XNPreeditAttributes, preedit_attr, NULL);
       XFree(preedit_attr);
 

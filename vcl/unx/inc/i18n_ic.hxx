@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-29 14:10:15 $
+ *  last change: $Author: cp $ $Date: 2001-06-12 12:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ public:
     int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
     void EndExtTextInput( USHORT nFlags );                      // unused
     int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
+    int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
+    int  UpdateSpotLocation();
 
     void Map( SalFrame *pFrame );
     void Unmap();
