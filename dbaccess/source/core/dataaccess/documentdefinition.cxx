@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:10:37 $
+ *  last change: $Author: mav $ $Date: 2004-10-14 07:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,8 +316,8 @@ namespace dbaccess
         virtual Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (RuntimeException)
         {
             Reference< ::com::sun::star::util::XCloseable > xRet;
-            if ( m_pClient )
-                xRet = m_pClient->getComponent();
+            // if ( m_pClient )
+            //  xRet = m_pClient->getComponent();
             return xRet;
         }
 
