@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-17 11:42:15 $
+ *  last change: $Author: cl $ $Date: 2002-05-28 09:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,26 @@
 
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERACCESS_HPP_
+#include <com/sun/star/container/XIdentifierAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
+#include <com/sun/star/drawing/GluePoint2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_ALIGNMENT_HPP_
+#include <com/sun/star/drawing/Alignment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_ESCAPEDIRECTION_HPP_
+#include <com/sun/star/drawing/EscapeDirection.hpp>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
@@ -560,6 +580,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         rExport.GetProgressBarHelper()->Increment();
     }
 
+    onExport( xShape );
+
     // --------------------
     // export shape element
     // --------------------
@@ -981,27 +1003,6 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 
 ///////////////////////////////////////////////////////////////////////
 
-#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
-#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERACCESS_HPP_
-#include <com/sun/star/container/XIdentifierAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
-#include <com/sun/star/drawing/GluePoint2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ALIGNMENT_HPP_
-#include <com/sun/star/drawing/Alignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ESCAPEDIRECTION_HPP_
-#include <com/sun/star/drawing/EscapeDirection.hpp>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
-#endif
-#include "xmlnmspe.hxx"
-
 extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
 extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];
 
@@ -1085,3 +1086,8 @@ void XMLShapeExport::ExportGraphicDefaults()
         }
     }
 }
+
+void XMLShapeExport::onExport( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
+{
+}
+
