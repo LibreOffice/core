@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,16 @@
 
 #pragma hdrstop
 
+#define _SVSTDARR_STRINGSDTOR
+
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
+#endif
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
 #endif
 
 #ifndef _WRTSH_HXX
@@ -89,7 +94,7 @@
 // ist, muss die fuer die weiteren Aktionen beruecksichtigt werden.
 
 
-void SwWrtShell::Do( DoType eDoType )
+void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 {
     StartAllAction();
     switch( eDoType )
@@ -97,15 +102,15 @@ void SwWrtShell::Do( DoType eDoType )
         case UNDO:
             // Modi zuruecksetzen
             EnterStdMode();
-            SwEditShell::Undo(0);
+            SwEditShell::Undo(0, nCnt );
             break;
         case REDO:
             // Modi zuruecksetzen
             EnterStdMode();
-            SwEditShell::Redo();
+            SwEditShell::Redo( nCnt );
             break;
         case REPEAT:
-            SwEditShell::Repeat( 1 /*Anzahl!*/ );
+            SwEditShell::Repeat( nCnt );
             break;
     }
     EndAllAction();
@@ -160,6 +165,37 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     return aStr;
 }
 
+USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
+{
+    SwUndoIds aIds;
+    switch( eDoType )
+    {
+    case UNDO:
+        GetUndoIds( 0, &aIds );
+        break;
+    case REDO:
+        GetRedoIds( 0, &aIds );
+        break;
+    }
+
+    String sList;
+    for( USHORT n = 0, nEnd = aIds.Count(); n < nEnd; ++n )
+    {
+        const SwUndoIdAndName& rIdNm = *aIds[ n ];
+        if( UNDO_DRAWUNDO != rIdNm.GetUndoId() )
+            sList += String( ResId( UNDO_BASE + rIdNm.GetUndoId(), pSwResMgr ));
+        else if( rIdNm.GetUndoStr() )
+            sList += *rIdNm.GetUndoStr();
+        else
+        {
+            ASSERT( !this, "no Undo/Redo Test set" );
+        }
+        sList += '\n';
+    }
+    rStrs.SetString( sList );
+    return aIds.Count();
+}
+
 
 String SwWrtShell::GetRepeatString() const
 {
@@ -177,6 +213,9 @@ String SwWrtShell::GetRepeatString() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:53  hr
+      initial import
+
       Revision 1.53  2000/09/18 16:06:27  willem.vandorp
       OpenOffice header added.
 
