@@ -94,7 +94,7 @@ $(JARTARGETN) .SETDIR=$(CLASSDIR) :
 .IF "$(GUI)"=="WNT"
 #	+tolodir .
 .IF "$(JARIMGDIRS)"!=""
-    +toloimg $(JARIMGDIRS)
+#	+toloimg $(JARIMGDIRS)
 .ENDIF
 .ENDIF
 .IF "$(OS)$(CPU)"=="SOLARISS"

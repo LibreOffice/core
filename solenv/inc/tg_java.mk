@@ -20,7 +20,7 @@ $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
     @+-$(MKDIRHIER) $(MISC)$/java$/com$/sun$/star$/upd
 .IF "$(GUI)"=="WNT"
 .IF "$(UPDATER)"!=""
-    +tolodir $(MISC)$
+#	+tolodir $(MISC)$
 #	+tolodir $(MISC)$/java
 .ENDIF
 .ENDIF
