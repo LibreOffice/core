@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,51 +424,14 @@ SvXMLImport::~SvXMLImport() throw ()
     delete pContexts;
     delete pEventImportHelper;
 //  delete pImageMapImportHelper;
-    if (pNumImport)
-        delete pNumImport;
-    if (xImportInfo.is())
-    {
-        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
-        if (xPropertySetInfo.is())
-        {
-            if (pProgressBarHelper)
-            {
-                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
-                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
-                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
-                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
-                    xPropertySetInfo->hasPropertyByName(sProgressCurrent))
-                {
-                    sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
-                    sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
-                    uno::Any aAny;
-                    aAny <<= nProgressMax;
-                    xImportInfo->setPropertyValue(sProgressMax, aAny);
-                    aAny <<= nProgressCurrent;
-                    xImportInfo->setPropertyValue(sProgressCurrent, aAny);
-                }
-                if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                    xImportInfo->setPropertyValue(sRepeat, cppu::bool2any(pProgressBarHelper->GetRepeat()));
-                delete pProgressBarHelper;
-            }
-            OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
-            if (xNumberStyles.is() && xPropertySetInfo->hasPropertyByName(sNumberStyles))
-            {
-                uno::Any aAny;
-                aAny <<= xNumberStyles;
-                xImportInfo->setPropertyValue(sNumberStyles, aAny);
-            }
-        }
-    }
 
-    if( xFontDecls.Is() )
-        ((SvXMLStylesContext *)&xFontDecls)->Clear();
-    if( xStyles.Is() )
-        ((SvXMLStylesContext *)&xStyles)->Clear();
-    if( xAutoStyles.Is() )
-        ((SvXMLStylesContext *)&xAutoStyles)->Clear();
-    if( xMasterStyles.Is() )
-        ((SvXMLStylesContext *)&xMasterStyles)->Clear();
+    //  #i9518# the import component might not be deleted until after the document has been closed,
+    //  so the stuff that accesses the document has been moved to endDocument.
+
+    //  pNumImport is allocated in the ctor, so it must also be deleted here in case the component
+    //  is created and deleted without actually importing.
+    delete pNumImport;
+    delete pProgressBarHelper;
 
     xmloff::token::ResetTokens();
 
@@ -560,6 +523,62 @@ void SAL_CALL SvXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException)
 {
     RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "} SvXMLImport::startDocument" );
+
+    //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
+    //  because the SvXMLImport dtor might not be called until after the document has been closed.
+
+    if (pNumImport)
+    {
+        delete pNumImport;
+        pNumImport = NULL;
+    }
+    if (xImportInfo.is())
+    {
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+        if (xPropertySetInfo.is())
+        {
+            if (pProgressBarHelper)
+            {
+                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
+                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
+                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressCurrent))
+                {
+                    sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
+                    sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
+                    uno::Any aAny;
+                    aAny <<= nProgressMax;
+                    xImportInfo->setPropertyValue(sProgressMax, aAny);
+                    aAny <<= nProgressCurrent;
+                    xImportInfo->setPropertyValue(sProgressCurrent, aAny);
+                }
+                if (xPropertySetInfo->hasPropertyByName(sRepeat))
+                    xImportInfo->setPropertyValue(sRepeat, cppu::bool2any(pProgressBarHelper->GetRepeat()));
+                // pProgressBarHelper is deleted in dtor
+            }
+            OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+            if (xNumberStyles.is() && xPropertySetInfo->hasPropertyByName(sNumberStyles))
+            {
+                uno::Any aAny;
+                aAny <<= xNumberStyles;
+                xImportInfo->setPropertyValue(sNumberStyles, aAny);
+            }
+        }
+    }
+
+    if( xFontDecls.Is() )
+        ((SvXMLStylesContext *)&xFontDecls)->Clear();
+    if( xStyles.Is() )
+        ((SvXMLStylesContext *)&xStyles)->Clear();
+    if( xAutoStyles.Is() )
+        ((SvXMLStylesContext *)&xAutoStyles)->Clear();
+    if( xMasterStyles.Is() )
+        ((SvXMLStylesContext *)&xMasterStyles)->Clear();
+
+    //  The shape import helper does the z-order sorting in the dtor,
+    //  so it must be deleted here, too.
+    mxShapeImport = NULL;
 
     if( pImpl->mbOwnGraphicResolver )
     {
