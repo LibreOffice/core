@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+#   last change: $Author: nn $ $Date: 2000-10-26 18:57:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,7 @@ CXXFILES = \
     dpsave.cxx \
     pivot.cxx \
     pivot2.cxx \
+    dbdocutl.cxx \
     pagepar.cxx \
     conditio.cxx \
     validat.cxx
@@ -185,6 +186,7 @@ SLOFILES =  \
     $(SLO)$/dpsave.obj \
     $(SLO)$/pivot.obj \
     $(SLO)$/pivot2.obj \
+    $(SLO)$/dbdocutl.obj \
     $(SLO)$/pagepar.obj \
     $(SLO)$/conditio.obj \
     $(SLO)$/validat.obj
@@ -195,6 +197,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpsave.obj	\
+    $(SLO)$/dbdocutl.obj \
     $(SLO)$/globalx.obj
 
 # --- Tagets -------------------------------------------------------
