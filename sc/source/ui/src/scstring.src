@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 22:16:03 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ String SCSTR_PIVOTSHELL
     Text [ spanish ] = "Tablas del piloto de datos" ;
     Text [ english_us ] = "Data Pilot Tables" ;
     Text[ chinese_simplified ] = "ж•°жЌ®еЉ©зђ†е·ҐдЅњиЎЁ";
-    Text[ russian ] = "Сводная таблица";
+    Text[ russian ] = "Листы сводной таблицы";
     Text[ polish ] = "Tabele Pilota danych";
     Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂпѕЉпѕџпЅІпѕ›пЅЇпѕ„гЃ®иЎЁ";
     Text[ chinese_traditional ] = "иі‡ж–™еЉ©зђ†е·ҐдЅњиЎЁ";
@@ -2973,7 +2973,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ chinese_simplified ] = "жІЎжњ‰и¶іе¤џзљ„е†…е­з”ЁдєЋжЏ’е…Ґе›ѕеЅў";
     Text[ russian ] = "Недостаточно памяти для вставки рисунка";
     Text[ polish ] = "Za maіo pamiкci do wstawienia grafiki";
-    Text[ japanese ] = "пЅёпѕћпѕ—пЅЇпѕЊпЅЁпЅЇпЅёгЃ®жЊїе…ҐгЃ«еЌЃе€†гЃЄпѕ’пѕ“пѕз©єгЃЌе®№й‡ЏгЃЊгЃ‚г‚ЉгЃѕгЃ›г‚“гЂ‚";
+    Text[ japanese ] = "пЅёпѕћпѕ—пЅЇпѕЊпЅЁпЅЇпЅёгЃ®жЊїе…ҐгЃ«еї…и¦ЃгЃЄпѕѓпѕћпЅЁпЅЅпЅёз©єгЃЌе®№й‡ЏгЃЊи¶іг‚ЉгЃѕгЃ›г‚“гЂ‚";
     Text[ chinese_traditional ] = "иЁж†¶й«”дёЌи¶іпјЊз„Ўжі•жЏ’е…Ґењ–еЅў";
     Text[ arabic ] = "бЗ нжМП РЗЯСЙ ЯЗЭнЙ бЕПСЗМ ЗбСУг";
     Text[ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen";
@@ -3009,6 +3009,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
