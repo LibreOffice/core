@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:15:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
 #include <vcl/toolbox.hxx>
+#endif
+#ifndef _SV_BMPACC_HXX //autogen wg. ToolBox
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
@@ -1713,17 +1716,19 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
 SvxTbxButtonColorUpdater_Impl::SvxTbxButtonColorUpdater_Impl( USHORT nTbxBtnId,
                                                     ToolBox* ptrTbx,
                                                     USHORT nMode ) :
-    nDrawMode         ( nMode ),
-    nBtnId            ( nTbxBtnId ),
-    pTbx              ( ptrTbx ),
-    pBtnBmp           ( NULL ),
-    aCurColor         ( COL_TRANSPARENT )
+    mnDrawMode        ( nMode ),
+    mnBtnId           ( nTbxBtnId ),
+    mpTbx             ( ptrTbx ),
+    maCurColor        ( COL_TRANSPARENT )
 {
-    if (nTbxBtnId == SID_BACKGROUND_COLOR)
-        nDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+    if( nTbxBtnId == SID_BACKGROUND_COLOR )
+        mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+
     DBG_ASSERT( pTbx, "ToolBox not found :-(" );
-    bWasHiContrastMode = pTbx ? ( pTbx->GetBackground().GetColor().IsDark() ) : FALSE;
-    Update(nTbxBtnId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
+
+    mbWasHiContrastMode = mpTbx ? ( mpTbx->GetBackground().GetColor().IsDark() ) : FALSE;
+    Update( nTbxBtnId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY );
+
     return;
 }
 
@@ -1731,104 +1736,106 @@ SvxTbxButtonColorUpdater_Impl::SvxTbxButtonColorUpdater_Impl( USHORT nTbxBtnId,
 
 SvxTbxButtonColorUpdater_Impl::~SvxTbxButtonColorUpdater_Impl()
 {
-    delete pBtnBmp;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
 {
-    Image   aImage( pTbx->GetItemImage( nBtnId ) );
-    BOOL    bSizeChanged = ( theBmpSize != aImage.GetSizePixel() );
-    BOOL    bDisplayModeChanged = ( bWasHiContrastMode != pTbx->GetBackground().GetColor().IsDark() );
+    Image       aImage( mpTbx->GetItemImage( mnBtnId ) );
+    const bool  bSizeChanged = ( maBmpSize != aImage.GetSizePixel() );
+    const bool  bDisplayModeChanged = ( mbWasHiContrastMode != mpTbx->GetBackground().GetColor().IsDark() );
+    Color       aColor( rColor );
 
-    Color aColor( rColor );
+    // !!! #109290# Workaround for SetFillColor with COL_AUTO
+    if( aColor.GetColor() == COL_AUTO )
+        aColor = Color( COL_TRANSPARENT );
 
-    // #109290# Workaround for SetFillColor with COL_AUTO
-    if ( aColor.GetColor() == COL_AUTO )
-        aColor = Color( IMAGE_COL_TRANSPARENT );
-
-    if ( aCurColor == aColor && !bSizeChanged && !bDisplayModeChanged )
-        return;
-
-    VirtualDevice aVirDev( *pTbx );
-    Point aNullPnt;
-
-    if ( bSizeChanged || bDisplayModeChanged )
+    if( ( maCurColor != aColor ) || bSizeChanged || bDisplayModeChanged )
     {
-        bWasHiContrastMode = pTbx->GetBackground().GetColor().IsDark();
-        theBmpSize = aImage.GetSizePixel();
+        BitmapEx            aBmpEx( aImage.GetBitmapEx() );
+        Bitmap              aBmp( aBmpEx.GetBitmap() );
+        BitmapWriteAccess*  pBmpAcc = aBmp.AcquireWriteAccess();
 
-        if ( theBmpSize.Width() <= 16 )
-            theUpdRect = Rectangle( Point(7,7), Size(8,8) );
-        else
-            theUpdRect = Rectangle( Point(14,14), Size(11,11) );
+        maBmpSize = aBmp.GetSizePixel();
 
-        aVirDev.SetLineColor();
-        aVirDev.SetOutputSizePixel( theBmpSize );
-        aVirDev.SetFillColor( Color( IMAGE_COL_TRANSPARENT ) );
-        aVirDev.DrawRect( Rectangle( aNullPnt, theBmpSize ) );
-        aVirDev.DrawImage( aNullPnt, aImage );
-        delete pBtnBmp;
-        pBtnBmp = new Bitmap( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-        if ( nDrawMode != TBX_UPDATER_MODE_CHAR_COLOR_NEW )
-            aVirDev.DrawRect( theUpdRect );
+        if( pBmpAcc )
+        {
+            Bitmap              aMsk;
+            BitmapWriteAccess*  pMskAcc;
+            const Point         aNullPnt;
+
+            if( aBmpEx.IsAlpha() )
+                pMskAcc = ( aMsk = aBmpEx.GetAlpha().GetBitmap() ).AcquireWriteAccess();
+            else if( aBmpEx.IsTransparent() )
+                pMskAcc = ( aMsk = aBmpEx.GetMask() ).AcquireWriteAccess();
+            else
+                pMskAcc = NULL;
+
+            mbWasHiContrastMode = mpTbx->GetBackground().GetColor().IsDark();
+
+            if( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW && ( COL_TRANSPARENT != aColor.GetColor() ) )
+                pBmpAcc->SetLineColor( aColor );
+            else if( mpTbx->GetBackground().GetColor().IsDark() )
+                pBmpAcc->SetLineColor( Color( COL_WHITE ) );
+            else
+                pBmpAcc->SetLineColor( Color( COL_BLACK ) );
+
+            pBmpAcc->SetFillColor( maCurColor = aColor );
+
+            if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode || TBX_UPDATER_MODE_NONE == mnDrawMode )
+            {
+                if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode )
+                {
+                    if( maBmpSize.Width() <= 16 )
+                        maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
+                    else
+                        maUpdRect = Rectangle( Point( 1,19 ), Size( 24,6 ) );
+                }
+                else
+                {
+                    if( maBmpSize.Width() <= 16 )
+                        maUpdRect = Rectangle( Point( 7, 7 ), Size( 8, 8 ) );
+                    else
+                        maUpdRect = Rectangle( Point( 14, 14 ), Size( 11, 11 ) );
+                }
+
+                pBmpAcc->DrawRect( maUpdRect );
+
+                if( pMskAcc )
+                {
+                    if( COL_TRANSPARENT == aColor.GetColor() )
+                    {
+                        pMskAcc->SetLineColor( COL_BLACK );
+                        pMskAcc->SetFillColor( COL_WHITE );
+                    }
+                    else
+                        pMskAcc->SetFillColor( COL_BLACK );
+
+                    pMskAcc->DrawRect( maUpdRect );
+                }
+            }
+            else
+            {
+                DBG_ERROR( "SvxTbxButtonColorUpdater_Impl::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
+                // !!! DrawChar( aVirDev, aColor );
+            }
+
+            aBmp.ReleaseAccess( pBmpAcc );
+
+            if( pMskAcc )
+                aMsk.ReleaseAccess( pMskAcc );
+
+            if( aBmpEx.IsAlpha() )
+                aBmpEx = BitmapEx( aBmp, AlphaMask( aMsk ) );
+            else if( aBmpEx.IsTransparent() )
+                aBmpEx = BitmapEx( aBmp, aMsk );
+            else
+                aBmpEx = aBmp;
+
+            mpTbx->SetItemImage( mnBtnId, Image( aBmpEx ) );
+        }
     }
-    else if ( !pBtnBmp )
-        pBtnBmp = new Bitmap( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-
-    aVirDev.SetOutputSizePixel( theBmpSize );
-    aVirDev.DrawBitmap( aNullPnt, *pBtnBmp );
-
-    // Choose line color according to background color
-    if ( pTbx->GetBackground().GetColor().IsDark() )
-        aVirDev.SetLineColor( COL_WHITE );
-    else
-        aVirDev.SetLineColor( COL_BLACK );
-
-    if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW &&
-         ( aColor.GetColor() != COL_AUTO &&
-           aColor.GetColor() != IMAGE_COL_TRANSPARENT ))
-    {
-        // Draw border only if COLOR_AUTO is the new color!
-        aVirDev.SetLineColor( aColor );
-    }
-    aVirDev.SetFillColor( aColor );
-
-    if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW )
-    {
-        // New mode for our new high contrast enabled bitmaps
-        if ( theBmpSize.Width() <= 16 )
-            theUpdRect = Rectangle( Point( 0,12 ), Size(theBmpSize.Width(), 4 ) );
-        else
-            theUpdRect = Rectangle( Point( 1,19 ), Size( 24,6 ) );
-        aVirDev.DrawRect( theUpdRect );
-    }
-    else if ( nDrawMode != TBX_UPDATER_MODE_NONE )
-    {
-        DrawChar( aVirDev, aColor );
-    }
-    else
-        aVirDev.DrawRect( theUpdRect );
-
-    aCurColor = aColor;
-
-    // The following code asumes that we cannot change the display color depth
-    // during Office runtime. Which is at least NOT true for newer Windows versions!
-    const Bitmap    aBmp( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-    static Color    aTransparentColor;
-    static sal_Bool bTransparentColorInitialized = sal_False;
-
-    if( !bTransparentColorInitialized )
-    {
-        aVirDev.DrawPixel( aNullPnt, IMAGE_COL_TRANSPARENT );
-        aTransparentColor = aVirDev.GetPixel( aNullPnt );
-        bTransparentColorInitialized = sal_True;
-    }
-
-    Bitmap  aMaskBitmap = aBmp.CreateMask( aTransparentColor );
-    Image aNewImage( aBmp, aMaskBitmap );
-    pTbx->SetItemImage( nBtnId, aNewImage );
 }
 
 // -----------------------------------------------------------------------
@@ -1838,11 +1845,11 @@ void SvxTbxButtonColorUpdater_Impl::DrawChar( VirtualDevice& rVirDev, const Colo
     Font aOldFont = rVirDev.GetFont();
     Font aFont = aOldFont;
     Size aSz = aFont.GetSize();
-    aSz.Height() = theBmpSize.Height();
+    aSz.Height() = maBmpSize.Height();
     aFont.SetSize( aSz );
     aFont.SetWeight( WEIGHT_BOLD );
 
-    if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR )
+    if ( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR )
     {
         aFont.SetColor( rCol );
         aFont.SetFillColor( Color( IMAGE_COL_TRANSPARENT ) );
@@ -1851,14 +1858,14 @@ void SvxTbxButtonColorUpdater_Impl::DrawChar( VirtualDevice& rVirDev, const Colo
     {
         rVirDev.SetLineColor();
         rVirDev.SetFillColor( rCol );
-        Rectangle aRect( Point(0,0), theBmpSize );
+        Rectangle aRect( Point(0,0), maBmpSize );
         rVirDev.DrawRect( aRect );
         aFont.SetFillColor( rCol );
     }
     rVirDev.SetFont( aFont );
     Size aTxtSize(rVirDev.GetTextWidth( 'A' ), rVirDev.GetTextHeight());
-    Point aPos( ( theBmpSize.Width() - aTxtSize.Width() ) / 2,
-                ( theBmpSize.Height() - aTxtSize.Height() ) / 2 );
+    Point aPos( ( maBmpSize.Width() - aTxtSize.Width() ) / 2,
+                ( maBmpSize.Height() - aTxtSize.Height() ) / 2 );
 
     rVirDev.DrawText( aPos, 'A' );
     rVirDev.SetFont( aOldFont );
