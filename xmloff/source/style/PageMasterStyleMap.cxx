@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:20:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "PrintZeroValues",           XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTZEROVALUES | MID_FLAG_MERGE_ATTRIBUTE,                         CTF_PM_PRINT_ZEROVALUES ),
     PLMAP( "PrintDownFirst",            XML_NAMESPACE_STYLE,    XML_PRINT_PAGE_ORDER,           XML_PM_TYPE_PRINTPAGEORDER,                             0 ),
     PLMAP( "FirstPageNumber",           XML_NAMESPACE_STYLE,    XML_FIRST_PAGE_NUMBER,          XML_PM_TYPE_FIRSTPAGENUMBER,                            0 ),
-    PLMAP( "PageScale",             XML_NAMESPACE_STYLE,    XML_SCALE_TO,                   XML_TYPE_NUMBER16,                                      CTF_PM_SCALETO ),
+    PLMAP( "PageScale",             XML_NAMESPACE_STYLE,    XML_SCALE_TO,                   XML_TYPE_PERCENT16,                                     CTF_PM_SCALETO ),
     PLMAP( "ScaleToPages",          XML_NAMESPACE_STYLE,    XML_SCALE_TO_PAGES,             XML_TYPE_NUMBER16,                                      CTF_PM_SCALETOPAGES ),
     PLMAP( "ScaleToPagesX",         XML_NAMESPACE_STYLE,    XML_SCALE_TO_X,                 XML_TYPE_NUMBER16,                                      CTF_PM_SCALETOX ),
     PLMAP( "ScaleToPagesY",         XML_NAMESPACE_STYLE,    XML_SCALE_TO_Y,                 XML_TYPE_NUMBER16,                                      CTF_PM_SCALETOY ),
