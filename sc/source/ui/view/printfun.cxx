@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:05:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1750,7 +1750,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             pDev->SetMapMode( aControlMode );
             pDev->SetClipRegion( aLogicRect );      // single controls may extend beyond the page
 
-            pPV->InitRedraw( SC_LAYER_CONTROLS, aLogicRect );
+            pPV->DrawLayer( SC_LAYER_CONTROLS, aLogicRect );
 
             pDev->SetClipRegion();
         }
