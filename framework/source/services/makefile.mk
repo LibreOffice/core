@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: as $ $Date: 2001-07-02 13:40:10 $
+#   last change: $Author: mba $ $Date: 2001-10-02 07:39:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ BOOTSTRAP_SERVICE=	FALSE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\
+                                        $(SLO)$/documentlist.obj                                                             \
                     $(SLO)$/desktop.obj								\
                     $(SLO)$/pluginframe.obj							\
                     $(SLO)$/task.obj								\
@@ -93,12 +94,16 @@ SLOFILES=			\
                     $(SLO)$/saxnamespacefilter.obj					\
                     $(SLO)$/contenthandlerfactory.obj
 
-SRCFILES=			logindialog.src
+SRCFILES=                       logindialog.src \
+                documentlist.src
 
 RESLIB1NAME=		lgd
 RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
 RESLIB1DEPN=		logindialog.src									\
-                    logindialog.hrc
+            logindialog.hrc \
+            documentlist.src \
+            documentlist.hrc
+
 
 # --- Targets ------------------------------------------------------
 
