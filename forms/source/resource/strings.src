@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-04 18:51:42 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 16:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ swedish ] = "Inneh�llet i ett kombinationsf�lt eller en listruta kunde inte best�mmas.";
     Text[ polish ] = "Nie mo�na by�o ustali� zawarto�ci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
-    Text[ japanese ] = "ｺﾝﾎﾞﾎﾞｯｸｽまたはﾘｽﾄﾎﾞｯｸｽの内容が確認できませんでした。";
+    Text[ japanese ] = "コンボボックスまたはリストボックスの内容が確認できませんでした。";
     Text[ korean ] = "콤보 상자 또는 목록 필드의 내용을 조사할 수 없었습니다.";
     Text[ chinese_simplified ] = "无法确定组合框或者列表框内的内容。";
     Text[ chinese_traditional ] = "無法從資料庫內測定組合方塊或清單方塊的內容";
@@ -157,7 +157,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ swedish ] = "N�r denna control laddades uppstod ett fel. D�rf�r ersattes den av en platsh�llare.";
     Text[ polish ] = "Wyst�pi� b��d podczas �adowania pola kontrolnego (control). Z tego powodu zamieniono je na symbol wieloznaczny.";
     Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
-    Text[ japanese ] = "このｺﾝﾄﾛｰﾙの読み込み中にｴﾗｰが発生しました。それが原因でﾜｲﾙﾄﾞｶｰﾄﾞに置換されました。";
+    Text[ japanese ] = "このコントロールの読み込み中にエラーが発生しました。それが原因でワイルドカードに置換されました。";
     Text[ korean ] = "이 컨트롤 로드시에 오류가 발생하였습니다. 그러므로 플레이스홀더로 변경되었습니다.";
     Text[ chinese_simplified ] = "装入这个字段时出现了一个错误，因此用通配符代替字段。";
     Text[ chinese_traditional ] = "載入這個控制項時發生一個錯誤。但已經用一個萬用字元替代它。";
@@ -185,7 +185,7 @@ String RID_STR_READERROR
     Text[ chinese_simplified ] = "在读取数据库数据时发生错误";
     Text[ russian ] = "������ ��� ������ ������ �� ���� ������";
     Text[ polish ] = "B��d podczas odczytu danych z bazy danych";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽからﾃﾞｰﾀを読み取る時のｴﾗｰ";
+    Text[ japanese ] = "データベースからデータを読み取る時のエラー";
     Text[ chinese_traditional ] = "在讀取資料庫時發生錯誤";
     Text[ greek ] = "������ ���� ��� �������� ��������� ��� �� ���� ���������";
     Text[ korean ] = "데이터베이스에 있는 데이터를 읽을 때 오류";
@@ -237,7 +237,7 @@ String RID_ERR_LOADING_FORM
     Text[ swedish ] = "Datainneh�llet kunde inte laddas.";
     Text[ polish ] = "Nie mo�na by�o za�adowa� zawarto�ci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be loaded.";
-    Text[ japanese ] = "ﾃﾞｰﾀ内容が読み込めませんでした。";
+    Text[ japanese ] = "データ内容が読み込めませんでした。";
     Text[ korean ] = "데이터 내용을 로드하지 못했습니다.";
     Text[ chinese_simplified ] = "无法装入数据内容。";
     Text[ chinese_traditional ] = "無法載入資料內容。";
@@ -263,7 +263,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ swedish ] = "Datainneh�llet kunde inte uppdateras.";
     Text[ polish ] = "Nie mo�na by�o zaktualizowa� zawarto�ci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be refreshed.";
-    Text[ japanese ] = "ﾃﾞｰﾀ内容が更新できませんでした。";
+    Text[ japanese ] = "データ内容が更新できませんでした。";
     Text[ korean ] = "데이터 내용을 업데이트하지 못했습니다.";
     Text[ chinese_simplified ] = "无法更新数据内容。";
     Text[ chinese_traditional ] = "無法更新資料內容。";
@@ -290,7 +290,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ swedish ] = "Fel vid infogning av den nya dataposten";
     Text[ polish ] = "B��d przy wstawianiu nowego rekordu";
     Text[ portuguese_brazilian ] = "error inserting the new record";
-    Text[ japanese ] = "新しいﾚｺｰﾄﾞを挿入する時のｴﾗｰ";
+    Text[ japanese ] = "新しいレコードを挿入する時のエラー";
     Text[ korean ] = "새 레코드 삽입시 오류";
     Text[ chinese_simplified ] = "在插入新数据条目时发生错误";
     Text[ chinese_traditional ] = "在插入新資料條目時發生錯誤";
@@ -316,7 +316,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ swedish ] = "Fel vid skrivning av den aktuella dataposten";
     Text[ polish ] = "B��d przy pisaniu aktualnego rekordu";
     Text[ portuguese_brazilian ] = "error updating the current record";
-    Text[ japanese ] = "現在のﾚｺｰﾄﾞを書き込む時のｴﾗｰ";
+    Text[ japanese ] = "現在のレコードを書き込む時のエラー";
     Text[ korean ] = "현재의 데이터 레코드에서 오류";
     Text[ chinese_simplified ] = "在更新当前数据条目时发生错误";
     Text[ chinese_traditional ] = "在寫入資料條目時發生錯誤";
@@ -342,7 +342,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ swedish ] = "Fel vid radering av den aktuella dataposten";
     Text[ polish ] = "B��d przy usuwaniu aktualnego rekordu";
     Text[ portuguese_brazilian ] = "error deleting the current record";
-    Text[ japanese ] = "現在のﾚｺｰﾄﾞを削除する時のｴﾗｰ";
+    Text[ japanese ] = "現在のレコードを削除する時のエラー";
     Text[ korean ] = "현재 레코드 삭제시에 오류";
     Text[ chinese_simplified ] = "在删除当前数据条目时发生错误";
     Text[ chinese_traditional ] = "在刪除資料條目時發生錯誤";
@@ -368,7 +368,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ swedish ] = "Fel vid radering av de angivna dataposterna";
     Text[ polish ] = "B��d przy usuwaniu podanych rekord�w";
     Text[ portuguese_brazilian ] = "error deleting the specified records";
-    Text[ japanese ] = "指定したﾚｺｰﾄﾞを削除する時のｴﾗｰ";
+    Text[ japanese ] = "指定したレコードを削除する時のエラー";
     Text[ korean ] = "지정된 레코드 삭제시에 오류";
     Text[ chinese_simplified ] = "在删除指定的数据条目时发生错误";
     Text[ chinese_traditional ] = "在刪除指定資料條目時發生錯誤";
@@ -395,7 +395,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ swedish ] = "Objektet f�r inte vara NULL.";
     Text[ polish ] = "Obiekt nie mo�e by� r�wny ZERO.";
     Text[ portuguese_brazilian ] = "The object must not be NULL.";
-    Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄが NULL ではいけません。";
+    Text[ japanese ] = "オブジェクトが NULL ではいけません。";
     Text[ korean ] = "개체는 NULL이 아니어야 합니다.";
     Text[ chinese_simplified ] = "这个对象不可以是 NULL 。";
     Text[ chinese_traditional ] = "這個物件不可以是 NULL 。";
@@ -455,6 +455,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ arabic ] = "Remove graphics";
     Text[ catalan ] = "Remove graphics";
 };
+
 
 
 
