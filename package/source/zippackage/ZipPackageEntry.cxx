@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:22:17 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewPar
 {
     sal_Int64 nTest;
     Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
-    if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::getUnoTunnelImplementationId () ) ) == 0 )
+    if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::static_getImplementationId () ) ) == 0 )
         throw NoSupportException();
 
     ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );
