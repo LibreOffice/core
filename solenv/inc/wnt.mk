@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:53:18 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:20:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -340,7 +340,9 @@ LINKFLAGSOPT=
 
 .IF "$(DYNAMIC_CRT)"!=""
 LIBCMT=msvcrt.lib
+.IF "$(COMEX)"!="10"
 LIBCIMT=msvcirt.lib
+.ENDIF
 OLDNAMES=oldnames.lib
 UWINAPILIB*=uwinapi.lib
 .ELSE
