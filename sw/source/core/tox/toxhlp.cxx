@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:32:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_XINDEXENTRYSUPPLIER_HPP_
-#include <drafts/com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -96,7 +96,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         if( xI.is() )
         {
             UNO_NMSPC::Any x = xI->queryInterface( ::getCppuType(
-                    (const com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) );
+                    (const com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) );
             x >>= xIES;
         }
     }
