@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 13:34:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 13:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _DBAUI_DBADMIN_HXX_
+#include "dbadmin.hxx"
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 
 #include <stdlib.h>
@@ -176,6 +182,41 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    sal_Bool OGenericAdministrationPage::prepareConnectionAction( ODbAdminDialog* _pDialog, const String& _rActionDescription, OPageSettings** _pViewSettings )
+    {
+        sal_Bool bDeleteSettings = sal_True;
+        sal_Bool bContinueAction = sal_True;
+        if (_pDialog->isCurrentModified())
+        {
+            // the current data source is modified, so we need to save it in case we're
+            // about to do something which requires a connection
+            if (!_pDialog->isApplyable())
+            {
+                ErrorBox aError(this, ModuleRes(ERR_CANTDOTABLEACTION));
+                aError.Execute();
+            }
+            else
+            {
+                QueryBox aAskForSave(this, ModuleRes(QUERY_NEED_TO_SAVE_FILTER));
+                aAskForSave.SetText(_rActionDescription);
+                if (RET_YES == aAskForSave.Execute())
+                {
+                    _pDialog->applyChangesAsync(_pViewSettings ? *_pViewSettings : NULL);
+                    bDeleteSettings = sal_False;
+                }
+            }
+            bContinueAction = sal_False;
+        }
+
+        if (bDeleteSettings && _pViewSettings)
+        {
+            delete *_pViewSettings;
+            *_pViewSettings = NULL;
+        }
+        return bContinueAction;
+    }
+
+    // -----------------------------------------------------------------------
     IMPL_LINK(OGenericAdministrationPage, OnControlModified, Control*, EMPTYARG)
     {
         callModifiedHdl();
@@ -189,6 +230,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/05/10 13:34:28  fs
+ *  #86223# +OPageSettings/createViewSettings/filleViewSettings/restoreViewSettings
+ *
  *  Revision 1.28  2001/01/26 16:12:12  fs
  *  split up the file
  *

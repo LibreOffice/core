@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 13:34:29 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 13:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ namespace dbaui
     //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
+    class ODbAdminDialog;
     class OGenericAdministrationPage : public SfxTabPage
     {
     protected:
@@ -175,6 +176,17 @@ namespace dbaui
         /// analyze the invalid and the readonly flag which may be present in the set
         void getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly);
 
+        /** prepares an action which requires a connection to work with.
+
+            <p>It is checked if the current data source is modified. If in this case the dialog is appliable, and
+            the user confirms the apply, an asyncApplyChanges (on the dialog) with the page settings given is executed.
+
+            <p>If no async apply is necessary, the settings given (if not <NULL/> are deleted.</p>
+            @return
+                <TRUE/> if the action can be continued, <FALSE/> otherwise
+        */
+        sal_Bool prepareConnectionAction( ODbAdminDialog* _pDialog, const String& _rActionDescription, OPageSettings** _pViewSettings = NULL );
+
     protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
@@ -194,6 +206,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/05/10 13:34:29  fs
+ *  #86223# +OPageSettings/createViewSettings/filleViewSettings/restoreViewSettings
+ *
  *  Revision 1.19  2001/01/26 16:12:12  fs
  *  split up the file
  *
