@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:42:24 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 07:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ greek ] = "”мяксхнуз";
         QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
