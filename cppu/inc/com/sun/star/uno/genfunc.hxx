@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:53 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@ namespace star
 namespace uno
 {
 
-extern "C"
-{
 //==================================================================================================
 inline void SAL_CALL cpp_acquire( void * pCppI )
     SAL_THROW( () )
@@ -122,7 +120,6 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
 #endif
     }
     return 0;
-}
 }
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:40:58 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,9 @@ template< class E >
 inline Sequence< E >::Sequence() SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_construct( &_pSequence, rType.getTypeLibType(), 0, 0, cpp_acquire );
+    ::uno_type_sequence_construct(
+        &_pSequence, rType.getTypeLibType(),
+        0, 0, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 template< class E >
@@ -123,7 +125,8 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len ) SAL_THROW( 
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_construct(
-        &_pSequence, rType.getTypeLibType(), const_cast< E * >( pElements ), len, cpp_acquire );
+        &_pSequence, rType.getTypeLibType(),
+        const_cast< E * >( pElements ), len, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 template< class E >
@@ -131,7 +134,8 @@ inline Sequence< E >::Sequence( sal_Int32 len ) SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_construct(
-        &_pSequence, rType.getTypeLibType(), 0, len, cpp_acquire );
+        &_pSequence, rType.getTypeLibType(),
+        0, len, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 template< class E >
@@ -139,7 +143,7 @@ inline Sequence< E >::~Sequence() SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_destructData(
-        this, rType.getTypeLibType(), cpp_release );
+        this, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 template< class E >
@@ -147,7 +151,7 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) 
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_assign(
-        &_pSequence, rSeq._pSequence, rType.getTypeLibType(), cpp_release );
+        &_pSequence, rSeq._pSequence, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
     return *this;
 }
 //__________________________________________________________________________________________________
@@ -160,7 +164,7 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const 
     return ::uno_type_equalData(
         const_cast< Sequence< E > * >( this ), rType.getTypeLibType(),
         const_cast< Sequence< E > * >( &rSeq ), rType.getTypeLibType(),
-        cpp_queryInterface, cpp_release );
+        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 template< class E >
@@ -174,7 +178,8 @@ inline E * Sequence< E >::getArray() SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_reference2One(
-        &_pSequence, rType.getTypeLibType(), cpp_acquire, cpp_release );
+        &_pSequence, rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
     return reinterpret_cast< E * >( _pSequence->elements );
 }
 //__________________________________________________________________________________________________
@@ -184,7 +189,8 @@ inline E & Sequence< E >::operator [] ( sal_Int32 nIndex ) SAL_THROW( () )
     OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_reference2One(
-        &_pSequence, rType.getTypeLibType(), cpp_acquire, cpp_release );
+        &_pSequence, rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
     return reinterpret_cast< E * >( _pSequence->elements )[ nIndex ];
 }
 //__________________________________________________________________________________________________
@@ -200,7 +206,8 @@ inline void Sequence< E >::realloc( sal_Int32 nSize ) SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_realloc(
-        &_pSequence, rType.getTypeLibType(), nSize, cpp_acquire, cpp_release );
+        &_pSequence, rType.getTypeLibType(), nSize,
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 
 //--------------------------------------------------------------------------------------------------

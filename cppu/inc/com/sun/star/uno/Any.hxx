@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-02 15:13:46 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,36 +94,37 @@ namespace uno
 //__________________________________________________________________________________________________
 inline Any::Any() SAL_THROW( () )
 {
-    ::uno_any_construct( this, 0, 0, cpp_acquire );
+    ::uno_any_construct( this, 0, 0, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::Any( const Any & rAny ) SAL_THROW( () )
 {
-    ::uno_type_any_construct( this, rAny.pData, rAny.pType, cpp_acquire );
+    ::uno_type_any_construct( this, rAny.pData, rAny.pType, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::Any( const void * pData_, const Type & rType ) SAL_THROW( () )
 {
     ::uno_type_any_construct(
-        this, const_cast< void * >( pData_ ), rType.getTypeLibType(), cpp_acquire );
+        this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::Any( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
 {
     ::uno_any_construct(
-        this, const_cast< void * >( pData_ ), pTypeDescr, cpp_acquire );
+        this, const_cast< void * >( pData_ ), pTypeDescr, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::Any( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
 {
     ::uno_type_any_construct(
-        this, const_cast< void * >( pData_ ), pType, cpp_acquire );
+        this, const_cast< void * >( pData_ ), pType, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::~Any() SAL_THROW( () )
 {
     ::uno_any_destruct(
-        this, cpp_release );
+        this, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline Any & Any::operator = ( const Any & rAny ) SAL_THROW( () )
@@ -131,7 +132,8 @@ inline Any & Any::operator = ( const Any & rAny ) SAL_THROW( () )
     if (this != &rAny)
     {
         ::uno_type_any_assign(
-            this, rAny.pData, rAny.pType, cpp_acquire, cpp_release );
+            this, rAny.pData, rAny.pType,
+            (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
     }
     return *this;
 }
@@ -144,37 +146,42 @@ inline ::rtl::OUString Any::getValueTypeName() const SAL_THROW( () )
 inline void Any::setValue( const void * pData_, const Type & rType ) SAL_THROW( () )
 {
     ::uno_type_any_assign(
-        this, const_cast< void * >( pData_ ), rType.getTypeLibType(), cpp_acquire, cpp_release );
+        this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
 {
     ::uno_type_any_assign(
-        this, const_cast< void * >( pData_ ), pType, cpp_acquire, cpp_release );
+        this, const_cast< void * >( pData_ ), pType,
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline void Any::setValue( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW( () )
 {
     ::uno_any_assign(
-        this, const_cast< void * >( pData_ ), pTypeDescr, cpp_acquire, cpp_release );
+        this, const_cast< void * >( pData_ ), pTypeDescr,
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline void Any::clear() SAL_THROW( () )
 {
-    ::uno_any_assign(
-        this, 0, 0, cpp_acquire, cpp_release );
+    ::uno_any_clear(
+        this, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline sal_Bool Any::operator == ( const Any & rAny ) const SAL_THROW( () )
 {
     return ::uno_type_equalData(
-        pData, pType, rAny.pData, rAny.pType, cpp_queryInterface, cpp_release );
+        pData, pType, rAny.pData, rAny.pType,
+        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 inline sal_Bool Any::operator != ( const Any & rAny ) const SAL_THROW( () )
 {
     return (! ::uno_type_equalData(
-        pData, pType, rAny.pData, rAny.pType, cpp_queryInterface, cpp_release ));
+        pData, pType, rAny.pData, rAny.pType,
+        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release ));
 }
 
 //__________________________________________________________________________________________________
@@ -190,7 +197,8 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () 
 {
     const Type & rType = ::getCppuType( &value );
     ::uno_type_any_assign(
-        &rAny, const_cast< C * >( &value ), rType.getTypeLibType(), cpp_acquire, cpp_release );
+        &rAny, const_cast< C * >( &value ), rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
 template< class C >
@@ -200,7 +208,8 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(
     return ::uno_type_assignData(
         &value, rType.getTypeLibType(),
         rAny.pData, rAny.pType,
-        cpp_queryInterface, cpp_acquire, cpp_release );
+        (uno_QueryInterfaceFunc)cpp_queryInterface,
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 
 // bool
@@ -457,7 +466,8 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THRO
     if (&rAny != &value)
     {
         ::uno_type_any_assign(
-            &value, rAny.pData, rAny.pType, cpp_acquire, cpp_release );
+            &value, rAny.pData, rAny.pType,
+            (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
     }
     return sal_True;
 }
@@ -481,7 +491,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_T
     return ::uno_type_equalData(
         rAny.pData, rAny.pType,
         const_cast< C * >( &value ), rType.getTypeLibType(),
-        cpp_queryInterface, cpp_release );
+        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
 // operator to compare to an any.  may use specialized operators ==.
 //__________________________________________________________________________________________________
