@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,6 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
         eState = bSet ? STATE_ON : STATE_OFF;
     }
 
-
     int bFlag = STATE_ON == eState;
     // fuer die (WebViewSettings
     enum WebDepend
@@ -799,7 +798,8 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
     delete pOpt;
     Invalidate(rReq.GetSlot());
     if(!pArgs)
-        rReq.AppendItem(SfxUInt16Item(nSlot, bFlag));
+        rReq.AppendItem(SfxBoolItem(nSlot, (BOOL)bFlag));
+    rReq.Done();
 }
 
 /*--------------------------------------------------------------------
