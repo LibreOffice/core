@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Loader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:50:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@ public final class Loader {
         ClassLoader loader = clazz.getClassLoader();
         Vector res = new Vector();
         try {
-            Enumeration enum = loader.getResources( "META-INF/MANIFEST.MF" );
-            while ( enum.hasMoreElements() ) {
-                res.add( (URL) enum.nextElement() );
+            Enumeration en = loader.getResources( "META-INF/MANIFEST.MF" );
+            while ( en.hasMoreElements() ) {
+                res.add( (URL) en.nextElement() );
             }
             // the jarfile with the com/sun/star/lib/loader/Loader.class
             // per-entry attribute is most probably the last resource in the
@@ -223,8 +223,8 @@ public final class Loader {
                     ClassLoader cl = new CustomURLClassLoader( clurls );
                     Class c = cl.loadClass(
                         "com.sun.star.comp.helper.UnoInfo" );
-                    Method m = c.getMethod( "getJars", null );
-                    URL[] jarurls = (URL[]) m.invoke( null, null );
+                    Method m = c.getMethod( "getJars", (Class[]) null );
+                    URL[] jarurls = (URL[]) m.invoke( null, (Object[]) null );
                     for ( int i = 0; i < jarurls.length; i++ ) {
                         vec.add( jarurls[i] );
                     }
