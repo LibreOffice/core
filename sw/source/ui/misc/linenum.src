@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:00:10 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ TabPage TP_LINENUMBERING
         Text [ english_us ] = "~Show numbering" ;
         Text [ portuguese_brazilian ] = "Mostrar ~numera��o" ;
         Text [ swedish ] = "~Numrering p�" ;
-        Text [ danish ] = "Aktiver nummerering" ;
+        Text [ danish ] = "~Aktiver nummerering" ;
         Text [ italian ] = "Att~iva numerazione" ;
         Text [ spanish ] = "Mostrar ~numeraci�n" ;
         Text [ french ] = "Activer la ~num�rotation" ;
@@ -114,6 +114,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "~Nummerierung einschalten";
         Text[ hindi ] = "~संख्या देना दिखाओ";
         Text[ slovak ] = "~Zobraziť číslovanie";
+        Text[ hungarian ] = "~Számozás megjelenítése";
+        Text[ slovenian ] = "~Pokaži oštevilčevanje";
     };
     FixedText FT_CHAR_STYLE
     {
@@ -124,7 +126,7 @@ TabPage TP_LINENUMBERING
         Text [ english_us ] = "~Character Style" ;
         Text [ portuguese_brazilian ] = "~Estilo de Caracter" ;
         Text [ swedish ] = "~Teckenformatmall" ;
-        Text [ danish ] = "Tegntypografi" ;
+        Text [ danish ] = "Te~gntypografi" ;
         Text [ italian ] = "~Modello di carattere" ;
         Text [ spanish ] = "Est~ilo de caracteres" ;
         Text [ french ] = "Style de caract�res" ;
@@ -147,6 +149,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "~Zeichenvorlage";
         Text[ hindi ] = "~अक्षर शैली";
         Text[ slovak ] = "Štýl ~znaku";
+        Text[ hungarian ] = "~Karakterstílus";
+        Text[ slovenian ] = "~Znakovni slog";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -188,6 +192,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "र~चना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "~Formátum";
+        Text[ slovenian ] = "O~blika";
     };
     ListBox LB_FORMAT
     {
@@ -228,6 +234,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     ListBox LB_POS
     {
@@ -431,6 +439,20 @@ TabPage TP_LINENUMBERING
         < "Vnútorný" ; > ;
         < "vonkajší" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balra" ; > ;
+        < "Jobbra" ; > ;
+        < "Belső" ; > ;
+        < "Külső" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Levo" ; > ;
+        < "Desno" ; > ;
+        < "Znotraj" ; > ;
+        < "Zunaj" ; > ;
+    };
     };
     FixedText FT_OFFSET
     {
@@ -464,6 +486,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "अंतर देना";
         Text[ slovak ] = "Vzdialenosť";
+        Text[ hungarian ] = "Térköz";
+        Text[ slovenian ] = "Razmik";
     };
     MetricField MF_OFFSET
     {
@@ -514,6 +538,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "~Intervall";
         Text[ hindi ] = "अंतराल";
         Text[ slovak ] = "Interval";
+        Text[ hungarian ] = "Minden";
+        Text[ slovenian ] = "Interval";
     };
     NumericField NF_NUM_INVERVAL
     {
@@ -562,6 +588,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "Zeilen";
         Text[ hindi ] = "रेखाएँ";
         Text[ slovak ] = "riadkov";
+        Text[ hungarian ] = "sorban";
+        Text[ slovenian ] = "vrstic";
     };
     FixedLine FL_DISPLAY
     {
@@ -595,6 +623,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "दृश्य";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Megjelenítés";
+        Text[ slovenian ] = "Pogled";
     };
     FixedText FT_DIVISOR
     {
@@ -628,6 +658,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
         Text[ slovak ] = "Text";
+        Text[ hungarian ] = "Szöveg";
+        Text[ slovenian ] = "Besedilo";
     };
     Edit ED_DIVISOR
     {
@@ -669,6 +701,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "A~lle";
         Text[ hindi ] = "हरेक";
         Text[ slovak ] = "Každé";
+        Text[ hungarian ] = "Minden";
+        Text[ slovenian ] = "Vsakih";
     };
     NumericField NF_DIV_INTERVAL
     {
@@ -718,6 +752,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "Zeilen";
         Text[ hindi ] = "रेखाएँ";
         Text[ slovak ] = "Riadky";
+        Text[ hungarian ] = "sorban";
+        Text[ slovenian ] = "Črte";
     };
     FixedLine FL_DIVISOR
     {
@@ -751,6 +787,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "Teiler";
         Text[ hindi ] = "अलगानेवाला";
         Text[ slovak ] = "Oddeľovač";
+        Text[ hungarian ] = "Elválasztó";
+        Text[ slovenian ] = "Ločilo";
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
@@ -762,7 +800,7 @@ TabPage TP_LINENUMBERING
         Text [ english_us ] = "Blank lines" ;
         Text [ portuguese_brazilian ] = "Linhas em branco" ;
         Text [ swedish ] = "T~omma rader" ;
-        Text [ danish ] = "Tomme r�kker" ;
+        Text [ danish ] = "Tomme linjer" ;
         Text [ italian ] = "Righe vuote" ;
         Text [ spanish ] = "L�neas en ~blanco" ;
         Text [ french ] = "~Lignes inutilis�es" ;
@@ -785,6 +823,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "L~eerzeilen";
         Text[ hindi ] = "खाली रेखाएँ";
         Text[ slovak ] = "Prázdne riadky";
+        Text[ hungarian ] = "Üres sorok";
+        Text[ slovenian ] = "Prazne vrstice";
     };
     CheckBox CB_COUNT_FRAMELINES
     {
@@ -796,7 +836,7 @@ TabPage TP_LINENUMBERING
         Text [ english_us ] = "Lines in text frames" ;
         Text [ portuguese_brazilian ] = "Linhas nas molduras de texto" ;
         Text [ swedish ] = "Rader i te~xtram" ;
-        Text [ danish ] = "R�kker i tekstboks" ;
+        Text [ danish ] = "Linjer i tekstrammer" ;
         Text [ italian ] = "Rig~he nella cornice di testo" ;
         Text [ spanish ] = "L�neas en marco de texto" ;
         Text [ french ] = "Lignes dans le cadre texte" ;
@@ -819,6 +859,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "Zeilen in Te~xtrahmen";
         Text[ hindi ] = "टेक्स्ट् फ्रेमों में रेखाएँ ";
         Text[ slovak ] = "Riadky v textových rámcoch";
+        Text[ hungarian ] = "Keretben levő sorok sorszámozása";
+        Text[ slovenian ] = "Vrstice v okvirih besedila";
     };
     CheckBox CB_RESTART_PAGE
     {
@@ -835,7 +877,7 @@ TabPage TP_LINENUMBERING
         Text[ french ] = "~Reprendre au d�but des pages";
         Text[ spanish ] = "~Reiniciar al comienzo de p�gina";
         Text[ italian ] = "Riavvia a inizio pagina";
-        Text[ danish ] = "Genstart p� hver ny side";
+        Text[ danish ] = "~Start forfra p� hver ny side";
         Text[ swedish ] = "~B�rja om p� varje ny sida";
         Text[ polish ] = "~Rozpocznij od nowa na ka�dej stronie";
         Text[ portuguese_brazilian ] = "~Reiniciar a cada nova p�gina";
@@ -852,6 +894,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "~Neustart am Seitenanfang";
         Text[ hindi ] = "~हरेक नया पृष्ठ पुनः प्रारंभ करो";
         Text[ slovak ] = "~Reštartovať každú novú stranu";
+        Text[ hungarian ] = "Új~rakezdés minden oldalon";
+        Text[ slovenian ] = "~Ponovno začni na vsaki novi strani";
     };
     FixedLine FL_COUNT
     {
@@ -885,6 +929,8 @@ TabPage TP_LINENUMBERING
         Text[ hebrew ] = "Zählen";
         Text[ hindi ] = "गिनती";
         Text[ slovak ] = "Zahrnúť do počtu";
+        Text[ hungarian ] = "Szám";
+        Text[ slovenian ] = "Seštevek";
     };
     Text [ english_us ] = "Line Numbering" ;
     Text [ portuguese_brazilian ] = "Numera��o das Linhas" ;
@@ -912,7 +958,10 @@ TabPage TP_LINENUMBERING
     Text[ hebrew ] = "‮מיספור שורות‬";
     Text[ hindi ] = "रेखा को संख्या देना";
     Text[ slovak ] = "Číslovanie riadkov";
+    Text[ hungarian ] = "Sorszámozás";
+    Text[ slovenian ] = "Oštevilčevanje vrstic";
 };
+
 
 
 
