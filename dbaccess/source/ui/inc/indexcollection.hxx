@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:21:44 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,14 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _DBAUI_INDEXES_HXX_
+#include "indexes.hxx"
 #endif
 
 #if SUPD<625
@@ -103,66 +100,6 @@
 namespace dbaui
 {
 //......................................................................
-
-    //==================================================================
-    //= OIndexField
-    //==================================================================
-    struct OIndexField
-    {
-        String              sFieldName;
-        sal_Bool            bSortAscending;
-
-        OIndexField() : bSortAscending(sal_True) { }
-    };
-
-    DECLARE_STL_VECTOR( OIndexField, IndexFields );
-
-    //==================================================================
-    //= OIndex
-    //==================================================================
-    struct GrantIndexAccess
-    {
-        friend class OIndexCollection;
-    private:
-        GrantIndexAccess() { }
-    };
-
-    //..................................................................
-    struct OIndex
-    {
-    protected:
-        ::rtl::OUString     sOriginalName;
-        sal_Bool            bModified;
-
-    public:
-        ::rtl::OUString     sName;
-        ::rtl::OUString     sDescription;
-        sal_Bool            bPrimaryKey;
-        sal_Bool            bUnique;
-        IndexFields         aFields;
-
-    public:
-        OIndex(const ::rtl::OUString& _rOriginalName)
-            : sOriginalName(_rOriginalName), sName(_rOriginalName), bPrimaryKey(sal_False), bUnique(sal_False), bModified(sal_False)
-        {
-        }
-
-        const ::rtl::OUString& getOriginalName() const { return sOriginalName; }
-
-        sal_Bool    isModified() const { return bModified; }
-        void        setModified(sal_Bool _bModified) { bModified = _bModified; }
-        void        clearModified() { setModified(sal_False); }
-
-        sal_Bool    isNew() const { return 0 == getOriginalName().getLength(); }
-        void        flagAsNew(const GrantIndexAccess&) { sOriginalName = ::rtl::OUString(); }
-        void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
-
-
-    private:
-        OIndex();   // not implemented
-    };
-
-    DECLARE_STL_VECTOR( OIndex, Indexes );
 
     //==================================================================
     //= OIndexCollection
@@ -244,6 +181,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:21:44  fs
+ *  initial checkin - index design related classes
+ *
  *
  *  Revision 1.0 07.03.01 15:07:15  fs
  ************************************************************************/
