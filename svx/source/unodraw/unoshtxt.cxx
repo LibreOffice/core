@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:33:50 $
+ *  last change: $Author: cl $ $Date: 2001-08-06 13:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,14 +189,14 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 
 //------------------------------------------------------------------------
 
-void SAL_CALL SvxTextEditSourceImpl::acquire() throw()
+void SAL_CALL SvxTextEditSourceImpl::acquire()
 {
     osl_incrementInterlockedCount( &maRefCount );
 }
 
 //------------------------------------------------------------------------
 
-void SAL_CALL SvxTextEditSourceImpl::release() throw()
+void SAL_CALL SvxTextEditSourceImpl::release()
 {
     if( ! osl_decrementInterlockedCount( &maRefCount ) )
         delete this;
