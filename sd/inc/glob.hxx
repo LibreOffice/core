@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:19:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #define SD_IF_SDVIEWSHELLBASE           SFX_INTERFACE_SD_START + 16
 #define SD_IF_SD3DOBJECTBAR             SFX_INTERFACE_SD_START + 17
 #define SD_IF_SDFONTWORKOBJECTBAR       SFX_INTERFACE_SD_START + 18
+#define SD_IF_SDSLIDESORTERVIEWSHELL    SFX_INTERFACE_SD_START + 19
+#define SD_IF_SDTASKPANEVIEWSHELL       SFX_INTERFACE_SD_START + 20
+#define SD_IF_SDMASTERPAGESSELECTOR     SFX_INTERFACE_SD_START + 21
+#define SD_IF_SDLAYOUTMENU              SFX_INTERFACE_SD_START + 22
 
 // Inventor-Id fuer StarDraw UserData
 const UINT32 SdUDInventor=UINT32('S')*0x00000001+
