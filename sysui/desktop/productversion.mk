@@ -58,7 +58,6 @@
 # NOTE: remove $(UPD) for final releases
 PRODUCTNAME = OpenOffice.org
 LONGPRODUCTNAME = OpenOffice.org 1.9
-BASEDIR = /opt/openoffice.org1.9.$(LAST_MINOR:s/m//:s/s/./)
 UNIXFILENAME = openoffice.org-1.9
 PKGVERSION = 1.9.$(LAST_MINOR:s/m//:s/s/./)
 PKGREV = 1
