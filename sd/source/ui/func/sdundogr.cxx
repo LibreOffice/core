@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundogr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
+ *  last change: $Author: ka $ $Date: 2002-12-11 14:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ SdUndoGroup::~SdUndoGroup()
     ULONG nLast = aCtn.Count();
     for (ULONG nAction = 0; nAction < nLast; nAction++)
     {
-        delete aCtn.GetObject(nAction);
+        delete (SdUndoAction*) aCtn.GetObject(nAction);
     }
     aCtn.Clear();
 }

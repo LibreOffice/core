@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-11-28 10:48:49 $
+ *  last change: $Author: ka $ $Date: 2002-12-11 14:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,6 @@ protected:
     SvxSearchItem*          pSearchItem;
     SvNumberFormatter*      pNumberFormatter;
     SvStorageRef            xOptionStorage;
-    const SdDrawDocShell*   pCurrentNavigatorDragDocShell;
-    NavigatorDragType       eCurrentNavigatorDragType;
     BOOL                    bAutoSave;
     BOOL                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
@@ -161,12 +159,6 @@ public:
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
     SvStorageStreamRef      GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
-
-    const SdDrawDocShell*   GetCurrentNavigatorDragDocShell() const { return pCurrentNavigatorDragDocShell; }
-    void                    SetCurrentNavigatorDragDocShell( const SdDrawDocShell* pDocShell ) { pCurrentNavigatorDragDocShell = pDocShell; }
-
-    NavigatorDragType       GetCurrentNavigatorDragType() const { return eCurrentNavigatorDragType; }
-    void                    SetCurrentNavigatorDragType( NavigatorDragType eDragType ) { eCurrentNavigatorDragType = eDragType; }
 
     BOOL                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:02:27 $
+ *  last change: $Author: ka $ $Date: 2002-12-11 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,6 +711,41 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
         bPageTransferable = TRUE;
         bPageTransferablePersistent = bPersistent;
     }
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    sal_Int64 nRet;
+
+    if( ( rId.getLength() == 16 ) &&
+        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    {
+        nRet = (sal_Int64) this;
+    }
+    else
+        nRet = 0;
+
+    return nRet;
+}
+
+// -----------------------------------------------------------------------------
+
+const ::com::sun::star::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
+{
+    static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex   aCreateMutex;
+        osl::MutexGuard     aGuard( aCreateMutex );
+
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+
+    return aSeq;
 }
 
 // -----------------------------------------------------------------------------

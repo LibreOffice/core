@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-06 16:51:17 $
+ *  last change: $Author: ka $ $Date: 2002-12-11 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,27 +59,23 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#include <tools/urlobj.hxx>
-
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVDITER_HXX //autogen
-#include <svx/svditer.hxx>
+#ifndef _SOT_FORMATS_HXX //autogen
+#include <sot/formats.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+#ifndef _SVDITER_HXX //autogen
+#include <svx/svditer.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SOT_FORMATS_HXX //autogen
-#include <sot/formats.hxx>
 #endif
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
@@ -132,6 +128,74 @@ sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star:
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mrParent.DragFinished( nDropAction );
+}
+
+// -----------------------------------------------------------------------------
+
+SdDrawDocShell& SdPageObjsTLB::SdPageObjsTransferable::GetDocShell() const
+{
+    return mrDocShell;
+}
+
+// -----------------------------------------------------------------------------
+
+NavigatorDragType SdPageObjsTLB::SdPageObjsTransferable::GetDragType() const
+{
+    return meDragType;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    sal_Int64 nRet;
+
+    if( ( rId.getLength() == 16 ) &&
+        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    {
+        nRet = (sal_Int64) this;
+    }
+    else
+        nRet = 0;
+
+    return nRet;
+}
+
+// -----------------------------------------------------------------------------
+
+const ::com::sun::star::uno::Sequence< sal_Int8 >& SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId()
+{
+    static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex   aCreateMutex;
+        osl::MutexGuard     aGuard( aCreateMutex );
+
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+
+    return aSeq;
+}
+
+// -----------------------------------------------------------------------------
+
+SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData )
+    throw()
+{
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( rxData, ::com::sun::star::uno::UNO_QUERY );
+
+        return( xUnoTunnel.is() ?
+                ( (SdPageObjsTLB::SdPageObjsTransferable*)(void*) xUnoTunnel->getSomething( SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId() ) ) :
+                NULL );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        return NULL;
+    }
 }
 
 /*************************************************************************
@@ -583,7 +647,8 @@ List* SdPageObjsTLB::GetSelectEntryList( USHORT nDepth )
             if( !pList )
                 pList = new List();
 
-            pList->Insert( new String( GetEntryText( pEntry ) ), LIST_APPEND );
+            const String aEntryText( GetEntryText( pEntry ) );
+            pList->Insert( new String( aEntryText ), LIST_APPEND );
         }
         pEntry = NextSelected( pEntry );
     }
@@ -957,11 +1022,9 @@ void SdPageObjsTLB::DoDrag()
         SvTreeListBox::ReleaseMouse();
 
         bIsInDrag = TRUE;
-        SD_MOD()->SetCurrentNavigatorDragDocShell( pDocShell );
-        SD_MOD()->SetCurrentNavigatorDragType( eDragType );
 
         // object is destroyed by internal reference mechanism
-        ( new SdPageObjsTLB::SdPageObjsTransferable( *this, aBookmark ) )->StartDrag( this, nDNDActions );
+        ( new SdPageObjsTLB::SdPageObjsTransferable( *this, aBookmark, *pDocShell, eDragType ) )->StartDrag( this, nDNDActions );
     }
 }
 
@@ -985,9 +1048,6 @@ void SdPageObjsTLB::DragFinished( sal_uInt8 nDropAction )
     }
 
     pDropNavWin = NULL;
-    SD_MOD()->SetCurrentNavigatorDragType( NAVIGATOR_DRAGTYPE_NONE );
-    SD_MOD()->SetCurrentNavigatorDragDocShell( NULL );
-
     bIsInDrag = FALSE;
 }
 

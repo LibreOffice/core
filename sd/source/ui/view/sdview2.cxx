@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-31 13:22:36 $
+ *  last change: $Author: ka $ $Date: 2002-12-11 14:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,16 +173,14 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     SdWindow*               mpTargetWindow;
     USHORT                  mnPage;
     USHORT                  mnLayer;
-    const SdDrawDocShell*   mpNavigatorDragDocShell;
 
                 SdNavigatorDropEvent( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                      SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer, const SdDrawDocShell* pNavigatorDragDocShell ) :
+                                      SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer ) :
                     ExecuteDropEvent( rEvt ),
                     mrTargetHelper( rTargetHelper ),
                     mpTargetWindow( pTargetWindow ),
                     mnPage( nPage ),
-                    mnLayer( nLayer ),
-                    mpNavigatorDragDocShell( pNavigatorDragDocShell ) {}
+                    mnLayer( nLayer ) {}
 };
 
 // -----------------------------------------------------------------------------
@@ -789,15 +787,16 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
                 if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
                     aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
                 {
-                    const NavigatorDragType eDragType = SD_MOD()->GetCurrentNavigatorDragType();
+                    SdPageObjsTLB::SdPageObjsTransferable* pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
 
-                    if( eDragType == NAVIGATOR_DRAGTYPE_LINK || eDragType == NAVIGATOR_DRAGTYPE_EMBEDDED )
+                    if( pPageObjsTransferable &&
+                        ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType() ||
+                          NAVIGATOR_DRAGTYPE_EMBEDDED == pPageObjsTransferable->GetDragType() ) )
                     {
                         // insert bookmark from own navigator (handled async. due to possible message box )
                         Application::PostUserEvent( LINK( this, SdView, ExecuteNavigatorDrop ),
                                                     new SdNavigatorDropEvent( rEvt, rTargetHelper, pTargetWindow,
-                                                                              nPage, nLayer,
-                                                                              SD_MOD()->GetCurrentNavigatorDragDocShell() ) );
+                                                                              nPage, nLayer ) );
                         nRet = nDropAction;
                     }
                     else
@@ -884,11 +883,11 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
 
 IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
 {
-    TransferableDataHelper  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
-    INetBookmark            aINetBookmark;
+    TransferableDataHelper                  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
+    SdPageObjsTLB::SdPageObjsTransferable*  pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
+    INetBookmark                            aINetBookmark;
 
-    if( pSdNavigatorDropEvent->mpNavigatorDragDocShell &&
-        aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
+    if( pPageObjsTransferable && aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
     {
         Point   aPos;
         List    aBookmarkList;
@@ -916,9 +915,7 @@ IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDrop
         // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
         // aufgenommen (bNameOK == FALSE -> Benutzer hat abgebrochen)
         List*   pExchangeList = NULL;
-
-        // #93240# swapped order: GetExchangeList() ends drop, which in turn resets GetCurrentNavigatorDragType.
-        BOOL    bLink = ( SD_MOD()->GetCurrentNavigatorDragType() == NAVIGATOR_DRAGTYPE_LINK ? TRUE : FALSE );
+        BOOL    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? TRUE : FALSE );
         BOOL    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
         BOOL    bReplace = FALSE;
 
@@ -929,7 +926,7 @@ IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDrop
         {
             pDoc->InsertBookmark( &aBookmarkList, pExchangeList,
                                   bLink, bReplace, nPgPos, FALSE,
-                                  (SdDrawDocShell*) pSdNavigatorDropEvent->mpNavigatorDragDocShell,
+                                  &pPageObjsTransferable->GetDocShell(),
                                   TRUE, &aPos );
         }
 

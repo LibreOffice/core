@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-06 16:51:18 $
+ *  last change: $Author: ka $ $Date: 2002-12-11 14:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,15 @@
 #ifndef _SDTREELB_HXX
 #define _SDTREELB_HXX
 
+#ifndef _TRANSFER_HXX //autogen
+#include <svtools/transfer.hxx>
+#endif
 #ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
 #endif
-
+#ifndef _PRESENTATION_HXX
+#include "pres.hxx"
+#endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -75,9 +80,6 @@
 #endif
 #ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
-#endif
-#ifndef _TRANSFER_HXX //autogen
-#include <svtools/transfer.hxx>
 #endif
 #ifndef _REF_HXX //autogen
 #include <tools/ref.hxx>
@@ -89,6 +91,7 @@ SV_DECL_REF(SdDrawDocShell)
 #endif
 
 class SdDrawDocument;
+class SdDrawDocShell;
 class SfxMedium;
 class SfxViewFrame;
 class SdNavigatorWin;
@@ -107,7 +110,7 @@ private:
 
     static BOOL             bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
-private:
+public:
 
     // nested class to implement the TransferableHelper
     class SdPageObjsTransferable : public TransferableHelper
@@ -116,6 +119,8 @@ private:
 
         SdPageObjsTLB&      mrParent;
         INetBookmark        maBookmark;
+        SdDrawDocShell&     mrDocShell;
+        NavigatorDragType   meDragType;
 
         virtual             ~SdPageObjsTransferable();
 
@@ -123,10 +128,26 @@ private:
         virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         virtual void        DragFinished( sal_Int8 nDropAction );
 
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+
     public:
 
-                            SdPageObjsTransferable( SdPageObjsTLB& rParent, const INetBookmark& rBookmark ) :
-                                mrParent( rParent ), maBookmark( rBookmark ) {}
+                            SdPageObjsTransferable( SdPageObjsTLB& rParent,
+                                                    const INetBookmark& rBookmark,
+                                                    SdDrawDocShell& rDocShell,
+                                                    NavigatorDragType eDragType ) :
+                                mrParent( rParent ),
+                                maBookmark( rBookmark ),
+                                mrDocShell( rDocShell ),
+                                meDragType( eDragType ) {}
+
+        SdDrawDocShell&     GetDocShell() const;
+        NavigatorDragType   GetDragType() const;
+
+    public:
+
+        static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+        static SdPageObjsTransferable* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
     };
 
     friend class SdPageObjsTLB::SdPageObjsTransferable;
