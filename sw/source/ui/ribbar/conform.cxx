@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 11:30:27 $
+ *  last change: $Author: os $ $Date: 2002-04-29 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@ void ConstFormControl::CreateDefaultObject()
     aStartPos.Y() -= MM50;
     aEndPos.X() += 2 * MM50;
     aEndPos.Y() += MM50;
+    if(!pSh->HasDrawView())
+        pSh->MakeDrawView();
+
+    SdrView *pSdrView = pSh->GetDrawView();
+    pSdrView->SetDesignMode(TRUE);
     pSh->BeginCreate(pWin->GetDrawMode(), FmFormInventor, aStartPos);
     pSh->MoveCreate(aEndPos);
     pSh->EndCreate(SDRCREATE_FORCEEND);
