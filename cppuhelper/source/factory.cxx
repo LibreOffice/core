@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-07 10:56:36 $
+ *  last change: $Author: rt $ $Date: 2001-06-12 10:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ void OFactoryComponentHelper::dispose()
 // one-instance factory: sal_False
 // single factory: sal_True
 // component factory: sal_True
-sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification()
+sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException)
 {
     if( bOneInstance)
         return sal_False;
@@ -833,7 +833,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames(void)
     return aServiceNames;
 }
 
-sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
+sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Bool retVal= sal_True;
     if( isOneInstance() && isInstance())
@@ -944,7 +944,7 @@ Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames(void)
     return Sequence< OUString >();
 }
 
-sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification()
+sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException)
 {
 
     Reference<XUnloadingPreference> pref( xFactory, UNO_QUERY);
