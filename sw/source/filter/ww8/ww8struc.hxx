@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-12-17 18:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,7 @@ struct WW67_ATRD                // fuer die 6/7-Version
 
 struct WW8_TablePos
 {
+    INT16 nSp26;
     INT16 nSp27;
     INT16 nSp49;
     BYTE nSp29;
