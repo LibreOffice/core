@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,14 @@
 #include <ary/ary.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary_i/codeinf2.hxx>
+#include <parser/parserinfo.hxx>
 #include <tools/filecoll.hxx>
 #include <tools/tkpchars.hxx>
 #include <s2_luidl/tkp_uidl.hxx>
 #include <s2_luidl/distrib.hxx>
 #include <s2_luidl/pe_file2.hxx>
 #include <s2_dsapi/cx_dsapi.hxx>
+#include <adc_msg.hxx>
 #include <x_parse2.hxx>
 
 
@@ -87,7 +89,10 @@ namespace autodoc
 class FileParsePerformers
 {
   public:
-                        FileParsePerformers( ary::n22::Repository & io_rRepository );
+                        FileParsePerformers(
+                            ary::n22::Repository &
+                                                io_rRepository,
+                            ParserInfo &        io_rParserInfo );
 
     void                ParseFile(
                             const char *        i_sFullPath );
@@ -104,6 +109,7 @@ class FileParsePerformers
                         pFileParseEnvironment;
     ary::n22::Repository &
                         rRepository;
+    ParserInfo &        rParserInfo;
 };
 
 
@@ -116,7 +122,9 @@ void
 IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
 {
     Dyn<FileParsePerformers>
-        pFileParsePerformers( new FileParsePerformers(*pRepository) );
+        pFileParsePerformers(
+            new FileParsePerformers(*pRepository,
+                                    static_cast< ParserInfo& >(*this)) );
 
     FileCollector::const_iterator iEnd = i_rFiles.End();
     for ( FileCollector::const_iterator iter = i_rFiles.Begin();
@@ -132,12 +140,13 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
         catch (X_AutodocParser &)
         {
             /// Ignore and goon
-            Cout() << "Parse error in file " << *iter << Endl();
-            pFileParsePerformers = new FileParsePerformers( *pRepository );
+            TheMessages().Out_ParseError(CurFile(), CurLine());
+            pFileParsePerformers
+                = new FileParsePerformers(*pRepository,
+                                          static_cast< ParserInfo& >(*this));
         }
         catch (...)
         {
-            /// Ignore and goon
             Cout() << "Unknown error." << Endl();
             exit(0);
 //          pFileParsePerformers = new FileParsePerformers( *pRepository );
@@ -147,15 +156,19 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
     pFileParsePerformers->ConnectLinks();
 }
 
-FileParsePerformers::FileParsePerformers( ary::n22::Repository & io_rRepository )
-    :   aDistributor(io_rRepository),
-        rRepository( io_rRepository )
+FileParsePerformers::FileParsePerformers( ary::n22::Repository & io_rRepository,
+                                          ParserInfo &           io_rParserInfo )
+    :   aDistributor(io_rRepository, io_rParserInfo),
+        pTokens(0),
+        rRepository( io_rRepository ),
+        rParserInfo(io_rParserInfo)
 {
-    DYN csi::dsapi::Context_Docu * dpDocuContext
+    DYN csi::dsapi::Context_Docu *
+        dpDocuContext
             = new csi::dsapi::Context_Docu( aDistributor.DocuTokens_Receiver() );
     pTokens = new csi::uidl::TokenParser_Uidl( aDistributor.CodeTokens_Receiver(), *dpDocuContext );
     pFileParseEnvironment
-            = new csi::uidl::PE_File(aDistributor);
+            = new csi::uidl::PE_File(aDistributor,rParserInfo);
 
     aDistributor.SetTokenProvider(*pTokens);
     aDistributor.SetTopParseEnvironment(*pFileParseEnvironment);
@@ -171,6 +184,7 @@ FileParsePerformers::ParseFile( const char * i_sFullPath )
     aFileLoader.LoadText(aFile);
     aFile.close();
 
+    rParserInfo.Set_CurFile(i_sFullPath, true); // true = count lines
     pTokens->Start(aFileLoader);
     aDistributor.Reset();
 
@@ -187,5 +201,3 @@ FileParsePerformers::ConnectLinks()
 }
 
 }   // namespace autodoc
-
-
