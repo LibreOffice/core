@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-22 11:54:06 $
+ *  last change: $Author: aw $ $Date: 2000-11-22 13:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,8 +1207,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 }
             }
 
-                if(!aSet.Count())
-                {
+            if(!aSet.Count())
+            {
 //-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
 //-/                    {
 //-/                        // 3D-Attribut, eigenen Default
@@ -1218,11 +1218,10 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 //-/                    }
 //-/                    else
 //-/                    {
-                    // Default aus ItemPool holen
-                    if(pModel->GetItemPool().IsWhich(pMap->nWID))
-                        aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                // Default aus ItemPool holen
+                if(pModel->GetItemPool().IsWhich(pMap->nWID))
+                    aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
 //-/                    }
-                }
             }
 
             if(aSet.Count())
@@ -1314,211 +1313,211 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
         switch( pMap->nWID )
         {
-        case OWN_ATTR_BITMAP:
-        {
-            aAny = GetBitmap();
-            if(!aAny.hasValue())
-                throw uno::RuntimeException();
+            case OWN_ATTR_BITMAP:
+            {
+                aAny = GetBitmap();
+                if(!aAny.hasValue())
+                    throw uno::RuntimeException();
 
-            break;
-        }
-        case OWN_ATTR_ISFONTWORK:
-        {
-            sal_Bool bIsFontWork = pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsFontwork();
-            aAny.setValue( &bIsFontWork, ::getBooleanCppuType() );
-            break;
-        }
-        case OWN_ATTR_FRAMERECT:
-        {
-            Rectangle aRect( pObj->GetSnapRect() );
-            Point aTopLeft( aRect.TopLeft() );
-            Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
-            ForceMetricTo100th_mm(aTopLeft);
-            ForceMetricTo100th_mm(aObjSize);
-            ::com::sun::star::awt::Rectangle aUnoRect(
-                aTopLeft.X(), aTopLeft.Y(),
-                aObjSize.getWidth(), aObjSize.getHeight() );
-            aAny <<= aUnoRect;
-            break;
-        }
-        case OWN_ATTR_BOUNDRECT:
-        {
-            Rectangle aRect( pObj->GetBoundRect() );
-            Point aTopLeft( aRect.TopLeft() );
-            Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
-            ForceMetricTo100th_mm(aTopLeft);
-            ForceMetricTo100th_mm(aObjSize);
-            ::com::sun::star::awt::Rectangle aUnoRect(
-                aTopLeft.X(), aTopLeft.Y(),
-                aObjSize.getWidth(), aObjSize.getHeight() );
-            aAny <<= aUnoRect;
-            break;
-        }
-        case OWN_ATTR_LDNAME:
-        {
-            OUString aName( pObj->GetName() );
-            aAny <<= aName;
-            break;
-        }
-        case OWN_ATTR_LDBITMAP:
-        {
-            sal_uInt16 nId;
-            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
-            {
-                nId = RID_UNODRAW_OLE2;
+                break;
             }
-            else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+            case OWN_ATTR_ISFONTWORK:
             {
-                nId = RID_UNODRAW_GRAPHICS;
+                sal_Bool bIsFontWork = pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsFontwork();
+                aAny.setValue( &bIsFontWork, ::getBooleanCppuType() );
+                break;
             }
-            else
+            case OWN_ATTR_FRAMERECT:
             {
-                nId = RID_UNODRAW_OBJECTS;
+                Rectangle aRect( pObj->GetSnapRect() );
+                Point aTopLeft( aRect.TopLeft() );
+                Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
+                ForceMetricTo100th_mm(aTopLeft);
+                ForceMetricTo100th_mm(aObjSize);
+                ::com::sun::star::awt::Rectangle aUnoRect(
+                    aTopLeft.X(), aTopLeft.Y(),
+                    aObjSize.getWidth(), aObjSize.getHeight() );
+                aAny <<= aUnoRect;
+                break;
             }
-
-            BitmapEx aBmp( SVX_RES(nId) );
-            Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
-
-            aAny <<= xBmp;
-            break;
-        }
-        case OWN_ATTR_OLESIZE:
-        {
-            awt::Size aSize;
-            if( pObj->ISA(SdrOle2Obj))
+            case OWN_ATTR_BOUNDRECT:
             {
-                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
-                if( xInplace.Is() )
+                Rectangle aRect( pObj->GetBoundRect() );
+                Point aTopLeft( aRect.TopLeft() );
+                Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
+                ForceMetricTo100th_mm(aTopLeft);
+                ForceMetricTo100th_mm(aObjSize);
+                ::com::sun::star::awt::Rectangle aUnoRect(
+                    aTopLeft.X(), aTopLeft.Y(),
+                    aObjSize.getWidth(), aObjSize.getHeight() );
+                aAny <<= aUnoRect;
+                break;
+            }
+            case OWN_ATTR_LDNAME:
+            {
+                OUString aName( pObj->GetName() );
+                aAny <<= aName;
+                break;
+            }
+            case OWN_ATTR_LDBITMAP:
+            {
+                sal_uInt16 nId;
+                if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    Size aTmpSize( xInplace->GetVisArea().GetSize() );
-                    aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                    nId = RID_UNODRAW_OLE2;
                 }
-            }
-            aAny <<= aSize;
-            break;
-        }
-        case OWN_ATTR_OLEMODEL:
-        {
-            uno::Reference< frame::XModel > xModel;
-            if( pObj->ISA(SdrOle2Obj))
-            {
-                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                xModel = ((SdrOle2Obj*)pObj)->getXModel();
-            }
-            aAny <<= xModel;
-            break;
-        }
-        case OWN_ATTR_MIRRORED:
-        {
-            sal_Bool bMirror = sal_False;
-            if( pObj && pObj->ISA(SdrGrafObj) )
-                bMirror = ((SdrGrafObj*)pObj)->IsMirrored();
-
-            return uno::Any( &bMirror, ::getCppuBooleanType() );
-        }
-        case OWN_ATTR_CLSID:
-        {
-            OUString aCLSID;
-            if( pObj && pObj->ISA(SdrOle2Obj))
-            {
-                const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-                if (rIPRef.Is() )
+                else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                 {
-                    const SvGlobalName &rClassName = rIPRef->GetClassName();
-                    aCLSID = rClassName.GetHexName();
+                    nId = RID_UNODRAW_GRAPHICS;
                 }
-            }
-            aAny <<= aCLSID;
-            break;
-        }
-        case OWN_ATTR_METAFILE:
-        {
-            if( pObj->ISA(SdrOle2Obj))
-            {
-                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-
-                if(aObj.HasGDIMetaFile() && aObj.GetGDIMetaFile())
+                else
                 {
-                    SvMemoryStream aDestStrm( 65535, 65535 );
-
-                    ConvertGDIMetaFileToWMF( *aObj.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
-                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
-                    aAny <<= aSeq;
+                    nId = RID_UNODRAW_OBJECTS;
                 }
+
+                BitmapEx aBmp( SVX_RES(nId) );
+                Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
+
+                aAny <<= xBmp;
+                break;
             }
-            else
+            case OWN_ATTR_OLESIZE:
             {
-                aAny = GetBitmap( sal_True );
-            }
-            break;
-        }
-        case OWN_ATTR_EDGE_START_OBJ:
-        case OWN_ATTR_EDGE_START_POS:
-        case OWN_ATTR_EDGE_END_POS:
-        case OWN_ATTR_EDGE_END_OBJ:
-        case OWN_ATTR_GLUEID_HEAD:
-        case OWN_ATTR_GLUEID_TAIL:
-        {
-            SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
-            if(pEdgeObj)
-            {
-                switch(pMap->nWID)
+                awt::Size aSize;
+                if( pObj->ISA(SdrOle2Obj))
                 {
-                case OWN_ATTR_EDGE_START_OBJ:
-                case OWN_ATTR_EDGE_END_OBJ:
+                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+                    const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
+                    if( xInplace.Is() )
                     {
-                        SdrObject* pNode = pEdgeObj->GetConnectedNode(pMap->nWID == OWN_ATTR_EDGE_START_OBJ);
-                        if(pNode)
+                        Size aTmpSize( xInplace->GetVisArea().GetSize() );
+                        aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                    }
+                }
+                aAny <<= aSize;
+                break;
+            }
+            case OWN_ATTR_OLEMODEL:
+            {
+                uno::Reference< frame::XModel > xModel;
+                if( pObj->ISA(SdrOle2Obj))
+                {
+                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+                    xModel = ((SdrOle2Obj*)pObj)->getXModel();
+                }
+                aAny <<= xModel;
+                break;
+            }
+            case OWN_ATTR_MIRRORED:
+            {
+                sal_Bool bMirror = sal_False;
+                if( pObj && pObj->ISA(SdrGrafObj) )
+                    bMirror = ((SdrGrafObj*)pObj)->IsMirrored();
+
+                return uno::Any( &bMirror, ::getCppuBooleanType() );
+            }
+            case OWN_ATTR_CLSID:
+            {
+                OUString aCLSID;
+                if( pObj && pObj->ISA(SdrOle2Obj))
+                {
+                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+                    if (rIPRef.Is() )
+                    {
+                        const SvGlobalName &rClassName = rIPRef->GetClassName();
+                        aCLSID = rClassName.GetHexName();
+                    }
+                }
+                aAny <<= aCLSID;
+                break;
+            }
+            case OWN_ATTR_METAFILE:
+            {
+                if( pObj->ISA(SdrOle2Obj))
+                {
+                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+
+                    if(aObj.HasGDIMetaFile() && aObj.GetGDIMetaFile())
+                    {
+                        SvMemoryStream aDestStrm( 65535, 65535 );
+
+                        ConvertGDIMetaFileToWMF( *aObj.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
+                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                        aAny <<= aSeq;
+                    }
+                }
+                else
+                {
+                    aAny = GetBitmap( sal_True );
+                }
+                break;
+            }
+            case OWN_ATTR_EDGE_START_OBJ:
+            case OWN_ATTR_EDGE_START_POS:
+            case OWN_ATTR_EDGE_END_POS:
+            case OWN_ATTR_EDGE_END_OBJ:
+            case OWN_ATTR_GLUEID_HEAD:
+            case OWN_ATTR_GLUEID_TAIL:
+            {
+                SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
+                if(pEdgeObj)
+                {
+                    switch(pMap->nWID)
+                    {
+                    case OWN_ATTR_EDGE_START_OBJ:
+                    case OWN_ATTR_EDGE_END_OBJ:
                         {
-                            Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
-                            if(xShape.is())
-                                aAny <<= xShape;
+                            SdrObject* pNode = pEdgeObj->GetConnectedNode(pMap->nWID == OWN_ATTR_EDGE_START_OBJ);
+                            if(pNode)
+                            {
+                                Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
+                                if(xShape.is())
+                                    aAny <<= xShape;
 
+                            }
+                            break;
                         }
-                        break;
-                    }
 
-                case OWN_ATTR_EDGE_START_POS:
-                case OWN_ATTR_EDGE_END_POS:
-                    {
-                        Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
-                        awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
-                        aAny <<= aUnoPoint;
-                        break;
-                    }
-                case OWN_ATTR_GLUEID_HEAD:
-                case OWN_ATTR_GLUEID_TAIL:
-                    {
-                        aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_TAIL );
-                        break;
+                    case OWN_ATTR_EDGE_START_POS:
+                    case OWN_ATTR_EDGE_END_POS:
+                        {
+                            Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
+                            awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
+                            aAny <<= aUnoPoint;
+                            break;
+                        }
+                    case OWN_ATTR_GLUEID_HEAD:
+                    case OWN_ATTR_GLUEID_TAIL:
+                        {
+                            aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_TAIL );
+                            break;
+                        }
                     }
                 }
+                break;
             }
-            break;
-        }
-        default:
-        {
-            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
+            default:
+            {
+                SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
-            aSet.Put(pObj->GetItemSet());
+                aSet.Put(pObj->GetItemSet());
 
-            if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
-                return aAny;
+                if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
+                    return aAny;
 
-            if(!aSet.Count())
-            {
-                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+                if(!aSet.Count())
                 {
-                    // Not-Persistant Attribute, hole diese extra
-                    pObj->TakeNotPersistAttr(aSet, sal_False);
+                    if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+                    {
+                        // Not-Persistant Attribute, hole diese extra
+                        pObj->TakeNotPersistAttr(aSet, sal_False);
+                    }
                 }
-            }
 
-            if(!aSet.Count())
-            {
-                if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+                if(!aSet.Count())
                 {
+                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+                    {
 //-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
 //-/                    {
 //-/                        // 3D-Attribut, eigenen Default
@@ -1528,17 +1527,18 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 //-/                    }
 //-/                    else
 //-/                    {
-                    // Default aus ItemPool holen
-                    if(pModel->GetItemPool().IsWhich(pMap->nWID))
-                        aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                        // Default aus ItemPool holen
+                        if(pModel->GetItemPool().IsWhich(pMap->nWID))
+                            aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
 //-/                    }
+
+                    }
 
                 }
 
+                if(aSet.Count())
+                    aAny = GetAnyForItem( aSet, pMap );
             }
-
-            if(aSet.Count())
-                aAny = GetAnyForItem( aSet, pMap );
         }
     }
     else
@@ -1760,8 +1760,6 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
             pObj->SetItemSetAndBroadcast(aSet);
 //-/                pObj->BroadcastItemChange(aItemChange);
         }
-        if( xPropertyState.is() )
-            xPropertyState->setPropertyToDefault( PropertyName );
     }
 
     pModel->SetChanged();
