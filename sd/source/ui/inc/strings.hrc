@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:55:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@
 #define STR_GRAPHIC_TEXT_TOOLBOX    RID_GRAPHIC_TEXT_TOOLBOX
 
 #define STR_DRAW_GRAF_TOOLBOX       RID_DRAW_GRAF_TOOLBOX
+#define STR_DRAW_MEDIA_TOOLBOX      RID_DRAW_MEDIA_TOOLBOX
 
 #define STR_UNDO_ANIMATION_ORDER    (RID_APP_START+200)
 
