@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:29:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2295,7 +2295,8 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     // Tabellenzelle(n) selektiert?
     BOOL bPrepare = TRUE;
-    if ( rSh.IsTableMode() )
+    BOOL bTableMode = rSh.IsTableMode();
+    if ( bTableMode )
     {
         SfxItemSet aCoreSet( GetPool(),
                              RES_BOX, RES_BOX,
@@ -2314,9 +2315,10 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     else
         // Umrandungsattribute ganz normal ueber Shell holen
         rSh.GetAttr( rSet );
-
     if ( bPrepare )
         ::PrepareBoxInfo( rSet, rSh );
+    // switch the border toolbox controller mode
+    rSet.Put( SfxBoolItem( SID_BORDER_REDUCED_MODE, !bTableMode ));
 }
 
 /*--------------------------------------------------------------------
