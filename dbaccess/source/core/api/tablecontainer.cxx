@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:20:06 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
             sal_Bool bPKey = sal_False;
             for(sal_Int32 i=0;i<xKeys->getCount();++i)
             {
-                if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                if(::cppu::extractInterface(xColProp,xKeys->getByIndex(i)) && xColProp.is())
                 {
 
                     sal_Int32 nKeyType      = ::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_TYPE));
