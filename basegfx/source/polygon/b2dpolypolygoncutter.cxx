@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:37:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,8 +941,6 @@ namespace basegfx
                         aTmpCuts.erase(aTmpCuts.begin());
                         B2DPolygonNode* pActA = pCutA->getLeft();
                         B2DPolygonNode* pActB = pCutA->getRight();
-                        bool bPrevSamePos(isPrevSamePos(pActA, pActB));
-                        bool bNextSamePos(isNextSamePos(pActA, pActB));
 
                         if(aTmpCuts.size())
                         {
