@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:56:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,15 @@ interface TableDraw : Selection
     SID_LINEEND_LIST        [ StateMethod = GetDrawAttrState; Export = FALSE; ]
      // Flaechen-Attribute
     SID_ATTR_FILL_STYLE     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+
+    // #i25616#
+    SID_ATTR_FILL_SHADOW
+    [
+        ExecMethod = ExecDrawAttr;
+        StateMethod = GetDrawAttrState;
+        Export = FALSE;
+    ]
+
     SID_ATTR_FILL_COLOR     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_FILL_GRADIENT  [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_FILL_HATCH     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
@@ -155,6 +164,7 @@ interface TableDraw : Selection
     SID_LEAVE_GROUP     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
      // !!! special
     SID_DELETE          [ExecMethod = ExecDrawFunc ;StateMethod = GetDrawFuncState; Export = FALSE ;]
+
     /*
     SfxVoidItem Delete SID_DELETE ( )
     [
