@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-06 20:10:11 $
+ *  last change: $Author: mib $ $Date: 2000-12-07 12:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,10 +442,11 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_document,
                                 sal_True, sal_True );
 
-        _ExportScripts();
-
         // meta information
         ImplExportMeta();
+
+        // scripts
+        _ExportScripts();
 
         // styles
         ImplExportStyles( sal_False );
