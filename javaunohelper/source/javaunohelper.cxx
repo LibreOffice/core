@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 17:30:35 $
+ *  last change: $Author: kr $ $Date: 2000-11-24 15:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,11 +373,38 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_RegistryServi
         else
             rMSFac = createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
 
-        JavaVMContext * pVMContext = new JavaVMContext(pJVM);
-        pVMContext->registerThread();
 
-        uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pVMContext);
-        if(!pJavaEnv) throw RuntimeException();
+        JavaVMContext * pVMContext = NULL;
+
+        // possible race ?
+        { // get the java environment
+            uno_Environment ** ppEnviroments = NULL;
+            sal_Int32 size = 0;
+            OUString java(RTL_CONSTASCII_USTRINGPARAM("java"));
+
+            uno_getRegisteredEnvironments(&ppEnviroments, &size, (uno_memAlloc)malloc, java.pData);
+            if(size) { // did we find an existing java environment?
+                OSL_TRACE("javaunohelper.cxx: RegistryServiceFactory.createRegistryServiceFactory: found an existing java environment");
+
+                pJavaEnv = ppEnviroments[0];
+                pVMContext = (JavaVMContext *)pJavaEnv->pContext;
+
+                for(sal_Int32 i = 1; i < size; ++ i)
+                    ppEnviroments[i]->release(ppEnviroments[i]);
+
+                free(ppEnviroments);
+            }
+            else { // no, create one
+                pVMContext = new JavaVMContext(pJVM);
+
+                uno_getEnvironment(&pJavaEnv, java.pData, pVMContext);
+                if(!pJavaEnv) throw RuntimeException();
+            }
+        }
+
+
+
+        pVMContext->registerThread();
 
         OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
         uno_getEnvironment(&pCurrEnv, aCurrentEnv.pData, NULL);
