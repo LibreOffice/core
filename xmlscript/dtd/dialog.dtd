@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.13 2001-05-08 11:49:08 tbe Exp $
+	$Id: dialog.dtd,v 1.14 2001-06-08 12:09:37 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -103,7 +103,7 @@
 		     dlg:title CDATA #IMPLIED
 		     dlg:page %numeric; #IMPLIED
 		     dlg:tag CDATA #IMPLIED
-        	 dlg:help-text CDATA #IMPLIED
+		     dlg:help-text CDATA #IMPLIED
 		     dlg:help-url CDATA #IMPLIED
 		     xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dialog"
 		     >
@@ -306,16 +306,16 @@
 <!ELEMENT dlg:scrollbar (dlg:event*)>
 <!ATTLIST dlg:scrollbar %default-attributes;
 			dlg:align (horizontal|vertical) #IMPLIED
-			dlg:curpos %numeric #IMPLIED
-			dlg:maxpos %numeric #IMPLIED
-			dlg:increment %numeric #IMPLIED
-			dlg:pageincrement %numeric #IMPLIED
-			dlg:visible-size %numeric #IMPLIED
+			dlg:curpos %numeric; #IMPLIED
+			dlg:maxpos %numeric; #IMPLIED
+			dlg:increment %numeric; #IMPLIED
+			dlg:pageincrement %numeric; #IMPLIED
+			dlg:visible-size %numeric; #IMPLIED
 			>
 
 <!ELEMENT dlg:progressmeter (dlg:event*)>
 <!ATTLIST dlg:progressmeter %default-attributes;
-			    dlg:value %numeric #IMPLIED
-			    dlg:value-min %numeric #IMPLIED
-			    dlg:value-max %numeric #IMPLIED
+			    dlg:value %numeric; #IMPLIED
+			    dlg:value-min %numeric; #IMPLIED
+			    dlg:value-max %numeric; #IMPLIED
 			    >
