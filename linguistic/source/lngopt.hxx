@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-28 03:12:44 $
+ *  last change: $Author: os $ $Date: 2000-11-28 12:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,18 @@ public:
     LinguOptConfig( const String& rPath ) :
         ConfigItem( rPath )
     {}
-    ConfigItem::GetProperties;
-    ConfigItem::PutProperties;
+    ::com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames( INT16 nCfgItem );
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any >
+        GetProperties(const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames )
+            {return ConfigItem::GetProperties(rNames);}
+
+    sal_Bool PutProperties(
+        const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+        const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rValues)
+        {
+            return ConfigItem::PutProperties( rNames, rValues);
+        }
 };
 
 

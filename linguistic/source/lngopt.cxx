@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-28 03:12:32 $
+ *  last change: $Author: os $ $Date: 2000-11-28 12:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ LinguOptionsData::LinguOptionsData()
 }
 
 
-Sequence< OUString > GetPropertyNames( INT16 nCfgItem )
+Sequence< OUString > LinguOptConfig::GetPropertyNames( INT16 nCfgItem )
 {
     static const char * aPropNames1[] =
     {
@@ -285,10 +285,10 @@ BOOL LinguOptionsData::LoadConfig()
 
     for( INT16 nCfgItem = 0; nCfgItem < 4; ++nCfgItem )
     {
-        Sequence< OUString > aNames = GetPropertyNames( nCfgItem );
+        LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
+        Sequence< OUString > aNames = aCfg.GetPropertyNames( nCfgItem );
         INT32 nProps = aNames.getLength();
 
-        LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
 
         const Sequence< Any > aValues = aCfg.GetProperties( aNames );
 
@@ -355,7 +355,8 @@ BOOL LinguOptionsData::SaveConfig()
 
     for( INT16 nCfgItem = 0; nCfgItem < 4; ++nCfgItem )
     {
-        const Sequence< OUString > aNames = GetPropertyNames( nCfgItem );
+        LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
+        const Sequence< OUString > aNames = aCfg.GetPropertyNames( nCfgItem );
         INT32 nProps = aNames.getLength();
         Sequence< Any > aValues( aNames.getLength() );
         Any *pValue = aValues.getArray();
@@ -406,7 +407,6 @@ BOOL LinguOptionsData::SaveConfig()
             break;
         }
 
-        LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
         bRet |= aCfg.PutProperties( aNames, aValues );
     }
 
