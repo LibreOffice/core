@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,12 @@
 #endif
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>
+#endif
+#ifndef _VIEWSH_HXX     // for the pagedescname from the ShellRes
+#include <viewsh.hxx>
+#endif
+#ifndef _SHELLRES_HXX   // for the pagedescname from the ShellRes
+#include <shellres.hxx>
 #endif
 
 #define MAX_FIELDLEN 64000
@@ -2122,17 +2128,10 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 // Erkennung doppelter Namen fehlt noch (Wahrscheinlichkeit
 // fuer dopp. Namen ist gering)
 
-// Namen zusammenbasteln
-    String aNm( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Konvert ")));
-    if (bFollow)
-        aNm.AppendAscii( "Folge" );
-    aNm += String(GetDoc().GetPageDescCnt());
-    if (!bFollow)
-        nPos = GetDoc().MakePageDesc(aNm, 0);
-    else
-        nPos = GetDoc().MakePageDesc(aNm,
-         pFirstPageDesc);// alles uebernehmen
+    nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
+                                   GetDoc().GetPageDescCnt(), FALSE, bFollow ),
+                                pFirstPageDesc );
+
     pNewPD =  &((SwPageDesc&)GetDoc().GetPageDesc(nPos));
     if (bFollow)
     {               // Dieser ist der folgende von pPageDesc
@@ -2194,11 +2193,14 @@ void SwFltShell::NextStyle(USHORT nWhich, USHORT nNext)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/fltshell.cxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/fltshell.cxx,v 1.2 2001-01-26 15:42:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:57  hr
+      initial import
+
       Revision 1.57  2000/09/18 16:04:55  willem.vandorp
       OpenOffice header added.
 

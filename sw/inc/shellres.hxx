@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellres.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 15:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 
 struct ShellResource : public Resource
 {
-
     String          aPostItAuthor;
     String          aPostItPage;
     String          aPostItLine;
@@ -120,12 +119,19 @@ struct ShellResource : public Resource
     // die AutoFormat-Redline-Kommentare
     inline const SvStringsDtor& GetAutoFmtNameLst() const;
 
+    // returns for the specific filter the new names of pagedescs
+    // This method is for the old code of the specific filters with
+    // now localized names
+    String GetPageDescName( USHORT nNo, BOOL bFirst = FALSE,
+                                        BOOL bFollow = FALSE );
+
     ShellResource();
     ~ShellResource();
 
 private:
     void _GetAutoFmtNameLst() const;
     SvStringsDtor   *pAutoFmtNameLst;
+    String          sPageDescFirstName, sPageDescFollowName, sPageDescName;
 };
 
 inline const SvStringsDtor& ShellResource::GetAutoFmtNameLst() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-22 11:47:43 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 15:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,9 @@ ShellResource::ShellResource()
     aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
     aTOXTablesName(         SW_RES(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
+    sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
+    sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
+    sPageDescName(          SW_RES(STR_PAGEDESC_NAME)),
     pAutoFmtNameLst( 0 )
 {
     const USHORT nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
@@ -209,6 +212,16 @@ ShellResource::~ShellResource()
     if( pAutoFmtNameLst )
         delete pAutoFmtNameLst, pAutoFmtNameLst = 0;
 }
+
+String ShellResource::GetPageDescName( USHORT nNo, BOOL bIsFirst, BOOL bFollow )
+{
+    String sRet( bIsFirst ? sPageDescFirstName
+                          : bFollow ? sPageDescFollowName
+                                      : sPageDescName );
+    sRet.SearchAndReplaceAscii( "$(ARG1)", String::CreateFromInt32( nNo ));
+    return sRet;
+}
+
 
 SwGlossaries* GetGlossaries()
 {
@@ -302,6 +315,9 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 /*************************************************************************
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/22 11:47:43  obo
+    #65293# wrong methodname localedatawrapper
+
     Revision 1.3  2000/11/20 09:02:23  jp
     should change: use LocaleDataWrapper
 

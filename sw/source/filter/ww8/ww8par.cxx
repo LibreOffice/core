@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 09:05:58 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 15:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,13 +218,17 @@
 #ifndef _DOCUFLD_HXX //autogen
 #include <docufld.hxx>
 #endif
-#if SUPD>612
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
 #endif
-#endif
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
+#endif
+#ifndef _VIEWSH_HXX     // for the pagedescname from the ShellRes
+#include <viewsh.hxx>
+#endif
+#ifndef _SHELLRES_HXX   // for the pagedescname from the ShellRes
+#include <shellres.hxx>
 #endif
 
 #ifdef DEBUG
@@ -1179,13 +1183,9 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc( SwPageDesc* pFirstPageDesc,
         return pFirstPageDesc;      // Fehler: hat schon Follow
 
     // compose name of PageDescriptor
-    String aNm( WW8_ASCII2STR( "Konvert " ) );
-    if ( bFollow )
-        aNm.AppendAscii( "Folge" );
     USHORT nPageDescCount = rDoc.GetPageDescCnt();
-    aNm += String::CreateFromInt32( nPageDescCount );
-
-    nPos = rDoc.MakePageDesc( aNm,
+    nPos = rDoc.MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
+                                        nPageDescCount, FALSE, bFollow ),
                         bFollow // && (pFirstPageDesc != &rDoc._GetPageDesc( 0 ))
                         ? pFirstPageDesc
                         : 0 );
@@ -2981,11 +2981,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.7 2001-01-22 09:05:58 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.8 2001-01-26 15:43:22 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/22 09:05:58  os
+      update of filter configuration
+
       Revision 1.6  2000/12/15 15:33:06  cmc
       #79055# OCX FormControls changes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:30:33 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 15:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,12 @@
 #endif
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
+#endif
+#ifndef _VIEWSH_HXX     // for the pagedescname from the ShellRes
+#include <viewsh.hxx>
+#endif
+#ifndef _SHELLRES_HXX   // for the pagedescname from the ShellRes
+#include <shellres.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -1340,19 +1346,9 @@ void SwRTFParser::MakeStyleTab()
 
 SwPageDesc* SwRTFParser::_MakeNewPageDesc( int bFirst )
 {
-    USHORT* pNo = &nAktPageDesc;
-    String aNm( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "RTF-SectionPage(" )));
-
-    if( bFirst )
-    {
-        aNm.InsertAscii( "First", 4 );
-        pNo = &nAktFirstPageDesc;
-    }
-    aNm += String::CreateFromInt32( pDoc->GetPageDescCnt() );
-    aNm += ')';
-
-    USHORT nNew = pDoc->MakePageDesc( aNm, 0 );
+    USHORT* pNo = bFirst ? &nAktFirstPageDesc : &nAktPageDesc;
+    USHORT nNew = pDoc->MakePageDesc( ViewShell::GetShellRes()->
+                    GetPageDescName( pDoc->GetPageDescCnt(), bFirst ), 0 );
     SwPageDesc& rAkt = pDoc->_GetPageDesc( nNew );
     SwPageDesc& rOld = pDoc->_GetPageDesc( *pNo );
     pDoc->CopyPageDesc( rOld, rAkt, FALSE );
@@ -3759,11 +3755,14 @@ static void DumpEnde()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/swparrtf.cxx,v 1.2 2000-11-06 09:30:33 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/swparrtf.cxx,v 1.3 2001-01-26 15:42:30 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/06 09:30:33  jp
+      must changes: tempfile
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 
