@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:18:25 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 10:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,16 @@ enum FrmType
 
 #define FRMTYPE_ANYCOLSECT ( FRMTYPE_COLSECT | FRMTYPE_COLSECTOUTTAB )
 
-enum DrawObjType
+enum GotoObjType
 {
-    DRAW_ANY,
-    DRAW_CONTROL,
-    DRAW_SIMPLE
+    DRAW_CONTROL = 1,
+    DRAW_SIMPLE = 2,
+    DRAW_ANY = 3,
+    FLY_FRM = 4,
+    FLY_GRF = 8,
+    FLY_OLE = 16,
+    FLY_ANY = 28,
+    GOTO_ANY = 31
 };
 
 enum FlyProtectType
@@ -186,8 +191,6 @@ class SwFEShell : public SwEditShell
 
     SwFlyFrm *FindFlyFrm() const;
     SwFlyFrm *FindFlyFrm( const SvEmbeddedObject *pObj ) const;
-
-    BOOL GotoFly( BOOL bNext, FlyCntType eType = FLYCNTTYPE_ALL );
 
     //Actions fuer alle Shells beenden und ChangeLink rufen.
     void EndAllActionAndCall();
@@ -336,10 +339,10 @@ public:
     BOOL WizzardDelFly();
 
     //Selebstaendiges selektieren von Flys
-    BOOL GotoNextFly(FlyCntType eType = FLYCNTTYPE_ALL)
-                                { return GotoFly( TRUE, eType ); }
-    BOOL GotoPrevFly(FlyCntType eType = FLYCNTTYPE_ALL)
-                                { return GotoFly( FALSE, eType); }
+    BOOL GotoNextFly(GotoObjType eType = FLY_ANY)
+                                { return GotoObj( TRUE, eType ); }
+    BOOL GotoPrevFly(GotoObjType eType = FLY_ANY)
+                                { return GotoObj( FALSE, eType); }
 
     //iterieren ueber Flys - fuer Basic-Collections
     USHORT GetFlyCount(FlyCntType eType = FLYCNTTYPE_ALL) const;
@@ -415,7 +418,7 @@ public:
     BOOL GetObjAttr( SfxItemSet &rSet ) const;
     BOOL SetObjAttr( const SfxItemSet &rSet );
 
-    BOOL GotoObj( BOOL bNext, DrawObjType eType = DRAW_ANY);
+    BOOL GotoObj( BOOL bNext, GotoObjType eType = DRAW_ANY);
 
     ULONG ControlCount() const;
     BOOL  GotoControl( ULONG nIndex );
