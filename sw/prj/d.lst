@@ -52,3 +52,9 @@ hedabu: ..\%__SRC%\inc\sw\swmod.h %_DEST%\inc%_EXT%\uno\one\swmod.h
 mkdir: %_DEST%\ucr\sw
 ..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sw\*.ucr
 
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
