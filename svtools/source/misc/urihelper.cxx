@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-16 13:19:52 $
+ *  last change: $Author: sb $ $Date: 2002-11-27 11:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         {
                             rBegin = nPos;
                             rEnd = nUriEnd;
-                            return aUri.GetMainURL();
+                            return
+                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
                         }
                     }
                 }
@@ -560,7 +561,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         {
                             rBegin = nPos;
                             rEnd = nUriEnd;
-                            return aUri.GetMainURL();
+                            return
+                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
                         }
                     }
                 }
@@ -609,7 +611,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         {
                             rBegin = nPos;
                             rEnd = nUriEnd;
-                            return aUri.GetMainURL();
+                            return
+                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
                         }
                     }
                 }
@@ -635,7 +638,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         {
                             rBegin = nPos;
                             rEnd = nUriEnd;
-                            return aUri.GetMainURL();
+                            return
+                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
                         }
                     }
                 }
@@ -664,7 +668,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         {
                             rBegin = nPos;
                             rEnd = nUriEnd;
-                            return aUri.GetMainURL();
+                            return
+                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
                         }
                     }
                 }
@@ -698,7 +703,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                             {
                                 rBegin = nPos;
                                 rEnd = i;
-                                return aUri.GetMainURL();
+                                return aUri.GetMainURL(
+                                           INetURLObject::DECODE_TO_IURI);
                             }
                         }
                     }
