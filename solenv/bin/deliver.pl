@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: rt $ $Date: 2003-05-14 15:52:02 $
+#   last change: $Author: rt $ $Date: 2003-05-27 15:43:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.46 $ ';
+$id_str = ' $Revision: 1.47 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -202,16 +202,16 @@ sub do_dos
 {
     my $line = shift;
 
-    expand_macros($line);
+    my $command = expand_macros($line);
     if ( $opt_check ) {
-        print "DOS: $line\n";
+        print "DOS: $command\n";
     }
     else {
         # HACK: remove MACOSX stuff which is wrongly labled with dos
         # better: fix broken d.lst
-        return if ( $line =~ /MACOSX/ );
-        $line =~ s#/#\\#g if $^O eq 'MSWin32';
-        system($line);
+        return if ( $command =~ /MACOSX/ );
+        $command =~ s#/#\\#g if $^O eq 'MSWin32';
+        system($command);
     }
 }
 
