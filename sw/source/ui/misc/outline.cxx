@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 12:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -711,7 +714,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
         if(nActLevel & nMask)
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetUpperLevel((BYTE) min(pFld->GetValue(), i + 1) );
+            aNumFmt.SetUpperLevel((BYTE) std::min(pFld->GetValue(), (long)(i + 1)) );
             pNumRule->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -1101,7 +1104,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             }
             if(nStart) // damit moeglichs Vorgaenger und Nachfolger gezeigt werden
                 nStart--;
-            BYTE nEnd = min(nStart + 3, MAXLEVEL);
+            BYTE nEnd = std::min((long)(nStart + 3), (long) MAXLEVEL);
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
@@ -1210,6 +1213,9 @@ NumberingPreview::~NumberingPreview()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:45  hr
+    initial import
+
     Revision 1.105  2000/09/18 16:05:58  willem.vandorp
     OpenOffice header added.
 
