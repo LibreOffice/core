@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2001-11-01 19:28:12 $
+#   last change: $Author: mba $ $Date: 2002-03-28 16:27:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 
 SDINAME=$(TARGET)
 SIDHRCNAME=SCSLOTS.HRC
-SDIEXPORT=newslots
+SDIEXPORT=scalc
 
 SVSDIDEPEND= \
     $(SOLARINCDIR)$/ofa.ilb \
@@ -89,7 +89,6 @@ SVSDIDEPEND= \
     drtxtob.sdi \
     drformsh.sdi \
     editsh.sdi \
-    newslots.sdi \
     pivotsh.sdi \
     prevwsh.sdi \
     tabvwsh.sdi \

@@ -17,7 +17,6 @@ ModulePrefix( "Sc" )
     //----------------------------------------------------------
     // bei Problemen ggF. "von Hand" includen (=Copy/Paste)
 
-    include "newslots.sdi"      // temporaer
     include "scalc.sdi"
     include "docsh.sdi"
     include "tabvwsh.sdi"
