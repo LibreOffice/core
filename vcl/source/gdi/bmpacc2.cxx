@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_BMPACC2_CXX
 
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
