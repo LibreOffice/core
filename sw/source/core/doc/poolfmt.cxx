@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:05:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,8 +1273,6 @@ BOOL SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
     return !pNewColl->GetInfo( aGetHt );
 }
 
-
-
     // Gebe das "Auto[matische]-Format" mit der Id zurueck. Existiert
     // es noch nicht, dann erzeuge es
 
@@ -2264,25 +2262,6 @@ BOOL SwDoc::IsPoolPageDescUsed( USHORT nId ) const
     return !pNewPgDsc->GetInfo( aGetHt );
 }
 
-    // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
-    // benutzt wird
-BOOL SwDoc::IsPoolNumRuleUsed( USHORT nId ) const
-{
-    ASSERT( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
-            "Falsche AutoFormat-Id" );
-    SwNumRule *pNewRule;
-    BOOL bUsed = FALSE;
-    for( USHORT n = 0; n < GetNumRuleTbl().Count(); ++n )
-        if( nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId() )
-        {
-            bUsed = IsUsed( *pNewRule );
-            break;
-        }
-    return bUsed;
-}
-
-
-
 // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
 BOOL SwDoc::IsUsed( const SwModify& rModify ) const
 {
@@ -2322,54 +2301,6 @@ BOOL SwDoc::IsUsed( const SwNumRule& rRule ) const
         }
 
     return bUsed;
-}
-
-    // loeche die nicht mehr benutzten Pattern-Namen aus dem Array.
-    // alle nicht mehr referenzierten Namen werden durch 0-Pointer
-    // ersetzt. Diese Positionen koennen wieder vergeben werden.
-void SwDoc::ReOrgPatternHelpIds()
-{
-#if defined( MAC ) || defined( UNX )
-    const SvPtrarr* pFmtArray[ 3 ];
-    pFmtArray[ 0 ] = pCharFmtTbl;       pFmtArray[ 1 ] = pFrmFmtTbl;
-    pFmtArray[ 2 ] = pSpzFrmFmtTbl;
-#else
-    const SvPtrarr* pFmtArray[ 3 ] = {
-        pCharFmtTbl,        pFrmFmtTbl,     pSpzFrmFmtTbl
-        };
-#endif
-
-
-    USHORT i, n, nFmt;
-    for( n = 0; n < aPatternNms.Count(); ++n )
-    {
-        BOOL bFnd = FALSE;
-        // suche im Absatz-Vorlagen Array
-        for( nFmt = 0; !bFnd && nFmt < pTxtFmtCollTbl->Count(); ++nFmt )
-            if( n == (*pTxtFmtCollTbl)[ nFmt ]->GetPoolHlpFileId() )
-                bFnd = TRUE;
-
-        // suche im Format-Vorlagen Array
-        for( i = 0; !bFnd && i < 3; ++i )
-        {
-            const SvPtrarr* pArr = *(pFmtArray + i);
-            for( nFmt = 0; !bFnd && nFmt < pArr->Count(); ++nFmt )
-                if( n == ((SwFmt*)(*pArr)[ nFmt ])->GetPoolHlpFileId() )
-                    bFnd = TRUE;
-        }
-        // suche im Format-Vorlagen Array
-        for( nFmt = 0; !bFnd && nFmt < aPageDescs.Count(); ++nFmt )
-            if( n == aPageDescs[ nFmt ]->GetPoolHlpFileId() )
-                bFnd = TRUE;
-
-        if( !bFnd )
-        {
-            // losche den alten String, setze die Position auf 0
-            aPatternNms.DeleteAndDestroy( n+1 );
-            String* pNull = 0;
-            aPatternNms.Insert( pNull, n );
-        }
-    }
 }
 
     // Suche die Position vom Vorlagen-Namen. Ist nicht vorhanden
