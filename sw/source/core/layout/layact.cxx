@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:46:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2523,7 +2523,7 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
             bAllValid = FALSE;
         if ( aRepaint.HasArea() )
             pImp->GetShell()->InvalidateWindows( aRepaint );
-        if ( Application::AnyInput( INPUT_ANY ) )
+        if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
             return TRUE;
     }
     //Die im Absatz verankerten Flys wollen auch mitspielen.
@@ -2663,6 +2663,7 @@ BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
 
 BOOL SwLayIdle::CollectAutoCmplWords( BOOL bVisAreaOnly )
 {
+
     //Worte aller Inhalte der Seiten zusammensammeln, um eine
     //AutoComplete-Liste zu erstellen. Entweder nur der sichtbaren
     //Seiten oder eben aller. Falls ein Input am Ende einer Seite anliegt,
