@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:30:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,25 @@ public:
 
     static inline sal_Unicode ToUpperAlpha( sal_Unicode c )
         { return ( c >= 'a' && c <= 'z' ) ? ( c-'a'+'A' ) : c; }
+
+    /** Adds the string rToken to rTokenList, using a list separator character.
+        @param rTokenList  The string list where the token will be appended to.
+        @param rToken  The token string to append to the token list.
+        @param cSep  The character to separate the tokens.
+        @param nSepCount  Specifies how often cSep is inserted between two tokens.
+        @param bForceSep  true = Always insert separator; false = Only, if not at begin or end. */
+    static void             AddToken(
+                                String& rTokenList, const String& rToken,
+                                sal_Unicode cSep, xub_StrLen nSepCount = 1,
+                                bool bForceSep = false );
+
+    /** Returns true, if the first and last character of the string is cQuote. */
+    static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '"' );
+    /** Inserts the character cQuote at beginning and end of rString. */
+    static void             AddQuotes( String& rString, sal_Unicode cQuote = '"' );
+    /** Erases the character cQuote from rString, if it exists at beginning AND end. */
+    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '"' );
+
 
     static  CharSet         GetCharsetValue( const String& rCharSet );
     static  String          GetCharsetString( CharSet eVal );
