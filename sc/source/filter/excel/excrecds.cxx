@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:48:24 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 06:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,7 @@ void ExcETabNumBuffer::ApplyBuffer()
 
 BOOL ExcETabNumBuffer::IsExternal( UINT16 nScTab ) const
 {
-    DBG_ASSERT( nScTab < nScCnt, "ExcETabNumBuffer::IsExternal() - out of range!" );
-    return TRUEBOOL( pBuffer[ nScTab ] & EXC_TABBUF_FLAGEXT );
+    return (nScTab < nScCnt) ? TRUEBOOL( pBuffer[ nScTab ] & EXC_TABBUF_FLAGEXT ) : FALSE;
 }
 
 BOOL ExcETabNumBuffer::IsExportTable( UINT16 nScTab ) const
@@ -4615,6 +4614,8 @@ BOOL ExcArrays::Extend( UINT8 nStartCol, UINT16 nStartRow, UINT8 nEndCol, UINT16
     {
         if( pAct->AppendBy( nStartCol, nStartRow, nEndCol, nEndRow ) )
             return TRUE;
+
+        pAct = ( ExcArray* ) List::Next();
     }
 
     return FALSE;
@@ -4639,8 +4640,6 @@ ExcShrdFmla::ExcShrdFmla( const sal_Char* p, UINT16 n, const ScRange& r ) :
 
 ExcShrdFmla::~ExcShrdFmla()
 {
-    if( pData )
-        delete[] pData;
 }
 
 
