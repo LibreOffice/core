@@ -315,7 +315,6 @@
             <menu:menuitem menu:id=".uno:Gallery" menu:helpid="5960" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:BibliographyComponent" menu:helpid="10880" menu:label="" />
-            <menu:menuitem menu:id=".uno:DatasourceAdministration" menu:helpid="10882" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SortDialog" menu:helpid="20614" menu:label="" />
             <menu:menuitem menu:id=".uno:CalculateSel" menu:helpid="20615" menu:label="" />
