@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-31 12:35:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 07:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2214,9 +2214,9 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                         bEscapeProcessing = any2bool(xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
 
                         ::rtl::OUString aCatalog,aSchema,aTable;
-                        xQuery->getPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME) >>= aCatalog;
-                        xQuery->getPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME)  >>= aSchema;
-                        xQuery->getPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME)   >>= aTable;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME) >>= aCatalog;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
+                        xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME) >>= aTable;
                         if(aTable.getLength())
                             composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False);
 
