@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String RID_SVXSTR_COLOR_USER
     Text [ English ] = "User" ;
     Text [ norwegian ] = "User" ;
     Text [ italian ] = "Utente" ;
-    Text [ portuguese_brazilian ] = "Usu?rio" ;
+    Text [ portuguese_brazilian ] = "Usu�rio" ;
     Text [ portuguese ] = "Utilizador" ;
     Text [ finnish ] = "K�ytt�j�" ;
     Text [ danish ] = "Bruger" ;
@@ -92,6 +92,9 @@ String RID_SVXSTR_COLOR_USER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuari";
     Text[ thai ] = "ผู้ใช้";
+    Text[ czech ] = "Uživatelský";
+    Text[ hebrew ] = "Benutzer";
+    Text[ hindi ] = "उपभोक्ता";
 };
 
 // RID_SVXPAGE_CHAR_NAME ----------------------------------------------------
@@ -117,7 +120,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Skrifttype til vestlig tekst";
         Text[ swedish ] = "Teckensnitt f�r v�stlig text";
         Text[ polish ] = "Czcionka tekstu zachodniego";
-        Text[ portuguese_brazilian ] = "Schriftart f? westlichen Text";
+        Text[ portuguese_brazilian ] = "Fonte do texto ocidental";
         Text[ japanese ] = "英数字用フォント";
         Text[ korean ] = "서양권 언어 글꼴";
         Text[ chinese_simplified ] = "适用于西文的字体";
@@ -127,6 +130,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ catalan ] = "Tipus de lletra de text occidental";
         Text[ finnish ] = "L�nsimaiset tekstifontit";
         Text[ thai ] = "ตัวอักษรข้อความแบบตะวันตก";
+        Text[ czech ] = "Písmo pro západní text";
+        Text[ hebrew ] = "Schriftart für westlichen Text";
+        Text[ hindi ] = "पाश्चात्य टेक्स्ट् अक्षर";
     };
     FixedText FT_WEST_NAME
     {
@@ -145,16 +151,19 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "S~krifttype";
         Text[ swedish ] = "Tecken~snitt";
         Text[ polish ] = "Czcionka";
-        Text[ portuguese_brazilian ] = "Font";
+        Text[ portuguese_brazilian ] = "Fonte";
         Text[ japanese ] = "フォントの種類";
         Text[ korean ] = "글꼴";
         Text[ chinese_simplified ] = "字体";
         Text[ chinese_traditional ] = "字型";
-        Text[ turkish ] = "Font";
+        Text[ turkish ] = "Yaz� tipi";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Tipus de lletra";
         Text[ finnish ] = "Fo~ntti";
         Text[ thai ] = "ตัวอักษร";
+        Text[ czech ] = "Písmo";
+        Text[ hebrew ] = "‮גופן‬";
+        Text[ hindi ] = "अक्षर";
     };
     FixedText FT_WEST_NAME_NOCJK
     {
@@ -172,17 +181,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Tipo di carattere";
         Text[ danish ] = "S~krifttype";
         Text[ swedish ] = "Tecken~snitt";
-        Text[ polish ] = "Czcionka";
-        Text[ portuguese_brazilian ] = "Font";
+        Text[ polish ] = "~Czcionka";
+        Text[ portuguese_brazilian ] = "~Fonte";
         Text[ japanese ] = "フォント(~F)";
         Text[ korean ] = "글꼴(~F)";
         Text[ chinese_simplified ] = "字体(~F)";
         Text[ chinese_traditional ] = "字型(~F)";
-        Text[ turkish ] = "Font";
+        Text[ turkish ] = "Yaz� tipi";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "~Tipus de lletra";
         Text[ finnish ] = "~Fontti";
         Text[ thai ] = "~ตัวอักษร";
+        Text[ czech ] = "Písmo";
+        Text[ hebrew ] = "‮גופן‬";
+        Text[ hindi ] = "~अक्षर";
     };
     ComboBox LB_WEST_NAME
     {
@@ -216,17 +228,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Stile";
         Text[ danish ] = "Typogra~fi";
         Text[ swedish ] = "Te~ckenstil";
-        Text[ polish ] = "Styl";
-        Text[ portuguese_brazilian ] = "Type";
+        Text[ polish ] = "Kr�j czc~ionki";
+        Text[ portuguese_brazilian ] = "~Tipos";
         Text[ japanese ] = "スタイル(~T)";
-        Text[ korean ] = "스타일(~T)";
+        Text[ korean ] = "글꼴 유형(~T)";
         Text[ chinese_simplified ] = "字体形状(~T)";
         Text[ chinese_traditional ] = "字型形狀(~T)";
-        Text[ turkish ] = "Type";
+        Text[ turkish ] = "T�r";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "~Tipografia";
         Text[ finnish ] = "K~irjasinlaji";
         Text[ thai ] = "~รูปร่างของตัวพิมพ์";
+        Text[ czech ] = "Styl písma";
+        Text[ hebrew ] = "‮צורת גופן‬";
+        Text[ hindi ] = "~टइपफेस";
     };
     FixedText FT_WEST_STYLE_NOCJK
     {
@@ -244,17 +259,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Stile";
         Text[ danish ] = "Typogra~fi";
         Text[ swedish ] = "Te~ckenstil";
-        Text[ polish ] = "Styl";
-        Text[ portuguese_brazilian ] = "Type";
+        Text[ polish ] = "Kr�j czc~ionki";
+        Text[ portuguese_brazilian ] = "~Tipos";
         Text[ japanese ] = "スタイル(~T)";
         Text[ korean ] = "글꼴 유형(~T)";
         Text[ chinese_simplified ] = "字体形状(~T)";
         Text[ chinese_traditional ] = "字型形狀(~T)";
-        Text[ turkish ] = "Type";
+        Text[ turkish ] = "T�r";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Estil";
         Text[ finnish ] = "Kir~jasinlaji";
         Text[ thai ] = "~รูปร่างของตัวพิมพ์";
+        Text[ czech ] = "Styl písma";
+        Text[ hebrew ] = "‮צורת גופן‬";
+        Text[ hindi ] = "~टइपफेस";
     };
     ComboBox LB_WEST_STYLE
     {
@@ -349,17 +367,17 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
         StringList [ polish ] =
         {
-            "Normalny" ;
+            "Normalna" ;
             "Kursywa" ;
-            "Pogrubienie" ;
-            "Kursywa pogrubiona" ;
+            "Pogrubiona" ;
+            "Pogrubiona kursywa" ;
         };
         StringList [ portuguese_brazilian ] =
         {
             "Normal" ;
-            "Kursiv" ;
-            "Fett" ;
-            "Fett Kursiv" ;
+            "It�lico" ;
+            "Negrito" ;
+            "Negrito It�lico" ;
         };
         StringList [ japanese ] =
         {
@@ -392,9 +410,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         StringList [ turkish ] =
         {
             "Normal" ;
-            "�talik" ;
+            "Yat�k" ;
             "Kal�n" ;
-            "Kal�n italik" ;
+            "Kal�n yat�k" ;
         };
         StringList [ arabic ] =
         {
@@ -423,6 +441,27 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "เอียง" ;
         "หนา" ;
         "หนา เอียง" ;
+    };
+    StringList [ czech ] =
+    {
+        "Normální" ;
+        "Kurzíva" ;
+        "Tučné" ;
+        "Tučná kurzíva" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "Normal" ;
+        "‮נטוי‬" ;
+        "‮מודגש‬" ;
+        "‮נטוי מודגש‬" ;
+    };
+    StringList [ hindi ] =
+    {
+        "सामान्य" ;
+        "इटालिक" ;
+        "मोटा" ;
+        "मोटा ढेडा" ;
     };
     };
     ComboBox LB_WEST_STYLE_NOCJK
@@ -518,17 +557,17 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
         StringList [ polish ] =
         {
-            "Normalny" ;
+            "Normalna" ;
             "Kursywa" ;
-            "Pogrubienie" ;
+            "Pogrubiona" ;
             "Pogrubiona kursywa" ;
         };
         StringList [ portuguese_brazilian ] =
         {
             "Normal" ;
-            "Kursiv" ;
-            "Fett" ;
-            "Fett Kursiv" ;
+            "It�lico" ;
+            "Negrito" ;
+            "Negrito It�lico" ;
         };
         StringList [ japanese ] =
         {
@@ -561,9 +600,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         StringList [ turkish ] =
         {
             "Normal" ;
-            "�talik" ;
+            "Yat�k" ;
             "Kal�n" ;
-            "Kal�n italik" ;
+            "Kal�n yat�k" ;
         };
         StringList [ arabic ] =
         {
@@ -593,6 +632,27 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "หนา" ;
         "หนา เอียง" ;
     };
+    StringList [ czech ] =
+    {
+        "Normální" ;
+        "Kurzíva" ;
+        "Tučné" ;
+        "Tučná kurzíva" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "Normal" ;
+        "‮נטוי‬" ;
+        "‮מודגש‬" ;
+        "‮נטוי מודגש‬" ;
+    };
+    StringList [ hindi ] =
+    {
+        "सामान्य" ;
+        "ढेडा" ;
+        "मोटा" ;
+        "मोटा ढेडा" ;
+    };
     };
     FixedText FT_WEST_SIZE
     {
@@ -610,17 +670,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "~Dimensione";
         Text[ danish ] = "Sk~riftgrad";
         Text[ swedish ] = "Teckenst~orlek";
-        Text[ polish ] = "Rozmiar";
-        Text[ portuguese_brazilian ] = "Size";
+        Text[ polish ] = "Rozmi~ar";
+        Text[ portuguese_brazilian ] = "Tamanho";
         Text[ japanese ] = "サイズ";
         Text[ korean ] = "크기";
         Text[ chinese_simplified ] = "字体规格";
         Text[ chinese_traditional ] = "字型規格";
-        Text[ turkish ] = "Size";
+        Text[ turkish ] = "Boyut";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Mida";
         Text[ finnish ] = "Koko";
         Text[ thai ] = "ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "परिमाण";
     };
     FixedText FT_WEST_SIZE_NOCJK
     {
@@ -638,17 +701,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "~Dimensione";
         Text[ danish ] = "Sk~riftgrad";
         Text[ swedish ] = "Teckenst~orlek";
-        Text[ polish ] = "Rozmiar";
-        Text[ portuguese_brazilian ] = "Size";
+        Text[ polish ] = "Rozmi~ar";
+        Text[ portuguese_brazilian ] = "Tamanho";
         Text[ japanese ] = "サイズ";
         Text[ korean ] = "크기";
         Text[ chinese_simplified ] = "字体规格";
         Text[ chinese_traditional ] = "字型規格";
-        Text[ turkish ] = "Size";
+        Text[ turkish ] = "Boyut";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Mida";
         Text[ finnish ] = "Koko";
         Text[ thai ] = "ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "परिमाण";
     };
     MetricBox LB_WEST_SIZE
     {
@@ -683,15 +749,19 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "S~prog";
         Text[ swedish ] = "S~pr�k";
         Text[ polish ] = "J�zyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ portuguese_brazilian ] = "Idioma";
         Text[ japanese ] = "言語";
         Text[ korean ] = "언어";
         Text[ chinese_simplified ] = "语言";
         Text[ chinese_traditional ] = "語言";
-        Text[ turkish ] = "Language";
+        Text[ turkish ] = "Dil";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Idioma";
         Text[ finnish ] = "Kieli";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ thai ] = "Language";
+        Text[ hindi ] = "भाषा";
     };
     FixedText FT_WEST_LANG_NOCJK
     {
@@ -709,17 +779,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Lingua";
         Text[ danish ] = "S~prog";
         Text[ swedish ] = "S~pr�k";
-        Text[ polish ] = "J�zyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ polish ] = "~J�zyk";
+        Text[ portuguese_brazilian ] = "Idio~ma";
         Text[ japanese ] = "言語(~L)";
         Text[ korean ] = "언어(~L)";
         Text[ chinese_simplified ] = "语言(~L)";
         Text[ chinese_traditional ] = "語言(~L)";
-        Text[ turkish ] = "Language";
+        Text[ turkish ] = "Dil";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Idioma";
         Text[ finnish ] = "Ki~eli";
         Text[ thai ] = "~ภาษา";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ hindi ] = "~भाषा";
     };
     ListBox LB_WEST_LANG
     {
@@ -755,7 +828,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Skrifttype til asiatisk tekst";
         Text[ swedish ] = "Teckensnitt f�r asiatisk text";
         Text[ polish ] = "Czcionka tekstu azjatyckiego";
-        Text[ portuguese_brazilian ] = "Schriftart f? asiatischen Text";
+        Text[ portuguese_brazilian ] = "Fonte para texto asi�tico";
         Text[ japanese ] = "日本語用フォント";
         Text[ korean ] = "한글 글꼴";
         Text[ chinese_simplified ] = "中日韩字体";
@@ -765,6 +838,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ catalan ] = "Tipus de lletra de text asi�tic";
         Text[ finnish ] = "Aasialaiset tekstifontit";
         Text[ thai ] = "ตัวอักษรข้อความแบบเอเชีย";
+        Text[ czech ] = "Písmo pro asijský text";
+        Text[ hebrew ] = "Schriftart für asiatischen Text";
+        Text[ hindi ] = "ऐशियन टेक्स्ट् अक्षर";
     };
     FixedText FT_EAST_NAME
     {
@@ -783,16 +859,19 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Skriftt~ype";
         Text[ swedish ] = "Tec~kensnitt";
         Text[ polish ] = "Czcionka";
-        Text[ portuguese_brazilian ] = "Font";
+        Text[ portuguese_brazilian ] = "Fonte";
         Text[ japanese ] = "フォントの種類";
         Text[ korean ] = "글꼴";
         Text[ chinese_simplified ] = "字体";
         Text[ chinese_traditional ] = "字型類型";
-        Text[ turkish ] = "Font";
+        Text[ turkish ] = "Yaz� tipi";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Tipus de lletra";
         Text[ finnish ] = "Fontti";
         Text[ thai ] = "ตัวอักษร";
+        Text[ czech ] = "Písmo";
+        Text[ hebrew ] = "‮גופן‬";
+        Text[ hindi ] = "अक्षर";
     };
     ComboBox LB_EAST_NAME
     {
@@ -818,17 +897,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Stile";
         Text[ danish ] = "Typograf~i";
         Text[ swedish ] = "Teckenst~il";
-        Text[ polish ] = "Styl";
-        Text[ portuguese_brazilian ] = "Type";
+        Text[ polish ] = "~Kr�j czcionki";
+        Text[ portuguese_brazilian ] = "~Tipos";
         Text[ japanese ] = "スタイル(~Y)";
         Text[ korean ] = "글꼴 유형(~Y)";
         Text[ chinese_simplified ] = "字体形状(~Y)";
         Text[ chinese_traditional ] = "字型形狀(~Y)";
-        Text[ turkish ] = "Type";
+        Text[ turkish ] = "T�r";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "T~ipografia";
         Text[ finnish ] = "K~irjasinlaji";
         Text[ thai ] = "รู~ปร่างของตัวพิมพ์";
+        Text[ czech ] = "Styl písma";
+        Text[ hebrew ] = "Schr~iftschnitt";
+        Text[ hindi ] = "ट~इपफेस";
     };
     ComboBox LB_EAST_STYLE
     {
@@ -923,17 +1005,17 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
         StringList [ polish ] =
         {
-            "Zwyk�a" ;
+            "Normalna" ;
             "Kursywa" ;
-            "Pogrubienie" ;
+            "Pogrubiona" ;
             "Pogrubiona kursywa" ;
         };
         StringList [ portuguese_brazilian ] =
         {
             "Normal" ;
-            "Kursiv" ;
-            "Fett" ;
-            "Fett Kursiv" ;
+            "It�lico" ;
+            "Negrito" ;
+            "Negrito It�lico" ;
         };
         StringList [ japanese ] =
         {
@@ -966,9 +1048,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         StringList [ turkish ] =
         {
             "Normal" ;
-            "�talik" ;
+            "Yat�k" ;
             "Kal�n" ;
-            "Kal�n italik" ;
+            "Kal�n yat�k" ;
         };
         StringList [ arabic ] =
         {
@@ -998,6 +1080,27 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "หนา" ;
         "หนา เอียง" ;
     };
+    StringList [ czech ] =
+    {
+        "Normální" ;
+        "Kurzíva" ;
+        "Tučné" ;
+        "Tučná kurzíva" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "Normal" ;
+        "‮נטוי‬" ;
+        "‮מודגש‬" ;
+        "‮נטוי מודגש‬" ;
+    };
+    StringList [ hindi ] =
+    {
+        "सामान्य" ;
+        "ढेडा" ;
+        "मोटा" ;
+        "मोटा ढेडा" ;
+    };
     };
     FixedText FT_EAST_SIZE
     {
@@ -1015,17 +1118,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "~Dimensione";
         Text[ danish ] = "Skrift~grad";
         Text[ swedish ] = "Teckens~torlek";
-        Text[ polish ] = "Rozmiar";
-        Text[ portuguese_brazilian ] = "Size";
+        Text[ polish ] = "~Rozmiar";
+        Text[ portuguese_brazilian ] = "Tamanho";
         Text[ japanese ] = "サイズ";
         Text[ korean ] = "크기";
         Text[ chinese_simplified ] = "字体规格";
         Text[ chinese_traditional ] = "字型規格";
-        Text[ turkish ] = "Size";
+        Text[ turkish ] = "Boyut";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Mida";
         Text[ finnish ] = "Koko";
         Text[ thai ] = "ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "परिमाण";
     };
     MetricBox LB_EAST_SIZE
     {
@@ -1052,15 +1158,19 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Spr~og";
         Text[ swedish ] = "Sp~r�k";
         Text[ polish ] = "J�zyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ portuguese_brazilian ] = "Idioma";
         Text[ japanese ] = "言語";
         Text[ korean ] = "언어";
         Text[ chinese_simplified ] = "语言";
         Text[ chinese_traditional ] = "語言";
-        Text[ turkish ] = "Language";
+        Text[ turkish ] = "Dil";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Idioma";
         Text[ finnish ] = "Kieli";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ thai ] = "Language";
+        Text[ hindi ] = "भाषा";
     };
     ListBox LB_EAST_LANG
     {
@@ -1088,15 +1198,18 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Complex script font";
         Text[ swedish ] = "Teckensnitt f�r CTL";
         Text[ polish ] = "Complex script font";
-        Text[ portuguese_brazilian ] = "Complex script font";
+        Text[ portuguese_brazilian ] = "CTL font";
         Text[ japanese ] = "複合文字言語用フォント";
         Text[ korean ] = "복합 문자 언어용(CTL) 글꼴";
         Text[ chinese_simplified ] = "适用于复杂的文字版式的字型";
         Text[ chinese_traditional ] = "適用于複雜的文字版式的字型";
-        Text[ turkish ] = "Complex script font";
+        Text[ turkish ] = "CTL yaz�tipi";
         Text[ arabic ] = "Complex script font";
-        Text[ catalan ] = "Complex script font";
-        Text[ thai ] = "Complex script font";
+        Text[ catalan ] = "CTL font";
+        Text[ thai ] = "CTL font";
+        Text[ czech ] = "CTL písmo";
+        Text[ hebrew ] = "Schriftart für CTL";
+        Text[ hindi ] = "CTL font";
     };
     FixedText FT_CTL_NAME
     {
@@ -1120,11 +1233,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ korean ] = "글꼴";
         Text[ chinese_simplified ] = "字体";
         Text[ chinese_traditional ] = "字型";
-        Text[ turkish ] = "Font";
+        Text[ turkish ] = "Yaz�tipi";
         Text[ arabic ] = "��� ����";
-        Text[ catalan ] = "Fuente";
+        Text[ catalan ] = "Font";
         Text[ finnish ] = "Fontti";
         Text[ thai ] = "Font";
+        Text[ czech ] = "Písmo";
+        Text[ hebrew ] = "‮גופן‬";
+        Text[ hindi ] = "Font";
     };
     ComboBox LB_CTL_NAME
     {
@@ -1156,11 +1272,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ korean ] = "스타일(~Y)";
         Text[ chinese_simplified ] = "字体形状(~Y)";
         Text[ chinese_traditional ] = "字型形狀(~Y)";
-        Text[ turkish ] = "Type";
+        Text[ turkish ] = "~Yaz�resmi";
         Text[ arabic ] = "��� ����";
-        Text[ catalan ] = "Estilo";
+        Text[ catalan ] = "Ty~peface";
         Text[ finnish ] = "~Kirjasinlaji";
-        Text[ thai ] = "T~ypeface";
+        Text[ thai ] = "Ty~peface";
+        Text[ czech ] = "Druh písma";
+        Text[ hebrew ] = "Schriftsch~nitt";
+        Text[ hindi ] = "Ty~peface";
     };
     ComboBox LB_CTL_STYLE
     {
@@ -1242,7 +1361,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         StringList [ danish ] =
         {
             "Normal" ;
-            "Kursiv" ;
+            "Italic" ;
             "Fed" ;
             "Fed kursiv" ;
         };
@@ -1298,9 +1417,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         StringList [ turkish ] =
         {
             "Normal" ;
-            "�talik" ;
+            "Yat�k" ;
             "Kal�n" ;
-            "Kal�n italik" ;
+            "Kal�n yat�k" ;
         };
         StringList [ arabic ] =
         {
@@ -1330,6 +1449,27 @@ TabPage RID_SVXPAGE_CHAR_NAME
         ", หนา" ;
         "หนา เอียง" ;
     };
+    StringList [ czech ] =
+    {
+        "Normální" ;
+        "Kurzíva" ;
+        "Tučné" ;
+        "Tučná kurzíva" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "Normal" ;
+        "‮נטוי‬" ;
+        "‮מודגש‬" ;
+        "‮נטוי מודגש‬" ;
+    };
+    StringList [ hindi ] =
+    {
+        "Normal" ;
+        "Italic" ;
+        "Bold" ;
+        "Bold italic" ;
+    };
     };
     FixedText FT_CTL_SIZE
     {
@@ -1353,11 +1493,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ korean ] = "크기";
         Text[ chinese_simplified ] = "字体规格";
         Text[ chinese_traditional ] = "字型規格";
-        Text[ turkish ] = "Size";
+        Text[ turkish ] = "Boyut";
         Text[ arabic ] = "��� ����";
-        Text[ catalan ] = "Tama�o";
+        Text[ catalan ] = "Size";
         Text[ finnish ] = "Koko";
         Text[ thai ] = "Size";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "Size";
     };
     MetricBox LB_CTL_SIZE
     {
@@ -1389,11 +1532,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ korean ] = "언어";
         Text[ chinese_simplified ] = "语言";
         Text[ chinese_traditional ] = "語言";
-        Text[ turkish ] = "Language";
+        Text[ turkish ] = "Dil";
         Text[ arabic ] = "�����";
-        Text[ catalan ] = "Idioma";
+        Text[ catalan ] = "Language";
         Text[ finnish ] = "Kieli";
         Text[ thai ] = "Language";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ hindi ] = "Language";
     };
     ListBox LB_CTL_LANG
     {
@@ -1421,16 +1567,19 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Exempel";
         Text[ polish ] = "Przyk�ad";
-        Text[ portuguese_brazilian ] = "Example";
+        Text[ portuguese_brazilian ] = "Exemplo";
         Text[ japanese ] = "例";
         Text[ korean ] = "예";
         Text[ chinese_simplified ] = "示例";
         Text[ chinese_traditional ] = "示例";
-        Text[ turkish ] = "Example";
+        Text[ turkish ] = "�rnek";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Exemple";
         Text[ finnish ] = "Esimerkki";
         Text[ thai ] = "ตัวอย่าง";
+        Text[ czech ] = "Příklad";
+        Text[ hebrew ] = "Beispiel";
+        Text[ hindi ] = "उदाहरण";
     };
     FixedText FT_CHAR_FONTTYPE
     {
@@ -1446,7 +1595,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text [ ENGLISH ] = "Color" ;
         Text [ norwegian ] = "Color" ;
         Text [ italian ] = "Colore" ;
-        Text [ portuguese_brazilian ] = "Font color" ;
+        Text [ portuguese_brazilian ] = "Cor" ;
         Text [ portuguese ] = "Cor" ;
         Text [ finnish ] = "V�ri" ;
         Text [ danish ] = "Farve" ;
@@ -1463,10 +1612,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ arabic ] = "��� ����";
         Text[ greek ] = "����� ��������������";
         Text[ korean ] = "색상";
-        Text[ turkish ] = "Font color";
+        Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Color";
         Text[ thai ] = "สี";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "‮צבע‬";
+        Text[ hindi ] = "रंग";
     };
     FixedText FT_COLOR2
     {
@@ -1484,17 +1636,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Colore carattere";
         Text[ danish ] = "Skriftfar~ve";
         Text[ swedish ] = "Teckenf�r~g";
-        Text[ polish ] = "Kolor";
-        Text[ portuguese_brazilian ] = "Font ~Color";
+        Text[ polish ] = "K~olor czcionki";
+        Text[ portuguese_brazilian ] = "~Cor da fonte";
         Text[ japanese ] = "フォントの色(~C)";
         Text[ korean ] = "글꼴 색상(~C)";
         Text[ chinese_simplified ] = "字体颜色(~C)";
         Text[ chinese_traditional ] = "字型顏色(~C)";
-        Text[ turkish ] = "Font ~Color";
+        Text[ turkish ] = "Font Rengi";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "~Color de la lletra";
         Text[ finnish ] = "Fontin ~v�ri";
         Text[ thai ] = "~สีตัวอักษร";
+        Text[ czech ] = "Barva písma";
+        Text[ hebrew ] = "Schriftfar~be";
+        Text[ hindi ] = "अक्षर का ~रंग";
     };
     ListBox LB_COLOR2
     {
@@ -1517,18 +1672,21 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Senza %s";
         Text[ danish ] = "Ikke %s";
         Text[ swedish ] = "Inte %s";
-        Text[ polish ] = "Nie %s";
-        Text[ portuguese_brazilian ] = "No %s";
+        Text[ polish ] = "Brak %s";
+        Text[ portuguese_brazilian ] = "Sem %s";
         Text[ japanese ] = "%s なし";
         Text[ chinese_simplified ] = "不是 %s";
         Text[ chinese_traditional ] = "不是 %s";
         Text[ arabic ] = "���� %s";
         Text[ greek ] = "����� %s";
         Text[ korean ] = "%s 아님";
-        Text[ turkish ] = "%s de�il";
+        Text[ turkish ] = "Hay�r %s";
         Text[ catalan ] = "No %s";
         Text[ finnish ] = "Ei %s";
         Text[ thai ] = "ไม่ %s";
+        Text[ czech ] = "Bez %s";
+        Text[ hebrew ] = "Nicht %s";
+        Text[ hindi ] = "%s नहीं";
     };
     String STR_CHARNAME_TRANSPARENT
     {
@@ -1536,7 +1694,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text = "Transparent";
         Text[ english_us ] = "Transparent";
         Text[ italian ] = "Trasparente";
-        Text[ portuguese_brazilian ] = "Transparent";
+        Text[ portuguese_brazilian ] = "Transparente";
         Text[ portuguese ] = "Transparente";
         Text[ danish ] = "Transparent";
         Text[ french ] = "Transparent";
@@ -1545,16 +1703,19 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "Transparente";
         Text[ chinese_simplified ] = "透明";
         Text[ russian ] = "����������";
-        Text[ polish ] = "Prze�roczysty";
+        Text[ polish ] = "Przezroczysty";
         Text[ japanese ] = "透過性";
         Text[ chinese_traditional ] = "透明";
         Text[ arabic ] = "����";
         Text[ greek ] = "��������";
         Text[ korean ] = "투명";
-        Text[ turkish ] = "Saydam";
+        Text[ turkish ] = "�effaf";
         Text[ catalan ] = "Transparent";
         Text[ finnish ] = "L�pin�kyv�";
         Text[ thai ] = "โปร่งแสง";
+        Text[ czech ] = "Průhledné";
+        Text[ hebrew ] = "Transparent";
+        Text[ hindi ] = "पारदर्शक";
     };
 };
 
@@ -1582,16 +1743,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "~Understregning";
         Text[ swedish ] = "~Understrykning";
         Text[ polish ] = "Podkre�lenie";
-        Text[ portuguese_brazilian ] = "Underlining";
+        Text[ portuguese_brazilian ] = "Sublinhando";
         Text[ japanese ] = "下線";
         Text[ korean ] = "밑줄";
         Text[ chinese_simplified ] = "下划线";
         Text[ chinese_traditional ] = "下劃線";
-        Text[ turkish ] = "Underlining";
+        Text[ turkish ] = "Alt� �izili";
         Text[ arabic ] = "�� ����";
         Text[ catalan ] = "Subratllat";
         Text[ finnish ] = "Allev~iivaus";
         Text[ thai ] = "ขีดเส้นใต้";
+        Text[ czech ] = "Podtržení";
+        Text[ hebrew ] = "~Unterstreichung";
+        Text[ hindi ] = "रेखांकित करना";
     };
     ListBox LB_UNDERLINE
     {
@@ -1845,7 +2009,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "(Brak)" ; CHRDLG_UNDERLINE_NONE ; > ;
             < "Pojedyncze" ; CHRDLG_UNDERLINE_SINGLE ; > ;
             < "Podw�jne" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-            < "Pogrubienie"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pogrubione"; CHRDLG_UNDERLINE_BOLD; > ;
             < "Kropki" ; CHRDLG_UNDERLINE_DOTTED ; > ;
             < "Kropki pogrubione" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
             < "Kreski"; CHRDLG_UNDERLINE_DASH; > ;
@@ -1862,23 +2026,23 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-            < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-            < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-            < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
-            < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-            < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-            < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
-            < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-            < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-            < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-            < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
-            < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-            < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-            < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-            < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
-            < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-            < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+            < "(Sem)" ; CHRDLG_UNDERLINE_NONE ; > ;
+            < "Simples" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Duplo" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Negrito"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pontilhado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Pontilhado (negrito)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Tra�o"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Tra�o (Negrito)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Tra�o longo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Tra�o Longo (Negrito)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Tra�o e Ponto"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Tra�o e Ponto (Negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Tra�o Ponto Ponto"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Tra�o Ponto Ponto (Negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Ondula��o"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Ondula��o (Negrito)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ondula��o Dupla"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
         };
         StringList [ japanese ] =
         {
@@ -1904,7 +2068,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         {
             < "(없음)" ; CHRDLG_UNDERLINE_NONE ; > ;
             < "단일선" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-            < "이중" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "이중선" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
             < "굵게"; CHRDLG_UNDERLINE_BOLD; > ;
             < "점" ; CHRDLG_UNDERLINE_DOTTED ; > ;
             < "점(굵게)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
@@ -1967,17 +2131,17 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "�ift" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
             < "Kal�n"; CHRDLG_UNDERLINE_BOLD; > ;
             < "Noktal�" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-            < "Kal�n noktal�" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-            < "�izgi"; CHRDLG_UNDERLINE_DASH; > ;
-            < "Kal�n �izgi"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-            < "Uzun �izgi"; CHRDLG_UNDERLINE_LONGDASH; > ;
-            < "Kal�n u�un �izgi"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-            < "Nokta �izgi"; CHRDLG_UNDERLINE_DASHDOT; > ;
-            < "Kal�n nokta �izgi"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-            < "Nokta nokta �izgi"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-            < "Kal�n nokta nokta �izgi"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Noktal� (Kal�n)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Tire"; CHRDLG_UNDERLINE_DASH; > ;
+            < "�izgili �izgili (Kal�n)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Uzun Tire"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Kal�n uzun �izgi"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Nokta �izgi"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Noktal� �izgili (Kal�n)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Nokta Nokta �izgi"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Noktal� noktal� �izgili (Kal�n)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
             < "Dalga"; CHRDLG_UNDERLINE_WAVE; > ;
-            < "Kal�n dalga"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Dalgal� (Kal�n)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
             < "�ift dalga"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
         };
         StringList [ arabic ] =
@@ -2060,6 +2224,66 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ลอน (หนา)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "ลอนคู่"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
+    StringList [ czech ] =
+    {
+         < "(žádné)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "Jednoduché" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "Dvojité" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Tučné"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Tečkovaně" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Tečkovaně (tučně)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "Čárka"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Čárka (tučně)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Dlouhá čárka"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Dlouhá čárka (tučně)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Čerchovaně"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Čerchovaně (tučně)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Tečka-tečka-čárka"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Tečka-tečka-čárka (tučně)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Vlnka"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Vlnka (tučně)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Dvojitá vlnka"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "(‮ללא‬)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "‮יחיד‬" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "‮כפול‬" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "‮מודגש‬"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "‮מנוקד‬" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "‮מודגש(מנוקד)‬" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "‮מרווקן‬"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "‮מקווקו ארוך‬"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "‮נקודה קו‬"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "‮נקודה נקודה קו‬"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "‮גלי‬"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "‮גלי כפול‬"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "(के बिना)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "अकेला" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "द्विगुणित" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "मोटा"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "बिन्दी" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "बिन्दी (मोटा)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "डॉश"; CHRDLG_UNDERLINE_DASH; > ;
+        < "डॉश (मोटा)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "लम्बा डॉश"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "लम्बा डॉश (मोटा)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "बिन्दु डॉश"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "बिन्दु डॉश (मोटा)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "बिन्दु बिन्दु डॉश"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "बिन्दु बिन्दु डॉश (मोटा)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "लहर"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "लहर (मोटा)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "द्विगुणित लहर"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
     };
     FixedText FT_UNDERLINE_COLOR
     {
@@ -2078,16 +2302,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Far~ve";
         Text[ swedish ] = "~F�rg";
         Text[ polish ] = "Kolor";
-        Text[ portuguese_brazilian ] = "Color";
+        Text[ portuguese_brazilian ] = "Cor";
         Text[ japanese ] = "色";
         Text[ korean ] = "색상";
         Text[ chinese_simplified ] = "颜色";
         Text[ chinese_traditional ] = "顏色";
-        Text[ turkish ] = "Color";
+        Text[ turkish ] = "Renk";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Color";
         Text[ finnish ] = "V�ri";
         Text[ thai ] = "สี";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "‮צבע‬";
+        Text[ hindi ] = "रंग";
     };
     ListBox LB_UNDERLINE_COLOR
     {
@@ -2114,16 +2341,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "~Gennemstregning";
         Text[ swedish ] = "~Genomstrykning";
         Text[ polish ] = "Przekre�lenie";
-        Text[ portuguese_brazilian ] = "Strikethrough";
+        Text[ portuguese_brazilian ] = "Rasurado";
         Text[ japanese ] = "取り消し線";
         Text[ korean ] = "취소선";
         Text[ chinese_simplified ] = "删除线";
         Text[ chinese_traditional ] = "刪除線";
-        Text[ turkish ] = "Strikethrough";
+        Text[ turkish ] = "�st� �izili";
         Text[ arabic ] = "���";
         Text[ catalan ] = "Barrat";
         Text[ finnish ] = "Yliviivaus";
         Text[ thai ] = "ขีดทับ";
+        Text[ czech ] = "Přeškrtnutí";
+        Text[ hebrew ] = "‮מבוטל‬";
+        Text[ hindi ] = "स्ट्रइकत्रु";
     };
     ListBox LB_STRIKEOUT
     {
@@ -2245,18 +2475,18 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "(Brak)" ; CHRDLG_STRIKEOUT_NONE ; > ;
             < "Pojedyncze" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
             < "Podw�jne" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-            < "Pogrubienie" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-            < "Z /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-            < "Z X" ; CHRDLG_STRIKEOUT_X ; > ;
+            < "Pogrubione" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Znakami /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Znakami X" ; CHRDLG_STRIKEOUT_X ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-            < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-            < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-            < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-            < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-            < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
+            < "(Sem)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+            < "Simples" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Duplo" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Negrito" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Com /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Com X" ; CHRDLG_STRIKEOUT_X ; > ;
         };
         StringList [ japanese ] =
         {
@@ -2271,7 +2501,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         {
             < "(없음)" ; CHRDLG_STRIKEOUT_NONE ; > ;
             < "단일선" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-            < "이중" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "이중선" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
             < "굵게" ; CHRDLG_STRIKEOUT_BOLD ; > ;
             < "/ 로" ; CHRDLG_STRIKEOUT_SLASH ; > ;
             < "X 로" ; CHRDLG_STRIKEOUT_X ; > ;
@@ -2296,8 +2526,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-            < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-            < "Basit" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "(Hari�)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+            < "Tek" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
             < "�ift" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
             < "Kal�n" ; CHRDLG_STRIKEOUT_BOLD ; > ;
             < "/ ile" ; CHRDLG_STRIKEOUT_SLASH ; > ;
@@ -2339,6 +2569,33 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ด้วย /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "ด้วย X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "(žádné)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "Jednoduché" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Dvojité" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Tučné" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Pomocí /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Pomocí X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "(‮ללא‬)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "‮יחיד‬" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "‮כפול‬" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "‮מודגש‬" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "/‮עם ‬" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "X‮עם ‬" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "(के बिना)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "अकेला" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "द्विगुणित" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "मोटा" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "/ सहित" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "X सहित" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
     };
     CheckBox CB_INDIVIDUALWORDS
     {
@@ -2357,17 +2614,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "Solo par~ole";
         Text[ danish ] = "~Ordvis";
         Text[ swedish ] = "Ord~vis";
-        Text[ polish ] = "Tylko s�owa";
-        Text[ portuguese_brazilian ] = "Individual words";
+        Text[ polish ] = "P~oszczeg�lne s�owa";
+        Text[ portuguese_brazilian ] = "Palavras ~individuais";
         Text[ japanese ] = "単語ごとにする(~W)";
         Text[ korean ] = "한 단어 마다(~W)";
         Text[ chinese_simplified ] = "逐字(~W)";
         Text[ chinese_traditional ] = "逐字(~W)";
-        Text[ turkish ] = "Individual words";
+        Text[ turkish ] = "Bireysel kelimeler";
         Text[ arabic ] = "������� ���";
         Text[ catalan ] = "~Paraules individuals";
         Text[ finnish ] = "Yksitt�iset ~sanat";
         Text[ thai ] = "~คำเฉพาะ";
+        Text[ czech ] = "Jednotlivá slova";
+        Text[ hebrew ] = "‮מלים נפרדות‬";
+        Text[ hindi ] = "अलग अलग ~शब्द";
     };
     FixedText FT_EMPHASIS
     {
@@ -2385,17 +2645,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "Carattere di accentua~zione";
         Text[ danish ] = "Fre~mh�vningstegn";
         Text[ swedish ] = "~Betoningstecken";
-        Text[ polish ] = "Znak intonacji";
-        Text[ portuguese_brazilian ] = "Emphasis character";
+        Text[ polish ] = "Znak ~wyr�nienia";
+        Text[ portuguese_brazilian ] = "Marca de de~staque";
         Text[ japanese ] = "強調に用いる記号(~H)";
         Text[ korean ] = "강조 표시(~H)";
         Text[ chinese_simplified ] = "重音符(~H)";
         Text[ chinese_traditional ] = "重音符號(~H)";
-        Text[ turkish ] = "Emphasis character";
+        Text[ turkish ] = "Vurgulama karakteri";
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Car�cter ~emf�tic";
         Text[ finnish ] = "Korostus~merkki";
         Text[ thai ] = "เครื่องหมายเ~น้น";
+        Text[ czech ] = "Značka zvýraznění";
+        Text[ hebrew ] = "~Betonungszeichen";
+        Text[ hindi ] = "विशि~ष्ट उच्चारण चिह्न";
     };
     ListBox LB_EMPHASIS
     {
@@ -2512,17 +2775,17 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         {
             < "(Brak)" ; default ; > ;
             < "Kropka" ; default ; > ;
-            < "K�ko" ; default ; > ;
+            < "Ko�o" ; default ; > ;
             < "Dysk" ; default ; > ;
             < "Akcent" ; default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "(Ohne)" ; default ; > ;
-            < "?" ; default ; > ;
-            < "." ; default ; > ;
-            < "Scheibe" ; default ; > ;
-            < "Akzent" ; default ; > ;
+            < "(Sem)" ; default ; > ;
+            < "Ponto" ; default ; > ;
+            < "C�rculo" ; default ; > ;
+            < "Disco" ; default ; > ;
+            < "Acento" ; default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -2558,11 +2821,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-            < "(Ohne)" ; default ; > ;
-            < "�" ; default ; > ;
-            < "." ; default ; > ;
-            < "Scheibe" ; default ; > ;
-            < "Akzent" ; default ; > ;
+            < "(Hari�)" ; default ; > ;
+            < "Nokta" ; default ; > ;
+            < "Daire" ; default ; > ;
+            < "Disk" ; default ; > ;
+            < "Aksan" ; default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -2596,6 +2859,30 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ดิสก์" ; default ; > ;
         < "เน้น" ; default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "(Bez)" ; default ; > ;
+        < "Tečka" ; default ; > ;
+        < "Kruh" ; default ; > ;
+        < "Disk" ; default ; > ;
+            < "Akcent" ; default ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "(‮ללא‬)" ; default ; > ;
+        < "Punkt" ; default ; > ;
+        < "Kreis" ; default ; > ;
+        < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "(के बिना)" ; default ; > ;
+        < "बिन्दु" ; default ; > ;
+        < "वृत्त" ; default ; > ;
+        < "डिस्क" ; default ; > ;
+            < "उच्चारण" ; default ; > ;
+        };
     };
     FixedText FT_POSITION
     {
@@ -2614,16 +2901,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "~Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Posi��o";
         Text[ japanese ] = "位置";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "Position";
+        Text[ turkish ] = "Pozisyon";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Posici�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "स्थान";
     };
     ListBox LB_POSITION
     {
@@ -2694,13 +2984,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ polish ] =
         {
-            < "Nad tekstem" ; CHRDLG_POSITION_OVER ; > ;
+            < "Powy�ej tekstu" ; CHRDLG_POSITION_OVER ; > ;
             < "Pod tekstem" ; CHRDLG_POSITION_UNDER ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "?ber Text" ; CHRDLG_POSITION_OVER ; > ;
-            < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+            < "Acima do texto" ; CHRDLG_POSITION_OVER ; > ;
+            < "Abaixo do texto" ; CHRDLG_POSITION_UNDER ; > ;
         };
         StringList [ japanese ] =
         {
@@ -2724,8 +3014,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-            < "�ber Text" ; CHRDLG_POSITION_OVER ; > ;
-            < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+            < "Metin �st�nde" ; CHRDLG_POSITION_OVER ; > ;
+            < "Metin Alt�nda" ; CHRDLG_POSITION_UNDER ; > ;
         };
         StringList [ arabic ] =
         {
@@ -2747,6 +3037,21 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
          < "เหนือข้อความ" ; CHRDLG_POSITION_OVER ; > ;
         < "ใต้ข้อความ" ; CHRDLG_POSITION_UNDER ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Nad textem" ; CHRDLG_POSITION_OVER ; > ;
+        < "Pod textem" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "Über Text" ; CHRDLG_POSITION_OVER ; > ;
+        < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "टेक्स्ट् के ऊपर" ; CHRDLG_POSITION_OVER ; > ;
+        < "टेक्स्ट् के नीचे " ; CHRDLG_POSITION_UNDER ; > ;
+        };
     };
     FixedText FT_FONTCOLOR
     {
@@ -2762,19 +3067,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Couleur de police";
         Text[ spanish ] = "~Color de fuente";
         Text[ italian ] = "Colore carattere";
-        Text[ danish ] = "Font ~Color";
+        Text[ danish ] = "Font ~color";
         Text[ swedish ] = "Tecken~f�rg";
         Text[ polish ] = "Kolor";
-        Text[ portuguese_brazilian ] = "Font ~Color";
+        Text[ portuguese_brazilian ] = "Font ~color";
         Text[ japanese ] = "フォントの色(~C)";
         Text[ korean ] = "글꼴 색상(~C)";
         Text[ chinese_simplified ] = "字体颜色(~C)";
         Text[ chinese_traditional ] = "字型顏色(~C)";
-        Text[ turkish ] = "Font ~Color";
+        Text[ turkish ] = "Yaz�tipi ~rengi";
         Text[ arabic ] = "��� ����";
-        Text[ catalan ] = "Color de fuente";
+        Text[ catalan ] = "Font ~color";
         Text[ finnish ] = "Fontin ~v�ri";
         Text[ thai ] = "Font ~color";
+        Text[ czech ] = "Barva písma";
+        Text[ hebrew ] = "S~chriftfarbe";
+        Text[ hindi ] = "Font ~color";
     };
     ListBox LB_FONTCOLOR
     {
@@ -2800,17 +3108,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "Effet~ti";
         Text[ danish ] = "~Effekter";
         Text[ swedish ] = "~Effekter";
-        Text[ polish ] = "Wyr�nienia";
-        Text[ portuguese_brazilian ] = "Effects";
+        Text[ polish ] = "Efekty";
+        Text[ portuguese_brazilian ] = "Efeitos";
         Text[ japanese ] = "文字種";
         Text[ korean ] = "효과";
         Text[ chinese_simplified ] = "醒目字体";
         Text[ chinese_traditional ] = "醒目字型";
-        Text[ turkish ] = "Effects";
+        Text[ turkish ] = "Efektler";
         Text[ arabic ] = "���������";
         Text[ catalan ] = "Efectes";
         Text[ finnish ] = "Tehosteet";
         Text[ thai ] = "ลักษณะพิเศษ";
+        Text[ czech ] = "Efekty";
+        Text[ hebrew ] = "‮אפקטים‬";
+        Text[ hindi ] = "प्रभाव";
     };
     ListBox LB_EFFECTS2
     {
@@ -2924,18 +3235,18 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         StringList [ polish ] =
         {
             < "(Brak)" ; Default ; > ;
-            < "Wersaliki" ; Default ; > ;
+            < "Wielkie litery" ; Default ; > ;
             < "Ma�e litery" ; Default ; > ;
-            < "Czcionka tytu�owa" ; Default ; > ;
+            < "Jak w tytule" ; Default ; > ;
             < "Kapitaliki" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Keine" ; Default ; > ;
-            < "Versalien" ; Default ; > ;
-            < "Gemeine" ; Default ; > ;
-            < "Titelschrift" ; Default ; > ;
-            < "Kapit?lchen" ; Default ; > ;
+            < "(Sem)" ; Default ; > ;
+            < "Mai�sculas" ; Default ; > ;
+            < "Min�sculas" ; Default ; > ;
+            < "T�tulo" ; Default ; > ;
+            < "Versalete" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -2971,11 +3282,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-            < "Yok" ; Default ; > ;
-            < "B�y�k harflerle" ; Default ; > ;
-            < "K���k harflerle" ; Default ; > ;
-            < "Ba�l�k yaz�tipi" ; Default ; > ;
-            < "K���k b�y�k harf" ; Default ; > ;
+            < "(Hari�)" ; Default ; > ;
+            < "B�l�mler" ; Default ; > ;
+            < "K���k harf" ; Default ; > ;
+            < "Ba�l�k" ; Default ; > ;
+            < "K���k b�l�mler" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -3009,6 +3320,30 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ชื่อเรื่อง" ; Default ; > ;
         < "ตัวพิมพ์ใหญ่ขนาดเล็ก" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "(žádný)" ; Default ; > ;
+        < "Velká písmena" ; Default ; > ;
+        < "Malá písmena" ; Default ; > ;
+        < "Počáteční" ; Default ; > ;
+        < "Malé kapitálky" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "(‮ללא‬)" ; Default ; > ;
+        < "‮אותיות גדולות‬" ; Default ; > ;
+        < "‮אותיות קטנות‬" ; Default ; > ;
+        < "‮כותרת‬" ; Default ; > ;
+        < "‮אותיות גדולות קטנות‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "(के बिना)" ; Default ; > ;
+        < "बड़े अक्षरें" ; Default ; > ;
+        < "लोवरकेस" ; Default ; > ;
+        < "शीर्षक" ; Default ; > ;
+        < "छोटा बड़े अक्षरें" ; Default ; > ;
+    };
     };
     FixedText FT_RELIEF
     {
@@ -3026,17 +3361,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "Rilievo";
         Text[ danish ] = "~Relief";
         Text[ swedish ] = "~Relief";
-        Text[ polish ] = "Uwypuklenie";
-        Text[ portuguese_brazilian ] = "Relief";
+        Text[ polish ] = "~Uwypuklenie";
+        Text[ portuguese_brazilian ] = "~Relevo";
         Text[ japanese ] = "浮き出し(~R)";
         Text[ korean ] = "양각(~R)";
         Text[ chinese_simplified ] = "浮雕(~R)";
         Text[ chinese_traditional ] = "浮雕(~R)";
-        Text[ turkish ] = "Relief";
+        Text[ turkish ] = "~Kabartma";
         Text[ arabic ] = "���";
         Text[ catalan ] = "~Relleu";
         Text[ finnish ] = "~Korkokuva";
         Text[ thai ] = "~นูน";
+        Text[ czech ] = "Reliéf";
+        Text[ hebrew ] = "‮תבליט‬";
+        Text[ hindi ] = "~सहायता";
     };
     ListBox LB_RELIEF
     {
@@ -3082,8 +3420,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         StringList [ greek ] =
         {
             < "������" ; Default ; > ;
-            < "Erhaben" ; Default ; > ;
-            < "Vertieft" ; Default ; > ;
+            < "Embossed" ; Default ; > ;
+            < "Engraved" ; Default ; > ;
         };
         StringList [ dutch ] =
         {
@@ -3125,13 +3463,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         {
             < "(Brak)" ; Default ; > ;
             < "Wypuk�e" ; Default ; > ;
-            < "Wkl�s�e" ; Default ; > ;
+            < "Grawerowane" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Keine" ; Default ; > ;
-            < "Erhaben" ; Default ; > ;
-            < "Vertieft" ; Default ; > ;
+            < "(Sem)" ; Default ; > ;
+            < "Salientado" ; Default ; > ;
+            < "Entalhado" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -3159,9 +3497,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-            < "Yok" ; Default ; > ;
-            < "Erhaben" ; Default ; > ;
-            < "Vertieft" ; Default ; > ;
+            < "(Olmadan)" ; Default ; > ;
+            < "Kabarma" ; Default ; > ;
+            < "Kaz�nm��" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -3187,6 +3525,24 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "นูนขึ้น" ; Default ; > ;
         < "รอยสลัก" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "(žádný)" ; Default ; > ;
+        < "Reliéf" ; Default ; > ;
+        < "Rytina" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "(‮ללא‬)" ; Default ; > ;
+        < "‮בוטל‬" ; Default ; > ;
+        < "‮חקוק‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "(के बिना)" ; Default ; > ;
+        < "गुलकारी" ; Default ; > ;
+        < "खोदा हुआ" ; Default ; > ;
+    };
     };
     TriStateBox CB_OUTLINE
     {
@@ -3205,16 +3561,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "~Kontur";
         Text[ swedish ] = "~Kontur";
         Text[ polish ] = "Kontur";
-        Text[ portuguese_brazilian ] = "Outline";
+        Text[ portuguese_brazilian ] = "Contorno";
         Text[ japanese ] = "中抜き";
         Text[ korean ] = "외곽선";
         Text[ chinese_simplified ] = "轮廓";
         Text[ chinese_traditional ] = "輪廓";
-        Text[ turkish ] = "Outline";
+        Text[ turkish ] = "��kt�";
         Text[ arabic ] = "�� ������";
         Text[ catalan ] = "Contorn";
         Text[ finnish ] = "J�sennys";
         Text[ thai ] = "เค้าร่าง";
+        Text[ czech ] = "Obrys";
+        Text[ hebrew ] = "‮מסגרת‬";
+        Text[ hindi ] = "बाहरी रूपरेखा";
     };
     TriStateBox CB_SHADOW
     {
@@ -3233,16 +3592,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Sk~ygger";
         Text[ swedish ] = "~Skugga";
         Text[ polish ] = "Cie�";
-        Text[ portuguese_brazilian ] = "Shadow";
+        Text[ portuguese_brazilian ] = "Sombra";
         Text[ japanese ] = "影";
         Text[ korean ] = "그림자";
         Text[ chinese_simplified ] = "阴影";
         Text[ chinese_traditional ] = "陰影";
-        Text[ turkish ] = "Shadow";
+        Text[ turkish ] = "G�lde";
         Text[ arabic ] = "��";
         Text[ catalan ] = "Ombra";
         Text[ finnish ] = "Varjo";
         Text[ thai ] = "แรเงา";
+        Text[ czech ] = "Stín";
+        Text[ hebrew ] = "‮הצללה‬";
+        Text[ hindi ] = "छाया";
     };
     TriStateBox CB_BLINKING
     {
@@ -3267,11 +3629,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ korean ] = "깜박임 효과(~B)";
         Text[ chinese_simplified ] = "闪动的(~B)";
         Text[ chinese_traditional ] = "閃動(~B)";
-        Text[ turkish ] = "Blinking";
+        Text[ turkish ] = "~Yan�p s�nme";
         Text[ arabic ] = "����";
         Text[ catalan ] = "~Parpelleig";
         Text[ finnish ] = "~Vilkkuva";
         Text[ thai ] = "~กระพริบ";
+        Text[ czech ] = "Blikající";
+        Text[ hebrew ] = "‮הבהוב‬";
+        Text[ hindi ] = "~टिमटिमाहट";
     };
     Window WIN_EFFECTS_PREVIEW
     {
@@ -3290,16 +3655,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Exempel";
         Text[ polish ] = "Przyk�ad";
-        Text[ portuguese_brazilian ] = "Example";
+        Text[ portuguese_brazilian ] = "Exemplo";
         Text[ japanese ] = "例";
         Text[ korean ] = "예";
         Text[ chinese_simplified ] = "示例";
         Text[ chinese_traditional ] = "示例";
-        Text[ turkish ] = "Example";
+        Text[ turkish ] = "�rnek";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Exemple";
         Text[ finnish ] = "Esimerkki";
         Text[ thai ] = "ตัวอย่าง";
+        Text[ czech ] = "Příklad";
+        Text[ hebrew ] = "Beispiel";
+        Text[ hindi ] = "उदाहरण";
     };
     FixedText FT_EFFECTS_FONTTYPE
     {
@@ -3320,17 +3688,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "Maiuscolo";
         Text[ danish ] = "Store bogstaver";
         Text[ swedish ] = "Versaler";
-        Text[ polish ] = "Wersaliki";
-        Text[ portuguese_brazilian ] = "Capitals";
+        Text[ polish ] = "Wielkie litery";
+        Text[ portuguese_brazilian ] = "Mai�sculas";
         Text[ japanese ] = "大文字";
         Text[ korean ] = "대문자";
         Text[ chinese_simplified ] = "大写字母";
         Text[ chinese_traditional ] = "大寫字母";
-        Text[ turkish ] = "Capitals";
+        Text[ turkish ] = "B�y�k harf";
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Maj�scules";
         Text[ finnish ] = "Isot kirjaimet";
         Text[ thai ] = "ตัวพิมพ์ใหญ่";
+        Text[ czech ] = "Velká písmena";
+        Text[ hebrew ] = "‮אותיות גדולות‬";
+        Text[ hindi ] = "बड़े अक्षरें";
     };
     String STR_EFFECTS_LOWERCASE
     {
@@ -3346,16 +3717,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Sm� bogstaver";
         Text[ swedish ] = "Gemener";
         Text[ polish ] = "Ma�e litery";
-        Text[ portuguese_brazilian ] = "Lowercase";
+        Text[ portuguese_brazilian ] = "Min�sculas";
         Text[ japanese ] = "小文字";
         Text[ korean ] = "소문자";
         Text[ chinese_simplified ] = "小写字母";
         Text[ chinese_traditional ] = "小寫字母";
-        Text[ turkish ] = "Lowercase";
+        Text[ turkish ] = "K���k harf";
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Min�scules";
         Text[ finnish ] = "Pienet kirjaimet";
         Text[ thai ] = "ตัวพิมพ์เล็ก";
+        Text[ czech ] = "Malá písmena";
+        Text[ hebrew ] = "‮אותיות קטנות‬";
+        Text[ hindi ] = "लोवरकेस";
     };
     String STR_EFFECTS_TITLE
     {
@@ -3370,17 +3744,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ italian ] = "Titolo";
         Text[ danish ] = "Titelskrift";
         Text[ swedish ] = "Titel";
-        Text[ polish ] = "Czcionka tytu�owa";
-        Text[ portuguese_brazilian ] = "Title";
+        Text[ polish ] = "Jak w tytule";
+        Text[ portuguese_brazilian ] = "T�tulo";
         Text[ japanese ] = "タイトル文字";
         Text[ korean ] = "제목";
         Text[ chinese_simplified ] = "标题文字";
         Text[ chinese_traditional ] = "標題文字";
-        Text[ turkish ] = "Title";
+        Text[ turkish ] = "Ba�l�k";
         Text[ arabic ] = "�� �����";
         Text[ catalan ] = "T�tol";
         Text[ finnish ] = "Otsikko";
         Text[ thai ] = "ชื่อเรื่อง";
+        Text[ czech ] = "Počáteční";
+        Text[ hebrew ] = "‮כותרת‬";
+        Text[ hindi ] = "शीर्षक";
     };
     String STR_EFFECTS_SMALL
     {
@@ -3396,16 +3773,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Kapit�ler";
         Text[ swedish ] = "Kapit�ler";
         Text[ polish ] = "Kapitaliki";
-        Text[ portuguese_brazilian ] = "Small Capitals";
+        Text[ portuguese_brazilian ] = "Versalete";
         Text[ japanese ] = "小型大文字";
         Text[ korean ] = "스몰캡";
         Text[ chinese_simplified ] = "小型大写字母";
         Text[ chinese_traditional ] = "小型大寫字母";
-        Text[ turkish ] = "Small Capitals";
+        Text[ turkish ] = "K���lt";
         Text[ arabic ] = "��� ����� ����";
         Text[ catalan ] = "Maj�scules petites";
         Text[ finnish ] = "Kapiteelikirjaimet";
         Text[ thai ] = "ตัวพิมพ์เล็ก";
+        Text[ czech ] = "Malé kapitálky";
+        Text[ hebrew ] = "‮אותיות גדולות קטנות‬";
+        Text[ hindi ] = "छोटा बड़े अक्षरें";
     };
     String STR_EFFECTS_OUTLINE
     {
@@ -3421,16 +3801,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Kontur";
         Text[ swedish ] = "Kontur";
         Text[ polish ] = "Kontur";
-        Text[ portuguese_brazilian ] = "Outline";
+        Text[ portuguese_brazilian ] = "Contorno";
         Text[ japanese ] = "中抜き";
         Text[ korean ] = "외곽선";
         Text[ chinese_simplified ] = "轮廓";
         Text[ chinese_traditional ] = "輪廓";
-        Text[ turkish ] = "Outline";
+        Text[ turkish ] = "��kt�";
         Text[ arabic ] = "�� ������";
         Text[ catalan ] = "Contorn";
         Text[ finnish ] = "J�sennys";
         Text[ thai ] = "เค้าร่าง";
+        Text[ czech ] = "Obrys";
+        Text[ hebrew ] = "‮מסגרת‬";
+        Text[ hindi ] = "बाहरी रूपरेखा";
     };
     String STR_EFFECTS_SHADOW
     {
@@ -3446,16 +3829,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Skygger";
         Text[ swedish ] = "Skugga";
         Text[ polish ] = "Cie�";
-        Text[ portuguese_brazilian ] = "Shadow";
+        Text[ portuguese_brazilian ] = "Sombra";
         Text[ japanese ] = "影";
         Text[ korean ] = "그림자";
         Text[ chinese_simplified ] = "阴影";
         Text[ chinese_traditional ] = "陰影";
-        Text[ turkish ] = "Shadow";
+        Text[ turkish ] = "G�lde";
         Text[ arabic ] = "��";
         Text[ catalan ] = "Ombra";
         Text[ finnish ] = "Va~rjo";
         Text[ thai ] = "แรเงา";
+        Text[ czech ] = "Stín";
+        Text[ hebrew ] = "‮הצללה‬";
+        Text[ hindi ] = "छाया";
     };
     String STR_EFFECTS_BLINKING
     {
@@ -3471,16 +3857,19 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ danish ] = "Blinkende";
         Text[ swedish ] = "Blinkande";
         Text[ polish ] = "Miganie";
-        Text[ portuguese_brazilian ] = "Blinking";
+        Text[ portuguese_brazilian ] = "Piscante";
         Text[ japanese ] = "点滅";
         Text[ korean ] = "깜박임 효과";
         Text[ chinese_simplified ] = "闪动的";
         Text[ chinese_traditional ] = "閃動";
-        Text[ turkish ] = "Blinking";
+        Text[ turkish ] = "Yan�p s�nen";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Parpelleig";
         Text[ finnish ] = "Vilkkuva";
         Text[ thai ] = "กระพริบ";
+        Text[ czech ] = "Blikání";
+        Text[ hebrew ] = "‮הבהוב‬";
+        Text[ hindi ] = "टिमटिमाहट";
     };
     String STR_CHARNAME_TRANSPARENT
     {
@@ -3503,10 +3892,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ arabic ] = "����";
         Text[ greek ] = "��������";
         Text[ korean ] = "투명";
-        Text[ turkish ] = "Saydam";
-        Text[ catalan ] = "Transparente";
+        Text[ turkish ] = "�effaf";
+        Text[ catalan ] = "Transparent";
         Text[ finnish ] = "L�pin�kyv�";
         Text[ thai ] = "โปร่งแสง";
+        Text[ czech ] = "Průhledný";
+        Text[ hebrew ] = "Transparent";
+        Text[ hindi ] = "Transparent";
     };
 };
 
@@ -3533,16 +3925,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "Position";
         Text[ swedish ] = "Position";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Posi��o";
         Text[ japanese ] = "位置";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "Pozisyon";
+        Text[ turkish ] = "Konum";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Posici�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "स्थान";
     };
     RadioButton RB_HIGHPOS
     {
@@ -3562,16 +3957,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "H�~j";
         Text[ swedish ] = "Upph�j~d";
         Text[ polish ] = "Indeks g�rny";
-        Text[ portuguese_brazilian ] = "Super";
+        Text[ portuguese_brazilian ] = "Sobrescrito";
         Text[ japanese ] = "上付き";
         Text[ korean ] = "위 첨자";
         Text[ chinese_simplified ] = "向上";
         Text[ chinese_traditional ] = "向上";
-        Text[ turkish ] = "Super";
+        Text[ turkish ] = "�st simge";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Super�ndex";
         Text[ finnish ] = "Yl�indeksi";
         Text[ thai ] = "ตัวยก";
+        Text[ czech ] = "Horní index";
+        Text[ hebrew ] = "‮כיתוב עילי‬";
+        Text[ hindi ] = "सूपरस्क्रिप्ट्";
     };
     RadioButton RB_NORMALPOS
     {
@@ -3590,7 +3988,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Normale";
         Text[ danish ] = "~Normal";
         Text[ swedish ] = "~Normal";
-        Text[ polish ] = "Zwyk�a";
+        Text[ polish ] = "Normalna";
         Text[ portuguese_brazilian ] = "Normal";
         Text[ japanese ] = "普通";
         Text[ korean ] = "보통";
@@ -3601,6 +3999,9 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ catalan ] = "Normal";
         Text[ finnish ] = "Normaali";
         Text[ thai ] = "ปกติ";
+        Text[ czech ] = "Normální";
+        Text[ hebrew ] = "‮כיתוב רגיל‬";
+        Text[ hindi ] = "सामान्य";
     };
     RadioButton RB_LOWPOS
     {
@@ -3620,16 +4021,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "S~�nket";
         Text[ swedish ] = "N~eds�nkt";
         Text[ polish ] = "Indeks dolny";
-        Text[ portuguese_brazilian ] = "Sub";
+        Text[ portuguese_brazilian ] = "Subscrito";
         Text[ japanese ] = "下付き";
         Text[ korean ] = "아래 첨자";
         Text[ chinese_simplified ] = "向下";
         Text[ chinese_traditional ] = "向下";
-        Text[ turkish ] = "Sub";
+        Text[ turkish ] = "Alt simge";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Sub�ndex";
         Text[ finnish ] = "Alaindeksi";
         Text[ thai ] = "ตัวห้อย";
+        Text[ czech ] = "Dolní index";
+        Text[ hebrew ] = "‮כיתוב תחתי‬";
+        Text[ hindi ] = "सबस्क्रिप्ट्";
     };
     FixedText FT_HIGHLOW
     {
@@ -3647,17 +4051,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Apice/Pedice di";
         Text[ danish ] = "H~�j/s�nket om";
         Text[ swedish ] = "H�j/s�n~k med";
-        Text[ polish ] = "Ind.gr./Ind.dln. przy";
-        Text[ portuguese_brazilian ] = "Raise/lower by";
+        Text[ polish ] = "~Podnie�/obni� o";
+        Text[ portuguese_brazilian ] = "~Aumentar / Reduzir de";
         Text[ japanese ] = "上/下の割合(~R)";
         Text[ korean ] = "올림/내림 설정(~R)";
         Text[ chinese_simplified ] = "上升/下降值(~R)";
         Text[ chinese_traditional ] = "上昇/下降值(~R)";
-        Text[ turkish ] = "Raise/lower by";
+        Text[ turkish ] = "Y�kseklik/Derinlik";
         Text[ arabic ] = "�����/����� ������";
         Text[ catalan ] = "Augment/disminuci� de";
         Text[ finnish ] = "~Nosta / laske";
         Text[ thai ] = "~ขึ้น/ลงโดย";
+        Text[ czech ] = "Zvýšit/snížit o";
+        Text[ hebrew ] = "‮הגבה/הנמוך ב ‬";
+        Text[ hindi ] = "से ~बढ़ाओ/घटाओ";
     };
     MetricField ED_HIGHLOW
     {
@@ -3692,17 +4099,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "A~utomatico";
         Text[ danish ] = "~Automatisk";
         Text[ swedish ] = "~Automatiskt";
-        Text[ polish ] = "Automatycznie";
-        Text[ portuguese_brazilian ] = "Automatic";
+        Text[ polish ] = "A~utomatycznie";
+        Text[ portuguese_brazilian ] = "~Autom�tico";
         Text[ japanese ] = "自動(~U)";
         Text[ korean ] = "자동(~U)";
         Text[ chinese_simplified ] = "自动(~U)";
         Text[ chinese_traditional ] = "自動(~U)";
-        Text[ turkish ] = "Automatic";
+        Text[ turkish ] = "Otomatik";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Autom�tic";
         Text[ finnish ] = "A~utomaattinen";
         Text[ thai ] = "อั~ตโนมัติ";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "‮אוטומטי‬";
+        Text[ hindi ] = "स्व~चालित";
     };
     FixedText FT_FONTSIZE
     {
@@ -3721,16 +4131,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "S~kriftst�rrelse rel.";
         Text[ swedish ] = "Rel. tecken~storlek";
         Text[ polish ] = "Wzgl. rozm. czcionki";
-        Text[ portuguese_brazilian ] = "Relative font size";
+        Text[ portuguese_brazilian ] = "Tamanho relativo da fonte";
         Text[ japanese ] = "相対フォントサイズ";
         Text[ korean ] = "글꼴 크기에 비례하여";
         Text[ chinese_simplified ] = "相对的字体大小";
         Text[ chinese_traditional ] = "相對的字型大小";
-        Text[ turkish ] = "Relative font size";
+        Text[ turkish ] = "G�receli yaz� boyut";
         Text[ arabic ] = "����� ������ ����";
         Text[ catalan ] = "Mida relativa de la lletra";
         Text[ finnish ] = "Suhteellinen fonttikoko";
         Text[ thai ] = "ขนาดตัวอักษรสัมพัทธ์";
+        Text[ czech ] = "Relativní velikost písma";
+        Text[ hebrew ] = "‮גודל גופן יחסי‬";
+        Text[ hindi ] = "संबन्धित फ़ॉन्ट परिमाण";
     };
     MetricField ED_FONTSIZE
     {
@@ -3763,17 +4176,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Rotazione / scala";
         Text[ danish ] = "Rotation / skalering";
         Text[ swedish ] = "Rotation/skalning";
-        Text[ polish ] = "Rotacja / Skalowanie";
-        Text[ portuguese_brazilian ] = "Rotation / scaling";
+        Text[ polish ] = "Obr�t/skalowanie";
+        Text[ portuguese_brazilian ] = "Rota��o / Escalonamento";
         Text[ japanese ] = "回転と倍率";
         Text[ korean ] = "회전 및 배율";
         Text[ chinese_simplified ] = "旋转/显示比例";
         Text[ chinese_traditional ] = "旋轉/顯示比例";
-        Text[ turkish ] = "Rotation / scaling";
+        Text[ turkish ] = "D�nd�r / �l�eklendirme";
         Text[ arabic ] = "������� / �����";
         Text[ catalan ] = "Rotaci� / Escala";
         Text[ finnish ] = "Kierto / skaalaus";
         Text[ thai ] = "หมุน / สเกล";
+        Text[ czech ] = "Rotace / škálování";
+        Text[ hebrew ] = "‮סיבוב/קביעת גודל‬";
+        Text[ hindi ] = "घुमाव / स्केलिंग";
     };
     FixedLine FL_SCALING
     {
@@ -3783,7 +4199,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text [ english_us ] = "Scaling" ;
         Text[ portuguese ] = "Escala";
         Text[ russian ] = "���������������";
-        Text[ greek ] = "Scaling";
+        Text[ greek ] = "�������";
         Text[ dutch ] = "Schaalverdeling";
         Text[ french ] = "�chelle";
         Text[ spanish ] = "Escala";
@@ -3791,16 +4207,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "Skalering";
         Text[ swedish ] = "Skalning";
         Text[ polish ] = "Skalowanie";
-        Text[ portuguese_brazilian ] = "Scaling";
+        Text[ portuguese_brazilian ] = "Escalonamento";
         Text[ japanese ] = "倍率";
         Text[ korean ] = "장평";
         Text[ chinese_simplified ] = "显示比例";
         Text[ chinese_traditional ] = "顯示比例";
-        Text[ turkish ] = "Scaling";
-        Text[ arabic ] = "Scaling";
+        Text[ turkish ] = "Boyutland�rma";
+        Text[ arabic ] = "�������";
         Text[ catalan ] = "Redimensionament";
         Text[ finnish ] = "Skaalaus";
         Text[ thai ] = "สเกล";
+        Text[ czech ] = "Škálování";
+        Text[ hebrew ] = "Skalierung";
+        Text[ hindi ] = "स्केलिंग";
     };
     RadioButton RB_0_DEG
     {
@@ -3819,17 +4238,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "0 gradi";
         Text[ danish ] = "~0 grader";
         Text[ swedish ] = "~0 grad";
-        Text[ polish ] = "0 stopni";
-        Text[ portuguese_brazilian ] = "0 degree";
+        Text[ polish ] = "~0 st.";
+        Text[ portuguese_brazilian ] = "~0 graus";
         Text[ japanese ] = "0 度";
         Text[ korean ] = "0 도";
         Text[ chinese_simplified ] = "0 度";
         Text[ chinese_traditional ] = "0 度";
-        Text[ turkish ] = "0 degree";
+        Text[ turkish ] = "0 derece";
         Text[ arabic ] = "0 ����";
         Text[ catalan ] = "0 graus";
         Text[ finnish ] = "~0 astetta";
         Text[ thai ] = "~0 องศา";
+        Text[ czech ] = "0 stupňů";
+        Text[ hebrew ] = "~0 Grad";
+        Text[ hindi ] = "~0 डिग्रियाँ";
     };
     RadioButton RB_90_DEG
     {
@@ -3848,17 +4270,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "90 gradi";
         Text[ danish ] = "~90 grader";
         Text[ swedish ] = "~90 grader";
-        Text[ polish ] = "90 stopni";
-        Text[ portuguese_brazilian ] = "90 degree";
+        Text[ polish ] = "~90 st.";
+        Text[ portuguese_brazilian ] = "~90 graus";
         Text[ japanese ] = "90 度";
         Text[ korean ] = "90 도";
         Text[ chinese_simplified ] = "90 度";
         Text[ chinese_traditional ] = "90 度";
-        Text[ turkish ] = "90 degree";
+        Text[ turkish ] = "90 derece";
         Text[ arabic ] = "90 ����";
         Text[ catalan ] = "90 graus";
         Text[ finnish ] = "~90 astetta";
         Text[ thai ] = "~90 องศา";
+        Text[ czech ] = "90 stupňů";
+        Text[ hebrew ] = "~90 Grad";
+        Text[ hindi ] = "~90 डिग्रियाँ";
     };
     RadioButton RB_270_DEG
     {
@@ -3877,17 +4302,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "270 gradi";
         Text[ danish ] = "~270 grader";
         Text[ swedish ] = "~270 grader";
-        Text[ polish ] = "270 stopni";
-        Text[ portuguese_brazilian ] = "270 degree";
+        Text[ polish ] = "~270 st.";
+        Text[ portuguese_brazilian ] = "~270 graus";
         Text[ japanese ] = "270 度";
         Text[ korean ] = "270 도";
         Text[ chinese_simplified ] = "270 度";
         Text[ chinese_traditional ] = "270 度";
-        Text[ turkish ] = "270 degree";
+        Text[ turkish ] = "270 derece";
         Text[ arabic ] = "270 ����";
         Text[ catalan ] = "270 graus";
         Text[ finnish ] = "~270 astetta";
         Text[ thai ] = "~270 องศา";
+        Text[ czech ] = "270 stupňů";
+        Text[ hebrew ] = "~270 Grad";
+        Text[ hindi ] = "~270 डिग्रियाँ";
     };
     CheckBox CB_FIT_TO_LINE
     {
@@ -3907,16 +4335,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "Tilpas til ~linje";
         Text[ swedish ] = "Anpassa till ~rad";
         Text[ polish ] = "Dopasuj do wiersza";
-        Text[ portuguese_brazilian ] = "Fit to line";
+        Text[ portuguese_brazilian ] = "Ajustar na linha";
         Text[ japanese ] = "行に合わせる";
         Text[ korean ] = "줄에 맞춤";
         Text[ chinese_simplified ] = "和行对齐";
         Text[ chinese_traditional ] = "和行對齊";
-        Text[ turkish ] = "Fit to line";
+        Text[ turkish ] = "Sat�ra s��d�r";
         Text[ arabic ] = "������ �����";
         Text[ catalan ] = "Ajusta a fila";
         Text[ finnish ] = "Sovita riville";
         Text[ thai ] = "จัดพอดีบรรทัด";
+        Text[ czech ] = "Přizpůsobit řádce";
+        Text[ hebrew ] = "‮התאמה לשורה‬";
+        Text[ hindi ] = "रेखा के योग्य";
     };
     FixedText FT_SCALE_WIDTH
     {
@@ -3934,17 +4365,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Scala larghezza";
         Text[ danish ] = "Skaler ~bredde";
         Text[ swedish ] = "Skala ~bredd";
-        Text[ polish ] = "Skaluj szeroko��";
-        Text[ portuguese_brazilian ] = "Scale width";
+        Text[ polish ] = "Sk~aluj szeroko��";
+        Text[ portuguese_brazilian ] = "E~scalonar largura";
         Text[ japanese ] = "幅の倍率(~W)";
         Text[ korean ] = "너비 배율 조정(~W)";
         Text[ chinese_simplified ] = "宽度显示比例(~W)";
         Text[ chinese_traditional ] = "寬度顯示比例(~W)";
-        Text[ turkish ] = "Scale width";
+        Text[ turkish ] = "Geni�li�i �l�eklendir";
         Text[ arabic ] = "����� �����";
         Text[ catalan ] = "Amplada de l'escala";
         Text[ finnish ] = "Skaalaa ~leveys";
         Text[ thai ] = "สเกลความ~กว้าง";
+        Text[ czech ] = "Zvětšit na šířku";
+        Text[ hebrew ] = "‮רוחב יחסי‬";
+        Text[ hindi ] = "~चौड़ाई स्केल करो";
     };
     MetricField MF_SCALE_WIDTH
     {
@@ -3977,17 +4411,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Spaziatura";
         Text[ danish ] = "Afstand";
         Text[ swedish ] = "Avst�nd";
-        Text[ polish ] = "Odst�py";
-        Text[ portuguese_brazilian ] = "Spacing";
+        Text[ polish ] = "Odst�p";
+        Text[ portuguese_brazilian ] = "Afastamento";
         Text[ japanese ] = "文字間隔";
         Text[ korean ] = "자간";
         Text[ chinese_simplified ] = "间隔";
         Text[ chinese_traditional ] = "間隔";
-        Text[ turkish ] = "Spacing";
+        Text[ turkish ] = "Aral�k";
         Text[ arabic ] = "����� ������";
         Text[ catalan ] = "Espaiat";
         Text[ finnish ] = "V�lit";
         Text[ thai ] = "ระยะห่าง";
+        Text[ czech ] = "Rozestup";
+        Text[ hebrew ] = "‮ריווח‬";
+        Text[ hindi ] = "अंतर देना";
     };
     ListBox LB_KERNING2
     {
@@ -4070,14 +4507,14 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         StringList [ polish ] =
         {
             < "Domy�lnie" ; Default ; > ;
-            < "Szerokie" ; Default ; > ;
-            < "W�skie" ; Default ; > ;
+            < "Rozszerzone" ; Default ; > ;
+            < "�cie�nione" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Padr?o" ; Default ; > ;
-            < "Gesperrt" ; Default ; > ;
-            < "Schmal" ; Default ; > ;
+            < "Padr�o" ; Default ; > ;
+            < "Expandido" ; Default ; > ;
+            < "Condensado" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -4105,9 +4542,9 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         };
         StringList [ turkish ] =
         {
-            < "Standart" ; Default ; > ;
-            < "Aral��� b�y�t" ; Default ; > ;
-            < "Aral��� k���lt" ; Default ; > ;
+            < "�ntan�ml�" ; Default ; > ;
+            < "Geni�letilmi�" ; Default ; > ;
+            < "K�salt�lm��" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -4133,6 +4570,24 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         < "ขยาย" ; Default ; > ;
         < "ย่อ" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Výchozí" ; Default ; > ;
+        < "Rozšířené" ; Default ; > ;
+        < "Zúžené" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮ברירת מגדל‬" ; Default ; > ;
+        < "‮מורחב‬" ; Default ; > ;
+        < "‮מרובז‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "अनुपस्थिति" ; Default ; > ;
+        < "विस्तृत" ; Default ; > ;
+        < "संक्षिप्त" ; Default ; > ;
+    };
     };
     FixedText FT_KERNING2
     {
@@ -4151,17 +4606,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "per";
         Text[ danish ] = "~p�";
         Text[ swedish ] = "~med";
-        Text[ polish ] = "o";
-        Text[ portuguese_brazilian ] = "by";
+        Text[ polish ] = "~o";
+        Text[ portuguese_brazilian ] = "~de";
         Text[ japanese ] = "間隔(~Y)";
         Text[ korean ] = "간격(~Y)";
         Text[ chinese_simplified ] = "间隔(~Y)";
         Text[ chinese_traditional ] = "間隔(~Y)";
-        Text[ turkish ] = "by";
+        Text[ turkish ] = "taraf�ndan";
         Text[ arabic ] = "������";
         Text[ catalan ] = "per";
         Text[ finnish ] = "~et�isyys";
         Text[ thai ] = "โด~ย";
+        Text[ czech ] = "o";
+        Text[ hebrew ] = "‮ב‬";
+        Text[ hindi ] = "~से";
     };
     MetricField ED_KERNING2
     {
@@ -4193,17 +4651,20 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ italian ] = "Crenatura caratteri a coppia";
         Text[ danish ] = "Par~vis knibning";
         Text[ swedish ] = "~Parvis kerning";
-        Text[ polish ] = "Kerning w parze";
-        Text[ portuguese_brazilian ] = "~Pair kerning";
+        Text[ polish ] = "~Kerning";
+        Text[ portuguese_brazilian ] = "~Kerning de pares";
         Text[ japanese ] = "文字組みのカーニング(~P)";
         Text[ korean ] = "글꼴 커닝(~P)";
         Text[ chinese_simplified ] = "字母间隔相等(~P)";
         Text[ chinese_traditional ] = "字母間隔相等(~P)";
-        Text[ turkish ] = "~Pair kerning";
+        Text[ turkish ] = "~Aral�k azaltma";
         Text[ arabic ] = "����� ���� ����";
         Text[ catalan ] = "Interlletratge ~parell";
         Text[ finnish ] = "~Pariv�listys";
         Text[ thai ] = "ปรับระยะห่าง~คู่";
+        Text[ czech ] = "Kerning párů";
+        Text[ hebrew ] = "~Paarweises Kerning";
+        Text[ hindi ] = "~युगल कर्निन्ग";
     };
     Window WIN_POS_PREVIEW
     {
@@ -4222,16 +4683,19 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Exempel";
         Text[ polish ] = "Przyk�ad";
-        Text[ portuguese_brazilian ] = "Example";
+        Text[ portuguese_brazilian ] = "Exemplo";
         Text[ japanese ] = "例";
         Text[ korean ] = "예";
         Text[ chinese_simplified ] = "示例";
         Text[ chinese_traditional ] = "示例";
-        Text[ turkish ] = "Example";
+        Text[ turkish ] = "�rnek";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Exemple";
         Text[ finnish ] = "Esimerkki";
         Text[ thai ] = "ตัวอย่าง";
+        Text[ czech ] = "Příklad";
+        Text[ hebrew ] = "Beispiel";
+        Text[ hindi ] = "उदाहरण";
     };
     FixedText FT_POS_FONTTYPE
     {
@@ -4261,17 +4725,20 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ italian ] = "Due righe";
         Text[ danish ] = "Dobbeltlinjet";
         Text[ swedish ] = "Dubbla rader";
-        Text[ polish ] = "Dwa wiersze";
-        Text[ portuguese_brazilian ] = "Two lines";
+        Text[ polish ] = "Podw�jne wiersze";
+        Text[ portuguese_brazilian ] = "Linhas duplas";
         Text[ japanese ] = "2行使い";
-        Text[ korean ] = "2줄";
+        Text[ korean ] = "두줄 쓰기";
         Text[ chinese_simplified ] = "双行";
         Text[ chinese_traditional ] = "雙行";
-        Text[ turkish ] = "Two lines";
+        Text[ turkish ] = "�ift �izgili";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Doble";
         Text[ finnish ] = "Kaksoisviiva";
         Text[ thai ] = "บรรทัดคู่";
+        Text[ czech ] = "Dvouřádkové";
+        Text[ hebrew ] = "Doppelzeilig";
+        Text[ hindi ] = "द्विगुणित रेखा";
     };
     CheckBox CB_TWOLINES
     {
@@ -4290,17 +4757,20 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ italian ] = "Scrivi due rig~he per riga";
         Text[ danish ] = "Skriv ~dobbeltlinjet";
         Text[ swedish ] = "Skriv p� ~dubbla rader";
-        Text[ polish ] = "Pisz w dw�ch wierszach";
-        Text[ portuguese_brazilian ] = "Two lines each line";
+        Text[ polish ] = "~Pisz w dw�ch wierszach";
+        Text[ portuguese_brazilian ] = "E~screver em linhas duplas";
         Text[ japanese ] = "1行を2行使いにする(~W)";
         Text[ korean ] = "두 줄을 한 줄 높이로 쓰기(~W)";
         Text[ chinese_simplified ] = "用一行的空间输入两行字(~W)";
         Text[ chinese_traditional ] = "用一行的空間輸入兩行字(~W)";
-        Text[ turkish ] = "Two lines each line";
+        Text[ turkish ] = "�ift �izginin i�ine yaz";
         Text[ arabic ] = "������� �� �����";
         Text[ catalan ] = "Dos l�nies per rengla";
         Text[ finnish ] = "K�yt� ~kaksoisviivoja";
         Text[ thai ] = "เ~ขียนในบรรทัดคู่";
+        Text[ czech ] = "Psát ve dvojitých řádcích";
+        Text[ hebrew ] = "~Doppelzeilig schreiben";
+        Text[ hindi ] = "द्विगुणित रेखाओं में ~लिखो";
     };
     FixedLine FL_ENCLOSE
     {
@@ -4317,17 +4787,20 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ italian ] = "Carattere di inclusione";
         Text[ danish ] = "Indramningstegn";
         Text[ swedish ] = "Inneslutande tecken";
-        Text[ polish ] = "Znaki wiod�ce i ko�cowe";
-        Text[ portuguese_brazilian ] = "Enclose character";
+        Text[ polish ] = "Znak otaczaj�cy";
+        Text[ portuguese_brazilian ] = "Caracter de delimita��o";
         Text[ japanese ] = "かっこ記号";
-        Text[ korean ] = "원문자";
+        Text[ korean ] = "기호 및 문자 넣기";
         Text[ chinese_simplified ] = "带括号的字符";
         Text[ chinese_traditional ] = "帶括號的字元";
-        Text[ turkish ] = "Enclose character";
+        Text[ turkish ] = "�evreleyen karakter";
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Car�cters d'inclusi�";
         Text[ finnish ] = "Ymp�r�iv� merkki";
         Text[ thai ] = "ตัวอักขระที่ล้อมรอบ";
+        Text[ czech ] = "Znak okolo";
+        Text[ hebrew ] = "Einschließende Zeichen";
+        Text[ hindi ] = "घिरा हुआ अक्षर";
     };
     FixedText FT_STARTBRACKET
     {
@@ -4344,17 +4817,20 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ italian ] = "Carattere ini~ziale";
         Text[ danish ] = "Startteg~n";
         Text[ swedish ] = "I~nledande tecken";
-        Text[ polish ] = "Znak wiod�cy";
-        Text[ portuguese_brazilian ] = "Beginning character";
+        Text[ polish ] = "~Znak wiod�cy";
+        Text[ portuguese_brazilian ] = "Caracter i~nicial";
         Text[ japanese ] = "開く記号(~N)";
         Text[ korean ] = "시작 문자(~N)";
         Text[ chinese_simplified ] = "开始字符(~N)";
         Text[ chinese_traditional ] = "起始字元(~N)";
-        Text[ turkish ] = "Beginning character";
+        Text[ turkish ] = "�lk karakter";
         Text[ arabic ] = "��� � �����";
         Text[ catalan ] = "Car�cter inicial";
         Text[ finnish ] = "En~simm�inen merkki";
         Text[ thai ] = "ตัวอักขระแ~รก";
+        Text[ czech ] = "Úvodní znak";
+        Text[ hebrew ] = "A~nfangszeichen";
+        Text[ hindi ] = "प्रा~रंभ का अक्षर";
     };
     ListBox ED_STARTBRACKET
     {
@@ -4477,16 +4953,16 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
             < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
             < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
             < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-            < "Dodatkowe znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "Inne znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
+            < "(Nenhum)" ; CHRDLG_ENCLOSE_NONE ; > ;
             < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
             < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
             < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
             < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "Outros Caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
         StringList [ japanese ] =
         {
@@ -4526,12 +5002,12 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         };
         StringList [ turkish ] =
         {
-            < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
+            < "(Yok)" ; CHRDLG_ENCLOSE_NONE ; > ;
             < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
             < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
             < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
             < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "Di�er Karakterler..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
         StringList [ arabic ] =
         {
@@ -4563,6 +5039,38 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     StringList [ thai ] =
     {
          < "(ไม่มี)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "ตัวอักขระอื่น ๆ..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+    StringList [ czech ] =
+    {
+         < "(Nic)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Jiné znaky..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮(ללא)‬" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "(कोई नहीं)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "अन्य अक्षरें..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     };
     FixedText FT_ENDBRACKET
@@ -4580,17 +5088,20 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ italian ] = "~Ultimo carattere";
         Text[ danish ] = "~Sluttegn";
         Text[ swedish ] = "Slutt~ecken";
-        Text[ polish ] = "Znak ko�cowy";
-        Text[ portuguese_brazilian ] = "End character";
+        Text[ polish ] = "Znak ~ko�cowy";
+        Text[ portuguese_brazilian ] = "Caract~er final";
         Text[ japanese ] = "閉じる記号(~E)";
         Text[ korean ] = "마지막 문자(~E)";
         Text[ chinese_simplified ] = "结尾字符(~E)";
         Text[ chinese_traditional ] = "結尾字元(~E)";
-        Text[ turkish ] = "End character";
+        Text[ turkish ] = "Son Karakter";
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Car�cter final";
         Text[ finnish ] = "Viimeinen merk~ki";
         Text[ thai ] = "ตัวอัก~ขระสุดท้าย";
+        Text[ czech ] = "Koncový znak";
+        Text[ hebrew ] = "~Endzeichen";
+        Text[ hindi ] = "अंतिम अक्ष~र";
     };
     ListBox ED_ENDBRACKET
     {
@@ -4713,16 +5224,16 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
             < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
             < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
             < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-            < "Dodatkowe znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "Inne znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
+            < "(Nenhum)" ; CHRDLG_ENCLOSE_NONE ; > ;
             < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
             < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
             < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
             < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "Outros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
         StringList [ japanese ] =
         {
@@ -4762,12 +5273,12 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         };
         StringList [ turkish ] =
         {
-            < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
+            < "(Yok)" ; CHRDLG_ENCLOSE_NONE ; > ;
             < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
             < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
             < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
             < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "Di�er Karakterler..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
         StringList [ arabic ] =
         {
@@ -4799,6 +5310,38 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     StringList [ thai ] =
     {
          < "(ไม่มี)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "ตัวอักขระอื่น ๆ..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+    StringList [ czech ] =
+    {
+         < "(Nic)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Jiné znaky..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮(ללא)‬" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "(कोई नहीं)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "अन्य अक्षरें..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     };
     Window WIN_TWOLINES_PREVIEW
@@ -4818,16 +5361,19 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Exempel";
         Text[ polish ] = "Przyk�ad";
-        Text[ portuguese_brazilian ] = "Example";
+        Text[ portuguese_brazilian ] = "Exemplo";
         Text[ japanese ] = "例";
         Text[ korean ] = "예";
         Text[ chinese_simplified ] = "示例";
         Text[ chinese_traditional ] = "示例";
-        Text[ turkish ] = "Example";
+        Text[ turkish ] = "�rnek";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Exemple";
         Text[ finnish ] = "Esimerkki";
         Text[ thai ] = "ตัวอย่าง";
+        Text[ czech ] = "Příklad";
+        Text[ hebrew ] = "Beispiel";
+        Text[ hindi ] = "उदाहरण";
     };
     FixedText FT_TWOLINES_FONTTYPE
     {
@@ -4839,6 +5385,71 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
