@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 12:43:12 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ namespace dbp
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("Command"), makeAny(::rtl::OUString(m_aTable.GetSelectEntry())));
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("CommandType"), makeAny((sal_Int32)CommandType::TABLE));
 
-            setFormConnection(xOldConn);
+            setFormConnection( xOldConn, sal_False );
 
             if (!updateContext())
                 return sal_False;
@@ -291,7 +291,7 @@ namespace dbp
                         aTableNames = xTables->getElementNames();
                 }
 
-                setFormConnection(xConn);
+                setFormConnection( xConn );
             }
         }
         catch(SQLContext& e) { aSQLException <<= e; }
@@ -446,6 +446,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/03 12:43:12  fs
+ *  #85223# share the connection with the wizard as a whole
+ *
  *  Revision 1.3  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *
