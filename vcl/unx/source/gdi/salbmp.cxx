@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:58:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <prex.h>
 #include <postx.h>
 #include <salunx.h>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
 #endif
@@ -394,14 +397,14 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, long nDepth, const
 
                 case( 16 ):
                 {
-                    #ifdef __BIGENDIAN
+                    #ifdef OSL_BIGENDIAN
 
                     if( MSBFirst == pImage->byte_order )
                         nDstFormat |= BMP_FORMAT_16BIT_TC_MSB_MASK;
                     else
                         nDstFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
 
-                    #else /* __LITTLEENDIAN */
+                    #else /* OSL_LITENDIAN */
 
                     nDstFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
                     if( MSBFirst == pImage->byte_order )
