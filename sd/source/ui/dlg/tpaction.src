@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:06:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ TabPage TP_ANIMATION
         Text[ english_us ] = "Animation";
         Text[ portuguese ] = "Animaηγo";
         Text[ russian ] = "ΐνθμΰφθÿ";
-        Text[ greek ] = "Εφέ κίνησης";
+        Text[ greek ] = "Κίνηση";
         Text[ dutch ] = "Animatie";
         Text[ french ] = "Animation";
         Text[ spanish ] = "Animaciσn";
@@ -211,7 +211,7 @@ TabPage TP_ANIMATION
         Text[ english_us ] = "Speed";
         Text[ portuguese ] = "Velocidade";
         Text[ russian ] = "Ρκξπξρςό";
-        Text[ greek ] = "Speed";
+        Text[ greek ] = "Ταχύτητα";
         Text[ dutch ] = "Speed";
         Text[ french ] = "Vitesse";
         Text[ spanish ] = "Velocidad";
@@ -259,7 +259,7 @@ TabPage TP_ANIMATION
         Text[ japanese ] = "γ‚†γ£γγ‚(~S)";
         Text[ chinese_traditional ] = "ζ…Άι€(~S)";
         Text[ arabic ] = "ΘΨνΑ";
-        Text[ greek ] = "Αργά";
+        Text[ greek ] = "~Αργή";
         Text[ korean ] = "μ²μ²ν(~S)";
         Text[ turkish ] = "~Yavaώ";
         Text[ language_user1 ] = " ";
@@ -295,7 +295,7 @@ TabPage TP_ANIMATION
         Text[ japanese ] = "ζ™®ι€(~M)";
         Text[ chinese_traditional ] = "δΈ­ι€(~M)";
         Text[ arabic ] = "γΚζΣΨ";
-        Text[ greek ] = "Μεσαίο";
+        Text[ greek ] = "~Μέση";
         Text[ korean ] = "λ³΄ν†µ(~M)";
         Text[ turkish ] = "~Orta";
         Text[ language_user1 ] = " ";
@@ -331,7 +331,7 @@ TabPage TP_ANIMATION
         Text[ japanese ] = "ι€γ(~F)";
         Text[ chinese_traditional ] = "εΏ«ι€(~F)";
         Text[ arabic ] = "ΣΡνΪ";
-        Text[ greek ] = "Γρήγορα";
+        Text[ greek ] = "~Γρήγορη";
         Text[ korean ] = "λΉ λ¥΄κ²(~F)";
         Text[ turkish ] = "~Hύzlύ";
         Text[ language_user1 ] = " ";
@@ -355,7 +355,7 @@ TabPage TP_ANIMATION
         Text[ english_us ] = "Fade with sound";
         Text[ portuguese ] = "Ocultar com som";
         Text[ russian ] = "Οπÿςΰςό ρξ ηβσκξμ";
-        Text[ greek ] = "Vanish with sound";
+        Text[ greek ] = "Αποχρωματισμός με ήχο";
         Text[ dutch ] = "Met geluid verbergen";
         Text[ french ] = "Masquer avec son";
         Text[ spanish ] = "Ocultar con sonido";
@@ -411,7 +411,7 @@ TabPage TP_ANIMATION
         Text[ japanese ] = "ζ¤η΄Ά(~B)...";
         Text[ chinese_traditional ] = "η€θ¦½(~B)...";
         Text[ arabic ] = "ΗΣΚΪΡΗΦ...";
-        Text[ greek ] = "Αναζήτηση...";
+        Text[ greek ] = "~Αναζήτηση...";
         Text[ korean ] = "μ°Ύμ•„λ³΄κΈ°(~B)...";
         Text[ turkish ] = "~Gφzat...";
         Text[ language_user1 ] = " ";
@@ -446,7 +446,7 @@ TabPage TP_ANIMATION
         Text[ japanese ] = "γ‚µγ‚¦γƒ³γƒ‰γ‚’ε…¨ιƒ¨ε†η”(~P)";
         Text[ chinese_traditional ] = "ε®ζ•΄ε°ζ’­ζ”Ύθ²ι³(~P)";
         Text[ arabic ] = "ΚΤΫνα ΗαΥζΚ ίΗγαΗπ";
-        Text[ greek ] = "Πλήρης εκτέλεση ήχου";
+        Text[ greek ] = "~Πλήρης εκτέλεση";
         Text[ korean ] = "μ‚¬μ΄λ“ μ™„λ²½ν•κ² μ¬μƒ(~P)";
         Text[ turkish ] = "~Tam ekran";
         Text[ language_user1 ] = " ";
@@ -554,7 +554,7 @@ TabPage TP_ANIMATION
         Text[ japanese ] = "ζ¤η΄Ά(~F)";
         Text[ chinese_traditional ] = "ε°‹ζ‰Ύ(~F)";
         Text[ arabic ] = "ΘΝΛ";
-        Text[ greek ] = "Aναζήτηση";
+        Text[ greek ] = "~Εύρεση";
         Text[ korean ] = "μ°ΎκΈ°(~F)";
         Text[ turkish ] = "~Bul";
         Text[ language_user1 ] = " ";
@@ -605,6 +605,7 @@ TabPage TP_ANIMATION
     Text[ hindi ] = "ΰ¤ªΰ¤°ΰ¤Έΰ¥ΰ¤ªΰ¤° ΰ¤Έΰ¤®ΰ¥ΰ¤¬ΰ¤¨ΰ¥ΰ¤§ ΰ¤•ΰ¤Ύ ΰ¤•ΰ¤Ύΰ¤°ΰ¥ΰ¤―";
     Text[ slovak ] = "Interakcia";
 };
+
 
 
 
