@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:34 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
+#endif
+#ifndef SC_XLFORMULA_HXX
+#include "xlformula.hxx"
 #endif
 
 using ::rtl::OUString;
@@ -462,6 +465,29 @@ void XclExpLabelranges::WriteBody( XclExpStream& rStrm )
 
 // Validation =================================================================
 
+/** Writes a formula for the DV record. */
+void lcl_xecontent_WriteDvFormula( XclExpStream& rStrm, const ExcUPN* pXclTokArr )
+{
+    sal_uInt16 nSize = pXclTokArr ? pXclTokArr->GetLen() : 0;
+    const sal_Char* pData = pXclTokArr ? pXclTokArr->GetData() : NULL;
+
+    rStrm << nSize << sal_uInt16( 0 );
+    rStrm.Write( pData, nSize );
+}
+
+/** Writes a formula for the DV record, based on a single string. */
+void lcl_xecontent_WriteDvFormula( XclExpStream& rStrm, const XclExpString& rString )
+{
+    // fake a formula with a single tStr token
+    rStrm   << static_cast< sal_uInt16 >( rString.GetSize() + 1 )
+            << sal_uInt16( 0 )
+            << sal_uInt8( 0x17 )    // TODO: define tStr
+            << rString;
+}
+
+
+// ----------------------------------------------------------------------------
+
 XclExpDv::XclExpDv( const XclExpRoot& rRoot, sal_uInt32 nHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
@@ -484,31 +510,30 @@ bool XclExpDv::CheckWriteRecord()
 void XclExpDv::WriteBody( XclExpStream& rStrm )
 {
     DBG_ASSERT( mpValData, "XclExpDv::WriteBody - missing core data" );
+    if( !mpValData ) return;
 
+    // prompt box - empty string represented by single NUL character
     String aTitle, aText;
-
-    // prompt box
     bool bShowPrompt = (mpValData->GetInput( aTitle, aText ) == TRUE);
     XclExpString aPromptTitle( aTitle );
-    // empty strings are not empty but contain a zero character (why not)
     if( !aTitle.Len() )
-        aPromptTitle.Assign( 0, EXC_STR_KEEPZEROCHARS );
+        aPromptTitle.Assign( '\0' );
     XclExpString aPromptText( aText );
     if( !aText.Len() )
-        aPromptText.Assign( 0, EXC_STR_KEEPZEROCHARS );
+        aPromptText.Assign( '\0' );
 
-    // error box
+    // error box - empty string represented by single NUL character
     ScValidErrorStyle eScErrorStyle;
     bool bShowError = (mpValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == TRUE);
     XclExpString aErrorTitle( aTitle );
     if( !aTitle.Len() )
-        aErrorTitle.Assign( 0, EXC_STR_KEEPZEROCHARS );
+        aErrorTitle.Assign( '\0' );
     XclExpString aErrorText( aText );
     if( !aText.Len() )
-        aErrorText.Assign( 0, EXC_STR_KEEPZEROCHARS );
+        aErrorText.Assign( '\0' );
 
     // flags
-    sal_uInt32 nFlags = EXC_DV_SUPPRESSDROPDOWN;
+    sal_uInt32 nFlags = 0;
     switch( mpValData->GetDataMode() )
     {
         case SC_VALID_ANY:      nFlags |= EXC_DV_MODE_ANY;      break;
@@ -544,38 +569,92 @@ void XclExpDv::WriteBody( XclExpStream& rStrm )
     }
     if( mpValData->IsIgnoreBlank() )
         nFlags |= EXC_DV_IGNOREBLANK;
+    if( mpValData->GetListType() == ValidListType::INVISIBLE )
+        nFlags |= EXC_DV_SUPPRESSDROPDOWN;
     if( bShowPrompt )
         nFlags |= EXC_DV_SHOWPROMPT;
     if( bShowError )
         nFlags |= EXC_DV_SHOWERROR;
 
     // formulas
-    ExcUPN* pFmlaUPN1 = NULL;
-    ExcUPN* pFmlaUPN2 = NULL;
-    ScTokenArray* pScTokenArr = NULL;
+    ::std::auto_ptr< ScTokenArray > pScTokArr;
     EC_Codetype eDummy;
 
-    pScTokenArr = mpValData->CreateTokenArry( 0 );
-    if( pScTokenArr )
-        pFmlaUPN1 = new ExcUPN( mpRD, *pScTokenArr, eDummy, NULL, true );
-    delete pScTokenArr;
+    // first formula
+    ::std::auto_ptr< ExcUPN > pXclTokArr1;
+    ::std::auto_ptr< XclExpString > pXclString;
+    pScTokArr.reset( mpValData->CreateTokenArry( 0 ) );
+    if( pScTokArr.get() )
+    {
+        String aString;
+        if( (mpValData->GetDataMode() == SC_VALID_LIST) &&
+            XclTokenArrayHelper::GetStringList( aString, *pScTokArr, '\n' ) )
+        {
+            /*  Formula is a list of string tokens -> build the Excel string.
+                Data validity is BIFF8 only (important for the XclExpString object).
+                Excel uses the NUL character as string list separator. */
+            pXclString.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
+            xub_StrLen nTokenCnt = aString.GetTokenCount( '\n' );
+            xub_StrLen nStringIx = 0;
+            for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+            {
+                String aToken( aString.GetToken( 0, '\n', nStringIx ) );
+                if( nToken > 0 )
+                    pXclString->Append( '\0' );
+                pXclString->Append( aToken );
+            }
+            nFlags |= EXC_DV_STRINGLIST;
+        }
+        else
+        {
+            // no list validation -> convert the formula
+            pXclTokArr1.reset( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, true ) );
+        }
 
-    pScTokenArr = mpValData->CreateTokenArry( 1 );
-    if( pScTokenArr )
-        pFmlaUPN2 = new ExcUPN( mpRD, *pScTokenArr, eDummy, NULL, true );
-    delete pScTokenArr;
+        /*  All formulas are stored like conditional formatting formulas (with
+            tRefN/tAreaN tokens as value or array class). But NOT the cell references
+            and defined names in list validation - they are stored as reference class
+            tokens... Example:
+            1) Cell must be equal to A1 -> formula is =A1 -> writes tRefNV token
+            2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
 
-    sal_uInt16 nFmlaLen1 = pFmlaUPN1 ? pFmlaUPN1->GetLen() : 0;
-    const sal_Char* pFmlaData1 = nFmlaLen1 ? pFmlaUPN1->GetData() : NULL;
-    sal_uInt16 nFmlaLen2 = pFmlaUPN2 ? pFmlaUPN2->GetLen() : 0;
-    const sal_Char* pFmlaData2 = nFmlaLen2 ? pFmlaUPN2->GetData() : NULL;
+            Following a VERY dirty hack that looks into the Excel token array. If there
+            is a leading tRefN*, tAreaN*, or tName* token, it is converted to reference
+            class. This is because the formula compiler is already too obscure, so
+            adding this special case will surely break anything else there.
+            TODO: Remove this mess when the formula compiler is cleaned up! */
+        if( (mpValData->GetDataMode() == SC_VALID_LIST) && pXclTokArr1.get() )
+        {
+            sal_Char* pData = const_cast< sal_Char* >( pXclTokArr1->GetData() );
+            if( pData && pXclTokArr1->GetLen() )
+            {
+                if( (*pData == 0x43) || (*pData == 0x63) ||     // tNameV, tNameA
+                    (*pData == 0x4C) || (*pData == 0x6C) ||     // tRefNV, tRefNA
+                    (*pData == 0x4D) || (*pData == 0x6D) )      // tAreaNV, tAreaNA
+                    // remove any token class and add reference token class
+                    (*pData &= 0x1F) |= 0x20;
+            }
+        }
+    }
 
-    // write it
+    // second formula
+    ::std::auto_ptr< ExcUPN > pXclTokArr2;
+    pScTokArr.reset( mpValData->CreateTokenArry( 1 ) );
+    if( pScTokArr.get() )
+    {
+        EC_Codetype eDummy;
+        pXclTokArr2.reset( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, true ) );
+    }
+
+    // export the record
     rStrm << nFlags << aPromptTitle << aErrorTitle << aPromptText << aErrorText;
-    rStrm << nFmlaLen1 << static_cast< sal_uInt16 >( 0 );
-    rStrm.Write( pFmlaData1, nFmlaLen1 );
-    rStrm << nFmlaLen2 << static_cast< sal_uInt16 >( 0 );
-    rStrm.Write( pFmlaData2, nFmlaLen2 );
+
+    if( pXclString.get() )
+        lcl_xecontent_WriteDvFormula( rStrm, *pXclString );
+    else
+        lcl_xecontent_WriteDvFormula( rStrm, pXclTokArr1.get() );
+    lcl_xecontent_WriteDvFormula( rStrm, pXclTokArr2.get() );
+
     rStrm << maRanges;
 }
 
@@ -687,7 +766,7 @@ XclExpWebQuery::XclExpWebQuery(
         mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
         bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
         if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
-            ScfTools::AddToken( aNewTables, aAppendTable, ',' );
+            ScGlobal::AddToken( aNewTables, aAppendTable, ',' );
     }
 
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found
