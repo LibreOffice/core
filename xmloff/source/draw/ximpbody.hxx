@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 class SdXMLDrawPageContext : public SdXMLGenericPageContext
 {
     rtl::OUString               maName;
-    rtl::OUString               maStyleName;
     rtl::OUString               maMasterPageName;
+    rtl::OUString               maStyleName;
     rtl::OUString               maHREF;
 
 public:
