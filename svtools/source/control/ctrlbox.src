@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:59:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ hebrew ] = "‮אוטומטי‬";
     Text[ hindi ] = "स्वचालित";
     Text[ slovak ] = "Automaticky";
+    Text[ hungarian ] = "Automatikus";
+    Text[ slovenian ] = "Samodejno";
 };
 
 /*
@@ -166,6 +168,8 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ hebrew ] = "‮אלפאנומרי‬";
     Text[ hindi ] = "आल्फ़ान्युमरिक";
     Text[ slovak ] = "Alfanumerický";
+    Text[ hungarian ] = "Alfanumerikus";
+    Text[ slovenian ] = "Alfanumerično";
 };
 
 String STR_SVT_COLLATE_NORMAL
@@ -198,6 +202,8 @@ String STR_SVT_COLLATE_NORMAL
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "Normal";
     Text[ slovak ] = "Normálne";
+    Text[ hungarian ] = "Normál";
+    Text[ slovenian ] = "Navadno";
 };
 
 String STR_SVT_COLLATE_CHARSET
@@ -230,6 +236,8 @@ String STR_SVT_COLLATE_CHARSET
     Text[ hebrew ] = "‮קבוצת אותיות‬";
     Text[ hindi ] = "अक्षर समूह";
     Text[ slovak ] = "Znaková sada";
+    Text[ hungarian ] = "Karakterkészlet";
+    Text[ slovenian ] = "Nabor znakov";
 };
 
 String STR_SVT_COLLATE_DICTIONARY
@@ -262,6 +270,8 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ hebrew ] = "‮מילון‬";
     Text[ hindi ] = "Dictionary";
     Text[ slovak ] = "Slovník";
+    Text[ hungarian ] = "Szótár";
+    Text[ slovenian ] = "Slovar";
 };
 
 String STR_SVT_COLLATE_PINYIN
@@ -294,6 +304,8 @@ String STR_SVT_COLLATE_PINYIN
     Text[ hebrew ] = "Pinyin";
     Text[ hindi ] = "पिन्यिन";
     Text[ slovak ] = "Pinyin";
+    Text[ hungarian ] = "Pinyin";
+    Text[ slovenian ] = "Pindžin";
 };
 
 String STR_SVT_COLLATE_STROKE
@@ -309,7 +321,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ french ] = "Trait (stroke)";
     Text[ spanish ] = "Trazo";
     Text[ italian ] = "Stroke";
-    Text[ danish ] = "Stroke";
+    Text[ danish ] = "Str�g";
     Text[ swedish ] = "Stroke";
     Text[ polish ] = "Kreski (stroke)";
     Text[ portuguese_brazilian ] = "Tra�o";
@@ -326,6 +338,8 @@ String STR_SVT_COLLATE_STROKE
     Text[ hebrew ] = "Stroke";
     Text[ hindi ] = "स्ट्रोक";
     Text[ slovak ] = "Preškrtnúť";
+    Text[ hungarian ] = "Stroke";
+    Text[ slovenian ] = "Poteza";
 };
 
 String STR_SVT_COLLATE_RADICAL
@@ -358,6 +372,8 @@ String STR_SVT_COLLATE_RADICAL
     Text[ hebrew ] = "‮שורש‬";
     Text[ hindi ] = "Radical";
     Text[ slovak ] = "Radical";
+    Text[ hungarian ] = "Gyök";
+    Text[ slovenian ] = "Koren";
 };
 
 String STR_SVT_COLLATE_UNICODE
@@ -390,6 +406,8 @@ String STR_SVT_COLLATE_UNICODE
     Text[ hebrew ] = "‮יוניקוד‬";
     Text[ hindi ] = "यूनिकोड";
     Text[ slovak ] = "Unicode";
+    Text[ hungarian ] = "Unicode";
+    Text[ slovenian ] = "Unicode";
 };
 
 String STR_SVT_COLLATE_ZHUYIN
@@ -422,6 +440,8 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ hebrew ] = "Zhuyin";
     Text[ hindi ] = "ज़ुयिन";
     Text[ slovak ] = "Zhuyin";
+    Text[ hungarian ] = "Zhuyin";
+    Text[ slovenian ] = "Zhuyin";
 };
 
 String STR_SVT_COLLATE_PHONEBOOK
@@ -438,7 +458,7 @@ String STR_SVT_COLLATE_PHONEBOOK
     Text[ spanish ] = "List�n telef�nico";
     Text[ finnish ] = "Phone book";
     Text[ italian ] = "Elenco telefonico";
-    Text[ danish ] = "Phone book";
+    Text[ danish ] = "Telefonbog";
     Text[ swedish ] = "Telefonkatalog";
     Text[ polish ] = "Phone book";
     Text[ japanese ] = "電話帳";
@@ -454,6 +474,8 @@ String STR_SVT_COLLATE_PHONEBOOK
     Text[ thai ] = "Phone book";
     Text[ hindi ] = "Phone book";
     Text[ slovak ] = "Telefónny zoznam";
+    Text[ hungarian ] = "Telefonkönyv";
+    Text[ slovenian ] = "Telefonski imenik";
 };
 
 String STR_SVT_COLLATE_PHONETIC_F
@@ -468,7 +490,7 @@ String STR_SVT_COLLATE_PHONETIC_F
     Text[ spanish ] = "Fon�tico (alfanum�rico primero)";
     Text[ finnish ] = "Phonetic (alphanumeric first)";
     Text[ italian ] = "Fonetico (alfanumerico prima)";
-    Text[ danish ] = "Phonetic (alphanumeric first)";
+    Text[ danish ] = "Fonetisk (alfanumerisk f�rst)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst)";
     Text[ polish ] = "Phonetic (alphanumeric first)";
     Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos em primeiro)";
@@ -484,6 +506,8 @@ String STR_SVT_COLLATE_PHONETIC_F
     Text[ hebrew ] = "‮מיון פונטי - מספרים לפני אותיות‬";
     Text[ hindi ] = "Phonetic (alphanumeric first)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky prvé)";
+    Text[ hungarian ] = "Fonetikus (alfanumerikus először)";
+    Text[ slovenian ] = "Fonetično (najprej alfanumerično)";
 };
 
 String STR_SVT_COLLATE_PHONETIC_L
@@ -498,7 +522,7 @@ String STR_SVT_COLLATE_PHONETIC_L
     Text[ spanish ] = "Fon�tico (alfanum�rico por �ltimo)";
     Text[ finnish ] = "Phonetic (alphanumeric last)";
     Text[ italian ] = "Fonetico (alfanumerico ultimo)";
-    Text[ danish ] = "Phonetic (alphanumeric last)";
+    Text[ danish ] = "Fonetisk (alfanumerisk sidst)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist)";
     Text[ polish ] = "Phonetic (alphanumeric last)";
     Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos por �ltimo)";
@@ -514,6 +538,8 @@ String STR_SVT_COLLATE_PHONETIC_L
     Text[ hebrew ] = "‮מיון פונטי - מספרים אחרי אותיות‬";
     Text[ hindi ] = "Phonetic (alphanumeric last)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky posledné)";
+    Text[ hungarian ] = "Fonetikus (alfanumerikus utoljára)";
+    Text[ slovenian ] = "Fonetično (alfanumerično zadnje)";
 };
 
 String STR_SVT_INDEXENTRY_ALPHANUMERIC
@@ -545,6 +571,8 @@ String STR_SVT_INDEXENTRY_ALPHANUMERIC
     Text[ hebrew ] = "‮אלפאנומרי‬";
     Text[ hindi ] = "आल्फ़ान्युमरिक";
     Text[ slovak ] = "Alfanumerický";
+    Text[ hungarian ] = "Alfanumerikus";
+    Text[ slovenian ] = "Alfanumerično";
 };
 
 String STR_SVT_INDEXENTRY_DICTIONARY
@@ -576,6 +604,8 @@ String STR_SVT_INDEXENTRY_DICTIONARY
     Text[ hebrew ] = "‮מילון‬";
     Text[ hindi ] = "शब्दकोश";
     Text[ slovak ] = "Slovník";
+    Text[ hungarian ] = "Szótár";
+    Text[ slovenian ] = "Slovar";
 };
 
 String STR_SVT_INDEXENTRY_PINYIN
@@ -607,6 +637,8 @@ String STR_SVT_INDEXENTRY_PINYIN
     Text[ hebrew ] = "Pinyin";
     Text[ hindi ] = "पिन्यिन";
     Text[ slovak ] = "Pinyin";
+    Text[ hungarian ] = "Pinyin";
+    Text[ slovenian ] = "Pindžin";
 };
 
 String STR_SVT_INDEXENTRY_RADICAL
@@ -638,6 +670,8 @@ String STR_SVT_INDEXENTRY_RADICAL
     Text[ hebrew ] = "‮שורש‬";
     Text[ hindi ] = "Radical";
     Text[ slovak ] = "Radical";
+    Text[ hungarian ] = "Gyök";
+    Text[ slovenian ] = "Koren";
 };
 
 String STR_SVT_INDEXENTRY_STROKE
@@ -653,7 +687,7 @@ String STR_SVT_INDEXENTRY_STROKE
     Text[ spanish ] = "Trazo";
     Text[ finnish ] = "Viiva";
     Text[ italian ] = "Stroke";
-    Text[ danish ] = "Stroke";
+    Text[ danish ] = "Str�g";
     Text[ swedish ] = "Stroke";
     Text[ polish ] = "Kreski (stroke)";
     Text[ portuguese_brazilian ] = "Tra�o";
@@ -669,6 +703,8 @@ String STR_SVT_INDEXENTRY_STROKE
     Text[ hebrew ] = "Stroke";
     Text[ hindi ] = "स्ट्रोक";
     Text[ slovak ] = "Preškrtnúť";
+    Text[ hungarian ] = "Stroke";
+    Text[ slovenian ] = "Poteza";
 };
 
 String STR_SVT_INDEXENTRY_ZHUYIN
@@ -700,6 +736,8 @@ String STR_SVT_INDEXENTRY_ZHUYIN
     Text[ hebrew ] = "Zhuyin";
     Text[ hindi ] = "ज़ुयिन";
     Text[ slovak ] = "Zhuyin";
+    Text[ hungarian ] = "Zhuyin";
+    Text[ slovenian ] = "Zhuyin";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FS
@@ -714,7 +752,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_FS
     Text[ spanish ] = "Fon�tico (alfanum�rico primero, agrupado por s�labas)";
     Text[ finnish ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ italian ] = "Fonetico (alfanumerico prima ordinato per sillabe)";
-    Text[ danish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ danish ] = "Fonetisk (alfanumerisk f�rst, opdelt efter stavelser)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos em primeiro, agrupado por s�labas)";
@@ -730,6 +768,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_FS
     Text[ hebrew ] = "‮פונטית, אלפאנומרי ראשון, קיבוץ לפי הברות‬";
     Text[ hindi ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky prvé, zoskupené do slabík)";
+    Text[ hungarian ] = "Fonetikus (alfanumerikus először, szótagok szerint csoportosítva)";
+    Text[ slovenian ] = "Fonetično (najprej alfanumerično, razvrščeno po zlogih)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FC
@@ -744,7 +784,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_FC
     Text[ spanish ] = "Fon�tico (alfanum�rico primero, agrupado por consonantes)";
     Text[ finnish ] = "Phonetic (alphanumeric first, grouped by consonants)";
     Text[ italian ] = "Fonetico (alfanumerico prima, ordinato per consonanti)";
-    Text[ danish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ danish ] = "Fonetisk (alfanumerisk f�rst, opdelt efter konsonanter)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by consonants)";
     Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos em primeiro, agrupado por consoantes)";
@@ -760,6 +800,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_FC
     Text[ hebrew ] = "‮מיון פונטי - אלפאנומרי ראשון, קיבוץ לפי אותיות עיצורים‬";
     Text[ hindi ] = "Phonetic (alphanumeric first, grouped by consonants)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky prvé, zoskupené do konsonantov)";
+    Text[ hungarian ] = "Fonetikus (alfanumerikus először, mássalhangzók szerint csoportosítva)";
+    Text[ slovenian ] = "Fonetično (najprej alfanumerično, razvrščeno po soglasnikih)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LS
@@ -774,7 +816,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_LS
     Text[ spanish ] = "Fon�tico (alfanum�rico por �ltimo, agrupado por s�labas)";
     Text[ finnish ] = "Phonetic (alphanumeric last, grouped by syllables)";
     Text[ italian ] = "Fonetico (alfanumerico ultimo, ordinato per sillabe)";
-    Text[ danish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ danish ] = "Fonetisk (alfanumerisk sidst, opdelt efter stavelser)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by syllables)";
     Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos por �ltimo, agrupado por s�labas)";
@@ -790,6 +832,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_LS
     Text[ hebrew ] = "‮מיון פונטי - אלפאנומרי אחרון, קיבוץ לפי הברות‬";
     Text[ hindi ] = "Phonetic (alphanumeric last, grouped by syllables)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky posledné, zoskupené do slabík)";
+    Text[ hungarian ] = "Fonetikus (alfanumerikus utoljára, szótagok szerint csoportosítva)";
+    Text[ slovenian ] = "Fonetično (alfanumerično zadnje, razvrščeno po zlogih)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LC
@@ -804,7 +848,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ spanish ] = "Fon�tico (alfanum�rico por �ltimo, agrupado por consonantes)";
     Text[ finnish ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ italian ] = "Fonetico (alfanumerico ultimo, ordinato per consonanti)";
-    Text[ danish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ danish ] = "Fonetisk (alfanumerisk sidst, opdelt efter konsonanter)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos por �ltimo, agrupado por consoantes)";
@@ -820,7 +864,10 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ hebrew ] = "‮מיון פונטי - אלפאנומרי אחרון, קיבוץ לפי אותיות עיצורים‬";
     Text[ hindi ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky posledné, zoskupené do konsonantov)";
+    Text[ hungarian ] = "Fonetikus (alfanumerikus utoljára, mássalhangzók szerint csoportosítva)";
+    Text[ slovenian ] = "Fonetično (alfanumerično zadnje, razvrščeno po soglasnikih)";
 };
+
 
 
 
