@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:55:06 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ BOOL XDashList::Load()
         // check if file exists, SfxMedium shows an errorbox else
         {
             com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ, xHandler );
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
 
             sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
 
