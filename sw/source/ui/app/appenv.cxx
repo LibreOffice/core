@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-28 12:32:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <hintids.hxx>
 
 #include <sfx2/request.hxx>
+#include <svx/svxids.hrc>
 
 #include <svtools/svmedit.hxx>
 #ifndef _APP_HXX //autogen
@@ -113,9 +114,6 @@
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _SBASLTID_HRC //autogen
-#include <offmgr/sbasltid.hrc>
 #endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
