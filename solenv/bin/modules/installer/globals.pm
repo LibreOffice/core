@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-22 10:22:17 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:57:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ BEGIN
     @languageproducts = ();
     $build = "";
     $minor = "";
+    $lastminor = "";
     $compiler = "";
     $pro = 0;
     $dounzip = 1;
@@ -97,6 +98,8 @@ BEGIN
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
     $issolarisbuild = 0;
+    $issolarissparcbuild = 0;
+    $issolarisx86build = 0;
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
@@ -155,8 +158,12 @@ BEGIN
     $unomaxservices = 25;
     $javamaxservices = 1;
 
-    $one_cab_file  = 1;
-    $many_cab_files = 0;
+    $one_cab_file = 0;
+    $fix_number_of_cab_files = 1;
+    $cab_file_per_component = 0;
+    $cabfilecompressionlevel = 2;
+    $number_of_cabfiles = 3;    # only for $fix_number_of_cab_files = 1
+
     $updatepack = 0;
     $winshipdrive = "";
     $unixshipdrive = "";
@@ -167,6 +174,8 @@ BEGIN
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
     @selfreglibraries = ("shlxthdl.dll");               # to be removed after scp changes, see parameter.pm
     @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca");   # to be removed after scp changes, see parameter.pm
+
+    @removedirs = ();
 
     $plat = $^O;
 
