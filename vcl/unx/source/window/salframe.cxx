@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-12 09:08:20 $
+ *  last change: $Author: pl $ $Date: 2001-07-17 15:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,7 +1115,8 @@ void SalFrameData::SetSize( const Size &rSize )
     values.height   = rSize.Height();
     if (values.width > 0 && values.height > 0)
     {
-        XtResizeWidget( hShell_, rSize.Width(), rSize.Height(), 0 );
+        XResizeWindow( GetXDisplay(), GetShellWindow(), rSize.Width(), rSize.Height() );
+        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
         {
             Arg args[10];
@@ -1177,14 +1178,16 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     {
         Arg args[10];
         int n = 0;
+
         XtSetArg( args[n], XtNminWidth, values.width );     n++;
         XtSetArg( args[n], XtNminHeight, values.height );   n++;
         XtSetArg( args[n], XtNmaxWidth, values.width );     n++;
         XtSetArg( args[n], XtNmaxHeight, values.height );   n++;
         XtSetValues( hShell_, args, n );
     }
+    XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
+    XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
 
-    XtConfigureWidget( hShell_, values.x, values.y, values.width, values.height, 0 );
     if ( aPosSize_ != rPosSize )
     {
         aPosSize_ = rPosSize;
@@ -1352,7 +1355,7 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
 
     if( bFullScreen )
     {
-        GetPosSize( aRestoreFullScreen_ );
+        aRestoreFullScreen_ = aPosSize_;
 
         delete pFreeGraphics_;
         pFreeGraphics_ = NULL;
@@ -2776,6 +2779,26 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 if( pEvent->xmap.window == XtWindow( hShell_ ) ||
                     pEvent->xmap.window == XtWindow( hComposite_ ) )
                 {
+                    /*
+                     *  update position & size here
+                     *  WM may have moved/sized us
+                     */
+                    int x, y;
+                    unsigned int w, h, bw, d;
+                    XLIB_Window aRoot, aChild;
+                    XGetGeometry( GetXDisplay(), GetWindow(),
+                                  &aRoot,
+                                  &x, &y, &w, &h, &bw, &d );
+                    aPosSize_.SetSize( Size( w, h ) );
+                    if( XTranslateCoordinates( GetXDisplay(),
+                                               GetWindow(),
+                                               aRoot,
+                                               0, 0,
+                                               &x, &y, &aChild ) )
+                    {
+                        aPosSize_.Left() = x;
+                        aPosSize_.Top() = y;
+                    }
                     bMapped_   = TRUE;
                     bViewable_ = TRUE;
                     nRet = TRUE;
