@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 08:40:42 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETVIEW_HPP_
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XENHANCEDMOUSECLICKBROADCASTER_HPP_
+#include <com/sun/star/sheet/XEnhancedMouseClickBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XACTIVATIONBROADCASTER_HPP_
+#include <com/sun/star/sheet/XActivationBroadcaster.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_XVIEWPANE_HPP_
 #include <com/sun/star/sheet/XViewPane.hpp>
 #endif
@@ -134,6 +140,14 @@ SV_DECL_PTRARR_DEL( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPt
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertyChangeListener >* XViewPropertyChangeListenerPtr;
 SV_DECL_PTRARR_DEL( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr, 4, 4 );
+
+typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::awt::XEnhancedMouseClickHandler >* XMouseClickHandlerPtr;
+SV_DECL_PTRARR_DEL( XMouseClickHandlerArr_Impl, XMouseClickHandlerPtr, 4, 4 );
+
+typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::sheet::XActivationEventListener >* XActivationEventListenerPtr;
+SV_DECL_PTRARR_DEL( XActivationEventListenerArr_Impl, XActivationEventListenerPtr, 4, 4 );
 
 
 //  ScViewPaneBase not derived from OWeakObject
@@ -216,12 +230,13 @@ public:
     virtual void SAL_CALL   release() throw();
 };
 
-
 //  OWeakObject is base of SfxBaseController -> use ScViewPaneBase
 
 class ScTabViewObj : public ScViewPaneBase,
                      public SfxBaseController,
                      public com::sun::star::sheet::XSpreadsheetView,
+                     public com::sun::star::sheet::XEnhancedMouseClickBroadcaster,
+                     public com::sun::star::sheet::XActivationBroadcaster,
                      public com::sun::star::container::XEnumerationAccess,
                      public com::sun::star::container::XIndexAccess,
                      public com::sun::star::view::XSelectionSupplier,
@@ -237,6 +252,8 @@ private:
     XRangeSelectionListenerArr_Impl         aRangeSelListeners;
     XRangeSelectionChangeListenerArr_Impl   aRangeChgListeners;
     XViewPropertyChangeListenerArr_Impl     aPropertyChgListeners;
+    XMouseClickHandlerArr_Impl              aMouseClickHandlers;
+    XActivationEventListenerArr_Impl        aActivationListeners;
     sal_Bool                                bDrawSelModeSet;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
@@ -245,10 +262,18 @@ private:
     INT16                   GetZoomType(void) const;
     void                    SetZoomType(INT16 ZoomType);
 
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetClickedObject(const Point& rPoint) const;
+    void                    StartMouseListening();
+    void                    EndMouseListening();
+    void                    StartActivationListening();
+    void                    EndActivationListening();
+
 public:
                             ScTabViewObj();
                             ScTabViewObj(ScTabViewShell* pViewSh);
     virtual                 ~ScTabViewObj();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
@@ -258,6 +283,9 @@ public:
 
     void                    SelectionChanged();
     void                    VisAreaChanged();
+    sal_Bool                IsMouseListening() { return aMouseClickHandlers.Count() > 0; }
+    sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     void                    RangeSelDone( const String& rText );
     void                    RangeSelAborted( const String& rText );
@@ -341,6 +369,24 @@ public:
     virtual void SAL_CALL   setActiveSheet( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            //XEnhancedMouseClickBroadcaster
+
+    virtual void SAL_CALL addEnhancedMouseClickHandler( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XEnhancedMouseClickHandler >& aListener )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEnhancedMouseClickHandler( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XEnhancedMouseClickHandler >& aListener )
+                                    throw (::com::sun::star::uno::RuntimeException);
+
+                            //XActivationBroadcaster
+
+    virtual void SAL_CALL addActivationEventListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XActivationEventListener >& aListener )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeActivationEventListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XActivationEventListener >& aListener )
+                                    throw (::com::sun::star::uno::RuntimeException);
 
                             // XViewSplitable
     virtual sal_Bool SAL_CALL getIsWindowSplit() throw(::com::sun::star::uno::RuntimeException);
