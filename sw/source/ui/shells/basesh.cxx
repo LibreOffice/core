@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-31 06:02:00 $
+ *  last change: $Author: os $ $Date: 2001-08-09 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,8 +1070,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                                     : nSlot == FN_TOOL_ANKER_FRAME
                                         ? FLY_AT_FLY
                                         : nSlot == FN_TOOL_ANKER_CHAR
-                                            ? FLY_IN_CNTNT
-                                            : FLY_AUTO_CNTNT;
+                                            ? FLY_AUTO_CNTNT
+                                            : FLY_IN_CNTNT;
             rSh.StartUndo();
             if( rSh.IsObjSelected() )
                 rSh.ChgAnchor( eSet );
@@ -1563,8 +1563,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     bSet = (nWhich == FN_TOOL_ANKER_PAGE && eSet == FLY_PAGE) ||
                             (nWhich == FN_TOOL_ANKER_PARAGRAPH && eSet == FLY_AT_CNTNT) ||
                             (nWhich == FN_TOOL_ANKER_FRAME && eSet == FLY_AT_FLY) ||
-                            (nWhich == FN_TOOL_ANKER_AT_CHAR && eSet == FLY_AUTO_CNTNT) ||
-                            (nWhich == FN_TOOL_ANKER_CHAR && eSet == FLY_IN_CNTNT);
+                            (nWhich == FN_TOOL_ANKER_AT_CHAR && eSet == FLY_IN_CNTNT) ||
+                            (nWhich == FN_TOOL_ANKER_CHAR && eSet == FLY_AUTO_CNTNT);
                     if(nWhich != FN_TOOL_ANKER)
                     {
                         USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
