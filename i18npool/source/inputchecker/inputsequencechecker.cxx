@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputsequencechecker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:07:23 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
 {
-    serviceName = "com.sun.star.i18n.InputSequenceCheckerImpl";
-    cachedItem = NULL;
+        serviceName = "com.sun.star.i18n.InputSequenceCheckerImpl";
+        cachedItem = NULL;
 }
 
 InputSequenceCheckerImpl::InputSequenceCheckerImpl()
@@ -83,35 +83,35 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl()
 
 InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
-    // Clear lookuptable
-    for (cachedItem = (lookupTableItem*)lookupTable.First();
-            cachedItem; cachedItem = (lookupTableItem*)lookupTable.Next())
-        delete cachedItem;
-    lookupTable.Clear();
+        // Clear lookuptable
+        for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+            delete lookupTable[l];
+
+        lookupTable.clear();
 }
 
 sal_Bool SAL_CALL
 InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
-    sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException)
+        sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException)
 {
-    if (inputCheckMode == InputSequenceCheckMode::PASSTHROUGH)
-        return sal_True;
+        if (inputCheckMode == InputSequenceCheckMode::PASSTHROUGH)
+            return sal_True;
 
-    sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
+        sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
 
-    if (language)
-        return getInputSequenceChecker(language)->checkInputSequence(Text, nStartPos, inputChar, inputCheckMode);
-    else
-        return sal_True; // not a checkable languages.
+        if (language)
+            return getInputSequenceChecker(language)->checkInputSequence(Text, nStartPos, inputChar, inputCheckMode);
+        else
+            return sal_True; // not a checkable languages.
 }
 
 static ScriptTypeList typeList[] = {
-    //{ UnicodeScript_kHebrew,      UnicodeScript_kHebrew },    // 10,
-    //{ UnicodeScript_kArabic,      UnicodeScript_kArabic },    // 11,
-    //{ UnicodeScript_kDevanagari,      UnicodeScript_kDevanagari },    // 14,
-    { UnicodeScript_kThai,          UnicodeScript_kThai },      // 24,
+        //{ UnicodeScript_kHebrew,              UnicodeScript_kHebrew },        // 10,
+        //{ UnicodeScript_kArabic,              UnicodeScript_kArabic },        // 11,
+        //{ UnicodeScript_kDevanagari,          UnicodeScript_kDevanagari },    // 14,
+        { UnicodeScript_kThai,                  UnicodeScript_kThai },          // 24,
 
-    { UnicodeScript_kScriptCount,       UnicodeScript_kScriptCount }    // 88
+        { UnicodeScript_kScriptCount,           UnicodeScript_kScriptCount }    // 88
 };
 
 sal_Char* SAL_CALL
@@ -120,13 +120,13 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
     sal_Int16 type = unicode::getUnicodeScriptType( cChar, typeList, UnicodeScript_kScriptCount );
 
     if (type != UnicodeScript_kScriptCount &&
-        type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
-    switch(type) {
-        case UnicodeScript_kThai:       return "th";
-        //case UnicodeScript_kArabic:   return "ar";
-        //case UnicodeScript_kHebrew:   return "he";
-        //cace UnicodeScript_kDevanagari:   return "hi";
-    }
+            type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
+        switch(type) {
+            case UnicodeScript_kThai:           return "th";
+            //case UnicodeScript_kArabic:       return "ar";
+            //case UnicodeScript_kHebrew:       return "he";
+            //cace UnicodeScript_kDevanagari:   return "hi";
+        }
     }
     return NULL;
 }
@@ -134,51 +134,50 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
 Reference< XInputSequenceChecker >& SAL_CALL
 InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (RuntimeException)
 {
-    if (cachedItem && cachedItem->aLanguage == rLanguage) {
-        return cachedItem->xISC;
-    }
-    else if (xMSF.is()) {
-        for (cachedItem = (lookupTableItem*)lookupTable.First();
-            cachedItem; cachedItem = (lookupTableItem*)lookupTable.Next()) {
-        if (cachedItem->aLanguage == rLanguage) {
+        if (cachedItem && cachedItem->aLanguage == rLanguage) {
             return cachedItem->xISC;
         }
-        }
+        else if (xMSF.is()) {
+            for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+                cachedItem = lookupTable[l];
+                if (cachedItem->aLanguage == rLanguage)
+                    return cachedItem->xISC;
+            }
 
-        Reference < uno::XInterface > xI = xMSF->createInstance(
-            OUString::createFromAscii("com.sun.star.i18n.InputSequenceChecker_") +
-            OUString::createFromAscii(rLanguage));
+            Reference < uno::XInterface > xI = xMSF->createInstance(
+                        OUString::createFromAscii("com.sun.star.i18n.InputSequenceChecker_") +
+                        OUString::createFromAscii(rLanguage));
 
-        if ( xI.is() ) {
-        Reference< XInputSequenceChecker > xISC;
-        xI->queryInterface( getCppuType((const Reference< XInputSequenceChecker>*)0) ) >>= xISC;
-        if (xISC.is()) {
-            lookupTable.Insert(cachedItem = new lookupTableItem(rLanguage, xISC));
-            return cachedItem->xISC;
+            if ( xI.is() ) {
+                Reference< XInputSequenceChecker > xISC;
+                xI->queryInterface( getCppuType((const Reference< XInputSequenceChecker>*)0) ) >>= xISC;
+                if (xISC.is()) {
+                    lookupTable.push_back(cachedItem = new lookupTableItem(rLanguage, xISC));
+                    return cachedItem->xISC;
+                }
+            }
         }
-        }
-    }
-    throw RuntimeException();
+        throw RuntimeException();
 }
 
 OUString SAL_CALL
 InputSequenceCheckerImpl::getImplementationName(void) throw( RuntimeException )
 {
-    return OUString::createFromAscii(serviceName);
+        return OUString::createFromAscii(serviceName);
 }
 
 sal_Bool SAL_CALL
 InputSequenceCheckerImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(serviceName);
+        return !rServiceName.compareToAscii(serviceName);
 }
 
 Sequence< OUString > SAL_CALL
 InputSequenceCheckerImpl::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(serviceName);
-    return aRet;
+        Sequence< OUString > aRet(1);
+        aRet[0] = OUString::createFromAscii(serviceName);
+        return aRet;
 }
 
 } } } }
