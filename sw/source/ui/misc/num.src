@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:22:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "Ebene";
         Text[ hindi ] = "स्तर";
+        Text[ slovak ] = "Úroveň";
     };
     MultiListBox LB_LEVEL
     {
@@ -153,6 +154,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Umístění a rozteče";
         Text[ hebrew ] = "Position und Abstand";
         Text[ hindi ] = "स्थान और अंतर देना";
+        Text[ slovak ] = "Umiestnenie a rozostupy";
     };
     FixedText FT_BORDERDIST
     {
@@ -185,6 +187,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Odsazení";
         Text[ hebrew ] = "‮שוליים‬";
         Text[ hindi ] = "इन्डेन्ट";
+        Text[ slovak ] = "Odsadenie";
     };
     CheckBox CB_RELATIVE
     {
@@ -217,6 +220,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Relativní";
         Text[ hebrew ] = "Relati~v";
         Text[ hindi ] = "सम्बन्धि~त";
+        Text[ slovak ] = "Relatí~vne";
     };
     MetricField MF_BORDERDIST
     {
@@ -267,6 +271,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Vzdálenost k textu";
         Text[ hebrew ] = "Abstand zum Te~xt";
         Text[ hindi ] = "~टेक्स्ट् केलिए अंतर";
+        Text[ slovak ] = "Vzdialenosť k te~xtu";
     };
     MetricField MF_INDENT
     {
@@ -317,6 +322,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Minimální mezera mezi číslováním a textem";
         Text[ hebrew ] = "~Mindestabstand Nummer <-> Text";
         Text[ hindi ] = "~न्यूनतम अंतर संख्या देना <-> टेक्स्ट्";
+        Text[ slovak ] = "~Min. medzera číslovanie <-> text";
     };
     MetricField MF_NUMDIST
     {
@@ -367,6 +373,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Zarovnání číslování";
         Text[ hebrew ] = "Ausri~chtung der Nummerierung";
         Text[ hindi ] = "संख्या का ~पंक्तिकरण";
+        Text[ slovak ] = "Zarovn~anie číslovania";
     };
     ListBox LB_ALIGN
     {
@@ -536,6 +543,12 @@ TabPage TP_NUM_POSITION
         < "केन्द्रित" ; > ;
         < "दाहिना" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Vľavo" ; > ;
+        < "Na stred" ; > ;
+        < "Vpravo" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -568,6 +581,7 @@ TabPage TP_NUM_POSITION
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     Window WIN_PREVIEW
     {
@@ -623,6 +637,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ czech ] = "Odrážky";
                 Text[ hebrew ] = "Bullets";
                 Text[ hindi ] = "बुल्लेट्स";
+                Text[ slovak ] = "Odrážky";
             };
             PageItem
             {
@@ -654,6 +669,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ czech ] = "Typ číslování";
                 Text[ hebrew ] = "Nummerierungsart";
                 Text[ hindi ] = "संख्या देने का वर्ग";
+                Text[ slovak ] = "Typ číslovania";
             };
             PageItem
             {
@@ -685,6 +701,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ czech ] = "Osnova";
                 Text[ hebrew ] = "‮מסגרת‬";
                 Text[ hindi ] = "बाहरी रूपरेखा";
+                Text[ slovak ] = "Osnova";
             };
             PageItem
             {
@@ -716,6 +733,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ czech ] = "Obrázky";
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
+                Text[ slovak ] = "Obrázky";
             };
             PageItem
             {
@@ -747,6 +765,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -779,6 +798,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ czech ] = "Volby";
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
+                Text[ slovak ] = "Nastavenia";
             };
         };
         Text[ english_us ] = "Numbering/Bullets";
@@ -825,6 +845,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ czech ] = "Odstranit";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
+        Text[ slovak ] = "Odst~rániť";
     };
     Text [ english_us ] = "Numbering/Bullets" ;
     Text [ portuguese_brazilian ] = "Numera��o / Marcas" ;
@@ -851,7 +872,10 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ czech ] = "Číslování/odrážky";
     Text[ hebrew ] = "‮תבליטים/מיספור‬";
     Text[ hindi ] = "संख्या देना/बुल्लेट्स";
+    Text[ slovak ] = "Číslovanie/odrážky";
 };
+
+
 
 
 
