@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-19 18:20:48 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_HXX
+#include <svx/IAccessibleViewForwarder.hxx>
+#endif
+
 class ScTabViewShell;
 class ScAccessibleSpreadsheet;
 class ScChildrenShapes;
@@ -88,6 +92,10 @@ class ScChildrenShapes;
 namespace accessibility
 {
     class AccessibleShape;
+}
+namespace utl
+{
+    class AccessibleRelationSetHelper;
 }
 
 /** @descr
@@ -101,7 +109,8 @@ typedef cppu::ImplHelper2< ::drafts::com::sun::star::accessibility::XAccessibleS
 
 class ScAccessibleDocument
     :   public ScAccessibleDocumentBase,
-        public ScAccessibleDocumentImpl
+        public ScAccessibleDocumentImpl,
+        public accessibility::IAccessibleViewForwarder
 {
 public:
     //=====  internal  ========================================================
@@ -231,6 +240,75 @@ public:
         getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    ///=====  IAccessibleViewForwarder  ========================================
+
+    /** This method informs you about the state of the forwarder.  Do not
+        use it when the returned value is <false/>.
+
+        @return
+            Return <true/> if the view forwarder is valid and <false/> else.
+     */
+    virtual sal_Bool IsValid (void) const;
+
+    /** Returns the area of the underlying document that is visible in the
+    * corresponding window.
+
+        @return
+            The rectangle of the visible part of the document. The values
+            are, contrary to the base class, in internal coordinates.
+     */
+    virtual Rectangle GetVisibleArea() const;
+
+    /** Transform the specified point from internal coordinates to an
+        absolute screen position.
+
+        @param rPoint
+            Point in internal coordinates.
+
+        @return
+            The same point but in screen coordinates relative to the upper
+            left corner of the (current) screen.
+     */
+    virtual Point LogicToPixel (const Point& rPoint) const;
+
+    /** Transform the specified size from internal coordinates to a screen
+    * oriented pixel size.
+
+        @param rSize
+            Size in internal coordinates.
+
+        @return
+            The same size but in screen coordinates.
+     */
+    virtual Size LogicToPixel (const Size& rSize) const;
+
+    /** Transform the specified point from absolute screen coordinates to
+        internal coordinates.
+
+        @param rPoint
+            Point in screen coordinates relative to the upper left corner of
+            the (current) screen.
+
+        @return
+            The same point but in internal coordinates.
+     */
+    virtual Point PixelToLogic (const Point& rPoint) const;
+
+    /** Transform the specified size from screen coordinates to internal
+        coordinates.
+
+        @param rSize
+            Size in screen coordinates.
+
+        @return
+            The same size but in internal coordinates.
+     */
+    virtual Size PixelToLogic (const Size& rSize) const;
+
+    ///======== internal =====================================================
+
+    utl::AccessibleRelationSetHelper* GetRelationSet(const ScAddress* pAddress) const;
+
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
@@ -243,11 +321,11 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
+    virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
+    virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
