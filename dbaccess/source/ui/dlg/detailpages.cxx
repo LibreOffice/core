@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:43:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ namespace dbaui
             }
 
             if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
-                m_pSuppressVersionColumn->Check(pSuppressVersionColumn->GetValue());
+                m_pSuppressVersionColumn->Check( !pSuppressVersionColumn->GetValue() );
 
             if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
                 m_pEnableOuterJoin->Check(pEnableOuterJoin->GetValue());
@@ -652,7 +652,13 @@ namespace dbaui
             fillBool(_rSet,m_pIgnoreDriverPrivileges,DSID_IGNOREDRIVER_PRIV,bChangedSomething);
 
         if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
-            fillBool(_rSet,m_pSuppressVersionColumn,DSID_SUPPRESSVERSIONCL,bChangedSomething);
+        {
+            if( (m_pSuppressVersionColumn != NULL) && (m_pSuppressVersionColumn->GetState() != m_pSuppressVersionColumn->GetSavedValue()) )
+            {
+                _rSet.Put(SfxBoolItem(DSID_SUPPRESSVERSIONCL, !m_pSuppressVersionColumn->IsChecked()));
+                bChangedSomething = sal_True;
+            }
+        }
 
         if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
             fillBool(_rSet,m_pEnableOuterJoin,DSID_ENABLEOUTERJOIN,bChangedSomething);
