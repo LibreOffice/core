@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 16:10:38 $
+ *  last change: $Author: cl $ $Date: 2001-12-06 09:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,8 @@ using namespace ::com::sun::star;
 ///////////////////////////////////////////////////////////////////////
 
 DECLARE_STL_STDKEY_MAP(sal_uInt32, SfxExtItemPropertySetInfo*, SdExtPropertySetInfoCache);
-static SdExtPropertySetInfoCache gImplPropertySetInfoCache;
+static SdExtPropertySetInfoCache gImplImpressPropertySetInfoCache;
+static SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;
 
 DECLARE_STL_STDKEY_MAP(sal_uInt32, uno::Sequence< uno::Type >*, SdTypesCache);
 static SdTypesCache gImplTypesCache;
@@ -349,10 +350,13 @@ void SAL_CALL SdXShape::release() throw()
 
 sal_Bool SdXShape::queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny )
 {
-    if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
+    if( mpModel && mpModel ->IsImpressDocument() )
     {
-        aAny <<= uno::Reference< document::XEventsSupplier >(this);
-        return sal_True;
+        if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
+        {
+            aAny <<= uno::Reference< document::XEventsSupplier >(this);
+            return sal_True;
+        }
     }
 
     return sal_False;
@@ -361,27 +365,31 @@ sal_Bool SdXShape::queryAggregation( const com::sun::star::uno::Type & rType, co
 uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     throw (uno::RuntimeException)
 {
-    const sal_uInt32 nObjId = mpShape->getShapeKind();
-
-    uno::Sequence< uno::Type >* pTypes;
-
-    SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
-    if( aIter == gImplTypesCache.end() )
+    if( mpModel && !mpModel->IsImpressDocument() )
     {
-        uno::Sequence< uno::Type >* pTypes = new uno::Sequence< uno::Type >( mpShape->_getTypes() );
-        sal_uInt32 nCount = pTypes->getLength();
-        pTypes->realloc( nCount+1 );
-        (*pTypes)[nCount] = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-
-        gImplTypesCache[ nObjId ] = pTypes;
+        return mpShape->_getTypes();
     }
     else
     {
-        // use the already computed implementation id
-        pTypes = (*aIter).second;
-    }
+        const sal_uInt32 nObjId = mpShape->getShapeKind();
+        uno::Sequence< uno::Type >* pTypes;
+        SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
+        if( aIter == gImplTypesCache.end() )
+        {
+            pTypes = new uno::Sequence< uno::Type >( mpShape->_getTypes() );
+            sal_uInt32 nCount = pTypes->getLength();
+            pTypes->realloc( nCount+1 );
+            (*pTypes)[nCount] = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
 
-    return *pTypes;
+            gImplTypesCache[ nObjId ] = pTypes;
+        }
+        else
+        {
+            // use the already computed implementation id
+            pTypes = (*aIter).second;
+        }
+        return *pTypes;
+    }
 }
 
 // XPropertyState
@@ -443,17 +451,19 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     throw(::com::sun::star::uno::RuntimeException)
 {
     sal_uInt32 nObjId = (sal_uInt32)mpShape->getPropertyMap();
-
     SfxExtItemPropertySetInfo* pInfo = NULL;
 
-    SdExtPropertySetInfoCache::iterator aIter( gImplPropertySetInfoCache.find( nObjId ) );
-    if( aIter == gImplPropertySetInfoCache.end() )
+    SdExtPropertySetInfoCache* pCache = (mpModel && mpModel->IsImpressDocument()) ?
+        &gImplImpressPropertySetInfoCache : &gImplDrawPropertySetInfoCache;
+
+    SdExtPropertySetInfoCache::iterator aIter( pCache->find( nObjId ) );
+    if( aIter == pCache->end() )
     {
         uno::Reference< beans::XPropertySetInfo > xInfo( mpShape->_getPropertySetInfo() );
         pInfo = new SfxExtItemPropertySetInfo( mpMap, xInfo->getProperties() );
         pInfo->acquire();
 
-        gImplPropertySetInfoCache[ nObjId ] = pInfo;
+        (*pCache)[ nObjId ] = pInfo;
     }
     else
     {
