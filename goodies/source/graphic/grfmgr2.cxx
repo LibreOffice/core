@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 15:52:43 $
+ *  last change: $Author: ka $ $Date: 2002-08-16 11:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         const Size aOutSize( pOut->GetOutputSizePixel() );
 
         if( !( nFlags & GRFMGR_DRAW_CACHED ) || rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
-            ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() && ( aOutSize.Width() == 1 ) && ( aOutSize.Height() == 1 ) ) )
+            ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() ) )
         {
             // simple output of transformed graphic
             const Graphic aGraphic( rObj.GetTransformedGraphic( &rAttr ) );
