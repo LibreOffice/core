@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: fs $ $Date: 2000-11-21 19:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace configmgr
 
     // getting Property Metadata
         // XPropertySet & XMultiPropertySet
-        uno::Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode )
+        uno::Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode, sal_Bool _bWriteable )
             throw(uno::RuntimeException);
 
         // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
