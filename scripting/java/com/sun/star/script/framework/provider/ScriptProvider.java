@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 13:11:22 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:09:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -66,6 +66,9 @@ import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.frame.XModel;
+
+import com.sun.star.ucb.XFileIdentifierConverter;
+
 import com.sun.star.util.XMacroExpander;
 
 import com.sun.star.uno.UnoRuntime;
@@ -74,6 +77,14 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.Any;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XVetoableChangeListener;
+import com.sun.star.beans.XPropertyChangeListener;
+import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.Type;
+import com.sun.star.beans.XIntrospectionAccess;
+import com.sun.star.script.XInvocation;
 
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
@@ -87,17 +98,22 @@ import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 
 import com.sun.star.script.framework.log.LogUtils;
-import com.sun.star.script.framework.browse.DirBrowseNode;
-import com.sun.star.script.framework.browse.DocBrowseNode;
-import com.sun.star.script.framework.browse.ScriptMetaData;
-import com.sun.star.script.framework.browse.XMLParserFactory;
-import com.sun.star.script.framework.provider.ScriptsRegistry;
-import com.sun.star.script.framework.provider.LocationRegistry;
+
+import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.container.XMLParserFactory;
+import com.sun.star.script.framework.container.ContainerCache;
+import com.sun.star.script.framework.container.ParcelContainer;
+
+import com.sun.star.script.framework.io.XStorageHelper;
+
+
+import com.sun.star.script.framework.browse.ProviderBrowseNode;
+import com.sun.star.script.framework.browse.DialogFactory;
 
 
 import java.util.*;
 public abstract class ScriptProvider
-    implements XScriptProvider, XBrowseNode,
+    implements XScriptProvider, XBrowseNode, XPropertySet, XInvocation,
                XInitialization, XTypeProvider, XServiceInfo
 {
     private final String[] __serviceNames = {
@@ -106,25 +122,31 @@ public abstract class ScriptProvider
     };
 
     public final static String CLASSPATH = "classpath";
-    public static ScriptsRegistry frameWorkRegistry;
 
     private String language;
-    protected XModel m_xModel;
-    protected String m_sPath;
-    protected String m_sSharePath;
-    protected String m_sUserPath;
+
+
     protected XComponentContext m_xContext;
     protected XMultiComponentFactory m_xMultiComponentFactory;
     protected XPropertySet m_xInvocationContext;
+
+    // proxies to helper objects which implement interfaces
+    private XPropertySet m_xPropertySetProxy;
+    private XInvocation m_xInvocationProxy;
+   // TODO should this be implemented in this class
+    private XBrowseNode m_xBrowseNodeProxy;
 
     public ScriptProvider( XComponentContext ctx, String language )
     {
         this.language = language;
         __serviceNames[0] += language;
 
-        LogUtils.DEBUG( "ScriptProvider: constructor - start." );
+        LogUtils.DEBUG( "ScriptProvider: constructor - start. " + language );
 
         m_xContext = ctx;
+
+        // Initialize DialogFactory class in case dialogs are required
+        DialogFactory.createDialogFactory(m_xContext);
 
         try
         {
@@ -144,25 +166,11 @@ public abstract class ScriptProvider
 
             XMLParserFactory.setOfficeDTDURL(me.expandMacros(
                 "${$SYSBINDIR/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
-            m_sSharePath = PathUtils.getShareURL( m_xContext );
-            m_sUserPath = PathUtils.getUserURL( m_xContext );
 
-            // initialse script registry for this language and user and share
-            synchronized ( ScriptProvider.class )
-            {
-                if ( frameWorkRegistry == null )
-                {
-                    frameWorkRegistry = new ScriptsRegistry( m_xContext, m_sUserPath, m_sSharePath );
-                }
-            }
-            LocationRegistry reg = frameWorkRegistry.getLocationRegistry( m_sSharePath, true );
-            reg.addScriptingBrowseNodes( new DirBrowseNode(reg, m_xContext, m_sSharePath, language) );
-            reg  = frameWorkRegistry.getLocationRegistry( m_sUserPath, true );
-            reg.addScriptingBrowseNodes( new DirBrowseNode( reg, m_xContext, m_sUserPath, language) );
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
             throw new com.sun.star.uno.RuntimeException(
                 "Error constructing  ScriptProvider: "
                 + e.getMessage() );
@@ -185,21 +193,47 @@ public abstract class ScriptProvider
                         new com.sun.star.uno.Type(XPropertySet.class),
                         aArguments[0]);
 
-                 m_xModel =
+                 XModel xModel =
                     (XModel) AnyConverter.toObject(
                         new com.sun.star.uno.Type(XModel.class),
                         m_xInvocationContext.getPropertyValue(
                             "SCRIPTING_DOC_REF"));
+                XStorageHelper.addNewModel( xModel );
+                ContainerCache cache = new ContainerCache( ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory ) );
+                ParcelContainer parcelContainer = cache.getContainer( language, xModel );
 
-                LocationRegistry docReg = frameWorkRegistry.getLocationRegistry( m_xModel, true );
-                docReg.addScriptingBrowseNodes(  new DocBrowseNode( docReg, m_xContext,m_xModel, language) );
+                // TODO should be done for provider, no need to proxy this anymore
+                m_xBrowseNodeProxy = new ProviderBrowseNode( this, parcelContainer );
+
+                m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
+                m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
+
             }
             else if (AnyConverter.isString(aArguments[0]) == true)
             {
-                m_sPath = AnyConverter.toString(aArguments[0]);
-                LogUtils.DEBUG("creating DirBrowseNode, path: " + m_sPath);
-                LocationRegistry reg = frameWorkRegistry.getLocationRegistry( m_sPath, true );
-                reg.addScriptingBrowseNodes(  new DirBrowseNode(reg, m_xContext,m_sPath, language) );
+                String sPath = AnyConverter.toString(aArguments[0]);
+                LogUtils.DEBUG("creating Application, path: " + sPath);
+
+
+                // TODO m_xInvocationProxy, m_xPropertySetProxy in ctor, otherwise bridge will
+                // have problems as it does some introspection on the XPropertySet
+                // interface ( which is null if initialise is not called
+
+
+                ContainerCache cache = new ContainerCache( ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory ) );
+                // TODO fix up where paths are fixed up
+                // currently path is also fixed up by macro expander
+                ParcelContainer parcelContainer = cache.getContainer( language, sPath );
+                LogUtils.DEBUG("******* CONTAINER retrieved is " + parcelContainer );
+
+
+                // TODO should all be done in this class instead of
+                // deleagation????
+                m_xBrowseNodeProxy = new ProviderBrowseNode( this, parcelContainer );
+
+                m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
+                m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
+
             }
             else
             {
@@ -209,10 +243,10 @@ public abstract class ScriptProvider
         }
         else
         {
-            LogUtils.DEBUG( "throwing from  XInit" );
-            throw new com.sun.star.uno.RuntimeException(
-                "Incorrect number of args passed to " +
-                "ScriptProvider.initialize" );
+            // this is ok, for example when executing a script from the
+            // command line
+            LogUtils.DEBUG( "ScriptProviderFor" + language +
+                " initialized without a context");
         }
         LogUtils.DEBUG( "leaving XInit" );
     }
@@ -224,12 +258,14 @@ public abstract class ScriptProvider
      */
     public com.sun.star.uno.Type[] getTypes()
     {
-        Type[] retValue = new Type[ 5 ];
+        Type[] retValue = new Type[ 7 ];
         retValue[ 0 ] = new Type( XScriptProvider.class );
         retValue[ 1 ] = new Type( XBrowseNode.class );
         retValue[ 2 ] = new Type( XInitialization.class );
         retValue[ 3 ] = new Type( XTypeProvider.class );
         retValue[ 4 ] = new Type( XServiceInfo.class );
+        retValue[ 5 ] = new Type( XPropertySet.class );
+        retValue[ 6 ] = new Type( XInvocation.class );
         return retValue;
     }
 
@@ -281,49 +317,34 @@ public abstract class ScriptProvider
         return __serviceNames;
     }
 
+
+
     public abstract XScript getScript( /*IN*/String scriptURI )
         throws com.sun.star.uno.RuntimeException,
                com.sun.star.lang.IllegalArgumentException;
 
+    // TODO need to encapsulate this better,
+    // Some factory concept for creating/accessing Editor
+    // How this is passed down or how it is accessable by BrowseNode
+    // implementations needs thinking about
+    // This method is used to determine whether the ScriptProvider
+    // has a ScriptEditor
+    public abstract boolean hasScriptEditor();
+    // TODO see above
+    // This method is used to get the ScriptEditor for this ScriptProvider
+    public abstract ScriptEditor getScriptEditor();
+
+    // TODO should throw appropriate exception
     public ScriptMetaData  getScriptData( /*IN*/String scriptURI )
     {
 
         ScriptMetaData scriptData = null;
-        if ( scriptURI.indexOf( "location=document" ) > -1 )
-        {
-             scriptData = (ScriptMetaData)frameWorkRegistry.getScriptData(m_xModel, scriptURI);
-        }
-        else if ( scriptURI.indexOf( "location=user" ) > -1 )
-        {
-            scriptData = (ScriptMetaData)frameWorkRegistry.getScriptData( m_sUserPath, scriptURI );
-        }
-        else if ( scriptURI.indexOf( "location=share" ) > -1 )
-        {
-            scriptData = (ScriptMetaData)frameWorkRegistry.getScriptData( m_sSharePath,scriptURI );
-        }
+        ContainerCache cache = new ContainerCache( ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory ) );
+
+        scriptData = cache.findScript( scriptURI );
         return scriptData;
     }
-    private XBrowseNode getBrowseNode()
-    {
-        XBrowseNode nodes = null;
-        Object key = m_xModel;
-        if ( m_xModel == null )
-        {
-            key = m_sPath;
-        }
-        LocationRegistry reg = frameWorkRegistry.getLocationRegistry( key );
-        if ( reg == null )
-        {
-            LogUtils.DEBUG("Cant find registry for " + key );
-            return null;
-        }
-        else
-        {
-            nodes = reg.getBrowseNodeForLanguage( language );
-        }
-        return nodes;
 
-    }
 
     // Implementation of XBrowseNode interface
     public String getName()
@@ -333,24 +354,22 @@ public abstract class ScriptProvider
 
     public XBrowseNode[] getChildNodes()
     {
-        XBrowseNode children = getBrowseNode();
-        if ( children == null )
+        if ( m_xBrowseNodeProxy  == null )
         {
             LogUtils.DEBUG("No Nodes available ");
             return new XBrowseNode[0];
         }
-        return children.getChildNodes();
+        return m_xBrowseNodeProxy .getChildNodes();
     }
 
     public boolean hasChildNodes()
     {
-        XBrowseNode children = getBrowseNode();
-        if ( children == null )
+        if (  m_xBrowseNodeProxy == null )
         {
             LogUtils.DEBUG("No Nodes available ");
             return false;
         }
-        return children.hasChildNodes();
+        return  m_xBrowseNodeProxy.hasChildNodes();
     }
 
     public short getType()
@@ -362,4 +381,97 @@ public abstract class ScriptProvider
     {
         return getName();
     }
+
+    // implementation of XInvocation interface
+    public XIntrospectionAccess getIntrospection() {
+        return m_xInvocationProxy.getIntrospection();
+    }
+
+    public Object invoke(String aFunctionName, Object[] aParams,
+                         short[][] aOutParamIndex, Object[][] aOutParam)
+        throws com.sun.star.lang.IllegalArgumentException,
+               com.sun.star.script.CannotConvertException,
+               com.sun.star.reflection.InvocationTargetException
+    {
+        return m_xInvocationProxy.invoke(
+            aFunctionName, aParams, aOutParamIndex, aOutParam);
+    }
+
+    public void setValue(String aPropertyName, Object aValue)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.script.CannotConvertException,
+               com.sun.star.reflection.InvocationTargetException
+    {
+        m_xInvocationProxy.setValue(aPropertyName, aValue);
+    }
+
+    public Object getValue(String aPropertyName)
+        throws com.sun.star.beans.UnknownPropertyException
+    {
+        return m_xInvocationProxy.getValue(aPropertyName);
+    }
+
+    public boolean hasMethod(String aName) {
+        return m_xInvocationProxy.hasMethod(aName);
+    }
+
+    public boolean hasProperty(String aName) {
+        return m_xInvocationProxy.hasProperty(aName);
+    }
+
+    public XPropertySetInfo getPropertySetInfo()
+    {
+        return m_xPropertySetProxy.getPropertySetInfo();
+    }
+
+    public void setPropertyValue(String aPropertyName, Object aValue)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.beans.PropertyVetoException,
+               com.sun.star.lang.IllegalArgumentException,
+               com.sun.star.lang.WrappedTargetException
+    {
+        m_xPropertySetProxy.setPropertyValue(aPropertyName, aValue);
+    }
+
+    public Object getPropertyValue(String PropertyName)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.lang.WrappedTargetException
+    {
+        return m_xPropertySetProxy.getPropertyValue(PropertyName);
+    }
+
+    public void addPropertyChangeListener(
+        String aPropertyName, XPropertyChangeListener xListener)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.lang.WrappedTargetException
+    {
+        m_xPropertySetProxy.addPropertyChangeListener(aPropertyName, xListener);
+    }
+
+    public void removePropertyChangeListener(
+        String aPropertyName, XPropertyChangeListener aListener)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.lang.WrappedTargetException
+    {
+        m_xPropertySetProxy.removePropertyChangeListener(
+            aPropertyName, aListener);
+    }
+
+    public void addVetoableChangeListener(
+        String PropertyName, XVetoableChangeListener aListener)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.lang.WrappedTargetException
+    {
+        m_xPropertySetProxy.addVetoableChangeListener(PropertyName, aListener);
+    }
+
+    public void removeVetoableChangeListener(
+        String PropertyName, XVetoableChangeListener aListener)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.lang.WrappedTargetException
+    {
+        m_xPropertySetProxy.removeVetoableChangeListener(
+            PropertyName, aListener);
+    }
+
 }
