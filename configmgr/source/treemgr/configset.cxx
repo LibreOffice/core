@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 08:14:49 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,37 +198,37 @@ osl::Mutex& ElementRef::getTreeLock() const
 //-----------------------------------------------------------------------------
 
 ElementTree::ElementTree()
-: m_accessor(NULL)
-, m_aTreeHolder()
+: m_aTreeHolder()
+, m_accessor(NULL)
 {
 }
 //-----------------------------------------------------------------------------
 
 ElementTree::ElementTree(data::Accessor const& _accessor, ElementTreeImpl* pTree)
-: m_accessor(_accessor)
-, m_aTreeHolder(pTree)
+: m_aTreeHolder(pTree)
+, m_accessor(_accessor)
 {
 }
 //-----------------------------------------------------------------------------
 
 ElementTree::ElementTree(data::Accessor const& _accessor, ElementTreeHolder const& pTree)
-: m_accessor(_accessor)
-, m_aTreeHolder(pTree)
+: m_aTreeHolder(pTree)
+, m_accessor(_accessor)
 {
 }
 //-----------------------------------------------------------------------------
 
 ElementTree::ElementTree(ElementTree const& aOther)
-: m_accessor(aOther.m_accessor)
-, m_aTreeHolder(aOther.m_aTreeHolder)
+: m_aTreeHolder(aOther.m_aTreeHolder)
+, m_accessor(aOther.m_accessor)
 {
 }
 //-----------------------------------------------------------------------------
 
 ElementTree& ElementTree::operator=(ElementTree const& aOther)
 {
-    m_accessor = aOther.m_accessor;
     m_aTreeHolder = aOther.m_aTreeHolder;
+    m_accessor = aOther.m_accessor;
     return *this;
 }
 //-----------------------------------------------------------------------------
@@ -260,7 +260,7 @@ TemplateHolder ElementTree::getTemplate() const
 {
     OSL_PRECOND(isValid(),"ERROR: Trying to get the template of a NULL element tree");
 
-    if (m_aTreeHolder,isValid())
+    if (isValid())
         return m_aTreeHolder->getTemplate();
     else
         return TemplateHolder();
