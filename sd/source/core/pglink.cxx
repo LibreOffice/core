@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:17:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 SdPageLink::SdPageLink(SdPage* pPg, const String& rFileName,
                        const String& rBookmarkName) :
-    ::sfx2::SvBaseLink(::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
+    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
     pPage(pPg)
 {
     pPage->SetFileName(rFileName);
