@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:25:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-class SdrPageView;
+class SdrPageViewWindow;
 class SdrPage;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ namespace sdr
         protected:
             // the owner of this ObjectContactOfPageView. Set from constructor and not
             // to be changed in any way.
-            SdrPageView&                                    mrPageView;
+            SdrPageViewWindow&                              mrPageViewWindow;
 
             // The last remembered StartPoint of the hierarchy
             SdrPage*                                        mpRememberedStartPage;
@@ -99,10 +99,10 @@ namespace sdr
             // The VirtualDevice for PreRendering
             VirtualDevice                                   maPreRenderDevice;
 
-            // internal access to SdrPageView
-            SdrPageView& GetPageView() const;
+            // internal access to SdrPageViewWindow
+            SdrPageViewWindow& GetPageViewWindow() const;
 
-            // internal access to SdrPage of SdrPageView
+            // internal access to SdrPage of PageView
             SdrPage* GetSdrPage() const;
 
             // Create and set the ExpandPaintClipRegion. This needs to be done before
@@ -124,8 +124,8 @@ namespace sdr
             virtual void EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo);
 
         public:
-            // basic constructor, used from SdrPageView.
-            ObjectContactOfPageView(SdrPageView& rPageView);
+            // basic constructor, used from SdrPageViewWindow.
+            ObjectContactOfPageView(SdrPageViewWindow& rPageViewWindow);
 
             // The destructor. When PrepareDelete() was not called before (see there)
             // warnings will be generated in debug version if there are still contacts
