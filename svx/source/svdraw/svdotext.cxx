@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-21 13:46:41 $
+ *  last change: $Author: aw $ $Date: 2002-11-26 15:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1600,9 +1600,28 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
         aR.Bottom()+=nMyTol;
     }
     FASTBOOL bRet=FALSE;
-    if (bFontwork) {
-        bRet=aR.IsInside(rPnt);
-    } else {
+
+    if(bFontwork)
+    {
+        bRet = aR.IsInside(rPnt);
+
+        // #105130# Include aRect here in measurements to be able to hit a
+        // fontwork object on its border
+        if(!bRet)
+        {
+            const Rectangle aSnapRect = GetSnapRect();
+
+            if( (rPnt.X() >= aSnapRect.Left() - nTol && rPnt.X() <= aSnapRect.Left() + nTol)
+             || (rPnt.X() >= aSnapRect.Right() - nTol && rPnt.X() <= aSnapRect.Right() + nTol)
+             || (rPnt.Y() >= aSnapRect.Top() - nTol && rPnt.Y() <= aSnapRect.Top() + nTol)
+             || (rPnt.Y() >= aSnapRect.Bottom() - nTol && rPnt.Y() <= aSnapRect.Bottom() + nTol))
+            {
+                bRet = TRUE;
+            }
+        }
+    }
+    else
+    {
         if (aGeo.nDrehWink!=0) {
             Polygon aPol(aR);
             RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
