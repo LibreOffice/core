@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+#   last change: $Author: jsc $ $Date: 2001-02-15 16:01:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ LIBTARGET=NO
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
 CXXFILES=	regview.cxx	  	\
-            regmerge.cxx
+            regmerge.cxx	\
+            regcompare.cxx
 
 
 APP1TARGET= $(TARGET)
@@ -105,6 +106,19 @@ APP2STDLIBS=\
 
 .IF "$(GUI)"=="WNT"
 APP2STDLIBS+= \
+            $(LIBCIMT) $(LIBCMT)
+.ENDIF
+
+APP3TARGET= regcompare
+APP3OBJS=   $(OBJ)$/regcompare.obj
+
+APP3STDLIBS=\
+            $(SALLIB) \
+            $(VOSLIB) \
+            $(REGLIB)
+
+.IF "$(GUI)"=="WNT"
+APP3STDLIBS+= \
             $(LIBCIMT) $(LIBCMT)
 .ENDIF
 
