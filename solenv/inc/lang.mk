@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    HJS 25.11.98
-#*    Letzte Aenderung  $Author: mh $ $Date: 2000-11-10 14:20:10 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: nf $ $Date: 2001-04-05 08:49:37 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/solar/inc/lang.mkv  $
 #*
@@ -226,6 +226,10 @@ LANGEXT=96
 .IF "$(solarlang)" == "korean"
 RSCLANG=KOREAN
 LANGEXT=82
+.ENDIF
+.IF "$(solarlang)" == "cat"
+RSCLANG=CATALAN ($IBM_PC_850)
+LANGEXT=37
 .ENDIF
 
 .ENDIF			# "$(NO_REC_RES)"==""

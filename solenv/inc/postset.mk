@@ -8,8 +8,8 @@
 #*                      in makefile.mk
 #*
 #*    Ersterstellung    HJS 20.07.99
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:16 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: nf $ $Date: 2001-04-05 08:49:37 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/solar/inc/postset.mkv  $
 #*
@@ -220,6 +220,18 @@ langext_82=82
 rsclang_82=-lgKOREAN $(IBM_PC_852)
 rescharset_82=$(korean$(LANG_GUI))
 RCLANGFLAGS_82+= -d KOREAN
+.ENDIF 
+
+.IF "$(RES_CAT)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=37
+catalan$(LANG_GUI)*=$(default$(LANG_GUI))
+cmd_catalan:=catalan 37 -lgCATALAN $(IBM_PC_850) $(catalan$(LANG_GUI))
+lang_37=catalan
+longlang_37=catalan
+langext_82=37
+rsclang_37=-lgCATALAN $(IBM_PC_850)
+rescharset_37=$(catalan$(LANG_GUI))
+RCLANGFLAGS_37+= -d CATALAN
 .ENDIF 
 
 .ENDIF			#  "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
