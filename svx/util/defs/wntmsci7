@@ -20108,3 +20108,6 @@ writeInfo
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexReplace@container@star@sun@com@@@2345@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIdentifierContainer@container@star@sun@com@@@2345@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexContainer@container@star@sun@com@@@2345@@Z
+?cpp_release@uno@star@sun@com@@YAXPAX@Z
+?cpp_acquire@uno@star@sun@com@@YAXPAX@Z
+?cpp_queryInterface@uno@star@sun@com@@YAPAXPAXPAU_typelib_TypeDescriptionReference@@@Z
