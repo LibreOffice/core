@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpusrlst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 18:21:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
     }
     else if ( pViewData && (pBtn == &aBtnCopy) )
     {
-        if ( bCopyDone ) return NULL;
+        if ( bCopyDone )
+            return 0;
 
         //-----------------------------------------------------------
 
@@ -804,14 +805,15 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         }
     }
 
-    return NULL;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( ScTpUserLists, EdEntriesModHdl, MultiLineEdit*, pEd )
 {
-    if ( pEd != &aEdEntries ) return NULL;
+    if ( pEd != &aEdEntries )
+        return 0;
 
     //-----------------------------------------------------------
 
@@ -843,7 +845,7 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, MultiLineEdit*, pEd )
         if ( aBtnAdd.IsEnabled() ) aBtnAdd.Disable();
     }
 
-    return NULL;
+    return 0;
 }
 
 
