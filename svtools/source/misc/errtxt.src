@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:10:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "Hata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error";
+        Text[ finnish ] = "Virhe";
     };
     String ERRCTX_WARNING
     {
@@ -117,6 +118,7 @@ Resource RID_ERRCTX
         Text[ korean ] = "°æ°í";
         Text[ turkish ] = "Uyarý";
         Text[ catalan ] = "Advertencia";
+        Text[ finnish ] = "Varoitus";
     };
     String ERRCTX_SFX_LOADTEMPLATE
     {
@@ -144,6 +146,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "$(ARG1) þablonu yüklenirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al cargar la plantilla $(ARG1)";
+        Text[ finnish ] = "$(ERR) ladattaessa mallipohjaa $(ARG1)";
     };
     String ERRCTX_SFX_SAVEDOC
     {
@@ -170,6 +173,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al guardar el documento $(ARG1)";
+        Text[ finnish ] = "$(ERR) tallennettaessa asiakirjaa $(ARG1)";
     };
     String ERRCTX_SFX_SAVEASDOC
     {
@@ -196,6 +200,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al guardar el documento $(ARG1)";
+        Text[ finnish ] = "$(ERR) tallennettaessa asiakirjaa $(ARG1)";
     };
     String ERRCTX_SFX_DOCINFO
     {
@@ -222,6 +227,7 @@ Resource RID_ERRCTX
         Text[ korean ] = "¹®¼­$(ARG1)ÀÇ ¹®¼­ Á¤º¸¸¦ Ç¥½ÃÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesinin, belge bilgileri görüntülenirken $(ERR)";
         Text[ catalan ] = "$(ERR) al mostrar la información del documento $(ARG1)";
+        Text[ finnish ] = "$(ERR) näytettäessä asiakirjan $(ARG1) tietoja";
     };
     String ERRCTX_SFX_DOCTEMPLATE
     {
@@ -249,6 +255,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "$(ARG1) belgesi þablon olarak yazýlýrken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al escribir el documento $(ARG1) como plantilla";
+        Text[ finnish ] = "$(ERR) kirjoitettaessa asiakirjaa $(ARG1) mallipohjaksi";
     };
     String ERRCTX_SFX_MOVEORCOPYCONTENTS
     {
@@ -275,6 +282,7 @@ Resource RID_ERRCTX
         Text[ korean ] = "¹®¼­ ³»¿ëÀ» º¹»ç ¶Ç´Â ÀÌµ¿½Ã¿¡ $(ERR)";
         Text[ turkish ] = "Belge içeriði kopyalanýrken ya da taþýnýrken $(ERR)";
         Text[ catalan ] = "$(ERR) al copiar o desplazar los contenidos del documento.";
+        Text[ finnish ] = "$(ERR) kopioitaessa tai siirrettäessä asiakirjan sisältöä";
     };
     String ERRCTX_SFX_DOCMANAGER
     {
@@ -301,6 +309,7 @@ Resource RID_ERRCTX
         Text[ korean ] = "¹®¼­°ü¸®ÀÚ¸¦ ½ÃÀÛÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "Belge yöneticisi baþlatýlýrken $(ERR)";
         Text[ catalan ] = "$(ERR) al inicializar el administrador de documentos";
+        Text[ finnish ] = "$(ERR) aloitettaessa asiakirjan hallintaa";
     };
     String ERRCTX_SFX_OPENDOC
     {
@@ -328,6 +337,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "$(ARG1) belgesi yüklenirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al cargar el documento $(ARG1)";
+        Text[ finnish ] = "$(ERR) ladattaessa asiakirjaa $(ARG1)";
     };
     String ERRCTX_SFX_NEWDOCDIRECT
     {
@@ -355,6 +365,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "Yeni belge oluþturulurken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al crear un nuevo documento";
+        Text[ finnish ] = "$(ERR) luotaessa uutta asiakirjaa";
     };
     String ERRCTX_SFX_NEWDOC
     {
@@ -382,6 +393,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "Yeni belge oluþturulurken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al crear un nuevo documento";
+        Text[ finnish ] = "$(ERR) luotaessa uutta asiakirjaa";
     };
     String ERRCTX_SFX_CREATEOBJSH
     {
@@ -408,6 +420,7 @@ Resource RID_ERRCTX
         Text[ korean ] = "Ç¥Á¦¸¦¡¡Àü°³ÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "Giriþi açarken $(ERR)";
         Text[ catalan ] = "$(ERR) al abrir una rúbrica";
+        Text[ finnish ] = "$(ERR) laajennettaessa merkintää";
     };
     String ERRCTX_SFX_LOADBASIC
     {
@@ -434,6 +447,7 @@ Resource RID_ERRCTX
         Text[ korean ] = "¹®¼­$(ARG1)ÀÇ BASICÀ» ·ÎµåÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi ile ilgili BASIC yüklenirken $(ERR)";
         Text[ catalan ] = "$(ERR) al cargar el BASIC del documento $(ARG1)";
+        Text[ finnish ] = "$(ERR) ladattaessa asiakirjan $(ARG1) BASIC-tietoja";
     };
     String ERRCTX_SFX_SEARCHADDRESS
     {
@@ -458,6 +472,7 @@ Resource RID_ERRCTX
         Text[ turkish ] = "$(ERR) searching for an address";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÇáÈÍË Úä ÇáÚäæÇä";
         Text[ catalan ] = "$(ERR) al buscar una dirección";
+        Text[ finnish ] = "$(ERR) osoitetta etsittäessä";
     };
 };
 Resource RID_ERRHDL
@@ -492,6 +507,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Á¸ÀçÇÏÁö¡¡¾Ê´Â °³Ã¼";
         Text[ turkish ] = "Mevcut olmayan nesne";
         Text[ catalan ] = "Objeto no existente";
+        Text[ finnish ] = "Objektia ei ole";
     };
     String ERRCODE_CLASS_ALREADYEXISTS
     {
@@ -518,6 +534,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼°¡ ÀÌ¹Ì Á¸ÀçÇÔ";
         Text[ turkish ] = "Nesne mevcut";
         Text[ catalan ] = "El objeto ya existe";
+        Text[ finnish ] = "Objekti on jo olemassa";
     };
     String ERRCODE_CLASS_ACCESS
     {
@@ -544,6 +561,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼¿¡ Á¢±Ù ¸øÇÔ";
         Text[ turkish ] = "Nesneye eriþim saðlanamýyor";
         Text[ catalan ] = "No hay acceso al objeto";
+        Text[ finnish ] = "Objektin ei ole käytettävissä";
     };
     String ERRCODE_CLASS_PATH
     {
@@ -570,6 +588,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Çã¿ëµÇÁö ¾Ê´Â °æ·Î";
         Text[ turkish ] = "Geçersiz veri yolu";
         Text[ catalan ] = "Ruta no autorizada";
+        Text[ finnish ] = "Polun käyttäminen ei onnistu";
     };
     String ERRCODE_CLASS_LOCKING
     {
@@ -597,6 +616,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Àá±Ý ¹®Á¦";
         Text[ turkish ] = "Kenetlenme sorunu";
         Text[ catalan ] = "Problema de bloqueo";
+        Text[ finnish ] = "Lukitusongelma";
     };
     String ERRCODE_CLASS_PARAMETER
     {
@@ -623,6 +643,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Æ²¸° ÆÄ¶ó¹ÌÅÍ";
         Text[ turkish ] = "Yanlýþ parametre";
         Text[ catalan ] = "Parámetro falso";
+        Text[ finnish ] = "Väärä parametri";
     };
     String ERRCODE_CLASS_SPACE
     {
@@ -649,6 +670,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¸®¼Ò½º °í°¥";
         Text[ turkish ] = "Kaynak tükendi";
         Text[ catalan ] = "No hay recursos diponibles";
+        Text[ finnish ] = "Resurssi käytetty loppuun";
     };
     String ERRCODE_CLASS_NOTSUPPORTED
     {
@@ -675,6 +697,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÛ¾÷À» Áö¿øÇÏÁö ¾ÊÀ½";
         Text[ turkish ] = "Ýþlem desteklenmiyor";
         Text[ catalan ] = "Acción no apoyada";
+        Text[ finnish ] = "Toimintoa ei tueta";
     };
     String ERRCODE_CLASS_READ
     {
@@ -701,6 +724,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÐ±â ¿À·ù";
         Text[ turkish ] = "Okuma hatasý";
         Text[ catalan ] = "Error de lectura";
+        Text[ finnish ] = "Lukuvirhe";
     };
     String ERRCODE_CLASS_WRITE
     {
@@ -727,6 +751,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾²±â ¿À·ù";
         Text[ turkish ] = "Yazma hatasý";
         Text[ catalan ] = "Error de escritura";
+        Text[ finnish ] = "Kirjoitusvirhe";
     };
     String ERRCODE_CLASS_UNKNOWN
     {
@@ -753,6 +778,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀ½";
         Text[ turkish ] = "Bilinmiyor";
         Text[ catalan ] = "Desconocido";
+        Text[ finnish ] = "tuntematon";
     };
     String ERRCODE_CLASS_VERSION
     {
@@ -779,6 +805,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "È£È¯µÇÁö ¾Ê´Â ¹öÀü";
         Text[ turkish ] = "Sürüm uyumsuzluðu";
         Text[ catalan ] = "Versiones incompatibles";
+        Text[ finnish ] = "Versioiden yhteensopimattomuus";
     };
     String ERRCODE_CLASS_GENERAL
     {
@@ -806,6 +833,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Genel hata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error general";
+        Text[ finnish ] = "Yleinen virhe";
     };
     String ERRCODE_CLASS_FORMAT
     {
@@ -832,6 +860,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Æ²¸° ¼­½Ä";
         Text[ turkish ] = "Yanlýþ format";
         Text[ catalan ] = "Formato incorrecto";
+        Text[ finnish ] = "Väärä muoto";
     };
     String ERRCODE_CLASS_CREATE
     {
@@ -858,6 +887,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼ ÀÛ¼º½Ã ¿À·ù";
         Text[ turkish ] = "Oluþturma hatasý";
         Text[ catalan ] = "Error al crear";
+        Text[ finnish ] = "Virhe objektia luotaessa";
     };
     String ERRCODE_CLASS_SBX
     {
@@ -884,6 +914,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Çã¿ëµÇÁö ¾Ê´Â °ª ¶Ç´Â µ¥ÀÌÅÍ À¯Çü";
         Text[ turkish ] = "Geçersiz deðer ya da veri tipi";
         Text[ catalan ] = "Valor o tipo de datos inadmisible";
+        Text[ finnish ] = "Arvon tai tietotyypin käyttäminen ei onnistu";
     };
     String ERRCODE_CLASS_RUNTIME
     {
@@ -910,6 +941,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "BASIC ½ÇÇà½Ã°£ ¿À·ù";
         Text[ turkish ] = "BASIC yürütüm süresi hatasý";
         Text[ catalan ] = "Error de ejecución de BASIC";
+        Text[ finnish ] = "BASIC-suoritusvirhe";
     };
     String ERRCODE_CLASS_COMPILER
     {
@@ -936,6 +968,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "BASIC ±¸¹® ¿À·ù";
         Text[ turkish ] = "BASIC söz dizimi hatasý";
         Text[ catalan ] = "Error de sintaxis de BASIC";
+        Text[ finnish ] = "BASIC-syntaksivirhe";
     };
     String 1
     {
@@ -963,6 +996,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Genel hata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error general";
+        Text[ finnish ] = "Yleinen virhe";
     };
     String ERRCODE_IO_GENERAL
     {
@@ -989,6 +1023,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÏ¹ÝÀû ÀÔ·Â/Ãâ·Â ¿À·ù";
         Text[ turkish ] = "Genel girdi/çýktý hatasý";
         Text[ catalan ] = "Error general de entrada/salida";
+        Text[ finnish ] = "Yleinen syöttö-/tulostevirhe";
     };
     String ERRCODE_IO_MISPLACEDCHAR
     {
@@ -1016,6 +1051,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Dosyanýn adý geçerli deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El nombre del archivo no es válido.";
+        Text[ finnish ] = "Virheellinen tiedostonimi";
     };
     String ERRCODE_IO_NOTEXISTS
     {
@@ -1042,6 +1078,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏÀÌ ¾øÀ½";
         Text[ turkish ] = "Dosya mevcut deðil";
         Text[ catalan ] = "El archivo no existe";
+        Text[ finnish ] = "Tiedostoa ei ole";
     };
     String ERRCODE_IO_ALREADYEXISTS
     {
@@ -1069,6 +1106,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Dosya mevcut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El archivo ya existe";
+        Text[ finnish ] = "Tiedosto on jo olemassa";
     };
     String ERRCODE_IO_NOTADIRECTORY
     {
@@ -1095,6 +1133,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼´Â µð·ºÅä¸®°¡ ¾Æ´Ô";
         Text[ turkish ] = "Nesne, dizin deðil";
         Text[ catalan ] = "El objeto no es un directorio.";
+        Text[ finnish ] = "Objekti ei ole hakemisto";
     };
     String ERRCODE_IO_NOTAFILE
     {
@@ -1121,6 +1160,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼´Â ÆÄÀÏÀÌ ¾Æ´Ô";
         Text[ turkish ] = "Nesne, dosya deðil";
         Text[ catalan ] = "El objeto no es ningún archivo.";
+        Text[ finnish ] = "Objekti ei ole tiedosto";
     };
     String ERRCODE_IO_INVALIDDEVICE
     {
@@ -1147,6 +1187,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÁöÁ¤µÈ ÀåÄ¡´Â À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Belirtilen cihaz geçerli deðil";
         Text[ catalan ] = "El dispositivo especificado no es válido.";
+        Text[ finnish ] = "Määritetty laite ei ole kelvollinen";
     };
     String ERRCODE_IO_ACCESSDENIED
     {
@@ -1173,6 +1214,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "»ç¿ëÀÚ ±ÇÇÑÀÌ ¾ø¾î °³Ã¼¿¡\nÁ¢±ÙÇÒ ¼ö ¾øÀ½";
         Text[ turkish ] = "Gerekli eriþim haklarýnýn olmamasý nedeniyle \nnesneye eriþim saðlanamýyor";
         Text[ catalan ] = "No es posible acceder al objeto\npor falta de derechos.";
+        Text[ finnish ] = "Objektin käyttäminen ei onnistu,\nkoska käyttäjäoikeudet eivät riitä";
     };
     String ERRCODE_IO_LOCKVIOLATION
     {
@@ -1199,6 +1241,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼¿¡ °øµ¿¡¡Á¢±Ù½Ã¿¡ ¿À·ù";
         Text[ turkish ] = "Nesneye eriþimde bir paylaþým hatasý oluþtu";
         Text[ catalan ] = "Error al acceder conjuntamente al objeto.";
+        Text[ finnish ] = "Objektin yhteiskäyttövirhe";
     };
     String ERRCODE_IO_OUTOFSPACE
     {
@@ -1225,6 +1268,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀåÄ¡¿¡ ´õ ÀÌ»ó °ø°£ÀÌ ¾øÀ½";
         Text[ turkish ] = "Cihazda yeterli alan kalmadý";
         Text[ catalan ] = "No hay espacio disponible en el dispositivo.";
+        Text[ finnish ] = "Laitteen tila ei riitä";
     };
     String ERRCODE_IO_ISWILDCARD
     {
@@ -1251,6 +1295,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÌ µ¿ÀÛÀº ¿ÍÀÏµå Ä«µå°¡ Æ÷ÇÔµÈ ÆÄÀÏ \n ¿¡¼­ ¼öÇàµÇÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Ýþlem, genel arama karakterleri\n içeren dosyalar üzerinde gerçekleþtirilemiyor";
         Text[ catalan ] = "La operación no se puede ejecutar en\narchivos que contengan Wildcards.";
+        Text[ finnish ] = "Tätä toimintoa ei voi suorittaa,\njos tiedostot sisältävät yleismerkkejä";
     };
     String ERRCODE_IO_NOTSUPPORTED
     {
@@ -1277,6 +1322,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÌ µ¿ÀÛÀº ÀÌ ¿î¿µÃ¼Á¦¿¡¼­ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Bu iþlem, iþletim sistemi tarafýndan desteklenmiyor";
         Text[ catalan ] = "La operación no es apoyada por este sistema operativo.";
+        Text[ finnish ] = "Käyttöjärjestelmä ei tue toimintoa";
     };
     String ERRCODE_IO_TOOMANYOPENFILES
     {
@@ -1303,6 +1349,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "³Ê¹« ¸¹Àº ÆÄÀÏÀÌ ¿­·ÁÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Çok fazla dosya açýk";
         Text[ catalan ] = "Hay demasiados archivos abiertos.";
+        Text[ finnish ] = "Avonaisia tiedostoja on liikaa";
     };
     String ERRCODE_IO_CANTREAD
     {
@@ -1329,6 +1376,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏ¿¡¼­ ÀÐÀ»¼ö ¾ø¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Dosyadan veri okunamadý";
         Text[ catalan ] = "No se pudo leer del archivo.";
+        Text[ finnish ] = "Tietojen lukeminen tiedostosta ei onnistu";
     };
     String ERRCODE_IO_CANTWRITE
     {
@@ -1356,6 +1404,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Dosya yazýlamadý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo guardar el archivo";
+        Text[ finnish ] = "Tiedoston kirjoittaminen ei onnistunut.";
     };
     String ERRCODE_IO_OUTOFMEMORY
     {
@@ -1382,6 +1431,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¸Þ¸ð¸® ºÎÁ·À¸·Î ÀÎÇØ, µ¿ÀÛÀÌ ½ÇÇàµÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Ýþlem, bellek yetersizliði nedeniyle yürütülemedi";
         Text[ catalan ] = "La operación no se pudo ejecutar por falta de memoria.";
+        Text[ finnish ] = "Toiminnon suorittaminen ei onnistunut muistin loppumisen takia.";
     };
     String ERRCODE_IO_CANTSEEK
     {
@@ -1408,6 +1458,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Ã£±â µ¿ÀÛÀÌ ½ÇÇàµÉ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Arama iþlemi yürütülemedi";
         Text[ catalan ] = "No se pudo ejecutar la operación Seek.";
+        Text[ finnish ] = "Hakutoimintoa ei voitu suorittaa";
     };
     String ERRCODE_IO_CANTTELL
     {
@@ -1434,6 +1485,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Tell ÀÛ¾÷À» ½ÇÇàÇÏÁö ¸øÇß½À´Ï´Ù";
         Text[ turkish ] = "Tell iþlemi yürütülemedi";
         Text[ catalan ] = "No se pudo ejecutar la operación Tell";
+        Text[ finnish ] = "Vastaustoimintoa ei voitu suorittaa";
     };
     String ERRCODE_IO_WRONGVERSION
     {
@@ -1460,6 +1512,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Æ²¸° ÆÄÀÏ ¹öÀü";
         Text[ turkish ] = "Yanlýþ dosya sürümü";
         Text[ catalan ] = "Versión incorrecta de archivo.";
+        Text[ finnish ] = "Väärä tiedostoversio";
     };
     String ERRCODE_IO_WRONGFORMAT
     {
@@ -1486,6 +1539,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ¼­½Ä";
         Text[ turkish ] = "Yanlýþ dosya sürümü";
         Text[ catalan ] = "Formato de archivo incorrecto";
+        Text[ finnish ] = "Väärä tiedostomuoto";
     };
     String ERRCODE_IO_INVALIDCHAR
     {
@@ -1512,6 +1566,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏÀÌ¸§¿¡ Çã¿ëµÇÁö ¾ÊÀº ¹®ÀÚ°¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Dosya adý geçersiz karakterler içeriyor";
         Text[ catalan ] = "El nombre del archivo contiene caracteres inadmisibles.";
+        Text[ finnish ] = "Tiedoston nimessä on virheellisiä merkkejä";
     };
     String ERRCODE_IO_UNKNOWN
     {
@@ -1538,6 +1593,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾Ë¼ö¾ø´Â ÀÔ/Ãâ·Â ¿À·ù ¹ß»ý";
         Text[ turkish ] = "Bilinmeyen bir girdi/çýktý hatasý oluþtu";
         Text[ catalan ] = "Ha ocurrido un error desconocido de entrada/salida.";
+        Text[ finnish ] = "On ilmennyt tuntematon keskeytysvirhe";
     };
     String ERRCODE_IO_INVALIDACCESS
     {
@@ -1564,6 +1620,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆÄÀÏ Á¢±Ù ½Ãµµ°¡ ÀÖ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Dosyaya yetkisiz eriþim denendi";
         Text[ catalan ] = "Se ha tratado de acceder al archivo de manera no válida.";
+        Text[ finnish ] = "Tiedostoja yritettiin käyttää virheellisesti";
     };
     String ERRCODE_IO_CANTCREATE
     {
@@ -1590,6 +1647,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏÀ» ¸¸µéÁö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Dosya oluþturulamadý";
         Text[ catalan ] = "No se pudo crear el archivo.";
+        Text[ finnish ] = "Tiedoston luominen ei onnistunut.";
     };
     String ERRCODE_IO_INVALIDPARAMETER
     {
@@ -1616,6 +1674,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆÄ¶ó¹ÌÅÍ·Î ÀÛµ¿ÀÌ ½ÃÀÛµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Ýþlem geçersiz bir parametre ile baþlatýldý.";
         Text[ catalan ] = "La operación se inició con un parámetro no válido.";
+        Text[ finnish ] = "Toiminto aloitettiin väärällä parametrillä";
     };
     String ERRCODE_IO_ABORT
     {
@@ -1642,6 +1701,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏ »ó¿¡¼­ ÀÛµ¿ÀÌ ÁßÁö µÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Dosya ile ilgili iþlem iptal edildi";
         Text[ catalan ] = "Se ha interrumpido la operación en el archivo.";
+        Text[ finnish ] = "Tiedoston toiminto keskeytettiin";
     };
     String ERRCODE_IO_NOTEXISTSPATH
     {
@@ -1668,6 +1728,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏ¿¡´ëÇÑ °æ·Î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Dosya veri yolu mevcut deðil";
         Text[ catalan ] = "No existe la ruta de acceso al archivo.";
+        Text[ finnish ] = "Tiedostopolkua ei ole";
     };
     String ERRCODE_IO_RECURSIVE
     {
@@ -1694,6 +1755,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "°³Ã¼¸¦ ±× ÀÚÃ¼¿¡ º¹»çÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Nesne kendi içine kopyalanamaz.";
         Text[ catalan ] = "No es posible copiar un objeto en sí mismo.";
+        Text[ finnish ] = "Objektia ei voi kopioida itseensä.";
     };
     String ERRCODE_SFX_NOSTDTEMPLATE
     {
@@ -1720,6 +1782,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "±âº» ÅÛÇÃ¸´À»  ¿­Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Standart þablon açýlamadý";
         Text[ catalan ] = "No se pudo abrir la plantilla estándar.";
+        Text[ finnish ] = "Oletusmallipohjan avaaminen ei onnistunut.";
     };
     String ERRCODE_SFX_TEMPLATENOTFOUND
     {
@@ -1746,6 +1809,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Á¤ÀÇµÈ ÅÛÇÃ¸´À» Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Belirtilen þablon bulunamadý";
         Text[ catalan ] = "No se encontró la plantilla especificada";
+        Text[ finnish ] = "Määritettyä mallipohjaa ei löytynyt.";
     };
     String ERRCODE_SFX_NOTATEMPLATE
     {
@@ -1772,6 +1836,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏÀº ÅÛÇÃ¸´À¸·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Dosya, þablon olarak kullanýlamýyor";
         Text[ catalan ] = "No se puede usar el archivo como plantilla";
+        Text[ finnish ] = "Tiedostoa ei voi käyttää mallipohjana";
     };
     String ERRCODE_SFX_CANTREADDOCINFO
     {
@@ -1798,6 +1863,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö¾ÊÀº ¹®¼­ ¼­½ÄÀÌ°Å³ª  \n¹®¼­ Á¤º¸°¡ Á¸ÀçÇÏÁö ¾Ê±â ¶§¹®¿¡ ÆÄÀÏ¿¡¼­¡¡¹®¼­ÀÇ Á¤º¸¸¦\nÀÐÀ»¼ö ¾ø¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Belge bilgileri formatý, bilinmediði ya da belge\nbilgisi mevcut olmadýðý için\ndosyadan okunamadý\n";
         Text[ catalan ] = "La información del documento no se pudo leer del\narchivo ya que su formato es desconocido o no\nexiste ninguna información acerca del documento.";
+        Text[ finnish ] = "Tiedoston asiakirjatietojen lukeminen ei onnistunut,\nkoska asiakirjan muoto on tuntematon tai koska asiakirjan tietoja ei\nole";
     };
     String ERRCODE_SFX_ALREADYOPEN
     {
@@ -1824,6 +1890,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¹®¼­´Â ÀÌ¹Ì ¿­·ÁÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Belge zaten düzenlenmek üzere açýldý";
         Text[ catalan ] = "El documento ya se ha abierto para editarlo.";
+        Text[ finnish ] = "Asiakirja on jo muokattavana";
     };
     String ERRCODE_SFX_WRONGPASSWORD
     {
@@ -1851,6 +1918,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Girilen þifre yanlýþ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se empleó una contraseña falsa";
+        Text[ finnish ] = "Väärä salasana annettiin";
     };
     String ERRCODE_SFX_DOCUMENTREADONLY
     {
@@ -1877,6 +1945,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¹®¼­´Â ÀÐ±â Àü¿ëÀ¸·Î ¿­·ÁÁ³½À´Ï´Ù.";
         Text[ turkish ] = "Belge, salt okunur olarak açýldý";
         Text[ catalan ] = "Se ha abierto el documento para lectura.";
+        Text[ finnish ] = "Asiakirja avattiin vain luku -tilassa";
     };
     String ERRCODE_SFX_OLEGENERAL
     {
@@ -1904,6 +1973,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Genel OLE hatasý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error OLE general";
+        Text[ finnish ] = "Yleinen OLE-virhe";
     };
     String ERRCODE_INET_NAME_RESOLVE
     {
@@ -1930,6 +2000,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "È£½ºÆ® ÀÌ¸§ $(ARG1)À» È®ÀÎÇÏÁö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "$(ARG1) sunucu adý çözülemedi";
         Text[ catalan ] = "No se pudo resolver el nombre del ordenador $(ARG1)";
+        Text[ finnish ] = "Pääkoneen $(ARG1) nimen selvittäminen ei onnistunut";
     };
     String ERRCODE_INET_CONNECT
     {
@@ -1956,6 +2027,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "$(ARG1)¿¡ ÀÎÅÍ³Ý ¿¬°áÀ» ±¸ÃàÇÏÁö ¸øÇß½À´Ï´Ù";
         Text[ turkish ] = "$(ARG1) Internet baðlantýsý oluþturulamadý";
         Text[ catalan ] = "No se pudo establecer la conexión de Internet a $(ARG1)";
+        Text[ finnish ] = "Internet-yhteyden muodostaminen kohteeseen $(ARG1) ei onnistunut";
     };
     String ERRCODE_INET_READ
     {
@@ -1983,6 +2055,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Internet üzerinden veri okunamadý.\nSunucu hata iletisi: $(ARG1)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)";
+        Text[ finnish ] = "On ilmennyt virhe luettaessa tietoja Internetistä.\nPalvelimen virhesanoma: $(ARG1)";
     };
     String ERRCODE_INET_WRITE
     {
@@ -2010,6 +2083,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Internet üzerinden veri aktarýlamadý.\nSunucu hata iletisi: $(ARG1)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron transferir los datos a Internet.\nMensaje de error del servidor: $(ARG1)";
+        Text[ finnish ] = "On ilmennyt virhe siirrettäessä tietoja Internetiin.\nPalvelimen virhesanoma: $(ARG1)";
     };
     String ERRCODE_INET_GENERAL
     {
@@ -2036,6 +2110,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÎÅÍ³Ý ¿µ¿ª¿¡ ÀÏ¹ÝÀûÀÎ ¿À·ù ¹ß»ý";
         Text[ turkish ] = "Genel Internet hatasý";
         Text[ catalan ] = "Error general en Internet";
+        Text[ finnish ] = "On ilmennyt yleinen Internet-virhe";
     };
     String ERRCODE_INET_OFFLINE
     {
@@ -2062,6 +2137,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¿äÃ»µÈ ÀÎÅÍ³Ý µ¥ÀÌÅÍ°¡ Ä³½Ã¿¡ ¾øÀ¸¸ç ¿Â¶óÀÎ ¸ðµå°¡ È°¼ºÈ­µÇ¾î ÀÖÁö ¾Ê¾Æ µ¥ÀÌÅÍ¸¦ º¸³¾ ¼ö ¾øÀ½";
         Text[ turkish ] = "Ýstenen Internet verileri önbellekte bulunmuyor ve çevrimiçi kipi etkin olmadýðý için aktarýlamýyor";
         Text[ catalan ] = "Los datos de Internet solicitados no se encuentran en el caché y no pueden ser transmitidos ya que el modo en línea no está activo.";
+        Text[ finnish ] = "Pyydettyjä Internet-tietoja ei ole käytettävissä välimuistissa eikä niitä voi siirtää, koska online-tila ei ole käytössä";
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
     {
@@ -2090,6 +2166,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "$(ARG1) biçimi deðiþtirilsin mi?";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00 - - - -";
         Text[ catalan ] = "¿Desea sustituir el estilo $(ARG1)?";
+        Text[ finnish ] = "Korvataanko tyyli $(ARG1)?";
     };
     String ERRCODE_SFX_NOFILTER
     {
@@ -2117,6 +2194,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Bir filtre bulunamadý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ha encontrado un filtro";
+        Text[ finnish ] = "Suodatinta ei löytynyt";
     };
     String ERRCODE_SFX_NODOCRELOAD
     {
@@ -2147,6 +2225,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¿øº»ÀÌ °áÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Asýl belirlenemedi";
         Text[ catalan ] = "No se pudo determinar el original.";
+        Text[ finnish ] = "Alkuperän selvittäminen ei onnistunut.";
     };
     String ERRCODE_SFX_CANTCREATECONTENT
     {
@@ -2173,6 +2252,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "³»¿ëÀÌ ¸¸µé¾îÁöÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Ýçerik oluþturulamadý";
         Text[ catalan ] = "No se pudo crear el contenido.";
+        Text[ finnish ] = "Sisällön luominen ei onnistunut.";
     };
     String ERRCODE_SFX_CANTCREATELINK
     {
@@ -2199,6 +2279,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¿¬°áÀ» ¸¸µéÁö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Baðlantý oluþturulamadý";
         Text[ catalan ] = "No se pudo crear el vínculo.";
+        Text[ finnish ] = "Linkin luominen ei onnistunut.";
     };
     String ERRCODE_SFX_WRONGBMKFORMAT
     {
@@ -2225,6 +2306,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¿¬°áÀÇ Æ÷¸ËÀÌ¡¡À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Baðlantýnýn formatý geçerli deðil";
         Text[ catalan ] = "El formato del vínculo no es válido";
+        Text[ finnish ] = "Linkkimuoto on virheellinen.";
     };
     String ERRCODE_SFX_WRONGICONFILE
     {
@@ -2251,6 +2333,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾ÆÀÌÄÜ º¸±â ±¸¼ºÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Simge görüntüleme konfigürasyonu geçerli deðil";
         Text[ catalan ] = "La configuración del panel de símbolos no es válida";
+        Text[ finnish ] = "Kuvakenäytön kokoonpano on virheellinen.";
     };
     String ERRCODE_SFX_CANTWRITEICONFILE
     {
@@ -2277,6 +2360,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾ÆÀÌÄÜ º¸±â ±¸¼ºÀ» ÀúÀåÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Simge görüntüleme konfigürasyonu kaydedilemiyor";
         Text[ catalan ] = "No se puede guardar la configuración del panel de símbolos";
+        Text[ finnish ] = "Kuvakenäytön kokoonpanon tallentaminen ei onnistunut.";
     };
     String ERRCODE_SFX_CANTDELICONFILE
     {
@@ -2303,6 +2387,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¾ÆÀÌÄÜ º¸±â ±¸¼ºÀ» »èÁ¦ÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Simge görüntüleme konfigürasyonu silinemedi.";
         Text[ catalan ] = "No se pudo eliminar la configuración del panel de símbolos.";
+        Text[ finnish ] = "Kuvakenäytön kokoonpanon poistaminen ei onnistunut.";
     };
     String ERRCODE_SFX_CANTRENAMECONTENT
     {
@@ -2329,6 +2414,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "³»¿ë ÀÌ¸§À»¡¡º¯°æÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Ýçerik yeniden adlandýrýlamadý";
         Text[ catalan ] = "No se puede cambiar el nombre al contenido.";
+        Text[ finnish ] = "Sisältöä ei voida nimetä uudelleen";
     };
     String ERRCODE_SFX_INVALIDBMKPATH
     {
@@ -2355,6 +2441,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Ã¥°¥ÇÇ Æú´õ°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Yer iþareti klasörü geçersizdir";
         Text[ catalan ] = "Carpeta de marcadores no válida";
+        Text[ finnish ] = "Kirjanmerkkikansio on virheellinen.";
     };
     String ERRCODE_SFX_CANTWRITEURLCFGFILE
     {
@@ -2381,6 +2468,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "·ÎÄÃ¿¡ ÀúÀåµÉ URL ±¸¼ºÀ» ÀúÀåÇÏÁö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'Lerin konfigürasyonu kaydedilemedi";
         Text[ catalan ] = "No se pudo guardar la configuración de las URLs a guardar localmente.";
+        Text[ finnish ] = "Paikallisiksi tallennettavien URL-osoitteiden kokoonpanon tallentaminen ei onnistunut";
     };
     String ERRCODE_SFX_WRONGURLCFGFORMAT
     {
@@ -2407,6 +2495,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "·ÎÄÃ¿¡ ÀúÀåµÉ URL ±¸¼ºÀº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'lerin konfigürasyon formatý geçerli deðil";
         Text[ catalan ] = "No es válido el formato de la configuración de las URLs a guardar localmente.";
+        Text[ finnish ] = "Paikallisiksi tallennettavien URL-osoitteiden kokoonpanomuoto on virheellinen";
     };
     String ERRCODE_SFX_NODOCUMENT
     {
@@ -2434,6 +2523,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Ýþlemin uygulanabileceði bir belge mevcut deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No existe ningún documento al que se le pueda aplicar la acción";
+        Text[ finnish ] = "Tätä toimintoa ei voi suorittaa asiakirjalle, jota ei ole olemassa";
     };
     String ERRCODE_SFX_INVALIDLINK
     {
@@ -2460,6 +2550,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¿¬°áÀÌ À¯È¿ÇÏÁö ¾ÊÀº Å¸°ÙÀ» ÁöÁ¤ÇÏ°í ÀÖÀ½";
         Text[ turkish ] = "Baðlantý geçersiz bir hedef gösteriyor";
         Text[ catalan ] = "El vínculo se refiere a un destino no válido";
+        Text[ finnish ] = "Linkki viittaa virheelliseen kohteeseen";
     };
     String ERRCODE_SFX_INVALIDTRASHPATH
     {
@@ -2486,6 +2577,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÈÞÁöÅë °æ·Î°¡ À¯È¿ÇÏÁö ¾ÊÀ½";
         Text[ turkish ] = "Çöp kutusu veri yolu geçerli deðil";
         Text[ catalan ] = "La ruta para la papelera no es válida.";
+        Text[ finnish ] = "Roskakorin polku on virheellinen";
     };
     String ERRCODE_SFX_NOTRESTORABLE
     {
@@ -2512,6 +2604,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÔ·ÂÀ» º¹±¸ÇÒ ¼ö ¾øÀ½";
         Text[ turkish ] = "Giriþ geri yüklenemedi";
         Text[ catalan ] = "No se pudo restaurar la entrada.";
+        Text[ finnish ] = "Merkinnän palauttaminen ei onnistunut";
     };
     String ERRCODE_IO_NAMETOOLONG
     {
@@ -2538,6 +2631,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÆÄÀÏ ÀÌ¸§ÀÌ ´ë»ó ÆÄÀÏ ½Ã½ºÅÛ¿¡ ´ëÇØ ³Ê¹« ±é´Ï´Ù.";
         Text[ turkish ] = "Dosya adý, hedef dosya sistemi için fazla uzun.";
         Text[ catalan ] = "El nombre del archivo es demasiado largo para el sistema de archivos destino.";
+        Text[ finnish ] = "Tiedostonimi on liian pitkä kohdejärjestelmän tiedostojärjestelmälle.";
     };
     String ERRCODE_SFX_CONSULTUSER
     {
@@ -2564,6 +2658,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "±â´É ½ÇÇàÀ» À§ÇÑ ÁöÁ¤»çÇ×ÀÌ ºÒ¿ÏÀüÇÕ´Ï´Ù.";
         Text[ turkish ] = "Ýþlemin yürütülmesi için gereken bilgiler tam deðil.";
         Text[ catalan ] = "La función no se puede ejecutar por falta de argumentos.";
+        Text[ finnish ] = "Tiedot eivät riitä toiminnon toteuttamiseen.";
     };
     String ERRCODE_SFX_INVALIDSYNTAX
     {
@@ -2590,6 +2685,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÔ·Â ±¸¹®ÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Giriþ söz dizimi geçerli deðil.";
         Text[ catalan ] = "La sintaxis de la entrada no es válida";
+        Text[ finnish ] = "Syöttösyntaksi on virheellinen.";
     };
     String ERRCODE_SFX_CANTCREATEFOLDER
     {
@@ -2616,6 +2712,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀÔ·Â ±¸¹®ÀÌ Æ²¸³´Ï´Ù.";
         Text[ turkish ] = "Giriþ söz dizimi yanlýþ.";
         Text[ catalan ] = "La sintaxis de la entrada es incorrecta.";
+        Text[ finnish ] = "Syöttösyntaksi on virheellinen.";
     };
     String ERRCODE_SFX_CANTRENAMEFOLDER
     {
@@ -2643,6 +2740,7 @@ Resource RID_ERRHDL
         Text[ turkish ] = "Giriþ söz dizimi yanlýþ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La sintaxis de entrada es incorrecta.";
+        Text[ finnish ] = "Syöttösyntaksi on virheellinen.";
     };
     String ERRCODE_SFX_WRONG_CDF_FORMAT
     {
@@ -2669,6 +2767,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Ã¤³Î ¹®¼­ÀÇ ¼­½ÄÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Kanal belgesinin formatý geçersiz.";
         Text[ catalan ] = "El formato del documento del canal no es válido.";
+        Text[ finnish ] = "Kanava-asiakirjan muoto on virheellinen.";
     };
     String ERRCODE_SFX_EMPTY_SERVER
     {
@@ -2695,6 +2794,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "¼­¹ö°¡ ºñ¾î¡¡ÀÖ¾î¼­´Â ¾ÈµÊ";
         Text[ turkish ] = "Sunucu boþ olmamalýdýr";
         Text[ catalan ] = "El servidor no debe estar vacío.";
+        Text[ finnish ] = "Palvelin ei saa olla tyhjä";
     };
     String ERRCODE_SFX_NO_ABOBOX
     {
@@ -2720,6 +2820,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Ã¤³ÎÀ» ¼³Ä¡ÇÏ·Á¸é ¾Ë¸²½ÅÃ» Æú´õ°¡ ÇÊ¿äÇÕ´Ï´Ù.";
         Text[ turkish ] = "Kanal kurmak için bir üyelik klasörünüz olmalý.";
         Text[ catalan ] = "Para instalar un canal necesita una carpeta de suscripciones.";
+        Text[ finnish ] = "Kanavan asentaminen edellyttää tilauskansiota.";
     };
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
@@ -2747,6 +2848,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "µ¥ÀÌÅÍ ±æÀÌ°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Geçersiz veri uzunluðu.";
         Text[ catalan ] = "Longitud de datos no válida.";
+        Text[ finnish ] = "Virheellinen tietojen pituus.";
     };
     String ERRCODE_IO_CURRENTDIR
     {
@@ -2773,6 +2875,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "±â´É ºÒ°¡´É: °æ·Î¿¡ ÇöÀç µð·ºÅä¸® Æ÷ÇÔ";
         Text[ turkish ] = "Ýþlev olanaklý deðil: Veri yolu yürürlükteki dizini içeriyor";
         Text[ catalan ] = "Función imposible: La ruta contiene el directorio actual.";
+        Text[ finnish ] = "Toimintoa ei voi toteuttaa: polku sisältää nykyisen hakemiston.";
     };
     String ERRCODE_IO_NOTSAMEDEVICE
     {
@@ -2799,6 +2902,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "±â´É ºÒ°¡´É: ÀåÄ¡(µå¶óÀÌºê)°¡ µ¿ÀÏÇÏÁö ¾ÊÀ½.";
         Text[ turkish ] = "Ýþlev olanaklý deðil: Chiza (sürücü) ayný deðil.";
         Text[ catalan ] = "Función imposible: No es el mismo dispositivo (unidad).";
+        Text[ finnish ] = "Toimintoa ei voi toteuttaa: laite (asema) ei ole identtinen.";
     };
     String ERRCODE_IO_DEVICENOTREADY
     {
@@ -2825,6 +2929,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "ÀåÄ¡(µå¶óÀÌºê)°¡ ÁØºñµÇ¾î ÀÖÁö ¾ÊÀ½.";
         Text[ turkish ] = "Cihaz (sürücü) hazýr deðil.";
         Text[ catalan ] = "Dispositivo (unidad) no listo.";
+        Text[ finnish ] = "Laite (asema) ei ole valmis.";
     };
     String ERRCODE_IO_BADCRC
     {
@@ -2851,6 +2956,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "Ã¼Å© ÇÕ°è°¡ Æ²¸³´Ï´Ù.";
         Text[ turkish ] = "Yanlýþ saðlama toplamý.";
         Text[ catalan ] = "Suma errónea de revisión.";
+        Text[ finnish ] = "Väärä tarkistussumma.";
     };
     String ERRCODE_IO_WRITEPROTECTED
     {
@@ -2877,6 +2983,7 @@ Resource RID_ERRHDL
         Text[ korean ] = "±â´É ºÒ°¡´É: ¾²±â º¸È£µÊ.";
         Text[ turkish ] = "Ýþlev olanaklý deðil: Yazma korumalý.";
         Text[ catalan ] = "Función imposible: Solo lectura.";
+        Text[ finnish ] = "Toiminnon toteutus ei ole mahdollista: objekti on kirjoitussuojattu.";
     };
 #endif
 };
