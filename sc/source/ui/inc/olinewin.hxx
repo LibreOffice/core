@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:39:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,20 +129,20 @@ private:
     /** Returns the calc document. */
     inline ScDocument&          GetDoc() const { return *mrViewData.GetDocument(); }
     /** Returns the current sheet index. */
-    inline sal_uInt16           GetTab() const { return mrViewData.GetTabNo(); }
+    inline SCTAB                GetTab() const { return mrViewData.GetTabNo(); }
     /** Returns the outline array of the corresponding document. */
     const ScOutlineArray*       GetOutlineArray() const;
     /** Returns the specified outline entry. */
     const ScOutlineEntry*       GetOutlineEntry( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
 
     /** Returns true, if the column/row is hidden. */
-    bool                        IsHidden( sal_uInt16 nColRowIndex ) const;
+    bool                        IsHidden( SCCOLROW nColRowIndex ) const;
     /** Returns true, if the column/row is filtered. */
-    bool                        IsFiltered( sal_uInt16 nColRowIndex ) const;
+    bool                        IsFiltered( SCCOLROW nColRowIndex ) const;
     /** Returns true, if all columns/rows before nColRowIndex are hidden. */
-    bool                        IsFirstVisible( sal_uInt16 nColRowIndex ) const;
+    bool                        IsFirstVisible( SCCOLROW nColRowIndex ) const;
     /** Returns the currently visible column/row range. */
-    void                        GetVisibleRange( sal_uInt16& rnColRowStart, sal_uInt16& rnColRowEnd ) const;
+    void                        GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColRowEnd ) const;
 
     /** Returns the point in the window of the specified position. */
     Point                       GetPoint( sal_Int32 nLevelPos, sal_Int32 nEntryPos ) const;
@@ -164,7 +164,7 @@ private:
     sal_uInt16                  GetLevelFromPos( sal_Int32 nLevelPos ) const;
 
     /** Returns the start coordinate of the specified column/row in the window. */
-    sal_Int32                   GetColRowPos( sal_uInt16 nColRowIndex ) const;
+    sal_Int32                   GetColRowPos( SCCOLROW nColRowIndex ) const;
     /** Returns the entry position of header images. */
     sal_Int32                   GetHeaderEntryPos() const;
     /** Calculates the coordinates the outline entry takes in the window.
