@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 16:03:37 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 11:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1831,7 +1831,8 @@ void ODatabaseForm::disposing()
     OPropertySetAggregationHelper::disposing();
 
     // stop listening on the aggregate
-    m_xAggregateAsRowSet->removeRowSetListener(this);
+    if (m_xAggregateAsRowSet.is())
+        m_xAggregateAsRowSet->removeRowSetListener(this);
 
     staruno::Reference<starlang::XComponent>  xAggregationComponent;
     if (query_aggregation(m_xAggregate, xAggregationComponent))
