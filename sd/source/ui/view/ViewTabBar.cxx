@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 14:18:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "ViewTabBar.hxx"
 
 #define USE_TAB_CONTROL
@@ -211,7 +210,7 @@ void ViewTabBar::ActivatePage (void)
         if (pFrameView != NULL)
         {
             pFrameView->SetViewShEditMode (EM_PAGE, pFrameView->GetPageKind());
-            DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pViewShell);
+            DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell);
             if (pDrawViewShell != NULL)
             {
                 pFrameView->SetLayerMode (pDrawViewShell->IsLayerModeActive());
