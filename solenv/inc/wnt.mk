@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-09 11:23:33 $
+#   last change: $Author: obo $ $Date: 2002-10-29 10:01:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -500,8 +500,13 @@ STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
 
+.IF "$(COMEX)"!="8"
 LIBSTLPORT=stlport_vc6.lib
 LIBSTLPORTST=stlport_vc6_static.lib
+.ELSE
+LIBSTLPORT=stlport_vc7.lib
+LIBSTLPORTST=stlport_vc7_static.lib
+.ENDIF
 
 .IF "$(USE_SHELL)"=="4nt"
 LIBMGR=lib $(NOLOGO)
