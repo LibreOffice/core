@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBackend.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-03-30 14:41:02 $
+ *  last change:$Date: 2004-11-02 11:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public class _XBackend extends MultiMethodTest {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         } catch (com.sun.star.lang.NoSupportException e) {
-            log.println("unexpected Exception " + e + " -- OK");
+            log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         }
 
@@ -133,7 +133,7 @@ public class _XBackend extends MultiMethodTest {
             log.println("unexpected Exception -- FAILED");
             res = false;
         } catch (com.sun.star.lang.NoSupportException e) {
-            log.println("unexpected Exception " + e + " -- OK");
+            log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         }
 
@@ -156,7 +156,7 @@ public class _XBackend extends MultiMethodTest {
             log.println("unexpected Exception -- FAILED");
             res = false;
         } catch (com.sun.star.lang.NoSupportException e) {
-            log.println("unexpected Exception " + e + " -- OK");
+            log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         } catch (com.sun.star.container.NoSuchElementException e) {
             log.println("unexpected Exception " + e + " -- FAILED");
