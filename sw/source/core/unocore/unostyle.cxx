@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:08 $
+ *  last change: $Author: os $ $Date: 2002-10-24 09:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2019,31 +2019,30 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
             short nSet;
             rValue >>= nSet;
 
-            sal_uInt16 nId = rBase.pNewBase->GetCollection()->GetPoolFmtId() &
-                            ~ ( COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID );
+            sal_uInt16 nId;
             switch( nSet )
             {
                 case ParagraphStyleCategory::TEXT:
-                    nId |= COLL_TEXT_BITS;
+                    nId = SWSTYLEBIT_TEXT;
                     break;
                 case ParagraphStyleCategory::CHAPTER:
-                    nId |= COLL_DOC_BITS;
+                    nId = SWSTYLEBIT_CHAPTER;
                     break;
                 case ParagraphStyleCategory::LIST:
-                    nId |= COLL_LISTS_BITS;
+                    nId = SWSTYLEBIT_LIST;
                     break;
                 case ParagraphStyleCategory::INDEX:
-                    nId |= COLL_REGISTER_BITS;
+                    nId = SWSTYLEBIT_IDX;
                     break;
                 case ParagraphStyleCategory::EXTRA:
-                    nId |= COLL_EXTRA_BITS;
+                    nId = SWSTYLEBIT_EXTRA;
                     break;
                 case ParagraphStyleCategory::HTML:
-                    nId |= COLL_HTML_BITS;
+                    nId = SWSTYLEBIT_HTML;
                     break;
                 default: throw lang::IllegalArgumentException();
             }
-            rBase.pNewBase->GetCollection()->SetPoolFmtId( nId );
+            rBase.pNewBase->SetMask( nId|SFXSTYLEBIT_USERDEF );
         }
         break;
         case SID_SWREGISTER_COLLECTION:
