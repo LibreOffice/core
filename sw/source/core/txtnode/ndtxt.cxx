@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@
 #ifndef _CHECKIT_HXX
 #include <checkit.hxx>
 #endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
+#endif
 
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
@@ -357,6 +360,9 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
         if( pRule )
             pRule->SetInvalidRule( TRUE );
     }
+
+    bContainsHiddenChars = bHiddenCharsHidePara = FALSE;
+    bRecalcHiddenCharFlags = TRUE;
 }
 
 SwTxtNode::~SwTxtNode()
@@ -1057,7 +1063,10 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
 
     SwTxtFmtColl *pOldColl = GetTxtColl();
     if( pNewColl != pOldColl )
+    {
+        SetCalcHiddenCharFlags();
         SwCntntNode::ChgFmtColl( pNewColl );
+    }
     // nur wenn im normalen Nodes-Array
     if( GetNodes().IsDocNodes() )
         _ChgTxtCollUpdateNum( pOldColl, (SwTxtFmtColl*)pNewColl );
@@ -1776,6 +1785,10 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
         SwModify::Modify( 0, &aHint );
     }
 
+    // By inserting a character, the hidden flags
+    // at the TxtNode can become invalid:
+    SetCalcHiddenCharFlags();
+
     CHECK_SWPHINTS(this);
     return *this;
 }
@@ -2195,6 +2208,10 @@ SwTxtNode& SwTxtNode::Erase(const SwIndex &rIdx, xub_StrLen nCount,
         SwModify::Modify( 0, &aHint );
     }
 
+    // By deleting a character, the hidden flags
+    // at the TxtNode can become invalid:
+    SetCalcHiddenCharFlags();
+
     CHECK_SWPHINTS(this);
     return *this;
 }
@@ -2598,7 +2615,7 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx, const xub_StrLen nLen,
     XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
     xub_StrLen nTxtStt = nIdx;
     Replace0xFF( aTxt, nTxtStt, aTxt.Len(), TRUE );
-
+// TODO HIDDEN
     if( bWithNum )
         aTxt.Insert( GetNumString(), 0 );
 
@@ -2621,6 +2638,11 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     String sTmpText = GetTxt().Copy(nIdx, nLen);
     if(bReplaceTabsWithSpaces)
         sTmpText.SearchAndReplaceAll('\t', ' ');
+
+    const xub_Unicode cChar = CH_TXTATR_BREAKWORD;
+    const USHORT nHiddenChrs =
+        SwScriptInfo::MaskHiddenRanges( *this, sTmpText, &cChar );
+
     rDestNd.Insert( sTmpText, aDestIdx );
     nLen = aDestIdx.GetIndex() - nDestStt;
 
@@ -2718,6 +2740,25 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         aDestIdx = nDestStt;
         rDestNd.Insert( GetNumString(), aDestIdx );
     }
+
+    if ( nHiddenChrs > 0 )
+    {
+        aDestIdx = 0;
+        while ( aDestIdx < rDestNd.GetTxt().Len() )
+        {
+            if ( cChar == rDestNd.GetTxt().GetChar( aDestIdx.GetIndex() ) )
+            {
+                xub_StrLen nIdx = aDestIdx.GetIndex();
+                while ( nIdx < rDestNd.GetTxt().Len() &&
+                        cChar == rDestNd.GetTxt().GetChar( ++nIdx ) )
+                    ;
+                rDestNd.Erase( aDestIdx, nIdx - aDestIdx.GetIndex() );
+            }
+            else
+                ++aDestIdx;
+        }
+    }
+
     return TRUE;
 }
 
