@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 09:44:20 $
+ *  last change: $Author: tl $ $Date: 2002-08-30 12:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2995,6 +2995,8 @@ void SwXPageStyle::setPropertyValues(
                 case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_HEADER_SHARE_CONTENT:
                 case FN_UNO_HEADER_HEIGHT:
+                case FN_UNO_HEADER_EAT_SPACING:
+
                 case FN_UNO_FOOTER_ON:
                 case FN_UNO_FOOTER_BACKGROUND:
                 case FN_UNO_FOOTER_BOX:
@@ -3004,6 +3006,7 @@ void SwXPageStyle::setPropertyValues(
                 case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_FOOTER_SHARE_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
+                case FN_UNO_FOOTER_EAT_SPACING:
                 {
                     sal_Bool bSetItem = sal_False;
                     sal_Bool bFooter = sal_False;
@@ -3047,7 +3050,10 @@ void SwXPageStyle::setPropertyValues(
                         // kein break;
                         case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
                         break;
-
+                        case FN_UNO_FOOTER_EAT_SPACING:     bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_EAT_SPACING:     nRes = RES_HEADER_FOOTER_EAT_SPACING;nItemType = TYPE_SIZE;
+                        break;
                     }
                     const SvxSetItem* pSetItem;
                     if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
@@ -3194,6 +3200,7 @@ Sequence< Any > SwXPageStyle::getPropertyValues(
                 case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_HEADER_SHARE_CONTENT:
                 case FN_UNO_HEADER_HEIGHT:
+                case FN_UNO_HEADER_EAT_SPACING:
 
                 case FN_UNO_FOOTER_ON:
                 case FN_UNO_FOOTER_BACKGROUND:
@@ -3204,6 +3211,7 @@ Sequence< Any > SwXPageStyle::getPropertyValues(
                 case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_FOOTER_SHARE_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
+                case FN_UNO_FOOTER_EAT_SPACING:
                 {
                     SfxStyleSheetBasePool* pBasePool = ((SwXPageStyle*)this)->GetBasePool();
                     pBasePool->SetSearchMask(GetFamily());
@@ -3258,6 +3266,10 @@ Sequence< Any > SwXPageStyle::getPropertyValues(
                             case FN_UNO_FOOTER_HEIGHT:          bFooter = sal_True;
                             // kein break;
                             case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
+                            break;
+                            case FN_UNO_FOOTER_EAT_SPACING: bFooter = sal_True;
+                            // kein break;
+                            case FN_UNO_HEADER_EAT_SPACING: nRes = RES_HEADER_FOOTER_EAT_SPACING;
                             break;
                         }
                         const SvxSetItem* pSetItem;

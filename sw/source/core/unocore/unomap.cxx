@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 13:39:18 $
+ *  last change: $Author: tl $ $Date: 2002-08-30 12:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_HEADER_IS_SHARED), FN_UNO_HEADER_SHARE_CONTENT,CPPU_E2T(CPPUTYPE_BOOLEAN),          PROPERTY_NONE ,0         },
                     { SW_PROP_NMID(UNO_NAME_HEADER_HEIGHT), FN_UNO_HEADER_HEIGHT,       CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
                     { SW_PROP_NMID(UNO_NAME_HEADER_IS_ON), FN_UNO_HEADER_ON,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_DYNAMIC_SPACING), FN_UNO_HEADER_EAT_SPACING,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
 
                     { SW_PROP_NMID(UNO_NAME_FOOTER_BACK_COLOR), FN_UNO_FOOTER_BACKGROUND,   CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
                 //  { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC), FN_UNO_FOOTER_BACKGROUND,      &,                              PROPERTY_NONE, MID_GRAPHIC
@@ -803,6 +804,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_FOOTER_IS_SHARED), FN_UNO_FOOTER_SHARE_CONTENT,CPPU_E2T(CPPUTYPE_BOOLEAN),          PROPERTY_NONE ,0         },
                     { SW_PROP_NMID(UNO_NAME_FOOTER_HEIGHT), FN_UNO_FOOTER_HEIGHT,       CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
                     { SW_PROP_NMID(UNO_NAME_FOOTER_IS_ON), FN_UNO_FOOTER_ON,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_DYNAMIC_SPACING), FN_UNO_FOOTER_EAT_SPACING,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
 
 
                     { SW_PROP_NMID(UNO_NAME_IS_LANDSCAPE), SID_ATTR_PAGE,           CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE ,MID_PAGE_ORIENTATION   },

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:18:40 $
+ *  last change: $Author: tl $ $Date: 2002-08-30 11:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,6 +881,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_GLOSSARY                  (FN_EXTRA2 + 89)
 #define FN_NEW_GLOSSARY                     (FN_EXTRA2 + 90)
 #define FN_SET_ACT_GLOSSARY                 (FN_EXTRA2 + 91)
+
+#define FN_UNO_HEADER_EAT_SPACING           (FN_EXTRA2 + 92)
+#define FN_UNO_FOOTER_EAT_SPACING           (FN_EXTRA2 + 93)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
