@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-04 08:58:37 $
+ *  last change: $Author: tbe $ $Date: 2001-07-06 15:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,110 @@ void BasicIDE::DecBasicDialogCount()
 
 //----------------------------------------------------------------------------
 
+::rtl::OUString BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly )
+{
+    IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
+    SFX_APP()->EnterBasicCall();
+
+    String aURL;
+    SbMethod* pMethod = NULL;
+
+    Window* pParent = Application::GetDefDialogParent();
+
+    MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
+    if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
+        pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
+
+    short nRetValue = pChooser->Execute();
+
+    IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
+
+    switch ( nRetValue )
+    {
+        case MACRO_OK_RUN:
+        {
+            pMethod = pChooser->GetMacro();
+
+            if ( pMethod )
+            {
+                SbModule* pModule = pMethod->GetModule();
+                DBG_ASSERT(pModule, "BasicIDE::SelectMacro: No Module found!");
+                if ( pModule )
+                {
+                    StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
+                    DBG_ASSERT(pBasic, "BasicIDE::SelectMacro: No Basic found!");
+                    if ( pBasic )
+                    {
+                        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+                        DBG_ASSERT(pBasMgr, "BasicIDE::SelectMacro: No BasicManager found!");
+                        if ( pBasMgr )
+                        {
+                            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                            aURL = String::CreateFromAscii("macro://");
+                            if ( pShell )
+                                aURL += pShell->GetTitle( SFX_TITLE_APINAME );
+                            aURL += '/';
+                            aURL += pBasic->GetName();
+                            aURL += '.';
+                            aURL += pModule->GetName();
+                            aURL += '.';
+                            aURL += pMethod->GetName();
+                            aURL += String::CreateFromAscii("()");
+                        }
+                    }
+                }
+            }
+
+            if ( pMethod && bExecute )
+            {
+                pMethod->AddRef();  // festhalten, bis Event abgearbeitet.
+                Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
+            }
+        }
+        break;
+    }
+
+    delete pChooser;
+
+    SFX_APP()->LeaveBasicCall();
+
+    return ::rtl::OUString( aURL );
+}
+
+//----------------------------------------------------------------------------
+
+::rtl::OUString BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
+{
+    if ( rPreferredMacroDesciption.Len() )
+        IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
+    return BasicIDE::SelectMacro( bExecute, bChooseOnly );
+}
+
+//----------------------------------------------------------------------------
+
+Sequence< ::rtl::OUString > BasicIDE::GetMethodsFromModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+    throw(NoSuchElementException )
+{
+    // get module
+    ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
+
+    SbModuleRef xModule = new SbModule( rModName );
+    xModule->SetSource( String( aOUSource ) );
+    USHORT nCount = xModule->GetMethods()->Count();
+    Sequence< ::rtl::OUString > aSeqMethods( nCount );
+
+    for ( USHORT i = 0; i < nCount; i++ )
+    {
+        SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+        DBG_ASSERT( pMethod, "Method not found! (NULL)" );
+        aSeqMethods.getArray()[ i ] = pMethod->GetName();
+    }
+
+    return aSeqMethods;
+}
+
+//----------------------------------------------------------------------------
+
 Reference< container::XNameContainer > BasicIDE::GetModuleLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
     throw(NoSuchElementException)
 {
@@ -346,29 +450,6 @@ BOOL BasicIDE::HasModule( SfxObjectShell* pShell, const String& rLibName, const 
     return aOUModSource;
 }
 */
-
-//----------------------------------------------------------------------------
-
-Sequence< ::rtl::OUString > BasicIDE::GetMethodsFromModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
-    throw(NoSuchElementException )
-{
-    // get module
-    ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
-
-    SbModuleRef xModule = new SbModule( rModName );
-    xModule->SetSource( String( aOUSource ) );
-    USHORT nCount = xModule->GetMethods()->Count();
-    Sequence< ::rtl::OUString > aSeqMethods( nCount );
-
-    for ( USHORT i = 0; i < nCount; i++ )
-    {
-        SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
-        DBG_ASSERT( pMethod, "Method not found! (NULL)" );
-        aSeqMethods.getArray()[ i ] = pMethod->GetName();
-    }
-
-    return aSeqMethods;
-}
 
 //----------------------------------------------------------------------------
 
