@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:06:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,17 +291,25 @@ TabPage TP_FRM_STD
     Hide = TRUE ;
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 43 , 8 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_2 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
     };
+    FixedText FT_WIDTH_AUTO
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_2 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ de ] = "Breite (mindestens)" ;
+        Text [ en-US ] = "~Width (at least)" ;
+    };
     MetricField ED_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 14 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_3 , SWFRMPG_ROW_1 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_3) , RSC_CD_TEXTBOX_HEIGHT ) ;
         Text = "12,99" ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -317,25 +325,41 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_REL_WIDTH
     {
-        Pos = MAP_APPFONT ( 59 , 30 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_3 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ de ] = "R~elativ" ;
         Text [ en-US ] = "Relat~ive" ;
     };
+    CheckBox CB_AUTOWIDTH
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_4 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Automatisch" ;
+        Text [ en-US ] = "Automatic";
+    };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 43 , 8 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "H~eight" ;
     };
+    FixedText FT_HEIGHT_AUTO
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ de ] = "Höhe (mindestens)" ;
+        Text [ en-US ] = "H~eight (at least)" ;
+    };
     MetricField ED_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 44 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_3 , SWFRMPG_ROW_5 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_3) , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -350,28 +374,28 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_REL_HEIGHT
     {
-        Pos = MAP_APPFONT ( 59 , 60 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_7 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ de ] = "Re~lativ" ;
         Text [ en-US ] = "Re~lative" ;
     };
-    CheckBox CB_FIXEDRATIO
-    {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ de ] = "~Abgleich" ;
-        Text [ en-US ] = "~Keep ratio" ;
-        Text [ x-comment ] = " ";
-    };
     CheckBox CB_AUTOHEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_8 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ de ] = "Au~tom. Größe" ;
         Text [ en-US ] = "AutoSize";
+        Text [ x-comment ] = " ";
+    };
+    CheckBox CB_FIXEDRATIO
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_9 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_1) , RSC_CD_CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Abgleich" ;
+        Text [ en-US ] = "~Keep ratio" ;
     };
     PushButton BT_REALSIZE
     {
@@ -384,15 +408,15 @@ TabPage TP_FRM_STD
     };
     FixedLine FL_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 104 , 8 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_0 , SWFRMPG_ROW_0 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_0) , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
     };
     FixedLine FL_TYPE_SEP
     {
         Pos = MAP_APPFONT ( 111 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 86 ) ;
+        Size = MAP_APPFONT ( 4 , (SWFRMPG_ROW_9+RSC_CD_CHECKBOX_HEIGHT-SWFRMPG_ROW_1) ) ;
         Vert = TRUE;
     };
     RadioButton RB_ANCHOR_PAGE
@@ -445,23 +469,23 @@ TabPage TP_FRM_STD
     };
     FixedText FT_HORIZONTAL
     {
-        Pos = MAP_APPFONT ( 12 , 117 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , SWFRMPG_ROW_12 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text [ de ] = "Horizo~ntal" ;
         Text [ en-US ] = "Hori~zontal" ;
     };
     ListBox DLB_HORIZONTAL
     {
-        Pos = MAP_APPFONT ( 49 , 115 ) ;
+        Pos = MAP_APPFONT ( 49 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_AT_HORZ_POS
     {
-        Pos = MAP_APPFONT ( 101 , 117 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 101 , SWFRMPG_ROW_12 ) ;
+        Size = MAP_APPFONT ( 20 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Center = TRUE ;
         Text [ de ] = "u~m" ;
         Text [ en-US ] = "b~y" ;
@@ -469,8 +493,8 @@ TabPage TP_FRM_STD
     MetricField ED_AT_HORZ_POS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 115 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 123 , SWFRMPG_ROW_11 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -485,8 +509,8 @@ TabPage TP_FRM_STD
     };
     FixedText FT_HORI_RELATION
     {
-        Pos = MAP_APPFONT ( 160 , 117 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 160 , SWFRMPG_ROW_12 ) ;
+        Size = MAP_APPFONT ( 21 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
         Text [ de ] = "z~u" ;
         Text [ en-US ] = "~to" ;
@@ -494,38 +518,38 @@ TabPage TP_FRM_STD
     };
     ListBox LB_HORI_RELATION
     {
-        Pos = MAP_APPFONT ( 183 , 115 ) ;
+        Pos = MAP_APPFONT ( 183 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     CheckBox CB_MIRROR
     {
-        Pos = MAP_APPFONT ( 12 , 131 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_13 ) ;
+        Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ de ] = "Auf geraden Seiten spie~geln" ;
         Text [ en-US ] = "~Mirror on even pages" ;
     };
     FixedText FT_VERTICAL
     {
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , SWFRMPG_ROW_15 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text [ de ] = "~Vertikal" ;
         Text [ en-US ] = "~Vertical" ;
     };
     ListBox DLB_VERTICAL
     {
-        Pos = MAP_APPFONT ( 49 , 145 ) ;
+        Pos = MAP_APPFONT ( 49 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_AT_VERT_POS
     {
-        Pos = MAP_APPFONT ( 101 , 147 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 101 , SWFRMPG_ROW_15 ) ;
+        Size = MAP_APPFONT ( 20 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
         Text [ de ] = "u~m" ;
         Text [ en-US ] = "by" ;
@@ -533,8 +557,8 @@ TabPage TP_FRM_STD
     MetricField ED_AT_VERT_POS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 145 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 123 , SWFRMPG_ROW_14 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -549,8 +573,8 @@ TabPage TP_FRM_STD
     };
     FixedText FT_VERT_RELATION
     {
-        Pos = MAP_APPFONT ( 160 , 147 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 160 , SWFRMPG_ROW_15 ) ;
+        Size = MAP_APPFONT ( 21 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
         Text [ de ] = "z~u" ;
         Text [ en-US ] = "t~o" ;
@@ -558,23 +582,23 @@ TabPage TP_FRM_STD
     };
     ListBox LB_VERT_RELATION
     {
-        Pos = MAP_APPFONT ( 183 , 145 ) ;
+        Pos = MAP_APPFONT ( 183 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     CheckBox CB_FOLLOWTEXTFLOW
     {
-        Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_16 ) ;
+        Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ de ] = "Textfluss folgen" ;
         Text [ en-US ] = "Follow text flow" ;
     };
     FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 6 , 104 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , SWFRMPG_ROW_10 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
     };
