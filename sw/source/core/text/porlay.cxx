@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-02 15:09:42 $
+ *  last change: $Author: fme $ $Date: 2002-08-12 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
 #endif
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>
@@ -942,12 +945,12 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( ((SwTxtNode*)&rNode), NULL, nLastKashida,
-                                nChg, sal_False, sal_False );
-            LanguageType eActLang = rNode.GetLang( nLastKashida );
+            SwScanner aScanner( rNode, NULL,
+                                ::com::sun::star::i18n::WordType::DICTIONARY_WORD,
+                                nLastKashida, nChg, sal_False, sal_False );
 
             // the search has to be performed on a per word base
-            while ( aScanner.NextWord( eActLang ) )
+            while ( aScanner.NextWord() )
             {
                 const XubString& rWord = aScanner.GetWord();
                 xub_StrLen nIdx = 0;
@@ -1041,24 +1044,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 
                 if ( STRING_LEN != nKashidaPos )
                     aKashida.Insert( nKashidaPos, nCntKash++ );
-
-                // get next language in order to find next or previous word
-                xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
-
-                // first we have to skip some whitespace characters
-                while ( nNextBegin < rTxt.Len() &&
-                        ( 0x3000 == rTxt.GetChar( nNextBegin ) ||
-                          ' ' == rTxt.GetChar( nNextBegin ) ||
-                          '\t' == rTxt.GetChar( nNextBegin ) ||
-                          0x0a == rTxt.GetChar( nNextBegin ) ) )
-                {
-                    ++nNextBegin;
-                }
-
-                if ( nNextBegin < rTxt.Len() )
-                    eActLang = rNode.GetLang( nNextBegin );
-                else
-                    break;
             } // end of kashida search
         }
 #endif
@@ -1086,13 +1071,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         nScript = GetScriptType( nCnt++ );
         switch ( nScript )
         {
-        case LATIN:
+        case i18n::ScriptType::LATIN:
             bLatin = sal_True;
             break;
-        case ASIAN:
+        case i18n::ScriptType::ASIAN:
             bAsian = sal_True;
             break;
-        case COMPLEX:
+        case i18n::ScriptType::COMPLEX:
             bComplex = sal_True;
             break;
         default:

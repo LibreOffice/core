@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 12:38:34 $
+ *  last change: $Author: fme $ $Date: 2002-08-12 08:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,8 @@
 #include <tools/fract.hxx>
 #endif
 
-#ifdef BIDI
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
-#endif
 #endif
 
 
@@ -99,8 +97,6 @@ class SwTxtFrm;
 
 #define DARK_COLOR 154
 
-#ifdef BIDI
-
 /*************************************************************************
  *                class SwScanner
  * Hilfsklasse, die beim Spellen die Worte im gewuenschten Bereich
@@ -111,24 +107,32 @@ class SwScanner
 {
     XubString aWord;
     const SwWrongList* pWrong;
-    SwTxtNode* pNode;
+    const SwTxtNode& rNode;
     xub_StrLen nEndPos;
     xub_StrLen nBegin;
     xub_StrLen nLen;
+    LanguageType aCurrLang;
+    USHORT nWordType;
     BOOL bReverse;
     BOOL bStart;
     BOOL bIsOnlineSpell;
+
 public:
-    SwScanner( SwTxtNode* pNd, const SwWrongList* pWrng, xub_StrLen nStart,
-                xub_StrLen nEnde, BOOL bRev, BOOL bOS );
+    SwScanner( const SwTxtNode& rNd, const SwWrongList* pWrng, USHORT nWordType,
+               xub_StrLen nStart, xub_StrLen nEnde, BOOL bRev, BOOL bOS );
+
+    // This next word function tries to find the language for the next word
+    // It should currently _not_ be used for spell checking, and works only for
+    // ! bReverse
+    BOOL NextWord();
     BOOL NextWord( LanguageType aLang );
+
     const XubString& GetWord() const    { return aWord; }
+
     xub_StrLen GetBegin() const         { return nBegin; }
     xub_StrLen GetEnd() const           { return nBegin + nLen; }
     xub_StrLen GetLen() const           { return nLen; }
 };
-
-#endif
 
 /*************************************************************************
  *                      class SwScriptInfo

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-15 08:55:59 $
+ *  last change: $Author: fme $ $Date: 2002-08-12 08:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
+#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -166,6 +169,9 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> //DTor
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
@@ -195,6 +201,9 @@
 #endif
 #ifndef _WRONG_HXX
 #include <wrong.hxx>            // fuer OnlineSpell-Invalidierung
+#endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
 #endif
 #ifndef _ACORRECT_HXX
 #include <acorrect.hxx>         // Autokorrektur
@@ -637,6 +646,58 @@ void SwDoc::SetDocStat( const SwDocStat& rStat )
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
 
+/* void SwDoc::UpdateDocStat( SwDocStat& rStat )
+{
+    if( rStat.bModified )
+    {
+        rStat.Reset();
+        rStat.nPara = 0;        // Default ist auf 1 !!
+        SwNode* pNd;
+
+        for( ULONG n = GetNodes().Count(); n; )
+            switch( ( pNd = GetNodes()[ --n ])->GetNodeType() )
+            {
+            case ND_TEXTNODE:
+                {
+                    const String& rStr = ((SwTxtNode*)pNd)->GetTxt();
+
+                    if( rStr.Len() && pBreakIt->xBreak.is() )
+                    {
+//                        WordType::ANY_WORD
+//                        WordType::ANYWORD_IGNOREWHITESPACES
+//                        WordType::DICTIONARY_WORD
+//                        WordType::WORD_COUNT
+
+                        SwScanner aScanner( *((SwTxtNode*)pNd), NULL,
+                                            ::com::sun::star::i18n::WordType::DICTIONARY_WORD,
+                                            0, rStr.Len(), sal_False, sal_False );
+
+                        while ( aScanner.NextWord() )
+                        {
+                            if ( aScanner.GetLen() > 1 ||
+                                 CH_TXTATR_BREAKWORD != rStr.GetChar( aScanner.GetBegin() ) )
+                                ++rStat.nWord;
+                        }
+                    }
+                    rStat.nChar += rStr.Len();
+                    ++rStat.nPara;
+                }
+                break;
+            case ND_TABLENODE:      ++rStat.nTbl;   break;
+            case ND_GRFNODE:        ++rStat.nGrf;   break;
+            case ND_OLENODE:        ++rStat.nOLE;   break;
+            case ND_SECTIONNODE:    break;
+            }
+
+        rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
+        rStat.bModified = FALSE;
+        SetDocStat( rStat );
+        // event. Stat. Felder Updaten
+        SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
+        pType->UpdateFlds();
+    }
+}  */
+
 void SwDoc::UpdateDocStat( SwDocStat& rStat )
 {
     if( rStat.bModified )
@@ -716,6 +777,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         pType->UpdateFlds();
     }
 }
+
 
 // Dokument - Info
 
