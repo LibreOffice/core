@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,9 +355,17 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
     aGuard.clear();
     while( aIt.hasMoreElements() )
     {
-        Reference<XEventListener > xLst( aIt.next(), UNO_QUERY );
-        if( xLst.is() )
-            xLst->disposing( rEvt );
+        try
+        {
+            Reference<XEventListener > xLst( aIt.next(), UNO_QUERY );
+            if( xLst.is() )
+                xLst->disposing( rEvt );
+        }
+        catch ( RuntimeException & )
+        {
+            // be robust, if e.g. a remote bridge has disposed already.
+            // there is no way, to delegate the error to the caller :o(.
+        }
     }
 }
 
