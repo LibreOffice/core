@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 07:13:46 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 13:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,11 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
                 &&  isConnected()
                 );
                 // for a new table, assume that we can edit indexes
+            if ( aReturn.bEnabled )
+            {
+                ::std::vector<OTableRow*>::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
+                aReturn.bEnabled = aIter != m_vRowList.end();
+            }
             break;
     }
     return aReturn;
