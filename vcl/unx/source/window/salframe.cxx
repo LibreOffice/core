@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: cp $ $Date: 2002-09-24 14:33:30 $
+ *  last change: $Author: pl $ $Date: 2002-10-02 13:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2260,6 +2260,9 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         else if( pEvent->xbutton.button == Button4 ||
             pEvent->xbutton.button == Button5 )
         {
+            if( pEvent->type == ButtonRelease )
+                return 0;
+
             if( ! nLines )
             {
                 char* pEnv = getenv( "SAL_WHEELLINES" );
@@ -2283,7 +2286,7 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
             nEvent = SALEVENT_WHEELMOUSE;
 
             // --- RTL --- (mirror mouse pos)
-        if( Application::GetSettings().GetLayoutRTL() )
+            if( Application::GetSettings().GetLayoutRTL() )
                 aWheelEvt.mnX = nWidth_-1-aWheelEvt.mnX;
             return Call( nEvent, &aWheelEvt );
         }
