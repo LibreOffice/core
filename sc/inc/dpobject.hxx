@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:58:37 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
+class StrCollection;
 class TypedStrCollection;
 struct PivotField;
 
@@ -190,12 +191,16 @@ public:
     const String&       GetTag() const                  { return aTableTag; }
 
     String              GetDimName( long nDim, BOOL& rIsDataLayout );
+    BOOL                IsDuplicated( long nDim );
+    long                GetDimCount();
     void                GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
     long                GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
     BOOL                GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
                                         long nDragDim,
                                         Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
     BOOL                IsFilterButton( const ScAddress& rPos );
+
+    void                GetMemberResultNames( StrCollection& rNames, long nDimension );
 
     void                FillPageList( TypedStrCollection& rStrings, long nField );
 
