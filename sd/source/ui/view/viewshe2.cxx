@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:35:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include "ViewShell.hxx"
 #include "ViewShellHint.hxx"
+
+#include "ViewShellImplementation.hxx"
+#include "FactoryIds.hxx"
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -1197,7 +1200,12 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     rSequence.realloc( nIndex + 1 );
 
     OSL_ASSERT (GetViewShell()!=NULL);
-    sal_uInt16 nViewID(GetViewShell()->GetViewFrame()->GetCurViewId());
+    // Get the view id from the view shell in the center pane.  This will
+    // usually be the called view shell, but to be on the safe side we call
+    // the main view shell explicitly.
+    sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
+    if (GetViewShellBase().GetMainViewShell() != NULL)
+        nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
     rSequence[nIndex].Name = rtl::OUString (
         RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ViewId ) );
     rtl::OUStringBuffer sBuffer (
