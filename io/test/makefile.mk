@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2001-01-08 13:27:40 $
+#   last change: $Author: jbu $ $Date: 2001-01-25 14:07:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,6 @@ PRJNAME=extensions
 TARGET=workben
 LIBTARGET=NO
 
-#TESTAPP=testcomponent
-TESTAPP=testconnection
-
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
@@ -100,7 +97,6 @@ UNOTYPES =	com.sun.star.connection.XConnector \
 #
 # std testcomponent
 #
-.IF "$(TESTAPP)" == "testcomponent"
 
 APP1TARGET = testcomponent
 APP1OBJS   = $(OBJ)$/testcomponent.obj
@@ -108,18 +104,13 @@ APP1STDLIBS = 	$(SALLIB) \
         $(CPPULIB)\
         $(CPPUHELPERLIB)
 
-.ENDIF # testcomponent
-
-.IF "$(TESTAPP)" == "testconnection"
-
-APP1TARGET = testconnection
-APP1OBJS   = $(OBJ)$/testconnection.obj
-APP1STDLIBS = 	$(SALLIB) \
+APP2TARGET = testconnection
+APP2OBJS   = $(OBJ)$/testconnection.obj
+APP2STDLIBS = 	$(SALLIB) \
         $(VOSLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB)
 
-.ENDIF # testcomponent
 
 
 # --- Targets ------------------------------------------------------
