@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:59:17 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,7 +1044,7 @@ String STR_AUTH_TYPE_ARTICLE
     Text[ korean ] = "ÀâÁö ±â»ç";
     Text[ chinese_simplified ] = "ÔÓÖ¾ÎÄÕÂ";
     Text[ chinese_traditional ] = "Âø§Ó¤å³¹";
-    Text[ arabic ] = "ãŞÇáÉ ãÌáÉ";
+    Text[ arabic ] = "ãŞÇáÉ İí ãÌáÉ";
     Text[ turkish ] = "Dergi makalesi";
     Text[ language_user1 ] = " ";
 };
@@ -1212,7 +1212,7 @@ String STR_AUTH_TYPE_JOURNAL
     Text[ korean ] = "ÀâÁö";
     Text[ chinese_simplified ] = "ÔÓÖ¾";
     Text[ chinese_traditional ] = "Âø§Ó";
-    Text[ arabic ] = "ãÌáÉ";
+    Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "Dergi";
     Text[ language_user1 ] = " ";
 };
@@ -1836,7 +1836,7 @@ String STR_AUTH_FIELD_JOURNAL
     Text[ korean ] = "ÀâÁö";
     Text[ chinese_simplified ] = "ÔÓÖ¾";
     Text[ chinese_traditional ] = "Âø§Ó";
-    Text[ arabic ] = "ãÌáÉ";
+    Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "De~rgi";
     Text[ language_user1 ] = " ";
 };
