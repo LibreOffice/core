@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 13:25:13 $
+ *  last change: $Author: cl $ $Date: 2002-07-24 09:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-        if ( !bReadOnly && pViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
+        if ( pViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
         {
             bTextEdit = TRUE;
         }
@@ -385,7 +385,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = TRUE;
                 BOOL bDeactivateOLE = FALSE;
 
-                if ( !bReadOnly && !rMEvt.IsShift() && !rMEvt.IsMod2() )
+                if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
                 {
                     SdClient* pIPClient = (SdClient*) pViewShell->GetIPClient();
 
@@ -400,7 +400,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 BOOL bMarked = FALSE;
 
-                if ( !bReadOnly && !rMEvt.IsMod1() && !bDeactivateOLE)
+                if ( !rMEvt.IsMod1() && !bDeactivateOLE)
                 {
                     if ( rMEvt.IsMod2() )
                     {
@@ -420,27 +420,24 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                 }
 
-                if( !bReadOnly )
+                if ( !bReadOnly &&
+                     bMarked                                                   &&
+                    (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)))
                 {
-                    if (bMarked                                                   &&
-                        (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)) &&
-                        !pDocSh->IsReadOnly())
-                    {
-                        /**********************************************************
-                        * Objekt verschieben
-                        **********************************************************/
-                        aDragTimer.Start();
+                    /**********************************************************
+                    * Objekt verschieben
+                    **********************************************************/
+                    aDragTimer.Start();
 
-                        pHdl=pView->HitHandle(aMDPos, *pWindow);
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-                    }
-                    else
-                    {
-                        /**********************************************************
-                        * Objekt selektieren
-                        **********************************************************/
-                        pView->BegMarkObj(aMDPos);
-                    }
+                    pHdl=pView->HitHandle(aMDPos, *pWindow);
+                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                }
+                else
+                {
+                    /**********************************************************
+                    * Objekt selektieren
+                    **********************************************************/
+                    pView->BegMarkObj(aMDPos);
                 }
             }
         }
