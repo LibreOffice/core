@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcanvas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "implcanvas.hxx"
+#include <implcanvas.hxx>
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -78,8 +78,8 @@
 #include <canvas/canvastools.hxx>
 
 #include <cppcanvas/polypolygon.hxx>
-#include "implfont.hxx"
-#include "implcolor.hxx"
+#include <implfont.hxx>
+#include <implcolor.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -119,7 +119,11 @@ namespace cppcanvas
         void ImplCanvas::setClip( const PolyPolygonSharedPtr& rClipPoly )
         {
             mpClipPolyPolygon = rClipPoly;
-            maViewState.Clip = rClipPoly.get() != NULL ? rClipPoly->getUNOPolyPolygon() : NULL;
+
+            if( rClipPoly.get() )
+                maViewState.Clip = rClipPoly->getUNOPolyPolygon();
+            else
+                maViewState.Clip.clear();
         }
 
         PolyPolygonSharedPtr ImplCanvas::getClip() const
@@ -137,7 +141,7 @@ namespace cppcanvas
             return ColorSharedPtr( new ImplColor( getUNOCanvas()->getDevice() ) );
         }
 
-        CanvasSharedPtr ImplCanvas::cloneCanvas() const
+        CanvasSharedPtr ImplCanvas::clone() const
         {
             return CanvasSharedPtr( new ImplCanvas( *this ) );
         }
