@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScSheetLinksObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:15:46 $
+ *  last change:$Date: 2003-11-18 16:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ public class ScSheetLinksObj extends TestCase {
 
         // creating link. Doesn't matter that it refers to unexistant object.
         // this is for proper work of X*Access tests.
-        SL.link("dummy.sdc", "AnySheet", "", "",
+        String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
+        SL.link(aSourceArea, "Sheet1", "", "",
             com.sun.star.sheet.SheetLinkMode.VALUE);
 
         // Getting links.
