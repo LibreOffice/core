@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:58:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,6 @@ void SfxApplication::Init
     }
 #endif
 #endif
-    SetToolBoxCreator( CreateToolBox );
 }
 
 //--------------------------------------------------------------------
