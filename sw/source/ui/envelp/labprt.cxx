@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:25:58 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <labimg.hxx>
 #endif
 #ifndef _LABIMP_HXX
-#include <labimp.hxx>
+#include "swuilabimp.hxx" //CHINA001
 #endif
 
 #ifndef _CMDID_H
