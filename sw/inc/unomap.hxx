@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:26:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,8 @@
 #define WID_BLIND_COPIES_TO                     1097
 #define WID_IN_SERVER_PASSWORD                  1098
 #define WID_OUT_SERVER_PASSWORD                 1099
+#define WID_SAVE_FILTER_OPTIONS                 1100
+#define WID_SAVE_FILTER_DATA                    1101
 
 //AutoText
 #define WID_GROUP_PATH                          0
