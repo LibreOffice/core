@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:26:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,15 @@ public:
                                 sal_Bool bSupportPackage=sal_False ) const;
     sal_Bool ConvertURIToOOo( ::rtl::OUString& rURI,
                                 sal_Bool bSupportPackage=sal_False ) const;
+
+    /** renames the given rOutAttributeValue if one of the parameters contains a
+        matching token in its lower 16 bits.  The value is converted to the
+        token that is given in the upper 16 bits of the matching parameter.
+     */
+    sal_Bool RenameAttributeValue( ::rtl::OUString& rOutAttributeValue,
+                                   sal_Int32 nParam1,
+                                   sal_Int32 nParam2,
+                                   sal_Int32 nParam3 );
 
     ::xmloff::token::XMLTokenEnum GetToken( const ::rtl::OUString& rStr ) const;
 
