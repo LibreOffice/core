@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-12 14:12:47 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:27:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Types -------------------------------------
 
+# Disable optimization for SunCC (funny loops
+# when parsing e.g. "x+width/2")
+.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
+.ENDIF
+
 UNOTYPES=	com.sun.star.uno.XWeak									\
             com.sun.star.uno.XNamingService							\
             com.sun.star.uno.XComponentContext						\
@@ -93,13 +99,14 @@ UNOTYPES=	com.sun.star.uno.XWeak									\
 
 # --- Files -------------------------------------
         
-SLOFILES=	$(SLO)$/EnhancedCustomShapeEngine.obj	\
-            $(SLO)$/EnhancedCustomShapeTypeNames.obj\
-            $(SLO)$/EnhancedCustomShapeGeometry.obj	\
-            $(SLO)$/EnhancedCustomShape2d.obj		\
-            $(SLO)$/EnhancedCustomShape3d.obj		\
-            $(SLO)$/EnhancedCustomShapeFontWork.obj	\
-            $(SLO)$/EnhancedCustomShapeHandle.obj	\
+SLOFILES=	$(SLO)$/EnhancedCustomShapeEngine.obj			\
+            $(SLO)$/EnhancedCustomShapeTypeNames.obj		\
+            $(SLO)$/EnhancedCustomShapeGeometry.obj			\
+            $(SLO)$/EnhancedCustomShape2d.obj				\
+            $(SLO)$/EnhancedCustomShape3d.obj				\
+            $(SLO)$/EnhancedCustomShapeFontWork.obj			\
+            $(SLO)$/EnhancedCustomShapeHandle.obj			\
+            $(SLO)$/EnhancedCustomShapeFunctionParser.obj	\
             $(SLO)$/tbxcustomshapes.obj
 
 # --- Targets ----------------------------------
