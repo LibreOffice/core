@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.148 $
+#   $Revision: 1.149 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 18:33:28 $
+#   last change: $Author: rt $ $Date: 2004-12-16 12:58:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -182,15 +182,6 @@ something_wrong_with_objects :
 .ENDIF			# "$(DEPFILES)"!="$(strip $(DEPFILESX))"
 .ENDIF			# "$(DEPFILES_TEST)"!=""
 .ENDIF			# "$(TESTOBJECTS)"!=""
-
-.INCLUDE : postset.mk
-
-# --- add L10N_framework codes -------------------------------------
-
-alllangiso+=$(L10N_framework:s/,/ /)
-completelangiso+=$(L10N_framework:s/,/ /)
-RSC_LANG_ISO+:=$(completelangiso)
-.EXPORT : RSC_LANG_ISO
 
 .IF "$(depend)" == ""
 
@@ -564,7 +555,7 @@ ZIP1TARGETN=$(BIN)$/$(ZIP1TARGET).zip
 ZIP1TARGETN=$(foreach,i,$(zip1alllangiso) $(BIN)$/$(ZIP1TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP1DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP1TARGETN:s/.zip/.dpzz)))
+ZIP1DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP1TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP1DEPFILE)
 .ENDIF
 
@@ -582,7 +573,7 @@ ZIP2TARGETN=$(BIN)$/$(ZIP2TARGET).zip
 ZIP2TARGETN=$(foreach,i,$(zip2alllangiso) $(BIN)$/$(ZIP2TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP2DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP2TARGETN:s/.zip/.dpzz)))
+ZIP2DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP2TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP2DEPFILE)
 .ENDIF
 
@@ -600,7 +591,7 @@ ZIP3TARGETN=$(BIN)$/$(ZIP3TARGET).zip
 ZIP3TARGETN=$(foreach,i,$(zip3alllangiso) $(BIN)$/$(ZIP3TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP3DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP3TARGETN:s/.zip/.dpzz)))
+ZIP3DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP3TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP3DEPFILE)
 .ENDIF
 
@@ -618,7 +609,7 @@ ZIP4TARGETN=$(BIN)$/$(ZIP4TARGET).zip
 ZIP4TARGETN=$(foreach,i,$(zip4alllangiso) $(BIN)$/$(ZIP4TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP4DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP4TARGETN:s/.zip/.dpzz)))
+ZIP4DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP4TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP4DEPFILE)
 .ENDIF
 
@@ -636,7 +627,7 @@ ZIP5TARGETN=$(BIN)$/$(ZIP5TARGET).zip
 ZIP5TARGETN=$(foreach,i,$(zip5alllangiso) $(BIN)$/$(ZIP5TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP5DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP5TARGETN:s/.zip/.dpzz)))
+ZIP5DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP5TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP5DEPFILE)
 .ENDIF
 
@@ -654,7 +645,7 @@ ZIP6TARGETN=$(BIN)$/$(ZIP6TARGET).zip
 ZIP6TARGETN=$(foreach,i,$(zip6alllangiso) $(BIN)$/$(ZIP6TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP6DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP6TARGETN:s/.zip/.dpzz)))
+ZIP6DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP6TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP6DEPFILE)
 .ENDIF
 
@@ -672,7 +663,7 @@ ZIP7TARGETN=$(BIN)$/$(ZIP7TARGET).zip
 ZIP7TARGETN=$(foreach,i,$(zip7alllangiso) $(BIN)$/$(ZIP7TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP7DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP7TARGETN:s/.zip/.dpzz)))
+ZIP7DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP7TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP7DEPFILE)
 .ENDIF
 
@@ -690,7 +681,7 @@ ZIP8TARGETN=$(BIN)$/$(ZIP8TARGET).zip
 ZIP8TARGETN=$(foreach,i,$(zip8alllangiso) $(BIN)$/$(ZIP8TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP8DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP8TARGETN:s/.zip/.dpzz)))
+ZIP8DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP8TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP8DEPFILE)
 .ENDIF
 
@@ -708,7 +699,7 @@ ZIP9TARGETN=$(BIN)$/$(ZIP9TARGET).zip
 ZIP9TARGETN=$(foreach,i,$(zip9alllangiso) $(BIN)$/$(ZIP9TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP9DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP9TARGETN:s/.zip/.dpzz)))
+ZIP9DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP9TARGETN:s/.zip/.dpzz/)))
 ZIPDEPFILES+=$(ZIP9DEPFILE)
 .ENDIF
 
