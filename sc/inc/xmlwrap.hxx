@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-01 13:19:06 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 13:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XInterface; }
     namespace xml {
-        namespace sax { class InputSource; } }
+        namespace sax { struct InputSource; } }
 } } }
 
 class ScXMLImportWrapper
