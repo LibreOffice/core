@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 14:11:05 $
+ *  last change: $Author: ama $ $Date: 2000-12-12 10:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1892,9 +1892,12 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         pEndFrm->GetCharRect  ( aEndRect, *pEndPos, &aTmpState );
         Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
 
-        SwRect aStFrm ( pStartFrm->PaintArea() );
-        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->PaintArea() );
-
+        SwRect aStFrm ( pStartFrm->UnionFrm( sal_True ) );
+        aStFrm.Intersection( pStartFrm->PaintArea() );
+        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm :
+                                               pEndFrm->UnionFrm( sal_True ) );
+        if( pStartFrm != pEndFrm )
+            aEndFrm.Intersection( pEndFrm->PaintArea() );
         // If there's no doubleline portion involved or start and end are both
         // in the same doubleline portion, all works fine, but otherwise
         // we need the following...
@@ -2054,7 +2057,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 //die im Body liegen und umgekehrt.
                 if ( bBody == pCntnt->IsInDocBody() )
                 {
-                    SwRect aCRect( pCntnt->PaintArea() );
+                    SwRect aCRect( pCntnt->UnionFrm( sal_True ) );
+                    aCRect.Intersection( pCntnt->PaintArea() );
                     if( aCRect.IsOver( aRegion.GetOrigin() ))
                     {
                         SwRect aTmp( aPrvRect );
