@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:12:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #pragma hdrstop
 
+#include <sfx2/objface.hxx>
 
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
