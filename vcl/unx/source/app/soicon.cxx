@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:32:54 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,12 @@
 #endif
 #ifndef _SV_SOICON_HXX
 #include <soicon.hxx>
+#endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
 #endif
 
 #include <tools/stream.hxx>
@@ -351,7 +357,7 @@ BOOL ReadXBMFile( Display* pDisplay, const String& rFile, SalBitmap*& rpBmp )
     aPal[ 0 ] = BitmapColor( 0, 0, 0 );
     aPal[ 1 ] = BitmapColor( 0xff, 0xff, 0xff );
 
-    rpBmp = new SalBitmap;
+    rpBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
     rpBmp->Create( aSize, 1, aPal );
 
     BitmapBuffer*   pBmpBuf = rpBmp->AcquireBuffer( FALSE );
@@ -454,13 +460,13 @@ BOOL ReadXPMFile( Display* pDisplay, const String& rFile,
 
         if( !!aBmp )
         {
-            rpBmp = new SalBitmap;
+            rpBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
             rpBmp->Create( *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap() );
         }
 
         if( !!aMsk )
         {
-            rpMsk = new SalBitmap;
+            rpMsk = ImplGetSVData()->mpDefInst->CreateSalBitmap();
             rpMsk->Create( *aMsk.ImplGetImpBitmap()->ImplGetSalBitmap() );
         }
 
@@ -514,11 +520,11 @@ BOOL ReadXPMFile( Display* pDisplay, const String& rFile,
     aPal[ 0 ] = BitmapColor( 0, 0, 0 );
     aPal[ 1 ] = BitmapColor( 0xff, 0xff, 0xff );
 
-    rpBmp = new SalBitmap;
+    rpBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
     rpBmp->Create( aSize, 24, aPal );
     BitmapBuffer* pBmpBuf = rpBmp->AcquireBuffer( FALSE );
 
-    rpMsk = new SalBitmap;
+    rpMsk = ImplGetSVData()->mpDefInst->CreateSalBitmap();
     rpMsk->Create( aSize, 1, aPal );
     BitmapBuffer* pMskBuf = rpMsk->AcquireBuffer( FALSE );
 
