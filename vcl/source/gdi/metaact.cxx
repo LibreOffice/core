@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:47:52 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,8 +1363,8 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     {
         const ULONG nAryLen = mnLen;
 
-        mpDXAry = new long[ nAryLen ];
-        memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( long ) );
+        mpDXAry = new sal_Int32[ nAryLen ];
+        memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( sal_Int32 ) );
     }
     else
         mpDXAry = NULL;
@@ -1374,7 +1374,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const XubString& rStr,
-                                          const long* pDXAry,
+                                          const sal_Int32* pDXAry,
                                           USHORT nIndex,
                                           USHORT nLen ) :
     MetaAction  ( META_TEXTARRAY_ACTION ),
@@ -1387,8 +1387,8 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
     if( nAryLen )
     {
-        mpDXAry = new long[ nAryLen ];
-        memcpy( mpDXAry, pDXAry, nAryLen * sizeof( long ) );
+        mpDXAry = new sal_Int32[ nAryLen ];
+        memcpy( mpDXAry, pDXAry, nAryLen * sizeof( sal_Int32 ) );
     }
     else
         mpDXAry = NULL;
@@ -1492,7 +1492,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
         const ULONG nIntAryLen( Max(nAryLen, static_cast<ULONG>(mnLen)) );
-        mpDXAry = new long[ nIntAryLen ];
+        mpDXAry = new sal_Int32[ nIntAryLen ];
 
         ULONG i;
         for( i = 0UL; i < nAryLen; i++ )
