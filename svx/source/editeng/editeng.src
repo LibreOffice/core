@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:30:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ String RID_EDITUNDO_INDENT
     Text [ danish ] = "Indryk" ;
     Text [ italian ] = "Rientro" ;
     Text [ spanish ] = "Sangría" ;
-    Text [ french ] = "Augmenter retrait" ;
+    Text [ french ] = "Mettre en retrait" ;
     Text [ dutch ] = "Inspringen" ;
     Text[ chinese_simplified ] = "Ëõ½ø";
     Text[ russian ] = "Îòñòóï";
@@ -288,21 +288,21 @@ String RID_EDITUNDO_TRANSLITERATE
 {
     TEXT = "Groß-/Kleinschreibung";
     TEXT[English] = "Change case";
-    TEXT[ english_us ] = "Change case";
+    TEXT[ english_us ] = "Case/Characters";
     TEXT[ portuguese ] = "Change case";
     TEXT[ russian ] = "Çàãëàâíàÿ/ñòğî÷íàÿ áóêâà";
     TEXT[ greek ] = "Êåöáëáßá/ĞåæÜ";
     TEXT[ dutch ] = "Change case";
     TEXT[ french ] = "Change case";
-    TEXT[ spanish ] = "Change case";
+    TEXT[ spanish ] = "Mayúsculas/minúsculas";
     TEXT[ italian ] = "Change case";
     TEXT[ danish ] = "Change case";
-    TEXT[ swedish ] = "Change case";
+    TEXT[ swedish ] = "Versalkänslig";
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
-    TEXT[ japanese ] = "Change case";
+    TEXT[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(S)";
     TEXT[ korean ] = "Change case";
-    TEXT[ chinese_simplified ] = "Change case";
+    TEXT[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
     TEXT[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
     TEXT[ turkish ] = "Change case";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
@@ -367,7 +367,7 @@ Menu RID_MENU_SPELL
             Text[ dutch ] = "~Toevoegen";
             Text[ chinese_simplified ] = "¼ÓÈë(~A)";
             Text[ greek ] = "Ğñ~ïóèŞêç";
-            Text[ korean ] = "Ãß°¡";
+            Text[ korean ] = "Ãß°¡(~A)";
             Text[ turkish ] = "Ekle";
         };
         MenuItem
