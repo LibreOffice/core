@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-17 13:48:26 $
+ *  last change: $Author: dl $ $Date: 2001-08-28 10:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,8 +448,11 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
                     // loop because of storage bug 46033
                     for( USHORT n = 0; n < 100; n++ )
                     {
-                        aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
-                        aName += sal_Unicode(' ');
+//                      aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
+//                      aName += sal_Unicode(' ');
+
+                        aName = OUString::createFromAscii( "Object " );
+
                         String aStr(aName);
                         aStr+=String::CreateFromInt32( i );
                         while( pDestPers->Find( aStr ) )
@@ -660,7 +663,8 @@ SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
 void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 {
-    rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
+//  rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
+    rName = OUString::createFromAscii( "Object " );
 
     if(aName.Len())
     {
@@ -672,7 +676,8 @@ void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 
 void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 {
-    rName=ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
+//  rName=ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
+    rName = OUString::createFromAscii( "Object " );
 }
 
 void SdrOle2Obj::operator=(const SdrObject& rObj)
@@ -711,8 +716,11 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                 // loop because of storage bug 46033
                 for( USHORT n = 0; n < 100; n++ )
                 {
-                    aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
-                    aName += sal_Unicode(' ');
+//                  aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
+//                  aName += sal_Unicode(' ');
+
+                    aName = OUString::createFromAscii( "Object " );
+
                     String aStr(aName);
                     aStr+=String::CreateFromInt32( i );
                     while(pDestPers->Find(aStr)) {
