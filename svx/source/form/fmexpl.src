@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:22:19 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 15:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "svxids.hrc"
 #include "fmresids.hrc"
 #include "fmexpl.hrc"
+#include "globlmn.hrc"
 Menu RID_FMEXPLORER_POPUPMENU
 {
     ItemList =
@@ -183,6 +184,9 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ catalan ] = "Reemplazar con";
             Text[ finnish ] = "~Korvaa kohteella";
         };
+        MenuItem { ITEM_EDIT_CUT };
+        MenuItem { ITEM_EDIT_COPY };
+        MenuItem { ITEM_EDIT_PASTE };
         MenuItem
         {
             Identifier = SID_FM_DELETE ;
