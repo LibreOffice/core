@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mtg $ $Date: 2001-08-01 12:58:41 $
+#   last change: $Author: mh $ $Date: 2001-11-06 21:09:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings common for the whole project -----
 
-#UNOTYPES=
 #.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
@@ -86,8 +85,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Types -------------------------------------
 
-#UNOTYPES+=     \
-#               com.sun.star.container.XInputStream
+UNOTYPES+=     \
+               com.sun.star.sdbc.XRow
 
 
 # --- Files -------------------------------------
