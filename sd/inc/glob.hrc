@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: sj $ $Date: 2000-10-18 16:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,5 +150,6 @@
 #define STR_PSEUDOSHEET_SUBTITLE                RID_APP_START+785
 #define STR_LAYOUT_DEFAULT_TITLE_NAME           RID_APP_START+786
 #define STR_GRAFOBJECTBARSHELL                  RID_APP_START+787
+#define STR_POWERPOINT_IMPORT                   RID_APP_START+788
 
 

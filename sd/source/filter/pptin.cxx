@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-11 12:12:43 $
+ *  last change: $Author: sj $ $Date: 2000-10-18 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ BOOL SdPPTImport::Import()
     ///////////////////////////////////////////////////////////
     // create master pages:
     ///////////////////////////////////////////////////////////
-    SfxProgress* pStbMgr = new SfxProgress( pDocShell, String( RTL_CONSTASCII_USTRINGPARAM( "PPTImport" ) ),
+    SfxProgress* pStbMgr = new SfxProgress( pDocShell, String( SdResId( STR_POWERPOINT_IMPORT ) ),
             pMasterPages->Count() + pSlidePages->Count() + pNotePages->Count() );
 
     UINT32 nImportedPages = 0;
