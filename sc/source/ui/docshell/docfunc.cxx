@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:50:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,10 +596,9 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
                 bObjects = FALSE;
     }
 
-    USHORT nExtFlags = 0;                       // Linien interessieren nur, wenn Attribute
-    if ( nFlags & IDF_ATTRIB )                  // geloescht werden
-        if (pDoc->HasAttrib( aMarkRange, HASATTR_PAINTEXT ))
-            nExtFlags |= SC_PF_LINES;
+    USHORT nExtFlags = 0;       // extra flags are needed only if attributes are deleted
+    if ( nFlags & IDF_ATTRIB )
+        rDocShell.UpdatePaintExt( nExtFlags, aMarkRange );
 
     //  Reihenfolge:
     //  1) BeginDrawUndo
@@ -1136,12 +1135,14 @@ BOOL ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     }
 
     // While loading XML it is not neccessary to ask HasAttrib. It needs too much time.
-    BOOL bPaintExt = pDoc->IsImportingXML() || pDoc->HasAttrib( aMultiRange, HASATTR_PAINTEXT );
+    USHORT nExtFlags = 0;
+    BOOL bImportingXML = pDoc->IsImportingXML();
+    if ( !bImportingXML )
+        rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change
     pDoc->ApplySelectionPattern( rPattern, rMark );
+    if ( !bImportingXML )
+        rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
 
-    if (!bPaintExt)
-        bPaintExt = pDoc->HasAttrib( aMultiRange, HASATTR_PAINTEXT );
-    USHORT nExtFlags = bPaintExt ? SC_PF_LINES : 0;
     if (!AdjustRowHeight( aMultiRange ))
         rDocShell.PostPaint( aMultiRange, PAINT_GRID, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
@@ -1411,9 +1412,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
             pDoc->UpdatePageBreaks( nTab );
 
         USHORT nExtFlags = 0;
-        if (pDoc->HasAttrib( nPaintStartX,nPaintStartY,nTab,
-                                nPaintEndX,nPaintEndY,nTab, HASATTR_PAINTEXT ))
-            nExtFlags |= SC_PF_LINES;
+        rDocShell.UpdatePaintExt( nExtFlags, nPaintStartX,nPaintStartY,nTab, nPaintEndX,nPaintEndY,nTab );
 
         //  ganze Zeilen einfuegen: nur neue Zeilen anpassen
         BOOL bAdjusted = ( eCmd == INS_INSROWS ) ?
@@ -1583,8 +1582,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     }
 
     USHORT nExtFlags = 0;
-    if (pDoc->HasAttrib( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab, HASATTR_PAINTEXT ))
-        nExtFlags |= SC_PF_LINES;
+    rDocShell.UpdatePaintExt( nExtFlags, nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab );
 
     BOOL bUndoOutline = FALSE;
     switch (eCmd)
@@ -1662,9 +1660,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     if ( eCmd == DEL_DELCOLS || eCmd == DEL_DELROWS )
         pDoc->UpdatePageBreaks( nTab );
 
-    if (pDoc->HasAttrib( nPaintStartX,nPaintStartY,nTab,
-                            nPaintEndX,nPaintEndY,nTab, HASATTR_PAINTEXT ))
-        nExtFlags |= SC_PF_LINES;
+    rDocShell.UpdatePaintExt( nExtFlags, nPaintStartX,nPaintStartY,nTab, nPaintEndX,nPaintEndY,nTab );
 
     //  ganze Zeilen loeschen: nichts anpassen
     if ( eCmd == DEL_DELROWS ||
@@ -1817,12 +1813,12 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
             return FALSE;
         }
 
-    //  Linien drin? (fuer Paint)
+    //  Are there borders in the cells? (for painting)
 
-    BOOL bSourceLines = pDoc->HasAttrib( nStartCol,nStartRow,nStartTab,
-                                nEndCol,nEndRow,nEndTab, HASATTR_PAINTEXT );
-    BOOL bDestLines = pDoc->HasAttrib( nDestCol,nDestRow,nDestTab,
-                                nDestEndCol,nDestEndRow,nDestEndTab, HASATTR_PAINTEXT );
+    USHORT nSourceExt = 0;
+    rDocShell.UpdatePaintExt( nSourceExt, nStartCol,nStartRow,nStartTab, nEndCol,nEndRow,nEndTab );
+    USHORT nDestExt = 0;
+    rDocShell.UpdatePaintExt( nDestExt, nDestCol,nDestRow,nDestTab, nDestEndCol,nDestEndRow,nDestEndTab );
 
     //
     //  ausfuehren
@@ -1968,9 +1964,6 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         USHORT nPaintEndX = nDestPaintEndCol;
         USHORT nPaintEndY = nDestPaintEndRow;
         USHORT nFlags = PAINT_GRID;
-        USHORT nExt = 0;
-        if ( bSourceLines || bDestLines )
-            nExt |= SC_PF_LINES;
 
         if ( nStartRow==0 && nEndRow==MAXROW )      // Breiten mitkopiert?
         {
@@ -1994,7 +1987,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         }
 
         rDocShell.PostPaint( nPaintStartX,nPaintStartY,nDestTab,
-                            nPaintEndX,nPaintEndY,nDestEndTab, nFlags, nExt );
+                            nPaintEndX,nPaintEndY,nDestEndTab, nFlags, nSourceExt | nDestExt );
 
         if ( bCut )
         {
@@ -2005,9 +1998,6 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
             nPaintEndX = nEndCol;
             nPaintEndY = nEndRow;
             nFlags = PAINT_GRID;
-            nExt = 0;
-            if ( bSourceLines )
-                nExt |= SC_PF_LINES;
 
             if ( bSourceHeight )
             {
@@ -2024,7 +2014,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
             }
 
             rDocShell.PostPaint( nPaintStartX,nPaintStartY,nStartTab,
-                                nPaintEndX,nPaintEndY,nEndTab, nFlags, nExt );
+                                nPaintEndX,nPaintEndY,nEndTab, nFlags, nSourceExt );
         }
     }
 
@@ -2201,6 +2191,37 @@ BOOL ScDocFunc::SetTableVisible( USHORT nTab, BOOL bVisible, BOOL bApi )
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     rDocShell.PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
     aModificator.SetDocumentModified();
+
+    return TRUE;
+}
+
+BOOL ScDocFunc::SetLayoutRTL( USHORT nTab, BOOL bRTL, BOOL bApi )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bUndo(pDoc->IsUndoEnabled());
+    if ( pDoc->IsLayoutRTL( nTab ) == bRTL )
+        return TRUE;                                // nothing to do - ok
+
+    //! protection (sheet or document?)
+
+    ScDocShellModificator aModificator( rDocShell );
+
+    pDoc->SetLayoutRTL( nTab, bRTL );
+
+    if (bUndo)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoLayoutRTL( &rDocShell, nTab, bRTL ) );
+    }
+
+    rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
+    aModificator.SetDocumentModified();
+
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
+    if (pBindings)
+    {
+        pBindings->Invalidate( FID_TAB_RTL );
+        pBindings->Invalidate( SID_ATTR_SIZE );
+    }
 
     return TRUE;
 }
