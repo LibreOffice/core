@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: os $ $Date: 2002-04-18 10:18:20 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ SfxSlotInfo FN_ABSTRACT_NEWDOC
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Documento desde extracto";
     SlotName[ finnish ] = "Asiakirja tiivistelm�st�";
+    SlotName[ thai ] = "เอกสารจากบทคัดย่อ";
 };
 SfxSlotInfo FN_ABSTRACT_STARIMPRESS
 {
@@ -112,11 +113,12 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ dutch ] = "Presentatie uit extract";
     SlotName[ chinese_simplified ] = "演示文稿来自摘要";
     SlotName[ greek ] = "���������� ��� Abstract";
-    SlotName[ korean ] = "추상 프레젠테이션";
+    SlotName[ korean ] = "추상 프리젠테이션";
     SlotName[ turkish ] = "Sunu �zeti ��kar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Presentaci�n desde extracto";
     SlotName[ finnish ] = "Esitys tiivistelm�st�";
+    SlotName[ thai ] = "การนำเสนอจากบทคัดย่อ";
 };
 SfxSlotInfo FN_ADD_UNKNOWN
 {
@@ -145,6 +147,7 @@ SfxSlotInfo FN_ADD_UNKNOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aceptar palabras desconocidas";
     SlotName[ finnish ] = "Lis�� tunnistamattomia sanoja";
+    SlotName[ thai ] = "เพิ่มคำที่ไม่รู้จัก";
 };
 SfxSlotInfo FN_AUTO_CORRECT
 {
@@ -173,6 +176,7 @@ SfxSlotInfo FN_AUTO_CORRECT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "AutoCorrecci�n";
     SlotName[ finnish ] = "Automaattinen korjaus";
+    SlotName[ thai ] = "แก้ไขอัตโนมัติ";
 };
 SfxSlotInfo FN_AUTOFORMAT_APPLY
 {
@@ -201,6 +205,7 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aplicar opciones AutoFormato";
     SlotName[ finnish ] = "K�yt� automaattisen muotoilun asetuksia";
+    SlotName[ thai ] = "ใช้ตัวเลือกรูปแบบอัตโนมัติ";
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
@@ -225,6 +230,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ turkish ] = "Otomatik formatlama";
     SlotName[ arabic ] = "����� ������";
     SlotName[ catalan ] = "AutoFormato";
+    SlotName[ thai ] = "รูปแบบอัตโนมัติ";
 };
 SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
 {
@@ -253,6 +259,7 @@ SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "AutoFormato-Aplicar opciones y confirmar modificaciones";
     SlotName[ finnish ] = "K�yt� automaattisen muotoilun asetuksia ja vahvista muutokset";
+    SlotName[ thai ] = "ใช้ตัวเลือกรูปแบบอัตโนมัติและยืนยันการเปลี่ยนแปลง";
 };
 SfxSlotInfo FN_BACKSPACE
 {
@@ -281,6 +288,7 @@ SfxSlotInfo FN_BACKSPACE
     SlotName[ turkish ] = "Geri al";
     SlotName[ catalan ] = "Retroceder";
     SlotName[ finnish ] = "Askelpalautin";
+    SlotName[ thai ] = "แบ็คสเปซ";
 };
 SfxSlotInfo FN_CALC_TABLE
 {
@@ -309,6 +317,7 @@ SfxSlotInfo FN_CALC_TABLE
     SlotName[ turkish ] = "Tabloyu hesapla";
     SlotName[ catalan ] = "Calcular tabla";
     SlotName[ finnish ] = "Laske taulukko";
+    SlotName[ thai ] = "ตารางคำนวณ";
 };
 SfxSlotInfo FN_CALCULATE
 {
@@ -337,6 +346,7 @@ SfxSlotInfo FN_CALCULATE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Calcular selecci�n";
     SlotName[ finnish ] = "Laske valinta";
+    SlotName[ thai ] = "เลือกการคำนวณ";
 };
 SfxSlotInfo FN_CHANGE_DBFIELD
 {
@@ -365,6 +375,7 @@ SfxSlotInfo FN_CHANGE_DBFIELD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Modificar base de datos";
     SlotName[ finnish ] = "Muuta tietokanta";
+    SlotName[ thai ] = "เปลี่ยนฐานข้อมูล";
 };
 SfxSlotInfo FN_CHANGE_PAGENUM
 {
@@ -393,6 +404,7 @@ SfxSlotInfo FN_CHANGE_PAGENUM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "N�mero de p�gina";
     SlotName[ finnish ] = "Sivunumero";
+    SlotName[ thai ] = "เลขหน้า";
 };
 SfxSlotInfo FN_CHAR_LEFT
 {
@@ -421,6 +433,7 @@ SfxSlotInfo FN_CHAR_LEFT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Car�cter a la izquierda";
     SlotName[ finnish ] = "Merkin vasemmalle puolelle";
+    SlotName[ thai ] = "ไปที่ตัวอักขระด้านซ้าย";
 };
 SfxSlotInfo FN_CHAR_LEFT_SEL
 {
@@ -449,6 +462,7 @@ SfxSlotInfo FN_CHAR_LEFT_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar car�cter a la izquierda";
     SlotName[ finnish ] = "Valitse merkin vasemmalle puolelle";
+    SlotName[ thai ] = "เลือกตัวอักขระด้านซ้าย";
 };
 SfxSlotInfo FN_CHAR_RIGHT
 {
@@ -477,6 +491,7 @@ SfxSlotInfo FN_CHAR_RIGHT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Car�cter a la derecha";
     SlotName[ finnish ] = "Siirry oikealle";
+    SlotName[ thai ] = "ไปด้านขวา";
 };
 SfxSlotInfo FN_CHAR_RIGHT_SEL
 {
@@ -505,6 +520,7 @@ SfxSlotInfo FN_CHAR_RIGHT_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar car�cter a la derecha";
     SlotName[ finnish ] = "Valitse oikeanpuoleinen merkki";
+    SlotName[ thai ] = "เลือกตัวอักขระด้านขวา";
 };
 SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
 {
@@ -533,6 +549,7 @@ SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al marco siguiente";
     SlotName[ finnish ] = "Seuraavaan kehykseen";
+    SlotName[ thai ] = "ไปยังกรอบถัดไป";
 };
 SfxSlotInfo FN_CONVERT_TEXT_TABLE
 {
@@ -561,6 +578,7 @@ SfxSlotInfo FN_CONVERT_TEXT_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "ConvertirTabla/Texto";
     SlotName[ finnish ] = "Muunna taulukko/teksti";
+    SlotName[ thai ] = "แปลงตาราง/ข้อความ";
 };
 SfxSlotInfo FN_DEC_INDENT_OFFSET
 {
@@ -589,6 +607,7 @@ SfxSlotInfo FN_DEC_INDENT_OFFSET
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Disminuir sangr�a en";
     SlotName[ finnish ] = "V�henn� sisennysarvoa";
+    SlotName[ thai ] = "ลดค่าระยะเยื้อง";
 };
 SfxSlotInfo FN_DELETE_BACK_LINE
 {
@@ -617,6 +636,7 @@ SfxSlotInfo FN_DELETE_BACK_LINE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el comienzo de la l�nea";
     SlotName[ finnish ] = "Poista rivin alkuun";
+    SlotName[ thai ] = "ลบเพื่อเริ่มบรรทัด";
 };
 SfxSlotInfo FN_DELETE_BACK_PARA
 {
@@ -645,6 +665,7 @@ SfxSlotInfo FN_DELETE_BACK_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el comienzo del p�rrafo";
     SlotName[ finnish ] = "Poista kappaleen alkuun";
+    SlotName[ thai ] = "ลบเพื่อเริ่มย่อหน้า";
 };
 SfxSlotInfo FN_DELETE_BACK_SENT
 {
@@ -673,6 +694,7 @@ SfxSlotInfo FN_DELETE_BACK_SENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el comienzo de la frase";
     SlotName[ finnish ] = "Poista virkkeen alkuun";
+    SlotName[ thai ] = "ลบเพื่อเริ่มประโยค";
 };
 SfxSlotInfo FN_DELETE_BACK_WORD
 {
@@ -701,6 +723,7 @@ SfxSlotInfo FN_DELETE_BACK_WORD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el comienzo de la palabra";
     SlotName[ finnish ] = "Poista sanan alkuun";
+    SlotName[ thai ] = "ลบเพื่อเริ่มคำ";
 };
 SfxSlotInfo FN_DELETE_LINE
 {
@@ -729,6 +752,7 @@ SfxSlotInfo FN_DELETE_LINE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el final de la l�nea";
     SlotName[ finnish ] = "Poista rivin loppuun";
+    SlotName[ thai ] = "ลบเพื่อจบบรรทัด";
 };
 SfxSlotInfo FN_DELETE_PARA
 {
@@ -757,6 +781,7 @@ SfxSlotInfo FN_DELETE_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el final del p�rrafo";
     SlotName[ finnish ] = "Poista kappaleen loppuun";
+    SlotName[ thai ] = "ลบเพื่อจบย่อหน้า";
 };
 SfxSlotInfo FN_DELETE_SENT
 {
@@ -785,6 +810,7 @@ SfxSlotInfo FN_DELETE_SENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el final de la frase";
     SlotName[ finnish ] = "Poista virkkeen loppuun";
+    SlotName[ thai ] = "ลบเพื่อจบประโยค";
 };
 SfxSlotInfo FN_DELETE_WHOLE_LINE
 {
@@ -813,6 +839,7 @@ SfxSlotInfo FN_DELETE_WHOLE_LINE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar l�nea";
     SlotName[ finnish ] = "Poista rivi";
+    SlotName[ thai ] = "ลบแถว";
 };
 SfxSlotInfo FN_DELETE_WORD
 {
@@ -841,6 +868,7 @@ SfxSlotInfo FN_DELETE_WORD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar hasta el final de la palabra";
     SlotName[ finnish ] = "Poista sanan loppuun";
+    SlotName[ thai ] = "ลบเพื่อจบคำ";
 };
 SfxSlotInfo FN_DRAW_WRAP_DLG
 {
@@ -869,6 +897,7 @@ SfxSlotInfo FN_DRAW_WRAP_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste de texto";
     SlotName[ finnish ] = "Tekstin rivitys";
+    SlotName[ thai ] = "ตัดข้อความ";
 };
 SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
 {
@@ -897,6 +926,7 @@ SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Atributos de texto";
     SlotName[ finnish ] = "Tekstin ominaisuudet";
+    SlotName[ thai ] = "คุณลักษณะข้อความ";
 };
 SfxSlotInfo FN_EDIT_FIELD
 {
@@ -925,6 +955,7 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "C�digo de campo";
     SlotName[ finnish ] = "Kent�t";
+    SlotName[ thai ] = "เขตข้อมูล";
 };
 SfxSlotInfo FN_EDIT_FOOTNOTE
 {
@@ -953,11 +984,32 @@ SfxSlotInfo FN_EDIT_FOOTNOTE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Nota al pie";
     SlotName[ finnish ] = "Alaviite";
+    SlotName[ thai ] = "เชิงอรรถ";
 };
 SfxSlotInfo FN_EDIT_FORMULA
 {
     SlotName = "Rechenleiste";
-    SlotName[ english_us ] = "Formularbar";
+    SlotName[ english_us ] = "Insert Formula";
+    SlotName[ portuguese ] = "Inserir f�rmula";
+    SlotName[ russian ] = "�������� �������";
+    SlotName[ greek ] = "�������� �����";
+    SlotName[ dutch ] = "Formule invoegen";
+    SlotName[ french ] = "Ins�rer une formule";
+    SlotName[ spanish ] = "Insertar f�rmula";
+    SlotName[ finnish ] = "Lis�� kaava";
+    SlotName[ italian ] = "Inserisci formula";
+    SlotName[ danish ] = "Inds�t formel";
+    SlotName[ swedish ] = "Infoga formel";
+    SlotName[ polish ] = "Wstaw formu��";
+    SlotName[ portuguese_brazilian ] = "InsertFormula";
+    SlotName[ japanese ] = "数式の挿入";
+    SlotName[ korean ] = "수식 삽입";
+    SlotName[ chinese_simplified ] = "插入公式";
+    SlotName[ chinese_traditional ] = "插入公式";
+    SlotName[ turkish ] = "Form�l ekle";
+    SlotName[ arabic ] = "����� ����";
+    SlotName[ catalan ] = "Insertar f�rmula";
+    SlotName[ thai ] = "แทรกสูตรคำนวณ";
 };
 SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
 {
@@ -986,6 +1038,7 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Entrada del �ndice";
     SlotName[ finnish ] = "Hakemistomerkint�";
+    SlotName[ thai ] = "รายการดัชนี";
 };
 SfxSlotInfo FN_EDIT_LINK_DLG
 {
@@ -1014,6 +1067,7 @@ SfxSlotInfo FN_EDIT_LINK_DLG
     SlotName[ turkish ] = "Ba�lant�lar";
     SlotName[ catalan ] = "V�nculos";
     SlotName[ finnish ] = "Linkit";
+    SlotName[ thai ] = "ตัวเชื่อมโยง";
 };
 SfxSlotInfo FN_EDIT_REGION
 {
@@ -1042,6 +1096,7 @@ SfxSlotInfo FN_EDIT_REGION
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Areas";
     SlotName[ finnish ] = "Osiot";
+    SlotName[ thai ] = "ส่วน";
 };
 SfxSlotInfo FN_END_DOC_DIRECT
 {
@@ -1070,6 +1125,7 @@ SfxSlotInfo FN_END_DOC_DIRECT
     SlotName[ turkish ] = "Do�rudan belge sonuna";
     SlotName[ catalan ] = "Final del documento";
     SlotName[ finnish ] = "Suoraan asiakirjan loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายเอกสารโดยตรง";
 };
 SfxSlotInfo FN_END_OF_COLUMN
 {
@@ -1098,6 +1154,7 @@ SfxSlotInfo FN_END_OF_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la columna";
     SlotName[ finnish ] = "Sarakkeen loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายคอลัมน์";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT
 {
@@ -1126,6 +1183,7 @@ SfxSlotInfo FN_END_OF_DOCUMENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final del documento";
     SlotName[ finnish ] = "Asiakirjan loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายเอกสาร";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT_SEL
 {
@@ -1154,6 +1212,7 @@ SfxSlotInfo FN_END_OF_DOCUMENT_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el final del documento";
     SlotName[ finnish ] = "Valitse asiakirjan loppuun";
+    SlotName[ thai ] = "เลือกไปที่ท้ายเอกสาร";
 };
 SfxSlotInfo FN_END_OF_LINE
 {
@@ -1182,6 +1241,7 @@ SfxSlotInfo FN_END_OF_LINE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la l�nea";
     SlotName[ finnish ] = "Rivin loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายบรรทัด";
 };
 SfxSlotInfo FN_END_OF_LINE_SEL
 {
@@ -1210,6 +1270,7 @@ SfxSlotInfo FN_END_OF_LINE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el final de la l�nea";
     SlotName[ finnish ] = "Valitse rivin loppuun";
+    SlotName[ thai ] = "เลือกไปที่ท้ายบรรทัด";
 };
 SfxSlotInfo FN_END_OF_NEXT_COLUMN
 {
@@ -1238,6 +1299,7 @@ SfxSlotInfo FN_END_OF_NEXT_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la columna siguiente";
     SlotName[ finnish ] = "Seuraavan sarakkeen loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายคอลัมน์ถัดไป";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE
 {
@@ -1266,6 +1328,7 @@ SfxSlotInfo FN_END_OF_NEXT_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la p�gina siguiente";
     SlotName[ finnish ] = "Seuraavan sivun loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายหน้าถัดไป";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
 {
@@ -1294,6 +1357,7 @@ SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el final de la p�gina siguiente";
     SlotName[ finnish ] = "Valitse seuraavan sivun loppuun";
+    SlotName[ thai ] = "เลือกไปที่ท้ายหน้าถัดไป";
 };
 SfxSlotInfo FN_END_OF_PAGE
 {
@@ -1322,6 +1386,7 @@ SfxSlotInfo FN_END_OF_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la p�gina";
     SlotName[ finnish ] = "Sivun loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายหน้า";
 };
 SfxSlotInfo FN_END_OF_PAGE_SEL
 {
@@ -1350,6 +1415,7 @@ SfxSlotInfo FN_END_OF_PAGE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el final de la p�gina";
     SlotName[ finnish ] = "Valitse sivun loppuun";
+    SlotName[ thai ] = "เลือกไปที่ท้ายหน้า";
 };
 SfxSlotInfo FN_END_OF_PARA
 {
@@ -1378,6 +1444,7 @@ SfxSlotInfo FN_END_OF_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final del p�rrafo";
     SlotName[ finnish ] = "Kappaleen loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายย่อหน้า";
 };
 SfxSlotInfo FN_END_OF_PARA_SEL
 {
@@ -1406,6 +1473,7 @@ SfxSlotInfo FN_END_OF_PARA_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta final del p�rrafo";
     SlotName[ finnish ] = "Valitse kappaleen loppuun";
+    SlotName[ thai ] = "เลือกไปที่ท้ายย่อหน้า";
 };
 SfxSlotInfo FN_END_OF_PREV_COLUMN
 {
@@ -1434,6 +1502,7 @@ SfxSlotInfo FN_END_OF_PREV_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la columna anterior";
     SlotName[ finnish ] = "Edelliseen sarakkeeseen";
+    SlotName[ thai ] = "ไปที่คอลัมน์ก่อน";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE
 {
@@ -1462,6 +1531,7 @@ SfxSlotInfo FN_END_OF_PREV_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la p�gina anterior";
     SlotName[ finnish ] = "Edellisen sivun loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายหน้าก่อน";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
 {
@@ -1490,6 +1560,7 @@ SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el final de la p�gina anterior";
     SlotName[ finnish ] = "Valitse edellisen sivun loppuun";
+    SlotName[ thai ] = "เลือกไปที่ท้ายหน้าก่อน";
 };
 SfxSlotInfo FN_END_TABLE
 {
@@ -1518,6 +1589,7 @@ SfxSlotInfo FN_END_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al final de la tabla";
     SlotName[ finnish ] = "Taulukon loppuun";
+    SlotName[ thai ] = "ไปที่ท้ายตาราง";
 };
 SfxSlotInfo FN_ENVELOP
 {
@@ -1546,6 +1618,7 @@ SfxSlotInfo FN_ENVELOP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar sobre";
     SlotName[ finnish ] = "Lis�� kirjekuori";
+    SlotName[ thai ] = "แทรกซองจดหมาย";
 };
 SfxSlotInfo FN_ESCAPE
 {
@@ -1574,6 +1647,7 @@ SfxSlotInfo FN_ESCAPE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Cancelar";
     SlotName[ finnish ] = "Peruuta";
+    SlotName[ thai ] = "ยกเลิก";
 };
 SfxSlotInfo FN_EXECUTE_MACROFIELD
 {
@@ -1602,6 +1676,7 @@ SfxSlotInfo FN_EXECUTE_MACROFIELD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ejecutar Campo de macro";
     SlotName[ finnish ] = "Suorita makrokentt�";
+    SlotName[ thai ] = "ใช้งานเขตข้อมูลมาโคร";
 };
 SfxSlotInfo FN_EXPAND_GLOSSARY
 {
@@ -1630,6 +1705,7 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ejecutar entrada AutoTexto";
     SlotName[ finnish ] = "Suorita automaattinen tekstimerkint�";
+    SlotName[ thai ] = "ใช้งานรายการข้อมูลอัตโนมัติ";
 };
 SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
@@ -1658,6 +1734,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reflejar horizontal";
     SlotName[ finnish ] = "K��nn� pystysuunta";
+    SlotName[ thai ] = "พลิกตามแนวตั้ง";
 };
 SfxSlotInfo FN_FLIP_VERT_GRAFIC
 {
@@ -1686,6 +1763,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ turkish ] = "Dikey yans�t";
     SlotName[ catalan ] = "Reflejar verticalmente";
     SlotName[ finnish ] = "K��nn� vaakasuunta";
+    SlotName[ thai ] = "พลิกตามแนวนอน";
 };
 SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
 {
@@ -1714,6 +1792,7 @@ SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la nota al pie/Ancla";
     SlotName[ finnish ] = "Alaviitteen ankkuri";
+    SlotName[ thai ] = "ไปที่สมอเชิงอรรถ";
 };
 SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
 {
@@ -1742,6 +1821,7 @@ SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Fondo";
     SlotName[ finnish ] = "Tausta";
+    SlotName[ thai ] = "พื้นหลัง";
 };
 SfxSlotInfo FN_FORMAT_BORDER_DLG
 {
@@ -1770,6 +1850,7 @@ SfxSlotInfo FN_FORMAT_BORDER_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Borde";
     SlotName[ finnish ] = "Reunat";
+    SlotName[ thai ] = "เส้นขอบ";
 };
 SfxSlotInfo FN_FORMAT_DROPCAPS
 {
@@ -1798,6 +1879,7 @@ SfxSlotInfo FN_FORMAT_DROPCAPS
     SlotName[ turkish ] = "Ba�harfler";
     SlotName[ catalan ] = "Iniciales";
     SlotName[ finnish ] = "Anfangit";
+    SlotName[ thai ] = "ปล่อยตัวพิมพ์ใหญ่";
 };
 SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
 {
@@ -1826,6 +1908,7 @@ SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Notas al pie";
     SlotName[ finnish ] = "Alaviitteet";
+    SlotName[ thai ] = "เชิงอรรถ";
 };
 SfxSlotInfo FN_FORMAT_FRAME_DLG
 {
@@ -1854,6 +1937,7 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Propiedades del marco";
     SlotName[ finnish ] = "Kehyksen ominaisuudet";
+    SlotName[ thai ] = "คุณสมบัติกรอบ";
 };
 SfxSlotInfo FN_FORMAT_GRAFIC_DLG
 {
@@ -1882,6 +1966,7 @@ SfxSlotInfo FN_FORMAT_GRAFIC_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar imagen";
     SlotName[ finnish ] = "Muokkaa kuvaa";
+    SlotName[ thai ] = "แก้ไขกราฟิค";
 };
 SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
 {
@@ -1910,6 +1995,7 @@ SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Columnas de la p�gina";
     SlotName[ finnish ] = "Sivun sarakkeet";
+    SlotName[ thai ] = "หน้าคอลัมน์";
 };
 SfxSlotInfo FN_FORMAT_PAGE_DLG
 {
@@ -1938,6 +2024,7 @@ SfxSlotInfo FN_FORMAT_PAGE_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Configuraci�n de p�gina";
     SlotName[ finnish ] = "Sivun asetukset";
+    SlotName[ thai ] = "ตั้งค่าหน้ากระดาษ";
 };
 SfxSlotInfo FN_FORMAT_RESET
 {
@@ -1966,6 +2053,7 @@ SfxSlotInfo FN_FORMAT_RESET
     SlotName[ turkish ] = "Yaz�tipi �znitelikleri";
     SlotName[ catalan ] = "Restablecer fuentes";
     SlotName[ finnish ] = "Palauta fonttim��ritteet";
+    SlotName[ thai ] = "กำหนดคุณลักษณะตัวอักษรใหม่";
 };
 SfxSlotInfo FN_FORMAT_TABLE_DLG
 {
@@ -1994,6 +2082,7 @@ SfxSlotInfo FN_FORMAT_TABLE_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar tabla";
     SlotName[ finnish ] = "Muokkaa taulukkoa";
+    SlotName[ thai ] = "แก้ไขตาราง";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
 {
@@ -2022,6 +2111,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Centrar horizontalmente";
     SlotName[ finnish ] = "Keskit� vaakatasossa";
+    SlotName[ thai ] = "ตรงกลางแนวนอน";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
 {
@@ -2050,6 +2140,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear a la izquierda";
     SlotName[ finnish ] = "Tasaa vasemmalle";
+    SlotName[ thai ] = "ชิดซ้าย";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
 {
@@ -2078,6 +2169,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear a la derecha";
     SlotName[ finnish ] = "Tasaa oikealle";
+    SlotName[ thai ] = "ชิดขวา";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
 {
@@ -2106,6 +2198,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear abajo";
     SlotName[ finnish ] = "Tasaa alaosa";
+    SlotName[ thai ] = "ชิดด้านล่าง";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
 {
@@ -2134,6 +2227,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear al centro vertical";
     SlotName[ finnish ] = "Tasaa keskelle pystysuunnassa";
+    SlotName[ thai ] = "ชิดตรงกลางแนวตั้ง";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 {
@@ -2162,6 +2256,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear debajo del car�cter";
     SlotName[ finnish ] = "Tasaa merkin alaosaan";
+    SlotName[ thai ] = "ชิดด้านล่างของตัวอักขระ";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
 {
@@ -2190,6 +2285,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear al centro vertical del car�cter";
     SlotName[ finnish ] = "Tasaa merkin keskustaan pystysuunnassa";
+    SlotName[ thai ] = "ชิดตรงกลางของตัวอักขระแนวตั้ง";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
 {
@@ -2218,6 +2314,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear encima del car�cter";
     SlotName[ finnish ] = "Tasaa merkin yl�osaan";
+    SlotName[ thai ] = "ชิดด้านบนของตัวอักขระ";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 {
@@ -2246,6 +2343,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear debajo de la l�nea";
     SlotName[ finnish ] = "Tasaa rivin alaosaan";
+    SlotName[ thai ] = "ชิดด้านล่างของบรรทัด";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
 {
@@ -2274,6 +2372,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear centro vertical l�nea";
     SlotName[ finnish ] = "Tasaa rivin keskustaan pystysuunnassa";
+    SlotName[ thai ] = "ชิดตรงกลางของบรรทัดแนวตั้ง";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
 {
@@ -2302,6 +2401,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear encima de la l�nea";
     SlotName[ finnish ] = "Tasaa rivin yl�osaan";
+    SlotName[ thai ] = "ชิดด้านบนของบรรทัด";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
 {
@@ -2330,6 +2430,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear arriba";
     SlotName[ finnish ] = "Tasaa yl�osa";
+    SlotName[ thai ] = "ชิดด้านบน";
 };
 SfxSlotInfo FN_FRAME_CHAIN
 {
@@ -2358,6 +2459,7 @@ SfxSlotInfo FN_FRAME_CHAIN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Vincular marcos";
     SlotName[ finnish ] = "Linkit� kehykset";
+    SlotName[ thai ] = "เชื่อมโยงกรอบ";
 };
 SfxSlotInfo FN_FRAME_DOWN
 {
@@ -2386,6 +2488,7 @@ SfxSlotInfo FN_FRAME_DOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Hacia atr�s";
     SlotName[ finnish ] = "Vie taaksep�in";
+    SlotName[ thai ] = "ส่งไปข้างหลัง";
 };
 SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
 {
@@ -2414,6 +2517,7 @@ SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reflejar objeto en p�ginas pares";
     SlotName[ finnish ] = "Peilaa objekti parillisilla sivuilla";
+    SlotName[ thai ] = "วัตถุที่ส่องเป็นเงาบนหน้าเดียวกัน";
 };
 SfxSlotInfo FN_FRAME_NOWRAP
 {
@@ -2442,6 +2546,7 @@ SfxSlotInfo FN_FRAME_NOWRAP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desactivar Ajuste";
     SlotName[ finnish ] = "Rivitys pois k�yt�st�";
+    SlotName[ thai ] = "ตัดออก";
 };
 SfxSlotInfo FN_FRAME_TO_ANCHOR
 {
@@ -2470,6 +2575,7 @@ SfxSlotInfo FN_FRAME_TO_ANCHOR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Colocar cursor sobre ancla";
     SlotName[ finnish ] = "M��rit� ohjain ankkuriksi";
+    SlotName[ thai ] = "กำหนดเคอร์เซอร์ไปที่สมอ";
 };
 SfxSlotInfo FN_FRAME_UNCHAIN
 {
@@ -2498,6 +2604,7 @@ SfxSlotInfo FN_FRAME_UNCHAIN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar v�nculo";
     SlotName[ finnish ] = "Poista kehysten linkki";
+    SlotName[ thai ] = "ไม่เชื่อมโยงกรอบ";
 };
 SfxSlotInfo FN_FRAME_UP
 {
@@ -2526,6 +2633,7 @@ SfxSlotInfo FN_FRAME_UP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Hacia adelante";
     SlotName[ finnish ] = "Tuo eteenp�in";
+    SlotName[ thai ] = "นำไปข้างหน้า";
 };
 SfxSlotInfo FN_FRAME_WRAP
 {
@@ -2554,6 +2662,7 @@ SfxSlotInfo FN_FRAME_WRAP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar Ajuste";
     SlotName[ finnish ] = "Rivitys k�yt�ss�";
+    SlotName[ thai ] = "ตัด";
 };
 SfxSlotInfo FN_FRAME_WRAP_CONTOUR
 {
@@ -2582,6 +2691,7 @@ SfxSlotInfo FN_FRAME_WRAP_CONTOUR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Contorno";
     SlotName[ finnish ] = "��riviivarivitys k�yt�ss�";
+    SlotName[ thai ] = "ตัดเส้นแสดงรูปร่าง";
 };
 SfxSlotInfo FN_FRAME_WRAP_IDEAL
 {
@@ -2610,6 +2720,7 @@ SfxSlotInfo FN_FRAME_WRAP_IDEAL
     SlotName[ turkish ] = "Dinamik metin da��l�m�";
     SlotName[ catalan ] = "Ajuste din�mico";
     SlotName[ finnish ] = "Optimaalinen rivitys";
+    SlotName[ thai ] = "ตัดเหมาะที่สุด";
 };
 SfxSlotInfo FN_FRAME_WRAP_LEFT
 {
@@ -2638,6 +2749,7 @@ SfxSlotInfo FN_FRAME_WRAP_LEFT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste izquierda";
     SlotName[ finnish ] = "Rivit� vasemmalle";
+    SlotName[ thai ] = "ตัดด้านซ้าย";
 };
 SfxSlotInfo FN_FRAME_WRAP_RIGHT
 {
@@ -2666,6 +2778,7 @@ SfxSlotInfo FN_FRAME_WRAP_RIGHT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste derecha";
     SlotName[ finnish ] = "Rivit� oikealle";
+    SlotName[ thai ] = "ตัดด้านขวา";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU
 {
@@ -2694,6 +2807,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Continuo";
     SlotName[ finnish ] = "Rivit� l�pi";
+    SlotName[ thai ] = "ตัดผ่าน";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
 {
@@ -2722,6 +2836,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Continuo transparente";
     SlotName[ finnish ] = "Rivit� l�pin�kyv�sti";
+    SlotName[ thai ] = "ตัดความโปร่งแสง";
 };
 SfxSlotInfo FN_GLOSSARY_DLG
 {
@@ -2750,6 +2865,7 @@ SfxSlotInfo FN_GLOSSARY_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar AutoTexto";
     SlotName[ finnish ] = "Muokkaa automaattista teksti�";
+    SlotName[ thai ] = "แก้ไขข้อความอัตโนมัติ";
 };
 SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
 {
@@ -2778,6 +2894,7 @@ SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al campo de entrada siguiente";
     SlotName[ finnish ] = "Seuraavaan sy�tt�kentt��n";
+    SlotName[ thai ] = "ไปยังเขตข้อมูลที่ใส่ถัดไป";
 };
 SfxSlotInfo FN_GOTO_NEXT_MARK
 {
@@ -2806,6 +2923,7 @@ SfxSlotInfo FN_GOTO_NEXT_MARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comod�n siguiente";
     SlotName[ finnish ] = "Seuraavaan paikkamerkkiin";
+    SlotName[ thai ] = "ไปยังตัวยึดตำแหน่งถัดไป";
 };
 SfxSlotInfo FN_GOTO_NEXT_OBJ
 {
@@ -2834,6 +2952,7 @@ SfxSlotInfo FN_GOTO_NEXT_OBJ
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al objeto siguiente";
     SlotName[ finnish ] = "Seuraavaan objektiin";
+    SlotName[ thai ] = "ไปยังวัตถุถัดไป";
 };
 SfxSlotInfo FN_GOTO_NEXT_REGION
 {
@@ -2862,6 +2981,7 @@ SfxSlotInfo FN_GOTO_NEXT_REGION
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "A la �rea siguiente";
     SlotName[ finnish ] = "Seuraavaan osioon";
+    SlotName[ thai ] = "ไปยังส่วนถัดไป";
 };
 SfxSlotInfo FN_GOTO_PREV_INPUTFLD
 {
@@ -2890,6 +3010,7 @@ SfxSlotInfo FN_GOTO_PREV_INPUTFLD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al campo de entrada anterior";
     SlotName[ finnish ] = "Edelliseen sy�tt�kentt��n";
+    SlotName[ thai ] = "ไปยังเขตข้อมูลที่ใส่ก่อนหน้านี้";
 };
 SfxSlotInfo FN_GOTO_PREV_MARK
 {
@@ -2918,6 +3039,7 @@ SfxSlotInfo FN_GOTO_PREV_MARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comod�n anterior";
     SlotName[ finnish ] = "Edelliseen paikkamerkkiin";
+    SlotName[ thai ] = "ไปยังตัวยึดตำแหน่งตัวก่อน";
 };
 SfxSlotInfo FN_GOTO_PREV_OBJ
 {
@@ -2946,6 +3068,7 @@ SfxSlotInfo FN_GOTO_PREV_OBJ
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al objeto anterior";
     SlotName[ finnish ] = "Edelliseen objektiin";
+    SlotName[ thai ] = "ไปยังวัตถุอันก่อน";
 };
 SfxSlotInfo FN_GOTO_PREV_REGION
 {
@@ -2974,6 +3097,7 @@ SfxSlotInfo FN_GOTO_PREV_REGION
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al �rea anterior";
     SlotName[ finnish ] = "Edelliseen osioon";
+    SlotName[ thai ] = "ไปยังส่วนก่อนหน้านี้";
 };
 SfxSlotInfo FN_GOTO_REFERENCE
 {
@@ -3002,6 +3126,7 @@ SfxSlotInfo FN_GOTO_REFERENCE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la referencia";
     SlotName[ finnish ] = "Viitteeseen";
+    SlotName[ thai ] = "ไปยังการอ้างอิง";
 };
 SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 {
@@ -3030,6 +3155,7 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName[ turkish ] = "Grafi�i �ift say�l� sayfalarda yans�t";
     SlotName[ catalan ] = "Reflejar imagen en las p�ginas pares";
     SlotName[ finnish ] = "K��nn� grafiikka parillisilla sivuilla";
+    SlotName[ thai ] = "พลิกกราฟิคบนหน้าเดียวกัน";
 };
 SfxSlotInfo FN_GROW_FONT_SIZE
 {
@@ -3058,6 +3184,7 @@ SfxSlotInfo FN_GROW_FONT_SIZE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aumentar fuente";
     SlotName[ finnish ] = "Kasvata fonttia";
+    SlotName[ thai ] = "เพิ่มตัวอักษร";
 };
 SfxSlotInfo FN_HSCROLLBAR
 {
@@ -3086,6 +3213,7 @@ SfxSlotInfo FN_HSCROLLBAR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazamiento Horizontal";
     SlotName[ finnish ] = "Vierit� vaakasuorassa";
+    SlotName[ thai ] = "เลื่อนตามแนวนอน";
 };
 SfxSlotInfo FN_HYPHENATE_OPT_DLG
 {
@@ -3114,6 +3242,7 @@ SfxSlotInfo FN_HYPHENATE_OPT_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Separaci�n sil�bica";
     SlotName[ finnish ] = "Tavutus";
+    SlotName[ thai ] = "ใช้ยัติภังค์";
 };
 SfxSlotInfo FN_IDX_MARK_TO_IDX
 {
@@ -3142,6 +3271,7 @@ SfxSlotInfo FN_IDX_MARK_TO_IDX
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Marca de �ndice al �ndice";
     SlotName[ finnish ] = "Hakemistomerkki hakemistoon";
+    SlotName[ thai ] = "ทำเครื่องหมายดัชนีไปที่ดัชนี";
 };
 SfxSlotInfo FN_INC_INDENT_OFFSET
 {
@@ -3170,6 +3300,7 @@ SfxSlotInfo FN_INC_INDENT_OFFSET
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Incrementar sangr�a en";
     SlotName[ finnish ] = "Suurenna sisennysarvoa";
+    SlotName[ thai ] = "ลดค่าระยะเยื้อง";
 };
 SfxSlotInfo FN_INSERT_BOOKMARK
 {
@@ -3198,6 +3329,7 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marca";
     SlotName[ finnish ] = "Lis�� kirjanmerkki";
+    SlotName[ thai ] = "แทรกที่คั่น";
 };
 SfxSlotInfo FN_INSERT_BREAK
 {
@@ -3226,6 +3358,7 @@ SfxSlotInfo FN_INSERT_BREAK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar p�rrafo";
     SlotName[ finnish ] = "Lis�� kappale";
+    SlotName[ thai ] = "แทรกย่อหน้า";
 };
 SfxSlotInfo FN_INSERT_BREAK_DLG
 {
@@ -3254,6 +3387,7 @@ SfxSlotInfo FN_INSERT_BREAK_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar un salto manual";
     SlotName[ finnish ] = "Lis�� manuaalinen vaihto";
+    SlotName[ thai ] = "แทรกตัวแบ่งด้วยตนเอง";
 };
 SfxSlotInfo FN_INSERT_CAPTION
 {
@@ -3282,6 +3416,7 @@ SfxSlotInfo FN_INSERT_CAPTION
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar etiqueta";
     SlotName[ finnish ] = "Lis�� kuvaotsikko";
+    SlotName[ thai ] = "แทรกคำอธิบายภาพ";
 };
 SfxSlotInfo FN_INSERT_COLUMN_BREAK
 {
@@ -3305,11 +3440,12 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ dutch ] = "Kolomeinde invoegen";
     SlotName[ chinese_simplified ] = "插入分栏符";
     SlotName[ greek ] = "�������� ������� ������";
-    SlotName[ korean ] = "열 삽입";
+    SlotName[ korean ] = "열 나누기 삽입";
     SlotName[ turkish ] = "S�tun sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cambio de columnas";
     SlotName[ finnish ] = "Lis�� sarakevaihto";
+    SlotName[ thai ] = "แทรกตัวแบ่งคอลัมน์";
 };
 SfxSlotInfo FN_INSERT_CTRL
 {
@@ -3338,6 +3474,7 @@ SfxSlotInfo FN_INSERT_CTRL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar";
     SlotName[ finnish ] = "Lis��";
+    SlotName[ thai ] = "แทรก";
 };
 SfxSlotInfo FN_INSERT_ENDNOTE
 {
@@ -3366,6 +3503,7 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota final directamente";
     SlotName[ finnish ] = "Lis�� loppuhuomautus suoraan";
+    SlotName[ thai ] = "แทรกการอ้างอิงท้ายเรื่องโดยตรง";
 };
 SfxSlotInfo FN_INSERT_FIELD
 {
@@ -3394,6 +3532,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar c�digo de campo";
     SlotName[ finnish ] = "Lis�� kent�t";
+    SlotName[ thai ] = "แทรกเขตข้อมูล";
 };
 SfxSlotInfo FN_INSERT_FIELD_CTRL
 {
@@ -3422,6 +3561,7 @@ SfxSlotInfo FN_INSERT_FIELD_CTRL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar c�digos de campo";
     SlotName[ finnish ] = "Lis�� kent�t";
+    SlotName[ thai ] = "แทรกเขตข้อมูล";
 };
 SfxSlotInfo FN_INSERT_FLD_AUTHOR
 {
@@ -3450,6 +3590,7 @@ SfxSlotInfo FN_INSERT_FLD_AUTHOR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar campo para autor";
     SlotName[ finnish ] = "Lis�� laatijakentt�";
+    SlotName[ thai ] = "แทรกเขตข้อมูลสมอ";
 };
 SfxSlotInfo FN_INSERT_FLD_DATE
 {
@@ -3478,6 +3619,7 @@ SfxSlotInfo FN_INSERT_FLD_DATE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar fecha";
     SlotName[ finnish ] = "Lis�� p�iv�m��r�";
+    SlotName[ thai ] = "แทรกวันที่";
 };
 SfxSlotInfo FN_INSERT_FLD_PGCOUNT
 {
@@ -3506,6 +3648,7 @@ SfxSlotInfo FN_INSERT_FLD_PGCOUNT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar contador de p�ginas";
     SlotName[ finnish ] = "Lis�� sivum��r�";
+    SlotName[ thai ] = "แทรกการนับหน้า";
 };
 SfxSlotInfo FN_INSERT_FLD_PGNUMBER
 {
@@ -3534,6 +3677,7 @@ SfxSlotInfo FN_INSERT_FLD_PGNUMBER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar n�mero de p�gina";
     SlotName[ finnish ] = "Lis�� sivunumero";
+    SlotName[ thai ] = "แทรกเลขหน้า";
 };
 SfxSlotInfo FN_INSERT_FLD_TIME
 {
@@ -3562,6 +3706,7 @@ SfxSlotInfo FN_INSERT_FLD_TIME
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar hora";
     SlotName[ finnish ] = "Lis�� aika";
+    SlotName[ thai ] = "แทรกเวลา";
 };
 SfxSlotInfo FN_INSERT_FLD_TITLE
 {
@@ -3590,6 +3735,7 @@ SfxSlotInfo FN_INSERT_FLD_TITLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar t�tulo de documento";
     SlotName[ finnish ] = "Lis�� asiakirjan otsikko";
+    SlotName[ thai ] = "แทรกชื่อเอกสาร";
 };
 SfxSlotInfo FN_INSERT_FLD_TOPIC
 {
@@ -3618,6 +3764,7 @@ SfxSlotInfo FN_INSERT_FLD_TOPIC
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tema";
     SlotName[ finnish ] = "Lis�� aihe";
+    SlotName[ thai ] = "แทรกชื่อเรื่อง";
 };
 SfxSlotInfo FN_INSERT_FOOTER
 {
@@ -3646,6 +3793,7 @@ SfxSlotInfo FN_INSERT_FOOTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar pie de p�gina";
     SlotName[ finnish ] = "Lis�� alaselite";
+    SlotName[ thai ] = "แทรกส่วนท้าย";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE
 {
@@ -3674,6 +3822,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota al pie, directo";
     SlotName[ finnish ] = "Lis�� alaviite suoraan";
+    SlotName[ thai ] = "แทรกเชิงอรรถโดยตรง";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
 {
@@ -3702,6 +3851,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota al pie";
     SlotName[ finnish ] = "Lis�� alaviite";
+    SlotName[ thai ] = "แทรกเชิงอรรถ";
 };
 SfxSlotInfo FN_INSERT_FRAME
 {
@@ -3730,6 +3880,7 @@ SfxSlotInfo FN_INSERT_FRAME
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marco";
     SlotName[ finnish ] = "Lis�� kehys";
+    SlotName[ thai ] = "แทรกกรอบ";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
 {
@@ -3755,6 +3906,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ arabic ] = "����� ���� ����� �� ���� ���� ������";
     SlotName[ catalan ] = "Insertar manualmente marco de una columna";
     SlotName[ finnish ] = "Lis�� yksitt�inen sarakekehys manuaalisesti";
+    SlotName[ thai ] = "แทรกกรอบคอลัมน์เดียวด้วยตนเอง";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT
 {
@@ -3783,6 +3935,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marco manualmente";
     SlotName[ finnish ] = "Lis�� kehys manuaalisesti";
+    SlotName[ thai ] = "แทรกกรอบด้วยตนเอง";
 };
 SfxSlotInfo FN_INSERT_HARD_SPACE
 {
@@ -3811,6 +3964,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar espacio protegido";
     SlotName[ finnish ] = "Lis�� sitova v�lily�nti";
+    SlotName[ thai ] = "แทรกการไม่แบ่งด้วยระยะห่าง";
 };
 SfxSlotInfo FN_INSERT_HARDHYPHEN
 {
@@ -3839,6 +3993,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar gui�n protegido";
     SlotName[ finnish ] = "Lis�� sitova yhdysmerkki";
+    SlotName[ thai ] = "แทรกการไม่แบ่งด้วยการใส่ยัติภังค์";
 };
 SfxSlotInfo FN_INSERT_HEADER
 {
@@ -3867,6 +4022,7 @@ SfxSlotInfo FN_INSERT_HEADER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar encabezamiento";
     SlotName[ finnish ] = "Lis�� yl�otsikko";
+    SlotName[ thai ] = "แทรกส่วนหัว";
 };
 SfxSlotInfo FN_INSERT_HRULER
 {
@@ -3895,6 +4051,7 @@ SfxSlotInfo FN_INSERT_HRULER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar l�neas horizontales";
     SlotName[ finnish ] = "Lis�� vaakakohdistin";
+    SlotName[ thai ] = "แทรกไม้บรรทัดแนวนอน";
 };
 SfxSlotInfo FN_INSERT_HYPERLINK
 {
@@ -3922,6 +4079,7 @@ SfxSlotInfo FN_INSERT_HYPERLINK
     SlotName[ turkish ] = "Hyperlink ekle";
     SlotName[ catalan ] = "Insertar hiperenlace";
     SlotName[ finnish ] = "Lis�� hyperlinkki";
+    SlotName[ thai ] = "แทรกการเชื่อมโยงหลายมิติ";
 };
 SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
 {
@@ -3950,6 +4108,7 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marca en el �ndice";
     SlotName[ finnish ] = "Lis�� hakemistomerkki";
+    SlotName[ thai ] = "แทรกเครื่องหมายดัชนี";
 };
 SfxSlotInfo FN_INSERT_LINEBREAK
 {
@@ -3973,11 +4132,12 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ dutch ] = "Handmatig regeleinde invoegen";
     SlotName[ chinese_simplified ] = "手工插入换行符";
     SlotName[ greek ] = "�������� ������������ ������� �������";
-    SlotName[ korean ] = "수동 단락 삽입";
+    SlotName[ korean ] = "수동 개행 삽입";
     SlotName[ turkish ] = "Man�el sat�r sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar salto de l�nea manual";
     SlotName[ finnish ] = "Lis�� manuaalinen rivinvaihto";
+    SlotName[ thai ] = "แทรกตัวแบ่งแถวด้วยตนเอง";
 };
 SfxSlotInfo FN_INSERT_OBJ_CTRL
 {
@@ -4006,6 +4166,7 @@ SfxSlotInfo FN_INSERT_OBJ_CTRL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar objetos";
     SlotName[ finnish ] = "Lis�� objektit";
+    SlotName[ thai ] = "แทรกวัตถุ";
 };
 SfxSlotInfo FN_INSERT_OBJECT_DLG
 {
@@ -4034,6 +4195,7 @@ SfxSlotInfo FN_INSERT_OBJECT_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar otros objetos";
     SlotName[ finnish ] = "Lis�� muita objekteja";
+    SlotName[ thai ] = "แทรกวัตถุอื่น";
 };
 SfxSlotInfo FN_INSERT_PAGEBREAK
 {
@@ -4062,6 +4224,7 @@ SfxSlotInfo FN_INSERT_PAGEBREAK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar un salto de p�gina manual";
     SlotName[ finnish ] = "Lis�� manuaalinen sivunvaihto";
+    SlotName[ thai ] = "แทรกตัวแบ่งหน้าด้วยตนเอง";
 };
 SfxSlotInfo FN_INSERT_PAGEFOOTER
 {
@@ -4090,6 +4253,7 @@ SfxSlotInfo FN_INSERT_PAGEFOOTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar pie de p�gina";
     SlotName[ finnish ] = "Lis�� alaselite";
+    SlotName[ thai ] = "แทรกส่วนท้าย";
 };
 SfxSlotInfo FN_INSERT_PAGEHEADER
 {
@@ -4118,6 +4282,7 @@ SfxSlotInfo FN_INSERT_PAGEHEADER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar encabezamiento";
     SlotName[ finnish ] = "Lis�� yl�otsikko";
+    SlotName[ thai ] = "แทรกส่วนหัว";
 };
 SfxSlotInfo FN_INSERT_REF_FIELD
 {
@@ -4146,6 +4311,7 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar campo referencia";
     SlotName[ finnish ] = "Lis�� kentt�viite";
+    SlotName[ thai ] = "แทรกการอ้างอิงเขตข้อมูล";
 };
 SfxSlotInfo FN_INSERT_REGION
 {
@@ -4174,6 +4340,7 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar �rea";
     SlotName[ finnish ] = "Lis�� osio";
+    SlotName[ thai ] = "แทรกส่วน";
 };
 SfxSlotInfo FN_INSERT_SMA
 {
@@ -4202,6 +4369,7 @@ SfxSlotInfo FN_INSERT_SMA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar objeto %PRODUCTNAME Math";
     SlotName[ finnish ] = "Lis�� %PRODUCTNAME Math -objekti";
+    SlotName[ thai ] = "แทรกวัตถุคณิตศาสตร์  %PRODUCTNAME ";
 };
 SfxSlotInfo FN_INSERT_SOFT_HYPHEN
 {
@@ -4230,6 +4398,7 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar gui�n opcional";
     SlotName[ finnish ] = "Lis�� lis�yhdysmerkki";
+    SlotName[ thai ] = "แทรกการใส่ยัติภังค์เป็นทางเลือก";
 };
 SfxSlotInfo FN_INSERT_SYMBOL
 {
@@ -4258,6 +4427,7 @@ SfxSlotInfo FN_INSERT_SYMBOL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar s�mbolo ";
     SlotName[ finnish ] = "Lis�� erikoismerkki";
+    SlotName[ thai ] = "แทรกตัวอักขระพิเศษ ";
 };
 SfxSlotInfo FN_INSERT_TABLE
 {
@@ -4286,6 +4456,7 @@ SfxSlotInfo FN_INSERT_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tabla";
     SlotName[ finnish ] = "Lis�� taulukko";
+    SlotName[ thai ] = "แทรกตาราง";
 };
 SfxSlotInfo FN_JAVAEDIT
 {
@@ -4314,6 +4485,7 @@ SfxSlotInfo FN_JAVAEDIT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar script";
     SlotName[ finnish ] = "Lis�� komentosarja";
+    SlotName[ thai ] = "แทรกสคริปต์";
 };
 SfxSlotInfo FN_LABEL
 {
@@ -4342,6 +4514,7 @@ SfxSlotInfo FN_LABEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar etiquetas";
     SlotName[ finnish ] = "Lis�� nimi�t";
+    SlotName[ thai ] = "แทรกป้ายชื่อ";
 };
 SfxSlotInfo FN_BUSINESS_CARD
 {
@@ -4368,6 +4541,7 @@ SfxSlotInfo FN_BUSINESS_CARD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tarjetas de visita";
     SlotName[ finnish ] = "Lis�� k�yntikortit";
+    SlotName[ thai ] = "แทรกนามบัตร";
 };
 SfxSlotInfo FN_LINE_DOWN
 {
@@ -4396,6 +4570,7 @@ SfxSlotInfo FN_LINE_DOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la l�nea de abajo";
     SlotName[ finnish ] = "Alla olevaan riviin";
+    SlotName[ thai ] = "ไปยังบรรทัดข้างล่าง";
 };
 SfxSlotInfo FN_LINE_DOWN_SEL
 {
@@ -4424,6 +4599,7 @@ SfxSlotInfo FN_LINE_DOWN_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta la l�nea de abajo";
     SlotName[ finnish ] = "Valitse alasp�in";
+    SlotName[ thai ] = "เลือกลง";
 };
 SfxSlotInfo FN_LINE_NUMBERING_DLG
 {
@@ -4452,6 +4628,7 @@ SfxSlotInfo FN_LINE_NUMBERING_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Definir numeraci�n de l�neas";
     SlotName[ finnish ] = "M��rit� rivinumerointi";
+    SlotName[ thai ] = "กำหนดลำดับตัวเลขบรรทัด";
 };
 SfxSlotInfo FN_LINE_UP
 {
@@ -4480,6 +4657,7 @@ SfxSlotInfo FN_LINE_UP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la l�nea de arriba";
     SlotName[ finnish ] = "Ylimm�lle riville";
+    SlotName[ thai ] = "ไปยังบรรทัดบน";
 };
 SfxSlotInfo FN_LINE_UP_SEL
 {
@@ -4508,6 +4686,7 @@ SfxSlotInfo FN_LINE_UP_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta l�nea de arriba";
     SlotName[ finnish ] = "Valitse ylimm�lle riville";
+    SlotName[ thai ] = "เลือกไปยังบรรทัดบน";
 };
 SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
 {
@@ -4536,6 +4715,7 @@ SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la p�gina";
     SlotName[ finnish ] = "Sivulle";
+    SlotName[ thai ] = "ไปที่หน้า";
 };
 SfxSlotInfo FN_NEW_GLOBAL_DOC
 {
@@ -4564,6 +4744,7 @@ SfxSlotInfo FN_NEW_GLOBAL_DOC
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Crear un documento maestro";
     SlotName[ finnish ] = "Luo p��asiakirja";
+    SlotName[ thai ] = "สร้างเอกสารต้นฉบับ";
 };
 SfxSlotInfo FN_NEW_HTML_DOC
 {
@@ -4592,6 +4773,7 @@ SfxSlotInfo FN_NEW_HTML_DOC
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Crear documento HTML";
     SlotName[ finnish ] = "Luo HTML-asiakirja";
+    SlotName[ thai ] = "สร้างเอกสาร HTML ";
 };
 SfxSlotInfo FN_NEXT_BOOKMARK
 {
@@ -4620,6 +4802,7 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la marca siguiente";
     SlotName[ finnish ] = "Seuraavaan kirjanmerkkiin";
+    SlotName[ thai ] = "ไปยังที่คั่นถัดไป";
 };
 SfxSlotInfo FN_NEXT_FOOTNOTE
 {
@@ -4648,6 +4831,7 @@ SfxSlotInfo FN_NEXT_FOOTNOTE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la nota al pie siguiente";
     SlotName[ finnish ] = "Seuraavaan alaviitteeseen";
+    SlotName[ thai ] = "ไปยังเชิงอรรถถัดไป";
 };
 SfxSlotInfo FN_NEXT_PARA
 {
@@ -4676,6 +4860,7 @@ SfxSlotInfo FN_NEXT_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al p�rrafo siguiente";
     SlotName[ finnish ] = "Seuraavaan kappaleeseen";
+    SlotName[ thai ] = "ไปยังย่อหน้าถัดไป";
 };
 SfxSlotInfo FN_NEXT_SENT
 {
@@ -4704,6 +4889,7 @@ SfxSlotInfo FN_NEXT_SENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir  la oraci�n siguiente";
     SlotName[ finnish ] = "Seuraavaan lauseeseen";
+    SlotName[ thai ] = "ไปยังประโยคถัดไป";
 };
 SfxSlotInfo FN_NEXT_SENT_SEL
 {
@@ -4732,6 +4918,7 @@ SfxSlotInfo FN_NEXT_SENT_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta frase siguiente";
     SlotName[ finnish ] = "Valitse seuraavaan lauseeseen";
+    SlotName[ thai ] = "เลือกไปยังประโยคถัดไป";
 };
 SfxSlotInfo FN_NEXT_TABLE
 {
@@ -4760,6 +4947,7 @@ SfxSlotInfo FN_NEXT_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la tabla siguiente";
     SlotName[ finnish ] = "Seuraavaan taulukkoon";
+    SlotName[ thai ] = "ไปที่ตารางถัดไป";
 };
 SfxSlotInfo FN_NEXT_TBLFML
 {
@@ -4788,6 +4976,7 @@ SfxSlotInfo FN_NEXT_TBLFML
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la pr�xima f�rmula";
     SlotName[ finnish ] = "Siirry seuraavaan taulukon kaavaan";
+    SlotName[ thai ] = "ไปที่ตารางสูตรคำนวณถัดไป";
 };
 SfxSlotInfo FN_NEXT_TBLFML_ERR
 {
@@ -4816,6 +5005,7 @@ SfxSlotInfo FN_NEXT_TBLFML_ERR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a f�rmula err�nea siguiente";
     SlotName[ finnish ] = "Siirry seuraavaan virheelliseen taulukon kaavaan";
+    SlotName[ thai ] = "ไปที่ตารางสูตรคำนวณที่ผิดถัดไป";
 };
 SfxSlotInfo FN_NEXT_TOXMARK
 {
@@ -4844,6 +5034,7 @@ SfxSlotInfo FN_NEXT_TOXMARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la marca de �ndice siguiente";
     SlotName[ finnish ] = "Siirry seuraavaan hakemistomerkkiin";
+    SlotName[ thai ] = "ไปที่เครื่องหมายดัชนีถัดไป";
 };
 SfxSlotInfo FN_NEXT_WORD
 {
@@ -4872,6 +5063,7 @@ SfxSlotInfo FN_NEXT_WORD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la derecha de la palabra";
     SlotName[ finnish ] = "Sanan oikeaan reunaan";
+    SlotName[ thai ] = "ไปที่ด้านขวาของคำ";
 };
 SfxSlotInfo FN_NEXT_WORD_SEL
 {
@@ -4900,6 +5092,7 @@ SfxSlotInfo FN_NEXT_WORD_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el final de la palabra";
     SlotName[ finnish ] = "Valitse sanan oikeaan reunaan";
+    SlotName[ thai ] = "เลือกไปที่ด้านขวาของคำ";
 };
 SfxSlotInfo FN_NUM_BULLET_DOWN
 {
@@ -4928,6 +5121,7 @@ SfxSlotInfo FN_NUM_BULLET_DOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Bajar un nivel";
     SlotName[ finnish ] = "Yksi taso alas";
+    SlotName[ thai ] = "ลงหนึ่งระดับ";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
 {
@@ -4956,6 +5150,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia abajo";
     SlotName[ finnish ] = "Siirr� alas";
+    SlotName[ thai ] = "เลื่อนลง";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEUP
 {
@@ -4984,6 +5179,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia arriba";
     SlotName[ finnish ] = "Siirr� yl�s";
+    SlotName[ thai ] = "เลื่อนขึ้น";
 };
 SfxSlotInfo FN_NUM_BULLET_NEXT
 {
@@ -5012,6 +5208,7 @@ SfxSlotInfo FN_NUM_BULLET_NEXT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Al p�rrafo siguiente del mismo nivel";
     SlotName[ finnish ] = "Kerroksen seuraavaan kappaleeseen";
+    SlotName[ thai ] = "ไปที่ย่อหน้าถัดไปในระดับ";
 };
 SfxSlotInfo FN_NUM_BULLET_NONUM
 {
@@ -5040,6 +5237,7 @@ SfxSlotInfo FN_NUM_BULLET_NONUM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar entrada sin n�mero";
     SlotName[ finnish ] = "Lis�� numeroimaton merkint�";
+    SlotName[ thai ] = "แทรกรายการที่ไม่มีลำดับตัวเลข";
 };
 SfxSlotInfo FN_NUM_BULLET_OFF
 {
@@ -5068,6 +5266,7 @@ SfxSlotInfo FN_NUM_BULLET_OFF
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desactivar numeraci�n";
     SlotName[ finnish ] = "Numerointi pois k�yt�st�";
+    SlotName[ thai ] = "ไม่มีลำดับตัวเลข";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
 {
@@ -5096,6 +5295,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Bajar un nivel con subniveles";
     SlotName[ finnish ] = "Siirr� alas alikohteiden kanssa";
+    SlotName[ thai ] = "เลื่อนลงด้วยจุดย่อย";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
 {
@@ -5124,6 +5324,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia abajo con subniveles";
     SlotName[ finnish ] = "Siirr� alas alikohteiden kanssa";
+    SlotName[ thai ] = "เลื่อนลงด้วยจุดย่อย";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
 {
@@ -5152,6 +5353,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia arriba con subniveles";
     SlotName[ finnish ] = "Siirr� yl�s alikohteiden kanssa";
+    SlotName[ thai ] = "เลื่อนขึ้นด้วยจุดย่อย";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
 {
@@ -5180,6 +5382,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Subir un nivel con subniveles";
     SlotName[ finnish ] = "Siirr� yl�s alikohteiden kanssa";
+    SlotName[ thai ] = "เลื่อนขึ้นด้วยจุดย่อย";
 };
 SfxSlotInfo FN_NUM_BULLET_PREV
 {
@@ -5208,6 +5411,7 @@ SfxSlotInfo FN_NUM_BULLET_PREV
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Al p�rrafo anterior del mismo nivel";
     SlotName[ finnish ] = "Kerroksen edelliseen kappaleeseen";
+    SlotName[ thai ] = "ไปยังย่อหน้าก่อนในระดับ";
 };
 SfxSlotInfo FN_NUM_BULLET_UP
 {
@@ -5236,6 +5440,7 @@ SfxSlotInfo FN_NUM_BULLET_UP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Subir un nivel";
     SlotName[ finnish ] = "Yksi taso yl�s";
+    SlotName[ thai ] = "ขึ้นหนึ่งระดับ";
 };
 SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
 {
@@ -5264,6 +5469,7 @@ SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar formato de n�meros";
     SlotName[ finnish ] = "Muokkaa numeromuotoa";
+    SlotName[ thai ] = "แก้ไขรูปแบบตัวเลข";
 };
 SfxSlotInfo FN_NUM_OR_NONUM
 {
@@ -5292,6 +5498,7 @@ SfxSlotInfo FN_NUM_OR_NONUM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar/Desact. Numeraci�n";
     SlotName[ finnish ] = "Numerointi on/off";
+    SlotName[ thai ] = "ลำดับตัวเลข มี/ไม่มี";
 };
 SfxSlotInfo FN_NUMBER_BULLETS
 {
@@ -5320,6 +5527,7 @@ SfxSlotInfo FN_NUMBER_BULLETS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar numeraci�n";
     SlotName[ finnish ] = "Muokkaa numerointia";
+    SlotName[ thai ] = "แก้ไขลำดับตัวเลข";
 };
 SfxSlotInfo FN_NUMBER_CURRENCY
 {
@@ -5348,6 +5556,7 @@ SfxSlotInfo FN_NUMBER_CURRENCY
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Formato num�rico: Moneda";
     SlotName[ finnish ] = "Numeromuoto: Valuutta";
+    SlotName[ thai ] = "รูปแบบตัวเลข: สกุลเงิน";
 };
 SfxSlotInfo FN_NUMBER_DATE
 {
@@ -5376,6 +5585,7 @@ SfxSlotInfo FN_NUMBER_DATE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Formato num�rico : Fecha";
     SlotName[ finnish ] = "Numeromuoto: P�iv�m��r�";
+    SlotName[ thai ] = "รูปแบบตัวเลข : วันที่";
 };
 SfxSlotInfo FN_NUMBER_NEWSTART
 {
@@ -5404,6 +5614,7 @@ SfxSlotInfo FN_NUMBER_NEWSTART
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reiniciar numeraci�n";
     SlotName[ finnish ] = "Aloita numerointi uudestaan";
+    SlotName[ thai ] = "เริ่มลำดับตัวเลขใหม่";
 };
 SfxSlotInfo FN_NUMBER_PERCENT
 {
@@ -5432,6 +5643,7 @@ SfxSlotInfo FN_NUMBER_PERCENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Formato num�rico: Porciento";
     SlotName[ finnish ] = "Numeromuoto: Prosenttia";
+    SlotName[ thai ] = "รูปแบบตัวเลข: เปอร์เซ็นต์";
 };
 SfxSlotInfo FN_NUMBER_SCIENTIFIC
 {
@@ -5445,7 +5657,7 @@ SfxSlotInfo FN_NUMBER_SCIENTIFIC
     SlotName[ spanish ] = "Formato num�rico: Exponencial";
     SlotName[ italian ] = "Formato numero: esponenziale";
     SlotName[ danish ] = "Talformat: eksponentiel";
-    SlotName[ swedish ] = "Talformat: Exponentiellt";
+    SlotName[ swedish ] = "Talformat: exponentiellt";
     SlotName[ polish ] = "Format liczb : Wyk�adniczy";
     SlotName[ portuguese_brazilian ] = "NumberFormatExponential";
     SlotName[ japanese ] = "数の書式: 指数";
@@ -5460,6 +5672,7 @@ SfxSlotInfo FN_NUMBER_SCIENTIFIC
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Formato num�rico: Exponencial";
     SlotName[ finnish ] = "Numeromuoto: eksponentiaalinen";
+    SlotName[ thai ] = "รูปแบบตัวเลข: เอ็กซ์โปเนนเชียล";
 };
 SfxSlotInfo FN_NUMBER_STANDARD
 {
@@ -5488,6 +5701,7 @@ SfxSlotInfo FN_NUMBER_STANDARD
     SlotName[ turkish ] = "Say� format�: Standart";
     SlotName[ catalan ] = "Formato num�rico: Est�ndar";
     SlotName[ finnish ] = "Numeromuoto: Vakio";
+    SlotName[ thai ] = "รูปแบบตัวเลข: มาตรฐาน";
 };
 SfxSlotInfo FN_NUMBER_TIME
 {
@@ -5516,6 +5730,7 @@ SfxSlotInfo FN_NUMBER_TIME
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Formato num�rico: Hora";
     SlotName[ finnish ] = "Numeromuoto: Aika";
+    SlotName[ thai ] = "รูปแบบตัวเลข: เวลา";
 };
 SfxSlotInfo FN_NUMBER_TWODEC
 {
@@ -5544,6 +5759,7 @@ SfxSlotInfo FN_NUMBER_TWODEC
     SlotName[ turkish ] = "Say� format�: Ondal�k";
     SlotName[ catalan ] = "Formato num�rico: Decimal";
     SlotName[ finnish ] = "Numeromuoto: Desimaali";
+    SlotName[ thai ] = "รูปแบบตัวเลข: ทศนิยม";
 };
 SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
 {
@@ -5572,6 +5788,7 @@ SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Numeraci�n de cap�tulos";
     SlotName[ finnish ] = "J�sennysnumerointi";
+    SlotName[ thai ] = "เค้าร่างลำดับตัวเลข";
 };
 SfxSlotInfo FN_OPTIMIZE_TABLE
 {
@@ -5600,6 +5817,7 @@ SfxSlotInfo FN_OPTIMIZE_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Optimar";
     SlotName[ finnish ] = "Optimoi";
+    SlotName[ thai ] = "ปรับให้เหมาะสมที่สุด";
 };
 SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
 {
@@ -5623,11 +5841,12 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ dutch ] = "Overzicht naar Klembord";
     SlotName[ chinese_simplified ] = "大纲送至剪贴板";
     SlotName[ greek ] = "��������� ���� �� ��������";
-    SlotName[ korean ] = "클립보드의 아웃트라인";
+    SlotName[ korean ] = "클립보드의 다단계";
     SlotName[ turkish ] = "Anahatlar� panoya g�nder";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema al portapapeles";
     SlotName[ finnish ] = "J�senn� Leikep�yd�lle";
+    SlotName[ thai ] = "เค้าร่างไปยังคลิปบอร์ด";
 };
 SfxSlotInfo FN_OUTLINE_TO_IMPRESS
 {
@@ -5651,11 +5870,12 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ dutch ] = "Overzicht bij presentatie";
     SlotName[ chinese_simplified ] = "大纲送到演示文稿";
     SlotName[ greek ] = "��������� ���� ����������";
-    SlotName[ korean ] = "프레젠테이션 아웃트라인";
+    SlotName[ korean ] = "프리젠테이션 다단계";
     SlotName[ turkish ] = "Anahatlar� sunuya aktar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema para presentaci�n";
     SlotName[ finnish ] = "J�senn� Esitykseen";
+    SlotName[ thai ] = "เค้าร่างไปยังการนำเสนอ";
 };
 SfxSlotInfo FN_PAGE_STYLE_SET_COLS
 {
@@ -5679,11 +5899,12 @@ SfxSlotInfo FN_PAGE_STYLE_SET_COLS
     SlotName[ dutch ] = "Pagina-opmaakprofiel: kolommen";
     SlotName[ chinese_simplified ] = "页面样式：列";
     SlotName[ greek ] = "������� �������: ������";
-    SlotName[ korean ] = "페이지 스타일: 열";
+    SlotName[ korean ] = "페이지 템플릿: 열";
     SlotName[ turkish ] = "Sayfa bi�imi: S�tunlar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Estilo de p�gina: Columnas";
     SlotName[ finnish ] = "Sivun tyyli: Sarakkeet";
+    SlotName[ thai ] = "ลักษณะหน้า: คอลัมน์";
 };
 SfxSlotInfo FN_PAGEDOWN
 {
@@ -5712,6 +5933,7 @@ SfxSlotInfo FN_PAGEDOWN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "P�gina siguiente";
     SlotName[ finnish ] = "Seuraava sivu";
+    SlotName[ thai ] = "หน้าถัดไป";
 };
 SfxSlotInfo FN_PAGEDOWN_SEL
 {
@@ -5740,6 +5962,7 @@ SfxSlotInfo FN_PAGEDOWN_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta la p�gina siguiente";
     SlotName[ finnish ] = "Valitse seuraavaan sivuun";
+    SlotName[ thai ] = "เลือกไปยังหน้าถัดไป";
 };
 SfxSlotInfo FN_PAGEUP
 {
@@ -5768,6 +5991,7 @@ SfxSlotInfo FN_PAGEUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "P�gina anterior";
     SlotName[ finnish ] = "Edellinen sivu";
+    SlotName[ thai ] = "หน้าก่อน";
 };
 SfxSlotInfo FN_PAGEUP_SEL
 {
@@ -5796,6 +6020,7 @@ SfxSlotInfo FN_PAGEUP_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta la p�gina anterior";
     SlotName[ finnish ] = "Valitse edelliseen sivuun";
+    SlotName[ thai ] = "เลือกไปยังหน้าก่อน";
 };
 SfxSlotInfo FN_PASTESPECIAL
 {
@@ -5824,6 +6049,7 @@ SfxSlotInfo FN_PASTESPECIAL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Pegado especial";
     SlotName[ finnish ] = "Liit� m��r�ten";
+    SlotName[ thai ] = "วางพิเศษ";
 };
 SfxSlotInfo FN_POSTIT
 {
@@ -5852,6 +6078,7 @@ SfxSlotInfo FN_POSTIT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota";
     SlotName[ finnish ] = "Lis�� huomautus";
+    SlotName[ thai ] = "แทรกบันทึกย่อ";
 };
 SfxSlotInfo FN_PREV_BOOKMARK
 {
@@ -5880,6 +6107,7 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la marca anterior";
     SlotName[ finnish ] = "Edelliseen kirjanmerkkiin";
+    SlotName[ thai ] = "ไปยังที่คั่นอันก่อน";
 };
 SfxSlotInfo FN_PREV_FOOTNOTE
 {
@@ -5908,6 +6136,7 @@ SfxSlotInfo FN_PREV_FOOTNOTE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la nota al pie anterior";
     SlotName[ finnish ] = "Edelliseen alaviitteeseen";
+    SlotName[ thai ] = "ไปยังเชิงอรรถอันก่อน";
 };
 SfxSlotInfo FN_PREV_PARA
 {
@@ -5936,6 +6165,7 @@ SfxSlotInfo FN_PREV_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al p�rrafo anterior";
     SlotName[ finnish ] = "Edelliseen kappaleeseen";
+    SlotName[ thai ] = "ไปยังย่อหน้าก่อน";
 };
 SfxSlotInfo FN_PREV_SENT
 {
@@ -5964,6 +6194,7 @@ SfxSlotInfo FN_PREV_SENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a frase anterior";
     SlotName[ finnish ] = "Edelliseen lauseeseen";
+    SlotName[ thai ] = "ไปยังประโยคก่อน";
 };
 SfxSlotInfo FN_PREV_SENT_SEL
 {
@@ -5992,6 +6223,7 @@ SfxSlotInfo FN_PREV_SENT_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta la oraci�n anterior";
     SlotName[ finnish ] = "Valitse edelliseen lauseeseen";
+    SlotName[ thai ] = "เลือกไปยังประโยคก่อน";
 };
 SfxSlotInfo FN_PREV_TABLE
 {
@@ -6020,6 +6252,7 @@ SfxSlotInfo FN_PREV_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la tabla anterior";
     SlotName[ finnish ] = "Edelliseen taulukkoon";
+    SlotName[ thai ] = "ไปยังตารางก่อน";
 };
 SfxSlotInfo FN_PREV_TBLFML
 {
@@ -6048,6 +6281,7 @@ SfxSlotInfo FN_PREV_TBLFML
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la f�rmula anterior";
     SlotName[ finnish ] = "Siirry edelliseen taulukon kaavaan";
+    SlotName[ thai ] = "ไปยังตารางสูตรคำนวณอันก่อน";
 };
 SfxSlotInfo FN_PREV_TBLFML_ERR
 {
@@ -6076,6 +6310,7 @@ SfxSlotInfo FN_PREV_TBLFML_ERR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a f�rmula err�nea anterior";
     SlotName[ finnish ] = "Siirry edelliseen virheelliseen taulukon kaavaan";
+    SlotName[ thai ] = "ไปยังตารางสูตรคำนวณที่ผิดอันก่อน";
 };
 SfxSlotInfo FN_PREV_TOXMARK
 {
@@ -6104,6 +6339,7 @@ SfxSlotInfo FN_PREV_TOXMARK
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la marca de �ndice anterior";
     SlotName[ finnish ] = "Siirry edelliseen hakemistomerkkiin";
+    SlotName[ thai ] = "ไปยังเครื่องหมายดัชนีอันก่อน";
 };
 SfxSlotInfo FN_PREV_WORD
 {
@@ -6132,6 +6368,7 @@ SfxSlotInfo FN_PREV_WORD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la palabra izquierda";
     SlotName[ finnish ] = "Sanan vasempaan reunaan";
+    SlotName[ thai ] = "ไปยังด้านซ้ายของคำ";
 };
 SfxSlotInfo FN_PREV_WORD_SEL
 {
@@ -6160,6 +6397,7 @@ SfxSlotInfo FN_PREV_WORD_SEL
     SlotName[ turkish ] = "Soldaki s�zc��e kadar se�";
     SlotName[ catalan ] = "Seleccionar hasta el comienzo de la palabra";
     SlotName[ finnish ] = "Valitse sanan alkuun";
+    SlotName[ thai ] = "เลือกไปยังส่วนเริ่มต้นของคำ";
 };
 SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
 {
@@ -6188,6 +6426,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ turkish ] = "Sayfa g�r�n�m� yazd�rma se�enekleri";
     SlotName[ catalan ] = "Opciones de impresi�n";
     SlotName[ finnish ] = "Tulostusasetusten n�kym�";
+    SlotName[ thai ] = "ตัวเลือกการพิมพ์มุมมองหน้า";
 };
 SfxSlotInfo FN_PREVIEW_ZOOM
 {
@@ -6213,6 +6452,7 @@ SfxSlotInfo FN_PREVIEW_ZOOM
     SlotName[ arabic ] = "����� ������ ������ ������";
     SlotName[ catalan ] = "Escala previsualizaci�n";
     SlotName[ finnish ] = "Esikatseluzoomaus";
+    SlotName[ thai ] = "แสดงตัวอย่างย่อ/ขยาย";
 };
 SfxSlotInfo FN_PRINT_LAYOUT
 {
@@ -6241,6 +6481,7 @@ SfxSlotInfo FN_PRINT_LAYOUT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Dise�o de Impresi�n";
     SlotName[ finnish ] = "Tulostusasettelu on/off";
+    SlotName[ thai ] = "เค้าโครงการพิมพ์ มี/ไม่มี";
 };
 SfxSlotInfo FN_PRINT_PAGEPREVIEW
 {
@@ -6269,6 +6510,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Imprimir previsualizaci�n";
     SlotName[ finnish ] = "Sivun tulostusn�kym�";
+    SlotName[ thai ] = "มุมมองหน้าที่จะพิมพ์";
 };
 SfxSlotInfo FN_QRY_MERGE
 {
@@ -6297,6 +6539,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Preparar impresi�n en serie";
     SlotName[ finnish ] = "Valmistele yhdist�minen";
+    SlotName[ thai ] = "เตรียมผสานเมล์";
 };
 SfxSlotInfo FN_REDLINE_ACCEPT
 {
@@ -6325,6 +6568,7 @@ SfxSlotInfo FN_REDLINE_ACCEPT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aceptar modificaciones o rechazarlas";
     SlotName[ finnish ] = "Hyv�ksy tai hylk�� muutokset";
+    SlotName[ thai ] = "ยอมรับหรือปฏิเสธการเปลี่ยนแปลง";
 };
 SfxSlotInfo FN_REDLINE_COMMENT
 {
@@ -6353,6 +6597,7 @@ SfxSlotInfo FN_REDLINE_COMMENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar comentario";
     SlotName[ finnish ] = "Lis�� huomautus";
+    SlotName[ thai ] = "แทรกข้อคิดเห็น";
 };
 SfxSlotInfo FN_REDLINE_ON
 {
@@ -6381,6 +6626,7 @@ SfxSlotInfo FN_REDLINE_ON
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar modificaciones";
     SlotName[ finnish ] = "Vaihda tarkastettaessa";
+    SlotName[ thai ] = "สลับการตรวจทาน";
 };
 SfxSlotInfo FN_REDLINE_PROTECT
 {
@@ -6407,6 +6653,7 @@ SfxSlotInfo FN_REDLINE_PROTECT
     SlotName[ arabic ] = "Protect changes trace mode";
     SlotName[ catalan ] = "Protect changes trace mode";
     SlotName[ finnish ] = "Suojaa muutostietue";
+    SlotName[ thai ] = "ป้องกันระเบียนของการเปลี่ยนแปลง";
 };
 SfxSlotInfo FN_REDLINE_SHOW
 {
@@ -6435,6 +6682,7 @@ SfxSlotInfo FN_REDLINE_SHOW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Mostrar modificaciones";
     SlotName[ finnish ] = "Korosta muutokset";
+    SlotName[ thai ] = "ไฮไลต์การเปลี่ยนแปลง";
 };
 SfxSlotInfo FN_REFRESH_VIEW
 {
@@ -6463,6 +6711,7 @@ SfxSlotInfo FN_REFRESH_VIEW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Restablecer visualizaci�n";
     SlotName[ finnish ] = "Palauta n�kym�";
+    SlotName[ thai ] = "คืนสภาพมุมมอง";
 };
 SfxSlotInfo FN_REPAGINATE
 {
@@ -6491,6 +6740,7 @@ SfxSlotInfo FN_REPAGINATE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reformatear";
     SlotName[ finnish ] = "Sivuta uudelleen";
+    SlotName[ thai ] = "แบ่งหน้าใหม่";
 };
 SfxSlotInfo FN_REPEAT_SEARCH
 {
@@ -6519,6 +6769,7 @@ SfxSlotInfo FN_REPEAT_SEARCH
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Repetir b�squeda";
     SlotName[ finnish ] = "Toista haku";
+    SlotName[ thai ] = "ทำการค้นหาซ้ำ";
 };
 SfxSlotInfo FN_RULER
 {
@@ -6547,6 +6798,7 @@ SfxSlotInfo FN_RULER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Regla";
     SlotName[ finnish ] = "Viivain on/off";
+    SlotName[ thai ] = "ไม้บรรทัด มี/ไม่มี";
 };
 SfxSlotInfo FN_SELECT_PARA
 {
@@ -6575,6 +6827,7 @@ SfxSlotInfo FN_SELECT_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar p�rrafo";
     SlotName[ finnish ] = "Valitse kappale";
+    SlotName[ thai ] = "เลือกย่อหน้า";
 };
 SfxSlotInfo FN_SELECT_WORD
 {
@@ -6603,6 +6856,7 @@ SfxSlotInfo FN_SELECT_WORD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar palabra";
     SlotName[ finnish ] = "Valitse sana";
+    SlotName[ thai ] = "เลือกคำ";
 };
 SfxSlotInfo FN_SET_ADD_MODE
 {
@@ -6631,6 +6885,7 @@ SfxSlotInfo FN_SET_ADD_MODE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar selecci�n m�ltiple";
     SlotName[ finnish ] = "Monivalinta k�yt�ss�";
+    SlotName[ thai ] = "เลือกหลายส่วน";
 };
 SfxSlotInfo FN_SET_EXT_MODE
 {
@@ -6659,6 +6914,7 @@ SfxSlotInfo FN_SET_EXT_MODE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar Selecci�n Extendida";
     SlotName[ finnish ] = "Laajennettu valinta k�yt�ss�";
+    SlotName[ thai ] = "เลือกเพิ่มเติม";
 };
 SfxSlotInfo FN_SET_PAGE_STYLE
 {
@@ -6682,11 +6938,12 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ dutch ] = "Pagina-opmaakprofiel toewijzen";
     SlotName[ chinese_simplified ] = "指定页面样式";
     SlotName[ greek ] = "�������� �������� �������";
-    SlotName[ korean ] = "페이지 스타일 적용";
+    SlotName[ korean ] = "페이지 템플릿 적용";
     SlotName[ turkish ] = "Sayfa bi�imi uygula";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aplicar estilo de p�gina";
     SlotName[ finnish ] = "K�yt� sivun tyyli�";
+    SlotName[ thai ] = "ใช้ลักษณะหน้า";
 };
 SfxSlotInfo FN_SET_SUB_SCRIPT
 {
@@ -6715,6 +6972,7 @@ SfxSlotInfo FN_SET_SUB_SCRIPT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Sub�ndice";
     SlotName[ finnish ] = "Alaindeksi";
+    SlotName[ thai ] = "ตัวห้อย";
 };
 SfxSlotInfo FN_SET_SUPER_SCRIPT
 {
@@ -6743,6 +7001,7 @@ SfxSlotInfo FN_SET_SUPER_SCRIPT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Super�ndice";
     SlotName[ finnish ] = "Yl�indeksi";
+    SlotName[ thai ] = "ตัวยก";
 };
 SfxSlotInfo FN_SHADOWCURSOR
 {
@@ -6771,6 +7030,7 @@ SfxSlotInfo FN_SHADOWCURSOR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar/desactivar cursor directo";
     SlotName[ finnish ] = "Suora kohdistin on/off";
+    SlotName[ thai ] = "เคอร์เซอร์โดยตรง มี/ไม่มี";
 };
 SfxSlotInfo FN_SHIFT_BACKSPACE
 {
@@ -6799,6 +7059,7 @@ SfxSlotInfo FN_SHIFT_BACKSPACE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Retroceso";
     SlotName[ finnish ] = "Askelpalautin";
+    SlotName[ thai ] = "แบ็คสเปซ";
 };
 SfxSlotInfo FN_SHOW_FOUR_PAGES
 {
@@ -6827,6 +7088,7 @@ SfxSlotInfo FN_SHOW_FOUR_PAGES
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Vista preliminar: cuatro p�ginas";
     SlotName[ finnish ] = "Sivun esikatselu: nelj� sivua";
+    SlotName[ thai ] = "มุมมองหน้า: สี่หน้า";
 };
 SfxSlotInfo FN_SHOW_TWO_PAGES
 {
@@ -6855,6 +7117,7 @@ SfxSlotInfo FN_SHOW_TWO_PAGES
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Vista preliminar: dos p�ginas";
     SlotName[ finnish ] = "Sivun esikatselu: kaksi sivua";
+    SlotName[ thai ] = "มุมมองหน้า: สองหน้า";
 };
 SfxSlotInfo FN_SHRINK_FONT_SIZE
 {
@@ -6883,6 +7146,7 @@ SfxSlotInfo FN_SHRINK_FONT_SIZE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reducir fuente";
     SlotName[ finnish ] = "Pienenn� fonttia";
+    SlotName[ thai ] = "ลดตัวอักษร";
 };
 SfxSlotInfo FN_SORTING_DLG
 {
@@ -6911,6 +7175,7 @@ SfxSlotInfo FN_SORTING_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ordenar";
     SlotName[ finnish ] = "Lajittele";
+    SlotName[ thai ] = "เรียง";
 };
 SfxSlotInfo FN_SOURCEVIEW
 {
@@ -6939,6 +7204,7 @@ SfxSlotInfo FN_SOURCEVIEW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Mostrar texto fuente HTML";
     SlotName[ finnish ] = "N�yt� HTML-l�hde";
+    SlotName[ thai ] = "แสดงแหล่ง HTML ";
 };
 SfxSlotInfo FN_SPELLING_DLG
 {
@@ -6967,6 +7233,7 @@ SfxSlotInfo FN_SPELLING_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Revisi�n ortogr�fica";
     SlotName[ finnish ] = "Oikeinkirjoituksen tarkistus";
+    SlotName[ thai ] = "ตรวจสอบการสะกด";
 };
 SfxSlotInfo FN_START_DOC_DIRECT
 {
@@ -6995,6 +7262,7 @@ SfxSlotInfo FN_START_DOC_DIRECT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Directo al comienzo del documento";
     SlotName[ finnish ] = "Suoraan asiakirjan alkuun";
+    SlotName[ thai ] = "ไปยังเอกสารเริ่มต้นโดยตรง";
 };
 SfxSlotInfo FN_START_OF_COLUMN
 {
@@ -7023,6 +7291,7 @@ SfxSlotInfo FN_START_OF_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la columna";
     SlotName[ finnish ] = "Sarakkeen alkuun";
+    SlotName[ thai ] = "ไปยังคอลัมน์แรก";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT
 {
@@ -7051,6 +7320,7 @@ SfxSlotInfo FN_START_OF_DOCUMENT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Al comienzo del documento";
     SlotName[ finnish ] = "Asiakirjan alkuun";
+    SlotName[ thai ] = "ไปยังเอกสารแรก";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT_SEL
 {
@@ -7079,6 +7349,7 @@ SfxSlotInfo FN_START_OF_DOCUMENT_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el comienzo del documento";
     SlotName[ finnish ] = "Valitse asiakirjan alkuun";
+    SlotName[ thai ] = "เลือกไปยังเอกสารแรก";
 };
 SfxSlotInfo FN_START_OF_LINE
 {
@@ -7107,6 +7378,7 @@ SfxSlotInfo FN_START_OF_LINE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la l�nea";
     SlotName[ finnish ] = "Rivin alkuun";
+    SlotName[ thai ] = "ไปยังบรรทัดแรก";
 };
 SfxSlotInfo FN_START_OF_LINE_SEL
 {
@@ -7135,6 +7407,7 @@ SfxSlotInfo FN_START_OF_LINE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el comienzo de la l�nea";
     SlotName[ finnish ] = "Valitse rivin alkuun";
+    SlotName[ thai ] = "เลือกไปยังจุดเริ่มต้นของบรรทัด";
 };
 SfxSlotInfo FN_START_OF_NEXT_COLUMN
 {
@@ -7163,6 +7436,7 @@ SfxSlotInfo FN_START_OF_NEXT_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la columna siguiente ";
     SlotName[ finnish ] = "Seuraavan sarakkeen alkuun";
+    SlotName[ thai ] = "ไปยังจุดเริ่มต้นของคอลัมน์ถัดไป";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE
 {
@@ -7191,6 +7465,7 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la p�gina siguiente";
     SlotName[ finnish ] = "Seuraavan sivun alkuun";
+    SlotName[ thai ] = "ไปยังจุดเริ่มต้นของหน้าถัดไป";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
 {
@@ -7219,6 +7494,7 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta comienzo de la p�gina siguiente";
     SlotName[ finnish ] = "Valitse seuraavan sivun alkuun";
+    SlotName[ thai ] = "เลือกไปยังจุดเริ่มต้นของหน้าถัดไป";
 };
 SfxSlotInfo FN_START_OF_PAGE
 {
@@ -7247,6 +7523,7 @@ SfxSlotInfo FN_START_OF_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la p�gina";
     SlotName[ finnish ] = "Sivun alkuun";
+    SlotName[ thai ] = "ไปยังหน้าแรก";
 };
 SfxSlotInfo FN_START_OF_PAGE_SEL
 {
@@ -7275,6 +7552,7 @@ SfxSlotInfo FN_START_OF_PAGE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el comienzo de la p�gina";
     SlotName[ finnish ] = "Valitse sivun alkuun";
+    SlotName[ thai ] = "เลือกไปยังหน้าแรก";
 };
 SfxSlotInfo FN_START_OF_PARA
 {
@@ -7303,6 +7581,7 @@ SfxSlotInfo FN_START_OF_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo del p�rrafo";
     SlotName[ finnish ] = "Kappaleen alkuun";
+    SlotName[ thai ] = "ไปยังย่อหน้าแรก";
 };
 SfxSlotInfo FN_START_OF_PARA_SEL
 {
@@ -7331,6 +7610,7 @@ SfxSlotInfo FN_START_OF_PARA_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el comienzo del p�rrafo";
     SlotName[ finnish ] = "Valitse kappaleen alkuun";
+    SlotName[ thai ] = "เลือกไปยังย่อหน้าแรก";
 };
 SfxSlotInfo FN_START_OF_PREV_COLUMN
 {
@@ -7359,6 +7639,7 @@ SfxSlotInfo FN_START_OF_PREV_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la columna anterior";
     SlotName[ finnish ] = "Edellisen sarakkeen alkuun";
+    SlotName[ thai ] = "ไปยังจุดเริ่มต้นของคอลัมน์ก่อน";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE
 {
@@ -7387,6 +7668,7 @@ SfxSlotInfo FN_START_OF_PREV_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de p�gina anterior";
     SlotName[ finnish ] = "Edellisen sivun alkuun";
+    SlotName[ thai ] = "ไปยังจุดเริ่มต้นของหน้าก่อน";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
 {
@@ -7415,6 +7697,7 @@ SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta el comienzo de la p�gina anterior";
     SlotName[ finnish ] = "Valitse edellisen sivun alkuun";
+    SlotName[ thai ] = "เลือกไปยังจุดเริ่มต้นของหน้าก่อน";
 };
 SfxSlotInfo FN_START_TABLE
 {
@@ -7443,6 +7726,7 @@ SfxSlotInfo FN_START_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al comienzo de la tabla";
     SlotName[ finnish ] = "Taulukon alkuun";
+    SlotName[ thai ] = "ไปยังตารางแรก";
 };
 SfxSlotInfo FN_STAT_HYPERLINKS
 {
@@ -7471,6 +7755,7 @@ SfxSlotInfo FN_STAT_HYPERLINKS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar Hiperenlaces";
     SlotName[ finnish ] = "Aktiiviset hyperlinkit";
+    SlotName[ thai ] = "ใช้งานการเชื่อมโยงหลายมิติ";
 };
 SfxSlotInfo FN_STAT_PAGE
 {
@@ -7499,6 +7784,7 @@ SfxSlotInfo FN_STAT_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "N�mero de p�gina";
     SlotName[ finnish ] = "Sivunumero";
+    SlotName[ thai ] = "เลขหน้า";
 };
 SfxSlotInfo FN_STAT_SELMODE
 {
@@ -7527,6 +7813,7 @@ SfxSlotInfo FN_STAT_SELMODE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Modo Selecci�n";
     SlotName[ finnish ] = "Valintatila";
+    SlotName[ thai ] = "เลือกโหมด";
 };
 SfxSlotInfo FN_STAT_TEMPLATE
 {
@@ -7550,11 +7837,12 @@ SfxSlotInfo FN_STAT_TEMPLATE
     SlotName[ dutch ] = "Pagina-opmaakprofiel";
     SlotName[ chinese_simplified ] = "页面样式";
     SlotName[ greek ] = "������� �������";
-    SlotName[ korean ] = "페이지 스타일";
+    SlotName[ korean ] = "페이지 템플릿";
     SlotName[ turkish ] = "Sayfa bi�imi";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Estilo de p�gina";
     SlotName[ finnish ] = "Sivun tyyli";
+    SlotName[ thai ] = "ลักษณะหน้า";
 };
 SfxSlotInfo FN_TABLE_ADJUST_CELLS
 {
@@ -7583,6 +7871,7 @@ SfxSlotInfo FN_TABLE_ADJUST_CELLS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ancho �ptimo de columnas";
     SlotName[ finnish ] = "Optimaalinen palstaleveys";
+    SlotName[ thai ] = "ความกว้างคอลัมน์ที่เหมาะที่สุด";
 };
 SfxSlotInfo FN_TABLE_AUTOSUM
 {
@@ -7608,6 +7897,7 @@ SfxSlotInfo FN_TABLE_AUTOSUM
     SlotName[ arabic ] = "�������";
     SlotName[ catalan ] = "Suma";
     SlotName[ finnish ] = "Sum";
+    SlotName[ thai ] = "ผลรวม";
 };
 SfxSlotInfo FN_TABLE_BALANCE_CELLS
 {
@@ -7636,6 +7926,7 @@ SfxSlotInfo FN_TABLE_BALANCE_CELLS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ordenar columnas";
     SlotName[ finnish ] = "Tasaa sarakev�lit";
+    SlotName[ thai ] = "ระยะห่างคอลัมน์ที่เท่ากัน";
 };
 SfxSlotInfo FN_TABLE_BALANCE_ROWS
 {
@@ -7664,6 +7955,7 @@ SfxSlotInfo FN_TABLE_BALANCE_ROWS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ordenar filas";
     SlotName[ finnish ] = "Tasaa riviv�lit";
+    SlotName[ thai ] = "ระยะห่างแถวที่เท่ากัน ";
 };
 SfxSlotInfo FN_TABLE_DELETE_COL
 {
@@ -7692,6 +7984,7 @@ SfxSlotInfo FN_TABLE_DELETE_COL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar columna";
     SlotName[ finnish ] = "Poista sarake";
+    SlotName[ thai ] = "ลบคอลัมน์";
 };
 SfxSlotInfo FN_TABLE_DELETE_ROW
 {
@@ -7720,6 +8013,7 @@ SfxSlotInfo FN_TABLE_DELETE_ROW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar fila";
     SlotName[ finnish ] = "Poista rivi";
+    SlotName[ thai ] = "ลบแถว";
 };
 SfxSlotInfo FN_TABLE_INSERT_COL
 {
@@ -7748,6 +8042,7 @@ SfxSlotInfo FN_TABLE_INSERT_COL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar columna";
     SlotName[ finnish ] = "Lis�� sarakkeet";
+    SlotName[ thai ] = "แทรกคอลัมน์";
 };
 SfxSlotInfo FN_TABLE_INSERT_ROW
 {
@@ -7776,6 +8071,7 @@ SfxSlotInfo FN_TABLE_INSERT_ROW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar fila";
     SlotName[ finnish ] = "Lis�� rivit";
+    SlotName[ thai ] = "แทรกแถว";
 };
 SfxSlotInfo FN_TABLE_MERGE_CELLS
 {
@@ -7804,6 +8100,7 @@ SfxSlotInfo FN_TABLE_MERGE_CELLS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Unir celdas";
     SlotName[ finnish ] = "Yhdist� solut";
+    SlotName[ thai ] = "ผสานเซลล์";
 };
 SfxSlotInfo FN_TABLE_MERGE_TABLE
 {
@@ -7832,6 +8129,7 @@ SfxSlotInfo FN_TABLE_MERGE_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Unir tabla";
     SlotName[ finnish ] = "Yhdist� taulukko";
+    SlotName[ thai ] = "ผสานตาราง";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX
 {
@@ -7860,6 +8158,7 @@ SfxSlotInfo FN_TABLE_MODE_FIX
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Tabla: fija";
     SlotName[ finnish ] = "Taulukko: Kiinte�";
+    SlotName[ thai ] = "ตาราง: คงที่";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX_PROP
 {
@@ -7888,6 +8187,7 @@ SfxSlotInfo FN_TABLE_MODE_FIX_PROP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Tabla: fija, proporcional";
     SlotName[ finnish ] = "Taulukko: Kiinte�, suhteellinen";
+    SlotName[ thai ] = "ตาราง: คงที่, สัดส่วน";
 };
 SfxSlotInfo FN_TABLE_MODE_VARIABLE
 {
@@ -7916,6 +8216,7 @@ SfxSlotInfo FN_TABLE_MODE_VARIABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Tabla: variable";
     SlotName[ finnish ] = "Taulukko: Muuttuja";
+    SlotName[ thai ] = "ตาราง: ตัวแปร";
 };
 SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
 {
@@ -7944,6 +8245,7 @@ SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Altura �ptima de filas";
     SlotName[ finnish ] = "Optimaalinen rivikorkeus";
+    SlotName[ thai ] = "ความยาวของแถวที่เหมาะที่สุด";
 };
 SfxSlotInfo FN_TABLE_SELECT_ALL
 {
@@ -7972,6 +8274,7 @@ SfxSlotInfo FN_TABLE_SELECT_ALL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar tabla";
     SlotName[ finnish ] = "Valitse taulukko";
+    SlotName[ thai ] = "เลือกตาราง";
 };
 SfxSlotInfo FN_TABLE_SELECT_COL
 {
@@ -8000,6 +8303,7 @@ SfxSlotInfo FN_TABLE_SELECT_COL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar columna";
     SlotName[ finnish ] = "Valitse sarake";
+    SlotName[ thai ] = "เลือกคอลัมน์";
 };
 SfxSlotInfo FN_TABLE_SELECT_ROW
 {
@@ -8028,6 +8332,7 @@ SfxSlotInfo FN_TABLE_SELECT_ROW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Selecionar fila";
     SlotName[ finnish ] = "Valitse rivit";
+    SlotName[ thai ] = "เลือกแถว";
 };
 SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
 {
@@ -8056,6 +8361,7 @@ SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Proteger celda";
     SlotName[ finnish ] = "Suojaa solut";
+    SlotName[ thai ] = "ป้องกันเซลล์";
 };
 SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
 {
@@ -8084,6 +8390,7 @@ SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Altura de fila";
     SlotName[ finnish ] = "Rivin korkeus";
+    SlotName[ thai ] = "ความยาวแถว";
 };
 SfxSlotInfo FN_TABLE_SPLIT_CELLS
 {
@@ -8112,6 +8419,7 @@ SfxSlotInfo FN_TABLE_SPLIT_CELLS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Dividir celdas";
     SlotName[ finnish ] = "Jaa solut";
+    SlotName[ thai ] = "แยกเซลล์";
 };
 SfxSlotInfo FN_TABLE_SPLIT_TABLE
 {
@@ -8140,6 +8448,7 @@ SfxSlotInfo FN_TABLE_SPLIT_TABLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Dividir tabla";
     SlotName[ finnish ] = "Jaa taulukko";
+    SlotName[ thai ] = "แยกตาราง";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
 {
@@ -8168,6 +8477,7 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desproteger tabla";
     SlotName[ finnish ] = "Poista lomakkeen suojaus";
+    SlotName[ thai ] = "ไม่ป้องกันแผ่นงาน";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
 {
@@ -8196,6 +8506,7 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desproteger celdas";
     SlotName[ finnish ] = "Suojaamattomat solut";
+    SlotName[ thai ] = "ไม่ป้องกันเซลล์";
 };
 SfxSlotInfo FN_TABLE_VERT_BOTTOM
 {
@@ -8224,6 +8535,7 @@ SfxSlotInfo FN_TABLE_VERT_BOTTOM
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Abajo";
     SlotName[ finnish ] = "Alaosa";
+    SlotName[ thai ] = "ล่าง";
 };
 SfxSlotInfo FN_TABLE_VERT_CENTER
 {
@@ -8252,6 +8564,7 @@ SfxSlotInfo FN_TABLE_VERT_CENTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Centrado (vertical)";
     SlotName[ finnish ] = "Keskit� (pystysuunnassa)";
+    SlotName[ thai ] = "ตรงกลาง ( แนวตั้ง )";
 };
 SfxSlotInfo FN_TABLE_VERT_NONE
 {
@@ -8280,6 +8593,7 @@ SfxSlotInfo FN_TABLE_VERT_NONE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Arriba";
     SlotName[ finnish ] = "Yl�osa";
+    SlotName[ thai ] = "บน";
 };
 SfxSlotInfo FN_THESAURUS_DLG
 {
@@ -8308,6 +8622,7 @@ SfxSlotInfo FN_THESAURUS_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Sin�nimos";
     SlotName[ finnish ] = "Synonyymisanasto";
+    SlotName[ thai ] = "อรรถาภิธาน";
 };
 SfxSlotInfo FN_TO_FOOTER
 {
@@ -8336,6 +8651,7 @@ SfxSlotInfo FN_TO_FOOTER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al pie de p�gina";
     SlotName[ finnish ] = "Alaselitteeseen";
+    SlotName[ thai ] = "ไปยังส่วนท้าย";
 };
 SfxSlotInfo FN_TO_HEADER
 {
@@ -8364,6 +8680,7 @@ SfxSlotInfo FN_TO_HEADER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al encabezamiento";
     SlotName[ finnish ] = "Yl�otsikkoon";
+    SlotName[ thai ] = "ไปยังส่วนหัว";
 };
 SfxSlotInfo FN_TOOL_ANKER
 {
@@ -8392,6 +8709,7 @@ SfxSlotInfo FN_TOOL_ANKER
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Cambiar ancla";
     SlotName[ finnish ] = "Muuta ankkuri";
+    SlotName[ thai ] = "เปลี่ยนตัวยึด";
 };
 SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
@@ -8420,6 +8738,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar al car�cter";
     SlotName[ finnish ] = "Ankkuri merkkiin";
+    SlotName[ thai ] = "ตัวยึดไปยังตัวอักขระ";
 };
 SfxSlotInfo FN_TOOL_ANKER_CHAR
 {
@@ -8448,6 +8767,7 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar al car�cter";
     SlotName[ finnish ] = "Ankkuri merkkiin";
+    SlotName[ thai ] = "ตัวยึดเป็นตัวอักขระ";
 };
 SfxSlotInfo FN_TOOL_ANKER_FRAME
 {
@@ -8476,6 +8796,7 @@ SfxSlotInfo FN_TOOL_ANKER_FRAME
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar al marco";
     SlotName[ finnish ] = "Ankkuri kehykseen";
+    SlotName[ thai ] = "ตัวยึดไปยังกรอบ";
 };
 SfxSlotInfo FN_TOOL_ANKER_PAGE
 {
@@ -8504,6 +8825,7 @@ SfxSlotInfo FN_TOOL_ANKER_PAGE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar a la p�gina";
     SlotName[ finnish ] = "Ankkuri sivuun";
+    SlotName[ thai ] = "ตัวยึดไปยังหน้า";
 };
 SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
 {
@@ -8532,6 +8854,7 @@ SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar en el p�rrafo";
     SlotName[ finnish ] = "Ankkuri kappaleeseen";
+    SlotName[ thai ] = "ตัวยึดไปยังย่อหน้า";
 };
 SfxSlotInfo FN_TOOL_GROUP
 {
@@ -8560,6 +8883,7 @@ SfxSlotInfo FN_TOOL_GROUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Agrupar";
     SlotName[ finnish ] = "Ryhm�";
+    SlotName[ thai ] = "จัดกลุ่ม";
 };
 SfxSlotInfo FN_TOOL_HIERARCHIE
 {
@@ -8588,6 +8912,7 @@ SfxSlotInfo FN_TOOL_HIERARCHIE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Cambiar posici�n";
     SlotName[ finnish ] = "Muuta sijainti";
+    SlotName[ thai ] = "เปลี่ยนตำแหน่ง";
 };
 SfxSlotInfo FN_TOOL_UNGROUP
 {
@@ -8616,6 +8941,7 @@ SfxSlotInfo FN_TOOL_UNGROUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desagrupar";
     SlotName[ finnish ] = "Pura ryhm�";
+    SlotName[ thai ] = "แตกกลุ่ม";
 };
 SfxSlotInfo FN_UNDERLINE_DOUBLE
 {
@@ -8644,6 +8970,7 @@ SfxSlotInfo FN_UNDERLINE_DOUBLE
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Subrayado doble";
     SlotName[ finnish ] = "Kaksinkertainen alleviivaus";
+    SlotName[ thai ] = "ขีดเส้นใต้คู่ ";
 };
 SfxSlotInfo FN_UPDATE_ALL
 {
@@ -8672,6 +8999,7 @@ SfxSlotInfo FN_UPDATE_ALL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar todo";
     SlotName[ finnish ] = "P�ivit� kaikki";
+    SlotName[ thai ] = "ปรับปรุงทั้งหมด";
 };
 SfxSlotInfo FN_UPDATE_ALL_LINKS
 {
@@ -8700,6 +9028,7 @@ SfxSlotInfo FN_UPDATE_ALL_LINKS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar v�nculos";
     SlotName[ finnish ] = "P�ivit� kaikki linkit";
+    SlotName[ thai ] = "ปรับปรุงการเชื่อมโยงทั้งหมด";
 };
 SfxSlotInfo FN_UPDATE_CUR_TOX
 {
@@ -8728,6 +9057,7 @@ SfxSlotInfo FN_UPDATE_CUR_TOX
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar �ndice";
     SlotName[ finnish ] = "P�ivit� hakemisto";
+    SlotName[ thai ] = "ปรับปรุงดัชนี";
 };
 SfxSlotInfo FN_EDIT_CURRENT_TOX
 {
@@ -8754,6 +9084,7 @@ SfxSlotInfo FN_EDIT_CURRENT_TOX
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar �ndice";
     SlotName[ finnish ] = "Muokkaa hakemistoa";
+    SlotName[ thai ] = "แก้ไขดัชนี";
 };
 SfxSlotInfo FN_UPDATE_FIELDS
 {
@@ -8782,6 +9113,7 @@ SfxSlotInfo FN_UPDATE_FIELDS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar campos";
     SlotName[ finnish ] = "P�ivit� kent�t";
+    SlotName[ thai ] = "ปรับปรุงเขตข้อมูล";
 };
 SfxSlotInfo FN_UPDATE_INPUTFIELDS
 {
@@ -8810,6 +9142,7 @@ SfxSlotInfo FN_UPDATE_INPUTFIELDS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar campos para entradas";
     SlotName[ finnish ] = "P�ivit� hakemistokent�t";
+    SlotName[ thai ] = "ปรับปรุงเขตข้อมูลที่ใส่";
 };
 SfxSlotInfo FN_UPDATE_TOX
 {
@@ -8838,6 +9171,7 @@ SfxSlotInfo FN_UPDATE_TOX
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar �ndices";
     SlotName[ finnish ] = "P�ivit� hakemistot";
+    SlotName[ thai ] = "ปรับปรุงดัชนี";
 };
 SfxSlotInfo FN_VIEW_BOUNDS
 {
@@ -8866,6 +9200,7 @@ SfxSlotInfo FN_VIEW_BOUNDS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "L�mites del texto";
     SlotName[ finnish ] = "Tekstin rajat";
+    SlotName[ thai ] = "ขีดจำกัดข้อความ";
 };
 SfxSlotInfo FN_VIEW_FIELDNAME
 {
@@ -8894,6 +9229,7 @@ SfxSlotInfo FN_VIEW_FIELDNAME
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Mostrar/ocultar nombre de campos";
     SlotName[ finnish ] = "Kenttien nimet on/off";
+    SlotName[ thai ] = "ชื่อเขตข้อมูล มี/ไม่มี";
 };
 SfxSlotInfo FN_VIEW_FIELDS
 {
@@ -8922,6 +9258,7 @@ SfxSlotInfo FN_VIEW_FIELDS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Campos";
     SlotName[ finnish ] = "Kent�t";
+    SlotName[ thai ] = "เขตข้อมูล";
 };
 SfxSlotInfo FN_VIEW_GRAPHIC
 {
@@ -8948,6 +9285,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
     SlotName[ catalan ] = "Imagen";
     SlotName[ finnish ] = "Grafiikka on/off";
     SlotName[ language_user1 ] = "BLG 27.07.00 : Plural, da Funktion f�r alle Grafiken (ob selektiert oder nicht) des Doks g�ltig.";
+    SlotName[ thai ] = "กราฟิค มี/ไม่มี";
 };
 SfxSlotInfo FN_VIEW_HIDDEN_PARA
 {
@@ -8976,6 +9314,7 @@ SfxSlotInfo FN_VIEW_HIDDEN_PARA
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "P�rrafos ocultos";
     SlotName[ finnish ] = "Piilotetut kappaleet";
+    SlotName[ thai ] = "ย่อหน้าที่ซ่อนไว้";
 };
 SfxSlotInfo FN_VIEW_MARKS
 {
@@ -9004,6 +9343,7 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Marcas";
     SlotName[ finnish ] = "Kent�n varjostus";
+    SlotName[ thai ] = "แรเงาเขตข้อมูล";
 };
 SfxSlotInfo FN_VIEW_META_CHARS
 {
@@ -9029,6 +9369,7 @@ SfxSlotInfo FN_VIEW_META_CHARS
     SlotName[ arabic ] = "�����/����� ������ ���� �� �����";
     SlotName[ catalan ] = "Caracteres no imprimibles";
     SlotName[ finnish ] = "Tulostumattomat merkit on/off";
+    SlotName[ thai ] = "ไม่พิมพ์ตัวอักขระ  มี/ไม่มี";
 };
 SfxSlotInfo FN_VIEW_TABLEGRID
 {
@@ -9057,6 +9398,7 @@ SfxSlotInfo FN_VIEW_TABLEGRID
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "L�mites de la tabla";
     SlotName[ finnish ] = "Taulukon rajat";
+    SlotName[ thai ] = "ขีดจำกัดตาราง";
 };
 SfxSlotInfo FN_VLINEAL
 {
@@ -9085,6 +9427,7 @@ SfxSlotInfo FN_VLINEAL
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Regla vertical";
     SlotName[ finnish ] = "Pystyviivain";
+    SlotName[ thai ] = "ไม้บรรทัดแนวตั้ง";
 };
 SfxSlotInfo FN_VSCROLLBAR
 {
@@ -9113,6 +9456,7 @@ SfxSlotInfo FN_VSCROLLBAR
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Barra de desplazamiento vertical";
     SlotName[ finnish ] = "Pystyvierityspalkki";
+    SlotName[ thai ] = "แถบเลื่อนแนวตั้ง";
 };
 SfxSlotInfo FN_WRAP_ANCHOR_ONLY
 {
@@ -9141,6 +9485,7 @@ SfxSlotInfo FN_WRAP_ANCHOR_ONLY
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste del primer p�rrafo";
     SlotName[ finnish ] = "Rivit� ensimm�inen kappale";
+    SlotName[ thai ] = "ตัดย่อหน้าแรก";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
 {
@@ -9169,6 +9514,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Fondo de car�cter";
     SlotName[ finnish ] = "Korostetaan";
+    SlotName[ thai ] = "ไฮไลต์";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 {
@@ -9197,6 +9543,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Fondo de car�cter";
     SlotName[ finnish ] = "Korosta t�ytt�";
+    SlotName[ thai ] = "เติมไฮไลต์";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
 {
@@ -9225,6 +9572,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Color de relleno del car�cter";
     SlotName[ finnish ] = "Fontin t�ytt�v�ri";
+    SlotName[ thai ] = "เติมสีตัวอักษร";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR2
 {
@@ -9253,6 +9601,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Color del car�cter";
     SlotName[ finnish ] = "Fontin v�ri";
+    SlotName[ thai ] = "สีตัวอักษร";
 };
 SfxSlotInfo SID_TEMPLATE_LOAD
 {
@@ -9281,6 +9630,7 @@ SfxSlotInfo SID_TEMPLATE_LOAD
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Cargar estilos";
     SlotName[ finnish ] = "Lataa mallipohja";
+    SlotName[ thai ] = "โหลดแม่แบบ";
 };
 SfxSlotInfo FN_INSERT_COLUMN_SECTION
 {
@@ -9307,6 +9657,7 @@ SfxSlotInfo FN_INSERT_COLUMN_SECTION
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar �rea";
     SlotName[ finnish ] = "Lis�� osio";
+    SlotName[ thai ] = "แทรกส่วน";
 };
 SfxSlotInfo FN_FORMAT_COLUMN
 {
@@ -9325,7 +9676,7 @@ SfxSlotInfo FN_FORMAT_COLUMN
     SlotName[ polish ] = "Kolumny";
     SlotName[ portuguese_brazilian ] = "Spalten";
     SlotName[ japanese ] = "段組み";
-    SlotName[ korean ] = "단";
+    SlotName[ korean ] = "열";
     SlotName[ chinese_simplified ] = "列";
     SlotName[ chinese_traditional ] = "欄";
     SlotName[ arabic ] = "�����";
@@ -9333,6 +9684,7 @@ SfxSlotInfo FN_FORMAT_COLUMN
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Columnas";
     SlotName[ finnish ] = "Sarakkeet";
+    SlotName[ thai ] = "คอลัมน์";
 };
 SfxSlotInfo FN_INSERT_MULTI_TOX
 {
@@ -9360,6 +9712,7 @@ SfxSlotInfo FN_INSERT_MULTI_TOX
     SlotName[ turkish ] = "Dizin ekle";
     SlotName[ catalan ] = "Insertar �ndice";
     SlotName[ finnish ] = "Lis�� hakemisto";
+    SlotName[ thai ] = "แทรกดัชนี";
 };
 SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
 {
@@ -9386,6 +9739,7 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar entrada de bibliograf�a";
     SlotName[ finnish ] = "Lis�� bibliografiamerkint�";
+    SlotName[ thai ] = "แทรกรายการบรรณานุกรม";
 };
 
 SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
@@ -9413,6 +9767,7 @@ SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar entrada de bibliograf�a";
     SlotName[ finnish ] = "Muokkaa bibliografiamerkint��";
+    SlotName[ thai ] = "แก้ไขรายการบรรณานุกรม";
 };
 
 SfxSlotInfo FN_REMOVE_CUR_TOX
@@ -9440,6 +9795,7 @@ SfxSlotInfo FN_REMOVE_CUR_TOX
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Eliminar �ndice";
     SlotName[ finnish ] = "Poista hakemisto";
+    SlotName[ thai ] = "ลบดัชนี";
 };
 SfxSlotInfo FN_EDIT_HYPERLINK
 {
@@ -9465,6 +9821,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ turkish ] = "Hyperlink'i d�zenle";
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkki�";
+    SlotName[ thai ] = "แก้ไขการเชื่อมโยงหลายมิติ";
 };
 SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
 {
@@ -9490,6 +9847,7 @@ SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
     SlotName[ turkish ] = "Number recognition";
     SlotName[ arabic ] = "Number recognition";
     SlotName[ catalan ] = "Number recognition";
+    SlotName[ thai ] = "Number Recognition";
 };
 SfxSlotInfo FN_UPDATE_CHARTS
 {
@@ -9515,6 +9873,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ turkish ] = "Update Charts";
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
+    SlotName[ thai ] = "อัพเดตชาร์ท";
 };
 SfxSlotInfo FN_NAME_GROUP
 {
@@ -9543,11 +9902,33 @@ SfxSlotInfo FN_NAME_GROUP
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anomena l'objecte";
     SlotName[ finnish ] = "Nime� objekti";
+    SlotName[ thai ] = "Name Object";
 };
 SfxSlotInfo FN_CLOSE_PAGEPREVIEW
 {
     SlotName = "Seitenansicht schlie�en";
     SlotName [ english ] =  "Close preview";
+    SlotName[ english_us ] = "Close preview";
+    SlotName[ portuguese ] = "Close preview";
+    SlotName[ russian ] = "Close preview";
+    SlotName[ greek ] = "Close preview";
+    SlotName[ dutch ] = "Close preview";
+    SlotName[ french ] = "Close preview";
+    SlotName[ spanish ] = "Close preview";
+    SlotName[ finnish ] = "Close preview";
+    SlotName[ italian ] = "Close preview";
+    SlotName[ danish ] = "Close preview";
+    SlotName[ swedish ] = "Close preview";
+    SlotName[ polish ] = "Close preview";
+    SlotName[ portuguese_brazilian ] = "Close preview";
+    SlotName[ japanese ] = "Close preview";
+    SlotName[ korean ] = "Close preview";
+    SlotName[ chinese_simplified ] = "Close preview";
+    SlotName[ chinese_traditional ] = "Close preview";
+    SlotName[ turkish ] = "Close preview";
+    SlotName[ arabic ] = "Close preview";
+    SlotName[ catalan ] = "Close preview";
+    SlotName[ thai ] = "Close preview";
 };
 
 
