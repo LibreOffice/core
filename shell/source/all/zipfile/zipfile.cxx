@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zipfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:30:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,24 @@
 
 #include <malloc.h>
 #include <algorithm>
+#include <functional>
+
+#include <string.h>
+
+namespace internal
+{
+    /* for case in-sensitive string comparison */
+    struct stricmp : public std::unary_function<std::string, bool>
+    {
+        stricmp(const std::string& str) : str_(str)
+        {}
+
+        bool operator() (const std::string& other)
+        { return (0 == _stricmp(str_.c_str(), other.c_str())); }
+
+        std::string str_;
+    };
+} // namespace internal
 
 /** Checks whether a file is a zip file or not
 
@@ -205,13 +223,15 @@ ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
 
 /** Convinience query function may even realized with
     iterating over a ZipFileDirectory returned by
-    GetDirectory
-*/
+    GetDirectory */
 bool ZipFile::HasContent(const std::string& ContentName) const
 {
+    //#i34314# we need to compare package content names
+    //case in-sensitive as it is not defined that such
+    //names must be handled case sensitive
     DirectoryPtr_t dir = GetDirectory();
-    Directory_t::iterator iter = std::find(
-        dir->begin(), dir->end(), ContentName);
+    Directory_t::iterator iter =
+        std::find_if(dir->begin(), dir->end(), internal::stricmp(ContentName));
 
     return (iter != dir->end());
 }
