@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-04 13:25:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 14:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
     }
 
     m_pOwnFormatter = new SvNumberFormatter(m_xORB, eNewFormatterLanguage);
+    m_pOwnFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     SetNumberFormatter(m_pOwnFormatter);
 }
 
