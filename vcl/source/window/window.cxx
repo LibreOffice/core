@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-21 13:09:04 $
+ *  last change: $Author: ssa $ $Date: 2002-06-26 13:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6082,6 +6082,26 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
             }
             pSysWin = pSysWin->mpNextOverlap;
         }
+
+        // enable/disable floating system windows as well
+        Window* pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
+        while ( pFrameWin )
+        {
+            if( pFrameWin->ImplIsFloatingWindow() )
+            {
+                // Is Window in the path from this window
+                if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pFrameWin, TRUE ) )
+                {
+                    // Is Window not in the exclude window path or not the
+                    // exclude window, than change the status
+                    if ( !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, TRUE ) )
+                        pFrameWin->EnableInput( bEnable, bChild );
+                }
+            }
+            pFrameWin = pFrameWin->mpFrameData->mpNextFrame;
+        }
+
+
     }
 }
 
@@ -8042,3 +8062,4 @@ void Window::DbgAssertNoEventListeners()
         maChildEventListeners.Call( &aEvent );
 }
 */
+

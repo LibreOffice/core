@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-16 11:20:53 $
+ *  last change: $Author: ssa $ $Date: 2002-06-26 13:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,18 @@ long Dialog::Notify( NotifyEvent& rNEvt )
                 return TRUE;
             }
         }
+        else if ( rNEvt.GetType() == EVENT_GETFOCUS )
+        {
+            // make sure the dialog is still modal
+            // changing focus between application frames may
+            // have re-enabled input for our parent
+            if( mbInExecute )
+            {
+                // do not change modal counter (pSVData->maAppData.mnModalDialog)
+                SetModalInputMode( FALSE );
+                SetModalInputMode( TRUE );
+            }
+        }
     }
 
     return nRet;
@@ -607,7 +619,7 @@ short Dialog::Execute()
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::Execute() is called in Dialoh::Execute(): " );
+        ByteString aErrorStr( "Dialog::Execute() is called in Dialog::Execute(): " );
         aErrorStr += ImplGetDialogText( this );
         DBG_ERROR( aErrorStr.GetBuffer() );
 #endif
