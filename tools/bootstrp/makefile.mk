@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-02 11:56:22 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:11:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,21 +80,23 @@ dummy:
     @echo No bootstrp for Mac OS
 .ELSE	# "$(OS)"=="MACOS"
 
-OBJFILES=                       $(OBJ)$/cppdep.obj\
-                                $(OBJ)$/prj.obj \
-                                $(OBJ)$/command.obj \
-                                $(OBJ)$/mkcreate.obj \
-                                $(OBJ)$/sstring.obj \
-                                $(OBJ)$/inimgr.obj\
-                                $(OBJ)$/appdef.obj
+OBJFILES= \
+          $(OBJ)$/appdef.obj \
+          $(OBJ)$/command.obj \
+          $(OBJ)$/cppdep.obj\
+          $(OBJ)$/inimgr.obj\
+          $(OBJ)$/mkcreate.obj \
+          $(OBJ)$/prj.obj \
+          $(OBJ)$/sstring.obj
 
-SLOFILES=                   $(SLO)$/cppdep.obj\
-                            $(SLO)$/prj.obj\
-                            $(SLO)$/command.obj\
-                            $(SLO)$/mkcreate.obj\
-                            $(SLO)$/sstring.obj\
-                            $(SLO)$/inimgr.obj\
-                            $(SLO)$/appdef.obj
+SLOFILES= \
+          $(SLO)$/appdef.obj \
+          $(SLO)$/command.obj \
+          $(SLO)$/cppdep.obj \
+          $(SLO)$/inimgr.obj \
+          $(SLO)$/mkcreate.obj \
+          $(SLO)$/prj.obj \
+          $(SLO)$/sstring.obj
 
 LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
@@ -104,25 +106,25 @@ LIB2TARGET= $(SLB)$/btstrpsh.lib
 LIB2ARCHIV= $(SLB)$/libbtstrpsh.a
 LIB2FILES=  $(SLB)$/bootstrp.lib
 
-APP1TARGET=     i_server
-APP1STACK=      16000
-APP1OBJS=   $(OBJ)$/iserver.obj
-APP1LIBS=       $(LB)$/bootstrp.lib
+APP1TARGET=  i_server
+APP1STACK=   16000
+APP1OBJS=    $(OBJ)$/iserver.obj
+APP1LIBS=    $(LB)$/bootstrp.lib
 APP1STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
 
-APP6TARGET= sspretty
-APP6OBJS=	$(OBJ)$/sspretty.obj
-APP6LIBS=	$(LB)$/bootstrp.lib
-APP6STDLIBS=$(STATIC_LIBS) 
-APP6STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
+APP1TARGET= sspretty
+APP1OBJS=	$(OBJ)$/sspretty.obj
+APP1LIBS=	$(LB)$/bootstrp.lib
+APP1STDLIBS=$(STATIC_LIBS) 
+APP1STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
-APP7TARGET= rscdep
-APP7OBJS=	$(OBJ)$/rscdep.obj
-APP7LIBS=	$(LB)$/bootstrp.lib
-APP7STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
+APP2TARGET= rscdep
+APP2OBJS=	$(OBJ)$/rscdep.obj
+APP2LIBS=	$(LB)$/bootstrp.lib
+APP2STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
-DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
+DEPOBJFILES	= $(APP1OBJS) $(APP2OBJS) 
 
 .ENDIF	# "$(OS)"=="MACOS"
 
