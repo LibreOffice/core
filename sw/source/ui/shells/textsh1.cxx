@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:12:47 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Done();
         }
         break;
-
+        case FN_TABLE_SORT_DIALOG:
         case FN_SORTING_DLG:
         {
             //CHINA001 SwSortDlg *pDlg = new SwSortDlg(GetView().GetWindow(), rWrtSh );
@@ -1414,8 +1414,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 #endif
             }
             break;
+            case FN_TABLE_SORT_DIALOG:
             case FN_SORTING_DLG:
-                if(!rSh.HasSelection())
+                if(!rSh.HasSelection() ||
+                        (FN_TABLE_SORT_DIALOG == nWhich && !rSh.GetTableFmt()))
                     rSet.DisableItem( nWhich );
             break;
             case SID_RUBY_DIALOG:
