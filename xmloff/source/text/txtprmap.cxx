@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:06:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,18 +731,23 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     M_E( "ContourOutside",          STYLE,  WRAP_CONTOUR_MODE,  XML_TYPE_TEXT_WRAP_OUTSIDE, CTF_WRAP_CONTOUR_MODE ),
     // RES_VERT_ORIENT
     M_E( "VertOrient",              STYLE,  VERTICAL_POS,         XML_TYPE_TEXT_VERTICAL_POS, CTF_VERTICALPOS ),
+    // OD 2004-04-16 #i26791# - add property for at-character anchored shapes
+    M_E( "VertOrient",              STYLE,  VERTICAL_POS,         XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR, CTF_VERTICALPOS_ATCHAR ),
     M_E( "VertOrient",              STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR|MID_FLAG_MULTI_PROPERTY, CTF_VERTICALREL_ASCHAR ),
     M_E( "VertOrientRelation",      STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL, CTF_VERTICALREL ),
     M_E( "VertOrientRelation",      STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_PAGE|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_PAGE ),
     M_E( "VertOrientRelation",      STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_FRAME ),
     // RES_HORI_ORIENT
     M_E( "HoriOrient",              STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS|MID_FLAG_MULTI_PROPERTY, CTF_HORIZONTALPOS ),
-    M_E( "PageToggle",      STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_HORIZONTALMIRROR ),
+    M_E( "PageToggle",              STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_HORIZONTALMIRROR ),
     M_E( "HoriOrient",              STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALPOS_MIRRORED ),
     M_E( "HoriOrientRelation",      STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL, CTF_HORIZONTALREL ),
     M_E( "HoriOrientRelation",      STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALREL_FRAME ),
     // UserDefinedAttributes is already contained in the map this one is
     // chained to.
+
+    // RES_FOLLOW_TEXT_FLOW - OD 2004-04-21 #i26791#
+    M_ED( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
     M_END()
 };
