@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:58:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <sysdata.hxx>
 #endif
 
+#include <list>
+
 class X11SalGraphics;
 class GtkSalDisplay;
 
@@ -94,31 +96,87 @@ class GtkSalFrame : public SalFrame
         ~GraphicsHolder();
     };
 
-    GtkWindow*              m_pWindow;
-    GdkWindow*              m_pForeignParent;
-    GdkWindow*              m_pForeignTopLevel;
-    ULONG                   m_nStyle;
-    GtkFixed*               m_pFixedContainer;
-    GtkSalFrame*            m_pParent;
-    GdkWindowState          m_nState;
-    GtkIMContext*           m_pIMContext;
-    SystemEnvData           m_aSystemData;
-    GraphicsHolder          m_aGraphics[ nMaxGraphics ];
-    USHORT                  m_nKeyModifiers;
-    GdkCursor              *m_pCurrentCursor;
-    GdkVisibilityState      m_nVisibility;
-    int                     m_nSavedScreenSaverTimeout;
-    bool                    m_bResizeable;
-    bool                    m_bSingleAltPress;
-    bool                    m_bDefaultPos;
-    bool                    m_bDefaultSize;
-    bool                    m_bSendModChangeOnRelease;
-    bool                    m_bWasPreedit;
+    //--------------------------------------------------------
+    // Not all GTK Input Methods swallow key release
+    // events.  Since they swallow the key press events and we
+    // are left with the key release events, we need to
+    // manually swallow those.  To do this, we keep a list of
+    // the previous 10 key press events in each GtkSalFrame
+    // and when we get a key release that matches one of the
+    // key press events in our list, we swallow it.
+    struct PreviousKeyPress
+    {
+        GdkWindow *window;
+        gint8   send_event;
+        guint32 time;
+        guint   state;
+        guint   keyval;
 
-    Size                    m_aMaxSize;
-    Size                    m_aMinSize;
+        PreviousKeyPress (GdkEventKey *event)
+        :   window (NULL),
+            send_event (0),
+            time (0),
+            state (0),
+            keyval (0)
+        {
+            if (event)
+            {
+                window = event->window;
+                send_event = event->send_event;
+                time = event->time;
+                state = event->state;
+                keyval = event->keyval;
+            }
+        }
 
-    GdkEventKey             m_aLastKeyPress;
+        PreviousKeyPress( const PreviousKeyPress& rPrev )
+        :   window( rPrev.window ),
+            send_event( rPrev.send_event ),
+            time( rPrev.time ),
+            state( rPrev.state ),
+            keyval( rPrev.keyval )
+        {}
+
+        bool PreviousKeyPress::operator== (GdkEventKey *event) const
+        {
+            return (event != NULL)
+                && (event->window == window)
+                && (event->send_event == send_event)
+                && (event->state == state)
+                && (event->keyval == keyval)
+                && (event->time - time < 3)
+                ;
+        }
+    };
+
+    GtkWindow*                      m_pWindow;
+    GdkWindow*                      m_pForeignParent;
+    GdkWindow*                      m_pForeignTopLevel;
+    ULONG                           m_nStyle;
+    GtkFixed*                       m_pFixedContainer;
+    GtkSalFrame*                    m_pParent;
+    GdkWindowState                  m_nState;
+    GtkIMContext*                   m_pIMContext;
+    SystemEnvData                   m_aSystemData;
+    GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
+    USHORT                          m_nKeyModifiers;
+    GdkCursor                      *m_pCurrentCursor;
+    GdkVisibilityState              m_nVisibility;
+    int                             m_nSavedScreenSaverTimeout;
+    bool                            m_bResizeable;
+    bool                            m_bFullscreen;
+    bool                            m_bSingleAltPress;
+    bool                            m_bDefaultPos;
+    bool                            m_bDefaultSize;
+    bool                            m_bSendModChangeOnRelease;
+    bool                            m_bWasPreedit;
+
+    Size                            m_aMaxSize;
+    Size                            m_aMinSize;
+
+    std::list< PreviousKeyPress >   m_aPrevKeyPresses;
+    int                             m_nPrevKeyPresses; // avoid using size()
+
 
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
@@ -169,6 +227,7 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
+    void updateIMSpotLocation();
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -199,8 +258,8 @@ public:
 
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
-    virtual void              SetMenu( SalMenu *pSalMenu );
-    virtual void              DrawMenuBar();
+    virtual void                SetMenu( SalMenu *pSalMenu );
+    virtual void                DrawMenuBar();
 
     // Before the window is visible, a resize event
     // must be sent with the correct size
@@ -208,8 +267,8 @@ public:
     virtual void                Enable( BOOL bEnable );
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
-    virtual void              SetMinClientSize( long nWidth, long nHeight );
-    virtual void              SetMaxClientSize( long nWidth, long nHeight );
+    virtual void                SetMinClientSize( long nWidth, long nHeight );
+    virtual void                SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
