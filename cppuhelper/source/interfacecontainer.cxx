@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,7 @@ namespace cppu
 static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewLen )
     SAL_THROW( () )
 {
-    Sequence< Reference< XInterface > > aNewSeq( nNewLen );
-    Reference< XInterface > * pDest = aNewSeq.getArray();
-    // getArray on a const sequence is faster
-    const Reference< XInterface > * pSource = ((const Sequence< Reference< XInterface > > &)rSeq).getConstArray();
-    for( sal_Int32 i = (nNewLen < rSeq.getLength() ? nNewLen : rSeq.getLength()) -1; i >= 0; i-- )
-        pDest[i] = pSource[i];
-    rSeq = aNewSeq;
+    rSeq.realloc( nNewLen );
 }
 
 /**
