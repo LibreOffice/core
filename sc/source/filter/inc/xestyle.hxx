@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ enum XclColorType
     An instance of this class collects all colors in the conversion phase of the export,
     using the InsertColor() function. It returns a unique identidier for each passed color.
     After the entire document is converted, the palette will be reduced to the number of
-    colors supported by the current BIFF version, using the function ReduceColors().
+    colors supported by the current BIFF version, using the function Reduce().
     Then, in the streaming phase, the functions GetColorIndex() and GetMixedColors()
     return the real Excel palette index for all color identifiers. */
 class XclExpPalette : public XclExpRecord, public XclDefaultPalette, protected XclExpRoot
@@ -191,19 +191,15 @@ private:
 public:
     explicit                    XclExpPalette( const XclExpRoot& rRoot );
 
-    /** Activates the default colors for the current BIFF version. */
-    void                        OnChangeBiff();
-
     /** Inserts the color into the list and updates weighting.
         @param nAutoDefault  The Excel palette index for automatic color.
         @return  A unique ID for this color. */
     sal_uInt32                  InsertColor( const Color& rColor, XclColorType eType, sal_uInt16 nAutoDefault = 0 );
-    /** Inserts the Excel color index into the list.
-        @return  A unique ID, that will later return exactly the passed index. */
-    sal_uInt32                  InsertIndex( sal_uInt16 nIndex );
+    /** Returns the color ID representing a fixed Excel palette index (i.e. for auto colors). */
+    static sal_uInt32           GetColorIdFromIndex( sal_uInt16 nIndex );
 
     /** Reduces the color list to the maximum count of the current BIFF version. */
-    void                        ReduceColors();
+    void                        Reduce();
 
     /** Returns the Excel palette index of the color with passed color ID. */
     sal_uInt16                  GetColorIndex( sal_uInt32 nColorId ) const;
@@ -353,25 +349,30 @@ private:
 public:
     explicit                    XclExpFontBuffer( const XclExpRoot& rRoot );
 
-    /** Finds the maximum number of fonts for the current BIFF version. */
-    void                        OnChangeBiff();
-
     /** Returns the specified font from font list. */
     inline const XclExpFont*    GetFont( sal_uInt32 nIndex ) const
                                     { return maFontList.GetObject( nIndex ); }
 
     /** Searches for the passed font and returns its Excel font index.
         @return  Excel font index or nDefault, if not found. */
-    sal_uInt16                  GetIndex( const XclExpFont& rFont, sal_uInt16 nDefault = 0 );
+    sal_uInt16                  GetIndex( const XclExpFont& rFont, sal_uInt16 nDefault = EXC_FONT_APP );
+
     /** Inserts the font into the buffer if not present, otherwise deletes it.
+        @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16                  Insert( XclExpFont*& rpFont );
+    sal_uInt16                  Insert( XclExpFont*& rpFont, bool bAppFont = false );
     /** Inserts the font into the buffer if not present.
+        @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16                  Insert( const Font& rFont );
-    /** Inserts the font contained in rAttr into the buffer if not present.
+    sal_uInt16                  Insert( const Font& rFont, bool bAppFont = false );
+    /** Inserts the font contained in the passed item set into the buffer, if not present.
+        @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16                  Insert( const ScPatternAttr& rAttr );
+    sal_uInt16                  Insert( const SfxItemSet& rItemSet, bool bAppFont = false );
+    /** Inserts the font contained in rPattern into the buffer if not present.
+        @param bAppFont  true = Sets the application font; false = Inserts a new font.
+        @return  The resulting Excel font index. */
+    sal_uInt16                  Insert( const ScPatternAttr& rPattern, bool bAppFont = false );
 
     /** Writes all FONT records contained in this buffer. */
     virtual void                Save( XclExpStream& rStrm );
@@ -422,9 +423,6 @@ public:
 
     virtual                     ~XclExpNumFmtBuffer();
 
-    /** Sets internal data for the current BIFF version. */
-    void                        OnChangeBiff();
-
     /** Returns the core index of the current standard number format. */
     inline sal_uInt32           GetStandardFormat() const { return mnStdFmt; }
 
@@ -448,144 +446,249 @@ private:
 
 // XF, STYLE record - Cell formatting =========================================
 
-/** Contains color and line style for each cell border line. */
-struct XclExpXFBorder
+/** Extends the XclCellProt struct for export.
+    @descr  Provides functions to fill from item sets and to fill to Excel record data. */
+struct XclExpCellProt : public XclCellProt
 {
-    sal_uInt32                  mnLeftColorId;      /// Color ID for left line.
-    sal_uInt32                  mnRightColorId;     /// Color ID for right line.
-    sal_uInt32                  mnTopColorId;       /// Color ID for top line.
-    sal_uInt32                  mnBottomColorId;    /// Color ID for bottom line.
-    sal_uInt8                   mnLeftLine;         /// Style of left line.
-    sal_uInt8                   mnRightLine;        /// Style of right line.
-    sal_uInt8                   mnTopLine;          /// Style of top line.
-    sal_uInt8                   mnBottomLine;       /// Style of bottom line.
+    /** Fills the protection attributes from the passed item set.
+        @descr  Fills only the attributes exported in the passed BIFF version.
+        @return  true = At least one protection item is set. */
+    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff );
 
-    explicit                    XclExpXFBorder();
+#if 0
+    /** Fills the data to the passed fields of a BIFF2 XF record. */
+    void                        FillToXF2( sal_uInt8& rnNumFmt ) const;
+#endif
+    /** Fills the data to the passed fields of a BIFF3-BIFF8 XF record. */
+    void                        FillToXF3( sal_uInt16& rnProt ) const;
 };
 
 
 // ----------------------------------------------------------------------------
 
-/** Contains background colors and pattern. */
-struct XclExpXFArea
+/** Extends the XclCellAlign struct for export.
+    @descr  Provides functions to fill from item sets and to fill to Excel record data. */
+struct XclExpCellAlign : public XclCellAlign
+{
+    /** Fills the alignment attributes from the passed item set.
+        @descr  Fills only the attributes exported in the passed BIFF version.
+        @param bForceWrapped  true = Set text wrap flag unconditionally.
+        @return  true = At least one alignment item is set. */
+    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bForceWrapped = false );
+
+#if 0
+    /** Fills the data to the passed fields of a BIFF2 XF record. */
+    void                        FillToXF2( sal_uInt8& rnFlags ) const;
+    /** Fills the data to the passed fields of a BIFF3 XF record. */
+    void                        FillToXF3( sal_uInt16& rnAlign ) const;
+    /** Fills the data to the passed fields of a BIFF4 XF record. */
+    void                        FillToXF4( sal_uInt16& rnAlign ) const;
+#endif
+    /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
+    void                        FillToXF5( sal_uInt16& rnAlign ) const;
+    /** Fills the data to the passed fields of a BIFF8 XF record. */
+    void                        FillToXF8( sal_uInt16& rnAlign, sal_uInt16& rnMiscAttrib ) const;
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Extends the XclCellBorder struct for export.
+    @descr  Provides functions to fill from item sets and to fill to Excel record data. */
+struct XclExpCellBorder : public XclCellBorder
+{
+    sal_uInt32                  mnLeftColorId;      /// Color ID for left line.
+    sal_uInt32                  mnRightColorId;     /// Color ID for right line.
+    sal_uInt32                  mnTopColorId;       /// Color ID for top line.
+    sal_uInt32                  mnBottomColorId;    /// Color ID for bottom line.
+
+    explicit                    XclExpCellBorder();
+
+    /** Fills the border attributes from the passed item set.
+        @descr  Fills only the attributes exported in the passed BIFF version.
+        @return  true = At least one border item is set. */
+    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff );
+    /** Fills the mn***Color base members from the mn***ColorId members. */
+    void                        SetFinalColors( const XclExpPalette& rPalette );
+
+#if 0
+    /** Fills the data to the passed fields of a BIFF2 XF record. */
+    void                        FillToXF2( sal_uInt8& rnFlags ) const;
+    /** Fills the data to the passed fields of a BIFF3/BIFF4 XF record. */
+    void                        FillToXF3( sal_uInt32& rnBorder ) const;
+#endif
+    /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
+    void                        FillToXF5( sal_uInt32& rnBorder, sal_uInt32& rnArea ) const;
+    /** Fills the data to the passed fields of a BIFF8 XF record. */
+    void                        FillToXF8( sal_uInt32& rnBorder1, sal_uInt32& rnBorder2 ) const;
+
+    /** Fills the data to the passed fields of a BIFF8 CF (conditional format) record. */
+    void                        FillToCF8( sal_uInt16& rnLine, sal_uInt32& rnColor ) const;
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Extends the XclCellArea struct for export.
+    @descr  Provides functions to fill from item sets and to fill to Excel record data. */
+struct XclExpCellArea : public XclCellArea
 {
     sal_uInt32                  mnForeColorId;  /// Foreground color ID.
     sal_uInt32                  mnBackColorId;  /// Background color ID.
-    sal_uInt8                   mnPattern;      /// Fill pattern.
 
-    explicit                    XclExpXFArea();
+    explicit                    XclExpCellArea();
+
+    /** Fills the area attributes from the passed item set.
+        @descr  Fills only the attributes exported in the passed BIFF version.
+        @return  true = At least one area item is set. */
+    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff );
+    /** Fills the mn***Color base members from the mn***ColorId members. */
+    void                        SetFinalColors( const XclExpPalette& rPalette );
+
+#if 0
+    /** Fills the data to the passed fields of a BIFF2 XF record. */
+    void                        FillToXF2( sal_uInt8& rnFlags ) const;
+    /** Fills the data to the passed fields of a BIFF3/BIFF4 XF record. */
+    void                        FillToXF3( sal_uInt16& rnArea ) const;
+#endif
+    /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
+    void                        FillToXF5( sal_uInt32& rnArea ) const;
+    /** Fills the data to the passed fields of a BIFF8 XF record. */
+    void                        FillToXF8( sal_uInt32& rnBorder2, sal_uInt16& rnArea ) const;
+
+    /** Fills the data to the passed fields of a BIFF8 CF (conditional format) record. */
+    void                        FillToCF8( sal_uInt16& rnPattern, sal_uInt16& rnColor ) const;
 };
 
 
 // ----------------------------------------------------------------------------
 
 class SfxStyleSheetBase;
-class SvxBoxItem;
-class SvxBorderLine;
 
 /** Represents an XF record which contains all formatting data of a cell or cell style. */
-class XclExpXF : public XclExpRecord
+class XclExpXF : public XclXFBase, public XclExpRecord, protected XclExpRoot
 {
-private:
-    typedef ::std::auto_ptr< ScPatternAttr > ScPatternAttrPtr;
+protected:  // access for XclExpDefaultXF
+    const SfxItemSet*           mpItemSet;          /// Pointer to the item set (we do not own it).
 
-    ScPatternAttrPtr            mpOwnPattern;       /// An own item set (used for cell styles).
-    const ScPatternAttr*        mpPattern;          /// Pointer to Calc item set (we do not own it).
-
-    XclExpXFBorder              maBorder;           /// Border line style.
-    XclExpXFArea                maArea;             /// Background area style.
-    XclHorAlign                 meHorAlign;         /// Horizontal alignment.
-    XclVerAlign                 meVerAlign;         /// Vertical alignment.
-    XclTextOrient               meOrient;           /// Text orientation.
-    XclTextDirection            meTextDir;          /// CTL text direction.
-
-    sal_uInt16                  mnParent;           /// Index to parent style XF.
+    XclExpCellProt              maProtection;       /// Cell protection flags.
+    XclExpCellAlign             maAlignment;        /// All alignment attributes.
+    XclExpCellBorder            maBorder;           /// Border line style.
+    XclExpCellArea              maArea;             /// Background area style.
+    sal_uInt32                  mnParentXFId;       /// XF ID of parent XF record.
     sal_uInt16                  mnFont;             /// Excel font index.
     sal_uInt16                  mnNumFmt;           /// Excel number format index.
-    sal_uInt8                   mnIndent;           /// Text indent.
-    sal_uInt8                   mnRotation;         /// Rotation angle.
-
-    bool                        mbCellXF;           /// true = cell XF, false = style XF.
-    bool                        mbLocked;           /// true = cell is locked.
-    bool                        mbHidden;           /// true = formulas are hidden.
-    bool                        mbWrapped;          /// true = wrap text on cell border.
-    bool                        mbProtUsed;         /// true = locked/hidden flags used.
-    bool                        mbFontUsed;         /// true = font index used.
-    bool                        mbFmtUsed;          /// true = number format used.
-    bool                        mbAlignUsed;        /// true = alignment used.
-    bool                        mbBorderUsed;       /// true = border data used.
-    bool                        mbAreaUsed;         /// true = area data used.
 
 public:
-    /** Constructs a cell XF record from the passed Calc item set.
+    /** Constructs a cell XF record from the passed Calc cell formatting.
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
         the number format of the passed item set.
-        @param bForcedWrap  true = set text wrap flag unconditionally. */
+        @param bForceWrapped  true = set text wrap flag unconditionally. */
     explicit                    XclExpXF(
                                     const XclExpRoot& rRoot,
-                                    const ScPatternAttr* pPattern,
+                                    const ScPatternAttr& rPattern,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
                                     bool bForceWrapped = false );
     /** Constructs a style XF record from the passed cell style sheet. */
-    explicit                    XclExpXF( const XclExpRoot& rRoot, SfxStyleSheetBase& rStyleSheet );
+    explicit                    XclExpXF(
+                                    const XclExpRoot& rRoot,
+                                    const SfxStyleSheetBase& rStyleSheet );
 
-    /** Returns true, if the passed cell formatting is represented by this XF record.
+    /** Returns true, if this XF record represents the passed cell formatting.
         @descr  Searches for cell XFs only. */
     bool                        Equals(
-                                    const ScPatternAttr* pPattern,
+                                    const ScPatternAttr& rPattern,
                                     sal_uInt32 nForcedNumFmt,
                                     bool bForceWrapped ) const;
+    /** Returns true, if this XF record represents the passed style.
+        @descr  Searches for style XFs only. */
+    bool                        Equals( const SfxStyleSheetBase& rStyleSheet ) const;
 
-    /** Sets the border line styles from the item set into the passed struct. */
-    static void                 GetBorder(
-                                    XclExpXFBorder& rBorder,
-                                    XclExpPalette& rPalette,
-                                    const ScPatternAttr& rPattern );
+    /** Sets the resulting Excel palette index from all used color IDs (border and area). */
+    void                        SetFinalColors();
 
-    /** Sets the area styles from the brush item into the passed struct. */
-    static void                 GetArea(
-                                    XclExpXFArea& rArea,
-                                    XclExpPalette& rPalette,
-                                    const ScPatternAttr& rPattern );
+    /** Returns true, if this XF record is completely equal to the passed. */
+    bool                        Equals( const XclExpXF& rCmpXF ) const;
+
+protected:
+    explicit                    XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
 
 private:
-    /** Fills all members from the passed item set. */
+    /** Initializes with default values. */
+    void                        InitDefault();
+    /** Fills all members from the passed item set.
+        @param bDefStyle  true = This is the "Default"/"Normal" style - needs special handling. */
     void                        Init(
-                                    const XclExpRoot& rRoot,
-                                    const ScPatternAttr* pPattern,
+                                    const SfxItemSet& rItemSet,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                    bool bForceWrapped = false );
+                                    bool bForceWrapped = false,
+                                    bool bDefStyle = false );
 
     /** Returns the bits specifying the used attributes.
         @descr  In cell XFs a set bit means a used attribute, in style XF a cleared
         bit means a used attribute. This method regards the cell/style state.
         @return  The mask based on bit 0 (not yet bit-shifted as needed for export). */
-    sal_uInt8                   GetUsedAttribMask() const;
+    sal_uInt8                   GetUsedFlags() const;
 
     void                        WriteBody5( XclExpStream& rStrm );
     void                        WriteBody8( XclExpStream& rStrm );
 
     /** Writes the contents of the XF record. */
     virtual void                WriteBody( XclExpStream& rStrm );
-
-    /** Reads the passed border line struct and converts to Excel line style and color. */
-    static void                 GetBorderLine(
-                                    sal_uInt8& rnXclLine, sal_uInt32& rnColorId,
-                                    XclExpPalette& rPalette, const SvxBorderLine* pLine );
 };
 
 
 // ----------------------------------------------------------------------------
 
-/** Represents a STYLE record containing the name of a user-defined cell style. */
+/** Represents a default XF record. Supports methods to set attributes directly. */
+class XclExpDefaultXF : public XclExpXF
+{
+public:
+    explicit                    XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF );
+
+    /** Sets the parent XF ID. Only allowed for cell XFs. */
+    void                        SetParent( sal_uInt32 nParentXFId );
+
+    /** Sets all "attribute used" flags explicitely.
+        @descr  The following Set***() functions set the appropriate flag too. */
+    void                        SetUsedFlags(
+                                    bool bProtUsed, bool bFontUsed, bool bFmtUsed,
+                                    bool bAlignUsed, bool bBorderUsed, bool bAreaUsed );
+    /** Sets the cell protection flags. */
+    void                        SetProtection( const XclExpCellProt& rProtection );
+    /** Sets the Excel font index. */
+    void                        SetFont( sal_uInt16 nFont );
+    /** Sets the Excel number format index. */
+    void                        SetNumFmt( sal_uInt16 nNumFmt );
+    /** Sets cell alignment attributes. */
+    void                        SetAlignment( const XclExpCellAlign& rAlignment );
+    /** Sets a cell border style. */
+    void                        SetBorder( const XclExpCellBorder& rBorder );
+    /** Sets a cell area style. */
+    void                        SetArea( const XclExpCellArea& rArea );
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Represents a STYLE record containing the data of a cell style.
+    @descr  The calss is able to store built-in and user-defined styles. */
 class XclExpStyle : public XclExpRecord
 {
 private:
     String                      maName;         /// Name of the cell style.
-    sal_uInt16                  mnXFIndex;      /// Index to XF record with style formatting.
+    sal_uInt32                  mnXFId;         /// XF record ID with style formatting.
+    sal_uInt8                   mnStyleId;      /// Built-in style identifier.
+    sal_uInt8                   mnLevel;        /// Outline level for RowLevel and ColLevel styles.
 
 public:
-    explicit                    XclExpStyle( const String& rName, sal_uInt16 nXFIndex );
+    explicit                    XclExpStyle( sal_uInt32 nXFId, const String& rStyleName );
+    explicit                    XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL );
+
+    /** Returns the index of the XF record used by this style. */
+    inline sal_uInt32           GetXFId() const { return mnXFId; }
+    /** Returns true, if this record represents an Excel built-in style. */
+    inline bool                 IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
 
 private:
     /** Writes the contents of the STYLE record. */
@@ -595,56 +698,91 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Stores all XF records (cell formats) in the document. */
+/** Stores all XF records (cell formats and cell styles) in the document.
+    @descr  Stores also the names of user defined cell styles (STYLE records).
+    Supports reduction to the maximum count of XF records of the current BIFF version.
+    An instance of this class collects all XF records in the conversion phase of the export,
+    using the Insert() and InsertStyle() functions. It returns a unique identidier for each
+    XF record. After the entire document is converted, the list will be reduced to the
+    number of XF records supported by the current BIFF version, using the function Reduce().
+    Then, in the streaming phase, the function GetXFIndex() returns the real Excel XF index
+    for all XF identifiers. */
 class XclExpXFBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 private:
-    typedef XclExpRecordList< XclExpXF >    XclExpXFList;
+    typedef ScfDelList< XclExpXF >          XclExpXFList;
     typedef XclExpRecordList< XclExpStyle > XclExpStyleList;
+    typedef ::std::vector< bool >           BoolVec;
+    typedef ::std::vector< sal_uInt16 >     XclExpXFIndexVec;
+    typedef ::std::vector< XclExpXF* >      XclExpXFPtrVec;
 
     XclExpXFList                maXFList;       /// List of all XF records.
     XclExpStyleList             maStyleList;    /// List of all STYLE records.
-    sal_uInt32                  mnXclMaxCount;  /// Maximum number of XF records.
-    sal_uInt16                  mnXclOffset;    /// Offset to first user defined XF.
+    BoolVec                     maPredefined;   /// true = Corresponding XF still predefined.
+    XclExpXFIndexVec            maXFIndexVec;   /// Maps XF IDs to XF indexes.
+    XclExpXFPtrVec              maXFPtrVec;     /// Pointer to XF records in resulting export order.
 
 public:
     explicit                    XclExpXFBuffer( const XclExpRoot& rRoot );
 
-    /** Inserts all user-defined styles into the XF record list. */
-    void                        InsertUserStyles();
+    /** Inserts predefined built-in styles and user-defined styles. */
+    void                        InitDefaults();
 
     /** Finds or creates a cell XF record for the passed item set.
         @param bForceWrapped  true = cell contains hard newlines.
         In this case the text wrap flag must be set in the XF record.
-        @return  The resulting Excel XF record index. */
-    sal_uInt16                  Insert( const ScPatternAttr* pPattern, bool bForceWrapped = false );
+        @return  A unique XF record ID. */
+    sal_uInt32                  Insert( const ScPatternAttr* pPattern, bool bForceWrapped = false );
     /** Finds or creates a cell XF record for the passed item set, with custom number format.
         @param nForcedNumFmt  The number format to be exported, i.e. formula result type.
         This format will always overwrite the cell's number format.
-        @return  The resulting Excel XF record index. */
-    sal_uInt16                  Insert( const ScPatternAttr* pPattern, sal_uInt32 nForcedNumFmt );
+        @return  A unique XF record ID. */
+    sal_uInt32                  Insert( const ScPatternAttr* pPattern, sal_uInt32 nForcedNumFmt );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
-        @return  The resulting Excel XF record index. */
-    sal_uInt16                  InsertStyle( SfxStyleSheetBase& rStyleSheet );
+        @return  A unique XF record ID. */
+    sal_uInt32                  InsertStyle( const SfxStyleSheetBase* pStyleSheet );
+    /** Returns the XF ID representing a fixed Excel XF index (i.e. for built-in XFs). */
+    static sal_uInt32           GetXFIdFromIndex( sal_uInt16 nXFIndex );
+
+    /** Reduces the XF record list to the maximum allowed number of records. */
+    void                        Reduce();
+
+    /** Returns the Excel XF index of the XF record with passed XF ID. */
+    sal_uInt16                  GetXFIndex( sal_uInt32 nXFId ) const;
 
     /** Writes all XF records contained in this buffer. */
     virtual void                Save( XclExpStream& rStrm );
 
 private:
-    /** Converts a list index into Excel XF index. */
-    sal_uInt16                  GetXclIndex( sal_uInt32 nIndex ) const;
+    /** Returns the XF ID of the cell XF containing the passed format. */
+    sal_uInt32                  FindXF(
+                                    const ScPatternAttr& rPattern,
+                                    sal_uInt32 nForcedNumFmt, bool bForceWrapped ) const;
+    /** Returns the XF ID of the style XF containing the passed style. */
+    sal_uInt32                  FindXF( const SfxStyleSheetBase& rStyleSheet ) const;
+
+    /** Returns the style list index of the STYLE record containing the passed XF ID. */
+    sal_uInt32                  FindStyle( sal_uInt32 nXFId ) const;
 
     /** Tries to find the XF record containing the passed format or inserts a new record.
-        @return  The Excel XF index. */
-    sal_uInt16                  InsertCellXF(
+        @return  The XF record ID. */
+    sal_uInt32                  InsertCellXF(
                                     const ScPatternAttr* pPattern,
-                                    sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                    bool bForceWrapped = false );
+                                    sal_uInt32 nForcedNumFmt, bool bForceWrapped );
+    /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
+        @return  The XF record ID. */
+    sal_uInt32                  InsertStyleXF( const SfxStyleSheetBase& rStyleSheet );
 
-    void                        WriteDefaultXFs5( XclExpStream& rStrm );
-    void                        WriteDefaultXFs8( XclExpStream& rStrm );
+    /** Inserts an XF and a STYLE record for all user defined style sheets. */
+    void                        InsertUserStyles();
 
-    void                        WriteDefaultStyles5( XclExpStream& rStrm );
+    /** Inserts a default XF and STYLE record. */
+    void                        InsertDefaultStyle( XclExpXF* pXF, sal_uInt8 nStyleId, sal_uInt8 nLevel = 0xFF );
+    /** Inserts all default XF and STYLE records. */
+    void                        InsertDefaultRecords();
+
+    /** Appends a XF index to the internal ID<->index maps. */
+    void                        AppendXFIndex( sal_uInt32 nXFId );
 };
 
 
