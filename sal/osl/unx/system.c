@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-09 10:37:17 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 15:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,14 @@
  ************************************************************************/
 
 #include "system.h"
+
+#ifdef MACOSX
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/errno.h>
+#include <string.h>
+#endif
 
 #ifdef NO_PTHREAD_RTL
 
@@ -126,7 +134,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
       return res;
 }
 
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(MACOSX)
 int getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer,
            size_t buflen, struct passwd **result)
 {
@@ -228,7 +236,6 @@ struct tm *gmtime_r(const time_t *timep, struct tm *buffer)
 
     return res;
 }
-
 #endif  /* defined NETBSD || defined MACOSX */
 
 #ifdef SCO
@@ -422,6 +429,193 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
       return res;
 }
 
+#if defined(MACOSX)
+/*
+ * This section works around calls that are missing or broken
+ * in MacOS X 10.1.x and earlier.
+ */
+
+/* MacOS X doesn't have readdir_r() standard, plus readdir() isn't threadsafe. */
+
+/*******************************************************************************/
+int readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result )
+{
+    struct dirent* pDirEntry;
+    int nRet;
+    int nSavedErrno;
+
+    pthread_mutex_lock(&getrtl_mutex);
+
+    nSavedErrno = errno;
+    errno = 0;
+    pDirEntry = readdir(dirp);
+
+    if ( pDirEntry ) {
+        memcpy(entry, pDirEntry, sizeof(struct dirent));
+        *result = entry;
+        errno = nSavedErrno;
+        nRet = 0;
+    }
+    else {
+        if ( errno ) {
+            nRet = errno; /* can be EBADF */
+        }
+        else {
+            *result = NULL;
+            nRet = 0;
+            /* errno must not be changed if reaching end of dir */
+            errno = nSavedErrno;
+        }
+    }
+
+    pthread_mutex_unlock(&getrtl_mutex);
+
+    return nRet;
+}
+
+/* No reentrant asctime() either... */
+
+/*******************************************************************************/
+char *asctime_r( const struct tm *tm, char *buffer )
+{
+    char        *asctimeBuffer;
+
+    pthread_mutex_lock(&getrtl_mutex);
+
+    asctimeBuffer = asctime( tm );
+    /* Simply hope we don't have a buffer overflow... */
+    if ( asctimeBuffer )
+        strcpy( buffer, asctimeBuffer );
+    else
+        *buffer = '\0';
+
+    pthread_mutex_unlock(&getrtl_mutex);
+    return( buffer );
+}
+
+/*
+ * Default tempnam() on MacOS X and Darwin 10.1 and before is broken.
+ * This implementation of tempnam() emulates normal tempnam() behavior.  It tries
+ * the normal hierarchy of temporary directories, and if all fail, uses
+ * kLastResortTempDir.  A file prefix may also be specified, but if one is not,
+ * kDefaultFilePrefix is used instead.  The randomness of the last part of the file
+ * name is maximum 10 characters long, composed of numbers and letters.  The returned
+ * name is guarunteed to be unique at the time of invocation, in the directory
+ * used from the hierarchy.  In any error case, NULL is also returned.  errno
+ * is set to any value that may be returned by malloc() or stat().
+ */
+
+#define     kLastResortTempDir      "/tmp"
+#define     kDefaultFilePrefix      "temp"
+#define     kRandomnessLength       10
+
+/*******************************************************************************/
+char *macxp_tempnam( const char *tmpdir, const char *prefix )
+{
+    char            *tempFileName = NULL;
+    char            *tempFilePathAndPrefix = NULL;
+    char            *envTempDir = NULL;
+    size_t      tempDirLen = 0;
+    size_t      prefixLen = 0;
+    size_t      tempFileNameSize = 0;
+    struct stat fileStatus;
+    int         staterr = 0;
+    char            randString[ kRandomnessLength+1 ];
+    struct timeval  timeOfDay;
+
+    pthread_mutex_lock(&getrtl_mutex);
+
+    /* There are a number of temp paths to choose from...  The order
+     * from the MacOS X man page is:
+     * 1) the environment variable TMPDIR
+     * 2) tmpdir argument
+     * 3) P_tmpdir (defined in stdio.h)
+     * 4) /tmp
+     */
+
+    /* Get the length of whatever temp dir we are going to use. */
+    if ( (envTempDir=getenv("TMPDIR")) != NULL )
+        tempDirLen = strlen( envTempDir );
+    else if ( tmpdir != NULL )
+        tempDirLen = strlen( tmpdir );
+    #ifdef P_tmpdir
+        else if ( P_tmpdir != NULL )
+            tempDirLen = strlen( P_tmpdir );
+    #endif
+    else
+        tempDirLen = strlen( kLastResortTempDir );
+    tempDirLen++;
+
+    /* Get the length of the prefix of the file, if any. */
+    prefixLen = strlen( (prefix != NULL) ? prefix : kDefaultFilePrefix ) + 1;
+
+    /* Allocate memory to store final temp file name, plus
+     * extra for the randomness and a little more for good measure. */
+    tempFileNameSize = tempDirLen + prefixLen + kRandomnessLength + 4;
+    if ( (tempFileName=malloc(tempFileNameSize)) != NULL )
+    {
+        *tempFileName = '\0';
+        if ( (tempFilePathAndPrefix=malloc(tempFileNameSize)) != NULL )
+        {
+            *tempFilePathAndPrefix = '\0';
+
+            /* Get the actual path of the temp dir to use. */
+            if ( (envTempDir=getenv("TMPDIR")) != NULL )
+                strncpy( tempFilePathAndPrefix, envTempDir, tempDirLen );
+            else if ( tmpdir != NULL )
+                strncpy( tempFilePathAndPrefix, tmpdir, tempDirLen );
+            #ifdef P_tmpdir
+                else if ( P_tmpdir != NULL )
+                    strncpy( tempFilePathAndPrefix, P_tmpdir, tempDirLen );
+            #endif
+            else
+                strncpy( tempFilePathAndPrefix, kLastResortTempDir, tempDirLen );
+
+            /* Make sure there's a '/' trailing the temp directory path. */
+            if ( *(tempFilePathAndPrefix+(strlen(tempFilePathAndPrefix)-1)) != '/' )
+                strncat( tempFilePathAndPrefix, "/", 2 );
+
+            /* Append the file prefix if any. */
+            strncat( tempFilePathAndPrefix, (prefix!=NULL) ? prefix : kDefaultFilePrefix, prefixLen );
+
+            /* Now generate the randomness and make sure the file isn't already there. */
+            /* Make sure our seed is fairly random too */
+            do
+            {
+                gettimeofday( &timeOfDay, NULL );
+                srandom( timeOfDay.tv_usec );
+
+                randString[ 0 ] = '\0';
+
+                gettimeofday( &timeOfDay, NULL );
+                snprintf( randString, kRandomnessLength+1, "%05x%05x", getpid(), (random()*timeOfDay.tv_usec) );
+                strcpy( tempFileName, tempFilePathAndPrefix );
+                strncat( tempFileName, randString, kRandomnessLength+1 );
+            }
+            while ( (staterr=stat(tempFileName, &fileStatus)) == 0 );
+
+            /* If stat returned anything other than an error (-1) and that
+             * error was anything other than ENOENT (ie file does not exist)
+             * then we return NULL. */
+            if ( (staterr!=-1) || (errno!=ENOENT) )
+                *tempFileName = '\0';
+
+            free( tempFilePathAndPrefix );
+        }
+
+        /* If there was an error in any case, free memory and return NULL. */
+        if ( *tempFileName == '\0' )
+        {
+            free( tempFileName );
+            tempFileName = NULL;
+        }
+    }
+
+    pthread_mutex_unlock(&getrtl_mutex);
+    return( tempFileName );
+}
+
+#endif  /* defined MACOSX */
 
 #endif /* NO_PTHREAD_RTL */
 
