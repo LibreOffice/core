@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:05:34 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 07:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,42 +247,6 @@ TabPage TP_DOC_STAT
         Text[ turkish ] = "Sözcük:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de palabras:";
-    };
-    FixedText FT_WORD_DELIM
-    {
-        Pos = MAP_APPFONT ( 144 , 68 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text = "~Trenner" ;
-        Text [ ENGLISH ] = "Delimiter" ;
-        Left = TRUE ;
-        Text [ portuguese ] = "~Separador" ;
-        Text [ english_us ] = "Separator" ;
-        Text [ portuguese_brazilian ] = "Trenner" ;
-        Text [ swedish ] = "Avgränsare" ;
-        Text [ danish ] = "Separator" ;
-        Text [ italian ] = "~Separatore" ;
-        Text [ spanish ] = "Sepa~rador" ;
-        Text [ french ] = "~Séparateur" ;
-        Text [ dutch ] = "~Scheidingsteken" ;
-        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦";
-        Text[ russian ] = "Ğàçäåëèòåëü";
-        Text[ polish ] = "Separator";
-        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·";
-        Text[ chinese_traditional ] = "é€£å­—ç¬¦";
-        Text[ arabic ] = "İÇÕá";
-        Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "êµ¬ë¶„ì";
-        Text[ turkish ] = "~Ayırma işareti";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sepa~rador";
-        Text[ finnish ] = "Erotin";
-    };
-    Edit ED_WORD_DELIM
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 204 , 66 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
     };
     FixedText FT_CHAR
     {
