@@ -28,6 +28,7 @@ import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.event.*;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.document.MacroExecMode;
 
 public class FaxWizardDialogImpl extends FaxWizardDialog {
 
@@ -168,10 +169,6 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
                 sPath = myPathSelection.getSelectedPath();
             }
             sPath = fileAccess.getURL(sPath);
-            myFaxDoc.killEmptyUserFields();
-            myFaxDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
-            myFaxDoc.keepTypeFrame = (chkUseCommunicationType.getState() != 0);
-            myFaxDoc.killEmptyFrames();
 
             //first, if the filename was not changed, thus
             //it is coming from a saved session, check if the
@@ -183,6 +180,11 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
                     if (answer == 3) // user said: no, do not overwrite....
                         return;
                 }
+            myFaxDoc.setWizardTemplateDocInfo(resources.resFaxWizardDialog_title, resources.resTemplateDescription);
+            myFaxDoc.killEmptyUserFields();
+            myFaxDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
+            myFaxDoc.keepTypeFrame = (chkUseCommunicationType.getState() != 0);
+            myFaxDoc.killEmptyFrames();
 
 
             bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
@@ -191,15 +193,23 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
                 xWindow.setVisible(false);
                 closeDocument();
                 //myFaxDoc.xTextDocument.unlockControllers();
-                PropertyValue loadValues[] = new PropertyValue[1];
+
+                PropertyValue loadValues[] = new PropertyValue[3];
                 loadValues[0] = new PropertyValue();
                 loadValues[0].Name = "AsTemplate";
+                loadValues[1] = new PropertyValue();
+                loadValues[1].Name = "MacroExecutionMode";
+                loadValues[1].Value = new Short (MacroExecMode.ALWAYS_EXECUTE);
+                loadValues[2] = new PropertyValue();
+                loadValues[2].Name = "UpdateDocMode";
+                loadValues[2].Value = new Short (com.sun.star.document.UpdateDocMode.FULL_UPDATE);
+
                 if (bEditTemplate) {
                     loadValues[0].Value = Boolean.FALSE;
                 } else {
                     loadValues[0].Value = Boolean.TRUE;
                 }
-                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_blank", loadValues);
+                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", loadValues);
                 XTextDocument xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
                 XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
                 ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
@@ -672,4 +682,4 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
 
 
 
-    
+
