@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-22 09:34:03 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,6 @@ class SwXTextTable : public cppu::WeakImplHelper9
     SwChartEventListenerContainer   aChartLstnrCntnr;
     SfxItemPropertySet          aPropSet;
     const SfxItemPropertyMap*   _pMap;
-    SwSortOptions*              pLastSortOptions;
 
     // Descriptor-interface
     SwTableProperties_Impl*     pTableProps;
@@ -438,7 +437,6 @@ class SwXCellRange : public cppu::WeakImplHelper6
     SfxItemPropertySet          aPropSet;
 
     SwUnoCrsr*                  pTblCrsr;
-    SwSortOptions*              pLastSortOptions;
     const SfxItemPropertyMap*   _pMap;
 
     sal_Bool                        bFirstRowAsLabel    :1;
