@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:04:44 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnOptions                   = rData.mnOptions;
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
+    mnUseFlatBorders            = rData.mnUseFlatBorders;
     mnUseFlatMenues             = rData.mnUseFlatMenues;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
@@ -661,225 +662,9 @@ void ImplStyleData::SetStandardStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplStyleData::SetStandardWinStyles()
-{
-    SetStandardStyles();
-
-    mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
-    mnRadioButtonStyle         |= STYLE_RADIOBUTTON_WIN;
-    mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
-    mnCheckBoxStyle            |= STYLE_CHECKBOX_WIN;
-    mnPushButtonStyle          &= ~STYLE_PUSHBUTTON_STYLE;
-    mnPushButtonStyle          |= STYLE_PUSHBUTTON_WIN;
-    mnTabControlStyle           = 0;
-
-    mnOptions                  &= ~(STYLE_OPTION_SYSTEMSTYLE | STDSYS_STYLE);
-    mnOptions                  |= STYLE_OPTION_WINSTYLE;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplStyleData::SetStandardOS2Styles()
-{
-    Font aStdFont( FAMILY_SWISS, Size( 0, 9 ) );
-    aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
-    aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(LANGUAGE_ENGLISH) );
-    maAppFont                   = aStdFont;
-    maHelpFont                  = aStdFont;
-    maToolFont                  = aStdFont;
-    maGroupFont                 = aStdFont;
-    maLabelFont                 = aStdFont;
-    maInfoFont                  = aStdFont;
-    maRadioCheckFont            = aStdFont;
-    maPushButtonFont            = aStdFont;
-    maFieldFont                 = aStdFont;
-    maIconFont                  = aStdFont;
-    maFloatTitleFont            = aStdFont;
-    aStdFont.SetWeight( WEIGHT_BOLD );
-    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(LANGUAGE_ENGLISH) );
-    maMenuFont                  = aStdFont;
-    maTitleFont                 = aStdFont;
-
-    maFaceColor                 = Color( COL_LIGHTGRAY );
-    maCheckedColor              = Color( 0xCC, 0xCC, 0xCC );
-    maLightColor                = Color( COL_WHITE );
-    maLightBorderColor          = Color( COL_LIGHTGRAY );
-    maShadowColor               = Color( COL_GRAY );
-    maDarkShadowColor           = Color( COL_BLACK );
-    maButtonTextColor           = Color( COL_BLACK );
-    maRadioCheckTextColor       = Color( COL_BLACK );
-    maGroupTextColor            = Color( COL_BLACK );
-    maLabelTextColor            = Color( COL_BLACK );
-    maInfoTextColor             = Color( COL_BLACK );
-    maWindowColor               = Color( COL_WHITE );
-    maWindowTextColor           = Color( COL_BLACK );
-    maDialogColor               = Color( COL_LIGHTGRAY );
-    maDialogTextColor           = Color( COL_BLACK );
-    maWorkspaceColor            = Color( COL_GRAY );
-    maFieldColor                = Color( COL_WHITE );
-    maFieldTextColor            = Color( COL_BLACK );
-    maActiveColor               = Color( COL_BLUE );
-    maActiveColor2              = Color( COL_BLACK );
-    maActiveTextColor           = Color( COL_WHITE );
-    maActiveBorderColor         = Color( COL_LIGHTGRAY );
-    maDeactiveColor             = Color( COL_GRAY );
-    maDeactiveColor2            = Color( COL_BLACK );
-    maDeactiveTextColor         = Color( COL_LIGHTGRAY );
-    maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
-    maMenuColor                 = Color( COL_LIGHTGRAY );
-    maMenuBarColor              = Color( COL_LIGHTGRAY );
-    maMenuBorderColor           = Color( COL_LIGHTGRAY );
-    maMenuTextColor             = Color( COL_BLACK );
-    maMenuHighlightColor        = Color( COL_BLUE );
-    maMenuHighlightTextColor    = Color( COL_WHITE );
-    maHighlightColor            = Color( COL_GRAY );
-    maHighlightTextColor        = Color( COL_WHITE );
-    maDisableColor              = Color( COL_GRAY );
-    maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
-    maHelpTextColor             = Color( COL_BLACK );
-
-    mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
-    mnRadioButtonStyle         |= STYLE_RADIOBUTTON_OS2;
-    mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
-    mnCheckBoxStyle            |= STYLE_CHECKBOX_OS2;
-    mnPushButtonStyle          &= ~STYLE_PUSHBUTTON_STYLE;
-    mnPushButtonStyle          |= STYLE_PUSHBUTTON_OS2;
-    mnTabControlStyle           = STYLE_TABCONTROL_SINGLELINE |
-                                  STYLE_TABCONTROL_COLOR;
-
-    mnOptions                  &= ~(STYLE_OPTION_SYSTEMSTYLE | STDSYS_STYLE);
-    mnOptions                  |= STYLE_OPTION_OS2STYLE | STYLE_OPTION_SPINARROW;
-    mnBorderSize                = 1;
-    mnTitleHeight               = 18;
-    mnFloatTitleHeight          = 13;
-    mnTearOffTitleHeight        = 8;
-    mnMenuBarHeight             = 14;
-    mnHighContrast              = 0;
-    mnUseSystemUIFonts          = 0;
-    mnUseFlatMenues             = 0;
-    mnUseImagesInMenus          = (USHORT)TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplStyleData::SetStandardMacStyles()
-{
-    Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
-    aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
-    aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(LANGUAGE_ENGLISH) );
-    maAppFont                   = aStdFont;
-    maHelpFont                  = aStdFont;
-    maToolFont                  = aStdFont;
-    maPushButtonFont            = aStdFont;
-    maGroupFont                 = aStdFont;
-    maLabelFont                 = aStdFont;
-    maInfoFont                  = aStdFont;
-    maRadioCheckFont            = aStdFont;
-    maFieldFont                 = aStdFont;
-    maIconFont                  = aStdFont;
-    maFloatTitleFont            = aStdFont;
-    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(LANGUAGE_ENGLISH) );
-//    aStdFont.SetWeight( WEIGHT_BOLD );
-    maMenuFont                  = aStdFont;
-    maTitleFont                 = aStdFont;
-//    maPushButtonFont            = aStdFont;
-//    maGroupFont                 = aStdFont;
-//    maLabelFont                 = aStdFont;
-
-    maFaceColor                 = Color( COL_LIGHTGRAY );
-    maCheckedColor              = Color( 0x99, 0x99, 0x99 );
-    maLightColor                = Color( COL_WHITE );
-    maLightBorderColor          = Color( COL_LIGHTGRAY );
-    maShadowColor               = Color( COL_GRAY );
-    maDarkShadowColor           = Color( COL_BLACK );
-    maButtonTextColor           = Color( COL_BLACK );
-    maRadioCheckTextColor       = Color( COL_BLACK );
-    maGroupTextColor            = Color( COL_BLACK );
-    maLabelTextColor            = Color( COL_BLACK );
-    maInfoTextColor             = Color( COL_BLACK );
-    maWindowColor               = Color( COL_WHITE );
-    maWindowTextColor           = Color( COL_BLACK );
-    maDialogColor               = Color( COL_LIGHTGRAY );
-    maDialogTextColor           = Color( COL_BLACK );
-    maWorkspaceColor            = Color( COL_GRAY );
-    maFieldColor                = Color( COL_WHITE );
-    maFieldTextColor            = Color( COL_BLACK );
-    maActiveColor               = Color( COL_LIGHTGRAY );
-    maActiveColor2              = Color( COL_LIGHTGRAY );
-    maActiveTextColor           = Color( COL_BLACK );
-    maActiveBorderColor         = Color( COL_LIGHTGRAY );
-    maDeactiveColor             = Color( COL_LIGHTGRAY );
-    maDeactiveColor2            = Color( COL_LIGHTGRAY );
-    maDeactiveTextColor         = Color( COL_GRAY );
-    maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
-    maMenuColor                 = Color( COL_LIGHTGRAY );
-    maMenuBarColor              = Color( COL_LIGHTGRAY );
-    maMenuBorderColor           = Color( COL_LIGHTGRAY );
-    maMenuTextColor             = Color( COL_BLACK );
-    maMenuHighlightColor        = Color( COL_BLUE );
-    maMenuHighlightTextColor    = Color( COL_WHITE );
-    maHighlightColor            = Color( COL_BLUE );
-    maHighlightTextColor        = Color( COL_WHITE );
-    maDisableColor              = Color( COL_GRAY );
-    maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
-    maHelpTextColor             = Color( COL_BLACK );
-
-    mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
-    mnRadioButtonStyle         |= STYLE_RADIOBUTTON_MAC;
-    mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
-    mnCheckBoxStyle            |= STYLE_CHECKBOX_MAC;
-    mnPushButtonStyle          &= ~STYLE_PUSHBUTTON_STYLE;
-    mnPushButtonStyle          |= STYLE_PUSHBUTTON_MAC;
-    mnTabControlStyle           = 0;
-
-    mnOptions                  &= ~(STYLE_OPTION_SYSTEMSTYLE | STDSYS_STYLE);
-    mnOptions                  |= STYLE_OPTION_MACSTYLE | STYLE_OPTION_NOMNEMONICS | STYLE_OPTION_SPINUPDOWN;
-    mnBorderSize                = 2;
-    mnTitleHeight               = 16;
-    mnFloatTitleHeight          = 12;
-    mnTearOffTitleHeight        = 7;
-    mnMenuBarHeight             = 14;
-    mnHighContrast              = 0;
-    mnUseSystemUIFonts          = 0;
-    mnUseFlatMenues             = 0;
-    mnUseImagesInMenus          = (USHORT)TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplStyleData::SetStandardUnixStyles()
-{
-    SetStandardStyles();
-
-    maActiveColor               = Color( 182, 77, 121 );
-    maActiveColor2              = Color( 182, 77, 121 );
-    maActiveTextColor           = Color( COL_WHITE );
-    maActiveBorderColor         = Color( 182, 77, 121 );
-    maDeactiveColor             = Color( 174, 178, 199 );
-    maDeactiveColor2            = Color( 174, 178, 199 );
-    maDeactiveTextColor         = Color( COL_BLACK );
-    maDeactiveBorderColor       = Color( 174, 178, 199 );
-
-    mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
-    mnRadioButtonStyle         |= STYLE_RADIOBUTTON_UNIX;
-    mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
-    mnCheckBoxStyle            |= STYLE_CHECKBOX_UNIX;
-    mnPushButtonStyle          &= ~STYLE_PUSHBUTTON_STYLE;
-    mnPushButtonStyle          |= STYLE_PUSHBUTTON_UNIX;
-    mnTabControlStyle           = 0;
-
-    mnOptions                  &= ~(STYLE_OPTION_SYSTEMSTYLE | STDSYS_STYLE);
-    mnOptions                  |= STYLE_OPTION_UNIXSTYLE;
-
-    mnBorderSize                = 3;
 }
 
 // -----------------------------------------------------------------------
@@ -954,32 +739,28 @@ void StyleSettings::SetStandardStyles()
 
 void StyleSettings::SetStandardWinStyles()
 {
-    CopyData();
-    mpData->SetStandardWinStyles();
+    return; // no more style changes since NWF
 }
 
 // -----------------------------------------------------------------------
 
 void StyleSettings::SetStandardOS2Styles()
 {
-    CopyData();
-    mpData->SetStandardOS2Styles();
+    return; // no more style changes since NWF
 }
 
 // -----------------------------------------------------------------------
 
 void StyleSettings::SetStandardMacStyles()
 {
-    CopyData();
-    mpData->SetStandardMacStyles();
+    return; // no more style changes since NWF
 }
 
 // -----------------------------------------------------------------------
 
 void StyleSettings::SetStandardUnixStyles()
 {
-    CopyData();
-    mpData->SetStandardUnixStyles();
+    return; // no more style changes since NWF
 }
 
 
@@ -1050,6 +831,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
+         (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
          (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
