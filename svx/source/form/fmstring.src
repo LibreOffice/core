@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:39:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ String RID_STR_LOCKED
     Text [ dutch ] = "Versperd" ;
     Text[ chinese_simplified ] = "Λψ¶¨µΔ";
     Text[ russian ] = "Ηΰαλξκθπξβΰνξ";
-    Text[ polish ] = "Zablokowany";
+    Text[ polish ] = "Ochrona";
     Text[ japanese ] = "Ϋ―Έ‚³‚κ‚Δ‚Ά‚ι";
     Text[ chinese_traditional ] = "Βκ©wªΊ";
     Text[ greek ] = "Κλειδωμένο";
@@ -2715,7 +2715,7 @@ String RID_STR_FILLCOLOR
     Text[ japanese ] = "“h‚θ‚Β‚Τ‚µ";
     Text[ chinese_traditional ] = "¥R¶ρΓC¦β";
     Text[ greek ] = "Γέμισμα με χρώμα";
-    Text[ korean ] = "»φ Γ¤Ώμ±β";
+    Text[ korean ] = "Γ¤Ώμ±β »φ»σ";
     Text[ arabic ] = "αζδ ΚΪΘΖΙ";
     Text[ turkish ] = "Dolgu rengi";
     Text[ language_user1 ] = " ";
@@ -2739,7 +2739,7 @@ String RID_STR_TEXTCOLOR
     Text[ japanese ] = "Γ·½Δ‚ΜF";
     Text[ chinese_traditional ] = "¤ε¦rΓC¦β";
     Text[ greek ] = "Χρώμα κειμένου";
-    Text[ korean ] = "ΕΨ½ΊΖ® »φ";
+    Text[ korean ] = "ΕΨ½ΊΖ® »φ»σ";
     Text[ arabic ] = "αζδ ΗαδΥ";
     Text[ turkish ] = "Metin rengi";
     Text[ language_user1 ] = " ";
@@ -3966,7 +3966,7 @@ String RID_STR_HARDLINEBREAKS
     Text[ japanese ] = "‰όs";
     Text[ chinese_traditional ] = "¤β¤u¤ΐ¦ζ²Ε";
     Text[ greek ] = "Έντονη αλλαγή γραμμής";
-    Text[ korean ] = "°νΑ¤ ΑΩΉΩ²Ω±β";
+    Text[ korean ] = "°νΑ¤ °³Ηΰ";
     Text[ arabic ] = "έΗΥα ΓΣΨΡ νΟζν";
     Text[ turkish ] = "Kullanύcύ tanύmlύ satύr sonu";
     Text[ language_user1 ] = " ";
