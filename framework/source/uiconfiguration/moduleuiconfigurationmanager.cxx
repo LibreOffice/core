@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:49:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
     {
         try
         {
-            Reference< XStream > xStream = xElementTypeStorage->openStreamElement( aUIElementData.aName, ElementModes::ELEMENT_READ );
+            Reference< XStream > xStream = xElementTypeStorage->openStreamElement( aUIElementData.aName, ElementModes::READ );
             Reference< XInputStream > xInputStream = xStream->getInputStream();
 
             if ( xInputStream.is() )
@@ -402,7 +402,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
         catch ( ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWTException& )
+        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -462,7 +462,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
             }
             else
             {
-                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::ELEMENT_WRITE|ElementModes::ELEMENT_TRUNCATE ), UNO_QUERY );
+                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE ), UNO_QUERY );
                 Reference< XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                 if ( xOutputStream.is() )
@@ -663,7 +663,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xUserConfigStorage.is() )
     {
-        long nModes = m_bReadOnly ? ElementModes::ELEMENT_READ : ElementModes::ELEMENT_READWRITE;
+        long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
 
         // Try to access our module sub folder
         for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
@@ -685,7 +685,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
             catch ( ::com::sun::star::io::IOException& )
             {
             }
-            catch ( ::com::sun::star::embed::StorageWTException& )
+            catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
             {
             }
 
@@ -825,7 +825,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
                 long nOpenMode;
                 Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" )));
                 if ( a >>= nOpenMode )
-                    m_bReadOnly = !( nOpenMode & ElementModes::ELEMENT_WRITE );
+                    m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
         }
 
@@ -949,7 +949,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
         catch ( ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWTException& )
+        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -1473,7 +1473,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
             try
             {
                 Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                            OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::ELEMENT_READWRITE ));
+                                                            OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
 
                 if ( rElementType.bModified && xElementTypeStorage.is() )

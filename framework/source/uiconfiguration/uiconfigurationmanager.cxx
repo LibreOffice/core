@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:50:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
     {
         try
         {
-            Reference< XStream > xStream = xElementTypeStorage->openStreamElement( aUIElementData.aName, ElementModes::ELEMENT_READ );
+            Reference< XStream > xStream = xElementTypeStorage->openStreamElement( aUIElementData.aName, ElementModes::READ );
             Reference< XInputStream > xInputStream = xStream->getInputStream();
 
             if ( xInputStream.is() )
@@ -365,7 +365,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
         catch ( ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWTException& )
+        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -414,7 +414,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
             }
             else
             {
-                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::ELEMENT_WRITE|ElementModes::ELEMENT_TRUNCATE ), UNO_QUERY );
+                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE ), UNO_QUERY );
                 Reference< XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                 if ( xOutputStream.is() )
@@ -564,7 +564,7 @@ void UIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xDocConfigStorage.is() )
     {
-        long nModes = m_bReadOnly ? ElementModes::ELEMENT_READ : ElementModes::ELEMENT_READWRITE;
+        long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
 
         // Try to access our module sub folder
         for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
@@ -586,7 +586,7 @@ void UIConfigurationManager::impl_Initialize()
             catch ( ::com::sun::star::io::IOException& )
             {
             }
-            catch ( ::com::sun::star::embed::StorageWTException& )
+            catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
             {
             }
 
@@ -766,7 +766,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
         catch ( ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWTException& )
+        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -1094,7 +1094,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
                 long nOpenMode;
                 Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" )));
                 if ( a >>= nOpenMode )
-                    m_bReadOnly = !( nOpenMode & ElementModes::ELEMENT_WRITE );
+                    m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
             catch ( com::sun::star::beans::UnknownPropertyException& )
             {
@@ -1205,7 +1205,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
             try
             {
                 Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                            OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::ELEMENT_READWRITE ));
+                                                            OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
                 UIElementType& rElementType = m_aUIElements[i];
 
                 if ( rElementType.bModified && xElementTypeStorage.is() )
