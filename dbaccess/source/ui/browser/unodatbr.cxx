@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 09:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,10 +782,9 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 if(xProp.is())
                 {
-                    if(evt.NewValue.hasValue())
-                        xProp->setPropertyValue(PROPERTY_ALIGN,evt.NewValue);
-                    else
-                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)0));
+                    sal_Int32 nNewAlign = 0;
+                    evt.NewValue >>= nNewAlign; // may fail in case it's void
+                    xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(nNewAlign));
                 }
             }
             catch(Exception&)
@@ -2536,7 +2535,7 @@ void SbaTableQueryBrowser::implRemoveQuery( SvLBoxEntry* _pApplyTo )
 {
     String sDsName = getEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
     String sName = getEntryText( _pApplyTo );
-    if (!sDsName.Len() || sName.Len())
+    if (!sDsName.Len() || !sName.Len())
     {
         DBG_ERROR("SbaTableQueryBrowser::implRemoveQuery: invalid entries detected!");
         return;
@@ -2788,7 +2787,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             break;
 
         case ID_TREE_QUERY_DELETE:
-            implRemoveQuery(pDSEntry);
+            implRemoveQuery( pEntry );
             break;
 
         case ID_TREE_TABLE_DELETE:
