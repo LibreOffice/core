@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 14:31:48 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 11:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,11 @@ namespace CPPU_CURRENT_NAMESPACE
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW( () )
 {
-char const * start = p;
-//      N3com3sun4star4lang24IllegalArgumentExceptionE
+#ifdef DEBUG
+    char const * start = p;
+#endif
+
+    // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
     OSL_ASSERT( 'N' == *p );
@@ -119,32 +122,6 @@ char const * start = p;
     return buf.makeStringAndClear();
 #endif
 }
-//==================================================================================================
-static OString toRTTIname( OUString const & unoName ) SAL_THROW( () )
-{
-    OStringBuffer buf( 64 );
-
-    buf.append( RTL_CONSTASCII_STRINGPARAM("_ZTIN") );
-    sal_Int32 index = 0;
-    do
-    {
-        OUString token( unoName.getToken( 0, '.', index ) );
-        buf.append( token.getLength() );
-        OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
-        buf.append( c_token );
-    }
-    while (index >= 0);
-    buf.append( 'E' );
-
-#ifdef DEBUG
-    OString ret( buf.makeStringAndClear() );
-    OString str( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> toRTTIname(): %s => %s\n", str.getStr(), ret.getStr() );
-    return ret;
-#else
-    return buf.makeStringAndClear();
-#endif
-}
 
 //==================================================================================================
 class RTTI
@@ -154,26 +131,65 @@ class RTTI
     Mutex m_mutex;
     t_rtti_map m_rttis;
 
+    void * m_hApp;
+
 public:
+    RTTI() SAL_THROW( () );
+    ~RTTI() SAL_THROW( () );
+
     type_info * getRTTI( OUString const & unoName ) SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
+RTTI::RTTI() SAL_THROW( () )
+    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+{
+}
+//__________________________________________________________________________________________________
+RTTI::~RTTI() SAL_THROW( () )
+{
+    dlclose( m_hApp );
+}
+//__________________________________________________________________________________________________
 type_info * RTTI::getRTTI( OUString const & unoName ) SAL_THROW( () )
 {
-    static void * s_hApp = dlopen( 0, RTLD_LAZY );
     type_info * rtti;
 
     MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
     if (iFind == m_rttis.end())
     {
-        OString rttiName( toRTTIname( unoName ) );
-        rtti = (type_info *)dlsym( s_hApp, rttiName.getStr() );
+        // RTTI symbol
+        OStringBuffer buf( 64 );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("_ZTIN") );
+        sal_Int32 index = 0;
+        do
+        {
+            OUString token( unoName.getToken( 0, '.', index ) );
+            buf.append( token.getLength() );
+            OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( c_token );
+        }
+        while (index >= 0);
+        buf.append( 'E' );
+
+        OString rttiName( buf.makeStringAndClear() );
+        rtti = (type_info *)dlsym( m_hApp, rttiName.getStr() );
         if (rtti)
         {
             pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
             OSL_ENSURE( insertion.second, "### inserting new rtti failed?!" );
+        }
+        else
+        {
+#ifdef _DEBUG
+            OStringBuffer buf( 64 );
+            buf.append( "rtti symbol not found: " );
+            buf.append( rttiName );
+            OString msg( buf.makeStringAndClear() );
+            OSL_ENSURE( 0, msg.getStr() );
+#endif
+            rtti = 0;
         }
     }
     else
@@ -185,7 +201,7 @@ type_info * RTTI::getRTTI( OUString const & unoName ) SAL_THROW( () )
 }
 
 //--------------------------------------------------------------------------------------------------
-static void deleteException( void* pExc )
+static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
     typelib_TypeDescription * pTD = 0;
