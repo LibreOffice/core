@@ -13,6 +13,11 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(SOLAR_JAVA)"==""
+nojava:
+    @echo "Not building jurt because Java is disabled"
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
