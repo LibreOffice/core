@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:08:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 10:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ String STR_WORD
 String STR_PARAGRAPH
 {
     Text = "Absatz ist " ;
-    Text [ ENGLISH ] = "Paragraph in" ;
+    Text [ ENGLISH ] = "Paragraph in " ;
     Text [ portuguese ] = "Par·grafo em " ;
     Text [ english_us ] = "Paragraph is " ;
     Text [ portuguese_brazilian ] = "O par·grafo È" ;
@@ -272,7 +272,7 @@ String STR_PARAGRAPH
     Text [ danish ] = "Afsnittet er " ;
     Text [ italian ] = "Il paragrafo Ë " ;
     Text [ spanish ] = "El p·rrafo est· en  " ;
-    Text [ french ] = "Le paragraphe est en" ;
+    Text [ french ] = "Le paragraphe est en " ;
     Text [ dutch ] = "Alinea is " ;
     Text[ chinese_simplified ] = "ÊÆµËêΩÊòØ ";
     Text[ russian ] = "ﬂÁ˚Í ‡·Á‡ˆ‡: ";
@@ -290,7 +290,7 @@ String STR_PARAGRAPH
     Text[ finnish ] = "Kappale on ";
     Text[ thai ] = "‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤‡πÉ‡∏ô ";
     Text[ czech ] = "Odstavec je ";
-    Text[ hebrew ] = "Absatz ist";
+    Text[ hebrew ] = "Absatz ist ";
     Text[ hindi ] = "‡§™‡§∞‡§ø‡§ö‡•ç‡§õ‡•á‡§¶ ";
     Text[ slovak ] = "Odstavec je ";
     Text[ hungarian ] = "Bekezd√©s:";
