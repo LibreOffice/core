@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:13:07 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,10 @@ String S_NAME_NOT_THERE
     Text[ swedish ] = "Name doesn't exist: #($Arg1)";
     Text[ polish ] = "Nazwa nie istnieje: #($Arg1)";
     Text[ portuguese_brazilian ] = "Name nicht vorhanden: #($Arg1)";
-    Text[ japanese ] = "‚±‚Ì–¼‘O‚Í‚ ‚è‚Ü‚¹‚ñ: #($Arg1)";
-    Text[ korean ] = "ÀÌ¸§ÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù: #($Arg1)";
-    Text[ chinese_simplified ] = "Ãû³Æ²»´æÔÚ£º#($Arg1)";
-    Text[ chinese_traditional ] = "¦WºÙ¤£¦s¦b¡G #($Arg1)";
+    Text[ japanese ] = "ã“ã®åå‰ã¯ã‚ã‚Šã¾ã›ã‚“: #($Arg1)";
+    Text[ korean ] = "ì´ë¦„ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤: #($Arg1)";
+    Text[ chinese_simplified ] = "åç§°ä¸å­˜åœ¨ï¼š#($Arg1)";
+    Text[ chinese_traditional ] = "åç¨±ä¸å­˜åœ¨ï¼š #($Arg1)";
     Text[ arabic ] = "Name doesn't exist: #($Arg1)";
     Text[ turkish ] = "Name doesn't exist: #($Arg1)";
     Text[ catalan ] = "El nombre no existe: #($Arg1)";
@@ -112,10 +112,10 @@ String S_DOUBLE_NAME
     Text[ swedish ] = "Name double: ($Arg1)";
     Text[ polish ] = "Podwójna nazwa: ($Arg1)";
     Text[ portuguese_brazilian ] = "Name Doppelt: ($Arg1)";
-    Text[ japanese ] = "–¼‘O‚ªd•¡‚µ‚Ä‚¢‚Ü‚·: ($Arg1)";
-    Text[ korean ] = "ÀÌ¸§ÀÌ Áßº¹µÇ¾ú½À´Ï´Ù. : ($Arg1)";
-    Text[ chinese_simplified ] = "Ë«ÖØÃû³Æ£º($Arg1)";
-    Text[ chinese_traditional ] = "¦WºÙÂù­«¡G($Arg1)";
+    Text[ japanese ] = "åå‰ãŒé‡è¤‡ã—ã¦ã„ã¾ã™: ($Arg1)";
+    Text[ korean ] = "ì´ë¦„ì´ ì¤‘ë³µë˜ì—ˆìŠµë‹ˆë‹¤. : ($Arg1)";
+    Text[ chinese_simplified ] = "åŒé‡åç§°ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "åç¨±é›™é‡ï¼š($Arg1)";
     Text[ arabic ] = "Name double: ($Arg1)";
     Text[ turkish ] = "Name double: ($Arg1)";
     Text[ catalan ] = "Nombre doble: ($Arg1)";
@@ -136,10 +136,10 @@ String S_READING_FILE
     Text[ swedish ] = "Reading the files";
     Text[ polish ] = "Czytanie plików";
     Text[ portuguese_brazilian ] = "Einlesen der Dateien";
-    Text[ japanese ] = "Ì§²Ù‚Ì“Ç‚İæ‚è";
-    Text[ korean ] = "ÆÄÀÏ ÀĞ±â";
-    Text[ chinese_simplified ] = "¶ÁÈ¡ÎÄ¼ş";
-    Text[ chinese_traditional ] = "Åª¨úÀÉ®×";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã®èª­ã¿å–ã‚Š";
+    Text[ korean ] = "íŒŒì¼ ì½ê¸°";
+    Text[ chinese_simplified ] = "è¯»å–æ–‡ä»¶";
+    Text[ chinese_traditional ] = "è®€å–æª”æ¡ˆ";
     Text[ arabic ] = "Reading the files";
     Text[ turkish ] = "Reading the files";
     Text[ catalan ] = "Leyendo los archivos";
@@ -160,10 +160,10 @@ String S_CANNOT_OPEN_FILE
     Text[ swedish ] = "File cannot be opened: ($Arg1)";
     Text[ polish ] = "Nie mo¿e otworzyæ pliku: ($Arg1)";
     Text[ portuguese_brazilian ] = "Kann Datei nicht ?ffnen: ($Arg1)";
-    Text[ japanese ] = "Ì§²Ù‚ªŠJ‚¯‚ç‚ê‚Ü‚¹‚ñ: ($Arg1)";
-    Text[ korean ] = "ÆÄÀÏÀÌ ¿­¸®Áö ¾Ê½À´Ï´Ù: ($Arg1)";
-    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş£º($Arg1)";
-    Text[ chinese_traditional ] = "µLªk¶}±ÒÀÉ®×¡G ($Arg1)";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ãŒé–‹ã‘ã‚‰ã‚Œã¾ã›ã‚“: ($Arg1)";
+    Text[ korean ] = "íŒŒì¼ì´ ì—´ë¦¬ì§€ ì•ŠìŠµë‹ˆë‹¤: ($Arg1)";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€æ–‡ä»¶ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿæª”æ¡ˆï¼š ($Arg1)";
     Text[ arabic ] = "File cannot be opened: ($Arg1)";
     Text[ turkish ] = "File cannot be opened: ($Arg1)";
     Text[ catalan ] = "No se puede abrir el archivo: ($Arg1)";
@@ -184,10 +184,10 @@ String S_INVALID_LINE
     Text[ swedish ] = "Line \"($Arg1)\" is invalid.";
     Text[ polish ] = "Wiersz \"($Arg1)\" jest niewa¿ny.";
     Text[ portuguese_brazilian ] = "Zeile \"($Arg1)\" Ist ung?tig.";
-    Text[ japanese ] = "\"($Arg1)\"s‚Í–³Œø‚Å‚·B";
-    Text[ korean ] = "Çà \"($Arg1)\" Àº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÎŞĞ§µÄĞĞ¡°($Arg1)¡±";
-    Text[ chinese_traditional ] = "¦æ($Arg1)µL®Ä¡C";
+    Text[ japanese ] = "\"($Arg1)\"è¡Œã¯ç„¡åŠ¹ã§ã™ã€‚";
+    Text[ korean ] = "í–‰ \"($Arg1)\" ì€ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "è¡Œ($Arg1)æ— æ•ˆã€‚";
+    Text[ chinese_traditional ] = "è¡Œ($Arg1)ç„¡æ•ˆã€‚";
     Text[ arabic ] = "Line \"($Arg1)\" is invalid.";
     Text[ turkish ] = "Line \"($Arg1)\" is invalid.";
     Text[ catalan ] = "La línea \"($Arg1)\" no es válida.";
@@ -209,9 +209,9 @@ String S_SHORTNAME_UNKNOWN
     Text[ polish ] = "Skrót nazwy nieznany podczas kopiowania: ($Arg1)";
     Text[ portuguese_brazilian ] = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
     Text[ japanese ] = "Short name unknown during copying: ($Arg1)";
-    Text[ korean ] = "º¹»ç½Ã¿¡ ¾Ë ¼ö ¾ø´Â ÂªÀº ÀÌ¸§: ($Arg1)";
-    Text[ chinese_simplified ] = "¸´ÖÆÊ±²»Ã÷µÄ¼ò³Æ£º($Arg1)";
-    Text[ chinese_traditional ] = "½Æ»s®ÉÀÉ®×µu¦WºÙ¤£©ú¡G($Arg1)";
+    Text[ korean ] = "ë³µì‚¬ì‹œì— ì•Œ ìˆ˜ ì—†ëŠ” ì§§ì€ ì´ë¦„: ($Arg1)";
+    Text[ chinese_simplified ] = "å¤åˆ¶æ—¶ä¸æ˜çš„ç®€ç§°ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "è¤‡è£½æ™‚æª”æ¡ˆçŸ­åç¨±ä¸æ˜ï¼š($Arg1)";
     Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "Abreviatura desconocida al copiar: ($Arg1)";
@@ -232,10 +232,10 @@ String S_LONGNAME_UNKNOWN
     Text[ swedish ] = "Long name unknown: ($Arg1)";
     Text[ polish ] = "Pe³na nazwa nieznana: ($Arg1)";
     Text[ portuguese_brazilian ] = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
-    Text[ japanese ] = "’·‚¢–¼‘O‚Í•s–¾: ($Arg1)";
-    Text[ korean ] = "¾Ë ¼ö ¾ø´Â ±ä ÀÌ¸§: ($Arg1)";
-    Text[ chinese_simplified ] = "³¤Ãû³Æ²»Ã÷£º($Arg1)";
-    Text[ chinese_traditional ] = "ªøÀÉ®×¦WºÙ¤£©ú¡G($Arg1)";
+    Text[ japanese ] = "é•·ã„åå‰ã¯ä¸æ˜: ($Arg1)";
+    Text[ korean ] = "ì•Œ ìˆ˜ ì—†ëŠ” ê¸´ ì´ë¦„: ($Arg1)";
+    Text[ chinese_simplified ] = "é•¿åç§°ä¸æ˜ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "é•·æª”æ¡ˆåç¨±ä¸æ˜ï¼š($Arg1)";
     Text[ arabic ] = "ÇÓã Øæíá ÛíÑ ãÚÑæİ: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "Abreviatura desconocida al copiar: ($Arg1)";
@@ -257,9 +257,9 @@ String S_FIRST_SHORTNAME_REQ_ASTRX
     Text[ polish ] = "Pierwszy skrót nazwy musi siê zaczynaæ na * . Omiñ.";
     Text[ portuguese_brazilian ] = "Erster Kurzname mu? mit * beginnen. ?berspringe.";
     Text[ japanese ] = "First short name must start with * . Ignore.";
-    Text[ korean ] = "Ã¹¹øÂ° ÂªÀº ÀÌ¸§Àº ¹İµå½Ã * ·Î ½ÃÀÛ µÇ¾î¾ß ÇÕ´Ï´Ù.°Ç³Ê¶Ù±â";
-    Text[ chinese_simplified ] = "µÚÒ»¸ö¼ò³Æ±ØĞëÒÔ * ¿ªÍ·¡£Ê¡ÂÔ¡£";
-    Text[ chinese_traditional ] = "²Ä¤@­Óµu¦WºÙ¥²¶·¥H * ¶}©l¡C©¿²¤¡C";
+    Text[ korean ] = "ì²«ë²ˆì§¸ ì§§ì€ ì´ë¦„ì€ ë°˜ë“œì‹œ * ë¡œ ì‹œì‘ ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.ê±´ë„ˆë›°ê¸°";
+    Text[ chinese_simplified ] = "ç¬¬ä¸€ä¸ªç®€ç§°å¿…é¡»ä»¥ * å¼€å¤´ã€‚çœç•¥ã€‚";
+    Text[ chinese_traditional ] = "ç¬¬ä¸€å€‹çŸ­åç¨±å¿…é ˆä»¥ * é–‹å§‹ã€‚å¿½ç•¥ã€‚";
     Text[ arabic ] = "First short name must start with * . Leave out.";
     Text[ turkish ] = "First short name must start with * . Ignore.";
     Text[ catalan ] = "La primera abreviatura debe comenzar con *. Ignorar.";
@@ -280,10 +280,10 @@ String S_TIMOUT_WAITING
     Text[ swedish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ polish ] = "Server Timeout podczas czekania na odpowiedŸ. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "‰“š‘Ò‚¿‚ÌÛ‚Ì»°ÊŞ°‚ÌÀ²Ñ±³ÄB¼°¹İ½No.: ($Arg1)";
-    Text[ korean ] = "ÀÀ´äÀ» ±â´Ù¸± ¶§ ¼­¹ö Å¸ÀÓ¾Æ¿ô. ÀÏ·Ã ¹øÈ£: ($Arg1)";
-    Text[ chinese_simplified ] = "ÔÚµÈºò´ğ¸´Ê±·şÎñÆ÷³¬Ê±¡£ĞòÁĞºÅ£º($Arg1)";
-    Text[ chinese_traditional ] = "¦øªA¾¹µ¥­ÔµªÎ`¶W®É¡C§Ç¦C¸¹½X¡G ($Arg1)";
+    Text[ japanese ] = "å¿œç­”å¾…ã¡ã®éš›ã®ï½»ï½°ï¾Šï¾ï½°ã®ï¾€ï½²ï¾‘ï½±ï½³ï¾„ã€‚ï½¼ï½°ï½¹ï¾ï½½No.: ($Arg1)";
+    Text[ korean ] = "ì‘ë‹µì„ ê¸°ë‹¤ë¦´ ë•Œ ì„œë²„ íƒ€ì„ì•„ì›ƒ. ì¼ë ¨ ë²ˆí˜¸: ($Arg1)";
+    Text[ chinese_simplified ] = "åœ¨ç­‰å€™ç­”å¤æ—¶æœåŠ¡å™¨è¶…æ—¶ã€‚åºåˆ—å·ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "ä¼ºæœå™¨ç­‰å€™ç­”å¤è¶…æ™‚ã€‚åºåˆ—è™Ÿç¢¼ï¼š ($Arg1)";
     Text[ arabic ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ turkish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ catalan ] = "Desconexión temporal al esperar por respuesta. Secuencia núm.: ($Arg1)";
@@ -304,10 +304,10 @@ String S_APPLICATION_RESTARTED
     Text[ swedish ] = "Application has been restarted.";
     Text[ polish ] = "Aplikacja zosta³a ponownie uruchomiona.";
     Text[ portuguese_brazilian ] = "Applikation wurde neu gestartet.";
-    Text[ japanese ] = "±ÌßØ¹°¼®İ‚ÍÄ½À°Ä‚³‚ê‚Ü‚µ‚½B";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ÀÌ ´Ù½Ã ½ÃÀÛ µÇ¾ú½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "Ó¦ÓÃ³ÌĞòÒÑ¾­ÖØĞÂÆô¶¯¡£";
-    Text[ chinese_traditional ] = "­«·s±Ò°Ê¤FÀ³¥Îµ{¦¡¡C";
+    Text[ japanese ] = "ï½±ï¾Œï¾Ÿï¾˜ï½¹ï½°ï½¼ï½®ï¾ã¯å†ï½½ï¾€ï½°ï¾„ã•ã‚Œã¾ã—ãŸã€‚";
+    Text[ korean ] = "ì‘ìš©í”„ë¡œê·¸ë¨ì´ ë‹¤ì‹œ ì‹œì‘ ë˜ì—ˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "åº”ç”¨ç¨‹åºå·²ç»é‡æ–°å¯åŠ¨ã€‚";
+    Text[ chinese_traditional ] = "é‡æ–°å•Ÿå‹•äº†æ‡‰ç”¨ç¨‹å¼ã€‚";
     Text[ arabic ] = "Application has been restarted.";
     Text[ turkish ] = "Application has been restarted.";
     Text[ catalan ] = "Se reinició la aplicación.";
@@ -328,10 +328,10 @@ String S_APPLICATION_START_FAILED
     Text[ swedish ] = "Application \"($Arg1)\" cannot be started.  ";
     Text[ polish ] = "Nie mo¿na uruchomiæ aplikacji \"($Arg1)\". ";
     Text[ portuguese_brazilian ] = "Applikation \"($Arg1)\" kann nicht gestartet werden. ";
-    Text[ japanese ] = "±ÌßØ¹°¼®İ \"($Arg1)\" ‚Í½À°Ä‚Å‚«‚Ü‚¹‚ñB ";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ \"($Arg1)\"Àº(´Â) ½ÃÀÛµÉ ¼ö ¾ø½À´Ï´Ù. ";
-    Text[ chinese_simplified ] = "ÎŞ·¨Æô¶¯Ó¦ÓÃ³ÌĞò¡°($Arg1)¡±¡£ ";
-    Text[ chinese_traditional ] = "µLªk±Ò°ÊÀ³¥Îµ{¦¡($Arg1)¡C";
+    Text[ japanese ] = "ï½±ï¾Œï¾Ÿï¾˜ï½¹ï½°ï½¼ï½®ï¾ \"($Arg1)\" ã¯ï½½ï¾€ï½°ï¾„ã§ãã¾ã›ã‚“ã€‚ ";
+    Text[ korean ] = "ì‘ìš©í”„ë¡œê·¸ë¨ \"($Arg1)\"ì€(ëŠ”) ì‹œì‘ë  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ";
+    Text[ chinese_simplified ] = "æ— æ³•å¯åŠ¨åº”ç”¨ç¨‹åº($Arg1)ã€‚ ";
+    Text[ chinese_traditional ] = "ç„¡æ³•å•Ÿå‹•æ‡‰ç”¨ç¨‹å¼($Arg1)ã€‚";
     Text[ arabic ] = "Application \"($Arg1)\" cannot be started. ";
     Text[ turkish ] = "Application \"($Arg1)\" cannot be started. ";
     Text[ catalan ] = "No se puede iniciar la aplicación \"($Arg1)\".  ";
@@ -352,10 +352,10 @@ String S_TIMOUT_SENDING
     Text[ swedish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ polish ] = "Server Timeout podczas wysy³ania. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Server Timeout beim Senden. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "‘—M‚ÌÛ‚Ì»°ÊŞ°‚ÌÀ²Ñ±³ÄB¼°¹İ½No.: ($Arg1)";
-    Text[ korean ] = "¼Û½Å½Ã ¼­¹ö Å¸ÀÓ¾Æ¿ô. ÀÏ·Ã ¹øÈ£: ($Arg1)";
-    Text[ chinese_simplified ] = "ÔÚ¼Ä·¢Ê±·şÎñÆ÷³¬Ê±¡£ĞòÁĞºÅ£º($Arg1)";
-    Text[ chinese_traditional ] = "¦øªA¾¹µo°e®É¶W®É¡C§Ç¦C¸¹½X¡G ($Arg1)";
+    Text[ japanese ] = "é€ä¿¡ã®éš›ã®ï½»ï½°ï¾Šï¾ï½°ã®ï¾€ï½²ï¾‘ï½±ï½³ï¾„ã€‚ï½¼ï½°ï½¹ï¾ï½½No.: ($Arg1)";
+    Text[ korean ] = "ì†¡ì‹ ì‹œ ì„œë²„ íƒ€ì„ì•„ì›ƒ. ì¼ë ¨ ë²ˆí˜¸: ($Arg1)";
+    Text[ chinese_simplified ] = "åœ¨å¯„å‘æ—¶æœåŠ¡å™¨è¶…æ—¶ã€‚åºåˆ—å·ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "ä¼ºæœå™¨ç™¼é€æ™‚è¶…æ™‚ã€‚åºåˆ—è™Ÿç¢¼ï¼š ($Arg1)";
     Text[ arabic ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ turkish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ catalan ] = "Desconexión temporal al enviar. Secuencia núm.: ($Arg1)";
@@ -376,10 +376,10 @@ String S_NO_CONNECTION
     Text[ swedish ] = "No connection. Sequence No: ($Arg1)";
     Text[ polish ] = "Brak po³¹czenia. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Keine Verbindung. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "Ú‘±‚È‚µB¼°¹İ½No.: ($Arg1)";
-    Text[ korean ] = "Á¢¼Ó ¾ÈµÊ. ÀÏ·Ã¹øÈ£: ($Arg1)";
-    Text[ chinese_simplified ] = "Ã»ÓĞÁ¬½Ó¡£ĞòÁĞºÅ£º($Arg1)";
-    Text[ chinese_traditional ] = "µLªk³s½u¡C§Ç¦C¸¹½X¡G($Arg1)";
+    Text[ japanese ] = "æ¥ç¶šãªã—ã€‚ï½¼ï½°ï½¹ï¾ï½½No.: ($Arg1)";
+    Text[ korean ] = "ì ‘ì† ì•ˆë¨. ì¼ë ¨ë²ˆí˜¸: ($Arg1)";
+    Text[ chinese_simplified ] = "æ²¡æœ‰è¿æ¥ã€‚åºåˆ—å·ï¼š($Arg1)";
+    Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šã€‚åºåˆ—è™Ÿç¢¼ï¼š($Arg1)";
     Text[ arabic ] = "No connection. Sequence No: ($Arg1)";
     Text[ turkish ] = "No connection. Sequence No: ($Arg1)";
     Text[ catalan ] = "Sin conexión. Secuencia núm.: ($Arg1)";
@@ -400,10 +400,10 @@ String S_NO_FILES_FOUND
     Text[ swedish ] = "No ($Arg1) files found";
     Text[ polish ] = "Nie znaleziono plików ($Arg1)";
     Text[ portuguese_brazilian ] = "Keine ($Arg1) Dateien gefunden";
-    Text[ japanese ] = "($Arg1)Ì§²Ù‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "($Arg1) ÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ ($Arg1) ÎÄ¼ş";
-    Text[ chinese_traditional ] = "¨S¦³§ä¨ì ($Arg1) ÀÉ®×";
+    Text[ japanese ] = "($Arg1)ï¾Œï½§ï½²ï¾™ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "($Arg1) íŒŒì¼ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ° ($Arg1) æ–‡ä»¶";
+    Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ° ($Arg1) æª”æ¡ˆ";
     Text[ arabic ] = "No ($Arg1) files found";
     Text[ turkish ] = "No ($Arg1) files found";
     Text[ catalan ] = "No se encontró ningún archivo ($Arg1)";
@@ -424,10 +424,10 @@ String S_ERRORS_DETECTED
     Text[ swedish ] = "** ($Arg1) errors occurred";
     Text[ polish ] = "** Wyst¹pi³o ($Arg1) b³êdów";
     Text[ portuguese_brazilian ] = "** ($Arg1) Fehler aufgetreten";
-    Text[ japanese ] = "** ($Arg1) ‚Ì´×°”­¶";
-    Text[ korean ] = "** ($Arg1) ¿À·ù ¹ß»ı";
-    Text[ chinese_simplified ] = "·¢ÉúÁË** ($Arg1) ´íÎó";
-    Text[ chinese_traditional ] = "** ($Arg1) ¿ù»~";
+    Text[ japanese ] = "** ($Arg1) ã®ï½´ï¾—ï½°ç™ºç”Ÿ";
+    Text[ korean ] = "** ($Arg1) ì˜¤ë¥˜ ë°œìƒ";
+    Text[ chinese_simplified ] = "å‘ç”Ÿäº†** ($Arg1) é”™è¯¯";
+    Text[ chinese_traditional ] = "** ($Arg1) éŒ¯èª¤";
     Text[ arabic ] = "** ($Arg1) errors occurred";
     Text[ turkish ] = "** ($Arg1) errors occurred";
     Text[ catalan ] = "** Ha ocurrido el error ($Arg1)";
@@ -448,10 +448,10 @@ String S_NO_ERRORS_DETECTED
     Text[ swedish ] = "** No errors have occurred";
     Text[ polish ] = "** Nie wyst¹pi³y ¿adne b³êdy";
     Text[ portuguese_brazilian ] = "** Keine Fehler aufgetreten";
-    Text[ japanese ] = "** ´×°‚È‚µ";
-    Text[ korean ] = "** ¹ß»ıµÈ ¿À·ù ¾øÀ½.";
-    Text[ chinese_simplified ] = "** Ã»ÓĞ³öÏÖ´íÎó";
-    Text[ chinese_traditional ] = "** ¨S¦³¥X²{¿ù»~";
+    Text[ japanese ] = "** ï½´ï¾—ï½°ãªã—";
+    Text[ korean ] = "** ë°œìƒëœ ì˜¤ë¥˜ ì—†ìŒ.";
+    Text[ chinese_simplified ] = "** æ²¡æœ‰å‡ºç°é”™è¯¯";
+    Text[ chinese_traditional ] = "** æ²’æœ‰å‡ºç¾éŒ¯èª¤";
     Text[ arabic ] = "** No errors have occurred";
     Text[ turkish ] = "** No errors have occurred";
     Text[ catalan ] = "** No ha ocurrido ningún error";
@@ -472,10 +472,10 @@ String S_WARNINGS_DETECTED
     Text[ swedish ] = "** ($Arg1) warnings occurred";
     Text[ polish ] = "** Wyst¹pi³o ($Arg1) ostrze¿eñ";
     Text[ portuguese_brazilian ] = "** ($Arg1) Warnungen aufgetreten";
-    Text[ japanese ] = "** ($Arg1) ‚ÌŒx”­¶";
-    Text[ korean ] = "** ($Arg1) °æ°í ¹ß»ı";
-    Text[ chinese_simplified ] = "·¢ÉúÁË** ($Arg1) ¾¯¸æ";
-    Text[ chinese_traditional ] = "** ($Arg1) Äµ§i";
+    Text[ japanese ] = "** ($Arg1) ã®è­¦å‘Šç™ºç”Ÿ";
+    Text[ korean ] = "** ($Arg1) ê²½ê³  ë°œìƒ";
+    Text[ chinese_simplified ] = "å‘ç”Ÿäº†** ($Arg1) è­¦å‘Š";
+    Text[ chinese_traditional ] = "** ($Arg1) è­¦å‘Š";
     Text[ arabic ] = "** ($Arg1) warnings occurred";
     Text[ turkish ] = "** ($Arg1) warnings occurred";
     Text[ catalan ] = "** Han aparecido las advertencias ($Arg1)";
@@ -496,10 +496,10 @@ String S_NO_WARNINGS_DETECTED
     Text[ swedish ] = "** No warnings have occurred";
     Text[ polish ] = "** Nie wyst¹pi³y ¿adne ostrze¿enia";
     Text[ portuguese_brazilian ] = "** Keine Warnungen aufgetreten";
-    Text[ japanese ] = "** Œx‚È‚µ";
-    Text[ korean ] = "** ¹ß»ıµÈ °æ°í ¾øÀ½.";
-    Text[ chinese_simplified ] = "** Ã»ÓĞ³öÏÖ¾¯¸æ";
-    Text[ chinese_traditional ] = "** ¨S¦³Äµ§i";
+    Text[ japanese ] = "** è­¦å‘Šãªã—";
+    Text[ korean ] = "** ë°œìƒëœ ê²½ê³  ì—†ìŒ.";
+    Text[ chinese_simplified ] = "** æ²¡æœ‰å‡ºç°è­¦å‘Š";
+    Text[ chinese_traditional ] = "** æ²’æœ‰è­¦å‘Š";
     Text[ arabic ] = "** No warnings have occurred";
     Text[ turkish ] = "** No warnings have occurred";
     Text[ catalan ] = "** No han aparecido advertencias";
@@ -520,10 +520,10 @@ String S_INCLUDE_FILE_WARNINGS_DETECTED
     Text[ swedish ] = "** ($Arg1) warnings occurred during initialization";
     Text[ polish ] = "** Wyst¹pi³o ($Arg1) ostrze¿eñ podczas inicjalizacji";
     Text[ portuguese_brazilian ] = "** ($Arg1) Warnungen aufgetreten";
-    Text[ japanese ] = "** ‰Šú‰»’†‚É ($Arg1) ‚ÌŒx‚ ‚è";
-    Text[ korean ] = "** ($Arg1) ÃÊ±âÈ­¿¡¼­ °æ°í ¹ß»ı";
-    Text[ chinese_simplified ] = "ÔÚ³õÊ¼»¯Ê±·¢³ö ** ($Arg1) ¾¯¸æ";
-    Text[ chinese_traditional ] = "** ¦bªì©l¤Æ®Éµo¥XÄµ§i($Arg1) Äµ§i";
+    Text[ japanese ] = "** åˆæœŸåŒ–ä¸­ã« ($Arg1) ã®è­¦å‘Šã‚ã‚Š";
+    Text[ korean ] = "** ($Arg1) ì´ˆê¸°í™”ì—ì„œ ê²½ê³  ë°œìƒ";
+    Text[ chinese_simplified ] = "åœ¨åˆå§‹åŒ–æ—¶å‘å‡º ** ($Arg1) è­¦å‘Š";
+    Text[ chinese_traditional ] = "** åœ¨åˆå§‹åŒ–æ™‚ç™¼å‡ºè­¦å‘Š($Arg1) è­¦å‘Š";
     Text[ arabic ] = "** ($Arg1) ÊÍĞíÑÇÊ ÃËäÇÁ ÚãáíÉ ÇáÊåíÆÉ ÍÏËÊ";
     Text[ turkish ] = "** ($Arg1) warnings occurred";
     Text[ catalan ] = "** Han aparecido las advertencias ($Arg1) durante la inicialización";
@@ -544,10 +544,10 @@ String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
     Text[ swedish ] = "** No warnings occurred during initialization";
     Text[ polish ] = "** Nie wyst¹pi³y ¿adne ostrze¿enia podczas inicjalizacji";
     Text[ portuguese_brazilian ] = "** Keine Warnungen aufgetreten";
-    Text[ japanese ] = "** ‰Šú‰»’†‚ÉŒx‚È‚µ";
-    Text[ korean ] = "** ÃÊ±âÈ­¿¡¼­ °æ°í°¡ ¹ß»ıÇÏÁö ¾Ê¾Ò½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "** ÔÚ³õÊ¼»¯Ê±Ã»ÓĞ³öÏÖ¾¯¸æ";
-    Text[ chinese_traditional ] = "** ¦bªì©l¤Æ®É¨S¦³µo¥XÄµ§i";
+    Text[ japanese ] = "** åˆæœŸåŒ–ä¸­ã«è­¦å‘Šãªã—";
+    Text[ korean ] = "** ì´ˆê¸°í™”ì—ì„œ ê²½ê³ ê°€ ë°œìƒí•˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "** åœ¨åˆå§‹åŒ–æ—¶æ²¡æœ‰å‡ºç°è­¦å‘Š";
+    Text[ chinese_traditional ] = "** åœ¨åˆå§‹åŒ–æ™‚æ²’æœ‰ç™¼å‡ºè­¦å‘Š";
     Text[ arabic ] = "** áã ÊÍÏË ÃíÉ ÊÍĞíÑÇÊ ÃËäÇÁ ÇáÊåíÆÉ";
     Text[ turkish ] = "** No warnings have occurred";
     Text[ catalan ] = "** No han aparecido advertencias durante la inicialización";
@@ -568,10 +568,10 @@ String S_UNKNOWN_SLOT_CONTROL
     Text[ swedish ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ polish ] = "Nieznany Slot/Control :\"($Arg1)\"";
     Text[ portuguese_brazilian ] = "Slot/Control unbekannt :\"($Arg1)\"";
-    Text[ japanese ] = "½Û¯Ä/ºİÄÛ°Ù‚ª‚í‚©‚è‚Ü‚¹‚ñ:\"($Arg1)\"";
-    Text[ korean ] = "¾Ë¼ö ¾ø´Â ½½·Ô/ÄÁÆ®·Ñ :\"($Arg1)\"";
-    Text[ chinese_simplified ] = "²»Ã÷µÄ Slot/Control£º\"($Arg1)\"";
-    Text[ chinese_traditional ] = "Slot/Control ¤£©ú¡G($Arg1)";
+    Text[ japanese ] = "ï½½ï¾›ï½¯ï¾„/ï½ºï¾ï¾„ï¾›ï½°ï¾™ãŒã‚ã‹ã‚Šã¾ã›ã‚“:\"($Arg1)\"";
+    Text[ korean ] = "ì•Œìˆ˜ ì—†ëŠ” ìŠ¬ë¡¯/ì»¨íŠ¸ë¡¤ :\"($Arg1)\"";
+    Text[ chinese_simplified ] = "ä¸æ˜çš„ Slot/Controlï¼š\"($Arg1)\"";
+    Text[ chinese_traditional ] = "Slot/Control ä¸æ˜ï¼š($Arg1)";
     Text[ arabic ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ turkish ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ catalan ] = "Slot/Control desconocido :\"($Arg1)\"";
@@ -592,10 +592,10 @@ String S_RETURN_SEQUENCE_MISSMATCH
     Text[ swedish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ polish ] = "Return Stream o nieprawid³owej sekwencji: ($Arg1) zamiast ($Arg2)";
     Text[ portuguese_brazilian ] = "Return Stream mit falscher Sequenz: ($Arg1) statt ($Arg2)";
-    Text[ japanese ] = "ØÀ°İ½ÄØ°Ñ‚Ì¼°¹İ½‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·: ($Arg2) ‚Å‚È‚­ ($Arg1)";
-    Text[ korean ] = "ÀÏ·Ã ¹øÈ£°¡ Æ²¸° ¸®ÅÏ ½ºÆ®¸²: ($Arg2) ´ë½Å ($Arg1)";
-    Text[ chinese_simplified ] = "º¬ÓĞ´íÎóĞòÁĞµÄ·µ»ØĞÅÏ¢Á÷£º($Arg1) ´úÌæ($Arg2)";
-    Text[ chinese_traditional ] = "ªğ¦^¼Æ¾Ú¬yªº§Ç¦C¿ù»~¡G($Arg1)¡A À³¸Ó¬O ($Arg2)";
+    Text[ japanese ] = "ï¾˜ï¾€ï½°ï¾ï½½ï¾„ï¾˜ï½°ï¾‘ã®ï½¼ï½°ï½¹ï¾ï½½ãŒé–“é•ã£ã¦ã„ã¾ã™: ($Arg2) ã§ãªã ($Arg1)";
+    Text[ korean ] = "ì¼ë ¨ ë²ˆí˜¸ê°€ í‹€ë¦° ë¦¬í„´ ìŠ¤íŠ¸ë¦¼: ($Arg2) ëŒ€ì‹  ($Arg1)";
+    Text[ chinese_simplified ] = "å«æœ‰é”™è¯¯åºåˆ—çš„è¿”å›ä¿¡æ¯æµï¼š($Arg1) ä»£æ›¿($Arg2)";
+    Text[ chinese_traditional ] = "è¿”å›æ•¸æ“šæµçš„åºåˆ—éŒ¯èª¤ï¼š($Arg1)ï¼Œ æ‡‰è©²æ˜¯ ($Arg2)";
     Text[ arabic ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ turkish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ catalan ] = "Return Stream con secuencia falsa: ($Arg1) en vez de ($Arg2)";
@@ -616,10 +616,10 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ swedish ] = "Return value received but different Id expected";
     Text[ polish ] = "Odebrano wartoœæ return, ale oczekiwane jest inne ID";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
-    Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªA•Ê‚ÌId‚ª•K—v‚Å‚·B";
-    Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ,  ÇÏÁö¸¸ ´Ù¸¥ Id¸¦ ±â´ëÇÔ";
-    Text[ chinese_simplified ] = "·µ»ØÖµ½ÓÊÕÆÚ´ıµÄÊÇÆäËüµÄ Id(±êÊ¶·û)";
-    Text[ chinese_traditional ] = "±µ¦¬¨ìªğ¦^­È¡A¦ı¬O´Á«İ¬O¨ä¥¦ Id";
+    Text[ japanese ] = "ï¾˜ï¾€ï½°ï¾å€¤ã‚’å—ã‘å–ã‚Šã¾ã—ãŸãŒã€åˆ¥ã®IdãŒå¿…è¦ã§ã™ã€‚";
+    Text[ korean ] = "ë°˜í™˜ê°’ ìˆ˜ì‹ í•¨,  í•˜ì§€ë§Œ ë‹¤ë¥¸ Idë¥¼ ê¸°ëŒ€í•¨";
+    Text[ chinese_simplified ] = "è¿”å›å€¼æ¥æ”¶æœŸå¾…çš„æ˜¯å…¶å®ƒçš„ Id(æ ‡è¯†ç¬¦)";
+    Text[ chinese_traditional ] = "æ¥æ”¶åˆ°è¿”å›å€¼ï¼Œä½†æ˜¯æœŸå¾…æ˜¯å…¶å®ƒ Id";
     Text[ arabic ] = "Return value received but different Id expected";
     Text[ turkish ] = "Return value received but different Id expected";
     Text[ catalan ] = "Recibido Valor Return, pero se esperaba otro Id";
@@ -640,10 +640,10 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ swedish ] = "Return value received but receiver not defined";
     Text[ polish ] = "Odebrano wartoœæ return, ale brak zdefiniowanego odbiorcy";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empf?nger definiert";
-    Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªAóMÒ‚ªŒˆ’è‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ, ÇÏÁö¸¸ ¼ö½ÅÀÚ°¡  Á¤ÀÇµÇÁö ¾Ê¾ÒÀ½";
-    Text[ chinese_simplified ] = "·µ»ØÖµ½ÓÊÕÃ»ÓĞÖ¸¶¨½ÓÊÕÕß";
-    Text[ chinese_traditional ] = "±µ¦¬¨ìªğ¦^­È¡A¦ı¬O¨S¦³«ü©w±µ¦¬¥Ø¼Ğ¡C";
+    Text[ japanese ] = "ï¾˜ï¾€ï½°ï¾å€¤ã‚’å—ã‘å–ã‚Šã¾ã—ãŸãŒã€å—ä¿¡è€…ãŒæ±ºå®šã§ãã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ë°˜í™˜ê°’ ìˆ˜ì‹ í•¨, í•˜ì§€ë§Œ ìˆ˜ì‹ ìê°€  ì •ì˜ë˜ì§€ ì•Šì•˜ìŒ";
+    Text[ chinese_simplified ] = "è¿”å›å€¼æ¥æ”¶æ²¡æœ‰æŒ‡å®šæ¥æ”¶è€…";
+    Text[ chinese_traditional ] = "æ¥æ”¶åˆ°è¿”å›å€¼ï¼Œä½†æ˜¯æ²’æœ‰æŒ‡å®šæ¥æ”¶ç›®æ¨™ã€‚";
     Text[ arabic ] = "Return value received but receiver not defined";
     Text[ turkish ] = "Return value received but receiver not defined";
     Text[ catalan ] = "Recibido valor Return sin definición de destinatario";
@@ -665,9 +665,9 @@ String S_UNKNOWN_METHOD
     Text[ polish ] = "Nieznana metoda do obiektu: ($Arg1).($Arg2)";
     Text[ portuguese_brazilian ] = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
     Text[ japanese ] = "Unknown method on object :($Arg1).($Arg2)";
-    Text[ korean ] = "°³Ã¼¿¡ ¾Ë¼ö ¾ø´Â ¸Ş¼Òµå : ($Arg1).($Arg2)";
+    Text[ korean ] = "ê°œì²´ì— ì•Œìˆ˜ ì—†ëŠ” ë©”ì†Œë“œ : ($Arg1).($Arg2)";
     Text[ chinese_simplified ] = "Unknown method on object:($Arg1).($Arg2)";
-    Text[ chinese_traditional ] = "ª«¥ó¤è¦¡¤£©ú¡G ($Arg1).($Arg2)";
+    Text[ chinese_traditional ] = "ç‰©ä»¶æ–¹å¼ä¸æ˜ï¼š ($Arg1).($Arg2)";
     Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ turkish ] = "Unknown method on object :($Arg1).($Arg2)";
     Text[ catalan ] = "Método desconocido ($Arg1) a ($Arg2)";
@@ -703,6 +703,7 @@ String
     Text = ;
 };
 */
+
 
 
 
