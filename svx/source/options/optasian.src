@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-30 20:12:06 $
+ *  last change: $Author: os $ $Date: 2001-09-28 09:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     {
         Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text = "~Westlicher Text und Interpunktion" ;
-        Text [ English ] = "Western text and punctuation" ;
+        Text = "~Westlicher Text und asiatische Interpunktion" ;
+        Text [ English ] = "Western text and Asian punctuation" ;
         Text[ english_us ] = "Western ~text and punctuation";
         Text[ portuguese ] = "~Texto ocidental e pontuaзгo";
         Text[ russian ] = "Западный текст и пунктуация";
