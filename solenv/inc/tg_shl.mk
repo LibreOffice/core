@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-22 16:54:05 $
+#   last change: $Author: hjs $ $Date: 2001-01-31 10:28:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -311,7 +311,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STACK) $(SHL$(TNR)BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL$(TNR)TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL$(TNR)DEF) \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ) \

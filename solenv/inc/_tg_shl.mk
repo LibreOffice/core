@@ -211,7 +211,7 @@ $(SHL1TARGETN) : \
         $(SHL1STACK) $(SHL1BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL1TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL1DEF) \
         $(USE_1IMPLIB) \
         $(STDOBJ) \
@@ -618,7 +618,7 @@ $(SHL2TARGETN) : \
         $(SHL2STACK) $(SHL2BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL2TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL2DEF) \
         $(USE_2IMPLIB) \
         $(STDOBJ) \
@@ -1025,7 +1025,7 @@ $(SHL3TARGETN) : \
         $(SHL3STACK) $(SHL3BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL3TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL3DEF) \
         $(USE_3IMPLIB) \
         $(STDOBJ) \
@@ -1432,7 +1432,7 @@ $(SHL4TARGETN) : \
         $(SHL4STACK) $(SHL4BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL4TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL4DEF) \
         $(USE_4IMPLIB) \
         $(STDOBJ) \
@@ -1839,7 +1839,7 @@ $(SHL5TARGETN) : \
         $(SHL5STACK) $(SHL5BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL5TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL5DEF) \
         $(USE_5IMPLIB) \
         $(STDOBJ) \
@@ -2246,7 +2246,7 @@ $(SHL6TARGETN) : \
         $(SHL6STACK) $(SHL6BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL6TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL6DEF) \
         $(USE_6IMPLIB) \
         $(STDOBJ) \
@@ -2653,7 +2653,7 @@ $(SHL7TARGETN) : \
         $(SHL7STACK) $(SHL7BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL7TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL7DEF) \
         $(USE_7IMPLIB) \
         $(STDOBJ) \
@@ -3060,7 +3060,7 @@ $(SHL8TARGETN) : \
         $(SHL8STACK) $(SHL8BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL8TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL8DEF) \
         $(USE_8IMPLIB) \
         $(STDOBJ) \
@@ -3467,7 +3467,7 @@ $(SHL9TARGETN) : \
         $(SHL9STACK) $(SHL9BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL9TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL9DEF) \
         $(USE_9IMPLIB) \
         $(STDOBJ) \
@@ -3874,7 +3874,7 @@ $(SHL10TARGETN) : \
         $(SHL10STACK) $(SHL10BASEX)	\
         /DEBUG /PDB:NONE \
         -out:$(BIN)$/_$(SHL10TARGET).dll \
-        -map:$(MISC)$/$(@:b).map \
+        -map:$(MISC)$/_$(@:b).map \
         -def:$(SHL10DEF) \
         $(USE_10IMPLIB) \
         $(STDOBJ) \
