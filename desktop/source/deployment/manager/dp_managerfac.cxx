@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_managerfac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:07:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ public:
         OUString const & context ) throw (RuntimeException);
 };
 
+// xxx todo: remove when PL has inserted res mgr mutex in tools:
 // XUnoTunnel: hack to set application solar mutex from within gui
 //______________________________________________________________________________
 sal_Int64 PackageManagerFactoryImpl::getSomething(
@@ -116,7 +117,7 @@ sal_Int64 PackageManagerFactoryImpl::getSomething(
     ::rtl::OString str( reinterpret_cast<sal_Char const *>(id.getConstArray()),
                         id.getLength() );
     if (str.equals("ResMgrMutexPointer"))
-        return reinterpret_cast<sal_Int64>(&g_pResMgrMmutex);
+        return reinterpret_cast<sal_Int64>(&g_pResMgrMutex);
     return 0;
 }
 
