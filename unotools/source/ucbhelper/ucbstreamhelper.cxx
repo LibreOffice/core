@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 11:14:07 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,25 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream )
         pStream->SetBufferSize( 4096 );
         pStream->SetError( xLockBytes->GetError() );
     }
+
+    return pStream;
+};
+
+SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream )
+{
+    SvStream* pStream = NULL;
+    if ( xStream->getOutputStream().is() )
+    {
+        UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
+        if ( xLockBytes.Is() )
+        {
+            pStream = new SvStream( xLockBytes );
+            pStream->SetBufferSize( 4096 );
+            pStream->SetError( xLockBytes->GetError() );
+        }
+    }
+    else
+        return CreateStream( xStream->getInputStream() );
 
     return pStream;
 };
