@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:44:02 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,8 @@
 #ifndef _WRONG_HXX
 #include <wrong.hxx>            // fuer OnlineSpell-Invalidierung
 #endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 #ifndef _ACORRECT_HXX
 #include <acorrect.hxx>         // Autokorrektur
