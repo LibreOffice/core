@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2209,6 +2209,20 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             eHoriRel = aRelOriTab[  nXRelTo ];
 
             /*
+             Absolute positions in winword for graphics are broken when the graphic is
+             in a table, all absolute positions now become relative to the top left
+             corner of that cell.  We really cannot import that feature correctly as
+             we have not the same functionality (yet). This normalizes the absolute
+             position by the left of the table, which at least puts it close, theres
+             nothing we can do about the vertical either.
+             */
+            if (nTable && eAnchor == FLY_PAGE)
+            {
+                pFSPA->nXaLeft -= GetTableLeft();
+                pFSPA->nXaRight -= GetTableLeft();
+            }
+
+            /*
             ##640##
             If we are inside another frame we have to adjust our x and y
             offsets correspondingly by the offsets of the parent
@@ -2769,17 +2783,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     long nHeightTw = pF->nYaBottom - pF->nYaTop;
     if (0 > nHeightTw)
         nHeightTw = 0;
-
-    /*
-     Absolute positions in winword for graphics are broken when the graphic is
-     in a table, all absolute positions now become relative to the top left
-     corner of that cell.  We really cannot import that feature correctly as
-     we have not the same functionality (yet). This normalizes the absolute
-     position by the left of the table, which at least puts it close, theres
-     nothing we can do about the vertical either.
-     */
-    if (nTable)
-        pF->nXaLeft -= GetTableLeft();
 
     ProcessEscherAlign( pRecord, pF, rFlySet, TRUE );
 

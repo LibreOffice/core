@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,6 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bVerticalEnviron = pRdr->bVerticalEnviron;
     bWasParaEnd = pRdr->bWasParaEnd;
     nAktColl        = pRdr->nAktColl;
-    nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
                                     // Tracking beginnt neu
     pRdr->bHdFtFtnEdn = TRUE;
@@ -895,7 +894,6 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
         pRdr->pPlcxMan = new WW8PLCFMan( pRdr->pSBase,
             pOldPlcxMan->GetManType(), nStartCp );
     }
-    pRdr->pSBase->SetNoAttrScan( 0 );
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
@@ -918,7 +916,6 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bWasParaEnd = bWasParaEnd;
     pRdr->bPgSecBreak   = bPgSecBreak;
     pRdr->nAktColl      = nAktColl;
-    pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
@@ -1744,8 +1741,6 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
             break;
         case 0x7:
             TabCellEnd();       // table cell end (Flags abfragen!)
-            if( bWasTabRowEnd )
-                pSBase->SetNoAttrScan( 0 );
             break;
         case 0xf:
             if( !bSpec )        // "Satellit"
@@ -1838,11 +1833,8 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                     pTest->Where() == nPosCp+1+nCpOfs)
                 {
                     TabCellEnd();
-                    if (bWasTabRowEnd)
-                    {
-                        ASSERT(nTable > 1, "Complicated subtable mishap");
-                        pSBase->SetNoAttrScan( 0 );
-                    }
+                    ASSERT(!(bWasTabRowEnd && (nTable > 1)),
+                        "Complicated subtable mishap");
                     bRet = FALSE;
                 }
             }

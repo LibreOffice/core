@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,11 @@ struct WW8TabBandDesc
 {
     WW8TabBandDesc* pNextBand;
     short nGapHalf;
+    short mnDefaultLeft;
+    short mnDefaultTop;
+    short mnDefaultRight;
+    short mnDefaultBottom;
+    bool mbHasSpacing;
     short nLineHeight;
     short nRows;
     short nCenter[MAX_COL + 1]; // X-Rand aller Zellen dieses Bandes
@@ -210,6 +215,8 @@ struct WW8TabBandDesc
     BOOL bLEmptyCol;    // SW: Links eine leere Zusatz-Spalte
     BOOL bREmptyCol;    // SW: dito rechts
     WW8_TCell* pTCs;
+    BYTE nOverrideSpacing[MAX_COL + 1];
+    short nOverrideValues[MAX_COL + 1][4];
     WW8_SHD* pSHDs;
     sal_uInt32 *pNewSHDs;
     WW8_BRC aDefBrcs[6];
@@ -231,8 +238,12 @@ struct WW8TabBandDesc
     void ProcessSprmTDxaCol(const BYTE* pParamsTDxaCol);
     void ProcessSprmTDelete(const BYTE* pParamsTDelete);
     void ProcessSprmTInsert(const BYTE* pParamsTInsert);
+    void ProcessSpacing(const BYTE* pParamsTInsert);
+    void ProcessSpecificSpacing(const BYTE* pParamsTInsert);
     void ReadShd(const BYTE* pS );
     void ReadNewShd(const BYTE* pS );
+
+    enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 };
 
 class WW8TabDesc
@@ -283,7 +294,6 @@ class WW8TabDesc
     void SetTabVertAlign( SwTableBox* pBox, short nWwIdx );
     void CalcDefaults();
     BOOL SetPamInCell( short nWwCol, BOOL bPam );
-    void DeleteCells( short nDelete );
     void InsertCells( short nIns );
     void AdjustNewBand();
 
@@ -319,6 +329,7 @@ public:
 
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     const short GetAktCol() const { return nAktCol; }
+    SwTableBox* GetTableBox() { return pTabBox; }
     // find name of numrule valid for current WW-COL
     const String& GetNumRuleName() const;
     void SetNumRuleName( const String& rName );
@@ -1030,6 +1041,18 @@ static BOOL IsEqual( WW8TabBandDesc* p1, WW8TabBandDesc* p2 )
     if( p1->nGapHalf != p2->nGapHalf )
         return FALSE;
 
+    if( p1->mbHasSpacing != p2->mbHasSpacing )
+        return FALSE;
+    if( p1->mnDefaultLeft != p2->mnDefaultLeft )
+        return FALSE;
+    if( p1->mnDefaultRight != p2->mnDefaultRight )
+        return FALSE;
+    if( p1->mnDefaultTop != p2->mnDefaultTop )
+        return FALSE;
+    if( p1->mnDefaultBottom != p2->mnDefaultBottom )
+        return FALSE;
+
+
     for( int i = 0; i <= p1->nWwCols; i++ )     // nCols+1 Angaben
         if( p1->nCenter[i] != p2->nCenter[i] )  // Toleranz bei nCenter ?
             return FALSE;
@@ -1335,6 +1358,79 @@ void WW8TabBandDesc::ProcessSprmTInsert(const BYTE* pParamsTInsert)
     }
 }
 
+void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
+{
+    BYTE nLen = pParams ? *(pParams - 1) : 0;
+    ASSERT(nLen == 6, "Unexpected spacing len");
+    if (nLen != 6)
+        return;
+    mbHasSpacing=true;
+    BYTE nWhichCell = *pParams++;
+    ASSERT(nWhichCell == 0, "Expected cell to be 0!");
+    BYTE nUnknown1 = *pParams++;
+    ASSERT(nUnknown1 == 0x1, "Unexpected value for spacing1");
+
+    BYTE nSideBits = *pParams++;
+    ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
+    BYTE nUnknown2 = *pParams++;
+    ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
+    USHORT nValue =  SVBT16ToShort( pParams );
+    for (int i = wwTOP; i <= wwRIGHT; i++)
+    {
+        switch (nSideBits & (1 << i))
+        {
+            case 1 << wwTOP:
+                mnDefaultTop = nValue;
+                break;
+            case 1 << wwLEFT:
+                mnDefaultLeft = nValue;
+                break;
+            case 1 << wwBOTTOM:
+                mnDefaultBottom = nValue;
+                break;
+            case 1 << wwRIGHT:
+                mnDefaultRight = nValue;
+                break;
+            case 0:
+                break;
+            default:
+                ASSERT(!this, "Impossible");
+                break;
+        }
+    }
+}
+
+void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
+{
+    BYTE nLen = pParams ? *(pParams - 1) : 0;
+    ASSERT(nLen == 6, "Unexpected spacing len");
+    if (nLen != 6)
+        return;
+    BYTE nWhichCell = *pParams++;
+    ASSERT(nWhichCell < nWwCols, "Cell out of range in spacings");
+    if (nWhichCell >= nWwCols)
+        return;
+
+    BYTE nUnknown1 = *pParams++;
+    ASSERT(nUnknown1 == 0x3, "Unexpected value for spacing1");
+
+    BYTE nSideBits = *pParams++;
+    ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
+    nOverrideSpacing[nWhichCell] |= nSideBits;
+
+    ASSERT(nOverrideSpacing[nWhichCell] < 0x10,
+        "Unexpected value for nSideBits");
+    BYTE nUnknown2 = *pParams++;
+    ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
+    USHORT nValue =  SVBT16ToShort( pParams );
+
+    for (int i=0; i < 4; i++)
+    {
+        if (nSideBits & (1 << i))
+            nOverrideValues[nWhichCell][i] = nValue;
+    }
+}
+
 void WW8TabBandDesc::ProcessSprmTDelete(const BYTE* pParamsTDelete)
 {
     if( nWwCols && pParamsTDelete )        // set one or more cell length(s)
@@ -1447,8 +1543,6 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     BOOL bComplex = pIo->pWwFib->fComplex;
     WW8_TablePos aTabPos;
 
-    WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
-
     WW8PLCFxSave1 aSave;
     pIo->pPlcxMan->GetPap()->Save( aSave );
 
@@ -1456,12 +1550,12 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
     eOri = HORI_LEFT;
 
+       WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
+
     // process pPap until end of table found
     do
     {
         short nTabeDxaNew      = SHRT_MAX;
-        pNewBand->nGapHalf     = 0;
-        pNewBand->nLineHeight  = 0;
         BOOL bTabRowJustRead   = FALSE;
         const BYTE* pShadeSprm = 0;
         const BYTE* pNewShadeSprm = 0;
@@ -1595,6 +1689,12 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                         pNewBand->ProcessSprmTDelete(pParams);
                     }
                     break;
+                case 0xD634:
+                    pNewBand->ProcessSpacing(pParams);
+                    break;
+                case 0xD632:
+                    pNewBand->ProcessSpecificSpacing(pParams);
+                    break;
                 }
                 aSprmIter++;
             }
@@ -1637,14 +1737,13 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                 pActBand->pNextBand = pNewBand;
                 pActBand = pNewBand;
             }
-            pNewBand = new WW8TabBandDesc;
             nBands++;
         }
         else
-        {
             delete pNewBand;
-            pNewBand = new WW8TabBandDesc;
-        }
+
+        pNewBand = new WW8TabBandDesc;
+
         nRows++;
         pActBand->nRows++;
 
@@ -1921,7 +2020,10 @@ void WW8TabDesc::CalcDefaults()
     // 4. Ausrichtung der Tabelle
     long nMidTab  = ( (long)nMinLeft  + nMaxRight ) / 2; // TabellenMitte
     long nRight   = pIo->nPgWidth - pIo->nPgRight - pIo->nPgLeft;
-
+#if 1
+    if (nMinLeft && (HORI_LEFT == eOri))
+        eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
+#else
      // set Position if not on adjusted to left border
     if (nMinLeft && (HORI_LEFT == eOri))
     {
@@ -1932,7 +2034,7 @@ void WW8TabDesc::CalcDefaults()
         else
             eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
     }
-
+#endif
     nDefaultSwCols = nMinCols;  // da Zellen einfuegen billiger ist als Mergen
     if( nDefaultSwCols == 0 )
         bOk = FALSE;
@@ -2550,63 +2652,61 @@ void WW8TabDesc::InsertCells( short nIns )
     // hier kann man auch noch optimieren, um FrmFmts zu sparen
 }
 
-void WW8TabDesc::SetTabBorders(SwTableBox* pBox,short nWwIdx)
+void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
 {
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
         return;                 // kuenstlich erzeugte Zellen -> Kein Rand
 
+
     SvxBoxItem aFmtBox;
+    if (pActBand->pTCs)     // neither Cell Border nor Default Border defined ?
+    {
+        WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
+        if (pIo->IsBorder(pT->rgbrc))
+            pIo->SetBorder(aFmtBox, pT->rgbrc);
+    }
+
+    if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwTOP))
+    {
+        aFmtBox.SetDistance(
+            pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwTOP],
+            BOX_LINE_TOP);
+    }
+    else
+        aFmtBox.SetDistance(pActBand->mnDefaultTop, BOX_LINE_TOP);
+    if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwBOTTOM))
+    {
+        aFmtBox.SetDistance(
+            pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwBOTTOM],
+            BOX_LINE_BOTTOM);
+    }
+    else
+        aFmtBox.SetDistance(pActBand->mnDefaultBottom,BOX_LINE_BOTTOM);
 
     // nGapHalf bedeutet bei WW ein *horizontaler* Abstand zwischen
     // Tabellenzelle und -Inhalt
-
-    short nHorDist  = (short)pActBand->nGapHalf;
-    short nVertDist = 0;
-
-    if( pActBand->pTCs ) // neither Cell Border nor Default Border defined ?
+    short nLeftDist =
+        pActBand->mbHasSpacing ? pActBand->mnDefaultLeft : pActBand->nGapHalf;
+    short nRightDist =
+        pActBand->mbHasSpacing ? pActBand->mnDefaultRight : pActBand->nGapHalf;
+    if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwLEFT))
     {
-        WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
-#if 1
-        if( pIo->IsBorder( pT->rgbrc ) )
-            pIo->SetBorder( aFmtBox, pT->rgbrc );
-#else
-        if( pIo->IsBorder( pT->rgbrc ) )
-        {
-            pIo->SetBorder( aFmtBox, pT->rgbrc, pSizeArray );
-            if ( nHorDist < MIN_BORDER_DIST )
-                nHorDist = MIN_BORDER_DIST; // Border -> min. MIN_BORDER_DIST
-        }
-#endif
+        aFmtBox.SetDistance(
+            pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwLEFT],
+            BOX_LINE_LEFT);
     }
-
-    // Vertikal benutzt WW den Absatzabstand oben und unten, um einen Abstand
-    // zu schaffen. Dieser ist hier leider noch unbekannt.  :-(
-
-
-    // Frueher stand hier das Hypo-Flag:
-    // Hypo-Tabellen alles einheitlich !
-    // if ( SwFltGetFlag( pIo->GetFieldFlags(), SwFltControlStack::HYPO ) )
-
-    // jetzt musz das alte Verhalten auch von HYPO gesondert aktiviert werden !
-#if 1
-    if( SwFltGetFlag( pIo->GetIniFlags1(), EQUAL_TAB_BORDERDISTS ) )
-        nVertDist = nHorDist;
-#else
-    if( SwFltGetFlag( pIo->GetIniFlags1(), EQUAL_TAB_BORDERDISTS ) )
+    else
+        aFmtBox.SetDistance(nLeftDist, BOX_LINE_LEFT);
+    if (pActBand->nOverrideSpacing[nWwIdx] & (1 << WW8TabBandDesc::wwRIGHT))
     {
-        if ( nHorDist < MIN_BORDER_DIST )
-            nHorDist = MIN_BORDER_DIST; // Border -> min. MIN_BORDER_DIST
-        nVertDist = nHorDist;
+        aFmtBox.SetDistance(
+            pActBand->nOverrideValues[nWwIdx][WW8TabBandDesc::wwRIGHT],
+            BOX_LINE_RIGHT);
     }
-#endif
+    else
+        aFmtBox.SetDistance(nRightDist,BOX_LINE_RIGHT);
 
-    aFmtBox.SetDistance( nHorDist, BOX_LINE_LEFT    );
-    aFmtBox.SetDistance( nVertDist, BOX_LINE_TOP    );
-
-    aFmtBox.SetDistance( nHorDist, BOX_LINE_RIGHT   );
-    aFmtBox.SetDistance( nVertDist, BOX_LINE_BOTTOM );
-
-    pBox->GetFrmFmt()->SetAttr( aFmtBox );
+    pBox->GetFrmFmt()->SetAttr(aFmtBox);
 }
 
 void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
@@ -2948,10 +3048,7 @@ void SwWW8ImplReader::TabCellEnd()
 void SwWW8ImplReader::Read_TabRowEnd( USHORT, const BYTE* pData, short nLen )   // Sprm25
 {
     if( ( nLen > 0 ) && ( *pData == 1 ) )
-    {
         bWasTabRowEnd = TRUE;
-        pSBase->SetNoAttrScan( 1 );
-    }
 }
 
 void SwWW8ImplReader::PopTableDesc()

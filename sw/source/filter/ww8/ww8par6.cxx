@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5439,6 +5439,7 @@ SprmReadInfo aSprmReadTab[] = {
     0xD61C, (FNReadRecord)0, //undocumented
     0xD61D, (FNReadRecord)0, //undocumented
     0xD634, (FNReadRecord)0, //undocumented
+    0xD632, (FNReadRecord)0, //undocumented
     0xD238, (FNReadRecord)0, //undocumented sep
     0xC64E, (FNReadRecord)0, //undocumented
     0xC64F, (FNReadRecord)0, //undocumented

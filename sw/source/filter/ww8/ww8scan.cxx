@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-31 09:58:18 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,7 +951,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     SvStream* pDataSt, const WW8Fib* pWwFib )
     : pWw8Fib( pWwFib ), pPieceGrpprls( 0 ), pMainFdoa( 0 ), pHdFtFdoa( 0 ),
     pMainTxbx( 0 ), pMainTxbxBkd( 0 ), pHdFtTxbx( 0 ), pHdFtTxbxBkd( 0 ),
-    pMagicTables(0), nNoAttrScan( 0 )
+    pMagicTables(0)
 {
     pPiecePLCF = OpenPieceTable( pTblSt, pWw8Fib );             // Complex
     if( pPiecePLCF )
@@ -3353,7 +3353,6 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
 {
     bDoingDrawTextBox = FALSE;
     pWwFib      = pBase->pWw8Fib;
-    pNoAttrScan = &pBase->nNoAttrScan;
 
     nLastWhereIdxCp = 0;
     memset( aD, 0, sizeof( aD ) );
@@ -3633,23 +3632,20 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 
     register const WW8PLCFxDesc* p = &aD[nIdx];
 
-    if ( !*pNoAttrScan || (*pNoAttrScan < (p->nEndPos - p->nStartPos + 1)) )
+    // first Sprm in a Group
+    if( p->bFirstSprm )
     {
-        // first Sprm in a Group
-        if( p->bFirstSprm )
-        {
-            if( p == pPap )
-                pRes->nFlags |= MAN_MASK_NEW_PAP;
-            else if( p == pSep )
-                pRes->nFlags |= MAN_MASK_NEW_SEP;
-        }
-        pRes->pMemPos = p->pMemPos;
-        pRes->nSprmId = GetId( pWwFib->nVersion, p );
-        if( p->nSprmsLen )
-        {
-            pRes->nMemLen = WW8GetSprmSize( pWwFib->nVersion, pRes->pMemPos,
-                &pRes->nSprmId ); // Length of actual sprm
-        }
+        if( p == pPap )
+            pRes->nFlags |= MAN_MASK_NEW_PAP;
+        else if( p == pSep )
+            pRes->nFlags |= MAN_MASK_NEW_SEP;
+    }
+    pRes->pMemPos = p->pMemPos;
+    pRes->nSprmId = GetId( pWwFib->nVersion, p );
+    if( p->nSprmsLen )
+    {
+        pRes->nMemLen = WW8GetSprmSize( pWwFib->nVersion, pRes->pMemPos,
+            &pRes->nSprmId ); // Length of actual sprm
     }
 }
 
@@ -3659,15 +3655,12 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
     register const WW8PLCFxDesc* p = &aD[nIdx];
 
-    if ( !*pNoAttrScan || (*pNoAttrScan < (p->nEndPos - p->nStartPos + 1)) )
+    if( p->pIdStk->Count() )
+        pRes->nSprmId = p->pIdStk->Top();       // get end position
+    else
     {
-        if( p->pIdStk->Count() )
-            pRes->nSprmId = p->pIdStk->Top();       // get end position
-        else
-        {
-            ASSERT( !this, "No Id on the Stack" );
-            pRes->nSprmId = 0;
-        }
+        ASSERT( !this, "No Id on the Stack" );
+        pRes->nSprmId = 0;
     }
 }
 
@@ -6166,7 +6159,7 @@ static SprmInfo aWwSprmTab[] = {
     0x9407, 2, L_FIX, // "sprmTDyaRowHeight" tap.dyaRowHeight;dya;word;
     0xD608, 0, L_VAR, // "sprmTDefTable" tap.rgtc;complex (see below);;
     0xD609, 0, L_VAR, // "sprmTDefTableShd" tap.rgshd;complex (see below);;
-    0x740A, 2, L_FIX, // "sprmTTlp" tap.tlp;TLP;4 bytes;
+    0x740A, 4, L_FIX, // "sprmTTlp" tap.tlp;TLP;4 bytes;
 //0x560B, 0, L_FIX, // "sprmTFBiDi" ;;;
 //0x740C, 0, L_FIX, // "sprmTHTMLProps" ;;;
     0xD620, 0, L_VAR, // "sprmTSetBrc" tap.rgtc[].rgbrc;complex (see below);5 bytes;
@@ -6191,6 +6184,7 @@ static SprmInfo aWwSprmTab[] = {
     0xD61B, 0, L_VAR, // undocumented
     0xD61C, 0, L_VAR, // undocumented
     0xD61D, 0, L_VAR, // undocumented
+    0xD632, 0, L_VAR, // undocumented
     0xD634, 0, L_VAR, // undocumented
     0xD238, 0, L_VAR, // undocumented sep
     0xC64E, 0, L_VAR, // undocumented

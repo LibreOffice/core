@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,6 @@ class WW8ReaderSave
     WW8TabDesc* pTableDesc;
     int nTable;
     USHORT nAktColl;
-    USHORT nNoAttrScan;
     sal_Unicode cSymbol;
     BOOL bIgnoreText    : 1;
     BOOL bDontCreateSep : 1;

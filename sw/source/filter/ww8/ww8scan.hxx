@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:57 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,10 +770,6 @@ private:
 
     const WW8Fib* pWwFib;
 
-    // Attribute komplett(!) ignorieren, die ueber n CPs aufgespannt sind;
-    // z.B. bei Char #7 (Zellen-/Zeilenende)
-    USHORT* pNoAttrScan;
-
     USHORT WhereIdx(BOOL* pbStart=0, long* pPos=0) const;
     void AdjustEnds(WW8PLCFxDesc& rDesc);
     void GetNewSprms(WW8PLCFxDesc& rDesc);
@@ -874,8 +870,6 @@ private:
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
     BYTE**              pPieceGrpprls;  // Attribute an Piece-Table
     UINT16              nPieceGrpprls;  // Anzahl davon
-    USHORT              nNoAttrScan;    // Attribute komplett(!) ignorieren, die ueber n CPs
-                                        // aufgespannt sind; z.B. bei Char #7 (Zellen-/Zeilenende)
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
     void DeletePieceTable();
@@ -889,9 +883,6 @@ public:
     WW8_CP WW8Fc2Cp( WW8_FC nFcPos ) const ;
     WW8_FC WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode = 0,
         WW8_CP* pNextPieceCp = 0, BOOL* pTestFlag = 0 ) const;
-
-    void SetNoAttrScan( USHORT nValue ) { nNoAttrScan = nValue; };
-    USHORT GetNoAttrScan() const { return nNoAttrScan; }
 
     USHORT WW8ReadString( SvStream& rStrm, String& rStr, WW8_CP nAktStartCp,
         long nTotalLen, rtl_TextEncoding eEnc ) const;

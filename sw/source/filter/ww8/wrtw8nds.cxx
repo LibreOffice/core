@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-11 12:42:12 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 /*  */
 
 USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
-    SwTwips &rPageSize, SwTwips &rTblOffset)
+    SwTwips &rTblOffset)
 
 {
     //Tell the undocumented table hack that everything between here and
@@ -1336,25 +1336,49 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
         rAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), rAt.Count() );
     }
 
-    SwHoriOrient eHOri = pFmt->GetHoriOrient().GetHoriOrient();
-    switch( eHOri )
+    ASSERT(pFmt, "No pFmt!");
+    if (pFmt)
     {
-    case HORI_CENTER:
-    case HORI_RIGHT:
-        if( bWrtWW8 )
-            InsUInt16( rAt, 0x5400 );
-        else
-            rAt.Insert( 182, rAt.Count() );
-        InsUInt16( rAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
-        break;
-    case HORI_NONE:
-    case HORI_LEFT_AND_WIDTH:
+        const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
+        const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
+        if (
+            (PRTAREA == rHori.GetRelationOrient() ||
+             FRAME == rHori.GetRelationOrient())
+            &&
+            (PRTAREA == rVert.GetRelationOrient() ||
+             FRAME == rVert.GetRelationOrient())
+           )
         {
-            const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
-            rTblOffset = rLRSp.GetLeft();
-            rPageSize -= rTblOffset + rLRSp.GetRight();
+            SwHoriOrient eHOri = rHori.GetHoriOrient();
+            switch (eHOri)
+            {
+                case HORI_CENTER:
+                case HORI_RIGHT:
+                    if( bWrtWW8 )
+                        InsUInt16( rAt, 0x5400 );
+                    else
+                        rAt.Insert( 182, rAt.Count() );
+                    InsUInt16( rAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
+                    break;
+                default:
+#if 1
+#if 1
+                    rTblOffset = rHori.GetPos();
+#else
+                    Point aOffset = pFmt->FindLayoutRect(true).Pos();
+                    rTblOffset = aOffset.X();
+#endif
+
+#else
+                    {
+                        const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
+                        rTblOffset = rLRSp.GetLeft();
+                        rPageSize -= rTblOffset + rLRSp.GetRight();
+                    }
+#endif
+                    break;
+            }
         }
-        break;
     }
     return rAt.Count();
 }
@@ -1397,8 +1421,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     BOOL bRelBoxSize = TRUE;
     SwTwips nTblSz = rTbl.GetFrmFmt()->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
-    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(
-        aAt,rTbl.GetFrmFmt(),nPageSize, nTblOffset);
+    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(aAt,rTbl.GetFrmFmt(),
+        nTblOffset);
     static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
 
     SwWriteTable* pTableWrt;
@@ -1411,6 +1435,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             (USHORT)nTblSz, FALSE );
     }
 
+    const SwFrmFmt *pDefaultFmt = 0;
     // WW6 / 8 can not have more then 31 / 64 cells
     const BYTE nMaxCols = rWW8Wrt.bWrtWW8 ? 64 : 31;
     // rCols are the array of all cols of the table
@@ -1603,23 +1628,81 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 if( 1 < nFlags )
                 {
                     if( nFlags == pRowSpans[ nBox ] )
-                        nFlags = 0x60;                  // start a new vert. merge
+                        nFlags = 0x60;      // start a new vert. merge
                     else
-                        nFlags = 0x20;                  // continue a vert. merge
+                        nFlags = 0x20;      // continue a vert. merge
                 }
                 else
-                    nFlags = 0;                     // no vert. merge
+                    nFlags = 0;             // no vert. merge
 
                 switch( rFmt.GetVertOrient().GetVertOrient() )
                 {
-                case VERT_CENTER:   nFlags |= 0x080;    break;
-                case VERT_BOTTOM:   nFlags |= 0x100;    break;
+                    case VERT_CENTER:
+                        nFlags |= 0x080;
+                        break;
+                    case VERT_BOTTOM:
+                        nFlags |= 0x100;
+                        break;
                 }
                 SwWW8Writer::InsUInt16( aAt, nFlags );
             }
             ++nRealBox;
             aAt.Insert( aNullBytes, 2, aAt.Count() );   // dummy
             rWW8Wrt.Out_SwFmtTableBox( aAt, rFmt.GetBox() ); // 8/16 Byte
+        }
+
+        //Cell widths and heights
+        if (rWW8Wrt.bWrtWW8)
+        {
+            if (!pDefaultFmt && nWWColMax)
+                pDefaultFmt = pBoxArr[ 0 ]->GetBox()->GetFrmFmt();
+
+            static USHORT __READONLY_DATA aBorders[] =
+            {
+                BOX_LINE_TOP, BOX_LINE_LEFT,
+                BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+            };
+            const USHORT* pBrd = aBorders;
+
+            //Export non default border spacing
+            for( nBox = 0, nRealBox = 0; nRealBox < nWWColMax; nBox++ )
+            {
+                if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+                    continue;
+                const SwFrmFmt& rFmt = *pBoxArr[ nBox ]->GetBox()->GetFrmFmt();
+
+                pBrd = aBorders;
+                for( int i = 0; i < 4; ++i, ++pBrd)
+                {
+                    USHORT nDist = rFmt.GetBox().GetDistance(*pBrd);
+                    if (pDefaultFmt->GetBox().GetDistance(*pBrd) != nDist)
+                    {
+                        SwWW8Writer::InsUInt16(aAt, 0xD632);
+                        aAt.Insert( BYTE(6), aAt.Count() );
+                        aAt.Insert( BYTE(nRealBox), aAt.Count() );
+                        aAt.Insert( BYTE(3), aAt.Count() );
+                        aAt.Insert( BYTE(1 << i), aAt.Count() );
+                        aAt.Insert( BYTE(3), aAt.Count() );
+                        SwWW8Writer::InsUInt16(aAt, nDist);
+                    }
+                }
+                ++nRealBox;
+            }
+
+            //Set Default, just taken from the first cell of the first
+            //row
+            pBrd = aBorders;
+            for( int i = 0; i < 4; ++i, ++pBrd)
+            {
+                SwWW8Writer::InsUInt16(aAt, 0xD634);
+                aAt.Insert( BYTE(6), aAt.Count() );
+                aAt.Insert( BYTE(0), aAt.Count() );
+                aAt.Insert( BYTE(3), aAt.Count() );
+                aAt.Insert( BYTE(1 << i), aAt.Count() );
+                aAt.Insert( BYTE(3), aAt.Count() );
+                SwWW8Writer::InsUInt16(aAt,
+                    pDefaultFmt->GetBox().GetDistance(*pBrd));
+            }
         }
 
         // Background

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ public:
     void WriteCellEnd();
     void WriteRowEnd();
     USHORT StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
-        SwTwips &rPageSize, SwTwips &rTblOffset);
+        SwTwips &rPageSize);
 
     void OutSwString( const String&, xub_StrLen nStt, xub_StrLen nLen,
                         BOOL bUnicode, rtl_TextEncoding eChrSet );

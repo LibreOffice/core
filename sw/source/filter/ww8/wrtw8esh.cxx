@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,11 +519,9 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
     if (bExportAsTable)
     {
         SwTwips nTblSz = rFrmFmt.GetFrmSize().GetWidth();
-        SwTwips nPageSize = nTblSz;
         SwTwips nTblOffset=0;
         WW8Bytes aAt( 128, 128 );
-        USHORT nStdAtLen = StartTableFromFrmFmt(aAt,&rFrmFmt,nPageSize,
-            nTblOffset);
+        USHORT nStdAtLen = StartTableFromFrmFmt(aAt,&rFrmFmt,nTblOffset);
 
         static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
         BYTE nWWColMax = 1;
@@ -580,12 +578,9 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
             SwWW8Writer::InsUInt16( aAt, nWWColMax * 12 + 4 );
             aAt.Insert( nWWColMax, aAt.Count() );
         }
-        nTblOffset = -8;
         SwWW8Writer::InsUInt16( aAt, (USHORT)nTblOffset );
 
         SwTwips nCalc = rFrmFmt.GetFrmSize().GetWidth();
-        nCalc *= nPageSize;
-        nCalc /= nTblSz;
         SwWW8Writer::InsUInt16( aAt, (USHORT)(nTblOffset + nCalc ));
 
         if( bWrtWW8 )
@@ -594,6 +589,25 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
             SwWW8Writer::InsUInt16( aAt, nFlags );
             aAt.Insert( aNullBytes, 2, aAt.Count() );
             Out_SwFmtTableBox( aAt, rFrmFmt.GetBox() );
+
+            static USHORT __READONLY_DATA aBorders[] =
+            {
+                BOX_LINE_TOP, BOX_LINE_LEFT,
+                BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+            };
+            const USHORT* pBrd = aBorders;
+
+            for( int i = 0; i < 4; ++i, ++pBrd)
+            {
+                SwWW8Writer::InsUInt16(aAt, 0xD634);
+                aAt.Insert( BYTE(6), aAt.Count() );
+                aAt.Insert( BYTE(0), aAt.Count() );
+                aAt.Insert( BYTE(3), aAt.Count() );
+                aAt.Insert( BYTE(1 << i), aAt.Count() );
+                aAt.Insert( BYTE(3), aAt.Count() );
+                SwWW8Writer::InsUInt16(aAt,
+                    rFrmFmt.GetBox().GetDistance(*pBrd));
+            }
         }
 
         pPapPlc->AppendFkpEntry( Strm().Tell(),
@@ -2350,6 +2364,12 @@ INT32 SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight,
                 DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetRight() ) );
     }
+    else
+    {
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
+    }
+
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_UL_SPACE, TRUE, &pItem ))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
