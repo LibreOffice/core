@@ -17457,3 +17457,4 @@ _real@8@3ffd820c49ba5e354000
 ?SvxUnoGetResourceRanges@@YA_NFAAH00@Z
 ?SvxUnogetApiNameForItem@@YAXFABVString@@AAVOUString@rtl@@@Z
 ?SvxUnogetInternalNameForItem@@YAXFABVOUString@rtl@@AAVString@@@Z
+?__query@?$Reference@VXNumberingFormatter@text@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
