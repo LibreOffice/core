@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:52:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ english_us ] = "~Show changes in spreadsheet" ;
         Text [ portuguese_brazilian ] = "~Mostrar altera��es na planilha" ;
         Text [ swedish ] = "Visa ~�ndringar i tabellen" ;
-        Text [ danish ] = "Vis �ndringerne i regnearket" ;
+        Text [ danish ] = "~Vis �ndringerne i regnearket" ;
         Text [ italian ] = "Mostra modifiche nella tabella" ;
         Text [ spanish ] = "~Mostrar las modificaciones en la hoja" ;
         Text [ french ] = "Afficher les modifications dans la feuille de calcul" ;
@@ -105,6 +105,8 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ hebrew ] = "~Änderungen in der Tabelle anzeigen";
         Text[ hindi ] = "स्प्रेडशीट् में परिवर्तनों को ~दिखाओ";
         Text[ slovak ] = "~Zobraziť zmeny v zošite";
+        Text[ hungarian ] = "~Munkafüzet változtatásainak megtekintése";
+        Text[ slovenian ] = "~Pokaži spremembe v preglednici";
     };
     FixedLine FL_FILTER
     {
@@ -137,6 +139,8 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ hebrew ] = "Filtereinstellungen";
         Text[ hindi ] = "फिल्टर निर्धारण";
         Text[ slovak ] = "Nastavenie filtra";
+        Text[ hungarian ] = "Szűrő beállításai";
+        Text[ slovenian ] = "Nastavitve filtra";
     };
     CheckBox CB_HIGHLIGHT_ACCEPT
     {
@@ -148,7 +152,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ english_us ] = "Show ~accepted changes" ;
         Text [ portuguese_brazilian ] = "Mostrar altera��es ~aceitas" ;
         Text [ swedish ] = "Visa acc~epterade �ndringar" ;
-        Text [ danish ] = "Vis accepterede �ndringer" ;
+        Text [ danish ] = "Vis ~accepterede �ndringer" ;
         Text [ italian ] = "Mostra le modifiche a~ccettate" ;
         Text [ spanish ] = "Mostrar las modificaciones aceptadas" ;
         Text [ french ] = "Afficher les modifications accept�es" ;
@@ -171,6 +175,8 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ hebrew ] = "A~kzeptierte Änderungen anzeigen";
         Text[ hindi ] = "~स्वीकृत परिवर्तनों को दिखाओ";
         Text[ slovak ] = "Zobraziť ~akceptované zmeny";
+        Text[ hungarian ] = "~Elfogadott változtatások megtekintése";
+        Text[ slovenian ] = "Pokaži spr~ejete spremembe";
     };
     CheckBox CB_HIGHLIGHT_REJECT
     {
@@ -182,7 +188,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ english_us ] = "Show ~rejected changes" ;
         Text [ portuguese_brazilian ] = "Mostrar altera��es ~rejeitadas" ;
         Text [ swedish ] = "Visa i~gnorerade �ndringar" ;
-        Text [ danish ] = "Vis for~kastede �ndringer" ;
+        Text [ danish ] = "Vis a~fviste �ndringer" ;
         Text [ italian ] = "Mostra le modifiche ri~fiutate" ;
         Text [ spanish ] = "Mostrar las modificaciones rechazadas" ;
         Text [ french ] = "Afficher les modifications refus�es" ;
@@ -205,6 +211,8 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ hebrew ] = "Ab~gelehnte Änderungen anzeigen";
         Text[ hindi ] = "~अस्वीकृत परिवर्तनों को दिखाओ";
         Text[ slovak ] = "Zob~raziť odmietnuté zmeny";
+        Text[ hungarian ] = "El~vetett változtatások megtekintése";
+        Text[ slovenian ] = "Pokaži zav~rnjene spremembe";
     };
     OKButton BTN_OK
     {
@@ -268,6 +276,8 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText[ hebrew ] = "Verkleinern/Vergrößern";
         QuickHelpText[ hindi ] = "छोटा करो/बड़ा करो";
         QuickHelpText[ slovak ] = "Minimalizovať/Maximalizovať";
+        QuickHelpText[ hungarian ] = "Minimalizálás/Maximalizálás";
+        QuickHelpText[ slovenian ] = "Minimiraj/Maksimiraj";
     };
     Text [ english_us ] = "Show Changes" ;
     Text [ portuguese_brazilian ] = "Mostrar Altera��es" ;
@@ -295,7 +305,10 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ hebrew ] = "Änderungen anzeigen";
     Text[ hindi ] = "परिवर्तनों को दिखाओ";
     Text[ slovak ] = "Zobraziť zmeny";
+    Text[ hungarian ] = "Változtatások megtekintése";
+    Text[ slovenian ] = "Pokaži spremembe";
 };
+
 
 
 
