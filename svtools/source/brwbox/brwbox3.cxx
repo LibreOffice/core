@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-13 12:34:10 $
+ *  last change: $Author: oj $ $Date: 2002-11-13 11:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,8 @@ void BrowseBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& 
         _rStateSet.AddState( AccessibleStateType::VISIBLE );
     if ( GetCurrRow() == _nRow && GetCurrColumn() == _nColumn )
         _rStateSet.AddState( AccessibleStateType::FOCUSED );
-    _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+    else // only transient when column is not focused
+        _rStateSet.AddState( AccessibleStateType::TRANSIENT );
 }
 // -----------------------------------------------------------------------------
 
