@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:38:42 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,11 @@ void XclImpFont::ReadFont( XclImpStream& rStrm )
     SetAllUsedFlags( true );
 }
 
+void XclImpFont::ReadEfont( XclImpStream& rStrm )
+{
+    rStrm >> maData.mnColor;
+}
+
 void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
 {
     DBG_ASSERT_BIFF( GetBiff() == xlBiff8 );
@@ -490,6 +495,12 @@ void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
         // #i3006# Calculate the width of '0' from first font and current printer.
         SetCharWidth( maAppFont );
     }
+}
+
+void XclImpFontBuffer::ReadEfont( XclImpStream& rStrm )
+{
+    if( XclImpFont* pFont = maFontList.Last() )
+        pFont->ReadEfont( rStrm );
 }
 
 void XclImpFontBuffer::FillToItemSet(
@@ -1338,7 +1349,8 @@ void XclImpXFBuffer::ApplyPattern(
     // #108770# set 'Standard' number format for all Boolean cells
     ULONG nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
     // do nothing for default cell format without explicit number format
-    if( (nXFIndex != EXC_XF_DEFAULTCELL) || (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND) )
+    // #i34061# but always for BIFF2
+    if( (GetBiff() == xlBiff2) || (nXFIndex != EXC_XF_DEFAULTCELL) || (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND) )
         if( XclImpXF* pXF = GetXF( nXFIndex ) )
             pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
 }
