@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:29:32 $
+ *  last change: $Author: ssa $ $Date: 2002-07-17 14:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,8 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
         if( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) )
         {
             WinBits nFloatWinStyle = nStyle;
-            nFloatWinStyle |= WB_CLOSEABLE;
+            // #99154# floaters are not closeable by default anymore, eg fullscreen floater
+            // nFloatWinStyle |= WB_CLOSEABLE;
             mbFrame = TRUE;
             mbOverlapWin = TRUE;
             SystemWindow::ImplInit( pParent, nFloatWinStyle & ~WB_BORDER, NULL );
