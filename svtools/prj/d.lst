@@ -263,6 +263,7 @@ hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svtools\xmlcnitm.hxx
 hedabu: ..\inc\tresitem.hxx %_DEST%\inc%_EXT%\svtools\tresitem.hxx
 hedabu: ..\inc\urihelper.hxx %_DEST%\inc%_EXT%\svtools\urihelper.hxx
 hedabu: ..\inc\reginfo.hxx %_DEST%\inc%_EXT%\svtools\reginfo.hxx
+hedabu: ..\inc\cacheoptions.hxx %_DEST%\inc%_EXT%\svtools\cacheoptions.hxx
 hedabu: ..\inc\cjkoptions.hxx %_DEST%\inc%_EXT%\svtools\cjkoptions.hxx
 hedabu: ..\inc\pathoptions.hxx %_DEST%\inc%_EXT%\svtools\pathoptions.hxx
 hedabu: ..\inc\useroptions.hxx %_DEST%\inc%_EXT%\svtools\useroptions.hxx
