@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-29 16:36:31 $
+#   last change: $Author: rt $ $Date: 2004-07-30 09:08:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,6 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
-.IF "$(BSCLIENT)"==""
 
 .IF "$(UPDATER)"!=""
 ALLTAR : updatepack
@@ -106,7 +105,6 @@ openoffice:
 
 .ENDIF			# "$(alllangiso)"!=""
 
-.ENDIF          # "$(BSCLIENT)"==""
 
 ooolanguagepack_%:
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist ..$/inc_openoffice$/unix$/packagelist_languagepack.txt -u $(OUT) -buildid $(BUILD) -msitemplate ..$/inc_openoffice$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -msifiles ..$/inc_openoffice$/windows$/msi_files -languagepack
