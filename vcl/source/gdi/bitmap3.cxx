@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-14 10:33:38 $
+ *  last change: $Author: ka $ $Date: 2001-08-27 12:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,9 +1767,16 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
         rtl_zeroMemory( pCountTable, nTotalColors * sizeof( PopularColorCount ) );
 
         for( nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
+        {
             for( nG = 0; nG < 256; nG += nColorOffset )
+            {
                 for( nB = 0; nB < 256; nB += nColorOffset )
-                    pCountTable[ nIndex ].mnIndex = nIndex++;
+                {
+                    pCountTable[ nIndex ].mnIndex = nIndex;
+                    nIndex++;
+                }
+            }
+        }
 
         if( pRAcc->HasPalette() )
         {
