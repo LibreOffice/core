@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-10 16:20:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: vg $ $Date: 2003-04-10 16:20:53 $ $Revision: 1.51 $
+ // $Author: hr $ $Date: 2003-04-29 17:14:00 $ $Revision: 1.52 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -135,7 +135,7 @@ String SCSTR_QHELP_POSWND
     Text [ english ] = "Table Area" ;
     Text [ norwegian ] = "Table Area" ;
     Text [ italian ] = "Area tabella" ;
-    Text [ portuguese_brazilian ] = "?rea da Tabela" ;
+    Text [ portuguese_brazilian ] = "Área da Planilha" ;
     Text [ portuguese ] = "Área da folha" ;
     Text [ finnish ] = "Taulukkoalue" ;
     Text [ danish ] = "Regnearksområde" ;
@@ -156,6 +156,9 @@ String SCSTR_QHELP_POSWND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Àrea del full";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
+    Text[ czech ] = "Oblast listu";
+    Text[ hebrew ] = "Tabellenbereich";
+    Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
 };
 
 String SCSTR_QHELP_INPUTWND
@@ -185,6 +188,9 @@ String SCSTR_QHELP_INPUTWND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línia d'entrada";
     Text[ thai ] = "à¸›à¹‰à¸­à¸™à¸šà¸£à¸£à¸—à¸±à¸”";
+    Text[ czech ] = "VstupnÃ­ Å™Ã¡dka";
+    Text[ hebrew ] = "Eingabezeile";
+    Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤°à¥‡à¤–à¤¾";
 };
 
 String SCSTR_QHELP_BTNCALC
@@ -193,7 +199,7 @@ String SCSTR_QHELP_BTNCALC
     Text [ english ] = "Function Autopilot" ;
     Text [ norwegian ] = "Function Autopilot" ;
     Text [ italian ] = "Pilota automatico di funzione" ;
-    Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico" ;
+    Text [ portuguese_brazilian ] = "Assistente: Funções" ;
     Text [ portuguese ] = "Função AutoPiloto" ;
     Text [ finnish ] = "Ohjattu toiminto: Funktiot" ;
     Text [ danish ] = "FunktionsAutoPilot" ;
@@ -204,16 +210,19 @@ String SCSTR_QHELP_BTNCALC
     Text [ english_us ] = "AutoPilot: Functions" ;
     Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç†ï¼šå‡½æ•°";
     Text[ russian ] = "Ìàñòåğ: Ôóíêöèè";
-    Text[ polish ] = "AutoPilot funkcji";
+    Text[ polish ] = "AutoPilot: Funkcje";
     Text[ japanese ] = "é–¢æ•°ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆ";
     Text[ chinese_traditional ] = "å‡½æ•¸è‡ªå‹•åŠ©ç†";
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÏÇáÇÊ";
     Text[ greek ] = "Function Autopilot";
-    Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿: ê¸°ëŠ¥";
-    Text[ turkish ] = "Fonksyon OtoPilotu";
+    Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿: í•¨ìˆ˜";
+    Text[ turkish ] = "OtoPilot: Fonksiyonlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot: funcions";
     Text[ thai ] = "à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´: à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
+    Text[ czech ] = "PrÅ¯vodce: funkce";
+    Text[ hebrew ] = "Funktionsautopilot";
+    Text[ hindi ] = "à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥: à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥à¤¸";
 };
 
 String SCSTR_QHELP_BTNOK
@@ -234,16 +243,19 @@ String SCSTR_QHELP_BTNOK
     Text [ english_us ] = "Accept" ;
     Text[ chinese_simplified ] = "é‡‡ç”¨";
     Text[ russian ] = "Ïğèíÿòü";
-    Text[ polish ] = "Zaakceptuj";
+    Text[ polish ] = "Akceptuj";
     Text[ japanese ] = "OK";
     Text[ chinese_traditional ] = "æ¡ç”¨";
     Text[ arabic ] = "ÅÏÎÇá";
     Text[ greek ] = "Accept";
     Text[ korean ] = "ì ìš©";
-    Text[ turkish ] = "Kabul";
+    Text[ turkish ] = "Onayla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta";
     Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸š";
+    Text[ czech ] = "PÅ™ijmout";
+    Text[ hebrew ] = "â€®×§×‘×œ×ª ×©×™× ×•×™×â€¬";
+    Text[ hindi ] = "à¤¸à¥à¤µà¥€à¤•à¤¾à¤°";
 };
 
 String SCSTR_QHELP_BTNCANCEL
@@ -263,7 +275,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text [ english_us ] = "Cancel" ;
     Text[ chinese_simplified ] = "èˆå¼ƒ";
     Text[ russian ] = "Îòìåíèòü";
-    Text[ polish ] = "Odrzuæ";
+    Text[ polish ] = "Anuluj";
     Text[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«";
     Text[ chinese_traditional ] = "æ¨æ£„";
     Text[ arabic ] = "ÑİÖ";
@@ -273,6 +285,9 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cancel.la";
     Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸";
+    Text[ czech ] = "ZruÅ¡it";
+    Text[ hebrew ] = "â€®×‘×™×˜×•×œâ€¬";
+    Text[ hindi ] = "à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
 };
 
 String SCSTR_QHELP_BTNSUM
@@ -302,6 +317,9 @@ String SCSTR_QHELP_BTNSUM
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suma";
     Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡";
+    Text[ czech ] = "SouÄet";
+    Text[ hebrew ] = "â€®×¡×›×•×â€¬";
+    Text[ hindi ] = "à¤•à¥à¤²à¤œà¥‹à¤¡à¤¼";
 };
 
 String SCSTR_QHELP_BTNEQUAL
@@ -310,7 +328,7 @@ String SCSTR_QHELP_BTNEQUAL
     Text [ english ] = "Funktion" ;
     Text [ norwegian ] = "Funktion" ;
     Text [ italian ] = "Funzione" ;
-    Text [ portuguese_brazilian ] = "Fun??o" ;
+    Text [ portuguese_brazilian ] = "Função" ;
     Text [ portuguese ] = "Função" ;
     Text [ finnish ] = "Funktio" ;
     Text [ danish ] = "Funktion" ;
@@ -327,10 +345,13 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ arabic ] = "ÇáÏÇáÉ";
     Text[ greek ] = "ÓõíÜñôçóç";
     Text[ korean ] = "ìˆ˜ì‹ ëª¨ìŒ";
-    Text[ turkish ] = "İşlev";
+    Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funció";
     Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
+    Text[ czech ] = "Funkce";
+    Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
+    Text[ hindi ] = "à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥";
 };
 
 String RID_OBJECTBAR_FORMAT
@@ -339,7 +360,7 @@ String RID_OBJECTBAR_FORMAT
     Text [ english ] = "Table Object Bar" ;
     Text [ norwegian ] = "Object Bar" ;
     Text [ italian ] = "Barra degli oggetti per tabelle" ;
-    Text [ portuguese_brazilian ] = "Object Bar" ;
+    Text [ portuguese_brazilian ] = "Barra de Objetos de Planilha" ;
     Text [ portuguese ] = "Barra de objectos da folha de cálculo" ;
     Text [ french ] = "Barre d'objets de classeur" ;
     Text [ dutch ] = "Werkbladobjectbalk" ;
@@ -350,7 +371,7 @@ String RID_OBJECTBAR_FORMAT
     Text [ english_us ] = "Spreadsheet Object Bar" ;
     Text[ chinese_simplified ] = "å·¥ä½œè¡¨å¯¹è±¡æ ";
     Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü ıëåêòğîííîé òàáëèöû";
-    Text[ polish ] = "Pasek obiektów arkusza kalkulacyjnego.";
+    Text[ polish ] = "Pasek obiektów arkusza kalkulacyjnego";
     Text[ japanese ] = "è¡¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
     Text[ chinese_traditional ] = "å·¥ä½œè¡¨ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÌÏÇæá";
@@ -360,6 +381,9 @@ String RID_OBJECTBAR_FORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes del full de càlcul";
     Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
+    Text[ czech ] = "Panel nÃ¡strojÅ¯ SeÅ¡it";
+    Text[ hebrew ] = "Tabellenobjektleiste";
+    Text[ hindi ] = "à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 
 ToolBox RID_OBJECTBAR_FORMAT
@@ -1130,7 +1154,7 @@ String RID_OBJECTBAR_PREVIEW
     Text [ english ] = "Page Preview Object Bar" ;
     Text [ norwegian ] = "Forhåndsvisning av side" ;
     Text [ italian ] = "Barra degli oggetti dell'anteprima stampa" ;
-    Text [ portuguese_brazilian ] = "Examinar P?gina" ;
+    Text [ portuguese_brazilian ] = "Barra de Objetos de Visualização de Página" ;
     Text [ portuguese ] = "Previsualização" ;
     Text [ finnish ] = "Sivunäkymän muotoilurivi" ;
     Text [ danish ] = "Sidevisningobjektlinje" ;
@@ -1141,7 +1165,7 @@ String RID_OBJECTBAR_PREVIEW
     Text [ english_us ] = "Page View Object Bar" ;
     Text[ chinese_simplified ] = "é¡µé¢å¯¹è±¡æ ";
     Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü âèäà ñòğàíèöû";
-    Text[ polish ] = "Pasek obiektów podgl¹du strony";
+    Text[ polish ] = "Pasek obiektów widoku strony";
     Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
     Text[ chinese_traditional ] = "é é¢æª¢è¦–ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ãÚÇíäÉ ÇáÕİÍÉ";
@@ -1151,6 +1175,9 @@ String RID_OBJECTBAR_PREVIEW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de la visualització de pàgina";
     Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸«à¸™à¹‰à¸²";
+    Text[ czech ] = "Panel nÃ¡strojÅ¯ ZobrazenÃ­ strÃ¡nky";
+    Text[ hebrew ] = "Seitenansichtobjektleiste";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤¦à¥ƒà¤¶à¥à¤¯ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 
 ToolBox RID_OBJECTBAR_PREVIEW
@@ -1254,20 +1281,23 @@ String RID_OBJECTBAR_TOOLS
     Text [ swedish ] = "Verktygslist" ;
     Text [ danish ] = "Værktøjslinje" ;
     Text [ portuguese ] = "Barra de ferramentas" ;
-    Text [ portuguese_brazilian ] = "Werkzeugleiste" ;
+    Text [ portuguese_brazilian ] = "Barra de Ferramentas Principal" ;
     Text[ chinese_simplified ] = "ä¸»å·¥å…·æ ";
     Text[ russian ] = "Ãëàâíàÿ ïàíåëü èíñòğóìåíòîâ";
-    Text[ polish ] = "Pasek narzêdziowy";
+    Text[ polish ] = "G³ówny pasek narzêdzi";
     Text[ japanese ] = "æ¨™æº–ãƒ„ãƒ¼ãƒ«ãƒãƒ¼";
     Text[ chinese_traditional ] = "ä¸»å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáÃÏæÇÊ";
     Text[ greek ] = "ÃñáììŞ åñãáëåßùí";
-    Text[ korean ] = "ì£¼ ë„êµ¬ëª¨ìŒ";
+    Text[ korean ] = "ì£¼ ë„êµ¬ ëª¨ìŒ";
     Text[ turkish ] = "Ana araç çubuğu";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Päätyökalurivi";
     Text[ catalan ] = "Barra d'eines principal";
     Text[ thai ] = "à¹à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­à¸«à¸¥à¸±à¸";
+    Text[ czech ] = "HlavnÃ­ panel nÃ¡strojÅ¯";
+    Text[ hebrew ] = "â€®×¡×¨×’×œ ×¨××©×™â€¬";
+    Text[ hindi ] = "à¤®à¥à¤–à¥à¤¯ à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 
 ToolBox RID_OBJECTBAR_TOOLS
@@ -1438,7 +1468,7 @@ FloatingWindow RID_TBXCTL_INSERT
     Text [ swedish ] = "Infoga" ;
     Text [ danish ] = "Indsæt" ;
     Text [ portuguese ] = "Inserir" ;
-    Text [ portuguese_brazilian ] = "Einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir" ;
     Text[ chinese_simplified ] = "æ’å…¥";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
@@ -1472,6 +1502,9 @@ FloatingWindow RID_TBXCTL_INSERT
     Text[ finnish ] = "Lisää";
     Text[ catalan ] = "Insereix";
     Text[ thai ] = "à¹à¸—à¸£à¸";
+    Text[ czech ] = "VloÅ¾it";
+    Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 
 FloatingWindow RID_TBXCTL_INSCELLS
@@ -1491,7 +1524,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text [ dutch ] = "Cellen invoegen" ;
     Text [ swedish ] = "Infoga celler" ;
     Text [ danish ] = "Indsæt celler" ;
-    Text [ portuguese_brazilian ] = "Zellen einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Células" ;
     Text [ portuguese ] = "Inserir células" ;
     Text[ chinese_simplified ] = "æ’å…¥å•å…ƒæ ¼";
     Text[ russian ] = "Âñòàâèòü ÿ÷åéêè";
@@ -1536,6 +1569,9 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ finnish ] = "Lisää solut";
     Text[ catalan ] = "Insereix cel.les";
     Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸‹à¸¥à¸¥à¹Œ";
+    Text[ czech ] = "VloÅ¾it buÅˆky";
+    Text[ hebrew ] = "Zellen einfÃ¼gen";
+    Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤ à¥‹à¤‚ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 
 FloatingWindow RID_TBXCTL_INSOBJ
@@ -1599,7 +1635,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         };
     };
     Text [ portuguese ] = "Inserir objecto" ;
-    Text [ portuguese_brazilian ] = "Objekt einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Objeto" ;
     Text[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü îáúåêò";
     Text[ polish ] = "Wstaw obiekt";
@@ -1613,6 +1649,9 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Text[ finnish ] = "Lisää objekti";
     Text[ catalan ] = "Insereix un objecte";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "VloÅ¾it objekt";
+    Text[ hebrew ] = "â€®×”×•×¡×¤×ª ××•×‘×™×§×˜â€¬";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 
  // Image-Liste fuer ToolBoxen -----------------------------------------------
@@ -2017,28 +2056,31 @@ String RID_OBJECTBAR_APP
     TEXT [ english ] = "Function Bar (viewing mode)" ;
     Text [ dutch ] = "Werkbalk" ;
     Text [ english_us ] = "Function Bar (viewing mode)" ;
-    Text [ italian ] = "Barra delle funzioni" ;
-    Text [ spanish ] = "Barra de funciones" ;
-    Text [ french ] = "Barre de fonctions" ;
-    Text [ swedish ] = "Funktionslist" ;
+    Text [ italian ] = "Barra delle funzioni (modo visualizzazione)" ;
+    Text [ spanish ] = "Barra de funciones (modo vista)" ;
+    Text [ french ] = "Barre de fonctions (mode visualisation)" ;
+    Text [ swedish ] = "Funktionslist (visningsläge)" ;
     Text [ danish ] = "Funktionslinje" ;
-    Text [ portuguese_brazilian ] = "Funktionsleiste" ;
+    Text [ portuguese_brazilian ] = "Barra de Funções" ;
     Text [ portuguese ] = "Barra de funções" ;
-    Text[ chinese_simplified ] = "åŠŸèƒ½æ ";
+    Text[ chinese_simplified ] = "åŠŸèƒ½æ (è§†å›¾æ¨¡å¼)";
     Text[ russian ] = "Ïàíåëü ôóíêöèé";
     Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ¼";
-    Text[ chinese_traditional ] = "å·¥å…·åˆ—";
+    Text[ japanese ] = "ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ¼ï¼ˆè¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ï¼‰";
+    Text[ chinese_traditional ] = "å·¥å…·åˆ—(æª¢è¦–æ¨¡å¼)";
     Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
     Text[ dutch ] = "Werkbalk";
-    Text[ chinese_simplified ] = "åŠŸèƒ½æ ";
+    Text[ chinese_simplified ] = "åŠŸèƒ½æ (è§†å›¾æ¨¡å¼)";
     Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
-    Text[ korean ] = "í•¨ìˆ˜ ëª¨ìŒ";
-    Text[ turkish ] = "İşlev çubuğu";
+    Text[ korean ] = "ê¸°ëŠ¥ ëª¨ìŒ (ë³´ê¸° ëª¨ë“œ)";
+    Text[ turkish ] = "Fonksiyon çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de funcions";
     Text[ finnish ] = "Toimintorivi";
     Text[ thai ] = "à¹à¸–à¸šà¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
+    Text[ czech ] = "Panel funkcÃ­";
+    Text[ hebrew ] = "â€®×¡×¨×’×œ ×¤×¢×•×œ×•×ª × ×¤×•×¦×•×ªâ€¬";
+    Text[ hindi ] = "à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
 };
 
 ToolBox RID_OBJECTBAR_APP
@@ -2116,6 +2158,15 @@ ToolBox RID_OBJECTBAR_APP
     };
     Scroll = TRUE ;
 };
+
+
+
+
+
+
+
+
+
 
 
 
