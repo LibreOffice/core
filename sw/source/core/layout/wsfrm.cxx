@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-21 13:59:56 $
+ *  last change: $Author: ama $ $Date: 2002-06-27 10:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,8 +644,13 @@ void SwFrm::ChgSize( const Size& aNewSize )
             GetNext()->_InvalidatePos();
             GetNext()->InvalidatePage( pPage );
         }
-        if ( IsLayoutFrm() && ((SwLayoutFrm*)this)->Lower() )
-            ((SwLayoutFrm*)this)->Lower()->_InvalidateSize();
+        if( IsLayoutFrm() )
+        {
+            if( IsRightToLeft() )
+                _InvalidatePos();
+            if( ((SwLayoutFrm*)this)->Lower() )
+                ((SwLayoutFrm*)this)->Lower()->_InvalidateSize();
+        }
         _InvalidatePrt();
         _InvalidateSize();
         InvalidatePage( pPage );
