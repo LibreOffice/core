@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:36:14 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 08:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,9 @@ namespace connectivity
                 return sal_False;
             }
 
-            const ::rtl::OUString& getName() const { return m_Name; }
-            const ::rtl::OUString& getSchema() const { return m_SchemaName; }
+            ::rtl::OUString SAL_CALL getName() { return m_Name; }
+
+            ::rtl::OUString getSchema() { return m_SchemaName; }
             sal_Bool isReadOnly() const { return m_aFileStream.IsOpen() && (m_aFileStream.GetStreamMode() & STREAM_READWRITE) != STREAM_READWRITE; }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
