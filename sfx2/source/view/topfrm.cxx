@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-03 17:35:30 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,15 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( pView && pView != pContainer )
             pView->MakeActive_Impl( FALSE );
         Window* pWindow = rNEvt.GetWindow();
-        if ( pWindow->GetHelpId() )
-            SfxHelp::OpenHelpAgent( pFrame, pWindow->GetHelpId() );
+        ULONG nHelpId  = 0;
+        while ( !nHelpId && pWindow )
+        {
+            nHelpId = pWindow->GetHelpId();
+            pWindow = pWindow->GetParent();
+        }
+
+        if ( nHelpId )
+            SfxHelp::OpenHelpAgent( pFrame, nHelpId );
         return sal_True;
     }
 

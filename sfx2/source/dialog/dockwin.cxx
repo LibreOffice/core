@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-26 14:51:06 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1435,8 +1435,15 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
             pMgr->Activate_Impl();
 
         Window* pWindow = rEvt.GetWindow();
-        if ( pWindow->GetHelpId() )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), pWindow->GetHelpId() );
+        ULONG nHelpId  = 0;
+        while ( !nHelpId && pWindow )
+        {
+            nHelpId = pWindow->GetHelpId();
+            pWindow = pWindow->GetParent();
+        }
+
+        if ( nHelpId )
+            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
 /*
         // Nur wg. PlugIn
         SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();

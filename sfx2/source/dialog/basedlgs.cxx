@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:44:20 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,15 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pMgr->GetFrame() );
         pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        if ( pWindow->GetHelpId() )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), pWindow->GetHelpId() );
+        ULONG nHelpId  = 0;
+        while ( !nHelpId && pWindow )
+        {
+            nHelpId = pWindow->GetHelpId();
+            pWindow = pWindow->GetParent();
+        }
+
+        if ( nHelpId )
+            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
@@ -512,8 +519,15 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pMgr->GetFrame() );
         pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        if ( pWindow->GetHelpId() )
-            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), pWindow->GetHelpId() );
+        ULONG nHelpId  = 0;
+        while ( !nHelpId && pWindow )
+        {
+            nHelpId = pWindow->GetHelpId();
+            pWindow = pWindow->GetParent();
+        }
+
+        if ( nHelpId )
+            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {
