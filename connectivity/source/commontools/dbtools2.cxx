@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 08:43:02 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 09:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ namespace dbtools
     sal_Int32       nPrecision  = 0;
     sal_Int32       nScale      = 0;
 
-    ::rtl::OUString aSql = ::dbtools::quoteTableName(xMetaData,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))),::dbtools::eInTableDefinitions);
+    ::rtl::OUString sQuoteString = xMetaData->getIdentifierQuoteString();
+    ::rtl::OUString aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
 
     aSql += ::rtl::OUString::createFromAscii(" ");
 
@@ -264,6 +265,30 @@ namespace dbtools
     }
     return aSql;
 }
+namespace
+{
+    ::rtl::OUString generateColumnNames(const Reference<XIndexAccess>& _xColumns,const Reference<XDatabaseMetaData>& _xMetaData)
+    {
+        ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+        static const ::rtl::OUString sComma(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")));
+
+        const ::rtl::OUString sQuote(_xMetaData->getIdentifierQuoteString());
+        ::rtl::OUString sSql = ::rtl::OUString::createFromAscii(" (");
+        Reference< XPropertySet > xColProp;
+
+        sal_Int32 nColCount  = _xColumns->getCount();
+        for(sal_Int32 i=0;i<nColCount;++i)
+        {
+            if ( (_xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
+                sSql += ::dbtools::quoteName(sQuote,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))))
+                        + sComma;
+        }
+
+        if ( nColCount )
+            sSql = sSql.replaceAt(sSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        return sSql;
+    }
+}
 // -----------------------------------------------------------------------------
 ::rtl::OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection)
 {
@@ -299,15 +324,9 @@ namespace dbtools
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
-                    for(sal_Int32 i=0;i<xColumns->getCount();++i)
-                    {
-                        if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
-                            aSql += ::dbtools::quoteTableName(xMetaData,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))),::dbtools::eInTableDefinitions)
-                                    +   ::rtl::OUString::createFromAscii(",");
-                    }
-
-                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+                    const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
+                    aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY ");
+                    aSql += generateColumnNames(xColumns,xMetaData);
                 }
                 else if(nKeyType == KeyType::UNIQUE)
                 {
@@ -316,15 +335,9 @@ namespace dbtools
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
-                    for(sal_Int32 i=0;i<xColumns->getCount();++i)
-                    {
-                        if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
-                            aSql += ::dbtools::quoteTableName(xMetaData,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))),::dbtools::eInTableDefinitions)
-                                 + ::rtl::OUString::createFromAscii(",");
-                    }
-
-                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+                    const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
+                    aSql += ::rtl::OUString::createFromAscii(" UNIQUE ");
+                    aSql += generateColumnNames(xColumns,xMetaData);
                 }
                 else if(nKeyType == KeyType::FOREIGN)
                 {
@@ -346,19 +359,10 @@ namespace dbtools
                     ::dbtools::composeTableName(xMetaData,sCatalog, sSchema, sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
 
 
-                    if(!sComposedName.getLength())
+                    if ( !sComposedName.getLength() )
                         ::dbtools::throwFunctionSequenceException(_xConnection);
-                    aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
 
-                    sal_Int32 nColCount = xColumns->getCount();
-                    for(sal_Int32 i=0;i<nColCount;++i)
-                    {
-                        if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
-                            aSql += ::dbtools::quoteTableName(xMetaData,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))),::dbtools::eInTableDefinitions)
-                                        + ::rtl::OUString::createFromAscii(",");
-                    }
-
-                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+                    aSql += generateColumnNames(xColumns,xMetaData);
 
                     switch(nDeleteRule)
                     {
