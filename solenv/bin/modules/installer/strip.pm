@@ -2,9 +2,9 @@
 #
 #   $RCSfile: strip.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:30:42 $
+#   last change: $Author: rt $ $Date: 2004-07-06 15:00:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 package installer::strip;
 
 use installer::converter;
+use installer::existence;
 use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
@@ -126,8 +127,12 @@ sub strip_libraries
 
     installer::logger::include_header_into_logfile("Stripping files:");
 
-    my $strippeddirbase = installer::systemactions::create_directories("stripped", "");
-    $strippeddirbase = installer::converter::make_path_conform($strippeddirbase);
+    my $strippeddirbase = installer::systemactions::create_directories("stripped", $languagestringref);
+
+    if (! installer::existence::exists_in_array($strippeddirbase, \@installer::globals::removedirs))
+    {
+        push(@installer::globals::removedirs, $strippeddirbase);
+    }
 
     for ( my $i = 0; $i <= $#{$filelist}; $i++ )
     {
