@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:04:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,6 @@ TabPage RID_SVXPAGE_TABULATOR
     Text [ de ] = "Tabulatoren" ;
     Text [ en-US ] = "Tabs" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    MetricBox ED_TABPOS
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 39 , 95 ) ;
-        Minimum = -5600 ;
-        Maximum = 5600 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-    };
     FixedLine FL_TABPOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -89,16 +80,33 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ en-US ] = "Position" ;
         Text [ x-comment ] = " ";
     };
+    MetricBox ED_TABPOS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 39 , 165 ) ;
+        Minimum = -5600 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+    };
     FixedLine FL_TABPOS_VERT
     {
         Pos = MAP_APPFONT ( 55 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 95 ) ;
+        Size = MAP_APPFONT ( 4 , 165 ) ;
         Vert = TRUE;
+    };
+    FixedLine FL_TABTYPE
+    {
+        Pos = MAP_APPFONT ( 60 , 3 ) ;
+        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Text [ de ] = "Typ" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_TABTYPE_LEFT
     {
         Pos = MAP_APPFONT ( 66 , 14 ) ;
-        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
         Check = TRUE ;
@@ -106,52 +114,52 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     Window WIN_TABLEFT
     {
-        Pos = MAP_APPFONT ( 115 , 14 ) ;
+        Pos = MAP_APPFONT ( 157 , 14 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     RadioButton BTN_TABTYPE_RIGHT
     {
         Pos = MAP_APPFONT ( 66 , 28 ) ;
-        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "Righ~t" ;
         Text [ x-comment ] = " ";
     };
     Window WIN_TABRIGHT
     {
-        Pos = MAP_APPFONT ( 115 , 28 ) ;
+        Pos = MAP_APPFONT ( 157 , 28 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     RadioButton BTN_TABTYPE_CENTER
     {
         Pos = MAP_APPFONT ( 66 , 42 ) ;
-        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ de ] = "~Zentriert" ;
         Text [ en-US ] = "C~entered" ;
         Text [ x-comment ] = " ";
     };
     Window WIN_TABCENTER
     {
-        Pos = MAP_APPFONT ( 115 , 42 ) ;
+        Pos = MAP_APPFONT ( 157 , 42 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     RadioButton BTN_TABTYPE_DECIMAL
     {
         Pos = MAP_APPFONT ( 66 , 56 ) ;
-        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ de ] = "~Dezimal" ;
         Text [ en-US ] = "Deci~mal" ;
         Text [ x-comment ] = " ";
     };
     Window WIN_TABDECIMAL
     {
-        Pos = MAP_APPFONT ( 115 , 56 ) ;
+        Pos = MAP_APPFONT ( 157 , 56 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     FixedText FT_TABTYPE_DECCHAR
     {
         Pos = MAP_APPFONT ( 75 , 70 ) ;
-        Size = MAP_APPFONT ( 39 , 8 ) ;
+        Size = MAP_APPFONT ( 79 , 8 ) ;
         Text [ de ] = "Z~eichen" ;
         Text [ en-US ] = "~Character" ;
         Text [ x-comment ] = " ";
@@ -159,28 +167,22 @@ TabPage RID_SVXPAGE_TABULATOR
     Edit ED_TABTYPE_DECCHAR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 114 , 68 ) ;
+        Pos = MAP_APPFONT ( 156 , 68 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Left = TRUE ;
     };
-    FixedLine FL_TABTYPE
+    FixedLine FL_FILLCHAR
     {
-        Pos = MAP_APPFONT ( 60 , 3 ) ;
-        Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text [ de ] = "Typ" ;
-        Text [ en-US ] = "Type" ;
+        Pos = MAP_APPFONT ( 60 , 86 ) ;
+        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Text [ de ] = "Füllzeichen" ;
+        Text [ en-US ] = "Fill character" ;
         Text [ x-comment ] = " ";
-    };
-    FixedLine FL_TABTYPE_VERT
-    {
-        Pos = MAP_APPFONT ( 127 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 95 ) ;
-        Vert = TRUE;
     };
     RadioButton BTN_FILLCHAR_NO
     {
-        Pos = MAP_APPFONT ( 138 , 14 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 97 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ de ] = "~Keine" ;
         Text [ en-US ] = "N~one" ;
         Check = TRUE ;
@@ -188,26 +190,26 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
-        Pos = MAP_APPFONT ( 138 , 28 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 111 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text = "~........" ;
     };
     RadioButton BTN_FILLCHAR_DASHLINE
     {
-        Pos = MAP_APPFONT ( 138 , 42 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 125 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text = "~--------" ;
     };
     RadioButton BTN_FILLCHAR_UNDERSCORE
     {
-        Pos = MAP_APPFONT ( 138 , 56 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 139 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text = "~_____" ;
     };
     RadioButton BTN_FILLCHAR_OTHER
     {
-        Pos = MAP_APPFONT ( 138 , 70 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 153 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ de ] = "Ze~ichen" ;
         Text [ en-US ] = "Character" ;
         Text [ x-comment ] = " ";
@@ -215,17 +217,9 @@ TabPage RID_SVXPAGE_TABULATOR
     Edit ED_FILLCHAR_OTHER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 186 , 68 ) ;
+        Pos = MAP_APPFONT ( 156 , 151 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Left = TRUE ;
-    };
-    FixedLine FL_FILLCHAR
-    {
-        Pos = MAP_APPFONT ( 132 , 3 ) ;
-        Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text [ de ] = "Füllzeichen" ;
-        Text [ en-US ] = "Fill character" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_NEW
     {
