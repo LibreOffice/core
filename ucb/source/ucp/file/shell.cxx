@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-15 15:45:06 $
+ *  last change: $Author: hro $ $Date: 2001-05-17 17:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3618,7 +3618,9 @@ static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::O
 
     std::vector< rtl::OUString >    aTokenStack;
 
-    do
+    aRelPath.getToken( 0, '/', nIndex );
+
+    while ( nIndex >= 0 )
     {
         rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
 
@@ -3626,7 +3628,7 @@ static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::O
             aTokenStack.pop_back();
         else
             aTokenStack.push_back( aToken );
-    } while ( nIndex >= 0 );
+    }
 
 
     std::vector< rtl::OUString >::iterator it;
