@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:19:20 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 07:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1225,7 +1225,7 @@ String STR_SCALE
     Text [ ENGLISH ] = "Scale" ;
     Text [ english_us ] = "Decimal ~places" ;
     Text [ portuguese_brazilian ] = "Nachkommastellen" ;
-    Text [ swedish ] = "Decimalpositio~ner" ;
+    Text [ swedish ] = "A~ntal decimaler" ;
     Text [ danish ] = "Antal decimaler" ;
     Text [ italian ] = "Posizio~ni decimali" ;
     Text [ spanish ] = "~Decimales" ;
@@ -1448,7 +1448,7 @@ String STR_HELP_SCALE
     Text [ ENGLISH ] = "Enter the number of decimals." ;
     Text [ english_us ] = "Specify the number of decimal places permitted in this field." ;
     Text [ portuguese_brazilian ] = "Geben Sie die Zahl der Nachkommastellen an." ;
-    Text [ swedish ] = "Ange hur mеnga decimalpositioner det hдr fдltet skall innehеlla." ;
+    Text [ swedish ] = "Ange hur mеnga decimaler det hдr fдltet skall innehеlla." ;
     Text [ danish ] = "Angiv her, hvormange decimaler dette felt skal indeholde." ;
     Text [ italian ] = "Digitate il numero di cifre dopo la virgola." ;
     Text [ spanish ] = "Especifique el nъmero de decimales que deban contener los nъmeros en este campo." ;
@@ -2208,7 +2208,7 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ russian ] = "Изменить колонку \"\\$column\\$\" невозможно. Вместо этого ее можно удалить и применить новый формат. Продолжить?";
     Text[ greek ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ dutch ] = "De kolom \"\\$column\\$\" kon niet worden gewijzigd. U kunt de kolom wissen en het nieuwe formaat toevoegen. Wilt u dat?";
-    Text[ french ] = "Impossible de modifier la colonne \"\\$column\\$\". Alternative : suppression et attribution du nouveau format. Continuer ?";
+    Text[ french ] = "Impossible de modifier la colonne \"\\$column\\$\". Alternative : suppression de la colonne et application du nouveau format. Continuer ?";
     Text[ spanish ] = "No se pudo modificar la columna \"\\$column\\$\". їDesea eliminarla y adjuntar el nuevo formato?";
     Text[ finnish ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ italian ] = "Impossibile cambiare la colonna \"\\$column\\$\". Preferite eliminare la colonna e applicare un nuovo formato?";
@@ -2224,6 +2224,7 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ arabic ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ catalan ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
 };
+
 
 
 
