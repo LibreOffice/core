@@ -69,9 +69,6 @@ public class CGSettings    extends ConfigGroup {
         xmsf = xmsf_;
         try {
             soTemplateDir = FileAccess.getOfficePath(xmsf, "Config","");
-
-
-//  soTemplateDir = FileAccess.getOfficePath(xmsf, "Template","share");
             soGalleryDir  = FileAccess.getOfficePath(xmsf,"Gallery","share");
             root = this;
             formatter = new Formatter(xmsf, document );
