@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-18 13:16:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ namespace connectivity
             static ::rtl::OUString jstring2ustring(JNIEnv * env, jstring jstr);
             static ::rtl::OUString removeURLPrefix(const ::rtl::OUString& _sURL,const ::rtl::OUString& _sFileURL);
             static ::rtl::OUString removeOldURLPrefix(const ::rtl::OUString& _sURL);
+            static void throwJavaException(const ::com::sun::star::uno::Exception& _aException,JNIEnv * env);
         };
     //........................................................................
     }   // namespace hsqldb
