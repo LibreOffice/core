@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:21:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
+
+#include <sfx2/sfxsids.hrc>
 
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -516,8 +518,8 @@ const String& SwSection::GetLinkFileName() const
                     refLink->GetLinkManager()->GetDisplayNames(
                         refLink, 0, &sTmp, &sRange, &sFilter ) )
                 {
-                    ( sTmp += so3::cTokenSeperator ) += sFilter;
-                    ( sTmp += so3::cTokenSeperator ) += sRange;
+                    ( sTmp += sfx2::cTokenSeperator ) += sFilter;
+                    ( sTmp += sfx2::cTokenSeperator ) += sRange;
                 }
                 else if( GetFmt() && !GetFmt()->GetSectionNode() )
                 {
@@ -550,10 +552,10 @@ void SwSection::SetLinkFileName( const String& rNew, const String* pPassWd )
 void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
-    const ::so3::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
     for( USHORT n = rLnks.Count(); n; )
     {
-        ::so3::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
+        ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
             pBLnk->ISA( SwBaseLink ) &&
             0 != ( pNd = ((SwBaseLink*)pBLnk)->GetAnchor() ) )
@@ -1054,10 +1056,10 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     ::com::sun::star::uno::Any aValue;
     aValue <<= ::rtl::OUString( sName );                        // beliebiger Name
 
-    const ::so3::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
     for( USHORT n = rLnks.Count(); n; )
     {
-        ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+        ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
             pLnk->ISA( SwBaseLink ) &&
@@ -1497,7 +1499,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     if( !pFmt || CONTENT_SECTION == eType )
         return ;
 
-    USHORT nUpdateType = so3::LINKUPDATE_ALWAYS;
+    USHORT nUpdateType = sfx2::LINKUPDATE_ALWAYS;
 
     if( !refLink.Is() )
         // dann mal den BaseLink aufbauen
@@ -1525,10 +1527,10 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     case FILE_LINK_SECTION:
         {
             pLnk->SetContentType( FORMAT_FILE );
-            String sFltr( sCmd.GetToken( 1, so3::cTokenSeperator ) );
-            String sRange( sCmd.GetToken( 2, so3::cTokenSeperator ) );
+            String sFltr( sCmd.GetToken( 1, sfx2::cTokenSeperator ) );
+            String sRange( sCmd.GetToken( 2, sfx2::cTokenSeperator ) );
             pFmt->GetDoc()->GetLinkManager().InsertFileLink( *pLnk, eType,
-                                sCmd.GetToken( 0, so3::cTokenSeperator ),
+                                sCmd.GetToken( 0, sfx2::cTokenSeperator ),
                                 ( sFltr.Len() ? &sFltr : 0 ),
                                 ( sRange.Len() ? &sRange : 0 ) );
         }
