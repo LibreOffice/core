@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
         pLocalOptions->SetDate( 1, 1, 1904 );
     }
 
-    return NULL;
+    return 0;
 }
 
 //-----------------------------------------------------------------------
@@ -332,7 +332,7 @@ IMPL_LINK(  ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
         aFtEps  .Disable(); aEdEps  .Disable();
     }
 
-    return NULL;
+    return 0;
 }
 
 
