@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:17:51 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #ifndef _SFX_EVENTCONF_HXX
 #include <evntconf.hxx>
 #endif
+#include <svtools/eventcfg.hxx>
 
 #include <svtools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
@@ -143,15 +144,10 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
                 USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
                 if ( nID )
                 {
-                    SfxEventConfigItem_Impl* pConfig =
-                        mpObjShell ? mpObjShell->GetEventConfig_Impl(TRUE) : SFX_APP()->GetEventConfig()->GetAppEventConfig_Impl();
-
                     ANY aValue;
                     BlowUpMacro( rElement, aValue, mpObjShell );
 
                     // pConfig becomes the owner of the new SvxMacro
-                    SvxMacro *pMacro = ConvertToMacro( aValue, mpObjShell, FALSE );
-                     pConfig->ConfigureEvent( nID, pMacro );
                     maEventData[i] = aValue;
 
                     SEQUENCE < PROPERTYVALUE > aProperties;
@@ -248,34 +244,9 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( RUNTIMEEXCEPTION )
         return sal_False;
 }
 
-//--------------------------------------------------------------------------------------------------------
-// --- ::document::XEventListener ---
-//--------------------------------------------------------------------------------------------------------
-void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION )
+static void Execute( ANY& aEventData, SfxObjectShell* pDoc )
 {
-    ::osl::ClearableMutexGuard aGuard( maMutex );
-
-    // get the event name, find the coresponding data, execute the data
-
-    OUSTRING    aName   = aEvent.EventName;
-    long        nCount  = maEventNames.getLength();
-    long        nIndex  = 0;
-    sal_Bool    bFound  = sal_False;
-
-    while ( !bFound && ( nIndex < nCount ) )
-    {
-        if ( maEventNames[nIndex] == aName )
-            bFound = sal_True;
-        else
-            nIndex += 1;
-    }
-
-    if ( !bFound )
-        return;
-
     SEQUENCE < PROPERTYVALUE > aProperties;
-    ANY aEventData = maEventData[ nIndex ];
-
     if ( aEventData >>= aProperties )
     {
         OUSTRING        aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
@@ -284,12 +255,12 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
         OUSTRING        aLibrary;
         OUSTRING        aMacroName;
 
-        nCount = aProperties.getLength();
+        sal_Int32 nCount = aProperties.getLength();
 
         if ( !nCount )
             return;
 
-        nIndex = 0;
+        sal_Int32 nIndex = 0;
         while ( nIndex < nCount )
         {
             if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
@@ -307,17 +278,16 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 
         if ( aType.compareToAscii( STAR_BASIC ) == 0 && aScript.getLength() )
         {
-            aGuard.clear();
             com::sun::star::uno::Any aAny;
-            SfxMacroLoader::loadMacro( aScript, aAny, mpObjShell );
+            SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
         }
         else if ( aType.compareToAscii( "Service" ) == 0 ||
                             aType.compareToAscii( "Script" ) == 0 )
         {
             if ( aScript.getLength() )
             {
-                SfxViewFrame* pView = mpObjShell ?
-                    SfxViewFrame::GetFirst( mpObjShell ) :
+                SfxViewFrame* pView = pDoc ?
+                    SfxViewFrame::GetFirst( pDoc ) :
                     SfxViewFrame::Current();
 
                 ::com::sun::star::uno::Reference
@@ -358,7 +328,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
                 {
                     //::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
                     //aArgs[0].Name = rtl::OUString::createFromAscii("Referer");
-                    //aArs[0].Value <<= ::rtl::OUString( mpObjShell->GetMedium()->GetName() );
+                    //aArs[0].Value <<= ::rtl::OUString( pDoc->GetMedium()->GetName() );
                     //xDisp->dispatch( aURL, aArgs );
                     xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >() );
                 }
@@ -369,6 +339,36 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
             DBG_ERRORFILE( "notifyEvent(): Unsupported event type" );
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------------
+// --- ::document::XEventListener ---
+//--------------------------------------------------------------------------------------------------------
+void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION )
+{
+    ::osl::ClearableMutexGuard aGuard( maMutex );
+
+    // get the event name, find the coresponding data, execute the data
+
+    OUSTRING    aName   = aEvent.EventName;
+    long        nCount  = maEventNames.getLength();
+    long        nIndex  = 0;
+    sal_Bool    bFound  = sal_False;
+
+    while ( !bFound && ( nIndex < nCount ) )
+    {
+        if ( maEventNames[nIndex] == aName )
+            bFound = sal_True;
+        else
+            nIndex += 1;
+    }
+
+    if ( !bFound )
+        return;
+
+    ANY aEventData = maEventData[ nIndex ];
+    aGuard.clear();
+    Execute( aEventData, mpObjShell );
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -600,7 +600,8 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference
     : m_aInterfaceContainer( m_aMutex )
 {
     m_refCount++;
-    pImp = new SfxEvents_Impl( NULL, this );
+//  pImp = new SfxEvents_Impl( NULL, this );
+    pImp = new GlobalEventConfig();
     m_xEvents = pImp;
     m_xJobsBinding = REFERENCE< XJOBEXECUTOR >(xSmgr->createInstance(OUSTRING::createFromAscii("com.sun.star.task.JobExecutor")), UNO_QUERY);
     StartListening(*SFX_APP());
@@ -648,6 +649,15 @@ void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& aBC, const SfxHint& aHint )
         REFERENCE< XDOCEVENTLISTENER > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
         if (xJobExecutor.is())
             xJobExecutor->notifyEvent(aEvent);
+
+        try
+        {
+            ANY aAny = m_xEvents->getByName( aName );
+            Execute( aAny, 0 );
+        }
+        catch ( EXCEPTION& )
+        {
+        }
 
         ::cppu::OInterfaceIteratorHelper aIt( m_aInterfaceContainer );
         while( aIt.hasMoreElements() )
