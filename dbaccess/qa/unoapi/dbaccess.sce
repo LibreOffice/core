@@ -1,3 +1,5 @@
+-o dbaccess.SbaXGridControl
+-o dbaccess.ORowSet
 -o dbaccess.ConnectionLineAccessibility
 -o dbaccess.DBContentLoader
 -o dbaccess.OCommandDefinition
@@ -6,9 +8,7 @@
 -o dbaccess.ODatasourceAdministrationDialog
 -o dbaccess.ODatasourceBrowser
 -o dbaccess.OInteractionHandler
--o dbaccess.OQueryDesign
--o dbaccess.ORowSet
 -o dbaccess.OSQLMessageDialog
--o dbaccess.SbaXGridControl
 -o dbaccess.TableWindowAccessibility
 -o dbaccess.JoinViewAccessibility
+-o dbaccess.OQueryDesign
