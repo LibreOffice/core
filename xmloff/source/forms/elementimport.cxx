@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:51:09 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 11:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,10 @@ namespace xmloff
                     ++aCheck
                 )
             {
-                OSL_ENSURE(xPropInfo->hasPropertyByName(aCheck->Name), "OElementImport::EndElement: read a property which does not exist on the element!");
+                OSL_ENSURE(xPropInfo->hasPropertyByName(aCheck->Name),
+                        ::rtl::OString("OElementImport::EndElement: read a property (")
+                    +=  ::rtl::OString(aCheck->Name.getStr(), aCheck->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString(") which does not exist on the element!"));
             }
         }
 #endif
@@ -716,7 +719,19 @@ namespace xmloff
         OControlImport::StartElement(_rxAttrList);
 
         // handle the convert-empty-to-null attribute, which's default is different from the property default
-        simluateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+        sal_Bool bHaveEmptyIsNull = sal_False;
+        // unfortunately, different classes are imported by this class ('cause they're represented by the
+        // same XML element), though not all of them know this property.
+        // So we have to do a check ...
+        if (m_xElement.is())
+        {
+            Reference< XPropertySetInfo > xProps = m_xElement->getPropertySetInfo();
+            if (xProps.is())
+                bHaveEmptyIsNull = xProps->hasPropertyByName(PROPERTY_EMPTY_IS_NULL);
+        }
+
+        if (bHaveEmptyIsNull)
+            simluateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
     //=====================================================================
@@ -1184,6 +1199,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/04/20 16:51:09  fs
+ *  OFormImport: recognize tabbing-cycle 'til SRC630 (compatibility)
+ *
  *  Revision 1.18  2001/03/29 09:45:16  fs
  *  #85386# +OTextLikeImport / handle attributes which's defaults differ from the property defaults
  *
