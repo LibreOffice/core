@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:27:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1916,11 +1916,11 @@ BOOL SwHTMLParser::FileDownload( const String& rURL,
     }
 
     // View wieder anlgen
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ViewShell *pVSh =
 #endif
         CallStartAction( pOldVSh );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ASSERT( pOldVSh == pVSh, "FileDownload: ViewShell wurde ausgetauscht" );
 #endif
 
