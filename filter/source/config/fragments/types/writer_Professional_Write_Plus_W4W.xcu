@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>Professional Write Plus (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PFS Professional Write Plus</value>
+            <value>PFS Professional Write Plus</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>PocketWord File</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Pocket Word</value>
+            <value>Pocket Word</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
