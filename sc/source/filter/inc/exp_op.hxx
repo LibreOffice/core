@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_op.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:27:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@ private:
     void                Hidcol();
     void                Cpi();
 public:
+
+    static  const USHORT    WK1MAXCOL;
+    static  const USHORT    WK1MAXROW;
+
     inline              ExportWK1( SvStream& r, ScDocument* p, CharSet e ) :
                             ExportTyp( r, p, e ) {};
 
