@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 17:39:32 $
+ *  last change: $Author: cd $ $Date: 2002-08-01 05:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2189,11 +2189,17 @@
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
 					<!-- Notice: LM: Description is missing 5962Window=V1,995/150/280/321,H,0,AL:(16,4,0/0/400/250)#100 -->
+					<info>
+						<desc xml:lang="en-US">deprecated</desc>
+					</info>
 				</prop>
 				<prop oor:name="Version" oor:type="xs:string">
 					<!-- OldPath: soffice_View/Window -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Notice: LM: Description is missing -->
+					<info>
+						<desc xml:lang="en-US">deprecated</desc>
+					</info>
 				</prop>
 				<prop oor:name="State" oor:type="xs:boolean">
 					<!-- OldPath: soffice_View/Window -->
@@ -2201,13 +2207,16 @@
 					<!-- Notice: LM: Description is missing -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the state of the window (hidden - false, visible - true).</desc>
+						<desc xml:lang="en-US">deprecated</desc>
 					</info>
 				</prop>
 				<prop oor:name="Flag" oor:type="xs:int">
 					<!-- OldPath: soffice_View/Window -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Notice: LM: Description is missing -->
+					<info>
+						<desc xml:lang="en-US">deprecated</desc>
+					</info>
 					<constraints>
 						<enumeration oor:value="01">
 							<info>
@@ -2246,7 +2255,7 @@
 					<!-- OldLocation: soffice.ini -->
 					<!-- Notice: LM: Description is missing -->
 					<info>
-						<desc xml:lang="en-US">Internally used</desc>
+						<desc xml:lang="en-US">deprecated</desc>
 					</info>
 				</prop>
 			</group>
