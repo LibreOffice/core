@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSortedDynamicResultSetFactory.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 11:26:24 $
+ *  last change:$Date: 2004-03-09 10:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 package ifc.ucb;
 
-import lib.MultiMethodTest;
-
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
@@ -77,9 +75,11 @@ import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.ucb.XSortedDynamicResultSetFactory;
+import com.sun.star.uno.UnoRuntime;
+import lib.MultiMethodTest;
+
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
 
 /**
 * Testing <code>com.sun.star.ucb.XSortedDynamicResultSetFactory</code>
@@ -123,7 +123,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
                 UnoRuntime.queryInterface
                     (XContentIdentifierFactory.class,oUCB) ;
 
-            String url = util.utils.getFullTestURL("solibrary.jar") ;
+            String url = util.utils.getFullTestURL("SwXTextEmbeddedObject.sxw") ;
             String escUrl = "" ;
 
             // In base URL of a JAR file in content URL all directory
@@ -187,7 +187,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
             result &= false ;
         }
 
-        result &= rowCount > 0 ;
+        result &= rowCount > 1 ;
 
         tRes.tested("createSortedDynamicResultSet()", result) ;
     }
