@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:08:43 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_traditional ] = "¼Æ¦r®æ¦¡(~N)";
         Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
         Text[ greek ] = "ÌïñöŞ áñéèìşí";
-        Text[ korean ] = "¼ıÀÚ Çü½Ä";
+        Text[ korean ] = "¼ıÀÚ Çü½Ä(~N)";
         Text[ turkish ] = "Sayı f~ormatı";
         Text[ language_user1 ] = " ";
     };
@@ -205,7 +205,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_traditional ] = "Ãä®Ø(~B)";
         Text[ arabic ] = "ÇáÍÏæÏ";
         Text[ greek ] = "Ğåñßãñáììá";
-        Text[ korean ] = "Å×µÎ¸®";
+        Text[ korean ] = "Å×µÎ¸®(~B)";
         Text[ turkish ] = "~Kenarlık";
         Text[ language_user1 ] = " ";
     };
@@ -231,11 +231,11 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_simplified ] = "×ÖÌå(~O)";
         Text[ russian ] = "Øğèôò";
         Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş(~F)";
-        Text[ chinese_traditional ] = "¦r«¬(~F)";
+        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş(~O)";
+        Text[ chinese_traditional ] = "¦r«¬(~O)";
         Text[ arabic ] = "äæÚ ÇáÎØ";
         Text[ greek ] = "ÃñáììáôïóåéñÜ";
-        Text[ korean ] = "±Û²Ã";
+        Text[ korean ] = "±Û²Ã(~O)";
         Text[ turkish ] = "Yazıti~pi";
         Text[ language_user1 ] = " ";
     };
@@ -265,7 +265,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_traditional ] = "¹Ï®×(~P)";
         Text[ arabic ] = "äãæĞÌ";
         Text[ greek ] = "Ìïôßâï";
-        Text[ korean ] = "ÆĞÅÏ";
+        Text[ korean ] = "ÆĞÅÏ(~P)";
         Text[ turkish ] = "~Desen";
         Text[ language_user1 ] = " ";
     };
@@ -288,14 +288,14 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ spanish ] = "Orienta~ción" ;
         Text [ english_us ] = "Alignmen~t" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¶ÔÆë(~A)";
+        Text[ chinese_simplified ] = "¶ÔÆë(~T)";
         Text[ russian ] = "Âûğàâíèâàíèå";
         Text[ polish ] = "Wyrównanie";
-        Text[ japanese ] = "”z’u(~A)";
-        Text[ chinese_traditional ] = "¹ï»ô(~A)";
+        Text[ japanese ] = "”z’u(~T)";
+        Text[ chinese_traditional ] = "¹ï»ô(~T)";
         Text[ arabic ] = "ÇáãÍÇĞÇÉ";
         Text[ greek ] = "~Óôïß÷éóç";
-        Text[ korean ] = "¸ÂÃã";
+        Text[ korean ] = "¸ÂÃã(~T)";
         Text[ turkish ] = "~Hizalama";
         Text[ language_user1 ] = " ";
     };
@@ -446,11 +446,11 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ spanish ] = "Cambiar ~nombre" ;
         Text [ french ] = "Re~nommer" ;
         Text [ dutch ] = "~Naam wijzigen" ;
-        Text[ chinese_simplified ] = "ÖØÃüÃû(~A)";
+        Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
         Text[ russian ] = "Ïåğåèìåíîâàòü";
         Text[ polish ] = "Zmieñ nazwê";
-        Text[ japanese ] = "–¼‘O‚Ì•ÏX(~A)";
-        Text[ chinese_traditional ] = "­«·s©R¦W(~A)";
+        Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)";
+        Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
         Text[ greek ] = "Ìåôïíïìáóßá";
         Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)";
