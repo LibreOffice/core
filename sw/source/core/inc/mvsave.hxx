@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvsave.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 14:26:32 $
+ *  last change: $Author: dvo $ $Date: 2002-06-24 16:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,17 +128,23 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nCorrLen );
 
 
+/** data structure to temporarily hold fly anchor positions relative to some
+ *  location. */
 struct _SaveFly
 {
-    ULONG nNdDiff;
-    SwFrmFmt* pFrmFmt;
-    _SaveFly( ULONG nNodeDiff, SwFrmFmt* pFmt )
-        : nNdDiff( nNodeDiff ), pFrmFmt( pFmt ) {}
+    ULONG nNdDiff;              /// relative node difference
+    SwFrmFmt* pFrmFmt;          /// the fly's frame format
+    sal_Bool bInsertPosition;   /// if true, anchor _at_ insert position
+
+    _SaveFly( ULONG nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
+        : nNdDiff( nNodeDiff ), pFrmFmt( pFmt ), bInsertPosition( bInsert )
+    { }
 };
 
 SV_DECL_VARARR( _SaveFlyArr, _SaveFly, 0, 10 )
 
-void _RestFlyInRange( _SaveFlyArr& rArr, const SwNodeIndex& rSttIdx );
+void _RestFlyInRange( _SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
+                      const SwNodeIndex* pInsPos );
 void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr );
 void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                        _SaveFlyArr& rArr, sal_Bool bMoveAllFlys );

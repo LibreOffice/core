@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:41:09 $
+ *  last change: $Author: dvo $ $Date: 2002-06-24 16:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
 
 // -----------------------------------------------------------------
 
-void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx )
+void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
+                      const SwNodeIndex* pInsertPos )
 {
     SwPosition aPos( rSttIdx );
     for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
@@ -279,7 +280,17 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx )
         // neuen Anker anlegen
         _SaveFly& rSave = rArr[n];
         SwFrmFmt* pFmt = rSave.pFrmFmt;
-        aPos.nNode = rSttIdx.GetIndex() + rSave.nNdDiff;
+
+        if( rSave.bInsertPosition )
+        {
+            if( pInsertPos != NULL )
+                aPos.nNode = *pInsertPos;
+            else
+                aPos.nNode = rSttIdx.GetIndex();
+        }
+        else
+            aPos.nNode = rSttIdx.GetIndex() + rSave.nNdDiff;
+
         aPos.nContent.Assign( 0, 0 );
         SwFmtAnchor aAnchor( pFmt->GetAnchor() );
         aAnchor.SetAnchor( &aPos );
@@ -308,8 +319,8 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
             ASSERT( pAnchor->GetAnchorId() != FLY_AUTO_CNTNT, "FLY-AUTO-Baustelle!" );
-            _SaveFly aSave( pAPos->nNode.GetIndex() -
-                            rRg.aStart.GetIndex(), pFmt );
+            _SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
+                            pFmt, sal_False );
             rArr.Insert( aSave, rArr.Count());
             pFmt->DelFrms();
             rFmts.Remove( n--, 1 );
@@ -371,8 +382,8 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                         0 != ( bInsPos = rInsPos == pAPos->nNode ))
 
             {
-                _SaveFly aSave( bInsPos ? 0 : pAPos->nNode.GetIndex() -
-                                                rSttNdIdx.GetIndex(), pFmt );
+                _SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
+                                pFmt, bInsPos );
                 rArr.Insert( aSave, rArr.Count());
                 pFmt->DelFrms();
                 rFmts.Remove( n--, 1 );
@@ -1140,7 +1151,7 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     delete pSavePam;
 
     // verschiebe die Flys an die neue Position
-    _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode );
+    _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
 
     if( bUpdateFtn )
     {
@@ -1238,7 +1249,7 @@ sal_Bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFla
 
     // verschiebe die Flys an die neue Position
     if( aSaveFlyArr.Count() )
-        _RestFlyInRange( aSaveFlyArr, aIdx );
+        _RestFlyInRange( aSaveFlyArr, aIdx, NULL );
 
     // setze jetzt wieder die text::Bookmarks in das Dokument
     for( sal_uInt16 nCnt = 0; nCnt < aSaveBkmk.Count(); ++nCnt )
