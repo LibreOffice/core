@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ polish ] = "Zak³adki";
         TEXT[ japanese ] = "Γ·½ΔΟ°Έ";
         TEXT[ chinese_traditional ] = "¤Ί¤εΌΠΕÒ";
-        TEXT[ greek ] = "Σελιδοδείκτες";
+        TEXT[ greek ] = "Σημάδια κειμένου";
         TEXT[ korean ] = "Γ¥ °¥ΗΗ";
         TEXT[ arabic ] = "ΕΤΗΡΗΚ γΡΜΪνΙ";
         TEXT[ turkish ] = "Metin iώareti";
@@ -168,7 +168,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT[ polish ] = "Wstaw zak³adkκ";
     TEXT[ japanese ] = "Γ·½ΔΟ°Έ‚Μ‘}“ό";
     TEXT[ chinese_traditional ] = "΄΅¤J¤Ί¤εΌΠΕÒ";
-    TEXT[ greek ] = "Εισαγωγή σελιδοδείκτη";
+    TEXT[ greek ] = "Εισαγωγή σημαδιού κειμένου";
     TEXT[ korean ] = "Γ¥ °¥ΗΗ »πΐΤ";
     TEXT[ arabic ] = "ΕΟΡΗΜ ΕΤΗΡΙ γΡΜΪνΙ";
     TEXT[ turkish ] = "Metin iώareti ekle";
