@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
+ *  last change: $Author: fs $ $Date: 2001-09-06 13:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2145,6 +2145,14 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( !IsEntryInView( pCursor ) )
                 MakeVisible( pCursor );
             pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pCursor ));
+
+            // if there is no next entry, take the current one
+            // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
+            // the cursor key
+            // 06.09.20001 - 83416 - frank.schoenheit@sun.com
+            if ( !pNewCursor && pCursor )
+                pNewCursor = pCursor;
+
             if( pNewCursor )
             {
                 aSelEng.CursorPosChanging( bShift, bMod1 );
@@ -2162,6 +2170,14 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( !IsEntryInView( pCursor ) )
                 MakeVisible( pCursor );
             pNewCursor = (SvLBoxEntry*)(pView->NextVisible( pCursor ));
+
+            // if there is no next entry, take the current one
+            // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
+            // the cursor key
+            // 06.09.20001 - 83416 - frank.schoenheit@sun.com
+            if ( !pNewCursor && pCursor )
+                pNewCursor = pCursor;
+
             if( pNewCursor )
             {
                 aSelEng.CursorPosChanging( bShift, bMod1 );
