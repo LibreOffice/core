@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 16:37:48 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:53:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -323,6 +323,7 @@ SLOFILES=\
     $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
     $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/framelink.obj \
     $(SLO)$/swframeposstrings.obj\
     $(SLO)$/swframeexample.obj \
 
@@ -390,11 +391,12 @@ LIB1OBJFILES= \
     $(SLO)$/grfflt.obj \
     $(SLO)$/frmdirlbox.obj \
     $(SLO)$/commonlingui.obj \
-    $(SLO)$/dialmgr.obj \
+    $(SLO)$/dialmgr.obj	\
+    $(SLO)$/svxbmpnumvalueset.obj   \
+    $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/framelink.obj\
     $(SLO)$/swframeexample.obj \
     $(SLO)$/swframeposstrings.obj \
-    $(SLO)$/svxbmpnumvalueset.obj \
-    $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/eventdlg.obj \
     $(SLO)$/macropg.obj \
     $(SLO)$/cfg.obj
