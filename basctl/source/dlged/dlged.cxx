@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:30:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,7 +622,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     // #114282# unbuffered paint
     SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
     if ( pPgView )
-        pPgView->InitRedraw( 0, aPaintRect, pWindow );
+        pPgView->DrawLayer( 0, aPaintRect, pWindow );
 
     nInPaint = FALSE;
 
@@ -726,7 +726,7 @@ void DlgEditor::Cut()
 
 void DlgEditor::Copy()
 {
-    if( !pDlgEdView->HasMarkedObj() )
+    if( !pDlgEdView->AreObjectsMarked() )
         return;
 
     // stop all drawing actions
@@ -751,10 +751,10 @@ void DlgEditor::Copy()
     }
 
     // insert control models of marked objects into clipboard dialog model
-    ULONG nMark = pDlgEdView->GetMarkList().GetMarkCount();
+    ULONG nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
     for( ULONG i = 0; i < nMark; i++ )
     {
-        SdrObject* pObj = pDlgEdView->GetMarkList().GetMark(i)->GetObj();
+        SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
         if (pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
@@ -936,15 +936,15 @@ void DlgEditor::Paste()
 
 void DlgEditor::Delete()
 {
-    if( !pDlgEdView->HasMarkedObj() )
+    if( !pDlgEdView->AreObjectsMarked() )
         return;
 
     // remove control models of marked objects from dialog model
-    ULONG nMark = pDlgEdView->GetMarkList().GetMarkCount();
+    ULONG nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
 
     for( ULONG i = 0; i < nMark; i++ )
     {
-        SdrObject* pObj = pDlgEdView->GetMarkList().GetMark(i)->GetObj();
+        SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
         if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
