@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-15 11:53:25 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 09:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ String ConstructTempDir_Impl( const String* pParent )
             osl_getLocalHostname( &aHost.pData );
 
             // test for valid filename
-            rtl::OUString aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aTmp, aHost );
+            rtl::OUString aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, aTmp );
             if ( aRet.getLength() )
             {
                 ::osl::DirectoryItem aItem;
