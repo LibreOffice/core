@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 15:12:53 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,62 +120,60 @@ DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName, S
             String aDlgName = xNewDlg->GetName();
 
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            if( !pShell )
+            if( pShell )
+            {
+                xLibContainer = uno::Reference< script::XLibraryContainer >
+                    ( pShell->GetDialogContainer(), uno::UNO_QUERY );
+            }
+            else
             {
                 // Application
                 xLibContainer = uno::Reference< script::XLibraryContainer >
                     ( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
+            }
+            uno::Reference< container::XNameAccess > xLib;
 
-                uno::Reference< container::XNameAccess > xLib;
+            // Check if the lib/dialog already exists
+            rtl::OUString aOULibName( aLibName );
+            if( xLibContainer->hasByName( aOULibName ) )
+            {
+                Any aElement = xLibContainer->getByName( aOULibName );
+                aElement >>= xLib;
+            }
 
-                // Check if the lib/dialog already exists
-                rtl::OUString aOULibName( aLibName );
-                if( xLibContainer->hasByName( aOULibName ) )
-                {
-                    Any aElement = xLibContainer->getByName( aOULibName );
-                    aElement >>= xLib;
-                }
+            Reference< container::XNameContainer > xLibNC;
+            if( !xLib.is() )
+            {
+                xLibNC = xLibContainer->createLibrary( aOULibName );
+                xLib = Reference< container::XNameAccess >( xLibNC, uno::UNO_QUERY );
+            }
 
-                Reference< container::XNameContainer > xLibNC;
-                if( !xLib.is() )
-                {
-                    xLibNC = xLibContainer->createLibrary( aOULibName );
-                    xLib = Reference< container::XNameAccess >( xLibNC, uno::UNO_QUERY );
-                }
-
-                // Does the dialog exist?
-                rtl::OUString aOUDlgName( aDlgName );
-                BOOL bCreateWin = FALSE;
-                if( xLib->hasByName( aOUDlgName ) )
+            // Does the dialog exist?
+            rtl::OUString aOUDlgName( aDlgName );
+            BOOL bCreateWin = FALSE;
+            if( xLib->hasByName( aOUDlgName ) )
+            {
+                bCreateWin = TRUE;
+            }
+            else
+            {
+                if( !xLibNC.is() )
+                    xLibNC = Reference< container::XNameContainer >( xLib, uno::UNO_QUERY );
+                if( xLibNC.is() )
                 {
                     bCreateWin = TRUE;
                 }
                 else
                 {
-                    if( !xLibNC.is() )
-                        xLibNC = Reference< container::XNameContainer >( xLib, uno::UNO_QUERY );
-                    if( xLibNC.is() )
-                    {
-                        bCreateWin = TRUE;
-                    }
-                    else
-                    {
-                        // TODO: ReadOnlyLib
-                    }
-                }
-                if( bCreateWin )
-                {
-                    // New dialog window
-                    pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic,
-                                             xLibContainer, aLibName, aDlgName );
+                    // TODO: ReadOnlyLib
                 }
             }
-            /* TODO Docs
-            else
+            if( bCreateWin )
             {
-
+                // New dialog window
+                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic,
+                                         xLibContainer, aLibName, aDlgName );
             }
-            */
         }
 
         if( !pWin )
