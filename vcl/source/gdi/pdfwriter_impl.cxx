@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 09:56:04 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,17 +948,18 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
         return;
     const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
 
+    pMetric->mnOrientation  = pSelect->mnOrientation;
+    pMetric->meFamily       = pBuiltinFont->m_eFamily;
+    pMetric->mePitch        = pBuiltinFont->m_ePitch;
+    pMetric->meWeight       = pBuiltinFont->m_eWeight;
+    pMetric->meItalic       = pBuiltinFont->m_eItalic;
+    pMetric->mbSymbolFlag   = pFD->IsSymbolFont();
     pMetric->mnWidth        = pSelect->mnHeight;
     pMetric->mnAscent       = ( pSelect->mnHeight * +pBuiltinFont->m_nAscent + 500 ) / 1000;
     pMetric->mnDescent      = ( pSelect->mnHeight * -pBuiltinFont->m_nDescent + 500 ) / 1000;
     pMetric->mnIntLeading   = 0;
     pMetric->mnExtLeading   = 0;
     pMetric->mnSlant        = 0;
-    pMetric->meFamily       = pBuiltinFont->m_eFamily;
-    pMetric->mePitch        = pBuiltinFont->m_ePitch;
-    pMetric->meWeight       = pBuiltinFont->m_eWeight;
-    pMetric->meItalic       = pBuiltinFont->m_eItalic;
-    pMetric->mbSymbolFlag   = pFD->IsSymbolFont();
     pMetric->mbScalableFont = true;
     pMetric->mbDevice       = true;
 }
