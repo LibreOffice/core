@@ -64,4 +64,10 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\misc\fromTemplate.sh %_DEST%\bin%_EXT%\fromtemplate
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 
+mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
+mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
+..\res\so_login_image.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\ssologin.bmp
+..\res\ssu_login_image.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\ssologin.bmp
+..\res\open_login_image.bmp %COMMON_DEST%\pck%_EXT%\ssologin.bmp
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
