@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,14 @@ sal_uInt8 XclExpString::GetFlagField() const
     return (mbIsUnicode ? EXC_STRF_16BIT : 0) | (IsRich() ? EXC_STRF_RICH : 0);
 }
 
+sal_uInt32 XclExpString::GetHeaderSize() const
+{
+    return
+        (mb8BitLen ? 1 : 2) +           // length field
+        (IsWriteFlags() ? 1 : 0) +      // flag field
+        (IsWriteFormats() ? 2 : 0);     // richtext formattting count
+}
+
 sal_uInt32 XclExpString::GetBufferSize() const
 {
     return mnLen * (mbIsUnicode ? 2 : 1);
@@ -349,10 +357,9 @@ sal_uInt32 XclExpString::GetBufferSize() const
 sal_uInt32 XclExpString::GetSize() const
 {
     return
-        (mb8BitLen ? 1 : 2) +                                   // length field
-        (IsWriteFlags() ? 1 : 0) +                              // flag field
-        GetBufferSize() +                                       // character buffer
-        (IsWriteFormats() ? (4 * GetFormatsCount() + 2) : 0);   // richtext formattting
+        GetHeaderSize() +                                   // header
+        GetBufferSize() +                                   // character buffer
+        (IsWriteFormats() ? (4 * GetFormatsCount()) : 0);   // richtext formattting
 }
 
 sal_uInt16 XclExpString::GetHash() const
@@ -377,23 +384,18 @@ void XclExpString::WriteFlagField( XclExpStream& rStrm ) const
 void XclExpString::WriteHeader( XclExpStream& rStrm ) const
 {
     DBG_ASSERT( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeader - string too long" );
-
-    bool bWriteFlags = IsWriteFlags();
-    bool bWriteFormats = IsWriteFormats();
-    PrepareWrite( rStrm, (mb8BitLen ? 1 : 2) + (bWriteFlags ? 1 : 0) + (bWriteFormats ? 2 : 0) );
-
+    PrepareWrite( rStrm, GetHeaderSize() );
     // length
     if( mb8BitLen )
         rStrm << static_cast< sal_uInt8 >( mnLen );
     else
         rStrm << mnLen;
     // flag field
-    if( bWriteFlags )
+    if( IsWriteFlags() )
         rStrm << GetFlagField();
     // format run count
-    if( bWriteFormats )
+    if( IsWriteFormats() )
         rStrm << GetFormatsCount();
-
     rStrm.SetSliceSize( 0 );
 }
 
@@ -434,28 +436,55 @@ void XclExpString::Write( XclExpStream& rStrm ) const
         WriteFormats( rStrm );
 }
 
-void XclExpString::WriteBuffer( void* pDest ) const
+void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
 {
-    if( pDest && !IsEmpty() )
+    DBG_ASSERT( pnMem, "XclExpString::WriteHeaderToMem - no memory to write to" );
+    DBG_ASSERT( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeaderToMem - string too long" );
+    DBG_ASSERT( !IsWriteFormats(), "XclExpString::WriteHeaderToMem - formatted strings not supported" );
+    // length
+    if( mb8BitLen )
+    {
+        *pnMem = static_cast< sal_uInt8 >( mnLen );
+        ++pnMem;
+    }
+    else
+    {
+        ShortToSVBT16( mnLen, pnMem );
+        pnMem += 2;
+    }
+    // flag field
+    if( IsWriteFlags() )
+        *pnMem = GetFlagField();
+}
+
+void XclExpString::WriteBufferToMem( sal_uInt8* pnMem ) const
+{
+    DBG_ASSERT( pnMem, "XclExpString::WriteBufferToMem - no memory to write to" );
+    if( !IsEmpty() )
     {
         if( mbIsBiff8 )
         {
-            sal_uInt8* pDest8 = reinterpret_cast< sal_uInt8* >( pDest );
             for( ScfUInt16Vec::const_iterator aIt = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIt != aEnd; ++aIt )
             {
                 sal_uInt16 nChar = *aIt;
-                *pDest8 = static_cast< sal_uInt8 >( nChar );
-                ++pDest8;
+                *pnMem = static_cast< sal_uInt8 >( nChar );
+                ++pnMem;
                 if( mbIsUnicode )
                 {
-                    *pDest8 = static_cast< sal_uInt8 >( nChar >> 8 );
-                    ++pDest8;
+                    *pnMem = static_cast< sal_uInt8 >( nChar >> 8 );
+                    ++pnMem;
                 }
             }
         }
         else
-            memcpy( pDest, &maCharBuffer[ 0 ], mnLen );
+            memcpy( pnMem, &maCharBuffer[ 0 ], mnLen );
     }
+}
+
+void XclExpString::WriteToMem( sal_uInt8* pnMem ) const
+{
+    WriteHeaderToMem( pnMem );
+    WriteBufferToMem( pnMem + GetHeaderSize() );
 }
 
 // ----------------------------------------------------------------------------
