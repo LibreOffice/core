@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:32:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <svtools/intitem.hxx>
 #endif
 
+#include <vcl/toolbox.hxx>
+#include <sfx2/app.hxx>
 
 #include "cmdid.h"
 #include "swtypes.hxx"
