@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
@@ -143,6 +146,8 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -186,6 +191,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::svxform;
 
 ::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
@@ -435,7 +441,7 @@ void FmPropBrw::implDetachController()
 {
     m_sLastActivePage = getCurrentPage();
 
-    implSetNewObject(Reference< XPropertySet >());
+    implSetNewSelection( InterfaceBag() );
     if (m_xMeAsFrame.is())
     {
         try
@@ -498,15 +504,51 @@ sal_Bool FmPropBrw::Close()
 }
 
 //-----------------------------------------------------------------------
-void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
+namespace
+{
+    struct QueryXPropertySet : public ::std::unary_function< Reference< XInterface >, Reference< XPropertySet > >
+    {
+        Reference< XPropertySet > operator()( const Reference< XInterface >& _rxObject )
+        {
+            return Reference< XPropertySet >( _rxObject, UNO_QUERY );
+        }
+    };
+}
+
+//-----------------------------------------------------------------------
+void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 {
     if (m_xBrowserController.is())
     {
         try
         {
+            // tell the property browser which document we live in
+            Reference< XModel > xDocumentModel;
+            if ( !_rSelection.empty() )
+            {
+                Reference< XChild > xChild ( *_rSelection.begin(), UNO_QUERY );
+                xDocumentModel = xDocumentModel.query( xChild );
+
+                while( !xDocumentModel.is() && xChild.is() )
+                {
+                    Reference< XInterface > xParent = xChild->getParent();
+                    xDocumentModel = xDocumentModel.query( xParent );
+                    xChild = xChild.query( xParent );
+                }
+            }
+
             m_xBrowserController->setPropertyValue(
-                ::rtl::OUString::createFromAscii("IntrospectedObject"),
-                makeAny(_rxObject)
+                ::rtl::OUString::createFromAscii( "ContextDocument" ),
+                makeAny( xDocumentModel )
+            );
+
+            // tell it the objects to inspect
+            Sequence< Reference< XPropertySet > > aSelection( _rSelection.size() );
+            ::std::transform( _rSelection.begin(), _rSelection.end(), aSelection.getArray(), QueryXPropertySet() );
+
+            m_xBrowserController->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "IntrospectedCollection" ),
+                makeAny( aSelection )
             );
         }
         catch( const PropertyVetoException& )
@@ -515,34 +557,39 @@ void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::implSetNewObject: caught an unexpected exception!" );
+            OSL_ENSURE( sal_False, "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
             return;
         }
 
         // set the new title according to the selected object
         String sTitle;
-        if  (::comphelper::hasProperty(FM_PROP_CLASSID, _rxObject))
+
+        if ( _rSelection.empty() )
         {
-            Any aClassIdValue(_rxObject->getPropertyValue(FM_PROP_CLASSID));
-            if (aClassIdValue.hasValue())
-            {
-                sal_Int16 nClassID = ::comphelper::getINT16(_rxObject->getPropertyValue(FM_PROP_CLASSID));
-                sTitle = String(SVX_RES(RID_STR_PROPERTIES_CONTROL));
-                sTitle += String(GetUIHeadlineName(nClassID, makeAny(_rxObject)));
-            }
+            sTitle = String( SVX_RES( RID_STR_NO_PROPERTIES ) );
         }
-        else if (Reference< XForm >(_rxObject, UNO_QUERY).is())
-            sTitle = String(SVX_RES(RID_STR_PROPERTIES_FORM));
-        else if (!_rxObject.is())
-            sTitle = String(SVX_RES(RID_STR_NO_PROPERTIES));
-        else if (!::comphelper::hasProperty(FM_PROP_DATASOURCE, _rxObject) || !::comphelper::hasProperty(FM_PROP_NAME, _rxObject))
+        else if ( _rSelection.size() > 1 )
         {
             // no form component and (no form or no name) -> Multiselection
-            sTitle = String(SVX_RES(RID_STR_PROPERTIES_CONTROL));
-            sTitle += String(SVX_RES(RID_STR_PROPTITLE_MULTISELECT));
+            sTitle = String( SVX_RES( RID_STR_PROPERTIES_CONTROL ) );
+            sTitle += String( SVX_RES( RID_STR_PROPTITLE_MULTISELECT ) );
+        }
+        else
+        {
+            Reference< XPropertySet > xSingleSelection( *_rSelection.begin(), UNO_QUERY);
+            if  ( ::comphelper::hasProperty( FM_PROP_CLASSID, xSingleSelection ) )
+            {
+                sal_Int16 nClassID = FormComponentType::CONTROL;
+                xSingleSelection->getPropertyValue( FM_PROP_CLASSID ) >>= nClassID;
+
+                sTitle = String( SVX_RES( RID_STR_PROPERTIES_CONTROL ) );
+                sTitle += String( GetUIHeadlineName( nClassID, makeAny( xSingleSelection ) ) );
+            }
+            else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
+                sTitle = String( SVX_RES( RID_STR_PROPERTIES_FORM ) );
         }
 
-        SetText(sTitle);
+        SetText( sTitle );
 
         // #95343# ---------------------------------
         Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
@@ -599,12 +646,9 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
         if (eState >= SFX_ITEM_AVAILABLE)
         {
             FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
-            Reference< XPropertySet > xObject;
+            InterfaceBag aSelection;
             if ( pShell )
-            {
-                // is there a selected object?
-                xObject = xObject.query( pShell->GetImpl()->getSelObject() );
-            }
+                pShell->GetImpl()->getCurrentSelection( aSelection );
 
             // for some functionality, the property browser needs to know the context of the controls
             Reference< awt::XControlContainer > xControlContext;
@@ -627,7 +671,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             }
 
             // set the new object to inspect
-            implSetNewObject( xObject );
+            implSetNewSelection( aSelection );
 
             // if this is the first time we're here, some additional things need to be done ...
             if ( m_bInitialStateChange )
@@ -656,7 +700,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
         }
         else
         {
-            implSetNewObject(Reference< XPropertySet >());
+            implSetNewSelection( InterfaceBag() );
         }
     }
     catch (Exception&)
