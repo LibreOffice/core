@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:53:57 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 15:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     delete pFnt;
     if ( rTxtNode.HasSwAttrSet() )
     {
+        // no style template found
         aAttrHandler.Init( *pAttrSet );
         pFnt = new SwFont( aAttrHandler );
     }
@@ -166,9 +167,10 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     {
 //FEATURE::CONDCOLL
 //      SwFontAccess aFontAccess( rTxtNode.GetFmtColl() );
+        // we are using a style template, caching the resulting font for
         SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
 //FEATURE::CONDCOLL
-        aAttrHandler.Init( aFontAccess.Get()->GetDefault() );
+        aAttrHandler.Init( aFontAccess.Get()->GetDefault(), *pAttrSet );
         pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
     }
 

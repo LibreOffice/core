@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:52:54 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 15:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,8 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFo
         pRedln->LeaveExtend( *pFnt, 0 );
 
     // Gehe zurueck auf Start ...
-    pFnt->SetFnt( pAttrSet );
+    aAttrHandler.Reset();
+    pFnt->SetFnt( aAttrHandler );
     pFnt->GetTox() = 0;
     pFnt->GetRef() = 0;
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
@@ -401,7 +402,8 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
             // Gehe zurueck auf Start ...
             if( pRedln )
                 pRedln->Clear( NULL );
-            pFnt->SetFnt( pAttrSet );
+            aAttrHandler.Reset();
+            pFnt->SetFnt( aAttrHandler );
             pFnt->GetTox() = 0;
             pFnt->GetRef() = 0;
             if( nPropFont )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:51:05 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 15:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
@@ -143,6 +142,13 @@
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
 #endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
+
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
 #endif
@@ -263,104 +269,123 @@ void SwSubFont::SetFnt( const SvxFont &rFont )
  *                      SwFont::SetFnt()
  *************************************************************************/
 
-void SwFont::SetFnt( const SwAttrSet *pAttrSet )
+void SwFont::SetFnt( const SwAttrHandler& rAttrHandler )
 {
     delete pBackColor;
     pBackColor = NULL;
-    if( pAttrSet )
+
     {
-        {   // Latin
-            const SvxFontItem& rFont = pAttrSet->GetFont();
-            aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
-            aSub[SW_LATIN].Font::SetName( rFont.GetFamilyName() );
-            aSub[SW_LATIN].Font::SetStyleName( rFont.GetStyleName() );
-            aSub[SW_LATIN].Font::SetPitch( rFont.GetPitch() );
-            aSub[SW_LATIN].Font::SetCharSet( rFont.GetCharSet() );
-            aSub[SW_LATIN].SvxFont::SetPropr( 100 );
-            aSub[SW_LATIN].SetPropWidth( 100 );
-            aSub[SW_LATIN].aSize = aSub[SW_LATIN].Font::GetSize();
-            Size aTmpSize = aSub[SW_LATIN].aSize;
-            aTmpSize.Height() = pAttrSet->GetSize().GetHeight();
-            aSub[SW_LATIN].SetSize( aTmpSize );
-            aSub[SW_LATIN].Font::SetItalic( pAttrSet->GetPosture().GetPosture() );
-            aSub[SW_LATIN].Font::SetWeight( pAttrSet->GetWeight().GetWeight() );
-            aSub[SW_LATIN].SetLanguage( pAttrSet->GetLanguage().GetLanguage() );
-        }
-        {   // CJK
-            const SvxFontItem& rFont = pAttrSet->GetCJKFont();
-            aSub[SW_CJK].SetFamily( rFont.GetFamily() );
-            aSub[SW_CJK].Font::SetName( rFont.GetFamilyName() );
-            aSub[SW_CJK].Font::SetStyleName( rFont.GetStyleName() );
-            aSub[SW_CJK].Font::SetPitch( rFont.GetPitch() );
-            aSub[SW_CJK].Font::SetCharSet( rFont.GetCharSet() );
-            aSub[SW_CJK].SvxFont::SetPropr( 100 );
-            aSub[SW_CJK].SetPropWidth( 100 );
-            aSub[SW_CJK].aSize = aSub[SW_CJK].Font::GetSize();
-            Size aTmpSize = aSub[SW_CJK].aSize;
-            aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
-            aSub[SW_CJK].SetSize( aTmpSize );
-            aSub[SW_CJK].Font::SetItalic( pAttrSet->GetCJKPosture().GetPosture() );
-            aSub[SW_CJK].Font::SetWeight( pAttrSet->GetCJKWeight().GetWeight() );
-            LanguageType eNewLang = pAttrSet->GetCJKLanguage().GetLanguage();
-            aSub[SW_CJK].SetLanguage( eNewLang );
-            aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
-            aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
-            aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
-        }
-        {   // CTL
-            const SvxFontItem& rFont = pAttrSet->GetCTLFont();
-            aSub[SW_CTL].SetFamily( rFont.GetFamily() );
-            aSub[SW_CTL].Font::SetName( rFont.GetFamilyName() );
-            aSub[SW_CTL].Font::SetStyleName( rFont.GetStyleName() );
-            aSub[SW_CTL].Font::SetPitch( rFont.GetPitch() );
-            aSub[SW_CTL].Font::SetCharSet( rFont.GetCharSet() );
-            aSub[SW_CTL].SvxFont::SetPropr( 100 );
-            aSub[SW_CTL].SetPropWidth( 100 );
-            aSub[SW_CTL].aSize = aSub[SW_CTL].Font::GetSize();
-            Size aTmpSize = aSub[SW_CTL].aSize;
-            aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
-            aSub[SW_CTL].SetSize( aTmpSize );
-            aSub[SW_CTL].Font::SetItalic( pAttrSet->GetCTLPosture().GetPosture() );
-            aSub[SW_CTL].Font::SetWeight( pAttrSet->GetCTLWeight().GetWeight() );
-            aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
-        }
-        SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
-        SetUnderColor( pAttrSet->GetUnderline().GetColor() );
-        SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
-        SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
-        SetColor( pAttrSet->GetColor().GetValue() );
-        SetTransparent( TRUE );
-        SetAlign( ALIGN_BASELINE );
-        SetOutline( pAttrSet->GetContour().GetValue() );
-        SetShadow( pAttrSet->GetShadowed().GetValue() );
-        SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
-#ifdef TEST_PROPWIDTH
-        //SetPropWidth( pAttrSet->GetPropWidth() );
-        if( pAttrSet->GetShadowed().GetValue() )
-            SetPropWidth(50);
-#endif
-        SetAutoKern( pAttrSet->GetAutoKern().GetValue() );
-        SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
-        const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
-        SetEscapement( rEsc.GetEsc() );
-        if( aSub[SW_LATIN].IsEsc() )
-            SetProportion( rEsc.GetProp() );
-        SetCaseMap( pAttrSet->GetCaseMap().GetCaseMap() );
-        SetFixKerning( pAttrSet->GetKerning().GetValue() );
-        bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
-        bBlink = pAttrSet->GetBlink().GetValue();
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
-            TRUE, &pItem ))
-            pBackColor = new Color( ((const SvxBrushItem*)pItem)->GetColor() );
+        const SvxFontItem& rFont = (SvxFontItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_FONT );
+        aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
+        aSub[SW_LATIN].SetName( rFont.GetFamilyName() );
+        aSub[SW_LATIN].SetStyleName( rFont.GetStyleName() );
+        aSub[SW_LATIN].SetPitch( rFont.GetPitch() );
+        aSub[SW_LATIN].SetCharSet( rFont.GetCharSet() );
+        aSub[SW_LATIN].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        Size aTmpSize = aSub[SW_LATIN].aSize;
+        aTmpSize.Height() = ( (SvxFontHeightItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_FONTSIZE ) ).GetHeight();
+        aSub[SW_LATIN].SetSize( aTmpSize );
+        aSub[SW_LATIN].SetItalic( ( (SvxPostureItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_POSTURE ) ).GetPosture() );
+        aSub[SW_LATIN].SetWeight( ( (SvxWeightItem&)
+                    rAttrHandler.GetDefault( RES_CHRATR_WEIGHT ) ).GetWeight() );
+        aSub[SW_LATIN].SetLanguage( ( (SvxLanguageItem&)
+                    rAttrHandler.GetDefault( RES_CHRATR_LANGUAGE ) ).GetLanguage() );
     }
+
+    {
+        const SvxFontItem& rFont = (SvxFontItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CJK_FONT );
+        aSub[SW_CJK].SetFamily( rFont.GetFamily() );
+        aSub[SW_CJK].SetName( rFont.GetFamilyName() );
+        aSub[SW_CJK].SetStyleName( rFont.GetStyleName() );
+        aSub[SW_CJK].SetPitch( rFont.GetPitch() );
+        aSub[SW_CJK].SetCharSet( rFont.GetCharSet() );
+        aSub[SW_CJK].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        Size aTmpSize = aSub[SW_CJK].aSize;
+        aTmpSize.Height() = ( (SvxFontHeightItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CJK_FONTSIZE ) ).GetHeight();
+        aSub[SW_CJK].SetSize( aTmpSize );
+        aSub[SW_CJK].SetItalic( ( (SvxPostureItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CJK_POSTURE ) ).GetPosture() );
+        aSub[SW_CJK].SetWeight( ( (SvxWeightItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CJK_WEIGHT ) ).GetWeight() );
+        LanguageType eNewLang = ( (SvxLanguageItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_CJK_LANGUAGE ) ).GetLanguage();
+        aSub[SW_CJK].SetLanguage( eNewLang );
+        aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
+    }
+
+    {
+        const SvxFontItem& rFont = (SvxFontItem&)
+              rAttrHandler.GetDefault( RES_CHRATR_CTL_FONT );
+        aSub[SW_CTL].SetFamily( rFont.GetFamily() );
+        aSub[SW_CTL].SetName( rFont.GetFamilyName() );
+        aSub[SW_CTL].SetStyleName( rFont.GetStyleName() );
+        aSub[SW_CTL].SetPitch( rFont.GetPitch() );
+        aSub[SW_CTL].SetCharSet( rFont.GetCharSet() );
+        aSub[SW_CTL].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        Size aTmpSize = aSub[SW_CTL].aSize;
+        aTmpSize.Height() = ( (SvxFontHeightItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CTL_FONTSIZE ) ).GetHeight();
+        aSub[SW_CTL].SetSize( aTmpSize );
+        aSub[SW_CTL].SetItalic( ( (SvxPostureItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CTL_POSTURE ) ).GetPosture() );
+        aSub[SW_CTL].SetWeight( ( (SvxWeightItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CTL_WEIGHT ) ).GetWeight() );
+        aSub[SW_CTL].SetLanguage( ( (SvxLanguageItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_CTL_LANGUAGE ) ).GetLanguage() );
+    }
+
+    SetUnderline( ( (SvxUnderlineItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_UNDERLINE ) ).GetUnderline() );
+    SetUnderColor( ( (SvxUnderlineItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_UNDERLINE ) ).GetColor() );
+    SetEmphasisMark( ( (SvxEmphasisMarkItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_EMPHASIS_MARK ) ).GetEmphasisMark() );
+    SetStrikeout( ( (SvxCrossedOutItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_CROSSEDOUT ) ).GetStrikeout() );
+    SetColor( ( (SvxColorItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_COLOR ) ).GetValue() );
+    SetTransparent( TRUE );
+    SetAlign( ALIGN_BASELINE );
+    SetOutline( ( (SvxContourItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_CONTOUR ) ).GetValue() );
+    SetShadow( ( (SvxShadowedItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_SHADOWED ) ).GetValue() );
+    SetRelief( (FontRelief)( (SvxCharReliefItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_RELIEF ) ).GetValue() );
+    SetAutoKern( ( (SvxAutoKernItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_AUTOKERN ) ).GetValue() );
+    SetWordLineMode( ( (SvxWordLineModeItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_WORDLINEMODE ) ).GetValue() );
+    const SvxEscapementItem &rEsc =
+            (SvxEscapementItem&)rAttrHandler.GetDefault( RES_CHRATR_ESCAPEMENT );
+    SetEscapement( rEsc.GetEsc() );
+    if( aSub[SW_LATIN].IsEsc() )
+        SetProportion( rEsc.GetProp() );
+    SetCaseMap( ( (SvxCaseMapItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_CASEMAP ) ).GetCaseMap() );
+    SetFixKerning( ( (SvxKerningItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_KERNING ) ).GetValue() );
+    bNoHyph = FALSE;
+    bBlink = ( (SvxBlinkItem&)rAttrHandler.GetDefault( RES_CHRATR_BLINK ) ).GetValue();
+    if( SFX_ITEM_SET == rAttrHandler.GetAttrSet()->GetItemState(
+            RES_CHRATR_BACKGROUND, TRUE ) )
+        pBackColor = new Color( ( (const SvxBrushItem&)
+                rAttrHandler.GetDefault( RES_CHRATR_BACKGROUND ) ).GetColor() );
+    const SvxTwoLinesItem& rTwoLinesItem =
+             (const SvxTwoLinesItem&)rAttrHandler.GetDefault( RES_CHRATR_TWO_LINES );
+    if (! rTwoLinesItem.GetValue() )
+        SetVertical( ( (SvxCharRotateItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_ROTATE ) ).GetValue() );
     else
-    {
-        aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
-        Invalidate();
-        bNoHyph = FALSE;
-        bBlink = FALSE;
-    }
+        SetVertical( 0 );
+
     bPaintBlank = FALSE;
     bPaintWrong = FALSE;
     bURL = bGreyWave = bNoColReplace = FALSE;
@@ -368,7 +393,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
 }
 
 /*************************************************************************
- *                      SwFont::SetFnt()
+ *                      SwFont::SetDiffFnt()
  *************************************************************************/
 
 void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
@@ -529,6 +554,14 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BLINK,
             TRUE, &pItem ))
             SetBlink( ((SvxBlinkItem*)pItem)->GetValue() );
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_ROTATE,
+            TRUE, &pItem ))
+            SetVertical( ((SvxCharRotateItem*)pItem)->GetValue() );
+        const SfxPoolItem* pTwoLinesItem = 0;
+        if( SFX_ITEM_SET ==
+                pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pTwoLinesItem ))
+            if ( ((SvxTwoLinesItem*)pTwoLinesItem)->GetValue() )
+                SetVertical( 0 );
     }
     else
     {
@@ -652,6 +685,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
         pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
     else
         pBackColor = NULL;
+    const SvxTwoLinesItem& rTwoLinesItem = pAttrSet->Get2Lines();
+    if ( ! rTwoLinesItem.GetValue() )
+        SetVertical( pAttrSet->GetCharRotate().GetValue() );
+    else
+        SetVertical( 0 );
 }
 
 SwFont::SwFont( const SwAttrHandler& rAttrHandler )
@@ -771,6 +809,13 @@ SwFont::SwFont( const SwAttrHandler& rAttrHandler )
             rAttrHandler.GetDefault( RES_CHRATR_BACKGROUND ) ).GetColor() );
     else
         pBackColor = NULL;
+    const SvxTwoLinesItem& rTwoLinesItem =
+             (SvxTwoLinesItem&)rAttrHandler.GetDefault( RES_CHRATR_TWO_LINES );
+    if (! rTwoLinesItem.GetValue() )
+        SetVertical( ( (SvxCharRotateItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_ROTATE ) ).GetValue() );
+    else
+        SetVertical( 0 );
 }
 
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )

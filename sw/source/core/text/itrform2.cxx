@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-28 08:46:55 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 15:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             {
                 SwMultiPortion* pTmp = NULL;
                 if( SW_MC_RUBY == pCreate->nId )
+                {
+                    Seek( rInf.GetIdx() );
                      pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(), nEnd );
+                }
                 else if( SW_MC_ROTATE == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd );
                 else
