@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:51:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,6 +1690,11 @@ bool Application::GetShowImeStatusWindowDefault()
     aInfo.StructSize = sizeof aInfo;
     return rtl_getTextEncodingInfo(osl_getThreadTextEncoding(), &aInfo)
         && aInfo.MaximumCharSize > 1;
+}
+
+const ::rtl::OUString& Application::GetDesktopEnvironment()
+{
+    return SalGetDesktopEnvironment();
 }
 
 BOOL Application::IsAccessibilityEnabled()
