@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
+ *  last change: $Author: jbu $ $Date: 2000-12-12 10:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ interface XBridgeFactory: com::sun::star::uno::XInterface
         @param anInstanceProvider
             gets called, when a request from remote comes in.
 
-        @exception BridgeExistsException
+        @throws BridgeExistsException
             There is already a bridge registered with this name.  Use getBridge instead.
 
-        @exception IllegalArgumentException
+        @throws IllegalArgumentException
             The protocol is unknown.
      */
     XBridge createBridge(

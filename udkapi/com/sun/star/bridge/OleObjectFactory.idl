@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleObjectFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
+ *  last change: $Author: jbu $ $Date: 2000-12-12 10:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@
     The created UNO objects support <type scope="com::sun::star::script">XInvocation</type>
     if the original OLE objects support IDispatch. </p>
 
-    <p>The optional parameters of the method <member>???</member>
+    <p>The optional parameters of the method
+    <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</method>
     are reserved for future use; at this time they are ignored.  </p>
  */
 service OleObjectFactory
@@ -97,6 +98,9 @@ service OleObjectFactory
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:40  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:26  mi
     moved from api
 
