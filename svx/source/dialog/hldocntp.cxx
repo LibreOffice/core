@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:10:22 $
+ *  last change: $Author: dl $ $Date: 2000-12-04 11:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
         if (pViewFrame)
         {
             //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
-            SfxStringItem aNewName( SID_FILE_NAME, aStrNewName );
+            SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL() );
+
             pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
                                                   SFX_CALLMODE_SYNCHRON,
                                                   &aNewName, 0L );
