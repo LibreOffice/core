@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-02-26 15:28:03 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,10 +475,22 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     BOOL    bNoTicks = FALSE;
 
     // Groessenvorberechnung
+    BOOL bVertRight = FALSE;
     if ( mnWinStyle & WB_HORZ )
         nTickWidth = aPixSize.Width();
     else
+    {
+        Font aFont = GetFont();
+        if ( mnWinStyle & WB_RIGHT_ALIGNED )
+        {
+            aFont.SetOrientation( 2700 );
+            bVertRight = TRUE;
+        }
+        else
+            aFont.SetOrientation( 900 );
+        maVirDev.SetFont( aFont );
         nTickWidth = aPixSize.Height();
+    }
     long nMaxWidth = maVirDev.PixelToLogic( Size( mpData->nPageWidth, 0 ), maMapMode ).Width();
     if ( nMaxWidth < 0 )
         nMaxWidth *= -1;
@@ -545,7 +557,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                             nX = nStart-nTxtWidth2;
                         else
                             nX = nStart+nTxtWidth2;
-                        ImplVDrawText( nX, nCenter-nTxtHeight2, aNumStr );
+                        long nY = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
+                        ImplVDrawText( nX, nY, aNumStr );
                     }
                 }
             }
@@ -565,7 +578,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     nTxtWidth2 = GetTextWidth( aNumStr )/2;
 
                     nX = nStart+n;
-                    nY = nCenter-nTxtHeight2;
+                    //different orientation needs a different starting position
+                    nY = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
                     if ( nX < nMax )
                     {
                         if ( mnWinStyle & WB_HORZ )
@@ -959,7 +973,7 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
                 for(USHORT i = 0; i < 5; i++)
                 {
                     aTmp = aPoly[i];
-                    Point aSet(aTmp.Y(), aTmp.X());
+                    Point aSet(nVirBottom - aTmp.Y(), aTmp.X());
                     aPoly[i] = aSet;
                 }
             }
@@ -981,7 +995,7 @@ static void ImplCenterTabPos( Point& rPos, USHORT nStyle )
 }
 
 // -----------------------------------------------------------------------
-void lcl_RotateRect(Rectangle& rRect)
+void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, BOOL bRightAligned)
 {
     if(!rRect.IsEmpty())
     {
@@ -990,12 +1004,18 @@ void lcl_RotateRect(Rectangle& rRect)
         rRect.Bottom() = aTmp.Right();
         rRect.Left() = aTmp.Top();
         rRect.Right() = aTmp.Bottom();
+        if(bRightAligned)
+        {
+            long nRef = 2 * nReference;
+            rRect.Left() = nRef - rRect.Left();
+            rRect.Right() = nRef - rRect.Right();
+        }
     }
 }
 // -----------------------------------------------------------------------
 
 static void ImplDrawRulerTab( OutputDevice* pDevice,
-                             const Point& rPos, USHORT nStyle, BOOL bVertical )
+                             const Point& rPos, USHORT nStyle, WinBits nWinBits )
 {
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;
@@ -1052,16 +1072,17 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
         if ( nTabStyle == RULER_TAB_DECIMAL )
         {
             aRect3.Left() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH - 1;
-            aRect3.Top() = rPos.Y() - RULER_TAB_HEIGHT + 1 + 1;
+            aRect3.Top()  = rPos.Y() - RULER_TAB_HEIGHT + 1 + 1;
             aRect3.Right() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
-            aRect3.Bottom() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+            aRect3.Bottom()= rPos.Y() - RULER_TAB_HEIGHT + 1 + 2 ;
         }
     }
-    if( bVertical )
+    if( 0 == (nWinBits&WB_HORZ) )
     {
-        lcl_RotateRect(aRect1);
-        lcl_RotateRect(aRect2);
-        lcl_RotateRect(aRect3);
+        BOOL bRightAligned = 0 != (nWinBits&WB_RIGHT_ALIGNED);
+        lcl_RotateRect_Impl(aRect1, rPos.Y(), bRightAligned);
+        lcl_RotateRect_Impl(aRect2, rPos.Y(), bRightAligned);
+        lcl_RotateRect_Impl(aRect3, rPos.Y(), bRightAligned);
     }
     pDevice->DrawRect( aRect1 );
     pDevice->DrawRect( aRect2 );
@@ -1083,12 +1104,12 @@ void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle
     else
         pDevice->SetFillColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
 
-    ImplDrawRulerTab( pDevice, rPos, nStyle, 0 == (GetStyle() & WB_HORZ ) );
+    ImplDrawRulerTab( pDevice, rPos, nStyle, GetStyle() );
 }
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirBottom )
+void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
 {
     for ( USHORT i = 0; i < mpData->nTabs; i++ )
     {
@@ -1096,8 +1117,9 @@ void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirBottom )
             continue;
 
         long n = mpData->pTabs[i].nPos+mpData->nNullVirOff;
+        long nTopBottom = GetStyle() & WB_RIGHT_ALIGNED ? nVirTop : nVirBottom;
         if ( (n >= nMin) && (n <= nMax) )
-            ImplDrawTab( &maVirDev, Point( n, nVirBottom ), mpData->pTabs[i].nStyle );
+            ImplDrawTab( &maVirDev, Point( n, nTopBottom ), mpData->pTabs[i].nStyle );
     }
 }
 
@@ -1410,7 +1432,9 @@ void Ruler::ImplFormat()
 
     // Tabs
     if ( mpData->pTabs )
-        ImplDrawTabs( nVirLeft, nP2, nVirBottom+1 );
+    {
+        ImplDrawTabs( nVirLeft, nP2, nVirTop-1, nVirBottom+1 );
+    }
 
     // Bemassungspfeile
     if ( mpData->pArrows )
@@ -1538,8 +1562,14 @@ void Ruler::ImplDrawExtra( BOOL bPaint )
     {
         USHORT nTabStyle = mnExtraStyle & RULER_TAB_STYLE;
         Point aCenter = aRect.Center();
-        ImplCenterTabPos( aCenter, nTabStyle );
-        ImplDrawTab( this, aCenter, nTabStyle );
+        Point aDraw(aCenter);
+        ImplCenterTabPos( aDraw, nTabStyle );
+        WinBits nWinBits = GetStyle();
+        if(( 0 == (nWinBits&WB_HORZ) ) && (0 != (nWinBits&WB_RIGHT_ALIGNED)))
+        {
+            aDraw.Y() = 2 * aCenter.Y() - aDraw.Y();
+        }
+        ImplDrawTab( this, aDraw, nTabStyle );
     }
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) && (mnExtraStyle & RULER_STYLE_HIGHLIGHT) )
@@ -1591,7 +1621,8 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const
         return FALSE;
 
     // Position ermitteln
-    if ( mnWinStyle & WB_HORZ )
+    BOOL bIsHori = 0 != (mnWinStyle & WB_HORZ);
+    if ( bIsHori )
     {
         nX = rPos.X();
         nY = rPos.Y();
@@ -1688,7 +1719,7 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const
                 nStyle &= RULER_INDENT_STYLE;
                 n1 = mpData->pIndents[i-1].nPos;
 
-                if ( nStyle == RULER_INDENT_BOTTOM )
+                if ( (nStyle == RULER_INDENT_BOTTOM) ^ (!bIsHori) )
                 {
                     aRect.Left()    = n1-nIndentWidth2;
                     aRect.Right()   = n1+nIndentWidth2;
@@ -3099,6 +3130,6 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
     pDevice->SetLineColor();
     pDevice->SetFillColor( pDevice->GetSettings().GetStyleSettings().GetWindowTextColor() );
     ImplCenterTabPos( aPos, nTabStyle );
-    ImplDrawRulerTab( pDevice, aPos, nTabStyle, 0 == (nStyle & WB_HORZ ) );
+    ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 13:40:57 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ WB_3DLOOK           3D-Darstellung
 WB_BORDER           Border am unteren/rechten Rand
 WB_EXTRAFIELD       Feld in der linken/oberen Ecke zur Anzeige und
                     Auswahl von Tabs, Null-Punkt, ...
+WB_RIGHT_ALIGNED    Marks the vertical ruler as right aligned
 
 --------------------------------------------------------------------------
 
@@ -572,6 +573,7 @@ Tips zur Benutzung des Lineals:
 // -----------
 
 #define WB_EXTRAFIELD       ((WinBits)0x00004000)
+#define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
 #define WB_STDRULER         WB_HORZ
 
 // ---------------
@@ -794,7 +796,7 @@ private:
     void                ImplDrawIndent( const Polygon& rPoly, USHORT nStyle );
     void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
     void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle );
-    void                ImplDrawTabs( long nMin, long nMax, long nVirBottom );
+    void                ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
     void                ImplInit( WinBits nWinBits );
     void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     void                ImplCalc();
