@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:44:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,12 @@
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #endif
 // <--
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _SVX_SVUNDO_HXX
+#include <svx/svdundo.hxx> // #111827#
+#endif
 // OD 2004-05-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
@@ -2829,6 +2835,11 @@ void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
     // empty body, because default implementation does nothing
 }
 // <--
+String SwFrmFmt::GetDescription() const
+{
+    return SW_RES(STR_FRAME);
+}
+
 //  class SwFlyFrmFmt
 //  Implementierung teilweise inline im hxx
 
@@ -3160,6 +3171,32 @@ void SwDrawFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
     }
 }
 // <--
+
+String SwDrawFrmFmt::GetDescription() const
+{
+    String aResult;
+    const SdrObject * pSdrObj = FindSdrObject();
+
+    if (pSdrObj)
+    {
+        if (pSdrObj != pSdrObjCached)
+        {
+            SdrObject * pSdrObjCopy = pSdrObj->Clone();
+            SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
+            sSdrObjCachedComment = pSdrUndo->GetComment();
+
+            delete pSdrUndo;
+
+            pSdrObjCached = pSdrObj;
+        }
+
+        aResult = sSdrObjCachedComment;
+    }
+    else
+        aResult = SW_RES(STR_GRAPHIC);
+
+    return aResult;
+}
 
 IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
                                         const SwFlyFrm *pFly ) const
