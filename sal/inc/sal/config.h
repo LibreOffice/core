@@ -2,8 +2,8 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: hr $ $Date: 2002-08-14 17:17:07 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: hro $ $Date: 2002-12-10 12:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,11 @@ extern "C" {
 #if defined(_DEBUG)
 /* No warning for: identifier was truncated to '255' characters in the browser information */
 #pragma warning( disable : 4786 )
+#endif
+
+/* Provide ISO C99 compatible versions of snprint and vsnprintf */
+#ifndef _SNPRINTF_H
+#include <systools/win32/snprintf.h>
 #endif
 
 #endif

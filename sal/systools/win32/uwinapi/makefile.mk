@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 13:36:09 $
+#   last change: $Author: hro $ $Date: 2002-12-10 12:17:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,9 @@ SLOFILES=\
         $(SLO)$/MoveFileExW.obj\
         $(SLO)$/DllGetVersion.obj\
         $(SLO)$/DllMain.obj\
-        $(SLO)$/ResolveThunk.obj
+        $(SLO)$/ResolveThunk.obj\
+        $(SLO)$/snprintf.obj\
+        $(SLO)$/snwprintf.obj
 
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
