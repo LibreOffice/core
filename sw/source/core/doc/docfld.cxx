@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:16:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SO2REF_HXX //autogen
-#include <so3/so2ref.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -187,11 +184,6 @@
 #include <SwUndoField.hxx> // #111840#
 
 using namespace com::sun::star::uno; // #111840#
-
-#ifndef SO2_DECL_SVLINKNAME_DEFINED
-#define SO2_DECL_SVLINKNAME_DEFINED
-SO2_DECL_REF(SvLinkName)
-#endif
 
 extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
                         const SwTxtNode& rBehindNd, USHORT nSttPos );
