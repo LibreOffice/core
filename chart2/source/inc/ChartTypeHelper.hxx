@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:52 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 10:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <drafts/com/sun/star/chart2/XChartType.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <drafts/com/sun/star/chart2/AxisType.hpp>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -84,6 +88,10 @@ public:
     static sal_Bool isSupportingSecondaryYAxis(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingAreaProperties(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingSymbolProperties(    const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
+
+    static ::drafts::com::sun::star::chart2::AxisType
+                    getAxisType( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType
+                                , sal_Int32 nDimensionIndex );
 };
 
 //.............................................................................

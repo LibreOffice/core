@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:53 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 10:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,27 @@ sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XC
             return sal_True;
     }
     return sal_False;
+}
+
+AxisType ChartTypeHelper::getAxisType( const uno::Reference<
+            XChartType >& xChartType, sal_Int32 nDimensionIndex )
+{
+    //@todo ask charttype itself --> need model change first
+    if(!xChartType.is())
+        return AxisType_CATEGORY;
+
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if(2==nDimensionIndex)//z-axis
+        return AxisType_CATEGORY;
+    if(1==nDimensionIndex)//y-axis
+        return AxisType_REALNUMBER;
+    if(0==nDimensionIndex)//x-axis
+    {
+        if( aChartTypeName.match(C2U("com.sun.star.chart2.ScatterChart")) )
+            return AxisType_REALNUMBER;
+        return AxisType_CATEGORY;
+    }
+    return AxisType_CATEGORY;
 }
 
 //.............................................................................
