@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:46:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabDialog TAB_TEMPLATE
     Text [ portuguese_brazilian ] = "Estilos de Figuras" ;
     Text [ portuguese ] = "Estilos de objecto gr�fico" ;
     Text [ finnish ] = "Grafiikkatyylit" ;
-    Text [ danish ] = "Grafikobjekttypografi" ;
+    Text [ danish ] = "Grafikobjekttypografier" ;
     Text [ french ] = "Style d'objet graphique" ;
     Text [ swedish ] = "Grafikobjektmall" ;
     Text [ dutch ] = "Opmaakprofiel voor grafische objecten" ;
@@ -121,6 +121,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Linie";
                 Text[ hindi ] = "रेखा";
                 Text[ slovak ] = "Úsečka";
+                Text[ hungarian ] = "Vonal";
+                Text[ slovenian ] = "Črta";
             };
             PageItem
             {
@@ -156,6 +158,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Fläche";
                 Text[ hindi ] = "विस्तीर्ण";
                 Text[ slovak ] = "Oblasť";
+                Text[ hungarian ] = "Terület";
+                Text[ slovenian ] = "Področje";
             };
             PageItem
             {
@@ -189,6 +193,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Schatten";
                 Text[ hindi ] = "छाया";
                 Text[ slovak ] = "Tieňovanie";
+                Text[ hungarian ] = "Árnyékolás";
+                Text[ slovenian ] = "Senčenje";
             };
             PageItem
             {
@@ -220,6 +226,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Transparenz";
                 Text[ hindi ] = "पारदर्शकता";
                 Text[ slovak ] = "Priehľadnosť";
+                Text[ hungarian ] = "Átlátszóság";
+                Text[ slovenian ] = "Prosojnost";
             };
             PageItem
             {
@@ -254,6 +262,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betű";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -265,7 +275,7 @@ TabDialog TAB_TEMPLATE
                 Text [ portuguese_brazilian ] = "Efeito da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehoste" ;
-                Text [ danish ] = "Skrifteffekt" ;
+                Text [ danish ] = "Skrifteffekter" ;
                 Text [ french ] = "Effets de caract�res" ;
                 Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffect" ;
@@ -288,6 +298,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Schrifteffekt";
                 Text[ hindi ] = "Font Effect";
                 Text[ slovak ] = "Efekty písma";
+                Text[ hungarian ] = "Betűhatás";
+                Text[ slovenian ] = "Učinek pisave";
             };
             PageItem
             {
@@ -300,7 +312,7 @@ TabDialog TAB_TEMPLATE
                 Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
-                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ danish ] = "Indrykning og afstand" ;
                 Text [ french ] = "Retraits et �carts" ;
                 Text [ swedish ] = "Indrag och avst�nd" ;
                 Text [ dutch ] = "Inspringingen en afstanden" ;
@@ -323,6 +335,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "‮שוליים ברווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
                 Text[ slovak ] = "Odsadenie a riadkovanie";
+                Text[ hungarian ] = "Behúzás és térköz";
+                Text[ slovenian ] = "Zamiki in razmiki";
             };
             PageItem
             {
@@ -356,6 +370,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "‮טקסט‬";
                 Text[ hindi ] = "टेक्स्ट्";
                 Text[ slovak ] = "Text";
+                Text[ hungarian ] = "Szöveg";
+                Text[ slovenian ] = "Besedilo";
             };
             PageItem
             {
@@ -365,7 +381,7 @@ TabDialog TAB_TEMPLATE
                 PageResID = RID_SVXPAGE_TEXTANIMATION ;
                 Text [ english_us ] = "Text Animation" ;
                 Text [ swedish ] = "Animerad text" ;
-                Text [ danish ] = "Animeret tekst" ;
+                Text [ danish ] = "Tekstanimation" ;
                 Text [ italian ] = "Testo scorrevole" ;
                 Text [ spanish ] = "Animaci�n de texto" ;
                 Text [ french ] = "Animation de texte" ;
@@ -389,6 +405,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Lauftext";
                 Text[ hindi ] = "टेक्स्ट् हुलास";
                 Text[ slovak ] = "Animácia textu";
+                Text[ hungarian ] = "Szöveg animálása";
+                Text[ slovenian ] = "Animacija besedila";
             };
             PageItem
             {
@@ -423,6 +441,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Bemaßung";
                 Text[ hindi ] = "परिमाण देना";
                 Text[ slovak ] = "Zmena rozmerov";
+                Text[ hungarian ] = "Méretvonal";
+                Text[ slovenian ] = "Dimenzioniranje";
             };
             PageItem
             {
@@ -455,6 +475,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Verbinder";
                 Text[ hindi ] = "कनेक्टर";
                 Text[ slovak ] = "Spojnica";
+                Text[ hungarian ] = "Összekötő";
+                Text[ slovenian ] = "Konektor";
             };
             PageItem
             {
@@ -487,6 +509,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -521,6 +545,8 @@ TabDialog TAB_TEMPLATE
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
                 Text[ slovak ] = "Tabulátory";
+                Text[ hungarian ] = "Tabulátorok";
+                Text[ slovenian ] = "Tabulatorji";
             };
         };
     };
@@ -577,6 +603,8 @@ TabDialog TAB_TEMPLATE
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "पीछे";
         Text[ slovak ] = "Späť";
+        Text[ hungarian ] = "Vissza";
+        Text[ slovenian ] = "Nazaj";
     };
     Text[ chinese_simplified ] = "图形对象样式";
     Text[ russian ] = "����� ����������� ��������";
@@ -594,7 +622,10 @@ TabDialog TAB_TEMPLATE
     Text[ hebrew ] = "Grafikobjektvorlage";
     Text[ hindi ] = "सुचित्र शैलियाँ";
     Text[ slovak ] = "Grafické štýly";
+    Text[ hungarian ] = "Képstílusok";
+    Text[ slovenian ] = "Grafični slogi";
 };
+
 
 
 
