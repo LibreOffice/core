@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:51 $
+ *  last change: $Author: os $ $Date: 2002-10-07 12:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,7 +1652,7 @@ TabPage TP_STD_FONT
     };
     String ST_SCRIPT_ASIAN
     {
-        Text = "Asiatisch" ;
+        Text = "asiatisch" ;
         Text [ English ] = "Asian" ;
         Text[ english_us ] = "Asian";
         Text[ portuguese ] = "Asiático";
@@ -1678,7 +1678,7 @@ TabPage TP_STD_FONT
     };
     String ST_SCRIPT_CTL
     {
-        Text = "komplexe Skripte" ;
+        Text = "CTL" ;
         Text [ English ] = "CTL" ;
         Text[ english_us ] = "CTL";
         Text[ portuguese ] = "CTL";
@@ -1701,7 +1701,7 @@ TabPage TP_STD_FONT
     };
     String ST_SCRIPT_WESTERN
     {
-        Text = "Westlich" ;
+        Text = "westlich" ;
         Text [ English ] = "Western" ;
         Text[ english_us ] = "Western";
         Text[ portuguese ] = "Ocidental";
