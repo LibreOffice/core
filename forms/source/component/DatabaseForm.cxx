@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 08:08:36 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 07:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3641,7 +3641,7 @@ void SAL_CALL ODatabaseForm::setInt(sal_Int32 parameterIndex, sal_Int32 x) throw
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::setLong(sal_Int32 parameterIndex, Hyper x) throw( SQLException, RuntimeException )
+void SAL_CALL ODatabaseForm::setLong(sal_Int32 parameterIndex, sal_Int64 x) throw( SQLException, RuntimeException )
 {
     PARAMETER_VISITED(setLong(parameterIndex, x));
 }
