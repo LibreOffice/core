@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:14:34 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,10 @@ public:
                                     sal_uInt16 nFlags ) const;
 
     inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
+
+    static sal_Bool QueryXMLValue( const SfxPoolItem& rItem,
+                                 ::rtl::OUString& rValue, sal_uInt16 nMemberId,
+                                 const SvXMLUnitConverter& rUnitConverter );
 };
 
 inline void

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-25 11:02:24 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@
 #include "xmlbrshi.hxx"
 #include "xmlbrshe.hxx"
 #include "xmlexp.hxx"
+#include "xmlimpit.hxx"
+#include "xmlexpit.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -144,21 +146,25 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_BGIMG_HREF:
-            pItem->importXML( GetImport().ResolveGraphicObjectURL( rValue,sal_False),
-                                   MID_GRAPHIC_LINK, rUnitConv );
+            SvXMLImportItemMapper::PutXMLValue(
+                *pItem, GetImport().ResolveGraphicObjectURL( rValue,sal_False),
+                MID_GRAPHIC_LINK, rUnitConv );
             break;
         case XML_TOK_BGIMG_TYPE:
         case XML_TOK_BGIMG_ACTUATE:
         case XML_TOK_BGIMG_SHOW:
             break;
         case XML_TOK_BGIMG_POSITION:
-            pItem->importXML( rValue, MID_GRAPHIC_POSITION, rUnitConv );
+            SvXMLImportItemMapper::PutXMLValue(
+                *pItem, rValue, MID_GRAPHIC_POSITION, rUnitConv );
             break;
         case XML_TOK_BGIMG_REPEAT:
-            pItem->importXML( rValue, MID_GRAPHIC_REPEAT, rUnitConv );
+            SvXMLImportItemMapper::PutXMLValue(
+                *pItem, rValue, MID_GRAPHIC_REPEAT, rUnitConv );
             break;
         case XML_TOK_BGIMG_FILTER:
-            pItem->importXML( rValue, MID_GRAPHIC_FILTER, rUnitConv );
+            SvXMLImportItemMapper::PutXMLValue(
+                *pItem, rValue, MID_GRAPHIC_FILTER, rUnitConv );
             break;
         }
     }
@@ -196,7 +202,7 @@ void SwXMLBrushItemImportContext::EndElement()
     {
         OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream ) );
         xBase64Stream = 0;
-        pItem->importXML( sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
+        SvXMLImportItemMapper::PutXMLValue( *pItem, sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
     }
 
     if( !(pItem->GetGraphicLink() || pItem->GetGraphic() ) )
@@ -253,7 +259,8 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 
     OUString sValue, sURL;
     const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
-    if( rItem.exportXML( sURL, MID_GRAPHIC_LINK, rUnitConv ) )
+    if( SvXMLExportItemMapper::QueryXMLValue(
+            rItem, sURL, MID_GRAPHIC_LINK, rUnitConv ) )
     {
         sValue = GetExport().AddEmbeddedGraphicObject( sURL );
         if( sValue.getLength() )
@@ -264,13 +271,16 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
         }
 
-        if( rItem.exportXML( sValue, MID_GRAPHIC_POSITION, rUnitConv ) )
+        if( SvXMLExportItemMapper::QueryXMLValue(
+                rItem, sValue, MID_GRAPHIC_POSITION, rUnitConv ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION, sValue );
 
-        if( rItem.exportXML( sValue, MID_GRAPHIC_REPEAT, rUnitConv ) )
+        if( SvXMLExportItemMapper::QueryXMLValue(
+                rItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REPEAT, sValue );
 
-        if( rItem.exportXML( sValue, MID_GRAPHIC_FILTER, rUnitConv ) )
+        if( SvXMLExportItemMapper::QueryXMLValue(
+                rItem, sValue, MID_GRAPHIC_FILTER, rUnitConv ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME, sValue );
     }
 
@@ -289,11 +299,14 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 
       Source Code Control ::com::sun::star::chaos::System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.5 2001-06-25 11:02:24 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.6 2001-07-09 20:10:42 dvo Exp $
 
       Source Code Control ::com::sun::star::chaos::System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/06/25 11:02:24  mib
+      #87313#: embedded images as BASE64
+
       Revision 1.4  2001/06/18 17:27:51  dvo
       #86004#
       - changed SvXMLItemMaps to use XMLTokenEnum

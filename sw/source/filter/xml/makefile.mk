@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mib $ $Date: 2001-07-05 09:50:51 $
+#   last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,11 +96,11 @@ CXXFILES = \
         xmlitemm.cxx	\
         xmlitemi.cxx	\
         xmliteme.cxx	\
-        swxmlat.cxx      \
         xmlbrsh.cxx		\
         xmlfonte.cxx	\
         XMLRedlineImportHelper.cxx \
         xmlitem.cxx	\
+        xmlithlp.cxx \
         xmlitmpr.cxx	\
         xmlimpit.cxx \
         xmlexpit.cxx 
@@ -122,7 +122,7 @@ SLOFILES =  \
         $(SLO)$/xmlitemm.obj \
         $(SLO)$/xmlitemi.obj \
         $(SLO)$/xmliteme.obj \
-        $(SLO)$/swxmlat.obj \
+        $(SLO)$/xmlithlp.obj \
         $(SLO)$/xmlbrsh.obj \
         $(SLO)$/xmlfonte.obj \
         $(SLO)$/XMLRedlineImportHelper.obj \
@@ -146,7 +146,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/xmlscript.obj \
         $(SLO)$/xmlitemi.obj \
         $(SLO)$/xmliteme.obj \
-        $(SLO)$/swxmlat.obj \
+        $(SLO)$/xmlithlp.obj \
         $(SLO)$/xmlbrsh.obj \
         $(SLO)$/xmlfonte.obj \
         $(SLO)$/XMLRedlineImportHelper.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fchrfmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,6 @@ public:
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    //
-    // XML import cannot be done using importXML, because the SwCharFmt's
-    // name must be adjusted according to the pool id and access to the SwDoc
-    // is required.
-    virtual BOOL        exportXML( rtl::OUString& rValue, USHORT,
-                                   const SvXMLUnitConverter& ) const;
 
     // an das SwTxtCharFmt weiterleiten (vom SwClient)
     virtual void    Modify( SfxPoolItem*, SfxPoolItem* );

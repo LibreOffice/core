@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtpdsc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,13 +134,6 @@ public:
     // fuer den SW3-Reader:
     USHORT GetDescNameIdx() const { return nDescNameIdx; }
     void SetDescNameIdx( USHORT n ) { nDescNameIdx = n;  }
-    //
-    // this item must be ignored while comparing item sets during XML export
-    virtual BOOL        equalsXML( const SfxPoolItem& ) const;
-    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
-                                   const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
-                                   const SvXMLUnitConverter& rUnitConv ) const;
 };
 
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(BOOL bInP) const

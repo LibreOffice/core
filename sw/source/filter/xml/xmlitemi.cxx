@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,8 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
             // already that must be preserved.
             if( SFX_ITEM_SET != rItemSet.GetItemState( RES_FRM_SIZE,
                                                        sal_False ) )
-                bRet = rItem.importXML( rValue, nMemberId, rUnitConv );
+                bRet = SvXMLImportItemMapper::PutXMLValue(
+                    rItem, rValue, nMemberId, rUnitConv );
             break;
         }
     }

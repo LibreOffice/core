@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,8 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                     break;
                 }
                 OUString sValue;
-                if( bExport && rItem.exportXML( sValue, nMemberId,
-                                                rUnitConverter ) )
+                if( bExport && SvXMLExportItemMapper::QueryXMLValue(
+                    rItem, sValue, nMemberId, rUnitConverter ) )
                 {
                     AddAttribute( rEntry.nNameSpace, rEntry.eLocalName, sValue,
                                   rNamespaceMap, rAttrList );
@@ -270,7 +270,8 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
             case MID_FRMSIZE_REL_WIDTH:
                 {
                     OUString sValue;
-                    if( rItem.exportXML( sValue, nMemberId, rUnitConverter ) )
+                    if( SvXMLExportItemMapper::QueryXMLValue(
+                        rItem, sValue, nMemberId, rUnitConverter ) )
                     {
                         AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
                                       sValue, rNamespaceMap, rAttrList );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtornt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,6 @@ public:
 
     SwTwips GetPosConvertedToSw31( const SvxULSpaceItem *pULSpace ) const;
     SwTwips GetPosConvertedFromSw31( const SvxULSpaceItem *pULSpace ) const;
-
-    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
-                                   const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
-                                   const SvXMLUnitConverter& rUnitConv ) const;
 };
 
 //SwFmtHoriOrient, wie und woran orientiert --
@@ -168,11 +163,6 @@ public:
 
     BOOL IsPosToggle() const { return bPosToggle; }
     void SetPosToggle( BOOL bNew ) { bPosToggle = bNew; }
-
-    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
-                                   const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
-                                   const SvXMLUnitConverter& rUnitConv ) const;
 };
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )

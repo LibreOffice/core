@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:14:49 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,15 @@ public:
 
     inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
     inline SvXMLItemMapEntriesRef getMapEntries() const;
+
+
+    /** This method is called for every item that should be set based
+        upon an XML attribute value. */
+    static sal_Bool PutXMLValue(
+        SfxPoolItem& rItem,
+        const ::rtl::OUString& rValue,
+        sal_uInt16 nMemberId,
+        const SvXMLUnitConverter& rUnitConverter );
 };
 
 inline void

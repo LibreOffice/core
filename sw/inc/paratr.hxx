@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,6 @@ public:
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = (SwModify*)pNew; }
-
-    // this item must be ignored while comparing item sets during XML export
-    virtual BOOL        equalsXML( const SfxPoolItem& ) const;
 };
 
 class SwRegisterItem : public SfxBoolItem
@@ -178,10 +175,6 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
 
-    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
-                                   const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
-                                   const SvXMLUnitConverter& rUnitConv ) const;
 };
 
 inline SwRegisterItem::SwRegisterItem( const BOOL bRegister ) :
@@ -229,9 +222,6 @@ public:
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
-
-    // this item must be ignored while comparing item sets during XML export
-    virtual BOOL        equalsXML( const SfxPoolItem& ) const;
 
     // erfrage und setze den Modify-Pointer
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }

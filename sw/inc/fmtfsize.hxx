@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfsize.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,11 +149,6 @@ public:
                                     const SvxULSpaceItem *pULSpace ) const;
     Size    GetSizeConvertedFromSw31( const SvxLRSpaceItem *pLRSpace,
                                       const SvxULSpaceItem *pULSpace ) const;
-
-    virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,
-                                   const SvXMLUnitConverter& rUnitConv );
-    virtual BOOL        exportXML( ::rtl::OUString& rValue, USHORT,
-                                   const SvXMLUnitConverter& rUnitConv ) const;
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(BOOL bInP) const

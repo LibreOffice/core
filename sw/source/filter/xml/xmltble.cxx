@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 17:28:23 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
               pFrmSize->GetHeight() != pTestFrmSize->GetHeight() ) )
             continue;
 
-        if( pBrush && !pBrush->equalsXML( *pTestBrush ) )
+        if( pBrush && (*pBrush != *pTestBrush) )
             continue;
 
         // found!
@@ -537,10 +537,10 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             pVertOrient->GetVertOrient() != pTestVertOrient->GetVertOrient() )
             continue;
 
-        if( pBrush && !pBrush->equalsXML( *pTestBrush ) )
+        if( pBrush && ( *pBrush != *pTestBrush ) )
             continue;
 
-        if( pBox && !pBox->equalsXML( *pTestBox ) )
+        if( pBox && ( *pBox != *pTestBox ) )
             continue;
 
         // compare formats based on value (rather than presentation)
