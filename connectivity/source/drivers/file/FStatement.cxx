@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 10:06:12 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #include "connectivity/dbexception.hxx"
 #endif
 #include <algorithm>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #define THROW_SQL(x) \
     OTools::ThrowException(x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
@@ -123,6 +126,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
+DBG_NAME( file_OStatement_Base )
+
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(OStatement_BASE::rBHelper)
@@ -143,6 +148,8 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,m_pTable(NULL)
     ,m_pEvaluationKeySet(NULL)
 {
+    DBG_CTOR( file_OStatement_Base, NULL );
+
     m_pConnection->acquire();
 
     sal_Int32 nAttrib = 0;
@@ -164,6 +171,8 @@ OStatement_Base::~OStatement_Base()
     osl_incrementInterlockedCount( &m_refCount );
     disposing();
     delete m_pSQLAnalyzer;
+
+    DBG_DTOR( file_OStatement_Base, NULL );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
@@ -199,10 +208,19 @@ void OStatement_BASE2::disposing()
     }
 
     if (m_pConnection)
+    {
         m_pConnection->release();
-
+        m_pConnection = NULL;
+    }
 
     dispose_ChildImpl();
+
+    if ( m_pParseTree )
+    {
+        delete m_pParseTree;
+        m_pParseTree = NULL;
+    }
+
     OStatement_Base::disposing();
 }
 // -----------------------------------------------------------------------------
