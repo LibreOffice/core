@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 11:20:53 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,66 +688,78 @@ class ImportExcel8 : public ImportExcel
 
 
 
+//___________________________________________________________________
+// internal and external 3D reference handling
 
-struct Xti
+struct XclImpXti
 {
-    UINT16                      nSupbook;       // Index auf suported external book
+    UINT16                      nSupbook;       // index to supbook
     UINT16                      nFirst;         // first sheet tab
     UINT16                      nLast;          // last sheet tab
 };
 
-
-
-
-class XtiBuffer : protected List
+class XclImpXtiBuffer : protected List
 {
-    private:
-    protected:
-    public:
-        virtual                 ~XtiBuffer();
-        void                    Read( SvStream& rIn, UINT32 nNumOfEntries, INT32& rBytesLeft );
-        inline const Xti*       Get( const UINT32 nIndex ) const;
+private:
+protected:
+public:
+    virtual                     ~XclImpXtiBuffer();
+
+    void                        Read( SvStream& rIn, INT32& rBytesLeft, UINT32 nNumOfEntries );
+    inline const XclImpXti*     Get( UINT32 nIndex ) const
+                                    { return (const XclImpXti*) List::GetObject( nIndex ); }
 };
 
-
-
-
-class SupbookE : protected List
+struct XclImpSupbookTab
 {
-    private:
-        String                  aFileName;
-        BOOL                    bSelf;
-        UINT16                  nCurrScTab;
-
-    public:
-                                SupbookE( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot );
-        virtual                 ~SupbookE();
-
-        BOOL                    IsValid( const UINT16 nExcTabNum ) const;
-        inline BOOL             IsExternal( void ) const;
-        inline const String&    GetName( void ) const;
-        UINT16                  GetScTabNum( const UINT16 nExcTabNum ) const;
-
-        inline void             SetCurrScTab( const UINT16 nExcTabNum );
-        inline UINT16           GetCurrScTab( void );
-        inline BOOL             HasValidScTab( void );
+    String      aName;
+    UINT16      nScNum;
 };
 
-
-
-
-class SupbookBuffer : protected List
+class XclImpSupbook : protected List
 {
-    private:
-    protected:
-    public:
-        virtual                 ~SupbookBuffer();
+private:
+    String                      aFileName;
+    UINT16                      nCurrScTab;
+    BOOL                        bSelf;
 
-        inline void             Append( SupbookE* pNewSupbook );
-        inline const SupbookE*  Get( const UINT32 nIndex ) const;
+    inline const XclImpSupbookTab* Get( UINT32 nIndex ) const
+                                    { return (const XclImpSupbookTab*) List::GetObject( nIndex ); }
+
+public:
+                                XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot );
+    virtual                     ~XclImpSupbook();
+
+    static void                 ReadDocName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rDocName, BOOL& rSelf );
+    static void                 ReadTabName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rTabName );
+
+    inline const String&        GetName() const         { return aFileName; }
+    UINT16                      GetScTabNum( UINT16 nExcTabNum ) const;
+    UINT16                      GetScTabNum( const String& rTabName ) const;
+
+    inline void                 SetCurrScTab( UINT16 nExcTabNum )
+                                    { nCurrScTab = GetScTabNum( nExcTabNum ); }
+    inline UINT16               GetCurrScTab() const    { return nCurrScTab; }
+    inline BOOL                 HasValidScTab() const   { return nCurrScTab != 0xFFFF; }
 };
 
+class XclImpSupbookBuffer : protected List
+{
+private:
+    inline XclImpSupbook*       _First()    { return (XclImpSupbook*) List::First(); }
+    inline XclImpSupbook*       _Next()     { return (XclImpSupbook*) List::Next(); }
 
+protected:
+public:
+    virtual                     ~XclImpSupbookBuffer();
+
+    inline void                 Append( XclImpSupbook* pNewSupbook )
+                                    { List::Insert( pNewSupbook, LIST_APPEND ); }
+
+    inline const XclImpSupbook* Get( UINT32 nIndex ) const
+                                    { return (const XclImpSupbook*) List::GetObject( nIndex ); }
+    const XclImpSupbook*        Get( const String& rDocName ) const;
+};
 
 //___________________________________________________________________
 // classes AutoFilterData, AutoFilterBuffer
@@ -908,60 +920,6 @@ inline const EditTextObject* TxoCont::GetTextObject( void ) const
 inline BOOL TxoCont::IsComplete( void ) const
 {
     return nStepCount > 2;
-}
-
-
-
-
-inline BOOL SupbookE::IsExternal( void ) const
-{
-    return !bSelf;
-}
-
-
-inline const String& SupbookE::GetName( void ) const
-{
-    return aFileName;
-}
-
-
-inline void SupbookE::SetCurrScTab( const UINT16 nExcTabNum )
-{
-    nCurrScTab = GetScTabNum( nExcTabNum );
-}
-
-
-inline UINT16 SupbookE::GetCurrScTab( void )
-{
-    return nCurrScTab;
-}
-
-
-inline BOOL SupbookE::HasValidScTab( void )
-{
-    return nCurrScTab != 0xFFFF;
-}
-
-
-
-
-inline const Xti* XtiBuffer::Get( const UINT32 n ) const
-{
-    return ( const Xti* ) List::GetObject( n );
-}
-
-
-
-
-inline void SupbookBuffer::Append( SupbookE* p )
-{
-    List::Insert( p, LIST_APPEND );
-}
-
-
-inline const SupbookE* SupbookBuffer::Get( const UINT32 n ) const
-{
-    return ( const SupbookE* ) List::GetObject( n );
 }
 
 
