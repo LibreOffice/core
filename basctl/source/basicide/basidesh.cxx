@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:45:01 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#include <svx/xmlsecctrl.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -195,6 +197,8 @@ void BasicIDEShell::Init()
     TbxControls::RegisterControl( SID_CHOOSE_CONTROLS );
     SvxPosSizeStatusBarControl::RegisterControl();
     SvxInsertStatusBarControl::RegisterControl();
+    XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE );
+
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False );
 
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = TRUE;
@@ -947,6 +951,7 @@ void BasicIDEShell::InvalidateBasicIDESlots()
         rBindings.Invalidate( SID_UNDO );
         rBindings.Invalidate( SID_REDO );
         rBindings.Invalidate( SID_SAVEDOC );
+        rBindings.Invalidate( SID_SIGNATURE );
         rBindings.Invalidate( SID_BASICIDE_CHOOSEMACRO );
         rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
         rBindings.Invalidate( SID_BASICIDE_OBJCAT );
