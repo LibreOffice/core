@@ -4,7 +4,7 @@
         <prop oor:name="Extensions"><value>bmp</value></prop>
         <prop oor:name="MediaType"><value>image/x-MS-bmp</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>bmp_MS_Windows</value></prop>
+        <prop oor:name="PreferredFilter"><value>BMP - MS Windows</value></prop>
         <prop oor:name="UIName">
             <value>BMP - Windows Bitmap</value>
         </prop>
