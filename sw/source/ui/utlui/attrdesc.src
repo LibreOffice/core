@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,12 @@ String STR_NO_MIRROR
     Text [ italian ] = "Non rispecchiare" ;
     Text [ spanish ] = "No reflejar" ;
     Text [ french ] = "Ne pas refléter" ;
-    Text [ swedish ] = "inte spegla" ;
+    Text [ swedish ] = "inte spegelvänd" ;
     Text [ danish ] = "spejlvend ikke" ;
     Text [ portuguese ] = "Não reflectir" ;
     Text [ portuguese_brazilian ] = "nicht Spiegeln" ;
     Text[ chinese_simplified ] = "²»·´Ó³";
-    Text[ russian ] = "íå îòîáğàæàòü";
+    Text[ russian ] = "íå îòğàæàòü";
     Text[ polish ] = "Nie przerzucaj";
     Text[ japanese ] = "”½“]‚µ‚È‚¢";
     Text[ chinese_traditional ] = "¤£¤Ï¬M";
@@ -204,12 +204,12 @@ String STR_VERT_MIRROR
     Text [ italian ] = "Rispecchia verticalmente" ;
     Text [ spanish ] = "Reflejar vertical" ;
     Text [ french ] = "Refléter verticalement" ;
-    Text [ swedish ] = "spegla vertikalt" ;
+    Text [ swedish ] = "spegelvänd vertikalt" ;
     Text [ danish ] = "spejlvend lodret" ;
     Text [ portuguese ] = "Reflectir na vertical" ;
     Text [ portuguese_brazilian ] = "vertikal Spiegeln" ;
     Text[ chinese_simplified ] = "´¹Ö±·½Ïò·´Ó³";
-    Text[ russian ] = "Îòîáğàçèòü ïî âåğòèêàëè";
+    Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     Text[ polish ] = "Przerzuæ w pionie";
     Text[ japanese ] = "¶‰E”½“]";
     Text[ chinese_traditional ] = "««ª½¤Ï¬M";
@@ -230,12 +230,12 @@ String STR_HORI_MIRROR
     Text [ italian ] = "Rispecchia orizzontalmente" ;
     Text [ spanish ] = "Reflejar horizontal" ;
     Text [ french ] = "Refléter horizontalement" ;
-    Text [ swedish ] = "Spegla horisontellt" ;
+    Text [ swedish ] = "Spegelvänd horisontellt" ;
     Text [ danish ] = "spejlvend vandret" ;
     Text [ portuguese ] = "Reflectir na horizontal" ;
     Text [ portuguese_brazilian ] = "horizontal Spiegeln" ;
     Text[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
-    Text[ russian ] = "Îòîáğàçèòü ïî âåğòèêàëè";
+    Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     Text[ polish ] = "Przerzuæ w poziomie";
     Text[ japanese ] = "ã‰º”½“]";
     Text[ chinese_traditional ] = "¤ô¥­¤Ï¬M";
@@ -256,12 +256,12 @@ String STR_BOTH_MIRROR
     Text [ spanish ] = "Reflejar vertical y horizontalmente" ;
     Text [ french ] = "Refléter verticalement et horizontalement" ;
     Text [ dutch ] = "Hoizontaal en verticaal spiegelen" ;
-    Text [ swedish ] = "spegla vert. och hori." ;
+    Text [ swedish ] = "spegelvänd vert. o. hori." ;
     Text [ danish ] = "spejlvend lodret og vandret" ;
     Text [ portuguese_brazilian ] = "vert. und horizontal Spiegeln" ;
     Text [ portuguese ] = "Reflectir na vertical e na horizontal" ;
     Text[ chinese_simplified ] = "´¹Ö±ºÍË®Æ½·½Ïò·´Ó³";
-    Text[ russian ] = "Îòîáğàçèòü ïî âåğòèêàëè è ãîğèçîíòàëè";
+    Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè è ãîğèçîíòàëè";
     Text[ polish ] = "Przerzuæ w pionie i w poziomie";
     Text[ japanese ] = "ã‰º‚Æ¶‰E‚É”½“]";
     Text[ chinese_traditional ] = "««ª½©M¤ô¥­¤Ï¬M";
@@ -287,7 +287,7 @@ String STR_MIRROR_TOGGLE
     Text [ french ] = "+ refléter horizontalement sur les pages paires" ;
     Text [ dutch ] = "+ op even pagina's horizontaal spiegelen" ;
     Text[ chinese_simplified ] = "+ Ë®Æ½·½Ïò·´Ó³µ½Å¼ÊıÒ³Ãæ";
-    Text[ russian ] = "+Îòîáğàçèòü ïî ãîğèçîíòàëè íà ÷åòíûõ ñòğàíèöàõ";
+    Text[ russian ] = " +îòğàçèòü ïî ãîğèçîíòàëè íà ÷åòíûõ ñòğàíèöàõ";
     Text[ polish ] = "+ przerzuæ w poziomie na stronach parzystych";
     Text[ japanese ] = "+ ‹ô”Íß°¼Ş‚Éã‰º”½“]";
     Text[ chinese_traditional ] = "+ ¤ô¥­¤Ï¬M¨ì°¸¼Æ­¶­±";
@@ -1618,15 +1618,15 @@ String STR_LUMINANCE
     Text = "Helligkeit: ";
     Text[ english ] = "Luminance: ";
     Text[ english_us ] = "Brightness: ";
-    Text[ portuguese ] = "Luminance: ";
+    Text[ portuguese ] = "Brilho:  ";
     Text[ russian ] = "Luminance: ";
-    Text[ greek ] = "Luminance: ";
-    Text[ dutch ] = "Luminance: ";
+    Text[ greek ] = "Öùôåéíüôçôá: ";
+    Text[ dutch ] = "Helderheid:  ";
     Text[ french ] = "Luminosité : ";
-    Text[ spanish ] = "Luminance: ";
+    Text[ spanish ] = "Brillo:  ";
     Text[ italian ] = "Luminance: ";
     Text[ danish ] = "Lysstyrke: ";
-    Text[ swedish ] = "Luminance: ";
+    Text[ swedish ] = "Ljusstyrka:  ";
     Text[ polish ] = "Luminance: ";
     Text[ portuguese_brazilian ] = "Luminance: ";
     Text[ japanese ] = "–¾“x: ";
@@ -1634,7 +1634,7 @@ String STR_LUMINANCE
     Text[ chinese_simplified ] = "ÁÁ¶È£º ";
     Text[ chinese_traditional ] = "«G«×¡G ";
     Text[ turkish ] = "Luminance: ";
-    Text[ arabic ] = "Luminance: ";
+    Text[ arabic ] = "ÇáÅÖÇÁÉ:";
 };
 
 String STR_CHANNELR
@@ -1642,15 +1642,15 @@ String STR_CHANNELR
     Text = "Rotanteil: ";
     Text[ english ] = "Red portion: ";
     Text[ english_us ] = "Red: ";
-    Text[ portuguese ] = "Red portion: ";
+    Text[ portuguese ] = "Proporção de vermelho:  ";
     Text[ russian ] = "Red portion: ";
-    Text[ greek ] = "Red portion: ";
-    Text[ dutch ] = "Red portion: ";
+    Text[ greek ] = "Áíáëïãßá êüêêéíïõ: ";
+    Text[ dutch ] = "Rood:  ";
     Text[ french ] = "Proportion de rouge : ";
-    Text[ spanish ] = "Red portion: ";
+    Text[ spanish ] = "Proporción de rojo: ";
     Text[ italian ] = "Red portion: ";
     Text[ danish ] = "Rød-andel: ";
-    Text[ swedish ] = "Red portion: ";
+    Text[ swedish ] = "Andel rött:  ";
     Text[ polish ] = "Red portion: ";
     Text[ portuguese_brazilian ] = "Red portion: ";
     Text[ japanese ] = "ÔF‚ÌŠ„‡: ";
@@ -1658,7 +1658,7 @@ String STR_CHANNELR
     Text[ chinese_simplified ] = "ºìÉ«±ÈÀı£º ";
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò¡G ";
     Text[ turkish ] = "Red portion: ";
-    Text[ arabic ] = "Red portion: ";
+    Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ:";
 };
 
 String STR_CHANNELG
@@ -1666,15 +1666,15 @@ String STR_CHANNELG
     Text = "Grünanteil: ";
     Text[ english ] = "Green portion: ";
     Text[ english_us ] = "Green: ";
-    Text[ portuguese ] = "Green portion: ";
+    Text[ portuguese ] = "Proporção de verde:  ";
     Text[ russian ] = "Green portion: ";
-    Text[ greek ] = "Green portion: ";
-    Text[ dutch ] = "Green portion: ";
+    Text[ greek ] = "Áíáëïãßá ğñáóßíïõ: ";
+    Text[ dutch ] = "Green:  ";
     Text[ french ] = "Proportion de vert : ";
-    Text[ spanish ] = "Green portion: ";
+    Text[ spanish ] = "Proporción verde: ";
     Text[ italian ] = "Green portion: ";
     Text[ danish ] = "Grøn-andel: ";
-    Text[ swedish ] = "Green portion: ";
+    Text[ swedish ] = "Andel grönt:  ";
     Text[ polish ] = "Green portion: ";
     Text[ portuguese_brazilian ] = "Green portion: ";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡: ";
@@ -1682,7 +1682,7 @@ String STR_CHANNELG
     Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı£º ";
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò¡G ";
     Text[ turkish ] = "Green portion: ";
-    Text[ arabic ] = "Green portion: ";
+    Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ:";
 };
 
 String STR_CHANNELB
@@ -1690,15 +1690,15 @@ String STR_CHANNELB
     Text = "Blauanteil: ";
     Text[ english ] = "Blue portion: ";
     Text[ english_us ] = "Blue: ";
-    Text[ portuguese ] = "Blue portion: ";
+    Text[ portuguese ] = "Proporção de azul:  ";
     Text[ russian ] = "Blue portion: ";
-    Text[ greek ] = "Blue portion: ";
-    Text[ dutch ] = "Blue portion: ";
+    Text[ greek ] = "Áíáëïãßá ìğëå: ";
+    Text[ dutch ] = "Blauw:  ";
     Text[ french ] = "Proportion de bleu : ";
-    Text[ spanish ] = "Blue portion: ";
+    Text[ spanish ] = "Proporción de azul: ";
     Text[ italian ] = "Blue portion: ";
     Text[ danish ] = "Blå-andel: ";
-    Text[ swedish ] = "Blue portion: ";
+    Text[ swedish ] = "Andel blått:  ";
     Text[ polish ] = "Blue portion: ";
     Text[ portuguese_brazilian ] = "Blue portion: ";
     Text[ japanese ] = "ÂF‚ÌŠ„‡: ";
@@ -1706,7 +1706,7 @@ String STR_CHANNELB
     Text[ chinese_simplified ] = "À¶É«±ÈÀı£º ";
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò¡G ";
     Text[ turkish ] = "Blue portion: ";
-    Text[ arabic ] = "Blue portion: ";
+    Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ:";
 };
 
 String STR_CONTRAST
@@ -1714,15 +1714,15 @@ String STR_CONTRAST
     Text = "Kontrast: ";
     Text[ english ] = "Contrast: ";
     Text[ english_us ] = "Contrast: ";
-    Text[ portuguese ] = "Contrast: ";
+    Text[ portuguese ] = "Contraste:  ";
     Text[ russian ] = "Contrast: ";
-    Text[ greek ] = "Contrast: ";
-    Text[ dutch ] = "Contrast: ";
+    Text[ greek ] = "ÊïíôñÜóô: ";
+    Text[ dutch ] = "Contrast:  ";
     Text[ french ] = "Contraste : ";
-    Text[ spanish ] = "Contrast: ";
+    Text[ spanish ] = "Contraste: ";
     Text[ italian ] = "Contrast: ";
     Text[ danish ] = "Kontrast: ";
-    Text[ swedish ] = "Contrast: ";
+    Text[ swedish ] = "Kontrast:  ";
     Text[ polish ] = "Contrast: ";
     Text[ portuguese_brazilian ] = "Contrast: ";
     Text[ japanese ] = "ºİÄ×½Ä: ";
@@ -1730,7 +1730,7 @@ String STR_CONTRAST
     Text[ chinese_simplified ] = "¶Ô±È¶È£º ";
     Text[ chinese_traditional ] = "¹ï¤ñ«×¡G ";
     Text[ turkish ] = "Contrast: ";
-    Text[ arabic ] = "Contrast: ";
+    Text[ arabic ] = "ÇáÊÈÇíä:";
 };
 
 String STR_GAMMA
@@ -1738,15 +1738,15 @@ String STR_GAMMA
     Text = "Gamma: ";
     Text[ english ] = "Gamma: ";
     Text[ english_us ] = "Gamma: ";
-    Text[ portuguese ] = "Gamma: ";
+    Text[ portuguese ] = "Gamma:  ";
     Text[ russian ] = "Gamma: ";
-    Text[ greek ] = "Gamma: ";
-    Text[ dutch ] = "Gamma: ";
+    Text[ greek ] = "ÃÜììá: ";
+    Text[ dutch ] = "Gamma:  ";
     Text[ french ] = "Gamma : ";
-    Text[ spanish ] = "Gamma: ";
+    Text[ spanish ] = "Gamma:  ";
     Text[ italian ] = "Gamma: ";
     Text[ danish ] = "Gamma: ";
-    Text[ swedish ] = "Gamma: ";
+    Text[ swedish ] = "Gamma:  ";
     Text[ polish ] = "Gamma: ";
     Text[ portuguese_brazilian ] = "Gamma: ";
     Text[ japanese ] = "¶ŞİÏ: ";
@@ -1754,7 +1754,7 @@ String STR_GAMMA
     Text[ chinese_simplified ] = "»ÒÉ«ÏµÊı£º ";
     Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ¡G ";
     Text[ turkish ] = "Gamma: ";
-    Text[ arabic ] = "Gamma: ";
+    Text[ arabic ] = "ÛÇãÇ:";
 };
 
 String STR_TRANSPARENCY
@@ -1762,15 +1762,15 @@ String STR_TRANSPARENCY
     Text = "Transparenz: ";
     Text[ english ] = "Transparency: ";
     Text[ english_us ] = "Transparency: ";
-    Text[ portuguese ] = "Transparency: ";
+    Text[ portuguese ] = "Transparência:  ";
     Text[ russian ] = "Transparency: ";
-    Text[ greek ] = "Transparency: ";
-    Text[ dutch ] = "Transparency: ";
+    Text[ greek ] = "ÄéáöÜíåéá: ";
+    Text[ dutch ] = "Transparantie:  ";
     Text[ french ] = "Transparence: ";
-    Text[ spanish ] = "Transparency: ";
+    Text[ spanish ] = "Transparencia:  ";
     Text[ italian ] = "Transparency: ";
     Text[ danish ] = "Transparens: ";
-    Text[ swedish ] = "Transparency: ";
+    Text[ swedish ] = "Transparens:  ";
     Text[ polish ] = "Transparency: ";
     Text[ portuguese_brazilian ] = "Transparency: ";
     Text[ japanese ] = "“§‰ß«: ";
@@ -1778,7 +1778,7 @@ String STR_TRANSPARENCY
     Text[ chinese_simplified ] = "Í¸Ã÷¶È£º ";
     Text[ chinese_traditional ] = "³z©ú«×¡G ";
     Text[ turkish ] = "Transparency: ";
-    Text[ arabic ] = "Transparency: ";
+    Text[ arabic ] = "ÇáÔİÇİíÉ:";
 };
 
 String STR_INVERT
@@ -1791,15 +1791,15 @@ String STR_INVERT_NOT
     Text = "nicht invertieren";
     Text[ english ] = "not invert";
     Text[ english_us ] = "do not invert";
-    Text[ portuguese ] = "not invert";
+    Text[ portuguese ] = "não inverter";
     Text[ russian ] = "not invert";
-    Text[ greek ] = "not invert";
-    Text[ dutch ] = "not invert";
+    Text[ greek ] = "÷ùñßò áíáóôñïöŞ";
+    Text[ dutch ] = "geen inversie";
     Text[ french ] = "ne pas invertir";
-    Text[ spanish ] = "not invert";
+    Text[ spanish ] = "no invertir";
     Text[ italian ] = "not invert";
     Text[ danish ] = "ikke invertere";
-    Text[ swedish ] = "not invert";
+    Text[ swedish ] = "invertera inte";
     Text[ polish ] = "not invert";
     Text[ portuguese_brazilian ] = "not invert";
     Text[ japanese ] = "‹t“]‚È‚µ";
@@ -1807,7 +1807,7 @@ String STR_INVERT_NOT
     Text[ chinese_simplified ] = "²»×ª»»»¥²¹É«";
     Text[ chinese_traditional ] = "¤£Âà´«¤¬¸É¦â";
     Text[ turkish ] = "not invert";
-    Text[ arabic ] = "not invert";
+    Text[ arabic ] = "ÚÏã ÇáÚßÓ";
 };
 
 String STR_DRAWMODE
@@ -1815,15 +1815,15 @@ String STR_DRAWMODE
     Text = "Grafikmodus: ";
     Text[ english ] = "Graphics mode: ";
     Text[ english_us ] = "Graphics mode: ";
-    Text[ portuguese ] = "Graphics mode: ";
+    Text[ portuguese ] = "Modo Gráfico:  ";
     Text[ russian ] = "Graphics mode: ";
-    Text[ greek ] = "Graphics mode: ";
-    Text[ dutch ] = "Graphics mode: ";
+    Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò ãñáöéêşí: ";
+    Text[ dutch ] = "Afbeeldingenmodus:  ";
     Text[ french ] = "Mode Graphique : ";
-    Text[ spanish ] = "Graphics mode: ";
+    Text[ spanish ] = "Modo gráfico: ";
     Text[ italian ] = "Graphics mode: ";
-    Text[ danish ] = "Billedmodus: ";
-    Text[ swedish ] = "Graphics mode: ";
+    Text[ danish ] = "Grafikmodus: ";
+    Text[ swedish ] = "Grafikläge:  ";
     Text[ polish ] = "Graphics mode: ";
     Text[ portuguese_brazilian ] = "Graphics mode: ";
     Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ: ";
@@ -1831,7 +1831,7 @@ String STR_DRAWMODE
     Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½£º ";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡¡G ";
     Text[ turkish ] = "Graphics mode: ";
-    Text[ arabic ] = "Graphics mode: ";
+    Text[ arabic ] = "æÖÚ ÇáÕæÑ:";
 };
 
 String STR_DRAWMODE_STD
@@ -1839,12 +1839,12 @@ String STR_DRAWMODE_STD
     Text = "Standard";
     Text[ english ] = "Standard";
     Text[ english_us ] = "Standard";
-    Text[ portuguese ] = "Standard";
+    Text[ portuguese ] = "Padrão";
     Text[ russian ] = "Standard";
-    Text[ greek ] = "Standard";
-    Text[ dutch ] = "Standard";
+    Text[ greek ] = "ĞñïåğéëïãŞ";
+    Text[ dutch ] = "Standaard";
     Text[ french ] = "Standard";
-    Text[ spanish ] = "Standard";
+    Text[ spanish ] = "Estándar";
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
@@ -1855,22 +1855,22 @@ String STR_DRAWMODE_STD
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ chinese_traditional ] = "¼Ğ­ã";
     Text[ turkish ] = "Standard";
-    Text[ arabic ] = "Standard";
+    Text[ arabic ] = "ŞíÇÓí";
 };
 String STR_DRAWMODE_GREY
 {
     Text = "Graustufen";
     Text[ english ] = "Greys";
     Text[ english_us ] = "Grayscales";
-    Text[ portuguese ] = "Greys";
+    Text[ portuguese ] = "Escala de cinzentos";
     Text[ russian ] = "Greys";
-    Text[ greek ] = "Greys";
-    Text[ dutch ] = "Greys";
+    Text[ greek ] = "Äéáâáèìßóåéò ôïõ ãêñé";
+    Text[ dutch ] = "Grijswaarden";
     Text[ french ] = "Niveaux de gris";
-    Text[ spanish ] = "Greys";
+    Text[ spanish ] = "Escala de grises";
     Text[ italian ] = "Greys";
     Text[ danish ] = "Gråtoner";
-    Text[ swedish ] = "Greys";
+    Text[ swedish ] = "Gråskalor";
     Text[ polish ] = "Greys";
     Text[ portuguese_brazilian ] = "Greys";
     Text[ japanese ] = "¸ŞÚ°½¹°Ù";
@@ -1878,22 +1878,22 @@ String STR_DRAWMODE_GREY
     Text[ chinese_simplified ] = "»Ò¶È";
     Text[ chinese_traditional ] = "¦Ç¶¥";
     Text[ turkish ] = "Greys";
-    Text[ arabic ] = "Greys";
+    Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
 };
 String STR_DRAWMODE_BLACKWHITE
 {
     Text = "Schwarz/Weiß";
     Text[ english ] = "Black/White";
     Text[ english_us ] = "Black & White";
-    Text[ portuguese ] = "Black/White";
+    Text[ portuguese ] = "Preto/Branco";
     Text[ russian ] = "Black/White";
-    Text[ greek ] = "Black/White";
-    Text[ dutch ] = "Black/White";
+    Text[ greek ] = "Ìáıñï/¢óğñï";
+    Text[ dutch ] = "Zwart-wit";
     Text[ french ] = "Noir/Blanc";
-    Text[ spanish ] = "Black/White";
+    Text[ spanish ] = "Negro/Blanco";
     Text[ italian ] = "Black/White";
     Text[ danish ] = "Sort-hvid";
-    Text[ swedish ] = "Black/White";
+    Text[ swedish ] = "Svartvitt";
     Text[ polish ] = "Black/White";
     Text[ portuguese_brazilian ] = "Black/White";
     Text[ japanese ] = "”’•";
@@ -1901,22 +1901,22 @@ String STR_DRAWMODE_BLACKWHITE
     Text[ chinese_simplified ] = "ºÚ°×";
     Text[ chinese_traditional ] = "¶Â¥Õ";
     Text[ turkish ] = "Black/White";
-    Text[ arabic ] = "Black/White";
+    Text[ arabic ] = "ÃÓæÏ/ÃÈíÖ";
 };
 String STR_DRAWMODE_WATERMARK
 {
     Text = "Wasserzeichen";
     Text[ english ] = "Watermark";
     Text[ english_us ] = "Watermark";
-    Text[ portuguese ] = "Watermark";
+    Text[ portuguese ] = "Marca de água";
     Text[ russian ] = "Watermark";
-    Text[ greek ] = "Watermark";
-    Text[ dutch ] = "Watermark";
+    Text[ greek ] = "Õäáôüóçìï";
+    Text[ dutch ] = "Watermerk";
     Text[ french ] = "Filigrane";
-    Text[ spanish ] = "Watermark";
+    Text[ spanish ] = "Marca de agua";
     Text[ italian ] = "Watermark";
     Text[ danish ] = "Vandmærke";
-    Text[ swedish ] = "Watermark";
+    Text[ swedish ] = "Vattenmärke";
     Text[ polish ] = "Watermark";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
@@ -1924,19 +1924,19 @@ String STR_DRAWMODE_WATERMARK
     Text[ chinese_simplified ] = "Ë®Ó¡";
     Text[ chinese_traditional ] = "¤ô¦L";
     Text[ turkish ] = "Watermark";
-    Text[ arabic ] = "Watermark";
+    Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
 };
 String STR_ROTATION
 {
     Text = "Drehung";
     Text[ english ] = "Rotation";
     Text[ english_us ] = "Rotation";
-    Text[ portuguese ] = "Rotation";
+    Text[ portuguese ] = "Rotação";
     Text[ russian ] = "Rotation";
-    Text[ greek ] = "Rotation";
-    Text[ dutch ] = "Rotation";
+    Text[ greek ] = "ĞåñéóôñïöŞ";
+    Text[ dutch ] = "Rotatie";
     Text[ french ] = "Rotation";
-    Text[ spanish ] = "Rotation";
+    Text[ spanish ] = "Rotación";
     Text[ italian ] = "Rotation";
     Text[ danish ] = "Rotation";
     Text[ swedish ] = "Rotation";
@@ -1947,7 +1947,7 @@ String STR_ROTATION
     Text[ chinese_simplified ] = "Ğı×ª";
     Text[ chinese_traditional ] = "±ÛÂà";
     Text[ turkish ] = "Rotation";
-    Text[ arabic ] = "Rotation";
+    Text[ arabic ] = "ÇáÇÓÊÏÇÑÉ";
 };
 
 
