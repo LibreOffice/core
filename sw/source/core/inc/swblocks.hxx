@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 20:30:35 $
+ *  last change: $Author: jp $ $Date: 2001-01-30 18:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@ public:
     virtual BOOL IsOnlyTextBlock( const String& rShort ) const;
 
     virtual ULONG GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl );
+    virtual ULONG SetMacroTable( USHORT nIdx,
+                                 const SvxMacroTableDtor& rMacroTbl );
     virtual BOOL PutMuchEntries( BOOL bOn );
 };
 
@@ -252,6 +254,8 @@ public:
     virtual BOOL IsOnlyTextBlock( const String& rShort ) const;
 
     virtual ULONG GetMacroTable( USHORT, SvxMacroTableDtor& rMacroTbl );
+    virtual ULONG SetMacroTable( USHORT nIdx,
+                                 const SvxMacroTableDtor& rMacroTbl );
     virtual BOOL PutMuchEntries( BOOL bOn );
 
     void ReadInfo();
