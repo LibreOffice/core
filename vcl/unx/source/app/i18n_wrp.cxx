@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:23:22 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 13:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,21 @@ struct XIMArg
     char *value;
 };
 
-#if !defined(LINUX) && !defined(FREEBSD) && !defined(NETBSD)
+#if !defined(LINUX) && !defined(FREEBSD) && !defined(NETBSD) && !defined(MACOSX)
 #include <varargs.h>
 #else
 #include <stdarg.h>
 #endif
-#if defined(NETBSD) || defined(FREEBSD)
+#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
 # include <stdlib.h>
 #else
 # include <alloca.h>
 #endif
 #include <string.h>
+#if !defined(MACOSX)
+/* MacOS X doesn't yet support XIM... FIXME */
 #include <dlfcn.h>
+#endif
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include "XIM.h"
@@ -215,7 +218,7 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         * so count the stuff dangling here
      */
 
-#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
+#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
     va_start(variable, res_class);
 #else
       va_start(variable);
@@ -232,7 +235,7 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         /*
           * now package it up so we can set it along
           */
-#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
+#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
         va_start(variable, res_class);
 #else
         va_start(variable);
@@ -240,6 +243,8 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         XvaGetArgs( variable, args );
         va_end(variable);
 
+    /* MacOS X doesn't yet support XIM... FIXME */
+#if !defined(MACOSX)
         if (!g_dlmodule)
         {
             g_dlmodule = dlopen(XIIIMP_LIB, RTLD_LAZY);
@@ -260,6 +265,7 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         {
               goto legacy_XIM;
         }
+#endif
       }
 
      legacy_XIM:
@@ -283,6 +289,8 @@ XvaCloseIM(XIM im)
       s = (im->methods->close)(im); /* we can use the same close module  */
     #endif
 
+    /* MacOS X doesn't yet support XIM... FIXME */
+#if !defined(MACOSX)
     if (!g_dlmodule)
     {
         /* assuming one XvaOpenIM call */
@@ -290,6 +298,8 @@ XvaCloseIM(XIM im)
             g_dlmodule = (void*)0;
         g_open_im = (OpenFunction)NULL;
       }
+#endif
+
     #if 0
       if (im)
         Xfree((char *)im);
