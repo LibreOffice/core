@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:39:42 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,11 +366,13 @@ FmEntryDataList::~FmEntryDataList()
 TYPEINIT0( FmEntryData );
 DBG_NAME(FmEntryData);
 //------------------------------------------------------------------------
-FmEntryData::FmEntryData( FmEntryData* pParentData )
+FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
     :pParent( pParentData )
 {
     DBG_CTOR(FmEntryData,NULL);
     pChildList = new FmEntryDataList();
+
+    newObject( _rxIFace );
 }
 
 //------------------------------------------------------------------------
@@ -379,6 +381,15 @@ FmEntryData::~FmEntryData()
     Clear();
     delete pChildList;
     DBG_DTOR(FmEntryData,NULL);
+}
+
+//------------------------------------------------------------------------
+void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace )
+{
+    // do not just copy, normalize it
+    m_xNormalizedIFace = Reference< XInterface >( _rxIFace, UNO_QUERY );
+    m_xProperties = m_xProperties.query( m_xNormalizedIFace );
+    m_xChild = m_xChild.query( m_xNormalizedIFace );
 }
 
 //------------------------------------------------------------------------
@@ -398,6 +409,10 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
         FmEntryData* pNewChildData = pChildData->Clone();
         pChildList->Insert( pNewChildData, LIST_APPEND );
     }
+
+    m_xNormalizedIFace = rEntryData.m_xNormalizedIFace;
+    m_xProperties = rEntryData.m_xProperties;
+    m_xChild = rEntryData.m_xChild;
 }
 
 //------------------------------------------------------------------------
@@ -443,7 +458,7 @@ TYPEINIT1( FmFormData, FmEntryData );
 DBG_NAME(FmFormData);
 //------------------------------------------------------------------------
 FmFormData::FmFormData( const Reference< XForm >& _rxForm, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
-    :FmEntryData( _pParent )
+    :FmEntryData( _pParent, _rxForm )
     ,m_xForm( _rxForm )
 {
     DBG_CTOR(FmEntryData,NULL);
@@ -510,7 +525,7 @@ TYPEINIT1( FmControlData, FmEntryData );
 DBG_NAME(FmControlData);
 //------------------------------------------------------------------------
 FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
-    :FmEntryData( _pParent )
+    :FmEntryData( _pParent, _rxComponent )
     ,m_xFormComponent( _rxComponent )
 {
     DBG_CTOR(FmControlData,NULL);
@@ -558,10 +573,8 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
     // Default-Image
     Image aImage = ilNavigatorImages.GetImage( RID_SVXIMG_CONTROL );
 
-    if (!m_xFormComponent.is()) return aImage;
-
-    Reference< XServiceInfo >  xInfo(m_xFormComponent, UNO_QUERY);
-    if (!xInfo.is())
+    Reference< XServiceInfo > xInfo( m_xFormComponent, UNO_QUERY );
+    if (!m_xFormComponent.is())
         return aImage;
 
     //////////////////////////////////////////////////////////////////////
@@ -669,6 +682,8 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, const ImageList& _rNormalImages, const ImageList& _rHCImages )
 {
     m_xFormComponent = _rxNew;
+    newObject( m_xFormComponent );
+
     // Images neu setzen
     m_aNormalImage = GetImage( _rNormalImages );
     m_aHCImage = GetImage( _rHCImages );

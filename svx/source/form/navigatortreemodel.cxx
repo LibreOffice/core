@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:41:57 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ namespace svxform
 
         m_pPropChangeList->Lock();
         FmFormData* pFolder     = (FmFormData*) pEntry->GetParent();
-        Reference< XChild >     xElement    (pEntry->GetElement(), UNO_QUERY);
+        Reference< XChild > xElement( pEntry->GetChildIFace() );
         if (bAlterModel)
         {
             XubString aStr;
@@ -451,7 +451,7 @@ namespace svxform
 
         m_pPropChangeList->Lock();
         FmFormData*     pFolder     = (FmFormData*) pEntry->GetParent();
-        Reference< XChild >      xElement    (pEntry->GetElement(), UNO_QUERY);
+        Reference< XChild > xElement ( pEntry->GetChildIFace() );
         if (bAlterModel)
         {
             XubString        aStr;
@@ -476,7 +476,7 @@ namespace svxform
         {
             Reference< XIndexContainer >  xContainer(xElement->getParent(), UNO_QUERY);
             // aus dem Container entfernen
-            sal_Int32 nContainerIndex = getElementPos(Reference< XIndexAccess > (xContainer, UNO_QUERY), xElement);
+            sal_Int32 nContainerIndex = getElementPos(xContainer.get(), xElement);
             // UndoAction
             if (nContainerIndex >= 0)
             {
@@ -538,11 +538,11 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // Als PropertyChangeListener abmelden
-        Reference< XPropertySet >  xSet(pFormData->GetFormIface(), UNO_QUERY);
-        if( xSet.is() )
+        Reference< XPropertySet > xSet( pFormData->GetPropertySet() );
+        if ( xSet.is() )
             xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList );
 
-        Reference< XContainer >  xContainer(xSet, UNO_QUERY);
+        Reference< XContainer >  xContainer( pFormData->GetContainer() );
         if (xContainer.is())
             xContainer->removeContainerListener((XContainerListener*)m_pPropChangeList);
     }
@@ -557,7 +557,7 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // Als PropertyChangeListener abmelden
-        Reference< XPropertySet >  xSet(pControlData->GetElement(), UNO_QUERY);
+        Reference< XPropertySet >  xSet( pControlData->GetPropertySet() );
         if (xSet.is())
             xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList);
     }
@@ -707,12 +707,13 @@ namespace svxform
     //------------------------------------------------------------------------
     FmEntryData* NavigatorTreeModel::FindData(const Reference< XInterface > & xElement, FmEntryDataList* pDataList, sal_Bool bRecurs)
     {
+        // normalize
+        Reference< XInterface > xIFace( xElement, UNO_QUERY );
+
         for (sal_uInt16 i=0; i < pDataList->Count(); i++)
         {
             FmEntryData* pEntryData = pDataList->GetObject(i);
-            if (pEntryData->GetElement() == xElement)
-                // zu beachten : das == fuer Reference< XInterface >  macht einen 'tiefen' Vergleich, liefert also sal_True, wenn die beiden Refs das
-                // selbe Objekt bezeichnen, egal ob die auf die selben Interfaces zeigen
+            if ( pEntryData->GetElement().get() == xIFace.get() )
                 return pEntryData;
             else if (bRecurs)
             {
@@ -1117,6 +1118,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/05/17 08:41:57  fs
+ *  high contrast support #99375#
+ *
  *  Revision 1.2  2002/05/16 15:05:59  fs
  *  some major changes in preparation of #98725# (not enabled, yet)
  *
