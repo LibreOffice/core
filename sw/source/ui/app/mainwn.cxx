@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mainwn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:43:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include <sfx2/progress.hxx>
 #endif
 #ifndef _RESID_HXX //autogen
-#include <vcl/resid.hxx>
+#include <tools/resid.hxx>
 #endif
 
 #ifndef _SWDOCSH_HXX //autogen
