@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 13:47:06 $
+ *  last change: $Author: jp $ $Date: 2001-03-30 12:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,11 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #endif
+#ifndef _VOS_REF_HXX
+#include <vos/ref.hxx>
+#endif
 
+class SvxForbiddenCharactersTable;
 class SwExtTextInput;
 class DateTime;
 class EditFieldInfo;
@@ -160,7 +164,6 @@ class SwFmt;
 class SwFmtCol;
 class SwFmtINetFmt;
 class SwFmtRefMark;
-class SwForbiddenCharacterTable;
 class SwFrmFmt;
 class SwFrmFmts;
 class SwFtnIdxs;
@@ -372,8 +375,9 @@ class SwDoc
 
     SwUnoCallBack   *pUnoCallBack;
 
-    SwForbiddenCharacterTable* pForbiddenCharsTbl;  // table of forbidden
-                                                // characters of this document
+    // table of forbidden characters of this document
+    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+
     // -------------------------------------------------------------------
     // sonstige
     sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
@@ -1770,13 +1774,13 @@ public:
 
     // Interface for the forbidden characters of any asian/.. languages
     const com::sun::star::i18n::
-        ForbiddenCharacters* GetForbiddenCharacters( ULONG nLang,
+        ForbiddenCharacters* GetForbiddenCharacters( USHORT nLang,
                                                     BOOL bLocaleData ) const;
-    void SetForbiddenCharacters( ULONG nLang,
+    void SetForbiddenCharacters( USHORT nLang,
             const com::sun::star::i18n::ForbiddenCharacters& );
-    void ClearForbiddenCharacters( ULONG nLang );
-    const SwForbiddenCharacterTable* GetForbiddenCharacterTbl() const
-            { return pForbiddenCharsTbl; }
+    void ClearForbiddenCharacters( USHORT nLang );
+    const vos::ORef<SvxForbiddenCharactersTable>& GetForbiddenCharacterTbl() const
+            { return xForbiddenCharsTable; }
 
     // Interface for the list of Ruby - texts/attributes
     USHORT FillRubyList( const SwPaM& rPam, SwRubyList& rList,
