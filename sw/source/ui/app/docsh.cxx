@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:44:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@
 #endif
 #ifndef _APP_HRC
 #include <app.hrc>
+#endif
+#ifndef SW_WARNPASSWORD_HXX
+#include "warnpassword.hxx"
 #endif
 
 #include <cfgid.h>
@@ -766,6 +769,18 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
         return FALSE;
     }
+
+    // if the imported word document is password protected - warn the user
+    // about saving it without the password.
+    if(pDoc->IsWinEncrypted())
+    {
+        if(!SwWarnPassword::WarningOnPassword( rMedium ))
+        {
+            SetError(ERRCODE_ABORT);
+            return FALSE;
+        }
+    }
+
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
