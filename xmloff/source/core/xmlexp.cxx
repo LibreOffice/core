@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:06:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ void SvXMLExport::_InitCtor()
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
     }
     if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
     {
@@ -367,7 +367,7 @@ void SvXMLExport::_InitCtor()
         pNamespaceMap->Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
         pNamespaceMap->Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
         pNamespaceMap->Add( GetXMLToken(XML_NP_DR3D), GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
-        pNamespaceMap->Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT),  XML_NAMESPACE_SVG );
         pNamespaceMap->Add( GetXMLToken(XML_NP_CHART), GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
         pNamespaceMap->Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
         pNamespaceMap->Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
