@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hdu $ $Date: 2001-06-06 16:58:39 $
+ *  last change: $Author: hdu $ $Date: 2001-06-07 12:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5672,17 +5672,19 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
         nWidthFactor = mpFontEntry->mnWidthFactor;
 
     nCharExtra *= nWidthFactor;
-    nTextWidth *= nWidthFactor;
 
     if ( mbMap )
     {
-        nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth );
+        nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth * 8 );
+        nTextWidth *= (nWidthFactor + 4) / 8;
         if ( nCharExtra )
             nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra );
     }
+    else
+        nTextWidth *= nWidthFactor;
 
     // calc last index position
-    xub_StrLen nLastIndex = nIndex + nLen;
+    ULONG nLastIndex = (ULONG)nIndex + nLen;
     if ( nLastIndex > rStr.Len() )
         nLastIndex = rStr.Len();
 
