@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectregistry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:43:58 $
+ *  last change: $Author: jb $ $Date: 2000-12-03 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <vos/refernce.hxx>
 
 #include <stl/hash_map>
+#include "tracer.hxx"
 
 namespace configmgr
 {
@@ -116,8 +117,13 @@ namespace configmgr
             {
                 ObjectMap::iterator aFound = m_aMap.find(aNode);
 
-                if (aFound != m_aMap.end() && aFound->second == aElement)
-                    m_aMap.erase(aFound);
+                if (aFound != m_aMap.end())
+                {
+                    OSL_ENSURE(aFound->second == aElement,"Found unexpected element in map");
+
+                    if (aFound->second == aElement)
+                        m_aMap.erase(aFound);
+                }
             }
         private:
             mutable osl::Mutex m_aMutex;
