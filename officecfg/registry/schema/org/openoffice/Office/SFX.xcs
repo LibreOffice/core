@@ -3,9 +3,9 @@
  *
  *  $RCSfile: SFX.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:31:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Contains settings which specifies how the help in Office should work.</desc>
 				<desc xml:lang="pl">Contains settings which specifies how the help in Office should work.</desc>
 				<desc xml:lang="pt-BR">Contains settings which specifies how the help in Office should work.</desc>
-				<desc xml:lang="ja">Contains settings which specifies how the help in Office should work.</desc>
+				<desc xml:lang="ja">Office のヘルプ機能の動作方法を指定する設定が含まれます。</desc>
 				<desc xml:lang="ko">Contains settings which specifies how the help in Office should work.</desc>
 				<desc xml:lang="tr">Contains settings which specifies how the help in Office should work.</desc>
 				<desc xml:lang="th">Contains settings which specifies how the help in Office should work.</desc>
 				<desc xml:lang="hi-IN">Contains settings which specifies how the help in Office should work.</desc>
+				<desc xml:lang="x-comment">Contains settings which specifies how the help in Office should work.</desc>
 			</info>
 			<prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true">
 				<!-- OldLocation: hlpagent.ini -->
@@ -116,17 +117,19 @@
 					<desc xml:lang="sv">Lists IDs used by SFX to start the help agent.</desc>
 					<desc xml:lang="pl">Lists IDs used by SFX to start the help agent.</desc>
 					<desc xml:lang="pt-BR">Lists IDs used by SFX to start the help agent.</desc>
-					<desc xml:lang="ja">Lists IDs used by SFX to start the help agent.</desc>
+					<desc xml:lang="ja">ヘルプエージェントを開始するために SFX が使用する ID のリストです。</desc>
 					<desc xml:lang="ko">Lists IDs used by SFX to start the help agent.</desc>
 					<desc xml:lang="tr">Lists IDs used by SFX to start the help agent.</desc>
 					<desc xml:lang="th">Lists IDs used by SFX to start the help agent.</desc>
 					<desc xml:lang="hi-IN">Lists IDs used by SFX to start the help agent.</desc>
+					<desc xml:lang="x-comment">Lists IDs used by SFX to start the help agent.</desc>
 				</info>
 				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

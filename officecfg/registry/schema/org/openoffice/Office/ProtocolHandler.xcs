@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ProtocolHandler.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:31:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="pl">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="pt-BR">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
-				<desc xml:lang="ja">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
+				<desc xml:lang="ja">特殊な URL プロトコルを扱う URL ディスパッチ用に、UNO サービスを指定します。</desc>
 				<desc xml:lang="ko">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="tr">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="th">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="hi-IN">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
+				<desc xml:lang="x-comment">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 			</info>
 			<prop oor:name="Protocols" oor:type="oor:string-list">
 				<info>
@@ -114,11 +115,12 @@
 					<desc xml:lang="sv">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="pl">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="pt-BR">Lists the URL pattern that can recognized by this service.</desc>
-					<desc xml:lang="ja">Lists the URL pattern that can recognized by this service.</desc>
+					<desc xml:lang="ja">このサービスが認識する URL のパターンを一覧表示します。</desc>
 					<desc xml:lang="ko">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="tr">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="th">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="hi-IN">Lists the URL pattern that can recognized by this service.</desc>
+					<desc xml:lang="x-comment">Lists the URL pattern that can recognized by this service.</desc>
 				</info>
 			</prop>
 		</group>
@@ -145,15 +147,17 @@
 				<desc xml:lang="sv">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="pl">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="pt-BR">Lists the registered protocol handler services.</desc>
-				<desc xml:lang="ja">Lists the registered protocol handler services.</desc>
+				<desc xml:lang="ja">プロトコルハンドラのサービスを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="tr">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="th">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="hi-IN">Lists the registered protocol handler services.</desc>
+				<desc xml:lang="x-comment">Lists the registered protocol handler services.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
