@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-23 16:13:54 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 11:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
@@ -142,6 +151,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::form;
 
 #ifdef XML_CORE_API
 void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
@@ -384,6 +395,22 @@ void SwXMLExport::_ExportContent()
     } while( bContinue );
 #else
 
+    // switch redline mode
+    Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
+    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+    sal_Bool bSaveShowRedline = sal_False;
+    if (xPropSet.is())
+    {
+        // record old mode
+        Any aAny = xPropSet->getPropertyValue(sShowChanges);
+        bSaveShowRedline = *(sal_Bool*)aAny.getValue();
+
+        // set show = false
+        sal_Bool bTmp = sal_False;
+        aAny.setValue(&bTmp, ::getBooleanCppuType());
+        xPropSet->setPropertyValue(sShowChanges, aAny);
+    }
+
     // export forms
     Reference<XDrawPageSupplier> xDrawPageSupplier(GetModel(), UNO_QUERY);
     if (xDrawPageSupplier.is())
@@ -392,11 +419,15 @@ void SwXMLExport::_ExportContent()
         Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
         if (xPage.is())
         {
-            SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE,
-                                      sXML_forms, sal_True, sal_True);
+            Reference<XFormsSupplier> xFormSupp(xPage, UNO_QUERY);
+            if (xFormSupp->getForms()->hasElements())
+            {
+                SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE,
+                                          sXML_forms, sal_True, sal_True);
 
-            GetFormExport()->seekPage(xPage);
-            GetFormExport()->exportForms(xPage);
+                GetFormExport()->seekPage(xPage);
+                GetFormExport()->exportForms(xPage);
+            }
         }
     }
 
@@ -407,6 +438,15 @@ void SwXMLExport::_ExportContent()
 
     GetTextParagraphExport()->exportFramesBoundToPage( bShowProgress );
     GetTextParagraphExport()->exportText( xText, bShowProgress );
+
+    // switch redline mode back
+    if (xPropSet.is())
+    {
+        Any aAny;
+        aAny.setValue(&bSaveShowRedline, ::getBooleanCppuType());
+        xPropSet->setPropertyValue(sShowChanges, aAny);
+    }
+
 #endif
 }
 
