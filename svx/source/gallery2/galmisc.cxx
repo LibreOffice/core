@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:53:41 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,7 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
             rIStm.Seek(0);
             bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLImporter" );
         }
-
-//        bRet = SvxDrawingLayerImport( &rModel, xInputStream );
+//      bRet = SvxDrawingLayerImport( &rModel, xInputStream );
         rModel.SetStreamingSdrModel( FALSE );
     }
 
