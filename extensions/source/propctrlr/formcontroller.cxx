@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:12:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
 #endif
 
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
@@ -586,8 +589,8 @@ namespace pcr
                     sal_Int32 nIntValue = -1;
                     if ( ::cppu::enum2int( nIntValue, rValue ) )
                     {
-                        if ( PROPERTY_ID_LINEEND_FORMAT == _nPropId )
-                            // for the LineEndFormat, we do not have a UI corresponding to the value "0"
+                        if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
+                            // we do not have a UI corresponding to the value "0"
                             --nIntValue;
 
                         ::std::vector< String > aEnumStrings = m_pPropertyInfo->getPropertyEnumRepresentations( _nPropId );
@@ -800,7 +803,7 @@ namespace pcr
                     sal_Int32 nPos = GetStringPos( _rString, aEnumStrings );
                     if ( -1 != nPos )
                     {
-                        if ( PROPERTY_ID_LINEEND_FORMAT == _nPropId )
+                        if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
                             // for the LineEndFormat, we do not have a UI corresponding to the value "0"
                             ++nPos;
 
@@ -1874,7 +1877,11 @@ namespace pcr
                 // type
                 if ( nPropId == PROPERTY_ID_MULTILINE )
                 {
-                    if ( FormComponentType::FIXEDTEXT == m_nClassId )
+                    if (  ( m_nClassId == FormComponentType::FIXEDTEXT )
+                       || ( m_nClassId == FormComponentType::COMMANDBUTTON )
+                       || ( m_nClassId == FormComponentType::RADIOBUTTON )
+                       || ( m_nClassId == FormComponentType::CHECKBOX )
+                       )
                         nPropId = PROPERTY_ID_WORDBREAK;
                 }
 
@@ -2046,6 +2053,7 @@ namespace pcr
                 case PROPERTY_ID_BACKGROUNDCOLOR:
                 case PROPERTY_ID_FILLCOLOR:
                 case PROPERTY_ID_SYMBOLCOLOR:
+                case PROPERTY_ID_BORDERCOLOR:
                 {
                     bFilter = sal_False;
                     pProperty->eControlType = BCT_COLORBOX;
@@ -2059,6 +2067,8 @@ namespace pcr
                         pProperty->nUniqueButtonId = UID_PROP_DLG_FILLCOLOR; break;
                     case PROPERTY_ID_SYMBOLCOLOR:
                         pProperty->nUniqueButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
+                    case PROPERTY_ID_BORDERCOLOR:
+                        pProperty->nUniqueButtonId = UID_PROP_DLG_BORDERCOLOR; break;
                     }
                 }
                 break;
@@ -2650,6 +2660,7 @@ namespace pcr
             case PROPERTY_ID_BACKGROUNDCOLOR:
             case PROPERTY_ID_FILLCOLOR:
             case PROPERTY_ID_SYMBOLCOLOR:
+            case PROPERTY_ID_BORDERCOLOR:
             {
                 sal_uInt32 nColor = aVal.ToInt32();
                 Color aColor( nColor );
@@ -3415,7 +3426,7 @@ namespace pcr
         {
             ::rtl::OUString aImageRelatedProperties[] =
             {
-                PROPERTY_IMAGEALIGN
+                PROPERTY_IMAGEPOSITION
             };
             enablePropertyLinesIfNonEmptyString( STRING_ARRAY_LIMITS( aImageRelatedProperties ), _rNewValue );
 
@@ -3498,6 +3509,14 @@ namespace pcr
             _rNewValue >>= bHasTabStop;
 
             getPropertyBox()->EnablePropertyLine( PROPERTY_TABINDEX, bHasTabStop );
+        }
+        break;
+
+        case PROPERTY_ID_BORDER:
+        {
+            sal_Int16 nBordeType = VisualEffect::NONE;
+            OSL_VERIFY( _rNewValue >>= nBordeType );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_BORDERCOLOR, nBordeType == VisualEffect::FLAT );
         }
         break;
 
