@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
@@ -95,7 +98,7 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maSelection( rSelection )
 {
-    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
+    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 1 );
 
     FreeResource();
     maRbRange.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
@@ -106,18 +109,22 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     sal_Bool bHasSelection = maSelection.hasValue();
     if ( bHasSelection )
     {
-        // even if nothing is selected in writer the selection is not empty
-        Reference< container::XIndexAccess > xIndexAccess;
-        if ( maSelection >>= xIndexAccess )
+        Reference< drawing::XShapes > xShapes;
+        if ( ( maSelection >>= xShapes ) == sal_False ) // XShapes is always a selection
         {
-            sal_Int32 nLen = xIndexAccess->getCount();
-            if ( !nLen )
-                bHasSelection = sal_False;
-            else if ( nLen == 1 )
+            // even if nothing is selected in writer the selection is not empty
+            Reference< container::XIndexAccess > xIndexAccess;
+            if ( maSelection >>= xIndexAccess )
             {
-                Reference< text::XTextRange > xTextRange( xIndexAccess->getByIndex( 0 ), UNO_QUERY );
-                if ( xTextRange.is() && ( xTextRange->getString().getLength() == 0 ) )
+                sal_Int32 nLen = xIndexAccess->getCount();
+                if ( !nLen )
                     bHasSelection = sal_False;
+                else if ( nLen == 1 )
+                {
+                    Reference< text::XTextRange > xTextRange( xIndexAccess->getByIndex( 0 ), UNO_QUERY );
+                    if ( xTextRange.is() && ( xTextRange->getString().getLength() == 0 ) )
+                        bHasSelection = sal_False;
+                }
             }
         }
     }
@@ -125,11 +132,11 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
 
     switch( nCompressMode )
     {
-        case( 1 ): maRbPrint.Check(); break;
+        case( 0 ): maRbScreen.Check(); break;
         case( 2 ): maRbPress.Check(); break;
 
         default:
-            maRbScreen.Check();
+            maRbPrint.Check();
         break;
     }
 }
