@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:21:59 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape
 uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj ) const throw ()
 {
     uno::Reference< drawing::XShape >  xRet;
-    if(pObj->IsWriterFlyFrame() || pObj->GetObjInventor() == SWGInventor)
+    if(pObj->ISA(SwVirtFlyDrawObj) || pObj->GetObjInventor() == SWGInventor)
     {
         SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)pObj->GetUserCall();
         if(pFlyContact)
