@@ -30,6 +30,14 @@
 extern "C" {
 #endif
 
+#ifndef SIZEOF_LONG
+# if defined(__alpha__) || defined(__x86_64__) || defined(__ia64__)
+# define SIZEOF_LONG        8
+#else
+# define SIZEOF_LONG        4
+#endif
+#endif
+
 /****************************
  * These make up for having no windows.h
  ***************************/
@@ -47,7 +55,11 @@ typedef char                CHAR;
 typedef void                VOID;
 #endif
 typedef unsigned short      WORD;
-typedef unsigned long       DWORD;
+#if SIZEOF_LONG == 4
+    typedef unsigned long       DWORD;
+#else
+    typedef unsigned int        DWORD;
+#endif
 typedef unsigned char       BYTE;
 typedef unsigned short      WCHAR;
 typedef WCHAR*              LPWSTR;
@@ -68,7 +80,11 @@ typedef double          SQLDOUBLE;
 typedef double          SQLFLOAT;
 #endif
 
-typedef long            SQLINTEGER;
+#if SIZEOF_LONG == 4
+    typedef long    SQLINTEGER;
+#else
+    typedef int SQLINTEGER;
+#endif
 
 #if (ODBCVER >= 0x0300)
 typedef unsigned char   SQLNUMERIC;
@@ -114,9 +130,14 @@ typedef SQLINTEGER              SQLHSTMT;
 typedef unsigned char           UCHAR;
 typedef signed char             SCHAR;
 typedef SCHAR                   SQLSCHAR;
-typedef long int                SDWORD;
+#if SIZEOF_LONG == 4
+    typedef long int        SDWORD;
+    typedef unsigned long int   UDWORD;
+#else
+    typedef signed int  SDWORD;
+    typedef unsigned int    UDWORD;
+#endif
 typedef signed short int        SWORD;
-typedef unsigned long int       UDWORD;
 typedef unsigned short int      UWORD;
 typedef UDWORD                  SQLUINTEGER;
 typedef signed long             SLONG;
