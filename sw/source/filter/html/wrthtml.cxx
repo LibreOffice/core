@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 14:59:00 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+
 
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -270,7 +274,6 @@ SwHTMLWriter::SwHTMLWriter()
 {
     bFirstLine = sal_True;
     nBkmkTabPos = USHRT_MAX;
-    pFlyFrmFmt = 0;
     pDfltColor = 0;
     nImgMapCnt = 1;
     pStartNdIdx = 0;
@@ -280,6 +283,7 @@ SwHTMLWriter::SwHTMLWriter()
     pFootEndNotes = 0;
     pFmtFtn = 0;
     eDestEnc = RTL_TEXTENCODING_MS_1252;
+    nDirection = FRMDIR_HORI_LEFT_TOP;
 }
 
 
@@ -396,11 +400,10 @@ sal_uInt32 SwHTMLWriter::WriteStream()
         ::StartProgress( STR_STATSTR_W4WWRITE, 0, pDoc->GetNodes().Count(),
                          pDoc->GetDocShell());
 
-    pFlyFrmFmt = 0;     // kein FlyFrmFormat gesetzt
     pDfltColor = 0;
     pFootEndNotes = 0;
     pFmtFtn = 0;
-    bOutTable = bOutHeader = bOutFooter = sal_False;
+    bOutTable = bOutHeader = bOutFooter = bOutFlyFrame = sal_False;
     pxFormComps = 0;
     nFormCntrlCnt = 0;
     bPreserveForm = sal_False;
@@ -423,7 +426,8 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
     nCSS1OutMode = 0;
-    sal_uInt16 nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+    sal_uInt16 nScript = GetScriptTypeOfLanguage(
+            static_cast< LanguageType >( GetAppLanguage() ) );
     switch( nScript )
     {
     case SCRIPTTYPE_ASIAN:
@@ -722,6 +726,11 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         sOut = '\"';
     }
 
+    sal_uInt16 nDir = rHTMLWrt.GetHTMLDirection( rFmt.GetAttrSet() );
+    rHTMLWrt.Strm() << sOut.GetBuffer();
+    sOut.Erase();
+    rHTMLWrt.OutDirection( nDir );
+
     if( FILE_LINK_SECTION == rSection.GetType() )
     {
         ((sOut += ' ') += sHTML_O_href) += "=\"";
@@ -885,8 +894,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         HTMLSaveData aSaveData( rHTMLWrt,
             rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex()+1,
             rSectNd.EndOfSectionIndex(),
-            rHTMLWrt.GetFlyFrmFmt(),
-            sal_False );
+            sal_False, pFmt );
         rHTMLWrt.Out_SwDoc( rHTMLWrt.pCurPam );
     }
 
@@ -1191,6 +1199,9 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     String aEmbGrfName;
     OutBackground( rItemSet, aEmbGrfName, sal_True );
 
+    nDirection = GetHTMLDirection( rItemSet );
+    OutDirection( nDirection );
+
     if( bCfgOutStyles )
         OutCSS1_BodyTagStyleOpt( *this, rItemSet, aEmbGrfName );
 
@@ -1373,6 +1384,52 @@ void SwHTMLWriter::OutLanguage( LanguageType eLang )
     }
 }
 
+sal_uInt16 SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const
+{
+    return GetHTMLDirection(
+        static_cast < const SvxFrameDirectionItem& >( rItemSet.Get( RES_FRAMEDIR ) )
+            .GetValue() );
+}
+
+sal_uInt16 SwHTMLWriter::GetHTMLDirection( sal_uInt16 nDir ) const
+{
+    switch( nDir )
+    {
+    case FRMDIR_VERT_TOP_LEFT:
+        nDir = FRMDIR_HORI_LEFT_TOP;
+        break;
+    case FRMDIR_VERT_TOP_RIGHT:
+        nDir = FRMDIR_HORI_RIGHT_TOP;
+        break;
+    case FRMDIR_ENVIRONMENT:
+        nDir = nDirection;
+    }
+
+    return nDir;
+}
+
+void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
+{
+    const sal_Char *pValue = 0;
+    switch( nDir )
+    {
+    case FRMDIR_HORI_LEFT_TOP:
+    case FRMDIR_VERT_TOP_LEFT:
+        pValue = "LTR";
+        break;
+    case FRMDIR_HORI_RIGHT_TOP:
+    case FRMDIR_VERT_TOP_RIGHT:
+        pValue = "RTL";
+        break;
+    }
+    if( pValue != 0 )
+    {
+        ByteString sOut( ' ' );
+        (((sOut += sHTML_O_dir) += "=\"") += pValue) += '\"';
+        Strm() << sOut.GetBuffer();
+    }
+}
+
 void SwHTMLWriter::GetIndentString( ByteString& rStr, sal_uInt16 nIncLvl )
 {
     // etwas umstaendlich, aber wir haben nur einen Indent-String!
@@ -1419,14 +1476,17 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
-HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uInt32 nStt, sal_uInt32 nEnd,
-                            const SwFlyFrmFmt *pFly, sal_Bool bSaveNum )
+HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uInt32 nStt,
+                            sal_uInt32 nEnd, sal_Bool bSaveNum,
+                                const SwFrmFmt *pFrmFmt )
     : rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ), pOldEnd( rWrt.GetEndPaM() ),
-    pOldFlyFmt( rWrt.GetFlyFrmFmt() ), pOldNumRuleInfo( 0 ),
+    pOldNumRuleInfo( 0 ),
     pOldNextNumRuleInfo( 0 ),
+    nOldDirection( rWrt.nDirection ),
     nOldDefListLvl( rWrt.nDefListLvl ),
-    bOldOutHeader( rWrt.bOutHeader ), bOldOutFooter( rWrt.bOutFooter )
+    bOldOutHeader( rWrt.bOutHeader ), bOldOutFooter( rWrt.bOutFooter ),
+    bOldOutFlyFrame( rWrt.bOutFlyFrame )
 {
     bOldWriteAll = rWrt.bWriteAll;
 
@@ -1462,7 +1522,9 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uInt32 nStt, sal_uInt32 n
 
     // Die Numerierung wird in jedem Fall unterbrochen.
     rWrt.GetNumInfo().Clear();
-    rWrt.SetFlyFrmFmt( pFly );
+
+    if( pFrmFmt )
+        rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
 }
 
 
@@ -1475,8 +1537,10 @@ HTMLSaveData::~HTMLSaveData()
     rWrt.bWriteAll = bOldWriteAll;
     rWrt.nLastParaToken = 0;
     rWrt.nDefListLvl = nOldDefListLvl;
+    rWrt.nDirection = nOldDirection;
     rWrt.bOutHeader = bOldOutHeader;
     rWrt.bOutFooter = bOldOutFooter;
+    rWrt.bOutFlyFrame = bOldOutFlyFrame;
 
     // Ggf. die Numerierung von vor der Section fortsetzen. Die Numerierung
     // des naecshten Absatz wird in jedem Fall ungueltig.
@@ -1491,7 +1555,6 @@ HTMLSaveData::~HTMLSaveData()
         rWrt.GetNumInfo().Clear();
         rWrt.ClearNextNumInfo();
     }
-    rWrt.SetFlyFrmFmt( pOldFlyFmt );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 14:54:02 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,10 +591,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( pSttNd )
     {
         HTMLSaveData aSaveData( rWrt, pSttNd->GetIndex()+1,
-                                pSttNd->EndOfSectionIndex(),
-                                rWrt.GetFlyFrmFmt() );
+                                pSttNd->EndOfSectionIndex() );
         rWrt.Out_SwDoc( rWrt.pCurPam );
-//      rWrt.ChangeParaToken( 0 );  // MIB 8.7.97: Passiert jetzt in Out_SwDoc
     }
     else
     {
@@ -757,6 +755,15 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, SwHoriOrient eAlign,
         rWrt.OutNewLine();  // <TABLE> in neue Zeile
     ByteString sOut( '<' );
     sOut += sHTML_table;
+
+    sal_uInt16 nOldDirection = rWrt.nDirection;
+    rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
+    if( rWrt.bOutFlyFrame || nOldDirection != rWrt.nDirection )
+    {
+        rWrt.Strm() << sOut.GetBuffer();
+        sOut.Erase();
+        rWrt.OutDirection( rWrt.nDirection );
+    }
 
     // COLS ausgeben: Nur bei Export ueber Layout, wenn es beim Import
     // vorhanden war.
@@ -1085,6 +1092,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, SwHoriOrient eAlign,
 
     rWrt.OutNewLine(); // </TABLE> in neue Zeile
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_table, sal_False );
+
+    rWrt.nDirection = nOldDirection;
 }
 
 Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,

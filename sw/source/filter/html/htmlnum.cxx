@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     }
 
     // und es ggf. durch die Optionen veraendern
-    String aId, aStyle, aClass, aBulletSrc, aLang;
+    String aId, aStyle, aClass, aBulletSrc, aLang, aDir;
     SvxFrameVertOrient eVertOri = SVX_VERT_NONE;
     sal_uInt16 nWidth=USHRT_MAX, nHeight=USHRT_MAX;
     const HTMLOptions *pOptions = GetOptions();
@@ -292,6 +292,9 @@ void SwHTMLParser::NewNumBulList( int nToken )
             break;
         case HTML_O_LANG:
             aLang = pOption->GetString();
+            break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
             break;
         case HTML_O_SRC:
             if( bNewNumFmt )
@@ -364,12 +367,12 @@ void SwHTMLParser::NewNumBulList( int nToken )
 #endif
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
 #ifdef NUM_RELSPACE
             if( bNewNumFmt )
@@ -528,7 +531,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
 void SwHTMLParser::NewNumBulListItem( int nToken )
 {
     sal_uInt8 nLevel = GetNumInfo().GetLevel();
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
     sal_uInt16 nStart = HTML_LISTHEADER_ON != nToken
                         ? GetNumInfo().GetNodeStartValue( nLevel )
                         : USHRT_MAX;
@@ -555,6 +558,9 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
+                break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
                 break;
         }
     }
@@ -617,12 +623,12 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 14:55:49 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
 #endif
@@ -488,7 +492,8 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
 {
     SvxBrushItem aBrushItem;
     SvxBoxItem aBoxItem;
-    BOOL bSetBrush = pBrush!=0, bSetBox = FALSE;
+    SvxFrameDirectionItem aFrmDirItem;
+    BOOL bSetBrush = pBrush!=0, bSetBox = FALSE, bSetFrmDir = FALSE;
     if( pBrush )
         aBrushItem = *pBrush;
 
@@ -511,9 +516,25 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
             pItemSet->ClearItem( RES_BOX );
             bSetBox = TRUE;
         }
+
+        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, FALSE, &pItem ) )
+        {
+            // eine Umrandung wird gesetzt
+            aBoxItem = *((const SvxBoxItem *)pItem);
+            pItemSet->ClearItem( RES_BOX );
+            bSetBox = TRUE;
+        }
+
+        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_FRAMEDIR, FALSE, &pItem ) )
+        {
+            // eine Umrandung wird gesetzt
+            aFrmDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
+            pItemSet->ClearItem( RES_FRAMEDIR );
+            bSetFrmDir = TRUE;
+        }
     }
 
-    if( bSetBrush || bSetBox )
+    if( bSetBrush || bSetBox || bSetFrmDir )
     {
         static USHORT aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
                                      RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
@@ -528,6 +549,8 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                     rMaster.SetAttr( aBrushItem );
                 if( bSetBox )
                     rMaster.SetAttr( aBoxItem );
+                if( bSetFrmDir )
+                    rMaster.SetAttr( aFrmDirItem );
 
                 ChgPageDesc( pPageDesc, aNewPageDesc );
             }
@@ -1811,6 +1834,10 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( USHORT nWhich )
     case RES_CHRATR_CTL_LANGUAGE:
         ppAttr = &aAttrTab.pLanguageCTL;
         break;
+
+    case RES_FRAMEDIR:
+        ppAttr = &aAttrTab.pDirection;
+        break;
     }
 
     return ppAttr;
@@ -2064,7 +2091,8 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
                                       const String &rClass,
                                       SfxItemSet &rItemSet,
                                       SvxCSS1PropertyInfo &rPropInfo,
-                                         const String *pLang )
+                                         const String *pLang,
+                                         const String *pDir )
 {
     BOOL bRet = FALSE;
 
@@ -2113,6 +2141,24 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
             rItemSet.Put( aLang );
             aLang.SetWhich( RES_CHRATR_CTL_LANGUAGE );
             rItemSet.Put( aLang );
+
+            bRet = sal_True;
+        }
+    }
+    if( pDir && pDir->Len() )
+    {
+        String aValue( *pDir );
+        aValue.ToUpperAscii();
+        SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+        if( aValue.EqualsAscii( "LTR" ) )
+            eDir = FRMDIR_HORI_LEFT_TOP;
+        else if( aValue.EqualsAscii( "RTL" ) )
+            eDir = FRMDIR_HORI_RIGHT_TOP;
+
+        if( FRMDIR_ENVIRONMENT != eDir )
+        {
+            SvxFrameDirectionItem aDir( eDir );
+            rItemSet.Put( aDir );
 
             bRet = sal_True;
         }
@@ -2292,6 +2338,13 @@ void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
     {
         rFrmItemSet.Put( *pItem );
         rItemSet.ClearItem( RES_BACKGROUND );
+    }
+
+    if( (nFlags & HTML_FF_DIRECTION) != 0 &&
+        SFX_ITEM_SET==rItemSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem ) )
+    {
+        rFrmItemSet.Put( *pItem );
+        rItemSet.ClearItem( RES_FRAMEDIR );
     }
 }
 

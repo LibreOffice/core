@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ struct HTMLTableOptions
     Color aBorderColor;
     Color aBGColor;
 
-    String aBGImage, aStyle, aId, aClass;
+    String aBGImage, aStyle, aId, aClass, aDir;
 
     HTMLTableOptions( const HTMLOptions *pOptions, SvxAdjust eParentAdjust );
 };
@@ -482,6 +482,7 @@ class HTMLTable
     String aId;
     String aStyle;
     String aClass;
+    String aDir;
 
     SdrObjects *pResizeDrawObjs;// SDR-Objekte
     SvUShorts *pDrawObjPrcWidths;   // Spalte des Zeichen-Objekts und dessen
@@ -751,6 +752,7 @@ public:
     const String& GetId() const { return aId; }
     const String& GetClass() const { return aClass; }
     const String& GetStyle() const { return aStyle; }
+    const String& GetDirection() const { return aDir; }
 
     void IncBoxCount() { nBoxes++; }
     sal_Bool IsOverflowing() const { return nBoxes > 64000; }
@@ -1157,6 +1159,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     aId = pOptions->aId;
     aClass = pOptions->aClass;
     aStyle = pOptions->aStyle;
+    aDir = pOptions->aDir;
 }
 
 HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
@@ -3367,7 +3370,7 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
 
 class _CellSaveStruct : public _SectionSaveStruct
 {
-    String aStyle, aId, aClass, aLang;
+    String aStyle, aId, aClass, aLang, aDir;
     String aBGImage;
     Color aBGColor;
 
@@ -3491,6 +3494,9 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
             case HTML_O_LANG:
                 aLang = pOption->GetString();
                 break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
+                break;
             case HTML_O_SDNUM:
                 aNumFmt = pOption->GetString();
                 bHasNumFmt = sal_True;
@@ -3536,14 +3542,14 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         rParser.InsertAttr( &rParser.aAttrTab.pAdjust, SvxAdjustItem(eAdjust),
                             pCntxt );
 
-    if( rParser.HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( rParser.HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( rParser.pDoc->GetAttrPool(),
                              rParser.pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( rParser.ParseStyleOptions( aStyle, aId, aClass, aItemSet,
-                                       aPropInfo, &aLang ) )
+                                       aPropInfo, &aLang, &aDir ) )
             rParser.InsertAttrs( aItemSet, aPropInfo, pCntxt );
     }
 
@@ -3754,14 +3760,11 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
 
         if( !pCurTable->GetContext() )
         {
-//          MIB: 5.9.2000: Do we need this any longer?
-//          bIsWriterDoc = sal_True;
             sal_Bool bTopTable = pTable==pCurTable;
 
             // die Tabelle besitzt noch keinen Inhalt, d.h. die eigentliche
             // Tabelle muss erst noch angelegt werden
 
-            String aStyle, aId, aClass;
             static sal_uInt16 aWhichIds[] =
             {
                 RES_PARATR_SPLIT,   RES_PARATR_SPLIT,
@@ -3770,6 +3773,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 RES_BACKGROUND,     RES_BACKGROUND,
                 RES_KEEP,           RES_KEEP,
                 RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
+                RES_FRAMEDIR,       RES_FRAMEDIR,
                 0
             };
 
@@ -3779,7 +3783,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             sal_Bool bStyleParsed = ParseStyleOptions( pCurTable->GetStyle(),
                                                    pCurTable->GetId(),
                                                    pCurTable->GetClass(),
-                                                   aItemSet, aPropInfo );
+                                                   aItemSet, aPropInfo,
+                                                      0, &pCurTable->GetDirection() );
             const SfxPoolItem *pItem = 0;
             if( bStyleParsed )
             {
@@ -5463,6 +5468,9 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions *pOptions,
             break;
         case HTML_O_CLASS:
             aClass = pOption->GetString();
+            break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
             break;
         case HTML_O_HSPACE:
             nHSpace = (sal_uInt16)pOption->GetNumber();

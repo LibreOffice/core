@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 13:08:57 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,9 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
@@ -895,6 +897,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         pNodeItemSet ? ((const SvxULSpaceItem &)pNodeItemSet->Get(RES_UL_SPACE))
                      : rFmt.GetULSpace();
 
+
     if( (rHWrt.bOutHeader &&
          rWrt.pCurPam->GetPoint()->nNode.GetIndex() ==
             rWrt.pCurPam->GetMark()->nNode.GetIndex()) ||
@@ -1159,6 +1162,12 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
     }
 
+    // and the text direction
+    sal_uInt16 nDir = rHWrt.GetHTMLDirection(
+            (pNodeItemSet ? static_cast < const SvxFrameDirectionItem& >(
+                                    pNodeItemSet->Get( RES_FRAMEDIR ) )
+                          : rFmt.GetFrmDir() ).GetValue() );
+
     // Ein <P> wird nur geschrieben, wenn
     // - wir in keiner OL/UL/DL sind, oder
     // - der Absatz einer OL/UL nicht numeriert ist, oder
@@ -1175,6 +1184,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         (!rHWrt.bCfgOutStyles &&
          (bHasParSpace || pAdjItem ||
           (eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.eLang))) ||
+        nDir != rHWrt.nDirection ||
         rHWrt.bCfgOutStyles )
     {
         // jetzt werden Optionen ausgegeben
@@ -1189,6 +1199,16 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             rWrt.Strm() << sOut.GetBuffer();
             rHWrt.OutLanguage( eLang );
             sOut.Erase();
+        }
+
+        if( nDir != rHWrt.nDirection )
+        {
+            if( sOut.Len() )
+            {
+                rWrt.Strm() << sOut.GetBuffer();
+                sOut.Erase();
+            }
+            rHWrt.OutDirection( nDir );
         }
 
         if( rHWrt.bCfgOutStyles &&
@@ -2423,7 +2443,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // PagePreaks uns PagDescs abfangen
     BOOL bPageBreakBehind = FALSE;
     if( rHTMLWrt.bCfgFormFeed &&
-        !(rHTMLWrt.bOutTable || rHTMLWrt.GetFlyFrmFmt()) &&
+        !(rHTMLWrt.bOutTable || rHTMLWrt.bOutFlyFrame) &&
         rHTMLWrt.pStartNdIdx->GetIndex() !=
         rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex() )
     {

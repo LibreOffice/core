@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-17 11:11:27 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2027,11 +2027,32 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
 
     case HTML_DOCTYPE:
     case HTML_BODY_OFF:
-    case HTML_HTML_ON:
     case HTML_HTML_OFF:
     case HTML_HEAD_ON:
     case HTML_TITLE_OFF:
         break;      // nicht weiter auswerten, oder???
+    case HTML_HTML_ON:
+        {
+            const HTMLOptions *pOptions = GetOptions();
+            for( USHORT i = pOptions->Count(); i; )
+            {
+                const HTMLOption *pOption = (*pOptions)[ --i ];
+                if( HTML_O_DIR == pOption->GetToken() )
+                {
+                    const String& rDir = pOption->GetString();
+                    SfxItemSet aItemSet( pDoc->GetAttrPool(),
+                                         pCSS1Parser->GetWhichMap() );
+                    SvxCSS1PropertyInfo aPropInfo;
+                    String aDummy;
+                    ParseStyleOptions( aDummy, aDummy, aDummy, aItemSet,
+                                       aPropInfo, 0, &rDir );
+
+                    pCSS1Parser->SetPageDescAttrs( 0, &aItemSet );
+                    break;
+                }
+            }
+        }
+        break;
 
     case HTML_INPUT:
         InsertInput();
@@ -3465,7 +3486,7 @@ void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
 
 void SwHTMLParser::NewStdAttr( int nToken )
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3485,6 +3506,9 @@ void SwHTMLParser::NewStdAttr( int nToken )
         case HTML_O_LANG:
             aLang = pOption->GetString();
             break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
+            break;
         }
     }
 
@@ -3492,12 +3516,12 @@ void SwHTMLParser::NewStdAttr( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             if( HTML_SPAN_ON != nToken || !aClass.Len() ||
                 !CreateContainer( aClass, aItemSet, aPropInfo, pCntxt ) )
@@ -3515,7 +3539,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
                                _HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
                                _HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3535,6 +3559,9 @@ void SwHTMLParser::NewStdAttr( int nToken,
         case HTML_O_LANG:
             aLang = pOption->GetString();
             break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
+            break;
         }
     }
 
@@ -3542,7 +3569,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -3553,7 +3580,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
         if( pItem3 )
             aItemSet.Put( *pItem3 );
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
         InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
@@ -3592,7 +3619,7 @@ void SwHTMLParser::EndTag( int nToken )
 
 void SwHTMLParser::NewBasefontAttr()
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
     USHORT nSize = 3;
 
     const HTMLOptions *pOptions = GetOptions();
@@ -3616,6 +3643,9 @@ void SwHTMLParser::NewBasefontAttr()
         case HTML_O_LANG:
             aLang = pOption->GetString();
             break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
+            break;
         }
     }
 
@@ -3629,7 +3659,7 @@ void SwHTMLParser::NewBasefontAttr()
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_BASEFONT_ON );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -3641,7 +3671,7 @@ void SwHTMLParser::NewBasefontAttr()
         aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
         aItemSet.Put( aFontHeight );
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
         InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
@@ -3683,7 +3713,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
             ? (aFontStack[aFontStack.Count()-1] & FONTSIZE_MASK)
             : nBaseSize );
 
-    String aFace, aId, aStyle, aClass, aLang;
+    String aFace, aId, aStyle, aClass, aLang, aDir;
     Color aColor;
     ULONG nFontHeight = 0;  // tatsaechlich einzustellende Font-Hoehe
     USHORT nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
@@ -3736,6 +3766,9 @@ void SwHTMLParser::NewFontAttr( int nToken )
             break;
         case HTML_O_LANG:
             aLang = pOption->GetString();
+            break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
             break;
         }
     }
@@ -3826,7 +3859,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -3853,7 +3886,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         }
 
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
         InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
@@ -3907,7 +3940,7 @@ void SwHTMLParser::NewPara()
         AddParSpace();
 
     eParaAdjust = SVX_ADJUST_END;
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3930,6 +3963,9 @@ void SwHTMLParser::NewPara()
             case HTML_O_LANG:
                 aLang = pOption->GetString();
                 break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
+                break;
         }
     }
 
@@ -3941,12 +3977,12 @@ void SwHTMLParser::NewPara()
 
     // Styles parsen (Class nicht beruecksichtigen. Das geht nur, solange
     // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4025,7 +4061,7 @@ void SwHTMLParser::NewHeading( int nToken )
 {
     eParaAdjust = SVX_ADJUST_END;
 
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -4047,6 +4083,9 @@ void SwHTMLParser::NewHeading( int nToken )
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
+                break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
                 break;
         }
     }
@@ -4074,12 +4113,12 @@ void SwHTMLParser::NewHeading( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nTxtColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4148,7 +4187,7 @@ void SwHTMLParser::EndHeading()
 
 void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -4167,6 +4206,9 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
+                break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
                 break;
         }
     }
@@ -4206,12 +4248,12 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4274,7 +4316,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
 
 void SwHTMLParser::NewDefList()
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -4293,6 +4335,9 @@ void SwHTMLParser::NewDefList()
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
+                break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
                 break;
         }
     }
@@ -4354,12 +4399,12 @@ void SwHTMLParser::NewDefList()
     pCntxt->SetMargins( nLeft, nRight, nIndent );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -4844,7 +4889,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 
 void SwHTMLParser::NewCharFmt( int nToken )
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -4864,6 +4909,9 @@ void SwHTMLParser::NewCharFmt( int nToken )
         case HTML_O_LANG:
             aLang = pOption->GetString();
             break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
+            break;
         }
     }
 
@@ -4876,12 +4924,12 @@ void SwHTMLParser::NewCharFmt( int nToken )
 
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );

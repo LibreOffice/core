@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 14:57:39 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,13 +197,15 @@ const ULONG HTML_FRMOPTS_DIV            =
     HTML_FRMOPT_S_SPACE |
     HTML_FRMOPT_S_BORDER |
     HTML_FRMOPT_S_BACKGROUND |
-    HTML_FRMOPT_BRCLEAR;
+    HTML_FRMOPT_BRCLEAR |
+    HTML_FRMOPT_DIR;
 
 const ULONG HTML_FRMOPTS_MULTICOL       =
     HTML_FRMOPT_ID |
     HTML_FRMOPT_WIDTH |
     HTML_FRMOPT_ANYSIZE |
-    HTML_FRMOPT_ABSSIZE;
+    HTML_FRMOPT_ABSSIZE |
+    HTML_FRMOPT_DIR;
 const ULONG HTML_FRMOPTS_MULTICOL_CNTNR =
     HTML_FRMOPTS_MULTICOL;
 const ULONG HTML_FRMOPTS_MULTICOL_CSS1  =
@@ -641,6 +643,16 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         HTMLOutFuncs::Out_String( Strm(), rFrmFmt.GetName(), eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
+
+    // Name
+    if( nFrmOpts & HTML_FRMOPT_DIR )
+    {
+        sal_uInt16 nDir = GetHTMLDirection( rItemSet );
+        Strm() << sOut.GetBuffer();
+        sOut.Erase();
+        OutDirection( nDir );
+    }
+
 
     // ALT
     if( (nFrmOpts & HTML_FRMOPT_ALT) && rAlternateTxt.Len() )
@@ -1424,7 +1436,8 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     {
         HTMLSaveData aSaveData( rHTMLWrt, pTblNd->GetIndex()+1,
                                 pTblNd->EndOfSectionIndex(),
-                                (SwFlyFrmFmt*)&rFrmFmt );
+                                   sal_True, &rFrmFmt );
+        rHTMLWrt.bOutFlyFrame = sal_True;
         OutHTML_SwTblNode( rHTMLWrt, *pTblNd, &rFrmFmt, &aCaption,
                            bTopCaption );
     }
@@ -1499,7 +1512,8 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
         // wieder hergestellt wird.
         HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex(),
-                                (const SwFlyFrmFmt*)&rFrmFmt );
+                                   sal_True, &rFrmFmt );
+        rHTMLWrt.bOutFlyFrame = sal_True;
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
@@ -1589,7 +1603,8 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
         // wieder hergestellt wird.
         HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex(),
-                                (const SwFlyFrmFmt*)&rFrmFmt );
+                                   sal_True, &rFrmFmt );
+        rHTMLWrt.bOutFlyFrame = sal_True;
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
@@ -1783,8 +1798,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // wieder hergestellt wird. pFlyFmt braucht hier nicht gestzt zu
         // werden, denn PageDesc-Attribute koennen hier nicht vorkommen
         HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
-                                pSttNd->EndOfSectionIndex(),
-                                rHTMLWrt.GetFlyFrmFmt() );
+                                pSttNd->EndOfSectionIndex() );
 
         if( bHeader )
             rHTMLWrt.bOutHeader = TRUE;

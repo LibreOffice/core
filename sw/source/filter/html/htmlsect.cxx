@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-01 12:18:05 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@
 
 void SwHTMLParser::NewDivision( int nToken )
 {
-    String aId, aHRef, aStyle, aClass, aLang;
+    String aId, aHRef, aStyle, aClass, aLang, aDir;
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
 
@@ -176,6 +176,9 @@ void SwHTMLParser::NewDivision( int nToken )
             break;
         case HTML_O_LANG:
             aLang = pOption->GetString();
+            break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
             break;
         case HTML_O_HREF:
             aHRef =  pOption->GetString();
@@ -204,10 +207,10 @@ void SwHTMLParser::NewDivision( int nToken )
     sal_Bool bStyleParsed = sal_False, bPositioned = sal_False;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         bStyleParsed = ParseStyleOptions( aStyle, aId, aClass,
-                                          aItemSet, aPropInfo, &aLang );
+                                          aItemSet, aPropInfo, &aLang, &aDir );
         if( bStyleParsed )
         {
             bPositioned = HTML_DIVISION_ON == nToken && aClass.Len() &&
@@ -417,6 +420,12 @@ void SwHTMLParser::NewDivision( int nToken )
         {
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_BACKGROUND );
+        }
+        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_FRAMEDIR, sal_False,
+                                                   &pItem ) )
+        {
+            aFrmItemSet.Put( *pItem );
+            aItemSet.ClearItem( RES_FRAMEDIR );
         }
 
         pDoc->Insert( *pPam, aSection, &aFrmItemSet, sal_False );
@@ -631,7 +640,7 @@ sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
 
 void SwHTMLParser::NewMultiCol()
 {
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
     long nWidth = 100;
     sal_uInt16 nCols = 0, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
@@ -653,6 +662,9 @@ void SwHTMLParser::NewMultiCol()
             break;
         case HTML_O_LANG:
             aLang = pOption->GetString();
+            break;
+        case HTML_O_DIR:
+            aDir = pOption->GetString();
             break;
         case HTML_O_COLS:
             nCols = (sal_uInt16)pOption->GetNumber();
@@ -683,9 +695,9 @@ void SwHTMLParser::NewMultiCol()
     sal_Bool bStyleParsed = sal_False;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
-    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
         bStyleParsed = ParseStyleOptions( aStyle, aId, aClass,
-                                          aItemSet, aPropInfo, &aLang );
+                                          aItemSet, aPropInfo, &aLang, &aDir );
 
     // Calculate width.
     sal_uInt8 nPrcWidth = bPrcWidth ? (sal_uInt8)nWidth : 0;
@@ -722,7 +734,7 @@ void SwHTMLParser::NewMultiCol()
         // it will be cleared here. That for, it won't be set at the section,
         // too.
         SetFrmFmtAttrs( aItemSet, aPropInfo,
-                        HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_PADDING,
+                        HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_PADDING|HTML_FF_DIRECTION,
                         aFrmItemSet );
 
         // Insert fly frame. If the are columns, the fly frame's name is not
@@ -802,6 +814,12 @@ void SwHTMLParser::NewMultiCol()
         {
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_BACKGROUND );
+        }
+        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_FRAMEDIR, sal_False,
+                                                   &pItem ) )
+        {
+            aFrmItemSet.Put( *pItem );
+            aItemSet.ClearItem( RES_FRAMEDIR );
         }
         pDoc->Insert( *pPam, aSection, &aFrmItemSet, sal_False );
 

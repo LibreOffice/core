@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlftn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-16 10:15:23 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,8 +450,7 @@ void SwHTMLWriter::OutFootEndNotes()
         if( pSttNdIdx )
         {
             HTMLSaveData aSaveData( *this, pSttNdIdx->GetIndex()+1,
-                pSttNdIdx->GetNode().EndOfSectionIndex(), GetFlyFrmFmt(),
-                FALSE );
+                pSttNdIdx->GetNode().EndOfSectionIndex(), FALSE );
             Out_SwDoc( pCurPam );
         }
 

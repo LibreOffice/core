@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-01 13:28:41 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ struct _HTMLAttrTable
                 *pSplit,
                 *pWidows,
                 *pOrphans,
+                *pDirection,
 
                 *pCharFmts,     // Text-Attribute
                 *pINetFmt,
@@ -415,6 +416,7 @@ SV_DECL_PTRARR( SwHTMLFrmFmts, SwFrmFmtPtr, 2, 2 )
 #define HTML_FF_BOX                 0x0001
 #define HTML_FF_BACKGROUND          0x0002
 #define HTML_FF_PADDING             0x0004
+#define HTML_FF_DIRECTION           0x0008
 
 class SwHTMLParser : public SfxHTMLParser, public SwClient
 {
@@ -831,11 +833,12 @@ private:
     void EndStyle();
 
     inline sal_Bool HasStyleOptions( const String &rStyle, const String &rId,
-                                 const String &rClass, const String *pLang=0 );
+                                 const String &rClass, const String *pLang=0,
+                                    const String *pDir=0 );
     sal_Bool ParseStyleOptions( const String &rStyle, const String &rId,
                             const String &rClass, SfxItemSet &rItemSet,
                             SvxCSS1PropertyInfo &rPropInfo,
-                             const String *pLang=0 );
+                             const String *pLang=0, const String *pDir=0 );
 
 
     // Einfuegen von Controls und ::com::sun::star::form::Forms (htmlform.cxx)
@@ -1049,11 +1052,13 @@ inline void _HTMLAttrContext::GetULSpace( sal_uInt16& rUpper,
 }
 
 inline sal_Bool SwHTMLParser::HasStyleOptions( const String &rStyle,
-                                           const String &rId,
-                                           const String &rClass,
-                                            const String *pLang )
+                                            const String &rId,
+                                            const String &rClass,
+                                            const String *pLang,
+                                               const String *pDir )
 {
-    return rStyle.Len() || rId.Len() || rClass.Len() || (pLang && pLang->Len());
+    return rStyle.Len() || rId.Len() || rClass.Len() ||
+           (pLang && pLang->Len()) || (pDir && pDir->Len());
 }
 
 inline const _HTMLAttrContext *SwHTMLParser::GetTopContext() const

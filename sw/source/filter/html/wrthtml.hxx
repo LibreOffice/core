@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 13:08:58 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ const sal_uInt32 HTML_FRMOPT_ALT        = 1<<16;
 const sal_uInt32 HTML_FRMOPT_BRCLEAR    = 1<<17;
 const sal_uInt32 HTML_FRMOPT_S_PIXSIZE  = 1<<18;
 const sal_uInt32 HTML_FRMOPT_ID             = 1<<19;
+const sal_uInt32 HTML_FRMOPT_DIR            = 1<<20;
 
 
 const sal_uInt32 HTML_FRMOPTS_GENIMG_ALL    =
@@ -247,11 +248,6 @@ class SwHTMLWriter : public Writer
     SwHTMLPosFlyFrms *pHTMLPosFlyFrms;
     SwHTMLNumRuleInfo *pNumRuleInfo;// aktuelle Numerierung
     SwHTMLNumRuleInfo *pNextNumRuleInfo;
-    const SwFlyFrmFmt* pFlyFrmFmt;  // liegt der Node in einem FlyFrame, ist
-                                    // das Format gesetzt, sonst 0. In Tabellen
-                                    // nur dann, wenn die Tabelle alleine
-                                    // im Rahmen ist.
-
     sal_uInt32 nHTMLMode;               // Beschreibung der Export-Konfiguration
 
     FieldUnit eCSS1Unit;
@@ -301,7 +297,7 @@ public:
     sal_uInt32 aFontHeights[7];         // die Font-Hoehen 1-7
 
     sal_uInt32 nWarn;                   // Result-Code fuer Warnungen
-    xub_StrLen nLastLFPos;              // letzte Position eines LF
+    sal_uInt32 nLastLFPos;              // letzte Position eines LF
 
     sal_uInt16 nLastParaToken;          // fuers Absaetze zusammenhalten
     sal_uInt16 nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
@@ -326,6 +322,7 @@ public:
     sal_uInt16 nCSS1OutMode;
     sal_uInt16 nCSS1Script;         // contains default script (that's the one
                                     // that is not contained in class names)
+    sal_uInt16 nDirection;          // the current direction
 
     rtl_TextEncoding    eDestEnc;
     LanguageType        eLang;
@@ -358,6 +355,7 @@ public:
     sal_Bool bOutTable : 1;             // wird der Tabelleninhalt geschrieben?
     sal_Bool bOutHeader : 1;
     sal_Bool bOutFooter : 1;
+    sal_Bool bOutFlyFrame : 1;
 
     // Flags fuer Style-Export
 
@@ -365,8 +363,8 @@ public:
     sal_Bool bFirstCSS1Property : 1;    // wurde schon eine Property ausgegeben
     sal_Bool bPoolCollTextModified : 1; // die Textkoerper-Vorlage wurde
                                     // modifiziert.
-    sal_Bool bCSS1IgnoreFirstPageDesc : 1;
     // 16
+    sal_Bool bCSS1IgnoreFirstPageDesc : 1;
 
     // was muss/kann/darf nicht ausgegeben werden?
 
@@ -380,7 +378,7 @@ public:
     sal_Bool bPreserveForm : 1;         // die aktuelle Form beibehalten
 
     sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
-    // 22
+    // 23
 
     SwHTMLWriter();
     virtual ~SwHTMLWriter();
@@ -450,6 +448,9 @@ public:
                         sal_Bool bGraphic );
 
     void OutLanguage( LanguageType eLang );
+    sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
+    sal_uInt16 GetHTMLDirection( const SfxItemSet& rItemSet ) const;
+    void OutDirection( sal_uInt16 nDir );
 
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
@@ -464,10 +465,6 @@ public:
     void OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt );
 
     void ChangeParaToken( sal_uInt16 nNew );
-
-    // Umgebendes FlyFrmFmt
-    const SwFlyFrmFmt *GetFlyFrmFmt() const { return pFlyFrmFmt; }
-    void SetFlyFrmFmt( const SwFlyFrmFmt *pFly ) { pFlyFrmFmt = pFly; }
 
     void IncIndentLevel() { nIndentLvl++; }
     void DecIndentLevel() { if ( nIndentLvl ) nIndentLvl--; }
@@ -587,13 +584,16 @@ struct HTMLSaveData
     SwHTMLNumRuleInfo *pOldNumRuleInfo;     // Owner = this
     SwHTMLNumRuleInfo *pOldNextNumRuleInfo; // Owner = HTML-Writer
     sal_uInt16 nOldDefListLvl;
+    sal_uInt16 nOldDirection;
     sal_Bool bOldWriteAll : 1;
     sal_Bool bOldOutHeader : 1;
     sal_Bool bOldOutFooter : 1;
+    sal_Bool bOldOutFlyFrame : 1;
     const SwFlyFrmFmt* pOldFlyFmt;
 
     HTMLSaveData( SwHTMLWriter&, sal_uInt32 nStt, sal_uInt32 nEnd,
-                  const SwFlyFrmFmt* pFly, sal_Bool bSaveNum=sal_True );
+                  sal_Bool bSaveNum=sal_True,
+                     const SwFrmFmt *pFrmFmt=0  );
     ~HTMLSaveData();
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 15:00:49 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _HTMLOUT_HXX //autogen
 #include <svtools/htmlout.hxx>
@@ -3784,6 +3787,38 @@ static Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwHTMLWriter& rHTMLWrt = static_cast< SwHTMLWriter& >( rWrt  );
+
+    // Language will be exported rules only
+    if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_TEMPLATE ) )
+        return rWrt;
+
+    sal_uInt16 nDir =
+        static_cast< const SvxFrameDirectionItem& >( rHt ).GetValue();
+    sal_Char *pStr = 0;
+    switch( nDir )
+    {
+    case FRMDIR_HORI_LEFT_TOP:
+    case FRMDIR_VERT_TOP_LEFT:
+        pStr = sCSS1_PV_ltr;
+        break;
+    case FRMDIR_HORI_RIGHT_TOP:
+    case FRMDIR_VERT_TOP_RIGHT:
+        pStr = sCSS1_PV_rtl;
+        break;
+    case FRMDIR_ENVIRONMENT:
+        pStr = sCSS1_PV_inherit;
+        break;
+    }
+
+    if( pStr )
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_direction, pStr );
+
+    return rWrt;
+}
+
 /*
  * lege hier die Tabellen fuer die HTML-Funktions-Pointer auf
  * die Ausgabe-Funktionen an.
@@ -3897,14 +3932,14 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_URL */                       0,
 /* RES_EDIT_IN_READONLY */          0,
 /* RES_LAYOUT_SPLIT */              0,
-/* RES_FRMATR_DUMMY1 */             0, // Dummy:
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
-/* RES_FRMATR_DUMMY6 */             0, // Dummy:
-/* RES_FRMATR_DUMMY7 */             0, // Dummy:
-/* RES_FRMATR_DUMMY8 */             0, // Dummy:
+/* RES_CHAIN */                     0,
+/* RES_TEXTGRID */                  0,
+/* RES_LINENUMBER */                0,
+/* RES_FTN_AT_TXTEND */             0,
+/* RES_END_AT_TXTEND */             0,
+/* RES_COLUMNBALANCE */             0,
+/* RES_FRAMEDIR */                  OutCSS1_SvxFrameDirection,
+/* RES_HEADER_FOOTER_EAT_SPACING */ 0,
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
 
 /* RES_GRFATR_MIRRORGRF */          0,
@@ -3929,101 +3964,3 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_BOXATR_FORMULA */            0,
 /* RES_BOXATR_VALUE */              0
 };
-
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.16  2002/05/24 12:38:53  mib
-      #97826#: Export default style correctly
-
-      Revision 1.15  2002/05/16 13:08:57  mib
-      #97334#: Process non positive margin correctly in HTML export
-
-      Revision 1.14  2002/03/13 14:20:19  mib
-      #97558#: Don't store LANGUAGE_DEFAULT
-
-      Revision 1.13  2001/12/03 09:52:53  mib
-      #95462#: Export COL_AUTO as black instead of white
-
-      Revision 1.12  2001/10/24 14:16:17  mib
-      #91961#: Support of language
-
-      Revision 1.11  2001/10/11 12:53:49  vg
-      #65293# added type vvoid
-
-      Revision 1.10  2001/10/09 14:57:36  mib
-      #90476#: Support for CJK/CTL font attributes
-
-      Revision 1.9  2001/07/30 14:36:19  mib
-      #90539#: Don't export table paragarph styles as P
-
-      Revision 1.8  2001/07/11 11:33:26  mib
-      #89534#: Export faont-family and some other properties again
-
-      Revision 1.7  2001/07/03 07:49:47  mib
-      #88156#: warning for unconvertable chars
-
-      Revision 1.6  2000/12/21 16:21:48  jp
-      writegraphic optional in original format and not general as JPG
-
-      Revision 1.5  2000/12/12 09:39:59  mib
-      #70821#: Don't export empty frames as spacer if they have a background
-
-      Revision 1.4  2000/11/20 09:39:36  jp
-      new para attributes - expand para range
-
-      Revision 1.3  2000/11/01 19:23:14  jp
-      export of mail graphics removed
-
-      Revision 1.2  2000/10/20 13:42:31  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.110  2000/09/18 16:04:42  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.109  2000/08/30 16:46:22  jp
-      use CharClass instead of international
-
-      Revision 1.108  2000/08/18 13:03:06  jp
-      don't export escaped URLs
-
-      Revision 1.107  2000/07/31 19:24:15  jp
-      new attributes for CJK/CTL and graphic
-
-      Revision 1.106  2000/06/26 12:55:05  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.105  2000/06/26 09:51:49  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.104  2000/05/15 10:06:56  os
-      Chg: GetOrigFileName()
-
-      Revision 1.103  2000/04/28 14:29:10  mib
-      unicode
-
-      Revision 1.102  2000/04/10 12:20:54  mib
-      unicode
-
-      Revision 1.101  2000/03/03 15:21:00  os
-      StarView remainders removed
-
-      Revision 1.100  2000/02/11 14:36:48  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.99  1999/09/21 09:48:39  mib
-      multiple text encodings
-
-      Revision 1.98  1999/09/20 13:16:17  mib
-      COL_WINDOWWORKSPACE->COL-WHITE
-
-      Revision 1.97  1999/07/23 13:34:28  MIB
-      #67578#: Export multicolumned sections as <MULTICOL>, section backgrounds
-
-
-*************************************************************************/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-27 13:20:13 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,7 +1029,7 @@ void SwHTMLParser::InsertBodyOptions()
     pDoc->SetTxtFmtColl( *pPam,
                          pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
 
-    String aBackGround, aId, aStyle, aLang;
+    String aBackGround, aId, aStyle, aLang, aDir;
     Color aBGColor, aTextColor, aLinkColor, aVLinkColor;
     BOOL bBGColor=FALSE, bTextColor=FALSE;
     BOOL bLinkColor=FALSE, bVLinkColor=FALSE;
@@ -1112,7 +1112,9 @@ void SwHTMLParser::InsertBodyOptions()
             case HTML_O_LANG:
                 aLang = pOption->GetString();
                 break;
-
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
+                break;
         }
 
         if( bSetEvent )
@@ -1168,11 +1170,12 @@ void SwHTMLParser::InsertBodyOptions()
         pCSS1Parser->SetBodyBackgroundSet();
     }
 
-    if( aStyle.Len() )
+    if( aStyle.Len() || aDir.Len() )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
-        pCSS1Parser->ParseStyleOption( aStyle, aItemSet, aPropInfo );
+        String aDummy;
+        ParseStyleOptions( aDummy, aDummy, aStyle, aItemSet, aPropInfo, 0, &aDir );
 
         // Ein par Attribute muessen an der Seitenvorlage gesetzt werden,
         // und zwar die, die nicht vererbit werden
@@ -1249,7 +1252,7 @@ void SwHTMLParser::NewAnchor()
 
     SvxMacroTableDtor aMacroTbl;
     String sHRef, aName, sTarget;
-    String aId, aStyle, aClass, aLang;
+    String aId, aStyle, aClass, aLang, aDir;
     BOOL bHasHRef = FALSE, bFixed = FALSE;
 
     ScriptType eDfltScriptType;
@@ -1290,6 +1293,9 @@ void SwHTMLParser::NewAnchor()
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
+                break;
+            case HTML_O_DIR:
+                aDir = pOption->GetString();
                 break;
 
             case HTML_O_SDONCLICK:
@@ -1383,12 +1389,12 @@ ANCHOR_SETEVENT:
     }
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aStrippedClass, &aLang ) )
+    if( HasStyleOptions( aStyle, aId, aStrippedClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );

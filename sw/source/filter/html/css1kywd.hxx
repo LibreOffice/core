@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1kywd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,10 @@ extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_class_abs_pos, "sd-abs-po
 
 
 extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_P_so_language, "so-language" );
+extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_P_direction, "direction" );
+extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_ltr, "ltr" );
+extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_rtl, "rtl" );
+extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_inherit, "inherit" );
 
 #endif
 

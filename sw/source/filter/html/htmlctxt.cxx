@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlctxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ BOOL SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
 
         // Sonstige CSS1-Attribute Setzen
         SetFrmFmtAttrs( rItemSet, rPropInfo,
-                        HTML_FF_BOX|HTML_FF_PADDING|HTML_FF_BACKGROUND,
+                        HTML_FF_BOX|HTML_FF_PADDING|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
                         aFrmItemSet );
 
         InsertFlyFrame( aFrmItemSet, pContext, rPropInfo.aId,
@@ -561,7 +561,7 @@ BOOL SwHTMLParser::CreateContainer( const String& rClass,
         SetFixSize( aDummy, aDummy, FALSE, FALSE, rItemSet, rPropInfo,
                     *pFrmItemSet );
         SetSpace( aDummy, rItemSet, rPropInfo, *pFrmItemSet );
-        SetFrmFmtAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND,
+        SetFrmFmtAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
                         *pFrmItemSet );
 
         bRet = TRUE;

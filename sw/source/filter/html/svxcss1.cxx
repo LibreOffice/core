@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #define ITEMID_ULSPACE SID_ATTR_ULSPACE
 #define ITEMID_BOX SID_ATTR_BORDER_OUTER
 #define ITEMID_BRUSH SID_ATTR_BRUSH
+#define ITEMID_FRAMEDIR     SID_ATTR_FRAMEDIRECTION
 #endif
 
 #ifndef _ISOLANG_HXX
@@ -163,6 +164,9 @@
 #endif
 #ifndef _SVX_WIDWITEM_HXX //autogen
 #include <svx/widwitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVX_ORPHITEM_HXX //autogen
 #include <svx/orphitem.hxx>
@@ -243,6 +247,14 @@ static CSS1PropertyEnum __READONLY_DATA aFontVariantTable[] =
 {
     { sCSS1_PV_normal,      SVX_CASEMAP_NOT_MAPPED      },
     { sCSS1_PV_small_caps,  SVX_CASEMAP_KAPITAELCHEN    },
+    { 0,                    0                   }
+};
+
+static CSS1PropertyEnum __READONLY_DATA aDirectionTable[] =
+{
+    { sCSS1_PV_ltr,         FRMDIR_HORI_LEFT_TOP        },
+    { sCSS1_PV_rtl,         FRMDIR_HORI_RIGHT_TOP       },
+    { sCSS1_PV_inherit,     FRMDIR_ENVIRONMENT          },
     { 0,                    0                   }
 };
 
@@ -435,6 +447,7 @@ struct SvxCSS1ItemIds
     USHORT nLanguage;
     USHORT nLanguageCJK;
     USHORT nLanguageCTL;
+    USHORT nDirection;
 };
 
 
@@ -915,6 +928,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, USHORT nMinFixLineSp,
     aItemIds.nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, FALSE );
     aItemIds.nLanguageCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, FALSE );
     aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, FALSE );
+    aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, FALSE );
 
     aWhichMap.Insert( (USHORT)0, (USHORT)0 );
     SvParser::BuildWhichTbl( aWhichMap, (USHORT *)&aItemIds,
@@ -971,6 +985,7 @@ BOOL SvxCSS1Parser::ParseStyleOption( const String& rIn,
     pPropInfo = &rPropInfo;
 
     BOOL bSuccess = CSS1Parser::ParseStyleOption( rIn );
+    rItemSet.ClearItem( aItemIds.nDirection );
 //  pPropInfo->CreateBoxItem( *pItemSet, GetDfltBorderDist() );
 
     pItemSet = 0;
@@ -1491,6 +1506,29 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
         }
         break;
 
+    }
+}
+
+static void ParseCSS1_direction( const CSS1Expression *pExpr,
+                             SfxItemSet &rItemSet,
+                             SvxCSS1PropertyInfo& rPropInfo,
+                             const SvxCSS1Parser& rParser )
+{
+    DBG_ASSERT( pExpr, "kein Ausdruck" );
+
+    sal_uInt16 nDir;
+    switch( pExpr->GetType() )
+    {
+    case CSS1_IDENT:
+    case CSS1_STRING:
+        if( SvxCSS1Parser::GetEnum( aDirectionTable, pExpr->GetString(),
+                                        nDir ) )
+        {
+            rItemSet.Put( SvxFrameDirectionItem(
+                       static_cast < SvxFrameDirection >( nDir ),
+                       aItemIds.nDirection ) );
+        }
+        break;
     }
 }
 
@@ -3192,6 +3230,7 @@ static CSS1PropEntry __FAR_DATA aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(border_left),
     CSS1_PROP_ENTRY(border),
     CSS1_PROP_ENTRY(color),
+    CSS1_PROP_ENTRY(direction),
     CSS1_PROP_ENTRY(float),
     CSS1_PROP_ENTRY(font_size),
     CSS1_PROP_ENTRY(font_family),
