@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2002-02-05 10:18:31 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:07:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,15 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		corefl
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = corereflection.uno
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = corefl
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ NOOPTFILES += $(SLO)$/criface.obj
 .ENDIF
 
 SHL1TARGET=	$(TARGET)
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = corefl.map
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
