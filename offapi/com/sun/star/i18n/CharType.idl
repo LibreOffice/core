@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharType.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module i18n {
     <member>XBreakIterator::nextCharBlock()</member>,
     <member>XBreakIterator::previousCharBlock()</member> </p>
  */
-constants CharType
+published constants CharType
 {
         /// all alpha characters allowed
         const short ANY_CHAR                = 0;
