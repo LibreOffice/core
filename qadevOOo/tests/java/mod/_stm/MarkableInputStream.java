@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkableInputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:52 $
+ *  last change:$Date: 2003-05-27 13:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public class MarkableInputStream extends TestCase {
     public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 
-        XMultiServiceFactory xMSF = Param.getMSF();;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();;
 
         Object aPipe = null;
         Object mostream = null;
