@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:35:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,15 @@
 #include "xoutx.hxx"
 
 #include "drawitem.hxx"
-#include "tabline.hxx"
+#include "cuitabline.hxx"
 #include "dlgname.hxx"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 #include "svdmodel.hxx"
-
+#include "svxgrahicitem.hxx"
 #include "linectrl.hrc"
-
+#include <sfx2/request.hxx> //add CHINA001
+#include "ofaitem.hxx" //add CHINA001
 //#58425# Symbole auf einer Linie (z.B. StarChart) Includes:
 
 
@@ -244,7 +245,7 @@ SvxLineTabPage::SvxLineTabPage
     bNewSize(FALSE),
     //#58425# Symbole auf einer Linie (z.B. StarChart) <-
 
-    pPageType           ( NULL ),
+    nPageType           ( 0 ),//CHINA001 pPageType          ( NULL ),
     rOutAttrs           ( rInAttrs )
 
 {
@@ -408,7 +409,10 @@ void SvxLineTabPage::FillListboxes()
 
 void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    if( *pDlgType == 0 && pDashList ) // Linien-Dialog
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False); //add CHINA001 begin
+    if (pPageTypeItem)
+        SetPageType(pPageTypeItem->GetValue()); //add CHINA001 end
+    if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
     {
         ResMgr* pMgr = DIALOG_MGR();
         int nPos;
@@ -518,24 +522,24 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         // Auswertung, ob von einer anderen TabPage ein anderer Fuelltyp gesetzt wurde
         if( aLbLineStyle.GetSelectEntryPos() != 0 )
         {
-            if( *pPageType == 2 ) // 1
+            if( nPageType == 2 ) // 1//CHINA001 if( *pPageType == 2 ) // 1
             {
                 aLbLineStyle.SelectEntryPos( *pPosDashLb + 2 ); // +2 wegen SOLID und INVLISIBLE
                 ChangePreviewHdl_Impl( this );
             }
-            if( *pPageType == 3 )
+            if( nPageType == 3 )//CHINA001 if( *pPageType == 3 )
             {
                 aLbStartStyle.SelectEntryPos( *pPosLineEndLb + 1 );// +1 wegen SOLID
                 aLbEndStyle.SelectEntryPos( *pPosLineEndLb + 1 );// +1 wegen SOLID
                 ChangePreviewHdl_Impl( this );
             }
         }
-        *pPageType = 0;
+        nPageType = 0;//CHINA001 *pPageType = 0;
     }
     // Seite existiert im Ctor noch nicht, deswegen hier!
 
-    else if ( *pDlgType == 1100 || // Chart-Dialog
-              *pDlgType == 1101 )
+    else if ( nDlgType == 1100 || // Chart-Dialog//CHINA001 else if ( *pDlgType == 1100 || // Chart-Dialog
+              nDlgType == 1101 )//CHINA001 *pDlgType == 1101 )
     {
         aFtLineEndsStyle.Hide();
         aFtLineEndsWidth.Hide();
@@ -554,9 +558,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxLineTabPage::DeactivatePage( SfxItemSet* pSet )
 {
-    if( *pDlgType == 0 ) // Linien-Dialog
+    if( nDlgType == 0 ) // Linien-Dialog//CHINA001 if( *pDlgType == 0 ) // Linien-Dialog
     {
-        *pPageType = 1; // evtl. fuer Erweiterungen
+        nPageType = 1; // evtl. fuer Erweiterungen//CHINA001 *pPageType = 1; // evtl. fuer Erweiterungen
         *pPosDashLb = aLbLineStyle.GetSelectEntryPos() - 2;// erster Eintrag SOLID !!!
         USHORT nPos = aLbStartStyle.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -580,7 +584,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     // Um evtl. Modifikationen der Liste vorzubeugen
     // werden Items anderer Seiten nicht gesetzt
-    if( *pDlgType != 0 || *pPageType != 2 )
+    if( nDlgType != 0 || nPageType != 2 )//CHINA001 if( *pDlgType != 0 || *pPageType != 2 )
     {
         nPos = aLbLineStyle.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
@@ -666,7 +670,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
 
-    if( *pDlgType != 0 || *pPageType != 3 )
+    if( nDlgType != 0 || nPageType != 3 )//CHINA001 if( *pDlgType != 0 || *pPageType != 3 )
     {
         // Linienanfang
         nPos = aLbStartStyle.GetSelectEntryPos();
@@ -804,7 +808,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
     }
-
+    rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));//add CHINA001
     return( bModified );
 }
 
@@ -1866,3 +1870,38 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+void SvxLineTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pSdrObjListItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pSymbolAttrItem,SfxTabDialogItem,SID_ATTR_SET,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC,sal_False);
+
+    if (pColorTabItem)
+        SetColorTable(pColorTabItem->GetColorTable());
+    if (pDashListItem)
+        SetDashList(pDashListItem->GetDashList());
+    if (pLineEndListItem)
+        SetLineEndList(pLineEndListItem->GetLineEndList());
+    if (pPageTypeItem)
+        SetPageType(pPageTypeItem->GetValue());
+    if (pDlgTypeItem)
+        SetDlgType(pDlgTypeItem->GetValue());
+    Construct();
+    if (pSymbolAttrItem)
+    {
+        ShowSymbolControls(TRUE);
+        if (pSdrObjListItem)
+            SetSymbolList(static_cast<SdrObjList*>(pSdrObjListItem->GetValue()));
+        if (pSymbolAttrItem)
+            SetSymbolAttr(&pSymbolAttrItem->GetItemSet());
+        if(pGraphicItem)
+            SetAutoSymbolGraphic(&pGraphicItem->GetGraphic());
+
+    }
+
+}
