@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-14 15:41:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchitem.hxx>
-#include <offmgr/sbasltid.hrc>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/app.hxx>
 
