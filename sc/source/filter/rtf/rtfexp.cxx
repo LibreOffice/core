@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:35:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ULONG ScRTFExport::Write()
 #endif
 
     // Daten
-    for ( USHORT nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
+    for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
         if ( nTab > aRange.aStart.Tab() )
             rStrm << sRTF_PAR;
@@ -187,21 +187,21 @@ ULONG ScRTFExport::Write()
 }
 
 
-void ScRTFExport::WriteTab( USHORT nTab )
+void ScRTFExport::WriteTab( SCTAB nTab )
 {
     rStrm << '{' << sNewLine;
     if ( pDoc->HasTable( nTab ) )
     {
         memset( &pCellX[0], 0, (MAXCOL+2) * sizeof(ULONG) );
-        USHORT nCol;
-        USHORT nEndCol = aRange.aEnd.Col();
+        SCCOL nCol;
+        SCCOL nEndCol = aRange.aEnd.Col();
         for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
         {
             pCellX[nCol+1] = pCellX[nCol] + pDoc->GetColWidth( nCol, nTab );
         }
 
-        USHORT nEndRow = aRange.aEnd.Row();
-        for ( USHORT nRow = aRange.aStart.Row(); nRow <= nEndRow; nRow++ )
+        SCROW nEndRow = aRange.aEnd.Row();
+        for ( SCROW nRow = aRange.aStart.Row(); nRow <= nEndRow; nRow++ )
         {
             WriteRow( nTab, nRow );
         }
@@ -210,12 +210,12 @@ void ScRTFExport::WriteTab( USHORT nTab )
 }
 
 
-void ScRTFExport::WriteRow( USHORT nTab, USHORT nRow )
+void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
     rStrm << sRTF_TROWD << sRTF_TRGAPH << "30" << sRTF_TRLEFT << "-30";
     rStrm << sRTF_TRRH << ByteString::CreateFromInt32( pDoc->GetRowHeight( nRow, nTab ) ).GetBuffer();
-    USHORT nCol;
-    USHORT nEndCol = aRange.aEnd.Col();
+    SCCOL nCol;
+    SCCOL nEndCol = aRange.aEnd.Col();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
@@ -224,7 +224,7 @@ void ScRTFExport::WriteRow( USHORT nTab, USHORT nRow )
 
         const sal_Char* pChar;
 
-        if ( rMergeAttr.GetColMerge() )
+        if ( rMergeAttr.GetColMerge() != 0 )
             rStrm << sRTF_CLMGF;
         else
         {
@@ -264,7 +264,7 @@ void ScRTFExport::WriteRow( USHORT nTab, USHORT nRow )
 }
 
 
-void ScRTFExport::WriteCell( USHORT nTab, USHORT nRow, USHORT nCol )
+void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 {
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
 
