@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 09:59:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,29 +390,23 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
 
     if( xPropStates.size() > 0L )
     {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            rPropSet->getPropertySetInfo();
+        Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
         OUString sParent, sCondParent;
-        Any aAny;
         sal_uInt16 nIgnoreProps = 0;
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
             if( xPropSetInfo->hasPropertyByName( sParaStyleName ) )
             {
-                aAny = rPropSet->getPropertyValue( sParaStyleName );
-                aAny >>= sParent;
+                rPropSet->getPropertyValue( sParaStyleName ) >>= sParent;
             }
             if( xPropSetInfo->hasPropertyByName( sParaConditionalStyleName ) )
             {
-                aAny = rPropSet->getPropertyValue( sParaConditionalStyleName );
-                aAny >>= sCondParent;
+                rPropSet->getPropertyValue( sParaConditionalStyleName ) >>= sCondParent;
             }
             if( xPropSetInfo->hasPropertyByName( sNumberingRules ) )
             {
-                aAny = rPropSet->getPropertyValue( sNumberingRules );
-                Reference < XIndexReplace > xNumRule;
-                aAny >>= xNumRule;
+                Reference < XIndexReplace > xNumRule(rPropSet->getPropertyValue( sNumberingRules ), uno::UNO_QUERY);
                 if( xNumRule.is() && xNumRule->getCount() )
                 {
                     Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
@@ -429,8 +423,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( sIsAutomatic ) )
                         {
-                            aAny = xNumPropSet->getPropertyValue( sIsAutomatic );
-                            bAdd = *(sal_Bool *)aAny.getValue();
+                            bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
                         }
                         else
                         {
@@ -445,10 +438,8 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         case XML_STYLE_FAMILY_TEXT_TEXT:
             {
                 // Get parent and remove hyperlinks (they aren't of interest)
-                UniReference< XMLPropertySetMapper > xPM =
-                    xPropMapper->getPropertySetMapper();
-                for( ::std::vector< XMLPropertyState >::iterator i
-                           = xPropStates.begin();
+                UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
+                for( ::std::vector< XMLPropertyState >::iterator i(xPropStates.begin());
                       nIgnoreProps < 2 && i != xPropStates.end();
                       i++ )
                 {
@@ -473,8 +464,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         case XML_STYLE_FAMILY_TEXT_FRAME:
             if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
             {
-                aAny = rPropSet->getPropertyValue( sFrameStyleName );
-                aAny >>= sParent;
+                rPropSet->getPropertyValue( sFrameStyleName ) >>= sParent;
             }
             break;
         case XML_STYLE_FAMILY_TEXT_SECTION:
@@ -510,42 +500,36 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
-    vector< XMLPropertyState > xPropStates =
-            xPropMapper->Filter( rPropSet );
+    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
     if( ppAddStates )
     {
         while( *ppAddStates )
         {
             xPropStates.push_back( **ppAddStates );
-            ppAddStates++;
+            ++ppAddStates;
         }
     }
 
     if( xPropStates.size() > 0L )
     {
         OUString sParent, sCondParent;
-        Any aAny;
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
             if( rPropSetHelper.hasProperty( PARA_STYLE_NAME_AUTO ) )
             {
-                aAny = rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
-                                                sal_True );
-                aAny >>= sParent;
+                rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
+                                                sal_True ) >>= sParent;
             }
             if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME_AUTO ) )
             {
-                aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
-                                                 rPropSet, sal_True );
-                aAny >>= sCondParent;
+                rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
+                                                 rPropSet, sal_True ) >>= sCondParent;
             }
             if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
             {
-                aAny = rPropSetHelper.getValue( NUMBERING_RULES_AUTO,
-                                                 rPropSet, sal_True );
-                Reference < XIndexReplace > xNumRule;
-                aAny >>= xNumRule;
+                Reference < XIndexReplace > xNumRule(rPropSetHelper.getValue( NUMBERING_RULES_AUTO,
+                    rPropSet, sal_True ), uno::UNO_QUERY);
                 if( xNumRule.is() && xNumRule->getCount() )
                 {
                     Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
@@ -562,8 +546,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( sIsAutomatic ) )
                         {
-                            aAny = xNumPropSet->getPropertyValue( sIsAutomatic );
-                            bAdd = *(sal_Bool *)aAny.getValue();
+                            bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
                         }
                         else
                         {
@@ -612,14 +595,13 @@ OUString XMLTextParagraphExport::Find(
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
     if( !xPropMapper.is() )
         return sName;
-    vector< XMLPropertyState > xPropStates =
-            xPropMapper->Filter( rPropSet );
+    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
     if( ppAddStates )
     {
         while( *ppAddStates )
         {
             xPropStates.push_back( **ppAddStates );
-            ppAddStates++;
+            ++ppAddStates;
         }
     }
     if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
@@ -634,17 +616,14 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         sal_Bool& rHasCharStyle,
         const XMLPropertyState** ppAddStates ) const
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper
-        = GetTextPropMapper();
-    vector< XMLPropertyState > xPropStates =
-            xPropMapper->Filter( rPropSet );
+    UniReference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
+    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;
     rHyperlink = rHasCharStyle = sal_False;
     sal_uInt16 nIgnoreProps = 0;
-    UniReference< XMLPropertySetMapper > xPM =
-        xPropMapper->getPropertySetMapper();
+    UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
     for( ::std::vector< XMLPropertyState >::iterator
             i = xPropStates.begin();
          nIgnoreProps < 2 && i != xPropStates.end();
@@ -967,8 +946,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
 #endif
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
-    UniReference < XMLPropertySetMapper > xPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
+    UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
     xParaPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
 
@@ -1021,13 +999,10 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     // here, because we need the text property mapper to do it.
 
     // construct Any value, then find index
-    Any aAny;
-    sal_Bool bTmp = sal_True;
-    aAny.setValue(&bTmp, ::getBooleanCppuType());
     sal_Int32 nIndex = xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
                                 "", XML_NAMESPACE_STYLE,
                                 GetXMLToken(XML_TEXT_COMBINE));
-    pFieldExport = new XMLTextFieldExport( rExp, new XMLPropertyState( nIndex, aAny ) );
+    pFieldExport = new XMLTextFieldExport( rExp, new XMLPropertyState( nIndex, uno::makeAny(sal_True) ) );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
@@ -1095,19 +1070,14 @@ void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
     Reference < XTextFramesSupplier > xTFS( GetExport().GetModel(), UNO_QUERY );
     if( xTFS.is() )
     {
-        xTextFrames = Reference < XIndexAccess >( xTFS->getTextFrames(),
-                                                  UNO_QUERY );
+        xTextFrames.set( xTFS->getTextFrames(), uno::UNO_QUERY);
         sal_Int32 nCount =  xTextFrames->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
-            Any aAny = xTextFrames->getByIndex( i );
-            Reference < XTextFrame > xTxtFrame;
-            aAny >>= xTxtFrame;
-            Reference < XPropertySet > xPropSet( xTxtFrame, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xTextFrames->getByIndex( i ), UNO_QUERY );
 
-            aAny = xPropSet->getPropertyValue( sAnchorType );
             TextContentAnchorType eAnchor;
-            aAny >>= eAnchor;
+            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
 
             switch( eAnchor )
             {
@@ -1132,19 +1102,15 @@ void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
                                                     UNO_QUERY );
     if( xTGOS.is() )
     {
-        xGraphics = Reference < XIndexAccess >( xTGOS->getGraphicObjects(),
+        xGraphics.set( xTGOS->getGraphicObjects(),
                                                   UNO_QUERY );
         sal_Int32 nCount =  xGraphics->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
-            Any aAny = xGraphics->getByIndex( i );
-            Reference < XTextContent > xTxtCntnt;
-            aAny >>= xTxtCntnt;
-            Reference < XPropertySet > xPropSet( xTxtCntnt, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xGraphics->getByIndex( i ), UNO_QUERY );
 
-            aAny = xPropSet->getPropertyValue( sAnchorType );
             TextContentAnchorType eAnchor;
-            aAny >>= eAnchor;
+            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
 
             switch( eAnchor )
             {
@@ -1174,14 +1140,10 @@ void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
         sal_Int32 nCount =  xEmbeddeds->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
-            Any aAny = xEmbeddeds->getByIndex( i );
-            Reference < XTextContent > xTxtCntnt;
-            aAny >>= xTxtCntnt;
-            Reference < XPropertySet > xPropSet( xTxtCntnt, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xEmbeddeds->getByIndex( i ), UNO_QUERY );
 
-            aAny = xPropSet->getPropertyValue( sAnchorType );
             TextContentAnchorType eAnchor;
-            aAny >>= eAnchor;
+            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
 
             switch( eAnchor )
             {
@@ -1211,17 +1173,14 @@ void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
         sal_Int32 nCount =  xShapes->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
-            Any aAny = xShapes->getByIndex( i );
-            Reference < XShape > xShape;
-            aAny >>= xShape;
+            Reference < XShape > xShape(xShapes->getByIndex( i ), uno::UNO_QUERY);
             if( !xShape.is() )
                 continue;
 
             Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
 
-            aAny = xPropSet->getPropertyValue( sAnchorType );
             TextContentAnchorType eAnchor;
-            aAny >>= eAnchor;
+            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
 
             if( (TextContentAnchorType_AT_PAGE != eAnchor &&
                  TextContentAnchorType_AT_FRAME != eAnchor) ||
@@ -1259,10 +1218,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     {
         for( sal_uInt16 i = 0; i < pPageTextFrameIdxs->Count(); i++ )
         {
-            Any aAny = xTextFrames->getByIndex( (*pPageTextFrameIdxs)[i] );
-            Reference < XTextFrame > xTxtFrame;
-            aAny >>= xTxtFrame;
-            Reference < XTextContent > xTxtCntnt( xTxtFrame, UNO_QUERY );
+            Reference < XTextContent > xTxtCntnt( xTextFrames->getByIndex( (*pPageTextFrameIdxs)[i] ), UNO_QUERY );
             exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
         }
     }
@@ -1270,9 +1226,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     {
         for( sal_uInt16 i = 0; i < pPageGraphicIdxs->Count(); i++ )
         {
-            Any aAny = xGraphics->getByIndex( (*pPageGraphicIdxs)[i] );
-            Reference < XTextContent > xTxtCntnt;
-            aAny >>= xTxtCntnt;
+            Reference < XTextContent > xTxtCntnt(xGraphics->getByIndex( (*pPageGraphicIdxs)[i] ), uno::UNO_QUERY);
             exportTextGraphic( xTxtCntnt, bAutoStyles );
         }
     }
@@ -1280,9 +1234,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     {
         for( sal_uInt16 i = 0; i < pPageEmbeddedIdxs->Count(); i++ )
         {
-            Any aAny = xEmbeddeds->getByIndex( (*pPageEmbeddedIdxs)[i] );
-            Reference < XTextContent > xTxtCntnt;
-            aAny >>= xTxtCntnt;
+            Reference < XTextContent > xTxtCntnt(xEmbeddeds->getByIndex( (*pPageEmbeddedIdxs)[i] ), uno::UNO_QUERY);
             exportTextEmbedded( xTxtCntnt, bAutoStyles );
         }
     }
@@ -1290,10 +1242,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     {
         for( sal_uInt16 i = 0; i < pPageShapeIdxs->Count(); i++ )
         {
-            Any aAny = xShapes->getByIndex( (*pPageShapeIdxs)[i] );
-            Reference < XShape > xShape;
-            aAny >>= xShape;
-            Reference < XTextContent > xTxtCntnt( xShape, UNO_QUERY );
+            Reference < XTextContent > xTxtCntnt( xShapes->getByIndex( (*pPageShapeIdxs)[i] ), UNO_QUERY );
             exportShape( xTxtCntnt, bAutoStyles );
         }
     }
@@ -1303,9 +1252,7 @@ sal_Bool lcl_txtpara_isFrameAnchor(
         const Reference < XPropertySet > rPropSet,
         const Reference < XTextFrame >& rParentTxtFrame )
 {
-    Any aAny = rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame") ) );
-    Reference < XTextFrame > xAnchorTxtFrame;
-    aAny >>= xAnchorTxtFrame;
+    Reference < XTextFrame > xAnchorTxtFrame(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame") ) ), uno::UNO_QUERY);
 
     return xAnchorTxtFrame == rParentTxtFrame;
 }
@@ -1317,20 +1264,16 @@ void XMLTextParagraphExport::exportFrameFrames(
 {
     if( pFrameTextFrameIdxs && pFrameTextFrameIdxs->Count() )
     {
-        Any aAny;
         sal_uInt16 i = 0;
         while( i < pFrameTextFrameIdxs->Count() )
         {
-            aAny = xTextFrames->getByIndex( (*pFrameTextFrameIdxs)[i] );
-            Reference < XTextFrame > xTxtFrame;
-            aAny >>= xTxtFrame;
-            Reference < XPropertySet > xPropSet( xTxtFrame, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xTextFrames->getByIndex( (*pFrameTextFrameIdxs)[i] ), UNO_QUERY );
             if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameTextFrameIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameTextFrameIdxs->Count();
-                Reference < XTextContent > xTxtCntnt( xTxtFrame, UNO_QUERY );
+                Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
                 exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
                 if( bAutoStyles )
                     i++;
@@ -1347,15 +1290,13 @@ void XMLTextParagraphExport::exportFrameFrames(
         sal_uInt16 i = 0;
         while( i < pFrameGraphicIdxs->Count() )
         {
-            aAny = xGraphics->getByIndex( (*pFrameGraphicIdxs)[i] );
-            Reference < XTextContent > xTxtCntnt;
-            aAny >>= xTxtCntnt;
-            Reference < XPropertySet > xPropSet( xTxtCntnt, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xGraphics->getByIndex( (*pFrameGraphicIdxs)[i] ), UNO_QUERY );
             if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameGraphicIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameGraphicIdxs->Count();
+                Reference < XTextContent > xTxtCntnt(xPropSet, uno::UNO_QUERY);
                 exportTextGraphic( xTxtCntnt, bAutoStyles );
                 if( bAutoStyles )
                     i++;
@@ -1372,16 +1313,13 @@ void XMLTextParagraphExport::exportFrameFrames(
         sal_uInt16 i = 0;
         while( i < pFrameEmbeddedIdxs->Count() )
         {
-            aAny = xEmbeddeds->getByIndex( (*pFrameEmbeddedIdxs)[i] );
-            Reference < XEmbeddedObjectSupplier > xEOS;
-            aAny >>= xEOS;
-            Reference < XPropertySet > xPropSet( xEOS, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xEmbeddeds->getByIndex( (*pFrameEmbeddedIdxs)[i] ), UNO_QUERY );
             if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameEmbeddedIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameEmbeddedIdxs->Count();
-                Reference < XTextContent > xTxtCntnt( xEOS, UNO_QUERY );
+                Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
                 exportTextEmbedded( xTxtCntnt, bAutoStyles );
                 if( bAutoStyles )
                     i++;
@@ -1398,16 +1336,13 @@ void XMLTextParagraphExport::exportFrameFrames(
         sal_uInt16 i = 0;
         while( i < pFrameShapeIdxs->Count() )
         {
-            aAny = xShapes->getByIndex( (*pFrameShapeIdxs)[i] );
-            Reference < XShape > xShape;
-            aAny >>= xShape;
-            Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
+            Reference < XPropertySet > xPropSet( xShapes->getByIndex( (*pFrameShapeIdxs)[i] ), UNO_QUERY );
             if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
             {
                 if( !bAutoStyles )
                     pFrameShapeIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameShapeIdxs->Count();
-                Reference < XTextContent > xTxtCntnt( xShape, UNO_QUERY );
+                Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
                 exportShape( xTxtCntnt, bAutoStyles );
                 if( bAutoStyles )
                     i++;
@@ -1430,7 +1365,7 @@ void XMLTextParagraphExport::exportText(
         GetExport().GetShapeExport(); // make sure the graphics styles family
                                       // is added
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
-    Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
+    Reference < XEnumeration > xParaEnum(xEA->createEnumeration());
     Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
     Reference < XTextSection > xBaseSection;
 
@@ -1489,7 +1424,7 @@ void XMLTextParagraphExport::exportText(
         GetExport().GetShapeExport(); // make sure the graphics styles family
                                       // is added
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
-    Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
+    Reference < XEnumeration > xParaEnum(xEA->createEnumeration());
 
     // #98165# don't continue without a paragraph enumeration
     if( ! xParaEnum.is() )
@@ -1500,7 +1435,7 @@ void XMLTextParagraphExport::exportText(
     Reference<XPropertySet> xPropertySet;
     if( !bAutoStyles && (pRedlineExport != NULL) )
     {
-        xPropertySet = Reference<XPropertySet>::query( rText );
+        xPropertySet.set(rText, uno::UNO_QUERY );
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_True );
     }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, rBaseSection,
@@ -1527,13 +1462,12 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
     XMLTextNumRuleInfo aNextNumInfo;
 
     sal_Bool bHasContent sal_False;
-    Reference<XTextSection> xCurrentTextSection = rBaseSection;
+    Reference<XTextSection> xCurrentTextSection(rBaseSection);
 
     MultiPropertySetHelper aPropSetHelper(
                                bAutoStyles ? aParagraphPropertyNamesAuto :
                                           aParagraphPropertyNames );
 
-    Any aAny;
     sal_Bool bHoldElement = sal_False;
     Reference < XTextContent > xTxtCntnt;
     while( bHoldElement || bHasMoreElements )
@@ -1544,8 +1478,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         }
         else
         {
-            aAny = rContEnum->nextElement();
-            aAny >>= xTxtCntnt;
+            xTxtCntnt.set(rContEnum->nextElement(), uno::UNO_QUERY);
 
             aPropSetHelper.resetValues();
 
@@ -1584,8 +1517,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                        pSectionExport->IsInSection( xCurrentTextSection,
                                                     xTxtCntnt, sal_True ))
                 {
-                    aAny = rContEnum->nextElement();
-                    aAny >>= xTxtCntnt;
+                    xTxtCntnt.set(rContEnum->nextElement(), uno::UNO_QUERY);
                     aPropSetHelper.resetValues();
                     aNextNumInfo.Reset();
                 }
@@ -1697,8 +1629,6 @@ void XMLTextParagraphExport::exportParagraph(
 //  else
 //      rPropSetHelper.getValues( xPropSet );
 
-    Any aAny;
-
     if( bExportParagraph )
     {
         if( bAutoStyles )
@@ -1711,12 +1641,11 @@ void XMLTextParagraphExport::exportParagraph(
             if( rPropSetHelper.hasProperty( PARA_STYLE_NAME ) )
             {
                 if( xMultiPropSet.is() )
-                    aAny = rPropSetHelper.getValue( PARA_STYLE_NAME,
-                                                    xMultiPropSet );
+                    rPropSetHelper.getValue( PARA_STYLE_NAME,
+                                                    xMultiPropSet ) >>= sStyle;
                 else
-                    aAny = rPropSetHelper.getValue( PARA_STYLE_NAME,
-                                                    xPropSet );
-                aAny >>= sStyle;
+                    rPropSetHelper.getValue( PARA_STYLE_NAME,
+                                                    xPropSet ) >>= sStyle;
             }
 
             Reference< XInterface > xRef( rTextContent, UNO_QUERY );
@@ -1737,12 +1666,11 @@ void XMLTextParagraphExport::exportParagraph(
             {
                 OUString sCondStyle;
                 if( xMultiPropSet.is() )
-                    aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
-                                                     xMultiPropSet );
+                    rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
+                                                     xMultiPropSet ) >>= sCondStyle;
                 else
-                    aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
-                                                     xPropSet );
-                aAny >>= sCondStyle;
+                    rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
+                                                     xPropSet ) >>= sCondStyle;
                 if( sCondStyle != sStyle )
                 {
                     sCondStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet,
@@ -1757,13 +1685,12 @@ void XMLTextParagraphExport::exportParagraph(
             if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )
             {
                 if( xMultiPropSet.is() )
-                    aAny = rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
-                                                     xMultiPropSet );
+                    rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
+                                                     xMultiPropSet ) >>= nOutlineLevel;
                 else
-                    aAny = rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
-                                                     xPropSet );
+                    rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
+                                                     xPropSet ) >>= nOutlineLevel;
 
-                aAny >>= nOutlineLevel;
                 if( -1 != nOutlineLevel )
                 {
                     OUStringBuffer sTmp;
@@ -1774,15 +1701,14 @@ void XMLTextParagraphExport::exportParagraph(
 
                     if( rPropSetHelper.hasProperty( NUMBERING_IS_NUMBER ) )
                     {
-                        if( xMultiPropSet.is() )
-                            aAny = rPropSetHelper.getValue(
-                                       NUMBERING_IS_NUMBER, xMultiPropSet );
-                        else
-                            aAny = rPropSetHelper.getValue(
-                                       NUMBERING_IS_NUMBER, xPropSet );
-
                         bool bIsNumber;
-                        aAny >>= bIsNumber;
+                        if( xMultiPropSet.is() )
+                            rPropSetHelper.getValue(
+                                       NUMBERING_IS_NUMBER, xMultiPropSet ) >>= bIsNumber;
+                        else
+                            rPropSetHelper.getValue(
+                                       NUMBERING_IS_NUMBER, xPropSet ) >>= bIsNumber;
+
                         if( ! bIsNumber )
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_IS_LIST_HEADER,
@@ -1794,12 +1720,12 @@ void XMLTextParagraphExport::exportParagraph(
     }
 
     Reference < XEnumerationAccess > xEA( rTextContent, UNO_QUERY );
-    Reference < XEnumeration > xTextEnum = xEA->createEnumeration();
+    Reference < XEnumeration > xTextEnum(xEA->createEnumeration());
 
     Reference < XEnumeration> xContentEnum;
     Reference < XContentEnumerationAccess > xCEA( rTextContent, UNO_QUERY );
     if( xCEA.is() )
-        xContentEnum = xCEA->createContentEnumeration( sTextContentService );
+        xContentEnum.set(xCEA->createContentEnumeration( sTextContentService ));
     sal_Bool bHasContentEnum = xContentEnum.is() &&
                                   xContentEnum->hasMoreElements();
 
@@ -1814,16 +1740,14 @@ void XMLTextParagraphExport::exportParagraph(
         {
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sTextSection ) )
             {
-                aAny = xPropSet->getPropertyValue( sTextSection );
-                aAny >>= xSection;
+                xSection.set(xPropSet->getPropertyValue( sTextSection ), uno::UNO_QUERY);
             }
         }
         else
         {
             if( rPropSetHelper.hasProperty( TEXT_SECTION ) )
             {
-                aAny = rPropSetHelper.getValue( TEXT_SECTION );
-                aAny >>= xSection;
+                xSection.set(rPropSetHelper.getValue( TEXT_SECTION ), uno::UNO_QUERY);
             }
         }
     }
@@ -1869,22 +1793,16 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 {
     sal_Bool bPrevCharIsSpace = bPrvChrIsSpc;
 
-    Any aAny;
     while( rTextEnum->hasMoreElements() )
     {
-        aAny = rTextEnum->nextElement();
-        Reference < XTextRange > xTxtRange;
-        aAny >>= xTxtRange;
-
-        Reference<XPropertySet> xPropSet(xTxtRange, UNO_QUERY);
-        Reference<XPropertySetInfo> xPropInfo =
-            xPropSet->getPropertySetInfo();
+        Reference<XPropertySet> xPropSet(rTextEnum->nextElement(), UNO_QUERY);
+        Reference < XTextRange > xTxtRange(xPropSet, uno::UNO_QUERY);
+        Reference<XPropertySetInfo> xPropInfo(xPropSet->getPropertySetInfo());
 
         if (xPropInfo->hasPropertyByName(sTextPortionType))
         {
-            aAny = xPropSet->getPropertyValue(sTextPortionType);
-            OUString sType;
-            aAny >>= sType;
+            rtl::OUString sType;
+            xPropSet->getPropertyValue(sTextPortionType) >>= sType;
 
             if( sType.equals(sText))
             {
@@ -1902,8 +1820,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 Reference < XContentEnumerationAccess > xCEA( xTxtRange,
                                                               UNO_QUERY );
                 if( xCEA.is() )
-                    xContentEnum = xCEA->createContentEnumeration(
-                                                    sTextContentService );
+                    xContentEnum.set(xCEA->createContentEnumeration(
+                                                    sTextContentService ));
                 // frames are never in sections
                 Reference<XTextSection> xSection;
                 if( xContentEnum.is() )
@@ -1984,10 +1902,7 @@ void XMLTextParagraphExport::exportTextField(
     // non-Writer apps need not support Property TextField, so test first
     if (xPropSet->getPropertySetInfo()->hasPropertyByName( sTextField ))
     {
-        Any aAny = xPropSet->getPropertyValue( sTextField );
-
-        Reference < XTextField > xTxtFld;
-        aAny >>= xTxtFld;
+        Reference < XTextField > xTxtFld(xPropSet->getPropertyValue( sTextField ), uno::UNO_QUERY);
         DBG_ASSERT( xTxtFld.is(), "text field missing" );
         if( xTxtFld.is() )
         {
@@ -2025,28 +1940,20 @@ void XMLTextParagraphExport::exportTextMark(
 
      if (!bAutoStyles)
     {
-        // get reference (as text content)
-        Any aAny;
-        aAny = rPropSet->getPropertyValue(sProperty);
-        Reference<XTextContent> xRefMark;
-        aAny >>= xRefMark;
-
         // name element
-        Reference<XNamed> xName(xRefMark, UNO_QUERY);
+        Reference<XNamed> xName(rPropSet->getPropertyValue(sProperty), UNO_QUERY);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
                                  xName->getName());
 
         // start, end, or point-reference?
         sal_Int8 nElement;
-        aAny = rPropSet->getPropertyValue(sIsCollapsed);
-        if( *(sal_Bool *)aAny.getValue() )
+        if( *(sal_Bool *)rPropSet->getPropertyValue(sIsCollapsed).getValue() )
         {
             nElement = 0;
         }
         else
         {
-            aAny = rPropSet->getPropertyValue(sIsStart);
-            nElement = *(sal_Bool *)aAny.getValue() ? 1 : 2;
+            nElement = *(sal_Bool *)rPropSet->getPropertyValue(sIsStart).getValue() ? 1 : 2;
         }
 
         // export element
@@ -2068,10 +1975,8 @@ sal_Bool lcl_txtpara_isBoundAsChar(
     OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
     if( rPropSetInfo->hasPropertyByName( sAnchorType ) )
     {
-        Any aAny =
-            rPropSet->getPropertyValue( sAnchorType );
         TextContentAnchorType eAnchor;
-        aAny >>= eAnchor;
+        rPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
         bIsBoundAsChar = TextContentAnchorType_AS_CHARACTER == eAnchor;
     }
 
@@ -2099,17 +2004,15 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         }
     }
 
-    Any aAny;
     OUStringBuffer sValue;
 
     // text:anchor-type
-    aAny = rPropSet->getPropertyValue( sAnchorType );
     TextContentAnchorType eAnchor = TextContentAnchorType_AT_PARAGRAPH;
-    aAny >>= eAnchor;
+    rPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
     {
         XMLAnchorTypePropHdl aAnchorTypeHdl;
         OUString sTmp;
-        aAnchorTypeHdl.exportXML( sTmp, aAny,
+        aAnchorTypeHdl.exportXML( sTmp, uno::makeAny(eAnchor),
                                   GetExport().GetMM100UnitConverter() );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, sTmp );
     }
@@ -2117,9 +2020,8 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     // text:anchor-page-number
     if( TextContentAnchorType_AT_PAGE == eAnchor )
     {
-        aAny = rPropSet->getPropertyValue( sAnchorPageNo );
         sal_Int16 nPage;
-        aAny >>= nPage;
+        rPropSet->getPropertyValue( sAnchorPageNo ) >>= nPage;
         GetExport().GetMM100UnitConverter().convertNumber( sValue,
                                                            (sal_Int32)nPage );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_PAGE_NUMBER,
@@ -2138,13 +2040,11 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         // svg:x
         sal_Int16 nHoriOrient =  HoriOrientation::NONE;
-        aAny = rPropSet->getPropertyValue( sHoriOrient );
-        aAny >>= nHoriOrient;
+        rPropSet->getPropertyValue( sHoriOrient ) >>= nHoriOrient;
         if( HoriOrientation::NONE == nHoriOrient )
         {
             sal_Int32 nPos = 0;
-            Any aAny = rPropSet->getPropertyValue( sHoriOrientPosition );
-            aAny >>= nPos;
+            rPropSet->getPropertyValue( sHoriOrientPosition ) >>= nPos;
             GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_X,
                                       sValue.makeStringAndClear() );
@@ -2157,13 +2057,11 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         // svg:y
         sal_Int16 nVertOrient =  VertOrientation::NONE;
-        aAny = rPropSet->getPropertyValue( sVertOrient );
-        aAny >>= nVertOrient;
+        rPropSet->getPropertyValue( sVertOrient ) >>= nVertOrient;
         if( VertOrientation::NONE == nVertOrient )
         {
             sal_Int32 nPos = 0;
-            Any aAny = rPropSet->getPropertyValue( sVertOrientPosition );
-            aAny >>= nPos;
+            rPropSet->getPropertyValue( sVertOrientPosition ) >>= nPos;
             GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                                       sValue.makeStringAndClear() );
@@ -2173,14 +2071,13 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     }
 
 
-    Reference< XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
+    Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
 
     // svg:width
     sal_Int16 nWidthType = SizeType::FIX;
     if( xPropSetInfo->hasPropertyByName( sWidthType ) )
     {
-        aAny = rPropSet->getPropertyValue( sWidthType );
-        aAny >>= nWidthType;
+        rPropSet->getPropertyValue( sWidthType ) >>= nWidthType;
     }
     if( xPropSetInfo->hasPropertyByName( sWidth ) )
     {
@@ -2188,8 +2085,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         // VAR size will be written as zero min-size
         if( SizeType::VARIABLE != nWidthType )
         {
-            aAny = rPropSet->getPropertyValue( sWidth );
-            aAny >>= nWidth;
+            rPropSet->getPropertyValue( sWidth ) >>= nWidth;
         }
         GetExport().GetMM100UnitConverter().convertMeasure( sValue, nWidth );
         if( SizeType::FIX != nWidthType )
@@ -2202,8 +2098,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     sal_Bool bSyncWidth = sal_False;
     if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
     {
-        aAny = rPropSet->getPropertyValue( sIsSyncWidthToHeight );
-        bSyncWidth = *(sal_Bool *)aAny.getValue();
+        bSyncWidth = *(sal_Bool *)rPropSet->getPropertyValue( sIsSyncWidthToHeight ).getValue();
         if( bSyncWidth )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                       XML_SCALE );
@@ -2211,8 +2106,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     if( !bSyncWidth && xPropSetInfo->hasPropertyByName( sRelativeWidth ) )
     {
         sal_Int16 nRelWidth =  0;
-        aAny = rPropSet->getPropertyValue( sRelativeWidth );
-        aAny >>= nRelWidth;
+        rPropSet->getPropertyValue( sRelativeWidth ) >>= nRelWidth;
         DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 254,
                     "Got illegal relative width from API" );
         if( nRelWidth > 0 )
@@ -2228,28 +2122,24 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     sal_Int16 nSizeType = SizeType::FIX;
     if( xPropSetInfo->hasPropertyByName( sSizeType ) )
     {
-        aAny = rPropSet->getPropertyValue( sSizeType );
-        aAny >>= nSizeType;
+        rPropSet->getPropertyValue( sSizeType ) >>= nSizeType;
     }
     sal_Bool bSyncHeight = sal_False;
     if( xPropSetInfo->hasPropertyByName( sIsSyncHeightToWidth ) )
     {
-        aAny = rPropSet->getPropertyValue( sIsSyncHeightToWidth );
-        bSyncHeight = *(sal_Bool *)aAny.getValue();
+        bSyncHeight = *(sal_Bool *)rPropSet->getPropertyValue( sIsSyncHeightToWidth ).getValue();
     }
     sal_Int16 nRelHeight =  0;
     if( !bSyncHeight && xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
     {
-        aAny = rPropSet->getPropertyValue( sRelativeHeight );
-        aAny >>= nRelHeight;
+        rPropSet->getPropertyValue( sRelativeHeight ) >>= nRelHeight;
     }
     if( xPropSetInfo->hasPropertyByName( sHeight ) )
     {
         sal_Int32 nHeight =  0;
         if( SizeType::VARIABLE != nSizeType )
         {
-            aAny = rPropSet->getPropertyValue( sHeight );
-            aAny >>= nHeight;
+            rPropSet->getPropertyValue( sHeight ) >>= nHeight;
         }
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                             nHeight );
@@ -2282,8 +2172,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     if( xPropSetInfo->hasPropertyByName( sZOrder ) )
     {
         sal_Int32 nZIndex;
-        aAny = rPropSet->getPropertyValue( sZOrder );
-        aAny >>= nZIndex;
+        rPropSet->getPropertyValue( sZOrder ) >>= nZIndex;
         if( -1 != nZIndex )
         {
             GetExport().GetMM100UnitConverter().convertNumber( sValue,
@@ -2324,7 +2213,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
             {
                 // frame bound frames
                 Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
-                Reference < XText > xTxt = xTxtFrame->getText();
+                Reference < XText > xTxt(xTxtFrame->getText());
                 collectFramesBoundToFrameAutoStyles( xTxtFrame, bProgress );
 
                 exportText( xTxt, bAutoStyles, bProgress, sal_True );
@@ -2340,8 +2229,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
     }
     else
     {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
+        Reference< XPropertySetInfo > xPropSetInfo(xPropSet->getPropertySetInfo());
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
         {
             sal_Bool bAddCharStyles = pRangePropSet &&
@@ -2404,14 +2292,12 @@ void XMLTextParagraphExport::_exportTextFrame(
         sal_Bool bProgress )
 {
     Reference < XTextFrame > xTxtFrame( rPropSet, UNO_QUERY );
-    Reference < XText > xTxt = xTxtFrame->getText();
+    Reference < XText > xTxt(xTxtFrame->getText());
 
     OUString sStyle;
-    Any aAny;
     if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
     {
-        aAny = rPropSet->getPropertyValue( sFrameStyleName );
-        aAny >>= sStyle;
+        rPropSet->getPropertyValue( sFrameStyleName ) >>= sStyle;
     }
 
     OUString sAutoStyle( sStyle );
@@ -2433,8 +2319,7 @@ void XMLTextParagraphExport::_exportTextFrame(
     if( rPropSetInfo->hasPropertyByName( sChainNextName ) )
     {
         OUString sNext;
-        aAny = rPropSet->getPropertyValue( sChainNextName );
-        if( (aAny >>= sNext) && sNext.getLength() > 0 )
+        if( (rPropSet->getPropertyValue( sChainNextName ) >>= sNext) && sNext.getLength() > 0 )
             GetExport().AddAttribute( XML_NAMESPACE_DRAW,
                                       XML_CHAIN_NEXT_NAME,
                                       sNext );
@@ -2466,10 +2351,8 @@ void XMLTextParagraphExport::exportContour(
     if( !rPropSetInfo->hasPropertyByName( sContourPolyPolygon ) )
         return;
 
-    Any aAny = rPropSet->getPropertyValue( sContourPolyPolygon );
-
     PointSequenceSequence aSourcePolyPolygon;
-    aAny >>= aSourcePolyPolygon;
+    rPropSet->getPropertyValue( sContourPolyPolygon ) >>= aSourcePolyPolygon;
 
     if( !aSourcePolyPolygon.getLength() )
         return;
@@ -2496,8 +2379,7 @@ void XMLTextParagraphExport::exportContour(
     sal_Bool bPixel = sal_False;
     if( rPropSetInfo->hasPropertyByName( sIsPixelContour ) )
     {
-        aAny = rPropSet->getPropertyValue( sIsPixelContour );
-        bPixel = *(sal_Bool *)aAny.getValue();
+        bPixel = *(sal_Bool *)rPropSet->getPropertyValue( sIsPixelContour ).getValue();
     }
 
     // svg: width
@@ -2569,8 +2451,7 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {
-        aAny = rPropSet->getPropertyValue( sIsAutomaticContour );
-        if( *(sal_Bool *)aAny.getValue() )
+        if( *(sal_Bool *)rPropSet->getPropertyValue( sIsAutomaticContour ).getValue() )
             GetExport().AddAttribute( XML_NAMESPACE_DRAW,
                                       XML_RECREATE_ON_EDIT, XML_TRUE );
     }
@@ -2585,11 +2466,9 @@ void XMLTextParagraphExport::_exportTextGraphic(
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     OUString sStyle;
-    Any aAny;
     if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
     {
-        aAny = rPropSet->getPropertyValue( sFrameStyleName );
-        aAny >>= sStyle;
+        rPropSet->getPropertyValue( sFrameStyleName ) >>= sStyle;
     }
 
     OUString sAutoStyle( sStyle );
@@ -2600,9 +2479,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
     addTextFrameAttributes( rPropSet, sal_False );
 
     // svg:transform
-    aAny = rPropSet->getPropertyValue( sGraphicRotation );
     sal_Int16 nVal;
-    aAny >>= nVal;
+    rPropSet->getPropertyValue( sGraphicRotation ) >>= nVal;
     if( nVal != 0 )
     {
         OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
@@ -2620,9 +2498,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     // xlink:href
     OUString sOrigURL;
-    aAny = rPropSet->getPropertyValue( sGraphicURL );
-    aAny >>= sOrigURL;
-    OUString sURL = GetExport().AddEmbeddedGraphicObject( sOrigURL );
+    rPropSet->getPropertyValue( sGraphicURL ) >>= sOrigURL;
+    OUString sURL(GetExport().AddEmbeddedGraphicObject( sOrigURL ));
     setTextEmbeddedGraphicURL( rPropSet, sURL );
 
     // If there still is no url, then then graphic is empty
@@ -2637,8 +2514,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     // draw:filter-name
     OUString sGrfFilter;
-    aAny = rPropSet->getPropertyValue( sGraphicFilter );
-    aAny >>= sGrfFilter;
+    rPropSet->getPropertyValue( sGraphicFilter ) >>= sGrfFilter;
     if( sGrfFilter.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
                                   sGrfFilter );
@@ -2697,8 +2573,7 @@ void XMLTextParagraphExport::exportAlternativeText(
     if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )
     {
         OUString sAltText;
-        Any aAny = rPropSet->getPropertyValue( sAlternativeText );
-        aAny >>= sAltText;
+        rPropSet->getPropertyValue( sAlternativeText ) >>= sAltText;
         if( sAltText.getLength() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
@@ -2720,7 +2595,6 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     sal_Bool bExport = sal_False;
-    Any aAny;
     OUString sHRef, sName, sTargetFrame, sUStyleName, sVStyleName;
     sal_Bool bServerMap = sal_False;
 
@@ -2728,8 +2602,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( sHyperLinkURL ) ) )
     {
-        aAny= rPropSet->getPropertyValue( sHyperLinkURL );
-        aAny >>= sHRef;
+        rPropSet->getPropertyValue( sHyperLinkURL ) >>= sHRef;
 
         if( sHRef.getLength() > 0 )
             bExport = sal_True;
@@ -2739,8 +2612,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( sHyperLinkName ) ) )
     {
-        aAny = rPropSet->getPropertyValue( sHyperLinkName );
-        aAny >>= sName;
+        rPropSet->getPropertyValue( sHyperLinkName ) >>= sName;
         if( sName.getLength() > 0 )
             bExport = sal_True;
     }
@@ -2749,8 +2621,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( sHyperLinkTarget ) ) )
     {
-        aAny = rPropSet->getPropertyValue( sHyperLinkTarget );
-        aAny >>= sTargetFrame;
+        rPropSet->getPropertyValue( sHyperLinkTarget ) >>= sTargetFrame;
         if( sTargetFrame.getLength() )
             bExport = sal_True;
     }
@@ -2759,8 +2630,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( sServerMap ) ) )
     {
-        aAny = rPropSet->getPropertyValue( sServerMap );
-        bServerMap = *(sal_Bool *)aAny.getValue();
+        bServerMap = *(sal_Bool *)rPropSet->getPropertyValue( sServerMap ).getValue();
         if( bServerMap  )
             bExport = sal_True;
     }
@@ -2769,8 +2639,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
             rPropState->getPropertyState( sUnvisitedCharStyleName ) ) )
     {
-        aAny = rPropSet->getPropertyValue( sUnvisitedCharStyleName );
-        aAny >>= sUStyleName;
+        rPropSet->getPropertyValue( sUnvisitedCharStyleName ) >>= sUStyleName;
         if( sUStyleName.getLength() )
             bExport = sal_True;
     }
@@ -2779,8 +2648,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
             rPropState->getPropertyState( sVisitedCharStyleName ) ) )
     {
-        aAny = rPropSet->getPropertyValue( sVisitedCharStyleName );
-        aAny >>= sVStyleName;
+        rPropSet->getPropertyValue( sVisitedCharStyleName ) >>= sVStyleName;
         if( sVStyleName.getLength() )
             bExport = sal_True;
     }
@@ -2832,13 +2700,13 @@ void XMLTextParagraphExport::exportTextRange(
     else
     {
         sal_Bool bHyperlink = sal_False, bIsUICharStyle = sal_False;
-        OUString sStyle = FindTextStyleAndHyperlink( xPropSet, bHyperlink,
-                                                        bIsUICharStyle );
+        OUString sStyle(FindTextStyleAndHyperlink( xPropSet, bHyperlink,
+                                                        bIsUICharStyle ));
         Reference < XPropertySetInfo > xPropSetInfo;
         if( bHyperlink )
         {
             Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-            xPropSetInfo = xPropSet->getPropertySetInfo();
+            xPropSetInfo.set(xPropSet->getPropertySetInfo());
             bHyperlink = addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
         }
         SvXMLElementExport aElem( GetExport(), bHyperlink, XML_NAMESPACE_TEXT,
@@ -2850,9 +2718,7 @@ void XMLTextParagraphExport::exportTextRange(
                 "HyperLinkEvents"));
             if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
             {
-                Any aAny = xPropSet->getPropertyValue(sHyperLinkEvents);
-                Reference<XNameReplace> xName;
-                aAny >>= xName;
+                Reference<XNameReplace> xName(xPropSet->getPropertyValue(sHyperLinkEvents), uno::UNO_QUERY);
                 GetExport().GetEventExport().Export(xName, sal_False);
             }
         }
@@ -2864,7 +2730,7 @@ void XMLTextParagraphExport::exportTextRange(
                                                     xPropSet, xPropSetInfo ),
                 xPropSet, sCharStyleNames );
 
-            OUString sText = rTextRange->getString();
+            OUString sText(rTextRange->getString());
             if( sStyle.getLength() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                           GetExport().EncodeStyleName( sStyle ) );
@@ -3032,8 +2898,7 @@ void XMLTextParagraphExport::exportTextDeclarations()
         if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
             sIndexAutoMarkFileURL))
         {
-            Any aAny = xPropertySet->getPropertyValue(sIndexAutoMarkFileURL);
-            aAny >>= sUrl;
+            xPropertySet->getPropertyValue(sIndexAutoMarkFileURL) >>= sUrl;
             if (sUrl.getLength() > 0)
             {
                 GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
@@ -3122,13 +2987,11 @@ void XMLTextParagraphExport::exportRuby(
     sal_Bool bAutoStyles )
 {
     // early out: a collapsed ruby makes no sense
-    Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
-    if (*(sal_Bool*)aAny.getValue())
+    if (*(sal_Bool*)rPropSet->getPropertyValue(sIsCollapsed).getValue())
         return;
 
     // start value ?
-    aAny = rPropSet->getPropertyValue(sIsStart);
-    sal_Bool bStart = (*(sal_Bool*)aAny.getValue());
+    sal_Bool bStart = (*(sal_Bool*)rPropSet->getPropertyValue(sIsStart).getValue());
 
     if (bAutoStyles)
     {
@@ -3156,19 +3019,17 @@ void XMLTextParagraphExport::exportRuby(
                 return;
 
             // save ruby text + ruby char style
-            aAny = rPropSet->getPropertyValue(sRubyText);
-            aAny >>= sOpenRubyText;
-            aAny = rPropSet->getPropertyValue(sRubyCharStyleName);
-            aAny >>= sOpenRubyCharStyle;
+            rPropSet->getPropertyValue(sRubyText) >>= sOpenRubyText;
+            rPropSet->getPropertyValue(sRubyCharStyleName) >>= sOpenRubyCharStyle;
 
             // ruby style
             GetExport().CheckAttrList();
             OUString sEmpty;
-            OUString sStyleName = Find( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet,
-                                        sEmpty );
+            OUString sStyleName(Find( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet,
+                                        sEmpty ));
             DBG_ASSERT(sStyleName.getLength() > 0, "I can't find the style!");
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                 XML_STYLE_NAME, sStyleName );
+                                     XML_STYLE_NAME, sStyleName);
 
             // export <text:ruby> and <text:ruby-base> start elements
             GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
@@ -3195,7 +3056,7 @@ void XMLTextParagraphExport::exportRuby(
                 if (sOpenRubyCharStyle.getLength() > 0)
                     GetExport().AddAttribute(
                         XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                GetExport().EncodeStyleName( sOpenRubyCharStyle) );
+                        GetExport().EncodeStyleName( sOpenRubyCharStyle) );
 
                 SvXMLElementExport aRuby(
                     GetExport(), XML_NAMESPACE_TEXT, XML_RUBY_TEXT,
@@ -3235,8 +3096,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         // if both answers are 'yes', notify the form layer export
 
         // we join accessing the shape and testing for control
-        Reference<XControlShape> xControlShape;
-        xShapes->getByIndex( i ) >>= xControlShape;
+        Reference<XControlShape> xControlShape(xShapes->getByIndex( i ), uno::UNO_QUERY);
         if( xControlShape.is() )
         {
             //            Reference<XPropertySet> xPropSet( xControlShape, UNO_QUERY );
