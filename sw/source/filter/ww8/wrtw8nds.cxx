@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:51:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,7 @@ short SwWW8Writer::GetCurrentPageDirection() const
 {
     const SwFrmFmt &rFmt = pAktPageDesc
                     ? pAktPageDesc->GetMaster()
-                    : pDoc->GetPageDesc(0).GetMaster();
+                    : const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetMaster();
     return rFmt.GetFrmDir().GetValue();
 }
 
@@ -1371,7 +1371,7 @@ const SvxBrushItem* SwWW8Writer::GetCurrentPageBgBrush() const
 {
     const SwFrmFmt  &rFmt = pAktPageDesc
                     ? pAktPageDesc->GetMaster()
-                    : pDoc->GetPageDesc(0).GetMaster();
+                    : const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetMaster();
 
     const SfxPoolItem* pItem = 0;
     //If not set, or "no fill", get real bg
@@ -2083,7 +2083,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             const SwFrmFmt* pParentFmt =
                 rWW8Wrt.mpParentFrame ?
                 &(rWW8Wrt.mpParentFrame->GetFrmFmt()) :
-                rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
+                const_cast<const SwDoc *>(rWrt.pDoc)->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
             aRect = pParentFmt->FindLayoutRect(true);
             if (!(nPageSize = aRect.Width()))
             {
