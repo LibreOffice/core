@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:14:10 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12598,7 +12598,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft de logische waarde ONWAAR.";
             Text[ chinese_simplified ] = "θ®Ύε®ι€»θΎ‘ε€Ό FALSE γ€‚";
             Text[ greek ] = "Ορίζει τη λογική τιμή ΨΕΥΔΗΣ (FALSE).";
-            Text[ korean ] = "λ¶ κ°’μ„ FALSEλ΅ μ •μ";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’μ„ FALSEλ΅ μ •μ";
             Text[ turkish ] = "Mantύksal deπeri YANLIή olarak tanύmlar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Defineix el valor lςgic com a FALSE.";
@@ -12672,7 +12672,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Logische waarde";
             Text[ chinese_simplified ] = "logical value";
             Text[ greek ] = "Λογική τιμή";
-            Text[ korean ] = "λ¶ κ°’";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’";
             Text[ turkish ] = "Mantύksal deπer";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Valor lςgic";
@@ -12734,7 +12734,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft als resultaat de logische waarde WAAR.";
             Text[ chinese_simplified ] = "θ®Ύε®ι€»θΎ‘ε€Ό TRUE γ€‚";
             Text[ greek ] = "Ορίζει τη λογική τιμή ΑΛΗΘΗΣ (TRUE).";
-            Text[ korean ] = "λ¶ κ°’ TRUEλ¥Ό λ°ν™.";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’ TRUEλ¥Ό λ°ν™.";
             Text[ turkish ] = "DOΠRU mantύksal deπerini verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Torna el valor lςgic TRUE.";
@@ -13025,7 +13025,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Logische waarde  ";
             Text[ chinese_simplified ] = "logical value ";
             Text[ greek ] = "Λογική τιμή ";
-            Text[ korean ] = "λ¶ κ°’ ";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’";
             Text[ turkish ] = "Mantύksal deπer ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Valor lςgic ";
@@ -13055,7 +13055,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Logisch 1; Logisch 2;... zijn maximaal 30 voorwaarden die getest worden en die WAAR of ONWAAR kunnen zijn.";
             Text[ chinese_simplified ] = "ι€»θΎ‘ε€Ό 1; ι€»θΎ‘ε€Ό 2;... δΈΊι€θ¦θΏ›θ΅ζ£€ιªη„ 1 ε° 30 δΈª\nζ΅δ»¶οΌδΈΊ TRUE ζ– FALSEγ€‚";
             Text[ greek ] = "Λογική τιμή 1, Λογική τιμή 2;...είναι από 1 έως 30 συνθήκες οι οποίες πρέπει να ελεγχθούν και δίνουν ή TRUE (ΑΛΗΘΗΣ) ή FALSE (ΛΑΘΟΣ).";
-            Text[ korean ] = "λ¶ κ°’ 1, λ¶ κ°’ 2,... λ” ν…μ¤νΈλμ–΄μ•Ό ν•λ” 1μ—μ„ 30κΉμ§€μ μ΅°κ±΄μ΄λ©°, TRUE λλ” FALSEλ¥Ό λ°ν™ν•©λ‹λ‹¤.";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’ 1, λ…Όλ¦¬ κ°’ 2,... λ” ν…μ¤νΈλμ–΄μ•Ό ν•λ” 1μ—μ„ 30κΉμ§€μ μ΅°κ±΄μ΄λ©°, TRUE λλ” FALSEλ¥Ό λ°ν™ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Mantύksal deπer 1;mantύksal deπer 2;... Denetlenmeleri istenen ve DOΠRU ya da YANLIή sonucunu veren 1 - 30 arasύ koώuldur.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Valor lςgic 1, valor lςgic 2,... sσn entre 1 i 30 condicions que s'han de verificar i que tornen TRUE o bι FALSE.";
@@ -13123,7 +13123,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Logische waarde  ";
             Text[ chinese_simplified ] = "logical value ";
             Text[ greek ] = "Λογική τιμή ";
-            Text[ korean ] = "λ¶ κ°’ ";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’";
             Text[ turkish ] = "Mantύksal deπer ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Valor lςgic ";
@@ -13153,7 +13153,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Logisch 1;Logisch 2;... zijn 1 tot 30 voorwaarden die moeten worden gecontroleerd en die ofwel WAAR of FOUT opleveren.";
             Text[ chinese_simplified ] = "ι€»θΎ‘ε€Ό 1;ι€»θΎ‘ε€Ό 2;... ζ― 1 θ‡³ 30 δΈªεΎ…ζ£€ζ¥η„ζ΅δ»¶ε€ΌοΌ\nη»“ζδΈΊ TRUE ζ– FALSE γ€‚";
             Text[ greek ] = "Λογική τιμή 1, Λογική τιμή 2;...είναι από 1 έως 30 συνθήκες οι οποίες πρέπει να ελεγχθούν και δίνουν ή TRUE (ΑΛΗΘΗΣ) ή FALSE (ΛΑΘΟΣ).";
-            Text[ korean ] = "λ¶ κ°’ 1, λ¶ κ°’ 2;...λ” ν…μ¤νΈλμ–΄μ•Ό ν•λ” 1μ—μ„ 30κΉμ§€μ μ΅°κ±΄μ΄λ©°, TRUE λλ” FALSEλ¥Ό λ°ν™ν•©λ‹λ‹¤.";
+            Text[ korean ] = "λ…Όλ¦¬ κ°’ 1, λ…Όλ¦¬ κ°’ 2;...λ” ν…μ¤νΈλμ–΄μ•Ό ν•λ” 1μ—μ„ 30κΉμ§€μ μ΅°κ±΄μ΄λ©°, TRUE λλ” FALSEλ¥Ό λ°ν™ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Mantύksal deπer 1;Mantύksal deπer 2;... kontrol edilmesi istenen, DOΠRU ya da YANLIή veren 1 - 30 arasύ koώuldur.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Valor lςgic 1, valor lςgic 2,... sσn entre 1 i 30 condicions que s'han de verificar i cada una de les quals tornen TRUE o FALSE.";
@@ -39717,7 +39717,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien voorhanden, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet.";
             Text[ chinese_simplified ] = "εƒδ½η‚Ήγ€‚η»™ε®ζ―ε¦δ½Ώη”¨εƒδ½η‚Ήγ€‚ε¦‚ζι€»θΎ‘ε€Όε­ε¨εΉ¶δΈ”ζ― true(δΈη­‰δΊ0)οΌε™δΈδ½Ώη”¨εƒδ½η‚Ήγ€‚";
             Text[ greek ] = "Διαχωριστικό χιλίων. Ορίζει αν εμφανίζονται διαχωριστικά χιλίων.";
-            Text[ korean ] = "μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈ μ—†μ. λ¶ κ°’κ³Ό TRUE (0κ³Ό κ°™μ§€ μ•μ)λ” μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈλ¥Ό μ‚¬μ©ν•μ§€ μ•μµλ‹λ‹¤.";
+            Text[ korean ] = "μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈ μ—†μ. λ…Όλ¦¬ κ°’κ³Ό TRUE (0κ³Ό κ°™μ§€ μ•μ)λ” μ²λ‹¨μ„ λ¶„λ¦¬ λ¶€νΈλ¥Ό μ‚¬μ©ν•μ§€ μ•μµλ‹λ‹¤.";
             Text[ turkish ] = "Binler hanesi ayύrύcύsύ. Binler hanesi ayύrύcύlarύ kullanύlύp kullanύlmayacaπύnύ belirler.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Delimitador de milers. Defineix si s'han d'establir els delimitadors de milers.";
