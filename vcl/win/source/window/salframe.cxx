@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-22 15:45:11 $
+ *  last change: $Author: ssa $ $Date: 2002-11-25 09:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4730,10 +4730,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     LRESULT     nRet = 0;
     static int  bInWheelMsg = FALSE;
     static int  bInQueryEnd = FALSE;
-
-    char buff[256];
-    wsprintf(buff, "Msg: %d WPARAM: %d LPARAM %d\n", nMsg, wParam, lParam);
-    OutputDebugStringA(buff);
 
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
