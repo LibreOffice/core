@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:35:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,8 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ hindi ] = "लेखपत्र को नहीं खोल सकते है ।";
     Text[ slovak ] = "Nie je možné otvoriť dokument.";
 };
+
+
 
 
 
