@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:22:00 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 16:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7597,7 +7597,8 @@ BOOL Window::ImplIsAccessibleCandidate() const
     if( !mbBorderWin )
         return TRUE;
     else
-        if( mbFrame && mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE) )
+        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menues!) are closeable
+        if( mbFrame && mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
             return TRUE;
         else
             return FALSE;
@@ -7606,7 +7607,8 @@ BOOL Window::ImplIsAccessibleCandidate() const
 BOOL Window::ImplIsAccessibleNativeFrame() const
 {
     if( mbFrame )
-        if( (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
+        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menues!) are closeable
+        if( (mnStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
             return TRUE;
         else
             return FALSE;
