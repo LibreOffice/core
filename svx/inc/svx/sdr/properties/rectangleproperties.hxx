@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rectangleproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:32:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,17 @@
 #include <svx/sdr/properties/textproperties.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
     namespace properties
     {
-        class RectangleProperties : public TextProperties
+        class SVX_DLLPUBLIC RectangleProperties : public TextProperties
         {
         protected:
             // react on ItemSet changes
