@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:34:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <basegfx/vector/b2dvector.hxx>
 #endif
 
+#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
+#include <basegfx/range/b2drectangle.hxx>
+#endif
+
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
@@ -88,12 +92,14 @@ namespace basegfx
     {
         // B2DPolygon tools
 
-        /** Check if given polygon is closed. This is kind of a
-            'classic' method to support old polygon definitions.
-            Those old polygon definitions define the closed state
-            of the polygon using identical start and endpoints. This
-            method corrects this (removes double start/end points)
-            and sets the Closed()-state of the polygon correctly.
+        /** Check if given polygon is closed.
+
+            This is kind of a 'classic' method to support old polygon
+            definitions.  Those old polygon definitions define the
+            closed state of the polygon using identical start and
+            endpoints. This method corrects this (removes double
+            start/end points) and sets the Closed()-state of the
+            polygon correctly.
         */
         void checkClosed(B2DPolygon& rCandidate);
 
@@ -226,6 +232,27 @@ namespace basegfx
         void transform(const Matrix4D& rTfMatrix);
         Polygon3D getExpandedPolygon(sal_uInt32 nNum);
         */
+
+        /** Create a polygon from a rectangle.
+         */
+        B2DPolygon createPolygonFromRect( const B2DRectangle& rRect );
+
+        /** Create a circle polygon with given radius.
+
+            This method creates a circle approximation consisting of
+            four cubic bezier segments, which approximate the given
+            circle with an error of less than 0.5 percent. To create
+            ellipses, simply scale the resulting circle
+            anisotrophically.
+
+            @param rCenter
+            Center point of the circle
+
+            @param nRadius
+            Radius of the circle
+         */
+        B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double nRadius );
+
     } // end of namespace tools
 } // end of namespace basegfx
 
