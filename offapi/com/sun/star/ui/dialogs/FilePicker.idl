@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:19:50 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 07:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
 
+#ifndef __com_sun_star_util_XCancellable_idl__
+#include <com/sun/star/util/XCancellable.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
@@ -142,6 +146,11 @@ service FilePicker
         @see TemplateDescription
     */
     [optional] interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** For canceling a running dialog instance.
+    */
+    [optional] interface com::sun::star::util::XCancellable;
 
     //-------------------------------------------------------------------------
     /** for shutdown and listener support.
