@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:45:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
     FORMS_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,           "LineEndFormat" );
 
+    FORMS_CONSTASCII_STRING( PROPERTY_NATIVE_LOOK,              "NativeWidgetLook" );
     FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );
     FORMS_CONSTASCII_STRING( PROPERTY_BORDERCOLOR,              "BorderColor" );
     FORMS_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,          "BackgroundColor"   );
