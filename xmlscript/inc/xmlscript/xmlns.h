@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlns.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:19:04 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 
 #define XMLNS_SCRIPT_URI "http://openoffice.org/2000/script"
 #define XMLNS_SCRIPT_PREFIX "script"
+
+#define XMLNS_OOO_URI "http://openoffice.org/2004/office"
+#define XMLNS_OOO_PREFIX "ooo"
 
 #define XMLNS_LIBRARY_URI "http://openoffice.org/2000/library"
 #define XMLNS_LIBRARY_PREFIX "library"
