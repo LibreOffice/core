@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:35:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,18 +104,18 @@ enum SbiToken {
 
     EACH, ELSE, ELSEIF, END, ERASE, EXIT,
     FOR, FUNCTION,
-    GLOBAL, GOSUB, GOTO,
+    GET, GLOBAL, GOSUB, GOTO,
     IF, _IN_, INPUT,
     LET, LINE, LINEINPUT, LOCAL, LOOP, LPRINT, LSET,
     NAME, NEW, NEXT,
     ON, OPEN, OPTION,
-    PRINT, PRIVATE, PUBLIC,
+    PRINT, PRIVATE, PROPERTY, PUBLIC,
     REDIM, REM, RESUME, RETURN, RSET,
     SELECT, SET, SHARED, STATIC, STEP, STOP, SUB,
     TEXT, THEN, TO, TYPE,
     UNTIL,
     WEND, WHILE, WITH, WRITE,
-    ENDIF, ENDFUNC, ENDSUB, ENDTYPE, ENDSELECT, ENDWITH,
+    ENDIF, ENDFUNC, ENDPROPERTY, ENDSUB, ENDTYPE, ENDSELECT, ENDWITH,
     // Ende aller Keywords
     LASTKWD = ENDWITH,
     // Statement-Ende
@@ -131,7 +131,7 @@ enum SbiToken {
     NUMBER=FIRSTEXTRA, FIXSTRING, SYMBOL, _CDECL_, BYVAL, BYREF,
     OUTPUT, RANDOM, APPEND, BINARY, ACCESS,
     LOCK, READ, PRESERVE, BASE, ANY, LIB, _OPTIONAL_,
-    EXPLICIT, COMPATIBLE,
+    EXPLICIT, COMPATIBLE, CLASSMODULE,
 
     // Ab hier kommen JavaScript-Tokens (gleiches enum, damit gleicher Typ)
     FIRSTJAVA,
