@@ -92,10 +92,10 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP1OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -288,10 +288,10 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP2OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -484,10 +484,10 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP3OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -680,10 +680,10 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP4OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -876,10 +876,10 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP5OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -1072,10 +1072,10 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP6OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -1268,10 +1268,10 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP7OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -1464,10 +1464,10 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP8OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -1660,10 +1660,10 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP9OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
@@ -1856,10 +1856,10 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP10OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"

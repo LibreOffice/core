@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-02 13:19:11 $
+#   last change: $Author: hjs $ $Date: 2002-01-15 12:14:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,10 +187,10 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP$(TNR)OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
+    -o $@ $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
