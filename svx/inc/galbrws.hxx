@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-07 16:01:27 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 14:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ private:
 
     virtual BOOL            Close();
     virtual void            Resize();
+    virtual void            GetFocus();
 
                             DECL_LINK( SplitHdl, void* );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 14:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,14 @@ void GalleryBrowser1::Resize()
 {
     Control::Resize();
     ImplAdjustControls();
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser1::GetFocus()
+{
+    Control::GetFocus();
+    mpThemes->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 14:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,14 @@ BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 BOOL GalleryBrowser::Close()
 {
     return SfxDockingWindow::Close();
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser::GetFocus()
+{
+    SfxDockingWindow::GetFocus();
+    mpBrowser1->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
