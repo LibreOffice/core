@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:34:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
             < "Produkt" ; Default ; > ;
             < "Antal (endast tal)" ; Default ; > ;
             < "StdAv (stickprov)" ; Default ; > ;
-            < "StdAvP(population)" ; Default ; > ;
+            < "StdAvP (population)" ; Default ; > ;
             < "Varians (stickprov)" ; Default ; > ;
             < "VariansP (population)" ; Default ; > ;
         };
@@ -457,12 +457,12 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ korean ] =
     {
             < "합계" ; Default ; > ;
-        < "카운트" ; Default ; > ;
+        < "수" ; Default ; > ;
         < "평균" ; Default ; > ;
         < "최대" ; Default ; > ;
         < "최소" ; Default ; > ;
         < "제품" ; Default ; > ;
-        < "카운트 (번호만)" ; Default ; > ;
+        < "수 (숫자만)" ; Default ; > ;
         < "StDev (샘플)" ; Default ; > ;
         < "표준 편차 (모집단)" ; Default ; > ;
         < "표준 편차(샘플)" ; Default ; > ;
