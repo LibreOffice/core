@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:39:46 $
+ *  last change: $Author: fs $ $Date: 2001-03-22 10:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@ namespace dbaui
         void    SetPreExpandHandler(const Link& _rHdl);
         /// gets the currently set NodeExpansionHandler
         Link    GetPreExpandHandler() const;
-
-        void    SetContextMenuHandler(const Link& _rHdl);
-        Link    GetContextMenuHandler() const;
 
         DBTreeListModel*    getModel() const;
         void                setModel(DBTreeListModel* _pTreeModel);
