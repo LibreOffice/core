@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:31:04 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ struct Bridge
 
     //
     ~Bridge() SAL_THROW( () );
-    Bridge(
+    explicit Bridge(
         uno_Environment * java_env, uno_ExtEnvironment * uno_env,
         bool registered_java2uno );
 
