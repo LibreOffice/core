@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-20 10:23:16 $
+#   last change: $Author: hr $ $Date: 2004-02-05 16:33:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ SDI2NAME=$(TARGET2)
 SIDHRCNAME=SDSLOTS.HRC
 
 SVSDI1DEPEND= \
-    $(SOLARINCXDIR)$/ofa.ilb \
     sdraw.sdi \
     app.sdi \
     _docsh.sdi \
@@ -98,7 +97,6 @@ SVSDI1DEPEND= \
     $(PRJ)$/inc$/app.hrc
 
 SVSDI2DEPEND= \
-    $(SOLARINCXDIR)$/ofa.ilb \
     sdraw.sdi \
     app.sdi \
     _docsh.sdi \
