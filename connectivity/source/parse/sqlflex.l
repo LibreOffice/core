@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.19 2003-05-19 12:58:56 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.20 2003-06-06 10:51:03 vg Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2003-05-19 12:58:56 $ $Revision: 1.19 $
+//	$Author: vg $ $Date: 2003-06-06 10:51:03 $ $Revision: 1.20 $
 //
 // Description:
 //
@@ -337,6 +337,19 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 .				{YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
 
 %%
+// Kludge around a bug (well, Posix incompatibility) in flex 2.5.x 
+// http://bugs.debian.org/cgi-bin/bugreport.cgi?archive=no&bug=189332 
+#if YY_FLEX_MAJOR_VERSION >= 2 && YY_FLEX_MINOR_VERSION >= 5 
+ 
+  #ifndef YY_FLUSH_BUFFER 
+    #define YY_FLUSH_BUFFER SQLyy_flush_buffer(YY_CURRENT_BUFFER ) 
+  #endif 
+ 
+  #ifndef yytext_ptr 
+    #define yytext_ptr SQLyytext 
+  #endif 
+ 
+#endif 
 
 /*
  * Read SQL string literal
