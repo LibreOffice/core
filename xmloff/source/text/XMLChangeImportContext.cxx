@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,18 +133,18 @@ void XMLChangeImportContext::StartElement(
             // prepare parameters
             UniReference<XMLTextImportHelper> rHelper =
                 GetImport().GetTextImport();
-            OUString& rID = xAttrList->getValueByIndex(nAttr);
+            OUString sID = xAttrList->getValueByIndex(nAttr);
 
             // call for bStart and bEnd (may both be true)
             if (bIsStart)
-                rHelper->RedlineSetCursor(rID,sal_True,bIsOutsideOfParagraph);
+                rHelper->RedlineSetCursor(sID,sal_True,bIsOutsideOfParagraph);
             if (bIsEnd)
-                rHelper->RedlineSetCursor(rID,sal_False,bIsOutsideOfParagraph);
+                rHelper->RedlineSetCursor(sID,sal_False,bIsOutsideOfParagraph);
 
             // outside of paragraph and still open? set open redline ID
             if (bIsOutsideOfParagraph)
             {
-                rHelper->SetOpenRedlineId(rID);
+                rHelper->SetOpenRedlineId(sID);
             }
         }
         // else: ignore
