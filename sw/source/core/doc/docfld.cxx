@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 13:50:53 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -187,14 +190,6 @@ extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
 SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
 
-#ifdef UNX
-#define DBNAME_COMPARE  0
-#define DBNAME_LOWER(s) s
-#else
-#define DBNAME_COMPARE  INTN_COMPARE_IGNORECASE
-#define DBNAME_LOWER(s) rCC.lower( s )
-#endif
-
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen einfuegen
  --------------------------------------------------------------------*/
@@ -226,18 +221,12 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
     case RES_USERFLD:
     case RES_DDEFLD:
         {
+            const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
             String sFldNm( rFldTyp.GetName() );
-            const CharClass& rCC = GetAppCharClass();
-            rCC.toLower( sFldNm );
-
             for( ; i < nSize; ++i )
-                if( nFldWhich == (*pFldTypes)[i]->Which() )
-                {
-                    String sCmpStr( (*pFldTypes)[i]->GetName() );
-                    rCC.toLower( sCmpStr );
-                    if( sCmpStr.Equals( sFldNm ))
+                if( nFldWhich == (*pFldTypes)[i]->Which() &&
+                    rSCmp.isEqual( sFldNm, (*pFldTypes)[i]->GetName() ))
                         return (*pFldTypes)[i];
-                }
         }
         break;
 
@@ -299,28 +288,27 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
             RES_USERFLD == nFldWhich ||
             RES_DDEFLD == nFldWhich, "Falscher FeldTyp" );
 
-    const CharClass& rCC = GetAppCharClass();
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     const String& rFldNm = rFldTyp.GetName();
-    String sLowerFldNm( rCC.lower( rFldNm ));
     SwFieldType* pFnd;
 
     for( ; i < nSize; ++i )
         if( nFldWhich == (pFnd = (*pFldTypes)[i])->Which() &&
-            sLowerFldNm.Equals( rCC.lower( pFnd->GetName() )) )
+            rSCmp.isEqual( rFldNm, pFnd->GetName() ) )
         {
             // neuen Namen suchen
             USHORT nNum = 1;
             do {
-                String sSrch( sLowerFldNm );
+                String sSrch( rFldNm );
                 sSrch.Append( String::CreateFromInt32( nNum ));
                 for( i = INIT_FLDTYPES; i < nSize; ++i )
                     if( nFldWhich == (pFnd = (*pFldTypes)[i])->Which() &&
-                        sSrch.Equals( rCC.lower( pFnd->GetName() ) ))
+                        rSCmp.isEqual( sSrch, pFnd->GetName() ) )
                         break;
 
                 if( i >= nSize )        // nicht gefunden
                 {
-                    ((String&)rFldNm).Append( String::CreateFromInt32( nNum ));
+                    ((String&)rFldNm) = sSrch;
                     break;      // raus aus der While-Schleife
                 }
                 ++nNum;
@@ -399,10 +387,7 @@ void SwDoc::RemoveFldType(USHORT nFld)
 SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName ) const
 {
     USHORT nSize = pFldTypes->Count(), i = 0;
-    const CharClass& rCC = GetAppCharClass();
-
-    String aTmp2( rName );
-    rCC.toLower( aTmp2 );
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
     switch( nResId )
     {
@@ -427,16 +412,11 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName ) const
     for( ; i < nSize; ++i )
     {
         SwFieldType* pFldType = (*pFldTypes)[i];
-        if( nResId == pFldType->Which() )
+        if( nResId == pFldType->Which() &&
+            rSCmp.isEqual( rName, pFldType->GetName() ))
         {
-            String aTmp( pFldType->GetName() );
-            rCC.toLower( aTmp );
-
-            if( aTmp2.Equals( aTmp ))
-            {
-                pRet = pFldType;
-                break;
-            }
+            pRet = pFldType;
+            break;
         }
     }
     return pRet;
@@ -1850,13 +1830,16 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     if( !rDBName.Len() )
         return;
 
-    const CharClass& rCC = GetAppCharClass();
-    String sLowerDBName( DBNAME_LOWER( rDBName ));
-
-    for (USHORT i = 0; i < rDBNameList.Count(); i++)
-        if( sLowerDBName.Equals( DBNAME_LOWER(
-                rDBNameList.GetObject(i)->GetToken(0) )))
-                return;
+#ifdef UNX
+    for( USHORT i = 0; i < rDBNameList.Count(); ++i )
+        if( rDBName == rDBNameList.GetObject(i)->GetToken(0) )
+            return;
+#else
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
+    for( USHORT i = 0; i < rDBNameList.Count(); ++i )
+        if( rSCmp.isEqual( rDBName, rDBNameList.GetObject(i)->GetToken(0) ) )
+            return;
+#endif
 
     SwDBData aData;
     aData.sDataSource = rDBName.GetToken(0, DB_DELIM);
@@ -1892,8 +1875,7 @@ BOOL SwDoc::RenameUserFields( const String& rOldName, const String& rNewName )
 
     const SfxPoolItem* pItem;
     USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
-    const CharClass& rCC = GetAppCharClass();
-    String sLowerOldName( rCC.lower( rOldName ));
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
     for( n = 0; n < nMaxItems; ++n )
     {
@@ -1911,7 +1893,7 @@ BOOL SwDoc::RenameUserFields( const String& rOldName, const String& rNewName )
         switch( pFld->GetTyp()->Which() )
         {
         case RES_USERFLD:
-            if( sLowerOldName.Equals( rCC.lower( pFld->GetTyp()->GetName() )))
+            if( rSCmp.isEqual( rOldName, pFld->GetTyp()->GetName() ))
             {
                 SwUserFieldType* pOldTyp = (SwUserFieldType*)pFld->GetTyp();
 
@@ -1938,7 +1920,7 @@ BOOL SwDoc::RenameUserFields( const String& rOldName, const String& rNewName )
             break;
 
         case RES_SETEXPFLD:
-            if( sLowerOldName.Equals( rCC.lower( pFld->GetTyp()->GetName() )))
+            if( rSCmp.isEqual( rOldName, pFld->GetTyp()->GetName() ))
             {
                 SwSetExpFieldType* pOldTyp = (SwSetExpFieldType*)pFld->GetTyp();
 
@@ -2151,11 +2133,16 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
 
 BOOL SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
 {
-    const CharClass& rCC = GetAppCharClass();
-    String sLowerName( DBNAME_LOWER( rName ));
+#ifdef UNX
     for( USHORT i = 0; i < rArr.Count(); ++i )
-        if( sLowerName.Equals( DBNAME_LOWER( *rArr[ i ] )) )
-                return TRUE;
+        if( rName == *rArr[ i ] )
+            return TRUE;
+#else
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
+    for( USHORT i = 0; i < rArr.Count(); ++i )
+        if( rSCmp.isEqual( rName, *rArr[ i] ))
+            return TRUE;
+#endif
     return FALSE;
 }
 

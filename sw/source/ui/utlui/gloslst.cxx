@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:25:06 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -593,7 +593,7 @@ BOOL SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLong
     USHORT nFound = 0;
     USHORT nCount = aGroupArr.Count();
     USHORT nBeginLen = rBegin.Len();
-    CollatorWrapper& rColl = ::GetAppCollator();
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
     for(USHORT i = 0; i < nCount; i++ )
     {
@@ -601,7 +601,7 @@ BOOL SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLong
         for(USHORT j = 0; j < pGroup->nCount; j++)
         {
             String sBlock = pGroup->sLongNames.GetToken(j, STRING_DELIM);
-            if( 0 == rColl.compareString( sBlock.Copy(0, nBeginLen), rBegin ) &&
+            if( rSCmp.isEqual( sBlock.Copy(0, nBeginLen), rBegin ) &&
                 nBeginLen + 1 < sBlock.Len())
             {
                 String* pBlock = new String(sBlock);
@@ -632,11 +632,14 @@ void    SwGlossaryList::ClearGroups()
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.6 2001-06-01 11:25:06 fme Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.7 2001-09-05 10:26:15 jp Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/06/01 11:25:06  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.5  2001/04/27 17:50:25  jp
     use Collator for international string compare
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:04:31 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,16 +214,18 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #endif
-
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
@@ -622,10 +624,9 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwBreakIt* pBreakIt = 0;
 CharClass* pAppCharClass = 0;
-LocaleDataWrapper* pAppLocaleData = 0;
 SwCalendarWrapper* pCalendarWrapper = 0;
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
-
+::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
  *  void _InitCore()
@@ -949,7 +950,6 @@ void _FinitCore()
 
     delete pBreakIt;
     delete pAppCharClass;
-    delete pAppLocaleData;
     delete pCalendarWrapper;
     delete pCollator;
     delete pCaseCollator;
@@ -1036,17 +1036,8 @@ CharClass& GetAppCharClass()
 
 LocaleDataWrapper& GetAppLocaleData()
 {
-    if( !pAppLocaleData )
-    {
-        const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
-                                            (LanguageType)GetAppLanguage() );
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-
-        pAppLocaleData = new LocaleDataWrapper( xMSF, rLcl );
-    }
-    return *pAppLocaleData;
+    SvtSysLocale aSysLocale;
+    return (LocaleDataWrapper&)aSysLocale.GetLocaleData();
 }
 
 
@@ -1097,5 +1088,22 @@ CollatorWrapper& GetAppCaseCollator()
         pCaseCollator->loadDefaultCollator( rLcl, 0 );
     }
     return *pCaseCollator;
+}
+
+const ::utl::TransliterationWrapper& GetAppCmpStrIgnore()
+{
+    if( !pTransWrp )
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
+        pTransWrp = new ::utl::TransliterationWrapper( xMSF,
+                ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
+                ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
+                ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+        pTransWrp->loadModuleIfNeeded( GetAppLanguage() );
+    }
+    return *pTransWrp;
 }
 

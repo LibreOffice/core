@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-18 14:30:04 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 
@@ -647,7 +647,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
     // Suchen in allen anderen Bereichen
     if( nFound == (USHORT) -1 )
     {
-        CollatorWrapper& rColl = ::GetAppCaseCollator();
+        const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         USHORT nGroupCount = pGlossaryList->GetGroupCount();
         for(USHORT i = 1; i <= nGroupCount; i++)
@@ -664,7 +664,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                 {
                     String sEntry;
                     String sLongName(pGlossaryList->GetBlockName(i - 1, j, sEntry));
-                    if( 0 == rColl.compareString( rShortName, sEntry ))
+                    if( rSCmp.isEqual( rShortName, sEntry ))
                     {
                         TextBlockInfo_Impl* pData = new TextBlockInfo_Impl;
                         pData->sTitle = sTitle;
@@ -1027,6 +1027,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/05/18 14:30:04  vg
+    #65293# Corrected for use under Solaris
+
     Revision 1.6  2001/04/27 17:17:52  jp
     use Collator for international string compare
 

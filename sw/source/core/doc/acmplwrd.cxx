@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 16:36:17 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,9 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
-
 #ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
 #endif
@@ -251,9 +250,8 @@ BOOL SwAutoCompleteWord::GetRange( const String& rWord, USHORT& rStt,
     aWordLst.Seek_Entry( pStr, &rStt );
     rEnd = rStt;
 
-    CollatorWrapper& rCollator = ::GetAppCollator();
-    while( rEnd < aWordLst.Count() && 0 == rCollator.compareSubstring (
-                rWord, 0, rWord.Len(), *aWordLst[ rEnd ], 0, rWord.Len() ))
+    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
+    while( rEnd < aWordLst.Count() && rSCmp.isMatch( rWord, *aWordLst[ rEnd ]))
         ++rEnd;
 
     return rStt < rEnd;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 14:10:43 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,8 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #ifndef _FMTURL_HXX
@@ -1950,7 +1950,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     String aName;
     BOOL bAlreadyThere = FALSE, bDoublePaste = FALSE;
     USHORT nSize = rWrtShell.GetFldTypeCount();
-    CollatorWrapper& rColl = ::GetAppCaseCollator();
+    const ::utl::TransliterationWrapper& rColl = ::GetAppCmpStrIgnore();
 
     do {
         aName = aApp;
@@ -1961,14 +1961,14 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             if( RES_DDEFLD == pTyp->Which() )
             {
                 String sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
-                if( 0 == rColl.compareString( sTmp, aCmd ) &&
+                if( rColl.isEqual( sTmp, aCmd ) &&
                     so3::LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
                     bDoublePaste = TRUE;
                     break;
                 }
-                else if( 0 == rColl.compareString( aName, pTyp->GetName() ) )
+                else if( rColl.isEqual( aName, pTyp->GetName() ) )
                     break;
             }
         }

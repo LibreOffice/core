@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 13:50:15 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #ifndef _UNOPRNMS_HXX
@@ -296,7 +296,7 @@ void SwDBField::InitContent(const String& rExpansion)
             rExpansion.GetChar(rExpansion.Len() - 1) == '>')
         {
             String sColumn( rExpansion.Copy( 1, rExpansion.Len() - 2 ) );
-            if( 0 == ::GetAppCollator().compareString( sColumn,
+            if( ::GetAppCmpStrIgnore().isEqual( sColumn,
                             ((SwDBFieldType *)GetTyp())->GetColumnName() ))
             {
                 InitContent();
@@ -319,7 +319,7 @@ String SwDBField::GetOldContent()
     InitContent();
     bInitialized = bOldInit;
 
-    if( 0 == GetAppCollator().compareString( sNewExpand, Expand() ))
+    if( ::GetAppCmpStrIgnore().isEqual( sNewExpand, Expand() ) )
     {
         sNewExpand = '<';
         sNewExpand += ((SwDBFieldType *)GetTyp())->GetColumnName();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #include <svtools/svstdarr.hxx>
@@ -550,7 +550,7 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         //ist es nicht case sensitive muss man selbst suchen
         if( 0xffffffff == nPos)
         {
-            CollatorWrapper& rColl = ::GetAppCollator();
+            const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
             for(USHORT i = 0; i < aGroupTLB.GetEntryCount(); i++)
             {
                 String sTemp = aGroupTLB.GetEntryText( i, 0 );
@@ -558,7 +558,7 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
                     aPathLB.GetEntryPos(aGroupTLB.GetEntryText(i,1)));
                 BOOL bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
-                if( !bCase && 0 == rColl.compareString( sTemp, sEntry ))
+                if( !bCase && rSCmp.isEqual( sTemp, sEntry ))
                 {
                     nPos = i;
                     break;
@@ -682,6 +682,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/05/21 12:29:30  fme
+      Fix #86988#: Redesign of dialogs
+
       Revision 1.7  2001/04/27 17:46:40  jp
       use Collator for international string compare
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:18:14 $
+ *  last change: $Author: jp $ $Date: 2001-09-05 10:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@ namespace com{namespace sun{namespace star{
         class XPropertySet;
     }
 }}}
+namespace utl{
+    class TransliterationWrapper;
+}
+
 class Size;
 class MapMode;
 class ResMgr;
@@ -310,6 +314,8 @@ ULONG GetAppLanguage();
 
 CollatorWrapper& GetAppCollator();
 CollatorWrapper& GetAppCaseCollator();
+
+const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 
 
 #endif
