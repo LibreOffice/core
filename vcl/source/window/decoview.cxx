@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:04 $
+ *  last change: $Author: cd $ $Date: 2003-01-09 12:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,13 +157,9 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                             SymbolType eType  )
 {
     // Groessen vorberechnen
-    long    n;
-    long    nHeight = rRect.GetHeight();
-    long    nWidth = rRect.GetWidth();
-    if ( nWidth < nHeight )
-        n = nWidth;
-    else
-        n = nHeight;
+    long    n       = ::std::min( rRect.GetWidth(), rRect.GetHeight() );
+    long    nSize   = n;
+
     if ( n & 0x01 )
         n--;
     Point   aCenter = rRect.Center();
@@ -382,28 +378,18 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             break;
 
         case SYMBOL_PAGEUP:
-            {
-            nTop = nCenterY-n2;
-            nBottom = nCenterY-1;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            pDev->DrawRect( Rectangle( nCenterX, nTop+n2+1, nCenterX, nBottom+n2+1 ) );
-            i = 1;
-            while ( i < n2 )
-            {
-                nTop++;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                pDev->DrawRect( Rectangle( nTemp, nTop+n2+1, nTemp, nBottom+n2+1 ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                pDev->DrawRect( Rectangle( nTemp, nTop+n2+1, nTemp, nBottom+n2+1 ) );
-                i++;
-            }
-            }
-            break;
-
         case SYMBOL_PAGEDOWN:
+        {
+            if ( !( nSize & 0x01 ))
             {
+                // An even rectangle size means we have to use a smaller size for
+                // our arrows as we want to use one pixel for the spearhead! Otherwise
+                // it will be clipped!
+                nCenterX++;
+                n2 = ( n-1 ) / 2;
+                n4 = ( n-1 ) / 4;
+            }
+
             nTop = nCenterY-n2;
             nBottom = nCenterY-1;
             pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
@@ -411,7 +397,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             i = 1;
             while ( i < n2 )
             {
-                nBottom--;
+                ( eType == SYMBOL_PAGEUP ) ? nTop++ : nBottom--;
                 nTemp = nCenterX-i;
                 pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
                 pDev->DrawRect( Rectangle( nTemp, nTop+n2+1, nTemp, nBottom+n2+1 ) );
@@ -420,8 +406,8 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                 pDev->DrawRect( Rectangle( nTemp, nTop+n2+1, nTemp, nBottom+n2+1 ) );
                 i++;
             }
-            }
-            break;
+        }
+        break;
 
         case SYMBOL_RADIOCHECKMARK:
         case SYMBOL_RECORD:
