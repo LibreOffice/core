@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-11 23:04:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Îøèáêà ïğè çàãğóçêå ôàéëà DLL";
         Text[ polish ] = "B³¹d przy ³adowaniu pliku DLL";
         Text[ japanese ] = "DLLÌ§²Ù“Ç‚İ‚İ‚Ì´×°";
-        Text[ chinese_traditional ] = "¸Ë¸üDLLÀÉ®×®Éµo¥Í¿ù»~";
+        Text[ chinese_traditional ] = "¸ü¤JDLLÀÉ®×®Éµo¥Í¿ù»~";
         Text[ arabic ] = "DLL ÎØÃ ÃËäÇÁ ÊÍãíá ãáİ";
         Text[ dutch ] = "Fout bei laden van DLL-bestand";
         Text[ chinese_simplified ] = "×°ÔØ DLL ÎÄ¼şÊ±·¢Éú´íÎó";
@@ -1390,7 +1390,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Êàíàë DDE áëîêèğîâàí";
         Text[ polish ] = "Kana³ DDE jest zablokowany";
         Text[ japanese ] = "DDEÁ¬İÈÙ‚ÍÛ¯¸‚³‚ê‚Ä‚¢‚Ü‚·";
-        Text[ chinese_traditional ] = "DDE «H¹D¤w¸g³QÂê©w";
+        Text[ chinese_traditional ] = "DDE³q¹D¤w¸g³QÂê©w";
         Text[ arabic ] = "ãÄãäÉ.DDE ŞäÇÉ";
         Text[ dutch ] = "DDE-kanaal vergrendeld";
         Text[ chinese_simplified ] = "DDE ĞÅµÀÒÑ¾­±»Ëø¶¨";
@@ -1646,7 +1646,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "Ìåòîä DDE âûçâàí áåç îòêğûòîãî êàíàëà DDE";
         Text[ polish ] = "Metoda DDE wywo³ana bez otwartego kana³u DDE";
         Text[ japanese ] = "DDEÁ¬İÈÙ‚ªŠJ‚©‚ê‚Ä‚¢‚È‚¢ó‘Ô‚ÅDDEÒ¿¯ÄŞ‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚Ü‚·";
-        Text[ chinese_traditional ] = "¦b¨S¦³¶}±ÒDDE«H¹D®É½Õ¥ÎDDE ¤èªk";
+        Text[ chinese_traditional ] = "¦b¨S¦³¶}±ÒDDE³q¹D®É½Õ¥ÎDDE¤èªk";
         Text[ arabic ] = "DDE ÈÏæä İÊÍ ŞäÇÉ DDE Êã ÇÓÊÏÚÇÁ ÃÓáæÈ";
         Text[ dutch ] = "DDE-methode zonder open kanaal opgeroepen";
         Text[ chinese_simplified ] = "ÔÚÃ»ÓĞ´ò¿ªDDEĞÅµÀÊ±µ÷ÓÃDDE·½·¨";
@@ -2663,7 +2663,7 @@ Resource RID_BASIC_START
         Text [ norwegian ] = "Unexpected symbol: $(ARG1)" ;
         Text [ italian ] = "Simbolo inatteso: $(ARG1)" ;
         Text [ portuguese_brazilian ] = "Unexpected symbol: $(ARG1)" ;
-        Text [ portuguese ] = "Símbolo inesperado: $(ARG1)" ;
+        Text [ portuguese ] = "Símbolo imprevisto: $(ARG1)" ;
         Text [ french ] = "Symbole imprévu : $(ARG1)" ;
         Text [ dutch ] = "Onverwacht symbool: $(ARG1)" ;
         Text [ spanish ] = "Símbolo inesperado: $(ARG1)" ;
@@ -2691,7 +2691,7 @@ Resource RID_BASIC_START
         Text [ norwegian ] = "Expected: $(ARG1)" ;
         Text [ italian ] = "Atteso: $(ARG1)" ;
         Text [ portuguese_brazilian ] = "Expected: $(ARG1)" ;
-        Text [ portuguese ] = "Esperado: $(ARG1)" ;
+        Text [ portuguese ] = "Necessário: $(ARG1)" ;
         Text [ french ] = "Requis : $(ARG1)" ;
         Text [ dutch ] = "Verwacht: $(ARG1)" ;
         Text [ spanish ] = "Se espera: $(ARG1)" ;
@@ -2719,7 +2719,7 @@ Resource RID_BASIC_START
         Text [ norwegian ] = "Symbol expected" ;
         Text [ italian ] = "Simbolo atteso" ;
         Text [ portuguese_brazilian ] = "Symbol expected" ;
-        Text [ portuguese ] = "Símbolo esperado" ;
+        Text [ portuguese ] = "Necessário símbolo" ;
         Text [ french ] = "Symbole requis" ;
         Text [ dutch ] = "Symbool verwacht" ;
         Text [ spanish ] = "Símbolo esperado" ;
@@ -2747,7 +2747,7 @@ Resource RID_BASIC_START
         Text [ norwegian ] = "Variable expected" ;
         Text [ italian ] = "Variabile attesa" ;
         Text [ portuguese_brazilian ] = "Variable expected" ;
-        Text [ portuguese ] = "Variável esperada" ;
+        Text [ portuguese ] = "Necessário variável" ;
         Text [ french ] = "Variable requise" ;
         Text [ dutch ] = "Variabele verwacht" ;
         Text [ spanish ] = "Se requiere una variable" ;
@@ -2775,7 +2775,7 @@ Resource RID_BASIC_START
         Text [ norwegian ] = "Label expected" ;
         Text [ italian ] = "Label attesa" ;
         Text [ portuguese_brazilian ] = "Label expected" ;
-        Text [ portuguese ] = "Etiqueta esperada" ;
+        Text [ portuguese ] = "Necessário etiqueta" ;
         Text [ french ] = "Étiquette requise" ;
         Text [ dutch ] = "Naam verwacht" ;
         Text [ spanish ] = "Se requiere una etiqueta" ;
@@ -3055,7 +3055,7 @@ Resource RID_BASIC_START
         Text [ norwegian ] = "Exit $(ARG1) erwartet" ;
         Text [ italian ] = "Exit $(ARG1) atteso" ;
         Text [ portuguese_brazilian ] = "Exit $(ARG1) erwartet" ;
-        Text [ portuguese ] = "Saída de $(ARG1) esperada" ;
+        Text [ portuguese ] = "Saída de $(ARG1) necessária." ;
         Text [ french ] = "Exit $(ARG1) requis" ;
         Text [ dutch ] = "Afsluiten $(ARG1) verwacht" ;
         Text [ spanish ] = "Se requiere salida $(ARG1)" ;
@@ -3584,7 +3584,7 @@ String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
     Text[ russian ] = "Îøèáêà ïğè çàãğóçêå áèáëèîòåêè '$(ARG1)'";
     Text[ polish ] = "B³¹d przy ³adowaniu biblioteki '$(ARG1)'";
     Text[ japanese ] = "'$(ARG1)' ×²ÌŞ×Ø‚Ì“Ç‚İ‚İ‚Ì´×°";
-    Text[ chinese_traditional ] = "¸Ë¸üµ{¦¡®w®Éµo¥Í¿ù»~'$(ARG1)'";
+    Text[ chinese_traditional ] = "¸ü¤Jµ{¦¡®w®Éµo¥Í¿ù»~'$(ARG1)'";
     Text[ arabic ] = "'$(ARG1)' ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãßÊÈÉ";
     Text[ dutch ] = "Fout bij laden van bibliotheek '$(ARG1)'";
     Text[ chinese_simplified ] = "×°ÔØ¿âÊ±·¢Éú´íÎó'$(ARG1)'";
