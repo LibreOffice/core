@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:25:08 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,9 +828,36 @@ void SwRTFParser::ReadTable( int nToken )
     SwNodeIdx aOldPos(aOldIdx);
     SwPaM aRg(*pPam);
 
+#if 0
     SwTableBox* pBox = pNewLine->GetTabBoxes()[ nAktBox ];
     pPam->GetPoint()->nNode = *pBox->GetSttNd()->EndOfSectionNode();
     pPam->Move( fnMoveBackward, fnGoCntnt );
+#else
+    bool bFailure = true;
+    if (pNewLine)
+    {
+        SwTableBoxes &rBoxes = pNewLine->GetTabBoxes();
+        if (SwTableBox* pBox = (nAktBox < rBoxes.Count() ? rBoxes[nAktBox] : 0))
+        {
+            if (const SwStartNode *pStart = pBox->GetSttNd())
+            {
+                if (const SwEndNode *pEnd = pStart->EndOfSectionNode())
+                {
+                    pPam->GetPoint()->nNode = *pEnd;
+                    pPam->Move( fnMoveBackward, fnGoCntnt );
+                    bFailure = false;
+                }
+            }
+        }
+    }
+
+    ASSERT(!bFailure, "RTF Table failure");
+    if (bFailure)
+    {
+        SkipToken( -1 );            // zum Letzen gueltigen zurueck
+        return;
+    }
+#endif
 
     //It might be that there was content at this point which is not already in
     //a table, but which is being followed by properties to place it into the
