@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <uno/any2.h>
 #include <uno/environment.h>
 #include <uno/threadpool.h>
-
 #include "urp_threadid.hxx"
 #include "urp_unmarshal.hxx"
 #include "urp_bridgeimpl.hxx"
@@ -96,9 +95,9 @@ public:
     Job( uno_Environment *pEnvRemote,
            struct urp_BridgeImpl *pBridgeImpl,
          ::bridges_remote::RemoteThreadCounter_HoldEnvWeak value )
-        : m_counter( pEnvRemote , value )
-        , m_pBridgeImpl( pBridgeImpl )
+        : m_pBridgeImpl( pBridgeImpl )
         , m_pTid( 0 )
+        , m_counter( pEnvRemote , value )
         {}
 
     ~Job();
@@ -318,14 +317,14 @@ inline ClientJob::ClientJob(
     void *ppArgs[],
     uno_Any **ppException )
     : Job( pEnvRemote , pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
-    , m_pOid( pOid ) // weak
-    , m_pEnvRemote( pEnvRemote ) // weak
     , m_ppArgs( ppArgs )
     , m_pReturn( pReturn )
-    , m_ppException( ppException )
     , m_pInterfaceType( pInterfaceType ) // weak
     , m_bReleaseForTypeDescriptionNecessary( sal_False )
+    , m_ppException( ppException )
     , m_bBridgePropertyCall( sal_False )
+    , m_pEnvRemote( pEnvRemote ) // weak
+    , m_pOid( pOid ) // weak
     , m_bCallingConventionForced( sal_False )
 {
     uno_getIdOfCurrentThread( &m_pTid );
