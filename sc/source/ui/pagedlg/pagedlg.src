@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 19:53:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ ENGLISH_US ] = "Print range" ;
         Text [ SPANISH ] = "Área de impresión" ;
         Text [ FINNISH ] = "Tulostusalue" ;
-        Text [ FRENCH ] = "Zone d'impression" ;
+        Text [ FRENCH ] = "Zone d'~impression" ;
         Text [ ITALIAN ] = "Area di stampa" ;
         Text [ DUTCH ] = "Afdrukbereik" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Area de impress?o" ;
@@ -111,7 +111,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ PORTUGUESE ] = "Área de impressão" ;
         Text[ chinese_simplified ] = "´òÓ¡ÇøÓò";
         Text[ russian ] = "Îáëàñòü ïå÷àòè";
-        Text[ polish ] = "Obszar wydruku";
+        Text[ polish ] = "Zakres wydruku";
         Text[ japanese ] = "ˆóü”ÍˆÍ";
         Text[ chinese_traditional ] = "¦C¦L­S³ò";
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
@@ -316,7 +316,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ ENGLISH_US ] = "Rows to repeat" ;
         Text [ SPANISH ] = "Fila ~a repetir" ;
         Text [ FINNISH ] = "Toistettavat rivit" ;
-        Text [ FRENCH ] = "Ligne à répéter" ;
+        Text [ FRENCH ] = "~Ligne à répéter" ;
         Text [ ITALIAN ] = "Riga da ripetere" ;
         Text [ DUTCH ] = "Rij herhalen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Fileira para repetir no topo" ;
@@ -505,13 +505,13 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ ENGLISH_US ] = "Repeat column" ;
         Text [ SPANISH ] = "~Columna a repetir" ;
         Text [ FINNISH ] = "Toista sarake" ;
-        Text [ FRENCH ] = "Colonne à répéter" ;
+        Text [ FRENCH ] = "~Colonne à répéter" ;
         Text [ ITALIAN ] = "Colonna da ripetere" ;
         Text [ DUTCH ] = "Kolom herhalen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Colunas para repetir ? esquerda" ;
         Text [ SWEDISH ] = "Upprepning~skolumn" ;
         Text [ PORTUGUESE ] = "Coluna a repetir" ;
-        Text[ chinese_simplified ] = "ÖØ¸´ÁĞ";
+        Text[ chinese_simplified ] = "ÖØ¸´µÄÁĞ";
         Text[ russian ] = "Êîëîíêà ïîâòîğà";
         Text[ polish ] = "Powtarzaj kolumny";
         Text[ japanese ] = "ŒJ‚è•Ô‚·—ñ";
@@ -974,21 +974,21 @@ TabPage RID_SCPAGE_TABLE
         Text = "Von o~ben nach unten, dann nach rechts" ;
         Text [ ENGLISH ] = "~Top to bottom, then to right" ;
         Text [ norwegian ] = "~Top to bottom" ;
-        Text [ italian ] = "Dall'al~to in basso" ;
+        Text [ italian ] = "Dall'al~to in basso, poi a destra" ;
         Text [ portuguese_brazilian ] = "~De cima para baixo" ;
         Text [ portuguese ] = "De ~cima para baixo" ;
         Text [ finnish ] = "~Ylhäältä alas" ;
         Text [ danish ] = "Fra øverst til nederst" ;
-        Text [ french ] = "~Du haut en bas" ;
-        Text [ swedish ] = "~Uppifrån och ned" ;
+        Text [ french ] = "~De haut en bas, puis vers la droite" ;
+        Text [ swedish ] = "~Uppifrån och ned, sedan till höger" ;
         Text [ dutch ] = "Van ~boven naar beneden" ;
         Text [ spanish ] = "De arriba ~hacia abajo" ;
         Text [ english_us ] = "~Top to bottom" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "´ÓÉÏÏòÏÂ(~T)";
-        Text[ russian ] = "Ñâåğõó âíèç";
+        Text[ chinese_simplified ] = "´ÓÉÏÏòÏÂ£¬ÔÙÏòÓÒ";
+        Text[ russian ] = "Ñâåğõó âíèç, çàòåì âïğàâî";
         Text[ polish ] = "Od g~óry do do³u";
-        Text[ japanese ] = "ã‚©‚ç‰º‚Ö(~T)";
+        Text[ japanese ] = "ã‚©‚ç‰º‚»‚µ‚Ä‰E‚Ö";
         Text[ chinese_traditional ] = "±q¤W¦V¤U(~T)";
         Text[ arabic ] = "ãä ÃÚáì áÃÓİá";
         Text[ greek ] = "Áğü ğÜíù ğñïò ôá êÜôù";
@@ -1003,21 +1003,21 @@ TabPage RID_SCPAGE_TABLE
         Text = "Von lin~ks nach rechts, dann nach unten" ;
         Text [ ENGLISH ] = "Left to rig~ht, then to bottom" ;
         Text [ norwegian ] = "Left to rig~ht" ;
-        Text [ italian ] = "Da sinistra a d~estra" ;
+        Text [ italian ] = "Da sinistra a d~estra, poi in basso" ;
         Text [ portuguese_brazilian ] = "Da esquerda para a di~reita" ;
         Text [ portuguese ] = "Da esquerda para a di~reita" ;
         Text [ finnish ] = "~Vasemmalta oikealle" ;
         Text [ danish ] = "Fra venstre til højre" ;
-        Text [ french ] = "De gauche à dro~ite" ;
-        Text [ swedish ] = "Från vänster till hög~er" ;
+        Text [ french ] = "De gauche à dro~ite, puis vers le bas" ;
+        Text [ swedish ] = "Från vänster till hög~er, sedan nedåt" ;
         Text [ dutch ] = "Van ~links naar rechts" ;
         Text [ spanish ] = "De ~izquierda a derecha" ;
         Text [ english_us ] = "L~eft to right" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "´Ó×óÏòÓÒ(~L)";
-        Text[ russian ] = "Ñëåâà íàïğàâî";
+        Text[ chinese_simplified ] = "´Ó×óÏòÓÒ£¬ÔÙÏòÏÂ";
+        Text[ russian ] = "Ñëåâà íàïğàâî, çàòåì âíèç";
         Text[ polish ] = "Od lewej do prawej";
-        Text[ japanese ] = "¶‚©‚ç‰E‚Ö(~L)";
+        Text[ japanese ] = "¶‚©‚ç‰E‚»‚µ‚Ä‰º‚Ö";
         Text[ chinese_traditional ] = "±q¥ª¦V¥k(~L)";
         Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä";
         Text[ language_user1 ] = "ÌŞêïò; - - - -";
@@ -1093,9 +1093,9 @@ TabPage RID_SCPAGE_TABLE
         Text [ dutch ] = "Pagina-volgorde" ;
         Text [ spanish ] = "Orden de páginas" ;
         Text [ ENGLISH_US ] = "Page order" ;
-        Text[ chinese_simplified ] = "Ò³Ğò";
+        Text[ chinese_simplified ] = "Ò³ÃæË³Ğò";
         Text[ russian ] = "Ïîğÿäîê ñòğàíèö";
-        Text[ polish ] = "Kolejno?æ stron";
+        Text[ polish ] = "Kolejnoœæ stron";
         Text[ japanese ] = "Íß°¼Ş‚Ì‡˜";
         Text[ chinese_traditional ] = "­¶§Ç";
         Text[ arabic ] = "ÊÑÊíÈ ÇáÕİÍÉ";
@@ -1113,20 +1113,20 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ english_us ] = "~All to [%]";
         Text[ portuguese ] = "~Tudo para [%]";
-        Text[ russian ] = "Âñå íà [%]";
+        Text[ russian ] = "Óìåíüøèòü/óâåëè÷èòü ğàñïå÷àòêó";
         Text[ greek ] = "¼~ëá óå [%]";
         Text[ dutch ] = "~Alles naar [%]";
-        Text[ french ] = "~Tout à [%]";
+        Text[ french ] = "~Reduire/agrandir l'impression";
         Text[ spanish ] = "~Todo al [%]";
         Text[ finnish ] = "~Kaikki -> [%]";
-        Text[ italian ] = "~Tutto a [%]";
+        Text[ italian ] = "~Riduci/ingrandisci stampa";
         Text[ danish ] = "Alt til [%]";
-        Text[ swedish ] = "A~llt till (%)";
+        Text[ swedish ] = "För~minska/förstora utskrift";
         Text[ polish ] = "Wszystko na [%] ";
         Text[ portuguese_brazilian ] = "~Todas as p?ginas para [%]";
-        Text[ japanese ] = "‚·‚×‚Ä [%](~A)";
+        Text[ japanese ] = "Šg‘åk¬ˆóü";
         Text[ korean ] = "ÀüÃ¼¸¦  [%] ·Î(~A)";
-        Text[ chinese_simplified ] = "È«²¿²ÉÓÃ°Ù·Ö±È[%](~A)";
+        Text[ chinese_simplified ] = "ËõĞ¡»ò·Å´ó´òÓ¡Ò³Ãæ";
         Text[ chinese_traditional ] = "¥ş³¡±Ä¥Î[%](~A)";
         Text[ turkish ] = "T~ümü [%]";
         Text[ arabic ] = "Çáßá Åáì  [%]";
@@ -1141,20 +1141,20 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ english_us ] = "~Max. no. of pages";
         Text[ portuguese ] = "~Máximo de páginas";
-        Text[ russian ] = "Ìàêñèìóì ñòğàíèö";
+        Text[ russian ] = "Ñîãëàñîâàòü ğàñïå÷àòêó ñ ÷èñëîì ñòğàíèö";
         Text[ greek ] = "Ìİ~ã. áñéèìüò óåëßäùí";
         Text[ dutch ] = "Hoogste ~paginanr.";
-        Text[ french ] = "Nbre ~max. de pages";
+        Text[ french ] = "Ada~pter l'impression au nombre de pages";
         Text[ spanish ] = "Núm. ~máx. de páginas";
         Text[ finnish ] = "~Sivujen enimmäismäärä";
-        Text[ italian ] = "Num. massimo pagine";
+        Text[ italian ] = "Adatta la stampa al numero di pagine";
         Text[ danish ] = "Maks. antal sider";
-        Text[ swedish ] = "Ma~x antal sidor";
+        Text[ swedish ] = "An~passa utskrift till antal sidor";
         Text[ polish ] = "Maks. licz~ba stron";
         Text[ portuguese_brazilian ] = "Para ~se ajustar nas p?ginas";
-        Text[ japanese ] = "Å‚Íß°¼Ş”(~M)";
+        Text[ japanese ] = "Íß°¼Ş”‚É‡‚í‚¹‚Äˆóü";
         Text[ korean ] = "ÃÖ´ë ÂÊ ¼ö(~M)";
-        Text[ chinese_simplified ] = "×î¶àÒ³Êı(~M)";
+        Text[ chinese_simplified ] = "°´Ò³Êıµ÷Õû´òÓ¡Ò³Ãæ";
         Text[ chinese_traditional ] = "³Ì¦h­¶¼Æ(~M)";
         Text[ turkish ] = "A~zami sayfa sayısı";
         Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
@@ -1197,15 +1197,15 @@ TabPage RID_SCPAGE_TABLE
         Text [ dutch ] = "Schaal" ;
         Text [ italian ] = "Scala" ;
         Text [ spanish ] = "Escala" ;
-        Text [ french ] = "Redimensionnement (impression)" ;
-        Text [ swedish ] = "Skalning" ;
+        Text [ french ] = "Échelle" ;
+        Text [ swedish ] = "Skala" ;
         Text [ danish ] = "Skalering" ;
         Text [ portuguese ] = "Escala" ;
         Text [ portuguese_brazilian ] = "Skalierung" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
         Text[ russian ] = "Ìàñøòàá";
         Text[ polish ] = "Skalowanie";
-        Text[ japanese ] = "½¹°Ù";
+        Text[ japanese ] = "”{—¦";
         Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
         Text[ arabic ] = "ÇáãŞíÇÓ";
         Text[ greek ] = "Êëßìáêá";
