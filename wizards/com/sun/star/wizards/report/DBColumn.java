@@ -38,7 +38,6 @@
  *
  *************************************************************************/
 package com.sun.star.wizards.report;
-
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertyState;
@@ -114,7 +113,6 @@ public class DBColumn {
         String CellName = (String) Helper.getUnoPropertyValue(xNameCell, "CellName");
         xNameTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xNameCell);
         xValCell = CurRecordTable.xCellRange.getCellByPosition(i,1);
-        Desktop.setNumberFormat(xValCell, oTextTableHandler.NumberFormats, CurDBField.DBFormatKey);
         xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
         xValCellCursor = TextDocument.createTextCursor(xValCell);
     }
@@ -134,6 +132,7 @@ public class DBColumn {
         xValCellCursor = TextDocument.createTextCursor(xValCell);
         ValColumn = OldDBColumn.ValColumn;
         ValRow = OldDBColumn.ValRow;
+        initializeNumberFormat();
     }
 
 
@@ -155,16 +154,17 @@ public class DBColumn {
                 CellString = xTextCell.getString();
                 String CompString = TableName.substring(4);
                 XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
-                if (isNameCell(xLocCellCursor, CurDBField.AliasName, CompString)){
+                if (isNameCell(xLocCellCursor, CurDBField.FieldName, CompString)){
                     xNameCell = xCell;
                     xNameTextCell = xTextCell;
                 }
-                else if (CellString.equals(CurFieldString)){
+                else{   //In Grouping Sections only two cells are allowed ' if (CellString.equals(CurFieldString)){
                     xValCell = xCell;
                     xValTextCell = xTextCell;
                     xValCellCursor = xLocCellCursor;
                     ValColumn = n;
                     ValRow = m;
+                    checkforLeftAlignment();
                 }
             }
         }
@@ -197,7 +197,7 @@ public class DBColumn {
 
 
     public void initializeNumberFormat(){
-        Desktop.setNumberFormat(xValCell, oTextTableHandler.NumberFormats, CurDBField.DBFormatKey);
+        oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey);
         setCellFont();
     }
 
@@ -218,11 +218,14 @@ public class DBColumn {
 
 
     public void formatValueCell(){
-        Desktop.setNumberFormat(xValCell, oTextTableHandler.NumberFormats, CurDBField.DBFormatKey);
-        if ((CurDBField.bIsNumberFormat) && (ValColumn == xTableColumns.getCount()-1)){
+        oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey);
+        if (checkforLeftAlignment())
             bAlignLeft = true;
-            setCellFont();
-        }
+    }
+
+    private boolean checkforLeftAlignment(){
+        bAlignLeft = ((CurDBField.bIsNumberFormat) && (ValColumn == xTableColumns.getCount()-1));
+        return bAlignLeft;
     }
 
 
@@ -315,7 +318,7 @@ public class DBColumn {
     public void setCellFont(){
     try{
         XPropertyState xPropertyState;
-            int FieldType = CurDBField.FieldType;
+        int FieldType = CurDBField.FieldType;
         if (FieldType == com.sun.star.sdbc.DataType.BOOLEAN || FieldType == com.sun.star.sdbc.DataType.BIT){
             CharFontName = "StarSymbol";
             PropertyState = com.sun.star.beans.PropertyState.DIRECT_VALUE;
