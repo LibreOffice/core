@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-26 08:45:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/cntritem.hxx>
-#include <svx/chardlg.hxx>
+//CHINA001 #include <svx/chardlg.hxx>
 #include <svx/crsditem.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
@@ -114,17 +114,18 @@
 #include "viewutil.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-#include "namepast.hxx"
+//CHINA001 #include "namepast.hxx"
 #include "reffind.hxx"
 #include "tabvwsh.hxx"
-#include "textdlgs.hxx"
+//CHINA001 #include "textdlgs.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
 
 #define ScEditShell
 #include "scslots.hxx"
 
-
+#include "scui_def.hxx" //CHINA001
+#include "scabstdlg.hxx" //CHINA001
 TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
@@ -377,10 +378,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScDocument*     pDoc = pViewData->GetDocument();
-                ScNamePasteDlg* pDlg = new ScNamePasteDlg( pViewData->GetDialogParent(),
-                                                pDoc->GetRangeName(), FALSE );
+                //CHINA001 ScNamePasteDlg* pDlg = new ScNamePasteDlg( pViewData->GetDialogParent(),
+                //CHINA001                              pDoc->GetRangeName(), FALSE );
                                                 // "Liste" disablen
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), ResId(RID_SCDLG_NAMES_PASTE), FALSE );
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -412,7 +417,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
 
-                ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(), &aAttrs, pObjSh );
+                //CHINA001 ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(), &aAttrs, pObjSh );
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg( pViewData->GetDialogParent(), &aAttrs,
+                                                                     pObjSh,ResId(RID_SCDLG_CHAR) );
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
