@@ -44,7 +44,7 @@ public class AccessibilityWorkBench
         XPropertyChangeListener,
         XTerminateListener
 {
-    public static final String msVersion = "v1.3";
+    public static final String msVersion = "v1.4";
     public String msFileName;
     public String msOptionsFileName = ".AWBrc";
 
@@ -366,6 +366,8 @@ public class AccessibilityWorkBench
 
     protected void initialize ()
     {
+        maCanvas.clear();
+
         // create new model (with new documents)
         if (maTree.getModel() instanceof AccessibilityTreeModel)
         {
