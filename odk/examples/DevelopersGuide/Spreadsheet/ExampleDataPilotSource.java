@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExampleDataPilotSource.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:45:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -96,7 +96,8 @@ class ExamplePropertySetInfo implements com.sun.star.beans.XPropertySetInfo
 
 //  implementation of com.sun.star.sheet.DataPilotSourceMember
 
-class ExampleMember implements com.sun.star.container.XNamed, com.sun.star.beans.XPropertySet
+class ExampleMember implements com.sun.star.container.XNamed,
+      com.sun.star.beans.XPropertySet
 {
     private ExampleSettings aSettings;
     private int nDimension;
@@ -126,13 +127,17 @@ class ExampleMember implements com.sun.star.container.XNamed, com.sun.star.beans
     public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
     {
         return new ExamplePropertySetInfo( new com.sun.star.beans.Property[] {
-            new com.sun.star.beans.Property( "IsVisible",   -1, new com.sun.star.uno.Type( Boolean.class ), (short) 0 ),
-            new com.sun.star.beans.Property( "ShowDetails", -1, new com.sun.star.uno.Type( Boolean.class ), (short) 0 ) } );
+            new com.sun.star.beans.Property( "IsVisible",   -1,
+                        new com.sun.star.uno.Type( Boolean.class ), (short) 0),
+            new com.sun.star.beans.Property( "ShowDetails", -1,
+                        new com.sun.star.uno.Type( Boolean.class ), (short) 0) });
     }
 
-    public void setPropertyValue( String aPropertyName, Object aValue ) throws com.sun.star.beans.UnknownPropertyException
+    public void setPropertyValue( String aPropertyName, Object aValue )
+        throws com.sun.star.beans.UnknownPropertyException
     {
-        if ( aPropertyName.equals( "IsVisible" ) || aPropertyName.equals( "ShowDetails" ) )
+        if ( aPropertyName.equals( "IsVisible" ) ||
+             aPropertyName.equals( "ShowDetails" ) )
         {
             // ignored
         }
@@ -140,9 +145,11 @@ class ExampleMember implements com.sun.star.container.XNamed, com.sun.star.beans
             throw new com.sun.star.beans.UnknownPropertyException();
     }
 
-    public Object getPropertyValue( String aPropertyName ) throws com.sun.star.beans.UnknownPropertyException
+    public Object getPropertyValue( String aPropertyName )
+        throws com.sun.star.beans.UnknownPropertyException
     {
-        if ( aPropertyName.equals( "IsVisible" ) || aPropertyName.equals( "ShowDetails" ) )
+        if ( aPropertyName.equals( "IsVisible" ) ||
+             aPropertyName.equals( "ShowDetails" ) )
         {
             return new Boolean( true );     // always true
         }
@@ -150,16 +157,20 @@ class ExampleMember implements com.sun.star.container.XNamed, com.sun.star.beans
             throw new com.sun.star.beans.UnknownPropertyException();
     }
 
-    public void addPropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener )
+    public void addPropertyChangeListener(
+        String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener)
     {
     }
-    public void removePropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener )
+    public void removePropertyChangeListener(
+        String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener)
     {
     }
-    public void addVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+    public void addVetoableChangeListener(
+        String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener)
     {
     }
-    public void removeVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+    public void removeVetoableChangeListener(
+        String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener)
     {
     }
 }
@@ -191,7 +202,8 @@ class ExampleMembers implements com.sun.star.container.XNameAccess
         return true;    // always has elements
     }
 
-    public Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException
+    public Object getByName( String aName )
+        throws com.sun.star.container.NoSuchElementException
     {
         int nCount = aSettings.nMemberCount;
         for ( int i=0; i<nCount; i++ )
@@ -267,12 +279,12 @@ class ExampleLevel implements
     public com.sun.star.sheet.MemberResult[] getResults()
     {
         int nDimensions = 0;
-        int nPosition = aSettings.aColDimensions.indexOf( new Integer(nDimension) );
+        int nPosition = aSettings.aColDimensions.indexOf( new Integer(nDimension));
         if ( nPosition >= 0 )
             nDimensions = aSettings.aColDimensions.size();
         else
         {
-            nPosition = aSettings.aRowDimensions.indexOf( new Integer(nDimension) );
+            nPosition = aSettings.aRowDimensions.indexOf( new Integer(nDimension));
             if ( nPosition >= 0 )
                 nDimensions = aSettings.aRowDimensions.size();
         }
@@ -292,22 +304,25 @@ class ExampleLevel implements
         }
         int nSize = nRepeat * nMembers * nFill;
 
-        com.sun.star.sheet.MemberResult[] aResults = new com.sun.star.sheet.MemberResult[nSize];
+        com.sun.star.sheet.MemberResult[] aResults =
+            new com.sun.star.sheet.MemberResult[nSize];
         int nResultPos = 0;
         for (int nOuter=0; nOuter<nRepeat; nOuter++)
         {
             for (int nMember=0; nMember<nMembers; nMember++)
             {
                 aResults[nResultPos] = new com.sun.star.sheet.MemberResult();
-                aResults[nResultPos].Name    = ExampleSettings.getMemberName( nMember );
+                aResults[nResultPos].Name = ExampleSettings.getMemberName(nMember);
                 aResults[nResultPos].Caption = aResults[nResultPos].Name;
-                aResults[nResultPos].Flags   = com.sun.star.sheet.MemberResultFlags.HASMEMBER;
+                aResults[nResultPos].Flags =
+                    com.sun.star.sheet.MemberResultFlags.HASMEMBER;
                 ++nResultPos;
 
                 for (int nInner=1; nInner<nFill; nInner++)
                 {
                     aResults[nResultPos] = new com.sun.star.sheet.MemberResult();
-                    aResults[nResultPos].Flags = com.sun.star.sheet.MemberResultFlags.CONTINUE;
+                    aResults[nResultPos].Flags =
+                        com.sun.star.sheet.MemberResultFlags.CONTINUE;
                     ++nResultPos;
                 }
             }
@@ -320,13 +335,20 @@ class ExampleLevel implements
     public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
     {
         return new ExamplePropertySetInfo( new com.sun.star.beans.Property[] {
-            new com.sun.star.beans.Property( "SubTotals", -1, new com.sun.star.uno.Type( com.sun.star.sheet.GeneralFunction[].class ), (short) 0 ),
-            new com.sun.star.beans.Property( "ShowEmpty", -1, new com.sun.star.uno.Type( Boolean.class ),                              (short) 0 ) } );
+            new com.sun.star.beans.Property( "SubTotals", -1,
+                            new com.sun.star.uno.Type(
+                                com.sun.star.sheet.GeneralFunction[].class ),
+                                             (short) 0 ),
+            new com.sun.star.beans.Property( "ShowEmpty", -1,
+                             new com.sun.star.uno.Type( Boolean.class ),
+                                             (short) 0 ) } );
     }
 
-    public void setPropertyValue( String aPropertyName, Object aValue ) throws com.sun.star.beans.UnknownPropertyException
+    public void setPropertyValue( String aPropertyName, Object aValue )
+        throws com.sun.star.beans.UnknownPropertyException
     {
-        if ( aPropertyName.equals( "SubTotals" ) || aPropertyName.equals( "ShowEmpty" ) )
+        if ( aPropertyName.equals( "SubTotals" ) ||
+             aPropertyName.equals( "ShowEmpty" ) )
         {
             // ignored
         }
@@ -334,7 +356,8 @@ class ExampleLevel implements
             throw new com.sun.star.beans.UnknownPropertyException();
     }
 
-    public Object getPropertyValue( String aPropertyName ) throws com.sun.star.beans.UnknownPropertyException
+    public Object getPropertyValue( String aPropertyName )
+        throws com.sun.star.beans.UnknownPropertyException
     {
         if ( aPropertyName.equals( "SubTotals" ) )
             return new com.sun.star.sheet.GeneralFunction[0];
@@ -344,16 +367,20 @@ class ExampleLevel implements
             throw new com.sun.star.beans.UnknownPropertyException();
     }
 
-    public void addPropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener )
+    public void addPropertyChangeListener(
+        String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener)
     {
     }
-    public void removePropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener )
+    public void removePropertyChangeListener(
+        String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener)
     {
     }
-    public void addVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+    public void addVetoableChangeListener(
+        String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener)
     {
     }
-    public void removeVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+    public void removeVetoableChangeListener(
+        String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener)
     {
     }
 }
@@ -384,7 +411,8 @@ class ExampleLevels implements com.sun.star.container.XNameAccess
         return true;    // always has elements
     }
 
-    public Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException
+    public Object getByName( String aName )
+        throws com.sun.star.container.NoSuchElementException
     {
         //  there's only one level with the same name as the dimension / hierarchy
         if ( aName.equals( ExampleSettings.aDimensionNames[nDimension] ) )
@@ -411,7 +439,8 @@ class ExampleLevels implements com.sun.star.container.XNameAccess
 
 //  implementation of com.sun.star.sheet.DataPilotSourceHierarchy
 
-class ExampleHierarchy implements com.sun.star.container.XNamed, com.sun.star.sheet.XLevelsSupplier
+class ExampleHierarchy implements com.sun.star.container.XNamed,
+      com.sun.star.sheet.XLevelsSupplier
 {
     private ExampleSettings aSettings;
     private int nDimension;
@@ -471,7 +500,8 @@ class ExampleHierarchies implements com.sun.star.container.XNameAccess
         return true;    // always has elements
     }
 
-    public Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException
+    public Object getByName( String aName )
+        throws com.sun.star.container.NoSuchElementException
     {
         //  there's only one hierarchy with the same name as the dimension
         if ( aName.equals( ExampleSettings.aDimensionNames[nDimension] ) )
@@ -551,13 +581,25 @@ class ExampleDimension implements
     public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
     {
         return new ExamplePropertySetInfo( new com.sun.star.beans.Property[] {
-            new com.sun.star.beans.Property( "Original",              -1, new com.sun.star.uno.Type( com.sun.star.container.XNamed.class ),                (short) com.sun.star.beans.PropertyAttribute.READONLY ),
-            new com.sun.star.beans.Property( "IsDataLayoutDimension", -1, new com.sun.star.uno.Type( Boolean.class ),                                      (short) com.sun.star.beans.PropertyAttribute.READONLY ),
-            new com.sun.star.beans.Property( "Orientation",           -1, new com.sun.star.uno.Type( com.sun.star.sheet.DataPilotFieldOrientation.class ), (short) 0 ),
-            new com.sun.star.beans.Property( "Position",              -1, new com.sun.star.uno.Type( Integer.class ),                                      (short) 0 ),
-            new com.sun.star.beans.Property( "Function",              -1, new com.sun.star.uno.Type( com.sun.star.sheet.GeneralFunction.class ),           (short) 0 ),
-            new com.sun.star.beans.Property( "UsedHierarchy",         -1, new com.sun.star.uno.Type( Integer.class ),                                      (short) 0 ),
-            new com.sun.star.beans.Property( "Filter",                -1, new com.sun.star.uno.Type( com.sun.star.sheet.TableFilterField[].class ),        (short) 0 ) } );
+            new com.sun.star.beans.Property( "Original", -1,
+                new com.sun.star.uno.Type( com.sun.star.container.XNamed.class),
+                (short) com.sun.star.beans.PropertyAttribute.READONLY ),
+            new com.sun.star.beans.Property( "IsDataLayoutDimension", -1,
+                new com.sun.star.uno.Type( Boolean.class),
+                (short) com.sun.star.beans.PropertyAttribute.READONLY ),
+            new com.sun.star.beans.Property( "Orientation", -1,
+                new com.sun.star.uno.Type(
+                  com.sun.star.sheet.DataPilotFieldOrientation.class), (short) 0),
+            new com.sun.star.beans.Property( "Position", -1,
+                new com.sun.star.uno.Type( Integer.class ), (short) 0),
+            new com.sun.star.beans.Property( "Function", -1,
+                new com.sun.star.uno.Type(com.sun.star.sheet.GeneralFunction.class),
+                                             (short) 0 ),
+            new com.sun.star.beans.Property( "UsedHierarchy", -1,
+                new com.sun.star.uno.Type( Integer.class ), (short) 0 ),
+            new com.sun.star.beans.Property( "Filter", -1,
+                new com.sun.star.uno.Type(
+                    com.sun.star.sheet.TableFilterField[].class), (short) 0) });
     }
 
     public void setPropertyValue( String aPropertyName, Object aValue )
@@ -640,16 +682,20 @@ class ExampleDimension implements
             throw new com.sun.star.beans.UnknownPropertyException();
     }
 
-    public void addPropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener )
+    public void addPropertyChangeListener(
+        String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener)
     {
     }
-    public void removePropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener )
+    public void removePropertyChangeListener(
+        String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener)
     {
     }
-    public void addVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+    public void addVetoableChangeListener(
+        String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener)
     {
     }
-    public void removeVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+    public void removeVetoableChangeListener(
+        String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener)
     {
     }
 }
@@ -678,7 +724,8 @@ class ExampleDimensions implements com.sun.star.container.XNameAccess
         return true;    // always has elements
     }
 
-    public Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException
+    public Object getByName( String aName )
+        throws com.sun.star.container.NoSuchElementException
     {
         for (int i=0; i<ExampleSettings.nDimensionCount; i++)
             if ( aName.equals( ExampleSettings.aDimensionNames[i] ) )
@@ -753,8 +800,8 @@ public class ExampleDataPilotSource
                     catch ( NumberFormatException e )
                     {
                         System.out.println( "Error: caught exception in " +
-                                            "ExampleDataPilotSource.initialize!\nException Message = "
-                                            + e.getMessage());
+                          "ExampleDataPilotSource.initialize!\nException Message = "
+                          + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -830,13 +877,17 @@ public class ExampleDataPilotSource
         public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
         {
             return new ExamplePropertySetInfo( new com.sun.star.beans.Property[] {
-                new com.sun.star.beans.Property( "ColumnGrand", -1, new com.sun.star.uno.Type( Boolean.class ), (short) 0 ),
-                new com.sun.star.beans.Property( "RowGrand",    -1, new com.sun.star.uno.Type( Boolean.class ), (short) 0 ) } );
+                new com.sun.star.beans.Property( "ColumnGrand", -1,
+                       new com.sun.star.uno.Type( Boolean.class ), (short) 0),
+                new com.sun.star.beans.Property( "RowGrand", -1,
+                       new com.sun.star.uno.Type( Boolean.class ), (short) 0) });
         }
 
-        public void setPropertyValue( String aPropertyName, Object aValue ) throws com.sun.star.beans.UnknownPropertyException
+        public void setPropertyValue( String aPropertyName, Object aValue )
+            throws com.sun.star.beans.UnknownPropertyException
         {
-            if ( aPropertyName.equals( "ColumnGrand" ) || aPropertyName.equals( "RowGrand" ) )
+            if ( aPropertyName.equals( "ColumnGrand" ) ||
+                 aPropertyName.equals( "RowGrand" ) )
             {
                 // ignored
             }
@@ -844,9 +895,11 @@ public class ExampleDataPilotSource
                 throw new com.sun.star.beans.UnknownPropertyException();
         }
 
-        public Object getPropertyValue( String aPropertyName ) throws com.sun.star.beans.UnknownPropertyException
+        public Object getPropertyValue( String aPropertyName )
+            throws com.sun.star.beans.UnknownPropertyException
         {
-            if ( aPropertyName.equals( "ColumnGrand" ) || aPropertyName.equals( "RowGrand" ) )
+            if ( aPropertyName.equals( "ColumnGrand" ) ||
+                 aPropertyName.equals( "RowGrand" ) )
             {
                 return new Boolean( false );        // always false
             }
@@ -854,16 +907,24 @@ public class ExampleDataPilotSource
                 throw new com.sun.star.beans.UnknownPropertyException();
         }
 
-        public void addPropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener )
+        public void addPropertyChangeListener(
+            String aPropertyName,
+            com.sun.star.beans.XPropertyChangeListener xListener )
         {
         }
-        public void removePropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener )
+        public void removePropertyChangeListener(
+            String aPropertyName,
+            com.sun.star.beans.XPropertyChangeListener aListener )
         {
         }
-        public void addVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+        public void addVetoableChangeListener(
+            String PropertyName,
+            com.sun.star.beans.XVetoableChangeListener aListener )
         {
         }
-        public void removeVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener )
+        public void removeVetoableChangeListener(
+            String PropertyName,
+            com.sun.star.beans.XVetoableChangeListener aListener )
         {
         }
 
@@ -899,23 +960,28 @@ public class ExampleDataPilotSource
         }
     }
 
-    public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String implName,
-                                                        com.sun.star.lang.XMultiServiceFactory multiFactory,
-                                                        com.sun.star.registry.XRegistryKey regKey)
+    public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(
+        String implName,
+        com.sun.star.lang.XMultiServiceFactory multiFactory,
+        com.sun.star.registry.XRegistryKey regKey)
     {
         com.sun.star.lang.XSingleServiceFactory xSingleServiceFactory = null;
 
         if ( implName.equals(_ExampleDataPilotSource.aImplName) )
-            xSingleServiceFactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
-                    _ExampleDataPilotSource.class, _ExampleDataPilotSource.aServiceName, multiFactory, regKey);
+            xSingleServiceFactory =
+                com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
+                    _ExampleDataPilotSource.class,
+                    _ExampleDataPilotSource.aServiceName, multiFactory, regKey);
 
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey regKey)
+    public static boolean __writeRegistryServiceInfo(
+        com.sun.star.registry.XRegistryKey regKey)
     {
         return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-                    _ExampleDataPilotSource.aImplName, _ExampleDataPilotSource.aServiceName, regKey);
+                    _ExampleDataPilotSource.aImplName,
+                    _ExampleDataPilotSource.aServiceName, regKey);
     }
 }
 
