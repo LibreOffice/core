@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-09-03 08:05:30 $
+ *  last change: $Author: cd $ $Date: 2002-09-17 06:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,18 @@ class SvxStyleBox_Impl : public ListBox
 {
 public:
     SvxStyleBox_Impl( Window* pParent, USHORT nSlot, SfxStyleFamily eFamily, SfxBindings& rBind );
+    ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
+    BOOL            IsVisible() { return bVisible; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    StateChanged( StateChangedType nStateChange );
+
+    void            SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
+    void            RemoveVisibilityListener() { aVisibilityListener = Link(); }
 
 protected:
     virtual void    Select();
@@ -195,6 +201,8 @@ private:
     BOOL            bRelease;
     SfxBindings&    rBindings;
     Size            aLogicalSize;
+    Link            aVisibilityListener;
+    BOOL            bVisible;
 
     void            ReleaseFocus();
 };
@@ -449,6 +457,10 @@ SvxStyleBox_Impl::SvxStyleBox_Impl( Window* pParent, USHORT nSlot, SfxStyleFamil
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
 }
 
+SvxStyleBox_Impl::~SvxStyleBox_Impl()
+{
+}
+
 // -----------------------------------------------------------------------
 
 void SvxStyleBox_Impl::ReleaseFocus()
@@ -549,6 +561,26 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     ListBox::DataChanged( rDCEvt );
 }
+
+void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
+{
+    ListBox::StateChanged( nStateChange );
+
+    if ( nStateChange == STATE_CHANGE_VISIBLE )
+    {
+        bVisible = IsReallyVisible();
+        if ( aVisibilityListener.IsSet() )
+            aVisibilityListener.Call( this );
+    }
+    else if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        bVisible = TRUE;
+        if ( aVisibilityListener.IsSet() )
+            aVisibilityListener.Call( this );
+    }
+}
+
+
 // -----------------------------------------------------------------------
 
 #define BRUSH(style,name) BrushStyle(style),SVX_RESSTR(name)
@@ -1901,8 +1933,16 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl( USHORT       nId,
         pBoundItems [i] = new SfxStyleControllerItem_Impl( SID_STYLE_FAMILY_START + i, rBindings, *this );
         pFamilyState[i] = NULL;
     }
-
     rBindings.LEAVEREGISTRATIONS();
+
+    // Default now: Unbind() controllers until we get our first visibility notification from our UI control.
+    for ( i=0; i<MAX_FAMILIES; i++ )
+    {
+        pBoundItems[i]->UnBind();
+        DBG_ASSERT( !pBoundItems[i]->IsBound(), "Invalidate bindings state!" );
+    }
+    UnBind();
+    DBG_ASSERT( !IsBound(), "Invalidate bindings state!" );
 }
 
 // -----------------------------------------------------------------------
@@ -2118,6 +2158,38 @@ void SvxStyleToolBoxControl::SetFamilyState( USHORT nIdx,
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, pVoid )
+{
+    // Call ReBind() && UnBind() according to visibility
+    SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)( GetToolBox().GetItemWindow( GetId() ));
+    if ( pBox->IsVisible() && !IsBound() )
+    {
+        // Rebind controllers again
+        GetBindings().ENTERREGISTRATIONS();
+
+        for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+            pBoundItems [i]->ReBind();
+
+        ReBind();
+        GetBindings().LEAVEREGISTRATIONS();
+
+        // Invalidate slots
+        for ( i=0; i<MAX_FAMILIES; i++ )
+            GetBindings().Invalidate( SID_STYLE_FAMILY_START + i );
+        GetBindings().Invalidate( GetId() );
+    }
+    else if ( !pBox->IsVisible() && IsBound() )
+    {
+        for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+            pBoundItems [i]->UnBind();
+        UnBind();
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SvxStyleToolBoxControl::StateChanged(
 
     USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
@@ -2160,6 +2232,10 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
     SvxStyleBox_Impl* pBox = new SvxStyleBox_Impl( pParent,
                                          SID_STYLE_APPLY,
                                          SFX_STYLE_FAMILY_PARA, GetBindings() );
+
+    // Set visibility listener to bind/unbind controller
+    pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));
+
     return pBox;
 }
 
