@@ -69,7 +69,6 @@ foreach $i (@files)
     $return = 0;
 }
 
-print "ref = $reffiles,  docu = $docufiles\n";
 exit $return;
 
 sub wanted {
