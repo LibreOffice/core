@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
+ *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2840,7 +2840,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 aData >>= aSeq;
                 {
                     SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                    aNewSelection = ReadBin( aBinStream, rPaM );
+                    aNewSelection = Read( aBinStream, EE_FORMAT_BIN, rPaM );
                 }
                 bDone = TRUE;
             }
@@ -2874,10 +2874,26 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     aData >>= aSeq;
                     {
                         SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                        aNewSelection = ReadRTF( aRTFStream, rPaM );
+                        aNewSelection = Read( aRTFStream, EE_FORMAT_RTF, rPaM );
                     }
                     bDone = TRUE;
                 }
+            }
+            if ( !bDone )
+            {
+                // XML
+//              SotExchange::GetFormatDataFlavor( MySOT_FORMAT_XML, aFlavor );
+//              if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+//              {
+//                  uno::Any aData = rxDataObj->getTransferData( aFlavor );
+//                  uno::Sequence< sal_Int8 > aSeq;
+//                  aData >>= aSeq;
+//                  {
+//                      SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+//                      aNewSelection = Read( aRTFStream, EE_FORMAT_XML, rPaM );
+//                  }
+//                  bDone = TRUE;
+//              }
             }
         }
         if ( !bDone )

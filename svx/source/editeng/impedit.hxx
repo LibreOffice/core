@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
+ *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,10 +595,12 @@ private:
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
+    EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadHTML( SvStream& rInput, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
     EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
     sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
+    sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicode = FALSE ) const;
 

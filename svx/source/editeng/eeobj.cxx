@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-14 10:03:49 $
+ *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
         memcpy( aSeq.getArray(), GetStream().GetData(), nLen );
         aAny <<= aSeq;
     }
-    else if ( nT == SOT_FORMAT_RTF )
+    else if ( ( nT == SOT_FORMAT_RTF ) || ( nT == MySOT_FORMAT_XML ) )
     {
         vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
@@ -120,12 +120,12 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
         pEditEngine->Read( GetStream(), EE_FORMAT_BIN );
         GetStream().Seek(0);
 
-        SvMemoryStream aRTFStream;
-        pEditEngine->Write( aRTFStream, EE_FORMAT_RTF );
-        ULONG nLen = aRTFStream.Tell();
+        SvMemoryStream aRTFOrXMLStream;
+        pEditEngine->Write( aRTFOrXMLStream, ( nT == SOT_FORMAT_RTF ) ? EE_FORMAT_RTF : EE_FORMAT_XML );
+        ULONG nLen = aRTFOrXMLStream.Tell();
 
         uno::Sequence< sal_Int8 > aSeq( nLen );
-        memcpy( aSeq.getArray(), aRTFStream.GetData(), nLen );
+        memcpy( aSeq.getArray(), aRTFOrXMLStream.GetData(), nLen );
         aAny <<= aSeq;
 
         delete pEditEngine;
@@ -146,6 +146,7 @@ uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors
     SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aDataFlavors.getArray()[0] );
     SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[1] );
     SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aDataFlavors.getArray()[2] );
+//  SotExchange::GetFormatDataFlavor( MySOT_FORMAT_XML, aDataFlavors.getArray()[3] );
 
     return aDataFlavors;
 }
@@ -155,7 +156,7 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
     sal_Bool bSupported = sal_False;
 
     ULONG nT = SotExchange::GetFormat( rFlavor );
-    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
+    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == MySOT_FORMAT_XML ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
         bSupported = sal_True;
 
     return bSupported;

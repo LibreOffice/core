@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
+ *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ EditPaM ImpEditEngine::Read( SvStream& rInput, EETextFormat eFormat, EditSelecti
         aPaM = ReadText( rInput, aSel );
     else if ( eFormat == EE_FORMAT_RTF )
         aPaM = ReadRTF( rInput, aSel );
+    else if ( eFormat == EE_FORMAT_XML )
+        aPaM = ReadXML( rInput, aSel );
     else if ( eFormat == EE_FORMAT_HTML )
         aPaM = ReadHTML( rInput, aSel, pHTTPHeaderAttrs );
     else if ( eFormat == EE_FORMAT_BIN)
@@ -191,6 +193,18 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
         bDone = rInput.ReadByteStringLine( aTmpStr );
     }
     return aPaM;
+}
+
+EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
+{
+    if ( aSel.HasRange() )
+        aSel = ImpDeleteSelection( aSel );
+
+    ESelection aESel = CreateESel( aSel );
+
+// CL:    ::ReadXML( *this, aESel, rInput );
+
+    return aSel.Max();
 }
 
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
@@ -280,6 +294,8 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
             WriteText( rOutput, aSel );
         else if ( eFormat == EE_FORMAT_RTF )
             WriteRTF( rOutput, aSel );
+        else if ( eFormat == EE_FORMAT_XML )
+            WriteXML( rOutput, aSel );
         else if ( eFormat == EE_FORMAT_HTML )
             WriteHTML( rOutput, aSel );
         else if ( eFormat == EE_FORMAT_BIN)
@@ -362,6 +378,15 @@ sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, BOOL 
     pObj->StoreUnicodeStrings( bStoreUnicodeStrings );
     pObj->Store( rOutput );
     delete pObj;
+    return 0;
+}
+
+sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
+{
+    ESelection aESel = CreateESel( aSel );
+
+    // CL:    ::WriteXML( *this, aESel, rOutput );
+
     return 0;
 }
 
