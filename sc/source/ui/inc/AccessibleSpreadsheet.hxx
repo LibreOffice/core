@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:26:29 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ protected:
     virtual ~ScAccessibleSpreadsheet();
 public:
 
-    void SetDefunc();
+     virtual void SAL_CALL disposing();
 
     ///=====  SfxListener  =====================================================
 

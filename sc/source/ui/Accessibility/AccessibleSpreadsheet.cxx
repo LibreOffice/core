@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:37:54 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
         mpViewShell->RemoveAccessibilityObject(*this);
 }
 
-void ScAccessibleSpreadsheet::SetDefunc()
+void SAL_CALL ScAccessibleSpreadsheet::disposing()
 {
     if (mpViewShell)
     {
@@ -157,7 +157,7 @@ void ScAccessibleSpreadsheet::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleTableBase::SetDefunc();
+    ScAccessibleTableBase::disposing();
 }
 
     //=====  SfxListener  =====================================================
@@ -236,7 +236,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         else if (rRef.GetId() == SFX_HINT_DYING)
         {
             // it seems the Broadcaster is dying, since the view is dying
-            SetDefunc();
+            dispose();
         }
     }
     else if (rHint.ISA( ScUpdateRefHint ))
@@ -279,12 +279,12 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
         sal_Int32* pSequence = aSequence.getArray();
         sal_Int32 nCount(0);
-        for (sal_uInt16 i = maRange.aStart.Row(); i <= maRange.aEnd.Row(); i++)
+        for (sal_uInt16 i = maRange.aStart.Row(); i <= maRange.aEnd.Row(); ++i)
         {
             if (rMarkdata.IsRowMarked(i))
             {
                 pSequence[nCount] = i;
-                nCount++;
+                ++nCount;
             }
         }
         aSequence.realloc(nCount);
@@ -305,12 +305,12 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
         sal_Int32* pSequence = aSequence.getArray();
         sal_Int32 nCount(0);
-        for (sal_uInt16 i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); i++)
+        for (sal_uInt16 i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
         {
             if (rMarkdata.IsColumnMarked(i))
             {
                 pSequence[nCount] = i;
-                nCount++;
+                ++nCount;
             }
         }
         aSequence.realloc(nCount);
@@ -621,7 +621,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -657,7 +657,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBox()
 sal_Bool ScAccessibleSpreadsheet::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
