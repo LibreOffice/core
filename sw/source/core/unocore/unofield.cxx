@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 13:23:13 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 20:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,9 +1628,11 @@ void SwXTextField::attachToRange(
                 aData.sDataSource = m_pProps->sPar1;
                 aData.sCommand = m_pProps->sPar2;
                 aData.nCommandType = m_pProps->nSHORT1;
-                SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNUMSETFLD);
-                pFld = new SwDBNumSetField( (SwDBNumSetFieldType*)pFldType,
-                    m_pProps->sPar3, String::CreateFromInt32(m_pProps->nFormat), aData);
+                pFld = new SwDBNumSetField( (SwDBNumSetFieldType*)
+                    pDoc->GetSysFldType(RES_DBNUMSETFLD),
+                    m_pProps->sPar3,
+                    String::CreateFromInt32(m_pProps->nFormat),
+                    aData );
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM:
@@ -1639,9 +1641,8 @@ void SwXTextField::attachToRange(
                 aData.sDataSource = m_pProps->sPar1;
                 aData.sCommand = m_pProps->sPar2;
                 aData.nCommandType = m_pProps->nSHORT1;
-                SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBSETNUMBERFLD);
-                pFld = new SwDBSetNumberField(
-                        (SwDBSetNumberFieldType*)pFldType,
+                pFld = new SwDBSetNumberField((SwDBSetNumberFieldType*)
+                        pDoc->GetSysFldType(RES_DBSETNUMBERFLD),
                         aData,
                         m_pProps->nUSHORT1);
                 ((SwDBSetNumberField*)pFld)->SetSetNumber(m_pProps->nFormat);
@@ -1690,9 +1691,6 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_GET_EXP:
             {
-                SwFieldType* pFldType = pDoc->GetSysFldType(RES_GETEXPFLD);
-                if(!pFldType)
-                    throw uno::RuntimeException();
                 sal_uInt16 nSubType;
                 switch(m_pProps->nSubType)
                 {
@@ -1708,7 +1706,8 @@ void SwXTextField::attachToRange(
                     nSubType |= SUB_CMD;
                 else
                     nSubType &= ~SUB_CMD;
-                pFld = new SwGetExpField((SwGetExpFieldType*)pFldType,
+                pFld = new SwGetExpField((SwGetExpFieldType*)
+                        pDoc->GetSysFldType(RES_GETEXPFLD),
                         m_pProps->sPar1, nSubType, m_pProps->nFormat);
                 //TODO: SubType auswerten!
                 if(m_pProps->sPar4.Len())
@@ -1760,43 +1759,23 @@ void SwXTextField::attachToRange(
             }
             break;
             case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
-            {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
-                if(!pFldType)
-                {
-                    pFldType =
-                        (SwAuthorityFieldType*)pDoc->InsertFldType(
-                                        SwAuthorityFieldType(pDoc));
-                }
-
-                pFld = new SwAuthorityField((SwAuthorityFieldType*)pFldType, aEmptyStr);
+                pFld = new SwAuthorityField( (SwAuthorityFieldType*)
+                        pDoc->InsertFldType(SwAuthorityFieldType(pDoc)),
+                        aEmptyStr );
                 if(m_pProps->aPropSeq.getLength())
                 {
                     Any aVal; aVal <<= m_pProps->aPropSeq;
                     pFld->PutValue( aVal, FIELD_PROP_PROP_SEQ );
                 }
-            }
-            break;
+                break;
             case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS:
-            {
-                // get or create field type
-                SwFieldType* pFldType = pDoc->GetFldType(RES_COMBINED_CHARS,
-                                                         aEmptyStr);
-                if(NULL == pFldType)
-                    pFldType = pDoc->InsertFldType(SwCombinedCharFieldType());
-
                 // create field
-                pFld = new SwCombinedCharField(
-                    (SwCombinedCharFieldType*)pFldType, m_pProps->sPar1);
-            }
-            break;
+                pFld = new SwCombinedCharField( (SwCombinedCharFieldType*)
+                            pDoc->GetSysFldType(RES_COMBINED_CHARS),
+                            m_pProps->sPar1);
+                break;
             case SW_SERVICE_FIELDTYPE_TABLE_FORMULA :
             {
-                // get or create field type
-                SwFieldType* pFldType = pDoc->GetFldType(RES_TABLEFLD,
-                                                         aEmptyStr);
-                if(NULL == pFldType)
-                    pFldType = pDoc->InsertFldType(SwTblFieldType(pDoc));
 
                 // create field
                 USHORT nType = GSE_FORMULA;
@@ -1806,8 +1785,9 @@ void SwXTextField::attachToRange(
                     if(m_pProps->bFormatIsDefault)
                         m_pProps->nFormat = -1;
                 }
-                pFld = new SwTblField(
-                    (SwTblFieldType*)pFldType, m_pProps->sPar2,
+                pFld = new SwTblField( (SwTblFieldType*)
+                    pDoc->GetSysFldType(RES_TABLEFLD),
+                    m_pProps->sPar2,
                     nType,
                     m_pProps->nFormat);
                ((SwTblField*)pFld)->ChgExpStr(m_pProps->sPar1);
@@ -1834,7 +1814,6 @@ void SwXTextField::attachToRange(
             if(pTxtAttr)
             {
                 const SwFmtFld& rFld = pTxtAttr->GetFld();
-                rFld.GetFld()->GetTyp()->Add(this);
                 pFmtFld = &rFld;
             }
         }
