@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-09-22 14:32:28 $
+ *  last change: $Author: lla $ $Date: 2000-10-16 11:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(TYPE_LONG,    "long");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_DOUBLE,  "double");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_STRING,  "string");
+    IMPLEMENT_CONSTASCII_USTRING(TYPE_ANY,     "any");
 
     // Type: Sequence<bytes>
     IMPLEMENT_CONSTASCII_USTRING(TYPE_BINARY,  "binary");

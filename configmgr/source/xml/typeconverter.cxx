@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-10 14:57:14 $
+ *  last change: $Author: lla $ $Date: 2000-10-16 11:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@ namespace configmgr
         case staruno::TypeClass_DOUBLE:   aRet = ::rtl::OUString::createFromAscii("double"); break;
         case staruno::TypeClass_STRING:   aRet = ::rtl::OUString::createFromAscii("string"); break;
         case staruno::TypeClass_SEQUENCE: aRet = ::rtl::OUString::createFromAscii("binary"); break;
+
+        case staruno::TypeClass_ANY: aRet = ::rtl::OUString::createFromAscii("any"); break;
         default:
         {
             ::rtl::OString aStr("Wrong typeclass! ");
@@ -179,6 +181,8 @@ namespace configmgr
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))   aRet = staruno::TypeClass_DOUBLE;
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = staruno::TypeClass_STRING;
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = staruno::TypeClass_SEQUENCE;
+
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = staruno::TypeClass_ANY;
         else
         {
             ::rtl::OString aStr("Wrong typeclass! ");
@@ -275,6 +279,8 @@ namespace configmgr
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = getStringType();
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = getBinaryType();
 //  else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = staruno::TypeClass_SEQUENCE;
+
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = getAnyType();
         else
         {
             ::rtl::OString aStr("Unknown type! ");

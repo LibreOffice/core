@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strdecl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-09-22 14:32:46 $
+ *  last change: $Author: lla $ $Date: 2000-10-16 11:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ namespace configmgr
     DECLARE_CONSTASCII_USTRING(TYPE_DOUBLE);
     DECLARE_CONSTASCII_USTRING(TYPE_STRING);
     DECLARE_CONSTASCII_USTRING(TYPE_BINARY);
+    DECLARE_CONSTASCII_USTRING(TYPE_ANY);
     DECLARE_CONSTASCII_USTRING(TYPE_SET);
     DECLARE_CONSTASCII_USTRING(TYPE_GROUP);
 

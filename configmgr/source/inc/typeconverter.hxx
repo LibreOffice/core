@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: lla $ $Date: 2000-10-16 11:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace configmgr
     }
 
     inline staruno::Type getBinaryType()    { return ::getCppuType(static_cast<staruno::Sequence<sal_Int8> const*>(0)); }
+    inline staruno::Type getAnyType()       { return ::getCppuType(static_cast<staruno::Any const*>(0)); }
 
 
 } // namespace configmgr
