@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:02:26 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 12:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,8 @@ BOOL SvxCharStdPage::FillItemSet( SfxItemSet& rSet )
         pOld = GetOldItem( rSet, SID_ATTR_CHAR_LANGUAGE );
         USHORT nLPos = aLanguageBox.GetSelectEntryPos();
         USHORT nLang = (USHORT)(ULONG)aLanguageBox.GetEntryData(nLPos);
-        util::Language nLanguage = SvxGetSelectableLanguages().getConstArray()[ nLang ];
+//        util::Language nLanguage = SvxGetSelectableLanguages().getConstArray()[ nLang ];
+        util::Language nLanguage = LANGUAGE_NONE;
 
         if ( pOld )
         {
@@ -896,7 +897,8 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
                             "LANGUAGE_SYSTEM nicht erlaubt!" );
                 if ( (LanguageType)rItem.GetValue() != LANGUAGE_DONTKNOW )
                 {
-                    USHORT nLang = (USHORT)SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
+//                    USHORT nLang = (USHORT)SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
+                    USHORT nLang = LANGUAGE_NONE;
                     for ( USHORT i = 0; i < aLanguageBox.GetEntryCount(); ++i )
                     {
                         if ( (USHORT)(ULONG)aLanguageBox.GetEntryData(i) == nLang )
@@ -1485,8 +1487,10 @@ void SvxCharStdPage::SetHandler_Impl()
         LINK( this, SvxCharStdPage, ColorBoxSelectHdl_Impl ) );
 
     // initialisieren Sprachen
-    const sal_Int32 nLanguageCount = SvxGetSelectableLanguages().getLength();
-    const util::Language *pLang = SvxGetSelectableLanguages().getConstArray();
+//    const sal_Int32 nLanguageCount = SvxGetSelectableLanguages().getLength();
+//    const util::Language *pLang = SvxGetSelectableLanguages().getConstArray();
+    const sal_Int32 nLanguageCount = 0;
+    const util::Language *pLang = NULL;
     for ( sal_Int32 i = 0; i < nLanguageCount; ++i )
     {
         LanguageType eType = pLang[i];
