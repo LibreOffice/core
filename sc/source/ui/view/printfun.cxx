@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-19 17:09:07 $
+ *  last change: $Author: nn $ $Date: 2002-11-06 14:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,7 @@ void lcl_DrawGraphic( const Bitmap& rBitmap, OutputDevice *pOut,
         pOut->Pop();
 }
 
-void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut,
+void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevice* pRefDev,
                         const Rectangle &rOrg, const Rectangle &rOut )
 {
     Size aGrfSize(0,0);
@@ -1113,12 +1113,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut,
     {
         const MapMode aMapMM( MAP_100TH_MM );
         if ( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-        {
-            MapMode aOldMap( pOut->GetMapMode() );
-            pOut->SetMapMode( aMapMM );
-            aGrfSize = pOut->PixelToLogic( pGraphic->GetPrefSize() );
-            pOut->SetMapMode( aOldMap );
-        }
+            aGrfSize = pRefDev->PixelToLogic( pGraphic->GetPrefSize(), aMapMM );
         else
             aGrfSize = OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
                                     pGraphic->GetPrefMapMode(), aMapMM );
@@ -1170,43 +1165,15 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut,
                       break;
         case GPOS_TILED:
                     {
-                        const FASTBOOL bUseQuickBmp = OUTDEV_PRINTER != pOut->GetOutDevType() &&
-                                                          !pOut->GetConnectMetaFile();
-                        Bitmap* pQuickDrawBmp = NULL;
-                        if (bUseQuickBmp)
-                        {
-                            pQuickDrawBmp = new Bitmap;
-                            *pQuickDrawBmp = XOutBitmap::CreateQuickDrawBitmapEx(
-                                             *pGraphic, *pOut, pOut->GetMapMode(),
-                                             aGrfSize, Point(), aGrfSize ).GetBitmap();
-                        }
-                        aPos  = rOrg.TopLeft();
-                        aSize = aGrfSize;
-                        do
-                        {
-                            do
-                            {
-                                Rectangle aGrf( aPos,aSize );
-                                if ( aGrf.IsOver( rOut ) )
-                                {
-                                    if (bUseQuickBmp)
-                                        lcl_DrawGraphic( *pQuickDrawBmp, pOut, aGrf, rOut );
-                                    else
-                                        lcl_DrawGraphic( *pGraphic, pOut, aGrf, rOut );
-                                }
-                                aPos.X() += aGrfSize.Width();
-                            }
-                            while ( aPos.X() < rOut.Right() );
+                        //  #104004# use GraphicObject::DrawTiled instead of an own loop
+                        //  (pixel rounding is handled correctly, and a very small bitmap
+                        //  is duplicated into a bigger one for better performance)
 
-                            aPos.X() = rOrg.Left();
-                            aPos.Y() += aGrfSize.Height();
+                        GraphicObject aObject( *pGraphic );
+                        aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
 
-                        }
-                        while ( aPos.Y() < rOut.Bottom() ) ;
                         bDraw = FALSE;
 //                      bRetouche = FALSE;
-
-                        delete pQuickDrawBmp;
                     }
                     break;
 
@@ -1276,7 +1243,15 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     {
 //      Rectangle aBackRect( Point(nScrX+nLeft, nScrY+nTop), Size(nEffWidth,nEffHeight) );
         if (pBackground->GetGraphicPos() != GPOS_NONE)
-            lcl_DrawGraphic( *pBackground, pDev, aFrameRect, aFrameRect );
+        {
+            OutputDevice* pRefDev;
+            if ( bIsRender )
+                pRefDev = pDev;                 // don't use printer for PDF
+            else
+                pRefDev = pDoc->GetPrinter();   // use printer also for preview
+
+            lcl_DrawGraphic( *pBackground, pDev, pRefDev, aFrameRect, aFrameRect );
+        }
         else
         {
             pDev->SetFillColor(pBackground->GetColor());
