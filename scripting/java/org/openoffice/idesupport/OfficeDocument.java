@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:44 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,9 @@ package org.openoffice.idesupport;
 
 import java.io.*;
 import java.util.zip.*;
+import java.util.Vector;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-import java.beans.PropertyVetoException;
-import javax.naming.InvalidNameException;
 
 import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.filter.BinaryOnlyFilter;
@@ -74,58 +73,44 @@ import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class OfficeDocument
 {
-    public static final String PARCEL_PREFIX_DIR = "Scripts/java/";
-    public static final String OFFICE_EXTENSIONS = "sxc,sxw";
+    public static final String PARCEL_PREFIX_DIR =
+        ParcelZipper.PARCEL_PREFIX_DIR;
+
+    public static final String[] OFFICE_EXTENSIONS = {".sxc" , ".sxw"};
     public static final String ARCHIVE_TAG = "[PARCEL_FILE]";
     public static final String OFFICE_PRODUCT_NAME = "OpenOffice.org";
 
     private static ParcelZipper zipper = ParcelZipper.getParcelZipper();
-    private File officeFile = null;
-    private String parcelName = null;
-    private String extension = null;
+    private File file = null;
 
-    public OfficeDocument(File officeFile) throws InvalidNameException
+    public OfficeDocument(File file) throws IllegalArgumentException
     {
-        this.officeFile = officeFile;
-        if( !checkIfOfficeDocument() )
-        {
-            throw new InvalidNameException("This is not a valid " +
+        if (!file.exists() || file.isDirectory() || !isOfficeFile(file)) {
+            throw new IllegalArgumentException("This is not a valid " +
                 OFFICE_PRODUCT_NAME + " document.");
         }
+        this.file = file;
     }
 
-    private boolean checkIfOfficeDocument()
-    {
-        if( officeFile.isDirectory() )
-        {
-            return false;
-        }
-        String tmpName = officeFile.getName();
-        if( tmpName.lastIndexOf(".") == 0 )
-        {
-            return false;
-        }
-        this.extension = tmpName.substring(tmpName.lastIndexOf(".")+1);
-        if( (OFFICE_EXTENSIONS.indexOf(extension)==-1) )
-        {
-            return false;
-        }
-        this.parcelName = tmpName.substring(0,tmpName.lastIndexOf("."));
-        return true;
+    private boolean isOfficeFile(File file) {
+        for (int i = 0; i < OFFICE_EXTENSIONS.length; i++)
+            if (file.getName().endsWith(OFFICE_EXTENSIONS[i]))
+                return true;
+        return false;
     }
 
-    public Enumeration getParcels()
-    {
-        java.util.Vector parcelEntries = new java.util.Vector();
+    public Enumeration getParcels() {
+
+        Vector parcels = new Vector();
         ZipFile zp = null;
 
         try
         {
-            zp = new ZipFile(this.officeFile);
+            zp = new ZipFile(this.file);
 
-            for (Enumeration officeEntries = zp.entries(); officeEntries.hasMoreElements(); )
+            for (Enumeration enum = zp.entries(); enum.hasMoreElements(); )
             {
-                ZipEntry ze = (ZipEntry)officeEntries.nextElement();
+                ZipEntry ze = (ZipEntry)enum.nextElement();
                 if (ze.getName().endsWith(ParcelZipper.PARCEL_DESCRIPTOR_XML))
                 {
                     String tmp = ze.getName();
@@ -135,7 +120,7 @@ public class OfficeDocument
 
                     String parcelName = ARCHIVE_TAG +
                         ze.getName().substring(start, end);
-                    parcelEntries.add(parcelName);
+                    parcels.add(parcelName);
                 }
             }
         }
@@ -155,33 +140,23 @@ public class OfficeDocument
             }
         }
 
-        return parcelEntries.elements();
+        return parcels.elements();
     }
 
-    public String getParcelNameFromEntry(String parcelName)
-    {
-        return parcelName.substring(PARCEL_PREFIX_DIR.length(), parcelName.length()-1);
-    }
-
-    public String getParcelEntryFromName(String parcelName)
-    {
+    public String getParcelEntryFromName(String parcelName) {
         return parcelName.substring(ARCHIVE_TAG.length()) + "/";
     }
 
-    public boolean removeParcel(String parcelName)
-    {
+    public boolean removeParcel(String parcelName) {
+
         try {
-            ParcelZipper.getParcelZipper().unzipToZipExceptParcel(this.officeFile, getParcelEntryFromName(parcelName));
+            ParcelZipper.getParcelZipper().removeParcel(
+                file, getParcelEntryFromName(parcelName));
         }
         catch (IOException ioe) {
             ioe.printStackTrace();
             return false;
         }
         return true;
-    }
-
-    public String unzipOneParcel(String parcelName)
-    {
-        return new String("location");
     }
 }

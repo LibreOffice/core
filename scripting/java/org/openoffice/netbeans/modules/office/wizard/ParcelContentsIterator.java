@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContentsIterator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:51:45 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ import org.openide.util.NbBundle;
 import org.openide.filesystems.*;
 
 import org.openoffice.idesupport.zip.ParcelZipper;
+import org.openoffice.idesupport.xml.ParcelDescriptor;
 import org.openoffice.netbeans.modules.office.loader.ParcelFolder;
 import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem;
 import org.openoffice.netbeans.modules.office.utils.PackageRemover;
@@ -175,11 +176,19 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         }
 
         FileObject recipe = result.getPrimaryFile();
-        recipe.setAttribute(ParcelFolder.LANGUAGE_ATTRIBUTE, language);
-        System.out.println("Called setAttribute from wizard: " + language);
 
         FileObject contents =
             recipe.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
+
+        FileObject descriptor =
+            contents.getFileObject(ParcelZipper.PARCEL_DESCRIPTOR_XML);
+
+        if (descriptor != null) {
+            ParcelDescriptor pd =
+                new ParcelDescriptor(FileUtil.toFile(descriptor));
+            pd.setLanguage(language);
+            pd.write();
+        }
 
         if (contents != null) {
             DataFolder parent = DataFolder.findFolder(contents);

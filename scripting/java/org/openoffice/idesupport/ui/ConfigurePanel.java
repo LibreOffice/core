@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurePanel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 package org.openoffice.idesupport.ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+
 import java.util.Vector;
 import java.util.Enumeration;
 
@@ -88,23 +90,33 @@ public class ConfigurePanel extends JPanel {
 
     private File basedir;
     private Vector classpath;
+    private ParcelDescriptor descriptor;
 
     private MethodPanel methodPanel;
     private ScriptPanel scriptPanel;
-    private ParcelDescriptor descriptor = ParcelDescriptor.getParcelDescriptor();
 
-    public static final String DIALOG_TITLE = "Choose What to Export as Scripts";
+    public static final String DIALOG_TITLE =
+        "Choose What to Export as Scripts";
 
-    public ConfigurePanel(String basedir, Vector classpath, Document doc,
-        String language) {
+    public ConfigurePanel(String basedir, Vector classpath, Document doc) {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
-        initUI(doc, language);
+        this.descriptor = new ParcelDescriptor(doc);
+        initUI();
     }
 
-    public void reload(String basedir, Vector classpath, Document doc,
-        String language) {
+    public ConfigurePanel(String basedir, Vector classpath)
+        throws FileNotFoundException {
+
+        this.basedir = new File(basedir);
+        this.classpath = classpath;
+        this.descriptor = new ParcelDescriptor(new File(this.basedir,
+            ParcelZipper.PARCEL_DESCRIPTOR_XML));
+        initUI();
+    }
+
+    public void reload(String basedir, Vector classpath, Document doc) {
 
         if (basedir != null)
             this.basedir = new File(basedir);
@@ -112,27 +124,51 @@ public class ConfigurePanel extends JPanel {
         if (classpath != null)
             this.classpath = classpath;
 
-        methodPanel.reload(this.basedir, this.classpath, language);
+        if (doc != null) {
+            descriptor = new ParcelDescriptor(doc);
+        }
 
-        if (doc != null)
-            scriptPanel.reload(descriptor.parse(doc));
+        methodPanel.reload(this.basedir, this.classpath,
+            descriptor.getLanguage());
+        scriptPanel.reload(descriptor.getScriptEntries());
+    }
+
+    public void reload(String basedir, Vector classpath)
+        throws FileNotFoundException {
+
+        if (basedir != null)
+            this.basedir = new File(basedir);
+
+        if (classpath != null)
+            this.classpath = classpath;
+
+        this.descriptor = new ParcelDescriptor(new File(this.basedir,
+            ParcelZipper.PARCEL_DESCRIPTOR_XML));
+
+        methodPanel.reload(this.basedir, this.classpath,
+            descriptor.getLanguage());
+        scriptPanel.reload(descriptor.getScriptEntries());
     }
 
     public Document getConfiguration() throws Exception {
         Enumeration scripts = scriptPanel.getScriptEntries();
-        return descriptor.generate(scripts);
+        descriptor.setScriptEntries(scripts);
+        return descriptor.getDocument();
     }
 
-    private void initUI(Document doc, String language) {
+    private void initUI() {
+
         JPanel leftPanel = new JPanel();
         JPanel methodButtons = initMethodButtons();
-        methodPanel = new MethodPanel(basedir, classpath, language);
+        methodPanel = new MethodPanel(basedir, classpath, descriptor.getLanguage());
+
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(methodPanel, BorderLayout.CENTER);
 
         JPanel rightPanel = new JPanel();
         JPanel scriptButtons = initScriptButtons();
-        scriptPanel = new ScriptPanel(descriptor.parse(doc));
+        scriptPanel = new ScriptPanel(descriptor.getScriptEntries());
+
         rightPanel.setLayout(new BorderLayout());
         rightPanel.add(scriptPanel, BorderLayout.CENTER);
         rightPanel.add(scriptButtons, BorderLayout.SOUTH);

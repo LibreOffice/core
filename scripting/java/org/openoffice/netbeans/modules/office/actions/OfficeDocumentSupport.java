@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentSupport.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:23 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ import org.openide.filesystems.FileRenameEvent;
 import org.openide.cookies.OpenCookie;
 
 import org.openoffice.idesupport.OfficeDocument;
-import org.openoffice.idesupport.zip.ParcelZipper;
 
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.netbeans.modules.office.loader.OfficeDocumentDataObject;
@@ -105,11 +104,6 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
             e.printStackTrace();
         }
         fo.addFileChangeListener(this);
-    }
-
-    // ensure that ParcelZipper's XMLParser is set
-    static {
-        ParcelZipper.setXMLParser(ManifestParser.getManifestParser());
     }
 
     public void mount() {

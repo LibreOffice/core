@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelSupport.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:25 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,6 @@ public class ParcelSupport implements ParcelCookie
         this.fo = fo;
     }
 
-    // ensure that ParcelZipper's XMLParser is set
-    static {
-        ParcelZipper.setXMLParser(ManifestParser.getManifestParser());
-    }
-
     public File getFile() {
         return FileUtil.toFile(fo);
     }
@@ -145,12 +140,19 @@ public class ParcelSupport implements ParcelCookie
             }
         }
 
-        if (zipper.isOverwriteNeeded(source, target) == true)
-            if (promptForOverwrite(source, target) == false)
-                return false;
-
         OutputWriter out =
             getOutputWindowWriter(fo.getName() + " (deploying)");
+
+        try {
+            if (zipper.isOverwriteNeeded(source, target) == true)
+                if (promptForOverwrite(source, target) == false)
+                    return false;
+        }
+        catch (IOException ioe) {
+           out.println("DEPLOYMENT FAILED: reason: " +
+               ioe.getClass().getName() + ": "+ ioe.getMessage());
+           return false;
+        }
 
         try {
             out.println("Deploying: " + fo.getName() +

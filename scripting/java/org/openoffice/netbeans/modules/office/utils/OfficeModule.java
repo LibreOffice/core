@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeModule.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-21 19:00:05 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,15 @@
 package org.openoffice.netbeans.modules.office.utils;
 
 import org.openide.modules.ModuleInstall;
+import org.openoffice.idesupport.xml.XMLParserFactory;
 
 public class OfficeModule extends ModuleInstall {
 
     private static final long serialVersionUID = -8499324854301243852L;
+
+    public void restored () {
+        XMLParserFactory.setParser(ManifestParser.getManifestParser());
+    }
 
     public boolean closing () {
         FrameworkJarChecker.unmountDependencies();

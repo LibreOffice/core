@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodPanel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,12 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.MalformedURLException;
 
 import org.openoffice.idesupport.ScriptEntry;
-import org.openoffice.idesupport.DefaultScriptClassLoader;
+import org.openoffice.idesupport.SVersionRCFile;
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class MethodPanel extends JPanel {
@@ -162,8 +165,7 @@ public class MethodPanel extends JPanel {
         classNames = findClassNames();
         if (classNames != null && classNames.length != 0) {
 
-            DefaultScriptClassLoader classloader =
-                new DefaultScriptClassLoader(classpath);
+            ClassLoader classloader = getClassLoader();
 
             for (int i = 0; i < classNames.length; i++)
             {
@@ -201,6 +203,26 @@ public class MethodPanel extends JPanel {
                 }
             }
         }
+    }
+
+    private ClassLoader getClassLoader() {
+
+        int len = classpath.size();
+        ArrayList urls = new ArrayList(len);
+
+        for (int i = 0; i < len; i++) {
+            try {
+                String s = (String)classpath.elementAt(i);
+                s = SVersionRCFile.toFileURL(s);
+
+                if (s != null)
+                    urls.add(new URL(s));
+            }
+            catch (MalformedURLException mue) {
+            }
+        }
+
+        return new URLClassLoader((URL[])urls.toArray(new URL[0]));
     }
 
     private void initBeanShellValues(String parcelName) {

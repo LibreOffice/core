@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:44 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,18 +70,17 @@ import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.filter.BinaryOnlyFilter;
 import org.openoffice.idesupport.filter.ExceptParcelFilter;
 
-import org.openoffice.idesupport.xml.XMLParser;
 import org.openoffice.idesupport.xml.Manifest;
+import org.openoffice.idesupport.xml.ParcelDescriptor;
 
 public class ParcelZipper
 {
-    public static final String PARCEL_PREFIX_DIR = "Scripts/java/";
+    public static final String PARCEL_PREFIX_DIR = "Scripts/";
     public static final String PARCEL_EXTENSION = "sxp";
     public static final String CONTENTS_DIRNAME = "Contents";
     public static final String PARCEL_DESCRIPTOR_XML = "parcel-descriptor.xml";
 
     private static ParcelZipper zipper = null;
-    private static XMLParser parser = null;
 
     private static final FileFilter DEFAULT_FILTER =
         BinaryOnlyFilter.getInstance();
@@ -97,10 +96,6 @@ public class ParcelZipper
             }
         }
         return zipper;
-    }
-
-    public static void setXMLParser(XMLParser parser) {
-        getParcelZipper().parser = parser;
     }
 
     public String zipParcel(File basedir) throws IOException {
@@ -197,7 +192,9 @@ public class ParcelZipper
         }
     }
 
-    public boolean isOverwriteNeeded(File parcel, File target) {
+    public boolean isOverwriteNeeded(File parcel, File target)
+        throws IOException
+    {
         boolean result;
 
         if (target.isDirectory())
@@ -219,7 +216,9 @@ public class ParcelZipper
         return false;
     }
 
-    private boolean isDocumentOverwriteNeeded(File parcel, File document) {
+    private boolean isDocumentOverwriteNeeded(File parcel, File document)
+        throws IOException
+    {
         ZipFile documentZip;
         boolean result = false;
 
@@ -231,7 +230,8 @@ public class ParcelZipper
         }
 
         String name =
-            PARCEL_PREFIX_DIR + getParcelDirFromParcelZip(parcel.getName()) +
+            PARCEL_PREFIX_DIR + getParcelLanguage(parcel) +
+                "/" + getParcelDirFromParcelZip(parcel.getName()) +
                 "/" + PARCEL_DESCRIPTOR_XML;
 
         if (documentZip.getEntry(name) != null)
@@ -267,6 +267,7 @@ public class ParcelZipper
 
         ZipInputStream in;
         File parcelDir = new File(targetDirectory,
+            getParcelLanguage(parcel) + File.separator +
             getParcelDirFromParcelZip(parcel.getName()));
 
         if (isDirectoryOverwriteNeeded(parcel, targetDirectory)) {
@@ -328,13 +329,14 @@ public class ParcelZipper
 
         if (isDocumentOverwriteNeeded(parcel, targetDocument)) {
             String parcelName = getParcelDirFromParcelZip(parcel.getName());
-            unzipToZipExceptParcel(targetDocument, parcelName);
+            removeParcel(targetDocument, parcelName);
         }
 
         // first write contents of document to tmpfile
         File tmpfile = new File(targetDocument.getAbsolutePath() + ".tmp");
 
         manifest = addParcelToManifest(targetDocument, parcel);
+        String language = getParcelLanguage(parcel);
 
         documentStream =
             new ZipInputStream(new FileInputStream(targetDocument));
@@ -343,7 +345,7 @@ public class ParcelZipper
 
         try {
             copyParcelToZip(parcelStream, outStream, PARCEL_PREFIX_DIR +
-                getParcelDirFromParcelZip(parcel.getName()));
+                language + "/" + getParcelDirFromParcelZip(parcel.getName()));
             copyDocumentToZip(documentStream, outStream, manifest);
             documentStream.close();
             parcelStream.close();
@@ -416,7 +418,7 @@ public class ParcelZipper
         }
     }
 
-    public String unzipToZipExceptParcel(File document, String parcelName)
+    public String removeParcel(File document, String parcelName)
         throws IOException {
 
         ZipInputStream documentStream;
@@ -494,7 +496,7 @@ public class ParcelZipper
         if (original != null) {
             try {
                 result =
-                    new Manifest(documentZip.getInputStream(original), parser);
+                    new Manifest(documentZip.getInputStream(original));
             }
             catch (IOException ioe) {
                 result = null;
@@ -510,13 +512,17 @@ public class ParcelZipper
         return result;
     }
 
-    private Manifest addParcelToManifest(File document, File parcel) {
+    private Manifest addParcelToManifest(File document, File parcel)
+        throws IOException {
+
         ZipFile parcelZip;
         Manifest result = null;
 
         result = getManifestFromDocument(document);
         if (result == null)
             return null;
+
+        String language = getParcelLanguage(parcel);
 
         try {
             parcelZip = new ZipFile(parcel);
@@ -525,7 +531,7 @@ public class ParcelZipper
             return null;
         }
 
-        String prefix = PARCEL_PREFIX_DIR +
+        String prefix = PARCEL_PREFIX_DIR + language + "/" +
             getParcelDirFromParcelZip(parcel.getName()) + "/";
 
         Enumeration entries = parcelZip.entries();
@@ -552,5 +558,18 @@ public class ParcelZipper
 
         result.remove(name);
         return result;
+    }
+
+    private String getParcelLanguage(File file) throws IOException {
+        ZipFile zf = new ZipFile(file);
+        ZipEntry ze = zf.getEntry(PARCEL_DESCRIPTOR_XML);
+
+        if (ze == null)
+            throw new IOException("Could not find Parcel Descriptor in parcel");
+
+        InputStream is = zf.getInputStream(ze);
+        ParcelDescriptor pd = new ParcelDescriptor(is);
+
+        return pd.getLanguage().toLowerCase();
     }
 }

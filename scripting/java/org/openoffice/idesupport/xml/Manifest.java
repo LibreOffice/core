@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Manifest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:14 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,10 @@ import org.w3c.dom.Element;
 public class Manifest {
 
     private Document document = null;
-    private XMLParser parser = null;
     private boolean baseElementsExist = false;
 
-    public Manifest(InputStream inputStream, XMLParser parser) {
-        this.parser = parser;
-        document = parser.parse(inputStream);
+    public Manifest(InputStream inputStream) {
+        document = XMLParserFactory.getParser().parse(inputStream);
     }
 
     public void add(String entry) {
@@ -119,7 +117,6 @@ public class Manifest {
         if (baseElementsExist == false) {
             baseElementsExist = true;
             add("Scripts/", "application/script-parcel");
-            add("Scripts/java/", "");
         }
     }
 
@@ -194,6 +191,6 @@ public class Manifest {
     }
 
     public void write(OutputStream out) throws IOException {
-        parser.write(document, out);
+        XMLParserFactory.getParser().write(document, out);
     }
 }

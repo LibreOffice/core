@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolder.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 18:00:19 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,8 @@ public class ParcelFolder extends DataFolder {
             prop = createFilterProperty();
             props.put(prop);
 
-            prop = createLanguageProperty();
-            props.put(prop);
+            // prop = createLanguageProperty();
+            // props.put(prop);
 
             return sheet;
         }

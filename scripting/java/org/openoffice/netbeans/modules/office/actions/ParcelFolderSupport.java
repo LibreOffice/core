@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2003-01-16 18:54:46 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,6 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         this.pf = pf;
     }
 
-    // ensure that ParcelZipper's XMLParser is set
-    static {
-        ParcelZipper.setXMLParser(ManifestParser.getManifestParser());
-    }
-
     public void generate() {
         ParcelFolder.ParcelFolderNode node =
             (ParcelFolder.ParcelFolderNode)pf.getNodeDelegate();
@@ -127,7 +122,9 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         File targetfile = new File(node.getTargetDir() + File.separator +
             parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
 
-        configure();
+        boolean proceed = configure();
+        if (proceed == false)
+            return;
 
         final OutputWriter out =
             ParcelSupport.getOutputWindowWriter(parcelDir.getName() + " (generating)");
@@ -152,12 +149,9 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         }
     }
 
-    public void configure() {
+    public boolean configure() {
 
         FileObject primary = pf.getPrimaryFile();
-
-        ParcelFolder.ParcelFolderNode node =
-            (ParcelFolder.ParcelFolderNode)pf.getNodeDelegate();
 
         File contents = FileUtil.toFile(
             primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
@@ -165,32 +159,19 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         File parcelDescriptor = new File(contents,
             ParcelZipper.PARCEL_DESCRIPTOR_XML);
 
-        InputSource is;
-        Document previous = null;
-
-        try {
-            is = new InputSource(new FileInputStream(parcelDescriptor));
-            previous = XMLUtil.parse(is, false, false, null, null);
-        }
-        catch (FileNotFoundException fnfe) {
-            System.out.println("Couldn't find file: " + parcelDescriptor.getName());
-        }
-        catch (IOException ioe) {
-            System.out.println("IO Error parsing file: " + parcelDescriptor.getName());
-        }
-        catch (SAXException se) {
-            System.out.println("Sax Error parsing file: " + parcelDescriptor.getName());
-        }
-
         Vector classpath = getClasspath();
         classpath.addElement(contents.getAbsolutePath());
 
-        if (configuror == null)
-            configuror = new ConfigurePanel(contents.getAbsolutePath(),
-                classpath, previous, node.getLanguage());
-        else
-            configuror.reload(contents.getAbsolutePath(), classpath, previous,
-                node.getLanguage());
+        try {
+            if (configuror == null)
+                configuror = new ConfigurePanel(
+                    contents.getAbsolutePath(), classpath);
+            else
+                configuror.reload(contents.getAbsolutePath(), classpath);
+        }
+        catch (FileNotFoundException fnfe) {
+            ErrorManager.getDefault().notify(fnfe);
+        }
 
         DialogDescriptor descriptor = new DialogDescriptor(configuror,
             ConfigurePanel.DIALOG_TITLE);
@@ -208,6 +189,10 @@ public class ParcelFolderSupport implements ParcelFolderCookie
                 ErrorManager.getDefault().notify(e);
             }
         }
+        else {
+            return false;
+        }
+        return true;
     }
 
     private Vector getClasspath() {

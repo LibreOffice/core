@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 11:42:46 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ public class SVersionRCFile {
 
     public SVersionRCFile(String name) {
         sverionrc = new File(name);
-        System.out.println("Created new SVersionRCFile: " + name);
     }
 
     public static SVersionRCFile createInstance() {
@@ -124,6 +123,31 @@ public class SVersionRCFile {
             }
         }
         return result;
+    }
+
+    public static String toFileURL(String path) {
+        File f = new File(path);
+        
+        if (!f.exists())
+            return null;
+
+        try {
+            path = f.getCanonicalPath();
+        }
+        catch (IOException ioe) {
+            return null;
+        }
+
+        if (System.getProperty("os.name").startsWith("Windows"))
+            path = path.replace(File.separatorChar, '/');
+
+        StringBuffer buf = new StringBuffer(FILE_URL_PREFIX);
+        buf.append(path);
+
+        if (f.isDirectory())
+            buf.append("/");
+
+        return buf.toString();
     }
 
     public Hashtable getVersions() throws IOException {
