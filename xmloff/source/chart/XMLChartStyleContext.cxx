@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 11:47:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_DATA_STYLE_NAME;
+using ::xmloff::token::XML_TEXT_PROPERTIES;
+using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
+using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
+using ::xmloff::token::XML_CHART_PROPERTIES;
 
 
 TYPEINIT1( XMLChartStyleContext, XMLPropStyleContext );
@@ -91,7 +95,7 @@ void XMLChartStyleContext::SetAttribute(
 {
     if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
     {
-        msDataStyleName = rValue;
+        msDataStyleName =rValue;
     }
     else
     {
@@ -142,15 +146,26 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, ::xmloff::token::XML_PROPERTIES ) )
+    if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
-            pContext = new XMLChartPropertyContext(
-                GetImport(), nPrefix, rLocalName, xAttrList,
-                GetProperties(), xImpPrMap );
+        sal_uInt32 nFamily = 0;
+        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_GRAPHIC;
+        else if( IsXMLToken( rLocalName, XML_CHART_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_CHART;
+        if( nFamily )
+        {
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+                pContext = new XMLChartPropertyContext(
+                    GetImport(), nPrefix, rLocalName, xAttrList, nFamily,
+                    GetProperties(), xImpPrMap );
+        }
     }
 
     if( !pContext )
