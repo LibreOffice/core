@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 15:18:05 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 14:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,25 @@ protected:
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );
+
+    /** ctor for calling the dialog for <em>selection</em> only, not for <em>opening</em> a document
+        <p>If you use this ctor, the dialog will behave differently in the following areas:
+        <ul><li>The <em>Edit</em> button will be hidden.</li>
+            <li>Upon pressing em>Open</em>, the selected file will not be opened. Instead, it's
+                URL is available (see <method>GetSelectedFileURL</method>).</li>
+        </ul>
+
+    */
+    struct SelectOnly { };
+    SvtDocumentTemplateDialog( Window* _pParent, SelectOnly );
+
     ~SvtDocumentTemplateDialog();
+
+    sal_Bool    IsFileSelected( ) const;
+    String      GetSelectedFileURL( ) const;
+
+private:
+    void InitImpl( );
 };
 
 #endif // _SVTOOLS_TEMPLDLG_HXX
