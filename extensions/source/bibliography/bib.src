@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:14:59 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,133 +62,25 @@
 
 String RID_BIB_STR_FIELDSELECTION
 {
-    Text = "Feldauswahl:" ;
-    Text [ English ] = "Fieldselection:" ;
-    Text[ english_us ] = "Field selection:";
-    Text[ portuguese ] = "Selecção de campo:";
-    Text[ russian ] = "Âûáîğ ïîëÿ:";
-    Text[ greek ] = "ÅğéëïãŞ ğåäßïõ:";
-    Text[ dutch ] = "Veldselectie:";
-    Text[ french ] = "Sélection de champ :";
-    Text[ spanish ] = "Selección de campo:";
-    Text[ italian ] = "Selezione campo:";
-    Text[ danish ] = "Feltudvalg:";
-    Text[ swedish ] = "Fälturval:";
-    Text[ polish ] = "Wybór pól:";
-    Text[ portuguese_brazilian ] = "Seleção de campo:";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰é¸æŠ:";
-    Text[ korean ] = "í•„ë“œ ì„ íƒ:";
-    Text[ chinese_simplified ] = "é€‰æ‹©å­—æ®µï¼š";
-    Text[ chinese_traditional ] = "é¸æ“‡æ¬„ä½ï¼š";
-    Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
-    Text[ turkish ] = "Alan seçimi:";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecció de camp:";
-    Text[ finnish ] = "Kenttävalinta:";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
-    Text[ czech ] = "VÃ½bÄ›r polÃ­:";
-    Text[ hebrew ] = "Feldauswahl:";
-    Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤šà¥à¤¨à¤¾à¤µ:";
-    Text[ slovak ] = "VÃ½ber poÄ¾a:";
-    Text[ hungarian ] = "MezÅ‘ kijelÃ¶lÃ©se:";
-    Text[ slovenian ] = "Izbor polja:";
+    Text [ de ] = "Feldauswahl:" ;
+    Text [ en-US ] = "Field selection:";
+    Text [ x-comment ] = " ";
 };
 
 String RID_BIB_STR_TABWIN_PREFIX
 {
-    Text = "Tabelle;Abfrage;Sql;Sql [Native]" ;
-    Text [ English ] = "Table;Query;Sql;Sql [Native]" ;
-    Text[ english_us ] = "Table;Query;Sql;Sql [Native]";
-    Text[ portuguese ] = "Tabela; Consulta; Sql;Sql [Native]";
-    Text[ russian ] = "Òàáëèöà;Çàïğîñ;Sql;Sql [Native]";
-    Text[ greek ] = "Ğßíáêáò;Åñşôçìá;Sql;Sql [Native]";
-    Text[ dutch ] = "Tabel;Query;Sql;Sql [Native]";
-    Text[ french ] = "Table;Requête;Sql;Sql [Natif]";
-    Text[ spanish ] = "Tabla;Consulta;Sql;Sql [Native]";
-    Text[ italian ] = "Tabella;Ricerca;Sql;Sql [native]";
-    Text[ danish ] = "Tabel;Forespørgsel;Sql;Sql [native]";
-    Text[ swedish ] = "Tabell;Sökning;Sql;Sql [Native]";
-    Text[ polish ] = "Tabela;Kwerenda;Sql;Sql [macierzysty]";
-    Text[ portuguese_brazilian ] = "Tabela;Consulta;Sql;Sql [Nativo]";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«;ã‚¯ã‚¨ãƒªãƒ¼;Sql;Sql [Native]";
-    Text[ korean ] = "í…Œì´ë¸”;ì¿¼ë¦¬;Sql;Sql [Native]";
-    Text[ chinese_simplified ] = "è¡¨æ ¼;æŸ¥è¯¢;Sql;Sql [Native]";
-    Text[ chinese_traditional ] = "è¡¨æ ¼;æŸ¥è©¢;Sql;Sql [Native]";
-    Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]";
-    Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Yerleşik]";
-    Text[ catalan ] = "Taula;Consulta;SQL;SQL [Natiu]";
-    Text[ finnish ] = "Taulukko;kysely;Sql;Sql [suora]";
-    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡;à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡;Sql;Sql [à¹‚à¸”à¸¢à¸à¸³à¹€à¸™à¸´à¸”]";
-    Text[ czech ] = "Tabulka;Dotaz;Sql;Sql [NativnÃ­]";
-    Text[ hebrew ] = "Tabelle;Abfrage;Sql;Sql [Native]";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€;à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€;Sql;Sql [Native]";
-    Text[ slovak ] = "TabuÄ¾ka;Dotaz;Sql;Sql [NatÃ­vne]";
-    Text[ hungarian ] = "TÃ¡bla;LekÃ©rdezÃ©s;SQL;SQL [NatÃ­v]";
-    Text[ slovenian ] = "Tabela;Poizvedba;Sql;Sql [Izvirni]";
+    Text [ de ] = "Tabelle;Abfrage;Sql;Sql [Native]" ;
+    Text [ en-US ] = "Table;Query;Sql;Sql [Native]";
 };
 String RID_BIB_STR_FRAME_TITLE
 {
-    Text = "Literaturdatenbank" ;
-    Text [ English ] = "Bibliography database" ;
-    Text[ english_us ] = "Bibliography Database";
-    Text[ portuguese ] = "Base de dados bibliográfica";
-    Text[ russian ] = "Áàçà äàííûõ áèáëèîãğàôèè";
-    Text[ greek ] = "ÂÜóç äåäïìİíùí âéâëéïãñáößáò";
-    Text[ dutch ] = "Literatuurdatabase";
-    Text[ french ] = "Base de données bibliographique";
-    Text[ spanish ] = "Base de datos bibliográfica";
-    Text[ italian ] = "Database bibliografico";
-    Text[ danish ] = "Litteraturdatabase";
-    Text[ swedish ] = "Litteraturdatabas";
-    Text[ polish ] = "Bibliograficzna baza danych";
-    Text[ portuguese_brazilian ] = "Banco de dados de bibliografia";
-    Text[ japanese ] = "è”µæ›¸ç®¡ç†ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
-    Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ ë°ì´í„°ë² ì´ìŠ¤";
-    Text[ chinese_simplified ] = "æ–‡çŒ®æ•°æ®åº“";
-    Text[ chinese_traditional ] = "æ–‡ç»è³‡æ–™åº«";
-    Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";
-    Text[ turkish ] = "Kaynakça veritabanı";
-    Text[ catalan ] = "Base de dades bibliogràfica";
-    Text[ finnish ] = "Lähdeluettelotietokanta";
-    Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
-    Text[ czech ] = "Seznam pouÅ¾itÃ© literatury";
-    Text[ hebrew ] = "Literaturdatenbank";
-    Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯";
-    Text[ slovak ] = "Zoznam pouÅ¾itej literatÃºry";
-    Text[ hungarian ] = "IrodalomjegyzÃ©k-adatbÃ¡zis";
-    Text[ slovenian ] = "Bibliografska zbirka podatkov";
+    Text [ de ] = "Literaturdatenbank" ;
+    Text [ en-US ] = "Bibliography Database";
 };
 String RID_MAP_QUESTION
 {
-    Text = "Möchten Sie die Spaltenzuordnung bearbeiten?" ;
-    Text [ English ] = "Dow you want to edit the column arrangement" ;
-    Text[ english_us ] = "Do you want to edit the column arrangement?";
-    Text[ portuguese ] = "Editar disposição de colunas?";
-    Text[ russian ] = "Èçìåíèòü ğàñïîëîæåíèå ñòîëáöîâ?";
-    Text[ greek ] = "Èİëåôå íá ãßíåé åğåîåñãáóßá ôçò áíôéóôïß÷éóçò óôçëşí;";
-    Text[ dutch ] = "Wilt u de kolomindeling wijzigen?";
-    Text[ french ] = "Souhaitez-vous éditer l'assignation des colonnes ?";
-    Text[ spanish ] = "¿Desea modificar el orden de las columnas?";
-    Text[ italian ] = "Volete modificare l'ordine delle colonne?";
-    Text[ danish ] = "Vil du redigere kolonnetildelingen?";
-    Text[ swedish ] = "Vill du redigera kolumntilldelningen?";
-    Text[ polish ] = "Czy chcesz edytowaæ rozmieszczenie kolumn?";
-    Text[ portuguese_brazilian ] = "Deseja editar a disposição das colunas?";
-    Text[ japanese ] = "åˆ—ã®åˆ†é¡ã‚’ç·¨é›†ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì—´ ë°°ì¹˜ë¥¼ í¸ì§‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "æ‚¨è¦ç¼–è¾‘åˆ—çš„æ’åˆ—é¡ºåºï¼Ÿ";
-    Text[ chinese_traditional ] = "æ‚¨è¦ç·¨æ’æ¬„ï¼Ÿ";
-    Text[ arabic ] = "åá ÊÑíÏ ÊÍÑíÑ ÊÚííä ÇáÚãæÏ¿";
-    Text[ turkish ] = "Sütunları düzenlemek istiyor musunuz?";
-    Text[ catalan ] = "Voleu editar la disposició de les columnes?";
-    Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Text[ czech ] = "PÅ™ejete si upravit uspoÅ™Ã¡dÃ¡nÃ­ sloupcÅ¯?";
-    Text[ hebrew ] = "MÃ¶chten Sie die Spaltenzuordnung bearbeiten?";
-    Text[ hindi ] = "à¤†à¤ª à¤¸à¥à¤¤à¤‚à¤­ à¤µà¤¿à¤¨à¥à¤¯à¤¾à¤¸ à¤•à¥‹ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "Chcete zmeniÅ¥ usporiadanie polÃ­?";
-    Text[ hungarian ] = "KÃ­vÃ¡nja mÃ³dosÃ­tani az oszlopok elrendezÃ©sÃ©t?";
-    Text[ slovenian ] = "Ali Å¾elite urediti razporeditev stolpcev?";
+    Text [ de ] = "Möchten Sie die Spaltenzuordnung bearbeiten?" ;
+    Text [ en-US ] = "Do you want to edit the column arrangement?";
 };
 
 
