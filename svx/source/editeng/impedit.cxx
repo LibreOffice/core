@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 15:44:48 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 16:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,7 +1528,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
         }
     }
 
-    if ( pDragAndDropInfo && pDragAndDropInfo->bStarterOfDD )
+    if ( pDragAndDropInfo && pDragAndDropInfo->bUndoAction )
         pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DRAGANDDROP );
 
     HideDDCursor();
@@ -1551,7 +1551,10 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     DrawSelection();
 
     if ( pDragAndDropInfo->bStarterOfDD )
+    {
         pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
+        pDragAndDropInfo->bUndoAction = TRUE;
+    }
 
     uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
     if ( xDataObj.is() )

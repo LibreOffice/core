@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 15:44:48 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 16:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,12 @@ struct DragAndDropInfo
     sal_Bool            bDroppedInMe            : 1;
     sal_Bool            bStarterOfDD            : 1;
     sal_Bool            bHasValidData           : 1;
+    sal_Bool            bUndoAction             : 1;
 
     DragAndDropInfo( const OutputDevice& rOutDev4VirtDev) :
             aBackground( rOutDev4VirtDev )  {
-            bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False; bHasValidData = sal_False;
+            bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False;
+            bHasValidData = sal_False; bUndoAction = sal_False;
             nSensibleRange = 0; nCursorWidth = 0; pField = 0;
     }
 };
