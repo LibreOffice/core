@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:00 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 17:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,62 +62,38 @@
 #ifndef _SVDITER_HXX
 #define _SVDITER_HXX
 
-#ifndef _SOLAR_H
-#include <tools/solar.h>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
-/* Iterieren ueber eine Objektliste:
-   SdrObjListIter aIter(pPage);
-   while (aIter.IsMore()) Next()->...;
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
 
-   SdrIterMode:
-   IM_FLAT: Die Suche erfolgt flach entlang der uebergebenen Liste. Next()
-       liefert also nacheinander alle Objekte die direkt in der Liste
-       verankert sind.
-       Der HitTest() bei einem Mausklick erfolgt z.B. in diesem Modus.
-   IM_DEEPWITHGROUPS: Stoesst Next() bei der Suche auf ein Gruppenobjekt, ein
-       Zeiger auf dieses Gruppenobjekt zuruekgegeben (wie IM_Flat). Das
-       naechste Next() sucht allerdings nicht in der selben Liste weiter,
-       sondern durchsucht zunaechst die Unterliste des Gruppenobjekts. Wird
-       in dieser Unterliste wieder ein Gruppenobjekt gefunden, dann wird
-       spaeter auch dessen Unterliste durchsucht, ... .
-       Dieser Modus wird benoetigt, wenn man Zugriff auf alle Einzelobjekte
-       inkl. der Gruppenobjekte benoetigt.
-   IM_DEEPNOGROUPS: Die Suche erfolgt nach aehnlichem Muster wie im Modus
-       IM_DEEPWITHGROUPS. Die einzige Ausnahme ist, daﬂ Gruppenobjekte
-       selbst uebersprungen werden. Sobald Next() auf ein Gruppenobjekt
-       stoesst liefert es sofort das erste Objekt dessen Unterliste, ohne
-       zuvor einen Zeiger auf das Gruppenobjekt zu liefern.
-       Dieser Modus z.B. beim Repaint verwendet, da SdrObjGroup.Paint()
-       ja sonst die gesamte Unterliste der Gruppe painten wuerde, ohne
-       eine Unterbrechung durch einen Event zuzulassen.
-   Die Rueckwaertssuche ist derzeit nur fuer den Modus IM_FLAT implementiert.
-*/
-
-enum SdrIterMode {IM_FLAT,           // Flach ueber die Liste
-                  IM_DEEPWITHGROUPS, // Mit rekursivem Abstieg, Next() liefert auch Gruppenobjekte
-                  IM_DEEPNOGROUPS};  // Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
-
-class SdrObject;
 class SdrObjList;
+class SdrObject;
 
-class SdrObjListIter {
-protected:
-    const SdrObjList* pMainList; // zu durchsuchende Liste
-    const SdrObjList* pAktList;  // Aktuelle (Sub-)Liste
-    const SdrObject*  pAktGroup; // Aktuelles Gruppenobjekt
-    const SdrObject*  pNextObj;  //
-    ULONG         nAktNum;   // Objektnummer in aktueller (Sub-)Liste
-    ULONG         nObjAnz;   // Anzahl der Objekte in der Hauptliste
-    FASTBOOL      bReverse;  // rueckwaerts durchsuchen
-    FASTBOOL      bRecurse;  // In Gruppen hinabsteigen
-    FASTBOOL      bSkipGrp;  // Gruppenobjekte ueberspringen ?
+// SdrObjListIter methods:
+// IM_FLAT              : Flach ueber die Liste
+// IM_DEEPWITHGROUPS    : Mit rekursivem Abstieg, Next() liefert auch Gruppenobjekte
+// IM_DEEPNOGROUPS      : Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
+enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
+
+class SdrObjListIter
+{
+    List                        maObjList;
+    sal_uInt32                  mnIndex;
+    BOOL                        mbReverse;
+
+    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode);
+
 public:
-    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode=IM_DEEPNOGROUPS, FASTBOOL bRevSearch=FALSE);
-    SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode=IM_DEEPNOGROUPS, FASTBOOL bRevSearch=FALSE);
-    void Reset();
-    FASTBOOL IsMore() const { return pNextObj!=NULL; }
-    SdrObject* Next();
+    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+    SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+
+    void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
+    BOOL IsMore() const { return (mbReverse ? mnIndex : (mnIndex < maObjList.Count())); }
+    SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
 };
 
 #endif //_SVDITER_HXX

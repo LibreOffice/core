@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 17:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,151 +59,48 @@
  *
  ************************************************************************/
 
+#ifndef _SVDITER_HXX
 #include "svditer.hxx"
-#include "svdobj.hxx"
-#include "svdogrp.hxx"
+#endif
+
+#ifndef _SVDPAGE_HXX
 #include "svdpage.hxx"
+#endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@ @@@@@@ @@@@@ @@@@@   @@@@  @@@@@@  @@@@  @@@@@
-//  @@   @@   @@    @@  @@ @@  @@   @@   @@  @@ @@  @@
-//  @@   @@   @@    @@  @@ @@  @@   @@   @@  @@ @@  @@
-//  @@   @@   @@@@  @@@@@  @@@@@@   @@   @@  @@ @@@@@
-//  @@   @@   @@    @@  @@ @@  @@   @@   @@  @@ @@  @@
-//  @@   @@   @@    @@  @@ @@  @@   @@   @@  @@ @@  @@
-//  @@   @@   @@@@@ @@  @@ @@  @@   @@    @@@@  @@  @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef _SVDOBJ_HXX
+#include "svdobj.hxx"
+#endif
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, FASTBOOL bRevSearch)
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bReverse)
+:   maObjList(1024, 64, 64),
+    mnIndex(0L),
+    mbReverse(bReverse)
 {
-    pMainList=&rObjList;
-    bReverse=bRevSearch;
-    switch (eMode) {
-        case IM_FLAT          : bRecurse=FALSE; bSkipGrp=FALSE; break;
-        case IM_DEEPWITHGROUPS: bRecurse=TRUE;  bSkipGrp=FALSE; break;
-        case IM_DEEPNOGROUPS  : bRecurse=TRUE;  bSkipGrp=TRUE;  break;
-    }
+    ImpProcessObjectList(rObjList, eMode);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode, FASTBOOL bRevSearch)
+SdrObjListIter::SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode, BOOL bReverse)
+:   maObjList(1024, 64, 64),
+    mnIndex(0L),
+    mbReverse(bReverse)
 {
-    pMainList=rGroup.GetSubList();
-    bReverse=bRevSearch;
-    switch (eMode) {
-        case IM_FLAT          : bRecurse=FALSE; bSkipGrp=FALSE; break;
-        case IM_DEEPWITHGROUPS: bRecurse=TRUE;  bSkipGrp=FALSE; break;
-        case IM_DEEPNOGROUPS  : bRecurse=TRUE;  bSkipGrp=TRUE;  break;
-    }
+    ImpProcessObjectList(*rGroup.GetSubList(), eMode);
     Reset();
 }
 
-void SdrObjListIter::Reset()
+void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode)
 {
-    pAktList=pMainList;
-    pAktGroup=NULL;
-    nAktNum=0;
-    nObjAnz=pMainList->aList.Count();
-    if (bReverse && nObjAnz!=0) {
-        nAktNum=nObjAnz-1;
-    }
-    pNextObj=pAktList->GetObj(nAktNum);
-    if (bReverse && bRecurse && pNextObj!=NULL) { // rekursive Ruekwaertssuche
-        // hier wird nun das tiefste Objekt der letzten Gruppe gesucht,
-        // falls das letzte Objekt der Hauptgruppe ein Gruppenobjekt ist.
-        FASTBOOL bWeiter=TRUE;
-        while (bWeiter) {
-            SdrObjList* pOL=pNextObj->GetSubList();
-            if (pOL!=NULL) {
-                ULONG nTmpObjCnt=pOL->GetObjCount();
-                if (nTmpObjCnt!=0) {
-                    pAktList=pOL;
-                    pAktGroup=pNextObj;
-                    nObjAnz=nTmpObjCnt;
-                    nAktNum=nObjAnz-1;
-                    pNextObj=pAktList->GetObj(nAktNum);
-                } else bWeiter=FALSE;
-            } else bWeiter=FALSE;
-        }
-    }
-    if (bSkipGrp) {
-        while (pNextObj!=NULL && pNextObj->IsGroupObject()) {
-            Next();
-        }
-    }
-}
+    for(sal_uInt32 a(0L); a < rObjList.GetObjCount(); a++)
+    {
+        SdrObject* pObj = rObjList.GetObj(a);
+        BOOL bIsGroup(pObj->IsGroupObject());
 
-SdrObject* SdrObjListIter::Next()
-{
-    const SdrObject* r=pNextObj;
-    do {
-        if (pNextObj!=NULL) {
-            if (!bReverse) {
-                SdrObjList* pSub=pNextObj->GetSubList();
-                if (bRecurse && pSub!=NULL && pSub->GetObjCount()!=0) { // Abstieg in eine Subliste
-                    pAktGroup=/*(SdrObjGroup*)*/pNextObj;
-                    ((SdrObject*)pAktGroup)->SetOrdNum(nAktNum);
-                    pAktList=pAktGroup->GetSubList();
-                    nAktNum=0;
-                    pNextObj=(SdrObject*)pAktList->aList.GetObject(nAktNum);
-                } else {
-                    nAktNum++;
-                    pNextObj=pAktList->GetObj(nAktNum);
-                    while (pNextObj==NULL && pAktGroup!=NULL) { // Ende Subliste
-                        nAktNum=pAktGroup->nOrdNum; //GetOrdNum();
-                        pAktGroup=pAktGroup->GetUpGroup();
-                        if (pAktGroup==NULL) pAktList=pMainList; // dann wird das wohl die Page sein
-                        if (pAktGroup!=NULL) {
-                            pAktList=pAktGroup->GetSubList();
-                            if (pAktList==pMainList) pAktGroup=NULL; // nicht an der MainList nach oben vorbeischliddern
-                        }
-                        nAktNum++;
-                        pNextObj=(SdrObject*)pAktList->aList.GetObject(nAktNum);
-                    }
-                }
-            } else {
-                if (nAktNum>0) {
-                    nAktNum--;
-                    pNextObj=(SdrObject*)pAktList->aList.GetObject(nAktNum);
-                    SdrObjList* pSub=pNextObj->GetSubList();
-                    if (bRecurse && pSub!=NULL && pSub->GetObjCount()!=0) { // rueckwaerts auf eine Gruppe gestossen
-                        // hier wird nun das tiefste Objekt der letzten Gruppe gesucht.
-                        FASTBOOL bWeiter=TRUE;
-                        while (bWeiter) {
-                            SdrObjList* pOL=pNextObj->GetSubList();
-                            if (pOL!=NULL) {
-                                ULONG nTmpObjCnt=pOL->GetObjCount();
-                                if (nTmpObjCnt!=0) {
-                                    pAktList=pOL;
-                                    pAktGroup=pNextObj;
-                                    nObjAnz=nTmpObjCnt;
-                                    nAktNum=nObjAnz-1;
-                                    pNextObj=pAktList->GetObj(nAktNum);
-                                } else bWeiter=FALSE;
-                            } else bWeiter=FALSE;
-                        }
-                    }
-                } else {
-                    if (bRecurse && pAktList!=pMainList && pAktGroup!=NULL) { // Ende der SubListe
-                        // fortfahren mit dem
-                        pNextObj=pAktGroup;
-                        nAktNum=pAktGroup->GetOrdNum();
-                        pAktGroup=pAktGroup->GetUpGroup();
-                        if (pAktGroup!=NULL) {
-                            pAktList=pAktGroup->GetSubList();
-                        } else {
-                            pAktList=pMainList;
-                        }
-                        if (pAktList==pMainList) pAktGroup=NULL; // nicht an der MainList nach oben vorbeischliddern
-                    } else { // ansonsten Listenende
-                        pNextObj=NULL;
-                    }
-                }
-            }
-        }
-    } while (bSkipGrp && pNextObj!=NULL && pNextObj->IsGroupObject());
-    return (SdrObject*)r;
+        if(eMode != IM_DEEPNOGROUPS || !bIsGroup)
+            maObjList.Insert(pObj, LIST_APPEND);
+
+        if(bIsGroup && eMode != IM_FLAT)
+            ImpProcessObjectList(*pObj->GetSubList(), eMode);
+    }
 }
 
