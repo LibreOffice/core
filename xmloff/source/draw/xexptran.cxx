@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1532,7 +1532,7 @@ void SdXMLImExSvgDElement::AddPolygon(
     {
         // append polygon to string
         OUString aNewString;
-        sal_Unicode aLastCommand;
+        sal_Unicode aLastCommand = ' ';
         awt::Point* pPointArray = pPoints->getArray();
 
         // are the flags used at all? If not forget about them
