@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:45:03 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3588,7 +3588,7 @@ TabPage PAGE_TEXT
         Text [ PORTUGUESE_BRAZILIAN ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{vazio}\t32" ;
         Text [ SWEDISH ] = ";\t59\t,\t44\t:\t58\t{Tabb}\t9\t{Mellanslag}\t32" ;
         Text [ PORTUGUESE ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{vazio}\t32" ;
-        Text [ chinese_simplified ] = ";\t59\t,\t44\t:\t58\t{制表键}\t9\t{空格}\t32";
+        Text [ chinese_simplified ] = ";\t59\t,\t44\t:\t58\t{制表符}\t9\t{空格}\t32";
         Text [ russian ] = ";\t59\t,\t44\t:\t58\t{Ta�}\t9\t{�����}\t32";
         Text [ polish ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Pusty}\t32";
         Text [ japanese ] = ";\t59\t,\t44\t:\t58\t{タブ}\t9\t{空白}\t32";
