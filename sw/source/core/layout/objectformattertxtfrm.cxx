@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:11:47 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,11 +179,15 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj )
 
         // format anchor text frame, if wrapping style influence of the object
         // has to be considered and it's <NONE_SUCCESSIVE_POSITIONED>
+        // --> OD 2004-08-25 #i3317# - consider also anchored objects, whose
+        // wrapping style influence is temporarly considered.
         if ( bSuccess &&
-             _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
-             _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
-                GetWrapInfluenceOnObjPos() ==
-                    text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED )
+             ( ( _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
+                 _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
+                    GetWrapInfluenceOnObjPos() ==
+                    text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ) ||
+             _rAnchoredObj.IsTmpConsiderWrapInfluence() ) )
+        // <--
         {
             mrAnchorTxtFrm.Calc();
         }
