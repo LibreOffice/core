@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:26:24 $
+ *  last change: $Author: nn $ $Date: 2001-02-23 15:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,23 +411,29 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     long nSizeX = 0;
     for (nX=nStartCol; nX<=nEndCol; nX++)
     {
+        BOOL bStartOfPage = FALSE;
         long nThisX = ( pColFlags[nX] & CR_HIDDEN ) ? 0 : pColWidth[nX];
         if ( (nSizeX+nThisX > nPageSizeX) || ((pColFlags[nX] & CR_MANUALBREAK) && !bSkipBreaks) )
         {
             pColFlags[nX] |= CR_PAGEBREAK;
             nSizeX = 0;
-            if (bRepeatCol)
-                if (nX>nRepeatStartX && !bColFound)
-                {
-                    for (i=nRepeatStartX; i<=nRepeatEndX; i++)
-                        nPageSizeX -= ( pColFlags[i] & CR_HIDDEN ) ? 0 : pColWidth[i];
-                    while (nX<=nRepeatEndX)
-                        pColFlags[++nX] &= ~CR_PAGEBREAK;
-                    bColFound = TRUE;
-                }
+            bStartOfPage = TRUE;
         }
         else if (nX != nStartCol)
             pColFlags[nX] &= ~CR_PAGEBREAK;
+        else
+            bStartOfPage = TRUE;
+
+        if ( bStartOfPage && bRepeatCol && nX>nRepeatStartX && !bColFound )
+        {
+            // subtract size of repeat columns from page size
+            for (i=nRepeatStartX; i<=nRepeatEndX; i++)
+                nPageSizeX -= ( pColFlags[i] & CR_HIDDEN ) ? 0 : pColWidth[i];
+            while (nX<=nRepeatEndX)
+                pColFlags[++nX] &= ~CR_PAGEBREAK;
+            bColFound = TRUE;
+        }
+
         nSizeX += nThisX;
     }
 
@@ -436,23 +442,29 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     long nSizeY = 0;
     for (nY=nStartRow; nY<=nEndRow; nY++)
     {
+        BOOL bStartOfPage = FALSE;
         long nThisY = ( pRowFlags[nY] & CR_HIDDEN ) ? 0 : pRowHeight[nY];
         if ( (nSizeY+nThisY > nPageSizeY) || ((pRowFlags[nY] & CR_MANUALBREAK) && !bSkipBreaks) )
         {
             pRowFlags[nY] |= CR_PAGEBREAK;
             nSizeY = 0;
-            if (bRepeatRow)
-                if (nY>nRepeatStartY && !bRowFound)
-                {
-                    for (i=nRepeatStartY; i<=nRepeatEndY; i++)
-                        nPageSizeY -= ( pRowFlags[i] & CR_HIDDEN ) ? 0 : pRowHeight[i];
-                    while (nY<=nRepeatEndY)
-                        pRowFlags[++nY] &= ~CR_PAGEBREAK;
-                    bRowFound = TRUE;
-                }
+            bStartOfPage = TRUE;
         }
         else if (nY != nStartRow)
             pRowFlags[nY] &= ~CR_PAGEBREAK;
+        else
+            bStartOfPage = TRUE;
+
+        if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
+        {
+            // subtract size of repeat rows from page size
+            for (i=nRepeatStartY; i<=nRepeatEndY; i++)
+                nPageSizeY -= ( pRowFlags[i] & CR_HIDDEN ) ? 0 : pRowHeight[i];
+            while (nY<=nRepeatEndY)
+                pRowFlags[++nY] &= ~CR_PAGEBREAK;
+            bRowFound = TRUE;
+        }
+
         nSizeY += nThisY;
     }
 
