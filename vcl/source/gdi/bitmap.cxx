@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1928,6 +1928,44 @@ BOOL Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 
     return bRet;
 }
+
+// ------------------------------------------------------------------
+
+BOOL Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
+{
+    // TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
+    // optimizations. Might even consolidate the code here and there.
+
+    // convert to a truecolor bitmap, if we're a paletted one. There's
+    // room for tradeoff decision here, maybe later for an overload (or a flag)
+    if( GetBitCount() <= 8 )
+        Convert( BMP_CONVERSION_24BIT );
+
+    BitmapReadAccess*   pAlphaAcc = const_cast<AlphaMask&>(rAlpha).AcquireReadAccess();
+    BitmapWriteAccess*  pAcc = AcquireWriteAccess();
+    BOOL                bRet = FALSE;
+
+    if( pAlphaAcc && pAcc )
+    {
+        const long          nWidth = Min( pAlphaAcc->Width(), pAcc->Width() );
+        const long          nHeight = Min( pAlphaAcc->Height(), pAcc->Height() );
+
+        for( long nY = 0L; nY < nHeight; ++nY )
+            for( long nX = 0L; nX < nWidth; ++nX )
+                pAcc->SetPixel( nY, nX,
+                                pAcc->GetPixel( nY, nX ).Merge( rBackgroundColor,
+                                                                255 - pAlphaAcc->GetPixel( nY, nX ) ) );
+
+        bRet = TRUE;
+    }
+
+    const_cast<AlphaMask&>(rAlpha).ReleaseAccess( pAlphaAcc );
+    ReleaseAccess( pAcc );
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------
 
 BOOL Bitmap::MakeMono( BYTE cThreshold )
 {
