@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:20:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ ShowWindow::ShowWindow( ::Window* pParent )
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
 //  SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+    SetBackground(); // avoids that VCL paints any background!
     GetParent()->Show();
 }
 
