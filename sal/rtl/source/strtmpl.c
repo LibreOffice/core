@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2002-06-25 09:03:11 $
+ *  last change: $Author: sb $ $Date: 2002-11-04 15:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,60 +856,6 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfFloat )( IMPL_RTL_STRCODE* pStr,
-                                                     float f )
-{
-    sal_Char    aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-    sal_Char*   pBuf = aBuf;
-    sal_Int32   nLen;
-    sal_Int32   nTempLen;
-
-    nLen = rtl_ImplFloatToString( pBuf, f );
-
-    /* Copy Buffer */
-    nTempLen = nLen;
-    while ( nTempLen )
-    {
-        *pStr = *pBuf;
-        pStr++;
-        pBuf++;
-        nTempLen--;
-
-    }
-    *pStr = 0;
-
-    return nLen;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfDouble )( IMPL_RTL_STRCODE* pStr,
-                                                      double d )
-{
-    sal_Char    aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-    sal_Char*   pBuf = aBuf;
-    sal_Int32   nLen;
-    sal_Int32   nTempLen;
-
-    nLen = rtl_ImplDoubleToString( pBuf, d );
-
-    /* Copy Buffer */
-    nTempLen = nLen;
-    while ( nTempLen )
-    {
-        *pStr = *pBuf;
-        pStr++;
-        pBuf++;
-        nTempLen--;
-
-    }
-    *pStr = 0;
-
-    return nLen;
-}
-
-/* ----------------------------------------------------------------------- */
-
 sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 {
     if ( *pStr == '1' )
@@ -1054,108 +1000,6 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
         return n;
     else
         return -n;
-}
-
-/* ----------------------------------------------------------------------- */
-
-static double IMPL_RTL_STRNAME( ImplStringToDouble )( const IMPL_RTL_STRCODE* pStr )
-{
-    sal_Bool    bExp        = sal_False;
-    sal_Bool    bNeg        = sal_False;
-    sal_Bool    bNegExp     = sal_False;
-    sal_Bool    bDec        = sal_False;
-    int         nExp        = 0;
-    double      fRet        = 0.0;
-    double      fDiv        = 0.1;
-
-    /* Skip whitespaces and leading zeros */
-    while ( *pStr && (rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) || (*pStr == '0')) )
-        pStr++;
-
-    while ( *pStr )
-    {
-        /* Digit */
-        if ( (*pStr >= '0') && (*pStr <= '9') )
-        {
-            if ( bExp )
-                nExp = nExp*10 + (*pStr-'0');
-            else if ( !bDec )
-                fRet = 10.0 * fRet + (double)(*pStr-'0');
-            else
-            {
-                fRet += fDiv * (double)(*pStr-'0');
-                fDiv /= 10.0;
-            }
-        }
-        /* Decimal separator */
-        else if ( *pStr == '.' )
-        {
-            if ( bExp || bDec )
-                break;
-            bDec = sal_True;
-        }
-        else if ( *pStr == '-' )
-        {
-            if ( bExp )
-            {
-                if ( nExp != 0 )
-                    break;
-                bNegExp = !bNegExp;
-            }
-            else
-            {
-                if ( fRet != 0.0 )
-                    break;
-                bNeg = !bNeg;
-            }
-        }
-        else if ( *pStr == '+' )
-        {
-            if ( bExp ? nExp != 0 : fRet != 0.0 )
-                break;
-        }
-        /* Exponent separator */
-        else if ( (*pStr == 'e') || (*pStr == 'E') )
-        {
-            if ( bExp )
-                break;
-            bExp = sal_True;
-        }
-        else
-            break;
-
-        pStr++;
-    }
-
-    /* Infinity || NaN not handled !!! ??? */
-
-    if ( bExp )
-    {
-        if ( bNegExp )
-            nExp = -nExp;
-        fRet *= rtl_ImplCalcPow10( nExp );
-    }
-
-    if ( bNeg )
-        return -fRet;
-    else
-#
-        return fRet;
-}
-
-/* ----------------------------------------------------------------------- */
-
-float SAL_CALL IMPL_RTL_STRNAME( toFloat )( const IMPL_RTL_STRCODE* pStr )
-{
-    double d = IMPL_RTL_STRNAME( ImplStringToDouble )( pStr );
-    return (float)d;
-}
-
-/* ----------------------------------------------------------------------- */
-
-double SAL_CALL IMPL_RTL_STRNAME( toDouble )( const IMPL_RTL_STRCODE* pStr )
-{
-    return IMPL_RTL_STRNAME( ImplStringToDouble )( pStr );
 }
 
 /* ======================================================================= */

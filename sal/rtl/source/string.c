@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-19 15:12:31 $
+ *  last change: $Author: sb $ $Date: 2002-11-04 15:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,13 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#ifndef _RTL_STRIMP_H_
 #include "strimp.h"
-#endif
+
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
 #endif
 
+#include "rtl/math.h"
 #include "rtl/tencinfo.h"
 
 /* ======================================================================= */
@@ -113,6 +113,48 @@ static rtl_String aImplEmpty_rtl_String =
 /* Include String/UString template code */
 
 #include "strtmpl.c"
+
+sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
+{
+    rtl_String * pResult = NULL;
+    sal_Int32 nLen;
+    rtl_math_doubleToString(
+        &pResult, 0, 0, f, rtl_math_StringFormat_G,
+        RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xx"), '.', 0, 0,
+        sal_True);
+    nLen = pResult->length;
+    OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
+    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
+    rtl_string_release(pResult);
+    return nLen;
+}
+
+sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
+{
+    rtl_String * pResult = NULL;
+    sal_Int32 nLen;
+    rtl_math_doubleToString(
+        &pResult, 0, 0, d, rtl_math_StringFormat_G,
+        RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+        0, sal_True);
+    nLen = pResult->length;
+    OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
+    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
+    rtl_string_release(pResult);
+    return nLen;
+}
+
+float SAL_CALL rtl_str_toFloat(sal_Char const * pStr)
+{
+    return (float) rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
+                                           '.', 0, 0, 0);
+}
+
+double SAL_CALL rtl_str_toDouble(sal_Char const * pStr)
+{
+    return rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr), '.', 0,
+                                   0, 0);
+}
 
 /* ======================================================================= */
 

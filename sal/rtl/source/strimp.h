@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 14:53:54 $
+ *  last change: $Author: sb $ $Date: 2002-11-04 15:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,25 @@
  *
  ************************************************************************/
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
+#ifndef INCLUDED_RTL_SOURCE_STRIMP_H
+#define INCLUDED_RTL_SOURCE_STRIMP_H
 
-#ifndef _RTL_STRIMP_H_
-#define _RTL_STRIMP_H_
+#include "sal/types.h"
 
 /* ======================================================================= */
 /* Help functions for String and UString                                   */
 /* ======================================================================= */
 
-const sal_Char* rtl_ImplGetDigits();
+#if defined __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
-sal_Int32 rtl_ImplFloatToString( sal_Char* pStr, float f );
-sal_Int32 rtl_ImplDoubleToString( sal_Char* pStr, double d );
-double rtl_ImplCalcPow10( int nExp );
 
 sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
 
-#endif /* _RTL_STRIMP_H_ */
+#if defined __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* INCLUDED_RTL_SOURCE_STRIMP_H */

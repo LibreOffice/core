@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-19 15:12:31 $
+ *  last change: $Author: sb $ $Date: 2002-11-04 15:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,13 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#ifndef _RTL_STRIMP_H_
 #include "strimp.h"
-#endif
+
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
 #endif
 
+#include "rtl/math.h"
 #include "rtl/tencinfo.h"
 
 /* ======================================================================= */
@@ -113,6 +113,49 @@ static rtl_uString aImplEmpty_rtl_uString =
 /* Include String/UString template code */
 
 #include "strtmpl.c"
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
+{
+    rtl_uString * pResult = NULL;
+    sal_Int32 nLen;
+    rtl_math_doubleToUString(
+        &pResult, 0, 0, f, rtl_math_StringFormat_G,
+        RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xx"), '.', 0, 0,
+        sal_True);
+    nLen = pResult->length;
+    OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
+    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
+    rtl_uString_release(pResult);
+    return nLen;
+}
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
+{
+    rtl_uString * pResult = NULL;
+    sal_Int32 nLen;
+    rtl_math_doubleToUString(
+        &pResult, 0, 0, d, rtl_math_StringFormat_G,
+        RTL_USTR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+        0, sal_True);
+    nLen = pResult->length;
+    OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
+    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
+    rtl_uString_release(pResult);
+    return nLen;
+}
+
+float SAL_CALL rtl_ustr_toFloat(sal_Unicode const * pStr)
+{
+    return (float) rtl_math_uStringToDouble(pStr,
+                                            pStr + rtl_ustr_getLength(pStr),
+                                            '.', 0, 0, 0);
+}
+
+double SAL_CALL rtl_ustr_toDouble(sal_Unicode const * pStr)
+{
+    return rtl_math_uStringToDouble(pStr, pStr + rtl_ustr_getLength(pStr), '.',
+                                    0, 0, 0);
+}
 
 /* ======================================================================= */
 
