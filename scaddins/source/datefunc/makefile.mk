@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.8 2002-10-01 11:12:03 jbu Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.9 2003-04-15 14:17:20 vg Exp $
 #
-#     $Date: 2002-10-01 11:12:03 $
-#     $Author: jbu $
-#     $Revision: 1.8 $
+#     $Date: 2003-04-15 14:17:20 $
+#     $Author: vg $
+#     $Revision: 1.9 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -64,7 +64,6 @@ PRJNAME=addin
 
 TARGET=date
 
-
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 LIBTARGET=NO
@@ -120,17 +119,18 @@ SRCFILES =\
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS= \
+        $(VCLLIB)			\
+        $(TOOLSLIB)			\
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
         $(VOSLIB)			\
-        $(TOOLSLIB)			\
-        $(SALLIB)			\
-        $(SVLIB)
+        $(SALLIB)
 
 SHL1DEPN=makefile.mk
+
+SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # --- Resourcen ----------------------------------------------------
 
