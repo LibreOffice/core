@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlListBoxModel.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:46:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef __com_sun_star_awt_UnoControlListBoxModel_idl__
 #define __com_sun_star_awt_UnoControlListBoxModel_idl__
 
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
 
@@ -88,7 +88,7 @@ published service UnoControlListBoxModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the alignment of the text in the control.
+    /** specifies the horiztontal alignment of the text in the control.
 
         <pre>
         0: left
