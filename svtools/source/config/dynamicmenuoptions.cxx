@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-11-28 14:43:09 $
+ *  last change: $Author: as $ $Date: 2001-11-29 09:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,8 @@ class Menu
         // the only way to free memory!
         void Clear()
         {
-            vector< MenuEntry >().swap( lSetupEntries );
-            vector< MenuEntry >().swap( lUserEntries  );
+            lSetupEntries.clear();
+            lUserEntries.clear();
         }
 
         //---------------------------------------------------------------------------------------------------------
