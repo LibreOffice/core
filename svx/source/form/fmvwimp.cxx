@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:48:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,
 
     // Anlegen des Tabcontrollers
     FmXFormController* pController = new FmXFormController( m_xORB,m_pViewImpl->getView(), m_pWindow );
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(pController);
+    Reference< XFormController > xController( pController );
 
     pController->setModel(xTabOrder);
     pController->setContainer(xCC);
@@ -1182,6 +1182,8 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
         switch ( nClassId )
         {
             case FormComponentType::SCROLLBAR:
+                _rxModel->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LiveScroll" ) ), makeAny( (sal_Bool)sal_True ) );
+                // NO break!
             case FormComponentType::SPINBUTTON:
             {
                 const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
@@ -1203,7 +1205,9 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
 
             case FormComponentType::TEXTFIELD:
             {
+                initializeTextFieldLineEnds( _rxModel, m_xORB );
                 lcl_initializeCharacterAttributes( _rxModel );
+
                 const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
                 if ( !( rBoundRect.GetWidth() > 4 * rBoundRect.GetHeight() ) )  // heuristics
                 {
