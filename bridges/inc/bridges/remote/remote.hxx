@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:37:21 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 16:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.h>
 #include <osl/interlck.h>
-
-//#include <vos/thread.hxx>
 
 #include <uno/environment.h>
 
