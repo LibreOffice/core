@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:04:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,17 @@ bool HelpParser::CreateSDF(
     Export::InitLanguages( false );
     std::vector<ByteString> aLanguages = Export::GetLanguages();
 
-    for(XMLHashMap::iterator pos=aXMLStrHM->begin();pos!=aXMLStrHM->end();++pos){
-        pElem=pos->second;
+    //for(XMLHashMap::iterator pos=aXMLStrHM->begin();pos!=aXMLStrHM->end();++pos){
+    std::vector<ByteString> order = file->getOrder();
+    std::vector<ByteString>::iterator pos;
+    XMLHashMap::iterator posm;
+
+    for( pos = order.begin(); pos != order.end() ; ++pos ){
+        //ByteString sKey = *pos;
+        posm = aXMLStrHM->find( *pos );
+        pElem = posm->second;
+        //pElem = aXMLStrHM[ sKey ];
+        //pElem=pos->second;
         ByteString sCur;
         for( long int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
@@ -258,7 +267,7 @@ bool HelpParser::CreateSDF(
                     if ( rRoot_in.Len())
                         sBuffer.append( sOUActFileName );
                        sBuffer.append( GSI_SEQUENCE1 );     //"\t0\thelp\t";
-                    ByteString sID = pos->first;            // ID
+                    ByteString sID = posm->first;           // ID
                     sBuffer.append( OUString( sID.GetBuffer() , sID.Len() , RTL_TEXTENCODING_UTF8 ) );
                     sBuffer.append( GSI_TAB ); //"\t";
                        ByteString sOldRef = pXMLElement->GetOldref(); // oldref
