@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-12 09:29:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-02-12 09:29:37 $
- // $Revision: 1.5 $
+ //     $Date: 2001-05-04 21:16:46 $
+ // $Revision: 1.6 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -120,6 +120,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¼ö½Ä(~F)";
         Text[ turkish ] = "~Formül";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fórmulas";
     };
     Edit ED_FORMULARANGE
     {
@@ -154,6 +155,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_ROWCELL
     {
@@ -182,6 +184,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "Çà(~R)";
         Text[ turkish ] = "~Satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fil~a";
     };
     Edit ED_ROWCELL
     {
@@ -216,6 +219,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_COLCELL
     {
@@ -244,6 +248,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¿­(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Columna";
     };
     Edit ED_COLCELL
     {
@@ -278,6 +283,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_VARIABLES
     {
@@ -306,6 +312,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Varsayýlan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Variables";
     };
     OKButton BTN_OK
     {
@@ -348,6 +355,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¼ö½ÄÀÌ ÀÔ·ÂµÇÁö¡¡¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Formül girilmedi!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡No se ha especificado ninguna fórmula!";
     };
     String STR_NOCOLROW
     {
@@ -374,6 +382,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÌ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Ne satýr ne de sütun belirtildi!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡No se ha especificado ni la fila ni la columna!";
     };
     String STR_WRONGFORMULA
     {
@@ -400,6 +409,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â ±¸¿ª!";
         Text[ turkish ] = "Tanýmlanmamýþ ad ya da alan!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Nombre o área no definidos!";
     };
     String STR_WRONGROWCOL
     {
@@ -426,6 +436,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â Æ²¸° ¼¿ ÂüÁ¶";
         Text[ turkish ] = "Tanýmlanmamýþ ad ya da yanlýþ hücre referansý!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Nombre no definido o ref. a celda incorrecta!";
     };
     String STR_NOCOLFORMULA
     {
@@ -452,6 +463,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¼ö½ÄÀº ¿­À» ±¸¼ºÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Formüller sütun oluþturmuyor!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Las fórmulas no forman columna!";
     };
     String STR_NOROWFORMULA
     {
@@ -478,6 +490,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ korean ] = "¼ö½ÄÀº ÇàÀ» ±¸¼ºÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Formüller satýr oluþturmuyor!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Fórmulas no forman una fila!";
     };
     Text[ chinese_simplified ] = "¶àÖØ¼ÆËã";
     Text[ russian ] = "Òàáëèöà ïîäñòàíîâîê";
@@ -489,4 +502,5 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ korean ] = "´ÙÁß ¿¬»ê";
     Text[ turkish ] = "Çoklu iþlemler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Operaciones múltiples";
 };
