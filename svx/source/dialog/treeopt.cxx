@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:54:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,7 +1383,23 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         break;
         case SID_LANGUAGE_OPTIONS :
         {
+            OfaTreeOptionsDialog::ApplyLanguageOptions(rSet);
+        }
+        break;
+        case SID_INET_DLG :
+        case SID_FILTER_DLG:
+            SFX_APP()->SetOptions( rSet );
 
+        case SID_SB_STARBASEOPTIONS:
+            ::offapp::ConnectionPoolConfig::SetOptions( rSet );
+            ::svx::DbRegisteredNamesConfig::SetOptions(rSet);
+            break;
+        break;
+    }
+
+}
+void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
+{
             sal_Bool bSaveSpellCheck = sal_False;
             const SfxPoolItem* pItem;
 
@@ -1478,19 +1494,6 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 }
             }
         }
-        break;
-        case SID_INET_DLG :
-        case SID_FILTER_DLG:
-            SFX_APP()->SetOptions( rSet );
-
-        case SID_SB_STARBASEOPTIONS:
-            ::offapp::ConnectionPoolConfig::SetOptions( rSet );
-            ::svx::DbRegisteredNamesConfig::SetOptions(rSet);
-            break;
-        break;
-    }
-
-}
 
 void OfaTreeOptionsDialog::Initialize()
 {
