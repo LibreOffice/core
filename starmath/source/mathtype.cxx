@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-30 11:14:42 $
+ *  last change: $Author: cmc $ $Date: 2001-08-23 12:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,15 +289,54 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case '.':
             pC = " \".\" ";
             break;
+        case 0xae:
+            if ((nVersion < 3) && (nTypeFace == 0x86))
+                pC = " rightarrow ";
+            else
+            {
+                rRet.Append(nChar);
+                bRet=TRUE;
+            }
+            break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
             rRet.Append(nChar);
             bRet=TRUE;
             break;
+        case 'a':
+            if ((nVersion < 3) && (nTypeFace == 0x84))
+                nChar = 0x3b1;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 'l':
+            if ((nVersion < 3) && (nTypeFace == 0x84))
+                nChar = 0x3bb;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 'n':
+            if ((nVersion < 3) && (nTypeFace == 0x84))
+                nChar = 0x3bd;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 'r':
+            if ((nVersion < 3) && (nTypeFace == 0x84))
+                nChar = 0x3c1;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 'D':
+            if ((nVersion < 3) && (nTypeFace == 0x84))
+                nChar = 0x394;
             rRet.Append(nChar);
             bRet=TRUE;
             break;
@@ -2888,6 +2927,8 @@ void MathType::HandleEmblishments()
             DBG_ASSERT(nEmbel < 21,"Embel out of range")
             break;
         }
+        if (nVersion < 3)
+            break;
     }while (nEmbel);
 }
 
@@ -2978,6 +3019,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
             }
             else
                 APPEND(rRet," {");
+            rTextStart = rRet.Len();
         }
     }
 
