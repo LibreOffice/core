@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:19:33 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,17 +307,19 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         if( !((SwDrawContact*)pContact)->GetAnchor() )
         {
-            Point aAnchorPos =
-                ((SwDrawContact*)pContact)->GetMaster()->GetAnchorPos();
-            ((SwDrawContact*)pContact)->ConnectToLayout();
-            ((SwDrawContact*)pContact)->GetMaster()->SetAnchorPos( aAnchorPos );
+            SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pContact);
+            Point aAnchorPos = pDrawContact->GetMaster()->GetAnchorPos();
+            pDrawContact->ConnectToLayout();
+            pDrawContact->GetMaster()->SetAnchorPos( aAnchorPos );
+            // OD 27.06.2003 #108784# - correct movement of 'virtual' drawing
+            // objects caused by the <SetAnchorPos(..)> of the 'master' drawing object.
+            pDrawContact->CorrectRelativePosOfVirtObjs();
         }
     }
     else
     {
         // Baseline-Ausgabe !
         // 7922: Bei CompletePaint alles painten
-#ifdef VERTICAL_LAYOUT
         SwRect aRepaintRect( rInf.GetPaintRect() );
         if ( rInf.GetTxtFrm()->IsVertical() )
             rInf.GetTxtFrm()->SwitchHorizontalToVertical( aRepaintRect );
@@ -330,16 +332,6 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             SwRect aRect( GetFlyFrm()->Frm() );
             if( !GetFlyFrm()->IsCompletePaint() )
                 aRect._Intersection( aRepaintRect );
-#else
-        if( (GetFlyFrm()->IsCompletePaint() ||
-             GetFlyFrm()->Frm().IsOver( rInf.GetPaintRect() )) &&
-             SwFlyFrm::IsPaint( (SdrObject*)GetFlyFrm()->GetVirtDrawObj(),
-                                GetFlyFrm()->GetShell() ))
-        {
-            SwRect aRect( GetFlyFrm()->Frm() );
-            if( !GetFlyFrm()->IsCompletePaint() )
-                aRect._Intersection( rInf.GetPaintRect() );
-#endif
 
             GetFlyFrm()->Paint( aRect );
             // Es hilft alles nichts, im zeichengebundenen Frame kann wer weiss
@@ -363,15 +355,10 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * Es werden die Masze vom pFly->OutRect() eingestellt.
  * Es erfolgt ein SetBase() !
  *************************************************************************/
-#ifdef VERTICAL_LAYOUT
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwFlyInCntFrm *pFly, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
                                   long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
-#else
-SwFlyCntPortion::SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase,
-    long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
-#endif
     pContact( pFly ),
     bDraw( sal_False ),
     bMax( sal_False ),
@@ -380,24 +367,14 @@ SwFlyCntPortion::SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase,
     ASSERT( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
     nLineLength = 1;
     nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
-#ifdef VERTICAL_LAYOUT
     SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
-#else
-    SetBase( rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
-#endif
     SetWhichPor( POR_FLYCNT );
 }
 
-#ifdef VERTICAL_LAYOUT
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwDrawContact *pDrawContact, const Point &rBase,
                                   long nLnAscent, long nLnDescent, long nFlyAsc,
                                   long nFlyDesc, sal_uInt8 nFlags ) :
-#else
-SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
-        const Point &rBase, long nLnAscent, long nLnDescent,
-        long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
-#endif
     pContact( pDrawContact ),
     bDraw( sal_True ),
     bMax( sal_False ),
@@ -418,11 +395,7 @@ SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
     nLineLength = 1;
     nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
 
-#ifdef VERTICAL_LAYOUT
     SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
-#else
-    SetBase( rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
-#endif
 
     SetWhichPor( POR_FLYCNT );
 }
@@ -444,7 +417,6 @@ const SwFrmFmt *SwFlyCntPortion::GetFrmFmt() const
  * Bei 0 liegt der obere Rand des FlyCnt auf der Baseline der Zeile.
  *************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
 void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                                long nLnAscent, long nLnDescent, long nFlyAsc,
                                long nFlyDesc, sal_uInt8 nFlags )
@@ -452,11 +424,6 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
     // Note: rBase is an absolute value
     SWAP_IF_SWAPPED( (&rFrm ) )
     SWRECTFN( (&rFrm ) )
-#else
-void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
-    long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags )
-{
-#endif
     Point aBase( rBase );
     const SwFrmFmt* pFmt = GetFrmFmt();
     const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
@@ -472,18 +439,22 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     long nOldWidth;
     if( bDraw )
     {
-        pSdrObj = GetDrawContact()->GetMaster();
+        // OD 20.06.2003 #108784# - determine drawing object ('master' or 'virtual')
+        // by frame.
+        pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm );
+        if ( !pSdrObj )
+        {
+            ASSERT( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
+            pSdrObj = GetDrawContact()->GetMaster();
+        }
         aBoundRect = pSdrObj->GetBoundRect();
     }
     else
     {
         aBoundRect = GetFlyFrm()->Frm();
-#ifndef VERTICAL_LAYOUT
         nOldWidth = aBoundRect.Width();
-#endif
     }
 
-#ifdef VERTICAL_LAYOUT
     nOldWidth = (aBoundRect.*fnRect->fnGetWidth)();
 
     long nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
@@ -500,7 +471,6 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         nULSpaceUpper = rLRSpace.GetRight();
         nULSpaceLower = rLRSpace.GetLeft();
     }
-#ifdef BIDI
     else
     {
         if ( rFrm.IsRightToLeft() )
@@ -517,15 +487,6 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         nULSpaceUpper = rULSpace.GetUpper();
         nULSpaceLower = rULSpace.GetLower();
     }
-#else
-    else
-    {
-        nLRSpaceLeft = rLRSpace.GetLeft();
-        nLRSpaceRight = rLRSpace.GetRight();
-        nULSpaceUpper = rULSpace.GetUpper();
-        nULSpaceLower = rULSpace.GetLower();
-    }
-#endif
 
     if( nFlags & SETBASE_ULSPACE )
         aBase.X() += nLRSpaceLeft;
@@ -546,25 +507,6 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     aBoundRect.Width( aBoundRect.Width() + nLRSpaceRight );
     aBoundRect.Top( aBoundRect.Top() - nULSpaceUpper );
     aBoundRect.Height( aBoundRect.Height() + nULSpaceLower );
-
-#else
-    if( nFlags & SETBASE_ULSPACE )
-        aBase.X() += rLRSpace.GetLeft();
-    aBase.Y() += rULSpace.GetUpper();
-
-    if( bDraw )
-    {
-        if( nFlags & SETBASE_ULSPACE )
-            aBase.X() += pSdrObj->GetSnapRect().Left() - aBoundRect.Left();
-        aBase.Y() += pSdrObj->GetSnapRect().Top() - aBoundRect.Top();
-    }
-
-    aBoundRect.Left( aBoundRect.Left() - rLRSpace.GetLeft() );
-    aBoundRect.Width( aBoundRect.Width() + rLRSpace.GetRight() );
-    aBoundRect.Top( aBoundRect.Top() - rULSpace.GetUpper() );
-    aBoundRect.Height( aBoundRect.Height() + rULSpace.GetLower() );
-
-#endif
 
     SwTwips nBoundHeight = ( nFlags & SETBASE_ROTATE ) ?
                             aBoundRect.Width() : aBoundRect.Height();
@@ -657,7 +599,6 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
                 ((SwFrmFmt*)pFmt)->SetAttr( aVert );
                 ((SwFrmFmt*)pFmt)->UnlockModify();
             }
-
             Point aAnchorBase( aBase );
             if ( rFrm.IsRightToLeft() )
             {
@@ -667,9 +608,24 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             if ( rFrm.IsVertical() )
                 rFrm.SwitchHorizontalToVertical( aAnchorBase );
 
-            // There used to be a ImpSetAnchorPos here. Very dangerous
-            // for group object.
-            pSdrObj->NbcSetAnchorPos( aAnchorBase );
+            // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
+            if ( pSdrObj->ISA(SwDrawVirtObj) )
+            {
+                SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pSdrObj);
+
+                pDrawVirtObj->NbcSetAnchorPos( aAnchorBase );
+                pDrawVirtObj->AdjustRelativePosToReference();
+            }
+            else
+            {
+                // There used to be a ImpSetAnchorPos here. Very dangerous
+                // for group object.
+                pSdrObj->NbcSetAnchorPos( aAnchorBase );
+                // OD 20.06.2003 #108784# - correct movement of 'virtual' drawing
+                // objects caused by the <SetAnchorPos(..)> of the 'master' drawing object.
+                GetDrawContact()->CorrectRelativePosOfVirtObjs();
+            }
+
             SwRect aSnapRect = pSdrObj->GetSnapRect();
 
             if ( rFrm.IsVertical() )
@@ -684,8 +640,15 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             if ( rFrm.IsVertical() )
                 aDiff = Point( -aDiff.Y(), aDiff.X() );
 
-            // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
-            pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
+            // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
+            if ( !pSdrObj->ISA(SwDrawVirtObj) )
+            {
+                // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
+                pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
+                // OD 23.06.2003 #108784# - correct movement of 'virtual' drawing
+                // objects caused by the <Move(..)> of the 'master' drawing object
+                GetDrawContact()->MoveOffsetOfVirtObjs( Size( -aDiff.X(), -aDiff.Y() ) );
+            }
         }
 
         if ( rFrm.IsVertical() )
@@ -749,9 +712,7 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         nAscent = 0;
     }
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( ( &rFrm ) )
-#endif
 }
 
 /*************************************************************************
