@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 14:00:32 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,16 @@
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
 #endif
+#ifndef _TOX_HXX
+#include <tox.hxx>
+#endif
+#ifndef _UNOIDX_HXX
+#include <unoidx.hxx>
+#endif
+#ifndef _DOCTXM_HXX
+#include <doctxm.hxx>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -721,6 +731,28 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
                 {
                     if(pFmt)
                         aRet <<= OUString(pFmt->GetSection()->GetName());
+                }
+                break;
+                case WID_SECT_DOCUMENT_INDEX:
+                {
+                    // search enclosing index
+                    SwSection* pEnclosingSection = pSect;
+                    while ( (pEnclosingSection != NULL) &&
+                            (TOX_CONTENT_SECTION !=
+                             pEnclosingSection->GetType()) )
+                    {
+                        pEnclosingSection = pEnclosingSection->GetParent();
+                    }
+                    if (pEnclosingSection)
+                    {
+                        // convert section to TOXBase and get SwXDocumentIndex
+                        SwTOXBaseSection* pTOXBaseSect =
+                            PTR_CAST(SwTOXBaseSection, pEnclosingSection);
+                        Reference<XDocumentIndex> xIndex =
+                            SwXDocumentIndexes::GetObject(pTOXBaseSect);
+                        aRet <<= xIndex;
+                    }
+                    // else: no enclosing index found -> empty return value
                 }
                 break;
                 default:

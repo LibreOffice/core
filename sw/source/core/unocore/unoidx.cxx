@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 11:41:48 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1982,6 +1982,17 @@ sal_Bool SwXDocumentIndexes::hasElements(void) throw( RuntimeException )
     if(!IsValid())
         throw RuntimeException();
     return 0 != getCount();
+}
+
+SwXDocumentIndex* SwXDocumentIndexes::GetObject(const SwTOXBaseSection* pTOX)
+{
+    SwSectionFmt* pFmt = pTOX->GetFmt();
+    SwClientIter aIter(*pFmt);
+    SwXDocumentIndex* pxIdx = (SwXDocumentIndex*)aIter.First(TYPE(SwXDocumentIndex));
+    if(pxIdx)
+        return pxIdx;
+    else
+        return new SwXDocumentIndex(pTOX, pFmt->GetDoc());
 }
 
 /* -----------------------------06.04.00 15:08--------------------------------

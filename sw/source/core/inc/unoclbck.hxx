@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@ class SwXReferenceMark;
 class SwFmtRefMark;
 class SwFmtFtn;
 class SwXFootnote;
+class SwTOXMark;
+class SwXDocumentIndexMark;
+
 class SwUnoCallBack : public SwModify
 {
 public:
@@ -81,5 +84,6 @@ public:
     // returns the API object of a reference mark if available
     SwXReferenceMark*   GetRefMark(const SwFmtRefMark& rMark);
     SwXFootnote*        GetFootnote(const SwFmtFtn& rMark);
+    SwXDocumentIndexMark* GetTOXMark(const SwTOXMark& rMark);
 };
 #endif

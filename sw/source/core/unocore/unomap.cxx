@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:19:08 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,6 +1149,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_TYPE)        ,RES_END_AT_TXTEND,       &::getCppuType((const sal_Int16*)0),               PROPERTY_NONE ,MID_NUM_TYPE     },
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_PREFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_PREFIX       },
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_SUFFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_SUFFIX       },
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX), WID_SECT_DOCUMENT_INDEX, &::getCppuType((uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID, 0 },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSectionPropertyMap_Impl;
@@ -1746,7 +1747,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aBibliographyMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE),                     WID_IDX_TITLE                                  ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED          ),    WID_PROTECTED                           ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((uno::Reference<text::XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL      ),        RES_BACKGROUND,         &::getCppuType((const OUString*)0), PROPERTY_NONE ,MID_GRAPHIC_URL    },

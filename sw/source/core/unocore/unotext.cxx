@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 14:32:51 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,11 +674,7 @@ void SwXText::insertTextContentBefore(
     {
         SwTable* pTable = SwTable::FindTable( pTableFmt );
         SwTableNode* pTblNode = pTable->GetTableNode();
-        {
-            const SwSectionNode* pSNd = pTblNode->GetSectionNode();
-            if( pSNd && pSNd->GetSection().IsProtectFlag() )
-                throw RuntimeException();
-        }
+
         SwNodeIndex aTblIdx(  *pTblNode, -1 );
         SwPosition aBefore(aTblIdx);
         bRet = GetDoc()->AppendTxtNode( aBefore );
@@ -690,8 +686,6 @@ void SwXText::insertTextContentBefore(
     {
         SwSectionFmt* pSectFmt = pXSection->GetFmt();
         SwSectionNode* pSectNode = pSectFmt->GetSectionNode();
-        if( pSectNode->GetSection().IsProtectFlag() )
-            throw RuntimeException();
 
         SwNodeIndex aSectIdx(  *pSectNode, -1 );
         SwPosition aBefore(aSectIdx);
@@ -731,12 +725,6 @@ void SwXText::insertTextContentAfter(
         SwTable* pTable = SwTable::FindTable( pTableFmt );
         SwTableNode* pTblNode = pTable->GetTableNode();
 
-        {
-            const SwSectionNode* pSNd = pTblNode->GetSectionNode();
-            if( pSNd && pSNd->GetSection().IsProtectFlag() )
-                throw RuntimeException();
-        }
-
         SwEndNode* pTableEnd = pTblNode->EndOfSectionNode();
         SwPosition aTableEnd(*pTableEnd);
         bRet = GetDoc()->AppendTxtNode( aTableEnd );
@@ -748,8 +736,6 @@ void SwXText::insertTextContentAfter(
     {
         SwSectionFmt* pSectFmt = pXSection->GetFmt();
         SwSectionNode* pSectNode = pSectFmt->GetSectionNode();
-        if( pSectNode->GetSection().IsProtectFlag() )
-            throw RuntimeException();
         SwEndNode* pEnd = pSectNode->EndOfSectionNode();
         SwPosition aEnd(*pEnd);
         bRet = GetDoc()->AppendTxtNode( aEnd );

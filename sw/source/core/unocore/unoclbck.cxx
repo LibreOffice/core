@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 10:31:05 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,8 +246,29 @@ SwXFootnote*    SwUnoCallBack::GetFootnote(const SwFmtFtn& rMark)
     return 0;
 }
 
+/* -----------------------------27.11.00 17:15--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXDocumentIndexMark* SwUnoCallBack::GetTOXMark(const SwTOXMark& rMark)
+{
+    SwClientIter aIter( *this );
+    SwXDocumentIndexMark* pxIndexMark = (SwXDocumentIndexMark*)aIter.First( TYPE( SwXDocumentIndexMark ));
+    while(pxIndexMark)
+    {
+        const SwTOXMark* pMark = pxIndexMark->GetTOXMark();
+        if(pMark == &rMark)
+            return pxIndexMark;
+
+        pxIndexMark = (SwXDocumentIndexMark*)aIter.Next( );
+    }
+    return 0;
+}
+
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/16 10:31:05  os
+    #79422# SwXDocumentIndexMark: invalidation uses SwUnoCallBack
+
     Revision 1.1.1.1  2000/09/19 00:08:28  hr
     initial import
 

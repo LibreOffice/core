@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2000-11-23 11:45:33 $
+ *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,14 +1268,8 @@ sal_Bool lcl_getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                                     *rPam.Start() );
             if( pBase )
             {
-                SwSectionFmt* pFmt = ((SwTOXBaseSection*)pBase)->GetFmt();
-                SwClientIter aIter(*pFmt);
-                SwXDocumentIndex* pxIdx = (SwXDocumentIndex*)aIter.First(TYPE(SwXDocumentIndex));
-                uno::Reference< XDocumentIndex >  aRef;
-                if(pxIdx)
-                    aRef = pxIdx;
-                else
-                    aRef = new SwXDocumentIndex((const SwTOXBaseSection*)pBase, rPam.GetDoc() );
+                uno::Reference< XDocumentIndex > aRef =
+                    SwXDocumentIndexes::GetObject((SwTOXBaseSection*)pBase);
                 rAny.setValue(&aRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
             }
             else
@@ -5629,17 +5623,8 @@ void lcl_InsertTOXMarkPortion(
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwTOXMark& rTOXMark = ((SwTOXMark&)pAttr->GetAttr());
 
-    SwClientIter aIter(*(SwTOXType*)rTOXMark.GetTOXType());
-    SwXDocumentIndexMark* pxMark = (SwXDocumentIndexMark*)
-                                            aIter.First(TYPE(SwXDocumentIndexMark));
-    while( pxMark )
-    {
-        if(pxMark->GetTOXMark() == &rTOXMark)
-            break;
-        pxMark = (SwXDocumentIndexMark*)aIter.Next();
-    }
-
-    Reference<XTextContent> xContent = pxMark;
+    Reference<XTextContent> xContent =
+        ((SwUnoCallBack*)pDoc->GetUnoCallBack())->GetTOXMark(rTOXMark);
     if(!xContent.is())
         xContent = new SwXDocumentIndexMark(rTOXMark.GetTOXType(), &rTOXMark, pDoc);
 
