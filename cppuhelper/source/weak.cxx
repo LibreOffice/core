@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-13 09:47:37 $
+ *  last change: $Author: dbo $ $Date: 2002-11-18 09:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,15 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 //------------------------------------------------------------------------
 //-- OWeakObject -------------------------------------------------------
 //------------------------------------------------------------------------
+
+#ifdef _MSC_VER
+// Accidentally occurs in msvc mapfile = > had to be outlined.
+OWeakObject::OWeakObject() SAL_THROW( () )
+    : m_refCount( 0 ),
+      m_pWeakConnectionPoint( 0 )
+{
+}
+#endif
 
 // XInterface
 Any SAL_CALL OWeakObject::queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException)

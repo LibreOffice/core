@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2002-11-18 09:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,19 @@ public:
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
 
-    /** Constructor.  Set the reference count to zero.
+#ifdef _MSC_VER
+    /** Default Constructor.  Sets the reference count to zero.
+        Accidentally occurs in msvc mapfile = > had to be outlined.
+    */
+    OWeakObject() SAL_THROW( () );
+#else
+    /** Default Constructor.  Sets the reference count to zero.
     */
     inline OWeakObject() SAL_THROW( () )
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
+#endif
     /** Dummy copy constructor.  Set the reference count to zero.
 
         @param rObj dummy param
