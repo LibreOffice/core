@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-05-08 09:44:07 $
+ *  last change: $Author: af $ $Date: 2002-05-17 11:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
@@ -138,7 +141,7 @@ AccessibleShape::AccessibleShape (
     : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
       mpChildrenManager(NULL),
       mxShape (rShapeInfo.mxShape),
-      mShapeTreeInfo (rShapeTreeInfo),
+      maShapeTreeInfo (rShapeTreeInfo),
       mnIndex (rShapeInfo.mnIndex),
       mpText (NULL),
       mpParent (rShapeInfo.mpChildrenManager)
@@ -201,7 +204,7 @@ void AccessibleShape::Init (void)
     Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
     if (xShapes.is() && xShapes->getCount() > 0)
         mpChildrenManager = new ChildrenManager (
-            this, xShapes, mShapeTreeInfo, *this);
+            this, xShapes, maShapeTreeInfo, *this);
     if (mpChildrenManager != NULL)
         mpChildrenManager->Update();
 
@@ -210,12 +213,17 @@ void AccessibleShape::Init (void)
     if (xComponent.is())
         xComponent->addEventListener (this);
 
+    // Register at model as document::XEventListener.
+    if (maShapeTreeInfo.GetModelBroadcaster().is())
+        maShapeTreeInfo.GetModelBroadcaster()->addEventListener (
+            static_cast<document::XEventListener*>(this));
+
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine
     // accessible.
 #if 0
-    SdrView* pView = mShapeTreeInfo.GetSdrView ();
-    const Window* pWindow = mShapeTreeInfo.GetWindow ();
+    SdrView* pView = maShapeTreeInfo.GetSdrView ();
+    const Window* pWindow = maShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL)
     {
         SvxEditSource* pEditSource = new SvxTextEditSource (
@@ -233,6 +241,86 @@ void AccessibleShape::Init (void)
 bool AccessibleShape::operator== (const AccessibleShape& rShape)
 {
     return this==&rShape;
+}
+
+
+
+sal_Bool AccessibleShape::SetState (sal_Int16 aState)
+{
+    bool bStateHasChanged = sal_False;
+#if 0
+    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    {
+        // Offer focused state to edit engine and set or reset the state
+        // according to whether it takes it or refuses it.
+        if (mpText->SetFocusedState (sal_True))
+            bStateHasChanged = AccessibleContextBase::SetState (aState);
+        else
+            bStateHasChanged = AccessibleContextBase::ResetState (aState);
+    }
+    else
+#endif
+        bStateHasChanged = AccessibleContextBase::SetState (aState);
+
+    return bStateHasChanged;
+}
+
+
+
+
+sal_Bool AccessibleShape::ResetState (sal_Int16 aState)
+{
+    bool bStateHasChanged = sal_False;
+#if 0
+    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    {
+        // Offer focused state to edit engine and set or reset the state
+        // according to whether it takes it or refuses it.
+        if (mpText->SetFocusedState (sal_True))
+            bStateHasChanged = AccessibleContextBase::SetState (aState);
+        else
+            bStateHasChanged = AccessibleContextBase::ResetState (aState);
+    }
+    else
+#endif
+        bStateHasChanged = AccessibleContextBase::ResetState (aState);
+
+    return bStateHasChanged;
+}
+
+
+
+
+sal_Bool AccessibleShape::GetState (sal_Int16 aState)
+{
+#if 0
+    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    {
+        ::osl::MutexGuard aGuard (maMutex);
+        ::utl::AccessibleStateSetHelper* pStateSet =
+              static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+
+        // Merge current focused state from edit engine.
+        if (pStateSet != NULL)
+        {
+            if (mpText->GetFocusedState ())
+            {
+                pStateSet->AddState (aState);
+                return sal_True;
+            }
+            else
+            {
+                pStateSet->RemoveState (aState);
+                return sal_False;
+            }
+        }
+        else
+            // Return false as default when state set does not exist.
+            return sal_FALSE;
+    }
+    else
+#endif
+        return AccessibleContextBase::GetState (aState);
 }
 
 
@@ -291,6 +379,49 @@ uno::Reference<XAccessible> SAL_CALL
             static_cast<uno::XWeak*>(this));
 
     return xChild;
+}
+
+
+
+
+/** Return a copy of the state set.
+    Possible states are:
+        ENABLED
+        SHOWING
+        VISIBLE
+*/
+uno::Reference<XAccessibleStateSet> SAL_CALL
+    AccessibleShape::getAccessibleStateSet (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    Reference<XAccessibleStateSet> xStateSet;
+
+    if (rBHelper.bDisposed || mpText == NULL)
+        xStateSet = AccessibleContextBase::getAccessibleStateSet ();
+    else
+    {
+        ::utl::AccessibleStateSetHelper* pStateSet =
+              static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+
+        // Merge current focused state from edit engine.
+
+#if 0
+        if (pStateSet != NULL)
+        {
+            if (mpText->GetFocusedState ())
+                pStateSet->AddState (aState);
+            else
+                pStateSet->RemoveState (aState);
+            xStateSet = Reference<XAccessibleStateSet>(
+                new ::utl::AccessibleStateSetHelper (*pStateSet));
+        }
+#else
+        xStateSet = AccessibleContextBase::getAccessibleStateSet ();
+#endif
+    }
+
+    return xStateSet;
 }
 
 
@@ -372,9 +503,9 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     }
 
     // Transform coordinates from internal to pixel.
-    ::Size aPixelSize = mShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+    ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Size (aBoundingBox.Width, aBoundingBox.Height));
-    ::Point aPixelPosition = mShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+    ::Point aPixelPosition = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Point (aBoundingBox.X, aBoundingBox.Y));
 
     // Clip the shape's bounding box with the bounding box of its parent.
@@ -529,6 +660,44 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
 
 
 
+//=====  XAccessibleEventBroadcaster  =========================================
+
+void SAL_CALL AccessibleShape::addEventListener (
+    const Reference<XAccessibleEventListener >& rxListener)
+    throw (uno::RuntimeException)
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        uno::Reference<uno::XInterface> xThis ((lang::XComponent *)this, uno::UNO_QUERY);
+        rxListener->disposing (lang::EventObject (xThis));
+    }
+    else
+    {
+        AccessibleContextBase::addEventListener (rxListener);
+#if 0
+        if (mpText != NULL)
+            mpText->addEventListener (rxListener);
+#endif
+    }
+}
+
+
+
+
+void SAL_CALL AccessibleShape::removeEventListener (
+    const Reference<XAccessibleEventListener >& rxListener)
+    throw (uno::RuntimeException)
+{
+    AccessibleContextBase::removeEventListener (rxListener);
+#if 0
+    if (mpText != NULL)
+        mpText->removeEventListener (rxListener);
+#endif
+}
+
+
+
+
 //=====  XInterface  ==========================================================
 
 com::sun::star::uno::Any SAL_CALL
@@ -541,6 +710,7 @@ com::sun::star::uno::Any SAL_CALL
             static_cast<XAccessibleComponent*>(this),
             static_cast<XAccessibleExtendedComponent*>(this),
             static_cast<lang::XEventListener*>(this),
+            static_cast<document::XEventListener*>(this),
             static_cast<lang::XUnoTunnel*>(this)
             );
     return aReturn;
@@ -606,8 +776,10 @@ uno::Sequence<uno::Type> SAL_CALL
     // ... get list of types from component base implementation, ...
     uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
     // ... define local types, ...
-    const uno::Type aEventListenerType =
+    const uno::Type aLangEventListenerType =
         ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
+    const uno::Type aDocumentEventListenerType =
+        ::getCppuType((const uno::Reference<document::XEventListener>*)0);
     const uno::Type aUnoTunnelType =
         ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
     //    const uno::Type aStateSetType =
@@ -617,12 +789,13 @@ uno::Sequence<uno::Type> SAL_CALL
     sal_Int32   nTypeCount (aTypeList.getLength()), nComponentTypeCount (aComponentTypeList.getLength());
     int         i;
 
-    aTypeList.realloc (nTypeCount + nComponentTypeCount + 2);
+    aTypeList.realloc (nTypeCount + nComponentTypeCount + 3);
 
     for (i=0; i<nComponentTypeCount; i++)
         aTypeList[nTypeCount + i] = aComponentTypeList[i];
 
-    aTypeList[nTypeCount + i++ ] = aEventListenerType;
+    aTypeList[nTypeCount + i++ ] = aLangEventListenerType;
+    aTypeList[nTypeCount + i++ ] = aDocumentEventListenerType;
     aTypeList[nTypeCount + i ] = aUnoTunnelType;
 
     return aTypeList;
@@ -666,6 +839,38 @@ void SAL_CALL
         OSL_TRACE ("caught exception while disposing");
     }
 }
+
+
+
+
+//=====  document::XEventListener  ============================================
+
+void SAL_CALL
+    AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
+    throw (uno::RuntimeException)
+{
+    OSL_TRACE ("AccessibleShape::notifyEvent");
+    const OUString sShapeModified (RTL_CONSTASCII_USTRINGPARAM("ShapeModified"));
+    if (rEventObject.EventName.equals (sShapeModified))
+    {
+        OSL_TRACE ("  Is ShapeNotified event");
+        // Some property of a shape has been modified.  Find the associated
+        // accessible object and send an event that indicates a change of the
+        // visible data to all listeners.
+        uno::Reference<drawing::XShape> xShape (rEventObject.Source, uno::UNO_QUERY);
+        if (xShape == mxShape)
+        {
+            OSL_TRACE ("   Found accessible object for shape.");
+            CommitChange (
+                AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
+                uno::Any(),
+                uno::Any());
+        }
+    }
+}
+
+
+
 
 //=====  lang::XUnoTunnel  ================================================
 
@@ -743,88 +948,97 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     AccessibleShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName;
+    sal_Int32 nResourceId;
+    OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
-    switch (nShapeType)
+    switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
     {
         case DRAWING_3D_CUBE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DCubeShape"));
+            nResourceId = STR_ObjNameSingulCube3d;
             break;
         case DRAWING_3D_EXTRUDE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DExtrudeShape"));
+            nResourceId = STR_ObjNameSingulExtrude3d;
             break;
         case DRAWING_3D_LATHE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DLatheShape"));
+            nResourceId = STR_ObjNameSingulLathe3d;
             break;
         case DRAWING_3D_POLYGON:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DPolygonShape"));
+            nResourceId = STR_ObjNameSingulPoly3d;
             break;
         case DRAWING_3D_SCENE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSceneShape"));
+            nResourceId = STR_ObjNameSingulScene3d;
             break;
         case DRAWING_3D_SPHERE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSphereShape"));
+            nResourceId = STR_ObjNameSingulSphere3d;
             break;
         case DRAWING_CAPTION:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CaptionShape"));
+            nResourceId = STR_ObjNameSingulCAPTION;
             break;
-
         case DRAWING_CLOSED_BEZIER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedBezierShape"));
+            nResourceId = STR_ObjNameSingulPATHFILL;
             break;
         case DRAWING_CLOSED_FREEHAND:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedFreehandShape"));
+            nResourceId = STR_ObjNameSingulFREEFILL;
             break;
         case DRAWING_CONNECTOR:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConnectorShape"));
+            nResourceId = STR_ObjNameSingulEDGE;
+            break;
+        case DRAWING_CONTROL:
+            nResourceId = STR_ObjNameSingulUno;
             break;
         case DRAWING_ELLIPSE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("EllipseShape"));
+            nResourceId = STR_ObjNameSingulCIRCE;
             break;
         case DRAWING_GROUP:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("GroupShape"));
+            nResourceId = STR_ObjNameSingulGRUP;
             break;
         case DRAWING_LINE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("LineShape"));
+            nResourceId = STR_ObjNameSingulLINE;
             break;
         case DRAWING_MEASURE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("MeasureShape"));
+            nResourceId = STR_ObjNameSingulMEASURE;
             break;
         case DRAWING_OPEN_BEZIER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenBezierShape"));
+            nResourceId = STR_ObjNameSingulPATHLINE;
             break;
         case DRAWING_OPEN_FREEHAND:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenFreehandShape"));
+            nResourceId = STR_ObjNameSingulFREELINE;
             break;
         case DRAWING_PAGE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PageShape"));
+            nResourceId = STR_ObjNameSingulPAGE;
             break;
         case DRAWING_POLY_LINE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLineShape"));
+            nResourceId = STR_ObjNameSingulPLIN;
             break;
         case DRAWING_POLY_LINE_PATH:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLinePathShape"));
+            nResourceId = STR_ObjNameSingulPLIN;
             break;
         case DRAWING_POLY_POLYGON:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonShape"));
+            nResourceId = STR_ObjNameSingulPOLY;
             break;
         case DRAWING_POLY_POLYGON_PATH:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonPathShape"));
+            nResourceId = STR_ObjNameSingulPOLY;
             break;
         case DRAWING_RECTANGLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("RectangleShape"));
+            nResourceId = STR_ObjNameSingulRECT;
             break;
         case DRAWING_TEXT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TextShape"));
+            nResourceId = STR_ObjNameSingulTEXT;
             break;
-
         default:
+            nResourceId = -1;
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
                     + xDescriptor->getShapeType();
+            break;
+    }
+
+    if (nResourceId != -1)
+    {
+        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        sName = OUString (SVX_RESSTR(nResourceId));
     }
 
     return sName;
@@ -877,53 +1091,45 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     throw (::com::sun::star::uno::RuntimeException)
 {
     DescriptionGenerator aDG (mxShape);
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
-    switch (nShapeType)
+    aDG.Initialize (CreateAccessibleBaseName());
+    switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
     {
         case DRAWING_3D_CUBE:
-            aDG.Initialize (STR_ObjNameSingulCube3d);
-            aDG.Add3DProperties ();
-            break;
         case DRAWING_3D_EXTRUDE:
-            aDG.Initialize (STR_ObjNameSingulExtrude3d);
-            aDG.Add3DProperties ();
-            break;
         case DRAWING_3D_LATHE:
-            aDG.Initialize (STR_ObjNameSingulLathe3d);
-            aDG.Add3DProperties ();
-            break;
         case DRAWING_3D_POLYGON:
-            aDG.Initialize (STR_ObjNameSingulPoly3d);
-            aDG.Add3DProperties ();
-            break;
-        case DRAWING_3D_SCENE:
-            aDG.Initialize (STR_ObjNameSingulScene3d);
-            break;
         case DRAWING_3D_SPHERE:
-            aDG.Initialize (STR_ObjNameSingulSphere3d);
             aDG.Add3DProperties ();
             break;
+
+        case DRAWING_3D_SCENE:
+        case DRAWING_GROUP:
+        case DRAWING_PAGE:
+            // No further information is appended.
+            break;
+
         case DRAWING_CAPTION:
-            aDG.Initialize (STR_ObjNameSingulCAPTION);
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
         case DRAWING_CLOSED_BEZIER:
-            aDG.Initialize (STR_ObjNameSingulPATHFILL);
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
         case DRAWING_CLOSED_FREEHAND:
-            aDG.Initialize (STR_ObjNameSingulFREEFILL);
+        case DRAWING_ELLIPSE:
+        case DRAWING_POLY_POLYGON:
+        case DRAWING_POLY_POLYGON_PATH:
+        case DRAWING_RECTANGLE:
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
+
         case DRAWING_CONNECTOR:
-            aDG.Initialize (STR_ObjNameSingulEDGE);
+        case DRAWING_LINE:
+        case DRAWING_MEASURE:
+        case DRAWING_OPEN_BEZIER:
+        case DRAWING_OPEN_FREEHAND:
+        case DRAWING_POLY_LINE:
+        case DRAWING_POLY_LINE_PATH:
             aDG.AddLineProperties ();
             break;
+
         case DRAWING_CONTROL:
-            aDG.Initialize (STR_ObjNameSingulUno);
             aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
                 DescriptionGenerator::COLOR,
                 OUString());
@@ -931,63 +1137,14 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
                 DescriptionGenerator::INTEGER,
                 OUString());
             break;
-        case DRAWING_ELLIPSE:
-            aDG.Initialize (STR_ObjNameSingulCIRCE);
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
-        case DRAWING_GROUP:
-            aDG.Initialize (STR_ObjNameSingulGRUP);
-            break;
-        case DRAWING_LINE:
-            aDG.Initialize (STR_ObjNameSingulLINE);
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_MEASURE:
-            aDG.Initialize (STR_ObjNameSingulMEASURE);
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_OPEN_BEZIER:
-            aDG.Initialize (STR_ObjNameSingulPATHLINE);
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_OPEN_FREEHAND:
-            aDG.Initialize (STR_ObjNameSingulFREELINE);
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_PAGE:
-            aDG.Initialize (STR_ObjNameSingulPAGE);
-            break;
-        case DRAWING_POLY_LINE:
-            aDG.Initialize (STR_ObjNameSingulPLIN);
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_POLY_LINE_PATH:
-            aDG.Initialize (STR_ObjNameSingulPLIN);
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_POLY_POLYGON:
-            aDG.Initialize (STR_ObjNameSingulPOLY);
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
-        case DRAWING_POLY_POLYGON_PATH:
-            aDG.Initialize (STR_ObjNameSingulPOLY);
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
-        case DRAWING_RECTANGLE:
-            aDG.Initialize (STR_ObjNameSingulRECT);
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
+
         case DRAWING_TEXT:
-            aDG.Initialize (STR_ObjNameSingulTEXT);
             aDG.AddTextProperties ();
             break;
+
         default:
-            aDG.Initialize (::rtl::OUString::createFromAscii (
-                "Unknown accessible shape"));
+            aDG.Initialize (::rtl::OUString (
+                                RTL_CONSTASCII_USTRINGPARAM("Unknown accessible shape")));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -998,6 +1155,9 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
     return aDG();
 }
+
+
+
 
 uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
 {
