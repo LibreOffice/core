@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:18:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 10:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class ZipPackageBuffer :
 private:
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     sal_Int64 nBufferSize;
+    sal_Int64 nEnd;
     sal_Int64 nCurrent;
 public:
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
