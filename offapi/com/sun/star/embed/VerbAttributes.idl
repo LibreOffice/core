@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VerbAttributes.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:51:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,63 +58,36 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_embed_ElementModes_idl__
-#define __com_sun_star_embed_ElementModes_idl__
+#ifndef __com_sun_star_embed_VerbAttributes_idl__
+#define __com_sun_star_embed_VerbAttributes_idl__
 
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module embed {
 
-//=============================================================================
-/** There are possible modes to open element.
-    The modes can be combined by 'or' operation.
-    ELEMENT_READ and ELEMENT_WRITE are kind of base modes.
-    A result mode must include one of base modes.
+//============================================================================
+/** The constant set specifies possible attributes of a verb.
+
+    @see VerbDescriptor
 */
-constants ElementModes
+constants VerbAttributes
 {
-    //-------------------------------------------------------------------------
-    /** Open element for reading.
+    // -----------------------------------------------------------------------
+    /** Execution of the verb with this attribute must not modify the
+        object.
      */
-    const long ELEMENT_READ = 1;
+    const long MS_VERBATTR_NEVERDIRTIES = 1;
 
-    //-------------------------------------------------------------------------
-    /** Open seekable element. Ignored for storages.
+    // -----------------------------------------------------------------------
+    /** indicates that the verb should appear in the object's menu.
      */
-    const long ELEMENT_SEEKABLE = 2;
-
-    //-------------------------------------------------------------------------
-    /** Open seekable element for reading. This is just a combination of the previous two values.
-    For storages it's the same as ELEMENT_READ.
-     */
-    const long ELEMENT_SEEKABLEREAD = 3;
-
-    //-------------------------------------------------------------------------
-    /** Open element in write mode.
-     */
-    const long ELEMENT_WRITE = 4;
-
-    //-------------------------------------------------------------------------
-    /** Open element in readwrite mode. A stream must be opened also in seekable mode.
-     */
-    const long ELEMENT_READWRITE = 7;
-
-    //-------------------------------------------------------------------------
-    /** Truncate opened for writing element.
-    flag.
-     */
-    const long ELEMENT_TRUNCATE = 8;
-
-    //-------------------------------------------------------------------------
-    /** Do not create a new element in case a requested one does not exist.
-    Applicable only for elements opened for writing.
-     */
-    const long ELEMENT_NOCREATE = 16;
+    const long MS_VERBATTR_ONCONTAINERMENU = 2;
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
 #endif
+
