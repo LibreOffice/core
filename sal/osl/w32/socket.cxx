@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:34:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,7 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
     rtl_string2UString(
         &cn, he->h_name, strlen(he->h_name),
         RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+    OSL_ASSERT(cn != 0);
 
     pSocketAddr = __osl_createSocketAddr();
 
@@ -986,6 +987,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                 rtl_string2UString(
                     &hostName, Host, strlen(Host),
                     RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+                OSL_ASSERT(hostName != 0);
 
                 /* no, determine it via dns */
                 pAddr = osl_createHostAddrByName(hostName);
@@ -1156,6 +1158,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
     rtl_string2UString(
         strDottedInetAddr, pDotted, strlen (pDotted),
         RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+    OSL_ASSERT(*strDottedInetAddr != 0);
 
     return osl_Socket_Ok;
 }
