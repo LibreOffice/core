@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:09:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
 
 #ifndef _SVDPOOL_HXX //autogen wg. SdrItemPool
@@ -1001,10 +1004,17 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     mnState( 0 ),
     mnLineCount( 0 ),
     mnSelEntry( 0 ),
+    mnScrollValue( 0 ),
+    mnScrollMin( 0 ),
+    mnScrollMax( 100 ),
+    mnScrollStep( 1 ),
+    mnScrollPage( 10 ),
     mb3DStyle( false ),
-    mbMultiSel( false )
+    mbMultiSel( false ),
+    mbScrollHor( false )
 {
     namespace FormCompType = ::com::sun::star::form::FormComponentType;
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
 
     Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
     if( !rxShape.is() || !xPropSet.is() )
@@ -1027,6 +1037,8 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             case FormCompType::COMBOBOX:        mnObjType = EXC_OBJ_CMO_COMBOBOX;       break;
             case FormCompType::GROUPBOX:        mnObjType = EXC_OBJ_CMO_GROUPBOX;       break;
             case FormCompType::FIXEDTEXT:       mnObjType = EXC_OBJ_CMO_LABEL;          break;
+            case FormCompType::SCROLLBAR:       mnObjType = EXC_OBJ_CMO_SCROLLBAR;      break;
+            case FormCompType::SPINBUTTON:      mnObjType = EXC_OBJ_CMO_SPIN;           break;
         }
     }
     if( mnObjType == EXC_OBJ_CMO_UNKNOWN )
@@ -1128,7 +1140,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         }
     }
 
-    // selection
+    // special control contents
     switch( nClassId )
     {
         case FormCompType::LISTBOX:
@@ -1152,6 +1164,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
                 mnObjType = EXC_OBJ_CMO_COMBOBOX;
         }
         break;
+
         case FormCompType::COMBOBOX:
         {
             Sequence< OUString > aStringList;
@@ -1172,6 +1185,40 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             // convert combobox without dropdown button to Excel listbox
             if( !::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
                 mnObjType = EXC_OBJ_CMO_LISTBOX;
+        }
+        break;
+
+        case FormCompType::SCROLLBAR:
+        {
+            sal_uInt32 nApiValue;
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMin" ) ) )
+                mnScrollMin = ::lulimit< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMax" ) ) )
+                mnScrollMax = ::lulimit< sal_Int16 >( nApiValue, mnScrollMin, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValue" ) ) )
+                mnScrollValue = ::lulimit< sal_Int16 >( nApiValue, mnScrollMin, mnScrollMax );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "LineIncrement" ) ) )
+                mnScrollStep = ::lulimit< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "BlockIncrement" ) ) )
+                mnScrollPage = ::lulimit< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "Orientation" ) ) )
+                mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
+        }
+        break;
+
+        case FormCompType::SPINBUTTON:
+        {
+            sal_uInt32 nApiValue;
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMin" ) ) )
+                mnScrollMin = ::lulimit< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMax" ) ) )
+                mnScrollMax = ::lulimit< sal_Int16 >( nApiValue, mnScrollMin, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValue" ) ) )
+                mnScrollValue = ::lulimit< sal_Int16 >( nApiValue, mnScrollMin, mnScrollMax );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinIncrement" ) ) )
+                mnScrollStep = ::lulimit< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "Orientation" ) ) )
+                mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
         }
         break;
     }
@@ -1200,13 +1247,8 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             rStrm << nStyle;
             rStrm.EndRecord();
 
-            // ftCblsFmla - cell link
-            if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
-            {
-                rStrm.StartRecord( EXC_ID_OBJ_FTCBLSFMLA, 0 );
-                WriteFormula( rStrm, *pCellLink );
-                rStrm.EndRecord();
-            }
+            // ftCblsFmla subrecord - cell link
+            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTCBLSFMLA );
         }
         break;
 
@@ -1219,31 +1261,19 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
             // ftSbs subrecord - Scroll bars
             sal_Int32 nLineHeight = XclTools::GetHmmFromTwips( 200 );   // always 10pt
-            sal_uInt16 nVisLines = 0;
             if( mnObjType == EXC_OBJ_CMO_LISTBOX )
-                nVisLines = static_cast< sal_uInt16 >( mnHeight / nLineHeight );
-            else
-                nVisLines = mnLineCount;
-            sal_uInt16 nInvisLines = (nEntryCount >= nVisLines) ? (nEntryCount - nVisLines) : 0;
-            rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
-            rStrm   << sal_uInt32( 0 )              // reserved
-                    << sal_uInt16( 0 )              // thumb position
-                    << sal_uInt16( 0 )              // thumb min pos
-                    << sal_uInt16( nInvisLines )    // thumb max pos
-                    << sal_uInt16( 1 )              // line increment
-                    << sal_uInt16( nVisLines )      // page increment
-                    << sal_uInt16( 0 )              // 0 = vertical, 1 = horizontal
-                    << sal_uInt16( 16 )             // thumb width
-                    << sal_uInt16( 1 );             // reserved
-            rStrm.EndRecord();
+                mnLineCount = static_cast< sal_uInt16 >( mnHeight / nLineHeight );
+            mnScrollValue = 0;
+            mnScrollMin = 0;
+            sal_uInt16 nInvisLines = (nEntryCount >= mnLineCount) ? (nEntryCount - mnLineCount) : 0;
+            mnScrollMax = ::lulimit< sal_Int16 >( nInvisLines, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            mnScrollStep = 1;
+            mnScrollPage = ::lulimit< sal_Int16 >( mnLineCount, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            mbScrollHor = false;
+            WriteSbs( rStrm );
 
-            // ftSbsFmla - cell link
-            if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
-            {
-                rStrm.StartRecord( EXC_ID_OBJ_FTSBSFMLA, 0 );
-                WriteFormula( rStrm, *pCellLink );
-                rStrm.EndRecord();
-            }
+            // ftSbsFmla subrecord - cell link
+            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
 
             // ftLbsData - source data range and box properties
             sal_uInt16 nStyle = mbMultiSel ? EXC_OBJ_LBS_SEL_MULTI : EXC_OBJ_LBS_SEL_SIMPLE;
@@ -1279,7 +1309,48 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             rStrm.EndRecord();
         }
         break;
+
+        // *** Spin buttons, scrollbars ***
+
+        case EXC_OBJ_CMO_SPIN:
+        case EXC_OBJ_CMO_SCROLLBAR:
+        {
+            // ftSbs subrecord - scroll bars
+            WriteSbs( rStrm );
+
+            // ftSbsFmla subrecord - cell link
+            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
+        }
+        break;
     }
+}
+
+void XclExpObjTbxCtrl::WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId )
+{
+    if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
+    {
+        rStrm.StartRecord( nSubRecId, 0 );
+        WriteFormula( rStrm, *pCellLink );
+        rStrm.EndRecord();
+    }
+}
+
+void XclExpObjTbxCtrl::WriteSbs( XclExpStream& rStrm )
+{
+    sal_uInt16 nOrient = 0;
+    ::set_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL, mbScrollHor );
+
+    rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
+    rStrm   << sal_uInt32( 0 )              // reserved
+            << mnScrollValue                // thumb position
+            << mnScrollMin                  // thumb min pos
+            << mnScrollMax                  // thumb max pos
+            << mnScrollStep                 // line increment
+            << mnScrollPage                 // page increment
+            << nOrient                      // 0 = vertical, 1 = horizontal
+            << sal_uInt16( 15 )             // thumb width
+            << sal_uInt16( 1 );             // reserved
+    rStrm.EndRecord();
 }
 
 #endif
