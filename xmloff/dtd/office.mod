@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.30 2001-02-07 16:18:34 cl Exp $
+	$Id: office.mod,v 1.31 2001-02-23 15:50:36 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -151,6 +151,8 @@
 		table:consolidation?,
 		presentation:shows?)">
 <!ELEMENT office:body %body;>
+<!ATTLIST office:body table:structure-protected %boolean; "false"
+			table:protection-key CDATA #IMPLIED>
 
 <!ELEMENT office:events (script:event|presentation:event)*>
 
