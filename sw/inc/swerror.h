@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swerror.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 08:11:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,6 @@
 
 // More Import & Export  - Warnings
 #define WARN_FORMAT_FILE_ROWCOL         (WARN_SW_READ_BASE | 77)
-#define WARN_UNCONVERTABLE_CHARS        (WARN_SW_WRITE_BASE | 78)
 
 #ifndef __RSC
 
