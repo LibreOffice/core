@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 12:50:48 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 14:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,10 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+#ifndef _DBA_REGISTRATION_HELPER_HXX_
+#include "registrationhelper.hxx"
+#endif
+
 
 
 using namespace ::com::sun::star::uno;
@@ -250,7 +254,23 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 using namespace dbaui;
+
+extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
+{
+    static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
+}
+//-------------------------------------------------------------------------
+::comphelper::StringSequence SAL_CALL SbaXGridControl::getSupportedServiceNames() throw(RuntimeException)
+{
+    return getSupportedServiceNames_Static();
+}
+// -------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
+{
+    return *(new SbaXGridControl(_rxFactory));
+}
 
 /// collect the SBA_DEF_...-items and use them to create a new font based on the given one
 ::com::sun::star::awt::FontDescriptor   BuildFontFromItems(const SfxItemSet* pAttr, const Font& rBase);
