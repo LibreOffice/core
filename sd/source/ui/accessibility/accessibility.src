@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:54:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String SID_SD_A11Y_I_OUTLINEVIEW_D
 
 String SID_SD_A11Y_I_SLIDEVIEW_N
 {
-    Text [ de ] = "Diaansicht" ;
+    Text [ de ] = "Folienansicht" ;
     Text [ en-US ] = "Slides View";
 };
 
