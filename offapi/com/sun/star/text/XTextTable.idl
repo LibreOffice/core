@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextTable.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:13 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,26 +88,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XTextTable
 /** manages a text table.
+
+    @see som::sun::star:text::TextTable
+    @see com::sun::star::text::Cell
  */
 interface XTextTable: com::sun::star::text::XTextContent
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextTable::initialize
     /** determines the numbers of rows and columns of the text table.
 
-
-
-        <p> This method must be called before the object is inserted via
-
-
-
-
-
-        .
-
+        <p> This method must be called after the object is created and
+            before the object is insert or attached elsewhere.
         </p>
      */
     void initialize( [in] long nRows,
@@ -115,67 +108,63 @@ interface XTextTable: com::sun::star::text::XTextContent
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XTextTable::getRows
     /** @returns
-                the access object for the text table rows.
+            the access object for the text table rows.
 
-                @see com::sun::star::table::XTableRows
+        @see com::sun::star::table::XTableRows
      */
     com::sun::star::table::XTableRows getRows();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XTextTable::getColumns
     /** @returns
-                the access object for the text table columns.
+            the access object for the text table columns.
 
-                @see com::sun::star::table::XTableColumns
+        @see com::sun::star::table::XTableColumns
      */
     com::sun::star::table::XTableColumns getColumns();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XTextTable::getCellByName
     /** @returns
-                the <type scope="com::sun::star::table">XCell</type> interface of the cell with the specified name.
+            the <type scope="com::sun::star::table">XCell</type> interface of the cell with the specified name.
 
-                @param aCellName
-                is a concatenation of the alphanumeric column name and the
-                index of the row.
+        @param aCellName
+            is a concatenation of the alphanumeric column name and the
+            index of the row.
 
-                <p>Example: The cell in the 4th column and third row has the name "D3".
+            <p>Example: The cell in the 4th column and third row has the name "D3".
 
-                <p>In cells that are split, the naming convention is more complex.
-                In this case the name is a concatenation of the former cell name
-                (i.e. "D3") and the number of the new column and row index inside
-                of the original table cell separated by dots. This is done
-                recursively.
+            <p>In cells that are split, the naming convention is more complex.
+            In this case the name is a concatenation of the former cell name
+            (i.e. "D3") and the number of the new column and row index inside
+            of the original table cell separated by dots. This is done
+            recursively.
 
-                <p>Example: If the cell "D3" is horizontally split, it now contains
-                the cells "D3.1.1" and "D3.1.2"
+            <p>Example: If the cell "D3" is horizontally split, it now contains
+            the cells "D3.1.1" and "D3.1.2"
 
-                @see com::sun::star::table::XCell
+        @see com::sun::star::table::Cell
+        @see com::sun::star::table::XCell
      */
     com::sun::star::table::XCell getCellByName( [in] string aCellName );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XTextTable::getCellNames
     /** @returns
-                the names of all cells of this text table.
+            the names of all cells of this text table.
      */
     sequence<string> getCellNames();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextTable::createCursorByCellName
     /** creates a text table cursor and returns the
         <type>XTextTableCursor</type> interface.
 
-
-
         <p>Initially the cursor is positioned in the cell with the specified name.
         </p>
+
+        @see com::sun::star::text::TextTableCursor
      */
     com::sun::star::text::XTextTableCursor createCursorByCellName( [in] string aCellName );
 
