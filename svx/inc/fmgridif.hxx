@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 16:26:26 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 17:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,8 @@ protected:
 public:
     OWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
 
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
+    virtual void SAL_CALL acquire() throw() { m_rParent.acquire(); }
+    virtual void SAL_CALL release() throw() { m_rParent.release(); }
 };
 
 //==================================================================
