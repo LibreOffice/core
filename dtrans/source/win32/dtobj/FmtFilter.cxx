@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: tra $ $Date: 2001-05-15 13:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,10 +297,10 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
         reinterpret_cast< const sal_Char* >( aTextHtml.getConstArray( ) ),
         aTextHtml.getLength( ) );
 
-    sal_Int32 nStartHtml  = textHtml.search( startHtmlTag );
-    sal_Int32 nEndHtml    = textHtml.search( endHtmlTag );
-    sal_Int32 nStartFrgmt = textHtml.search( startBodyTag );
-    sal_Int32 nEndFrgmt   = textHtml.search( endBodyTag );
+    sal_Int32 nStartHtml  = textHtml.indexOf( startHtmlTag );
+    sal_Int32 nEndHtml    = textHtml.indexOf( endHtmlTag );
+    sal_Int32 nStartFrgmt = textHtml.indexOf( startBodyTag );
+    sal_Int32 nEndFrgmt   = textHtml.indexOf( endBodyTag );
 
     Sequence< sal_Int8 > aHTMLFmtSequence;
 
