@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-03 08:15:04 $
+ *  last change: $Author: obr $ $Date: 2001-05-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,17 +248,6 @@ static uno::Reference < i18n::XBreakIterator > ImplGetBreakIterator()
     if ( !xB.is() )
         xB = vcl::unohelper::CreateBreakIterator();
     return xB;
-}
-
-static uno::Reference< datatransfer::clipboard::XClipboard > ImplGetClipboard()
-{
-    static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-    if ( !xClipboard.is() )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
-        xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
-    }
-    return xClipboard;
 }
 
 // =======================================================================
@@ -1493,7 +1482,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             // Paste nur, wenn Text im Clipboard
             BOOL bData = FALSE;
-            uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+            uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
             if ( xClipboard.is() )
             {
                 const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -2136,7 +2125,7 @@ void Edit::Copy()
 {
     if ( !(GetStyle() & WB_PASSWORD ) )
     {
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
         if ( xClipboard.is() )
         {
             TextDataObject* pDataObj = new TextDataObject( GetSelected() );
@@ -2151,7 +2140,7 @@ void Edit::Copy()
 
 void Edit::Paste()
 {
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
     if ( xClipboard.is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
