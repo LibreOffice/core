@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:22:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5505,35 +5505,8 @@ String RID_STR_SVT_SQL_SYNTAX_NO_NUM
 
 String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
 {
-    Text = "Das Feld kann nicht mit einem Datum verglichen werden!";
-    Text [ ENGLISH ] = "The field can not be compared with a date!";
-    Text[ english_us ] = "The field cannot be compared with a date.";
-    Text[ portuguese ] = "Este campo não pode ser comparado com uma data!";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óıãêñéóç ôïõ ğåäßïõ ìå ìéá çìåñïìçíßá!";
-    Text[ dutch ] = "Het veld kan niet worden vergeleken met een datum!";
-    Text[ french ] = "Impossible de comparer le champ avec une date !";
-    Text[ spanish ] = "¡El campo no se puede comparar con una fecha!";
-    Text[ swedish ] = "Fältet kan inte jämföras med ett datum!";
-    Text[ russian ] = "Ñğàâíèòü ïîëå ñ äàòîé íåëüçÿ!";
-    Text[ italian ] = "Il campo non può essere paragonato a un dato.";
-    Text[ danish ] = "Feltet kan ikke sammenlignes med en dato.";
-    Text[ polish ] = "Pola nie mo¿na porównaæ z dat¹!";
-    Text[ portuguese_brazilian ] = "Este campo não pode ser comparado com uma data!";
-    Text[ japanese ] = "ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯æ—¥ä»˜ã§æ¯”è¼ƒã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "í•„ë“œë¥¼ ë‚ ì§œì™€ ë¹„êµí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "è¿™ä¸ªå­—æ®µä¸èƒ½ä¸æ—¥æœŸç›¸æ¯”è¾ƒï¼";
-    Text[ chinese_traditional ] = "æ­¤æ¬„ä½ä¸å¯ä»¥å’Œæ—¥æœŸç›¸æ¯”è¼ƒã€‚";
-    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáÍŞá ÈÊÇÑíÎı!";
-    Text[ turkish ] = "Bu alan bir veri işe karşılaştırılamadı.";
-    Text[ finnish ] = "Kenttää ei voi verrata päivämäärään.";
-    Text[ catalan ] = "El camp no es pot comparar amb una data.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¹‰à¸§à¸¢à¸à¸±à¸šà¸§à¸±à¸™à¸—à¸µà¹ˆà¹„à¸”à¹‰";
-    Text[ czech ] = "Pole nemÅ¯Å¾e bÃ½t porovnÃ¡no s datem.";
-    Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×”×©×•×•×ª ×©×“×” ×–×” ×¢× ×ª××¨×™×š.â€¬";
-    Text[ hindi ] = "The field cannot be compared with a date.";
-    Text[ slovak ] = "Pole nemÃ´Å¾e byÅ¥ porovnÃ¡vanÃ© s dÃ¡tumom.";
-    Text[ hungarian ] = "A mezÅ‘t nem lehet Ã¶sszehasonlÃ­tani egy dÃ¡tummal.";
-    Text[ slovenian ] = "Polja ni mogoÄe primerjati z datumom.";
+    Text = "Der eingegebene Wert ist kein gültiges Datum. Bitte geben Sie ein Datum in einem gültigen Format ein, z.B. TT.MM.JJ.";
+    Text[ english_us ] = "The value entered is not a valid date. Please enter a date in a valid format, for example, MM/DD/YY.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID
