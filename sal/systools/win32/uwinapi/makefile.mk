@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-14 14:33:18 $
+#   last change: $Author: hro $ $Date: 2002-08-15 09:50:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@ TARGET=uwinapi
 USE_DEFFILE=TRUE
 LIBTARGET=NO
 #USE_LDUMP2=TRUE
-GEN_HID=TRUE
 
 # --- Settings ----------------------------------
 
