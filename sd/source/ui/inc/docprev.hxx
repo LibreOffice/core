@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:11:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,15 @@
 #endif
 
 #ifndef _SD_FADEDEF_H
-#include <fadedef.h>
+#include "fadedef.h"
+#endif
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
 #endif
 
 class GDIMetaFile;
 
-class SdDocPreviewWin : public Control, public SfxListener
+class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
     GDIMetaFile*    pMetaFile;
