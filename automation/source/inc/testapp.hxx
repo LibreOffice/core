@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:52:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #endif
 
 class CommunicationLink;
-class CommunicationManager;
+class CommunicationManagerClientViaSocketTT;
 class CNames;
 class ControlItemUId;
 class CRevNames;
@@ -193,7 +193,7 @@ private:
     USHORT nControlsObj;
 
     void InitTestToolObj();
-    CommunicationManager *pCommunicationManager;
+    CommunicationManagerClientViaSocketTT *pCommunicationManager;
     void SendViaSocket();
 
     BOOL Load( String aName, SbModule *pMod );
