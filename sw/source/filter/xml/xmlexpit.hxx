@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:57:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public:
                     sal_uInt16 nFlags = 0 ) const;
 
     /** this method is called for every item that has the
-        MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+        MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem( SvXMLAttributeList& rAttrList,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
@@ -143,7 +143,7 @@ public:
 
 
     /** this method is called for every item that has the
-        MID_FLAG_NO_ITEM_EXPORT flag set */
+        MID_SW_FLAG_NO_ITEM_EXPORT flag set */
     virtual void handleNoItem( SvXMLAttributeList& rAttrList,
                                const SvXMLItemMapEntry& rEntry,
                                const SvXMLUnitConverter& rUnitConverter,
@@ -151,7 +151,7 @@ public:
                                const SfxItemSet& rSet ) const;
 
     /** this method is called for every item that has the
-        MID_FLAG_ELEMENT_EXPORT flag set */
+        MID_SW_FLAG_ELEMENT_EXPORT flag set */
     virtual void handleElementItem( SvXMLExport& rExport,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
