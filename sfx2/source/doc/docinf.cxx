@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:53:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,7 @@ ULONG SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
 
     SotStorageStreamRef aStrPropSet = pStorage->OpenSotStream(
         String::CreateFromAscii( pPropSlot ), STREAM_STD_READ );
-    if ( !aStrPropSet.Is() )
+    if ( !aStrPropSet.Is() || aStrPropSet->GetError() != SVSTREAM_OK )
         return ERRCODE_IO_ACCESSDENIED;
     aStrPropSet->SetBufferSize( STREAM_BUFFER_SIZE );
     SfxPS_Impl* pPS = new SfxPS_Impl;
