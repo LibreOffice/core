@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 12:55:41 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 09:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,7 +1153,7 @@ void SdOptionsGrid::SetDefaults()
     SetFldSnapY( nVal );
     SetUseGridSnap( FALSE );
     SetSynchronize( TRUE );
-//  SetGridVisible( FALSE );
+    SetGridVisible( FALSE );
     SetEqualGrid( TRUE );
 }
 
@@ -1169,7 +1169,7 @@ BOOL SdOptionsGrid::operator==( const SdOptionsGrid& rOpt ) const
             GetFldSnapY() == rOpt.GetFldSnapY() &&
             IsUseGridSnap() == rOpt.IsUseGridSnap() &&
             IsSynchronize() == rOpt.IsSynchronize() &&
-//          IsGridVisible() == rOpt.IsGridVisible() &&
+            IsGridVisible() == rOpt.IsGridVisible() &&
             IsEqualGrid() == rOpt.IsEqualGrid() );
 }
 
@@ -1187,11 +1187,11 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "SnapGrid/YAxis/Metric",
         "Option/SnapToGrid",
         "Option/Synchronize",
-//      "Option/VisibleGrid",
+        "Option/VisibleGrid",
         "SnapGrid/Size"
     };
 
-    rCount = 9;
+    rCount = 10;
     ppNames = aPropNames;
 }
 
@@ -1218,8 +1218,8 @@ BOOL SdOptionsGrid::ReadData( const Any* pValues )
     if( pValues[5].hasValue() ) SetFldSnapY( *(sal_Int32*) pValues[ 5 ].getValue() );
     if( pValues[6].hasValue() ) SetUseGridSnap( *(sal_Bool*) pValues[ 6 ].getValue() );
     if( pValues[7].hasValue() ) SetSynchronize( *(sal_Bool*) pValues[ 7 ].getValue() );
-//  if( pValues[8].hasValue() ) SetGridVisible( *(sal_Bool*) pValues[ 8 ].getValue() );
-    if( pValues[8].hasValue() ) SetEqualGrid( *(sal_Bool*) pValues[ 8 ].getValue() );
+    if( pValues[8].hasValue() ) SetGridVisible( *(sal_Bool*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetEqualGrid( *(sal_Bool*) pValues[ 9 ].getValue() );
 
     return TRUE;
 }
@@ -1236,8 +1236,8 @@ BOOL SdOptionsGrid::WriteData( Any* pValues ) const
     pValues[ 5 ] <<= (sal_Int32) GetFldSnapY();
     pValues[ 6 ] <<= IsUseGridSnap();
     pValues[ 7 ] <<= IsSynchronize();
-//  pValues[ 8 ] <<= IsGridVisible();
-    pValues[ 8 ] <<= IsEqualGrid();
+    pValues[ 8 ] <<= IsGridVisible();
+    pValues[ 9 ] <<= IsEqualGrid();
 
     return TRUE;
 }
@@ -1270,7 +1270,7 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView
         SetFldSnapX( pView->GetSnapGrid().Width() );
         SetFldSnapY( pView->GetSnapGrid().Height() );
         SetUseGridSnap( pView->IsGridSnap() );
-//      SetGridVisible( pView->IsGridVisible() );
+        SetGridVisible( pView->IsGridVisible() );
     }
     else
     {
@@ -1281,7 +1281,7 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView
         SetFldSnapX( pOpts->GetFldSnapX() );
         SetFldSnapY( pOpts->GetFldSnapY() );
         SetUseGridSnap( pOpts->IsUseGridSnap() );
-//      SetGridVisible( pOpts->IsGridVisible() );
+        SetGridVisible( pOpts->IsGridVisible() );
     }
 }
 
@@ -1297,7 +1297,7 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetFldSnapY( GetFldSnapY() );
     pOpts->SetUseGridSnap( GetUseGridSnap() );
     pOpts->SetSynchronize( GetSynchronize() );
-//  pOpts->SetGridVisible( GetGridVisible() );
+    pOpts->SetGridVisible( GetGridVisible() );
     pOpts->SetEqualGrid( GetEqualGrid() );
 }
 
