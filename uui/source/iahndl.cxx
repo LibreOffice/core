@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
+ *  last change: $Author: mav $ $Date: 2001-06-26 14:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUEST_HPP_
+#include <com/sun/star/task/PasswordRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_NOMASTEREXCEPTION_HPP_
+#include <com/sun/star/task/NoMasterException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_HANDLECOOKIESREQUEST_HPP_
 #include <com/sun/star/ucb/HandleCookiesRequest.hpp>
@@ -152,6 +158,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#ifndef _RTL_DIGEST_H
+#include <rtl/digest.h>
+#endif
 
 #ifndef UUI_COOKIEDG_HXX
 #include <cookiedg.hxx>
@@ -164,6 +173,9 @@
 #endif
 #ifndef UUI_LOGINDLG_HXX
 #include <logindlg.hxx>
+#endif
+#ifndef UUI_PASSWORDDLG_HXX
+#include <passworddlg.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -190,6 +202,9 @@ USHORT executeErrorDialog(ULONG nID, USHORT nMask);
 
 //============================================================================
 void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm);
+
+//============================================================================
+void executePasswordDialog( LoginErrorInfo & rInfo, task::PasswordRequestMode nMode );
 
 //============================================================================
 void executeCookieDialog(CntHTTPCookieRequest & rRequest);
@@ -396,40 +411,19 @@ UUIInteractionHandler::handle(
             bRememberPersistent = false;
         }
 
-        if( mPContainer.is() )
+        // mPContainer works with userName passwdSequences pairs
+        if( mPContainer.is() && aAuthenticationRequest.HasUserName && aAuthenticationRequest.HasPassword )
         {
             if (!aAuthenticationRequest.UserName.getLength())
             {
-                task::UrlRecord  aRec = mPContainer->find( aAuthenticationRequest.ServerName,
-                                                uno::Reference< task::XInteractionHandler >());
-                if( aRec.UserList.getLength() )
-                {
-                    xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
-                    OSL_ENSURE( aRec.UserList[0].Passwords.getLength(), "Empty password list!\n" );
-                    xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
-                    if( aRec.UserList[0].Passwords.getLength() > 1 )
-                    {
-                        if ( aAuthenticationRequest.HasRealm )
-                            xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
-                        else
-                            xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
-                    }
-                    xSupplyAuthentication->select();
+                try {
+                    task::UrlRecord aRec = mPContainer->find( aAuthenticationRequest.ServerName,
+                                                uno::Reference< task::XInteractionHandler >( this ));
 
-                    return;
-                }
-            }
-            else
-            {
-                task::UrlRecord aRec = mPContainer->findForName( aAuthenticationRequest.ServerName,
-                                                 aAuthenticationRequest.UserName,
-                                                uno::Reference< task::XInteractionHandler >());
-                if( aRec.UserList.getLength() )
-                {
-                    OSL_ENSURE( aRec.UserList[0].Passwords.getLength(), "Empty password list!\n" );
-                    if ( !aAuthenticationRequest.HasPassword || !aAuthenticationRequest.Password.equals( aRec.UserList[0].Passwords[0] ))
+                    if( aRec.UserList.getLength() )
                     {
                         xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
+                        OSL_ENSURE( aRec.UserList[0].Passwords.getLength(), "Empty password list!\n" );
                         xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
                         if( aRec.UserList[0].Passwords.getLength() > 1 )
                         {
@@ -439,8 +433,54 @@ UUIInteractionHandler::handle(
                                 xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
                         }
                         xSupplyAuthentication->select();
+
                         return;
                     }
+                }
+                catch( task::NoMasterException& )
+                {
+                    // user did not enter master password
+                }
+                catch( uno::RuntimeException& )
+                {
+                    // something wrong happend
+                    OSL_ENSURE( sal_False, "PasswordContainer problem\n" );
+                }
+            }
+            else
+            {
+                try {
+                    task::UrlRecord aRec = mPContainer->findForName( aAuthenticationRequest.ServerName,
+                                                 aAuthenticationRequest.UserName,
+                                                 uno::Reference< task::XInteractionHandler >( this ));
+
+                    if( aRec.UserList.getLength() )
+                    {
+                        OSL_ENSURE( aRec.UserList[0].Passwords.getLength(), "Empty password list!\n" );
+                        if ( !aAuthenticationRequest.HasPassword || !aAuthenticationRequest.Password.equals( aRec.UserList[0].Passwords[0] ))
+                        {
+                            xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
+                            xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
+                            if( aRec.UserList[0].Passwords.getLength() > 1 )
+                            {
+                                if ( aAuthenticationRequest.HasRealm )
+                                    xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
+                                else
+                                    xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
+                            }
+                            xSupplyAuthentication->select();
+                            return;
+                        }
+                    }
+                }
+                catch( task::NoMasterException& )
+                {
+                    // user did not enter master password
+                }
+                catch( uno::RuntimeException& )
+                {
+                    // something wrong happend
+                    OSL_ENSURE( sal_False, "PasswordContainer problem\n" );
                 }
             }
         }
@@ -497,10 +537,25 @@ UUIInteractionHandler::handle(
                         aPassList.realloc(2);
                         aPassList[1] = aInfo.GetAccount();
                     }
-                    // after we are able to save encripted passwords
-                    // we should modify stuff below
-                    mPContainer->add( aAuthenticationRequest.ServerName, aInfo.GetUserName(), aPassList,
-                                                uno::Reference< task::XInteractionHandler >());
+
+                    try {
+                        if( aInfo.GetIsSavePassword() )
+                            if( bRememberPersistent )
+                                mPContainer->addPersistent( aAuthenticationRequest.ServerName, aInfo.GetUserName(), aPassList,
+                                                    uno::Reference< task::XInteractionHandler >( this ));
+                            else
+                                mPContainer->add( aAuthenticationRequest.ServerName, aInfo.GetUserName(), aPassList,
+                                                    uno::Reference< task::XInteractionHandler >( this ));
+                    }
+                    catch( task::NoMasterException& )
+                    {
+                        // user did not enter master password
+                    }
+                    catch( uno::RuntimeException& )
+                    {
+                        // something wrong happend
+                        OSL_ENSURE( sal_False, "PasswordContainer problem\n" );
+                    }
                 }
                 break;
 
@@ -514,6 +569,66 @@ UUIInteractionHandler::handle(
                     xAbort->select();
                 break;
         }
+        return;
+    }
+
+    task::PasswordRequest aPasswordRequest;
+    if (aTheRequest >>= aPasswordRequest)
+    {
+        uno::Reference< task::XInteractionAbort > xAbort;
+        uno::Reference< task::XInteractionRetry > xRetry;
+        uno::Reference< ucb::XInteractionSupplyAuthentication >
+            xSupplyAuthentication;
+        for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
+        {
+            if (!xAbort.is())
+            {
+                xAbort = uno::Reference< task::XInteractionAbort >(
+                             aContinuations[i], uno::UNO_QUERY);
+                if (xAbort.is())
+                    continue;
+            }
+            if (!xRetry.is())
+            {
+                xRetry = uno::Reference< task::XInteractionRetry >(
+                             aContinuations[i], uno::UNO_QUERY);
+                if (xRetry.is())
+                    continue;
+            }
+            if (!xSupplyAuthentication.is())
+            {
+                xSupplyAuthentication
+                    = uno::Reference< ucb::XInteractionSupplyAuthentication >(
+                          aContinuations[i], uno::UNO_QUERY);
+                if (xSupplyAuthentication.is())
+                    continue;
+            }
+        }
+
+        LoginErrorInfo aInfo;
+        executePasswordDialog(aInfo, aPasswordRequest.Mode );
+
+        switch (aInfo.GetResult())
+        {
+            case ERRCODE_BUTTON_OK:
+                if (xSupplyAuthentication.is())
+                {
+                    xSupplyAuthentication->setPassword(aInfo.GetPassword());
+                    xSupplyAuthentication->select();
+                }
+                break;
+
+            case ERRCODE_BUTTON_RETRY:
+                if (xRetry.is())
+                    xRetry->select();
+                break;
+
+            default:
+                if (xAbort.is())
+                    xAbort->select();
+                break;
+        }
+
         return;
     }
 
@@ -1104,6 +1219,48 @@ void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm)
     rInfo.SetSavePassword(pDialog->IsSavePassword());
     delete pDialog;
     delete pManager;
+}
+
+//============================================================================
+//
+//  executePasswordDialog
+//
+//============================================================================
+
+void executePasswordDialog( LoginErrorInfo & rInfo, task::PasswordRequestMode nMode )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    ResMgr * pManager = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui));
+    MasterPasswordDialog * pDialog = new MasterPasswordDialog(0, nMode, pManager);
+
+    rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+
+    unsigned char aKey[ RTL_DIGEST_LENGTH_MD5 ];
+
+    {
+        ::rtl::OString aMaster = ::rtl::OUStringToOString( pDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8 );
+
+        delete pDialog;
+        delete pManager;
+
+        rtl_digest_PBKDF2 ( aKey, RTL_DIGEST_LENGTH_MD5,
+                        (const unsigned char*)aMaster.getStr(), aMaster.getLength(),
+                        (const unsigned char*)"3B5509ABA6BC42D9A3A1F3DAD49E56A51", 32,
+                        1000 );
+    }
+
+    char strKey[ RTL_DIGEST_LENGTH_MD5*2 + 1 ];
+
+    for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
+    {
+        strKey[ind*2]   = ( ((sal_uInt8)aKey[ind]) >> 4 ) + 'a';
+        strKey[ind*2+1] = ( ((sal_uInt8)aKey[ind]) & 0x0f ) + 'a';
+    }
+    strKey[ RTL_DIGEST_LENGTH_MD5*2 ] = '\0';
+
+    rInfo.SetPassword( ::rtl::OUString::createFromAscii( strKey ) );
+
 }
 
 //============================================================================
