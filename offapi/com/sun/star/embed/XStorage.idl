@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorage.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:35:52 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,51 +681,6 @@ interface XStorage
         raises( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::container::ElementExistException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::embed::StorageWrappedTargetException );
-
-    // -----------------------------------------------------------------------
-    /** allows to insert a raw stream representing encrypted stream.
-
-        <p>
-        This method allows to transport encrypted streams without decryption.
-        Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not reccomended to
-        use this method outside of storage implementation since different
-        storages implementation could have different encryption format.
-        </p>
-
-        @param sStreamName
-            the name of the substream that should be open
-
-        @param xInputStream
-            a raw stream representing encrypted stream
-
-        @throws ::com::sun::star::embed::InvalidStorageException
-            this storage is in invalid state for any reason
-
-        @throws ::com::sun::star::lang::IllegalArgumentException
-            one of provided arguments is illegal
-
-        @throws ::com::sun::star::packages::NoRawFormatException
-            the stream is not one of raw package stream format
-
-        @throws ::com::sun::star::container::ElementExistException
-            an element with specified name already exists
-
-        @throws ::com::sun::star::io::IOException
-            in case of io errors during stream opening
-
-        @throws ::com::sun::star::embed::StorageWrappedTargetException
-            wraps other exceptions
-     */
-    void insertRawEncrStreamElement(
-            [in] string sStreamName,
-            [in] ::com::sun::star::io::XInputStream xInStream )
-        raises( ::com::sun::star::embed::InvalidStorageException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::packages::NoRawFormatException,
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
