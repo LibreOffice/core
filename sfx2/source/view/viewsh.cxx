@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:30:41 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     if ( xDocShell.Is() )
                     {
                         // Get PDF Filter from container
-                        SfxFactoryFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
+                        SfxFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
                         if ( pFilterContainer )
                         {
                             String aPDFExtension = String::CreateFromAscii( ".pdf" );
@@ -1261,7 +1261,7 @@ void SfxViewShell::SFX_NOTIFY( SfxBroadcaster& rBC,
                 if ( GetController().is() )
                 {
                     SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                    SFX_ITEMSET_ARG( pSet, pItem, SfxUsrAnyItem, SID_VIEW_DATA, sal_False );
+                    SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
                     if ( pItem )
                         pImp->pController->restoreViewData( pItem->GetValue() );
                     pSet->ClearItem( SID_VIEW_DATA );
