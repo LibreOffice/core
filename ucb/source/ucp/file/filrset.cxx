@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-18 09:20:28 $
+ *  last change: $Author: abi $ $Date: 2001-01-23 09:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,30 +345,46 @@ XResultSet_impl::OneMore(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
+    if( ! m_nIsOpen ) return false;
+
     if( m_bFaked )
         return OneMoreFaked();
 
-    osl::DirectoryItem                  m_aDirIte;
+    osl::FileBase::RC err;
+    sal_Bool IsRegular;
+    rtl::OUString aUnqPath;
+    osl::DirectoryItem  m_aDirIte;
+    uno::Reference< sdbc::XRow > aRow;
 
-     if( ! m_nIsOpen ) return false;
-
-    osl::FileBase::RC err = m_aFolder.getNextItem( m_aDirIte );
-
-    if( err == osl::FileBase::E_NOENT || err == osl::FileBase::E_INVAL )
+    while( true )
     {
-        m_aFolder.close();
-        isFinalChanged();
-        return ( m_nIsOpen = false );
-    }
-    else if( err == osl::FileBase::E_None )
-    {
-        sal_Bool IsRegular;
-        rtl::OUString aUnqPath;
-        uno::Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
+        err = m_aFolder.getNextItem( m_aDirIte );
 
-        if( m_nOpenMode == OpenMode::DOCUMENTS )
+        if( err == osl::FileBase::E_NOENT || err == osl::FileBase::E_INVAL )
         {
-            if( IsRegular )
+            m_aFolder.close();
+            isFinalChanged();
+            return ( m_nIsOpen = false );
+        }
+        else if( err == osl::FileBase::E_None )
+        {
+            aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
+
+            if( m_nOpenMode == OpenMode::DOCUMENTS && IsRegular )
+            {
+                vos::OGuard aGuard( m_aMutex );
+                m_aItems.push_back( aRow );
+                m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+                m_aUnqPath.push_back( aUnqPath );
+                rowCountChanged();
+                return true;
+
+            }
+            else if( m_nOpenMode == OpenMode::DOCUMENTS && ! IsRegular )
+            {
+                continue;
+            }
+            else if( m_nOpenMode == OpenMode::FOLDERS && ! IsRegular )
             {
                 vos::OGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
@@ -377,14 +393,11 @@ XResultSet_impl::OneMore(
                 rowCountChanged();
                 return true;
             }
-            else
+            else if( m_nOpenMode == OpenMode::FOLDERS && IsRegular )
             {
-                return OneMore();
+                continue;
             }
-        }
-        else if( m_nOpenMode == OpenMode::FOLDERS )
-        {
-            if( ! IsRegular )
+            else
             {
                 vos::OGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
@@ -393,27 +406,95 @@ XResultSet_impl::OneMore(
                 rowCountChanged();
                 return true;
             }
-            else
-            {
-                return OneMore();
-            }
         }
-        else
+        else  // error fetching anything
         {
-            vos::OGuard aGuard( m_aMutex );
-            m_aItems.push_back( aRow );
-            m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
-            m_aUnqPath.push_back( aUnqPath );
-            rowCountChanged();
-            return true;
+            throw sdbc::SQLException();
+            return false;
         }
-    }
-    else
-    {
-        throw sdbc::SQLException();
-        return false;
     }
 }
+
+
+
+
+/*
+  sal_Bool SAL_CALL
+  XResultSet_impl::OneMore(
+  void )
+  throw( sdbc::SQLException,
+  uno::RuntimeException )
+  {
+  if( m_bFaked )
+  return OneMoreFaked();
+
+  osl::DirectoryItem                  m_aDirIte;
+
+  if( ! m_nIsOpen ) return false;
+
+  osl::FileBase::RC err = m_aFolder.getNextItem( m_aDirIte );
+
+  if( err == osl::FileBase::E_NOENT || err == osl::FileBase::E_INVAL )
+  {
+  m_aFolder.close();
+  isFinalChanged();
+  return ( m_nIsOpen = false );
+  }
+  else if( err == osl::FileBase::E_None )
+  {
+  sal_Bool IsRegular;
+  rtl::OUString aUnqPath;
+  uno::Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
+
+  if( m_nOpenMode == OpenMode::DOCUMENTS )
+  {
+  if( IsRegular )
+  {
+  vos::OGuard aGuard( m_aMutex );
+  m_aItems.push_back( aRow );
+  m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+  m_aUnqPath.push_back( aUnqPath );
+  rowCountChanged();
+  return true;
+  }
+  else
+  {
+  return OneMore();
+  }
+  }
+  else if( m_nOpenMode == OpenMode::FOLDERS )
+  {
+  if( ! IsRegular )
+  {
+  vos::OGuard aGuard( m_aMutex );
+  m_aItems.push_back( aRow );
+  m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+  m_aUnqPath.push_back( aUnqPath );
+  rowCountChanged();
+  return true;
+  }
+  else
+  {
+  return OneMore();
+  }
+  }
+  else
+  {
+  vos::OGuard aGuard( m_aMutex );
+  m_aItems.push_back( aRow );
+  m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+  m_aUnqPath.push_back( aUnqPath );
+  rowCountChanged();
+  return true;
+  }
+  }
+  else
+  {
+  throw sdbc::SQLException();
+  return false;
+  }
+  }
+*/
 
 
 sal_Bool SAL_CALL
