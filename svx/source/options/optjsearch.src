@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: jp $ $Date: 2001-05-23 11:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text = "Suchoptionen für Japanisch" ;
+    Text [ ENGLISH ] = "Searching in Japanese" ;
     FixedLine FL_TREAT_AS_EQUAL
     {
         Pos = MAP_APPFONT( 6, 3 );
