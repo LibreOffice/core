@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:37:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 #ifndef _SFX_OBJSHIMP_HXX
 #define _SFX_OBJSHIMP_HXX
 
+//#include <hash_map>
+
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -94,10 +96,10 @@ class SfxToolBoxConfig;
 class SfxAcceleratorManager;
 struct SfxObjectShell_Impl
 {
+    ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
     SfxAcceleratorManager*  pAccMgr;
     SfxDocumentInfo*    pDocInfo;
     SfxConfigManager*   pCfgMgr;
-    SfxInPlaceObject*   pInPlaceObj;        // das dazugeh"orige SO2-Objekt, falls this ein SfxInPlaceObject ist
     BasicManager*       pBasicMgr;          // Doc-BASIC oder 0
     SfxScriptLibraryContainer* pBasicLibContainer;
     SfxDialogLibraryContainer* pDialogLibContainer;
@@ -116,9 +118,6 @@ struct SfxObjectShell_Impl
                         bPasswd:1,
                         bIsTmp:1,
                         bIsNamedVisible:1,
-                        bDidWarnFormat:1,   // sal_True, falls schon wg. speichern in Fremformat gewarnt wurde
-                        bSetStandardName:1, // sal_True, falls im FileSave Dialog xxxx.sdw im Standardverzeichnis vorgeschlagen werden soll.
-                        bDidDangerousSave:1,         // sal_True, falls ein Save in ein Alienformat durchgefuehrt wurde
                         bIsTemplate:1,
                         bIsAbortingImport:1,  // Importvorgang soll abgebrochen werden.
                         bImportDone : 1, //Import schon fertig? Fuer AutoReload von Docs.
@@ -134,8 +133,8 @@ struct SfxObjectShell_Impl
                         bLoadingWindows: 1,
                         bBasicInitialized :1,
                         bHidden :1, // indicates a hidden view shell
-                        bIsPrintJobCancelable :1; // Stampit disable/enable cancel button for print jobs ... default = true = enable!
-//!                        bLoadReadOnly:1; // if doc should be opened read only by config
+                        bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
+                        bOwnsStorage:1;
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -172,6 +171,18 @@ struct SfxObjectShell_Impl
     sal_Int16                nMacroMode;
     sal_Bool                bDisposing;
 
+    sal_Bool                m_bEnableSetModified;
+    sal_Bool                m_bIsModified;
+
+    Rectangle               m_aVisArea;
+    MapUnit                 m_nMapUnit;
+
+    sal_Bool                m_bCreateTempStor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;
+
+    sal_Bool                m_bIsInit;
+
+
     SfxObjectShell_Impl() :
         pAccMgr(0),
         nTime(),
@@ -179,7 +190,6 @@ struct SfxObjectShell_Impl
         bClosing( sal_False),
         bSetInPlaceObj( sal_False),
         bPasswd( sal_False),
-        pInPlaceObj( 0),
         pBasicMgr( 0),
         pBasicLibContainer( 0 ),
         pDialogLibContainer( 0 ),
@@ -191,8 +201,6 @@ struct SfxObjectShell_Impl
         bIsNamedVisible( sal_False),
         pCfgMgr( 0),
         bTemplateConfig( sal_False),
-        bDidWarnFormat( sal_False),
-        bDidDangerousSave(sal_False),
         bIsBasicDefault( sal_True ),
         bIsTemplate(sal_False),
         lErr(ERRCODE_NONE),
@@ -235,7 +243,13 @@ struct SfxObjectShell_Impl
         , nMacroMode( -1 )
         , bDisposing( sal_False )
         , bIsPrintJobCancelable( sal_True )
-//        , bLoadReadOnly( sal_False )
+        , m_bEnableSetModified( sal_True )
+        , m_bIsModified( sal_False )
+        , m_nMapUnit( MAP_100TH_MM )
+        , m_bCreateTempStor( sal_False )
+        , m_bIsInit( sal_False )
+        , mpObjectContainer(0)
+        , bOwnsStorage( sal_True )
     {}
     ~SfxObjectShell_Impl();
 
