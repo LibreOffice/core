@@ -117,26 +117,27 @@ public interface TokenConstants {
         public static final int TAVERAGE        = 0x05;
         public static final int TCOUNT          = 0x00;
         public static final int TCOUNTA         = 0xA9;
-        public static final int TMAX            = 0x07 ;
-        public static final int TMIN            = 0x06 ;
-        public static final int TSTDEV          = 0x0C ;
-        public static final int TVAR            = 0x2E ;
-        public static final int TVARP           = 0xC2 ;
+        public static final int TMAX            = 0x07;
+        public static final int TMIN            = 0x06;
+        public static final int TSTDEV          = 0x0C;
+        public static final int TSTDEVP         = 0xC1;
+        public static final int TVAR            = 0x2E;
+        public static final int TVARP           = 0xC2;
         // Lookup
-        public static final int TCHOOSE         = 0x64 ;
-        public static final int THLOOKUP        = 0x65 ;
-        public static final int TINDEX          = 0x1D ;
-        public static final int TMATCH          = 0x40 ;
-        public static final int TVLOOKUP        = 0x66 ;
+        public static final int TCHOOSE         = 0x64;
+        public static final int THLOOKUP        = 0x65;
+        public static final int TINDEX          = 0x1D;
+        public static final int TMATCH          = 0x40;
+        public static final int TVLOOKUP        = 0x66;
         // Text
-        public static final int TRIGHT          = 0x74 ;
-        public static final int TSUBSTITUTE     = 0x78 ;
-        public static final int TFIND           = 0x7c ;
-        public static final int TLEFT           = 0x73 ;
+        public static final int TRIGHT          = 0x74;
+        public static final int TSUBSTITUTE     = 0x78;
+        public static final int TFIND           = 0x7c;
+        public static final int TLEFT           = 0x73;
         // Logical
-        public static final int TAND            = 0x24 ; // 42
-        public static final int TIF             = 0x01 ; // 42
-        public static final int TOR             = 0x25 ; // 42
+        public static final int TAND            = 0x24; // 42
+        public static final int TIF             = 0x01; // 42
+        public static final int TOR             = 0x25; // 42
 
     // Fixed argument Functions
         // Math and Trig
@@ -184,47 +185,47 @@ public interface TokenConstants {
         // Statistical
         public static final int TCOUNTBLANK     = 0x015B ;
         // lookup
-        public static final int TCOLUMNS        = 0x4D ;
-        public static final int TROWS           = 0x4C ;
+        public static final int TCOLUMNS        = 0x4D;
+        public static final int TROWS           = 0x4C;
         // Database
-        public static final int TDAVAERAGE      = 0x2A ;
-        public static final int TDCOUNT         = 0x28 ;
-        public static final int TDCOUNTA        = 0xC7 ;
-        public static final int TDGET           = 0xEB ;
-        public static final int TDMAX           = 0x2C ;
-        public static final int TDMIN           = 0x2B ;
-        public static final int TDPRODUCT       = 0xBD ;
-        public static final int TDSTDEV         = 0x2D ;
-        public static final int TDSTDEVP        = 0xC3 ;
-        public static final int TDSUM           = 0x29 ;
-        public static final int TDVAR           = 0x2F ;
-        public static final int TDVARP          = 0xC4 ;
+        public static final int TDAVAERAGE      = 0x2A;
+        public static final int TDCOUNT         = 0x28;
+        public static final int TDCOUNTA        = 0xC7;
+        public static final int TDGET           = 0xEB;
+        public static final int TDMAX           = 0x2C;
+        public static final int TDMIN           = 0x2B;
+        public static final int TDPRODUCT       = 0xBD;
+        public static final int TDSTDEV         = 0x2D;
+        public static final int TDSTDEVP        = 0xC3;
+        public static final int TDSUM           = 0x29;
+        public static final int TDVAR           = 0x2F;
+        public static final int TDVARP          = 0xC4;
         // Text
-        public static final int TEXACT          = 0x75 ;
-        public static final int TLEN            = 0x20 ;
-        public static final int TLOWER          = 0x70 ;
-        public static final int TMID            = 0x1F ; // ??????
-        public static final int TPROPER         = 0x72 ;
-        public static final int TREPLACE        = 0x77 ;
-        public static final int TREPT           = 0x1E ;
-        public static final int TT              = 0x82 ;
-        public static final int TRIM            = 0x76 ;
-        public static final int TUPPER          = 0x71 ;
-        public static final int TVALUE          = 0x21 ;
+        public static final int TEXACT          = 0x75;
+        public static final int TLEN            = 0x20;
+        public static final int TLOWER          = 0x70;
+        public static final int TMID            = 0x1F; // ??????
+        public static final int TPROPER         = 0x72;
+        public static final int TREPLACE        = 0x77;
+        public static final int TREPT           = 0x1E;
+        public static final int TT              = 0x82;
+        public static final int TRIM            = 0x76;
+        public static final int TUPPER          = 0x71;
+        public static final int TVALUE          = 0x21;
         // Logical
-        public static final int TFALSE          = 0x23 ;
-        public static final int TNOT            = 0x26 ;
-        public static final int TTRUE           = 0x22 ;
+        public static final int TFALSE          = 0x23;
+        public static final int TNOT            = 0x26;
+        public static final int TTRUE           = 0x22;
         // Informational
-        public static final int TERRORTYPE      = 0x05 ;
-        public static final int TISBLANK        = 0x81 ;
-        public static final int TISERR          = 0x7E ;
-        public static final int TISERROR        = 0x03 ;
-        public static final int TISLOGICAL      = 0xC6 ;
-        public static final int TISNA           = 0x02 ;
-        public static final int TISNONTEXT      = 0xBE ;
-        public static final int TISNUMBER       = 0x80 ;
-        public static final int TISTEXT         = 0x7F ;
-        public static final int TN              = 0x83 ;
-        public static final int TNA             = 0x0A ;
+        public static final int TERRORTYPE      = 0x05;
+        public static final int TISBLANK        = 0x81;
+        public static final int TISERR          = 0x7E;
+        public static final int TISERROR        = 0x03;
+        public static final int TISLOGICAL      = 0xC6;
+        public static final int TISNA           = 0x02;
+        public static final int TISNONTEXT      = 0xBE;
+        public static final int TISNUMBER       = 0x80;
+        public static final int TISTEXT         = 0x7F;
+        public static final int TN              = 0x83;
+        public static final int TNA             = 0x0A;
 }

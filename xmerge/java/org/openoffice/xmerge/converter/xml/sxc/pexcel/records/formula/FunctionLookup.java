@@ -108,6 +108,7 @@ public class FunctionLookup implements SymbolLookup {
                 addEntry("MAX", TokenConstants.TMAX, -1 );
                 addEntry("MIN", TokenConstants.TMIN, -1);
                 addEntry("STDEV", TokenConstants.TSTDEV, -1 );
+                addEntry("STDEVP", TokenConstants.TSTDEVP, -1 );
                 addEntry("VAR", TokenConstants.TVAR, -1);
                 addEntry("VARP", TokenConstants.TVARP, -1);
                 // Lookup
@@ -181,7 +182,7 @@ public class FunctionLookup implements SymbolLookup {
                 addEntry("DSTDEV", TokenConstants.TDSTDEV, 3);
                 addEntry("DSTDEVP", TokenConstants.TDSTDEVP, 3) ;
                 addEntry("DSUM", TokenConstants.TDSUM, 3);
-                addEntry("TRUNC", TokenConstants.TDVAR, 3);
+                addEntry("DVAR", TokenConstants.TDVAR, 3);
                 addEntry("DVARP", TokenConstants.TDVARP, 3);
                 // Text
                 addEntry("EXACT", TokenConstants.TEXACT, 2);
