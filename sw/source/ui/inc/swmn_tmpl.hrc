@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmn_tmpl.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 08:42:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,10 +298,10 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
 #define MN_RESET\
     MenuItem\
     {\
-        Text [ de ] = "Standar~d" ; \
         Identifier = FN_FORMAT_RESET ; \
         HelpID = FN_FORMAT_RESET ; \
-        Text [ en-US ] = "~Default" ; \
+        Text [ de ] = "Standardformatierung" ; \
+        Text [ en-US ] = "~Default Formatting" ; \
     };
 
 #define BASE_TEXT_POPUPMENU_BEGIN \
