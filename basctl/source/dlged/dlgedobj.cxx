@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-12 11:31:43 $
+ *  last change: $Author: tbe $ $Date: 2001-03-13 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,7 +800,6 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 IMPL_LINK(DlgEdObj, OnCreate, void*, EMPTYTAG)
 {
     /*
-    nEvent = 0;
     if (pTempView)
         pTempView->ObjectCreated(this);
     */
@@ -825,17 +824,7 @@ void DlgEdObj::StartListening()
             m_xPropertyChangeListener = static_cast< ::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdPropListenerImpl( (DlgEdObj*)this ) );
 
             // register listener to properties
-            Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
-            DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::StartListening: control model has no property info!");
-            Sequence< Property > aProps = xControlModelInfo->getProperties();
-            Property* pProps = aProps.getArray();
-            for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
-            {
-                if ( pProps[i].Attributes & PropertyAttribute::BOUND )
-                {
-                    xControlModel->addPropertyChangeListener( pProps[i].Name , m_xPropertyChangeListener );
-                }
-            }
+            xControlModel->addPropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
         }
 
         // XContainerListener
@@ -872,17 +861,7 @@ void DlgEdObj::EndListening(sal_Bool bRemoveListener)
             if ( m_xPropertyChangeListener.is() && xControlModel.is() )
             {
                 // remove listener
-                Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
-                DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::EndListening: control model has no property info!");
-                Sequence< Property > aProps = xControlModelInfo->getProperties();
-                Property* pProps = aProps.getArray();
-                for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
-                {
-                    if ( pProps[i].Attributes & PropertyAttribute::BOUND )
-                    {
-                        xControlModel->removePropertyChangeListener( pProps[i].Name , m_xPropertyChangeListener );
-                    }
-                }
+                xControlModel->removePropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
             }
             m_xPropertyChangeListener.clear();
 
@@ -1082,6 +1061,7 @@ FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
+    // set geometry properties
     SetPropsFromRect();
 
     return bResult;
