@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:19:27 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 22:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3351,7 +3351,7 @@ String STR_COMBCHRS_FT
     TEXT[ dutch ] = "~Tekens";
     TEXT[ french ] = "~Caractères";
     TEXT[ spanish ] = "C~arácter";
-    TEXT[ italian ] = "C~arattere";
+    TEXT[ italian ] = "Carattere";
     TEXT[ danish ] = "Ch~aracters";
     TEXT[ swedish ] = "Te~cken";
     TEXT[ polish ] = "Znaki";
