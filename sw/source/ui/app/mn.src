@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:35:14 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ Menu MN_TAB_POPUPMENU
             Text [ italian ] = "Limte tabella" ;
             Text [ portuguese_brazilian ] = "Linhas da Grade" ;
             Text [ portuguese ] = "~Limites da tabela" ;
-            Text [ finnish ] = "Taustaruudukko" ;
+            Text [ finnish ] = "Taulukon rajat" ;
             Text [ danish ] = "Tabelgrænse" ;
             Text [ french ] = "Délimitations de t~ableau" ;
             Text [ swedish ] = "Tabellbegr~änsning" ;
@@ -200,6 +200,7 @@ Menu MN_TAB_POPUPMENU
             Text[ arabic ] = "ÊÚÑíÝ ÇáÃÑÞÇã";
             Text[ turkish ] = "Sayý tanýma";
             Text[ catalan ] = "~Reconocimiento de número";
+            Text[ finnish ] = "~Numeroiden tunnistus";
         };
     };
 };
@@ -315,6 +316,7 @@ String MN_DRAWFORM_POPUPMENU
     Text[ korean ] = "ÄÁÆ®·Ñ";
     Text[ turkish ] = "Komut alaný";
     Text[ catalan ] = "Campo de control";
+    Text[ finnish ] = "Ohjain";
 };
 
 Menu MN_DRAWFORM_POPUPMENU
@@ -358,6 +360,7 @@ String MN_DRWTXT_POPUPMENU
     Text[ korean ] = "±×¸®±â °³Ã¼ ÅØ½ºÆ®";
     Text[ turkish ] = "Çizim nesnesi metni";
     Text[ catalan ] = "Texto del objeto de dibujo";
+    Text[ finnish ] = "Piirrosobjektin teksti";
 };
 
 Menu MN_DRWTXT_POPUPMENU
@@ -487,6 +490,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ korean ] = "±×¸®±â °³Ã¼ ÅØ½ºÆ®";
     Text[ turkish ] = "Çizim nesnesi metni";
     Text[ catalan ] = "Texto del objeto de dibujo";
+    Text[ finnish ] = "Piirrosobjektin teksti";
 };
 
 Menu MN_PPREVIEW_POPUPMENU
@@ -518,6 +522,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ korean ] = "ÀÌÀü ÂÊ";
             Text[ turkish ] = "Önceki sayfa";
             Text[ catalan ] = "Página anterior";
+            Text[ finnish ] = "Edellinen sivu";
         };
         MenuItem
         {
@@ -545,6 +550,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ korean ] = "´ÙÀ½ ÂÊ";
             Text[ turkish ] = "Sonraki sayfa";
             Text[ catalan ] = "Página siguiente";
+            Text[ finnish ] = "Seuraava sivu";
         };
         MenuItem
         {
@@ -578,6 +584,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ korean ] = "ÂÊ¹Ì¸®º¸±â¡¡ÀÎ¼â";
             Text[ turkish ] = "Yazdýr";
             Text[ catalan ] = "Imprimir vista preliminar";
+            Text[ finnish ] = "Tulosta";
         };
         MenuItem
         {
@@ -604,6 +611,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ korean ] = "ÀÎ¼â ¿É¼Ç";
             Text[ turkish ] = "Yazdýrma seçenekleri";
             Text[ catalan ] = "Opciones de impresión";
+            Text[ finnish ] = "Tulostusasetukset";
         };
         SEPARATOR ;
         MenuItem
