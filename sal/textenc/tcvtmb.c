@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-18 10:49:51 $
+ *  last change: $Author: sb $ $Date: 2002-02-25 14:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,39 +289,50 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
         else
             cConv = 0;
 
-        if ( !cConv && !c )
+        if (cConv == 0 && c != 0)
         {
-            /* EUDC Ranges */
-            sal_uInt16              i;
-            const ImplDBCSEUDCData* pEUDCTab = pConvertData->mpEUDCTab;
-            for ( i = 0; i < pConvertData->mnEUDCCount; i++ )
+            /* Map to EUDC ranges: */
+            ImplDBCSEUDCData const * pEUDCTab = pConvertData->mpEUDCTab;
+            sal_uInt32 i;
+            for (i = 0; i < pConvertData->mnEUDCCount; ++i)
             {
-                if ( (c >= pEUDCTab->mnUniStart) && (c <= pEUDCTab->mnUniEnd) )
+                if (c >= pEUDCTab->mnUniStart && c <= pEUDCTab->mnUniEnd)
                 {
-                    sal_uInt16 nLead = (c-pEUDCTab->mnUniStart) / pEUDCTab->mnTrailRangeCount;
-                    sal_uInt16 nOff = c-(nLead*pEUDCTab->mnTrailRangeCount);
-                    cConv = pEUDCTab->mnLeadStart+nLead;
-                    cConv <<= 8;
-                    if ( nOff < (pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1) )
-                        cConv += pEUDCTab->mnTrail1Start+nOff;
-                    else
+                    sal_uInt32 nIndex = c - pEUDCTab->mnUniStart;
+                    sal_uInt32 nLeadOff
+                        = nIndex / pEUDCTab->mnTrailRangeCount;
+                    sal_uInt32 nTrailOff
+                        = nIndex % pEUDCTab->mnTrailRangeCount;
+                    sal_uInt32 nSize;
+                    cConv = (sal_uInt16)
+                                ((pEUDCTab->mnLeadStart + nLeadOff) << 8);
+                    nSize
+                        = pEUDCTab->mnTrail1End - pEUDCTab->mnTrail1Start + 1;
+                    if (nTrailOff < nSize)
                     {
-                        nOff -= pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
-                        if ( nOff < (pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1) )
-                            cConv += pEUDCTab->mnTrail2Start+nOff;
-                        else
-                        {
-                            nOff -= pEUDCTab->mnTrail2End-pEUDCTab->mnTrail2Start+1;
-                            cConv += pEUDCTab->mnTrail3Start+nOff;
-                        }
+                        cConv |= pEUDCTab->mnTrail1Start + nTrailOff;
+                        break;
                     }
-
+                    nTrailOff -= nSize;
+                    nSize
+                        = pEUDCTab->mnTrail2End - pEUDCTab->mnTrail2Start + 1;
+                    if (nTrailOff < nSize)
+                    {
+                        cConv |= pEUDCTab->mnTrail2Start + nTrailOff;
+                        break;
+                    }
+                    nTrailOff -= nSize;
+                    cConv |= pEUDCTab->mnTrail3Start + nTrailOff;
                     break;
                 }
-
                 pEUDCTab++;
             }
 
+            /* FIXME
+             * SB: Not sure why this is in here.  Plus, it does not work as
+             * intended when (c & 0xFF) == 0, because the next !cConv check
+             * will then think c has not yet been converted...
+             */
             if (c >= RTL_TEXTCVT_BYTE_PRIVATE_START
                 && c <= RTL_TEXTCVT_BYTE_PRIVATE_END)
             {
