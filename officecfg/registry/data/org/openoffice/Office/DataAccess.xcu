@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:20:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
           <value>com.sun.star.comp.sdbcx.adabas.ODriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -79,7 +79,7 @@
            <value>com.sun.star.comp.sdbc.evoab.OEvoabDriver</value>
          </prop>
          <prop oor:name="Enable">
-           <value>true</value>
+           <value>false</value>
          </prop>
          <prop oor:name="Timeout">
            <value>60</value>
@@ -90,7 +90,7 @@
           <value>com.sun.star.comp.sdbc.ado.ODriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -101,7 +101,7 @@
           <value>com.sun.star.comp.sdbc.flat.ODriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -112,7 +112,7 @@
           <value>com.sun.star.comp.sdbc.calc.ODriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -123,7 +123,7 @@
           <value>com.sun.star.comp.sdbc.dbase.ODriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -134,7 +134,7 @@
           <value>com.sun.star.comp.sdbc.JDBCDriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -145,7 +145,7 @@
           <value>com.sun.star.comp.sdbc.MozabDriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -156,7 +156,7 @@
           <value>org.openoffice.comp.drivers.MySQL.Driver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -167,7 +167,7 @@
           <value>com.sun.star.comp.sdbc.ODBCDriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
@@ -178,7 +178,7 @@
           <value>com.sun.star.comp.sdbcx.adabas.ext.ODriver</value>
         </prop>
         <prop oor:name="Enable">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Timeout">
           <value>60</value>
