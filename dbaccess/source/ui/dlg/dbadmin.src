@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:42:46 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
 
     Text = "Datenquellen verwalten" ;
     Text [ english ] = "Data source administration" ;
-    Text [ english_us ] = "Data source administration" ;
+    Text [ english_us ] = "Data Source Administration" ;
 
     //.........................................................................
     String STR_PAGETITLE_GENERAL
@@ -637,6 +637,23 @@ TabPage PAGE_GENERAL
         Text = "Auf Ihrem System wurden keine Adabas-Datenquellen gefunden.";
         Text [ english ] = "No Adabas data sources have been found on your system.";
         Text [ english_us ] = "No Adabas data sources have been found on your system.";
+        Text[ portuguese ] = "No Adabas data sources have been found on your system.";
+        Text[ russian ] = "No Adabas data sources have been found on your system.";
+        Text[ greek ] = "Äåí âñİèçêå êáìßá ğñïİëåõóç äåäïìİíùí ôïõ Adabas óôï óıóôçìá óáò.";
+        Text[ dutch ] = "Op uw systeem werden geen Adabas-gegevensbronnen gevonden.";
+        Text[ french ] = "Aucune source de données Adabas n'a été détectée dans votre système.";
+        Text[ spanish ] = "No Adabas data sources have been found on your system.";
+        Text[ italian ] = "No Adabas data sources have been found on your system.";
+        Text[ danish ] = "No Adabas data sources have been found on your system.";
+        Text[ swedish ] = "Inga Adabasdatakällor har hittats på Ditt system.";
+        Text[ polish ] = "No Adabas data sources have been found on your system.";
+        Text[ portuguese_brazilian ] = "No Adabas data sources have been found on your system.";
+        Text[ japanese ] = "No Adabas data sources have been found on your system.";
+        Text[ korean ] = "No Adabas data sources have been found on your system.";
+        Text[ chinese_simplified ] = "No Adabas data sources have been found on your system.";
+        Text[ chinese_traditional ] = "¦b±zªº¨t²Î¤W¨S¦³¦w¸Ë Adabas ¸ê®Æ·½¡C";
+        Text[ turkish ] = "No Adabas data sources have been found on your system.";
+        Text[ arabic ] = "No Adabas data sources have been found on your system.";
     };
 };
 
@@ -1736,21 +1753,21 @@ String STR_ERR_EMPTY_DSN_NAME
     Text = "Der Datenquellen-Name darf nicht leer sein!";
     Text [ english ] = "The data source name must not be empty!";
     Text [ english_us ] = "The data source name must not be empty!";
-    Text[ portuguese ] = "The data source name must not be empty!";
-    Text[ russian ] = "The data source name must not be empty!";
-    Text[ greek ] = "The data source name must not be empty!";
-    Text[ dutch ] = "The data source name must not be empty!";
-    Text[ french ] = "The data source name must not be empty!";
-    Text[ spanish ] = "The data source name must not be empty!";
+    Text[ portuguese ] = "O nome da fonte de dados não pode encontrar-se vazio!";
+    Text[ russian ] = "Èìÿ èñòî÷íèêà äàííûõ íå äîëæíî îñòàâàòüñÿ ïóñòûì!";
+    Text[ greek ] = "Ôï üíïìá ôçò ğñïİëåõóçò ôùí äåäïìİíùí äåí åğéôñİğåôáé íá åßíáé êåíü!";
+    Text[ dutch ] = "De naam van de gegevensbron moet worden aangegeven!";
+    Text[ french ] = "Le nom de la source de données ne peut pas être vide !";
+    Text[ spanish ] = "¡El nombre de la fuente de datos no puede quedar vacío!";
     Text[ italian ] = "The data source name must not be empty!";
     Text[ danish ] = "The data source name must not be empty!";
     Text[ swedish ] = "Namnet på datakällan får inte vara tomt!";
     Text[ polish ] = "Nazwa Ÿród³a danych nie mo¿e byæ pusta!";
     Text[ portuguese_brazilian ] = "The data source name must not be empty!";
-    Text[ japanese ] = "The data source name must not be empty!";
+    Text[ japanese ] = "ÃŞ°À¿°½–¼‚ª‹ó”’‚Å‚Í‚¢‚¯‚Ü‚¹‚ñB";
     Text[ korean ] = "The data source name must not be empty!";
     Text[ chinese_simplified ] = "Êı¾İÔ´Ãû³Æ²»¿ÉÒÔ¿ÕÈ±£¡";
-    Text[ chinese_traditional ] = "The data source name must not be empty!";
+    Text[ chinese_traditional ] = "¸ê®Æ·½¦WºÙ¤£¥i¥HªÅ¯Ê¡I";
     Text[ turkish ] = "The data source name must not be empty!";
     Text[ arabic ] = "The data source name must not be empty!";
 };
@@ -1836,6 +1853,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2000/11/10 17:42:46  fs
+ *  +STR_NO_ADABASE_DATASOURCES
+ *
  *  Revision 1.12  2000/11/09 12:29:24  kz
  *  Merge SRC612: 09.11.00 - 13:28:47 (NoBranch)
  *
