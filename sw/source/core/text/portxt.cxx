@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
+ *  last change: $Author: fme $ $Date: 2001-08-20 13:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                 rInf.GetRoot()->SetEndHyph( sal_True );
         }
         // case C1
-        else if ( IsFtnPortion() )
+        else if ( IsFtnPortion() && rInf.IsFakeLineStart() )
             BreakUnderflow( rInf );
         // case B2
         else if( rInf.GetIdx() > rInf.GetLineStart() ||

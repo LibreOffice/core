@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-24 11:55:06 $
+ *  last change: $Author: fme $ $Date: 2001-08-20 13:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,12 @@ void SwFtnPortion::ClearFtn()
 sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 {
     SwFtnSave aFtnSave( rInf, pFtn );
+    // the idx is manipulated in SwExpandPortion::Format
+    // this flag indicates, that a footnote is allowed to trigger
+    // an underflow during SwTxtGuess::Guess
+    rInf.SetFakeLineStart( rInf.GetIdx() > rInf.GetLineStart() );
     sal_Bool bFull = SwExpandPortion::Format( rInf );
+    rInf.SetFakeLineStart( sal_False );
     SetAscent( rInf.GetAscent() );
     rInf.SetFtnDone( !bFull );
     if( !bFull )

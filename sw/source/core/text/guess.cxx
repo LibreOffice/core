@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-17 11:08:09 $
+ *  last change: $Author: fme $ $Date: 2001-08-20 13:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,15 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             return sal_True;
         }
+    }
+
+    // we have to trigger an underflow for a footnote portion
+    // which does not fit to the current line
+    if ( rPor.IsFtnPortion() )
+    {
+        nBreakPos = rInf.GetIdx();
+        nCutPos = rInf.GetLen();
+        return sal_False;
     }
 
     sal_Bool bChgLocale = sal_False;
