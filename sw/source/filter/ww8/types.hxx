@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:39:19 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,16 @@
 //else
 //include standalonetypes.hxx
 //endif
+
+namespace ww
+{
+    /** For custom wrapping
+
+        When you edit the wrap points of a contour in word, word uses a relative
+        scale of 0 to 21600 where 21600 is apparently 100% of the graphic width
+    */
+    const int nWrap100Percent = 21600;
+}
 
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
