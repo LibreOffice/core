@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-16 13:39:05 $
+ *  last change: $Author: sj $ $Date: 2001-05-28 15:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,7 +1068,8 @@ static ImpFilterLibCache aCache;
 // - GraphicFilter -
 // -----------------
 
-GraphicFilter::GraphicFilter()
+GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
+    bUseConfig  ( bConfig )
 {
     ImplInit();
 }
@@ -1092,7 +1093,7 @@ void GraphicFilter::ImplInit()
     SvtPathOptions aPathOpt;
     aFilterPath = aPathOpt.GetFilterPath();
     pErrorEx = new FilterErrorEx;
-    pConfig = new FilterConfigCache();
+    pConfig = new FilterConfigCache( bUseConfig );
     nPercent = 0;
     bAbort = sal_False;
 
