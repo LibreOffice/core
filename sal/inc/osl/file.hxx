@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 08:55:38 $
+ *  last change: $Author: obr $ $Date: 2001-05-15 15:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,7 +1150,10 @@ public:
     static inline RC get( const File& rFile, DirectoryItem& rItem )
     {
         if( rItem._pData)
+        {
             osl_releaseDirectoryItem( rItem._pData );
+            rItem._pData = NULL;
+        }
 
         return (RC) osl_createDirectoryItemFromHandle( rFile._pData, &rItem._pData );
     }
