@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modulemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:49:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,34 +374,6 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_openCon
     {
         if (xModule->supportsService(pKnownModules[m]))
             return pKnownModules[m];
-    }
-
-    // but some modules must be handled seperatly!
-    // E.g. the help does not provide a controller. Its a window only :-(
-    // We use the frame name OFFICE_HELPTASk to detect the help frame ...
-    // then we search inside our configuration for this value as ShortName property.
-    // If we can locate it, the module name can be returned.
-    css::uno::Reference< css::frame::XFrame > xFrame(xModule, css::uno::UNO_QUERY);
-    if (xFrame.is())
-    {
-        if (xFrame->getName() == SPECIALTARGET_HELPTASK)
-        {
-            for (sal_Int32 m=0; m<c; ++m)
-            {
-                css::uno::Sequence< css::beans::PropertyValue > lProps;
-                getByName(pKnownModules[m]) >>= lProps;
-                for (sal_Int32 p=0; p<lProps.getLength(); ++p)
-                {
-                    if (lProps[p].Name.equalsAscii( "ooSetupFactoryShortName" ))
-                    {
-                        ::rtl::OUString sShortName;
-                        lProps[p].Value >>= sShortName;
-                        if (sShortName == SPECIALTARGET_HELPTASK)
-                            return pKnownModules[m];
-                    }
-                }
-            }
-        }
     }
 
     throw dcss::frame::UnknownModuleException(
