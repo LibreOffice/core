@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.2 2001-02-02 19:13:01 svesik Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.3 2001-03-02 07:16:57 pluby Exp $
 #
-#     $Date: 2001-02-02 19:13:01 $
-#     $Author: svesik $
-#     $Revision: 1.2 $
+#     $Date: 2001-03-02 07:16:57 $
+#     $Author: pluby $
+#     $Revision: 1.3 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -106,10 +106,6 @@ UNOTYPES=\
 
 SLOFILES=\
     $(SLO)$/datefunc.obj
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
 
 ALLIDLFILES=\
     dateadd.idl
