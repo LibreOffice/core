@@ -1,4 +1,6 @@
-..\%__SRC%\misc\svx.hid %_DEST%\bin%_EXT%\svx.hid
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\res%_EXT%
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
 ..\%__SRC%\inc\fren\svxslots.ilb %_DEST%\inc%_EXT%\fren\svxslots.ilb
 ..\%__SRC%\inc\dtch\svxslots.ilb %_DEST%\inc%_EXT%\dtch\svxslots.ilb
@@ -40,6 +42,7 @@
 ..\%__SRC%\bin\svl*.sym %_DEST%\bin%_EXT%\svl*.sym
 ..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
 ..\%__SRC%\srs\svxslots.srs %_DEST%\res%_EXT%\svxslots.srs
+..\%COMMON_OUTDIR%\srs\svxslots_srs.hid %COMMON_DEST%\res%_EXT%\svxslots_srs.hid
 ..\%__SRC%\lib\svxl.lib %_DEST%\lib%_EXT%\svxl.lib
 ..\%__SRC%\lib\libsvxl.a %_DEST%\lib%_EXT%\libsvxl.a
 
