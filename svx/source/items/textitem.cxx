@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 11:16:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_FONTHEIGHT_HPP_
-#include <drafts/com/sun/star/frame/status/FontHeight.hpp>
+#ifndef _COM_SUN_STAR_FRAME_STATUS_FONTHEIGHT_HPP_
+#include <com/sun/star/frame/status/FontHeight.hpp>
 #endif
 
 #ifndef _SV_BITMAPEX_HXX
@@ -988,7 +988,7 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     {
         case 0:
         {
-            drafts::com::sun::star::frame::status::FontHeight aFontHeight;
+            ::com::sun::star::frame::status::FontHeight aFontHeight;
 
             //  Point (also Twips) sind gefragt,
             //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
@@ -1120,7 +1120,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case 0:
         {
-            drafts::com::sun::star::frame::status::FontHeight aFontHeight;
+            ::com::sun::star::frame::status::FontHeight aFontHeight;
             if ( rVal >>= aFontHeight )
             {
                 // Height
