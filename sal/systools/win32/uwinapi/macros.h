@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:53:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ EXTERN_C void WINAPI ResolveThunk_ALLWAYS( FARPROC *lppfn, LPCSTR lpLibFileName,
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 EXTERN_C rettype calltype func##_##resolve params; \
 static rettype calltype func##_##Failure params; \
-static _declspec ( naked ) func##_Thunk() \
+static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, (FARPROC)func##_##resolve, (FARPROC)func##_##Failure ); \
     _asm    jmp [module##_##func##_Ptr] \
@@ -157,7 +157,7 @@ EXTERN_C rettype calltype func##_##resolve params
 
 #define DEFINE_CUSTOM_THUNK( module, resolve, rettype, calltype, func, params ) \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
-static _declspec ( naked ) func##_Thunk() \
+static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func ); \
     _asm    jmp [module##_##func##_Ptr] \
@@ -173,7 +173,7 @@ EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_
 #define DEFINE_DEFAULT_THUNK( module, resolve, rettype, calltype, func, params ) \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 static rettype calltype func##_##Failure params; \
-static _declspec ( naked ) func##_Thunk() \
+static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, NULL, (FARPROC)func##_##Failure ); \
     _asm    jmp [module##_##func##_Ptr] \
