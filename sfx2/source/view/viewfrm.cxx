@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:37:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,11 +190,9 @@ using namespace ::com::sun::star::lang;
 #include "docfac.hxx"
 #include "ipclient.hxx"
 #include "sfxresid.hxx"
-#include "cfgmgr.hxx"
 #include "appbas.hxx"
 #include "objitem.hxx"
 #include "viewfac.hxx"
-#include "stbmgr.hxx"
 #include "event.hxx"
 #include "fltfnc.hxx"
 #include "docfile.hxx"
@@ -213,11 +211,7 @@ using namespace ::com::sun::star::lang;
 #include "progress.hxx"
 #include "workwin.hxx"
 #include "helper.hxx"
-#include "tbxconf.hxx"
-#include "mnumgr.hxx"
-#include "virtmenu.hxx"
 #include "macro.hxx"
-#include "tbxcust.hxx"
 #include "minfitem.hxx"
 #include "../appl/app.hrc"
 //-------------------------------------------------------------------------
@@ -930,7 +924,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pFrame->InsertDocument(xNewObj.Is() ? xNewObj : xOldObj );
                     }
 
-                    DELETEZ( pView->pImp->pMenuBar );
+                    //DELETEZ( pView->pImp->pMenuBar );
                     pView->GetBindings().LEAVEREGISTRATIONS();
                     pView->GetDispatcher()->LockUI_Impl( sal_False );
                 }
@@ -3000,8 +2994,11 @@ void SfxViewFrame::StateView_Impl
 void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
 {
     if ( GetViewShell() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )
-        ;
-        //rSet.Put(SfxVerbListItem(USHORT( SID_OBJECT ), GetViewShell()->GetVerbs() ));
+    {
+        uno::Any aAny;
+        aAny <<= GetViewShell()->GetVerbs();
+        rSet.Put( SfxUnoAnyItem( USHORT( SID_OBJECT ), aAny ) );
+    }
     else
         rSet.DisableItem( SID_OBJECT );
 }
@@ -3878,7 +3875,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
     sal_uInt16 nTbxID = 0;
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
     BOOL bShow = sal_False;
-
+    /*
     if ( nSID == SID_TOGGLE_MENUBAR )
     {
         SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
@@ -3923,7 +3920,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
                 pViewFrame->GetDispatcher()->Update_Impl(sal_True);
             pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
         }
-    }
+    }*/
 
     if ( !pShowItem )
         rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
@@ -3935,6 +3932,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
 
 void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
 {
+    /*
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
@@ -3990,7 +3988,7 @@ void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
             default:
                 DBG_ERROR( "invalid ObjectBar`s SID" );
         }
-    }
+    }*/
 }
 
 //--------------------------------------------------------------------
@@ -4059,11 +4057,6 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
     return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
 }
 
-SfxAcceleratorManager* SfxViewFrame::GetAcceleratorManager()
-{
-    return GetObjectShell()->GetAccMgr_Impl();
-}
-
 SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
 {
     return pImp->pMacro;
@@ -4071,27 +4064,17 @@ SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
 
 void SfxViewFrame::UpdateDocument_Impl()
 {
-    BOOL bHasMacros = FALSE;
-    uno::Reference < embed::XStorage > xStor = GetObjectShell()->GetStorage();
-    try
-    {
-        bHasMacros = xStor->isStorageElement( String::CreateFromAscii("Basic") );
-    }
-    catch ( uno::Exception& )
-    {
-        // if no element "Basic" exists, Exception is thrown
-    }
-
-    if ( bHasMacros )
-        GetObjectShell()->AdjustMacroMode( String() );
+    SfxObjectShell* pDoc = GetObjectShell();
+    if ( pDoc->HasMacros_Impl() )
+        pDoc->AdjustMacroMode( String() );
     else
     {
         // if macros will be added by the user later, the security check is obsolete
-        GetObjectShell()->Get_Impl()->nMacroMode = ::com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+        pDoc->Get_Impl()->nMacroMode = ::com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     }
 
     // check if document depends from a template
-    GetObjectShell()->UpdateFromTemplate_Impl();
+    pDoc->UpdateFromTemplate_Impl();
 }
 
 BOOL SfxViewFrame::ClearEventFlag_Impl()
