@@ -84,11 +84,11 @@
 <!-- Date formats. Index range is from 18 - 38. -->
 <FormatElement msgid="DateFormatskey1" default="true" type="medium" usage="DATE" formatindex="18">
 <FormatCode>DD/MM/YY</FormatCode>
-<DefaultName>System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
 <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
-<DefaultName>System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="20">
 <FormatCode>YY"年"M"月"D"日"</FormatCode>
@@ -101,7 +101,7 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="22">
 <FormatCode>YY"年"M"月"D"日"</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
 <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
