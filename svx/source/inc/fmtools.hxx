@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-31 08:47:16 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 10:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ public:
     sal_Bool isAfterLast() const                { return m_xMoveOperations->isAfterLast(); }
     sal_Bool isFirst() const                    { return m_xMoveOperations->isFirst(); }
     sal_Bool isLast() const                     { return m_xMoveOperations->isLast(); }
-//  void moveBeforeFirst()                  { m_xMoveOperations->moveBeforeFirst(); }
+    void beforeFirst()                          { m_xMoveOperations->beforeFirst(); }
 //  void moveAfterLast()                    { m_xMoveOperations->moveAfterLast(); }
     sal_Bool first()                            { return m_xMoveOperations->first(); }
     sal_Bool last()                             { return m_xMoveOperations->last(); }

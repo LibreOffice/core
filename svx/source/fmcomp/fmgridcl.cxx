@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-30 18:09:01 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 10:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@
 
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include "dbaexchange.hxx"
+#endif
+#ifndef _SV_MULTISEL_HXX
+#include <tools/multisel.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -1299,190 +1302,219 @@ void FmGridControl::DeleteSelectedRows()
         }
     }
 
-    Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem((Reference< XInterface >)*getDataSource(), UNO_QUERY);
-
-    // colect the bookmarks of the selected rows
-    Sequence < Any> aBookmarks = getSelectionBookmarks();
-
-    // determine the next row to position after deletion
-    Any aBookmark;
-    sal_Bool bNewPos = sal_False;
-    // if the current row isn't selected we take the row as row after deletion
-    if (!IsRowSelected(GetCurrentPos()) && !IsCurrentAppending())
+    const MultiSelection* pRowSelection = GetSelection();
+    if ( pRowSelection && pRowSelection->IsAllSelected() )
     {
-        aBookmark = GetCurrentRow()->GetBookmark();
-        bNewPos   = sal_True;
-    }
-    else
-    {
-        // we look for the first row after the selected block for selection
-        long nIdx = LastSelectedRow() + 1;
-        if (nIdx < GetRowCount() - 1)
-        {
-            // there is a next row to position on
-            if (SeekCursor(nIdx))
-            {
-                GetSeekRow()->SetState(m_pSeekCursor, sal_True);
-
-                bNewPos = sal_True;
-                // if it's not the row for inserting we keep the bookmark
-                if (!IsEmptyRow(nIdx))
-                    aBookmark = m_pSeekCursor->getBookmark();
-            }
-        }
-        else
-        {
-            // we look for the first row before the selected block for selection after deletion
-            nIdx = FirstSelectedRow() - 1;
-            if (nIdx >= 0 && SeekCursor(nIdx))
-            {
-                GetSeekRow()->SetState(m_pSeekCursor, sal_True);
-
-                bNewPos = sal_True;
-                aBookmark = m_pSeekCursor->getBookmark();
-            }
-        }
-    }
-
-    // Sind alle Zeilen Selectiert
-    // Zweite bedingung falls keine einguegeZeile existiert
-    sal_Bool bAllSelected = GetTotalCount() == nSelectedRows || GetRowCount() == nSelectedRows;
-
-    BeginCursorAction();
-
-    // now delete the row
-    Sequence <sal_Int32> aDeletedRows;
-    try
-    {
-        aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
-    }
-    catch(SQLException&)
-    {
-    }
-
-    // how many rows are deleted?
-    sal_Int32 nDeletedRows = 0;
-    const sal_Int32* pSuccess = aDeletedRows.getConstArray();
-    for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
-    {
-        if (pSuccess[i])
-            nDeletedRows++;
-    }
-
-    // sind Zeilen geloescht worden?
-    if (nDeletedRows)
-    {
-        SetUpdateMode(sal_False);
-        SetNoSelection();
+        BeginCursorAction();
+        CursorWrapper* pCursor = getDataSource();
+        Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*pCursor, UNO_QUERY);
         try
         {
-            // did we delete all the rows than try to move to the next possible row
-            if (nDeletedRows == aDeletedRows.getLength())
-            {
-                // there exists a new position to move on
-                if (bNewPos)
-                {
-                    if (aBookmark.hasValue())
-                        getDataSource()->moveToBookmark(aBookmark);
-                    // no valid bookmark so move to the insert row
-                    else
-                    {
-                        Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*getDataSource(), UNO_QUERY);
-                        xUpdateCursor->moveToInsertRow();
-                    }
-                }
-                else
-                {
-                    Reference< ::com::sun::star::beans::XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
-                    sal_Int32 nRecordCount;
-                    xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
-                    // there are no rows left and we have an insert row
-                    if (!nRecordCount && GetEmptyRow().Is())
-                    {
-                        Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*getDataSource(), UNO_QUERY);
-                        xUpdateCursor->moveToInsertRow();
-                    }
-                    else if (nRecordCount)
-                        // move to the first row
-                        getDataSource()->first();
-                }
-            }
-            // not all the rows where deleted, so move to the first row which remained in the resultset
-            else
-            {
-                for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
-                {
-                    if (!pSuccess[i])
-                    {
-                        getDataSource()->moveToBookmark(aBookmarks.getConstArray()[i]);
-                        break;
-                    }
-                }
-            }
-        }
-        catch(...)
-        {
-            try
-            {
-                // positioning went wrong so try to move to the first row
-                getDataSource()->first();
-            }
-            catch(...)
-            {
-            }
-        }
+            pCursor->beforeFirst();
+            while( pCursor->next() )
+                xUpdateCursor->deleteRow();
 
+            SetUpdateMode(sal_False);
+            SetNoSelection();
+
+            xUpdateCursor->moveToInsertRow();
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(0,"Exception caught while deleting rows!");
+        }
         // An den DatenCursor anpassen
         AdjustDataSource(sal_True);
-
-        // es konnten nicht alle Zeilen geloescht werden
-        // da nie nicht geloeschten wieder selektieren
-        if (nDeletedRows < nSelectedRows)
-        {
-            // waren alle selektiert
-            if (bAllSelected)
-            {
-                SelectAll();
-                if (IsEmptyRow(GetRowCount() - 1))  // einfuegeZeile nicht
-                    SelectRow(GetRowCount() - 1, sal_False);
-            }
-            else
-            {
-                // select the remaining rows
-                for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
-                {
-                    try
-                    {
-                        if (!pSuccess[i])
-                        {
-                            m_pSeekCursor->moveToBookmark(m_pDataCursor->getBookmark());
-                            SetSeekPos(m_pSeekCursor->getRow() - 1);
-                            SelectRow(GetSeekPos());
-                        }
-                    }
-                    catch(...)
-                    {
-                        // keep the seekpos in all cases
-                        SetSeekPos(m_pSeekCursor->getRow() - 1);
-                    }
-                }
-            }
-        }
-
         EndCursorAction();
         SetUpdateMode(sal_True);
     }
-    else // Zeile konnte nicht geloescht werden
+    else
     {
-        EndCursorAction();
+        Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+
+        // colect the bookmarks of the selected rows
+        Sequence < Any> aBookmarks = getSelectionBookmarks();
+
+        // determine the next row to position after deletion
+        Any aBookmark;
+        sal_Bool bNewPos = sal_False;
+        // if the current row isn't selected we take the row as row after deletion
+        if (!IsRowSelected(GetCurrentPos()) && !IsCurrentAppending())
+        {
+            aBookmark = GetCurrentRow()->GetBookmark();
+            bNewPos   = sal_True;
+        }
+        else
+        {
+            // we look for the first row after the selected block for selection
+            long nIdx = LastSelectedRow() + 1;
+            if (nIdx < GetRowCount() - 1)
+            {
+                // there is a next row to position on
+                if (SeekCursor(nIdx))
+                {
+                    GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+
+                    bNewPos = sal_True;
+                    // if it's not the row for inserting we keep the bookmark
+                    if (!IsEmptyRow(nIdx))
+                        aBookmark = m_pSeekCursor->getBookmark();
+                }
+            }
+            else
+            {
+                // we look for the first row before the selected block for selection after deletion
+                nIdx = FirstSelectedRow() - 1;
+                if (nIdx >= 0 && SeekCursor(nIdx))
+                {
+                    GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+
+                    bNewPos = sal_True;
+                    aBookmark = m_pSeekCursor->getBookmark();
+                }
+            }
+        }
+
+        // Sind alle Zeilen Selectiert
+        // Zweite bedingung falls keine einguegeZeile existiert
+        sal_Bool bAllSelected = GetTotalCount() == nSelectedRows || GetRowCount() == nSelectedRows;
+
+        BeginCursorAction();
+
+        // now delete the row
+        Sequence <sal_Int32> aDeletedRows;
         try
         {
-            // currentrow is the insert row?
-            if (!IsCurrentAppending())
-                getDataSource()->refreshRow();
+            aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
         }
-        catch(...)
+        catch(SQLException&)
         {
+        }
+
+        // how many rows are deleted?
+        sal_Int32 nDeletedRows = 0;
+        const sal_Int32* pSuccess = aDeletedRows.getConstArray();
+        for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
+        {
+            if (pSuccess[i])
+                nDeletedRows++;
+        }
+
+        // sind Zeilen geloescht worden?
+        if (nDeletedRows)
+        {
+            SetUpdateMode(sal_False);
+            SetNoSelection();
+            try
+            {
+                // did we delete all the rows than try to move to the next possible row
+                if (nDeletedRows == aDeletedRows.getLength())
+                {
+                    // there exists a new position to move on
+                    if (bNewPos)
+                    {
+                        if (aBookmark.hasValue())
+                            getDataSource()->moveToBookmark(aBookmark);
+                        // no valid bookmark so move to the insert row
+                        else
+                        {
+                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+                            xUpdateCursor->moveToInsertRow();
+                        }
+                    }
+                    else
+                    {
+                        Reference< ::com::sun::star::beans::XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                        sal_Int32 nRecordCount;
+                        xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
+                        // there are no rows left and we have an insert row
+                        if (!nRecordCount && GetEmptyRow().Is())
+                        {
+                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+                            xUpdateCursor->moveToInsertRow();
+                        }
+                        else if (nRecordCount)
+                            // move to the first row
+                            getDataSource()->first();
+                    }
+                }
+                // not all the rows where deleted, so move to the first row which remained in the resultset
+                else
+                {
+                    for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
+                    {
+                        if (!pSuccess[i])
+                        {
+                            getDataSource()->moveToBookmark(aBookmarks.getConstArray()[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+            catch(const Exception&)
+            {
+                try
+                {
+                    // positioning went wrong so try to move to the first row
+                    getDataSource()->first();
+                }
+                catch(const Exception&)
+                {
+                }
+            }
+
+            // An den DatenCursor anpassen
+            AdjustDataSource(sal_True);
+
+            // es konnten nicht alle Zeilen geloescht werden
+            // da nie nicht geloeschten wieder selektieren
+            if (nDeletedRows < nSelectedRows)
+            {
+                // waren alle selektiert
+                if (bAllSelected)
+                {
+                    SelectAll();
+                    if (IsEmptyRow(GetRowCount() - 1))  // einfuegeZeile nicht
+                        SelectRow(GetRowCount() - 1, sal_False);
+                }
+                else
+                {
+                    // select the remaining rows
+                    for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
+                    {
+                        try
+                        {
+                            if (!pSuccess[i])
+                            {
+                                m_pSeekCursor->moveToBookmark(m_pDataCursor->getBookmark());
+                                SetSeekPos(m_pSeekCursor->getRow() - 1);
+                                SelectRow(GetSeekPos());
+                            }
+                        }
+                        catch(const Exception&)
+                        {
+                            // keep the seekpos in all cases
+                            SetSeekPos(m_pSeekCursor->getRow() - 1);
+                        }
+                    }
+                }
+            }
+
+            EndCursorAction();
+            SetUpdateMode(sal_True);
+        }
+        else // Zeile konnte nicht geloescht werden
+        {
+            EndCursorAction();
+            try
+            {
+                // currentrow is the insert row?
+                if (!IsCurrentAppending())
+                    getDataSource()->refreshRow();
+            }
+            catch(const Exception&)
+            {
+            }
         }
     }
 
@@ -1890,12 +1922,13 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 //------------------------------------------------------------------------------
 Sequence< Any> FmGridControl::getSelectionBookmarks()
 {
+    // lock our update so no paint-triggered seeks interfere ...
+    SetUpdateMode(sal_False);
+
     sal_Int32 nSelectedRows = GetSelectRowCount(), i = 0;
     Sequence< Any> aBookmarks(nSelectedRows);
     Any* pBookmarks = (Any*)aBookmarks.getArray();
 
-    // lock our update so no paint-triggered seeks interfere ...
-    SetUpdateMode(sal_False);
     // (I'm not sure if the problem isn't deeper : The szenario : a large table displayed by a grid with a
     // thread-safe cursor (dBase). On loading the sdb-cursor started a counting thread. While this counting progress
     // was running, I tried do delete 3 records from within the grid. Deletion caused a SeekCursor, which did a
