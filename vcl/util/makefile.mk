@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-20 09:04:14 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:16:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -287,6 +287,11 @@ SHL2STDLIBS=\
             $(CPPULIB)          \
             $(VOSLIB)           \
             $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+SHL2STDLIBS += -lXinerama
+.ENDIF
+
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL2STDLIBS += -laudio
 .IF "$(OS)"=="SOLARIS"
