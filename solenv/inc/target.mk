@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.115 $
+#   $Revision: 1.116 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-25 13:16:27 $
+#   last change: $Author: hjs $ $Date: 2002-06-26 11:24:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1445,12 +1445,13 @@ HXX39 ?= TNR!:=39
 HXXCOPYTARGET=	copy_hxxcopyfiles
 .ENDIF
 
+# multi-list enabled
 .IF "$(IMGLST_SRS)"!=""
 .IF "$(make_srs_deps)"==""
 .IF "$(common_build_reslib)"!=""
-IMGLSTTARGET=$(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)_img$i.don)
+IMGLSTTARGET=$(foreach,j,$(IMGLST_SRS) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(j:b)_img$i.don))
 .ELSE			# "$(common_build_reslib)"!=""
-IMGLSTTARGET=$(foreach,i,$(alllangext) $(MISC)$/$(TARGET)_img$i.don)
+IMGLSTTARGET=$(foreach,j,$(IMGLST_SRS) $(foreach,i,$(alllangext) $(MISC)$/$(j:b)_img$i.don))
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF			# "$(make_srs_deps)"==""
 .ENDIF			# "$(IMGLST_SRS)"!=""
@@ -2208,6 +2209,7 @@ $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg :
 .ENDIF			# "$(UPDATER)"!=""
 
 
+# multi-list enabled
 .IF "$(IMGLSTTARGET)"!=""
 $(IMGLSTTARGET): $(IMGLST_SRS)
     @+echo -----------------
@@ -2215,19 +2217,20 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
     @+echo -----------------
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(common_build_reslib)"!=""
-    @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
-    @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(IMGLST_SRS) $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) $(lang_{$(subst,$(TARGET)_img, $(@:b))}) -f $@
-    -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
-    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))})$/*.bmp~
+    @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -f $@
+    -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.bmp~
 .ELSE			# "$(common_build_reslib)"!=""
-    @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(IMGLST_SRS) $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) $(lang_{$(subst,$(TARGET)_img, $(@:b))}) -f $@
+    @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -f $@
 .ENDIF			# "$(common_build_reslib)"!=""
 .IF "$(BMP_WRITES_FLAG)"==""
     @+echo > $@
 .ENDIF
 .ENDIF
+
 
 .IF "$(XMLPROPERTIES)"!=""
 .IF "$(L10N_framework)"!=""
