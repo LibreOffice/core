@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-23 11:04:56 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,23 @@ String STR_APPLY
     Text = "Anwenden";
     Text [ english ] = "Apply";
     Text [ english_us ] = "Apply";
+    Text[ portuguese ] = "Apply";
+    Text[ russian ] = "Apply";
+    Text[ greek ] = "≈ˆ·ÒÏÔ„ﬁ";
+    Text[ dutch ] = "Apply";
+    Text[ french ] = "Appliquer";
+    Text[ spanish ] = "Aplicar";
+    Text[ italian ] = "Apply";
+    Text[ danish ] = "Apply";
+    Text[ swedish ] = "Anv‰nd";
+    Text[ polish ] = "Zastosuj";
+    Text[ portuguese_brazilian ] = "Apply";
+    Text[ japanese ] = "Apply";
+    Text[ korean ] = "Apply";
+    Text[ chinese_simplified ] = "Ã◊”√";
+    Text[ chinese_traditional ] = "Apply";
+    Text[ turkish ] = "Apply";
+    Text[ arabic ] = " ÿ»Ìﬁ";
 };
 String STR_INTERNET
 {
