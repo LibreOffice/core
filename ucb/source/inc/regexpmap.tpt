@@ -1,0 +1,597 @@
+/*************************************************************************
+ *
+ *  $RCSfile: regexpmap.tpt,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: kso $ $Date: 2000-10-16 14:53:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _UCB_REGEXPMAP_TPT_
+#define _UCB_REGEXPMAP_TPT_
+
+#ifndef _UCB_REGEXPMAP_HXX_
+#include <regexpmap.hxx>
+#endif
+
+#include <list>
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+#ifndef _UCB_REGEXP_HXX_
+#include "regexp.hxx"
+#endif
+
+namespace unnamed_ucb_regexpmap {} using namespace unnamed_ucb_regexpmap;
+	// unnamed namespaces don't work well yet...
+
+using namespace ucb;
+
+//============================================================================
+namespace unnamed_ucb_regexpmap {
+
+template< typename Val >
+struct Entry
+{
+	Regexp m_aRegexp;
+	Val m_aValue;
+
+	inline Entry(Regexp const & rTheRegexp, Val const & rTheValue):
+		m_aRegexp(rTheRegexp), m_aValue(rTheValue) {}
+};
+
+//============================================================================
+template< typename Val > class List: public std::list< Entry< Val > > {};
+
+}
+
+//============================================================================
+//
+//  RegexpMapIterImpl
+//
+//============================================================================
+
+namespace ucb {
+
+template< typename Val >
+class RegexpMapIterImpl
+{
+public:
+	typedef RegexpMapImpl< Val > MapImpl;
+	typedef List< Val >::iterator ListIterator;
+		// Solaris needs these for the ctor...
+
+	inline RegexpMapIterImpl();
+
+	inline RegexpMapIterImpl(MapImpl * pTheMap, int nTheList,
+							 ListIterator aTheIndex);
+
+	RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap, bool bBegin);
+
+	bool operator ==(RegexpMapIterImpl const & rOther) const;
+
+	RegexpMapImpl< Val > const * getMap() const { return m_pMap; }
+
+	int getList() const { return m_nList; }
+
+	List< Val >::iterator const & getIndex() const { return m_aIndex; }
+
+	void next();
+
+	RegexpMapEntry< Val > & get();
+
+private:
+	mutable RegexpMapEntry< Val > m_aEntry;
+	List< Val >::iterator m_aIndex;
+	RegexpMapImpl< Val > * m_pMap;
+	int m_nList;
+	mutable bool m_bEntrySet;
+
+	void setEntry() const;
+};
+
+}
+
+template< typename Val >
+inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
+	m_aEntry(rtl::OUString(), 0),
+	m_pMap(0),
+	m_nList(-1),
+	m_bEntrySet(false)
+{}
+
+template< typename Val >
+inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(MapImpl * pTheMap,
+												   int nTheList,
+												   ListIterator aTheIndex):
+	m_aEntry(rtl::OUString(), 0),
+	m_aIndex(aTheIndex),
+	m_pMap(pTheMap),
+	m_nList(nTheList),
+	m_bEntrySet(false)
+{}
+
+//============================================================================
+template< typename Val >
+void RegexpMapIterImpl< Val >::setEntry() const
+{
+	if (!m_bEntrySet)
+	{
+		Entry< Val > const & rTheEntry
+			= m_nList == -1 ? *m_pMap->m_pDefault : *m_aIndex;
+		m_aEntry
+			= RegexpMapEntry< Val >(rTheEntry.m_aRegexp.getRegexp(false),
+									const_cast< Val * >(&rTheEntry.m_aValue));
+		m_bEntrySet = true;
+	}
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
+											bool bBegin):
+	m_aEntry(rtl::OUString(), 0),
+	m_pMap(pTheMap),
+	m_bEntrySet(false)
+{
+	if (bBegin)
+	{
+		m_nList = -1;
+		m_aIndex = List< Val >::iterator();
+		if (!m_pMap->m_pDefault)
+			next();
+	}
+	else
+	{
+		m_nList = Regexp::KIND_DOMAIN;
+		m_aIndex = m_pMap->m_aList[Regexp::KIND_DOMAIN].end();
+	}
+}
+
+//============================================================================
+template< typename Val >
+bool RegexpMapIterImpl< Val >::operator ==(RegexpMapIterImpl const & rOther)
+	const
+{
+	return m_pMap == rOther.m_pMap
+		   && m_nList == rOther.m_nList
+		   && m_aIndex == rOther.m_aIndex;
+}
+
+//============================================================================
+template< typename Val >
+void RegexpMapIterImpl< Val >::next()
+{
+	switch (m_nList)
+	{
+		case Regexp::KIND_DOMAIN:
+			if (m_aIndex == m_pMap->m_aList[m_nList].end())
+				return;
+		default:
+			++m_aIndex;
+			if (m_nList == Regexp::KIND_DOMAIN
+				|| m_aIndex != m_pMap->m_aList[m_nList].end())
+				break;
+		case -1:
+			do
+			{
+				++m_nList;
+				m_aIndex = m_pMap->m_aList[m_nList].begin();
+			}
+			while (m_nList < Regexp::KIND_DOMAIN
+				   && m_aIndex == m_pMap->m_aList[m_nList].end());
+			break;
+	}
+	m_bEntrySet = false;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > & RegexpMapIterImpl< Val >::get()
+{
+	setEntry();
+	return m_aEntry;
+}
+
+//============================================================================
+//
+//  RegexpMapConstIter
+//
+//============================================================================
+
+template< typename Val >
+RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMapIterImpl< Val > *
+											      pTheImpl):
+	m_pImpl(pTheImpl)
+{}
+
+//============================================================================
+template< typename Val >
+RegexpMapConstIter< Val >::RegexpMapConstIter():
+	m_pImpl(new RegexpMapIterImpl< Val >)
+{}
+
+//============================================================================
+template< typename Val >
+RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMapConstIter const &
+											      rOther):
+	m_pImpl(new RegexpMapIterImpl< Val >(*rOther.m_pImpl))
+{}
+
+//============================================================================
+template< typename Val >
+RegexpMapConstIter< Val >::~RegexpMapConstIter()
+{
+	delete m_pImpl;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapConstIter< Val > &
+RegexpMapConstIter< Val >::operator =(RegexpMapConstIter const & rOther)
+{
+	*m_pImpl = *rOther.m_pImpl;
+	return *this;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapConstIter< Val > & RegexpMapConstIter< Val >::operator ++()
+{
+	m_pImpl->next();
+	return *this;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapConstIter< Val > RegexpMapConstIter< Val >::operator ++(int)
+{
+	RegexpMapConstIter aTemp(*this);
+	m_pImpl->next();
+	return aTemp;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > const & RegexpMapConstIter< Val >::operator *() const
+{
+	return m_pImpl->get();
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > const * RegexpMapConstIter< Val >::operator ->() const
+{
+	return &m_pImpl->get();
+}
+
+//============================================================================
+template< typename Val >
+bool RegexpMapConstIter< Val >::equals(RegexpMapConstIter const & rOther)
+	const
+{
+	return *m_pImpl == *rOther.m_pImpl;
+}
+
+//============================================================================
+//
+//  RegexpMapIter
+//
+//============================================================================
+
+template< typename Val >
+RegexpMapIter< Val >::RegexpMapIter(RegexpMapIterImpl< Val > * pTheImpl):
+	RegexpMapConstIter< Val >(pTheImpl)
+{}
+
+//============================================================================
+template< typename Val >
+RegexpMapIter< Val > & RegexpMapIter< Val >::operator ++()
+{
+	m_pImpl->next();
+	return *this;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapIter< Val > RegexpMapIter< Val >::operator ++(int)
+{
+	RegexpMapIter aTemp(*this);
+	m_pImpl->next();
+	return aTemp;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > & RegexpMapIter< Val >::operator *()
+{
+	return m_pImpl->get();
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > const & RegexpMapIter< Val >::operator *() const
+{
+	return m_pImpl->get();
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > * RegexpMapIter< Val >::operator ->()
+{
+	return &m_pImpl->get();
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapEntry< Val > const * RegexpMapIter< Val >::operator ->() const
+{
+	return &m_pImpl->get();
+}
+
+//============================================================================
+//
+//  RegexpMap
+//
+//============================================================================
+
+namespace ucb {
+
+template< typename Val >
+struct RegexpMapImpl
+{
+	List< Val > m_aList[Regexp::KIND_DOMAIN + 1];
+	Entry< Val > * m_pDefault;
+
+	RegexpMapImpl(): m_pDefault(0) {}
+
+	~RegexpMapImpl() { delete m_pDefault; }
+};
+
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::RegexpMap():
+	m_pImpl(new RegexpMapImpl< Val >)
+{}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::RegexpMap(RegexpMap const & rOther):
+	m_pImpl(new RegexpMapImpl< Val >(*rOther.m_pImpl))
+{}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::~RegexpMap()
+{
+	delete m_pImpl;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val > & RegexpMap< Val >::operator =(RegexpMap const & rOther)
+{
+	*m_pImpl = *rOther.m_pImpl;
+	return *this;
+}
+
+//============================================================================
+template< typename Val >
+bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
+						   bool bOverwrite, rtl::OUString * pReverse)
+{
+	Regexp aRegexp(Regexp::parse(rKey));
+
+	if (aRegexp.isDefault())
+	{
+		if (m_pImpl->m_pDefault)
+		{
+			if (!bOverwrite)
+				return false;
+			delete m_pImpl->m_pDefault;
+		}
+		m_pImpl->m_pDefault = new Entry< Val >(aRegexp, rValue);
+	}
+	else
+	{
+		List< Val > & rTheList = m_pImpl->m_aList[aRegexp.getKind()];
+
+		List< Val >::iterator aEnd(rTheList.end());
+		for (List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+			if (aIt->m_aRegexp == aRegexp)
+				if (bOverwrite)
+				{
+					rTheList.erase(aIt);
+					break;
+				}
+				else
+					return false;
+
+		rTheList.push_back(Entry< Val >(aRegexp, rValue));
+	}
+
+	if (pReverse)
+		*pReverse = aRegexp.getRegexp(true);
+
+	return true;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const & rKey,
+												  rtl::OUString * pReverse)
+{
+	Regexp aRegexp(Regexp::parse(rKey));
+
+	if (pReverse)
+		*pReverse = aRegexp.getRegexp(true);
+
+	if (aRegexp.isDefault())
+	{
+		if (m_pImpl->m_pDefault)
+			return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl,
+																	 true));
+	}
+	else
+	{
+		List< Val > & rTheList = m_pImpl->m_aList[aRegexp.getKind()];
+
+		List< Val > ::iterator aEnd(rTheList.end());
+		for (List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+			if (aIt->m_aRegexp == aRegexp)
+				return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(
+					                                m_pImpl,
+													aRegexp.getKind(), aIt));
+	}
+
+	return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl, false));
+}
+
+//============================================================================
+template< typename Val >
+void RegexpMap< Val >::erase(iterator const & rPos)
+{
+	if (rPos.m_pImpl->getMap() == m_pImpl)
+		if (rPos.m_pImpl->getList() == -1)
+		{
+			if (m_pImpl->m_pDefault)
+			{
+				delete m_pImpl->m_pDefault;
+				m_pImpl->m_pDefault = 0;
+			}
+		}
+		else
+			m_pImpl->m_aList[rPos.m_pImpl->getList()].
+				         erase(rPos.m_pImpl->getIndex());
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::iterator RegexpMap< Val >::begin()
+{
+	return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl, true));
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::const_iterator RegexpMap< Val >::begin() const
+{
+	return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl,
+																  true));
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::iterator RegexpMap< Val >::end()
+{
+	return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl, false));
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::const_iterator RegexpMap< Val >::end() const
+{
+	return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl,
+																  false));
+}
+
+//============================================================================
+template< typename Val >
+bool RegexpMap< Val >::empty() const
+{
+	return !m_pImpl->m_pDefault
+		   && m_pImpl->m_aList[Regexp::KIND_PREFIX].empty()
+		   && m_pImpl->m_aList[Regexp::KIND_AUTHORITY].empty()
+		   && m_pImpl->m_aList[Regexp::KIND_DOMAIN].empty();
+}
+
+//============================================================================
+template< typename Val >
+RegexpMap< Val >::size_type RegexpMap< Val >::size() const
+{
+	return (m_pImpl->m_pDefault ? 1 : 0)
+		       + m_pImpl->m_aList[Regexp::KIND_PREFIX].size()
+		       + m_pImpl->m_aList[Regexp::KIND_AUTHORITY].size()
+		       + m_pImpl->m_aList[Regexp::KIND_DOMAIN].size();
+}
+
+//============================================================================
+template< typename Val >
+Val const * RegexpMap< Val >::map(rtl::OUString const & rString,
+								  rtl::OUString * pTranslation,
+								  bool * pTranslated) const
+{
+	for (int n = Regexp::KIND_DOMAIN; n >= Regexp::KIND_PREFIX; --n)
+	{
+		List< Val > const & rTheList = m_pImpl->m_aList[n];
+
+		List< Val >::const_iterator aEnd(rTheList.end());
+		for (List< Val >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
+			 ++aIt)
+			if (aIt->m_aRegexp.matches(rString, pTranslation, pTranslated))
+				return &aIt->m_aValue;
+	}
+	if (m_pImpl->m_pDefault
+		&& m_pImpl->m_pDefault->m_aRegexp.matches(rString, pTranslation,
+												  pTranslated))
+		return &m_pImpl->m_pDefault->m_aValue;
+	return 0;
+}
+
+#endif // _UCB_REGEXPMAP_TPT_

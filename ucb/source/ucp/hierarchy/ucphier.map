@@ -1,0 +1,8 @@
+HIER_1_0 {
+    global:
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
+    local:
+        *;
+};
