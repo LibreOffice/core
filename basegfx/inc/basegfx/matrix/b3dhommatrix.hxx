@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhommatrix.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:37 $
+ *  last change: $Author: thb $ $Date: 2003-11-12 12:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <sal/types.h>
 #endif
 
-// predeclaration
-class Impl3DHomMatrix;
-
 namespace basegfx
 {
     namespace tuple
@@ -79,6 +76,9 @@ namespace basegfx
 
     namespace matrix
     {
+        // forward declaration
+        class Impl3DHomMatrix;
+
         class B3DHomMatrix
         {
         private:
