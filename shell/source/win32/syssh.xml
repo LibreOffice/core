@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>syssh</module-name>
+    <module-name>   syssh   </module-name>
     <component-description>
         <author> Tino Rachui </author>
         <name>com.sun.star.comp.system.SystemShellExecute</name>
@@ -14,6 +14,8 @@
         <supported-service> com.sun.star.system.SystemShellExecute </supported-service>
         <service-dependency>...</service-dependency>
         <type>  com.sun.star.system.XSystemShellExecute </type>
+        <type>  com.sun.star.system.SystemShellExecuteException </type>
+        <type>  com.sun.star.system.SystemShellExecuteFlags </type>
         <type>  com.sun.star.lang.XMultiServiceFactory      </type>
         <type>  com.sun.star.lang.XSingleServiceFactory     </type>
         <type>  com.sun.star.lang.XServiceInfo              </type>

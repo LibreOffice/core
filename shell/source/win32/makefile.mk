@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-04-27 13:54:19 $
+#   last change: $Author: tra $ $Date: 2001-05-07 14:43:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 
 # --- Files --------------------------------------------------------
 
-.INCLUDE : ..$/cppumaker.mk
+#.INCLUDE : ..$/cppumaker.mk
 
 SLOFILES=$(SLO)$/SysShentry.obj\
          $(SLO)$/SysShExec.obj
@@ -101,3 +101,4 @@ DEF1EXPORTFILE=	exports.dxp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+

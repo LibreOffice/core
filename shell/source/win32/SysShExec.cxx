@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SysShExec.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-27 13:54:12 $
+ *  last change: $Author: tra $ $Date: 2001-05-07 14:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             static_cast< XSystemShellExecute* >( this ),
             1 );
 
-    if ( !( nFlags >= SSEF_DEFAULTS && nFlags <= SSEF_NO_SYSTEM_ERROR_MESSAGE ) )
+    if ( !( nFlags >= DEFAULTS && nFlags <= NO_SYSTEM_ERROR_MESSAGE ) )
         throw IllegalArgumentException(
             OUString::createFromAscii( "Invalid Flags specified" ),
             static_cast< XSystemShellExecute* >( this ),
@@ -256,7 +256,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     sei.lpParameters = aParameter.getStr();
     sei.nShow        = SW_SHOWNORMAL;
 
-    if ( SSEF_NO_SYSTEM_ERROR_MESSAGE & nFlags )
+    if ( NO_SYSTEM_ERROR_MESSAGE & nFlags )
         sei.fMask = SEE_MASK_FLAG_NO_UI;
 
     SetLastError( 0 );
