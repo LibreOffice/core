@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 19:20:26 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 09:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,7 @@ class RotateDiagramDragMethod : public SdrDragMethod
 {
 public:
     RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrapper );
+    virtual ~RotateDiagramDragMethod();
     //,pDrawViewWrapper->GetMarkList(),E3DDETAIL_ONEBOX,E3DDRAG_CONSTR_XZ
 
     //TYPEINFO();
@@ -518,6 +519,9 @@ RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrap
             m_aCurrentTransform = aPureRotateMatrix*m_aParentTransform;
         }
     }
+}
+RotateDiagramDragMethod::~RotateDiagramDragMethod()
+{
 }
 void RotateDiagramDragMethod::TakeComment(String& rStr) const
 {
