@@ -1,9 +1,12 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\xml%_EXT%\uiconfig
-mkdir: %_DEST%\xml%_EXT%\uiconfig\smath
-mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\menubar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\statusbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\smath
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\smath\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\smath\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\smath\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\smath\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\smath\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
@@ -15,8 +18,9 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\statusbar
 ..\%__SRC%\bin\sm?????.sym %_DEST%\bin%_EXT%\sm?????.sym
 mkdir: %_DEST%\inc%_EXT%\starmath
 
-..\uiconfig\smath\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\smath\menubar\*.xml
-..\uiconfig\smath\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\smath\toolbar\*.xml
-..\uiconfig\smath\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\smath\statusbar\*.xml
+..\uiconfig\smath\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\menubar\*.xml
+..\uiconfig\smath\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\toolbar\*.xml
+..\uiconfig\smath\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\accelerator\en-US\*.xml
+..\uiconfig\smath\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\statusbar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
