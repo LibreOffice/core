@@ -2,9 +2,9 @@
 #
 #   $RCSfile: constant.tests,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 15:11:38 $
+#   last change: $Author: kz $ $Date: 2005-01-18 13:35:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,6 @@ constants C {
     const unsigned hyper C8 = 0;
     const float C9 = 0.0;
     const double C10 = 0.0;
-    const char C11 = 'A';
 };
 
 
@@ -87,21 +86,32 @@ module m {
     const unsigned hyper C8 = 0;
     const float C9 = 0.0;
     const double C10 = 0.0;
-    const char C11 = 'A';
 };
 
 
 EXPECT FAILURE "constant.tests 3":
 constants C {
-    const string C1 = "";
+    const char C1 = 'A';
 };
 
 
 EXPECT FAILURE "constant.tests 4":
 module m {
+    const char C1 = 'A';
+};
+
+
+EXPECT FAILURE "constant.tests 5":
+constants C {
     const string C1 = "";
 };
 
 
-EXPECT SUCCESS "constant.tests 5":
+EXPECT FAILURE "constant.tests 6":
+module m {
+    const string C1 = "";
+};
+
+
+EXPECT SUCCESS "constant.tests 7":
 constants C {};
