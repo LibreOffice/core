@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 12:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -330,8 +333,8 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
         long nWidth = aFrmSize.Width();
         long nHeight = aFrmSize.Height();
         Fraction aXScale( aWinSize.Width(),
-                            max( nWidth + nWidth / 8, 1 ) );
-        Fraction aYScale( aWinSize.Height(), max( nHeight, 1 ) );
+                            std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
+        Fraction aYScale( aWinSize.Height(), std::max( nHeight, (long) 1 ) );
         MapMode aMapMode( GetMapMode() );
         aMapMode.SetScaleX( aXScale );
         aMapMode.SetScaleY( aYScale );
@@ -427,6 +430,9 @@ void SwColumnOnlyExample::SetFrameSize(const Size& rS, long nDist)
 
 /*-----------------25.02.94 21:22-------------------
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:37  hr
+   initial import
+
    Revision 1.26  2000/09/18 16:05:32  willem.vandorp
    OpenOffice header added.
 
