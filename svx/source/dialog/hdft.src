@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:04:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,70 +65,14 @@
  // pragma ----------------------------------------------------------------
 
 #define  _TEXT_FT_LMARGIN \
-        Text = "~Linker Rand" ;                                             \
-        Text [ ENGLISH ] = "~Left Margin" ;                                 \
-        Text [ norwegian ] = "~Left Margin" ;                               \
-        Text [ italian ] = "Margine sinistro" ;                             \
-        Text [ portuguese_brazilian ] = "Margem ~esquerda" ;   \
-        Text [ portuguese ] = "Margem ~esquerda" ;                          \
-        Text [ finnish ] = "~Vasen reunus" ;                            \
-        Text [ danish ] = "~Venstre margen" ;                                \
-        Text [ french ] = "Marge ~gauche" ;                                  \
-        Text [ swedish ] = "~Vänstermarginal" ;                             \
-        Text [ dutch ] = "~Linkermarge" ;                                  \
-        Text [ spanish ] = "Margen ~izquierdo" ;                            \
-        Text [ english_us ] = "~Left margin" ;                              \
-        Text[ chinese_simplified ] = "å·¦è¾¹è·(~L)";                 \
-        Text[ russian ] = "Ëåâîå ïîëå";                                     \
-        Text[ polish ] = "~Lewy margines";                                   \
-        Text[ japanese ] = "å·¦ä½™ç™½(~L)";                                 \
-        Text[ chinese_traditional ] = "å·¦é‚Šæ¡†(~L)";                      \
-        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";                                   \
-        Text[ greek ] = "Á~ñéóôåñü ğåñéèşñéï";                               \
-        Text[ korean ] = "ì™¼ìª½ ì—¬ë°±(~L)";                               \
-        Text[ turkish ] = "~Sol kenar boşluğu";                                     \
-        Text[ language_user1 ] = " ";                                       \
-        Text[ catalan ] = "~Left margin";                              \
-    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸£à¸°à¸¢à¸°à¸‚à¸­à¸šà¸”à¹‰à¸²à¸™~à¸‹à¹‰à¸²à¸¢ :";  \
-    Text[ czech ] = "LevÃ½ okraj";  \
-    Text[ hebrew ] = "~Linker Rand";    \
-    Text[ hindi ] = "~Left margin"; \
-    Text[ slovak ] = "Ä½~avÃ½ okraj"; \
-    Text[ hungarian ] = "~Bal margÃ³"; \
-    Text[ slovenian ] = "~Levi rob";
+        Text [ de ] = "~Linker Rand" ;                                             \
+        Text [ en-US ] = "~Left margin" ;                              \
+        Text [ x-comment ] = " ";
 
 #define _TEXT_FT_RMARGIN \
-        Text = "~Rechter Rand" ;                                            \
-        Text [ ENGLISH ] = "R~ight Margin" ;                                \
-        Text [ norwegian ] = "R~ight Margin" ;                              \
-        Text [ italian ] = "~Margine destro" ;                              \
-        Text [ portuguese_brazilian ] = "Margem ~direita" ;        \
-        Text [ portuguese ] = "Margem ~direita" ;                           \
-        Text [ finnish ] = "Oi~kea reunus" ;                            \
-        Text [ danish ] = "Højre ~margen" ;                                  \
-        Text [ french ] = "Marge ~droite" ;                                  \
-        Text [ swedish ] = "Höge~rmarginal" ;                               \
-        Text [ dutch ] = "~Rechtermarge" ;                                 \
-        Text [ spanish ] = "Margen ~derecho" ;                              \
-        Text [ english_us ] = "R~ight margin" ;                             \
-        Text[ chinese_simplified ] = "å³è¾¹è·(~I)";                 \
-        Text[ russian ] = "Ïğàâîå ïîëå";                                    \
-        Text[ polish ] = "P~rawy margines";                                  \
-        Text[ japanese ] = "å³ä½™ç™½(~I)";                                 \
-        Text[ chinese_traditional ] = "å³é‚Šæ¡†(~I)";                      \
-        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä";                                   \
-        Text[ greek ] = "Äå~îéü ğåñéèşñéï";                                  \
-        Text[ korean ] = "ì˜¤ë¥¸ìª½ ì—¬ë°±(~I)";                            \
-        Text[ turkish ] = "S~ağ kenar boşlukları";                                     \
-        Text[ language_user1 ] = " ";                                       \
-        Text[ catalan ] = "R~ight margin";                                \
-    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸£à¸°à¸¢à¸°à¸‚à¸­à¸šà¸”à¹‰à¸²à¸™~à¸‚à¸§à¸²";   \
-    Text[ czech ] = "PravÃ½ okraj"; \
-    Text[ hebrew ] = "~Rechter Rand";   \
-    Text[ hindi ] = "R~ight margin";    \
-    Text[ slovak ] = "P~ravÃ½ okraj"; \
-    Text[ hungarian ] = "J~obb margÃ³"; \
-    Text[ slovenian ] = "De~sni rob";
+        Text [ de ] = "~Rechter Rand" ;                                            \
+        Text [ en-US ] = "R~ight margin" ;                             \
+        Text [ x-comment ] = " ";
 
 
  // RID_SVXPAGE_HEADER ----------------------------------------------------
@@ -136,91 +80,24 @@ TabPage RID_SVXPAGE_HEADER
 {
     HelpId = HID_FORMAT_HEADER ;
     Hide = TRUE ;
-    Text = "Kopfzeile" ;
-    Text [ English ] = "Header" ;
-    Text [ norwegian ] = "Header" ;
-    Text [ italian ] = "Intestazione" ;
-    Text [ portuguese_brazilian ] = "Cabeçalho" ;
-    Text [ portuguese ] = "Cabeçalho" ;
-    Text [ finnish ] = "Ylätunniste" ;
-    Text [ danish ] = "Sidehoved" ;
-    Text [ french ] = "En-tête" ;
-    Text [ swedish ] = "Sidhuvud" ;
-    Text [ dutch ] = "Koptekst" ;
-    Text [ spanish ] = "Encabezamiento" ;
-    Text [ english_us ] = "Header" ;
+    Text [ de ] = "Kopfzeile" ;
+    Text [ en-US ] = "Header" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text = "~Kopfzeile einschalten" ;
-        Text [ ENGLISH ] = "Hea~der on" ;
-        Text [ norwegian ] = "Header, ~with distance" ;
-        Text [ italian ] = "Attiva riga d'intesta~zione" ;
-        Text [ portuguese_brazilian ] = "Ativar ca~beçalho" ;
-        Text [ portuguese ] = "Activar ~cabeçalho" ;
-        Text [ finnish ] = "~Ylätunniste käytössä" ;
-        Text [ danish ] = "Aktiver sidehoved" ;
-        Text [ french ] = "Activer l'~en-tête " ;
-        Text [ swedish ] = "~Sidhuvud på" ;
-        Text [ dutch ] = "~Koptekst activeren" ;
-        Text [ spanish ] = "~Activar encabezamiento" ;
-        Text [ english_us ] = "Hea~der on" ;
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºé¡µçœ‰(~D)";
-        Text[ russian ] = "Âêë. âåğ~õíèé êîëîíòèòóë";
-        Text[ polish ] = "W³¹cz nag³ówe~k";
-        Text[ japanese ] = "ãƒ˜ãƒƒãƒ€ã‚’ä»˜ã‘ã‚‹(~D)";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºé é¦–(~D)";
-        Text[ arabic ] = "ÅÙåÇÑ ÑÃÓ ÇáÕİÍÉ";
-        Text[ greek ] = "Å~íåñãïğïßçóç êåöáëßäáò";
-        Text[ korean ] = "ë¨¸ë¦¬ê¸€ ì‚½ì…(~D)";
-        Text[ turkish ] = "Üstbilgi oluştur";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Activa l'encapçalament";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™~à¸«à¸±à¸§à¸šà¸™";
-        Text[ czech ] = "ZÃ¡hlavÃ­ zapnuto";
-        Text[ hebrew ] = "~Kopfzeile einschalten";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ ~à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¶à¥à¤°à¥";
-        Text[ slovak ] = "~ZÃ¡hlavie zapnutÃ©";
-        Text[ hungarian ] = "Ã‰~lÅ‘fej bekapcsolÃ¡sa";
-        Text[ slovenian ] = "G~lava vkljuÄena";
+        Text [ de ] = "~Kopfzeile einschalten" ;
+        Text [ en-US ] = "Hea~der on" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_SHARED
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text = "~Inhalt links/rechts gleich" ;
-        Text [ ENGLISH ] = "Same ~content left/right" ;
-        Text [ norwegian ] = "Same ~content left/right" ;
-        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
-        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo à esquerda/direita" ;
-        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "~Sama sisältö vasemmalla ja oikealla" ;
-        Text [ danish ] = "Ens indhold venstre/højre" ;
-        Text [ french ] = "~Contenu identique gauche/droite" ;
-        Text [ swedish ] = "Samma ~innehåll till höger/vänster" ;
-        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
-        Text [ spanish ] = "~Mismo contenido a izquierda y derecha" ;
-        Text [ english_us ] = "Same ~content left/right" ;
-        Text[ chinese_simplified ] = "å·¦å³å†…å®¹ç›¸åŒ(~C)";
-        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Ta sama ~zawartoœæ na stronie parzystej/nieparzystej";
-        Text[ japanese ] = "å·¦å³ãƒšãƒ¼ã‚¸åŒã˜å†…å®¹(~C)";
-        Text[ chinese_traditional ] = "å…§å®¹å·¦å³ç›¸åŒ(~C)";
-        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
-        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
-        Text[ korean ] = "ë‚´ìš© ì™¼ìª½/ì˜¤ë¥¸ìª½ ê°™ê²Œ(~C)";
-        Text[ turkish ] = "Sol/sağ içerik ay~nı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "El mateix ~contingut esquerra/dreta";
-        Text[ thai ] = "à¹€~à¸™à¸·à¹‰à¸­à¸«à¸²à¸‹à¹‰à¸²à¸¢/à¸‚à¸§à¸²à¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
-        Text[ czech ] = "StejnÃ½ obsah vlevo/vpravo";
-        Text[ hebrew ] = "~Inhalt links/rechts gleich";
-        Text[ hindi ] = "à¤¸à¤®à¤¾à¤¨ ~à¤µà¤¿à¤·à¤¯ à¤¬à¤¾à¤¯à¤¾à¤/à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
-        Text[ slovak ] = "RovnakÃ½ ~obsah vÄ¾avo/vpravo";
-        Text[ hungarian ] = "~PÃ¡ros Ã©s pÃ¡ratlan oldal tartalma azonos";
-        Text[ slovenian ] = "Enaka ~vsebina levo/desno";
+        Text [ de ] = "~Inhalt links/rechts gleich" ;
+        Text [ en-US ] = "Same ~content left/right" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_LMARGIN
     {
@@ -271,36 +148,9 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "A~bstand" ;
-        Text [ English ] = "~Distance" ;
-        Text [ english_us ] = "~Spacing" ;
-        Text [ portuguese_brazilian ] = "~Afastamento" ;
-        Text [ swedish ] = "A~vstånd" ;
-        Text [ danish ] = "~Afstand" ;
-        Text [ italian ] = "Distanza" ;
-        Text [ spanish ] = "Espacio" ;
-        Text [ french ] = "Écart" ;
-        Text [ dutch ] = "~Afstand" ;
-        Text [ portuguese ] = "~Espaçamento" ;
-        Text[ chinese_simplified ] = "é—´éš”(~S)";
-        Text[ russian ] = "Èíòåğâàë";
-        Text[ polish ] = "~Odstêp";
-        Text[ japanese ] = "é–“éš”(~S)";
-        Text[ chinese_traditional ] = "é–“éš”(~S)";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ greek ] = "Á~ğüóôáóç";
-        Text[ korean ] = "ê°„ê²©(~S)";
-        Text[ turkish ] = "Uzaklık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Espaiat";
-        Text[ finnish ] = "Väl~it";
-        Text[ thai ] = "~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Mezery";
-        Text[ hebrew ] = "â€®×¨×™×•×•×—â€¬";
-        Text[ hindi ] = "~à¤¬à¥€à¤š à¤®à¥‡à¤‚ à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "~Rozostupy";
-        Text[ hungarian ] = "~TÃ©rkÃ¶z";
-        Text[ slovenian ] = "~Razmik";
+        Text [ de ] = "A~bstand" ;
+        Text [ en-US ] = "~Spacing" ;
+        Text [ x-comment ] = " ";
     };
     MetricField ED_DIST
     {
@@ -322,69 +172,16 @@ TabPage RID_SVXPAGE_HEADER
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
-        Text = "D~ynamischen Abstand verwenden" ;
-        Text [ english_us ] = "Use d~ynamic spacing" ;
-        Text[ portuguese ] = "Use d~ynamic spacing";
-        Text[ russian ] = "Use d~ynamic spacing";
-        Text[ greek ] = "~ÄõíáìéêŞ áğüóôáóç";
-        Text[ dutch ] = "Use d~ynamic spacing";
-        Text[ french ] = "Utilisation de l'espacement dynamique";
-        Text[ spanish ] = "Utilizar espacio d~inámico";
-        Text[ finnish ] = "Use d~ynamic spacing";
-        Text[ italian ] = "Usa spaziatura dinamica";
-        Text[ danish ] = "Brug ~dynamisk afstand";
-        Text[ swedish ] = "Använd d~ynamiskt avstånd";
-        Text[ polish ] = "Use d~ynamic spacing";
-        Text[ portuguese_brazilian ] = "Usar afastamento dinâmico";
-        Text[ japanese ] = "é–“éš”è‡ªå‹•èª¿æ•´(~Y)";
-        Text[ korean ] = "ë™ì  ë¬¸ì ê°„ê²© ì‚¬ìš©(~Y)";
-        Text[ chinese_simplified ] = "ä½¿ç”¨è‡ªåŠ¨æœ€ä½³è°ƒæ•´çš„é—´éš”(~Y)";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è‡ªå‹•æœ€é©èª¿æ•´çš„é–“éš”(~Y)";
-        Text[ turkish ] = "Di~namik boşluk kullan";
-        Text[ arabic ] = "Use d~ynamic spacing";
-        Text[ catalan ] = "Use d~ynamic spacing";
-        Text[ thai ] = "Use d~ynamic spacing";
-        Text[ czech ] = "PouÅ¾Ã­t dynamickÃ© mezery";
-        Text[ hebrew ] = "D~ynamischen Abstand verwenden";
-        Text[ hindi ] = "Use d~ynamic spacing";
-        Text[ slovak ] = "~PouÅ¾iÅ¥ premenlivÃº Å¡Ã­rku";
-        Text[ hungarian ] = "~Dinamikus tÃ©rkÃ¶zhasznÃ¡lat";
-        Text[ slovenian ] = "Uporabi ~dinamiÄne razmike";
+        Text [ de ] = "D~ynamischen Abstand verwenden" ;
+        Text [ en-US ] = "Use d~ynamic spacing" ;
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "Höh~e" ;
-        Text [ ENGLISH ] = "H~eight" ;
-        Text [ english_us ] = "~Height" ;
-        Text [ portuguese_brazilian ] = "A~ltura" ;
-        Text [ swedish ] = "Höj~d" ;
-        Text [ danish ] = "~Højde" ;
-        Text [ italian ] = "Altezza" ;
-        Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "Hauteur" ;
-        Text [ dutch ] = "Hoo~gte" ;
-        Text [ portuguese ] = "~Altura" ;
-        Text[ chinese_simplified ] = "é«˜åº¦(~H)";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "~Wysokoœæ";
-        Text[ japanese ] = "é«˜ã•(~H)";
-        Text[ chinese_traditional ] = "é«˜åº¦(~H)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾~øïò";
-        Text[ korean ] = "ë†’ì´(~H)";
-        Text[ turkish ] = "Yükseklik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~lçada";
-        Text[ finnish ] = "~Korkeus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
-        Text[ czech ] = "VÃ½Å¡ka";
-        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
-        Text[ hindi ] = "~à¤Šà¤à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "~VÃ½Å¡ka";
-        Text[ hungarian ] = "~MagassÃ¡g";
-        Text[ slovenian ] = "~ViÅ¡ina";
+        Text [ de ] = "Höh~e" ;
+        Text [ en-US ] = "~Height" ;
+        Text [ x-comment ] = " ";
     };
     MetricField ED_HEIGHT
     {
@@ -407,72 +204,17 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text = "Höhe ~dynamisch anpassen" ;
-        Text [ ENGLISH ] = "~AutoFit height" ;
-        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
-        Text [ english_us ] = "~AutoFit height" ;
-        Text [ swedish ] = "An~passa höjd dynamiskt" ;
-        Text [ danish ] = "~Tilpas automatisk højden" ;
-        Text [ italian ] = "Adatta altezza d~inamicamente" ;
-        Text [ spanish ] = "Ajus~te dinámico de la altura" ;
-        Text [ french ] = "Adaptation dynamique de la hauteur" ;
-        Text [ portuguese ] = "Ajuste ~dinâmico da altura" ;
-        Text [ portuguese_brazilian ] = "A~juste automático da altura" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨è°ƒæ•´é«˜åº¦(~A)";
-        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
-        Text[ polish ] = "~Autodopasowanie wysokoœci";
-        Text[ japanese ] = "é«˜ã•è‡ªå‹•èª¿æ•´(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•æœ€é©èª¿æ•´é«˜åº¦(~A)";
-        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
-        Text[ greek ] = "Äõ~íáìéêŞ ğñïóáñìïãŞ ıøïõò";
-        Text[ korean ] = "ë†’ì´ ìë™ ë§ì¶¤(~A)";
-        Text[ turkish ] = "Yüksekliği otomatik olarak ayarla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Adap~tació dinàmica de l'alçada";
-        Text[ finnish ] = "A~utomaattinen korkeuden sovitus";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸à¸­à¸”à¸µ~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "AutomatickÃ¡ Ãºprava vÃ½Å¡ky";
-        Text[ hebrew ] = "HÃ¶he ~dynamisch anpassen";
-        Text[ hindi ] = "~à¤¯à¥‹à¤—à¥à¤¯ à¤Šà¤à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "~AutomatickÃ¡ Ãºprava vÃ½Å¡ky";
-        Text[ hungarian ] = "A~utomatikus magassÃ¡g";
-        Text[ slovenian ] = "S~amodejno prilagodi viÅ¡ino";
+        Text [ de ] = "Höhe ~dynamisch anpassen" ;
+        Text [ en-US ] = "~AutoFit height" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text = "Kopfzeile" ;
-        Text [ ENGLISH ] = "Header" ;
-        Text [ norwegian ] = "Header" ;
-        Text [ italian ] = "Intestazione" ;
-        Text [ portuguese_brazilian ] = "Cabeçalho" ;
-        Text [ portuguese ] = "Cabeçalho" ;
-        Text [ finnish ] = "Ylätunniste" ;
-        Text [ danish ] = "Sidehoved" ;
-        Text [ french ] = "En-tête" ;
-        Text [ swedish ] = "Sidhuvud" ;
-        Text [ dutch ] = "Koptekst" ;
-        Text [ spanish ] = "Encabezamiento" ;
-        Text [ english_us ] = "Header" ;
-        Text[ chinese_simplified ] = "é¡µçœ‰";
-        Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
-        Text[ polish ] = "Nag³ówek";
-        Text[ japanese ] = "ãƒ˜ãƒƒãƒ€";
-        Text[ chinese_traditional ] = "é é¦–";
-        Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
-        Text[ greek ] = "Êåöáëßäá";
-        Text[ korean ] = "ë¨¸ë¦¬ê¸€";
-        Text[ turkish ] = "Başlık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Encapçalament";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
-        Text[ czech ] = "ZÃ¡hlavÃ­";
-        Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×¢×œ×™×•× ×”â€¬";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-        Text[ slovak ] = "ZÃ¡hlavie";
-        Text[ hungarian ] = "Ã‰lÅ‘fej";
-        Text[ slovenian ] = "Glava";
+        Text [ de ] = "Kopfzeile" ;
+        Text [ en-US ] = "Header" ;
+        Text [ x-comment ] = " ";
     };
     Window WN_BSP
     {
@@ -483,147 +225,35 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Zus~ätze..." ;
-        Text [ ENGLISH ] = "~More..." ;
-        Text [ norwegian ] = "Option~s..." ;
-        Text [ italian ] = "E~xtra..." ;
-        Text [ portuguese_brazilian ] = "~Mais..." ;
-        Text [ portuguese ] = "~Outros..." ;
-        Text [ finnish ] = "~Lisää..." ;
-        Text [ danish ] = "~Flere..." ;
-        Text [ french ] = "Options..." ;
-        Text [ swedish ] = "~Fler..." ;
-        Text [ dutch ] = "~Overige..." ;
-        Text [ spanish ] = "~Opciones..." ;
-        Text [ english_us ] = "~More..." ;
-        Text[ chinese_simplified ] = "å…¶ä»–(~M)...";
-        Text[ russian ] = "Äîïîëíèòåëüíî";
-        Text[ polish ] = "Wiê~cej...";
-        Text[ japanese ] = "è©³ç´°(~M)...";
-        Text[ chinese_traditional ] = "å…¶ä»–(~M)...";
-        Text[ arabic ] = "ÅÖÇİÇÊ...";
-        Text[ greek ] = "Ğñüóèåôá...";
-        Text[ korean ] = "ì˜µì…˜(~M)...";
-        Text[ turkish ] = "Ayrıntılar...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opcions...";
-        Text[ thai ] = "~à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”...";
-        Text[ czech ] = "VÃ­ce...";
-        Text[ hebrew ] = "Zus~Ã¤tze...";
-        Text[ hindi ] = "~à¤…à¤§à¤¿à¤•...";
-        Text[ slovak ] = "~Viac...";
-        Text[ hungarian ] = "~Egyebek...";
-        Text[ slovenian ] = "~Dodatno...";
+        Text [ de ] = "Zus~ätze..." ;
+        Text [ en-US ] = "~More..." ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "é¡µçœ‰";
-    Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
-    Text[ polish ] = "Nag³ówek";
-    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€";
-    Text[ chinese_traditional ] = "é é¦–";
-    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
-    Text[ greek ] = "Êåöáëßäá";
-    Text[ korean ] = "ë¨¸ë¦¬ê¸€";
-    Text[ turkish ] = "Üstbilgi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encapçalament";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
-    Text[ czech ] = "ZÃ¡hlavÃ­";
-    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×¢×œ×™×•× ×”â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-    Text[ slovak ] = "ZÃ¡hlavie";
-    Text[ hungarian ] = "Ã‰lÅ‘fej";
-    Text[ slovenian ] = "Glava";
+    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_FOOTER ----------------------------------------------------
 TabPage RID_SVXPAGE_FOOTER
 {
     HelpId = HID_FORMAT_FOOTER ;
     Hide = TRUE ;
-    Text = "Fußzeile" ;
-    Text [ English ] = "Footer" ;
-    Text [ norwegian ] = "Footer" ;
-    Text [ italian ] = "Piè di pagina" ;
-    Text [ portuguese_brazilian ] = "Rodapé" ;
-    Text [ portuguese ] = "Rodapé" ;
-    Text [ finnish ] = "Alatunniste" ;
-    Text [ danish ] = "Sidefod" ;
-    Text [ french ] = "Pied de page" ;
-    Text [ swedish ] = "Sidfot" ;
-    Text [ dutch ] = "Voettekst" ;
-    Text [ spanish ] = "Pie de página" ;
-    Text [ english_us ] = "Footer" ;
+    Text [ de ] = "Fußzeile" ;
+    Text [ en-US ] = "Footer" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text = "~Fußzeile einschalten" ;
-        Text [ ENGLISH ] = "~Footer on" ;
-        Text [ norwegian ] = "~Footer, with distance" ;
-        Text [ italian ] = "~Attiva piè di pagina" ;
-        Text [ portuguese_brazilian ] = "Ativar ~rodapé" ;
-        Text [ portuguese ] = "Activar ~rodapé" ;
-        Text [ finnish ] = "Alatunniste k~äytössä" ;
-        Text [ danish ] = "~Aktiver sidefod" ;
-        Text [ french ] = "~Activer le pied de page" ;
-        Text [ swedish ] = "Sid~fot på" ;
-        Text [ dutch ] = "Vo~ettekst activeren" ;
-        Text [ spanish ] = "~Activar pie de página" ;
-        Text [ english_us ] = "~Footer on" ;
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºé¡µè„š(~F)";
-        Text[ russian ] = "Âêë. íè~æíèé êîëîíòèòóë";
-        Text[ polish ] = "W³¹cz ~stopkê";
-        Text[ japanese ] = "ãƒ•ãƒƒã‚¿ã‚’ä»˜ã‘ã‚‹(~F)";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºé å°¾(~F)";
-        Text[ arabic ] = "ÅÙåÇÑ ÊĞííá ÇáÕİÍÉ";
-        Text[ greek ] = "Å~íåñãïğïßçóç õğïóİëéäïõ";
-        Text[ korean ] = "ë°”ë‹¥ê¸€ ì‚½ì…(~F)";
-        Text[ turkish ] = "Altbilgi oluştur";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Activa el peu de pàgina";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™~à¸—à¹‰à¸²à¸¢à¸šà¸™";
-        Text[ czech ] = "ZÃ¡patÃ­ zapnuto";
-        Text[ hebrew ] = "~FuÃŸzeile einschalten";
-        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¶à¥à¤°à¥";
-        Text[ slovak ] = "ZÃ¡pÃ¤~tie zapnutÃ©";
-        Text[ hungarian ] = "Ã‰~lÅ‘lÃ¡b bekapcsolÃ¡sa";
-        Text[ slovenian ] = "~Noga vkljuÄena";
+        Text [ de ] = "~Fußzeile einschalten" ;
+        Text [ en-US ] = "~Footer on" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_SHARED
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text = "~Inhalt links/rechts gleich" ;
-        Text [ ENGLISH ] = "Same ~content left/right" ;
-        Text [ norwegian ] = "Same ~content left/right" ;
-        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
-        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo à esquerda/direita" ;
-        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "~Sama sisältö vasemmalla ja oikealla" ;
-        Text [ danish ] = "Ens indhold venstre/højre" ;
-        Text [ french ] = "~Contenu identique gauche/droite" ;
-        Text [ swedish ] = "Samma ~innehåll till höger/vänster" ;
-        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
-        Text [ spanish ] = "~Mismo contenido a izquierda y derecha" ;
-        Text [ english_us ] = "Same ~content left/right" ;
-        Text[ chinese_simplified ] = "å·¦å³å†…å®¹ç›¸åŒ(~C)";
-        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Ta sama ~zawartoœæ na stronie parzystej/nieparzystej";
-        Text[ japanese ] = "å·¦å³ãƒšãƒ¼ã‚¸åŒã˜å†…å®¹(~C)";
-        Text[ chinese_traditional ] = "å…§å®¹å·¦å³ç›¸åŒ(~C)";
-        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
-        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
-        Text[ korean ] = "ë‚´ìš© ì™¼ìª½/ì˜¤ë¥¸ìª½ ê°™ê²Œ(~C)";
-        Text[ turkish ] = "Sol/sağ içerik aynı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "El mateix ~contingut esquerra/dreta";
-        Text[ thai ] = "à¹€~à¸™à¸·à¹‰à¸­à¸«à¸²à¸‹à¹‰à¸²à¸¢/à¸‚à¸§à¸²à¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
-        Text[ czech ] = "StejnÃ½ obsah vlevo/vpravo";
-        Text[ hebrew ] = "~Inhalt links/rechts gleich";
-        Text[ hindi ] = "à¤¸à¤®à¤¾à¤¨ ~à¤µà¤¿à¤·à¤¯ à¤¬à¤¾à¤¯à¤¾à¤/à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
-        Text[ slovak ] = "RovnakÃ½ ~obsah vÄ¾avo/vpravo";
-        Text[ hungarian ] = "~PÃ¡ros Ã©s pÃ¡ratlan oldal tartalma azonos";
-        Text[ slovenian ] = "Enaka ~vsebina levo/desno";
+        Text [ de ] = "~Inhalt links/rechts gleich" ;
+        Text [ en-US ] = "Same ~content left/right" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_LMARGIN
     {
@@ -673,36 +303,9 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "A~bstand" ;
-        Text [ English ] = "~Distance" ;
-        Text [ english_us ] = "~Spacing" ;
-        Text [ portuguese_brazilian ] = "~Afastamento" ;
-        Text [ swedish ] = "A~vstånd" ;
-        Text [ danish ] = "~Afstand" ;
-        Text [ italian ] = "Distanza" ;
-        Text [ spanish ] = "Es~pacio" ;
-        Text [ french ] = "Écart" ;
-        Text [ dutch ] = "~Afstand" ;
-        Text [ portuguese ] = "~Espaçamento" ;
-        Text[ chinese_simplified ] = "é—´éš”(~S)";
-        Text[ russian ] = "Èíòåğâàë";
-        Text[ polish ] = "~Odstêp";
-        Text[ japanese ] = "é–“éš”(~S)";
-        Text[ chinese_traditional ] = "é–“éš”(~S)";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ greek ] = "Á~ğüóôáóç";
-        Text[ korean ] = "ê°„ê²©(~S)";
-        Text[ turkish ] = "Uzaklık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Espaiat";
-        Text[ finnish ] = "Väl~it";
-        Text[ thai ] = "~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Mezery";
-        Text[ hebrew ] = "â€®×¨×™×•×•×—â€¬";
-        Text[ hindi ] = "~à¤¬à¥€à¤š à¤®à¥‡à¤‚ à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "~Rozostupy";
-        Text[ hungarian ] = "~TÃ©rkÃ¶z";
-        Text[ slovenian ] = "~Razmik";
+        Text [ de ] = "A~bstand" ;
+        Text [ en-US ] = "~Spacing" ;
+        Text [ x-comment ] = " ";
     };
     MetricField ED_DIST
     {
@@ -724,70 +327,17 @@ TabPage RID_SVXPAGE_FOOTER
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
-        Text = "D~ynamischen Abstand verwenden" ;
-        Text [ english_us ] = "Use d~ynamic spacing" ;
-        Text[ portuguese ] = "Use d~ynamic spacing";
-        Text[ russian ] = "Use d~ynamic spacing";
-        Text[ greek ] = "Äõíá~ìéêŞ áğüóôáóç";
-        Text[ dutch ] = "Use d~ynamic spacing";
-        Text[ french ] = "Utilisation de l'espacement dynamique";
-        Text[ spanish ] = "Utilizar espacio d~inámico";
-        Text[ finnish ] = "Use d~ynamic spacing";
-        Text[ italian ] = "Usa spaziatura dinamica";
-        Text[ danish ] = "Brug ~dynamisk afstand";
-        Text[ swedish ] = "Använd d~ynamiskt avstånd";
-        Text[ polish ] = "Use d~ynamic spacing";
-        Text[ portuguese_brazilian ] = "Usar afastamento dinâmico";
-        Text[ japanese ] = "é–“éš”è‡ªå‹•èª¿æ•´(~Y)";
-        Text[ korean ] = "ë™ì  ë¬¸ì ê°„ê²© ì‚¬ìš©(~Y)";
-        Text[ chinese_simplified ] = "ä½¿ç”¨è‡ªåŠ¨æœ€ä½³è°ƒæ•´çš„é—´éš”(~Y)";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è‡ªå‹•æœ€é©èª¿æ•´çš„é–“éš”(~Y)";
-        Text[ turkish ] = "D~inamik boşluk kullan";
-        Text[ arabic ] = "Use d~ynamic spacing";
-        Text[ catalan ] = "Use d~ynamic spacing";
-        Text[ thai ] = "Use d~ynamic spacing";
-        Text[ czech ] = "PouÅ¾Ã­t dynamickÃ© mezery";
-        Text[ hebrew ] = "D~ynamischen Abstand verwenden";
-        Text[ hindi ] = "Use d~ynamic spacing";
-        Text[ slovak ] = "~PouÅ¾iÅ¥ premenlivÃº Å¡Ã­rku";
-        Text[ hungarian ] = "~Dinamikus tÃ©rkÃ¶zhasznÃ¡lat";
-        Text[ slovenian ] = "Uporabi ~dinamiÄne razmike";
+        Text [ de ] = "D~ynamischen Abstand verwenden" ;
+        Text [ en-US ] = "Use d~ynamic spacing" ;
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "Höh~e" ;
-        Text [ ENGLISH ] = "H~eight" ;
+        Text [ de ] = "Höh~e" ;
         Disable = TRUE ;
-        Text [ english_us ] = "~Height" ;
-        Text [ portuguese_brazilian ] = "A~ltura" ;
-        Text [ swedish ] = "Höj~d" ;
-        Text [ danish ] = "~Højde" ;
-        Text [ italian ] = "Altezza" ;
-        Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "Hauteur" ;
-        Text [ dutch ] = "Hoo~gte" ;
-        Text [ portuguese ] = "~Altura" ;
-        Text[ chinese_simplified ] = "é«˜åº¦(~H)";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "~Wysokoœæ";
-        Text[ japanese ] = "é«˜ã•(~H)";
-        Text[ chinese_traditional ] = "é«˜åº¦(~H)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾~øïò";
-        Text[ korean ] = "ë†’ì´(~H)";
-        Text[ turkish ] = "Yükseklik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~lçada";
-        Text[ finnish ] = "~Korkeus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
-        Text[ czech ] = "VÃ½Å¡ka";
-        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
-        Text[ hindi ] = "~à¤Šà¤à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "~VÃ½Å¡ka";
-        Text[ hungarian ] = "~MagassÃ¡g";
-        Text[ slovenian ] = "~ViÅ¡ina";
+        Text [ en-US ] = "~Height" ;
+        Text [ x-comment ] = " ";
     };
     MetricField ED_HEIGHT
     {
@@ -810,74 +360,18 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text = "Höhe ~dynamisch anpassen" ;
-        Text [ ENGLISH ] = "~AutoFit height" ;
-        Text [ norwegian ] = "Footer height ~dynamic" ;
-        Text [ italian ] = "Adatta altezza din~amicamente" ;
-        Text [ portuguese_brazilian ] = "A~juste automático da altura" ;
-        Text [ portuguese ] = "Ajuste dinâmico da altura" ;
-        Text [ finnish ] = "A~utomaattinen korkeuden sovitus" ;
-        Text [ danish ] = "~Tilpas automatisk højden" ;
-        Text [ french ] = "Adaptation dynamique de la hauteur" ;
-        Text [ swedish ] = "An~passa höjd dynamiskt" ;
-        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
-        Text [ spanish ] = "Ajuste dinámico de la altura" ;
-        Text [ english_us ] = "~AutoFit height" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨è°ƒæ•´é«˜åº¦(~A)";
-        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
-        Text[ polish ] = "~Autodopasowanie wysokoœci";
-        Text[ japanese ] = "é«˜ã•è‡ªå‹•èª¿æ•´(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•æœ€é©èª¿æ•´é«˜åº¦(~A)";
-        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
-        Text[ greek ] = "Äõ~íáìéêŞ ğñïóáñìïãŞ ıøïõò";
-        Text[ korean ] = "ë†’ì´ ìë™ ë§ì¶¤(~A)";
-        Text[ turkish ] = "Yüksekliği otomatik olarak ayarla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ada~ptació dinàmica de l'alçada";
-        Text[ thai ] = "à¸›à¸£à¸±à¸šà¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸à¸­à¸”à¸µ~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "AutomatickÃ¡ Ãºprava vÃ½Å¡ky";
-        Text[ hebrew ] = "HÃ¶he ~dynamisch anpassen";
-        Text[ hindi ] = "~à¤¯à¥‹à¤—à¥à¤¯ à¤Šà¤à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "~AutomatickÃ¡ Ãºprava vÃ½Å¡ky";
-        Text[ hungarian ] = "A~utomatikus magassÃ¡g";
-        Text[ slovenian ] = "S~amodejno prilagodi viÅ¡ino";
+        Text [ de ] = "Höhe ~dynamisch anpassen" ;
+        Text [ en-US ] = "~AutoFit height" ;
+        Text [ x-comment ] = " ";
     };
 
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text = "Fußzeile" ;
-        Text [ ENGLISH ] = "Footer" ;
-        Text [ norwegian ] = "Footer" ;
-        Text [ italian ] = "Piè di pagina" ;
-        Text [ portuguese_brazilian ] = "Rodapé" ;
-        Text [ portuguese ] = "Rodapé" ;
-        Text [ finnish ] = "Alatunniste" ;
-        Text [ danish ] = "Sidefod" ;
-        Text [ french ] = "Pied de page" ;
-        Text [ swedish ] = "Sidfot" ;
-        Text [ dutch ] = "Voettekst" ;
-        Text [ spanish ] = "Pie de página" ;
-        Text [ english_us ] = "Footer" ;
-        Text[ chinese_simplified ] = "é¡µè„š";
-        Text[ russian ] = "Íèæíèé êîëîíòèòóë";
-        Text[ polish ] = "Stopka";
-        Text[ japanese ] = "ãƒ•ãƒƒã‚¿";
-        Text[ chinese_traditional ] = "é å°¾";
-        Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
-        Text[ greek ] = "Õğïóİëéäï";
-        Text[ korean ] = "ë°”ë‹¥ê¸€";
-        Text[ turkish ] = "Dipnot";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Peu de pàgina";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
-        Text[ czech ] = "ZÃ¡patÃ­";
-        Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-        Text[ slovak ] = "ZÃ¡pÃ¤tie";
-        Text[ hungarian ] = "Ã‰lÅ‘lÃ¡b";
-        Text[ slovenian ] = "Noga";
+        Text [ de ] = "Fußzeile" ;
+        Text [ en-US ] = "Footer" ;
+        Text [ x-comment ] = " ";
     };
     Window WN_BSP
     {
@@ -888,92 +382,19 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Zus~ätze..." ;
-        Text [ ENGLISH ] = "~More..." ;
-        Text [ norwegian ] = "~Options..." ;
-        Text [ italian ] = "E~xtra..." ;
-        Text [ portuguese_brazilian ] = "~Mais..." ;
-        Text [ portuguese ] = "~Outros..." ;
-        Text [ finnish ] = "~Lisää..." ;
-        Text [ danish ] = "~Flere..." ;
-        Text [ french ] = "Options..." ;
-        Text [ swedish ] = "~Fler..." ;
-        Text [ dutch ] = "~Overige..." ;
-        Text [ spanish ] = "~Opciones..." ;
-        Text [ english_us ] = "~More..." ;
-        Text[ chinese_simplified ] = "å…¶ä»–(~M)...";
-        Text[ russian ] = "Äîïîëíèòåëüíî";
-        Text[ polish ] = "Wiê~cej...";
-        Text[ japanese ] = "è©³ç´°(~M)...";
-        Text[ chinese_traditional ] = "å…¶ä»–(~M)...";
-        Text[ arabic ] = "ÅÖÇİÇÊ...";
-        Text[ greek ] = "Ğñüóèåôá...";
-        Text[ korean ] = "ì˜µì…˜(~M)...";
-        Text[ turkish ] = "Ayrıntılar...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opcions...";
-        Text[ thai ] = "~à¸¡à¸²à¸à¸à¸§à¹ˆà¸²...";
-        Text[ czech ] = "VÃ­ce...";
-        Text[ hebrew ] = "Zus~Ã¤tze...";
-        Text[ hindi ] = "~à¤…à¤§à¤¿à¤•...";
-        Text[ slovak ] = "~Viac...";
-        Text[ hungarian ] = "~Egyebek...";
-        Text[ slovenian ] = "~Dodatno...";
+        Text [ de ] = "Zus~ätze..." ;
+        Text [ en-US ] = "~More..." ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "é¡µè„š";
-    Text[ russian ] = "Íèæíèé êîëîíòèòóë";
-    Text[ polish ] = "Stopka";
-    Text[ japanese ] = "ãƒ•ãƒƒã‚¿";
-    Text[ chinese_traditional ] = "é å°¾";
-    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
-    Text[ greek ] = "Õğïóİëéäï";
-    Text[ korean ] = "ë°”ë‹¥ê¸€";
-    Text[ turkish ] = "Altbilgi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Peu de pàgina";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
-    Text[ czech ] = "ZÃ¡patÃ­";
-    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-    Text[ slovak ] = "PÃ¤ta";
-    Text[ hungarian ] = "Ã‰lÅ‘lÃ¡b";
-    Text[ slovenian ] = "Noga";
+    Text [ x-comment ] = " ";
 };
 QueryBox RID_SVXQBX_DELETE_HEADFOOT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Inhalt.\nMöchten Sie den Inhalt löschen?" ;
-    Message [ English ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this content?" ;
-    Message [ norwegian ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this text?" ;
-    Message [ italian ] = "Disattivando l'intestazione o il piè di pagina il testo esistente verrà cancellato.\nVolete cancellare il contenuto?" ;
-    Message [ portuguese_brazilian ] = "Desativar o cabeçalho ou o rodapé excluirá seu conteúdo.\nDeseja excluir este texto?" ;
-    Message [ portuguese ] = "Ao desactivar o cabeçalho ou o rodapé apaga o respectivo conteúdo.\nDeseja realmente eliminar o texto?" ;
-    Message [ finnish ] = "Ylä- tai alatunnisteiden poistaminen poistaa sisällön.\nPoistetaanko teksti?" ;
-    Message [ danish ] = "Deaktivering af sidehoveder eller sidefødder sletter det nuværende indhold.\nSkal indholdet slettes?" ;
-    Message [ french ] = "La désactivation de l'en-tête ou du pied de page en supprime le contenu.\nÊtes-vous sûr de vouloir supprimer ce texte ?" ;
-    Message [ swedish ] = "Om du deaktiverar sidhuvuden eller sidfötter raderas innehållet. \nVill du radera innehållet?" ;
-    Message [ dutch ] = "Als u de kop- of voettekst uitschakelt, wordt de inhoud ervan verwijderd.\nWeet u zeker dat u de inhoud wilt verwijderen?" ;
-    Message [ spanish ] = "Al desactivar un encabezamiento o pie de página se borrará su contenido.\n¿Desea borrar este texto?" ;
-    Message [ english_us ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
-    Message[ chinese_simplified ] = "ä¸ç”¨é¡µçœ‰å’Œé¡µè„šåŠŸèƒ½å°±ä¼šåˆ é™¤ç°å­˜çš„æ–‡å­—ã€‚\nè¦åˆ é™¤è¿™äº›æ–‡å­—ï¼Ÿ";
-    Message[ russian ] = "Îòêëş÷åíèå êîëîíòèòóëîâ âûçîâåò óäàëåíèå èõ ñîäåğæàíèÿ.\nÓäàëèòü ıòîò òåêñò?";
-    Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie zawartoœci. \nUsun¹æ zawartoœæ?";
-    Message[ japanese ] = "ãƒ˜ãƒƒãƒ€ã¾ãŸã¯ãƒ•ãƒƒã‚¿ã®æ©Ÿèƒ½ã‚’ã‚ªãƒ•ã«ã™ã‚‹ã¨ã€ãã“ã«ã‚ã‚‹å†…å®¹ã‚‚å‰Šé™¤ã•ã‚Œã¾ã™ã€‚\nå‰Šé™¤ã—ã¦ã‚‚ã„ã„ã§ã™ã‹ã€‚";
-    Message[ chinese_traditional ] = "ä¸æ¡ç”¨é é¦–æˆ–é å°¾å°±æœƒåˆªé™¤å·²ç¾æœ‰çš„æ–‡å­—ã€‚\nè¦åˆªé™¤é€™äº›æ–‡å­—ï¼Ÿ";
-    Message[ arabic ] = "ÅÎİÇÁ ÑÃÓ/ ÊĞííá ÇáÕİÍÉ Óæİ íÄÏí Åáì ÍĞİ ãÍÊæíÇÊå.\nåá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáãÍÊæíÇÊ¿";
-    Message[ greek ] = "Ìå ôçí áğåíåñãïğïßçóç ôçò êåöáëßäáò Ş ôçò õğïêåöáëßäáò äéáãñÜöåôáé ôï õğÜñ÷ïí ğåñéå÷üìåíï.\nÈİëåôå íá äéáãñáöåß ôï ğåñéå÷üìåíï;";
-    Message[ korean ] = "ë¨¸ë¦¬ê¸€ì´ë‚˜ ë°”ë‹¥ê¸€ì„ ì—†ì• ë©´ ë‚´ìš©ë„ ì‚­ì œë©ë‹ˆë‹¤.\nì‚­ì œí•˜ê² ìŠµë‹ˆê¹Œ?";
-    Message[ turkish ] = "Sayfa başlıklarını ve dipnotları kaldırmak içeriği siler.\nBu metni silmek istiyor musunuz?";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Si desactiveu el encapçalament o el peu de pàgina en perdreu el seu contingut.\nVoleu eliminar-lo?";
-    Message[ thai ] = "à¹€à¸­à¸²à¸•à¸±à¸§à¸¥à¸šà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸«à¸£à¸·à¸­à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¸­à¸­à¸\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "OdstranÄ›nÃ­m zÃ¡hlavÃ­ nebo zÃ¡patÃ­ smaÅ¾ete obsah.\nOpravdu chcete smazat tento text?";
-    Message[ hebrew ] = "Das Ausschalten der Kopf- oder FuÃŸzeilen lÃ¶scht vorhandenen Inhalt.\nMÃ¶chten Sie den Inhalt lÃ¶schen?";
-    Message[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤”à¤° à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤¹à¤Ÿà¤¾à¤¨à¥‡ à¤¸à¥‡ à¤µà¤¿à¤·à¤¯ à¤®à¤¿à¤Ÿ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤\nà¤†à¤ª à¤‡à¤¸ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Message[ slovak ] = "OdstrÃ¡nenÃ­m zÃ¡hlavia alebo pÃ¤ty zmaÅ¾ete obsah.\nNaozaj chcete zmazaÅ¥ tento text?";
-    Message[ hungarian ] = "Az Ã©lÅ‘fej vagy Ã©lÅ‘lÃ¡b eltÃ¡volÃ­tÃ¡sa tÃ¶rli annak tartalmÃ¡t.\nMÃ©gis folytatja?";
-    Message[ slovenian ] = "ÄŒe odstranite glave in noge, boste odstranili tudi vsebino.\nAli Å¾elite izbrisati to besedilo?";
+    Message [ de ] = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Inhalt.\nMöchten Sie den Inhalt löschen?" ;
+    Message [ en-US ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
+    Message [ x-comment ] = " ";
 };
 
  // ********************************************************************** EOF
