@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:38:10 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:05:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,16 +64,12 @@ PRJ=..
 PRJNAME=comphelper
 TARGET=comphelper
 
-TARGETTYPE=CUI
-USE_LDUMP2=TRUE
-
-ENABLE_EXCEPTIONS=TRUE
-
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/version.mk
 
 # --- Library -----------------------------------
 
+LIB1TARGET=	$(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/container.lib		\
             $(SLB)$/evtattmgr.lib		\
             $(SLB)$/misc.lib			\
@@ -82,8 +78,6 @@ LIB1FILES=	$(SLB)$/container.lib		\
             $(SLB)$/streaming.lib		\
             $(SLB)$/compare.lib         \
             $(SLB)$/officeinstdir.lib
-
-LIB1TARGET=$(SLB)$/$(TARGET).lib
 
 SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)$(COMID)
 SHL1STDLIBS= \
@@ -96,29 +90,13 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(COMPHLP_TARGET)
-
+SHL1USE_EXPORTS=ordinal
 SHL1LIBS=	$(LIB1TARGET)
-
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
-            $(LIB1TARGET)
-
 DEFLIB1NAME=$(TARGET)
-DEF1EXPORTFILE = exports.dxp
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-.IF "$(depend)"==""
-
-# --- Goodies-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo __CT				>>$@
-.ENDIF
-
