@@ -28,13 +28,13 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\lib\svx2.lib %_DEST%\lib%_EXT%\svx2.lib
 ..\%__SRC%\slb\xdraw.lib %_DEST%\lib%_EXT%\svxsmrtd.lib
 ..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
+..\%__SRC%\bin\cu*.dll %_DEST%\bin%_EXT%\cu*.dll
 ..\%__SRC%\bin\dg*.dll %_DEST%\bin%_EXT%\dg*.dll
 ..\%__SRC%\bin\dl*.dll %_DEST%\bin%_EXT%\dl*.dll
 ..\%__SRC%\bin\dg*.sym %_DEST%\bin%_EXT%\dg*.sym
 ..\%__SRC%\misc\dg*.map %_DEST%\bin%_EXT%\dg*.map
 ..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
-..\%__SRC%\bin\svx*.res %_DEST%\bin%_EXT%\svx*.res
-..\%__SRC%\bin\gal*.res %_DEST%\bin%_EXT%\gal*.res
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\svx*.sym %_DEST%\bin%_EXT%\svx*.sym
 ..\%__SRC%\misc\svx*.map %_DEST%\bin%_EXT%\svx*.map
 ..\%__SRC%\misc\svx.csv %_DEST%\inc%_EXT%\svx.csv
@@ -618,6 +618,7 @@ hedabu: ..\inc\pgrditem.hxx %_DEST%\inc%_EXT%\svx\pgrditem.hxx
 hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
 hedabu: ..\inc\countryid.hxx %_DEST%\inc%_EXT%\svx\countryid.hxx
+hedabu: ..\inc\svxdlg.hxx %_DEST%\inc%_EXT%\svx\svxdlg.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
