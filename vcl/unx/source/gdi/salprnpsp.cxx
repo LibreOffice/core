@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 13:22:31 $
+ *  last change: $Author: pl $ $Date: 2001-11-29 12:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #endif
 #ifndef _SV_SALPTYPE_HXX
 #include <salptype.hxx>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
 #endif
 
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
@@ -820,6 +826,8 @@ BOOL SalPrinter::StartJob(
     ULONG nCopies, BOOL bCollate,
     ImplJobSetup* pJobSetup )
 {
+    vcl_sal::PrinterUpdate::jobStarted();
+
     maPrinterData.m_bFax        = false;
     maPrinterData.m_bPdf        = false;
     maPrinterData.m_aFileName   = pFileName ? *pFileName : String();
@@ -867,6 +875,7 @@ BOOL SalPrinter::StartJob(
             break;
         }
     }
+    maPrinterData.m_aPrinterGfx.Init( maPrinterData.m_aJobData );
     return maPrinterData.m_aPrintJob.StartJob( maPrinterData.m_aTmpFile.Len() ? maPrinterData.m_aTmpFile : maPrinterData.m_aFileName, rJobName, rAppName, maPrinterData.m_aJobData ) ? TRUE : FALSE;
 }
 
@@ -892,6 +901,7 @@ BOOL SalPrinter::EndJob()
             bSuccess = createPdf( maPrinterData.m_aFileName, maPrinterData.m_aTmpFile, rInfo.m_aCommand );
         }
     }
+    vcl_sal::PrinterUpdate::jobEnded();
     return bSuccess;
 }
 
@@ -899,7 +909,9 @@ BOOL SalPrinter::EndJob()
 
 BOOL SalPrinter::AbortJob()
 {
-    return maPrinterData.m_aPrintJob.AbortJob() ? TRUE : FALSE;
+    BOOL bAbort = maPrinterData.m_aPrintJob.AbortJob() ? TRUE : FALSE;
+    vcl_sal::PrinterUpdate::jobEnded();
+    return bAbort;
 }
 
 // -----------------------------------------------------------------------
@@ -939,4 +951,73 @@ BOOL SalPrinter::EndPage()
 ULONG SalPrinter::GetErrorCode()
 {
     return 0;
+}
+
+/*
+ *  vcl::PrinterUpdate
+ */
+
+Timer* vcl_sal::PrinterUpdate::pPrinterUpdateTimer = NULL;
+int vcl_sal::PrinterUpdate::nActiveJobs = 0;
+
+void vcl_sal::PrinterUpdate::doUpdate()
+{
+    ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
+    if( rManager.checkPrintersChanged() )
+    {
+        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        while( pFrame )
+        {
+            pFrame->maFrameData.Call( SALEVENT_PRINTERCHANGED, NULL );
+            pFrame = pFrame->maFrameData.GetNextFrame();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_STATIC_LINK( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, pDummy )
+{
+    if( nActiveJobs < 1 )
+    {
+        doUpdate();
+        delete pPrinterUpdateTimer;
+        pPrinterUpdateTimer = NULL;
+    }
+    else
+        pPrinterUpdateTimer->Start();
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void vcl_sal::PrinterUpdate::update()
+{
+    if( nActiveJobs < 1 )
+        doUpdate();
+    else if( ! pPrinterUpdateTimer )
+    {
+        pPrinterUpdateTimer = new Timer();
+        pPrinterUpdateTimer->SetTimeout( 500 );
+        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, vcl_sal::PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->Start();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void vcl_sal::PrinterUpdate::jobEnded()
+{
+    nActiveJobs--;
+    if( nActiveJobs < 1 )
+    {
+        if( pPrinterUpdateTimer )
+        {
+            pPrinterUpdateTimer->Stop();
+            delete pPrinterUpdateTimer;
+            pPrinterUpdateTimer = NULL;
+            doUpdate();
+        }
+    }
 }

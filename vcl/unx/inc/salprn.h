@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: pl $ $Date: 2001-11-29 12:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,22 @@ struct SalPrinterData
     ULONG                   m_nCopies;
 };
 
+class Timer;
+
+namespace vcl_sal {
+class PrinterUpdate
+{
+    static Timer*           pPrinterUpdateTimer;
+    static int              nActiveJobs;
+
+    static void doUpdate();
+    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+public:
+    static void update();
+    static void jobStarted() { nActiveJobs++; }
+    static void jobEnded();
+};
+}
 
 #else
 
