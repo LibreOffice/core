@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:10:09 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,17 @@ namespace dbaui
     DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLESQL92CHECK);
     DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS);
     DECLARE_CONSTASCII_USTRING( PARAM_INDEPENDENT_SQL_COMMAND );
+    DECLARE_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT);
 
     //============================================================
     //= other DBU properties
     //============================================================
     DECLARE_CONSTASCII_USTRING(PROPERTY_TRISTATE);
 
+    DECLARE_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL);
+    DECLARE_CONSTASCII_USTRING(PROPERTY_TABSTOP);
+    DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLED);
+    DECLARE_CONSTASCII_USTRING(PROPERTY_COLUMN);
 }
 
 #endif // DBACCESS_SHARED_DBUSTRINGS_HRC
