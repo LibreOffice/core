@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:27:23 $
+ *  last change: $Author: kz $ $Date: 2000-11-10 15:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_traditional ] = "®Φ¨ϊ¤θ¶τ";
                         Text[ dutch ] = "Markeerveld";
                         Text[ chinese_simplified ] = "Έ΄Ρ΅Ώς";
-                        Text[ greek ] = "Πεδίο σήμανσης";
+                        Text[ greek ] = "Πλαίσιο ελέγχου";
                         Text[ korean ] = "Θ®ΐΞ¶υ";
                         Text[ arabic ] = "ΞΗδΙ ΗΞΚνΗΡ";
                         Text[ turkish ] = "Seηme kutusu";
