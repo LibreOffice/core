@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-06 09:54:31 $
+ *  last change: $Author: jp $ $Date: 2001-10-19 13:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,40 +61,12 @@
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #define _SW_XMLTEXTBLOCKS_HXX
 
+#ifndef _EMBOBJ_HXX
+#include <so3/embobj.hxx>
+#endif
 #ifndef _SWBLOCKS_HXX
 #include <swblocks.hxx>
 #endif
-
-#ifndef SW_SWDLL_HXX
-#include <swdll.hxx>
-#endif
-#ifndef _DATE_HXX //autogen
-#include <tools/date.hxx>
-#endif
-
-#ifndef _PERSIST_HXX //autogen
-#include <so3/persist.hxx>
-#endif
-
-#ifndef _SVARRAY_HXX //autogen
-#include <svtools/svarray.hxx>
-#endif
-
-// Note...these headers only needed for the IsUCBStorage function
-#include <tools/urlobj.hxx>
-#include <unotools/streamhelper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <sot/stg.hxx>
-
-#ifndef _SHELLIO_HXX
-#include <shellio.hxx>
-#endif
-
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
-#endif
-
 
 class SfxMedium;
 class SwPaM;
@@ -102,7 +74,6 @@ class SwDoc;
 class SvxMacroTableDtor;
 class SwImpBlocks;
 class SwDocShell;
-class SvEmbeddedObjectRef;
 
 #define SWXML_CONVBLOCK     0x0001
 #define SWXML_NOROOTCOMMIT  0x0002
@@ -174,7 +145,7 @@ public:
     ULONG GetBlockText( const String& rShort, String& rText );
     ULONG PutBlockText( const String& rShort, const String& rName, const String& rText,  const String& rPackageName );
     void MakeBlockText( const String& rText );
-    void AddTextNode( const ::rtl::OUString& rText );
+    void AddTextNode( const String& rText );
 
 };
 
