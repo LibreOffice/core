@@ -164,14 +164,14 @@ SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:b:b)\"
 .IF "$(SHL1RES)"!=""
 SHL1RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL1RES))
 SHL1ALLRES+=$(SHL1RES)
-LINKRES*=$(MISC)$/$(SHL1TARGET).res
+SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
 .ENDIF			# "$(SHL1RES)"!=""
 .ENDIF
 
 .IF "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 SHL1DEFAULTRES*=$(MISC)$/$(SHL1TARGET)_def.res
 SHL1ALLRES+=$(SHL1DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL1TARGET).res
+SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
 .ENDIF			# "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL1DESCRIPTION)"==""
@@ -241,9 +241,9 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL1ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -268,7 +268,7 @@ $(SHL1TARGETN) : \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
         $(STDSHL) $(STDSHL1) \
-        $(LINKRES) \
+        $(SHL1LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -282,7 +282,7 @@ $(SHL1TARGETN) : \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
         $(STDSHL) $(STDSHL1)                           \
-        $(LINKRES) \
+        $(SHL1LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -298,7 +298,7 @@ $(SHL1TARGETN) : \
         $(SHL1OBJS) \
         $(SHL1STDLIBS) \
         $(STDSHL) $(STDSHL1) \
-        $(LINKRES) \
+        $(SHL1LINKRES) \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL1TARGET).lnk
@@ -559,14 +559,14 @@ SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:b:b)\"
 .IF "$(SHL2RES)"!=""
 SHL2RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL2RES))
 SHL2ALLRES+=$(SHL2RES)
-LINKRES*=$(MISC)$/$(SHL2TARGET).res
+SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
 .ENDIF			# "$(SHL2RES)"!=""
 .ENDIF
 
 .IF "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 SHL2DEFAULTRES*=$(MISC)$/$(SHL2TARGET)_def.res
 SHL2ALLRES+=$(SHL2DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL2TARGET).res
+SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
 .ENDIF			# "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL2DESCRIPTION)"==""
@@ -636,9 +636,9 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL2ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -663,7 +663,7 @@ $(SHL2TARGETN) : \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
         $(STDSHL) $(STDSHL2) \
-        $(LINKRES) \
+        $(SHL2LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -677,7 +677,7 @@ $(SHL2TARGETN) : \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
         $(STDSHL) $(STDSHL2)                           \
-        $(LINKRES) \
+        $(SHL2LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -693,7 +693,7 @@ $(SHL2TARGETN) : \
         $(SHL2OBJS) \
         $(SHL2STDLIBS) \
         $(STDSHL) $(STDSHL2) \
-        $(LINKRES) \
+        $(SHL2LINKRES) \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL2TARGET).lnk
@@ -954,14 +954,14 @@ SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:b:b)\"
 .IF "$(SHL3RES)"!=""
 SHL3RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL3RES))
 SHL3ALLRES+=$(SHL3RES)
-LINKRES*=$(MISC)$/$(SHL3TARGET).res
+SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
 .ENDIF			# "$(SHL3RES)"!=""
 .ENDIF
 
 .IF "$(SHL3DEFAULTRES)$(use_shl_versions)"!=""
 SHL3DEFAULTRES*=$(MISC)$/$(SHL3TARGET)_def.res
 SHL3ALLRES+=$(SHL3DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL3TARGET).res
+SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
 .ENDIF			# "$(SHL3DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL3DESCRIPTION)"==""
@@ -1031,9 +1031,9 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL3ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -1058,7 +1058,7 @@ $(SHL3TARGETN) : \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
         $(STDSHL) $(STDSHL3) \
-        $(LINKRES) \
+        $(SHL3LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -1072,7 +1072,7 @@ $(SHL3TARGETN) : \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
         $(STDSHL) $(STDSHL3)                           \
-        $(LINKRES) \
+        $(SHL3LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -1088,7 +1088,7 @@ $(SHL3TARGETN) : \
         $(SHL3OBJS) \
         $(SHL3STDLIBS) \
         $(STDSHL) $(STDSHL3) \
-        $(LINKRES) \
+        $(SHL3LINKRES) \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL3TARGET).lnk
@@ -1349,14 +1349,14 @@ SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:b:b)\"
 .IF "$(SHL4RES)"!=""
 SHL4RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL4RES))
 SHL4ALLRES+=$(SHL4RES)
-LINKRES*=$(MISC)$/$(SHL4TARGET).res
+SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
 .ENDIF			# "$(SHL4RES)"!=""
 .ENDIF
 
 .IF "$(SHL4DEFAULTRES)$(use_shl_versions)"!=""
 SHL4DEFAULTRES*=$(MISC)$/$(SHL4TARGET)_def.res
 SHL4ALLRES+=$(SHL4DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL4TARGET).res
+SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
 .ENDIF			# "$(SHL4DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL4DESCRIPTION)"==""
@@ -1426,9 +1426,9 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL4ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -1453,7 +1453,7 @@ $(SHL4TARGETN) : \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
         $(STDSHL) $(STDSHL4) \
-        $(LINKRES) \
+        $(SHL4LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -1467,7 +1467,7 @@ $(SHL4TARGETN) : \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
         $(STDSHL) $(STDSHL4)                           \
-        $(LINKRES) \
+        $(SHL4LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -1483,7 +1483,7 @@ $(SHL4TARGETN) : \
         $(SHL4OBJS) \
         $(SHL4STDLIBS) \
         $(STDSHL) $(STDSHL4) \
-        $(LINKRES) \
+        $(SHL4LINKRES) \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL4TARGET).lnk
@@ -1744,14 +1744,14 @@ SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:b:b)\"
 .IF "$(SHL5RES)"!=""
 SHL5RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL5RES))
 SHL5ALLRES+=$(SHL5RES)
-LINKRES*=$(MISC)$/$(SHL5TARGET).res
+SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
 .ENDIF			# "$(SHL5RES)"!=""
 .ENDIF
 
 .IF "$(SHL5DEFAULTRES)$(use_shl_versions)"!=""
 SHL5DEFAULTRES*=$(MISC)$/$(SHL5TARGET)_def.res
 SHL5ALLRES+=$(SHL5DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL5TARGET).res
+SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
 .ENDIF			# "$(SHL5DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL5DESCRIPTION)"==""
@@ -1821,9 +1821,9 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL5ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -1848,7 +1848,7 @@ $(SHL5TARGETN) : \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
         $(STDSHL) $(STDSHL5) \
-        $(LINKRES) \
+        $(SHL5LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -1862,7 +1862,7 @@ $(SHL5TARGETN) : \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
         $(STDSHL) $(STDSHL5)                           \
-        $(LINKRES) \
+        $(SHL5LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -1878,7 +1878,7 @@ $(SHL5TARGETN) : \
         $(SHL5OBJS) \
         $(SHL5STDLIBS) \
         $(STDSHL) $(STDSHL5) \
-        $(LINKRES) \
+        $(SHL5LINKRES) \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL5TARGET).lnk
@@ -2139,14 +2139,14 @@ SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:b:b)\"
 .IF "$(SHL6RES)"!=""
 SHL6RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL6RES))
 SHL6ALLRES+=$(SHL6RES)
-LINKRES*=$(MISC)$/$(SHL6TARGET).res
+SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
 .ENDIF			# "$(SHL6RES)"!=""
 .ENDIF
 
 .IF "$(SHL6DEFAULTRES)$(use_shl_versions)"!=""
 SHL6DEFAULTRES*=$(MISC)$/$(SHL6TARGET)_def.res
 SHL6ALLRES+=$(SHL6DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL6TARGET).res
+SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
 .ENDIF			# "$(SHL6DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL6DESCRIPTION)"==""
@@ -2216,9 +2216,9 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL6ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -2243,7 +2243,7 @@ $(SHL6TARGETN) : \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
         $(STDSHL) $(STDSHL6) \
-        $(LINKRES) \
+        $(SHL6LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -2257,7 +2257,7 @@ $(SHL6TARGETN) : \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
         $(STDSHL) $(STDSHL6)                           \
-        $(LINKRES) \
+        $(SHL6LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -2273,7 +2273,7 @@ $(SHL6TARGETN) : \
         $(SHL6OBJS) \
         $(SHL6STDLIBS) \
         $(STDSHL) $(STDSHL6) \
-        $(LINKRES) \
+        $(SHL6LINKRES) \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL6TARGET).lnk
@@ -2534,14 +2534,14 @@ SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:b:b)\"
 .IF "$(SHL7RES)"!=""
 SHL7RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL7RES))
 SHL7ALLRES+=$(SHL7RES)
-LINKRES*=$(MISC)$/$(SHL7TARGET).res
+SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
 .ENDIF			# "$(SHL7RES)"!=""
 .ENDIF
 
 .IF "$(SHL7DEFAULTRES)$(use_shl_versions)"!=""
 SHL7DEFAULTRES*=$(MISC)$/$(SHL7TARGET)_def.res
 SHL7ALLRES+=$(SHL7DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL7TARGET).res
+SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
 .ENDIF			# "$(SHL7DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL7DESCRIPTION)"==""
@@ -2611,9 +2611,9 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL7ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -2638,7 +2638,7 @@ $(SHL7TARGETN) : \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
         $(STDSHL) $(STDSHL7) \
-        $(LINKRES) \
+        $(SHL7LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -2652,7 +2652,7 @@ $(SHL7TARGETN) : \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
         $(STDSHL) $(STDSHL7)                           \
-        $(LINKRES) \
+        $(SHL7LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -2668,7 +2668,7 @@ $(SHL7TARGETN) : \
         $(SHL7OBJS) \
         $(SHL7STDLIBS) \
         $(STDSHL) $(STDSHL7) \
-        $(LINKRES) \
+        $(SHL7LINKRES) \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL7TARGET).lnk
@@ -2929,14 +2929,14 @@ SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:b:b)\"
 .IF "$(SHL8RES)"!=""
 SHL8RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL8RES))
 SHL8ALLRES+=$(SHL8RES)
-LINKRES*=$(MISC)$/$(SHL8TARGET).res
+SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
 .ENDIF			# "$(SHL8RES)"!=""
 .ENDIF
 
 .IF "$(SHL8DEFAULTRES)$(use_shl_versions)"!=""
 SHL8DEFAULTRES*=$(MISC)$/$(SHL8TARGET)_def.res
 SHL8ALLRES+=$(SHL8DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL8TARGET).res
+SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
 .ENDIF			# "$(SHL8DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL8DESCRIPTION)"==""
@@ -3006,9 +3006,9 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL8ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -3033,7 +3033,7 @@ $(SHL8TARGETN) : \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
         $(STDSHL) $(STDSHL8) \
-        $(LINKRES) \
+        $(SHL8LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -3047,7 +3047,7 @@ $(SHL8TARGETN) : \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
         $(STDSHL) $(STDSHL8)                           \
-        $(LINKRES) \
+        $(SHL8LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -3063,7 +3063,7 @@ $(SHL8TARGETN) : \
         $(SHL8OBJS) \
         $(SHL8STDLIBS) \
         $(STDSHL) $(STDSHL8) \
-        $(LINKRES) \
+        $(SHL8LINKRES) \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL8TARGET).lnk
@@ -3324,14 +3324,14 @@ SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:b:b)\"
 .IF "$(SHL9RES)"!=""
 SHL9RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL9RES))
 SHL9ALLRES+=$(SHL9RES)
-LINKRES*=$(MISC)$/$(SHL9TARGET).res
+SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
 .ENDIF			# "$(SHL9RES)"!=""
 .ENDIF
 
 .IF "$(SHL9DEFAULTRES)$(use_shl_versions)"!=""
 SHL9DEFAULTRES*=$(MISC)$/$(SHL9TARGET)_def.res
 SHL9ALLRES+=$(SHL9DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL9TARGET).res
+SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
 .ENDIF			# "$(SHL9DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL9DESCRIPTION)"==""
@@ -3401,9 +3401,9 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL9ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -3428,7 +3428,7 @@ $(SHL9TARGETN) : \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
         $(STDSHL) $(STDSHL9) \
-        $(LINKRES) \
+        $(SHL9LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -3442,7 +3442,7 @@ $(SHL9TARGETN) : \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
         $(STDSHL) $(STDSHL9)                           \
-        $(LINKRES) \
+        $(SHL9LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -3458,7 +3458,7 @@ $(SHL9TARGETN) : \
         $(SHL9OBJS) \
         $(SHL9STDLIBS) \
         $(STDSHL) $(STDSHL9) \
-        $(LINKRES) \
+        $(SHL9LINKRES) \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL9TARGET).lnk
@@ -3719,14 +3719,14 @@ SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:b:b)\"
 .IF "$(SHL10RES)"!=""
 SHL10RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL10RES))
 SHL10ALLRES+=$(SHL10RES)
-LINKRES*=$(MISC)$/$(SHL10TARGET).res
+SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
 .ENDIF			# "$(SHL10RES)"!=""
 .ENDIF
 
 .IF "$(SHL10DEFAULTRES)$(use_shl_versions)"!=""
 SHL10DEFAULTRES*=$(MISC)$/$(SHL10TARGET)_def.res
 SHL10ALLRES+=$(SHL10DEFAULTRES)
-LINKRES*=$(MISC)$/$(SHL10TARGET).res
+SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
 .ENDIF			# "$(SHL10DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL10DESCRIPTION)"==""
@@ -3796,9 +3796,9 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(LINKRES)
+    +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL10ALLRES) > $(LINKRES)
+    +$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -3823,7 +3823,7 @@ $(SHL10TARGETN) : \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
         $(STDSHL) $(STDSHL10) \
-        $(LINKRES) \
+        $(SHL10LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -3837,7 +3837,7 @@ $(SHL10TARGETN) : \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
         $(STDSHL) $(STDSHL10)                           \
-        $(LINKRES) \
+        $(SHL10LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -3853,7 +3853,7 @@ $(SHL10TARGETN) : \
         $(SHL10OBJS) \
         $(SHL10STDLIBS) \
         $(STDSHL) $(STDSHL10) \
-        $(LINKRES) \
+        $(SHL10LINKRES) \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL10TARGET).lnk
