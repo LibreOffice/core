@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:23:32 $
+ *  last change: $Author: obo $ $Date: 2000-11-03 16:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String STR_SVT_PRNDLG_READY
     Text [ dutch ] = "Klaar" ;
     Text[ chinese_simplified ] = "¾ÍÐ÷";
     Text[ russian ] = "Ãîòîâ";
-    Text[ polish ] = "Gotowy";
+    Text[ polish ] = "Gotowe";
     Text[ japanese ] = "±²ÄÞØÝ¸Þ’†";
     Text[ chinese_traditional ] = "´Nºü";
     Text[ arabic ] = "ÌÇåÒÉ";
