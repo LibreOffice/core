@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:31:24 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:24:05 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
 #          See webpages to checkout OpenOffice.org from you office directory.
@@ -188,10 +188,10 @@ BUILD_SUBDIRS =  \
 	zlib
 
 build_all .SETDIR=instsetoo/prj:
-	@+perl $(SOLARENV)$/bin$/build.pl --all product=full
+	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH)
 
 depend .SETDIR=instsetoo/prj:
-	@+perl $(SOLARENV)$/bin$/build.pl --all product=full depend=t
+	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH) depend=t
 
 
 # 
@@ -226,7 +226,7 @@ configure .PHONY SETDIR=config_office :
 	@configure
 
 install .SETDIR=instsetoo/util:
-	dmake product="full"
+	dmake $(PROFULLSWITCH)
 
 update: 
 	@echo Updating OpenOffice.org sources
