@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:59:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,15 @@
 #include <vcl/field.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvxGridTabPage;
 
 // class SvxOptionsGrid --------------------------------------------------
 
-class SvxOptionsGrid
+class SVX_DLLPUBLIC SvxOptionsGrid
 {
 protected:
     UINT32  nFldDrawX;
@@ -126,7 +130,7 @@ public:
 
 // class SvxGridItem -----------------------------------------------------
 
-class SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
+class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
 {
     // #i9076#
     friend class SvxGridTabPage;
@@ -147,7 +151,7 @@ public:
 
 // class SvxGridTabPage --------------------------------------------------
 
-class SvxGridTabPage : public SfxTabPage
+class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 {
 public:
     SvxGridTabPage( Window* pParent, const SfxItemSet& rSet );
