@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:43:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public:
 
     void                SetDrawPersist( const SvEmbeddedObjectRef& rRef );
     void                SetDragSource( ScDrawView* pView );
-    void                SetDragSourceObj( SdrObject* pObj, USHORT nTab );
+    void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
     void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();
 
