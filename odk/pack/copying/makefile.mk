@@ -17,54 +17,78 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/draw		\
     $(DESTDIRJAVAEXAMPLES)$/calc		\
     $(DESTDIRJAVAEXAMPLES)$/writer		\
+    $(DESTDIRJAVAEXAMPLES)$/Car		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver	\
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter	\
+    $(DESTDIRJAVAEXAMPLES)$/Inspector	\
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls	 	\
     $(DESTDIRBASICEXAMPLES)$/sheet	 			\
-    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater	 	\
+    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater       \
     $(DESTDIRBASICEXAMPLES)$/text	 			\
     $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index 	\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
-EXAMPLESLIST= \
+CPP_OFFICECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclient.cxx 		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclientsample.xml	\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/README           		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/makefile.mk      		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp      		\
+    $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp
+
+JAVA_DRAW= \
     $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile	  	 		\
-    $(DESTDIRJAVAEXAMPLES)$/draw$/README	  	 		\
+    $(DESTDIRJAVAEXAMPLES)$/draw$/README
+
+JAVA_CALC= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/SCalc.java		   	\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/EuroAdaption.java			\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/EuroAdaption.java		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile	  	 		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/README	  	 		\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/README
+
+JAVA_WRITER= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/SWriter.java	   		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/StyleInitialization.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/TextDocumentStructure.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/TextReplace.java 		\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/BookmarkInsertion.java 		\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/HardFormatting.java 		\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  		\
+    $(DESTDIRJAVAEXAMPLES)$/writer$/BookmarkInsertion.java 	\
+    $(DESTDIRJAVAEXAMPLES)$/writer$/HardFormatting.java 	\
+    $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/README				\
+    $(DESTDIRJAVAEXAMPLES)$/writer$/README
+
+JAVA_CAR= \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/Car.java \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/makefile.mk \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/Manifest \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/Test.java \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/XAccelerationControl.idl \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/XCar.idl \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/XDrivingDirection.idl
+
+JAVA_CALCADDINS= \
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.html		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/makefile.mk			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Manifest			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/README			\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl		\
+    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl
+    
+JAVA_DEMOCOMP= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/Makefile		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/makefile.mk		\
@@ -72,17 +96,54 @@ EXAMPLESLIST= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/README		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
+
+JAVA_DOCUMENTCONVERTER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/DocumentConverter.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/makefile.mk			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/README			\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/makefile.mk      \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/README
+
+JAVA_DOCUMENTLOADER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/DocumentLoader.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/makefile.mk		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/makefile.mk     \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/README
+
+JAVA_DOCUMENTPRINTER= \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/DocumentPrinter.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/Makefile		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/makefile.mk    \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/README
+
+JAVA_DOCUMENTSAVER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/DocumentSaver.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/makefile.mk		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/makefile.mk      \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/README
+
+JAVA_GRAPHICSINSERTER= \
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/GraphicsInserter.java	\
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/Makefile	\
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/makefile.mk	\
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/OpenOfficeLogo.gif	\
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/README
+
+JAVA_INSPECTOR= \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/index.html \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/install.html \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.jpg \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InspectorThumbnail.jpg \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.java \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/makefile.mk \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Manifest \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Test.java \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/README
+
+
+BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/index.html				\
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
     $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd 	\
@@ -101,6 +162,21 @@ EXAMPLESLIST= \
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.sxw 		\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw
 
+EXAMPLESLIST= \
+    $(CPP_OFFICECLIENT) \
+    $(JAVA_DRAW)        \
+    $(JAVA_CALC)        \
+    $(JAVA_CAR)         \
+    $(JAVA_WRITER)      \
+    $(JAVA_CALCADDINS)  \
+    $(JAVA_DEMOCOMP)    \
+    $(JAVA_DOCUMENTCONVERTER)      \
+    $(JAVA_DOCUMENTLOADER)         \
+    $(JAVA_DOCUMENTPRINTER)        \
+    $(JAVA_DOCUMENTSAVER)          \
+    $(JAVA_GRAPHICSINSERTER)       \
+    $(JAVA_INSPECTOR)              \
+    $(BASIC_EXAMPLES)
 
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
