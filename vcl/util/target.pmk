@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:48 $
+#   last change: $Author: oisin $ $Date: 2001-01-19 14:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,4 +71,9 @@ ONLYDLL .SETDIR=$(PRJ)$/util: $(SLOFILES)
     $(RM) ..$/$(OUTPATH)$/bin$/sv$(UPD)$(DLLSUFFIX).dll
     dmake debug=t prjpch=t linkinc=t compinc=t ..$/$(OUTPATH)$/bin$/sv$(UPD)$(DLLSUFFIX).dll
     @echo "READY"
+
+.IF "$(USE_XPRINT)"=="FALSE"
+.ELSE
+CFLAGS+=-D_USE_PRINT_EXTENSION_=1
+.ENDIF
 

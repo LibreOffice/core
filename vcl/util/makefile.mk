@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2000-11-23 15:14:04 $
+#   last change: $Author: oisin $ $Date: 2001-01-19 14:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -559,20 +559,48 @@ $(MISC)$/$(SHL2TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
 
 .IF "$(GUI)"=="UNX"
 
-.IF "$(OS)"=="SOLARIS"
-.IF "$(PSPRINT)" == ""
-SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
+.IF "$(USE_XPRINT)"=="FALSE"
 .ELSE
+CFLAGS+=-D_USE_PRINT_EXTENSION_=1
+.ENDIF
+
+# Solaris
+.IF "$(OS)"=="SOLARIS"
+
+.IF "$(PSPRINT)"=="" 
+.IF "$(USE_XPRINT)"=="FALSE"
+SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
+.ENDIF
+.ENDIF
+
+.IF "$(USE_XPRINT)" != "FALSE"
+SHL1STDLIBS += -lXp -lX11
+.ENDIF
+
+.IF "$(PSPRINT)"!="" 
 SHL1STDLIBS += -lXm -lXt -lX11
 .ENDIF
+
+# MacOSX
 .ELIF "$(OS)"=="MACOSX"
 SHL1STDLIBS +=
+
+# Others
 .ELSE
-.IF "$(PSPRINT)" == ""
-SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXaw -lXt -lX11
-.ELSE
-SHL1STDLIBS += -lXaw -lXt -lX11
+.IF "$(PSPRINT)"==""
+.IF "$(USE_XPRINT)"=="FALSE"
+SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
 .ENDIF
+.ENDIF
+
+.IF "$(USE_XPRINT)" != "FALSE"
+SHL1STDLIBS += -lXp -lX11
+.ENDIF
+
+.IF "$(PSPRINT)"!=""
+SHL1STDLIBS += -lXm -lXt -lX11
+.ENDIF
+
 .ENDIF
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
