@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:15:20 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ sal_Bool SfxObjectShell::DoInitNew_Impl( const String& rName )
                 xModel->attachResource( ::rtl::OUString(), aArgs );
             }
 
+            SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
             return sal_True;
         }
         return sal_False;
@@ -363,6 +364,7 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
             xModel->attachResource( ::rtl::OUString(), aArgs );
         }
 
+        SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
         return sal_True;
     }
     return sal_False;
