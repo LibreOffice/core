@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:19:30 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "WORKDAY";
         Text[ hebrew ] = "ARBEITSTAG";
         Text[ hindi ] = "WORKDAY";
+        Text[ slovak ] = "WORKDAY";
     };
 
     String ANALYSIS_FUNCNAME_Yearfrac
@@ -124,6 +125,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "YEARFRAC";
         Text[ hebrew ] = "BRTEILJAHRE";
         Text[ hindi ] = "YEARFRAC";
+        Text[ slovak ] = "YEARFRAC";
     };
 
     String ANALYSIS_FUNCNAME_Edate
@@ -154,6 +156,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "EDATE";
         Text[ hebrew ] = "EDATUM";
         Text[ hindi ] = "EDATE";
+        Text[ slovak ] = "EDATE";
     };
 
     String ANALYSIS_FUNCNAME_Weeknum
@@ -177,13 +180,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "WEEKNUM";
         Text[ chinese_simplified ] = "WEEKNUM";
         Text[ chinese_traditional ] = "WEEKNUM";
-        Text[ turkish ] = "WEEKNUM";
+        Text[ turkish ] = "HAFTASAYISI";
         Text[ arabic ] = "WEEKNUM";
         Text[ catalan ] = "WEEKNUM";
         Text[ thai ] = "WEEKNUM";
         Text[ czech ] = "WEEKNUM";
         Text[ hebrew ] = "KALENDERWOCHE";
         Text[ hindi ] = "WEEKNUM";
+        Text[ slovak ] = "WEEKNUM";
     };
 
     String ANALYSIS_FUNCNAME_Eomonth
@@ -214,6 +218,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "EOMONTH";
         Text[ hebrew ] = "MONATSENDE";
         Text[ hindi ] = "EOMONTH";
+        Text[ slovak ] = "EOMONTH";
     };
 
     String ANALYSIS_FUNCNAME_Networkdays
@@ -244,6 +249,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "NETWORKDAYS";
         Text[ hebrew ] = "NETTOARBEITSTAGE";
         Text[ hindi ] = "NETWORKDAYS";
+        Text[ slovak ] = "NETWORKDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Amordegrc
@@ -274,6 +280,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "AMORDEGRC";
         Text[ hebrew ] = "AMORDEGRK";
         Text[ hindi ] = "AMORDEGRC";
+        Text[ slovak ] = "AMORDEGRC";
     };
 
     String ANALYSIS_FUNCNAME_Amorlinc
@@ -304,6 +311,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "AMORLINC";
         Text[ hebrew ] = "AMORLINEARK";
         Text[ hindi ] = "AMORLINC";
+        Text[ slovak ] = "AMORLINC";
     };
 
     String ANALYSIS_FUNCNAME_Accrint
@@ -334,6 +342,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ACCRINT";
         Text[ hebrew ] = "AUFGELZINS";
         Text[ hindi ] = "ACCRINT";
+        Text[ slovak ] = "ACCRINT";
     };
 
     String ANALYSIS_FUNCNAME_Accrintm
@@ -364,6 +373,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ACCRINTM";
         Text[ hebrew ] = "AUFGELZINSF";
         Text[ hindi ] = "ACCRINTM";
+        Text[ slovak ] = "ACCRINTM";
     };
 
     String ANALYSIS_FUNCNAME_Received
@@ -394,6 +404,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "RECEIVED";
         Text[ hebrew ] = "AUSZAHLUNG";
         Text[ hindi ] = "RECEIVED";
+        Text[ slovak ] = "RECEIVED";
     };
 
     String ANALYSIS_FUNCNAME_Disc
@@ -424,6 +435,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DISC";
         Text[ hebrew ] = "DISAGIO";
         Text[ hindi ] = "DISC";
+        Text[ slovak ] = "DISC";
     };
 
     String ANALYSIS_FUNCNAME_Duration
@@ -454,6 +466,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DURATION";
         Text[ hebrew ] = "DURATION";
         Text[ hindi ] = "DURATION";
+        Text[ slovak ] = "DURATION";
     };
 
     String ANALYSIS_FUNCNAME_Effect
@@ -484,6 +497,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "EFFECT";
         Text[ hebrew ] = "EFFEKTIV";
         Text[ hindi ] = "EFFECT";
+        Text[ slovak ] = "EFFECT";
     };
 
     String ANALYSIS_FUNCNAME_Cumprinc
@@ -507,13 +521,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "CUMPRINC";
         Text[ chinese_simplified ] = "CUMPRINC";
         Text[ chinese_traditional ] = "CUMPRINC";
-        Text[ turkish ] = "CUMPRINC";
+        Text[ turkish ] = "KÜMÜLATÝFSERMAYE";
         Text[ arabic ] = "CUMPRINC";
         Text[ catalan ] = "CUMPRINC";
         Text[ thai ] = "CUMPRINC";
         Text[ czech ] = "CUMPRINC";
         Text[ hebrew ] = "KUMKAPITAL";
         Text[ hindi ] = "CUMPRINC";
+        Text[ slovak ] = "CUMPRINC";
     };
 
     String ANALYSIS_FUNCNAME_Cumipmt
@@ -537,13 +552,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "CUMIPMT";
         Text[ chinese_simplified ] = "CUMIPMT";
         Text[ chinese_traditional ] = "CUMIPMT";
-        Text[ turkish ] = "CUMIPMT";
+        Text[ turkish ] = "KÜMÜLATÝFÖDEME (Sermaye)";
         Text[ arabic ] = "CUMIPMT";
         Text[ catalan ] = "CUMIPMT";
         Text[ thai ] = "CUMIPMT";
         Text[ czech ] = "CUMIPMT";
         Text[ hebrew ] = "KUMZINSZ";
         Text[ hindi ] = "CUMIPMT";
+        Text[ slovak ] = "CUMIPMT";
     };
 
     String ANALYSIS_FUNCNAME_Price
@@ -574,6 +590,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "PRICE";
         Text[ hebrew ] = "KURS";
         Text[ hindi ] = "PRICE";
+        Text[ slovak ] = "PRICE";
     };
 
     String ANALYSIS_FUNCNAME_Pricedisc
@@ -604,6 +621,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "PRICEDISC";
         Text[ hebrew ] = "KURSDISAGIO";
         Text[ hindi ] = "PRICEDISC";
+        Text[ slovak ] = "PRICEDISC";
     };
 
     String ANALYSIS_FUNCNAME_Pricemat
@@ -634,6 +652,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "PRICEMAT";
         Text[ hebrew ] = "KURSFÃ„LLIG";
         Text[ hindi ] = "PRICEMAT";
+        Text[ slovak ] = "PRICEMAT";
     };
 
     String ANALYSIS_FUNCNAME_Mduration
@@ -664,6 +683,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "MDURATION";
         Text[ hebrew ] = "MDURATION";
         Text[ hindi ] = "MDURATION";
+        Text[ slovak ] = "MDURATION";
     };
 
     String ANALYSIS_FUNCNAME_Nominal
@@ -687,13 +707,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "NOMINAL";
         Text[ chinese_simplified ] = "NOMINAL";
         Text[ chinese_traditional ] = "NOMINAL";
-        Text[ turkish ] = "NOMINAL";
+        Text[ turkish ] = "NOMÝNAL";
         Text[ arabic ] = "NOMINAL";
         Text[ catalan ] = "NOMINAL";
         Text[ thai ] = "NOMINAL";
         Text[ czech ] = "NOMINAL";
         Text[ hebrew ] = "NOMINAL";
         Text[ hindi ] = "NOMINAL";
+        Text[ slovak ] = "NOMINAL";
     };
 
     String ANALYSIS_FUNCNAME_Dollarfr
@@ -724,6 +745,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DOLLARFR";
         Text[ hebrew ] = "NOTIERUNGBRU";
         Text[ hindi ] = "DOLLARFR";
+        Text[ slovak ] = "DOLLARFR";
     };
 
     String ANALYSIS_FUNCNAME_Dollarde
@@ -754,6 +776,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DOLLARDE";
         Text[ hebrew ] = "NOTIERUNGDEZ";
         Text[ hindi ] = "DOLLARDE";
+        Text[ slovak ] = "DOLLARDE";
     };
 
     String ANALYSIS_FUNCNAME_Yield
@@ -784,6 +807,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "YIELD";
         Text[ hebrew ] = "RENDITE";
         Text[ hindi ] = "YIELD";
+        Text[ slovak ] = "YIELD";
     };
 
     String ANALYSIS_FUNCNAME_Yielddisc
@@ -814,6 +838,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "YIELDDISC";
         Text[ hebrew ] = "RENDITEDIS";
         Text[ hindi ] = "YIELDDISC";
+        Text[ slovak ] = "YIELDDISC";
     };
 
     String ANALYSIS_FUNCNAME_Yieldmat
@@ -844,6 +869,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "YIELDMAT";
         Text[ hebrew ] = "RENDITEFÃ„LL";
         Text[ hindi ] = "YIELDMAT";
+        Text[ slovak ] = "YIELDMAT";
     };
 
     String ANALYSIS_FUNCNAME_Tbilleq
@@ -874,6 +900,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "TBILLEQ";
         Text[ hebrew ] = "TBILLÃ„QUIV";
         Text[ hindi ] = "TBILLEQ";
+        Text[ slovak ] = "TBILLEQ";
     };
 
     String ANALYSIS_FUNCNAME_Tbillprice
@@ -904,6 +931,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "TBILLPRICE";
         Text[ hebrew ] = "TBILLKURS";
         Text[ hindi ] = "TBILLPRICE";
+        Text[ slovak ] = "TBILLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Tbillyield
@@ -934,6 +962,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "TBILLYIELD";
         Text[ hebrew ] = "TBILLRENDITE";
         Text[ hindi ] = "TBILLYIELD";
+        Text[ slovak ] = "TBILLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddfprice
@@ -964,6 +993,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ODDFPRICE";
         Text[ hebrew ] = "UNREGER.KURS";
         Text[ hindi ] = "ODDFPRICE";
+        Text[ slovak ] = "ODDFPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddfyield
@@ -994,6 +1024,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ODDFYIELD";
         Text[ hebrew ] = "UNREGER.REND";
         Text[ hindi ] = "ODDFYIELD";
+        Text[ slovak ] = "ODDFYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddlprice
@@ -1024,6 +1055,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ODDLPRICE";
         Text[ hebrew ] = "UNREGLE.KURS";
         Text[ hindi ] = "ODDLPRICE";
+        Text[ slovak ] = "ODDLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddlyield
@@ -1054,6 +1086,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ODDLYIELD";
         Text[ hebrew ] = "UNREGLE.REND";
         Text[ hindi ] = "ODDLYIELD";
+        Text[ slovak ] = "ODDLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Xirr
@@ -1084,6 +1117,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "XIRR";
         Text[ hebrew ] = "XINTZINSFUSS";
         Text[ hindi ] = "XIRR";
+        Text[ slovak ] = "XIRR";
     };
 
     String ANALYSIS_FUNCNAME_Xnpv
@@ -1114,6 +1148,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "XNPV";
         Text[ hebrew ] = "XKAPITALWERT";
         Text[ hindi ] = "XNPV";
+        Text[ slovak ] = "XNPV";
     };
 
     String ANALYSIS_FUNCNAME_Intrate
@@ -1144,6 +1179,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "INTRATE";
         Text[ hebrew ] = "ZINSSATZ";
         Text[ hindi ] = "INTRATE";
+        Text[ slovak ] = "INTRATE";
     };
 
     String ANALYSIS_FUNCNAME_Coupncd
@@ -1174,6 +1210,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COUPNCD";
         Text[ hebrew ] = "ZINSTERMNZ";
         Text[ hindi ] = "COUPNCD";
+        Text[ slovak ] = "COUPNCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupdays
@@ -1204,6 +1241,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COUPDAYS";
         Text[ hebrew ] = "ZINSTERMTAGE";
         Text[ hindi ] = "COUPDAYS";
+        Text[ slovak ] = "COUPDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaysnc
@@ -1234,6 +1272,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COUPDAYSNC";
         Text[ hebrew ] = "ZINSTERMTAGNZ";
         Text[ hindi ] = "COUPDAYSNC";
+        Text[ slovak ] = "COUPDAYSNC";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaybs
@@ -1264,6 +1303,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COUPDAYBS";
         Text[ hebrew ] = "ZINSTERMTAGVA";
         Text[ hindi ] = "COUPDAYBS";
+        Text[ slovak ] = "COUPDAYBS";
     };
 
     String ANALYSIS_FUNCNAME_Couppcd
@@ -1294,6 +1334,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COUPPCD";
         Text[ hebrew ] = "ZINSTERMVZ";
         Text[ hindi ] = "COUPPCD";
+        Text[ slovak ] = "COUPPCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupnum
@@ -1324,6 +1365,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COUPNUM";
         Text[ hebrew ] = "ZINSTERMZAHL";
         Text[ hindi ] = "COUPNUM";
+        Text[ slovak ] = "COUPNUM";
     };
 
     String ANALYSIS_FUNCNAME_Fvschedule
@@ -1354,6 +1396,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "FVSCHEDULE";
         Text[ hebrew ] = "ZW2";
         Text[ hindi ] = "FVSCHEDULE";
+        Text[ slovak ] = "FVSCHEDULE";
     };
 
     String ANALYSIS_FUNCNAME_Iseven
@@ -1384,6 +1427,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ISEVEN";
         Text[ hebrew ] = "ISTGERADE";
         Text[ hindi ] = "ISEVEN";
+        Text[ slovak ] = "ISEVEN";
     };
 
     String ANALYSIS_FUNCNAME_Isodd
@@ -1407,13 +1451,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "ISODD";
         Text[ chinese_simplified ] = "ISODD";
         Text[ chinese_traditional ] = "ISODD";
-        Text[ turkish ] = "ISODD";
+        Text[ turkish ] = "TEKSAYISORGULA";
         Text[ arabic ] = "ISODD";
         Text[ catalan ] = "ISODD";
         Text[ thai ] = "ISODD";
         Text[ czech ] = "ISODD";
         Text[ hebrew ] = "ISTUNGERADE";
         Text[ hindi ] = "ISODD";
+        Text[ slovak ] = "ISODD";
     };
 
     String ANALYSIS_FUNCNAME_Gcd
@@ -1437,13 +1482,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "GCD";
         Text[ chinese_simplified ] = "GCD";
         Text[ chinese_traditional ] = "GCD";
-        Text[ turkish ] = "GCD";
+        Text[ turkish ] = "OBEB";
         Text[ arabic ] = "GCD";
         Text[ catalan ] = "GCD";
         Text[ thai ] = "GCD";
         Text[ czech ] = "GCD";
         Text[ hebrew ] = "GGT";
         Text[ hindi ] = "GCD";
+        Text[ slovak ] = "GCD";
     };
 
     String ANALYSIS_FUNCNAME_Lcm
@@ -1467,13 +1513,14 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ korean ] = "LCM";
         Text[ chinese_simplified ] = "LCM";
         Text[ chinese_traditional ] = "LCM";
-        Text[ turkish ] = "LCM";
+        Text[ turkish ] = "OKEK";
         Text[ arabic ] = "LCM";
         Text[ catalan ] = "LCM";
         Text[ thai ] = "LCM";
         Text[ czech ] = "LCM";
         Text[ hebrew ] = "KGV";
         Text[ hindi ] = "LCM";
+        Text[ slovak ] = "LCM";
     };
 
     String ANALYSIS_FUNCNAME_Multinomial
@@ -1504,6 +1551,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "MULTINOMIAL";
         Text[ hebrew ] = "POLYNOMIAL";
         Text[ hindi ] = "MULTINOMIAL";
+        Text[ slovak ] = "MULTINOMIAL";
     };
 
     String ANALYSIS_FUNCNAME_Seriessum
@@ -1534,6 +1582,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "SERIESSUM";
         Text[ hebrew ] = "POTENZREIHE";
         Text[ hindi ] = "SERIESSUM";
+        Text[ slovak ] = "SERIESSUM";
     };
 
     String ANALYSIS_FUNCNAME_Quotient
@@ -1564,6 +1613,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "QUOTIENT";
         Text[ hebrew ] = "QUOTIENT";
         Text[ hindi ] = "QUOTIENT";
+        Text[ slovak ] = "QUOTIENT";
     };
 
     String ANALYSIS_FUNCNAME_Mround
@@ -1594,6 +1644,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "MROUND";
         Text[ hebrew ] = "VRUNDEN";
         Text[ hindi ] = "MROUND";
+        Text[ slovak ] = "MROUND";
     };
 
     String ANALYSIS_FUNCNAME_Sqrtpi
@@ -1624,6 +1675,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "SQRTPI";
         Text[ hebrew ] = "WURZELPI";
         Text[ hindi ] = "SQRTPI";
+        Text[ slovak ] = "SQRTPI";
     };
 
     String ANALYSIS_FUNCNAME_Randbetween
@@ -1654,6 +1706,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "RANDBETWEEN";
         Text[ hebrew ] = "ZUFALLSBEREICH";
         Text[ hindi ] = "RANDBETWEEN";
+        Text[ slovak ] = "RANDBETWEEN";
     };
 
     String ANALYSIS_FUNCNAME_Besseli
@@ -1684,6 +1737,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BESSELI";
         Text[ hebrew ] = "BESSELI";
         Text[ hindi ] = "BESSELI";
+        Text[ slovak ] = "BESSELI";
     };
 
     String ANALYSIS_FUNCNAME_Besselj
@@ -1714,6 +1768,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BESSELJ";
         Text[ hebrew ] = "BESSELJ";
         Text[ hindi ] = "BESSELJ";
+        Text[ slovak ] = "BESSELJ";
     };
 
     String ANALYSIS_FUNCNAME_Besselk
@@ -1744,6 +1799,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BESSELK";
         Text[ hebrew ] = "BESSELK";
         Text[ hindi ] = "BESSELK";
+        Text[ slovak ] = "BESSELK";
     };
 
     String ANALYSIS_FUNCNAME_Bessely
@@ -1774,6 +1830,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BESSELY";
         Text[ hebrew ] = "BESSELY";
         Text[ hindi ] = "BESSELY";
+        Text[ slovak ] = "BESSELY";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Dec
@@ -1804,6 +1861,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BIN2DEC";
         Text[ hebrew ] = "BININDEZ";
         Text[ hindi ] = "BIN2DEC";
+        Text[ slovak ] = "BIN2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Hex
@@ -1834,6 +1892,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BIN2HEX";
         Text[ hebrew ] = "BININHEX";
         Text[ hindi ] = "BIN2HEX";
+        Text[ slovak ] = "BIN2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Oct
@@ -1864,6 +1923,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "BIN2OCT";
         Text[ hebrew ] = "BININOKT";
         Text[ hindi ] = "BIN2OCT";
+        Text[ slovak ] = "BIN2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Delta
@@ -1894,6 +1954,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DELTA";
         Text[ hebrew ] = "DELTA";
         Text[ hindi ] = "DELTA";
+        Text[ slovak ] = "DELTA";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Bin
@@ -1924,6 +1985,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DEC2BIN";
         Text[ hebrew ] = "DEZINBIN";
         Text[ hindi ] = "DEC2BIN";
+        Text[ slovak ] = "DEC2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Hex
@@ -1954,6 +2016,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DEC2HEX";
         Text[ hebrew ] = "DEZINHEX";
         Text[ hindi ] = "DEC2HEX";
+        Text[ slovak ] = "DEC2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Oct
@@ -1984,6 +2047,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "DEC2OCT";
         Text[ hebrew ] = "DEZINOKT";
         Text[ hindi ] = "DEC2OCT";
+        Text[ slovak ] = "DEC2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Erf
@@ -2014,6 +2078,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ERF";
         Text[ hebrew ] = "GAUSSFEHLER";
         Text[ hindi ] = "ERF";
+        Text[ slovak ] = "ERF";
     };
 
     String ANALYSIS_FUNCNAME_Erfc
@@ -2044,6 +2109,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "ERFC";
         Text[ hebrew ] = "GAUSSFKOMPL";
         Text[ hindi ] = "ERFC";
+        Text[ slovak ] = "ERFC";
     };
 
     String ANALYSIS_FUNCNAME_Gestep
@@ -2074,6 +2140,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "GESTEP";
         Text[ hebrew ] = "GGANZZAHL";
         Text[ hindi ] = "GESTEP";
+        Text[ slovak ] = "GESTEP";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Bin
@@ -2104,6 +2171,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "HEX2BIN";
         Text[ hebrew ] = "HEXINBIN";
         Text[ hindi ] = "HEX2BIN";
+        Text[ slovak ] = "HEX2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Dec
@@ -2134,6 +2202,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "HEX2DEC";
         Text[ hebrew ] = "HEXINDEZ";
         Text[ hindi ] = "HEX2DEC";
+        Text[ slovak ] = "HEX2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Oct
@@ -2164,6 +2233,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "HEX2OCT";
         Text[ hebrew ] = "HEXINOKT";
         Text[ hindi ] = "HEX2OCT";
+        Text[ slovak ] = "HEX2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Imabs
@@ -2194,6 +2264,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMABS";
         Text[ hebrew ] = "IMABS";
         Text[ hindi ] = "IMABS";
+        Text[ slovak ] = "IMABS";
     };
 
     String ANALYSIS_FUNCNAME_Imaginary
@@ -2224,6 +2295,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMAGINARY";
         Text[ hebrew ] = "IMAGINÃ„RTEIL";
         Text[ hindi ] = "IMAGINARY";
+        Text[ slovak ] = "IMAGINARY";
     };
 
     String ANALYSIS_FUNCNAME_Impower
@@ -2254,6 +2326,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMPOWER";
         Text[ hebrew ] = "IMAPOTENZ";
         Text[ hindi ] = "IMPOWER";
+        Text[ slovak ] = "IMPOWER";
     };
 
     String ANALYSIS_FUNCNAME_Imargument
@@ -2284,6 +2357,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMARGUMENT";
         Text[ hebrew ] = "IMARGUMENT";
         Text[ hindi ] = "IMARGUMENT";
+        Text[ slovak ] = "IMARGUMENT";
     };
 
     String ANALYSIS_FUNCNAME_Imcos
@@ -2314,6 +2388,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMCOS";
         Text[ hebrew ] = "IMCOS";
         Text[ hindi ] = "IMCOS";
+        Text[ slovak ] = "IMCOS";
     };
 
     String ANALYSIS_FUNCNAME_Imdiv
@@ -2344,6 +2419,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMDIV";
         Text[ hebrew ] = "IMDIV";
         Text[ hindi ] = "IMDIV";
+        Text[ slovak ] = "IMDIV";
     };
 
     String ANALYSIS_FUNCNAME_Imexp
@@ -2374,6 +2450,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMEXP";
         Text[ hebrew ] = "IMEXP";
         Text[ hindi ] = "IMEXP";
+        Text[ slovak ] = "IMEXP";
     };
 
     String ANALYSIS_FUNCNAME_Imconjugate
@@ -2404,6 +2481,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMCONJUGATE";
         Text[ hebrew ] = "IMKONJUGIERTE";
         Text[ hindi ] = "IMCONJUGATE";
+        Text[ slovak ] = "IMCONJUGATE";
     };
 
     String ANALYSIS_FUNCNAME_Imln
@@ -2434,6 +2512,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMLN";
         Text[ hebrew ] = "IMLN";
         Text[ hindi ] = "IMLN";
+        Text[ slovak ] = "IMLN";
     };
 
     String ANALYSIS_FUNCNAME_Imlog10
@@ -2464,6 +2543,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMLOG10";
         Text[ hebrew ] = "IMLOG10";
         Text[ hindi ] = "IMLOG10";
+        Text[ slovak ] = "IMLOG10";
     };
 
     String ANALYSIS_FUNCNAME_Imlog2
@@ -2494,6 +2574,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMLOG2";
         Text[ hebrew ] = "IMLOG2";
         Text[ hindi ] = "IMLOG2";
+        Text[ slovak ] = "IMLOG2";
     };
 
     String ANALYSIS_FUNCNAME_Improduct
@@ -2524,6 +2605,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMPRODUCT";
         Text[ hebrew ] = "IMPRODUKT";
         Text[ hindi ] = "IMPRODUCT";
+        Text[ slovak ] = "IMPRODUCT";
     };
 
     String ANALYSIS_FUNCNAME_Imreal
@@ -2554,6 +2636,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMREAL";
         Text[ hebrew ] = "IMREALTEIL";
         Text[ hindi ] = "IMREAL";
+        Text[ slovak ] = "IMREAL";
     };
 
     String ANALYSIS_FUNCNAME_Imsin
@@ -2584,6 +2667,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMSIN";
         Text[ hebrew ] = "IMSIN";
         Text[ hindi ] = "IMSIN";
+        Text[ slovak ] = "IMSIN";
     };
 
     String ANALYSIS_FUNCNAME_Imsub
@@ -2614,6 +2698,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMSUB";
         Text[ hebrew ] = "IMSUB";
         Text[ hindi ] = "IMSUB";
+        Text[ slovak ] = "IMSUB";
     };
 
     String ANALYSIS_FUNCNAME_Imsum
@@ -2644,6 +2729,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMSUM";
         Text[ hebrew ] = "IMSUMME";
         Text[ hindi ] = "IMSUM";
+        Text[ slovak ] = "IMSUM";
     };
 
     String ANALYSIS_FUNCNAME_Imsqrt
@@ -2674,6 +2760,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "IMSQRT";
         Text[ hebrew ] = "IMWURZEL";
         Text[ hindi ] = "IMSQRT";
+        Text[ slovak ] = "IMSQRT";
     };
 
     String ANALYSIS_FUNCNAME_Complex
@@ -2704,6 +2791,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "COMPLEX";
         Text[ hebrew ] = "KOMPLEXE";
         Text[ hindi ] = "COMPLEX";
+        Text[ slovak ] = "COMPLEX";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Bin
@@ -2734,6 +2822,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "OCT2BIN";
         Text[ hebrew ] = "OKTINBIN";
         Text[ hindi ] = "OCT2BIN";
+        Text[ slovak ] = "OCT2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Dec
@@ -2764,6 +2853,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "OCT2DEC";
         Text[ hebrew ] = "OKTINDEZ";
         Text[ hindi ] = "OCT2DEC";
+        Text[ slovak ] = "OCT2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Hex
@@ -2794,6 +2884,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "OCT2HEX";
         Text[ hebrew ] = "OKTINHEX";
         Text[ hindi ] = "OCT2HEX";
+        Text[ slovak ] = "OCT2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Convert
@@ -2824,6 +2915,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "CONVERT";
         Text[ hebrew ] = "UMWANDELN";
         Text[ hindi ] = "CONVERT";
+        Text[ slovak ] = "CONVERT";
     };
 
     String ANALYSIS_FUNCNAME_Factdouble
@@ -2854,9 +2946,12 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ czech ] = "FACTDOUBLE";
         Text[ hebrew ] = "ZWEIFAKULTÃ„T";
         Text[ hindi ] = "FACTDOUBLE";
+        Text[ slovak ] = "FACTDOUBLE";
     };
 
 };
+
+
 
 
 
