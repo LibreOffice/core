@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:44:58 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #include <starmath.hrc>
 #endif
 
+#include <svx/xmlsecctrl.hxx>
+
+
 
 BOOL SmDLL::bInitialized = FALSE;
 
@@ -149,6 +152,7 @@ void SmDLL::Init()
     SvxModifyControl::RegisterControl( SID_TEXTSTATUS, pp );
     SvxUndoRedoControl::RegisterControl( SID_UNDO, pp );
     SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
+    XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pp );
 
     SmToolBoxWrapper::RegisterChildWindow(TRUE);
     SmCmdBoxWrapper::RegisterChildWindow(TRUE);
