@@ -1,6 +1,9 @@
 mkdir: %_DEST%\inc%_EXT%\sal
 mkdir: %_DEST%\inc%_EXT%\osl
 mkdir: %_DEST%\inc%_EXT%\rtl
+mkdir: %_DEST%\inc%_EXT%\systools
+mkdir: %_DEST%\inc%_EXT%\systools\win32
+mkdir: %_DEST%\inc%_EXT%\systools\unx
 
 ..\inc\sal\*.h %_DEST%\inc%_EXT%\sal\*.h
 ..\inc\osl\*.h %_DEST%\inc%_EXT%\osl\*.h
@@ -9,8 +12,8 @@ mkdir: %_DEST%\inc%_EXT%\rtl
 ..\inc\rtl\*.hxx %_DEST%\inc%_EXT%\rtl\*.hxx
 ..\inc\rtl\ustring %_DEST%\inc%_EXT%\rtl\ustring
 ..\inc\systools\*.h %_DEST%\inc%_EXT%\*.h
-..\inc\systools\win32\*.h %_DEST%\inc%_EXT%\*.h
-..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\*.h
+..\inc\systools\win32\*.h %_DEST%\inc%_EXT%\systools\win32\*.h
+..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\systools\unx\*.h
 
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
@@ -24,10 +27,6 @@ mkdir: %_DEST%\inc%_EXT%\rtl
 ..\%__SRC%\lib\isal.lib %_DEST%\lib%_EXT%\isal.lib
 ..\%__SRC%\bin\sal*.dll %_DEST%\bin%_EXT%\sal*.dll
 
-..\%__SRC%\bin\sdaemon.sh %_DEST%\bin%_EXT%\sdaemon.sh
-..\%__SRC%\bin\sdaemon %_DEST%\bin%_EXT%\sdaemon
-..\%__SRC%\bin\sdaemon.exe %_DEST%\bin%_EXT%\sdaemon.exe
-..\%__SRC%\bin\sdaemon.cmd %_DEST%\bin%_EXT%\sdaemon.cmd
 ..\version.mk %_DEST%\inc%_EXT%\sal\version.mk
 
 
