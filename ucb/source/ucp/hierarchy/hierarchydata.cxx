@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-06 09:32:47 $
+ *  last change: $Author: kso $ $Date: 2000-12-07 08:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,10 +197,7 @@ sal_Bool HierarchyEntry::hasData()
 }
 
 //=========================================================================
-sal_Bool HierarchyEntry::getData( Any& rTitle,
-                                    Any& rTargetURL,
-                                  sal_Bool bChildren,
-                                  Any& rChildren )
+sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 {
     try
     {
@@ -241,19 +238,32 @@ sal_Bool HierarchyEntry::getData( Any& rTitle,
                 aTargetURLPath += OUString::createFromAscii( "/TargetURL" );
                 aChildrenPath  += OUString::createFromAscii( "/Children" );
 
-                // Get Title value.
-                rTitle
-                    = xRootHierAccess->getByHierarchicalName( aTitlePath );
+                // Note: Avoid NoSuchElementExceptions, because exceptions are
+                //       relatively 'expensive'. Checking for availability of
+                //       title value is sufficient here, because if it is
+                //       there, the other values will be available too.
+                if ( xRootHierAccess->hasByHierarchicalName( aTitlePath ) )
+                {
+                    // Get Title value.
+                    if ( !( xRootHierAccess->getByHierarchicalName(
+                                aTitlePath ) >>= rData.aTitle ) )
+                    {
+                        VOS_ENSURE( sal_False,
+                                    "HierarchyEntry::getData - "
+                                    "Got no Title value!" );
+                        return sal_False;
+                    }
 
-                // Get TargetURL value.
-                rTargetURL
-                    = xRootHierAccess->getByHierarchicalName( aTargetURLPath );
-
-                // Get Children value.
-                if ( bChildren )
-                    rChildren
-                        = xRootHierAccess->getByHierarchicalName(
-                                                            aChildrenPath );
+                    // Get TargetURL value.
+                    if ( !( xRootHierAccess->getByHierarchicalName(
+                                aTargetURLPath ) >>= rData.aTargetURL ) )
+                    {
+                        VOS_ENSURE( sal_False,
+                                    "HierarchyEntry::getData - "
+                                    "Got no TargetURL value!" );
+                        return sal_False;
+                    }
+                }
                 return sal_True;
             }
         }
@@ -265,6 +275,9 @@ sal_Bool HierarchyEntry::getData( Any& rTitle,
     catch ( NoSuchElementException& )
     {
         // getByHierarchicalName
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::getData - caught NoSuchElementException!" );
     }
     catch ( Exception& )
     {
@@ -272,23 +285,6 @@ sal_Bool HierarchyEntry::getData( Any& rTitle,
 
         VOS_ENSURE( sal_False,
                     "HierarchyEntry::getData - caught Exception!" );
-    }
-    return sal_False;
-}
-
-//=========================================================================
-sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
-{
-    Any aTitle;
-    Any aTargetURL;
-    if ( getData( aTitle, aTargetURL, sal_False, Any() ) )
-    {
-        if ( !( aTitle >>= rData.aTitle ) ||
-             !( aTargetURL >>= rData.aTargetURL ) )
-            VOS_ENSURE( sal_False,
-                        "HierarchyEntry::getData - Wrong Any type!" );
-
-        return sal_True;
     }
     return sal_False;
 }
@@ -479,7 +475,7 @@ sal_Bool HierarchyEntry::setData(
     }
     catch ( NoSuchElementException& )
     {
-        // replaceByName, getByName, getByHierarchicalName
+        // replaceByName, getByName
 
         VOS_ENSURE( sal_False,
                 "HierarchyEntry::setData - caught NoSuchElementException!" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-05 16:37:16 $
+ *  last change: $Author: kso $ $Date: 2000-12-07 08:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,6 @@ class HierarchyEntry
             ::com::sun::star::util::XStringEscape >        m_xEscaper;
 
 private:
-    sal_Bool getData( ::com::sun::star::uno::Any& rTitle,
-                      ::com::sun::star::uno::Any& rTargetURL,
-                      sal_Bool bChildren,
-                      ::com::sun::star::uno::Any& rChildren );
     ::rtl::OUString createPathFromHierarchyURL( const ::rtl::OUString& rURL );
 
 public:
