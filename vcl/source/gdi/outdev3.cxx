@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hdu $ $Date: 2001-10-26 10:21:20 $
+ *  last change: $Author: hdu $ $Date: 2001-10-29 10:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,8 +2096,8 @@ String GetSubsFontName( const String& rName, ULONG nFlags )
 
     // #93662# do not try to replace StarSymbol with MS only font
     if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)
-    ||  ( aOrgName.EqualsAscii( "starsymbol" )
-      &&  aOrgName.EqualsAscii( "opensymbol" ) ) )
+    &&  ( aOrgName.EqualsAscii( "starsymbol" )
+      ||  aOrgName.EqualsAscii( "opensymbol" ) ) )
     return aName;
 
     // Search Font in FontList
