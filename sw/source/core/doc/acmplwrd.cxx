@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 16:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,32 +70,29 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
 
-#ifndef _ACMPLWRD_HXX //autogen
+#ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
 #endif
-#ifndef _DOC_HXX //autogen
+#ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _NDINDEX_HXX //autogen
+#ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
-#ifndef _NODE_HXX //autogen
+#ifndef _NODE_HXX
 #include <node.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _NDTXT_HXX //autogen
+#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _PAM_HXX //autogen
+#ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
 
@@ -254,12 +251,9 @@ BOOL SwAutoCompleteWord::GetRange( const String& rWord, USHORT& rStt,
     aWordLst.Seek_Entry( pStr, &rStt );
     rEnd = rStt;
 
-    const International& rInter = Application::GetAppInternational();
-    while( rEnd < aWordLst.Count() && COMPARE_EQUAL ==
-//!!! UNICODE: fehlendes interface
-//          rInter.Compare( rWord, *aWordLst[ rEnd ]/*, rWord.Len()*/,
-//                          INTN_COMPARE_IGNORECASE ) )
-            rWord.CompareIgnoreCaseToAscii( *aWordLst[ rEnd ], rWord.Len() ) )
+    CollatorWrapper& rCollator = ::GetAppCollator();
+    while( rEnd < aWordLst.Count() && 0 == rCollator.compareSubstring (
+                rWord, 0, rWord.Len(), *aWordLst[ rEnd ], 0, rWord.Len() ))
         ++rEnd;
 
     return rStt < rEnd;

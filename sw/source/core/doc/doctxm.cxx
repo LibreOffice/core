@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 16:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2287,13 +2287,13 @@ Range SwTOXBaseSection::GetKeyRange(const   String& rStr,
     const USHORT nMax = (USHORT)rRange.Max();
 
     USHORT nOptions = GetOptions();
-    USHORT nCmpFlags = (nOptions & TOI_SAME_ENTRY) && 0 == (nOptions & TOI_CASE_SENSITIVE)
-                            ? INTN_COMPARE_IGNORECASE : 0;
+    BOOL bIgnoreCase = ( nOptions & TOI_SAME_ENTRY ) &&
+                        0 == ( nOptions & TOI_CASE_SENSITIVE );
     for(USHORT i = nMin; i < nMax; ++i)
     {
         SwTOXSortTabBase* pBase = aSortArr[i];
         String aTmp = pBase->GetTxt();
-        if( rIntl.IsEqual( aTmp, sToCompare, nCmpFlags )  &&
+        if( rIntl.IsEqual( aTmp, sToCompare, bIgnoreCase )  &&
                 pBase->GetLevel() == nLevel &&
                     pBase->GetType() == TOX_SORT_CUSTOM)
             break;

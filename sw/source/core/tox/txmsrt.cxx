@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 16:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,18 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -151,19 +163,48 @@ SV_IMPL_VARARR( SwTOXSources, SwTOXSource )
 SwTOXInternational::SwTOXInternational( LanguageType nLang )
     : eLang( nLang )
 {
-    pIntl = new International( eLang );
-    pCharClass = new CharClass( SvxCreateLocale( eLang ));
+    Init();
 }
 
 SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl )
     : eLang( rIntl.eLang )
 {
-    pIntl = new International( *rIntl.pIntl );
-    pCharClass = new CharClass( SvxCreateLocale( rIntl.eLang ));
+    Init();
+}
+
+void SwTOXInternational::Init()
+{
+    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( eLang ));
+    bNewCollator = eLang != GetAppLanguage();
+    if( bNewCollator )
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
+        pCollator = new CollatorWrapper( xMSF );
+        pIgnCsCollator = new CollatorWrapper( xMSF );
+
+        pCollator->loadDefaultCollator( aLcl, 0 );
+        pIgnCsCollator->loadDefaultCollator( aLcl, SW_COLLATOR_IGNORES );
+    }
+    else
+    {
+        pCollator = &::GetAppCaseCollator();
+        pIgnCsCollator = &::GetAppCollator();
+    }
+
+    pIntl = new International( eLang );
+    pCharClass = new CharClass( aLcl );
 }
 
 SwTOXInternational::~SwTOXInternational()
 {
+    if( bNewCollator )
+    {
+        delete pCollator;
+        delete pIgnCsCollator;
+    }
     delete pCharClass;
     delete pIntl;
 }
@@ -175,6 +216,23 @@ String SwTOXInternational::ToUpper( const String& rStr, xub_StrLen nPos ) const
 inline BOOL SwTOXInternational::IsNumeric( const String& rStr ) const
 {
     return pCharClass->isNumeric( rStr );
+}
+
+sal_Int32 SwTOXInternational::Compare( const String& rTxt1, const String& rTxt2,
+                                        BOOL bIgnoreCase ) const
+{
+    CollatorWrapper* pCmp = bIgnoreCase ? pIgnCsCollator : pCollator;
+    return pCmp->compareString( rTxt1, rTxt2 );
+}
+
+sal_Unicode SwTOXInternational::GetIndexChar( const String& rTxt ) const
+{
+    return pIntl->GetIndexChar( rTxt );
+}
+
+String SwTOXInternational::GetFollowingText( USHORT nType ) const
+{
+    return pIntl->GetFollowingText( (FollowingText)nType );
 }
 
 /*--------------------------------------------------------------------
@@ -263,8 +321,7 @@ BOOL SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
                                 *pEndCmp = rCmp.pTxtMark->GetEnd();
 
             bRet = ( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) ) &&
-                    pTOXIntl->IsEqual( GetTxt(), rCmp.GetTxt(),
-                                        INTN_COMPARE_IGNORECASE );
+                    pTOXIntl->IsEqual( GetTxt(), rCmp.GetTxt(), TRUE );
         }
     }
     return bRet;
@@ -301,7 +358,7 @@ BOOL SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                         // beide Pointer nicht vorhanden -> vergleiche AlternativText
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
                             return pTOXIntl->IsLess( GetTxt(), rCmp.GetTxt(),
-                                                    INTN_COMPARE_IGNORECASE );
+                                                    TRUE );
 
                         if( pEnd && !pEndCmp )
                             return TRUE;
@@ -352,12 +409,8 @@ BOOL SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     sMyTxt.Insert( pTOXIntl->GetIndexChar( sMyTxt ), 0 );
     sOtherTxt.Insert( pTOXIntl->GetIndexChar( sOtherTxt ), 0 );
 
-    USHORT nCmpFlags;
-    if( GetOptions() & TOI_CASE_SENSITIVE )
-        nCmpFlags = 0;
-    else
-        nCmpFlags = INTN_COMPARE_IGNORECASE;
-    bRet = pTOXIntl->IsEqual( sMyTxt, sOtherTxt, nCmpFlags );
+    bRet = pTOXIntl->IsEqual( sMyTxt, sOtherTxt,
+                            !(GetOptions() & TOI_CASE_SENSITIVE) );
 
     // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
     if(bRet && !(GetOptions() & TOI_SAME_ENTRY))
@@ -376,18 +429,18 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
-    USHORT nFlag = GetOptions() & TOI_CASE_SENSITIVE ? 0 : INTN_COMPARE_IGNORECASE;
+    BOOL bIgnoreCase = !(GetOptions() & TOI_CASE_SENSITIVE);
 
     String sMyTxt( GetTxt() ), sOtherTxt( rCmp.GetTxt() );
     sMyTxt.Insert( pTOXIntl->GetIndexChar( sMyTxt ), 0 );
     sOtherTxt.Insert( pTOXIntl->GetIndexChar( sOtherTxt ), 0 );
 
-    BOOL bRet = pTOXIntl->IsLess( sMyTxt, sOtherTxt, nFlag ) &&
+    BOOL bRet = pTOXIntl->IsLess( sMyTxt, sOtherTxt, bIgnoreCase ) &&
                 GetLevel() == rCmp.GetLevel();
 
     // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
     if( !bRet && !(GetOptions() & TOI_SAME_ENTRY) )
-        bRet = pTOXIntl->IsEqual( sMyTxt, sOtherTxt, nFlag ) &&
+        bRet = pTOXIntl->IsEqual( sMyTxt, sOtherTxt, bIgnoreCase ) &&
                 nPos < rCmp.nPos;
 
     return bRet;
@@ -766,14 +819,14 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
         nCntPos = *rField.GetTxtFld()->GetStart();
 }
 
-USHORT  SwTOXAuthority::GetLevel() const
+USHORT SwTOXAuthority::GetLevel() const
 {
     String sText(((SwAuthorityField*)m_rField.GetFld())->
                         GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
     USHORT nRet = 0;
     if( pTOXIntl->IsNumeric( sText ) )
     {
-        nRet = sText.ToInt32();
+        nRet = (USHORT)sText.ToInt32();
         nRet++;
     }
     if(nRet >= AUTH_TYPE_END)
@@ -844,11 +897,10 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
             String sText1 = pField->GetFieldText(pKey->eField);
             String sText2 = pCmpField->GetFieldText(pKey->eField);
 
-            StringCompare eComp = pTOXIntl->Compare( sText1, sText2,
-                                             INTN_COMPARE_IGNORECASE);
-            if( COMPARE_EQUAL != eComp )
+            sal_Int32 nComp = pTOXIntl->Compare( sText1, sText2, TRUE );
+            if( nComp )
             {
-                bRet = (COMPARE_LESS == eComp) == pKey->bSortAscending;
+                bRet = (-1 == nComp) == pKey->bSortAscending;
                 break;
             }
         }
