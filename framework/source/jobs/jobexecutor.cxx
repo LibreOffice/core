@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobexecutor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ JobExecutor::~JobExecutor()
 //________________________________
 /**
     @short  implementation of XJobExecutor interface
-    @descr  We use the given event locate any registered job inside our configuration
+    @descr  We use the given event to locate any registered job inside our configuration
             and execute it. Further we control the lifetime of it and supress
             shutdown of the office till all jobs was finished.
 
@@ -189,48 +189,47 @@ JobExecutor::~JobExecutor()
 */
 void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::uno::RuntimeException)
 {
-    // generate the full qualified path to the configuration entry.
-    ::rtl::OUStringBuffer sCfgEntry(256);
-    sCfgEntry.appendAscii(JobData::EVENTCFG_ROOT                     );
-    sCfgEntry.append     (::utl::wrapConfigurationElementName(sEvent));
-
-    // create a config access and read all registered jobs from there
+    // get list of all enabled jobs
+    // The called static helper methods read it from the configuration and
+    // filter disabled jobs using it's time stamp values.
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    ConfigAccess aConfig(m_xSMGR,sCfgEntry.makeStringAndClear());
+    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, sEvent);
     aReadLock.unlock();
     /* } SAFE */
 
-    aConfig.open(ConfigAccess::E_READONLY);
-    if (aConfig.getMode()==ConfigAccess::E_CLOSED)
-        return;
-    css::uno::Reference< css::beans::XPropertySet > xEventProperties(aConfig.cfg(), css::uno::UNO_QUERY);
-    css::uno::Sequence< ::rtl::OUString >           lJobs;
-    if (xEventProperties.is())
-    {
-        css::uno::Any aValue = xEventProperties->getPropertyValue(::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_JOBLIST));
-        aValue >>= lJobs;
-    }
-    aConfig.close();
-
-    // step over all found jobs and execute it
-    for (int j=0; j<lJobs.getLength(); ++j)
+    // step over all enabled jobs and execute it
+    sal_Int32 c = lJobs.getLength();
+    for (sal_Int32 j=0; j<c; ++j)
     {
         /* SAFE { */
         aReadLock.lock();
 
         JobData aCfg(m_xSMGR);
-        aCfg.setAlias(lJobs[j]);
-        aCfg.setEvent(sEvent  );
+        aCfg.setEvent(sEvent, lJobs[j]);
+        aCfg.setEnvironment(JobData::E_EXECUTION);
 
-        Job aJob(m_xSMGR, css::uno::Reference< css::frame::XFrame >());
-        aJob.setJobData(aCfg);
+        /*Attention!
+            Jobs implements interfaces and dies by ref count!
+            And freeing of such uno object is done by uno itself.
+            So we have to use dynamic memory everytimes.
+         */
+        Job* pJob = new Job(m_xSMGR, css::uno::Reference< css::frame::XFrame >());
+        css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+        pJob->setJobData(aCfg);
 
         aReadLock.unlock();
         /* } SAFE */
 
-        if (aCfg.isEnabled())
-            aJob.execute(css::uno::Sequence< css::beans::NamedValue >());
+        try
+        {
+            pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
+        }
+        #ifdef ENABLE_WARNINGS
+        catch(const css::uno::Exception& exAny) {LOG_EXCEPTION("JobExecutor::trigger()", "catched on execute job", exAny.Message)}
+        #else
+        catch(const css::uno::Exception&) {}
+        #endif // ENABLE_WARNINGS
     }
 }
 
