@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-11 08:56:34 $
+ *  last change: $Author: cl $ $Date: 2001-05-16 13:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,9 +680,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         bOk = sal_True;
 #ifndef SVX_LIGHT
                         sal_uInt32 nSize = aSequence.getLength();
-                        SvMemoryStream aStream;
-                        aStream.Write ( aSequence.getArray(), nSize );
-                        aStream.Flush();
+                        SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
                         aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                         SfxItemSet* pItemSet = new SfxItemSet(pDoc->GetPool(),
                                         SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
@@ -940,7 +938,9 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     {
                         SvMemoryStream aStream;
                         pPrinter->Store( aStream );
-                        sal_uInt32 nSize = aStream.GetSize();
+                        aStream.Seek ( STREAM_SEEK_TO_END );
+                        sal_uInt32 nSize = aStream.Tell();
+                        aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                         Sequence < sal_Int8 > aSequence ( nSize );
                         memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
                         *pValue <<= aSequence;
