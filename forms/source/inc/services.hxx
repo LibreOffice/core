@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:40:25 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 09:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,11 +234,11 @@ namespace frm
     FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_RADIO_BUTTON,   "com.sun.star.form.component.binding.BindableDatabaseRadioButton" );
     FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TEXT_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseTextField" );
 
-    DECLARE_CONSTASCII_USTRING( BINDABLE_CONTROL_MODEL,            "com.sun.star.form.binding.BindableControlModel" );
-    DECLARE_CONSTASCII_USTRING( BINDABLE_DATA_AWARE_CONTROL_MODEL, "com.sun.star.form.binding.BindableDataAwareControlModel" );
-    DECLARE_CONSTASCII_USTRING( DATA_AWARE_CONTROL_MODEL,          "com.sun.star.form.binding.DataAwareControlModel" );
-    DECLARE_CONSTASCII_USTRING( VALIDATABLE_CONTROL_MODEL,         "com.sun.star.form.binding.ValidatableControlModel" );
-    DECLARE_CONSTASCII_USTRING( VALIDATABLE_BINDABLE_CONTROL_MODEL,"com.sun.star.form.binding.ValidatableBindableControlModel" );
+    FORMS_CONSTASCII_STRING( BINDABLE_CONTROL_MODEL,            "com.sun.star.form.binding.BindableControlModel" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATA_AWARE_CONTROL_MODEL, "com.sun.star.form.binding.BindableDataAwareControlModel" );
+    FORMS_CONSTASCII_STRING( DATA_AWARE_CONTROL_MODEL,          "com.sun.star.form.binding.DataAwareControlModel" );
+    FORMS_CONSTASCII_STRING( VALIDATABLE_CONTROL_MODEL,         "com.sun.star.form.binding.ValidatableControlModel" );
+    FORMS_CONSTASCII_STRING( VALIDATABLE_BINDABLE_CONTROL_MODEL,"com.sun.star.form.binding.ValidatableBindableControlModel" );
 
     // -----------------------
     // common
