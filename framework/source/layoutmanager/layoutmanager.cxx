@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 18:02:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2204,7 +2204,7 @@ Reference< css::awt::XWindowPeer > LayoutManager::implts_createToolkitWindow( co
     return xPeer;
 }
 
-void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisivble )
+void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 {
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::vector< Reference< XUIElement > > aUIElementVector;
@@ -2213,7 +2213,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisivble )
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        pIter->m_bMasterHide = bSetVisivble;
+        pIter->m_bMasterHide = bSetVisible;
         if ( pIter->m_xUIElement.is() )
             aUIElementVector.push_back( pIter->m_xUIElement );
     }
@@ -2230,8 +2230,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisivble )
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if( pWindow )
-                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                //xWindow->setVisible( bSetVisivble );
+                    pWindow->Show( bSetVisible, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
     }
@@ -2373,12 +2372,20 @@ throw ( RuntimeException )
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
+    if ( m_xDockingAreaAcceptor == xDockingAreaAcceptor )
+        return;
+
     // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
     {
         Reference< css::awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
         if ( xWindow.is() )
             xWindow->removeWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject * >( this ), UNO_QUERY ));
+
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP]->dispose();
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM]->dispose();
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT]->dispose();
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT]->dispose();
 
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP].clear();
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM].clear();
