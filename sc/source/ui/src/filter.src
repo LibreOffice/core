@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:23:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text [ ENGLISH ] = "Standard Filter" ;
     Text [ norwegian ] = "Standard Filter" ;
     Text [ italian ] = "Filtro standard" ;
-    Text [ portuguese_brazilian ] = "Filtro Padr„o" ;
+    Text [ portuguese_brazilian ] = "Filtro Padr?o" ;
     Text [ portuguese ] = "Filtro padr„o" ;
     Text [ finnish ] = "Vakiosuodatin" ;
     Text [ danish ] = "Standardfilter" ;
@@ -150,7 +150,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Condition" ;
         Text [ norwegian ] = "VilkÂr" ;
         Text [ italian ] = "Condizione" ;
-        Text [ portuguese_brazilian ] = "condiÁ„o" ;
+        Text [ portuguese_brazilian ] = "condi??o" ;
         Text [ portuguese ] = "CondiÁ„o" ;
         Text [ finnish ] = "Ehto" ;
         Text [ danish ] = "Betingelse" ;
@@ -192,7 +192,7 @@ ModelessDialog RID_SCDLG_FILTER
         Center = TRUE ;
         Text[ chinese_simplified ] = "÷µ";
         Text[ russian ] = "«Ì‡˜ÂÌËÂ";
-        Text[ polish ] = "WartoúÊ";
+        Text[ polish ] = "Warto?Ê";
         Text[ japanese ] = "íl";
         Text[ chinese_traditional ] = "º∆≠»";
         Text[ arabic ] = "«·ﬁÌ„…";
@@ -551,9 +551,9 @@ ModelessDialog RID_SCDLG_FILTER
             < "<=" ; Default ; > ;
             < ">=" ; Default ; > ;
             < "<>" ; Default ; > ;
-            < "grˆﬂte" ; Default ; > ;
+            < "gr?te" ; Default ; > ;
             < "kleinste" ; Default ; > ;
-            < "grˆﬂte %" ; Default ; > ;
+            < "gr?te %" ; Default ; > ;
             < "kleinste %" ; Default ; > ;
         };
         stringlist [ swedish ] =
@@ -860,9 +860,9 @@ ModelessDialog RID_SCDLG_FILTER
             < "<=" ; Default ; > ;
             < ">=" ; Default ; > ;
             < "<>" ; Default ; > ;
-            < "grˆﬂte" ; Default ; > ;
+            < "gr?te" ; Default ; > ;
             < "kleinste" ; Default ; > ;
-            < "grˆﬂte %" ; Default ; > ;
+            < "gr?te %" ; Default ; > ;
             < "kleinste %" ; Default ; > ;
         };
         stringlist [ swedish ] =
@@ -1169,9 +1169,9 @@ ModelessDialog RID_SCDLG_FILTER
             < "<=" ; Default ; > ;
             < ">=" ; Default ; > ;
             < "<>" ; Default ; > ;
-            < "grˆﬂte" ; Default ; > ;
+            < "gr?te" ; Default ; > ;
             < "kleinste" ; Default ; > ;
-            < "grˆﬂte %" ; Default ; > ;
+            < "gr?te %" ; Default ; > ;
             < "kleinste %" ; Default ; > ;
         };
         stringlist [ swedish ] =
@@ -1438,7 +1438,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Criteria" ;
         Text [ norwegian ] = "Criteria" ;
         Text [ italian ] = "Criteri" ;
-        Text [ portuguese_brazilian ] = "CritÈrios" ;
+        Text [ portuguese_brazilian ] = "Crit?rios" ;
         Text [ portuguese ] = "CritÈrios" ;
         Text [ finnish ] = "Lajitteluperusteet" ;
         Text [ danish ] = "Kriterier" ;
@@ -1469,7 +1469,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~SensÌvel a mai˙sculas/min˙sculas" ;
+        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
         Text [ portuguese ] = "~Mai˙sculas/min˙sculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
         Text [ danish ] = "Store og smÂ bogstaver" ;
@@ -1501,7 +1501,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
         Text [ italian ] = "Espressione ~regolare" ;
-        Text [ portuguese_brazilian ] = "~Express„o regular" ;
+        Text [ portuguese_brazilian ] = "~Express?o regular" ;
         Text [ portuguese ] = "~Express„o regular" ;
         Text [ finnish ] = "~S‰‰nnˆllinen lauseke" ;
         Text [ danish ] = "RegulÊrt udtryk" ;
@@ -1533,7 +1533,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Area ~contains column headers" ;
         Text [ norwegian ] = "Area ~contains column headers" ;
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
-        Text [ portuguese_brazilian ] = "A ·rea ~contÈm cabeÁalhos de colunas" ;
+        Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
         Text [ portuguese ] = "A ·rea ~contÈm cabeÁalhos de colunas" ;
         Text [ finnish ] = "~Alue sis‰lt‰‰ sarakkeen otsikot" ;
         Text [ danish ] = "OmrÂde indholder kolonneoverskrifter" ;
@@ -1564,7 +1564,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
         Text [ italian ] = "~Univoco" ;
-        Text [ portuguese_brazilian ] = "~⁄nico" ;
+        Text [ portuguese_brazilian ] = "~?nico" ;
         Text [ portuguese ] = "~⁄nico" ;
         Text [ finnish ] = "~Ei monistusta" ;
         Text [ danish ] = "Kun unikke poster" ;
@@ -1682,7 +1682,7 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -1703,7 +1703,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "OpÁıes" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "OpÁıes" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -1745,7 +1745,7 @@ ModelessDialog RID_SCDLG_FILTER
         Left = TRUE ;
         Text[ chinese_simplified ] = "—˘±æ";
         Text[ russian ] = "ÙËÍÚË‚Ì˚È";
-        Text[ polish ] = "Zaúlepka";
+        Text[ polish ] = "Za?lepka";
         Text[ japanese ] = "¿ﬁ–∞";
         Text[ chinese_traditional ] = "ºÀ•ª";
         Text[ arabic ] = "‰„Ê–Ã „’ÿ‰⁄";
@@ -1764,7 +1764,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Data area:" ;
         Text [ norwegian ] = "Data area:" ;
         Text [ italian ] = "Area dati:" ;
-        Text [ portuguese_brazilian ] = "¡rea de dados:" ;
+        Text [ portuguese_brazilian ] = "?rea de dados:" ;
         Text [ portuguese ] = "¡rea de dados:" ;
         Text [ finnish ] = "Tietoalue:" ;
         Text [ danish ] = "DataomrÂde:" ;
@@ -1855,7 +1855,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Read ~filter criteria from" ;
         Text [ norwegian ] = "Read ~filter criteria from" ;
         Text [ italian ] = "Leggi i criteri di ~filtro da" ;
-        Text [ portuguese_brazilian ] = "Lerd ~critÈrios de filtro de" ;
+        Text [ portuguese_brazilian ] = "Lerd ~crit?rios de filtro de" ;
         Text [ portuguese ] = "~CritÈrios de filtro encontram-se em" ;
         Text [ finnish ] = "~Lue suodatusehdot kohteesta" ;
         Text [ danish ] = "Filterkriterier befinder sig i" ;
@@ -1909,7 +1909,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -1931,7 +1931,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~SensÌvel a mai˙sculas/min˙sculas" ;
+        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
         Text [ portuguese ] = "~Mai˙sculas/min˙sculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
         Text [ danish ] = "Store og smÂ bogstaver" ;
@@ -1963,7 +1963,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
         Text [ italian ] = "Espressione ~regolare" ;
-        Text [ portuguese_brazilian ] = "~Express„o regular" ;
+        Text [ portuguese_brazilian ] = "~Express?o regular" ;
         Text [ portuguese ] = "~Express„o regular" ;
         Text [ finnish ] = "~S‰‰nnˆlliset lausekkeet" ;
         Text [ danish ] = "RegulÊrt udtryk" ;
@@ -1995,7 +1995,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Area ~contains column headers" ;
         Text [ norwegian ] = "Area ~contains column headers" ;
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
-        Text [ portuguese_brazilian ] = "A ·rea ~contÈm cabeÁalhos de colunas" ;
+        Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
         Text [ portuguese ] = "ContÈm ~cabeÁalhos para colunas" ;
         Text [ finnish ] = "~Sis‰lt‰‰ sarakkeen otsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
@@ -2026,7 +2026,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
         Text [ italian ] = "~Univoco" ;
-        Text [ portuguese_brazilian ] = "~⁄nico" ;
+        Text [ portuguese_brazilian ] = "~?nico" ;
         Text [ portuguese ] = "~⁄nico" ;
         Text [ finnish ] = "~Ei monistusta" ;
         Text [ danish ] = "Kun unikke poster" ;
@@ -2144,7 +2144,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -2165,7 +2165,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "OpÁıes" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "OpÁıes" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -2207,7 +2207,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Left = TRUE ;
         Text[ chinese_simplified ] = "—˘±æ";
         Text[ russian ] = "ÙËÍÚË‚Ì˚È";
-        Text[ polish ] = "Zaúlepka";
+        Text[ polish ] = "Za?lepka";
         Text[ japanese ] = "¿ﬁ–∞";
         Text[ chinese_traditional ] = "ºÀ•ª";
         Text[ arabic ] = "‰„Ê–Ã „’ÿ‰⁄";
@@ -2226,7 +2226,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Data area:" ;
         Text [ norwegian ] = "Data area:" ;
         Text [ italian ] = "Area dati" ;
-        Text [ portuguese_brazilian ] = "¡rea de dados:" ;
+        Text [ portuguese_brazilian ] = "?rea de dados:" ;
         Text [ portuguese ] = "¡rea de dados:" ;
         Text [ finnish ] = "Tietoalue:" ;
         Text [ danish ] = "DataomrÂde:" ;
@@ -2377,7 +2377,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Condition" ;
         Text [ norwegian ] = "VilkÂr" ;
         Text [ italian ] = "Condizione" ;
-        Text [ portuguese_brazilian ] = "condiÁ„o" ;
+        Text [ portuguese_brazilian ] = "condi??o" ;
         Text [ portuguese ] = "CondiÁ„o" ;
         Text [ finnish ] = "Ehto" ;
         Text [ danish ] = "Betingelse" ;
@@ -2419,7 +2419,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Center = TRUE ;
         Text[ chinese_simplified ] = " ˝÷µ";
         Text[ russian ] = "«Ì‡˜ÂÌËÂ";
-        Text[ polish ] = "WartoúÊ";
+        Text[ polish ] = "Warto?Ê";
         Text[ japanese ] = "íl";
         Text[ chinese_traditional ] = "º∆≠»";
         Text[ arabic ] = "«·ﬁÌ„…";
@@ -3410,7 +3410,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Criteria" ;
         Text [ norwegian ] = "Criteria" ;
         Text [ italian ] = "Criteri" ;
-        Text [ portuguese_brazilian ] = "CritÈrios" ;
+        Text [ portuguese_brazilian ] = "Crit?rios" ;
         Text [ portuguese ] = "CritÈrios" ;
         Text [ finnish ] = "Hakukriteerit" ;
         Text [ danish ] = "Kriterier" ;
@@ -3441,7 +3441,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~SensÌvel a mai˙sculas/min˙sculas" ;
+        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
         Text [ portuguese ] = "~Mai˙sculas/min˙sculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
         Text [ danish ] = "Store og smÂ bogstaver" ;
@@ -3473,7 +3473,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
         Text [ italian ] = "Espressione ~regolare" ;
-        Text [ portuguese_brazilian ] = "~Express„o regular" ;
+        Text [ portuguese_brazilian ] = "~Express?o regular" ;
         Text [ portuguese ] = "~Express„o regular" ;
         Text [ finnish ] = "~S‰‰nnˆllinen lauseke" ;
         Text [ danish ] = "RegulÊrt udtryk" ;
@@ -3504,7 +3504,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
         Text [ italian ] = "~Univoco" ;
-        Text [ portuguese_brazilian ] = "~⁄nico" ;
+        Text [ portuguese_brazilian ] = "~?nico" ;
         Text [ portuguese ] = "~⁄nico" ;
         Text [ finnish ] = "~Ei monistusta" ;
         Text [ danish ] = "Kun unikke poster" ;
@@ -3535,7 +3535,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "OpÁıes" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "OpÁıes" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -3577,7 +3577,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Left = TRUE ;
         Text[ chinese_simplified ] = "–È…Ë";
         Text[ russian ] = "ÙËÍÚË‚Ì˚È";
-        Text[ polish ] = "Zaúlepka";
+        Text[ polish ] = "Za?lepka";
         Text[ japanese ] = "¿ﬁ–∞";
         Text[ chinese_traditional ] = "ºÀ¶°";
         Text[ arabic ] = "‰„Ê–Ã „’ÿ‰⁄";
@@ -3596,7 +3596,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Data area:" ;
         Text [ norwegian ] = "Data area:" ;
         Text [ italian ] = "Area dati:" ;
-        Text [ portuguese_brazilian ] = "¡rea de dados:" ;
+        Text [ portuguese_brazilian ] = "?rea de dados:" ;
         Text [ portuguese ] = "¡rea de dados:" ;
         Text [ finnish ] = "Tietoalue:" ;
         Text [ danish ] = "DataomrÂde:" ;
