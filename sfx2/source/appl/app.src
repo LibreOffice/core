@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:34:20 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3278,7 +3278,7 @@ String RID_PLUGIN
     Text [ portuguese ] = "Activar PlugIn" ;
     Text [ english_us ] = "Enable plug-ins" ;
     Text [ portuguese_brazilian ] = "PlugIn Aktivierung" ;
-    Text [ swedish ] = "Aktivera PlugIn" ;
+    Text [ swedish ] = "Aktivera plug-in" ;
     Text [ danish ] = "Aktiver PlugIns" ;
     Text [ italian ] = "Attivazione PlugIn " ;
     Text [ spanish ] = "Activar Plug-in" ;
@@ -3875,7 +3875,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ spanish ] = "Directorio de Plug-ins";
     Text[ italian ] = "Cartella plugin";
     Text[ danish ] = "PlugIn-bibliotek";
-    Text[ swedish ] = "Plugins-katalog";
+    Text[ swedish ] = "Plug-ins-katalog";
     Text[ polish ] = "Katalog wtyczek Plug-In";
     Text[ portuguese_brazilian ] = "Plugins directory";
     Text[ japanese ] = "ΜίΧΈή²έΓή¨ΪΈΔΨ";
@@ -3894,7 +3894,7 @@ String STR_KEY_FAVORITES_DIR
     Text = "Ordner-Bookmarks" ;
     Text [ English ] = "Folder Bookmarks" ;
     Text[ english_us ] = "Folder Bookmarks";
-    Text[ portuguese ] = "Pastas correntes";
+    Text[ portuguese ] = "Marcadores de pastas";
     Text[ greek ] = "Σελιδοδείκτες καταλόγων";
     Text[ dutch ] = "Bookmarks voor mappen";
     Text[ french ] = "Rιpertoires courants";
