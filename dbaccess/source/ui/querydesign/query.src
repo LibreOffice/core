@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-11 08:50:19 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 16:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ String STR_QUERY_UNDO_TABWINSHOW
     Text[ chinese_simplified ] = "新增表格窗口";
     Text[ russian ] = "�������� ���� �������";
     Text[ polish ] = "Dodaj okno tabeli";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙｳｨﾝﾄﾞｳの追加";
+    Text[ japanese ] = "テーブルウィンドウの追加";
     Text[ chinese_traditional ] = "新增表格窗口";
     Text[ dutch ] = "Tabelvenster toevoegen";
     Text[ chinese_simplified ] = "新增表格窗口";
@@ -156,7 +156,7 @@ String STR_QUERY_UNDO_MOVETABWIN
     Text[ chinese_simplified ] = "移动表格窗口";
     Text[ russian ] = "����������� ���� �������";
     Text[ polish ] = "Przenie� okno tabeli";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙｳｨﾝﾄﾞｳの移動";
+    Text[ japanese ] = "テーブルウィンドウの移動";
     Text[ chinese_traditional ] = "移動表格窗口";
     Text[ dutch ] = "Tabelvenster verplaatsen";
     Text[ chinese_simplified ] = "移动表格窗口";
@@ -242,7 +242,7 @@ String STR_QUERY_UNDO_SIZETABWIN
     Text[ chinese_simplified ] = "更改表格窗口大小";
     Text[ russian ] = "�������� ������ ���� �������";
     Text[ polish ] = "Zmie� wielko�� okna tabeli";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙｳｨﾝﾄﾞｳのｻｲｽﾞ変更";
+    Text[ japanese ] = "テーブルウィンドウのサイズ変更";
     Text[ chinese_traditional ] = "變更表格窗口大小";
     Text[ dutch ] = "Tabelvenster - Grootte veranderen";
     Text[ chinese_simplified ] = "更改表格窗口大小";
@@ -328,7 +328,7 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text[ swedish ] = "Uttrycket �r ogiltigt eftersom det inte finns n�gon tabell med namnet '$name$'!";
     Text[ polish ] = "Wyra�enie jest nieprawid�owe, poniewa� brak tabeli '$name$'!";
     Text[ portuguese_brazilian ] = "The expression is invalid because table '$name$' doesn't exist !";
-    Text[ japanese ] = "'$name$' ﾃｰﾌﾞﾙがないので、表現は無効です。";
+    Text[ japanese ] = "'$name$' テーブルがないので、表現は無効です。";
     Text[ chinese_simplified ] = "这个表达式无效，因为表格 '$name$' 不存在！";
     Text[ chinese_traditional ] = "這個表達式無效，因為表格<$name$>不存在！";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
@@ -357,7 +357,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ swedish ] = "Uttrycket �r ogiltigt eftersom f�ltnamnet '$name$' inte kan tilldelas!";
     Text[ polish ] = "Wyra�enie jest nieprawid�owe, poniewa� nie mo�na by�o przyporz�dkowa� nazwy pola '$name$'!";
     Text[ portuguese_brazilian ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ名 '$name$' の分類ができないので、表現は無効です。";
+    Text[ japanese ] = "フィールド名 '$name$' の分類ができないので、表現は無効です。";
     Text[ chinese_simplified ] = "这个表达式无效，因为无法确认字段名称 '$name$' ！";
     Text[ chinese_traditional ] = "因無法確定欄位名稱<$name$>而造成這個表達式無效﹗";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de veldnaam '$name$' niet kan worden herleid !";
@@ -387,12 +387,12 @@ String RID_STR_TOMUCHTABLES
     Text[ language_user1 ] = " ";
     Text[ russian ] = "������ �������� ������: #num#. ������, ������� ��� ���� ������ ����� ���������� �������� ������: #maxnum# �� ���� ����������!";
     Text[ polish ] = "Kwerenda zawiera #num# tabele/tabel. Aktualny typ bazy danych jest w stanie przetworzy� w przypadku jednej instrukcji maksymalnie #maxnum# tabele/tabel!";
-    Text[ japanese ] = "ｸｴﾘｰに #num# ﾃｰﾌﾞﾙが含まれています。現在のﾃﾞｰﾀﾍﾞｰｽﾀｲﾌﾟでは、ｽﾃｰﾄﾒﾝﾄごとに最大ﾃｰﾌﾞﾙ数 #maxnum# しか処理できません。";
+    Text[ japanese ] = "クエリーに #num# テーブルが含まれています。現在のデータベースタイプでは、ステートメントごとに最大テーブル数 #maxnum# しか処理できません。";
     Text[ chinese_traditional ] = "這個查詢含有 #num# 表格。這個資料庫類型在處理一個語句時最多只能夠查詢 #maxnum# 表格﹗";
     Text[ dutch ] = "Query bevat #num# tabellen. Het actuele databastype kan echter maximaal #maxnum# tabel(len) per statement verwerken !";
     Text[ chinese_simplified ] = "查询含有 #num# 表格。这个类型的数据库在处理一个语句时最多只能够查询 #maxnum# 表格！";
     Text[ greek ] = "�� ������� �������� #num# �������. ����� � ����� ����� ��������� ��� ������ �� ������������ ���� ��� #maxnum# ������/-�� ��� ������!";
-    Text[ korean ] = "질의는 #num# 시트를 포함합니다. 그러나 현재 데이터베이스 유형에서는 문장당 최대 #maxnum#개의 시트를 사용할 수 있습니다!";
+    Text[ korean ] = "질의에 #num# 개의 시트가 포함되어 있습니다. 그러나 현재 데이터베이스 유형은 문장당 최대 #maxnum#개의 시트를 처리할 수 있습니다!";
     Text[ arabic ] = "����� ��������� ��� #num# ������/�����. �� ���� ���� ����� �������� ������� ������ ���� �� #maxnum# ������/����� ������� �������!";
     Text[ turkish ] = "Sorgu #num# tablo i�eriyor. Ancak se�ili veritaban� tipi her deyim i�in en fazla #maxnum# tablo i�leyebilmektedir !";
     Text[ finnish ] = "Kysely k�sittelee #num# taulukkoa. Valittu tietokantatyyppi voi kuitenkin k�sitell� enint��n #maxnum# taulukkoa kussakin lausekkeessa.";
@@ -416,7 +416,7 @@ String STR_QUERY_UNDO_TABWINDELETE
     Text[ chinese_simplified ] = "清除表格窗口";
     Text[ russian ] = "������� ���� �������";
     Text[ polish ] = "Usu� okno tabeli";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙｳｨﾝﾄﾞｳの削除";
+    Text[ japanese ] = "テーブルウィンドウの削除";
     Text[ chinese_traditional ] = "清除表格窗口";
     Text[ dutch ] = "Tabelvenster wissen";
     Text[ chinese_simplified ] = "清除表格窗口";
@@ -530,7 +530,7 @@ String STR_QUERY_FUNCTIONS
     Text[ swedish ] = "(ingen funktion);Genomsnitt;Antal;Maximum;Minimum;Summa;Gruppering";
     Text[ polish ] = "(brak funkcji);�rednia;Liczba;Maksimum;Minimum;Suma;Grupowanie";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ japanese ] = "(関数なし);平均;数;最大;最小;合計;ｸﾞﾙｰﾌﾟ";
+    Text[ japanese ] = "(関数なし);平均;数;最大;最小;合計;グループ";
     Text[ chinese_simplified ] = "(无函数);平均值;数目;最大;最小;总数;分组";
     Text[ chinese_traditional ] = "(無函數);平均值;數目;最大;最小;總數;分組";
     Text[ dutch ] = "(geen functie);Gemiddelde;Aantal;Maximum;Minimum;Som;Groep";
@@ -560,7 +560,7 @@ String STR_QUERY_NOTABLE
     Text[ danish ] = "(ingen tabel)";
     Text[ polish ] = "(bez tabeli)";
     Text[ portuguese_brazilian ] = "(no table)";
-    Text[ japanese ] = "(ﾃｰﾌﾞﾙなし)";
+    Text[ japanese ] = "(テーブルなし)";
     Text[ korean ] = "(시트 없음)";
     Text[ chinese_simplified ] = "(无表格)";
     Text[ chinese_traditional ] = "(無表格)";
@@ -584,7 +584,7 @@ String STR_QRY_ORDERBY_UNRELATED
     Text[ swedish ] = "Databasen st�der bara sorteringen f�r synliga f�lt.";
     Text[ polish ] = "Baza danych obs�uguje sortowanie tylko w przypadku widocznych p�l.";
     Text[ portuguese_brazilian ] = "Die Datenbank unterst?zt die Sortierung nur f? sichtbare Felder.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽが支援する並べ替えの対象は、表示されたﾌｨｰﾙﾄﾞのみです。";
+    Text[ japanese ] = "データベースが支援する並べ替えの対象は、表示されたフィールドのみです。";
     Text[ chinese_simplified ] = "数据库只支持可显示字段的排序。";
     Text[ chinese_traditional ] = "資料庫只支援可檢視的欄位排序。";
     Text[ dutch ] = "De database ondersteunt alleen de sortering voor zichtbare velden.";
@@ -652,7 +652,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ swedish ] = "Tabellnamn";
             Text[ polish ] = "Nazwa tabeli";
             Text[ portuguese_brazilian ] = "Table name";
-            Text[ japanese ] = "ﾃｰﾌﾞﾙ名";
+            Text[ japanese ] = "テーブル名";
             Text[ chinese_simplified ] = "表格名称";
             Text[ chinese_traditional ] = "表格名稱";
             Text[ dutch ] = "Tabelnaam";
@@ -682,7 +682,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ swedish ] = "Aliasnamn";
             Text[ polish ] = "Nazwa alias";
             Text[ portuguese_brazilian ] = "Alias name";
-            Text[ japanese ] = "ｴｲﾘｱｽ名";
+            Text[ japanese ] = "エイリアス名";
             Text[ chinese_simplified ] = "别名";
             Text[ chinese_traditional ] = "代用名稱";
             Text[ dutch ] = "Alias naam";
@@ -746,7 +746,7 @@ String STR_QUERY_HANDLETEXT
     Text[ swedish ] = "F�lt;Alias;Tabell;Sortering;Synlig;Funktion;Kriterium;eller;eller";
     Text[ polish ] = "Pole;Alias;Tabela;Sortowanie;Widoczny;Funkcja;Kryterium;lub;lub";
     Text[ portuguese_brazilian ] = "Campo;Tabela;Ordem;Vis?vel;Crit?rios;ou;ou";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ;ｴｲﾘｱｽ;ﾃｰﾌﾞﾙ;並べ替え;表示;関数;条件;あるいは;あるいは";
+    Text[ japanese ] = "フィールド;エイリアス;テーブル;並べ替え;表示;関数;条件;あるいは;あるいは";
     Text[ chinese_simplified ] = "字段;别名;表格;排序;可见的;功能;条件;或者;或者";
     Text[ chinese_traditional ] = "欄位;代用名;表格;排序;可視;函數;規則;或者;或者";
     Text[ dutch ] = "Veld;Alias;Tabel;Volgorde;Zichtbaar;Functie;Criterium;of;of";
@@ -806,7 +806,7 @@ ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
     Message[ chinese_simplified ] = "条件无法用于字段 [*]";
     Message[ russian ] = "������� ��� ���� [*] �����������";
     Message[ polish ] = "Warunek dla pola [*] nie jest mo�liwy";
-    Message[ japanese ] = "[*] ﾌｨｰﾙﾄﾞに条件は使えません。";
+    Message[ japanese ] = "[*] フィールドに条件は使えません。";
     Message[ greek ] = "��� ����� ������� �� ������� ������� ��� �� ����� [*]";
     Message[ korean ] = "필드[*]에는 아무 조건도 지정할 수 없음 ";
     Message[ chinese_traditional ] = "欄位的條件[*]無效。";
@@ -861,7 +861,7 @@ ErrorBox ERR_QRY_TOOCOMPLEX
     Message[ chinese_simplified ] = "查询内容太复合";
     Message[ russian ] = "������� ������� ������";
     Message[ polish ] = "Kwerenda jest zbyt z�o�ona";
-    Message[ japanese ] = "ｸｴﾘｰが複雑すぎます。";
+    Message[ japanese ] = "クエリーが複雑すぎます。";
     Message[ chinese_traditional ] = "查詢內容太複合";
     Message[ dutch ] = "De query is te complex";
     Message[ chinese_simplified ] = "查询内容太复合";
@@ -948,7 +948,7 @@ ErrorBox ERR_QRY_SYNTAX
     Message[ chinese_simplified ] = "SQL 语法错误";
     Message[ russian ] = "������ � ���������� SQL";
     Message[ polish ] = "B��d sk�adni SQL";
-    Message[ japanese ] = "SQL ｼﾝﾀｯｸｽｴﾗｰ";
+    Message[ japanese ] = "SQL シンタックスエラー";
     Message[ chinese_traditional ] = "SQL 語法錯誤";
     Message[ dutch ] = "SQL-syntaxisfout";
     Message[ chinese_simplified ] = "SQL 语法错误";
@@ -1055,7 +1055,7 @@ ErrorBox ERR_QRY_TOO_MANY_TABLES
     Message[ chinese_simplified ] = "有太多的表格。";
     Message[ russian ] = "������� ����� ������.";
     Message[ polish ] = "Jest za du�o tabel.";
-    Message[ japanese ] = "ﾃｰﾌﾞﾙの数が多すぎます。";
+    Message[ japanese ] = "テーブルの数が多すぎます。";
     Message[ chinese_traditional ] = "表格數目太多。";
     Message[ dutch ] = "Er zijn teveel tabellen";
     Message[ chinese_simplified ] = "有太多的表格。";
@@ -1088,7 +1088,7 @@ WarningBox WARN_QRY_NATIVE
     Message[ chinese_simplified ] = "不接受数据库的 SQL 方言查询指令。";
     Message[ russian ] = "��� ������� � �������� SQL ���� ������ ���������� ��������� �� �����.";
     Message[ polish ] = "W przypadku kwerend w dialekcie bazy danych SQL wykonanie instrukcji nie b�dzie mo�liwe.";
-    Message[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽ SQL ﾀﾞｲｱﾚｸﾄのｸｴﾘｰではｽﾃｰﾄﾒﾝﾄは適用されません。";
+    Message[ japanese ] = "データベース SQL ダイアレクトのクエリーではステートメントは適用されません。";
     Message[ chinese_traditional ] = "不接受資料庫的 SQL 方言查詢指令。";
     Message[ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen.";
     Message[ chinese_simplified ] = "不接受数据库的 SQL 方言查询指令。";
@@ -1117,7 +1117,7 @@ ErrorBox ERR_QRY_AMB_FIELD
     Message[ chinese_simplified ] = "没有找到字段名称或者字段名称不明确。";
     Message[ russian ] = "��� ���� �� ������� ��� ��� ������������";
     Message[ polish ] = "Nazwy pola nie znaleziono lub nie jest ona jednoznaczna";
-    Message[ japanese ] = "ﾌｨｰﾙﾄﾞ名が見つからないか、あるいは名前が明確でありません。";
+    Message[ japanese ] = "フィールド名が見つからないか、あるいは名前が明確でありません。";
     Message[ language_user1 ] = " ";
     Message[ chinese_traditional ] = "沒有找到欄位名稱或者名稱不明確。";
     Message[ dutch ] = "Veldnaam niet gevonden of niet duidelijk";
@@ -1147,7 +1147,7 @@ ErrorBox ERR_QRY_ILLEGAL_JOIN
     Message[ chinese_simplified ] = "无法执行连结功能";
     Message[ russian ] = "����������� ����� �� �������";
     Message[ polish ] = "Z��czenie nie by�o mo�liwe";
-    Message[ japanese ] = "ﾘﾝｸできませんでした。";
+    Message[ japanese ] = "リンクできませんでした。";
     Message[ chinese_traditional ] = "無法執行連結功能";
     Message[ dutch ] = "Koppeling kon niet tot stand worden gebracht";
     Message[ chinese_simplified ] = "无法执行连结功能";
@@ -1221,7 +1221,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ swedish ] = "Radera s�kning";
             Text[ polish ] = "Usu� kwerendy";
             Text[ portuguese_brazilian ] = "Clear query";
-            Text[ japanese ] = "ｸｴﾘｰの削除";
+            Text[ japanese ] = "クエリーの削除";
             Text[ korean ] = "질의 삭제";
             Text[ chinese_simplified ] = "删除查询";
             Text[ chinese_traditional ] = "清除查詢";
@@ -1248,7 +1248,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ swedish ] = "S�tt p�/st�ng av designvy";
             Text[ polish ] = "W��cz / Wy��cz tryb projektu";
             Text[ portuguese_brazilian ] = "Switch design view on/off";
-            Text[ japanese ] = "ﾃﾞｻﾞｲﾝﾋﾞｭｰの切り替え ｵﾝ/ｵﾌ";
+            Text[ japanese ] = "デザインビューの切り替え オン/オフ";
             Text[ korean ] = "디자인 보기 스위치 온/오프";
             Text[ chinese_simplified ] = "打开或关闭设计视图";
             Text[ chinese_traditional ] = "打開或關閉設計檢視";
@@ -1276,7 +1276,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ swedish ] = "L�gg till tabeller...";
             Text[ polish ] = "Dodaj tabel�...";
             Text[ portuguese_brazilian ] = "Add tables";
-            Text[ japanese ] = "ﾃｰﾌﾞﾙの追加...";
+            Text[ japanese ] = "テーブルの追加...";
             Text[ korean ] = "시트 삽입";
             Text[ chinese_simplified ] = "新增表格...";
             Text[ chinese_traditional ] = "新增表格...";
@@ -1306,7 +1306,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ swedish ] = "Utf�r SQL-kommando direkt";
             Text[ polish ] = "Wykonaj bezpo�rednio polecenie SQL";
             Text[ portuguese_brazilian ] = "Native sql command";
-            Text[ japanese ] = "SQL ｺﾏﾝﾄﾞを直接実行";
+            Text[ japanese ] = "SQL コマンドを直接実行";
             Text[ korean ] = "SQL 명령 직접 실행";
             Text[ chinese_simplified ] = "直接执行SQL指令";
             Text[ chinese_traditional ] = "直接執行SQL指令";
@@ -1362,7 +1362,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ swedish ] = "Tabellnamn";
             Text[ polish ] = "Nazwa tabeli";
             Text[ portuguese_brazilian ] = "Table name";
-            Text[ japanese ] = "ﾃｰﾌﾞﾙ名";
+            Text[ japanese ] = "テーブル名";
             Text[ chinese_simplified ] = "表格名称";
             Text[ chinese_traditional ] = "表格名稱";
             Text[ dutch ] = "Tabelnaam";
@@ -1392,7 +1392,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ swedish ] = "Aliasnamn";
             Text[ polish ] = "Nazwa alias";
             Text[ portuguese_brazilian ] = "Alias name";
-            Text[ japanese ] = "ｴｲﾘｱｽ名";
+            Text[ japanese ] = "エイリアス名";
             Text[ chinese_simplified ] = "别名";
             Text[ chinese_traditional ] = "代用名";
             Text[ dutch ] = "Aliasnaam";
@@ -1704,7 +1704,7 @@ QueryBox QUERY_DESIGN_SAVEMODIFIED
     Message[ swedish ] = "S�kningen har �ndrats.\nSka �ndringarna sparas?";
     Message[ polish ] = "Zmieniono kwerend�.\nZapisa� zmiany?";
     Message[ portuguese_brazilian ] = "The query has been changed.\nDo you want to save the changes?";
-    Message[ japanese ] = "ｸｴﾘｰは変更されました。\n変更を保存しますか。";
+    Message[ japanese ] = "クエリーは変更されました。\n変更を保存しますか。";
     Message[ korean ] = "질의가 변경되었습니다.\n변경 사항을 저장하겠습니까?";
     Message[ chinese_simplified ] = "这个查询已经更改。\n要存盘更改的内容?";
     Message[ chinese_traditional ] = "這個查詢已經變更。\n要儲存變更內容？";
@@ -1732,7 +1732,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ swedish ] = "Tabellvyn har �ndrats.\nSka �ndringarna sparas?";
     Message[ polish ] = "Zmieniono widok tabeli.\nZapisa� zmiany?";
     Message[ portuguese_brazilian ] = "The view has been changed.\nDo you want to save the changes?";
-    Message[ japanese ] = "ﾃｰﾌﾞﾙﾋﾞｭｰが変更されています。\n変更を保存しますか。";
+    Message[ japanese ] = "テーブルビューが変更されています。\n変更を保存しますか。";
     Message[ korean ] = "뷰가 변경되었습니다.\n변경 내용을 저장하겠습니까?";
     Message[ chinese_simplified ] = "这个表格视图已经改变。\n要存盘更改的内容?";
     Message[ chinese_traditional ] = "這個檢視已經變更。\n要儲存變更內容?";
@@ -1784,7 +1784,7 @@ String STR_SVT_SQL_SYNTAX_ERROR
     Text[ chinese_simplified ] = "SQL 表达式语法错误";
     Text[ russian ] = "�������������� ������ � ��������� SQL";
     Text[ polish ] = "B��d sk�adni w wyra�eniu SQL";
-    Text[ japanese ] = "SQL 表現のｼﾝﾀｯｸｽｴﾗｰ";
+    Text[ japanese ] = "SQL 表現のシンタックスエラー";
     Text[ chinese_traditional ] = "SQL 表達語法錯誤";
     Text[ arabic ] = "��� �� ���� ������ �� ����� SQL";
     Text[ dutch ] = "Foutieve syntaxis in SQL-uitdrukking";
@@ -1866,7 +1866,7 @@ String STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
     Text[ danish ] = "Det er ikke muligt at bruge SOM sammen med dette felt!";
     Text[ polish ] = "JAK nie mo�na u�y� przy tym polu!";
     Text[ portuguese_brazilian ] = "LIKE can not be used with this field!";
-    Text[ japanese ] = "LIKE はこのﾌｨｰﾙﾄﾞで使用できません。";
+    Text[ japanese ] = "LIKE はこのフィールドで使用できません。";
     Text[ korean ] = "LIKE는 이 필드에서 사용할 수 없습니다!";
     Text[ chinese_simplified ] = "在这个字段中不能使用LIKE！";
     Text[ chinese_traditional ] = "這欄不可以使用 LIKE！";
@@ -1892,7 +1892,7 @@ String STR_SVT_SQL_SYNTAX_NO_NUM
     Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med en streng!";
     Text[ polish ] = "Pola nie mo�na por�wna� z ci�giem znak�w!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a string!";
-    Text[ japanese ] = "このﾌｨｰﾙﾄﾞは文字列で比較できません。";
+    Text[ japanese ] = "このフィールドは文字列で比較できません。";
     Text[ korean ] = "필드를 문자열과 비교할 수 없습니다!";
     Text[ chinese_simplified ] = "这个字段不能与字符串相比较！";
     Text[ chinese_traditional ] = "這欄的內容不可以和字串相比較！";
@@ -1918,7 +1918,7 @@ String STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
     Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med en dato!";
     Text[ polish ] = "Pola nie mo�na por�wna� z dat�!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a ACCESS date!";
-    Text[ japanese ] = "このﾌｨｰﾙﾄﾞは日付で比較できません。";
+    Text[ japanese ] = "このフィールドは日付で比較できません。";
     Text[ korean ] = "필드를 날짜와 비교할 수 없습니다!";
     Text[ chinese_simplified ] = "这个字段不能与日期相比较！";
     Text[ chinese_traditional ] = "這欄的內容不可以和一個日期相比較！";
@@ -1944,7 +1944,7 @@ String STR_SVT_SQL_SYNTAX_INT_NO_VALID
     Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med et heltal!";
     Text[ polish ] = "Por�wnanie pola z liczb� ca�kowit� nie jest mo�liwe!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a integer!";
-    Text[ japanese ] = "このﾌｨｰﾙﾄﾞは整数で比較できません。";
+    Text[ japanese ] = "このフィールドは整数で比較できません。";
     Text[ korean ] = "필드를 정수와 비교할 수 없습니다!";
     Text[ chinese_simplified ] = "这个字段不能与一个整数相比较！";
     Text[ chinese_traditional ] = "這欄的內容不可以和整數相比較！";
@@ -1969,7 +1969,7 @@ String STR_SVT_SQL_SYNTAX_TABLE
     Text[ swedish ] = "Tabellen \"#\" �r ok�nd i databasen!";
     Text[ polish ] = "Tabela \"#\" jest nieznana w bazie danych!";
     Text[ portuguese_brazilian ] = "The table \"#\" is unknown in the database!";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ \"#\" は、ﾃﾞｰﾀﾍﾞｰｽでは不明です。";
+    Text[ japanese ] = "テーブル \"#\" は、データベースでは不明です。";
     Text[ korean ] = "데이터베이스에 알 수 없는 \"#\" 시트가 포함되어 있습니다.!";
     Text[ chinese_simplified ] = "这个表格 \"#\" 对数据库而言是不明的！";
     Text[ chinese_traditional ] = "這個表格<#>對資料庫而言是不明的！";
@@ -1994,7 +1994,7 @@ String STR_SVT_SQL_SYNTAX_COLUMN
     Text[ swedish ] = "Kolumnen \"#\" �r ok�nd i tabellen \"#\"!";
     Text[ polish ] = "Kolumna \"#\" jest w tabeli \"#\" nieznana!";
     Text[ portuguese_brazilian ] = "The column \"#\" is unknown in the table \"#\"!";
-    Text[ japanese ] = "列 \"#\" は、\"#\" のﾃｰﾌﾞﾙでは不明です。";
+    Text[ japanese ] = "列 \"#\" は、\"#\" のテーブルでは不明です。";
     Text[ korean ] = "\"#\" 표에 알 수 없는 \"#\"열이 포함되어 있습니다.!";
     Text[ chinese_simplified ] = "这个列 \"#\" 对数据库 \"#\" 而言是不明的!";
     Text[ chinese_traditional ] = "這欄位<#>對這個表格<#>而言是不明的!";
@@ -2019,7 +2019,7 @@ String STR_SVT_SQL_SYNTAX_REAL_NO_VALID
     Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med et flydende kommatal!";
     Text[ polish ] = "Por�wnanie pola z liczb� rzeczywist� nie jest mo�liwe!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a real!";
-    Text[ japanese ] = "このﾌｨｰﾙﾄﾞは浮動小数で比較できません。";
+    Text[ japanese ] = "このフィールドは浮動小数で比較できません。";
     Text[ korean ] = "필드를 부동소수점의 수와 비교할 수 없습니다!";
     Text[ chinese_simplified ] = "这个字段不能与一个带可变小数点位数相比较！";
     Text[ chinese_traditional ] = "這欄的內容不可以和小數相比較！";
@@ -2045,7 +2045,7 @@ String STR_SVT_SQL_SYNTAX_REAL_NO_INT
     Text[ danish ] = "Det er ikke muligt at sammenligne et heltalsfelt med et flydende kommatal!";
     Text[ polish ] = "Pola liczby ca�kowitej nie mo�na por�wna� z liczb� rzeczywist�!";
     Text[ portuguese_brazilian ] = "A integer field can not be compared with a real!";
-    Text[ japanese ] = "整数ﾌｨｰﾙﾄﾞは浮動小数で比較できません。";
+    Text[ japanese ] = "整数フィールドは浮動小数で比較できません。";
     Text[ korean ] = "정수 필드를 부동소수점의 수와 비교할 수 없습니다.!";
     Text[ chinese_simplified ] = "一个整数字段不能与一个带可变小数点位数相比较！";
     Text[ chinese_traditional ] = "一個整數不可以和一個小數相比較！";
@@ -2071,7 +2071,7 @@ String STR_QUERYDESIGN_NO_VIEW_SUPPORT
     Text[ swedish ] = "Den h�r databasen underst�der inga tabellvyer!";
     Text[ polish ] = "Ta baza danych nie obs�uguje widok�w tabeli!";
     Text[ portuguese_brazilian ] = "This database doesn't support views!";
-    Text[ japanese ] = "このﾃﾞｰﾀﾍﾞｰｽはﾃｰﾌﾞﾙﾋﾞｭｰを支援しません。";
+    Text[ japanese ] = "このデータベースはテーブルビューを支援しません。";
     Text[ korean ] = "이 데이터베이스는 표 보기를 지원하지 않습니다.!";
     Text[ chinese_simplified ] = "这个数据库不支持表格视图的功能！";
     Text[ chinese_traditional ] = "這個資料庫不支援表格檢視功能！";
@@ -2097,7 +2097,7 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
     Text[ swedish ] = "Vill du skapa en s�kning i st�llet?";
     Text[ polish ] = "Utworzy� wzamian kwerend�?";
     Text[ portuguese_brazilian ] = "Do you want to create a view instead?";
-    Text[ japanese ] = "その代わりにｸｴﾘｰを作成しますか。";
+    Text[ japanese ] = "その代わりにクエリーを作成しますか。";
     Text[ korean ] = "대신 질의를 작성하겠습니까?";
     Text[ chinese_simplified ] = "要改为生成一个查询？";
     Text[ chinese_traditional ] = "改為要建立一個查詢？";
@@ -2122,7 +2122,7 @@ String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ swedish ] = "Det angivna kriteriet kan inte j�mf�ras med det h�r f�ltet!!";
     Text[ polish ] = "Podanego kryterium nie mo�na por�wna� z danym polem!!";
     Text[ portuguese_brazilian ] = "The entered critisim can not be compared with this field!!";
-    Text[ japanese ] = "入力した検索条件はこのﾌｨｰﾙﾄﾞで比較できません。";
+    Text[ japanese ] = "入力した検索条件はこのフィールドで比較できません。";
     Text[ korean ] = "지정한 기준을 이 필드와 비교할 수 없습니다!!";
     Text[ chinese_simplified ] = "设定的条件无法与这个字段比较！";
     Text[ chinese_traditional ] = "指定的條件無法和這個欄位相比較！";
@@ -2147,7 +2147,7 @@ ErrorBox ERR_QRY_NOSTATEMENT
     Message[ swedish ] = "Det gick inte att skapa en s�kning!";
     Message[ polish ] = "Utworzenie kwerendy nie powiod�o si�!";
     Message[ portuguese_brazilian ] = "No query could be created!";
-    Message[ japanese ] = "ｸｴﾘｰは作成できませんでした。";
+    Message[ japanese ] = "クエリーは作成できませんでした。";
     Message[ korean ] = "질의를 작성하지 못했습니다!";
     Message[ chinese_simplified ] = "无法建立任何查询！";
     Message[ chinese_traditional ] = "無法建立查詢！";
@@ -2173,7 +2173,7 @@ ErrorBox ERR_QRY_NOCRITERIA
     Message[ swedish ] = "Det gick inte att skapa en s�kning eftersom inga f�lt hade markerats!";
     Message[ polish ] = "Utworzenie kwerendy nie powiod�o si�, poniewa� nie wybrano �adnych p�l!";
     Message[ portuguese_brazilian ] = "No query could be created because no fields were selected!";
-    Message[ japanese ] = "ﾌｨｰﾙﾄﾞが選択されてなかったので、ｸｴﾘｰは作成できませんでした。";
+    Message[ japanese ] = "フィールドが選択されてなかったので、クエリーは作成できませんでした。";
     Message[ korean ] = "필드를 선택하지 않았으므로 질의를 작성하지 못했습니다!";
     Message[ chinese_simplified ] = "因为没有选中任何字段而无法建立查询！";
     Message[ chinese_traditional ] = "因為沒有選中任何欄位而無法建立查詢！";
@@ -2387,7 +2387,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ russian ] = "~������";
             Text[ greek ] = "�~�������";
             Text[ polish ] = "~Narz�dzia";
-            Text[ japanese ] = "ﾂｰﾙ(~T)";
+            Text[ japanese ] = "ツール(~T)";
             Text[ korean ] = "옵션(~T)";
             Text[ chinese_simplified ] = "工具(~T)";
             Text[ chinese_traditional ] = "工具(~T)";
@@ -2422,7 +2422,7 @@ String STR_DATASOURCE_DELETED
     Text[ swedish ] = "Den tillh�rande datak�llan har raderats. Det g�r inte att spara n�gra data som refererar till den.";
     Text[ polish ] = "Przynale�ne �r�d�o danych zosta�o usuni�te. Zapisanie dotycz�cych go danych nie jest mo�liwe.";
     Text[ portuguese_brazilian ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ japanese ] = "従属するﾃﾞｰﾀｿｰｽが削除されています。これに関連するﾃﾞｰﾀは保存できません。";
+    Text[ japanese ] = "従属するデータソースが削除されています。これに関連するデータは保存できません。";
     Text[ korean ] = "해당하는 데이터 소스가 삭제되었습니다. 데이터 소스의 관련 데이터를 저장할 수 없습니다.";
     Text[ chinese_simplified ] = "这个数据库已经被删除。因此无法保存任何相关数据。";
     Text[ chinese_traditional ] = "這個資料源已經被刪除。因此無法儲存任何資料。";
@@ -2430,6 +2430,7 @@ String STR_DATASOURCE_DELETED
     Text[ arabic ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ catalan ] = "La font de les dades s'ha borrat. No �s possible desar dades rellevants sobre ella.";
 };
+
 
 
 
