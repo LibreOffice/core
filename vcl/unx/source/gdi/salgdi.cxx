@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:00:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ X11SalGraphics::~X11SalGraphics()
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget )
 {
-    m_pColormap     = &GetSalData()->GetDefDisp()->GetColormap();
+    m_pColormap     = &GetSalData()->GetDisplay()->GetColormap();
     hDrawable_      = aTarget;
 
     bWindow_        = TRUE;
@@ -217,6 +217,7 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget )
     nPenPixel_      = GetPixel( nPenColor_ );
     nTextPixel_     = GetPixel( nTextColor_ );
     nBrushPixel_    = GetPixel( nBrushColor_ );
+    numClipRects_   = 0;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -564,6 +565,8 @@ void X11SalGraphics::BeginSetClipRegion( ULONG n )
     if( pClipRegion_ )
         XDestroyRegion( pClipRegion_ );
     pClipRegion_ = XCreateRegion();
+    numClipRects_ = 0;
+    boundingClipRect_.SetEmpty();
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -571,6 +574,9 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
 {
     if (!nDX || !nDY)
         return TRUE;
+
+    numClipRects_++;
+    boundingClipRect_.Union( Rectangle( nX, nY, nX+nDX, nY+nDY ) );
 
     XRectangle aRect;
     aRect.x         = (short)nX;
@@ -600,6 +606,8 @@ void X11SalGraphics::EndSetClipRegion()
     {
         XDestroyRegion( pClipRegion_ );
         pClipRegion_= NULL;
+        numClipRects_ = 0;
+        boundingClipRect_.SetEmpty();
     }
 }
 
