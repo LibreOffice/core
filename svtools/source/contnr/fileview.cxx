@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-13 12:37:32 $
+ *  last change: $Author: pb $ $Date: 2002-09-20 08:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,7 +1248,10 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
 
 SvtFileView::~SvtFileView()
 {
-    delete mpImp;
+    // use temp pointer to prevent access of deleted member (GetFocus())
+    SvtFileView_Impl* pTemp = mpImp;
+    mpImp = NULL;
+    delete pTemp;
 }
 
 // -----------------------------------------------------------------------
@@ -1468,7 +1471,8 @@ void SvtFileView::SetNoSelection()
 void SvtFileView::GetFocus()
 {
     Control::GetFocus();
-    mpImp->mpView->GrabFocus();
+    if ( mpImp && mpImp->mpView )
+        mpImp->mpView->GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1774,7 +1778,10 @@ SvtFileView_Impl::~SvtFileView_Impl()
 {
     Clear();
 
-    delete mpView;
+    // use temp pointer to prevent access of deleted member (GetFocus())
+    ViewTabListBox_Impl* pTemp = mpView;
+    mpView = NULL;
+    delete pTemp;
 }
 
 // -----------------------------------------------------------------------
