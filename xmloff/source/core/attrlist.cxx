@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 18:04:58 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,8 @@
  *
  ************************************************************************/
 
-#if STLPORT_VERSION<321
-#include <tools/presys.h>
-#include <stl/vector.h>
-#include <tools/postsys.h>
-#else
 #include <vector>
-#endif
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif

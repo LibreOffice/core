@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 19:55:35 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_

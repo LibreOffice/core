@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,7 @@
 #include "xmlictxt.hxx"
 #endif
 
-#ifndef __SGI_STL_VECTOR
-#include <stl/vector>
-#endif
+#include <vector>
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>

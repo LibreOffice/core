@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:33:41 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
-#include <stl/vector>
-#endif
+#include <vector>
 
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
