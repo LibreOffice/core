@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,44 +620,46 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
         // set the name
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel((*aIter)->second.get(),UNO_QUERY);
         if(xTunnel.is())
+        {
             pCurrent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
 
-        OSL_ENSHURE(pCurrent,"OColumns::storeSettings: No column from unotunnelhelper!");
+            OSL_ENSHURE(pCurrent,"OColumns::storeSettings: No column from unotunnelhelper!");
 
-        OColumnSettings* pCurrentSettings = pCurrent->getSettings();
-        if (!pCurrentSettings)
-        {
-            OSL_ASSERT("OColumns::storeSettings: column without settings we can write !");
-            continue;
-        }
-        sCurrent = pCurrent->m_sName;
-
-        OConfigurationNode aColumnNode;
-        // do we we have an existent key for that column ?
-        ConstMapName2NodeIterator aExistentObjectKey = aObjectKeys.find(sCurrent);
-        if (aExistentObjectKey != aObjectKeys.end())
-        {
-            aColumnNode = aExistentObjectKey->second;
-            // these sub key is used (and must not be deleted afterwards)
-            // -> remove from the key maps
-            aObjectKeys.erase(sCurrent);
-        }
-        else
-        {   // no -> create one
-
-            // the configuration does not support different types of operations in one transaction, so we must commit
-            // before and after we create the new node, to ensure, that every transaction we ever do contains only
-            // one type of operation (insert, remove, update)
-            aColumnNode = _rLocation.createNode(sCurrent);
-            if (!aColumnNode.isValid())
+            OColumnSettings* pCurrentSettings = pCurrent->getSettings();
+            if (!pCurrentSettings)
             {
-                OSL_ASSERT("OColumns::storeSettings: could not create the structures for writing a column !");
+                OSL_ASSERT("OColumns::storeSettings: column without settings we can write !");
                 continue;
             }
-        }
+            sCurrent = pCurrent->m_sName;
 
-        // let the column write itself
-        pCurrentSettings->writeUITo(aColumnNode);
+            OConfigurationNode aColumnNode;
+            // do we we have an existent key for that column ?
+            ConstMapName2NodeIterator aExistentObjectKey = aObjectKeys.find(sCurrent);
+            if (aExistentObjectKey != aObjectKeys.end())
+            {
+                aColumnNode = aExistentObjectKey->second;
+                // these sub key is used (and must not be deleted afterwards)
+                // -> remove from the key maps
+                aObjectKeys.erase(sCurrent);
+            }
+            else
+            {   // no -> create one
+
+                // the configuration does not support different types of operations in one transaction, so we must commit
+                // before and after we create the new node, to ensure, that every transaction we ever do contains only
+                // one type of operation (insert, remove, update)
+                aColumnNode = _rLocation.createNode(sCurrent);
+                if (!aColumnNode.isValid())
+                {
+                    OSL_ASSERT("OColumns::storeSettings: could not create the structures for writing a column !");
+                    continue;
+                }
+            }
+
+            // let the column write itself
+            pCurrentSettings->writeUITo(aColumnNode);
+        }
     }
 
     // delete all description keys where we have no columns for
