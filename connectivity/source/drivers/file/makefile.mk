@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: oj $ $Date: 2001-07-16 09:58:40 $
+#   last change: $Author: obo $ $Date: 2003-09-04 08:26:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,24 +78,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE :  $(PRJ)$/version.mk
 
 # --- Files -------------------------------------
-
-SLOFILES=\
-    $(SLO)$/FNoException.obj		\
-    $(SLO)$/FConnection.obj			\
-    $(SLO)$/FResultSetMetaData.obj	\
-    $(SLO)$/FColumns.obj			\
-    $(SLO)$/FTables.obj				\
-    $(SLO)$/FTable.obj				\
-    $(SLO)$/FCatalog.obj			\
-    $(SLO)$/FResultSet.obj			\
-    $(SLO)$/FStatement.obj			\
-    $(SLO)$/FPreparedStatement.obj	\
-    $(SLO)$/FDatabaseMetaData.obj	\
-    $(SLO)$/FDriver.obj				\
-    $(SLO)$/fanalyzer.obj			\
-    $(SLO)$/fcode.obj				\
-    $(SLO)$/fcomp.obj
-
 EXCEPTIONSFILES=\
     $(SLO)$/FNoException.obj		\
     $(SLO)$/FConnection.obj			\
@@ -111,6 +93,15 @@ EXCEPTIONSFILES=\
     $(SLO)$/FDriver.obj				\
     $(SLO)$/fanalyzer.obj			\
     $(SLO)$/fcomp.obj
+
+SLOFILES=\
+    $(EXCEPTIONSFILES)				\
+    $(SLO)$/fcode.obj				\
+    $(SLO)$/FStringFunctions.obj	\
+    $(SLO)$/FDateFunctions.obj	\
+    $(SLO)$/FNumericFunctions.obj
+
+
 
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map
