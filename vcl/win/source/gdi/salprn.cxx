@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-11 19:32:10 $
+ *  last change: $Author: ssa $ $Date: 2002-06-19 11:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, NULL, 0, &nBytes, &nInfoPrn2 );
     if ( nBytes )
     {
-        pWinInfo2 = (PRINTER_INFO_2*)new BYTE[nBytes];
+        pWinInfo2 = (PRINTER_INFO_2*) rtl_allocateMemory( nBytes );
         if ( EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes, &nInfoPrn2 ) )
         {
             pGetInfo2 = pWinInfo2;
@@ -350,7 +350,7 @@ void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 
     delete pBuf;
-    delete pWinInfo2;
+    rtl_freeMemory( pWinInfo2 );
 }
 
 // -----------------------------------------------------------------------
@@ -364,7 +364,7 @@ void SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
     EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, NULL, 0, &nBytes, &nInfoRet );
     if ( nBytes )
     {
-        pWinInfo2 = (PRINTER_INFO_2*)new BYTE[nBytes];
+        pWinInfo2 = (PRINTER_INFO_2*) rtl_allocateMemory( nBytes );
         if ( EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes, &nInfoRet ) )
         {
             PRINTER_INFO_2* pGetInfo2 = pWinInfo2;
@@ -386,7 +386,7 @@ void SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
             }
         }
 
-        delete pWinInfo2;
+        rtl_freeMemory( pWinInfo2 );
     }
 }
 
@@ -491,7 +491,7 @@ static BOOL ImplUpdateSalJobSetup( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
     // Outputbuffer anlegen
     nDriverDataLen              = sizeof(SalDriverData)+nSysJobSize-1;
-    pOutBuffer                  = (SalDriverData*)SvMemAlloc( nDriverDataLen );
+    pOutBuffer                  = (SalDriverData*)rtl_allocateMemory( nDriverDataLen );
     memset( pOutBuffer, 0, nDriverDataLen );
     pOutDevBuffer               = (LPDEVMODE)(pOutBuffer->maDriverData);
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
@@ -526,7 +526,7 @@ static BOOL ImplUpdateSalJobSetup( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
     if ( (nRet < 0) || (pVisibleDlgParent && (nRet == IDCANCEL)) )
     {
-        SvMemFree( pOutBuffer );
+        rtl_freeMemory( pOutBuffer );
         return FALSE;
     }
 
@@ -751,9 +751,9 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
                     }
                 }
                 if ( pPapers )
-                    delete pPapers;
+                    delete [] pPapers;
                 if ( pPaperSizes )
-                    delete pPaperSizes;
+                    delete [] pPaperSizes;
 
                 if ( nPaper )
                     pDevMode->dmPaperSize = nPaper;
@@ -976,7 +976,7 @@ XubString SalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, ULONG
         DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, pBuffer, pSetupData );
         if ( nRet && (nRet != ((ULONG)-1)) )
             aPaperBinName = ImplSalGetUniString( (const char*)(pBuffer + (nPaperBin*24)) );
-        delete pBuffer;
+        delete [] pBuffer;
     }
 
     return aPaperBinName;
@@ -1118,7 +1118,7 @@ static LPDEVMODE ImplSalSetCopies( LPDEVMODE pDevMode, ULONG nCopies, BOOL bColl
         if ( nCopies > 32765 )
             nCopies = 32765;
         ULONG nDevSize = pDevMode->dmSize+pDevMode->dmDriverExtra;
-        pNewDevMode = (LPDEVMODE)new BYTE[nDevSize];
+        pNewDevMode = (LPDEVMODE)rtl_allocateMemory( nDevSize );
         memcpy( pNewDevMode, pDevMode, nDevSize );
         pDevMode = pNewDevMode;
         pDevMode->dmFields |= DM_COPIES;
