@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:23:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,10 @@ enum PreDefVariable
     PREDEFVAR_PROGURL,
     PREDEFVAR_USERURL,
     PREDEFVAR_WORKDIRURL,
+    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    PREDEFVAR_BASEINSTURL,
+    PREDEFVAR_USERDATAURL,
+    // <--
     PREDEFVAR_COUNT
 };
 
