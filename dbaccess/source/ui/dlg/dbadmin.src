@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:21:50 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ portuguese ] = "Adabas D";
         Text[ russian ] = "Статистики Adabas D";
         Text[ greek ] = "Adabas D";
-        Text[ dutch ] = "Adabas D";
+        Text[ dutch ] = "Adabas D Statistiek";
         Text[ french ] = "Adabas D - Statistique";
         Text[ spanish ] = "Adabas D";
         Text[ italian ] = "Statistica Adabas D";
@@ -652,7 +652,7 @@ TabPage PAGE_GENERAL
         Text[ portuguese ] = "~new database";
         Text[ russian ] = "~Новая база данных...";
         Text[ greek ] = "~new database";
-        Text[ dutch ] = "~new database";
+        Text[ dutch ] = "~Nieuwe database";
         Text[ french ] = "~Nouvelle base de donnйes...";
         Text[ spanish ] = "~new database";
         Text[ italian ] = "~Nuovo database...";
@@ -2226,6 +2226,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/04/03 19:21:50  kz
+ *  Merge SRC627: 03.04.01 - 21:21:18
+ *
  *  Revision 1.34  2001/03/31 05:53:24  kz
  *  Merge SRC627: 31.03.01 - 07:52:53 (NoBranch)
  *
