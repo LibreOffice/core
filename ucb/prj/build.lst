@@ -1,5 +1,4 @@
-uc	ucb : unotools external sal vos cppu cppuhelper comphelper ucbhelper
-svtools NULL
+uc	ucb : unotools external sal vos cppu cppuhelper comphelper ucbhelper svtools NULL
 uc	ucb										usr1	-	all	uc_mkout NULL
 uc	ucb\unotypes			nmake	-	all	uc_unotypes NULL
 uc	ucb\source\regexp		nmake	-	all	uc_regexp uc_unotypes NULL
