@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -860,6 +864,51 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
     return bSuccess;
 }
 
+/** convert util::DateTime to ISO Time String */
+void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
+                            const ::com::sun::star::util::DateTime& rDateTime )
+{
+    double fHour = rDateTime.Hours;
+    double fMin = rDateTime.Minutes;
+    double fSec = rDateTime.Seconds;
+    double fSec100 = rDateTime.HundredthSeconds;
+    double fTempTime = fHour / 24;
+    fTempTime += fMin / (24 * 60);
+    fTempTime += fSec / (24 * 60 * 60);
+    fTempTime += fSec100 / (24 * 60 * 60 * 60);
+    convertTime( rBuffer, fTempTime );
+}
+
+/** convert ISO Time String to util::DateTime */
+sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
+                             const ::rtl::OUString& rString )
+{
+    double fTempTime = 0.0;
+    if( convertTime( fTempTime, rString ) )
+    {
+        double fHoursValue = SolarMath::ApproxFloor (fTempTime);
+        fTempTime -= fHoursValue;
+        fTempTime *= 60;
+        double fMinsValue = SolarMath::ApproxFloor (fTempTime);
+        fTempTime -= fMinsValue;
+        fTempTime *= 60;
+        double fSecsValue = SolarMath::ApproxFloor (fTempTime);
+        fTempTime -= fSecsValue;
+        double f100SecsValue = fTempTime;
+
+        rDateTime.Year = 0;
+        rDateTime.Month = 0;
+        rDateTime.Day = 0;
+        rDateTime.Hours = static_cast < sal_uInt16 > ( fHoursValue );
+        rDateTime.Minutes = static_cast < sal_uInt16 > ( fMinsValue );
+        rDateTime.Seconds = static_cast < sal_uInt16 > ( fSecsValue );
+        rDateTime.HundredthSeconds = static_cast < sal_uInt16 > ( f100SecsValue * 100.0 );
+
+        return sal_True;
+    }
+    return sal_False;
+}
+
 /** convert double to ISO Date Time String */
 void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                             const double& fDateTime, const com::sun::star::util::Date& aTempNullDate)
@@ -1050,6 +1099,121 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
         fTempDateTime += Sec100 / (24 * 60 * 60 * 60);
         fTempDateTime += fFraction / (24 * 60 * 60);
         fDateTime = fTempDateTime;
+    }
+    return bSuccess;
+}
+
+/** convert util::DateTime to ISO Date String */
+void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+                                const com::sun::star::util::DateTime& rDateTime )
+{
+    String aString( String::CreateFromInt32( rDateTime.Year ) );
+    aString += '-';
+    if( rDateTime.Month < 10 )
+        aString += '0';
+    aString += String::CreateFromInt32( rDateTime.Month );
+    aString += '-';
+    if( rDateTime.Day < 10 )
+        aString += '0';
+    aString += String::CreateFromInt32( rDateTime.Day );
+
+    if( rDateTime.Seconds != 0 ||
+        rDateTime.Minutes != 0 ||
+        rDateTime.Hours   != 0 )
+    {
+        aString += 'T';
+        if( rDateTime.Hours < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Hours );
+        aString += ':';
+        if( rDateTime.Minutes < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Minutes );
+        aString += ':';
+        if( rDateTime.Seconds < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Seconds );
+    }
+
+    rBuffer.append( aString );
+}
+
+/** convert ISO Date String to util::DateTime */
+sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rDateTime,
+                                     const ::rtl::OUString& rString )
+{
+    sal_Bool bSuccess = sal_True;
+
+    rtl::OUString aDateStr, aTimeStr, sDoubleStr;
+    sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
+    sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
+    if ( nPos >= 0 )
+    {
+        aDateStr = rString.copy( 0, nPos );
+        if ( nPos2 >= 0 )
+        {
+            aTimeStr = rString.copy( nPos + 1, nPos2 - nPos - 1 );
+            sDoubleStr = OUString(RTL_CONSTASCII_USTRINGPARAM("0."));
+            sDoubleStr += rString.copy( nPos2 + 1 );
+        }
+        else
+        {
+            aTimeStr = rString.copy(nPos + 1);
+            sDoubleStr = OUString(RTL_CONSTASCII_USTRINGPARAM("0.0"));
+        }
+    }
+    else
+        aDateStr = rString;         // no separator: only date part
+
+    sal_Int32 nYear  = 1899;
+    sal_Int32 nMonth = 12;
+    sal_Int32 nDay   = 30;
+    sal_Int32 nHour  = 0;
+    sal_Int32 nMin   = 0;
+    sal_Int32 nSec   = 0;
+
+    sal_Int32 nDateTokens = aDateStr.getTokenCount('-');
+    if ( nDateTokens > 3 || aDateStr.len() == 0 )
+        bSuccess = sal_False;
+    else
+    {
+        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-' ), 0, 9999 ) )
+            bSuccess = sal_False;
+        if ( nDateTokens >= 2 )
+            if ( !convertNumber( nMonth, aDateStr.getToken( 1, '-' ), 0, 12 ) )
+                bSuccess = sal_False;
+        if ( nDateTokens >= 3 )
+            if ( !convertNumber( nDay, aDateStr.getToken( 2, '-' ), 0, 31 ) )
+                bSuccess = sal_False;
+    }
+
+    if ( aTimeStr.len() > 0 )           // time is optional
+    {
+        sal_Int32 nTimeTokens = aTimeStr.getTokenCount(':');
+        if ( nTimeTokens > 3 )
+            bSuccess = sal_False;
+        else
+        {
+            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':' ), 0, 23 ) )
+                bSuccess = sal_False;
+            if ( nTimeTokens >= 2 )
+                if ( !convertNumber( nMin, aTimeStr.getToken( 1, ':' ), 0, 59 ) )
+                    bSuccess = sal_False;
+            if ( nTimeTokens >= 3 )
+                if ( !convertNumber( nSec, aTimeStr.getToken( 2, ':' ), 0, 59 ) )
+                    bSuccess = sal_False;
+        }
+    }
+
+    if (bSuccess)
+    {
+        rDateTime.Year = nYear;
+        rDateTime.Month = nMonth;
+        rDateTime.Day = nDay;
+        rDateTime.Hours = nHour;
+        rDateTime.Minutes = nMin;
+        rDateTime.Seconds = nSec;
+        rDateTime.HundredthSeconds = 0;
     }
     return bSuccess;
 }
