@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:28:06 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ class SwXCell : public SwXCellBaseClass,
     public SwXText,
     public SwClient
 {
-    friend void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt );
+    friend void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
+                                 BOOL bKeepNumberFmt = FALSE );
     friend double lcl_getValue( SwXCell &rCell );
     friend void   lcl_setValue( SwXCell &rCell, double nVal );
 
