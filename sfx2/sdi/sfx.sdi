@@ -8471,6 +8471,7 @@ SfxVoidItem RecentFileList SID_RECENTFILELIST
 
 //--------------------------------------------------------------------------
 SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
+(SfxStringItem Toolbar SID_AVAILABLE_TOOLBARS)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8484,8 +8485,6 @@ SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
