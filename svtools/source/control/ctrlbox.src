@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-07 19:07:29 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 22:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ portuguese ] = "Automatic";
     Text[ russian ] = "Автоматически";
     Text[ greek ] = "Automatic";
-    Text[ dutch ] = "Automatic";
+    Text[ dutch ] = "Automatisch";
     Text[ french ] = "Automatique";
     Text[ spanish ] = "Automatic";
     Text[ italian ] = "Automatic";
@@ -120,7 +120,7 @@ String STR_SVT_COLLATE_NORMAL
     Text[ portuguese ] = "Normal";
     Text[ russian ] = "Стандарт";
     Text[ greek ] = "КбнпнйкЬ";
-    Text[ dutch ] = "Normal";
+    Text[ dutch ] = "Normaal";
     Text[ french ] = "Normal";
     Text[ spanish ] = "Normal";
     Text[ italian ] = "Normal";
@@ -145,7 +145,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ portuguese ] = "Character Set";
     Text[ russian ] = "Набор знаков";
     Text[ greek ] = "Уэнплп чбсбкфЮсщн";
-    Text[ dutch ] = "Character Set";
+    Text[ dutch ] = "Charset";
     Text[ french ] = "Jeu de caractиres";
     Text[ spanish ] = "Character Set";
     Text[ italian ] = "Character Set";
@@ -170,7 +170,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ portuguese ] = "Dictionary";
     Text[ russian ] = "Словарь";
     Text[ greek ] = "Леойкь";
-    Text[ dutch ] = "Dictionary";
+    Text[ dutch ] = "Woordenboek";
     Text[ french ] = "Dictionnaire";
     Text[ spanish ] = "Dictionary";
     Text[ italian ] = "Dictionary";
@@ -245,7 +245,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ portuguese ] = "Radical";
     Text[ russian ] = "Корень";
     Text[ greek ] = "Radical";
-    Text[ dutch ] = "Radical";
+    Text[ dutch ] = "Radicaal";
     Text[ french ] = "Radical";
     Text[ spanish ] = "Radical";
     Text[ italian ] = "Radical";
