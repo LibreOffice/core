@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatrcn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 13:36:04 $
+ *  last change: $Author: thb $ $Date: 2001-08-01 13:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,8 @@ uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames(void
     for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
     {
         OUStringBuffer sBuffer( mpContainer->GetAttrPrefix(nAttr) );
-#ifdef ENABLEUNICODE
         if( sBuffer.getLength() != 0L )
             sBuffer.append( (sal_Unicode)':' );
-#endif
         sBuffer.append( mpContainer->GetAttrLName(nAttr) );
         *pNames++ = sBuffer.makeStringAndClear();
     }
