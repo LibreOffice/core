@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilenameHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:09:26 $
+ *  last change: $Date: 2004-12-10 16:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ package convwatch;
 import helper.URLHelper;
 import convwatch.FileHelper;
 import convwatch.StringHelper;
+import util.utils;
 
 interface Filenamer
 {
@@ -120,7 +121,7 @@ abstract class FilenameHelper_impl implements Filenamer
             {
                 _sFilename = FileHelper.getSystemPathFromFileURL(_sFilename);
             }
-            _sFilename = _sFilename.replaceAll("\\\\", "/");
+            _sFilename = utils.replaceAll13(_sFilename, "\\\\", "/");
 
             String sPath = checkPath(FileHelper.getPath(_sFilename));
             String sFilenameWithSuffix = checkFilename(FileHelper.getBasename(_sFilename));
@@ -137,7 +138,7 @@ abstract class FilenameHelper_impl implements Filenamer
     public FilenameHelper_impl(String _sPath, String _sName, String _sSuffix)
         {
             initMember();
-            _sPath = _sPath.replaceAll("\\\\", "/");
+            _sPath = utils.replaceAll13(_sPath, "\\\\", "/");
 
             String sPath = checkPath(_sPath);
             String sFilename = checkFilename(_sName);
@@ -165,7 +166,7 @@ abstract class FilenameHelper_impl implements Filenamer
     public String getAbsoluteSystemFilename()
         {
             String sSystemFilename = createAbsoluteFilename();
-            sSystemFilename = sSystemFilename.replaceAll("/", fs);
+            sSystemFilename = utils.replaceAll13(sSystemFilename, "/", fs);
             return sSystemFilename;
         }
 
@@ -210,7 +211,7 @@ abstract class FilenameHelper_impl implements Filenamer
     public String getSystemPath()
     {
         String sSystemPath = m_sPath;
-        sSystemPath = sSystemPath.replaceAll("/", fs);
+        sSystemPath = utils.replaceAll13(sSystemPath, "/", fs);
         return sSystemPath;
     }
     /**
