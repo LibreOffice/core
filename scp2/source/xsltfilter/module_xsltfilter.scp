@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_xsltfilter.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:35 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,8 @@
 Module gid_Module_Optional_Xsltfiltersamples
     MOD_NAME_DESC(MODULE_OPTIONAL_XSLTFILTERSAMPLES);
     ParentID = gid_Module_Optional;
-    Files = ( gid_File_Xsl_Sofftodocbookheadings,gid_File_Xsl_Docbooktosoffheadings,
+    Files = ( gid_File_Lib_Xmlfa, gid_File_Lib_Xmlfd,  gid_File_Jar_Xsltfilter, gid_File_Jar_Xsltvalidate, 
+    gid_File_Lib_Xsltfilter, gid_File_Xsl_Sofftodocbookheadings,gid_File_Xsl_Docbooktosoffheadings,
     gid_File_Stw_Docbooktemplate,gid_File_Xsl_Common,gid_File_Xsl_Main_Html,
     gid_File_Xsl_Main_Wml,gid_File_Xsl_Palm,gid_File_Xsl_Global_Document,
     gid_File_Xsl_Style_Header,gid_File_Xsl_Style_Inlined,gid_File_Xsl_Style_Mapping,
