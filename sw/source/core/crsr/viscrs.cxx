@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:46:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,11 +761,6 @@ void SwSelPaintRects::Paint( const SwRect& rRect )
         Paint( pWin->PixelToLogic( aPntRect ));
     else
         Paint( rRect.SVRect() );
-}
-
-
-void SwSelPaintRects::FillRects()
-{
 }
 
 // check current MapMode of the shell and set possibly the static members.
