@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlContainerDescriptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:31:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef SD_TOOLPANEL_CONTROL_CONTAINER_DESCRIPTOR_HXX
-#define SD_TOOLPANEL_CONTROL_CONTAINER_DESCRIPTOR_HXX
+#ifndef SD_TASKPANE_CONTROL_CONTAINER_DESCRIPTOR_HXX
+#define SD_TASKPANE_CONTROL_CONTAINER_DESCRIPTOR_HXX
 
-#include "ILayoutableWindow.hxx"
+#include "taskpane/ILayoutableWindow.hxx"
 #include "TitleBar.hxx"
 
 #ifndef _STRING_HXX
