@@ -92,14 +92,17 @@ public interface TokenConstants {
     // Operand Tokens
         public static final int TREF            = 0x44;
         public static final int TAREA           = 0x25;
+        public static final int TNAME           = 0x23;
+        public static final int TREF3D          = 0x3A;
+        public static final int TAREA3D         = 0x3B;
 
     //
         public static final int TARGSEP         = 0x1001;
-    public static final int TCLOSEPAREN     = 0x1002;
+        public static final int TCLOSEPAREN     = 0x1002;
 
     // Variable argument Functions
         // Math and Trig
-    public static final int TSUM            = 0x04;
+        public static final int TSUM            = 0x04;
         public static final int TPRODUCT        = 0xB7;
         public static final int TSUMIF          = 0x0159;
         public static final int TLOG            = 0x6D;

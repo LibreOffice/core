@@ -90,6 +90,9 @@ public class OperandLookup implements SymbolLookup {
         addEntry("INTEGER", TokenConstants.TNUM);
         addEntry("NUMBER", TokenConstants.TNUM);
         addEntry("STRING", TokenConstants.TSTRING);
+        addEntry("NAME", TokenConstants.TNAME);
+        addEntry("3D_CELL_REFERENCE", TokenConstants.TREF3D);
+        addEntry("3D_CELL_AREA_REFERENCE", TokenConstants.TAREA3D);
     }
 
     /**
