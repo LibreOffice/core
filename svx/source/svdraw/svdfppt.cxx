@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7127,7 +7127,7 @@ void PPTTextObj::ImplClear()
     {
         for ( PPTParagraphObj* pPtr = First(); pPtr; pPtr = Next() )
             delete pPtr;
-        delete mpImplTextObj->mpParagraphList;
+        delete[] mpImplTextObj->mpParagraphList;
         delete mpImplTextObj->mpPlaceHolderAtom;
         delete mpImplTextObj;
     }
