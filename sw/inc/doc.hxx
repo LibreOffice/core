@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:48:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ enum SwMoveFlags
 #define DUMMY_PARASPACEMAX_AT_PAGES 0x20
 #define DUMMY_TAB_COMPAT            0x40
 #define DUMMY_USE_VIRTUAL_DEVICE    0x80
+#define DUMMY_ADD_FLY_OFFSETS       0x01
 
 
 #define SW_HYPH_ERROR       0
@@ -1832,6 +1833,13 @@ public:
     {
         if( bNew ) n8Dummy1 |= DUMMY_USE_VIRTUAL_DEVICE;
         else n8Dummy1 &= ~DUMMY_USE_VIRTUAL_DEVICE;
+    }
+
+    sal_Bool IsAddFlyOffsets() const { return n8Dummy2 & DUMMY_ADD_FLY_OFFSETS; }
+    void SetAddFlyOffsets( sal_Bool bNew )
+    {
+        if( bNew ) n8Dummy2 |= DUMMY_ADD_FLY_OFFSETS;
+        else n8Dummy2 &= ~DUMMY_ADD_FLY_OFFSETS;
     }
 
     void ReadLayoutCache( SvStream& rStream );
