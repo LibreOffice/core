@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-12-06 14:42:31 $
+ *  last change: $Author: thb $ $Date: 2002-01-18 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
+#endif
+#ifndef _SVX_FLOAT3D_HXX
+#include <svx/float3d.hxx>
 #endif
 
 #include "app.hrc"
@@ -271,6 +274,17 @@ SdDrawViewShell::~SdDrawViewShell()
 {
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
+
+    // #96642# Remove references to items within Svx3DWin
+    // (maybe do a listening sometime in Svx3DWin)
+    USHORT nId = Svx3DChildWindow::GetChildWindowId();
+    SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : NULL;
+    if(pWindow)
+    {
+        Svx3DWin* p3DWin = static_cast< Svx3DWin* > (pWindow->GetWindow());
+        if(p3DWin)
+            p3DWin->DocumentReload();
+    }
 
     EndListening(*GetViewFrame());
 
