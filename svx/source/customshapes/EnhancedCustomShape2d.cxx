@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:26:16 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "EnhancedCustomShape2d.hxx"
 #endif
@@ -1158,6 +1157,15 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         case mso_sptBevel :                     nColorData = 0x502ad400; break;
         case mso_sptFoldedCorner :              nColorData = 0x20d00000; break;
         case mso_sptSmileyFace :                nColorData = 0x20d00000; break;
+        case mso_sptNil :
+        {
+            if( sShapeType.getLength() > 4 &&
+                sShapeType.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "col-" )))
+            {
+                nColorData = sShapeType.copy( 4 ).toInt32( 16 );
+            }
+        }
+        break;
         case mso_sptCurvedLeftArrow :
         {
             if ( ( seqAdjustmentValues.getLength() > 2 ) && ( seqAdjustmentValues[ 2 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
@@ -1949,14 +1957,18 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 3 ) < nCoordSize ); i++ )
                     {
                         Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ), GetPoint( seqCoordinates[ rSrcPt + 1 ], sal_True, sal_True ) );
-                        Point aCenter( aRect.Center() );
-                        Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], sal_True, sal_True ) );
-                        Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], sal_True, sal_True ) );
-                        aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) / fXScale ) ) + aCenter.X();
-                        aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) / fYScale ) ) + aCenter.Y();
-                        aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) / fXScale ) ) + aCenter.X();
-                        aEnd.Y() = (sal_Int32)( ( (double)( aEnd.Y() - aCenter.Y() ) / fYScale ) ) + aCenter.Y();
-                        AppendArc( aRect, aStart, aEnd, bClockwise, aPoly );
+                        if ( aRect.GetWidth() && aRect.GetHeight() )
+                        {
+                            Point aCenter( aRect.Center() );
+                            Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], sal_True, sal_True ) );
+                            Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], sal_True, sal_True ) );
+                            double fRatio = (double)aRect.GetHeight() / (double)aRect.GetWidth();
+                            aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
+                            aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) ) ) + aCenter.Y();
+                            aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
+                            aEnd.Y() = (sal_Int32)( ( (double)( aEnd.Y() - aCenter.Y() ) ) ) + aCenter.Y();
+                            AppendArc( aRect, aStart, aEnd, bClockwise, aPoly );
+                        }
                         rSrcPt += 4;
                     }
                 }
