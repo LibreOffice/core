@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:47:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@ StringList [ language_user1 ] =\
             < " " ; Default ; > ;\
         < " " ; Default ; > ;\
     };
+StringList [ catalan ] =
+    {
+            < "Y" ; Default ; > ;
+        < "O" ; Default ; > ;
+    };
 
 ModalDialog DLG_FILTERCRIT
 {
@@ -316,6 +321,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "ÇÊµå ÀÌ¸§";
         Text[ turkish ] = "Alan adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del campo";
     };
     FixedText FT_WHERECOMP
     {
@@ -345,6 +351,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "Á¶°Ç";
         Text[ turkish ] = "Koþul";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Condición";
     };
     FixedText FT_WHEREVALUE
     {
@@ -374,6 +381,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "°ª";
         Text[ turkish ] = "Deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor";
     };
     FixedText FT_WHEREOPER
     {
@@ -404,6 +412,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "¸µÅ©";
         Text[ turkish ] = "Baðlantý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Vínculo";
     };
     GroupBox GB_FIELDS
     {
@@ -432,6 +441,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "±âÁØ";
         Text[ turkish ] = "Ölçütler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Criterios";
     };
     OKButton BT_OK
     {
@@ -475,6 +485,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "- ¾øÀ½ -";
         Text[ turkish ] = "- Yok -";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "- ninguno -";
     };
     String STR_COMPARE_OPERATORS
     {
@@ -499,6 +510,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ korean ] = "=;<>;<;<=;>;>=;°°À½;°°Áö ¾ÊÀ½;ºó;ºñ¾îÀÖÁö¾ÊÀ½";
         Text[ turkish ] = "=;<>;<;<=;>;>=;gibi;gibi deðil;boþ;boþ deðil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "=;<>;<;<=;>;>=;como;no como;vacío;no vacío";
     };
     Text[ portuguese ] = "Filtro";
     Text[ russian ] = "Ôèëüòð";
@@ -517,4 +529,5 @@ ModalDialog DLG_FILTERCRIT
     Text[ chinese_traditional ] = "¿z¿ï";
     Text[ turkish ] = "Filtre";
     Text[ arabic ] = "ÝáÊÑ";
+    Text[ catalan ] = "Filtro";
 };
