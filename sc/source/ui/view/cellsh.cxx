@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:16:36 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,6 +887,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                                 rSet.DisableItem( nWhich);
                 }
                 break;
+
+            case SID_HANGUL_HANJA_CONVERSION:
+                if( !SvtCJKOptions().IsAnyEnabled() )
+                    rSet.DisableItem( nWhich );
+            break;
 
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
