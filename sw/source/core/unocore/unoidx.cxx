@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 07:52:43 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 12:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,12 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 pTOXBase->SetFromObjectNames(! lcl_AnyToBool(aValue));
             break;
             case WID_PROTECTED                         :
-                pTOXBase->SetProtected(lcl_AnyToBool(aValue));
+            {
+                sal_Bool bSet = lcl_AnyToBool(aValue);
+                pTOXBase->SetProtected(bSet);
+                if(GetFmt())
+                    ((SwTOXBaseSection*)pTOXBase)->SetProtect(bSet);
+            }
             break;
             case WID_USE_ALPHABETICAL_SEPARATORS:
                 nTOIOptions = lcl_AnyToBool(aValue) ?
