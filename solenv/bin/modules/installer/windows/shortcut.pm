@@ -2,9 +2,6 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.5 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:55:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -270,7 +267,10 @@ sub get_shortcut_description
 {
     my ($shortcut, $onelanguage) = @_;
 
-    return "";
+    my $description = "";
+    if ( $shortcut->{'Tooltip'} ) { $description = $shortcut->{'Tooltip'}; }
+
+    return $description;
 }
 
 ##############################################################
@@ -326,6 +326,51 @@ sub get_shortcut_wkdir
     my ($shortcut) = @_;
 
     return "";
+}
+
+####################################################################
+# Returning working directory for shortcut table for FolderItems.
+####################################################################
+
+sub get_folderitem_wkdir
+{
+    my ($onelink, $dirref) = @_;
+
+    # For shortcuts it is easy to convert the gid_Dir_Abc into the unique name in
+    # the directory table, for instance help_en_simpressidx.
+
+    my $onedir;
+    my $workingdirectory = "";
+    if ( $onelink->{'WkDir'} ) { $workingdirectory = $onelink->{'WkDir'}; }
+    my $directory = "";
+
+    if ( $workingdirectory )
+    {
+        my $found = 0;
+
+        for ( my $i = 0; $i <= $#{$dirref}; $i++ )
+        {
+            $onedir = ${$dirref}[$i];
+            my $directorygid = $onedir->{'Dir'};
+
+            if ( $directorygid eq $workingdirectory )
+            {
+                $found = 1;
+                last;
+            }
+        }
+
+        if (!($found))
+        {
+            installer::exiter::exit_program("ERROR: Did not find DirectoryID $workingdirectory in directory collection for FolderItem", "get_folderitem_wkdir");
+        }
+
+        $directory = $onedir->{'uniquename'};
+
+        if ($directory eq "") { $directory = "INSTALLLOCATION"; }
+    }
+
+    return $directory;
 }
 
 ###################################################################
@@ -588,7 +633,7 @@ sub create_shortcut_table
                 $shortcut{'Icon_'} = get_folderitem_icon($onelink, $filesref, $iconfilecollector);
                 $shortcut{'IconIndex'} = get_folderitem_iconindex($onelink);
                 $shortcut{'ShowCmd'} = get_folderitem_showcmd($onelink);
-                $shortcut{'WkDir'} = get_shortcut_wkdir($onelink);
+                $shortcut{'WkDir'} = get_folderitem_wkdir($onelink, $dirref);
 
                 my $oneline = $shortcut{'Shortcut'} . "\t" . $shortcut{'Directory_'} . "\t" . $shortcut{'Name'} . "\t"
                             . $shortcut{'Component_'} . "\t" . $shortcut{'Target'} . "\t" . $shortcut{'Arguments'} . "\t"
