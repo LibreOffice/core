@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-02-16 15:24:11 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 17:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,12 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     // don't prevent establishing of listeners anymore
     aDocument.SetInsertingFromOtherDoc( FALSE );
     if ( bRet )
+    {
         aDocument.CompileXML();
+        ScChartListenerCollection* pChartListener = aDocument.GetChartListenerCollection();
+        if (pChartListener)
+            pChartListener->UpdateDirtyCharts();
+    }
     aDocument.SetImportingXML( FALSE );
 
     //! row heights...
