@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:19:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text [ FRENCH ] = "CrÈation d'un scÈnario" ;
     Text [ ITALIAN ] = "Crea scenario" ;
     Text [ DUTCH ] = "Scenario maken" ;
-    Text [ PORTUGUESE_BRAZILIAN ] = "Criar Cen·rio" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Criar Cen?rio" ;
     Text [ SWEDISH ] = "Skapa scenario" ;
     Text [ PORTUGUESE ] = "Criar cen·rio" ;
     Moveable = TRUE ;
@@ -189,7 +189,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "Zur¸ckkopieren" ;
         Text [ ENGLISH ] = "Copy back" ;
         Text [ english_us ] = "Copy back" ;
-        Text [ portuguese_brazilian ] = "Zur≥ckkopieren" ;
+        Text [ portuguese_brazilian ] = "Zur?ckkopieren" ;
         Text [ swedish ] = "Kopiera tillbaka" ;
         Text [ danish ] = "Kopier tilbage" ;
         Text [ italian ] = "Ricopia all'indietro" ;
@@ -257,7 +257,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ portuguese ] = "Copiar sÛ valores" ;
         Text[ chinese_simplified ] = "÷ª∏¥÷∆ ˝÷µ";
         Text[ russian ] = " ÓÔËÓ‚‡Ú¸ ÚÓÎ¸ÍÓ ÁÌ‡˜ÂÌËˇ";
-        Text[ polish ] = "Kopiuj tylko wartoúci";
+        Text[ polish ] = "Kopiuj tylko warto?ci";
         Text[ japanese ] = "êîílÇÃÇ›∫Àﬂ∞";
         Text[ chinese_traditional ] = "•uΩ∆ªsº∆≠»";
         Text[ arabic ] = "‰”Œ «·ﬁÌ„ ›ﬁÿ";
