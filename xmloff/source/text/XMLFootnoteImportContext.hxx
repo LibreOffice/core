@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2001-07-19 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ namespace rtl {
 }
 class XMLTextImportHelper;
 
-
 /// import footnote elements (<text:footnote>)
 class XMLFootnoteImportContext : public SvXMLImportContext
 {
@@ -94,6 +93,10 @@ class XMLFootnoteImportContext : public SvXMLImportContext
     /// old document cursor
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> xOldCursor;
+
+    /// old list item and block (#89891#)
+    SvXMLImportContextRef xListBlock;
+    SvXMLImportContextRef xListItem;
 
     /// text import helper; holds current XTextCursor (and XText)
     XMLTextImportHelper& rHelper;

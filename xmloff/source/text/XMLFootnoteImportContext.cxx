@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: dvo $ $Date: 2001-07-19 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@
 #include "XMLFootnoteBodyImportContext.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTEXTLISTBLOCKCONTEXT_HXX
+#include "XMLTextListBlockContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTEXTLISTITEMCONTEXT_HXX
+#include "XMLTextListItemContext.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
@@ -114,6 +122,7 @@
 #ifndef _COM_SUN_STAR_TEXT_XFOOTNOTE_HPP_
 #include <com/sun/star/text/XFootnote.hpp>
 #endif
+
 
 
 using namespace ::rtl;
@@ -209,6 +218,13 @@ void XMLFootnoteImportContext::StartElement(
         Reference<XText> xText(xTextContent, UNO_QUERY);
         rHelper.SetCursor(xText->createTextCursor());
 
+        // remember old list item and block (#89891#) and reset them
+        // for the footnote
+        xListBlock = rHelper.GetListBlock();
+        xListItem = rHelper.GetListItem();
+        rHelper.SetListBlock( NULL );
+        rHelper.SetListItem( NULL );
+
         // remember footnote (for CreateChildContext)
         Reference<XFootnote> xNote(xTextContent, UNO_QUERY);
         xFootnote = xNote;
@@ -230,6 +246,10 @@ void XMLFootnoteImportContext::EndElement()
 
     // reinstall old cursor
     rHelper.SetCursor(xOldCursor);
+
+    // reinstall old list item
+    rHelper.SetListBlock( (XMLTextListBlockContext*)&xListBlock );
+    rHelper.SetListItem( (XMLTextListItemContext*)&xListItem );
 }
 
 
