@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 14:06:22 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 17:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,11 +891,11 @@ namespace dbaui
 
         // expand the entries
         // TODO: some kind of collapse all
-        actOnEntryPaths(pMySettings->aExpandedEntries, doExpand);
+        actOnEntryPaths(pMySettings->aExpandedEntries, (void (OTableSubscriptionPage::*)(SvLBoxEntry*))doExpand);
 
         // select the entries
         m_aTablesList.SelectAll(sal_False);
-        actOnEntryPaths(pMySettings->aSelectedEntries, doSelect);
+        actOnEntryPaths(pMySettings->aSelectedEntries, (void (OTableSubscriptionPage::*)(SvLBoxEntry*))doSelect);
 
         SvLBoxEntry* pFocusEntry = getEntryFromPath(pMySettings->sFocusEntry);
         if (pFocusEntry)
@@ -1416,6 +1416,12 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/10/26 14:06:22  oj
+ *  #93784# do not ask for catalog when supported
+ *
+ *  Revision 1.8.4.1  2001/10/26 16:16:04  hr
+ *  #92924#: cast
+ *
  *  Revision 1.8  2001/08/28 08:21:15  fs
  *  #91573# enable the items (drop/add/edit) only if the connection is capable
  *
