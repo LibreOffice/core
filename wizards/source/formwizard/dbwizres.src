@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 14:40:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,6 +616,12 @@ String RID_COMMON_START + 20
 {
     Text [ de ] = "Vorlage am <current_date> mit dem <wizard_name> erstellt.";
     Text [ en-US] = "Template created via <wizard_name> on <current_date>.";
+};
+
+String RID_COMMON_START + 21
+{
+    Text [ de ] = "Der Assistent kann nicht ausgeführt werden, da wichtige Dateien nicht gefunden werden konnten.\nUnter 'Extras - Optionen - %PRODUCTNAME - Pfade' können Sie die Standardeinstellungen der Pfade durch Klicken der Schaltfläche 'Standard' wieder herstellen.\nRufen Sie danach den Assistenten erneut auf.";
+    Text [ en-US] = "The wizard could not be run, because important files were not found.\nUnder 'Tools - Options - %PRODUCTNAME - Paths' click the 'Default' button to reset the paths to the original default settings.\nThen run the wizard again.";
 };
 
 
@@ -2436,1879 +2442,416 @@ String RID_DB_GROUP_WIZARD_START + 23
 #endif
 
 // ============================================================================
+// Form Wizard
+// ============================================================================
 
 String RID_DB_FORM_WIZARD_START + 0
 {
     Text [ de ] = "Formular Assistent";
     Text [ en-US ] = "Form Wizard";
-    Text[ pt ] = "AutoPiloto - Formulários";
-    Text[ ru ] = "Ìàñòåğ ôîğì";
-    Text[ nl ] = "AutoPiloot Formulier";
-    Text[ fr ] = "AutoPilote de formulaire";
-    Text[ es ] = "Piloto automático - Formulario  ";
-    Text[ it ] = "Pilota automatico - Formulario";
-    Text[ da ] = "AutoPilot-formular";
-    Text[ sv ] = "AutoPilot för formulär";
-    Text[ pl ] = "AutoPilot: Formularz";
-    Text[ pt-BR ] = "Assistente de Formulário";
-    Text[ ja ] = "ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆ ãƒ•ã‚©ãƒ¼ãƒ ";
-    Text[ zh ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† è¡¨å•";
-    Text[ zh-TW ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† è¡¨å–®";
-    Text[ ar ] = "ÇÓÊãÇÑÇÊ ÇáãÑÔÏ ÇáÂáí";
-    Text[ nl ] = "AutoPiloot Formulier";
-    Text[ zh ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† è¡¨å•";
-    Text[ el ] = "Áõôüìáôïò ğéëüôïò ãéá öüñìåò";
-    Text[ ko ] = "ìë™ íŒŒì¼ëŸ¿ ì–‘ì‹";
-    Text[ tr ] = "Form AutoPilot";
-    Text[ ca ] = "Formularis de l'AutoPilot";
-    Text[ fi ] = "Ohjattu lomakkeiden luominen";
-    Text[ th ] = "à¸™à¸³à¸£à¹ˆà¸­à¸‡à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ ";
-    Text[ cs ] = "PrÅ¯vodce formulÃ¡Å™em";
-    Text[ he ] = "â€®×˜×™×™×¡ ××•×˜×•××˜×™ ×œ×˜×¤×¡×™×â€¬";
-    Text[ hi ] = "à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥ à¤«à¤¼à¤¾à¤°à¥à¤®";
-    Text[ sk ] = "Sprievodca formulÃ¡rom";
-    Text[ hu ] = "Å°rlaptÃ¼ndÃ©r";
-    Text[ sl ] = "Avtopilot za obrazce";
 };
 
 String RID_DB_FORM_WIZARD_START + 1
 {
-    Text [ de ] = "Der Titel kann nicht verwendet werden. Bitte wählen Sie einen anderen.";
-    Text [ en-US ] = "This title cannot be used. Please select a different one.";
-    Text[ pt ] = "Impossível utilizar este título. Seleccione outro.";
-    Text[ ru ] = "Íåâîçìîæíî èñïîëüçîâàòü ıòîò çàãîëîâîê. Âûáåğèòå äğóãîé.";
-    Text[ nl ] = "De naam is niet bruikbaar. Kies een andere naam.";
-    Text[ fr ] = "Impossible d'utiliser ce titre ! Choisissez-en choisir un autre.";
-    Text[ es ] = "No se puede utilizar este título. Seleccione otro.";
-    Text[ it ] = "Il titolo non può essere utilizzato. Sceglietene un altro.";
-    Text[ da ] = "Titlen kan ikke anvendes. Vælg en anden titel.";
-    Text[ sv ] = "Namnet kan inte användas. Välj ett annat namn.";
-    Text[ pl ] = "Tego tytu³u nie mo¿na u¿yæ. Wybierz inny.";
-    Text[ pt-BR ] = "Não é possível utilizar este título. Por favor selecione outro.";
-    Text[ ja ] = "ã“ã®ã‚¿ã‚¤ãƒˆãƒ«ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚åˆ¥ã®ã‚¿ã‚¤ãƒˆãƒ«ã«ã—ã¦ãã ã•ã„ã€‚";
-    Text[ zh ] = "æ— æ³•ä½¿ç”¨è¿™ä¸ªæ ‡é¢˜ã€‚è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªå…¶ä»–çš„æ ‡é¢˜ã€‚";
-    Text[ zh-TW ] = "ç„¡æ³•ä½¿ç”¨é€™å€‹æ¨™é¡Œã€‚è«‹æ‚¨é¸æ“‡å¦å¤–ä¸€å€‹ã€‚";
-    Text[ ar ] = "áÇ íãßä ÇÓÊÎÏÇã åĞÇ ÇáÚäæÇä. ÇáÑÌÇÁ ÇÎÊíÇÑ ÚäæÇä ÂÎÑ.";
-    Text[ nl ] = "De naam is niet bruikbaar. Kies een andere naam.";
-    Text[ zh ] = "æ— æ³•ä½¿ç”¨è¿™ä¸ªæ ‡é¢˜ã€‚è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªå…¶ä»–çš„æ ‡é¢˜ã€‚";
-    Text[ el ] = "Äåí åßíáé äõíáôüí íá ÷ñçóéìïğïéçèåß áõôüò ï ôßôëïò. Ğáñáêáëş åğéëİîôå Üëëïí ôßôëï.";
-    Text[ ko ] = "ì´ ì œëª©ì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ë‹¤ë¥¸ ì œëª©ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-    Text[ tr ] = "Bu başlık kullanılamadı. Lütfen farklı bir başlık seçin. ";
-    Text[ ca ] = "No es pot usar aquest títol. Escolliu-ne un altre.";
-    Text[ fi ] = "Tätä otsikkoa ei voi käyttää. Valitse toinen otsikko.";
-    Text[ th ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸™à¸µà¹‰à¹„à¸”à¹‰ à¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
-    Text[ cs ] = "Tento titulek nemÅ¯Å¾e bÃ½t pouÅ¾it, prosÃ­m, zvolte si jinÃ½.";
-    Text[ he ] = "â€®×œ× × ×™×ª×Ÿ ×œ×”×©×ª××© ×‘×›×•×ª×¨×ª ×–×•. × × ×œ×‘×—×•×¨ ×›×•×ª×¨×ª ××—×¨×ª.â€¬";
-    Text[ hi ] = "à¤¯à¤¹ à¤¶à¥€à¤°à¥à¤·à¤• à¤•à¥‹ à¤‰à¤ªà¤¯à¥‹à¤— à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¦à¥‚à¤¸à¤°à¤¾ à¤¶à¥€à¤°à¥à¤·à¤• à¤•à¥‹ à¤šà¥à¤¨à¤¿à¤ à¥¤";
-    Text[ sk ] = "Tento nadpis sa nedÃ¡ pouÅ¾iÅ¥. ProsÃ­m vyberte inÃ½.";
-    Text[ hu ] = "Ez a cÃ­m nem hasznÃ¡lhatÃ³. KÃ©rem, vÃ¡lasszon mÃ¡st.";
-    Text[ sl ] = "Tega naslova ni mogoÄe uporabiti. Izberite drugega.";
+    Text [ de ] = "Felder im Fo~rmular";
+    Text [ en-US ] = "Fields in ~the form";
 };
 
 String RID_DB_FORM_WIZARD_START + 2
 {
-    Text [ de ] = "Formular erzeugen";
-    Text [ en-US ] = "Create Form";
-    Text[ pt ] = "Criar formulário";
-    Text[ ru ] = "Ñîçäàòü ôîğìó";
-    Text[ nl ] = "Formulier maken";
-    Text[ fr ] = "Créer un formulaire";
-    Text[ es ] = "Crear un formulario";
-    Text[ it ] = "Crea formulario";
-    Text[ da ] = "Opret formular";
-    Text[ sv ] = "Skapa formulär";
-    Text[ pl ] = "Utwórz formularz";
-    Text[ pt-BR ] = "Criar Formulário";
-    Text[ ja ] = "ãƒ•ã‚©ãƒ¼ãƒ ã®ä½œæˆ";
-    Text[ zh ] = "ç”Ÿæˆè¡¨å•";
-    Text[ zh-TW ] = "è£½ä½œè¡¨å–®";
-    Text[ ar ] = "ÅäÔÇÁ ÇÓÊãÇÑÉ";
-    Text[ nl ] = "Formulier maken";
-    Text[ zh ] = "ç”Ÿæˆè¡¨å•";
-    Text[ el ] = "Äçìéïõñãßá öüñìáò";
-    Text[ ko ] = "ì–‘ì‹ ë§Œë“¤ê¸°";
-    Text[ tr ] = "Form oluştur";
-    Text[ ca ] = "Crea un formulari";
-    Text[ fi ] = "Luo lomake";
-    Text[ th ] = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
-    Text[ cs ] = "VytvoÅ™it formulÃ¡Å™";
-    Text[ he ] = "â€®×™×¦×™×¨×ª ×˜×•×¤×¡â€¬";
-    Text[ hi ] = "à¤«à¤¼à¤¾à¤°à¥à¤® à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ sk ] = "VytvoriÅ¥ formulÃ¡r";
-    Text[ hu ] = "Å°rlap lÃ©trehozÃ¡sa";
-    Text[ sl ] = "Ustvari obrazec";
+    Text [ de ] = "Binärfelder werden mit aufgeführt und können aus der linken Liste selektiert werden.\nWenn möglich, werden Sie als Bilder interpretiert.";
+    Text [ en-US ] = "Binary fields are always listed and selectable from the left list.\nIf possible, they are interpreted as images.";
 };
 
 String RID_DB_FORM_WIZARD_START + 3
 {
-    Text [ de ] = "Formular_";
-    Text [ en-US ] = "Form_";
-    Text[ pt ] = "Formulário_";
-    Text[ ru ] = "Ôîğìà";
-    Text[ nl ] = "Formulier_";
-    Text[ fr ] = "Formulaire_";
-    Text[ es ] = "Formulario_";
-    Text[ it ] = "Formulario_";
-    Text[ da ] = "Formular_";
-    Text[ sv ] = "Formulär_";
-    Text[ pl ] = "Formularz_";
-    Text[ pt-BR ] = "Formulário_";
-    Text[ ja ] = "ãƒ•ã‚©ãƒ¼ãƒ _";
-    Text[ zh ] = "è¡¨å•_";
-    Text[ zh-TW ] = "è¡¨å–®_";
-    Text[ ar ] = "ÇÓÊãÇÑÉ_";
-    Text[ nl ] = "Formulier_";
-    Text[ zh ] = "è¡¨å•_";
-    Text[ el ] = "Öüñìá_";
-    Text[ ko ] = "ì–‘ì‹_";
-    Text[ tr ] = "\nForm_";
-    Text[ language_user1 ] = " ";
-    Text[ ca ] = "Formulari_";
-    Text[ fi ] = "Lomake_";
-    Text[ th ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡_";
-    Text[ cs ] = "Form_";
-    Text[ he ] = "â€®×˜×•×¤×¡_â€¬";
-    Text[ hi ] = "à¤«à¤¼à¤¾à¤°à¥à¤®_";
-    Text[ sk ] = "FormulÃ¡r_";
-    Text[ hu ] = "Å°rlap_";
-    Text[ sl ] = "Obrazec_";
+    Text [ de ] = "Ein Subformular ist ein Formular, das in ein anderes Formular eingefügt wird.\nSubformulare sind besonders geeignet, um Daten  von Tabellen oder Abfragen in eine  one-to-many Beziehung zu setzen.";
+    Text [ en-US ] = "A subform is a form that is inserted in another form.\nUse subforms to show data from tables or queries with a one-to-many relationship.";
 };
 
 String RID_DB_FORM_WIZARD_START + 4
 {
-    Text [ de ] = " (Datum)";
-    Text [ en-US ] = "(Date)";
-    Text[ pt ] = "(Data)";
-    Text[ ru ] = "(Äàòà)";
-    Text[ nl ] = "(Datum)";
-    Text[ fr ] = " (Date)";
-    Text[ es ] = "(Fecha)";
-    Text[ it ] = "(Data)";
-    Text[ da ] = "(Dato)";
-    Text[ sv ] = "(Datum)";
-    Text[ pl ] = "(Data)";
-    Text[ pt-BR ] = "(Data)";
-    Text[ ja ] = "(æ—¥ä»˜)";
-    Text[ zh ] = " (æ—¥æœŸ)";
-    Text[ zh-TW ] = " (æ—¥æœŸ)";
-    Text[ ar ] = "(ÇáÊÇÑíÎ)";
-    Text[ nl ] = "(Datum)";
-    Text[ zh ] = " (æ—¥æœŸ)";
-    Text[ el ] = "(Çìåñïìçíßá)";
-    Text[ ko ] = "(ë‚ ì§œ)";
-    Text[ tr ] = "(Tarih)";
-    Text[ ca ] = "(Data)";
-    Text[ fi ] = "(Päivämäärä)";
-    Text[ th ] = "(à¸§à¸±à¸™à¸—à¸µà¹ˆ)";
-    Text[ cs ] = "(Datum)";
-    Text[ he ] = "â€®(×ª××¨×™×š)â€¬";
-    Text[ hi ] = "(à¤¦à¤¿à¤¨à¤¾à¤‚à¤•)";
-    Text[ sk ] = "(DÃ¡tum)";
-    Text[ hu ] = "(DÃ¡tum)";
-    Text[ sl ] = "(datum)";
+    Text [ de ] = "Subformular ~hinzufügen";
+    Text [ en-US ] = "~Add Subform";
 };
 
 String RID_DB_FORM_WIZARD_START + 5
 {
-    Text [ de ] = " (Zeit)";
-    Text [ en-US ] = "(Time)";
-    Text[ pt ] = "(hora)";
-    Text[ ru ] = "(Âğåìÿ)";
-    Text[ nl ] = "(Tijd)";
-    Text[ fr ] = " (Heure)";
-    Text[ es ] = "(Hora)";
-    Text[ it ] = "(Ora)";
-    Text[ da ] = "(Klokkeslæt)";
-    Text[ sv ] = "(Tid)";
-    Text[ pl ] = "(Godzina)";
-    Text[ pt-BR ] = "(Hora)";
-    Text[ ja ] = "(æ™‚åˆ»)";
-    Text[ zh ] = " (æ—¶é—´)";
-    Text[ zh-TW ] = " (æ™‚é–“)";
-    Text[ ar ] = "(ÇáæŞÊ)";
-    Text[ nl ] = "(Tijd)";
-    Text[ zh ] = " (æ—¶é—´)";
-    Text[ el ] = "(¿ñá)";
-    Text[ ko ] = "(ì‹œê°„)";
-    Text[ tr ] = "(Saat)";
-    Text[ ca ] = "(Hora)";
-    Text[ fi ] = "(Aika)";
-    Text[ th ] = "(à¹€à¸§à¸¥à¸²)";
-    Text[ cs ] = "(ÄŒas)";
-    Text[ he ] = "â€®(×–××Ÿ)â€¬";
-    Text[ hi ] = "(à¤¸à¤®à¤¯)";
-    Text[ sk ] = "(ÄŒas)";
-    Text[ hu ] = "(IdÅ‘)";
-    Text[ sl ] = "(Äas)";
+    Text [ de ] = "Sub~formular basiert auf bestehenden Beziehung";
+    Text [ en-US ] = "~Sub form based on existing relation";
 };
 
 String RID_DB_FORM_WIZARD_START + 6
 {
     Text [ de ] = "~Tabellen und Abfragen";
     Text [ en-US ] = "Tables or queries";
-    Text[ pt ] = "Tabelas ou consultas";
-    Text[ ru ] = "Òàáëèöû èëè çàïğîñû";
-    Text[ nl ] = "Tabellen of query's";
-    Text[ fr ] = "Tables et requêtes";
-    Text[ es ] = "~Tablas o consultas";
-    Text[ it ] = "Tabella o ricerca";
-    Text[ da ] = "Tabeller eller forespørgsler";
-    Text[ sv ] = "Tabeller och sökningar";
-    Text[ pl ] = "Tabele i kwerendy";
-    Text[ pt-BR ] = "Tabelas ou consultas";
-    Text[ ja ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã¨ã‚¯ã‚¨ãƒªãƒ¼";
-    Text[ zh ] = "è¡¨æ ¼æˆ–æŸ¥è¯¢";
-    Text[ zh-TW ] = "è¡¨æ ¼å’ŒæŸ¥è©¢";
-    Text[ ar ] = ": ÊÍÏíÏ ÇáÌÏæá";
-    Text[ nl ] = "Tabellen of query's";
-    Text[ zh ] = "è¡¨æ ¼æˆ–æŸ¥è¯¢";
-    Text[ el ] = "Ğßíáêåò Ş åñùôŞìáôá";
-    Text[ ko ] = "í…Œì´ë¸” ë° ì¿¼ë¦¬";
-    Text[ tr ] = ": Tablo veya sorgulamalar";
-    Text[ ca ] = ": Selecció de taula";
-    Text[ fi ] = "Taulukot tai kyselyt";
-    Text[ th ] = ": à¹€à¸¥à¸·à¸­à¸à¸•à¸²à¸£à¸²à¸‡";
-    Text[ cs ] = "Tabulky nebo dotazy";
-    Text[ he ] = "â€®×˜×‘×œ××•×ª ××• ×©××™×œ×ª×•×ªâ€¬";
-    Text[ hi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤…à¤¥à¤µà¤¾ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€";
-    Text[ sk ] = "TabuÄ¾ky alebo dotazy";
-    Text[ hu ] = "TÃ¡blÃ¡k vagy lekÃ©rdezÃ©sek";
-    Text[ sl ] = "Tabele ali poizvedbe";
 };
 
 String RID_DB_FORM_WIZARD_START + 7
 {
-    Text [ de ] = ": Feldauswahl";
-    Text [ en-US ] = ": Field Selection";
-    Text[ pt ] = ": Selecção de campo";
-    Text[ ru ] = ": Âûáîğ ïîëÿ";
-    Text[ nl ] = ": veld selecteren";
-    Text[ fr ] = " : Sélection de champ";
-    Text[ es ] = ": Selección de campo";
-    Text[ it ] = ": Selezione campo";
-    Text[ da ] = ": Feltudvalg";
-    Text[ sv ] = ": fälturval";
-    Text[ pl ] = ": Wybór pola";
-    Text[ pt-BR ] = ": Seleção de Campo";
-    Text[ ja ] = ": ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é¸æŠ";
-    Text[ zh ] = "ï¼šå­—æ®µé€‰æ‹©";
-    Text[ zh-TW ] = "ï¼šé¸æ“‡æ¬„ä½";
-    Text[ ar ] = ": ÊÍÏíÏ ÇáÍŞá";
-    Text[ nl ] = ": veld selecteren";
-    Text[ zh ] = "ï¼šå­—æ®µé€‰æ‹©";
-    Text[ el ] = ": ÅğéëïãŞ ğåäßïõ";
-    Text[ ko ] = ": í•„ë“œ ì„ íƒ";
-    Text[ tr ] = ": Alan seçimi";
-    Text[ ca ] = ": Selecció de camp";
-    Text[ fi ] = ": Kentän valinta";
-    Text[ th ] = ": à¹€à¸¥à¸·à¸­à¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ cs ] = ": VÃ½bÄ›r polÃ­";
-    Text[ he ] = "â€®×‘×—×™×¨×ª ×©×“×•×ª:â€¬";
-    Text[ hi ] = ": à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¤¾ à¤šà¥à¤¨à¤¾à¤µ";
-    Text[ sk ] = ": VÃ½ber poÄ¾a";
-    Text[ hu ] = ": MezÅ‘ kivÃ¡lasztÃ¡sa";
-    Text[ sl ] = ": Izbor polja";
+    Text [ de ] = "~Beziehungen werden manuell ausgewählt";
+    Text [ en-US ] = "Sub form based on ~manual selection of fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 8
 {
-    Text [ de ] = ": Feldausrichtung";
-    Text [ en-US ] = ": Field Alignment";
-    Text[ pt ] = ": Alinhamento de campo";
-    Text[ ru ] = ": Âûğàâíèâàíèå ïîëÿ";
-    Text[ nl ] = ": veld uitlijnen";
-    Text[ fr ] = " : Alignement de champ";
-    Text[ es ] = ": Alineación de campo";
-    Text[ it ] = ": Allineamento del campo";
-    Text[ da ] = ": Feltjustering";
-    Text[ sv ] = ": fältjustering";
-    Text[ pl ] = ": Wyrównanie pola";
-    Text[ pt-BR ] = ": Alinhamento de Campo";
-    Text[ ja ] = ": ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é…ç½®";
-    Text[ zh ] = "ï¼šå­—æ®µå¯¹é½";
-    Text[ zh-TW ] = "ï¼šèª¿æ•´æ¬„ä½";
-    Text[ ar ] = ": ãÍÇĞÇÉ ÇáÍŞá";
-    Text[ nl ] = ": veld uitlijnen";
-    Text[ zh ] = "ï¼šå­—æ®µå¯¹é½";
-    Text[ el ] = ": Óôïß÷éóç ğåäßïõ";
-    Text[ ko ] = ": í•„ë“œ ë§ì¶¤";
-    Text[ tr ] = ": Alan hizalaması";
-    Text[ ca ] = ": Alineació de camp";
-    Text[ fi ] = ": Kentän tasaus";
-    Text[ th ] = ": à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ cs ] = ": ZarovnÃ¡nÃ­ polÃ­";
-    Text[ he ] = "â€®×™×™×©×•×¨ ×©×“×•×ª:â€¬";
-    Text[ hi ] = ": à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-    Text[ sk ] = ": Zarovnanie poÄ¾a";
-    Text[ hu ] = ": MezÅ‘ igazÃ­tÃ¡sa";
-    Text[ sl ] = ": Poravnava polja";
+    Text [ de ] = "~Welche Beziehung möchten Sie hinzufügen?";
+    Text [ en-US ] = "~Which relation do you want to add?";
 };
 
 String RID_DB_FORM_WIZARD_START + 9
 {
-    Text [ de ] = ": Vorlagen";
-    Text [ en-US ] = ": Templates";
-    Text[ pt ] = ": Estilos";
-    Text[ ru ] = ": Øàáëîíû";
-    Text[ nl ] = ": sjablonen";
-    Text[ fr ] = " : Styles";
-    Text[ es ] = ": Plantillas";
-    Text[ it ] = ": Modelli";
-    Text[ da ] = ": Skabeloner";
-    Text[ sv ] = ": mallar";
-    Text[ pl ] = ": Szablony";
-    Text[ pt-BR ] = ": Modelos";
-    Text[ ja ] = ": ã‚¹ã‚¿ã‚¤ãƒ«";
-    Text[ zh ] = "ï¼šæ ·å¼";
-    Text[ zh-TW ] = "ï¼šæ¨£å¼";
-    Text[ ar ] = ": ÇáŞæÇáÈ";
-    Text[ nl ] = ": sjablonen";
-    Text[ zh ] = "ï¼šæ ·å¼";
-    Text[ el ] = ": Ğñüôõğá";
-    Text[ ko ] = ": ì„œì‹ íŒŒì¼";
-    Text[ tr ] = ": Şablonlar";
-    Text[ ca ] = ": Plantilles";
-    Text[ fi ] = ": Mallit";
-    Text[ th ] = ": à¹à¸¡à¹ˆà¹à¸šà¸š";
-    Text[ cs ] = ": Å ablony";
-    Text[ he ] = "â€®×ª×‘× ×™×•×ª:â€¬";
-    Text[ hi ] = ": à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ sk ] = ": Å ablÃ³ny";
-    Text[ hu ] = ": Sablonok";
-    Text[ sl ] = ": Predloge";
-};
-
-String RID_DB_FORM_WIZARD_START + 10
-{
-    Text [ de ] = ": Formular erstellen";
-    Text [ en-US ] = ": Create Form";
-    Text[ pt ] = ": Criar formulário";
-    Text[ ru ] = ": Ñîçäàòü ôîğìó";
-    Text[ nl ] = ": formulier maken";
-    Text[ fr ] = " : Créer le formulaire";
-    Text[ es ] = ": Crear formulario";
-    Text[ it ] = ": Crea formulario";
-    Text[ da ] = ": Opret formular";
-    Text[ sv ] = ": skapa formulär";
-    Text[ pl ] = ": Utwórz formularz";
-    Text[ pt-BR ] = ": Criar Formulário";
-    Text[ ja ] = ": ãƒ•ã‚©ãƒ¼ãƒ ã®ä½œæˆ";
-    Text[ zh ] = "ï¼šåˆ¶ä½œè¡¨å•";
-    Text[ zh-TW ] = "ï¼šè£½ä½œè¡¨å–®";
-    Text[ ar ] = ": ÅäÔÇÁ ÇÓÊãÇÑÉ";
-    Text[ nl ] = ": formulier maken";
-    Text[ zh ] = "ï¼šåˆ¶ä½œè¡¨å•";
-    Text[ el ] = ": Äçìéïõñãßá öüñìáò";
-    Text[ ko ] = ": ì–‘ì‹ ë§Œë“¤ê¸°";
-    Text[ tr ] = ": Form oluştur";
-    Text[ ca ] = ": Crea un formulari";
-    Text[ fi ] = ": Luo lomake";
-    Text[ th ] = ": à¸ªà¸£à¹‰à¸²à¸‡à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
-    Text[ cs ] = ": VytvoÅ™it formulÃ¡Å™";
-    Text[ he ] = "â€®×™×¦×™×¨×ª ×˜×•×¤×¡:â€¬";
-    Text[ hi ] = ": à¤«à¤¼à¤¾à¤°à¥à¤® à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ sk ] = ": VytvoriÅ¥ formulÃ¡r";
-    Text[ hu ] = ": Å°rlap lÃ©trehozÃ¡sa";
-    Text[ sl ] = ": Ustvari obrazec";
-};
-
-String RID_DB_FORM_WIZARD_START + 11
-{
-    Text [ de ] = "Datenq~uelle";
-    Text [ en-US ] = "Data so~urce";
-    Text[ pt ] = "~Fonte de dados";
-    Text[ ru ] = "Èñõîäíûå äàííûå";
-    Text[ nl ] = "~Gegevensbron";
-    Text[ fr ] = "S~ource de données";
-    Text[ es ] = "~Fuente de datos";
-    Text[ it ] = "Sorgente ~dati";
-    Text[ da ] = "~Datakilde";
-    Text[ sv ] = "Data~källa";
-    Text[ pl ] = "~ród³o danych";
-    Text[ pt-BR ] = "~Fonte de dados";
-    Text[ ja ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹(~U)";
-    Text[ zh ] = "æ•°æ®æº(~U)";
-    Text[ zh-TW ] = "è³‡æ–™æº(~U)";
-    Text[ ar ] = "~ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text[ nl ] = "~Gegevensbron";
-    Text[ zh ] = "æ•°æ®æº(~U)";
-    Text[ el ] = "Ğñïİëå~õóç äåäïìİíùí";
-    Text[ ko ] = "ë°ì´í„° ì›ë³¸(~U)";
-    Text[ tr ] = "Veri kay~nağı";
-    Text[ language_user1 ] = " ";
-    Text[ ca ] = "F~ont de les dades";
-    Text[ fi ] = "Tieto~lähde";
-    Text[ th ] = "à¹à¸«~à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ cs ] = "Zdroj dat";
-    Text[ he ] = "â€®××§×•×¨ ×”× ×ª×•× ×™×â€¬";
-    Text[ hi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚~à¤²";
-    Text[ sk ] = "Zdr~oj dÃ¡t";
-    Text[ hu ] = "Adat~forrÃ¡s";
-    Text[ sl ] = "~Vir podatkov";
+    Text [ de ] = "Felder ~des Subformulars";
+    Text [ en-US ] = "Fields in the ~subform";
 };
 
 String RID_DB_FORM_WIZARD_START + 12
 {
-    Text [ de ] = "~Vorhandene Felder";
-    Text [ en-US ] = "Ex~isting fields";
-    Text[ pt ] = "Campos ~disponíveis";
-    Text[ ru ] = "~Ñóùåñòâóşùèå ïîëÿ";
-    Text[ nl ] = "~Bestaande velden";
-    Text[ fr ] = "Champs ~existants";
-    Text[ es ] = "~Campos existentes";
-    Text[ it ] = "~Campi disponibili";
-    Text[ da ] = "~Eksisterende felter";
-    Text[ sv ] = "~Existerande fält";
-    Text[ pl ] = "~Istniej¹ce pola";
-    Text[ pt-BR ] = "Campos ~existentes";
-    Text[ ja ] = "æ—¢å­˜ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~I)";
-    Text[ zh ] = "ç°æœ‰çš„å­—æ®µ(~I)";
-    Text[ zh-TW ] = "ç¾å­˜çš„æ¬„ä½(~I)";
-    Text[ ar ] = "~ÇáÍŞæá ÇáãæÌæÏÉ";
-    Text[ nl ] = "~Bestaande velden";
-    Text[ zh ] = "ç°æœ‰çš„å­—æ®µ(~I)";
-    Text[ el ] = "ÕğÜñ÷ïíôá ğåäßá";
-    Text[ ko ] = "ê¸°ì¡´ í•„ë“œ(~I)";
-    Text[ tr ] = "Mev~cut alanlar";
-    Text[ ca ] = "Camps ex~istents";
-    Text[ fi ] = "~Nykyiset kentät";
-    Text[ th ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸¡à¸µ~à¸­à¸¢à¸¹à¹ˆ";
-    Text[ cs ] = "StÃ¡vajÃ­cÃ­ pole";
-    Text[ he ] = "â€®×©×“×•×ª ×§×™×™××™×â€¬";
-    Text[ hi ] = "à¤…à¤¸à¥à¤¤à¤¿~à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤°";
-    Text[ sk ] = "AktuÃ¡lne pol~ia";
-    Text[ hu ] = "M~eglÃ©vÅ‘ mezÅ‘k";
-    Text[ sl ] = "O~bstojeÄa polja";
+    Text [ de ] = "~Verfügbare Felder";
+    Text [ en-US ] = "~Available fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 13
 {
     Text [ de ] = "~Felder im Formular";
     Text [ en-US ] = "Fields in form";
-    Text[ pt ] = "Campos no ~formulário";
-    Text[ ru ] = "Ïîëÿ â ~ôîğìå";
-    Text[ nl ] = "Velden in ~formulier";
-    Text[ fr ] = "Champs du formulaire";
-    Text[ es ] = "~Campos del formulario";
-    Text[ it ] = "Campi nel ~formulario";
-    Text[ da ] = "Felter i formular";
-    Text[ sv ] = "~Fält i formulär";
-    Text[ pl ] = "Pola w formularzu";
-    Text[ pt-BR ] = "Campos no formulário";
-    Text[ ja ] = "ãƒ•ã‚©ãƒ¼ãƒ ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
-    Text[ zh ] = "è¡¨å•å†…çš„å­—æ®µ";
-    Text[ zh-TW ] = "è¡¨å–®ä¹‹ä¸­çš„æ¬„ä½";
-    Text[ ar ] = "ÍŞæá ~ÇáÇÓÊãÇÑÉ";
-    Text[ nl ] = "Velden in ~formulier";
-    Text[ zh ] = "è¡¨å•å†…çš„å­—æ®µ";
-    Text[ el ] = "Ğåäßá ìİóá óôç öüñìá";
-    Text[ ko ] = "ì–‘ì‹ í•„ë“œ";
-    Text[ tr ] = "Formdaki alanlar";
-    Text[ ca ] = "Camps del formulari";
-    Text[ fi ] = "Lomakkeen kentät";
-    Text[ th ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸™à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
-    Text[ cs ] = "Pole ve formulÃ¡Å™i";
-    Text[ he ] = "â€®×©×“×•×ª ×‘×˜×•×¤×¡â€¬";
-    Text[ hi ] = "à¤«à¤¼à¥‰à¤°à¥à¤® à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤°";
-    Text[ sk ] = "Polia vo formulÃ¡ri";
-    Text[ hu ] = "MezÅ‘k az Å±rlapon";
-    Text[ sl ] = "Polja v obrazcu";
 };
 
-String RID_DB_FORM_WIZARD_START + 14
-{
-    Text [ de ] = "~Stil";
-    Text [ en-US ] = "~Layout";
-    Text[ pt ] = "~Estilo";
-    Text[ ru ] = "~Ğàçìåòêà";
-    Text[ nl ] = "~Stijl";
-    Text[ fr ] = "Style";
-    Text[ es ] = "~Estilo";
-    Text[ it ] = "~Stile";
-    Text[ da ] = "~Layout";
-    Text[ sv ] = "~Stil";
-    Text[ pl ] = "~Uk³ad";
-    Text[ pt-BR ] = "~Layout";
-    Text[ ja ] = "ã‚¹ã‚¿ã‚¤ãƒ«(~L)";
-    Text[ zh ] = "å¼æ ·(~L)";
-    Text[ zh-TW ] = "é¢¨æ ¼(~L)";
-    Text[ ar ] = "~ÇáäãØ";
-    Text[ nl ] = "~Stijl";
-    Text[ zh ] = "å¼æ ·(~L)";
-    Text[ el ] = "~Óôõë";
-    Text[ ko ] = "ë ˆì´ì•„ì›ƒ(~L)";
-    Text[ tr ] = "~Yerleşim";
-    Text[ ca ] = "~Format";
-    Text[ fi ] = "~Asettelu";
-    Text[ th ] = "à¹€~à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡";
-    Text[ cs ] = "Vzhled";
-    Text[ he ] = "â€®×¤×¨×™×¡×” (×¢×™×¦×•×‘ ×“×£)â€¬";
-    Text[ hi ] = "~à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-    Text[ sk ] = "VzhÄ¾a~d";
-    Text[ hu ] = "~ElrendezÃ©s";
-    Text[ sl ] = "~Postavitev";
-};
-
-String RID_DB_FORM_WIZARD_START + 15
-{
-    Text [ de ] = "S~paltenorientiert";
-    Text [ en-US ] = "Column-oriented";
-    Text[ pt ] = "Em ~colunas";
-    Text[ ru ] = "Ñòîëáöû";
-    Text[ nl ] = "~Kolomgeöriënteerd";
-    Text[ fr ] = "En c~olonnes";
-    Text[ es ] = "En ~columnas";
-    Text[ it ] = "~Orientato a colonna";
-    Text[ da ] = "Kolonneorienteret";
-    Text[ sv ] = "~Kolumnorienterad";
-    Text[ pl ] = "W postaci kolumn";
-    Text[ pt-BR ] = "Orientado por colunas";
-    Text[ ja ] = "åˆ—æ–¹å‘";
-    Text[ zh ] = "æŒ‰ç…§åˆ—";
-    Text[ zh-TW ] = "æŒ‰ç…§æ¬„";
-    Text[ ar ] = "Úáì Ôßá ~ÃÚãÏÉ";
-    Text[ nl ] = "~Kolomgeöriënteerd";
-    Text[ zh ] = "æŒ‰ç…§åˆ—";
-    Text[ el ] = "~Ğñïóáíáôïëéóìüò óôŞëçò";
-    Text[ ko ] = "ì—´ ë°©í–¥";
-    Text[ tr ] = "Ortantılı-sütun";
-    Text[ ca ] = "Orientat a columna";
-    Text[ fi ] = "Sarakesuunnattu";
-    Text[ th ] = "à¸§à¸²à¸‡à¹à¸™à¸§à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-    Text[ cs ] = "ZamÄ›Å™enÃ½ na sloupce";
-    Text[ he ] = "â€®×œ×¤×™ ×¢××•×“×™×â€¬";
-    Text[ hi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤…à¤¨à¥à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤";
-    Text[ sk ] = "StÄºpcovÃ½";
-    Text[ hu ] = "OszloporientÃ¡lt";
-    Text[ sl ] = "StolpiÄno usmerjeno";
-};
-
-String RID_DB_FORM_WIZARD_START + 16
-{
-    Text [ de ] = "~Optimiert";
-    Text [ en-US ] = "~Optimized";
-    Text[ pt ] = "~Optimizado";
-    Text[ ru ] = "~Îïòèìàëüíî";
-    Text[ nl ] = "~Geoptimaliseerd";
-    Text[ fr ] = "~Optimisé";
-    Text[ es ] = "~Optimizado";
-    Text[ it ] = "~Ottimizzato";
-    Text[ da ] = "~Optimeret";
-    Text[ sv ] = "~Optimerad";
-    Text[ pl ] = "~Optymalny";
-    Text[ pt-BR ] = "~Otimizado";
-    Text[ ja ] = "æœ€é©åŒ–(~O)";
-    Text[ zh ] = "å·²æœ€ä½³åŒ–(~O)";
-    Text[ zh-TW ] = "æœ€é©åŒ–(~O)";
-    Text[ ar ] = "~Úáì äÍæ ÃãËá";
-    Text[ nl ] = "~Geoptimaliseerd";
-    Text[ zh ] = "å·²æœ€ä½³åŒ–(~O)";
-    Text[ el ] = "Âåëôéùìİí~ï";
-    Text[ ko ] = "ìµœì í™”ë¨(~O)";
-    Text[ tr ] = "~Optimize edilmiş";
-    Text[ ca ] = "~Optimitzat";
-    Text[ fi ] = "~Optimoitu";
-    Text[ th ] = "~à¸—à¸³à¹ƒà¸«à¹‰à¹€à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-    Text[ cs ] = "OptimalizovanÃ½";
-    Text[ he ] = "â€®××™×•×¢×œâ€¬";
-    Text[ hi ] = "~à¤¯à¥‹à¤—à¥à¤¯ à¤•à¥€ à¤¹à¥à¤¯à¥€";
-    Text[ sk ] = "~OptimalizovanÃ½";
-    Text[ hu ] = "~OptimalizÃ¡lt";
-    Text[ sl ] = "~Optimirano";
-};
-
-String RID_DB_FORM_WIZARD_START + 17
-{
-    Text [ de ] = "~Tabellarisch";
-    Text [ en-US ] = "~Tabular";
-    Text[ pt ] = "~Em tabela";
-    Text[ ru ] = "~Òàáëèöà";
-    Text[ nl ] = "~Tabelvorm";
-    Text[ fr ] = "En ~tableau";
-    Text[ es ] = "~Como tabla";
-    Text[ it ] = "~Tabellare";
-    Text[ da ] = "~Tabellarisk";
-    Text[ sv ] = "I t~abellform";
-    Text[ pl ] = "W postaci ~tabeli";
-    Text[ pt-BR ] = "~Em tabela";
-    Text[ ja ] = "è¡¨ã«ã—ã¦(~T)";
-    Text[ zh ] = "è¡¨æ ¼å¼(~T)";
-    Text[ zh-TW ] = "è¡¨æ ¼å¼(~T)";
-    Text[ ar ] = "Úáì Ôßá ~ÌÏæá";
-    Text[ nl ] = "~Tabelvorm";
-    Text[ zh ] = "è¡¨æ ¼å¼(~T)";
-    Text[ el ] = "Óå ~ìïñöŞ ğßíáêá";
-    Text[ ko ] = "í‘œ í˜•ì‹(~T)";
-    Text[ tr ] = "~Cetvel";
-    Text[ ca ] = "~Tabular";
-    Text[ fi ] = "~Taulukkomuotoinen";
-    Text[ th ] = "à¹~à¸šà¸šà¸•à¸²à¸£à¸²à¸‡";
-    Text[ cs ] = "TabulkovÃ½";
-    Text[ he ] = "â€®×˜×‘×œ××™â€¬";
-    Text[ hi ] = "~à¤•à¥à¤°à¤®à¤¬à¤¦à¥à¤§à¥";
-    Text[ sk ] = "~TabuÄ¾kovÃ½";
-    Text[ hu ] = "~TÃ¡blÃ¡zatos";
-    Text[ sl ] = "V obliki ~tabele";
-};
-
-String RID_DB_FORM_WIZARD_START + 18
-{
-    Text [ de ] = "Titel / ~Daten";
-    Text [ en-US ] = "Title / ~Data";
-    Text[ pt ] = "Título / ~Dados";
-    Text[ ru ] = "Çàãîëîâîê / ~Äàííûå";
-    Text[ nl ] = "Naam / ~gegevens";
-    Text[ fr ] = "Titre / ~Données";
-    Text[ es ] = "Título / ~Datos";
-    Text[ it ] = "Titolo / ~dati";
-    Text[ da ] = "Titel / ~Data";
-    Text[ sv ] = "Titel/~data";
-    Text[ pl ] = "Tytu³/~Dane";
-    Text[ pt-BR ] = "Título / ~Dados";
-    Text[ ja ] = "ã‚¿ã‚¤ãƒˆãƒ«ã¨ãƒ‡ãƒ¼ã‚¿(~D)";
-    Text[ zh ] = "æ ‡é¢˜/æ•°æ®(~D)";
-    Text[ zh-TW ] = "æ¨™é¡Œå’Œè³‡æ–™(~D)";
-    Text[ ar ] = "ÇáÚäæÇä / ~ÇáÈíÇäÇÊ";
-    Text[ nl ] = "Naam / ~gegevens";
-    Text[ zh ] = "æ ‡é¢˜/æ•°æ®(~D)";
-    Text[ el ] = "Ôßôëïò / ~Äåäïìİíá";
-    Text[ ko ] = "ì œëª©/ë°ì´í„°(~D)";
-    Text[ tr ] = "Başlık / ~Veri";
-    Text[ language_user1 ] = " ";
-    Text[ ca ] = "Títol / ~Dades";
-    Text[ fi ] = "Otsikko/~tiedot";
-    Text[ th ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡ / ~à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ cs ] = "Titulek / Data";
-    Text[ he ] = "â€®×›×•×ª×¨×ª\\× ×ª×•× ×™×â€¬";
-    Text[ hi ] = "à¤¶à¥€à¤°à¥à¤·à¤• / ~à¤¡à¥‰à¤Ÿà¤¾";
-    Text[ sk ] = "Nadpis / ~DÃ¡ta";
-    Text[ hu ] = "CÃ­m/A~dat";
-    Text[ sl ] = "Naslov / Pod~atki";
-};
 
 String RID_DB_FORM_WIZARD_START + 19
 {
-    Text [ de ] = "~Nebeneinander";
-    Text [ en-US ] = "~Tile";
-    Text[ pt ] = "~Lado a lado";
-    Text[ ru ] = "~Ğÿäîì";
-    Text[ nl ] = "~Naast elkaar";
-    Text[ fr ] = "~Juxtaposer";
-    Text[ es ] = "~Mosaico";
-    Text[ it ] = "~Uno accanto all'altro";
-    Text[ da ] = "~Side om side";
-    Text[ sv ] = "~Bredvid varandra";
-    Text[ pl ] = "~S¹siaduj¹co";
-    Text[ pt-BR ] = "~Lado a lado";
-    Text[ ja ] = "æ¨ªç¶šã(~T)";
-    Text[ zh ] = "å¹¶æ’(~T)";
-    Text[ zh-TW ] = "ä¸¦æ’(~T)";
-    Text[ ar ] = "~ÊÌÇäÈ";
-    Text[ nl ] = "~Naast elkaar";
-    Text[ zh ] = "å¹¶æ’(~T)";
-    Text[ el ] = "Óå ğáñÜèåóç";
-    Text[ ko ] = "ë°”ë‘‘íŒì‹ ë°°ì¹˜(~T)";
-    Text[ tr ] = "~Döşe";
-    Text[ ca ] = "~Títol";
-    Text[ fi ] = "~Vierekkäin";
-    Text[ th ] = "~à¸‹à¹‰à¸­à¸™à¸—à¸±à¸š";
-    Text[ cs ] = "DlÃ¡Å¾dÄ›nÃ½";
-    Text[ he ] = "â€®×¤×¨×™×¡×” ×œ×œ× ×—×¤×™×¤×”â€¬";
-    Text[ hi ] = "~à¤Ÿà¤‡à¤²";
-    Text[ sk ] = "~DlÃ¡Å¾denÃ½";
-    Text[ hu ] = "~Mozaik";
-    Text[ sl ] = "Razpos~tavi";
+    Text [ de ] = "Die Verknüpfung '<FIELDNAME1>' und '<FIELDNAME2>' wurde zweimal ausgewählt.\nVerknüpfungen können aber nur einmal benutzt werden.";
+    Text [ en-US ] = "The join '<FIELDNAME1>' and '<FIELDNAME2>' has been selected twice.\nBut joins may only be used once.";
 };
 
 String RID_DB_FORM_WIZARD_START + 20
 {
-    Text [ de ] = "~Übereinander";
-    Text [ en-US ] = "~Stacked";
-    Text[ pt ] = "~Empilhar";
-    Text[ ru ] = "~Ïîâåğõ";
-    Text[ nl ] = "~Gestapeld";
-    Text[ fr ] = "~Empiler";
-    Text[ es ] = "~Apilado";
-    Text[ it ] = "Sovrapposti";
-    Text[ da ] = "~Over hinanden";
-    Text[ sv ] = "~Över varandra";
-    Text[ pl ] = "~Jeden nad drugim";
-    Text[ pt-BR ] = "~Empilhado";
-    Text[ ja ] = "ç¸¦ç¶šã(~S)";
-    Text[ zh ] = "é‡å (~S)";
-    Text[ zh-TW ] = "é‡ç–Š(~S)";
-    Text[ ar ] = "~ÊÑÇßã";
-    Text[ nl ] = "~Gestapeld";
-    Text[ zh ] = "é‡å (~S)";
-    Text[ el ] = "Óå ~óôïßâá";
-    Text[ ko ] = "ëˆ„ì (~S)";
-    Text[ tr ] = "~Kümelendi";
-    Text[ ca ] = "~Apilats";
-    Text[ fi ] = "~Pinottu";
-    Text[ th ] = "~à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
-    Text[ cs ] = "Co nejplnÄ›jÅ¡Ã­";
-    Text[ he ] = "â€®×—×•×¤×¤×™×â€¬";
-    Text[ hi ] = "~à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¥€ à¤¹à¥à¤¯à¥€";
-    Text[ sk ] = "Kumulo~vanÃ½";
-    Text[ hu ] = "~Halmozott";
-    Text[ sl ] = "~NaloÅ¾eno";
+    Text [ de ] = "Erstes untergeordnetes Feld";
+    Text [ en-US ] = "~First joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 21
 {
-    Text [ de ] = "~Seitenvorlagen";
-    Text [ en-US ] = "~Page Styles";
-    Text[ pt ] = "~Estilos de página";
-    Text[ ru ] = "~Ñòèëè ñòğàíèöû";
-    Text[ nl ] = "~Pagina-opmaakprofielen";
-    Text[ fr ] = "~Styles de page";
-    Text[ es ] = "~Estilos de página";
-    Text[ it ] = "~Modelli di pagina";
-    Text[ da ] = "~Sidetypografier";
-    Text[ sv ] = "~Sidformatmallar";
-    Text[ pl ] = "Style ~strony";
-    Text[ pt-BR ] = "~Estilos de Página";
-    Text[ ja ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«(~P)";
-    Text[ zh ] = "é¡µé¢æ ·å¼(~P)";
-    Text[ zh-TW ] = "é é¢æ¨£å¼(~P)";
-    Text[ ar ] = "~ŞæÇáÈ ÕİÍÉ";
-    Text[ nl ] = "~Pagina-opmaakprofielen";
-    Text[ zh ] = "é¡µé¢æ ·å¼(~P)";
-    Text[ el ] = "Óôõë óå~ëßäùí";
-    Text[ ko ] = "í˜ì´ì§€ ìŠ¤íƒ€ì¼(~P)";
-    Text[ tr ] = "~Sayfa Biçemleri";
-    Text[ language_user1 ] = " ";
-    Text[ ca ] = "~Estil de pàgina";
-    Text[ fi ] = "~Sivutyylit";
-    Text[ th ] = "à¸¥à¸±à¸à¸©à¸“à¸°~à¸«à¸™à¹‰à¸²";
-    Text[ cs ] = "FormÃ¡ty strÃ¡nek";
-    Text[ he ] = "â€®×¡×’× ×•× ×•×ª ×“×¤×™×â€¬";
-    Text[ hi ] = "~à¤ªà¥ƒà¤·à¥à¤  à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
-    Text[ sk ] = "Å tÃ½ly st~rÃ¡nky";
-    Text[ hu ] = "~OldalstÃ­lusok";
-    Text[ sl ] = "Slogi s~trani";
+    Text [ de ] = "Zweites untergeordnetes Feld";
+    Text [ en-US ] = "~Second joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 22
 {
-    Text [ de ] = "Geben Sie den Titel ein";
-    Text [ en-US ] = "Enter the title";
-    Text[ pt ] = "Indique o título";
-    Text[ ru ] = "~Ââåäèòå çàãîëîâîê";
-    Text[ nl ] = "Geef de titel op";
-    Text[ fr ] = "Titre du document";
-    Text[ es ] = "Escriba el título";
-    Text[ it ] = "Indicate un titolo per il documento";
-    Text[ da ] = "Indtast titlen.";
-    Text[ sv ] = "Ange rubriken";
-    Text[ pl ] = "WprowadŸ tytu³";
-    Text[ pt-BR ] = "Entre com o título";
-    Text[ ja ] = "ã‚¿ã‚¤ãƒˆãƒ«ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„";
-    Text[ zh ] = "è¯·æ‚¨è¾“å…¥ä¸€ä¸ªæ ‡é¢˜";
-    Text[ zh-TW ] = "è«‹è¼¸å…¥ä¸€å€‹æ–‡ä»¶æ¨™é¡Œ";
-    Text[ ar ] = "~ÚäæÇä ÇáãÓÊäÏ";
-    Text[ nl ] = "Geef de titel op";
-    Text[ zh ] = "è¯·æ‚¨è¾“å…¥ä¸€ä¸ªæ ‡é¢˜";
-    Text[ el ] = "ÅéóáãÜãåôå ôïí ôßôëï";
-    Text[ ko ] = "ë¬¸ì„œ ì œëª©ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
-    Text[ tr ] = "~Belge başlığı girinzi";
-    Text[ ca ] = "Títol del ~document";
-    Text[ fi ] = "Anna otsikko";
-    Text[ th ] = "à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
-    Text[ cs ] = "Zadejte titulek";
-    Text[ he ] = "â€®×”×›× ×¡×ª ×›×•×ª×¨×ªâ€¬";
-    Text[ hi ] = "à¤¶à¥€à¤°à¥à¤·à¤• à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¤°à¥‹";
-    Text[ sk ] = "Zadajte nadpis";
-    Text[ hu ] = "Ãrja be a cÃ­met";
-    Text[ sl ] = "Vnesite naslov";
+    Text [ de ] = "Drittes untergeordnetes Feld";
+    Text [ en-US ] = "~Third joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 23
 {
-    Text [ de ] = "~Nach der Fertigstellung...";
-    Text [ en-US ] = "~After completion...";
-    Text[ pt ] = "~Depois de pronto...";
-    Text[ ru ] = "~Ïîñëå âûïîëíåíèÿ...";
-    Text[ nl ] = "Na ~voltooiing...";
-    Text[ fr ] = "~Après génération...";
-    Text[ es ] = "~Tras la creación...";
-    Text[ it ] = "~Dopo il completamento...";
-    Text[ da ] = "~Efter færdiggørelse...";
-    Text[ sv ] = "~När det är färdigt...";
-    Text[ pl ] = "~Po ukoñczeniu...";
-    Text[ pt-BR ] = "~Depois da conclusão";
-    Text[ ja ] = "å®Œäº†å¾Œ(~A)...";
-    Text[ zh ] = "å®Œæˆä¹‹å(~A)...";
-    Text[ zh-TW ] = "åœ¨å®Œæˆä¹‹å¾Œ(~A)...";
-    Text[ ar ] = "~ÈÚÏ ÇáÅäÔÇÁ...";
-    Text[ nl ] = "Na ~voltooiing...";
-    Text[ zh ] = "å®Œæˆä¹‹å(~A)...";
-    Text[ el ] = "ÌåôÜ ôç~í ïëïêëŞñùóç...";
-    Text[ ko ] = "ì™„ë£Œ í›„(~A)...";
-    Text[ tr ] = "Tamamlamadan ~sonra...";
-    Text[ ca ] = "~En acabar...";
-    Text[ fi ] = "Valmistumisen ~jälkeen...";
-    Text[ th ] = "~à¸«à¸¥à¸±à¸‡à¸ˆà¸²à¸à¹€à¸ªà¸£à¹‡à¸ˆà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ...";
-    Text[ cs ] = "Po dokonÄenÃ­...";
-    Text[ he ] = "â€®×œ××—×¨ ×¡×™×•×...â€¬";
-    Text[ hi ] = "à¤¸à¤®à¤¾à¤ªà¥à¤¤à¥€ à¤•à¥‡ ~à¤ªà¤¶à¥à¤šà¤¾à¤¤...";
-    Text[ sk ] = "Po ukonÄ~enÃ­...";
-    Text[ hu ] = "~BefejezÃ©s utÃ¡n...";
-    Text[ sl ] = "~Ko konÄaÅ¡...";
+    Text [ de ] = "Viertes untergeordnetes Feld";
+    Text [ en-US ] = "~Fourth joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 24
 {
-    Text [ de ] = "Dokument ~sofort benutzen";
-    Text [ en-US ] = "Use document immediately";
-    Text[ pt ] = "Utilizar ~documento de imediato";
-    Text[ ru ] = "Èñïîëüçîâàòü äîêóìåíò ~ñğàçó";
-    Text[ nl ] = "Document ~meteen gebruiken";
-    Text[ fr ] = "A~fficher le document";
-    Text[ es ] = "~Utilizar documento inmediatamente";
-    Text[ it ] = "Utili~zza subito il documento";
-    Text[ da ] = "Anvend dokument omgående";
-    Text[ sv ] = "Använd d~okument direkt";
-    Text[ pl ] = "U¿yj dokumentu od razu";
-    Text[ pt-BR ] = "Use o documento imediatamente";
-    Text[ ja ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ã™ãã«ä½¿ç”¨";
-    Text[ zh ] = "ç«‹åˆ»ä½¿ç”¨æ–‡æ¡£";
-    Text[ zh-TW ] = "ç«‹åˆ»ä½¿ç”¨æ–‡ä»¶";
-    Text[ ar ] = "~ÇÓÊÎÏÇã ÇáãÓÊäÏ İæÑÇğ";
-    Text[ nl ] = "Document ~meteen gebruiken";
-    Text[ zh ] = "ç«‹åˆ»ä½¿ç”¨æ–‡æ¡£";
-    Text[ el ] = "¢ìå~óç ÷ñŞóç åããñÜöïõ";
-    Text[ ko ] = "ë¬¸ì„œ ì¦‰ì‹œ ì‚¬ìš©";
-    Text[ tr ] = "Hemen belgeyi kullan";
-    Text[ ca ] = "utilitza el document immediatament";
-    Text[ fi ] = "käytä asiakirjaa heti";
-    Text[ th ] = "à¹ƒà¸Šà¹‰à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸±à¸™à¸—à¸µ";
-    Text[ cs ] = "ZaÄÃ­t ihned pracovat s dokumentem";
-    Text[ he ] = "â€®×©×™××•×© ××™×™×“×™ ×‘××¡××šâ€¬";
-    Text[ hi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤¤à¥à¤°à¤‚à¤¤ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¥‹";
-    Text[ sk ] = "ZaÄaÅ¥ ihneÄ pracovaÅ¥ s dokumentom";
-    Text[ hu ] = "Dokumentum azonnali felhasznÃ¡lÃ¡sa";
-    Text[ sl ] = "Takoj uporabi dokument";
+    Text [ de ] = "Erstes übergeordnetes Feld";
+    Text [ en-US ] = "F~irst joined main form field";
 };
 
 String RID_DB_FORM_WIZARD_START + 25
 {
-    Text [ de ] = "Dokument ~ablegen";
-    Text [ en-US ] = "Save document";
-    Text[ pt ] = "~Guardar documento";
-    Text[ ru ] = "Ñîõğàíèòü äîêóìåíò";
-    Text[ nl ] = "document ~opslaan";
-    Text[ fr ] = "Enregistrer le document";
-    Text[ es ] = "~Guardar el documento";
-    Text[ it ] = "~Salva il documento";
-    Text[ da ] = "Gem dokument";
-    Text[ sv ] = "~Arkivera dokument";
-    Text[ pl ] = "Zapisz ~dokument";
-    Text[ pt-BR ] = "Salvar o documento";
-    Text[ ja ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ ¼ç´";
-    Text[ zh ] = "å­˜ç›˜æ–‡æ¡£";
-    Text[ zh-TW ] = "å„²å­˜æ–‡ä»¶";
-    Text[ ar ] = "~ÍİÙ ÇáãÓÊäÏ";
-    Text[ nl ] = "document ~opslaan";
-    Text[ zh ] = "å­˜ç›˜æ–‡æ¡£";
-    Text[ el ] = "~ÁğïèŞêåõóç åããñÜöïõ";
-    Text[ ko ] = "ë¬¸ì„œ ì €ì¥";
-    Text[ tr ] = "Belgeyi kaydet";
-    Text[ ca ] = "desa el document";
-    Text[ fi ] = "Tallenna asiakirja";
-    Text[ th ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ cs ] = "UloÅ¾it dokument";
-    Text[ he ] = "â€®×©××™×¨×ª ××¡××šâ€¬";
-    Text[ hi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-    Text[ sk ] = "UloÅ¾iÅ¥ dokument";
-    Text[ hu ] = "Dokumentum mentÃ©se";
-    Text[ sl ] = "Shrani dokument";
+    Text [ de ] = "Zweites übergeordnetes Feld";
+    Text [ en-US ] = "S~econd joined main form field";
 };
 
 String RID_DB_FORM_WIZARD_START + 26
 {
-    Text [ de ] = "Das Formular wurde erstellt und in der Datenbank abgelegt.";
-    Text [ en-US ] = "The form has been created and saved in the database.";
-    Text[ pt ] = "O formulário foi criado e guardado na base de dados.";
-    Text[ el ] = "Ç öüñìá äçìéïõñãŞèçêå êáé áğïèçêåıôçêå óôç âÜóç äåäïìİíùí.";
-    Text[ nl ] = "Het formulier is gemaakt en opgeslagen in de database.";
-    Text[ fr ] = "Le formulaire a été créé et archivé dans la base de données.";
-    Text[ es ] = "El formulario se creó y guardó en la base de datos.";
-    Text[ sv ] = "Formuläret har skapats och arkiverats i databasen.";
-    Text[ ru ] = "Ôîğìà ñîçäàíà è ïîìåùåíà â áàçó äàííûõ.";
-    Text[ it ] = "Il formulario è stato creato e salvato nel database.";
-    Text[ da ] = "Formularen blev oprettet og gemt i databasen.";
-    Text[ pl ] = "Formularz zosta³ utworzony i zapisany w bazie danych.";
-    Text[ pt-BR ] = "O formulário foi criado e salvo no banco de dados.";
-    Text[ ja ] = "ãƒ•ã‚©ãƒ¼ãƒ ã¯ä½œæˆã•ã‚Œãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«æ ¼ç´ã•ã‚Œã¦ã„ã¾ã™ã€‚";
-    Text[ ko ] = "ì–‘ì‹ì€ ì‘ì„±ë˜ì–´ ë°ì´í„°ë² ì´ìŠ¤ì— ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤.";
-    Text[ zh ] = "è¿™ä¸ªè¡¨å•å·²ç»å»ºç«‹ä¸”å­˜ç›˜åœ¨æ•°æ®åº“å†…ã€‚";
-    Text[ zh-TW ] = "åœ¨è³‡æ–™åº«å…§å·²ç¶“å»ºç«‹å’Œå„²å­˜äº†é€™å€‹è¡¨å–®ã€‚";
-    Text[ ar ] = "Êã ÅäÔÇÁ ÇáÇÓÊãÇÑÉ æÍİÙåÇ İí ŞÇÚÏÉ ÇáÈíÇäÇÊ.";
-    Text[ tr ] = "Form oluşturuldu ve veritabanına eklendi.";
-    Text[ language_user1 ] = " ";
-    Text[ ca ] = "S'ha creat el formulari i s'ha desat en la base de dades.";
-    Text[ fi ] = "Lomake on luotu ja tallennettu tietokantaan.";
-    Text[ th ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸–à¸¹à¸à¸ªà¸£à¹‰à¸²à¸‡à¹à¸¥à¸°à¸šà¸±à¸™à¸—à¸¶à¸à¹ƒà¸™à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¥à¹‰à¸§";
-    Text[ cs ] = "FormulÃ¡Å™ byl vytvoÅ™en a uloÅ¾en do databÃ¡ze.";
-    Text[ he ] = "â€®×”×˜×•×¤×¡ × ×•×¦×¨ ×•× ×©××¨ ×‘××¡×“ ×”× ×ª×•× ×™×.â€¬";
-    Text[ hi ] = "The form has been created and saved in the database.";
-    Text[ sk ] = "FormulÃ¡r bol vytvorenÃ½ a uloÅ¾enÃ½ v rÃ¡mci databÃ¡ze.";
-    Text[ hu ] = "Az Å±rlap elkÃ©szÃ¼lt Ã©s bekerÃ¼lt az adatbÃ¡zisba.";
-    Text[ sl ] = "Obrazec je bil ustvarjen in shranjen v zbirki podatkov.";
+    Text [ de ] = "Drittes übergeordnetes Feld";
+    Text [ en-US ] = "T~hird joined main form field";
 };
 
 String RID_DB_FORM_WIZARD_START + 27
 {
-    Text [ de ] = "Formular-Namen dürfen maximal 32 Zeichen lang sein.";
-    Text [ en ] = "Form names must not contain more than 32 characters.";
-    Text [ en-US ] = "Form names cannot be longer than 32 characters.";
-    Text[ pt ] = "Os nomes de formulários só podem ter um máximo de 32 caracteres.";
-    Text[ ru ] = "Èìåíà ôîğìû äîëæíû ñîäåğæàòü íå áîëåå 32 ñèìâîëîâ.";
-    Text[ el ] = "Ôï ìŞêïò ôïõ ïíüìáôïò ôçò öüñìáò äåí ğñİğåé íá õğåñâáßíåé ôïõò 32 ÷áñáêôŞñåò.";
-    Text[ nl ] = "Formuliernamen mogen maximaal 32 tekens lang zijn.";
-    Text[ fr ] = "Un nom de formulaire peut contenir au maximum 32 caractères.";
-    Text[ es ] = "Los nombres de los formularios no pueden exceder los 32 caracteres.";
-    Text[ it ] = "I nomi del formulario possono avere una lunghezza massima di 32 caratteri.";
-    Text[ da ] = "Formularnavne må højst indeholde 32 tegn.";
-    Text[ sv ] = "Formulärnamn får inte innehålla mer än 32 tecken.";
-    Text[ pl ] = "Nazwy formularzy mog¹ siê sk³adaæ maksymalnie z 32 znaków.";
-    Text[ pt-BR ] = "Os nomes de formulários não podem ter mais de 32 caracteres.";
-    Text[ ja ] = "ãƒ•ã‚©ãƒ¼ãƒ åã¯æœ€é«˜32æ–‡å­—ã¾ã§ã§ã™ã€‚";
-    Text[ ko ] = "ìˆ˜ì‹ ì´ë¦„ì˜ ê¸¸ì´ê°€ ìµœëŒ€ 32ìë¥¼ ì´ˆê³¼í•´ì„œëŠ” ì•ˆë©ë‹ˆë‹¤.";
-    Text[ zh ] = "è¡¨å•åç§°æœ€å¤šåªèƒ½ç”±32ä¸ªå­—ç¬¦ç»„æˆã€‚";
-    Text[ zh-TW ] = "å ±è¡¨åç¨±æœ€é•·ä¸å¾—è¶…é32å€‹å­—å…ƒã€‚";
-    Text[ ar ] = "íÌÈ ÃáÇ íÒíÏ Øæá ÃÓãÇÁ ÇáÇÓÊãÇÑÉ Úä 32 ÍÑİÇğ.";
-    Text[ tr ] = "Form adı 32 karakterden fazla olmamalı.";
-    Text[ ca ] = "Els noms dels formularis no poden ser més llargs de 32 caràcters.";
-    Text[ fi ] = "Lomakkeiden nimet eivät saa olla yli 32 merkin pituisia.";
-    Text[ th ] = "à¸Šà¸·à¹ˆà¸­à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸•à¹‰à¸­à¸‡à¸¢à¸²à¸§à¹„à¸¡à¹ˆà¹€à¸à¸´à¸™ 32 à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-    Text[ cs ] = "NÃ¡zvy formulÃ¡Å™Å¯ nemohou bÃ½t delÅ¡Ã­ neÅ¾ 32 znakÅ¯.";
-    Text[ he ] = "â€®×©××•×ª ×˜×¤×¡×™× ×¢×“ 32 ×ª×•×•×™× ×‘×œ×‘×“.â€¬";
-    Text[ hi ] = "à¤«à¤¼à¥‰à¤°à¥à¤® à¤•à¤¾ à¤¨à¤¾à¤® 32 à¤…à¤•à¥à¤·à¤° à¤¸à¥‡ à¤…à¤§à¤¿à¤• à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    Text[ sk ] = "NÃ¡zvy formulÃ¡rov nesmÃº presiahnuÅ¥ 32 znakov.";
-    Text[ hu ] = "Az Å±rlap neve nem haladhatja meg a 32 karaktert.";
-    Text[ sl ] = "Imena obrazcev ne smejo presegati 32 znakov.";
+    Text [ de ] = "Viertes übergeordnetes Feld";
+    Text [ en-US ] = "F~ourth joined main form field";
 };
+
+
 
 String RID_DB_FORM_WIZARD_START + 28
 {
     Text [ de ] = "Feldumrandung";
-    Text [ en ] = "Controlframes";
     Text [ en-US ] = "Field border";
-    Text[ pt ] = "Contornos de campos";
-    Text[ ru ] = "Îáğàìëåíèå ïîëÿ";
-    Text[ el ] = "Ğåñßãñáììá ğåäßïõ";
-    Text[ nl ] = "Veldomranding";
-    Text[ fr ] = "Bordure de champ";
-    Text[ es ] = "Borde del campo";
-    Text[ it ] = "Bordo campo";
-    Text[ da ] = "Feltkant";
-    Text[ sv ] = "Fältinramning";
-    Text[ pl ] = "KrawêdŸ pola";
-    Text[ pt-BR ] = "Bordas dos campos";
-    Text[ ja ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æ ";
-    Text[ ko ] = "í•„ë“œ í…Œë‘ë¦¬";
-    Text[ zh ] = "å­—æ®µè¾¹æ¡†";
-    Text[ zh-TW ] = "æ¬„ä½é‚Šæ¡†";
-    Text[ tr ] = "Alan sınırları";
-    Text[ ar ] = "ßÇÏÑ ÇáÍŞá¡ Ãæ ÍÏæÏ ÇáÍŞá¿¿¿¿ ŞÇÑä ÑŞã 47566";
-    Text[ ca ] = "Vora de camp";
-    Text[ fi ] = "Kentän reunat";
-    Text[ th ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸šà¸‚à¸­à¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ cs ] = "Okraje polÃ­Äek";
-    Text[ he ] = "â€®×’×‘×•×œ×•×ª ×©×“×”â€¬";
-    Text[ hi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¤¿à¤¨à¤¾à¤°à¤¾";
-    Text[ sk ] = "Okraj poÄ¾a";
-    Text[ hu ] = "MezÅ‘szegÃ©ly";
-    Text[ sl ] = "Obroba polja";
 };
 
 String RID_DB_FORM_WIZARD_START + 29
 {
     Text [ de ] = "Ohne Umrandung";
-    Text [ en ] = "No Border";
     Text [ en-US ] = "No border";
-    Text[ pt ] = "Sem contorno";
-    Text[ ru ] = "Áåç îáğàìëåíèÿ";
-    Text[ el ] = "×ùñßò ğåñßãñáììá";
-    Text[ nl ] = "Geen omranding";
-    Text[ fr ] = "Sans bordure";
-    Text[ es ] = "Sin bordes";
-    Text[ it ] = "Senza bordo";
-    Text[ da ] = "Ingen kant";
-    Text[ sv ] = "Utan inramning";
-    Text[ pl ] = "Bez krawêdzi";
-    Text[ pt-BR ] = "Sem bordas";
-    Text[ ja ] = "æ ãªã—";
-    Text[ ko ] = "í…Œë‘ë¦¬ ì—†ìŒ";
-    Text[ zh ] = "æ— è¾¹æ¡†";
-    Text[ zh-TW ] = "ç„¡é‚Šæ¡†";
-    Text[ tr ] = "Sınır yok";
-    Text[ ar ] = "ÈÏæä ÍÏæÏ¡ Ãæ ÈÏæä ßÇÏÑ¿¿¿¿¿¿¿¿ ŞÇÑä ÑŞã 47565";
-    Text[ ca ] = "Sense vores";
-    Text[ fi ] = "Ei reunusta";
-    Text[ th ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-    Text[ cs ] = "Bez okrajÅ¯";
-    Text[ he ] = "â€®×œ×œ× ×’×‘×•×œ×•×ª ×©×“×”â€¬";
-    Text[ hi ] = "à¤•à¥‹à¤ˆ à¤•à¤¿à¤¨à¤¾à¤°à¤¾ à¤¨à¤¹à¥€à¤‚";
-    Text[ sk ] = "Bez okrajov";
-    Text[ hu ] = "Nincs szegÃ©ly";
-    Text[ sl ] = "Brez obrob";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 30
 {
     Text [ de ] = "3-D Look";
-    Text [ en ] = "3D Look";
     Text [ en-US ] = "3D look";
-    Text[ pt ] = "3D";
-    Text[ ru ] = "Òğåõìåğíûé âèä";
-    Text[ el ] = "¼øç 3Ä";
-    Text[ nl ] = "3D-look";
-    Text[ fr ] = "3D";
-    Text[ es ] = "3D";
-    Text[ it ] = "3D";
-    Text[ da ] = "3-D Udseende";
-    Text[ sv ] = "3D-look";
-    Text[ pl ] = "Trójwymiarowy";
-    Text[ pt-BR ] = "Aparência 3D";
-    Text[ ja ] = "3D ãƒ«ãƒƒã‚¯";
-    Text[ ko ] = "3D Look";
-    Text[ zh ] = "3 ç»´å¤–è§‚";
-    Text[ zh-TW ] = "3D å¤–è§€";
-    Text[ tr ] = "3D görünümü";
-    Text[ ar ] = "ãÙåÑ ËáÇËí ÇáÃÈÚÇÏ";
-    Text[ ca ] = "Aparença 3D";
-    Text[ fi ] = "Kolmiulotteinen ulkoasu";
-    Text[ th ] = "à¸¡à¸­à¸‡à¹à¸šà¸š 3 à¸¡à¸´à¸•à¸´";
-    Text[ cs ] = "3D vzhled";
-    Text[ he ] = "â€®××¨××” ×ª×œ×ª ××™××“×™â€¬";
-    Text[ hi ] = "3D à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ sk ] = "3D vzhÄ¾ad";
-    Text[ hu ] = "TÃ©rhatÃ¡sÃº";
-    Text[ sl ] = "3D izgled";
 };
 
 String RID_DB_FORM_WIZARD_START + 31
 {
     Text [ de ] = "Flach";
-    Text [ en ] = "Flat";
     Text [ en-US ] = "Flat";
-    Text[ pt ] = "Plano";
-    Text[ ru ] = "Ïëîñêèå";
-    Text[ el ] = "Åğßğåäï";
-    Text[ nl ] = "Plat";
-    Text[ fr ] = "Plat";
-    Text[ es ] = "Planos";
-    Text[ it ] = "Piano";
-    Text[ da ] = "Flad";
-    Text[ sv ] = "Flat";
-    Text[ pl ] = "P³aski";
-    Text[ pt-BR ] = "Plano";
-    Text[ ja ] = "å¹³ãŸã„";
-    Text[ ko ] = "í‰ë©´";
-    Text[ zh ] = "å¹³å‹";
-    Text[ zh-TW ] = "å¹³å‹";
-    Text[ tr ] = "Düz";
-    Text[ ar ] = "ãÓØøÍ";
-    Text[ ca ] = "Pla";
-    Text[ fi ] = "Litteä";
-    Text[ th ] = "à¹à¸šà¸™";
-    Text[ cs ] = "PlochÃ½";
-    Text[ he ] = "â€®×©×˜×•×—â€¬";
-    Text[ hi ] = "à¤¸à¤®à¤¤à¤²";
-    Text[ sk ] = "PlochÃ½";
-    Text[ hu ] = "Lapos";
-    Text[ sl ] = "Plosko";
 };
 
 String RID_DB_FORM_WIZARD_START + 32
 {
-    Text [ de ] = "Ausrichtung der Beschriftungsfelder";
-    Text [ en ] = "Alignment of the labels";
+    Text [ de ] = "Ausrich~tung der Beschriftungsfelder";
     Text [ en-US ] = "Label placement";
-    Text[ pt ] = "Alinhamento de etiquetas";
-    Text[ ru ] = "Ğàñïîëîæåíèå ïîäïèñè";
-    Text[ el ] = "Ôïğïèİôçóç åğéóŞìáíóçò";
-    Text[ nl ] = "Uitlijning van labels";
-    Text[ fr ] = "Alignement des champs d'étiquette";
-    Text[ es ] = "Orientación de los campos de etiquetas";
-    Text[ fi ] = "Selitteiden sijoittelu";
-    Text[ it ] = "Allineamento del campo di testo fisso";
-    Text[ da ] = "Etiketplacering";
-    Text[ sv ] = "Justering av etikettfält";
-    Text[ pl ] = "Po³o¿enie etykiet";
-    Text[ pt-BR ] = "Colocação dos rótulos";
-    Text[ ja ] = "ãƒ©ãƒ™ãƒ«æ›¸ããƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ä½ç½®";
-    Text[ ko ] = "ë ˆì´ë¸” ìœ„ì¹˜ ë§ì¶¤";
-    Text[ zh ] = "æ ‡ç­¾å­—æ®µå¯¹é½";
-    Text[ zh-TW ] = "æ¨™ç±¤æ¬„ä½å°æº–";
-    Text[ tr ] = "Etiket yerleştirme";
-    Text[ language_user1 ] = "; Überschrift einer Option Button Gruppe ";
-    Text[ ar ] = "Alignment";
-    Text[ ca ] = "Alineació";
-    Text[ th ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
-    Text[ cs ] = "UmÃ­stÄ›nÃ­ titulku";
-    Text[ he ] = "â€®××™×§×•× ×ª×•×™×ªâ€¬";
-    Text[ hi ] = "à¤²à¥‡à¤¬à¤¿à¤² à¤¸à¥à¤¥à¤¾à¤¨";
-    Text[ sk ] = "OznaÄenie";
-    Text[ hu ] = "CÃ­mke elhelyezÃ©se";
-    Text[ sl ] = "Postavitev imena polja";
 };
 
 String RID_DB_FORM_WIZARD_START + 33
 {
     Text [ de ] = "Linksbündig";
-    Text [ en ] = "To left edge";
     Text [ en-US ] = "Align left";
-    Text[ pt ] = "Alinhar à esquerda";
-    Text[ ru ] = "Ïî ëåâîìó êğàş";
-    Text[ el ] = "Óôïß÷éóç áñéóôåñÜ";
-    Text[ nl ] = "Links uitlijnen";
-    Text[ fr ] = "Aligner à gauche";
-    Text[ es ] = "Izquierda";
-    Text[ fi ] = "Tasaa vasemmalle";
-    Text[ it ] = "Allinea a sinistra";
-    Text[ da ] = "Venstrejusteret";
-    Text[ sv ] = "Vänsterjusterat";
-    Text[ pl ] = "Wyrównaj do lewej";
-    Text[ pt-BR ] = "Alinhar à esquerda";
-    Text[ ja ] = "å·¦æƒãˆ";
-    Text[ ko ] = "ì™¼ìª½ ë§ì¶¤";
-    Text[ zh ] = "å‘å·¦å¯¹é½";
-    Text[ zh-TW ] = "é å·¦å°é½Š";
-    Text[ tr ] = "Sola doğru ayarlama";
-    Text[ language_user1 ] = "; Label eines Option Buttons";
-    Text[ ar ] = "Align Labels on left Edge";
-    Text[ ca ] = "Esquerra";
-    Text[ th ] = "à¸ˆà¸±à¸”à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸Šà¸´à¸”à¸‚à¸­à¸šà¸‹à¹‰à¸²à¸¢";
-    Text[ cs ] = "Zarovnat vlevo";
-    Text[ he ] = "â€®×™×©×•×¨ ×œ×©×××œâ€¬";
-    Text[ hi ] = "à¤¬à¤¾à¤¯à¤¾à¤ à¤“à¤° à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-    Text[ sk ] = "ZarovnaÅ¥ vÄ¾avo";
-    Text[ hu ] = "Balra igazÃ­tÃ¡s";
-    Text[ sl ] = "Poravnaj levo";
 };
 
 String RID_DB_FORM_WIZARD_START + 34
 {
     Text [ de ] = "Rechtsbündig";
-    Text [ en ] = "To right edge";
     Text [ en-US ] = "Align right";
-    Text[ pt ] = "Alinhar à direita";
-    Text[ ru ] = "Ïî ïğàâîìó êğàş";
-    Text[ el ] = "Óôïß÷éóç äåîéÜ";
-    Text[ nl ] = "Rechts uitlijnen";
-    Text[ fr ] = "Aligner à droite";
-    Text[ es ] = "Derecha";
-    Text[ fi ] = "Tasaa oikealle";
-    Text[ it ] = "Allinea a destra";
-    Text[ da ] = "Højrejusteret";
-    Text[ sv ] = "Högerjusterat";
-    Text[ pl ] = "Wyrównaj do prawej";
-    Text[ pt-BR ] = "Alinhar à direita";
-    Text[ ja ] = "å³æƒãˆ";
-    Text[ ko ] = "ì˜¤ë¥¸ìª½ ë§ì¶¤";
-    Text[ zh ] = "å‘å³å¯¹é½";
-    Text[ zh-TW ] = "é å³å°é½Š";
-    Text[ tr ] = "Sağa doğru ayarlama";
-    Text[ language_user1 ] = "; Label eines Option Buttons";
-    Text[ ar ] = "Align Labels on right Edge";
-    Text[ ca ] = "Dreta";
-    Text[ th ] = "à¸ˆà¸±à¸”à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸Šà¸´à¸”à¸‚à¸­à¸šà¸‚à¸§à¸²";
-    Text[ cs ] = "Zarovnat vpravo";
-    Text[ he ] = "â€®×™×©×•×¨ ×œ×™××™×Ÿâ€¬";
-    Text[ hi ] = "à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤° à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-    Text[ sk ] = "ZarovnaÅ¥ vpravo";
-    Text[ hu ] = "Jobbra igazÃ­tÃ¡s";
-    Text[ sl ] = "Poravnaj desno";
 };
 
 String RID_DB_FORM_WIZARD_START + 35
 {
     Text [ de ] = "Anordnung der DB-Felder";
-    Text [ en ] = "Arrangement of DB Fields";
     Text [ en-US ] = "Arrangement of DB fields";
-    Text[ pt ] = "Diposição dos campos da BD";
-    Text[ ru ] = "Ğàñïîëîæåíèå ïîëåé áàçû äàííûõ";
-    Text[ el ] = "Ôáêôïğïßçóç ôùí ğåäßùí ôçò âÜóçò äåäïìİíùí";
-    Text[ nl ] = "Plaatsing van databasevelden";
-    Text[ fr ] = "Disposition des champs de BD";
-    Text[ es ] = "Disposición de los campos de la base de datos";
-    Text[ fi ] = "Tietokantakenttien järjestys";
-    Text[ it ] = "Assegna i campi DB";
-    Text[ da ] = "DB-felternes justering";
-    Text[ sv ] = "Placering av DB-fält";
-    Text[ pl ] = "Rozmieszczenie pól bazy danych";
-    Text[ pt-BR ] = "Disposição dos campos do banco de dados";
-    Text[ ja ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ•´åˆ—";
-    Text[ ko ] = "DB í•„ë“œ ë°°ì¹˜";
-    Text[ zh ] = "å¯¹é½æ•°æ®åº“å­—æ®µ";
-    Text[ zh-TW ] = "å°é½Šè³‡æ–™åº«æ¬„ä½";
-    Text[ tr ] = "Veritabanı alanlarının ayarlanması";
-    Text[ ar ] = "Arrangement of DB fields";
-    Text[ ca ] = "Ajustament dels camps";
-    Text[ th ] = "à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ DB ";
-    Text[ cs ] = "RozmÃ­stÄ›nÃ­ databÃ¡zovÃ½ch polÃ­";
-    Text[ he ] = "â€®×ª×¦×•×’×ª ×©×“×•×ª ××¡×“ ×”× ×ª×•× ×™×â€¬";
-    Text[ hi ] = "DB à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤•à¥à¤°à¤® à¤®à¥‡à¤‚ à¤°à¤–à¤¨à¤¾";
-    Text[ sk ] = "Usporiadanie z DB polÃ­";
-    Text[ hu ] = "AdatbÃ¡zis mezÅ‘inek elrendezÃ©se";
-    Text[ sl ] = "Razporeditev podatkovnih polj";
 };
 
 String RID_DB_FORM_WIZARD_START + 36
 {
     Text [ de ] = "In Spalten-Beschriftungen links";
-    Text [ en ] = "Columnar - Labels left";
     Text [ en-US ] = "Columnar - Labels Left";
-    Text[ pt ] = "Colunas - Etiquetas à esquerda";
-    Text[ ru ] = "Ñòîëáöû - ïîäïèñè ñëåâà";
-    Text[ el ] = "Óå óôŞëåò - Ïé åğéóçìÜíóåéò áñéóôåñÜ";
-    Text[ nl ] = "In kolommen - labels links";
-    Text[ fr ] = "Colonnes - Étiquettes à gauche";
-    Text[ es ] = "En columnas - Etiquetas a la izquierda";
-    Text[ fi ] = "Sarakkeet - selitteet vasemmalla";
-    Text[ it ] = "In colonna - Testo fisso a sinistra";
-    Text[ da ] = "I kolonner - etiketter til venstre";
-    Text[ sv ] = "I kolumner - etiketter till vänster";
-    Text[ pl ] = "Kolumnowo z etykietami po lewej";
-    Text[ pt-BR ] = "Em Colunas - Rótulos à esquerda";
-    Text[ ja ] = "æ¬„ã§ã€ãƒ©ãƒ™ãƒ«æ›¸ãã¯å·¦ã«";
-    Text[ ko ] = "ì—´ì—ì„œ ë ˆì´ë¸”ì„ ì™¼ìª½ìœ¼ë¡œ";
-    Text[ zh ] = "åœ¨åˆ—å†… - æ ‡ç­¾å‘å·¦";
-    Text[ zh-TW ] = "åœ¨æ¬„ä½å…§ - æ¨™ç±¤å‘å·¦";
-    Text[ tr ] = "Sutunlar halinde, etiketler solda";
-    Text[ ar ] = "Columnar - Labels Left";
-    Text[ ca ] = "Columna - Etiquetes a l'esquerra";
-    Text[ language_user1 ] = "; Help tip";
-    Text[ th ] = "à¹à¸šà¸šà¹€à¸£à¸µà¸¢à¸‡à¹€à¸›à¹‡à¸™à¹à¸™à¸§à¸•à¸£à¸‡ - à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‹à¹‰à¸²à¸¢";
-    Text[ cs ] = "Do sloupcÅ¯ - titulky vlevo";
-    Text[ he ] = "â€®×œ×¤×™ ×¢××•×“×™× - ×ª×•×•×™×•×ª ×œ×©×××œâ€¬";
-    Text[ hi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‡ à¤¸à¤¦à¥ƒà¤¶ - à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚ à¤¬à¤¾à¤¯à¤¾à¤ à¤“à¤°";
-    Text[ sk ] = "Do stÄºpcov - popisy naÄ¾avo";
-    Text[ hu ] = "HasÃ¡bos - CÃ­mkÃ©k a bal oldalon";
-    Text[ sl ] = "StolpiÄno - imena polj levo";
 };
 
 String RID_DB_FORM_WIZARD_START + 37
 {
     Text [ de ] = "In Spalten - Beschriftungen oben";
-    Text [ en ] = "Columnar - Labels on Top";
     Text [ en-US ] = "Columnar - Labels on Top";
-    Text[ pt ] = "Colunas - Etiquetas no topo";
-    Text[ ru ] = "Ñòîëáöû - ïîäïèñè ñâåğõó";
-    Text[ el ] = "Óå óôŞëåò - Ïé åğéóçìÜíóåéò åğÜíù";
-    Text[ nl ] = "In kolommen - labels boven";
-    Text[ fr ] = "Colonnes - Étiquettes en haut";
-    Text[ es ] = "En columnas - Etiquetas arriba";
-    Text[ fi ] = "Sarakkeet - selitteet ylhäällä";
-    Text[ it ] = "In colonna - Testo fisso in alto";
-    Text[ da ] = "I kolonner - etiketter øverst";
-    Text[ sv ] = "I kolumner - etiketter uppe";
-    Text[ pl ] = "Kolumnowo z etykietami u góry";
-    Text[ pt-BR ] = "Em Colunas - Rótulos em cima";
-    Text[ ja ] = "æ¬„ã§ã€ãƒ©ãƒ™ãƒ«æ›¸ãã¯ä¸Šã«";
-    Text[ ko ] = "ì—´ì—ì„œ ë ˆì´ë¸”ì„ ìœ„ìª½ì—";
-    Text[ zh ] = "åœ¨åˆ—å†… - æ ‡ç­¾å‘ä¸Š";
-    Text[ zh-TW ] = "åœ¨æ¬„ä½å…§ - æ¨™ç±¤å‘ä¸Š";
-    Text[ tr ] = "Sutunlar halinde, etiketler üstte";
-    Text[ ar ] = "Columnar - Labels on Top";
-    Text[ ca ] = "Columna - Etiquetes amunt";
-    Text[ th ] = "à¹à¸šà¸šà¹€à¸£à¸µà¸¢à¸‡à¹€à¸›à¹‡à¸™à¹à¸™à¸§à¸•à¸£à¸‡ - à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸”à¹‰à¸²à¸™à¸šà¸™";
-    Text[ cs ] = "Do sloupcÅ¯ - titulky v zÃ¡hlavÃ­";
-    Text[ he ] = "â€®×œ×¤×™ ×¢××•×“×™× - ×ª×•×•×™×•×ª ×œ××¢×œ×”â€¬";
-    Text[ hi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‡ à¤¸à¤¦à¥ƒà¤¶ - à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚ à¤Šà¤ªà¤°";
-    Text[ sk ] = "Do stÄºpcov - popisy hore";
-    Text[ hu ] = "HasÃ¡bos - CÃ­mkÃ©k felÃ¼l";
-    Text[ sl ] = "StolpiÄno - imena polj na vrhu";
 };
 
 String RID_DB_FORM_WIZARD_START + 38
 {
     Text [ de ] = "In Blöcken - Beschriftungen links";
-    Text [ en ] = "In Blocks - Labels left";
     Text [ en-US ] = "In Blocks - Labels Left";
-    Text[ pt ] = "Blocos - Etiquetas à esquerda";
-    Text[ ru ] = "Áëîêè - ïîäïèñè ñëåâà";
-    Text[ el ] = "Óå ôìŞìáôá - Ïé åğéóçìÜíóåéò áñéóôåñÜ";
-    Text[ nl ] = "In blokken - labels links";
-    Text[ fr ] = "Blocs - Étiquettes à gauche";
-    Text[ es ] = "En bloques - Etiquetas a la izquierda";
-    Text[ fi ] = "Lohkot - selitteet vasemmalla";
-    Text[ it ] = "In riga - Testo fisso a sinistra";
-    Text[ da ] = "I blokke - etiketter til venstre";
-    Text[ sv ] = "Marginaljusterat - etiketter till vänster";
-    Text[ pl ] = "Blokowo z etykietami po lewej";
-    Text[ pt-BR ] = "Em Blocos - Rótulos à esquerda";
-    Text[ ja ] = "ãƒ–ãƒ­ãƒƒã‚¯ã§ã€ãƒ©ãƒ™ãƒ«æ›¸ãã¯å·¦ã«";
-    Text[ ko ] = "ë¸”ë¡ì—ì„œ ë ˆì´ë¸”ì„ ì™¼ìª½ì—";
-    Text[ zh ] = "åœ¨æ¡å—å†… - æ ‡ç­¾å‘å·¦";
-    Text[ zh-TW ] = "åœ¨æ¢å¡Šå…§ - æ¨™ç±¤å‘å·¦";
-    Text[ tr ] = "Bloklar halinde, etketler sola";
-    Text[ ar ] = "Inf Blocks - Labels left";
-    Text[ ca ] = "Blocs - Etiquetes a l'esquerra";
-    Text[ language_user1 ] = "; Help tip";
-    Text[ th ] = "à¹ƒà¸™à¸šà¸¥à¹‡à¸­à¸„ - à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‹à¹‰à¸²à¸¢";
-    Text[ cs ] = "Do blokÅ¯ - titulky vlevo";
-    Text[ he ] = "â€®×œ×¤×™ ×§×˜×¢×™× - ×ª×•×•×™×•×ª ×œ×©×××œâ€¬";
-    Text[ hi ] = "à¤¬à¥à¤²à¥‰à¤•à¥à¤¸ à¤®à¥‡à¤‚ - à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚ à¤¬à¤¾à¤¯à¤¾à¤ à¤“à¤°";
-    Text[ sk ] = "Do blokov - popisy naÄ¾avo";
-    Text[ hu ] = "TÃ¶mbÃ¶kben - CÃ­mkÃ©k balra";
-    Text[ sl ] = "V blokih - imena polj levo";
 };
 
 String RID_DB_FORM_WIZARD_START + 39
 {
     Text [ de ] = "In Blöcken - Beschriftungen oben";
-    Text [ en ] = "In Blocks - Labels oben";
     Text [ en-US ] = "In Blocks - Labels Above";
-    Text[ pt ] = "Blocos - Etiquetas no topo";
-    Text[ ru ] = "Áëîêè - ïîäïèñè ñâåğõó";
-    Text[ el ] = "Óå ôìŞìáôá - Ïé åğéóçìÜíóåéò åğÜíù";
-    Text[ nl ] = "In blokken - labels boven";
-    Text[ fr ] = "Blocs - Étiquettes en haut";
-    Text[ es ] = "En bloques - Etiquetas arriba";
-    Text[ fi ] = "Lohkot - selitteet ylhäällä";
-    Text[ it ] = "In riga - Testo fisso in alto";
-    Text[ da ] = "I blokke - etiketter øverst";
-    Text[ sv ] = "Marginaljusterat - etiketter uppe";
-    Text[ pl ] = "Blokowo z etykietami u góry";
-    Text[ pt-BR ] = "Em Blocos - Rótulos em cima ";
-    Text[ ja ] = "ãƒ–ãƒ­ãƒƒã‚¯ã§ã€ãƒ©ãƒ™ãƒ«æ›¸ãã¯ä¸Šã«";
-    Text[ ko ] = "ë¸”ë¡ì—ì„œ ë ˆì´ë¸”ì„ ìœ„ìª½ì—";
-    Text[ zh ] = "åœ¨æ¡å—å†… - æ ‡ç­¾å‘ä¸Š";
-    Text[ zh-TW ] = "åœ¨æ¢å¡Šå…§ - æ¨™ç±¤å‘ä¸Š";
-    Text[ tr ] = "Bloklar halinde, etketler üstte";
-    Text[ ar ] = "In Blocks - Labels oben";
-    Text[ ca ] = "Bloc - Etiquetes amunt";
-    Text[ language_user1 ] = "; Help tip";
-    Text[ th ] = "à¹ƒà¸™à¸šà¸¥à¹‡à¸­à¸„ - à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸”à¹‰à¸²à¸™à¸šà¸™";
-    Text[ cs ] = "Do blokÅ¯ - titulky nad poli";
-    Text[ he ] = "â€®×œ×¤×™ ×§×˜×¢×™× - ×ª×•×•×™×•×ª ×œ××¢×œ×”â€¬";
-    Text[ hi ] = "à¤¬à¥à¤²à¥‰à¤•à¥à¤¸ à¤®à¥‡à¤‚ - à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚ à¤Šà¤ªà¤°";
-    Text[ sk ] = "Do blokov - popisy nad";
-    Text[ hu ] = "TÃ¶mbÃ¶kben - CÃ­mkÃ©k felÃ¼lre";
-    Text[ sl ] = "V blokih - imena polj na vrhu";
 };
 
 String RID_DB_FORM_WIZARD_START + 40
 {
     Text [ de ] = "Als Datenblatt";
-    Text [ en ] = "As Grid";
     Text [ en-US ] = "As Data Sheet";
-    Text[ pt ] = "Como quadrícula";
-    Text[ ru ] = "Êàê ëèñò äàííûõ";
-    Text[ el ] = "Ùò öıëëï äåäïìİíùí";
-    Text[ nl ] = "Als gegevensblad";
-    Text[ fr ] = "Comme grille";
-    Text[ es ] = "Como hoja de datos";
-    Text[ fi ] = "Ruudukkona";
-    Text[ it ] = "Tabellare";
-    Text[ da ] = "Som dataark";
-    Text[ sv ] = "Som tabell";
-    Text[ pl ] = "Jako arkusz danych";
-    Text[ pt-BR ] = "Como Planilha de Dados";
-    Text[ ja ] = "ãƒ‡ãƒ¼ã‚¿è¡¨ã¨ã—ã¦";
-    Text[ ko ] = "ë°ì´í„° í‘œë¡œ";
-    Text[ zh ] = "å½“ä½œæ•°æ®è¡¨";
-    Text[ zh-TW ] = "ç•¶ä½œè³‡æ–™è¡¨";
-    Text[ tr ] = "Tablo gibi";
-    Text[ ar ] = "As Grid";
-    Text[ ca ] = "Com a quadrícula";
-    Text[ language_user1 ] = "; Help tip";
-    Text[ th ] = "à¹€à¸›à¹‡à¸™à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡";
-    Text[ cs ] = "Jako tabulku";
-    Text[ he ] = "â€®×œ×¤×™ ×ª×‘× ×™×ª ×“×£ × ×ª×•× ×™×â€¬";
-    Text[ hi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¶à¥€à¤Ÿà¥ à¤œà¥ˆà¤¸à¥‡";
-    Text[ sk ] = "Ako dÃ¡tovÃ½ list";
-    Text[ hu ] = "AdatlapkÃ©nt";
-    Text[ sl ] = "Kot podatkovni list";
 };
 
 
+String RID_DB_FORM_WIZARD_START + 41
+{
+    Text [ de ] = "Anordnung der Datenbankfelder des übergeordneten Formulars";
+    Text [ en-US ] = "Arrangement of the main form";
+};
+
+String RID_DB_FORM_WIZARD_START + 42
+{
+    Text [ de ] = "Anordnung der Datenbankfelder des Subformulars";
+    Text [ en-US ] = "Arrangement of the sub form";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 44
+{
+    Text [ de ] = "Das Formular wird nur zur Eingaben neuer Daten verwendet.";
+    Text [ en-US ] = "The form is to be ~used for entering new data only.";
+};
+
 String RID_DB_FORM_WIZARD_START + 45
 {
-    Text [ de ] = "Datenbankauswahl";
-    Text [ en ] = "Choose Database";
-    Text [ en-US ] = "Choose Database";
-    Text[ language_user1 ] = "; Titel der ersten Seite des Autopiloten";
-
-    Text[ pt ] = "Seleccionar base de dados";
-    Text[ ru ] = "Âûáîğ áàçû äàííûõ";
-    Text[ el ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
-    Text[ nl ] = "Selectie database";
-    Text[ fr ] = "Sélection d'une base de données";
-    Text[ es ] = "Seleccionar base de datos";
-    Text[ fi ] = "Valitse tietokanta";
-    Text[ it ] = "Scelta database";
-    Text[ da ] = "Vælg database";
-    Text[ sv ] = "Databasurval";
-    Text[ pl ] = "Wybierz bazê danych";
-    Text[ pt-BR ] = "Selecione o Banco de Dados";
-    Text[ ja ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®é¸æŠ";
-    Text[ ko ] = "ë°ì´í„°ë² ì´ìŠ¤ ì„ íƒ";
-    Text[ zh ] = "é€‰æ‹©æ•°æ®åº“";
-    Text[ zh-TW ] = "é¸æ“‡è³‡æ–™åº«";
-    Text[ tr ] = "Veritabanını seçiniz";
-    Text[ ar ] = "ÇÎÊíÇÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text[ ca ] = "Selecció de la base de dades";
-    Text[ th ] = "à¹€à¸¥à¸·à¸­à¸à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ cs ] = "Zvolte databÃ¡zi";
-    Text[ he ] = "â€®×‘×—×™×¨×ª ××¡×“ × ×ª×•× ×™×â€¬";
-    Text[ hi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤šà¥à¤¨à¥‹";
-    Text[ sk ] = "VybraÅ¥ databÃ¡zu";
-    Text[ hu ] = "VÃ¡lasszon adatbÃ¡zist";
-    Text[ sl ] = "Izberi zbirko podatkov";
+    Text [ de ] = "Existierende Daten werden nicht dargestellt.";
+    Text [ en-US ] = "Existing data will not be displayed ";
 };
 
 String RID_DB_FORM_WIZARD_START + 46
 {
-    Text [ de ] = "Gestaltung";
-    Text [ en ] = "Layout";
-    Text [ en-US ] = "Choose Layout";
-    Text[ language_user1 ] = "; Titel der zweiten Seite des Assistenten";
-
-    Text[ pt ] = "Esquema";
-    Text[ ru ] = "Âûáîğ ğàçìåòêè";
-    Text[ el ] = "ÅğéëïãŞ äéÜôáîçò";
-    Text[ nl ] = "Lay-out";
-    Text[ fr ] = "Composition";
-    Text[ es ] = "Diseño";
-    Text[ fi ] = "Valitse asettelu";
-    Text[ it ] = "Layout";
-    Text[ da ] = "Vælg layout";
-    Text[ sv ] = "Utformning";
-    Text[ pl ] = "Wybierz uk³ad";
-    Text[ pt-BR ] = "Selecione o Layout";
-    Text[ ja ] = "ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
-    Text[ ko ] = "ë ˆì´ì•„ì›ƒ ì„ íƒ";
-    Text[ zh ] = "ç‰ˆå¼";
-    Text[ zh-TW ] = "ç‰ˆå¼";
-    Text[ tr ] = "Düzeni seçiniz";
-    Text[ ar ] = "Layout";
-    Text[ ca ] = "Disseny";
-    Text[ th ] = "à¹€à¸¥à¸·à¸­à¸à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡";
-    Text[ cs ] = "Zvolte vzhled";
-    Text[ he ] = "â€®×‘×—×™×¨×ª ×¡×•×’ ×¤×¨×™×¡×”â€¬";
-    Text[ hi ] = "à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸ à¤šà¥à¤¨à¥‹";
-    Text[ sk ] = "VybraÅ¥ vzhÄ¾ad";
-    Text[ hu ] = "VÃ¡lasszon elrendezÃ©st";
-    Text[ sl ] = "Izberi postavitev";
+    Text [ de ] = "Das Formular zeigt existierende Daten an.";
+    Text [ en-US ] = "T~he form is to display all  data";
 };
 
 String RID_DB_FORM_WIZARD_START + 47
 {
-    Text [ de ] = "Fertigstellung";
-    Text [ en ] = "Completion";
-    Text [ en-US ] = "Finish";
-    Text[ language_user1 ] = "; Titel der dritten Seite des Assistenten";
-    Text[ pt ] = "Execução";
-    Text[ ru ] = "Ãîòîâî";
-    Text[ el ] = "Ôİëïò";
-    Text[ nl ] = "Uitvoeren";
-    Text[ fr ] = "Achèvement";
-    Text[ es ] = "Terminar";
-    Text[ fi ] = "Valmis";
-    Text[ it ] = "Completamento";
-    Text[ da ] = "Udfør";
-    Text[ sv ] = "Färdigställa";
-    Text[ pl ] = "Zakoñcz";
-    Text[ pt-BR ] = "Concluir";
-    Text[ ja ] = "å®Œæˆ";
-    Text[ ko ] = "ì™„ë£Œ";
-    Text[ zh ] = "å®Œæˆ";
-    Text[ zh-TW ] = "å®Œæˆ";
-    Text[ tr ] = "Bitiş";
-    Text[ ar ] = "Completion";
-    Text[ ca ] = "Acaba";
-    Text[ th ] = "à¹€à¸ªà¸£à¹‡à¸ˆà¸ªà¸´à¹‰à¸™";
-    Text[ cs ] = "Konec";
-    Text[ he ] = "â€®×¡×™×•×â€¬";
-    Text[ hi ] = "à¤¸à¤®à¤¾à¤ªà¥à¤¤";
-    Text[ sk ] = "Koniec";
-    Text[ hu ] = "BefejezÃ©s";
-    Text[ sl ] = "DokonÄaj";
+    Text [ de ] = "Existierende Daten dürfen nicht verändert werden.";
+    Text [ en-US ] = "Do not allow ~modification of existing data";
 };
+
+String RID_DB_FORM_WIZARD_START + 48
+{
+    Text [ de ] = "Existierende Daten dürfen nicht gelöscht werden.";
+    Text [ en-US ] = "Do not allow ~deletion of existing data";
+};
+
+String RID_DB_FORM_WIZARD_START + 49
+{
+    Text [ de ] = "Neue Daten dürfen nicht hinzugefügt werden.";
+    Text [ en-US ] = "Do not allow ~addition of new data";
+};
+
+
 
 String RID_DB_FORM_WIZARD_START + 50
 {
-    Text [ de ] = "Binärfeld-Darstellung";
-    Text [ en ] = "Presentation of Binary Fields";
-    Text [ en-US ] = "Display of binary fields";
-    Text[ language_user1 ] = "; Überschrift einiger Dialog Controls";
-    Text[ pt ] = "Representação de campos binários";
-    Text[ ru ] = "Ïğåäñòàâëåíèå äâîè÷íîãî ïîëÿ";
-    Text[ el ] = "ÅìöÜíéóç äõáäéêşí ğåäßùí";
-    Text[ nl ] = "Binaire velden weergeven";
-    Text[ fr ] = "Affichage des champs binaires";
-    Text[ es ] = "Representación de campo binario";
-    Text[ fi ] = "Binaarikenttien esitystapa";
-    Text[ it ] = "Presentazione del campo binario";
-    Text[ da ] = "Visning af binærefelter";
-    Text[ sv ] = "Visning av binära fält";
-    Text[ pl ] = "Wygl¹d pól binarnych";
-    Text[ pt-BR ] = "Exibição de campos binários";
-    Text[ ja ] = "2é€²æ³•ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®è¡¨ç¤º";
-    Text[ ko ] = "ì´ì§„ í•„ë“œ í‘œì‹œ";
-    Text[ zh ] = "äºŒè¿›åˆ¶å­—æ®µæ˜¾ç¤º";
-    Text[ zh-TW ] = "äºŒå…ƒæ¬„ä½é¡¯ç¤º";
-    Text[ tr ] = "İkili alanların görüntülenmesi";
-    Text[ ar ] = "Presentation of Binary Fields";
-    Text[ ca ] = "Presentació dels camps binaris";
-    Text[ th ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸šà¸™à¸²à¸£à¸µ ";
-    Text[ cs ] = "ZobrazenÃ­ binÃ¡rnÃ­ch polÃ­";
-    Text[ he ] = "â€®×ª×¦×•×’×ª ×©×“×•×ª ×‘×™× ×¨×™×™×â€¬";
-    Text[ hi ] = "à¤¬à¥ˆà¤¨à¤°à¥€ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾à¤“";
-    Text[ sk ] = "ZobraziÅ¥ z binÃ¡rnych polÃ­";
-    Text[ hu ] = "BinÃ¡ris mezÅ‘k megjelenÃ­tÃ©se";
-    Text[ sl ] = "Prikaz binarnih polj";
+    Text [ de ] = "Formularname";
+    Text [ en-US ] = "Name of ~the form";
 };
+
+
 
 String RID_DB_FORM_WIZARD_START + 51
 {
-    Text [ de ] = "Binärfelder ignorieren";
-    Text [ en ] = "Ignore Binary Fields";
-    Text [ en-US ] = "Ignore binary fields";
-    Text[ language_user1 ] = "; Label eines Radio-Buttons";
-    Text[ pt ] = "Ignorar campos binários";
-    Text[ ru ] = "Ïğîïóñêàòü äâîè÷íûå ïîëÿ";
-    Text[ el ] = "ĞáñÜâëåøç äõáäéêşí ğåäßùí";
-    Text[ nl ] = "Binaire velden negeren";
-    Text[ fr ] = "Ignorer les champs binaires";
-    Text[ es ] = "Ignorar campos binarios";
-    Text[ fi ] = "Ohita binaarikentät";
-    Text[ it ] = "Ignora campi binari";
-    Text[ da ] = "Ignorer binærfelter";
-    Text[ sv ] = "Ignorera binära fält";
-    Text[ pl ] = "Ignoruj pola binarne";
-    Text[ pt-BR ] = "Ignorar os campos binários";
-    Text[ ja ] = "2é€²æ³•ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ç„¡è¦–ã™ã‚‹";
-    Text[ ko ] = "ì´ì§„ í•„ë“œ ë¬´ì‹œ";
-    Text[ zh ] = "å¿½ç•¥äºŒè¿›åˆ¶å­—æ®µ";
-    Text[ zh-TW ] = "å¿½ç•¥äºŒå…ƒæ¬„ä½";
-    Text[ tr ] = "İkili alanları yok say";
-    Text[ ar ] = "Ignore binary fields";
-    Text[ ca ] = "Ignora els camps binaris";
-    Text[ th ] = "à¹€à¸à¸´à¸à¹€à¸‰à¸¢à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸šà¸™à¸²à¸£à¸µ ";
-    Text[ cs ] = "Ignorovat binÃ¡rnÃ­ pole";
-    Text[ he ] = "â€®×”×ª×¢×œ××•×ª ××©×“×•×ª ×‘×™× ×¨×™×™×â€¬";
-    Text[ hi ] = "à¤¬à¥ˆà¤¨à¤°à¥€ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
-    Text[ sk ] = "IgnorovaÅ¥ binÃ¡rne polia";
-    Text[ hu ] = "BinÃ¡ris mezÅ‘k mellÅ‘zÃ©se";
-    Text[ sl ] = "Prezri binarna polja";
+    Text [ de ] = "Wie möchten Sie fortfahren?";
+    Text [ en-US ] = "How do you want to proceed after creating the form?";
 };
+
 
 String RID_DB_FORM_WIZARD_START + 52
 {
-    Text [ de ] = "Binärfelder als Grafiken";
-    Text [ en ] = "Binary Fields as Images";
-    Text [ en-US ] = "Binary fields as images";
-    Text[ language_user1 ] = "; Label eines Radio-Buttons";
-    Text[ pt ] = "Campos binários como imagens";
-    Text[ ru ] = "Äâîè÷íûå ïîëÿ â âèäå ğèñóíêîâ";
-    Text[ el ] = "ÄõáäéêÜ ğåäßá ùò åéêüíåò";
-    Text[ nl ] = "Binaire velden als afbeeldingen";
-    Text[ fr ] = "Champs binaires comme images";
-    Text[ es ] = "Campos binarios como imágenes";
-    Text[ fi ] = "Binaarikentät kuvina";
-    Text[ it ] = "Campi binari come immagini";
-    Text[ da ] = "Binærfelter som grafik";
-    Text[ sv ] = "Binära fält som grafik";
-    Text[ pl ] = "Pola binarne jako obrazy";
-    Text[ pt-BR ] = "Campos binários como imagens";
-    Text[ ja ] = "2é€²æ³•ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å›³ã§";
-    Text[ ko ] = "ì´ì§„ í•„ë“œë¥¼ ì´ë¯¸ì§€ë¡œ";
-    Text[ zh ] = "äºŒè¿›åˆ¶å­—æ®µå½“ä½œå›¾å½¢";
-    Text[ zh-TW ] = "äºŒå…ƒæ¬„ä½ç•¶ä½œåœ–å½¢";
-    Text[ tr ] = "İkili alanları görüntü olarak";
-    Text[ ar ] = "Binary fields as images";
-    Text[ ca ] = "Camps binaris com a imatges";
-    Text[ th ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸šà¸™à¸²à¸£à¸µà¹€à¸›à¹‡à¸™à¸£à¸¹à¸›à¸ à¸²à¸";
-    Text[ cs ] = "Zobrazit jako obrÃ¡zky";
-    Text[ he ] = "â€®×©×“×•×ª ×‘×™× ×¨×™×™× ×›×ª××•× ×•×ªâ€¬";
-    Text[ hi ] = "à¤¬à¥ˆà¤¨à¤°à¥€ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤šà¤¿à¤¤à¥à¤° à¤œà¥ˆà¤¸à¥‡";
-    Text[ sk ] = "BinÃ¡rne polia ako obrÃ¡zky";
-    Text[ hu ] = "BinÃ¡ris mezÅ‘k kÃ©pkÃ©nt";
-    Text[ sl ] = "Binarna polja kot slike";
+    Text [ de ] = "Mit dem Formular   arbeiten";
+    Text [ en-US ] = "~Work with the form";
+};
+
+String RID_DB_FORM_WIZARD_START + 53
+{
+    Text [ de ] = "Das Formular weiter verändern";
+    Text [ en-US ] = "~Modify the form";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 55
 {
-    Text [ de ] = "Hintergrundbild";
-    Text[en] = "Background Picture";
-    Text[ en-US ] = "Background image";
-    Text[ pt ] = "Imagem de fundo";
-    Text[ ru ] = "Ôîíîâàÿ êàğòèíêà";
-    Text[ el ] = "Åéêüíá öüíôïõ";
-    Text[ nl ] = "Achtergrondafbeelding";
-    Text[ fr ] = "Image d'arrière-plan";
-    Text[ es ] = "Imagen de fondo";
-    Text[ it ] = "Immagine di sfondo";
-    Text[ da ] = "Baggrundsbillede";
-    Text[ sv ] = "Bakgrundsbild";
-    Text[ pl ] = "Obraz t³a";
-    Text[ pt-BR ] = "Imagem do Plano de Fundo";
-    Text[ ja ] = "èƒŒæ™¯ãƒ‡ã‚¶ã‚¤ãƒ³";
-    Text[ ko ] = "ë°°ê²½ ì´ë¯¸ì§€";
-    Text[ zh ] = "èƒŒæ™¯é¢œè‰²";
-    Text[ zh-TW ] = "èƒŒæ™¯åœ–ç‰‡";
-    Text[ tr ] = "Artalan görüntüsü";
-    Text[ ar ] = "ÕæÑÉ ÇáÎáİíÉ";
-    Text[ ca ] = "Imatge de fons";
-    Text[ fi ] = "Taustakuva";
-    Text[ th ] = "à¸ à¸²à¸à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-    Text[ cs ] = "ObrÃ¡zek pozadÃ­";
-    Text[ he ] = "â€®×¦×œ× ×¨×§×¢â€¬";
-    Text[ hi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤šà¤¿à¤¤à¥à¤°";
-    Text[ sk ] = "Pozadie";
-    Text[ hu ] = "HÃ¡ttÃ©rkÃ©p";
-    Text[ sl ] = "Slika za ozadje";
+    Text [ de ] = "~Seitenvorlagen";
+    Text [ en-US ] = "~Page Styles";
 };
 
 
 
-String RID_DB_FORM_WIZARD_START + 56
+String RID_DB_FORM_WIZARD_START + 80
 {
-    Text [ de ] = "~Gekachelt";
-    Text[en] = "~Tiled";
-    Text[ en-US ] = "~Tiled";
-    Text[ pt ] = "Em a~zulejo";
-    Text[ ru ] = "Ìîçàèêà";
-    Text[ el ] = "~Óå ğáñÜèåóç";
-    Text[ nl ] = "~Getegeld";
-    Text[ fr ] = "Carrelage";
-    Text[ es ] = "~Mosaico";
-    Text[ it ] = "Affianca";
-    Text[ da ] = "~Side om side";
-    Text[ sv ] = "Sida vid sida";
-    Text[ pl ] = "~S¹siaduj¹co";
-    Text[ pt-BR ] = "~Lado-a-lado";
-    Text[ ja ] = "ä¸¦ã¹ã¦è¡¨ç¤º(~T)";
-    Text[ ko ] = "ë°”ë‘‘íŒì‹(~T)";
-    Text[ zh ] = "å¹³é“º(~T)";
-    Text[ zh-TW ] = "å¹³é‹ª(~T)";
-    Text[ tr ] = "~yan yana";
-    Text[ ar ] = "Tiling";
-    Text[ ca ] = "~Tiled";
-    Text[ fi ] = "~Vierekkäin";
-    Text[ th ] = "~à¸‹à¹‰à¸­à¸™à¸—à¸±à¸š";
-    Text[ cs ] = "DlÃ¡Å¾dÄ›nÃ½";
-    Text[ he ] = "â€®×¤×¨×™×¡×” ×œ×œ× ×—×¤×™×¤×”â€¬";
-    Text[ hi ] = "~à¤Ÿà¤‡à¤² à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤†";
-    Text[ sk ] = "~DlÃ¡Å¾denÃ½";
-    Text[ hu ] = "Mo~zaik";
-    Text[ sl ] = "Razpos~tavljeno";
+    Text [ de ] = "Feldauswahl";
+    Text [ en-US ] = "Field selection";
 };
 
 
-String RID_DB_FORM_WIZARD_START + 57
+String RID_DB_FORM_WIZARD_START + 81
 {
-    Text [ de ] = "~Skaliert";
-    Text[en] = "~Scaled";
-    Text[ en-US ] = "~Scaled";
-    Text[ pt ] = "~Escalonado";
-    Text[ ru ] = "~Ìàñøòàáèğîâàíèå";
-    Text[ el ] = "Ó~å êëßìáêá";
-    Text[ nl ] = "Op schaal ~gebracht";
-    Text[ fr ] = "Gradué";
-    Text[ es ] = "~Graduado";
-    Text[ it ] = "~In scala";
-    Text[ da ] = "~Skaleret";
-    Text[ sv ] = "~Skalat";
-    Text[ pl ] = "Skalowa~ny";
-    Text[ pt-BR ] = "~Escalonado";
-    Text[ ja ] = "æ‹¡å¤§ã—ã¦è¡¨ç¤º(~S)";
-    Text[ ko ] = "í™•ëŒ€í•˜ì—¬ í‘œì‹œ(~S)";
-    Text[ zh ] = "é‡‡ç”¨æ˜¾ç¤ºæ¯”ä¾‹(~S)";
-    Text[ zh-TW ] = "æ¡ç”¨é¡¯ç¤ºæ¯”ä¾‹(~S)";
-    Text[ tr ] = "~Ölçeklendirilmiş";
-    Text[ ar ] = "~Scaled";
-    Text[ ca ] = "~Escalat";
-    Text[ fi ] = "~Skaalattu";
-    Text[ th ] = "~à¸ªà¹€à¸à¸¥";
-    Text[ cs ] = "RoztaÅ¾enÃ½";
-    Text[ he ] = "â€®×”×ª×××” ×œ×’×•×“×œâ€¬";
-    Text[ hi ] = "~à¤¸à¥à¤•à¥‡à¤² à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤†";
-    Text[ sk ] = "Ro~ztiahnutÃ½";
-    Text[ hu ] = "~MÃ©retezett";
-    Text[ sl ] = "Pr~ilagojeno";
+    Text [ de ] = "Subformular";
+    Text [ en-US ] = "Set up a subform";
 };
 
-String RID_DB_FORM_WIZARD_START + 60
+
+String RID_DB_FORM_WIZARD_START + 82
 {
-    Text [ de ] = "Verzeichnispfad";
-    Text[en] = "Directory Path";
-    Text[ en-US ] = "Directory path";
-    Text[ pt ] = "Atalho do directório";
-    Text[ ru ] = "Ïóòü êàòàëîãà";
-    Text[ el ] = "ÄéáäñïìŞ êáôáëüãïõ";
-    Text[ nl ] = "Directorypad";
-    Text[ fr ] = "Chemin du répertoire";
-    Text[ es ] = "Ruta del directorio";
-    Text[ fi ] = "Hakemistopolku";
-    Text[ it ] = "Percorso cartella";
-    Text[ da ] = "Katalogsti";
-    Text[ sv ] = "Katalogsökväg";
-    Text[ pl ] = "Œcie¿ka katalogu";
-    Text[ pt-BR ] = "Caminho do diretório";
-    Text[ ja ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹";
-    Text[ ko ] = "ë””ë ‰í† ë¦¬ ê²½ë¡œ";
-    Text[ zh ] = "ç›®å½•è·¯å¾„";
-    Text[ zh-TW ] = "ç›®éŒ„è·¯å¾‘";
-    Text[ tr ] = "Dizin yolu";
-    Text[ ar ] = "Directory path";
-    Text[ ca ] = "Camí del directori";
-    Text[ th ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ";
-    Text[ cs ] = "Cesta k adresÃ¡Å™i";
-    Text[ he ] = "â€®××¡×œ×•×œ ×¡×¤×¨×™×•×ªâ€¬";
-    Text[ hi ] = "à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¤¾à¤°à¥à¤—";
-    Text[ sk ] = "Cesta k adresÃ¡ru";
-    Text[ hu ] = "ElÃ©rÃ©si Ãºtvonal";
-    Text[ sl ] = "Pot do mape";
+    Text [ de ] = "Subformularfelder";
+    Text [ en-US ] = "Add subform fields";
 };
 
-
-String RID_DB_FORM_WIZARD_START + 65
+String RID_DB_FORM_WIZARD_START + 83
 {
-    Text [ de ] = "Dialog wird verkleinert";
-    Text[en] = "Dialog will be reduced";
-    Text[ en-US ] = "Dialog will be reduced";
-    Text[ language_user1 ] = "; Hilfetext eines Buttons";
-    Text[ pt ] = "Reduz a caixa de diálogo.";
-    Text[ ru ] = "Óìåíüøåíèå äèàëîãîâîãî îêíà";
-    Text[ el ] = "Åëá÷éóôïğïßçóç ôïõ ğáñáèıñïõ äéáëüãïõ";
-    Text[ nl ] = "Dialoogvenster wordt verkleind";
-    Text[ fr ] = "Réduit la boîte de dialogue.";
-    Text[ es ] = "El tamaño del diálogo disminuirá";
-    Text[ fi ] = "Valintaikkuna pienennetään";
-    Text[ it ] = "La finestra di dialogo verrà ridotta";
-    Text[ da ] = "Dialogen formindskes";
-    Text[ sv ] = "Dialogruta reduceras";
-    Text[ pl ] = "Pomniejszenie okna dialogowego";
-    Text[ pt-BR ] = "O diálogo será reduzido";
-    Text[ ja ] = "ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ç¸®å°";
-    Text[ ko ] = "ëŒ€í™” ìƒìê°€ ì¶•ì†Œë©ë‹ˆë‹¤";
-    Text[ zh ] = "å¯¹è¯æ¡†ä¼šç¼©å°";
-    Text[ zh-TW ] = "å°è©±æ–¹å¡Šæœƒç¸®å°ã€‚";
-    Text[ tr ] = "Dialog azaltılacak";
-    Text[ ar ] = "Dialog will be reduced";
-    Text[ ca ] = "El diàleg és farà més petit";
-    Text[ th ] = "à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸ˆà¸°à¸–à¸¹à¸à¸¥à¸”à¸¥à¸‡";
-    Text[ cs ] = "Dialog bude zmenÅ¡en";
-    Text[ he ] = "â€®×”×—×œ×•×Ÿ ×™×•×§×˜×Ÿâ€¬";
-    Text[ hi ] = "à¤¡à¤¯à¤²à¥‰à¤— à¤•à¥‹ à¤•à¤® à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾";
-    Text[ sk ] = "DialÃ³g bude zredukovanÃ½";
-    Text[ hu ] = "A pÃ¡rbeszÃ©dablak le lesz kicsinyÃ­tve";
-    Text[ sl ] = "Pogovorno okno bo pomanjÅ¡ano";
+    Text [ de ] = "Verknüpfte  Felder";
+    Text [ en-US ] = "Get joined fields";
 };
 
-String RID_DB_FORM_WIZARD_START + 66
+String RID_DB_FORM_WIZARD_START + 84
 {
-    Text [ de ] = "Dialog wird vergrößert";
-    Text[en] = "Dialog will be enlarged";
-    Text[ en-US ] = "Dialog will be enlarged";
-    Text[ language_user1 ] = "; Hilfetext eines Buttons";
-    Text[ pt ] = "Aumenta a caixa de diálogo.";
-    Text[ ru ] = "Óâåëè÷åíèå äèàëîãîâîãî îêíà";
-    Text[ el ] = "Ìåãİèõíóç ôïõ ğáñáèıñïõ äéáëüãïõ";
-    Text[ nl ] = "Dialoogvenster wordt vergroot";
-    Text[ fr ] = "Agrandit la boîte de dialogue.";
-    Text[ es ] = "El tamaño del diálogo aumentará";
-    Text[ fi ] = "Valintaikkuna suurennetaan";
-    Text[ it ] = "La finestra di dialogo verrà ingrandita";
-    Text[ da ] = "Dialogen forstørres";
-    Text[ sv ] = "Dialogruta förstoras";
-    Text[ pl ] = "Powiêkszenie okna dialogowego";
-    Text[ pt-BR ] = "O diálogo será ampliado";
-    Text[ ja ] = "ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’æ‹¡å¤§";
-    Text[ ko ] = "ëŒ€í™” ìƒìê°€ í™•ëŒ€ë©ë‹ˆë‹¤";
-    Text[ zh ] = "å¯¹è¯æ¡†ä¼šæ”¾å¤§";
-    Text[ zh-TW ] = "å°è©±æ–¹å¡Šæœƒæ”¾å¤§ã€‚";
-    Text[ tr ] = "Dialog büyültülecek";
-    Text[ ar ] = "Dialog will be enlarged";
-    Text[ ca ] = "El diàleg és farà més gran";
-    Text[ th ] = "à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸ˆà¸°à¹ƒà¸«à¸à¹ˆà¸‚à¸¶à¹‰à¸™";
-    Text[ cs ] = "Dialog bude zvÄ›tÅ¡en";
-    Text[ he ] = "â€®×”×—×œ×•×Ÿ ×™×•×’×“×œâ€¬";
-    Text[ hi ] = "à¤¡à¤¯à¤²à¥‰à¤— à¤•à¥‹ à¤¬à¤¡à¤¼à¤¾ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾";
-    Text[ sk ] = "DialÃ³g bude zvÃ¤ÄÅ¡enÃ½.";
-    Text[ hu ] = "A pÃ¡rbeszÃ©dablak fel lesz nagyÃ­tva";
-    Text[ sl ] = "Pogovorno okno bo poveÄano";
+    Text [ de ] = "Anordnung der Kontrollfelder";
+    Text [ en-US ] = "Arrange controls";
 };
 
-
-String RID_DB_FORM_WIZARD_START + 70
+String RID_DB_FORM_WIZARD_START + 85
 {
-    Text [ de ] = "Writer 6.0";
-    Text[en] = "Writer 6.0";
-    Text[ en-US ] = "Writer 6.0";
-    Text[ language_user1 ] = "; Dateityp für Textdokumente";
-    Text[ pt ] = "Writer 6.0";
-    Text[ ru ] = "Writer 6.0";
-    Text[ el ] = "Writer 6.0";
-    Text[ nl ] = "Writer 1.0/6.0";
-    Text[ fr ] = "Writer 6.0";
-    Text[ es ] = "Writer 6.0";
-    Text[ fi ] = "Writer 6.0";
-    Text[ it ] = "Writer 6.0";
-    Text[ da ] = "Writer 6.0";
-    Text[ sv ] = "Writer 6.0";
-    Text[ pl ] = "Writer 6.0";
-    Text[ pt-BR ] = "Writer 6.0";
-    Text[ ja ] = "Writer 6.0";
-    Text[ ko ] = "Writer 6.0";
-    Text[ zh ] = "Writer 6.0";
-    Text[ zh-TW ] = "Writer 6.0";
-    Text[ tr ] = "Writer 6.0";
-    Text[ ar ] = "Writer 6.0";
-    Text[ ca ] = "Writer 6.0";
-    Text[ th ] = "Writer 6.0";
-    Text[ cs ] = "Writer 6.0";
-    Text[ he ] = "â€®Writer 6.0â€¬";
-    Text[ hi ] = "à¤²à¥‡à¤–à¤• 6.0";
-    Text[ sk ] = "Writer 6.0";
-    Text[ hu ] = "Writer 6.0";
-    Text[ sl ] = "Writer 6.0";
+    Text [ de ] = "Dateneingabe";
+    Text [ en-US ] = "Set data entry";
 };
 
-String RID_DB_FORM_WIZARD_START + 71
+String RID_DB_FORM_WIZARD_START + 86
 {
-    Text [ de ] = "Writer 6.0 Vorlage";
-    Text[en] = "Writer 6.0 Template";
-    Text[ en-US ] = "Writer 6.0 Template";
-    Text[ language_user1 ] = "; Dateityp für Textvorlage";
-    Text[ pt ] = "Writer 6.0 Modelo";
-    Text[ ru ] = "Øàáëîí Writer 6.0";
-    Text[ el ] = "Ğñüôõğï Writer 6.0";
-    Text[ nl ] = "Writer 1.0/6.0 Sjabloon";
-    Text[ fr ] = "Writer 6.0 Modèle";
-    Text[ es ] = "Writer 6.0 - Plantilla";
-    Text[ fi ] = "Writer 6.0 -malli";
-    Text[ it ] = "Writer 6.0 Modello";
-    Text[ da ] = "Writer 6.0-skabelon";
-    Text[ sv ] = "Writer 6.0 mall";
-    Text[ pl ] = "Writer 6.0 - Szablon";
-    Text[ pt-BR ] = "Modelo Writer 6.0";
-    Text[ ja ] = "Writer 6.0 ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ ko ] = "Writer 6.0 ì„œì‹ íŒŒì¼";
-    Text[ zh ] = "Writer 6.0 æ ·å¼";
-    Text[ zh-TW ] = "Writer 6.0 æ¨£å¼";
-    Text[ tr ] = "Writer 6.0 Şablonu";
-    Text[ ar ] = "Writer 6.0 ŞÇáÈ";
-    Text[ ca ] = "Writer 6.0 Plantilla";
-    Text[ th ] = "à¹à¸¡à¹ˆà¹à¸šà¸š Writer 6.0 ";
-    Text[ cs ] = "Å ablona Writeru 6.0";
-    Text[ he ] = "â€®×ª×‘× ×™×ª Writer 6.0â€¬";
-    Text[ hi ] = "à¤²à¥‡à¤–à¤• 6.0 à¤¨à¤®à¥‚à¤¨à¤¾";
-    Text[ sk ] = "Å ablÃ³na Writer 6.0";
-    Text[ hu ] = "Writer 6.0-sablon";
-    Text[ sl ] = "Predloga programa Writer 6.0";
+    Text [ de ] = "Stile";
+    Text [ en-US ] = "Apply styles";
 };
 
+String RID_DB_FORM_WIZARD_START + 87
+{
+    Text [ de ] = "Formularname";
+    Text [ en-US ] = "Set name";
+};
+
+String RID_DB_FORM_WIZARD_START + 88
+{
+    Text [ de ] = " (Datum)";
+    Text [ en-US ] = "(Date)";
+};
+
+String RID_DB_FORM_WIZARD_START + 89
+{
+    Text [ de ] = " (Zeit)";
+    Text [ en-US ] = "(Time)";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 90
+{
+    Text [ de ] = "Wählen Sie die Felder Ihres Formulars";
+    Text [ en-US ] = "Select the fields of your form";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 91
+{
+    Text [ de ] = "Entscheiden Sie, ob Sie ein Subformular hinzufügen möchten";
+    Text [ en-US ] = "Decide if you want to set up a subform";
+};
+
+String RID_DB_FORM_WIZARD_START + 92
+{
+    Text [ de ] = "Wählen Sie die Felder Ihres Subformulars";
+    Text [ en-US ] = "Select the fields of your subform";
+};
+
+String RID_DB_FORM_WIZARD_START + 93
+{
+    Text [ de ] = "Wählen Sie die Verknüpfungen Ihrer Formulare";
+    Text [ en-US ] = "Select the joins between your forms";
+};
+
+String RID_DB_FORM_WIZARD_START + 94
+{
+    Text [ de ] = "Ordnen Sie die Kontrollfelder auf dem Fomular an";
+    Text [ en-US ] = "Arrange the controls on your form";
+};
+
+String RID_DB_FORM_WIZARD_START + 95
+{
+    Text [ de ] = "Wählen sie die Art der Dateneingabe";
+    Text [ en-US ] = "Select the data entry mode";
+};
+
+String RID_DB_FORM_WIZARD_START + 96
+{
+    Text [ de ] = "Wählen Sie den Stil Ihres Formulars";
+    Text [ en-US ] = "Apply the style of your form";
+};
+
+String RID_DB_FORM_WIZARD_START + 97
+{
+    Text [ de ] = "Setzen Sie den Namen des Formulars";
+    Text [ en-US ] = "Set the name of the form";
+};
 
 
 // ============================================================================
@@ -4588,7 +3131,7 @@ String RID_DB_QUERY_WIZARD_START + 48
 String RID_DB_QUERY_WIZARD_START + 50
 {
     Text [ de ] = "Felder in ~der Abfrage: ";
-    Text [ en-US] = "Fields in ~my Query: ";
+    Text [ en-US] = "Fie~lds in the Query: ";
 };
 
 
@@ -5714,8 +4257,8 @@ String RID_DB_REPORT_WIZARD_START + 31
 
 String RID_DB_REPORT_WIZARD_START + 32
 {
-    Text [ de ] = "Entscheiden, wie Sie nach der Fertigstellung des Assistenten fortfahren möchten?";
-    Text [ en-US ] = "Decide how you want to proceed after creating the wizard";
+    Text [ de ] = "Entscheiden, wie Sie fortfahren möchten?";
+    Text [ en-US ] = "Decide how you want to proceed";
     Text[ pt ] = "~Nome do relatório";
     Text[ ru ] = "~Èìÿ îò÷åòà";
     Text[ nl ] = "Welk type rapport wilt u?";
@@ -5918,8 +4461,8 @@ String RID_DB_REPORT_WIZARD_START + 37
 
 String RID_DB_REPORT_WIZARD_START + 40
 {
-    Text [ de ] = "Dynamische Berichtsvorlage";
-    Text [ en-US ] = "Dynamic report template";
+    Text [ de ] = "Dynamischer Bericht";
+    Text [ en-US ] = "Dynamic report";
     Text[ pt ] = "Dynamic report template";
     Text[ ru ] = "Dynamic report template";
     Text[ el ] = "Äõíáìéêü ğñüôõğï áíáöïñÜò";
@@ -5951,8 +4494,8 @@ String RID_DB_REPORT_WIZARD_START + 40
 
 String RID_DB_REPORT_WIZARD_START + 41
 {
-    Text [ de ] = "Berichtsvorlage sofort verwenden";
-    Text [ en-US ] = "Use report template immediately";
+    Text [ de ] = "Berichts sofort verwenden";
+    Text [ en-US ] = "Use report immediately";
     Text[ pt ] = "Use report template immediately";
     Text[ ru ] = "Use report template immediately";
     Text[ el ] = "¢ìåóç ÷ñŞóç ğñüôõğïõ áíáöïñÜò";
@@ -5983,8 +4526,8 @@ String RID_DB_REPORT_WIZARD_START + 41
 
 String RID_DB_REPORT_WIZARD_START + 42
 {
-    Text [ de ] = "Berichtsvorlage weiter bearbeiten";
-    Text [ en-US ] = "Modify report template";
+    Text [ de ] = "Bericht weiter bearbeiten";
+    Text [ en-US ] = "M~odify report";
     Text[ pt ] = "Modify report template";
     Text[ ru ] = "Modify report template";
     Text[ el ] = "Ôñïğïğïßçóç ğñïôığïõ áíáöïñÜò";
@@ -6924,25 +5467,24 @@ String RID_DB_REPORT_WIZARD_START + 75
 
 String RID_DB_REPORT_WIZARD_START + 76
 {
-    Text [ de ] = "Es existiert bereits ein Berichtsdokument '%REPORTNAME' in der Datenbank. Bitte wählen Sie einen anderen Namen";
-    Text [ en-US ] = "A report document '%REPORTNAME' already exists in the database. Please assign another name";
+    Text [ de ] = "Es existiert bereits ein Bericht '%REPORTNAME' in der Datenbank. Bitte wählen Sie einen anderen Namen";
+    Text [ en-US ] = "A report '%REPORTNAME' already exists in the database. Please assign another name";
 };
 
 String RID_DB_REPORT_WIZARD_START + 77
 {
-    Text [ de ] = "Es existiert bereits eine Berichtsvorlage '%REPORTNAME' in der Datenbank. Bitte wählen Sie einen anderen Namen";
-    Text [ en-US ] = "A report template '%REPORTNAME' already exists in the database. Please assign another name";
+    Text [ de ] = "Es existiert bereits ein Bericht '%REPORTNAME' in der Datenbank. Bitte wählen Sie einen anderen Namen";
+    Text [ en-US ] = "A report '%REPORTNAME' already exists in the database. Please assign another name";
 };
 
 String RID_DB_REPORT_WIZARD_START + 78
 {
-    Text [ de ] = "Wie möchten Sie nach Erstellung des Berichs fortfahren?";
+    Text [ de ] = "Wie möchten Sie nach Erstellung des Berichts fortfahren?";
     Text [ en-US ] = "How do you want to proceed after creating the report?";
 };
 
 
 // ============================================================================
-#ifdef null
 
 String RID_DB_TABLE_WIZARD_START + 1
 {
@@ -6952,96 +5494,96 @@ String RID_DB_TABLE_WIZARD_START + 1
 
 String RID_DB_TABLE_WIZARD_START + 2
 {
-    Text [ de ] = "Tabellen Szenario";
-    Text [ en-US] = "Select table ccenario";
+    Text [ de ] = "Felder wählen";
+    Text [ en-US] = "Select fields";
 };
 
 String RID_DB_TABLE_WIZARD_START + 3
 {
-    Text [ de ] = "Typformat setzen";
-    Text [ en-US] = "Set type formatting";
+    Text [ de ] = "Felddatentyp festlegen";
+    Text [ en-US] = "Set types and formats";
 };
 
 String RID_DB_TABLE_WIZARD_START + 4
 {
-    Text [ de ] = "Primärschlüssel";
+    Text [ de ] = "Primärschlüssel festlegen";
     Text [ en-US] = "Set primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 5
 {
-    Text [ de ] = "Tabelle erzeugen";
+    Text [ de ] = "Tabelle erstellen";
     Text [ en-US] = "Create table";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 8
 {
-    Text [ de ] = "Select the fields for your table";
-    Text [ en-US] = "Select the fields for your table";
+    Text [ de ] = "Wählen Sie die Felder für Ihre Tabelle aus";
+    Text [ en-US] = "Select fields for your table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 9
 {
-    Text [ de ] = "Set the type formats of your fields";
-    Text [ en-US] = "Set the type formats of your fields";
+    Text [ de ] = "Setzen Sie die Formate Ihrer Felder";
+    Text [ en-US] = "Set field types and formats";
 };
 
 String RID_DB_TABLE_WIZARD_START + 10
 {
-    Text [ de ] = "Decide if you want to use a primary key";
-    Text [ en-US] = "Decide if you want to use a primary key";
+    Text [ de ] = "Primärschlüssel setzen";
+    Text [ en-US] = "Set primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 11
 {
-    Text [ de ] = "Decide how you want to proceed after creating the table";
-    Text [ en-US] = "Decide how you want to proceed after creating the table";
+    Text [ de ] = "Tabelle erstellen";
+    Text [ en-US] = "Create table";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 14
 {
-    Text [ de ] = "This wizard will help you to create a database table. You can compose it from a set of offered sample tables";
-    Text [ en-US] = "This wizard will help you to create a database table. You can compose it from a set of offered sample tables";
+    Text [ de ] = "Dieser Assistent hilft Ihnen eine Datenbanktabelle zu erstellen. Nachdem Sie eine Tabellenkategorie ausgewählt haben, wählen Sie die Beispielstabelle und Beispielsfelder aus, die Sie in Ihre neue Tabelle einbeziehen möchten. Ihre Tabelle kann Felder aus mehr als einer Datenbank enthalten.";
+    Text [ en-US] = "This wizard helps you to create a table for your database. After selecting a table category and a sample table, choose the fields you want to include in your table. You can include fields from more than one sample table.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 15
 {
-    Text [ de ] = "Categories";
-    Text [ en-US] = "Categories";
+    Text [ de ] = "~Kategorie";
+    Text [ en-US] = "Ca~tegory";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 16
 {
-    Text [ de ] = "B~usiness";
+    Text [ de ] = "~Geschäftlich";
     Text [ en-US] = "B~usiness";
 };
 
 String RID_DB_TABLE_WIZARD_START + 17
 {
-    Text [ de ] = "P~rivate";
-    Text [ en-US] = "P~rivate";
+    Text [ de ] = "~Privat";
+    Text [ en-US] = "P~ersonal";
 };
 
 String RID_DB_TABLE_WIZARD_START + 18
 {
-    Text [ de ] = "~Sample tables";
+    Text [ de ] = "~Beispielstabellen";
     Text [ en-US] = "~Sample tables";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 19
 {
-    Text [ de ] = "Fields in the new ~table";
-    Text [ en-US] = "Fields in my new ~table";
+    Text [ de ] = "~Vorhandene Felder";
+    Text [ en-US] = "A~vailable fields";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 20
 {
-    Text [ de ] = "Field information";
+    Text [ de ] = "Feldinformationen";
     Text [ en-US] = "Field information";
 };
 
@@ -7059,114 +5601,160 @@ String RID_DB_TABLE_WIZARD_START + 22
 
 String RID_DB_TABLE_WIZARD_START + 23
 {
-    Text [ de ] = "Fieldname";
-    Text [ en-US] = "Fieldname";
+    Text [ de ] = "Feldname";
+    Text [ en-US] = "Field name";
 };
 
 String RID_DB_TABLE_WIZARD_START + 24
 {
-    Text [ de ] = "Field Type";
-    Text [ en-US] = "Field Type";
+    Text [ de ] = "Feldtyp";
+    Text [ en-US] = "Field type";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 25
 {
-    Text [ de ] = "~Selected fields";
+    Text [ de ] = "~Gewählte Felder";
     Text [ en-US] = "~Selected fields";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 26
 {
-    Text [ de ] = "It is suggested to have a field in every database table that uniquely identifies each record. This field is called a primary key. Primary keys ease the linking of information in separate tables. Without a primary no data entry to this table is possible.";
-    Text [ en-US] = "It is suggested to have a field in every database table that uniquely identifies each record. This field is called a primary key. Primary keys ease the linking of information in separate tables. Without a primary no data entry to this table is possible.";
+    Text [ de ] = "Jeder Datensatz wird eindeutig durch einen Primärschlüssel identifiziert. Primärschlüssel vereinfachen das Verbinden von Informationen aus verschiedenen Tabellen. Es wird daher empfohlen, für jede Tabelle einen Primärschlüssel anzulegen. Ohne einen Primärschlüssel ist keine Eingabe in diese Tabelle möglich.";
+    Text [ en-US] = "A primary key uniquely identifies each record in a database table. Primary keys ease the linking of information in separate tables, and it is recommended that you have a primary key in every table. Without a primary key, it will not be possible to enter data into this table.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 27
 {
-    Text [ de ] = "~Create a primary key";
+    Text [ de ] = "Primärschlüssel erstellen";
     Text [ en-US] = "~Create a primary key";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 28
 {
-    Text [ de ] = "~Add a primary key automatically";
-    Text [ en-US] = "~Add a primary key automatically";
+    Text [ de ] = "Primärschlüssel ~wird automatisch hinzugefügt";
+    Text [ en-US] = "~Automatically add a primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 29
 {
-    Text [ de ] = "~Use an existing field as primary key";
-    Text [ en-US] = "~Use an existing field as primary key";
+    Text [ de ] = "~Ein bestehendes Feld wird als Primärschlüssel verwendet";
+    Text [ en-US] = "~Use an existing field as a primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 30
 {
-    Text [ de ] = "Define p~rimary key by several fields";
-    Text [ en-US] = "Define p~rimary key by several fields";
+    Text [ de ] = "Definition eines P~rimärschlüssels durch mehrere Felder";
+    Text [ en-US] = "Define p~rimary key as a combination of several fields ";
 };
 
 String RID_DB_TABLE_WIZARD_START + 31
 {
-    Text [ de ] = "F~ieldname";
+    Text [ de ] = "Fe~ldname";
     Text [ en-US] = "F~ieldname";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 32
 {
-    Text [ de ] = "~Primary key fields";
+    Text [ de ] = "~Primärschlüsselfelder";
     Text [ en-US] = "~Primary key fields";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 33
 {
-    Text [ de ] = "Auto ~value";
+    Text [ de ] = "Au~towert";
     Text [ en-US] = "Auto ~value";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 34
 {
-    Text [ de ] = "Tablename:";
-    Text [ en-US] = "Tablename:";
+    Text [ de ] = "Wie möchten Sie Ihre  Tabelle benennen?";
+    Text [ en-US] = "What do you want to name your table?";
 };
 
 String RID_DB_TABLE_WIZARD_START + 35
 {
-    Text [ de ] = "Congratulations. You have assigned all Information you need to create a table";
-    Text [ en-US] = "Congratulations. You have assigned all Information you need to create a table";
+    Text [ de ] = "Herzlichen Glückwunsch! Sie haben alle Informationen zum Erstellen Ihrer Tabelle eingegeben.";
+    Text [ en-US] = "Congratulations. You have entered all the information needed to create your table";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 36
 {
-    Text [ de ] = "How do you want to proceed?";
-    Text [ en-US] = "How do you want to proceed?";
+    Text [ de ] = "~Wie möchten Sie weiter vorgehen?";
+    Text [ en-US] = "What do you want to do next?";
 };
 
 String RID_DB_TABLE_WIZARD_START + 37
 {
-    Text [ de ] = "Modify the table design";
+    Text [ de ] = "Das Tabellendesign bearbeiten";
     Text [ en-US] = "Modify the table design";
 };
 
 String RID_DB_TABLE_WIZARD_START + 38
 {
-    Text [ de ] = "Insert Data immediately";
-    Text [ en-US] = "Insert Data immediately";
+    Text [ de ] = "~Daten sofort eingeben";
+    Text [ en-US] = "Insert data immediately";
 };
 
 String RID_DB_TABLE_WIZARD_START + 39
 {
-    Text [ de ] = "Create a form based on this table";
-    Text [ en-US] = "Create a form based on this table";
+    Text [ de ] = "Ein Formular auf ~Basis dieser Tabelle erstellen";
+    Text [ en-US] = "C~reate a form based on this table";
+};
+
+String RID_DB_TABLE_WIZARD_START + 40
+{
+    Text [ de ] = "Die erzeugte Tabelle konnte nicht geöffnet werden.";
+    Text [ en-US] = "The table you have created could not be opened.";
+};
+
+String RID_DB_TABLE_WIZARD_START + 41
+{
+  Text [ de ] = "Der Tabellenname '%TABLENAME' enthält ein Sonderzeichen ('%SPECIALCHAR'), das möglicherweise nicht von der Datenbank unterstützt wird.";
+  Text [ en-US] = "The table name '%TABLENAME' contains a character ('%SPECIALCHAR') that might not be supported by the database.";
+};
+
+
+String RID_DB_TABLE_WIZARD_START + 42
+{
+  Text [ de ] = "Der Feldname '%FIELDNAME' enthält ein Sonderzeichen ('%SPECIALCHAR'), das möglicherweise nicht von der Datenbank unterstützt wird.";
+  Text [ en-US] = "The field name '%FIELDNAME' contains a special character ('%SPECIALCHAR') that might not be supported by the database.";
+};
+
+
+String RID_DB_TABLE_WIZARD_START + 43
+{
+    Text [ de ] = "unbenannt";
+    Text [ en-US] = "untitled";
+};
+
+
+String RID_DB_TABLE_WIZARD_START + 44
+{
+    Text [ de ] = "MeineTabelle";
+    Text [ en-US] = "MyTable";
+};
+
+String RID_DB_TABLE_WIZARD_START + 45
+{
+    Text [ de ] = "Ein Feld hinzufügen";
+    Text [ en-US] = "Add a Field";
+};
+
+String RID_DB_TABLE_WIZARD_START + 46
+{
+    Text [ de ] = "Das gewählte Feld entfernen";
+    Text [ en-US] = "Remove the selected Field";
 };
 
 // ============================================================================
+#ifdef null
 
 String RID_DB_GRID_WIZARD_START + 0
 {
