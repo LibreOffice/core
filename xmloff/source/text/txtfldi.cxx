@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-30 12:28:15 $
+ *  last change: $Author: dvo $ $Date: 2001-05-30 16:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,7 +1352,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             if (SvXMLUnitConverter::convertTime(fTmp, sAttrValue))
             {
                 // convert to minutes
-                nAdjust = (sal_Int16)SolarMath::ApproxFloor(fTmp * 60 * 24);
+                nAdjust = (sal_Int32)SolarMath::ApproxFloor(fTmp * 60 * 24);
             }
             break;
         }
