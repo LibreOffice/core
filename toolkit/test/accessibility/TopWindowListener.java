@@ -35,8 +35,12 @@ class TopWindowListener
             {
                 try
                 {
-                    AddTopLevelNode (maOffice.getAccessibleObject(
-                        xToolkit.getTopWindow (i)));
+                    XAccessible xAccessible = maOffice.getAccessibleObject(
+                        xToolkit.getTopWindow (i));
+                    // Uncomment the following line to get the real root of
+                    //   the accessible tree that xAccessible belongs to.
+                    // xAccessible = maOffice.getAccessibleRoot(xAccessible);
+                    AddTopLevelNode (xAccessible);
                 }
                 catch (Exception e)
                 {

@@ -507,47 +507,6 @@ public class AccessibilityWorkBench
         VectorNode aRoot = new VectorNode ("Accessibility Tree", null);
         if (maTopWindowListener != null)
             maTopWindowListener.Initialize ();
-        /*
-        try
-        {
-            XDesktop xDesktop = office.getDesktop();
-            if (xDesktop == null)
-            {
-                return new StringNode ("ERROR: Can't connect. (No desktop)", null);
-            }
-
-            XEnumerationAccess xEA = xDesktop.getComponents();
-            if (xEA == null)
-            {
-                return new StringNode ("ERROR: Can't get components", null);
-            }
-            XEnumeration xE = xEA.createEnumeration();
-            while (xE.hasMoreElements())
-            {
-                XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
-                    XComponent.class, xE.nextElement());
-                XModel xModel = (XModel) UnoRuntime.queryInterface(
-                    XModel.class, xComponent);
-                if (xModel != null)
-                {
-                    println (xModel.getURL());
-                    XWindow xWindow = office.getCurrentWindow (xModel);
-                    XAccessible xRoot = office.getAccessibleRoot (
-                        office.getAccessibleObject(xWindow));
-
-                    // create document node
-                    aRoot.addChild (
-                        AccessibilityTreeModel.createDefaultNode (xRoot, aRoot));
-                }
-            }
-            println ("finished getting named documents");
-        }
-        catch (Exception e)
-        {
-            System.out.println ("caught exception while getting document names: " + e);
-            e.printStackTrace();
-        }
-        */
         return aRoot;
     }
 
