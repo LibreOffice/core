@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-07 14:54:02 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 11:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
     if (!pMap)
         throw UnknownPropertyException();
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
     const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
     rItem.QueryValue( aRet, pMap->nMemberId );
@@ -172,7 +172,7 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
     if (!pMap)
         throw UnknownPropertyException();
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+        throw RuntimeException();
 
     const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
     if (IsStaticDefaultItem ( &rItem ) )
@@ -201,7 +201,7 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
     if (!pMap)
         throw UnknownPropertyException();
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
    SfxItemPool rSet (pDoc->GetAttrPool());
    rSet.ResetPoolDefaultItem ( pMap->nWID );
 }
@@ -214,7 +214,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
     if (!pMap)
         throw UnknownPropertyException();
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+        throw RuntimeException();
     Any aRet;
     SfxItemPool rSet (pDoc->GetAttrPool());
     const SfxPoolItem *pItem = rSet.GetPoolDefaultItem ( pMap->nWID );
