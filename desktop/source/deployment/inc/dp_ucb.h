@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:06:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include "rtl/byteseq.hxx"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include "dp_misc.h"
 
 
 namespace ucb
@@ -73,8 +74,11 @@ class Content;
 
 namespace css = ::com::sun::star;
 
-namespace dp_misc
-{
+namespace dp_misc {
+
+struct StrTitle : public ::rtl::StaticData<const ::rtl::OUString, StrTitle> {
+    const ::rtl::OUString operator () () { return OUSTR("Title"); }
+};
 
 //==============================================================================
 bool create_ucb_content(
