@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:57:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-05-10 06:57:48 $
- // $Revision: 1.9 $
+ //     $Date: 2001-05-17 08:35:29 $
+ // $Revision: 1.10 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "~formula cell" ;
         Text [ norwegian ] = "~formelcelle" ;
         Text [ italian ] = "~Cella formula" ;
-        Text [ portuguese_brazilian ] = "~célula de fórmula" ;
+        Text [ portuguese_brazilian ] = "~c?lula de f?mula" ;
         Text [ portuguese ] = "Célula de ~fórmula" ;
         Text [ finnish ] = "Kaavasolu" ;
         Text [ danish ] = "~Formelcelle" ;
@@ -147,7 +147,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
@@ -178,7 +178,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ english_us ] = "Target ~value" ;
         Text[ chinese_simplified ] = "Ä¿±êÖµ(~V)";
         Text[ russian ] = "Êîíå÷íîå çíà÷åíèå";
-        Text[ polish ] = "Wartoœæ docelowa";
+        Text[ polish ] = "Warto?æ docelowa";
         Text[ japanese ] = "–Ú•W’l(~V)";
         Text[ chinese_traditional ] = "¥Ø¼Ğ­È(~V)";
         Text[ arabic ] = "ÇáŞíãÉ ÇáåÏİ";
@@ -203,7 +203,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "~variable cell" ;
         Text [ norwegian ] = "~cellevariabel l" ;
         Text [ italian ] = "Cella ~variabile" ;
-        Text [ portuguese_brazilian ] = "~célula variável" ;
+        Text [ portuguese_brazilian ] = "~c?lula vari?vel" ;
         Text [ portuguese ] = "Célula ~variável" ;
         Text [ finnish ] = "Muuttuja~solu" ;
         Text [ danish ] = "Variabel celle" ;
@@ -249,7 +249,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
@@ -269,7 +269,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "Variables" ;
         Text [ norwegian ] = "Variabler" ;
         Text [ italian ] = "Preimpostazioni" ;
-        Text [ portuguese_brazilian ] = "Variáveis" ;
+        Text [ portuguese_brazilian ] = "Vari?veis" ;
         Text [ portuguese ] = "Definir variáveis" ;
         Text [ finnish ] = "Määritä oletusarvot" ;
         Text [ danish ] = "Forudindstillinger" ;
@@ -280,7 +280,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ english_us ] = "Set defaults" ;
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
-        Text[ polish ] = "Ustawienia domyœlne";
+        Text[ polish ] = "Ustawienia domy?lne";
         Text[ japanese ] = "w’è";
         Text[ chinese_traditional ] = "¹w¸m";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇİÊÑÇÖíÉ";
@@ -316,7 +316,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "Invalid target value!" ;
         Text [ norwegian ] = "Ugyldig målverdi!" ;
         Text [ italian ] = "Valore di destinazione non valido!" ;
-        Text [ portuguese_brazilian ] = "Valor do alvo inválido!" ;
+        Text [ portuguese_brazilian ] = "Valor do alvo inv?lido!" ;
         Text [ portuguese ] = "Valor de destino incorreto!" ;
         Text [ finnish ] = "Virheellinen kohdearvo." ;
         Text [ danish ] = "Ugyldig målværdi!" ;
@@ -327,7 +327,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ english_us ] = "Invalid target value." ;
         Text[ chinese_simplified ] = "Ä¿±êÊıÖµÎŞĞ§£¡";
         Text[ russian ] = "Íåäîïóñòèìîå êîíå÷íîå çíà÷åíèå!";
-        Text[ polish ] = "Nieprawid³owa wartoœæ docelowa!";
+        Text[ polish ] = "Nieprawid³owa warto?æ docelowa!";
         Text[ japanese ] = "‚±‚ÌÀ°¹Ş¯Ä’l‚Í–³Œø‚Å‚·B";
         Text[ chinese_traditional ] = "¥Ø¼Ğ¼Æ­ÈµL®Ä¡I";
         Text[ arabic ] = "ŞíãÉ åÏİ ÛíÑ ÕÇáÍÉ!";
@@ -343,7 +343,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "Undefined name for variable cell!" ;
         Text [ norwegian ] = "Udefinert navn for cellevariabel!" ;
         Text [ italian ] = "Nome non definito per la cella-variabile!" ;
-        Text [ portuguese_brazilian ] = "Nome indefinido para célula variável!" ;
+        Text [ portuguese_brazilian ] = "Nome indefinido para c?lula vari?vel!" ;
         Text [ portuguese ] = "Nome indefinido para célula variável!" ;
         Text [ finnish ] = "Määrittämätön nimi muuttujasoluna." ;
         Text [ danish ] = "Udefineret navn som variabelcelle!" ;
@@ -370,7 +370,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "Undefined name for formula cell!" ;
         Text [ norwegian ] = "Udefinert navn for formelcelle!" ;
         Text [ italian ] = "Nome non definito per la cella-formula!" ;
-        Text [ portuguese_brazilian ] = "Nome indefinido para célula de fórmula!" ;
+        Text [ portuguese_brazilian ] = "Nome indefinido para c?lula de f?mula!" ;
         Text [ portuguese ] = "Nome indefinido para célula fórmula!" ;
         Text [ finnish ] = "Määrittämätön nimi kaavasoluna." ;
         Text [ danish ] = "Udefineret navn som formelcelle!" ;
@@ -398,7 +398,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ ENGLISH ] = "No formula cell!" ;
         Text [ norwegian ] = "Ingen formelcelle!" ;
         Text [ italian ] = "La cella deve contenere una formula!" ;
-        Text [ portuguese_brazilian ] = "Sem célula de fórmula!" ;
+        Text [ portuguese_brazilian ] = "Sem c?lula de f?mula!" ;
         Text [ portuguese ] = "A célula tem de conter uma fórmula!" ;
         Text [ finnish ] = "Solussa on oltava kaava." ;
         Text [ danish ] = "Cellen skal indeholde en formel!" ;
