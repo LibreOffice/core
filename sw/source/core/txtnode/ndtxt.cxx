@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:21:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,20 +1066,6 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 
         if( rNds.IsDocNodes() )
             rNds.UpdateOutlineNode( *this, nOldLevel, nNewLevel );
-    }
-
-    const SfxPoolItem * pItem = NULL;
-    if (SFX_ITEM_SET ==
-        pNewColl->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem))
-    {
-        SwNumRule * pRule =
-            GetDoc()->FindNumRulePtr(((SwNumRuleItem *) pItem)->GetValue());
-
-        if (pRule)
-        {
-            SwPaM aPam(*this);
-            GetDoc()->SetNumRule(aPam, *pRule);
-        }
     }
 
     // Update beim Level 0 noch die Fussnoten !!
