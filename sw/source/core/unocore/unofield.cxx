@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:46:46 $
+ *  last change: $Author: os $ $Date: 2000-11-22 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@
 #ifndef  _FLDBAS_HXX
 #include <fldbas.hxx>
 #endif
+#ifndef _AUTHFLD_HXX
+#include <authfld.hxx>
+#endif
 #ifndef  _FLDDAT_HXX
 #include <flddat.hxx>
 #endif
@@ -261,6 +264,7 @@ using namespace ::rtl;
 #define FIELD_PROP_PAR4             23
 #define FIELD_PROP_SHORT1           24
 #define FIELD_PROP_DATE_TIME        25
+#define FIELD_PROP_PROP_SEQ         26
 
 //static SfxItemPropertyMap aSetRefFieldPropMap     [] = {{0,0,0,0}};
 //static SfxItemPropertyMap aInetFieldPropMap       [] = {{0,0,0,0}};
@@ -821,9 +825,9 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aBibliographyFieldMap[] =
             {
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , 0, new uno::Type(::getCppuType((Sequence<PropertyValue>*)0)),PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, new uno::Type(::getCppuType((Sequence<PropertyValue>*)0)),PROPERTY_NONE, 0},
 #else
-                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , 0, &::getCppuType((Sequence<PropertyValue>*)0),PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, &::getCppuType((Sequence<PropertyValue>*)0),PROPERTY_NONE, 0},
 #endif
                 {0,0,0,0}
             };
@@ -1534,6 +1538,7 @@ struct SwFieldProperties_Impl
     Date            aDate;
     Double          fDouble;
     util::DateTime* pDateTime;
+    Sequence<PropertyValue> aPropSeq;
 
     SwFieldProperties_Impl():
         nSubType(0),
@@ -2125,6 +2130,17 @@ void SwXTextField::attachToRange(
                 pFld = new SwDocStatField((SwDocStatFieldType*)pFldType, nSubType, m_pProps->nUSHORT2);
             }
             break;
+            case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
+            {
+                SwFieldType* pFldType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
+                pFld = new SwAuthorityField((SwAuthorityFieldType*)pFldType, aEmptyStr);
+                if(m_pProps->aPropSeq.getLength())
+                {
+                    Any aVal; aVal <<= m_pProps->aPropSeq;
+                    pFld->PutValue(aVal, C2U(UNO_NAME_FIELDS));
+                }
+            }
+            break;
             default: DBG_ERROR("was ist das fuer ein Typ?");
         }
         if(pFld)
@@ -2436,6 +2452,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                     m_pProps->pDateTime = new util::DateTime;
                 aValue >>= (*m_pProps->pDateTime);
             break;
+            case FIELD_PROP_PROP_SEQ:
+                aValue >>= m_pProps->aPropSeq;
+            break;
         }
     }
     else
@@ -2525,6 +2544,9 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
             case FIELD_PROP_DATE_TIME :
                 if(m_pProps->pDateTime)
                     aRet <<= (*m_pProps->pDateTime);
+            break;
+            case FIELD_PROP_PROP_SEQ:
+                aRet <<= m_pProps->aPropSeq;
             break;
         }
     }
