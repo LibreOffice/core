@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:00:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP
 #include <com/sun/star/awt/FontUnderline.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XCHAPTERNUMBERINGSUPPLIER_HPP_
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #endif
 #ifndef _XMLOFF_TXTEXPPR_HXX
 #include "txtexppr.hxx"
@@ -352,6 +355,10 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 
 }
 
+// helper method; implementation below
+bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
+
+
 void XMLTextExportPropertySetMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     Reference< XPropertySet > rPropSet ) const
@@ -486,6 +493,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pUnderlineColorState = NULL;
     XMLPropertyState* pUnderlineHasColorState = NULL;
 
+    // filter list style name
+    XMLPropertyState* pListStyleName = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -599,6 +609,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_UNDERLINE:             pUnderlineState = propertie; break;
         case CTF_UNDERLINE_COLOR:       pUnderlineColorState = propertie; break;
         case CTF_UNDERLINE_HASCOLOR:    pUnderlineHasColorState = propertie; break;
+        case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
         }
     }
 
@@ -1021,5 +1032,37 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     }
     // <--
 
+    // list style name: remove list style if it is the default outline style
+    if( pListStyleName != NULL )
+    {
+        OUString sListStyleName;
+        pListStyleName->maValue >>= sListStyleName;
+        if( lcl_IsOutlineStyle( GetExport(), sListStyleName ) )
+            pListStyleName->mnIndex = -1;
+    }
+
     SvXMLExportPropertyMapper::ContextFilter(rProperties,rPropSet);
+}
+
+
+bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
+{
+    Reference< XChapterNumberingSupplier >
+        xCNSupplier(rExport.GetModel(), UNO_QUERY);
+
+    OUString sOutlineName;
+    OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+
+    if (xCNSupplier.is())
+    {
+        Reference<XPropertySet> xNumRule(
+            xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
+        DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+        if (xNumRule.is())
+        {
+            xNumRule->getPropertyValue(sName) >>= sOutlineName;
+        }
+    }
+
+    return rName == sOutlineName;
 }
