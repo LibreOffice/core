@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-10 12:18:34 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,9 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ((nType==CTRL_EDITBOX) &&
                 (  (nPart==PART_ENTIRE_CONTROL)
                 || (nPart==HAS_BACKGROUND_TEXTURE) )            )   ||
+        ((nType==CTRL_MULTILINE_EDITBOX) &&
+                (  (nPart==PART_ENTIRE_CONTROL)
+                || (nPart==HAS_BACKGROUND_TEXTURE) )            )   ||
         ((nType==CTRL_SPINBOX) &&
                 (  (nPart==PART_ENTIRE_CONTROL)
                 || (nPart==PART_ALL_BUTTONS)
@@ -568,6 +571,10 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
                 || ((nType==CTRL_SPINBOX) && (nPart==HAS_BACKGROUND_TEXTURE))
                 || ((nType==CTRL_COMBOBOX) && (nPart==HAS_BACKGROUND_TEXTURE))
                 || ((nType==CTRL_LISTBOX) && (nPart==HAS_BACKGROUND_TEXTURE)) )
+        {
+            returnVal = NWPaintGTKEditBox( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption );
+        }
+        else if ( ((nType==CTRL_MULTILINE_EDITBOX) && ((nPart==PART_ENTIRE_CONTROL) || (nPart==HAS_BACKGROUND_TEXTURE)) ) )
         {
             returnVal = NWPaintGTKEditBox( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption );
         }
@@ -1609,7 +1616,7 @@ static void NWPaintOneEditBox(  GdkWindow * gdkDrawable,
 {
     GtkStateType    stateType;
     GtkShadowType   shadowType;
-    GtkWidget * widget;
+    GtkWidget      *widget;
     gboolean        interiorFocus;
     gint            focusWidth;
 
@@ -1617,6 +1624,7 @@ static void NWPaintOneEditBox(  GdkWindow * gdkDrawable,
     NWEnsureGTKEditBox();
     NWEnsureGTKSpinButton();
     NWEnsureGTKCombo();
+    NWEnsureGTKScrolledWindow();
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     shadowType = GTK_SHADOW_IN;
@@ -1628,6 +1636,9 @@ static void NWPaintOneEditBox(  GdkWindow * gdkDrawable,
             widget = gSpinButtonWidget;
             break;
 
+        case CTRL_MULTILINE_EDITBOX:
+            widget = gScrolledWindowWidget;
+            break;
 //      case CTRL_COMBOBOX:
 //          widget = gComboWidget;
 //          break;
@@ -1654,11 +1665,11 @@ static void NWPaintOneEditBox(  GdkWindow * gdkDrawable,
                       aEditBoxRect.getX(), aEditBoxRect.getY(),
                       aEditBoxRect.getWidth(), aEditBoxRect.getHeight() );
 
+#if 0   // vcl draws focus rects
     // Grab some entry style attributes
     gtk_widget_style_get( gEditBoxWidget,   "focus-line-width", &focusWidth,
                                      "interior-focus",  &interiorFocus, NULL );
     // Draw focus rect
-#if 0   // vcl draws focus rects
     if ( nState & CTRL_STATE_FOCUSED )
     {
         if ( !interiorFocus )
@@ -2187,18 +2198,15 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( ControlType nType, ControlPart nPart,
             "focus_line_width", &nFocusLineWidth,
             "focus_padding",    &nFocusPadding,
             NULL);
-
         // Listboxes must paint opaque since some themes have alpha-channel enabled bodies
         gtk_paint_flat_box( gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                             gdkRect, gBtnWidget, "base", x, y,
                             pixmapRect.getWidth(), pixmapRect.getHeight() );
-
         gtk_paint_box( gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, gdkRect,
                        gOptionMenuWidget, "optionmenu",
                        x+(widgetRect.getX() - pixmapRect.getX()),
                        y+(widgetRect.getY() - pixmapRect.getY()),
                        widgetRect.getWidth(), widgetRect.getHeight() );
-
         aIndicatorRect = NWGetListBoxIndicatorRect( nType, nPart, widgetRect, nState,
                                                     aValue, rControlHandle, aCaption );
         gtk_paint_tab( gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, gdkRect,
@@ -2209,6 +2217,8 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( ControlType nType, ControlPart nPart,
     }
     else
     {
+        shadowType = GTK_SHADOW_IN;
+
         gtk_paint_shadow( gScrolledWindowWidget->style, gdkDrawable, GTK_STATE_NORMAL, shadowType,
             gdkRect, gScrolledWindowWidget, "scrolled_window",
             x+(widgetRect.getX() - pixmapRect.getX()), y+(widgetRect.getY() - pixmapRect.getY()),
@@ -2230,21 +2240,21 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( ControlType nType, ControlPart nPart,
 
 //----
 
-static Rectangle NWGetListBoxButtonRect(    ControlType         nType,
-                                    ControlPart         nPart,
-                                    Rectangle               aAreaRect,
-                                    ControlState            nState,
-                                    const ImplControlValue& aValue,
-                                    SalControlHandle&       rControlHandle,
-                                    OUString                aCaption )
+static Rectangle NWGetListBoxButtonRect( ControlType    nType,
+                                         ControlPart    nPart,
+                                         Rectangle      aAreaRect,
+                                         ControlState   nState,
+                                         const ImplControlValue&    aValue,
+                                         SalControlHandle&          rControlHandle,
+                                         OUString       aCaption )
 {
     Rectangle       aPartRect;
-    GtkRequisition *    pIndicatorSize;
-    GtkBorder *     pIndicatorSpacing;
-    gint                width = 13; // GTK+ default
-    gint                left  = 7;  // GTK+ default
-    gint                right = 5;  // GTK+ default
-    gint                nButtonAreaWidth = 0;
+    GtkRequisition *pIndicatorSize = NULL;
+    GtkBorder      *pIndicatorSpacing = NULL;
+    gint            width = 13; // GTK+ default
+    gint            right = 5;  // GTK+ default
+    gint            nButtonAreaWidth = 0;
+    gint            xthickness = 0;
 
     NWEnsureGTKOptionMenu();
 
@@ -2252,18 +2262,17 @@ static Rectangle NWGetListBoxButtonRect(    ControlType         nType,
             "indicator_size",   &pIndicatorSize,
             "indicator_spacing",&pIndicatorSpacing, NULL);
 
-    if ( pIndicatorSize && ((pIndicatorSize->width < 20) || (pIndicatorSize->width >= 0)) )
+    if ( pIndicatorSize )
         width = pIndicatorSize->width;
 
-    if ( pIndicatorSpacing && ((pIndicatorSpacing->right < 20) || (pIndicatorSpacing->right >= 0)) )
+    if ( pIndicatorSpacing )
         right = pIndicatorSpacing->right;
-    if ( pIndicatorSpacing && ((pIndicatorSpacing->left < 20) || (pIndicatorSpacing->left >= 0)) )
-        left = pIndicatorSpacing->left;
 
     aPartRect.setHeight( aAreaRect.getHeight() );
     aPartRect.setY( aAreaRect.getY() );
 
-    nButtonAreaWidth = width + right + (gOptionMenuWidget->style->xthickness * 2);
+    xthickness = gOptionMenuWidget->style->xthickness;
+    nButtonAreaWidth = width + right + (xthickness * 2);
     switch( nPart )
     {
         case PART_BUTTON_DOWN:
@@ -2272,8 +2281,8 @@ static Rectangle NWGetListBoxButtonRect(    ControlType         nType,
             break;
 
         case PART_SUB_EDIT:
-            aPartRect.setWidth( aAreaRect.getWidth() - nButtonAreaWidth );
-            aPartRect.setX( aAreaRect.getX() );
+            aPartRect.setWidth( aAreaRect.getWidth() - nButtonAreaWidth - xthickness );
+            aPartRect.setX( aAreaRect.getX() + xthickness );
             break;
 
         default:
@@ -2301,11 +2310,11 @@ static Rectangle NWGetListBoxIndicatorRect( ControlType         nType,
                                     OUString                aCaption )
 {
     Rectangle       aIndicatorRect;
-    GtkRequisition *    pIndicatorSize;
-    GtkBorder *     pIndicatorSpacing;
-    gint                width = 7;  // GTK+ default
-    gint                height = 13;    // GTK+ default
-    gint                right = 5;  // GTK+ default
+    GtkRequisition *pIndicatorSize = NULL;
+    GtkBorder      *pIndicatorSpacing = NULL;
+    gint            width = 13; // GTK+ default
+    gint            height = 13;    // GTK+ default
+    gint            right = 5;  // GTK+ default
 
     NWEnsureGTKOptionMenu();
 
@@ -2313,12 +2322,13 @@ static Rectangle NWGetListBoxIndicatorRect( ControlType         nType,
             "indicator_size",   &pIndicatorSize,
             "indicator_spacing",&pIndicatorSpacing, NULL);
 
-    if ( pIndicatorSize && ((pIndicatorSize->width < 20) && (pIndicatorSize->width >= 0)) )
+    if ( pIndicatorSize )
+    {
         width = pIndicatorSize->width;
-    if ( pIndicatorSize && ((pIndicatorSize->height < 20) && (pIndicatorSize->height >= 0)) )
         height = pIndicatorSize->height;
+    }
 
-    if ( pIndicatorSpacing && ((pIndicatorSpacing->right < 20) && (pIndicatorSpacing->right >= 0)) )
+    if ( pIndicatorSpacing )
         right = pIndicatorSpacing->right;
 
     aIndicatorRect.setWidth( width );
