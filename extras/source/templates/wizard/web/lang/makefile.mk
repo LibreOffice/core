@@ -1,10 +1,10 @@
-#*************************************************************************
+#/*************************************************************************
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 09:03:29 $
+#   last change: $Author: kz $ $Date: 2004-05-19 14:18:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,8 @@
 #
 #
 #*************************************************************************
+
+
 PRJ=..$/..$/..$/..$/..
 
 
@@ -70,15 +72,10 @@ TARGET=templateswizardweb
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
-ZIP1TARGET      = $(TEMPLATE_WIZARD_HOMEPAGE_TARGET)
-
-ZIP1LIST	= $(LANGDIR)$/*
-
-
+ZIP1DIR			= .$/LANGDIR
+ZIPFLAGS		=
+ZIP1TARGET      = $(TEMPLATE_WIZARD_WEB_TARGET)
+ZIP1LIST        = $(LANGDIR)$/* $(LANGDIR)$/*$/* $(LANGDIR)$/*$/*$/*
 
 .INCLUDE : target.mk
-
-
 
