@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-28 16:21:05 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:29:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,7 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe -mtune=pentiumpro
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
-
+PICSWITCH:=-fpic
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
 # Compiler flags for compiling static object in single threaded environment with character user interface
@@ -131,9 +131,9 @@ CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
 CFLAGSOBJCUIMT=
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fpic
+CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fpic
+CFLAGSSLOCUIMT=$(PICSWITCH)
 # Compiler flags for profiling
 CFLAGSPROF=
 # Compiler flags for debugging
