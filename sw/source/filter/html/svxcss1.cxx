@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:57:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,9 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                 nBottomBorderDistance != USHRT_MAX ||
                 nLeftBorderDistance != USHRT_MAX ||
                 nRightBorderDistance != USHRT_MAX;
-    for( USHORT i=0; !bChg && i<4; i++ )
+    USHORT i;
+
+    for( i = 0; !bChg && i < 4; i++ )
         bChg = aBorderInfos[i]!=0;
 
     if( !bChg )
