@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 10:53:56 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 15:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include "miscuno.hxx"
 #include "viewopti.hxx"
 
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
+
 using namespace com::sun::star;
 
 #define SCDOCUMENTCONFIGURATION_SERVICE "com.sun.star.sheet.DocumentConfiguration"
@@ -97,6 +101,8 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_RASTERSUBX),   0,  &getCppuType((sal_Int32*)0),        0},
         {MAP_CHAR_LEN(SC_UNO_RASTERSUBY),   0,  &getCppuType((sal_Int32*)0),        0},
         {MAP_CHAR_LEN(SC_UNO_RASTERSYNC),   0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_AUTOCALC),     0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((rtl::OUString*)0),    0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -206,6 +212,29 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 aViewOpt.SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_OUTLSYMB ) == 0 )
                 aViewOpt.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_AUTOCALC ) == 0 )
+                pDoc->SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
+            {
+                SfxPrinter* pPrinter = pDocShell->GetPrinter();
+                if (pPrinter)
+                {
+                    rtl::OUString sPrinterName;
+                    if (aValue >>= sPrinterName)
+                    {
+                        String aString(sPrinterName);
+                        SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
+                        if (pNewPrinter->IsKnown())
+                            pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
+                        else
+                            delete pNewPrinter;
+                    }
+                    else
+                        throw lang::IllegalArgumentException();
+                }
+                else
+                    throw uno::RuntimeException();
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -228,7 +257,11 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             pDoc->SetViewOptions(aViewOpt);
         }
+        else
+            throw uno::RuntimeException();
     }
+    else
+        throw uno::RuntimeException();
 }
 
 uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -266,6 +299,16 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_TABCONTROLS ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_OUTLSYMB ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_OUTLINER ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_AUTOCALC ) == 0 )
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->GetAutoCalc() );
+            else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
+            {
+                SfxPrinter *pPrinter = pDoc->GetPrinter ();
+                if (pPrinter)
+                    aRet <<= rtl::OUString ( pPrinter->GetName());
+                else
+                    throw uno::RuntimeException();
+            }
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
@@ -287,7 +330,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                     throw beans::UnknownPropertyException();
             }
         }
+        else
+            throw uno::RuntimeException();
     }
+    else
+        throw uno::RuntimeException();
 
     return aRet;
 }
