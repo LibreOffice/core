@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineSpacingMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from idl: constants com::sun::star::style::LineSpacingMode
 /** These constants specify the interpretation of LineHeight.
  */
-constants LineSpacingMode
+published constants LineSpacingMode
 {
     //-------------------------------------------------------------------------
 
