@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertyStates.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com { module sun { module star { module beans {
     the value, e.g. the object itself, a default or a stylesheet.
     For more information see <type>PropertyState</type>.
 */
-interface XMultiPropertyStates: com::sun::star::uno::XInterface
+published interface XMultiPropertyStates: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @returns

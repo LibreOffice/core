@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertiesChangeListener.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module beans {
 
 /** receives events which get fired whenever a bound property is changed.
  */
-interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
+published interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
