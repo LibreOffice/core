@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:18:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,22 @@
 #include "xenum.hxx"
 #endif
 
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
+
+#ifndef _SVX_RECTENUM_HXX
+#include "rectenum.hxx"
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 class SdrObject;
-class ExtOutputDevice;
+class XOutputDevice;
 class XFillAttrSetItem;
 class XLineAttrSetItem;
-class XPolyPolygon;
-class XPolygon;
-class PolyPolygon;
 class SfxItemSet;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,12 +133,12 @@ class SfxItemSet;
 class ImpGraphicFill
 {
 public:
-    ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rXOut, const SfxItemSet& rFillItemSet, bool bIsShadow=false );
+    ImpGraphicFill( const SdrObject& rObj, const XOutputDevice& rXOut, const SfxItemSet& rFillItemSet, bool bIsShadow=false );
     ~ImpGraphicFill();
 
 private:
     const SdrObject&        mrObj;
-    const ExtOutputDevice&  mrXOut;
+    const XOutputDevice&    mrXOut;
     bool                    mbCommentWritten;
 };
 
@@ -194,135 +203,138 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// ImpCreateDotDashArray takes a XDash and translates it into an array of doubles
+// which describe the lengths of the dashes, dots and empty passages. It returns
+// the complete length of a full DashDot sequence and fills the given vetor of
+// doubles accordingly (also resizing it).
+
+double ImpCreateDotDashArray(::std::vector< double >& rDotDashArray, const XDash& mrDash, sal_Int32 nLineWidth);
+
+///////////////////////////////////////////////////////////////////////////////
 
 class ImpLineStyleParameterPack
 {
-    OutputDevice*               mpOut;
-    XDash                       aDash;
+    XLineJoint                      meLineJoint;
+    ::basegfx::B2DPolygon           maStartPolygon;
+    ::basegfx::B2DPolygon           maEndPolygon;
 
-    XLineJoint                  eLineJoint;
-    XLineStyle                  eLineStyle;
+    sal_Int32                       mnLineWidth;
+    sal_Int32                       mnStartWidth;
+    sal_Int32                       mnEndWidth;
 
-    const XPolygon&             rStartPolygon;
-    const XPolygon&             rEndPolygon;
+    ::std::vector<double>           maDotDashArray;
+    double                          mfFullDashDotLen;
+    double                          mfDegreeStepWidth;
 
-    INT32                       nLineWidth;
-    INT32                       nStartWidth;
-    INT32                       nEndWidth;
+    // bitfield
+    unsigned                        mbStartCentered : 1;
+    unsigned                        mbEndCentered : 1;
+    unsigned                        mbForceNoArrowsLeft : 1;
+    unsigned                        mbForceNoArrowsRight : 1;
+    unsigned                        mbForceHair : 1;
 
-    ::std::vector<double>       aDotDashArray;
-    double                      fFullDashDotLen;
-    double                      fDegreeStepWidth;
-
-    BOOL                        bStartCentered;
-    BOOL                        bEndCentered;
-    BOOL                        bForceNoArrowsLeft;
-    BOOL                        bForceNoArrowsRight;
-    BOOL                        bForceHair;
+    // flag for LineStyle. True is XLINE_SOLID, false is XLINE_DASH
+    unsigned                        mbLineStyleSolid : 1;
 
 public:
-    ImpLineStyleParameterPack(const SfxItemSet& rSet,
-        BOOL bForceHair, OutputDevice* pOut);
+    ImpLineStyleParameterPack(const SfxItemSet& rSet, bool bForceHair);
     ~ImpLineStyleParameterPack();
 
-    OutputDevice* GetOutDev() const { return mpOut; }
-    INT32 GetLineWidth() const { return nLineWidth; }
-    INT32 GetDisplayLineWidth() const { return bForceHair ? 0 : nLineWidth; }
-    XLineStyle GetLineStyle() const { return eLineStyle; }
+    sal_Int32 GetLineWidth() const { return mnLineWidth; }
+    sal_Int32 GetDisplayLineWidth() const { return mbForceHair ? 0L : mnLineWidth; }
+    bool IsLineStyleSolid() const { return mbLineStyleSolid; }
 
-    INT32 GetStartWidth() const { return nStartWidth; }
-    INT32 GetDisplayStartWidth() const { return bForceHair ? 0 : nStartWidth; }
-    INT32 GetEndWidth() const { return nEndWidth; }
-    INT32 GetDisplayEndWidth() const { return bForceHair ? 0 : nEndWidth; }
+    sal_Int32 GetStartWidth() const { return mnStartWidth; }
+    sal_Int32 GetEndWidth() const { return mnEndWidth; }
 
-    const XPolygon& GetStartPolygon() const { return rStartPolygon; }
-    const XPolygon& GetEndPolygon() const { return rEndPolygon; }
+    const ::basegfx::B2DPolygon& GetStartPolygon() const { return maStartPolygon; }
+    const ::basegfx::B2DPolygon& GetEndPolygon() const { return maEndPolygon; }
 
-    double GetDegreeStepWidth() const { return fDegreeStepWidth; }
+    double GetDegreeStepWidth() const { return mfDegreeStepWidth; }
 
-    XLineJoint GetLineJoint() const { return eLineJoint; }
-    double GetLinejointMiterUpperBound() const { return 3.0; }
+    XLineJoint GetLineJoint() const { return meLineJoint; }
+    double GetLinejointMiterMinimumAngle() const { return 15.0; }
 
-    XDashStyle GetDashStyle() const { return aDash.GetDashStyle(); }
-    UINT16 GetDots() const { return aDash.GetDots(); }
-    UINT32 GetDotLen() const { return aDash.GetDotLen(); }
-    UINT16 GetDashes() const { return aDash.GetDashes(); }
-    UINT32 GetDashLen() const { return aDash.GetDashLen(); }
-    UINT32 GetDashDistance() const { return aDash.GetDistance(); }
-    double GetFullDashDotLen() const { return fFullDashDotLen; }
-    UINT16 GetFirstDashDotIndex(double fPos, double& rfDist) const;
-    UINT16 GetNextDashDotIndex(UINT16 nInd, double& rfDist) const;
-    ::std::vector< double > GetDotDash() const { return ::std::vector< double >(aDotDashArray); }
+    double GetFullDashDotLen() const { return mfFullDashDotLen; }
+    const ::std::vector< double >& GetDotDash() const { return maDotDashArray; }
 
-    BOOL IsStartCentered() const { return bStartCentered; }
-    BOOL IsEndCentered() const { return bEndCentered; }
+    bool IsStartCentered() const { return mbStartCentered; }
+    bool IsEndCentered() const { return mbEndCentered; }
 
-    BOOL IsStartActive() const { return (!bForceNoArrowsLeft && GetStartPolygon().GetPointCount() && GetStartWidth()); }
-    BOOL IsEndActive() const { return (!bForceNoArrowsRight && GetEndPolygon().GetPointCount() && GetEndWidth()); }
+    bool IsStartActive() const { return (!mbForceNoArrowsLeft && maStartPolygon.count() && GetStartWidth()); }
+    bool IsEndActive() const { return (!mbForceNoArrowsRight && maEndPolygon.count() && GetEndWidth()); }
 
-    void ForceNoArrowsLeft(BOOL bNew) { bForceNoArrowsLeft = bNew; }
-    void ForceNoArrowsRight(BOOL bNew) { bForceNoArrowsRight = bNew; }
+    void ForceNoArrowsLeft(bool bNew) { mbForceNoArrowsLeft = bNew; }
+    void ForceNoArrowsRight(bool bNew) { mbForceNoArrowsRight = bNew; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ImpLineGeometryCreator
 {
-    const ImpLineStyleParameterPack&    mrLineAttr;
-    PolyPolygon3D&                      mrPolyPoly3D;
-    PolyPolygon3D&                      mrPolyLine3D;
-    BOOL                                mbLineDraft;
+    const ImpLineStyleParameterPack&        mrLineAttr;
+    ::basegfx::B2DPolyPolygon&              maAreaPolyPolygon;
+    ::basegfx::B2DPolyPolygon&              maLinePolyPolygon;
+
+    // bitfield
+    unsigned                                mbLineDraft : 1;
 
     // private support functions
     // help functions for line geometry creation
-    void ImpCreateLineGeometry(const Polygon3D& rSourcePoly);
-    double ImpCreateLineStartEnd(Polygon3D& rArrowPoly, const Polygon3D& rSourcePoly, BOOL bFront, double fWantedWidth, BOOL bCentered);
-    void ImpCreateSegmentsForLine(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext, double fPolyPos);
-    void ImpCreateLineSegment(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext);
-    double ImpSimpleFindCutPoint(const Vector3D& rEdge1Start, const Vector3D& rEdge1Delta, const Vector3D& rEdge2Start, const Vector3D& rEdge2Delta);
+    void ImpCreateLineGeometry(
+        const ::basegfx::B2DPolygon& rSourcePoly);
 
 public:
-    ImpLineGeometryCreator(const ImpLineStyleParameterPack& rAttr, PolyPolygon3D& rPoPo,
-        PolyPolygon3D& rPoLi, BOOL bIsLineDraft = FALSE)
+    ImpLineGeometryCreator(
+        const ImpLineStyleParameterPack& rAttr,
+        ::basegfx::B2DPolyPolygon& rPoPo,
+        ::basegfx::B2DPolyPolygon& rPoLi,
+        bool bIsLineDraft = false)
     :   mrLineAttr(rAttr),
-        mrPolyPoly3D(rPoPo),
-        mrPolyLine3D(rPoLi),
+        maAreaPolyPolygon(rPoPo),
+        maLinePolyPolygon(rPoLi),
         mbLineDraft(bIsLineDraft)
     {
     }
 
-    void AddPolygon3D(const Polygon3D& rPoly) { ImpCreateLineGeometry(rPoly); }
-    const PolyPolygon3D& GetPolyPolygon3D() const { return mrPolyPoly3D; }
-    const PolyPolygon3D& GetPolyLines3D() const { return mrPolyLine3D; }
-    void Clear() { mrPolyPoly3D.Clear(); mrPolyLine3D.Clear(); }
+    void AddPolygon(const ::basegfx::B2DPolygon& rPoly) { ImpCreateLineGeometry(rPoly); }
+    const ::basegfx::B2DPolyPolygon& GetAreaPolyPolygon() const { return maAreaPolyPolygon; }
+    const ::basegfx::B2DPolyPolygon& GetLinePolyPolygon() const { return maLinePolyPolygon; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SdrLineGeometry
 {
-    PolyPolygon3D               maPolyPoly3D;
-    PolyPolygon3D               maLinePoly3D;
-    ImpLineStyleParameterPack   maLineAttr;
-    BOOL                        mbForceOnePixel;
-    BOOL                        mbForceTwoPixel;
+    ::basegfx::B2DPolyPolygon               maAreaPolyPolygon;
+    ::basegfx::B2DPolyPolygon               maLinePolyPolygon;
+    ImpLineStyleParameterPack               maLineAttr;
+
+    // bitfield
+    unsigned                                mbForceOnePixel : 1;
+    unsigned                                mbForceTwoPixel : 1;
 
 public:
-    SdrLineGeometry(const PolyPolygon3D& rPolyPoly, const PolyPolygon3D& rLinePoly,
-                    const ImpLineStyleParameterPack& rLineAttr,
-                    BOOL bForceOnePixel, BOOL bForceTwoPixel)
-    :   maPolyPoly3D(rPolyPoly),
-        maLinePoly3D(rLinePoly),
+    SdrLineGeometry(
+        const ::basegfx::B2DPolyPolygon& rAreaPolyPolygon,
+        const ::basegfx::B2DPolyPolygon& rLinePolyPolygon,
+        const ImpLineStyleParameterPack& rLineAttr,
+        bool bForceOnePixel,
+        bool bForceTwoPixel)
+    :   maAreaPolyPolygon(rAreaPolyPolygon),
+        maLinePolyPolygon(rLinePolyPolygon),
         maLineAttr(rLineAttr),
         mbForceOnePixel(bForceOnePixel),
         mbForceTwoPixel(bForceTwoPixel)
     {}
 
-    PolyPolygon3D& GetPolyPoly3D() { return maPolyPoly3D; }
-    PolyPolygon3D& GetLinePoly3D() { return maLinePoly3D; }
-    ImpLineStyleParameterPack& GetLineAttr() { return maLineAttr; }
-    BOOL DoForceOnePixel() const { return mbForceOnePixel; }
-    BOOL DoForceTwoPixel() const { return mbForceTwoPixel; }
+    const ::basegfx::B2DPolyPolygon& GetAreaPolyPolygon() { return maAreaPolyPolygon; }
+    const ::basegfx::B2DPolyPolygon& GetLinePolyPolygon() { return maLinePolyPolygon; }
+    const ImpLineStyleParameterPack& GetLineAttr() { return maLineAttr; }
+    bool DoForceOnePixel() const { return mbForceOnePixel; }
+    bool DoForceTwoPixel() const { return mbForceTwoPixel; }
 };
 
 #endif // _SVX_SVDOIMP_HXX
+
+// eof
