@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-22 14:26:53 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,6 +948,24 @@ void ToolBox::SetItemImage( USHORT nItemId, const Image& rImage )
         }
         else
             pItem->maImage = rImage;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ToolBox::SetImageList( const ImageList& rImageList )
+{
+    maImageList = rImageList;
+
+    USHORT nCount = (USHORT)mpItemList->Count();
+    for( USHORT i = 0; i < nCount; i++ )
+    {
+        ImplToolItem* pItem = mpItemList->GetObject( i );
+        Image aImage;
+        if ( pItem->mnId )
+            aImage = maImageList.GetImage( pItem->mnId );
+        if( !!aImage )
+            SetItemImage( pItem->mnId, aImage );
     }
 }
 
