@@ -1,0 +1,745 @@
+/*************************************************************************
+ *
+ *  $RCSfile: queryorder.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:12:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_QUERYORDER_HRC
+#include "queryorder.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+
+ModalDialog DLG_ORDERCRIT
+{
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_ORDERCRIT ;
+    Size = MAP_APPFONT ( 252 , 83 ) ;
+    Text = "Sortierung" ;
+    Text [ ENGLISH ] = "Sort Order" ;
+    Text [ norwegian ] = "Sort Order" ;
+    Text [ italian ] = "Ordine" ;
+    Text [ portuguese_brazilian ] = "CritÈrio de OrdenaÁ„o" ;
+    Text [ portuguese ] = "Ordenar" ;
+    Text [ finnish ] = "Sort Order" ;
+    Text [ danish ] = "Sortering" ;
+    Text [ french ] = "Tri" ;
+    Text [ swedish ] = "Sortering" ;
+    Text [ dutch ] = "Sortering" ;
+    Text [ spanish ] = "Orden" ;
+    Text [ english_us ] = "Sort Order" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    ListBox LB_ORDERFIELD1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 29 ) ;
+        Size = MAP_APPFONT ( 60 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_ORDERVALUE1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 123 , 29 ) ;
+        Size = MAP_APPFONT ( 60 , 36 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "crescente" ; Default ; > ;
+            < "decrescente" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "ascendente" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "stigende" ; Default ; > ;
+            < "faldende" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "croissant" ; Default ; > ;
+            < "dÈcroissant" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "stigande" ; Default ; > ;
+            < "fallande" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "oplopend" ; Default ; > ;
+            < "aflopend" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "ascendente" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "ascending" ; Default ; > ;
+            < "descending" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "œÚ…œ" ; Default ; > ;
+        < "œÚœ¬" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛" ; Default ; > ;
+        < "ÔÓ Û·˚‚‡ÌË˛" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "rosnπco" ; Default ; > ;
+        < "malejπco" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "è∏èá" ; Default ; > ;
+        < "ç~èá" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶V§W" ; Default ; > ;
+        < "¶V§U" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < " ’«⁄œÌ" ; Default ; > ;
+        < " ‰«“·Ì" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "·˝ÓÔıÛ·" ; Default ; > ;
+        < "ˆËﬂÌÔıÛ·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ø¿∏ß¬˜º¯" ; Default ; > ;
+        < "≥ª∏≤¬˜º¯" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Artan d¸zen" ; Default ; > ;
+        < "Azalan d¸zen" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    ListBox LB_ORDERFIELD2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 45 ) ;
+        Size = MAP_APPFONT ( 60 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_ORDERVALUE2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 123 , 45 ) ;
+        Size = MAP_APPFONT ( 60 , 36 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "crescente" ; Default ; > ;
+            < "decrescente" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "ascendente" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "stigende" ; Default ; > ;
+            < "faldende" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "croissant" ; Default ; > ;
+            < "dÈcroissant" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "stigande" ; Default ; > ;
+            < "fallande" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "oplopend" ; Default ; > ;
+            < "aflopend" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "ascendente" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "ascending" ; Default ; > ;
+            < "descending" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "œÚ…œ" ; Default ; > ;
+        < "œÚœ¬" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛" ; Default ; > ;
+        < "ÔÓ Û·˚‚‡ÌË˛" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "rosnπco" ; Default ; > ;
+        < "malejπco" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "è∏èá" ; Default ; > ;
+        < "ç~èá" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶V§W" ; Default ; > ;
+        < "¶V§U" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < " ’«⁄œÌ" ; Default ; > ;
+        < " ‰«“·Ì" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "·˝ÓÔıÛ·" ; Default ; > ;
+        < "ˆËﬂÌÔıÛ·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ø¿∏ß¬˜º¯" ; Default ; > ;
+        < "≥ª∏≤¬˜º¯" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Artan d¸zen" ; Default ; > ;
+        < "Azalan d¸zen" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    ListBox LB_ORDERFIELD3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 60 ) ;
+        Size = MAP_APPFONT ( 60 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_ORDERVALUE3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 123 , 60 ) ;
+        Size = MAP_APPFONT ( 60 , 36 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "crescente" ; Default ; > ;
+            < "decrescente" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "ascendente" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "aufsteigend" ; Default ; > ;
+            < "absteigend" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "stigende" ; Default ; > ;
+            < "faldende" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "croissant" ; Default ; > ;
+            < "dÈcroissant" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "stigande" ; Default ; > ;
+            < "fallande" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "oplopend" ; Default ; > ;
+            < "aflopend" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "ascendente" ; Default ; > ;
+            < "descendente" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "ascending" ; Default ; > ;
+            < "descending" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "œÚ…œ" ; Default ; > ;
+        < "œÚœ¬" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛" ; Default ; > ;
+        < "ÔÓ Û·˚‚‡ÌË˛" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "rosnπco" ; Default ; > ;
+        < "malejπco" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "è∏èá" ; Default ; > ;
+        < "ç~èá" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶V§W" ; Default ; > ;
+        < "¶V§U" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < " ’«⁄œÌ" ; Default ; > ;
+        < " ‰«“·Ì" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "·˝ÓÔıÛ·" ; Default ; > ;
+        < "ˆËﬂÌÔıÛ·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ø¿∏ß¬˜º¯" ; Default ; > ;
+        < "≥ª∏≤¬˜º¯" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Artan d¸zen" ; Default ; > ;
+        < "Azalan d¸zen" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    FixedText FT_ORDERFIELD
+    {
+        Pos = MAP_APPFONT ( 58 , 15 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Feldname" ;
+        Text [ ENGLISH ] = "Fieldname" ;
+        Text [ norwegian ] = "Fieldname" ;
+        Text [ italian ] = "Nome di campo" ;
+        Text [ portuguese_brazilian ] = "Nome de campo" ;
+        Text [ portuguese ] = "Nome de campo" ;
+        Text [ finnish ] = "Kent‰n nimi" ;
+        Text [ danish ] = "Feltnavn" ;
+        Text [ french ] = "Nom de champ" ;
+        Text [ swedish ] = "F‰ltnamn" ;
+        Text [ dutch ] = "Veldnaam" ;
+        Text [ spanish ] = "Nombre de campo" ;
+        Text [ ENGLISH_US ] = "Field name" ;
+        Center = TRUE ;
+        Text[ chinese_simplified ] = "¿∏√˚";
+        Text[ russian ] = "»Ïˇ ÔÓÎˇ";
+        Text[ polish ] = "Nazwa pola";
+        Text[ japanese ] = "Ã®∞Ÿƒﬁñº";
+        Text[ chinese_traditional ] = "ƒÊ¶Ï¶W∫Ÿ";
+        Text[ arabic ] = "«”„ «·Õﬁ·";
+        Text[ greek ] = "ºÌÔÏ· Â‰ﬂÔı";
+        Text[ korean ] = "« µÂ∏Ì";
+        Text[ turkish ] = "Alan ad˝";
+        Text[ language_user1 ] = " ";
+    };
+
+    FixedText FT_ORDERVALUE
+    {
+        Pos = MAP_APPFONT ( 118 , 110 ) ;
+        Size = MAP_APPFONT ( 59 , 1 ) ;
+        Text = "Reihenfolge" ;
+        Text [ ENGLISH ] = "Order" ;
+        Text [ norwegian ] = "Rekkef¯lge" ;
+        Text [ italian ] = "Sequenza" ;
+        Text [ portuguese_brazilian ] = "Ordem" ;
+        Text [ portuguese ] = "Ordem" ;
+        Text [ finnish ] = "J‰rjestys" ;
+        Text [ danish ] = "RÊkkef¯lge" ;
+        Text [ french ] = "Ordre" ;
+        Text [ swedish ] = "Ordning" ;
+        Text [ dutch ] = "Volgorde" ;
+        Text [ spanish ] = "Orden" ;
+        Text [ ENGLISH_US ] = "Order" ;
+        Center = TRUE ;
+        Text[ chinese_simplified ] = "À≥–Ú";
+        Text[ russian ] = "œÓˇ‰ÓÍ";
+        Text[ polish ] = "KolejnoúÊ";
+        Text[ japanese ] = "ï¿Ç◊ë÷Ç¶èáèò";
+        Text[ chinese_traditional ] = "∂∂ß«";
+        Text[ arabic ] = "«· — Ì»";
+        Text[ greek ] = "”ÂÈÒ‹";
+        Text[ korean ] = "º¯º≠";
+        Text[ turkish ] = "S˝ra";
+        Text[ language_user1 ] = " ";
+    };
+
+    FixedText FT_ORDERAFTER1
+    {
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "danach" ;
+        Text [ ENGLISH ] = "and then" ;
+        Text [ norwegian ] = "and then" ;
+        Text [ italian ] = "poi per" ;
+        Text [ portuguese_brazilian ] = "e, em seguida," ;
+        Text [ portuguese ] = "depois" ;
+        Text [ finnish ] = "ja sitten" ;
+        Text [ danish ] = "derefter" ;
+        Text [ french ] = "puis" ;
+        Text [ swedish ] = "d‰refter" ;
+        Text [ dutch ] = "en vervolgens" ;
+        Text [ spanish ] = "detr·s" ;
+        Text [ ENGLISH_US ] = "and then" ;
+        Text[ chinese_simplified ] = "÷Æ∫Û";
+        Text[ russian ] = "Á‡ÚÂÏ";
+        Text[ polish ] = "wed≥ug";
+        Text[ japanese ] = "ÇªÇÍÇ©ÇÁ";
+        Text[ chinese_traditional ] = "§ß´·";
+        Text[ arabic ] = "»⁄œ –·ﬂ";
+        Text[ greek ] = "›ÂÈÙ·";
+        Text[ korean ] = "±◊ ¥Ÿ¿Ω";
+        Text[ turkish ] = "Sonra";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ORDERAFTER2
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "danach" ;
+        Text [ ENGLISH ] = "and then" ;
+        Text [ norwegian ] = "and then" ;
+        Text [ italian ] = "poi per" ;
+        Text [ portuguese_brazilian ] = "e, em seguida," ;
+        Text [ portuguese ] = "depois" ;
+        Text [ finnish ] = "ja sitten" ;
+        Text [ danish ] = "derefter" ;
+        Text [ french ] = "puis" ;
+        Text [ swedish ] = "d‰refter" ;
+        Text [ dutch ] = "en vervolgens" ;
+        Text [ spanish ] = "detr·s" ;
+        Text [ ENGLISH_US ] = "and then" ;
+        Text[ chinese_simplified ] = "÷Æ∫Û";
+        Text[ russian ] = "Á‡ÚÂÏ";
+        Text[ polish ] = "wed≥ug";
+        Text[ japanese ] = "ÇªÇÍÇ©ÇÁ";
+        Text[ chinese_traditional ] = "§ß´·";
+        Text[ arabic ] = "»⁄œ –·ﬂ";
+        Text[ greek ] = "›ÂÈÙ·";
+        Text[ korean ] = "±◊ ¥Ÿ¿Ω";
+        Text[ turkish ] = "Sonra";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ORDEROPER
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 46 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung : Verkn≥pfung */
+        Text = "Verkn¸pfung" ;
+        Text [ ENGLISH ] = "Operator" ;
+        Text [ norwegian ] = "Operator" ;
+        Text [ italian ] = "Operatore" ;
+        Text [ portuguese_brazilian ] = "Operador" ;
+        Text [ portuguese ] = "Operador" ;
+        Text [ finnish ] = "Operaattori" ;
+        Text [ danish ] = "KÊde" ;
+        Text [ french ] = "Lien" ;
+        Text [ swedish ] = "Operator" ;
+        Text [ dutch ] = "Koppeling" ;
+        Text [ spanish ] = "VÌnculo" ;
+        Text [ ENGLISH_US ] = "Operator" ;
+        Text[ chinese_simplified ] = "¡¥Ω”";
+        Text[ russian ] = "ŒÔÂ‡ÚÓ";
+        Text[ polish ] = "Operator";
+        Text[ japanese ] = "ââéZéq";
+        Text[ chinese_traditional ] = "±∂Æ|";
+        Text[ arabic ] = "«— »«ÿ";
+        Text[ greek ] = "‘ÂÎÂÛÙﬁÚ";
+        Text[ korean ] = "ø¨ªÍ¿⁄";
+        Text[ turkish ] = "›˛leÁ";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ORDERDIR
+    {
+        Pos = MAP_APPFONT ( 122 , 15 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Reihenfolge" ;
+        Text [ ENGLISH ] = "Direction" ;
+        Text [ norwegian ] = "Retning" ;
+        Text [ italian ] = "Sequenza" ;
+        Text [ portuguese_brazilian ] = "DireÁ„o" ;
+        Text [ portuguese ] = "Ordem" ;
+        Text [ finnish ] = "Suunta" ;
+        Text [ danish ] = "RÊkkef¯lge" ;
+        Text [ french ] = "Ordre" ;
+        Text [ swedish ] = "Ordning" ;
+        Text [ dutch ] = "Volgorde" ;
+        Text [ spanish ] = "Orden" ;
+        Text [ ENGLISH_US ] = "Order" ;
+        Center = TRUE ;
+        Text[ chinese_simplified ] = "À≥–Ú";
+        Text[ russian ] = "œÓˇ‰ÓÍ";
+        Text[ polish ] = "KolejnoúÊ";
+        Text[ japanese ] = "ï¿Ç◊ë÷Ç¶èáèò";
+        Text[ chinese_traditional ] = "∂∂ß«";
+        Text[ arabic ] = "«· — Ì»";
+        Text[ greek ] = "”ÂÈÒ‹";
+        Text[ korean ] = "º¯º≠";
+        Text[ turkish ] = "S˝ra";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 196 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 196 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 196 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_ORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 184 , 77 ) ;
+        Text = "Sortierung" ;
+        Text [ ENGLISH ] = "Sort order" ;
+        Text [ norwegian ] = "Sort order" ;
+        Text [ italian ] = "Ordine" ;
+        Text [ portuguese_brazilian ] = "Ordem de ordenaÁ„o" ;
+        Text [ portuguese ] = "Ordenar" ;
+        Text [ finnish ] = "Lajitteluj‰rjestys" ;
+        Text [ danish ] = "Sortering" ;
+        Text [ french ] = "Tri" ;
+        Text [ swedish ] = "Sortering" ;
+        Text [ dutch ] = "Sortering" ;
+        Text [ spanish ] = "Orden" ;
+        Text [ ENGLISH_US ] = "Sort order" ;
+        Text[ chinese_simplified ] = "≈≈–Ú";
+        Text[ russian ] = "—ÓÚËÓ‚Í‡";
+        Text[ polish ] = "Sortowanie";
+        Text[ japanese ] = "ï¿Ç◊ë÷Ç¶";
+        Text[ chinese_traditional ] = "±∆ß«";
+        Text[ arabic ] = "«·›—“";
+        Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
+        Text[ korean ] = "¡§∑ƒ";
+        Text[ turkish ] = "S˝ralama";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NOENTRY
+    {
+        Text = "<keines>" ;
+        Text [ ENGLISH ] = "<none>" ;
+        Text [ norwegian ] = "<none>" ;
+        Text [ italian ] = "<nessuno>" ;
+        Text [ portuguese_brazilian ] = "<nenhum>" ;
+        Text [ portuguese ] = "<nenhum>" ;
+        Text [ finnish ] = "<ei ole>" ;
+        Text [ danish ] = "<ingen>" ;
+        Text [ french ] = "<aucun(e)>" ;
+        Text [ swedish ] = "<ingen>" ;
+        Text [ dutch ] = "<geen>" ;
+        Text [ spanish ] = "<ninguno>" ;
+        Text [ ENGLISH_US ] = "<none>" ;
+        Text[ chinese_simplified ] = "<Œﬁ>";
+        Text[ russian ] = "<·ÂÁ>";
+        Text[ polish ] = "<brak>";
+        Text[ japanese ] = "<Ç»Çµ>";
+        Text[ chinese_traditional ] = "<µL>";
+        Text[ arabic ] = "<»œÊ‰>";
+        Text[ greek ] = "<Í·Ì›Ì·>";
+        Text[ korean ] = "<æ¯¿Ω>";
+        Text[ turkish ] = "<hiÁbiri>";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "≈≈–Ú";
+    Text[ russian ] = "—ÓÚËÓ‚Í‡";
+    Text[ polish ] = "Sortowanie";
+    Text[ japanese ] = "ï¿Ç◊ë÷Ç¶";
+    Text[ chinese_traditional ] = "±∆ß«";
+    Text[ arabic ] = " — Ì» «·›—“";
+    Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
+    Text[ korean ] = "¡§∑ƒ";
+    Text[ turkish ] = "S˝ralama";
+    Text[ language_user1 ] = " ";
+};

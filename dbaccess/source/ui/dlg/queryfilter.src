@@ -1,0 +1,520 @@
+/*************************************************************************
+ *
+ *  $RCSfile: queryfilter.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:11:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_QUERYFILTER_HRC
+#include "queryfilter.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+
+#define STRLST_AND_OR \
+    StringList = \
+    {\
+        < "UND" ; Default ; > ; \
+        < "ODER" ; Default ; > ; \
+    };\
+    StringList [ ENGLISH ] = \
+    {\
+        < "UND" ; Default ; > ; \
+        < "ODER" ; Default ; > ; \
+    };\
+    StringList [ norwegian ] = \
+    {\
+        < "UND" ; Default ; > ; \
+        < "ODER" ; Default ; > ; \
+    };\
+    StringList [ italian ] = \
+    {\
+        < "E" ; Default ; > ; \
+        < "O" ; Default ; > ; \
+    };\
+    StringList [ portuguese_brazilian ] = \
+    {\
+        < "E" ; Default ; > ; \
+        < "OU" ; Default ; > ; \
+    };\
+    StringList [ portuguese ] = \
+    {\
+        < "E" ; Default ; > ; \
+        < "OU" ; Default ; > ; \
+    };\
+    StringList [ finnish ] = \
+    {\
+        < "UND" ; Default ; > ; \
+        < "ODER" ; Default ; > ; \
+    };\
+    StringList [ danish ] = \
+    {\
+        < "OG " ; Default ; > ; \
+        < "ELLER" ; Default ; > ; \
+    };\
+    StringList [ french ] = \
+    {\
+        < "ET" ; Default ; > ; \
+        < "OU" ; Default ; > ; \
+    };\
+    StringList [ swedish ] = \
+    {\
+        < "OCH" ; Default ; > ; \
+        < "ELLER" ; Default ; > ; \
+    };\
+    StringList [ dutch ] = \
+    {\
+        < "EN" ; Default ; > ; \
+        < "OF" ; Default ; > ; \
+    };\
+    StringList [ spanish ] = \
+    {\
+        < "Y" ; Default ; > ; \
+        < "O" ; Default ; > ; \
+    };\
+    StringList [ english_us ] = \
+    {\
+        < "AND" ; Default ; > ; \
+        < "OR" ; Default ; > ; \
+    };\
+    StringList [ chinese_simplified ] = \
+    {\
+        < "AND" ; Default ; > ;\
+        < "OR" ; Default ; > ;\
+    }; \
+    StringList [ russian ] = \
+    { \
+             < "»" ; Default ; > ; \
+         < "»À»" ; Default ; > ; \
+    }; \
+    StringList [ japanese ] = \
+    { \
+             < "AND" ; Default ; > ; \
+         < "OR" ; Default ; > ; \
+    }; \
+    StringList [ polish ] = \
+    { \
+            < "I" ; Default ; > ; \
+        < "LUB" ; Default ; > ; \
+    }; \
+    StringList [ chinese_traditional ] = \
+    { \
+            < "AND" ; Default ; > ; \
+        < "OR" ; Default ; > ; \
+    }; \
+    StringList [ arabic ] = \
+    { \
+            < "Ê" ; Default ; > ; \
+        < "√Ê" ; Default ; > ; \
+    };\
+StringList [ greek ] =\
+    {\
+            < "KAI" ; Default ; > ;\
+        < "π" ; Default ; > ;\
+    };\
+    StringList [ korean ] =\
+    {\
+            < "AND" ; Default ; > ;\
+        < "OR" ; Default ; > ;\
+    };\
+StringList [ turkish ] = \
+    {\
+            < "VE" ; Default ; > ;\
+        < "VEYA" ; Default ; > ;\
+    };\
+StringList [ language_user1 ] =\
+    {\
+            < " " ; Default ; > ;\
+        < " " ; Default ; > ;\
+    };
+
+ModalDialog DLG_FILTERCRIT
+{
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 303 , 84 ) ;
+    Text = "Filter" ;
+    Text [ english ] = "Filter";
+    Text [ english_us ] = "Filter";
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    HelpId = HID_DLG_FILTERCRIT ;
+    ListBox LB_WHEREFIELD1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 28 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_WHERECOMP1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 72 ) ;
+        TabStop = TRUE ;
+        DDExtraWidth = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+    };
+    Edit ET_WHEREVALUE1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 28 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_WHERECOND2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 15 , 43 ) ;
+        Size = MAP_APPFONT ( 40 , 36 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        STRLST_AND_OR
+    };
+    ListBox LB_WHEREFIELD2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_WHERECOMP2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        CurPos = 0 ;
+    };
+    Edit ET_WHEREVALUE2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_WHERECOND3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 15 , 58 ) ;
+        Size = MAP_APPFONT ( 40 , 36 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        STRLST_AND_OR
+    };
+    ListBox LB_WHEREFIELD3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 58 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_WHERECOMP3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 58 ) ;
+        Size = MAP_APPFONT ( 50 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        CurPos = 0 ;
+    };
+    Edit ET_WHEREVALUE3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 58 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_WHEREFIELD
+    {
+        Pos = MAP_APPFONT ( 60 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Feldname" ;
+        Center = TRUE ;
+        Text [ ENGLISH ] = "Fieldname" ;
+        Text [ norwegian ] = "Fieldname" ;
+        Text [ italian ] = "Nome di campo" ;
+        Text [ portuguese_brazilian ] = "Nome de campo" ;
+        Text [ portuguese ] = "Nome de campo" ;
+        Text [ finnish ] = "Kent‰n nimi" ;
+        Text [ danish ] = "Feltnavn" ;
+        Text [ french ] = "Nom de champ" ;
+        Text [ swedish ] = "F‰ltnamn" ;
+        Text [ dutch ] = "Veldnaam" ;
+        Text [ spanish ] = "Nombre del campo" ;
+        Text [ english_us ] = "Field name" ;
+        Text[ chinese_simplified ] = "◊÷∂Œ√˚≥∆";
+        Text[ russian ] = "»Ïˇ ÔÓÎˇ";
+        Text[ polish ] = "Nazwa pola";
+        Text[ japanese ] = "Ã®∞Ÿƒﬁñº";
+        Text[ chinese_traditional ] = "ƒÊ¶Ï¶W∫Ÿ";
+        Text[ arabic ] = "«”„ «·Õﬁ·";
+        Text[ greek ] = "ºÌÔÏ· Â‰ﬂÔı";
+        Text[ korean ] = "« µÂ ¿Ã∏ß";
+        Text[ turkish ] = "Alan ad˝";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_WHERECOMP
+    {
+        Pos = MAP_APPFONT ( 124 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Bedingung" ;
+        Center = TRUE ;
+        Text [ ENGLISH ] = "Condition" ;
+        Text [ norwegian ] = "VilkÂr" ;
+        Text [ italian ] = "Condizione" ;
+        Text [ portuguese_brazilian ] = "condiÁ„o" ;
+        Text [ portuguese ] = "CondiÁ„o" ;
+        Text [ finnish ] = "Ehto" ;
+        Text [ danish ] = "Betingelse" ;
+        Text [ french ] = "Condition" ;
+        Text [ swedish ] = "Villkor" ;
+        Text [ dutch ] = "Voorwaarde" ;
+        Text [ spanish ] = "CondiciÛn" ;
+        Text [ english_us ] = "Condition" ;
+        Text[ chinese_simplified ] = "Ãıº˛";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ";
+        Text[ polish ] = "Warunek";
+        Text[ japanese ] = "èåè";
+        Text[ chinese_traditional ] = "±¯•Û";
+        Text[ arabic ] = "‘—ÿ";
+        Text[ greek ] = "”ıÌËﬁÍÁ";
+        Text[ korean ] = "¡∂∞«";
+        Text[ turkish ] = "Ko˛ul";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_WHEREVALUE
+    {
+        Pos = MAP_APPFONT ( 177 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Wert" ;
+        Center = TRUE ;
+        Text [ ENGLISH ] = "Value" ;
+        Text [ norwegian ] = "Verdi" ;
+        Text [ italian ] = "Valore" ;
+        Text [ portuguese_brazilian ] = "Valor" ;
+        Text [ portuguese ] = "Valor" ;
+        Text [ finnish ] = "Arvo" ;
+        Text [ danish ] = "VÊrdi" ;
+        Text [ french ] = "Valeur" ;
+        Text [ swedish ] = "V‰rde" ;
+        Text [ dutch ] = "Waarde" ;
+        Text [ spanish ] = "Valor" ;
+        Text [ english_us ] = "Value" ;
+        Text[ chinese_simplified ] = " ˝÷µ";
+        Text[ russian ] = "«Ì‡˜ÂÌËÂ";
+        Text[ polish ] = "WartoúÊ";
+        Text[ japanese ] = "íl";
+        Text[ chinese_traditional ] = "º∆≠»";
+        Text[ arabic ] = "«·ﬁÌ„…";
+        Text[ greek ] = "‘ÈÏﬁ";
+        Text[ korean ] = "∞™";
+        Text[ turkish ] = "Deer";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_WHEREOPER
+    {
+        Pos = MAP_APPFONT ( 15 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung : Verkn≥pfung */
+        Text = "Verkn¸pfung" ;
+        Center = TRUE ;
+        Text [ ENGLISH ] = "Operator" ;
+        Text [ norwegian ] = "Operator" ;
+        Text [ italian ] = "Operatore" ;
+        Text [ portuguese_brazilian ] = "Operador" ;
+        Text [ portuguese ] = "Operador" ;
+        Text [ finnish ] = "Operaattori" ;
+        Text [ danish ] = "KÊde" ;
+        Text [ french ] = "Lien" ;
+        Text [ swedish ] = "Operator" ;
+        Text [ dutch ] = "Koppeling" ;
+        Text [ spanish ] = "VÌnculo" ;
+        Text [ english_us ] = "Operator" ;
+        Text[ chinese_simplified ] = "¡¥Ω”";
+        Text[ russian ] = "ŒÔÂ‡ÚÓ";
+        Text[ polish ] = "Operator";
+        Text[ japanese ] = "ââéZéq";
+        Text[ chinese_traditional ] = "±∂Æ|";
+        Text[ arabic ] = "«— »«ÿ";
+        Text[ greek ] = "‘ÂÎÂÛÙﬁÚ";
+        Text[ korean ] = "ø¨ªÍ¿⁄";
+        Text[ turkish ] = "Balant˝";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_FIELDS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 236 , 74 ) ;
+        Text = "Kriterien" ;
+        Text [ ENGLISH ] = "Search criteria" ;
+        Text [ norwegian ] = "Search criteria" ;
+        Text [ italian ] = "Criteri di ricerca" ;
+        Text [ portuguese_brazilian ] = "Procurar critÈrios" ;
+        Text [ portuguese ] = "CritÈrios" ;
+        Text [ finnish ] = "Hakuehdot" ;
+        Text [ danish ] = "Kriterier" ;
+        Text [ french ] = "CritËres" ;
+        Text [ swedish ] = "Kriterier" ;
+        Text [ dutch ] = "Criteria" ;
+        Text [ spanish ] = "Criterios" ;
+        Text [ english_us ] = "Search criteria" ;
+        Text[ chinese_simplified ] = "∑∂Œß";
+        Text[ russian ] = " ËÚÂËË";
+        Text[ polish ] = "Kryteria";
+        Text[ japanese ] = "èåè";
+        Text[ chinese_traditional ] = "≠S≥Ú";
+        Text[ arabic ] = "«·„⁄«ÌÌ—";
+        Text[ greek ] = " ÒÈÙﬁÒÈ·";
+        Text[ korean ] = "∞Àªˆ ±‚¡ÿ";
+        Text[ turkish ] = "÷lÁ¸tler";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 249 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 249 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 249 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_NOENTRY
+    {
+        Text = "- keiner -" ;
+        Text [ ENGLISH ] = "- none -" ;
+        Text [ english_us ] = "- none -" ;
+        Text [ dutch ] = "- geen -" ;
+        Text [ swedish ] = "- inget -" ;
+        Text [ danish ] = "- ingen -" ;
+        Text [ italian ] = "- nessuno -" ;
+        Text [ spanish ] = "- ninguno -" ;
+        Text [ french ] = "- aucun(e) -" ;
+        Text [ portuguese ] = "- nenhum -" ;
+        Text [ portuguese_brazilian ] = "- keiner -" ;
+        Text[ chinese_simplified ] = "- Œﬁ -";
+        Text[ russian ] = "- ·ÂÁ -";
+        Text[ polish ] = "- brak -";
+        Text[ japanese ] = "-Ç»Çµ-";
+        Text[ chinese_traditional ] = "- µL -";
+        Text[ arabic ] = "- »œÊ‰ -";
+        Text[ greek ] = "- Í·Ì›Ì· -";
+        Text[ korean ] = "- æ¯¿Ω -";
+        Text[ turkish ] = "- Yok -";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_COMPARE_OPERATORS
+    {
+        Text = "=;<>;<;<=;>;>=;wie;nicht wie;leer;nicht leer";
+        Text[ENGLISH] = "=;<>;<;<=;>;>=;like;not like;null;not null";
+        Text[ english_us ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
+        Text[ portuguese ] = "=;<>;<;<=;>;>=;equivalente;n„o equivalente;zero;n„o zero";
+        Text[ russian ] = "=;<>;<;<=;>;>=;‡‚ÌÓ;ÌÂ ‡‚ÌÓ;ÌÛÎ¸;ÌÂ ÌÛÎ¸";
+        Text[ dutch ] = "=;<>;<;<=;>;>=;gelijk;niet gelijk;leeg;niet leeg";
+        Text[ french ] = "=;<>;<;<=;>;>=;comme;diffÈrent de;vide;non vide";
+        Text[ spanish ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
+        Text[ italian ] = "=;<>;<;<=;>;>=;simile;non simile;nullo;non nullo";
+        Text[ danish ] = "=;<>;<;<=;>;>=;som;ikke som;tom;ikke tom";
+        Text[ swedish ] = "=;<>;<;<=;>;>=;lika med;inte lika med;noll;inte noll";
+        Text[ polish ] = "=;<>;<;<=;>;>=;rÛwny;nie rÛwny;wiÍkszy niø;mniejszy niø;mniejszy niø lub rÛwny,wiÍkszy niø;wiÍkszy niø lub rÛwny";
+        Text[ portuguese_brazilian ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
+        Text[ japanese ] = "=;<>;<;<=;>;>=;ìØÇ∂;ìØÇ∂Ç≈Ç»Ç¢;ãÛ;ãÛÇ≈Ç»Ç¢";
+        Text[ chinese_simplified ] = "=;<>;<;<=;>;>=;µ»”⁄;≤ªµ»”⁄;¡„;≤ªµ»”⁄¡„";
+        Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;µ•©Û;§£µ•©Û;πs;§£µ•©Ûπs";
+        Text[ arabic ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
+        Text[ greek ] = "=;<>;<;<=;>;>=;¸˘Ú;¸˜È ¸˘Ú;ÍÂÌ¸;¸˜È ÍÂÌ¸";
+        Text[ korean ] = "=;<>;<;<=;>;>=;∞∞¿Ω;∞∞¡ˆ æ ¿Ω;≥Œ;≥Œ¿Ã æ∆¥‘";
+        Text[ turkish ] = "=;<>;<;<=;>;>=;gibi;gibi deil;bo˛;bo˛ deil";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ portuguese ] = "Filtro";
+    Text[ russian ] = "‘ËÎ¸Ú";
+    Text[ greek ] = "÷ﬂÎÙÒ·";
+    Text[ dutch ] = "Filter";
+    Text[ french ] = "Filtre";
+    Text[ spanish ] = "Filtro";
+    Text[ italian ] = "Filtro";
+    Text[ danish ] = "Filter";
+    Text[ swedish ] = "Filter";
+    Text[ polish ] = "Filtr";
+    Text[ portuguese_brazilian ] = "Filter";
+    Text[ japanese ] = "Ã®Ÿ¿";
+    Text[ korean ] = "Filter";
+    Text[ chinese_simplified ] = "π˝¬À∆˜";
+    Text[ chinese_traditional ] = "πL¬oæπ";
+    Text[ turkish ] = "Filtre";
+    Text[ arabic ] = "›· —";
+};
