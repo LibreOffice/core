@@ -1,0 +1,536 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmoutputpage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:18:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <mmoutputpage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+TabPage DLG_MM_OUTPUT_PAGE
+{
+    HelpID = HID_MM_OUTPUTPAGE ;
+    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Speichern, drucken oder versenden Sie die Serienbriefe" ;
+        Text[ en-US ] = "Save, print or send the document";
+    };
+    FixedText FI_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Wählen Sie eine der Optionen:" ;
+        Text[ en-US ] = "Select one of the options below:";
+    };
+    RadioButton RB_SAVESTARTDOC
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text [ de ] = "Ausgangsdokument speichern" ;
+        Text[ en-US ] = "~Save starting document";
+    };
+    RadioButton RB_SAVEMERGEDDOC
+    {
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Text [ de ] = "S~erienbriefdokument speichern" ;
+        Text[ en-US ] = "Save ~merged document" ;
+    };
+    RadioButton RB_PRINT
+    {
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Text [ de ] = "Serienbriefdokument ~drucken" ;
+        Text[ en-US ] = "~Print merged document";
+    };
+    RadioButton RB_SENDMAIL
+    {
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Text [ de ] = "Serienbriefdokument als E-Mail ~versenden" ;
+        Text[ en-US ] = "Send merged document as ~E-Mail";
+    };
+    FixedLine   FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 87 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
+    PushButton  PB_SAVESTARTDOC
+    {
+        Pos = MAP_APPFONT ( 55 , 100 ) ;
+        Size = MAP_APPFONT ( 100 , 14 ) ;
+        Text [ de ] = "Ausgansdokument ~speichern" ;
+        Text[ en-US ] = "Save starting ~document";
+    };
+    RadioButton RB_SAVEASONE
+    {
+        Pos = MAP_APPFONT ( 45 , 101 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ de ] = "Als ein Dokument speichern" ;
+        Text[ en-US ] = "S~ave as single document";
+    };
+    RadioButton RB_SAVEINDIVIDUAL
+    {
+        Pos = MAP_APPFONT (  45, 115 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ de ] = "Als einzelne Dokumente speichern" ;
+        Text[ en-US ] = "Sa~ve as individual documents";
+    };
+    RadioButton RB_FROM
+    {
+        Pos = MAP_APPFONT ( 45 , 129 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Text [ de ] = "Von" ;
+        Text[ en-US ] = "~From";
+    };
+    NumericField NF_FROM
+    {
+        Pos = MAP_APPFONT ( 78 , 128 ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Border = TRUE;
+        Left = TRUE ;
+        First = 1 ;
+        Minimum = 1 ;
+        Repeat = TRUE ;
+        Spin = FALSE ;
+        TabStop = TRUE ;
+    };
+    FixedText   FT_TO
+    {
+        Pos = MAP_APPFONT ( 101 , 130 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Right = TRUE;
+        Text [ de ] = "Bis" ;
+        Text[ en-US ] = "~To";
+    };
+    NumericField NF_TO
+    {
+        Pos = MAP_APPFONT ( 124 , 128 ) ;
+        Size = MAP_APPFONT ( 20 , 10 ) ;
+        Border = TRUE;
+        Left = TRUE ;
+        First = 1 ;
+        Minimum = 1 ;
+        Repeat = TRUE ;
+        Spin = FALSE ;
+        TabStop = TRUE ;
+    };
+    PushButton  PB_SAVENOW
+    {
+        Pos = MAP_APPFONT ( 45 , 142 ) ;
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        Text [ de ] = "Dokumente speichern" ;
+        Text[ en-US ] = "Save Do~cuments";
+    };
+    FixedText   FT_PRINT
+    {
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "Drucker" ;
+        Text[ en-US ] = "~Printer";
+    };
+    ListBox     LB_PRINT
+    {
+        Pos = MAP_APPFONT ( 45 , 101 ) ;
+        Size = MAP_APPFONT ( 147 , 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    PushButton  PB_PRINTERSETTINGS
+    {
+        Pos = MAP_APPFONT ( 198 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Eigenschaften..." ;
+        Text[ en-US ] = "P~roperties...";
+    };
+    RadioButton RB_PRINTALL
+    {
+        Pos = MAP_APPFONT ( 45 , 118 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ de ] = "Alle Dokumente drucken" ;
+        Text[ en-US ] = "Print ~all documents";
+    };
+    PushButton  PB_PRINTNOW
+    {
+        Pos = MAP_APPFONT ( 45 , 147 ) ;
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        Text [ de ] = "Dokumente drucken" ;
+        Text[ en-US ] = "Prin~t Documents";
+    };
+
+    FixedText        FT_MAILTO
+    {
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "An" ;
+        Text[ en-US ] = "T~o";
+    };
+    ListBox          LB_MAILTO
+    {
+        Pos = MAP_APPFONT ( 45 , 101 ) ;
+        Size = MAP_APPFONT ( 147 , 50 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+    };
+    PushButton       PB_COPYTO
+    {
+        Pos = MAP_APPFONT ( 198 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Kopie an..." ;
+        Text[ en-US ] = "~Copy to...";
+    };
+    FixedText        FT_SUBJECT
+    {
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "Betreff" ;
+        Text[ en-US ] = "S~ubject";
+    };
+    Edit             ED_SUBJECT
+    {
+        Pos = MAP_APPFONT ( 45 , 117 ) ;
+        Size = MAP_APPFONT ( 147 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedText        FT_SENDAS
+    {
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "Senden als" ;
+        Text[ en-US ] = "Sen~d as";
+    };
+    ListBox          LB_SENDAS
+    {
+        Pos = MAP_APPFONT ( 45 , 133 ) ;
+        Size = MAP_APPFONT (147  , 70 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList =
+        {
+            < "Open Office Textdokument" ;    MM_DOCTYPE_OOO ;> ;
+            < "Adobe PDF-Dokument" ;                      MM_DOCTYPE_PDF ;> ;
+            < "Microsoft Word Dokument" ;           MM_DOCTYPE_WORD;> ;
+            < "HTML-Nachricht" ;                    MM_DOCTYPE_HTML;> ;
+            < "Nur Text" ;                          MM_DOCTYPE_TEXT;> ;
+        };
+        StringList [en-US]=
+        {
+            < "Open Office Text Document" ;    MM_DOCTYPE_OOO ;> ;
+            < "Adobe PDF-Document" ;                      MM_DOCTYPE_PDF ;> ;
+            < "Microsoft Word Document" ;           MM_DOCTYPE_WORD;> ;
+            < "HTML Message" ;                      MM_DOCTYPE_HTML;> ;
+            < "Plain Text" ;                        MM_DOCTYPE_TEXT;> ;
+        };
+    };
+    PushButton       PB_SENDAS
+    {
+        Pos = MAP_APPFONT ( 198 , 132 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Eigenschaften..." ;
+        Text[ en-US ] = "Pr~operties...";
+    };
+    FixedText        FT_ATTACHMENT
+    {
+        Pos = MAP_APPFONT ( 45 , 149 ) ;
+        Size = MAP_APPFONT ( 147 , 8 ) ;
+        Text [ de ] = "Name des Anhangs" ;
+        Text[ en-US ] = "Name of the a~ttachment";
+    };
+    Edit ED_ATTACHMENT
+    {
+        Pos = MAP_APPFONT ( 45 , 160 ) ;
+        Size = MAP_APPFONT ( 147 , 12 ) ;
+        Border = TRUE;
+    };
+    RadioButton      RB_SENDALL
+    {
+        Pos = MAP_APPFONT ( 45 , 176 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        Text [ de ] = "Alle Dokumente versenden" ;
+        Text[ en-US ] = "S~end all documents";
+    };
+    PushButton       PB_SENDDOCUMENTS
+    {
+        Pos = MAP_APPFONT ( 45 , 204 ) ;
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        Text [ de ] = "Dokumente versenden" ;
+        Text[ en-US ] = "Se~nd documents";
+    };
+    String      ST_SAVESTART
+    {
+        Text [ de ] = "Ausgangsdokument speichern" ;
+        Text[ en-US ] = "Save ~starting document";
+    };
+    String      ST_SAVEMERGED
+    {
+        Text [ de ] = "Seriendruckdokument speichern Optionen" ;
+        Text[ en-US ] = "Save merged document settings";
+    };
+    String      ST_PRINT
+    {
+        Text [ de ] = "Druckoptionen" ;
+        Text[ en-US ] = "Print settings";
+    };
+    String      ST_SENDMAIL
+    {
+        Text [ de ] = "E-Mail Optionen" ;
+        Text[ en-US ] = "E-Mail settings";
+    };
+    String ST_DEFAULTATTACHMENT
+    {
+        Text [ de ] = "Unbenannt" ;
+        Text[ en-US ] = "Untitled";
+    };
+    String ST_SUBJECTQUERY
+    {
+        Text [ de ] = "Sie haben kein Betreff für diese Nachricht angegeben. Wenn Sie einen angeben wollen, dann geben Sie ihn jetzt ein." ;
+        Text[ en-US ] = "You did not specify a subject for this message. If you would like to provide one, please type it now.";
+    };
+    String ST_NOSUBJECT
+    {
+        Text [ de ] = "Kein Betreff" ;
+        Text[ en-US ] = "No subject";
+    };
+    String ST_NOATTACHMENTNAME
+    {
+        Text [ de ] = "Sie haben keinen neuen Namen für den Anhang angegeben. Wenn Sie einen festlegen wollen, dann geben Sie ihn jetzt ein." ;
+        Text[ en-US ] = "You did not specify a new name for the attachment. If you would like to provide one, please type it now.";
+    };
+    String ST_CONFIGUREMAIL
+    {
+        Text [ de ] = "Damit Serienbriefe per E-Mail versendet werden können, benötigt %PRODUCTNAME Informationen über das E-Mail-Konto, von dem aus Sie E-Mails versenden möchten.\n\nMöchten Sie jetzt die Konto-Informationen eingeben?" ;
+        Text[ en-US ] = "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\n Do you want to enter e-mail account information now?";
+    };
+};
+
+ModalDialog DLG_MM_COPYTO
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_COPYTO;
+    Size = MAP_APPFONT ( 250 , 117 ) ;
+    Moveable = TRUE ;
+
+    Text [ de ] = "Kopie an";
+    Text [ en-US ] = "Copy To";
+
+    FixedText FI_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+        Text [ de ] = "Eine Kopie dieser Nachricht soll gesendet werden an:" ;
+        Text[ en-US ] = "Send a copy of this mail to:";
+    };
+    FixedText FT_CC
+    {
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "Cc" ;
+        Text[ en-US ] = "~Cc";
+    };
+    Edit ED_CC
+    {
+        Pos = MAP_APPFONT ( 40 , 15 ) ;
+        Size = MAP_APPFONT ( 204 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedText FT_BCC
+    {
+        Pos = MAP_APPFONT ( 6 , 33 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "Bcc" ;
+        Text[ en-US ] = "~Bcc";
+    };
+    Edit ED_BCC
+    {
+        Pos = MAP_APPFONT ( 40 , 31 ) ;
+        Size = MAP_APPFONT ( 204 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedText FI_NOTE
+    {
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Size = MAP_APPFONT ( 204 , 20 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Hinweis:\nE-Mail-Adressen mit Semikolon (;) trennen." ;
+        Text[ en-US ] = "Note:\nSeparate e-mail addresses with a semicolon (;).";
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 73 ) ;
+        Size = MAP_APPFONT ( 250 , 8 ) ;
+    };
+    OKButton        PB_OK
+    {
+        Pos = MAP_APPFONT ( 85 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton        PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 138 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton      PB_HELP
+    {
+        Pos = MAP_APPFONT ( 194 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+ModalDialog DLG_MM_SAVEWARNING
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SAVEWARNING;
+    Size = MAP_APPFONT ( 200 , 99 ) ;
+    Moveable = TRUE ;
+
+    Text = "%PRODUCTNAME";
+    FixedImage IM_WARNING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 30 , 30 ) ;
+    };
+    FixedText FI_WARNING
+    {
+        Pos = MAP_APPFONT ( 40 , 3 ) ;
+        Size = MAP_APPFONT ( 150 , 30 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Ein Dokument mit dem Namen '%1' existiert bereits. Bitte wählen Sie einen anderen Namen." ;
+        Text[ en-US ] = "A document with the name '%1' already exists. Please save this document under a different name.";
+    };
+    FixedText   FT_FILENAME
+    {
+        Pos = MAP_APPFONT (  40, 39 ) ;
+        Size = MAP_APPFONT (  154, 8 ) ;
+        Text [ de ] = "Neuer Dokumentname" ;
+        Text[ en-US ] = "New document name";
+    };
+    Edit ED_FILENAME
+    {
+        Pos = MAP_APPFONT ( 40 , 50 ) ;
+        Size = MAP_APPFONT ( 154 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 68 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 40 ,  79) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 93 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+ModalDialog DLG_MM_QUERY
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_QUERY;
+    Size = MAP_APPFONT ( 240 , 88 ) ;
+    Moveable = TRUE ;
+
+    Text = "%PRODUCTNAME";
+    FixedImage IM_QUERY
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 30 , 30 ) ;
+    };
+    FixedText FI_QUERY
+    {
+        Pos = MAP_APPFONT ( 40 , 6 ) ;
+        Size = MAP_APPFONT ( 190 , 30 ) ;
+        WordBreak = TRUE;
+    };
+    Edit ED_TEXT
+    {
+        Pos = MAP_APPFONT ( 40 , 39 ) ;
+        Size = MAP_APPFONT ( 194 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 57 ) ;
+        Size = MAP_APPFONT ( 240 , 8 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 69 ,  68) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 122 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
