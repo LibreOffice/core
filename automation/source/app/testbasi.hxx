@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testbasi.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:13:26 $
+ *  last change: $Author: mh $ $Date: 2002-11-18 17:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,3 +94,5 @@ public:
 };
 
 SV_DECL_IMPL_REF(TTBasic)
+
+#endif
