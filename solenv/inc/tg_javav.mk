@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-06 18:49:50 $
+#   last change: $Author: hjs $ $Date: 2002-08-08 17:13:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ JAVAVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
-JAVANUMVER:=$(shell -java $(JFLAGSNUMVERSION_CMD))
+JAVANUMVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSNUMVERSION_CMD))
 
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF			# "$(COMNAME)"==""
