@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:54:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,9 @@ BOOL MenuConfiguration::IsWindowListItemId( USHORT nId )
 }
 
 
-MenuConfiguration::MenuConfiguration( Reference< XMultiServiceFactory >& rServiceManager ) :
-    m_rxServiceManager( rServiceManager )
+MenuConfiguration::MenuConfiguration(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager )
+:   m_rxServiceManager( rServiceManager )
 {
 }
 
@@ -162,7 +163,10 @@ throw ( WrappedTargetException )
     Reference< XIndexContainer > xItemContainer( static_cast< cppu::OWeakObject *>( new RootItemContainer()), UNO_QUERY );
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
-    Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( xItemContainer ));
+
+    // #110897# Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( xItemContainer ));
+    Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( m_rxServiceManager, xItemContainer ));
+
     Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
 
     // connect parser and filter

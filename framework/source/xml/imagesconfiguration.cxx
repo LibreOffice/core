@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesconfiguration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:54:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,25 +125,32 @@ SV_IMPL_PTRARR( ImageItemListDescriptor, ImageItemDescriptorPtr );
 SV_IMPL_PTRARR( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr );
 SV_IMPL_PTRARR( ImageListDescriptor, ImageListItemDescriptorPtr );
 
-static Reference< XParser > GetSaxParser()
+static Reference< XParser > GetSaxParser(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
 {
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    return Reference< XParser >( xServiceManager->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
-                                UNO_QUERY);
+    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    //return Reference< XParser >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
+    return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
 }
 
-static Reference< XDocumentHandler > GetSaxWriter()
+static Reference< XDocumentHandler > GetSaxWriter(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
 {
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    return Reference< XDocumentHandler >( xServiceManager->createInstance(
-                                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )),
-                                          UNO_QUERY) ;
+    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    //return Reference< XDocumentHandler >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+    return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
 }
 
-sal_Bool ImagesConfiguration::LoadImages( SvStream& rInStream, ImageListsDescriptor& aItems )
+// #110897#
+sal_Bool ImagesConfiguration::LoadImages(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rInStream, ImageListsDescriptor& aItems )
 {
-    Reference< XParser > xParser( GetSaxParser() );
+    Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
     Reference< XInputStream > xInputStream(
                                 (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
                                 UNO_QUERY );
@@ -182,9 +189,12 @@ sal_Bool ImagesConfiguration::LoadImages( SvStream& rInStream, ImageListsDescrip
 }
 
 
-sal_Bool ImagesConfiguration::StoreImages( SvStream& rOutStream, const ImageListsDescriptor& aItems )
+// #110897#
+sal_Bool ImagesConfiguration::StoreImages(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rOutStream, const ImageListsDescriptor& aItems )
 {
-    Reference< XDocumentHandler > xWriter( GetSaxWriter() );
+    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
 
     Reference< XOutputStream > xOutputStream(
                                 (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),

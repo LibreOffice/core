@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:52:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,14 +138,25 @@ using namespace drafts::com::sun::star::ui;
 namespace framework
 {
 
-MenuBarWrapper::MenuBarWrapper( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
-    m_xServiceManager( xServiceManager )
+// #110897#
+MenuBarWrapper::MenuBarWrapper(
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
+    )
+:   // #110897#
+    mxServiceFactory( xServiceManager ),
+    UIConfigElementWrapperBase( UIElementType::MENUBAR )
 {
 }
 
 MenuBarWrapper::~MenuBarWrapper()
 {
+}
+
+// #110897#
+const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& MenuBarWrapper::getServiceFactory()
+{
+    // #110897#
+    return mxServiceFactory;
 }
 
 void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException)
@@ -220,7 +231,9 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // interaction which is done by the menu bar manager. This must be requested by a special property called "MenuOnly". Be careful
                 // a menu bar created with this property is not fully supported. It must be attached to a real menu bar manager to have full
                 // support. This feature is currently used for "Inplace editing"!
-                MenuBarManager* pMenuBarManager = new MenuBarManager( xFrame, pVCLMenuBar, sal_False, sal_True );
+                // #110897# MenuBarManager* pMenuBarManager = new MenuBarManager( xFrame, pVCLMenuBar, sal_False, sal_True );
+                MenuBarManager* pMenuBarManager = new MenuBarManager( getServiceFactory(), xFrame, pVCLMenuBar, sal_False, sal_True );
+
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
             }
 
