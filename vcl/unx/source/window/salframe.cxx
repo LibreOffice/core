@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-14 08:24:08 $
+ *  last change: $Author: cp $ $Date: 2001-08-14 12:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2080,6 +2080,19 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
                     if( aAlternate.nCharCode )
                         aKeyEvt.mnCharCode = aAlternate.nCharCode;
                     Call(SALEVENT_KEYINPUT, &aKeyEvt);
+                }
+                else
+                if (pEvent->keycode != 0)
+                {
+                    // try to strip off modifiers, e.g. Ctrl-$ becomes Ctrl-Shift-4
+                    nKeySym  = XKeycodeToKeysym (pDisplay_->GetDisplay(),
+                                                 pEvent->keycode, 0);
+                    nKeyCode = pDisplay_->GetKeyCode(nKeySym, &aDummy);
+                    if (nKeyCode != 0)
+                    {
+                        aKeyEvt.mnCode = nKeyCode | nModCode;
+                        Call(SALEVENT_KEYINPUT, &aKeyEvt);
+                    }
                 }
             }
         }
