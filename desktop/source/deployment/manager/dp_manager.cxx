@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:06:35 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,31 +61,37 @@
 
 #include "dp_misc.h"
 #include "dp_ucb.h"
-#include "dp_props.h"
+#include "dp_resource.h"
+#include "dp_interact.h"
 #include "dp_persmap.h"
+#include "dp_manager.hrc"
 #include "rtl/ustrbuf.hxx"
+#include "rtl/string.hxx"
 #include "rtl/uri.hxx"
+#include "rtl/ref.hxx"
 #include "osl/diagnose.h"
-#include "osl/thread.h"
 #include "cppuhelper/weakref.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"
+#include "cppuhelper/interfacecontainer.hxx"
 #include "ucbhelper/content.hxx"
+#include "xmlscript/xml_helper.hxx"
+#include "svtools/inettype.hxx"
 #include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
+#include "com/sun/star/lang/XUnoTunnel.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/container/ElementExistException.hpp"
-#include "com/sun/star/deployment/XPackageManagerFactory.hpp"
-#include "com/sun/star/deployment/XPackageRegistry.hpp"
+#include "com/sun/star/deployment/PackageRegistry.hpp"
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/ucb/NameClashResolveRequest.hpp"
-#include "com/sun/star/ucb/XContentAccess.hpp"
+#include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
 #include <vector>
 #include <memory>
 
@@ -99,51 +105,177 @@ using ::rtl::OUString;
 namespace dp_manager
 {
 
-//==============================================================================
-class CommandEnvironmentImpl
-    : public ::cppu::WeakImplHelper2< XCommandEnvironment, XProgressHandler >
-{
-    Reference< XProgressHandler > m_xLogFile;
-    Reference< XProgressHandler > m_xUserProgress;
-    Reference< task::XInteractionHandler > m_xUserInteractionHandler;
+typedef ::cppu::WeakComponentImplHelper1<
+    deployment::XPackageManager > t_pm_helper;
 
-public:
-    virtual ~CommandEnvironmentImpl();
-    inline CommandEnvironmentImpl(
-        Reference< XCommandEnvironment > const & xUserCmdEnv,
-        Reference< XProgressHandler > const & xLogFile )
-        : m_xLogFile( xLogFile ),
-          m_xUserProgress( xUserCmdEnv->getProgressHandler() ),
-          m_xUserInteractionHandler( xUserCmdEnv->getInteractionHandler() )
+//==============================================================================
+class PackageManagerImpl : private MutexHolder, public t_pm_helper
+{
+    Reference<XComponentContext> m_xComponentContext;
+    OUString m_context;
+    OUString m_packagesDir;
+    OUString m_registryCache;
+    sal_Bool m_readOnly;
+
+    Reference<deployment::XPackageRegistry> m_xPackageRegistry;
+    bool m_callRegistry;
+
+    Reference<XProgressHandler> m_xLogFile;
+    inline void logIntern( Any const & status );
+    void fireModified();
+
+    ::std::auto_ptr<PersistentMap> m_persMediaTypes;
+    inline OUString getDeployPath( OUString const & name ) const;
+
+    void checkAborted( ::rtl::Reference<AbortChannel> const & abortChannel );
+
+    class CmdEnvWrapperImpl
+        : public ::cppu::WeakImplHelper2< XCommandEnvironment,
+                                          XProgressHandler >
+    {
+        Reference<XProgressHandler> m_xLogFile;
+        Reference<XProgressHandler> m_xUserProgress;
+        Reference<task::XInteractionHandler> m_xUserInteractionHandler;
+
+    public:
+        virtual ~CmdEnvWrapperImpl();
+        CmdEnvWrapperImpl( Reference<XCommandEnvironment> const & xUserCmdEnv,
+                           Reference<XProgressHandler> const & xLogFile );
+
+        // XCommandEnvironment
+        virtual Reference<task::XInteractionHandler> SAL_CALL
+        getInteractionHandler() throw (RuntimeException);
+        virtual Reference<XProgressHandler> SAL_CALL getProgressHandler()
+            throw (RuntimeException);
+
+        // XProgressHandler
+        virtual void SAL_CALL push( Any const & Status )
+            throw (RuntimeException);
+        virtual void SAL_CALL update( Any const & Status )
+            throw (RuntimeException);
+        virtual void SAL_CALL pop() throw (RuntimeException);
+    };
+
+protected:
+    inline void check();
+    virtual void SAL_CALL disposing();
+
+    virtual ~PackageManagerImpl();
+    inline PackageManagerImpl(
+        Reference<XComponentContext> const & xComponentContext,
+        OUString const & context )
+        : t_pm_helper( getMutex() ),
+          m_xComponentContext( xComponentContext ),
+          m_context( context ),
+          m_readOnly( false ),
+          m_callRegistry( true )
         {}
 
-    // XCommandEnvironment
-    virtual Reference< task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (RuntimeException);
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
+public:
+    static Reference<deployment::XPackageManager> create(
+        Reference<XComponentContext> const & xComponentContext,
+        OUString const & context );
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw (RuntimeException);
+    virtual void SAL_CALL addEventListener(
+        Reference<lang::XEventListener> const & xListener )
+        throw (RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+        Reference<lang::XEventListener> const & xListener )
         throw (RuntimeException);
 
-    // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException);
-    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException);
-    virtual void SAL_CALL pop() throw (RuntimeException);
+    // XModifyBroadcaster
+    virtual void SAL_CALL addModifyListener(
+        Reference<util::XModifyListener> const & xListener )
+        throw (RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        Reference<util::XModifyListener> const & xListener )
+        throw (RuntimeException);
+
+    // XPackageManager
+    virtual OUString SAL_CALL getContext() throw (RuntimeException);
+    virtual Reference<deployment::XPackageRegistry> SAL_CALL
+    getPackageRegistry() throw (RuntimeException);
+    virtual Reference<task::XAbortChannel> SAL_CALL createAbortChannel()
+        throw (RuntimeException);
+
+    virtual Reference<deployment::XPackage> SAL_CALL addPackage(
+        OUString const & url, OUString const & mediaType,
+        Reference<task::XAbortChannel> const & xAbortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException, CommandFailedException,
+               CommandAbortedException, lang::IllegalArgumentException,
+               RuntimeException);
+
+    void removePackage_(
+        OUString const & name,
+        Reference<task::XAbortChannel> const & xAbortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    virtual void SAL_CALL removePackage(
+        OUString const & name,
+        Reference<task::XAbortChannel> const & xAbortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException, CommandFailedException,
+               CommandAbortedException, lang::IllegalArgumentException,
+               RuntimeException);
+
+    Reference<deployment::XPackage> SAL_CALL getDeployedPackage_(
+        OUString const & name, Reference<XCommandEnvironment> const & xCmdEnv,
+        bool ignoreAlienPlatforms = false );
+    virtual Reference<deployment::XPackage> SAL_CALL getDeployedPackage(
+        OUString const & name, Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException, CommandFailedException,
+               lang::IllegalArgumentException, RuntimeException);
+
+    Sequence< Reference<deployment::XPackage> > getDeployedPackages_(
+        Reference<task::XAbortChannel> const & xAbortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    virtual Sequence< Reference<deployment::XPackage> > SAL_CALL
+    getDeployedPackages( Reference<task::XAbortChannel> const & xAbortChannel,
+                         Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException, CommandFailedException,
+               CommandAbortedException, lang::IllegalArgumentException,
+               RuntimeException);
+
+    virtual void SAL_CALL reinstallDeployedPackages(
+        Reference<task::XAbortChannel> const & xAbortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException, CommandFailedException,
+               CommandAbortedException, lang::IllegalArgumentException,
+               RuntimeException);
 };
 
 //______________________________________________________________________________
-CommandEnvironmentImpl::~CommandEnvironmentImpl()
+PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()
 {
+}
+
+//______________________________________________________________________________
+PackageManagerImpl::CmdEnvWrapperImpl::CmdEnvWrapperImpl(
+    Reference<XCommandEnvironment> const & xUserCmdEnv,
+    Reference<XProgressHandler> const & xLogFile )
+    : m_xLogFile( xLogFile )
+{
+    if (xUserCmdEnv.is())
+    {
+        m_xUserProgress.set( xUserCmdEnv->getProgressHandler() );
+        m_xUserInteractionHandler.set( xUserCmdEnv->getInteractionHandler() );
+    }
 }
 
 // XCommandEnvironment
 //______________________________________________________________________________
-Reference< task::XInteractionHandler >
-CommandEnvironmentImpl::getInteractionHandler() throw (RuntimeException)
+Reference<task::XInteractionHandler>
+PackageManagerImpl::CmdEnvWrapperImpl::getInteractionHandler()
+    throw (RuntimeException)
 {
     return m_xUserInteractionHandler;
 }
 
 //______________________________________________________________________________
-Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
+Reference<XProgressHandler>
+PackageManagerImpl::CmdEnvWrapperImpl::getProgressHandler()
     throw (RuntimeException)
 {
     return this;
@@ -151,7 +283,7 @@ Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
 
 // XProgressHandler
 //______________________________________________________________________________
-void CommandEnvironmentImpl::push( Any const & Status )
+void PackageManagerImpl::CmdEnvWrapperImpl::push( Any const & Status )
     throw (RuntimeException)
 {
     if (m_xLogFile.is())
@@ -161,7 +293,7 @@ void CommandEnvironmentImpl::push( Any const & Status )
 }
 
 //______________________________________________________________________________
-void CommandEnvironmentImpl::update( Any const & Status )
+void PackageManagerImpl::CmdEnvWrapperImpl::update( Any const & Status )
     throw (RuntimeException)
 {
     if (m_xLogFile.is())
@@ -171,7 +303,7 @@ void CommandEnvironmentImpl::update( Any const & Status )
 }
 
 //______________________________________________________________________________
-void CommandEnvironmentImpl::pop() throw (RuntimeException)
+void PackageManagerImpl::CmdEnvWrapperImpl::pop() throw (RuntimeException)
 {
     if (m_xLogFile.is())
         m_xLogFile->pop();
@@ -179,319 +311,187 @@ void CommandEnvironmentImpl::pop() throw (RuntimeException)
         m_xUserProgress->pop();
 }
 
-//##############################################################################
 
-typedef ::cppu::ImplInheritanceHelper2<
-    PropertyComponentBase,
-    lang::XServiceInfo, deployment::XPackageManager > t_pm_helper;
-
-//==============================================================================
-class PackageManagerImpl : public t_pm_helper
+//______________________________________________________________________________
+inline void PackageManagerImpl::check()
 {
-    enum { DEPLOYED_PACKAGES, REGISTRY };
-    ::std::auto_ptr< ::cppu::IPropertyArrayHelper > m_property_array_helper;
-
-    Reference< XComponentContext > m_xComponentContext;
-    OUString m_context;
-    OUString m_packages_dir;
-    bool m_register_packages;
-    Reference< deployment::XPackageRegistry > m_xPackageRegistry;
-    Reference< XProgressHandler > m_xLogFile;
-    ::std::auto_ptr< PersistentMap > m_persMediaTypes;
-
-    inline OUString getDeployPath( OUString const & name ) const;
-    inline OUString errmsg( OUString const & package, bool adding ) const;
-
-    bool bindPackage_(
-        Reference< deployment::XPackage > & xPackage,
-        OUString const & name,
-        Reference< XCommandEnvironment > const & xCmdEnv =
-        Reference< XCommandEnvironment >() ) const;
-    Sequence< Reference< deployment::XPackage > > getDeployedPackages(
-        Reference< XCommandEnvironment > const & xCmdEnv );
-
-protected:
-    inline void check() const { check_undisposed(); }
-    virtual void SAL_CALL disposing();
-
-    // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        Any & rConvertedValue, Any & rOldValue,
-        sal_Int32 nHandle, Any const & rValue )
-        throw (lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle, Any const & rValue ) throw (Exception);
-    virtual void SAL_CALL getFastPropertyValue(
-        Any & rValue, sal_Int32 nHandle ) const;
-
-    virtual ~PackageManagerImpl();
-public:
-    PackageManagerImpl(
-        Reference< XComponentContext > const & xComponentContext,
-        OUString const & context );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
-
-    // XPackageManager
-    virtual sal_Bool SAL_CALL addPackage(
-        Reference< deployment::XPackage > & xPackage,
-        OUString const & url,
-        OUString const & mediaType,
-        Reference< XCommandEnvironment > const & xCmdEnv )
-        throw (deployment::DeploymentException, RuntimeException);
-    virtual sal_Bool SAL_CALL removePackage(
-        OUString const & name,
-        Reference< XCommandEnvironment > const & xCmdEnv )
-        throw (deployment::DeploymentException, RuntimeException);
-    virtual Reference< deployment::XPackage > SAL_CALL getDeployedPackage(
-        OUString const & name )
-        throw (container::NoSuchElementException, RuntimeException);
-    virtual sal_Bool SAL_CALL repair(
-        Reference< XCommandEnvironment > const & xCmdEnv )
-        throw (deployment::DeploymentException, RuntimeException);
-};
+    ::osl::MutexGuard guard( getMutex() );
+    if (rBHelper.bInDispose || rBHelper.bDisposed)
+    {
+        throw lang::DisposedException(
+            OUSTR("PackageManager instance has already been disposed!"),
+            static_cast<OWeakObject *>(this) );
+    }
+}
 
 //______________________________________________________________________________
 inline OUString PackageManagerImpl::getDeployPath( OUString const & name ) const
 {
-    return make_url( m_packages_dir, ::rtl::Uri::encode(
+    return make_url( m_packagesDir, ::rtl::Uri::encode(
                          name, rtl_UriCharClassPchar,
                          rtl_UriEncodeIgnoreEscapes,
                          RTL_TEXTENCODING_UTF8 ) );
 }
 
 //______________________________________________________________________________
-inline OUString PackageManagerImpl::errmsg(
-    OUString const & package, bool adding ) const
+inline void PackageManagerImpl::logIntern( Any const & status )
 {
-    ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[context=\"") );
-    buf.append( m_context );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"] error while ") );
-    if (adding)
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("adding package \"") );
-    else
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("removing package \"") );
-    buf.append( package );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-    return buf.makeStringAndClear();
+    if (m_xLogFile.is())
+        m_xLogFile->update( status );
 }
 
 //______________________________________________________________________________
-bool PackageManagerImpl::bindPackage_(
-    Reference< deployment::XPackage > & xPackage,
-    OUString const & name,
-    Reference< XCommandEnvironment > const & xCmdEnv ) const
+void PackageManagerImpl::fireModified()
 {
-    OUString mediaType;
-    // xxx todo: guarding
-    if (m_persMediaTypes.get() != 0)
+    ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
+        ::getCppuType( static_cast<Reference<
+                       util::XModifyListener> const *>(0) ) );
+    if (container != 0)
     {
-        OSL_ASSERT( m_persMediaTypes->has( name ) );
-        m_persMediaTypes->get( &mediaType, name );
-    }
-    return (m_xPackageRegistry->bindPackage(
-                xPackage, getDeployPath(name), mediaType, xCmdEnv )
-            != sal_False);
-}
-
-// OPropertySetHelper
-//______________________________________________________________________________
-::cppu::IPropertyArrayHelper & PackageManagerImpl::getInfoHelper()
-{
-    ::osl::MutexGuard guard( getMutex() );
-    check();
-    if (m_property_array_helper.get() == 0)
-    {
-        beans::Property props [] = {
-            beans::Property(
-                OUSTR("DeployedPackages") /* name */,
-                DEPLOYED_PACKAGES /* handle */,
-                ::getCppuType(
-                    reinterpret_cast< Reference<
-                    deployment::XPackageRegistry > const * >(0) ),
-                beans::PropertyAttribute::READONLY |
-                beans::PropertyAttribute::BOUND ),
-            beans::Property(
-                OUSTR("Registry") /* name */,
-                REGISTRY /* handle */,
-                ::getCppuType(
-                    reinterpret_cast< Reference<
-                    deployment::XPackageRegistry > const * >(0) ),
-                beans::PropertyAttribute::READONLY )
-        };
-        m_property_array_helper.reset(
-            new ::cppu::OPropertyArrayHelper( props, ARLEN(props) ) );
-    }
-    return *m_property_array_helper.get();
-}
-
-//______________________________________________________________________________
-sal_Bool PackageManagerImpl::convertFastPropertyValue(
-    Any & rConvertedValue, Any & rOldValue,
-    sal_Int32 nHandle, Any const & rValue )
-    throw (lang::IllegalArgumentException)
-{
-    check();
-    OSL_ENSURE( 0, "unexpected!" );
-    return false;
-}
-
-//______________________________________________________________________________
-void PackageManagerImpl::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, Any const & rValue )
-    throw (Exception)
-{
-    check();
-    throw beans::PropertyVetoException(
-        OUSTR("unexpected: only readonly properties!"),
-        static_cast< OWeakObject * >(this) );
-}
-
-//______________________________________________________________________________
-void PackageManagerImpl::getFastPropertyValue(
-    Any & rValue, sal_Int32 nHandle ) const
-{
-    check();
-    switch (nHandle)
-    {
-    case DEPLOYED_PACKAGES:
-        try
+        Sequence< Reference<XInterface> > elements(
+            container->getElements() );
+        lang::EventObject evt( static_cast<OWeakObject *>(this) );
+        for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos )
         {
-            rValue <<= const_cast< PackageManagerImpl * >(this)
-                ->getDeployedPackages( Reference< XCommandEnvironment >() );
+            Reference<util::XModifyListener> xListener(
+                elements[ pos ], UNO_QUERY );
+            if (xListener.is())
+                xListener->modified( evt );
         }
-        catch (RuntimeException &)
-        {
-            throw;
-        }
-        catch (Exception &)
-        {
-            Any exc( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException(
-                OUSTR("unexpected exception occured!"),
-                static_cast< OWeakObject * >(
-                    const_cast< PackageManagerImpl * >(this) ), exc );
-        }
-        break;
-    case REGISTRY:
-        rValue <<= m_xPackageRegistry;
-        break;
-    default:
-       throw beans::UnknownPropertyException(
-            OUSTR("unexpected property handle!"),
-            static_cast< OWeakObject * >(
-                const_cast< PackageManagerImpl * >(this) ) );
     }
 }
 
 //______________________________________________________________________________
-PackageManagerImpl::PackageManagerImpl(
-    Reference< XComponentContext > const & xComponentContext,
+Reference<deployment::XPackageManager> PackageManagerImpl::create(
+    Reference<XComponentContext> const & xComponentContext,
     OUString const & context )
-    : m_xComponentContext( xComponentContext ),
-      m_context( context ),
-      m_register_packages( true )
 {
-    bool use_registry = true;
-    OUString log_file, registry_cache, media_types;
-    if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
+    PackageManagerImpl * that = new PackageManagerImpl(
+        xComponentContext, context );
+    Reference<deployment::XPackageManager> xPackageManager( that );
+
+    OUString logFile, mediaTypes, stampURL;
+    if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
     {
-        m_packages_dir = OUSTR("vnd.sun.star.expand:$UNO_"
-                               "USER_PACKAGES_CACHE/uno_packages");
-        registry_cache = OUSTR("vnd.sun.star.expand:$UNO_"
-                               "USER_PACKAGES_CACHE/registry");
-        media_types = OUSTR("vnd.sun.star.expand:$UNO_"
-                            "USER_PACKAGES_CACHE/media_types.db");
-        log_file = OUSTR("vnd.sun.star.expand:$UNO_"
-                         "USER_PACKAGES_CACHE/log.txt");
+        that->m_packagesDir = OUSTR("vnd.sun.star.expand:$UNO_"
+                                    "USER_PACKAGES_CACHE/uno_packages");
+        that->m_registryCache = OUSTR("vnd.sun.star.expand:$UNO_"
+                                      "USER_PACKAGES_CACHE/registry");
+        mediaTypes = OUSTR("vnd.sun.star.expand:$UNO_"
+                           "USER_PACKAGES_CACHE/media_types.db");
+        logFile = OUSTR("vnd.sun.star.expand:$UNO_"
+                        "USER_PACKAGES_CACHE/log.txt");
+        stampURL = OUSTR("vnd.sun.star.expand:$UNO_"
+                         "USER_PACKAGES_CACHE/stamp");
     }
-    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
+    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
     {
-        m_packages_dir = OUSTR("vnd.sun.star.expand:$UNO_"
-                               "SHARED_PACKAGES_CACHE/uno_packages");
-        registry_cache = OUSTR("vnd.sun.star.expand:$UNO_"
-                               "SHARED_PACKAGES_CACHE/registry");
-        media_types = OUSTR("vnd.sun.star.expand:$UNO_"
-                            "SHARED_PACKAGES_CACHE/media_types.db");
-        log_file = OUSTR("vnd.sun.star.expand:$UNO_"
-                         "SHARED_PACKAGES_CACHE/log.txt");
+        that->m_packagesDir = OUSTR("vnd.sun.star.expand:$UNO_"
+                                    "SHARED_PACKAGES_CACHE/uno_packages");
+        that->m_registryCache = OUSTR("vnd.sun.star.expand:$UNO_"
+                                      "SHARED_PACKAGES_CACHE/registry");
+        mediaTypes = OUSTR("vnd.sun.star.expand:$UNO_"
+                           "SHARED_PACKAGES_CACHE/media_types.db");
+        logFile = OUSTR("vnd.sun.star.expand:$UNO_"
+                        "SHARED_PACKAGES_CACHE/log.txt");
+        stampURL = OUSTR("vnd.sun.star.expand:$UNO_"
+                         "SHARED_PACKAGES_CACHE/stamp");
     }
-    else if (m_context.matchIgnoreAsciiCaseAsciiL(
+    else if (context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg:///") ))
     {
         // deploy into document, but no registration:
-        m_packages_dir = m_context;
-        m_register_packages = false;
+        that->m_packagesDir = context;
+        that->m_callRegistry = false;
         // no log file?: xxx todo
     }
-    else if (m_context.matchIgnoreAsciiCaseAsciiL(
+    else if (context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
     {
         // deploy into transient document, including registration:
-        m_packages_dir = m_context;
+        that->m_packagesDir = context;
         // no log file?: xxx todo
     }
     else
     {
         throw lang::IllegalArgumentException(
-            OUSTR("invalid context given: ") + m_context,
-            Reference< XInterface >(), static_cast< sal_Int16 >(0) );
+            OUSTR("invalid context given: ") + context,
+            Reference<XInterface>(), static_cast<sal_Int16>(-1) );
     }
+
+    Reference<XCommandEnvironment> xCmdEnv;
 
     try
     {
-        // assure packages folder is existing:
-        create_folder( 0, m_packages_dir );
+        bool renewal = false;
 
-        if (log_file.getLength() > 0)
+        if (stampURL.getLength() > 0)
         {
-            Any logfile( makeAny( log_file ) );
-            m_xLogFile.set(
-                m_xComponentContext->getServiceManager()
+            // currently no automatic renewal possible, because quickstarter
+            // already hinders from deleting registry directory...
+
+#define CURRENT_STAMP "1"
+//             renewal = true;
+//             {
+//             ::ucb::Content ucbStamp;
+//             if (create_ucb_content(
+//                     &ucbStamp, stampURL, xCmdEnv, false /* no throw */ ))
+//             {
+//                 OUString line;
+//                 renewal = !readLine( &line, OUSTR(CURRENT_STAMP), ucbStamp,
+//                                      RTL_TEXTENCODING_ASCII_US );
+//             }
+//             }
+
+            try
+            {
+                // probe writing:
+                erase_path( stampURL, xCmdEnv );
+                ::ucb::Content ucbStamp( stampURL, xCmdEnv );
+                ::rtl::OString stamp(
+                    RTL_CONSTASCII_STRINGPARAM(CURRENT_STAMP) );
+                Reference<io::XInputStream> xData(
+                    ::xmlscript::createInputStream(
+                        ::rtl::ByteSequence(
+                            reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
+                            stamp.getLength() ) ) );
+                ucbStamp.writeStream( xData, true /* replace existing */ );
+            }
+            catch (RuntimeException &)
+            {
+                throw;
+            }
+            catch (Exception &)
+            {
+                that->m_readOnly = true;
+            }
+        }
+
+        // assure packages folder is existing:
+        create_folder( 0, that->m_packagesDir, xCmdEnv, !that->m_readOnly );
+        if (!that->m_readOnly && logFile.getLength() > 0)
+        {
+            Any any_logFile( makeAny(logFile) );
+            that->m_xLogFile.set(
+                that->m_xComponentContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
                     OUSTR("com.sun.star.comp.deployment.ProgressLog"),
-                    Sequence< Any >( &logfile, 1 ),
-                    m_xComponentContext ),
+                    Sequence<Any>( &any_logFile, 1 ),
+                    that->m_xComponentContext ),
                 UNO_QUERY_THROW );
         }
 
-        if (media_types.getLength() > 0)
-        {
-            // open media_types.db:
-            m_persMediaTypes.reset(
-                new PersistentMap( media_types, m_xComponentContext ) );
-        }
+        if (mediaTypes.getLength() > 0) // open media_types.db
+            that->m_persMediaTypes.reset(
+                new PersistentMap( mediaTypes, that->m_readOnly ) );
 
-        Sequence< Any > args;
-        if (registry_cache.getLength() > 0)
-        {
-            create_folder( 0, registry_cache );
-            args.realloc( 2 );
-            args[ 0 ] <<= registry_cache;
-            args[ 1 ] <<= m_context;
-        }
+        OSL_ENSURE( !that->m_readOnly || !renewal,
+                    "### ought to reinstall all packages, but cannot write!" );
+        if (!that->m_readOnly && renewal) // try to reinstall
+            that->reinstallDeployedPackages(
+                Reference<task::XAbortChannel>(), xCmdEnv );
 
-        // xxx todo: create an own registry (with subsequent backends
-        //           for any manager(context)?
-        //           what happens if an embedded document is opened
-        //           and modified?  Then a different manager with
-        //           different registry will be instantiated...
-        //           the other way round: instantiating via /singl/reg
-        //           will globally register all scripts of open documents
-        //           which might be not wanted, too.
-        m_xPackageRegistry.set(
-            m_xComponentContext->getServiceManager()
-            ->createInstanceWithArgumentsAndContext(
-                OUSTR("com.sun.star.deployment.PackageRegistry"),
-                args, m_xComponentContext ), UNO_QUERY_THROW );
+        return xPackageManager;
     }
     catch (RuntimeException &)
     {
@@ -502,11 +502,11 @@ PackageManagerImpl::PackageManagerImpl(
         Any exc( ::cppu::getCaughtException() );
         ::rtl::OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[context=\"") );
-        buf.append( m_context );
+        buf.append( context );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
                              "\"] caught unexpected exception!") );
         throw lang::WrappedTargetRuntimeException(
-            buf.makeStringAndClear(), Reference< XInterface >(), exc );
+            buf.makeStringAndClear(), Reference<XInterface>(), exc );
     }
 }
 
@@ -539,225 +539,75 @@ void PackageManagerImpl::disposing()
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             OUSTR("caught unexpected exception while disposing..."),
-            static_cast< OWeakObject * >(this), exc );
+            static_cast<OWeakObject *>(this), exc );
     }
 }
 
-// XServiceInfo
+// XComponent
 //______________________________________________________________________________
-OUString PackageManagerImpl::getImplementationName()
-    throw (RuntimeException)
+void PackageManagerImpl::dispose() throw (RuntimeException)
 {
-//     check();
-    return OUSTR("com.sun.star.comp.deployment.PackageManager");
+    check();
+    WeakComponentImplHelperBase::dispose();
 }
 
 //______________________________________________________________________________
-sal_Bool PackageManagerImpl::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
+void PackageManagerImpl::addEventListener(
+    Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
-//     check();
-    Sequence< OUString > supported_services( getSupportedServiceNames() );
-    OUString const * ar = supported_services.getConstArray();
-    for ( sal_Int32 pos = supported_services.getLength(); pos--; )
-    {
-        if (ar[ pos ].equals( serviceName ))
-            return true;
-    }
-    return false;
+    check();
+    WeakComponentImplHelperBase::addEventListener( xListener );
 }
 
 //______________________________________________________________________________
-Sequence< OUString > PackageManagerImpl::getSupportedServiceNames()
-    throw (RuntimeException)
+void PackageManagerImpl::removeEventListener(
+    Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
-//     check();
-    OUString str_name = OUSTR("com.sun.star.comp.deployment.PackageManager");
-    return Sequence< OUString >( &str_name, 1 );
+    check();
+    WeakComponentImplHelperBase::removeEventListener( xListener );
 }
 
 // XPackageManager
 //______________________________________________________________________________
-sal_Bool PackageManagerImpl::addPackage(
-    Reference< deployment::XPackage > & xPackage,
-    OUString const & url, OUString const & mediaType_,
-    Reference< XCommandEnvironment > const & xCmdEnv_ )
-    throw (deployment::DeploymentException, RuntimeException)
+OUString PackageManagerImpl::getContext() throw (RuntimeException)
 {
     check();
-    Reference< XCommandEnvironment > xCmdEnv;
-    if (m_xLogFile.is())
-        xCmdEnv.set( new CommandEnvironmentImpl( xCmdEnv_, m_xLogFile ) );
-    else
-        xCmdEnv.set( xCmdEnv_ );
-
-    bool success = true;
-    ProgressLevel progress( xCmdEnv );
-    try
-    {
-        OUString mediaType( mediaType_ );
-        if (mediaType.getLength() == 0)
-        {
-            // auto-detect media-type:
-            mediaType = m_xPackageRegistry->detectMediaType( url );
-            if (mediaType.getLength() == 0)
-                throw Exception /* xxx todo: what exception */(
-                    OUSTR("Cannot detect media-type of ") + url, 0 );
-        }
-
-        ::ucb::Content source_content;
-        create_ucb_content( &source_content, url, xCmdEnv ); // throws exc
-        OUString title( extract_throw< OUString >(
-                            source_content.getPropertyValue(OUSTR("Title")) ) );
-        OUString deploy_path( getDeployPath( title ) );
-
-        {
-        ::osl::MutexGuard guard( getMutex() );
-
-        if (create_ucb_content( 0, deploy_path, xCmdEnv, false /* no throw */ ))
-        {
-            // interact whether pkgchk -f:
-            handle_error(
-                deployment::DeploymentException(
-                    errmsg( source_content.getURL(), true /* adding */ ),
-                    static_cast< OWeakObject * >(this),
-                    makeAny( NameClashResolveRequest(
-                                 OUSTR("package already added!"),
-                                 static_cast< OWeakObject * >(this),
-                                 task::InteractionClassification_ERROR,
-                                 deploy_path, title, OUString() ) ) ),
-                xCmdEnv, false /* no logging */ );
-            // remove clashing package:
-            if (! removePackage( title, xCmdEnv_ /* unwrapped cmd env */ ))
-                return false;
-        }
-
-        // copy file:
-        progress.update( OUSTR("copying package ") + title );
-        ::ucb::Content dest_content( m_packages_dir, xCmdEnv );
-        if (! dest_content.transferContent(
-                source_content, ::ucb::InsertOperation_COPY,
-                OUString(), NameClash::ASK ))
-            throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
-
-        if (m_persMediaTypes.get() != 0)
-        {
-            OSL_ASSERT( ! m_persMediaTypes->has( title ) );
-            OUString inserted( mediaType );
-            m_persMediaTypes->put( title, inserted );
-            OSL_ASSERT( inserted.equals( mediaType ) );
-        }
-        else // document
-        {
-            dest_content.setPropertyValue(
-                OUSTR("MediaType"), makeAny(mediaType) );
-        }
-        } // guard
-
-        // xxx todo: fire before bind()?
-        fireChange( DEPLOYED_PACKAGES, Any(), Any() /* performance resaons */ );
-
-        // bind destination package:
-        success &= (m_xPackageRegistry->bindPackage(
-                        xPackage, deploy_path, mediaType, xCmdEnv )
-                    != sal_False);
-        // register package:
-        if (success && m_register_packages && xPackage.is())
-            success &= (xPackage->registerPackage( xCmdEnv ) != sal_False);
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (deployment::DeploymentException &)
-    {
-        throw;
-    }
-    catch (Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        handle_error( deployment::DeploymentException(
-                          errmsg( url, true /* adding */ ),
-                          static_cast< OWeakObject * >(this), exc ),
-                      xCmdEnv );
-        success = false;
-    }
-    return success;
+    return m_context;
 }
 
 //______________________________________________________________________________
-sal_Bool PackageManagerImpl::removePackage(
-    OUString const & name,
-    Reference< XCommandEnvironment > const & xCmdEnv_ )
-    throw (deployment::DeploymentException, RuntimeException)
+Reference<deployment::XPackageRegistry> PackageManagerImpl::getPackageRegistry()
+    throw (RuntimeException)
 {
-    check();
-    Reference< XCommandEnvironment > xCmdEnv;
-    if (m_xLogFile.is())
-        xCmdEnv.set( new CommandEnvironmentImpl( xCmdEnv_, m_xLogFile ) );
-    else
-        xCmdEnv.set( xCmdEnv_ );
-
-    bool success;
-    try
-    {
-        OUString url( getDeployPath(name) );
-        ProgressLevel progress( xCmdEnv );
-        Reference< deployment::XPackage > xPackage;
-        success = bindPackage_( xPackage, name, xCmdEnv );
-        if (success && m_register_packages && xPackage.is())
-        {
-            // revoke package from registry:
-            success &= (xPackage->revokePackage( xCmdEnv ) != sal_False);
-            OSL_ASSERT(
-                extract_throw< OUString >(
-                    Reference< beans::XPropertySet >(
-                        xPackage, UNO_QUERY_THROW )->getPropertyValue(
-                            OUSTR("URL") ) ).equals( url ) );
-            try_dispose( xPackage );
-            if (m_persMediaTypes.get() != 0)
-                m_persMediaTypes->erase( name );
-        }
-        // remove manager's copy:
-        erase_path( url, xCmdEnv );
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (deployment::DeploymentException &)
-    {
-        throw;
-    }
-    catch (Exception &)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        handle_error( deployment::DeploymentException(
-                          errmsg( name, false /* removing */ ),
-                          static_cast< OWeakObject * >(this), exc ),
-                      xCmdEnv );
-        success = false;
-    }
-    return success;
-}
-
-//______________________________________________________________________________
-Reference< deployment::XPackage > PackageManagerImpl::getDeployedPackage(
-    OUString const & name )
-    throw (container::NoSuchElementException, RuntimeException)
-{
-    OUString deployPath( getDeployPath( name ) );
     ::osl::MutexGuard guard( getMutex() );
     check();
-    if (create_ucb_content(
-            0, deployPath,
-            Reference< XCommandEnvironment >(), false /* no throw */ ))
+    if (! m_xPackageRegistry.is())
     {
         try
         {
-            Reference< deployment::XPackage > xPackage;
-            if (bindPackage_( xPackage, name ))
-                return xPackage;
+            // xxx todo: create an own registry (with subsequent backends
+            //           for any manager(context)?
+            //           what happens if an embedded document is opened
+            //           and modified?  Then a different manager with
+            //           different registry will be instantiated...
+            //           the other way round: instantiating via /singl/reg
+            //           will globally register all scripts of open documents
+            //           which might be not wanted, too.
+            if (m_registryCache.getLength() > 0)
+            {
+                create_folder( 0, m_registryCache,
+                               Reference<XCommandEnvironment>(), !m_readOnly );
+                m_xPackageRegistry.set(
+                    deployment::PackageRegistry::createPersistent(
+                        m_xComponentContext, m_context,
+                        m_registryCache, m_readOnly ) );
+            }
+            else
+            {
+                m_xPackageRegistry.set(
+                    deployment::PackageRegistry::createTransient(
+                        m_xComponentContext, m_context ) );
+            }
         }
         catch (RuntimeException &)
         {
@@ -767,70 +617,505 @@ Reference< deployment::XPackage > PackageManagerImpl::getDeployedPackage(
         {
             Any exc( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException(
-                OUSTR("unexpected exception occured!"),
-                static_cast< OWeakObject * >(this), exc );
+                OUSTR("caught unexpected exception while "
+                      "installing PackageRegistry!"),
+                static_cast<OWeakObject *>(this), exc );
         }
     }
-    ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[context=\"") );
-    buf.append( m_context );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                         "\"] there is no such package deployed: \"") );
-    buf.append( name );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-    throw container::NoSuchElementException(
-        buf.makeStringAndClear(), static_cast< OWeakObject * >(this) );
+    return m_xPackageRegistry;
 }
 
 //______________________________________________________________________________
-Sequence< Reference< deployment::XPackage > >
-PackageManagerImpl::getDeployedPackages(
-    Reference< XCommandEnvironment > const & xCmdEnv )
+void PackageManagerImpl::checkAborted(
+    ::rtl::Reference<AbortChannel> const & abortChannel )
 {
-    ::std::vector< Reference< deployment::XPackage > > packages;
-    // scan for all entries in m_packages_dir:
-    ::ucb::Content ucb_content( m_packages_dir, xCmdEnv );
-    OUString str_title = OUSTR("Title");
-    Reference< sdbc::XResultSet > xResultSet(
-        ucb_content.createCursor(
-            Sequence< OUString >( &str_title, 1 ),
-            ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+    if (abortChannel.is() && abortChannel->isAborted())
+        throw CommandAbortedException(
+            OUSTR("abort!"), static_cast<OWeakObject *>(this) );
+}
+
+//______________________________________________________________________________
+Reference<task::XAbortChannel> PackageManagerImpl::createAbortChannel()
+    throw (RuntimeException)
+{
+    check();
+    return new AbortChannel;
+}
+
+// XModifyBroadcaster
+//______________________________________________________________________________
+void PackageManagerImpl::addModifyListener(
+    Reference<util::XModifyListener> const & xListener )
+    throw (RuntimeException)
+{
+    check();
+    rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+}
+
+//______________________________________________________________________________
+void PackageManagerImpl::removeModifyListener(
+    Reference<util::XModifyListener> const & xListener )
+    throw (RuntimeException)
+{
+    check();
+    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+}
+
+// XPackageManager
+//______________________________________________________________________________
+Reference<deployment::XPackage> PackageManagerImpl::addPackage(
+    OUString const & url, OUString const & mediaType_,
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv_ )
+    throw (deployment::DeploymentException, CommandFailedException,
+           CommandAbortedException, lang::IllegalArgumentException,
+           RuntimeException)
+{
+    check();
+    Reference<XCommandEnvironment> xCmdEnv;
+    if (m_xLogFile.is())
+        xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
+    else
+        xCmdEnv.set( xCmdEnv_ );
+
+    ProgressLevel progress( xCmdEnv );
+    try
+    {
+        ::ucb::Content sourceContent;
+        create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
+        OUString title( extract_throw< OUString >(
+                            sourceContent.getPropertyValue(OUSTR("Title")) ) );
+        OUString deployPath( getDeployPath(title) );
+
+        // prebind package before any copying to assure a valid package:
+        Reference<deployment::XPackage> xPackage(
+            getPackageRegistry()->bindPackage( url, mediaType_, xCmdEnv ) );
+        OUString mediaType( xPackage->getMediaType() );
+
+        {
+        ::osl::MutexGuard guard( getMutex() );
+
+        if (create_ucb_content( 0, deployPath, xCmdEnv, false /* no throw */ ))
+        {
+            // package already deployed, interact whether pkgchk -f:
+            interactThrow(
+                deployment::DeploymentException(
+                    getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                    static_cast<OWeakObject *>(this),
+                    makeAny( NameClashResolveRequest(
+                                 getResourceString(
+                                     RID_STR_PACKAGE_ALREADY_ADDED ) + title,
+                                 static_cast<OWeakObject *>(this),
+                                 task::InteractionClassification_QUERY,
+                                 deployPath, title, OUString() ) ) ),
+                ::getCppuType(
+                    static_cast<Reference<XInteractionReplaceExistingData>
+                    const *>(0) ),
+                xCmdEnv );
+            // remove clashing package before copying new version:
+            removePackage_(
+                title, xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+        }
+
+        // copy file:
+        progress.update( getResourceString(RID_STR_COPYING_PACKAGE) + title );
+        ::ucb::Content destContent( m_packagesDir, xCmdEnv );
+        if (! destContent.transferContent(
+                sourceContent, ::ucb::InsertOperation_COPY,
+                OUString(), NameClash::ASK /* xxx todo: ASK not needed? */ ))
+            throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
+
+        if (m_persMediaTypes.get() == 0)
+        {
+            destContent.setPropertyValue(
+                OUSTR("MediaType"), makeAny(mediaType) );
+        }
+        else
+        {
+            OSL_ASSERT( ! m_persMediaTypes->has( title ) );
+            OUString inserted( mediaType );
+            m_persMediaTypes->put( title, inserted );
+            OSL_ASSERT( inserted.equals( mediaType ) );
+        }
+        } // guard
+
+        // xxx todo: fire before bind(), registration?
+        fireModified();
+
+        // bind deployed package:
+        xPackage = getPackageRegistry()->bindPackage(
+            deployPath, mediaType, xCmdEnv );
+        OSL_ASSERT( xPackage.is() );
+        // register package:
+        if (m_callRegistry && xPackage.is())
+            xPackage->registerPackage( xAbortChannel, xCmdEnv );
+        return xPackage;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (CommandFailedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (CommandAbortedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (deployment::DeploymentException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        logIntern( exc );
+        throw deployment::DeploymentException(
+            getResourceString(RID_STR_ERROR_WHILE_ADDING) + url,
+            static_cast<OWeakObject *>(this), exc );
+    }
+}
+
+//______________________________________________________________________________
+void PackageManagerImpl::removePackage_(
+    OUString const & name,
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    ProgressLevel progress( xCmdEnv );
+    Reference<deployment::XPackage> xPackage( getDeployedPackage_(
+                                                  name, xCmdEnv ) );
+    OUString url( xPackage->getURL() );
+    OSL_ASSERT( url.equals( getDeployPath(name) ) );
+    if (m_callRegistry)
+    {
+        bool reg = true;
+        try
+        {
+            reg = xPackage->isRegistered(
+                // xxx todo: chain abort?
+                Reference<task::XAbortChannel>(), xCmdEnv );
+        }
+        catch (beans::UnknownPropertyException &)
+        {
+        }
+        if (reg) // revoke package from registry:
+            xPackage->revokePackage( xAbortChannel, xCmdEnv );
+        try_dispose( xPackage );
+        if (m_persMediaTypes.get() != 0)
+            m_persMediaTypes->erase( name );
+    }
+    // remove manager's copy:
+    erase_path( url, xCmdEnv );
+}
+
+//______________________________________________________________________________
+void PackageManagerImpl::removePackage(
+    OUString const & name,
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv_ )
+    throw (deployment::DeploymentException, CommandFailedException,
+           CommandAbortedException, lang::IllegalArgumentException,
+           RuntimeException)
+{
+    check();
+    Reference<XCommandEnvironment> xCmdEnv;
+    if (m_xLogFile.is())
+        xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
+    else
+        xCmdEnv.set( xCmdEnv_ );
+
+    try
+    {
+        removePackage_( name, xAbortChannel, xCmdEnv );
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (lang::IllegalArgumentException &)
+    {
+        throw;
+    }
+    catch (CommandFailedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (CommandAbortedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (deployment::DeploymentException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        logIntern( exc );
+        throw deployment::DeploymentException(
+            getResourceString(RID_STR_ERROR_WHILE_REMOVING) + name,
+            static_cast<OWeakObject *>(this), exc );
+    }
+}
+
+//______________________________________________________________________________
+Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
+    OUString const & name, Reference<XCommandEnvironment> const & xCmdEnv,
+    bool ignoreAlienPlatforms )
+{
+    OUString deployPath( getDeployPath(name) );
+    ::osl::MutexGuard guard( getMutex() );
+    check();
+    ::ucb::Content ucbContent;
+    if (create_ucb_content(
+            &ucbContent, deployPath, xCmdEnv, false /* no throw */ ))
+    {
+        OUString mediaType;
+        if (m_persMediaTypes.get() == 0)
+        {
+            try
+            {
+                ucbContent.getPropertyValue( OUSTR("MediaType") ) >>= mediaType;
+            }
+            catch (beans::UnknownPropertyException &)
+            {
+                OSL_ENSURE(
+                    0, "### no media-type entry for deployed package!" );
+            }
+        }
+        else
+        {
+            OSL_ASSERT( m_persMediaTypes->has( name ) );
+            m_persMediaTypes->get( &mediaType, name );
+        }
+        if (ignoreAlienPlatforms)
+        {
+            String type, subType;
+            INetContentTypeParameterList params;
+            if (INetContentTypes::parse( mediaType, type, subType, &params ))
+            {
+                INetContentTypeParameter const * param = params.find(
+                    ByteString("platform") );
+                if (param != 0 && !platform_fits( param->m_sValue ))
+                    return Reference<deployment::XPackage>();
+            }
+        }
+        return getPackageRegistry()->bindPackage(
+            deployPath, mediaType, xCmdEnv );
+    }
+    throw lang::IllegalArgumentException(
+        getResourceString(RID_STR_NO_SUCH_PACKAGE) + name,
+        static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
+}
+
+//______________________________________________________________________________
+Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
+    OUString const & name, Reference<XCommandEnvironment> const & xCmdEnv_ )
+    throw (deployment::DeploymentException, CommandFailedException,
+           lang::IllegalArgumentException, RuntimeException)
+{
+    check();
+    Reference<XCommandEnvironment> xCmdEnv;
+    if (m_xLogFile.is())
+        xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
+    else
+        xCmdEnv.set( xCmdEnv_ );
+
+    try
+    {
+        return getDeployedPackage_( name, xCmdEnv );
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (CommandFailedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (lang::IllegalArgumentException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (deployment::DeploymentException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        logIntern( exc );
+        throw deployment::DeploymentException(
+            // ought never occur...
+            OUSTR("error while accessing deployed package: ") + name,
+            static_cast<OWeakObject *>(this), exc );
+    }
+}
+
+//______________________________________________________________________________
+Sequence< Reference<deployment::XPackage> >
+PackageManagerImpl::getDeployedPackages_(
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    ::std::vector< Reference<deployment::XPackage> > packages;
+    // scan for all entries in m_packagesDir:
+    ::ucb::Content ucbContent( m_packagesDir, xCmdEnv );
+    OUString strTitle = OUSTR("Title");
+    Reference<sdbc::XResultSet> xResultSet(
+        ucbContent.createCursor( Sequence<OUString>( &strTitle, 1 ),
+                                 ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
     while (xResultSet->next())
     {
-        Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY_THROW );
-        Reference< deployment::XPackage > xPackage;
-        if (bindPackage_( xPackage, xRow->getString( 1 /* Title */ ) ) &&
-            xPackage.is())
+        Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
+        // xxx todo: remove workaround for tdoc
+        if (xRow->getString( 1 /* Title */ ).equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "this_is_a_dummy_stream_just_there_"
+                    "as_a_workaround_for_a_"
+                    "temporary_limitation_of_the_"
+                    "storage_api_implementation") ))
+            continue;
+        Reference<deployment::XPackage> xPackage(
+            getDeployedPackage_(
+                xRow->getString( 1 /* Title */ ), xCmdEnv,
+                true /* ignore other platforms than the current one */ ) );
+        if (xPackage.is())
             packages.push_back( xPackage );
     }
-    return Sequence< Reference< deployment::XPackage > >(
+    return Sequence< Reference<deployment::XPackage> >(
         &packages[ 0 ], packages.size() );
 }
 
 //______________________________________________________________________________
-sal_Bool PackageManagerImpl::repair(
-    Reference< XCommandEnvironment > const & xCmdEnv )
-    throw (deployment::DeploymentException, RuntimeException)
+Sequence< Reference<deployment::XPackage> >
+PackageManagerImpl::getDeployedPackages(
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv_ )
+    throw (deployment::DeploymentException, CommandFailedException,
+           CommandAbortedException, lang::IllegalArgumentException,
+           RuntimeException)
 {
-    // repair registry:
-    bool success = m_xPackageRegistry->repair( xCmdEnv );
-    // verify added packages:
-    Sequence< Reference< deployment::XPackage > > deployedPackages(
-        getDeployedPackages( xCmdEnv ) );
-    Reference< deployment::XPackage > const * pdeployedPackages =
-        deployedPackages.getConstArray();
-    for ( sal_Int32 pos = deployedPackages.getLength(); pos--; )
+    check();
+    Reference<XCommandEnvironment> xCmdEnv;
+    if (m_xLogFile.is())
+        xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
+    else
+        xCmdEnv.set( xCmdEnv_ );
+
+    try
     {
-        Reference< beans::XPropertySet > xProps(
-            pdeployedPackages[ pos ], UNO_QUERY_THROW );
-        if (! xProps->getPropertyValue( OUSTR("IsRegistered") ).hasValue())
-        {
-            // state unknown => try to register:
-            success &= (pdeployedPackages[ pos ]->registerPackage( xCmdEnv )
-                        != sal_False);
-        }
+        return getDeployedPackages_( xAbortChannel, xCmdEnv );
     }
-    return success;
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (CommandFailedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (CommandAbortedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (deployment::DeploymentException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        logIntern( exc );
+        throw deployment::DeploymentException(
+            // ought never occur...
+            OUSTR("error while getting all deployed packages: ") + m_context,
+            static_cast<OWeakObject *>(this), exc );
+    }
+}
+
+//______________________________________________________________________________
+void PackageManagerImpl::reinstallDeployedPackages(
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv_ )
+    throw (deployment::DeploymentException,
+           CommandFailedException, CommandAbortedException,
+           lang::IllegalArgumentException, RuntimeException)
+{
+    check();
+    if (office_is_running())
+        throw RuntimeException(
+            OUSTR("You must close any running Office process before "
+                  "reinstalling packages!"), static_cast<OWeakObject *>(this) );
+
+    Reference<XCommandEnvironment> xCmdEnv;
+    if (m_xLogFile.is())
+        xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
+    else
+        xCmdEnv.set( xCmdEnv_ );
+
+    try
+    {
+        ProgressLevel progress(
+            xCmdEnv, OUSTR("Reinstalling all deployed packages...") );
+
+        try_dispose( m_xPackageRegistry );
+        m_xPackageRegistry.clear();
+        if (m_registryCache.getLength() > 0)
+        {
+            erase_path( m_registryCache, xCmdEnv );
+            create_folder( 0, m_registryCache, xCmdEnv );
+        }
+
+        Sequence< Reference<deployment::XPackage> > packages(
+            getDeployedPackages_( xAbortChannel, xCmdEnv ) );
+        Reference<deployment::XPackage> const * ppackages =
+            packages.getConstArray();
+        for ( sal_Int32 pos = 0; pos < packages.getLength(); ++pos )
+            ppackages[ pos ]->registerPackage( xAbortChannel, xCmdEnv );
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (CommandFailedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (CommandAbortedException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (deployment::DeploymentException & exc)
+    {
+        logIntern( makeAny(exc) );
+        throw;
+    }
+    catch (Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        logIntern( exc );
+        throw deployment::DeploymentException(
+            OUSTR("Error while reinstalling all previously deployed "
+                  "packages of context ") + m_context,
+            static_cast<OWeakObject *>(this), exc );
+    }
 }
 
 //##############################################################################
@@ -839,41 +1124,49 @@ namespace factory
 {
 
 typedef ::cppu::WeakComponentImplHelper2<
-    lang::XServiceInfo, deployment::XPackageManagerFactory > t_pmfac_helper;
+    deployment::XPackageManagerFactory, lang::XUnoTunnel > t_pmfac_helper;
 
 //==============================================================================
 class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
 {
-    Reference< XComponentContext > m_xComponentContext;
+    Reference<XComponentContext> m_xComponentContext;
 
-    Reference< deployment::XPackageManager > m_xUserMgr;
-    Reference< deployment::XPackageManager > m_xSharedMgr;
+    Reference<deployment::XPackageManager> m_xUserMgr;
+    Reference<deployment::XPackageManager> m_xSharedMgr;
     typedef ::std::hash_map<
-        OUString, WeakReference< deployment::XPackageManager >,
+        OUString, WeakReference<deployment::XPackageManager>,
         ::rtl::OUStringHash > t_string2weakref;
     t_string2weakref m_managers;
 
 protected:
-    inline void check() const;
+    inline void check();
     virtual void SAL_CALL disposing();
 
-    virtual ~PackageManagerFactoryImpl();
 public:
+    virtual ~PackageManagerFactoryImpl();
     PackageManagerFactoryImpl(
-        Reference< XComponentContext > const & xComponentContext );
+        Reference<XComponentContext> const & xComponentContext );
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( Sequence<sal_Int8> const & id )
         throw (RuntimeException);
 
     // XPackageManagerFactory
-    virtual Reference< deployment::XPackageManager > SAL_CALL getPackageManager(
+    virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
         OUString const & context ) throw (RuntimeException);
 };
+
+// XUnoTunnel: hack to set application solar mutex from within gui
+//______________________________________________________________________________
+sal_Int64 PackageManagerFactoryImpl::getSomething(
+    Sequence<sal_Int8> const & id ) throw (RuntimeException)
+{
+    ::rtl::OString str( reinterpret_cast<sal_Char const *>(id.getConstArray()),
+                        id.getLength() );
+    if (str.equals("ResMgrMutexPointer"))
+        return reinterpret_cast<sal_Int64>(&g_pResMgrMmutex);
+    return 0;
+}
 
 //==============================================================================
 OUString SAL_CALL getImplementationName()
@@ -882,15 +1175,15 @@ OUString SAL_CALL getImplementationName()
 }
 
 //==============================================================================
-Sequence< OUString > SAL_CALL getSupportedServiceNames()
+Sequence<OUString> SAL_CALL getSupportedServiceNames()
 {
-    OUString str_name = OUSTR("com.sun.star.deployment.PackageManagerFactory");
-    return Sequence< OUString >( &str_name, 1 );
+    OUString strName( getImplementationName() );
+    return Sequence<OUString>( &strName, 1 );
 }
 
 //==============================================================================
-Reference< XInterface > SAL_CALL create(
-    Reference< XComponentContext > const & xComponentContext )
+Reference<XInterface> SAL_CALL create(
+    Reference<XComponentContext> const & xComponentContext )
     SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
@@ -899,17 +1192,17 @@ Reference< XInterface > SAL_CALL create(
 
 //==============================================================================
 bool singleton_entries(
-    Reference< registry::XRegistryKey > const & xRegistryKey )
+    Reference<registry::XRegistryKey> const & xRegistryKey )
 {
     try
     {
-        Reference< registry::XRegistryKey > xKey(
+        Reference<registry::XRegistryKey> xKey(
             xRegistryKey->createKey(
                 getImplementationName() +
+                // xxx todo: use future generated function to get singleton name
                 OUSTR("/UNO/SINGLETONS/"
                       "com.sun.star.deployment.thePackageManagerFactory") ) );
-        xKey->setStringValue(
-            OUSTR("com.sun.star.deployment.PackageManagerFactory") );
+        xKey->setStringValue( getImplementationName() );
         return true;
     }
     catch (registry::InvalidRegistryException & exc)
@@ -922,7 +1215,7 @@ bool singleton_entries(
 
 //______________________________________________________________________________
 PackageManagerFactoryImpl::PackageManagerFactoryImpl(
-    Reference< XComponentContext > const & xComponentContext )
+    Reference<XComponentContext> const & xComponentContext )
     : t_pmfac_helper( getMutex() ),
       m_xComponentContext( xComponentContext )
 {
@@ -934,16 +1227,14 @@ PackageManagerFactoryImpl::~PackageManagerFactoryImpl()
 }
 
 //______________________________________________________________________________
-inline void PackageManagerFactoryImpl::check() const
+inline void PackageManagerFactoryImpl::check()
 {
-    // xxx todo guard?
-//     ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
             OUSTR("PackageManagerFactory instance has already been disposed!"),
-            static_cast< OWeakObject * >(
-                const_cast< PackageManagerFactoryImpl * >(this) ) );
+            static_cast<OWeakObject *>(this) );
     }
 }
 
@@ -962,42 +1253,9 @@ void PackageManagerFactoryImpl::disposing()
     m_xSharedMgr.clear();
 }
 
-// XServiceInfo
-//______________________________________________________________________________
-OUString PackageManagerFactoryImpl::getImplementationName()
-    throw (RuntimeException)
-{
-//     check();
-    return ::dp_manager::factory::getImplementationName();
-}
-
-//______________________________________________________________________________
-sal_Bool PackageManagerFactoryImpl::supportsService(
-    OUString const & serviceName )
-    throw (RuntimeException)
-{
-//     check();
-    Sequence< OUString > supported_services( getSupportedServiceNames() );
-    OUString const * ar = supported_services.getConstArray();
-    for ( sal_Int32 pos = supported_services.getLength(); pos--; )
-    {
-        if (ar[ pos ].equals( serviceName ))
-            return true;
-    }
-    return false;
-}
-
-//______________________________________________________________________________
-Sequence< OUString > PackageManagerFactoryImpl::getSupportedServiceNames()
-    throw (RuntimeException)
-{
-//     check();
-    return ::dp_manager::factory::getSupportedServiceNames();
-}
-
 // XPackageManagerFactory
 //______________________________________________________________________________
-Reference< deployment::XPackageManager >
+Reference<deployment::XPackageManager>
 PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     throw (RuntimeException)
 {
@@ -1013,7 +1271,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     }
 
     guard.clear();
-    xRet.set( new PackageManagerImpl( m_xComponentContext, context ) );
+    xRet.set( PackageManagerImpl::create( m_xComponentContext, context ) );
     guard.reset();
     ::std::pair< t_string2weakref::iterator, bool > insertion(
         m_managers.insert( t_string2weakref::value_type( context, xRet ) ) );
