@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:33:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ void FuText::StopEditMode()
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
         if( pData )
         {
-            aTabPos = pData->aStt;
+            aTabPos = ScAddress( pData->aStt);
             bComment = TRUE;
         }
     }
@@ -410,7 +410,7 @@ void FuText::StopEditMode()
 
             if ( bRemove && eResult != SDRENDTEXTEDIT_DELETED )     // Legenden-Objekt loeschen ?
             {
-                SdrPage* pPage = pDrDoc->GetPage( aTabPos.Tab() );
+                SdrPage* pPage = pDrDoc->GetPage( static_cast<sal_uInt16>(aTabPos.Tab()) );
 // ER 28.04.97 19:12 laut JOE ist hier RecalcObjOrdNums unnoetig
 //              pPage->RecalcObjOrdNums();
                 pDrDoc->AddUndo( new SdrUndoRemoveObj( *pObject ) );
