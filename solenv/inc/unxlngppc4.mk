@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:18 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:47:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,7 +144,7 @@ CFLAGSOUTOBJ=-o
 CFLAGSWALL=-Wall
 
 # Set default warn level
-CFLAGSDFLTWARN=-w
+CFLAGSDFLTWARN=
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
