@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-18 09:52:58 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,6 @@ protected:
             void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                     const Point& rRefPoint );
             BOOL                ImplGetText( ImplEESdrObject& rObj );
-            void                ImplWriteTextBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
