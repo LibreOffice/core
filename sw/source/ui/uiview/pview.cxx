@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 12:54:23 $
+ *  last change: $Author: os $ $Date: 2002-02-26 15:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,9 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     aSettings.aPageMaxSize = rViewSh.GetPagePreViewPrtMaxSize();
     SfxPrinter*  pPrinter = rViewSh.GetPrt( TRUE );
     aSettings.aPrtSize = pPrinter->GetPaperSize();
+    //#97682# make sure that no division by zero occurs
+    if(!aSettings.aPrtSize.Width() || !aSettings.aPrtSize.Height())
+        aSettings.aPrtSize = Size(lA4Width, lA4Height);
     aSettings.bPrinterLandscape = pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE;
 
 
@@ -695,35 +698,6 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, StandardHdl, PushButton*, EMPTYARG )
  * --------------------------------------------------*/
 void    PrtPrvWindow::Paint(const Rectangle&)
 {
-/*
- struct PrintSettingsStruct
-{
-    Size                aPageMaxSize;   // groesste Seite
-    Size                aPrtSize;       // Papiergroesse
-    Size                aPrvPrtSize;    // Groesse innerhalb der LRTB-Raender
-    Size                aGridSize;      // Groesse fuer jede Seite, enthaelt je
-                                        // die Haelfte von H- und V-Distance
-
-    long                nLeft;
-    long                nRight;
-    long                nTop;
-    long                nBottom;
-    long                nHori;
-    long                nVert;
-
-    USHORT              nRows;
-    USHORT              nCols;
-
-    BOOL                bOrientation;       // Ausrichtung
-};
-
- * */
-//  Size aWinSize(GetOutputSizePixel());
-//  //MapMode aMode(GetMapMode());
-//  MapMode aMode(MAP_TWIP, Point(0,0), Fraction(1,10 ), Fraction( 1,10 ));
-//  SetMapMode(aMode);
-//  Size aWinLogSize(GetOutputSize());
-
         Size aWinSize(GetOutputSizePixel());
         long nWidth = rSettings.aPrtSize.Width();
         long nHeight = rSettings.aPrtSize.Height();
@@ -2274,6 +2248,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/11/30 12:54:23  jp
+      Bug #95431#: DataChanged - react only on whished type/flags
+
       Revision 1.9  2001/10/08 13:50:55  jp
       Task #92830#: min/max -> Min/Max
 
