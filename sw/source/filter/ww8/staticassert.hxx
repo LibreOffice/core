@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticassert.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:40:56 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,15 +89,15 @@ namespace ww
     classname. i.e. no spaces, punctuation or reserved keywords.
     */
 #ifndef NDEBUG
-#   define StaticAssert(test, errormsg)                     \
-    do {                                                    \
-        struct ERROR_##errormsg {};                         \
-        typedef ww::compile_time_check< test > tmplimpl;    \
-        tmplimpl aTemp = tmplimpl(ERROR_##errormsg());      \
-        sizeof(aTemp);                                      \
+#   define StaticAssert(test, errormsg)                         \
+    do {                                                        \
+        struct ERROR_##errormsg {};                             \
+        typedef ww::compile_time_check< (test) != 0 > tmplimpl; \
+        tmplimpl aTemp = tmplimpl(ERROR_##errormsg());          \
+        sizeof(aTemp);                                          \
     } while (0)
 #else
-#   define StaticAssert(test, errormsg)                     \
+#   define StaticAssert(test, errormsg)                         \
     do {} while (0)
 #endif
 
