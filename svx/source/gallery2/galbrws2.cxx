@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:46:39 $
+ *  last change: $Author: ka $ $Date: 2000-10-26 12:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,35 +177,38 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 aGraphic.Draw( pDev, aPos, aSize );
             }
 
-            String aItemText;
-
-            if( mpTheme->IsImported() )
+            if( GetStyle() & WB_NAMEFIELD )
             {
-                INetURLObject aPathTmp( mpTheme->GetParent()->GetImportPath( mpTheme->GetName() ), INET_PROT_FILE );
+                String aItemText;
 
-                aPathTmp.removeSegment();
-                aPathTmp.Append( INetURLObject( mpTheme->GetObjectPath( nId - 1 ), INET_PROT_FILE ).GetName() );
-                aItemText = aPathTmp.PathToFileName();
-            }
-            else
-                aItemText = mpTheme->GetObjectPath( nId - 1 );
-
-            if( pObj->GetTitle().Len() )
-            {
-                String aTitleItemText( pObj->GetTitle() );
-
-                if( pObj->GetObjKind() != SGA_OBJ_SVDRAW )
+                if( mpTheme->IsImported() )
                 {
-                    aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-                    aTitleItemText += aItemText;
-                    aTitleItemText += ')';
+                    INetURLObject aPathTmp( mpTheme->GetParent()->GetImportPath( mpTheme->GetName() ), INET_PROT_FILE );
+
+                    aPathTmp.removeSegment();
+                    aPathTmp.Append( INetURLObject( mpTheme->GetObjectPath( nId - 1 ), INET_PROT_FILE ).GetName() );
+                    aItemText = aPathTmp.PathToFileName();
+                }
+                else
+                    aItemText = mpTheme->GetObjectPath( nId - 1 );
+
+                if( pObj->GetTitle().Len() )
+                {
+                    String aTitleItemText( pObj->GetTitle() );
+
+                    if( pObj->GetObjKind() != SGA_OBJ_SVDRAW )
+                    {
+                        aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+                        aTitleItemText += aItemText;
+                        aTitleItemText += ')';
+                    }
+
+                    aItemText = aTitleItemText;
                 }
 
-                aItemText = aTitleItemText;
+                SetItemText( nId, aItemText );
+                mpTheme->ReleaseObject( pObj );
             }
-
-            SetItemText( nId, aItemText );
-            mpTheme->ReleaseObject( pObj );
         }
     }
 }
@@ -412,10 +415,14 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     mpCurTheme          ( NULL ),
     mpValueSet          ( NULL ),
     mpPreview           ( NULL ),
+    maInfoBar           ( this, WB_BORDER | WB_3DLOOK | WB_CENTER | WB_VCENTER ),
     mnCurActionPos      ( 0xffffffff ),
     mbIsPreview         ( FALSE ),
     mbCurActionIsLinkage( FALSE )
 {
+    maInfoBar.SetControlForeground( COL_WHITE );
+    maInfoBar.SetControlBackground( COL_GRAY );
+    maInfoBar.Show();
 }
 
 // -----------------------------------------------------------------------------
@@ -435,19 +442,19 @@ void GalleryBrowser2::Resize()
 {
     Control::Resize();
 
-    const Size      aOutSize( GetOutputSizePixel() );
-    USHORT          nSelLine = 0;
-    USHORT          nSelectId = 1;
-    USHORT          nColCount = mpValueSet->GetColCount();
+    const Size  aOutSize( GetOutputSizePixel() );
+    const long  nInfoBarHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
+    const Point aPt( 0, nInfoBarHeight );
+    const Size  aSz( aOutSize.Width(), aOutSize.Height() - nInfoBarHeight );
 
-    // Valueset und Preview-Fenster in der Groesse anpassen
     if( mbIsPreview )
         mpPreview->Hide();
     else
         mpValueSet->Hide();
 
-    mpValueSet->SetSizePixel( aOutSize );
-    mpPreview->SetSizePixel( aOutSize );
+    maInfoBar.SetPosSizePixel( Point(), Size( aOutSize.Width(), nInfoBarHeight ) );
+    mpValueSet->SetPosSizePixel( aPt, aSz );
+    mpPreview->SetPosSizePixel( aPt, aSz );
 
     if( mbIsPreview )
         mpPreview->Show();
@@ -582,8 +589,7 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
 
     mpValueSet = new GalleryValueSet( this, mpCurTheme, WB_3DLOOK | WB_BORDER |
                                                         WB_ITEMBORDER | WB_DOUBLEBORDER |
-                                                        WB_NAMEFIELD | WB_VSCROLL |
-                                                        WB_FLATVALUESET );
+                                                        WB_VSCROLL | WB_FLATVALUESET );
     mpValueSet->SetBackground( Wallpaper( COL_WHITE ) );
     mpValueSet->SetControlBackground( COL_WHITE );
     mpValueSet->SetColor( COL_WHITE );
@@ -600,6 +606,7 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
     mpPreview->Show( FALSE );
 
     ImplUpdateValueSet( 1 );
+
     Resize();
     mpValueSet->Show( TRUE );
 }
@@ -658,6 +665,56 @@ void GalleryBrowser2::ImplUpdateValueSet( USHORT nSelectionId )
     }
 
     mpValueSet->SelectItem( ( ( nSelectionId > mpValueSet->GetItemCount() ) ? mpValueSet->GetItemCount() : nSelectionId ) );
+    ImplUpdateInfoBar();
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser2::ImplUpdateInfoBar()
+{
+    String aInfoText;
+
+    if( mpCurTheme )
+    {
+        const ULONG nObjPos = mpValueSet->GetSelectItemId() - 1;
+
+        aInfoText = mpCurTheme->GetName();
+
+        if( !mpValueSet->IsNoSelection() && ( nObjPos < mpCurTheme->GetObjectCount() ) )
+        {
+            SgaObject*  pObj = mpCurTheme->AcquireObject( nObjPos );
+
+            aInfoText += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+
+            if( mpCurTheme->IsImported() )
+            {
+                INetURLObject aPathTmp( mpCurTheme->GetParent()->GetImportPath( mpCurTheme->GetName() ), INET_PROT_FILE );
+
+                aPathTmp.removeSegment();
+                aPathTmp.Append( INetURLObject( mpCurTheme->GetObjectPath( nObjPos ), INET_PROT_FILE ).GetName() );
+                aInfoText += aPathTmp.PathToFileName();
+            }
+            else if( pObj && pObj->GetTitle().Len() )
+            {
+                String aTitleItemText( pObj->GetTitle() );
+
+                if( pObj->GetObjKind() != SGA_OBJ_SVDRAW )
+                {
+                    aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+                    aTitleItemText += mpCurTheme->GetObjectPath( nObjPos );
+                    aTitleItemText += ')';
+                }
+
+                aInfoText += aTitleItemText;
+            }
+            else
+                aInfoText += mpCurTheme->GetObjectPath( nObjPos );
+
+            mpCurTheme->ReleaseObject( pObj );
+        }
+    }
+
+    maInfoBar.SetText( aInfoText );
 }
 
 // -----------------------------------------------------------------------------
@@ -840,6 +897,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
 
 IMPL_LINK( GalleryBrowser2, SelectObjectHdl, void*, p )
 {
+    ImplUpdateInfoBar();
     return 0L;
 }
 
