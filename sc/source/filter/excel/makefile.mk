@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-21 13:27:02 $
+#   last change: $Author: obo $ $Date: 2005-03-15 11:42:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,6 +148,7 @@ NOOPTFILES= \
 .ENDIF
 
 EXCEPTIONSFILES = \
+        $(SLO)$/excobj.obj					\
         $(SLO)$/xlocx.obj					\
         $(SLO)$/xehelper.obj				\
         $(SLO)$/xecontent.obj				\
