@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-19 10:17:35 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 16:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,35 +130,45 @@ using namespace ::com::sun::star::i18n;
 USHORT SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                             USHORT nMode )
 {
-    const SwPosition* pStt = rPam.Start(),
-                    * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
-                                                     : rPam.GetPoint();
-    SwPaM aPam( *pStt );
+    const SwPaM *_pStartCrsr = (SwPaM*)rPam.GetNext(),
+                *__pStartCrsr = _pStartCrsr;
+    BOOL bCheckEmpty = &rPam != _pStartCrsr;
     do {
-        SwRubyListEntry* pNew = new SwRubyListEntry;
-        if( pEnd != pStt )
+        const SwPosition* pStt = _pStartCrsr->Start(),
+                        * pEnd = pStt == _pStartCrsr->GetPoint()
+                                                ? _pStartCrsr->GetMark()
+                                                : _pStartCrsr->GetPoint();
+        if( !bCheckEmpty || ( pStt != pEnd && *pStt != *pEnd ))
         {
-            aPam.SetMark();
-            *aPam.GetMark() = *pEnd;
+            SwPaM aPam( *pStt );
+            do {
+                SwRubyListEntry* pNew = new SwRubyListEntry;
+                if( pEnd != pStt )
+                {
+                    aPam.SetMark();
+                    *aPam.GetMark() = *pEnd;
+                }
+                if( _SelectNextRubyChars( aPam, *pNew, nMode ))
+                {
+                    rList.Insert( pNew, rList.Count() );
+                    aPam.DeleteMark();
+                }
+                else
+                {
+                    delete pNew;
+                     if( *aPam.GetPoint() < *pEnd )
+                     {
+                        // goto next paragraph
+                        aPam.DeleteMark();
+                        aPam.Move( fnMoveForward, fnGoNode );
+                     }
+                     else
+                        break;
+                }
+            } while( 30 > rList.Count() && *aPam.GetPoint() < *pEnd );
         }
-        if( _SelectNextRubyChars( aPam, *pNew, nMode ))
-        {
-            rList.Insert( pNew, rList.Count() );
-            aPam.DeleteMark();
-        }
-        else
-        {
-            delete pNew;
-             if( *aPam.GetPoint() < *pEnd )
-             {
-                // goto next paragraph
-                aPam.DeleteMark();
-                aPam.Move( fnMoveForward, fnGoNode );
-             }
-             else
-                break;
-        }
-    } while( 30 > rList.Count() && *aPam.GetPoint() < *pEnd );
+    } while( 30 > rList.Count() &&
+        (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
 
     return rList.Count();
 }
@@ -166,70 +176,81 @@ USHORT SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
 USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             USHORT nMode )
 {
-    const SwPosition* pStt = rPam.Start(),
-                    * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
-                                                     : rPam.GetPoint();
-
     StartUndo( UNDO_SETRUBYATTR );
     SvUShortsSort aDelArr;
     aDelArr.Insert( RES_TXTATR_CJK_RUBY );
 
     USHORT nListEntry = 0;
-    SwPaM aPam( *pStt );
+
+    const SwPaM *_pStartCrsr = (SwPaM*)rPam.GetNext(),
+                *__pStartCrsr = _pStartCrsr;
+    BOOL bCheckEmpty = &rPam != _pStartCrsr;
     do {
-        SwRubyListEntry aCheckEntry;
-        if( pEnd != pStt )
+        const SwPosition* pStt = _pStartCrsr->Start(),
+                        * pEnd = pStt == _pStartCrsr->GetPoint()
+                                                ? _pStartCrsr->GetMark()
+                                                : _pStartCrsr->GetPoint();
+        if( !bCheckEmpty || ( pStt != pEnd && *pStt != *pEnd ))
         {
-            aPam.SetMark();
-            *aPam.GetMark() = *pEnd;
-        }
-        if( _SelectNextRubyChars( aPam, aCheckEntry, nMode ))
-        {
-            const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
-            if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
-            {
-                // set/reset the attribut
-                if( pEntry->GetRubyAttr().GetText().Len() )
-                    Insert( aPam, pEntry->GetRubyAttr() );
-                else
-                    ResetAttr( aPam, TRUE, &aDelArr );
-            }
 
-            if( aCheckEntry.GetText() != pEntry->GetText() &&
-                pEntry->GetText().Len() )
-            {
-                // text is changed, so replace the original
-                Replace( aPam, pEntry->GetText(), FALSE );
-            }
-            aPam.DeleteMark();
-        }
-        else
-        {
-             if( *aPam.GetPoint() < *pEnd )
-             {
-                // goto next paragraph
-                aPam.DeleteMark();
-                aPam.Move( fnMoveForward, fnGoNode );
-             }
-             else
-            {
-                const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
-
-                // set/reset the attribut
-                if( pEntry->GetRubyAttr().GetText().Len() &&
-                    pEntry->GetText().Len() )
+            SwPaM aPam( *pStt );
+            do {
+                SwRubyListEntry aCheckEntry;
+                if( pEnd != pStt )
                 {
-                    Insert( aPam, pEntry->GetText() );
                     aPam.SetMark();
-                    aPam.GetMark()->nContent -= pEntry->GetText().Len();
-                    Insert( aPam, pEntry->GetRubyAttr(), SETATTR_DONTEXPAND );
+                    *aPam.GetMark() = *pEnd;
+                }
+                if( _SelectNextRubyChars( aPam, aCheckEntry, nMode ))
+                {
+                    const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
+                    if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
+                    {
+                        // set/reset the attribut
+                        if( pEntry->GetRubyAttr().GetText().Len() )
+                            Insert( aPam, pEntry->GetRubyAttr() );
+                        else
+                            ResetAttr( aPam, TRUE, &aDelArr );
+                    }
+
+                    if( aCheckEntry.GetText() != pEntry->GetText() &&
+                        pEntry->GetText().Len() )
+                    {
+                        // text is changed, so replace the original
+                        Replace( aPam, pEntry->GetText(), FALSE );
+                    }
+                    aPam.DeleteMark();
                 }
                 else
-                    break;
-                aPam.DeleteMark();
-            }
+                {
+                     if( *aPam.GetPoint() < *pEnd )
+                     {
+                        // goto next paragraph
+                        aPam.DeleteMark();
+                        aPam.Move( fnMoveForward, fnGoNode );
+                     }
+                     else
+                    {
+                        const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
+
+                        // set/reset the attribut
+                        if( pEntry->GetRubyAttr().GetText().Len() &&
+                            pEntry->GetText().Len() )
+                        {
+                            Insert( aPam, pEntry->GetText() );
+                            aPam.SetMark();
+                            aPam.GetMark()->nContent -= pEntry->GetText().Len();
+                            Insert( aPam, pEntry->GetRubyAttr(), SETATTR_DONTEXPAND );
+                        }
+                        else
+                            break;
+                        aPam.DeleteMark();
+                    }
+                }
+            } while( nListEntry < rList.Count() && *aPam.GetPoint() < *pEnd );
         }
-    } while( nListEntry < rList.Count() && *aPam.GetPoint() < *pEnd );
+    } while( 30 > rList.Count() &&
+        (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
 
     EndUndo( UNDO_SETRUBYATTR );
 
