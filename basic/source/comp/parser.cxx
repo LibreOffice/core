@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:53:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,18 +563,34 @@ void SbiParser::Assign()
 void SbiParser::Set()
 {
     SbiExpression aLvalue( this, SbLVALUE );
-    if( aLvalue.GetType() != SbxOBJECT )
+    SbxDataType eType = aLvalue.GetType();
+    if( eType != SbxOBJECT && eType != SbxEMPTY && eType != SbxVARIANT )
         Error( SbERR_INVALID_OBJECT );
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
     if( pDef && pDef->GetConstDef() )
         Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
-    SbiExpression aExpr( this );
-    aLvalue.Gen();
-    aExpr.Gen();
-    if( pDef->GetTypeId() )
-//      if( pDef->GetTypeId() && !pDef->HabIchAlsTypeDefiniert() )
-        aGen.Gen( _CLASS, pDef->GetTypeId() );
+
+    SbiToken eTok = Peek();
+    if( eTok == NEW )
+    {
+        Next();
+        String aStr;
+        SbiSymDef* pDef = new SbiSymDef( aStr );
+        TypeDecl( *pDef, TRUE );
+
+        aLvalue.Gen();
+        aGen.Gen( _CLASS, pDef->GetTypeId() | 0x8000 );
+        aGen.Gen( _CREATE, pDef->GetId(), pDef->GetTypeId() );
+    }
+    else
+    {
+        SbiExpression aExpr( this );
+        aLvalue.Gen();
+        aExpr.Gen();
+        if( pDef->GetTypeId() )
+            aGen.Gen( _CLASS, pDef->GetTypeId() );
+    }
     aGen.Gen( _SET );
 }
 
@@ -681,9 +697,42 @@ void SbiParser::Option()
                 case BINARY:    bText = FALSE; return;
                 default:;
             } // Fall thru!
+        case COMPATIBLE:
+            if( !bCompatible )
+                AddConstants();
+            bCompatible = TRUE;
+            break;
         default:
             Error( SbERR_BAD_OPTION, eCurTok );
     }
+}
+
+void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pStr )
+{
+    SbiConstDef* pConst = new SbiConstDef( String::CreateFromAscii( pSym ) );
+    pConst->SetType( SbxSTRING );
+    pConst->Set( String::CreateFromAscii( pStr ) );
+    rPool.Add( pConst );
+}
+
+void SbiParser::AddConstants( void )
+{
+    // #113063 Create constant RTL symbols
+    addStringConst( aPublics, "vbCr", "\x0D" );
+    addStringConst( aPublics, "vbCrLf", "\x0D\x0A" );
+    addStringConst( aPublics, "vbFormFeed", "\x0C" );
+    addStringConst( aPublics, "vbLf", "\x0A" );
+#if defined(UNX)
+    addStringConst( aPublics, "vbNewLine", "\x0A" );
+#elif defined(MAC)
+    addStringConst( aPublics, "vbNewLine", "\x0D" );
+#else
+    addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
+#endif
+    addStringConst( aPublics, "vbNullChar", "\x00" );
+    addStringConst( aPublics, "vbNullString", "\x00" );
+    addStringConst( aPublics, "vbTab", "\x09" );
+    addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 }
 
 // ERROR n
