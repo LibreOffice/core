@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-03-26 12:47:55 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:46:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -78,9 +76,6 @@ SLOFILES=\
     $(SLO)$/accessibledialogwindow.obj			\
     $(SLO)$/accessibledialogcontrolshape.obj
     
-##SRCFILES=\
-##	accessiblelistboxentry.src
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
