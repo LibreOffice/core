@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:43:38 $
+ *  last change: $Author: os $ $Date: 2000-11-29 09:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,36 +576,21 @@ void SwXTextDocument::removeEventListener(const Reference< XEventListener > & aL
 /*-- 18.12.98 11:55:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< PropertyValues > SwXTextDocument::getLineNumberingRules(void)
-    throw( RuntimeException )
+Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties(void)
+            throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    return Sequence< PropertyValues >();
-    /* eigenartiges interface, muesste ein PropertySet returnen und get...Settings heissen
     if(IsValid())
     {
         if(!pxXLineNumberingProperties)
         {
-            ((SwXTextDocument*)this)->pxXLineNumberingProperties =
-                new Reference< XLineNumberingProperties > ;
+            pxXLineNumberingProperties = new Reference<XPropertySet>;
             (*pxXLineNumberingProperties) = new SwXLineNumberingProperties(pDocShell->GetDoc());
         }
     }
     else
         throw RuntimeException();
-    return *pxXLineNumberingProperties;*/
-
-}
-/*-- 18.12.98 11:55:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXTextDocument::setLineNumberingRules(
-    const Sequence< PropertyValues >& aRules)
-    throw( RuntimeException )
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    return *pxXLineNumberingProperties;
 }
 /*-- 18.12.98 11:55:20---------------------------------------------------
 
