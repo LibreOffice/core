@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #endif
