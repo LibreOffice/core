@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-25 16:17:26 $
+ *  last change: $Author: npower $ $Date: 2003-03-03 20:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@ namespace scripting_runtimemgr
 
 const sal_Char* const LANGUAGE_TO_RESOLVE_ON[] = { "All" }; // should be configurable
 OUString nrs_implName = OUString::createFromAscii(
-    "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" );
+    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" );
 OUString nrs_serviceName = OUString::createFromAscii(
-    "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" );
+    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" );
 Sequence< OUString > nrs_serviceNames = Sequence< OUString >( &nrs_serviceName, 1 );
 
 const char* const SCRIPTSTORAGEMANAGER_SERVICE =
