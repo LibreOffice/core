@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-26 09:28:05 $
+ *  last change: $Author: sb $ $Date: 2001-08-09 08:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,27 @@ bool testSetFSys(SetFSysTest const * pTest, size_t nSize)
 //  main
 //
 //============================================================================
+
+namespace {
+
+void abbreviate(INetURLObject aObj)
+{
+    sal_Int32 nMax = aObj.GetMainURL(INetURLObject::NO_DECODE).Len() + 10;
+    for (sal_Int32 i = -10; i <= nMax; ++i)
+    {
+        rtl::OString
+            aAbbreviated(rtl::OUStringToOString(
+                             aObj.getAbbreviated(i, INetURLObject::NO_DECODE),
+                             RTL_TEXTENCODING_UTF8));
+        printf(
+            "%4ld: <%s", static_cast< long int >(i), aAbbreviated.getStr());
+        for (sal_Int32 j = aAbbreviated.getLength(); j < i; ++j)
+            printf(" ");
+        printf(">\n");
+    }
+}
+
+}
 
 int
 #if defined WNT
@@ -840,6 +861,32 @@ main()
                 }
             }
         }
+    }
+
+    if (true)
+    {
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///a"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///a/def/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///ab/def/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///abc/def/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///a/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///ab/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///abc/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///abcdef/d"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///abcdef/de"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file:///abcdef/def"))));
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;

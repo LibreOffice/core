@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-26 09:58:04 $
+ *  last change: $Author: sb $ $Date: 2001-08-09 08:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,45 @@
 #define max max // fool <tools/solar.h>...
 
 #ifndef _URLOBJ_HXX
-#include <urlobj.hxx>
-#endif
-
-#include <limits>
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
+#include "urlobj.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
-#include <debug.hxx>
+#include "debug.hxx"
 #endif
 #ifndef TOOLS_INETMIME_HXX
-#include <inetmime.hxx>
+#include "inetmime.hxx"
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include "osl/diagnose.h"
+#endif
+#ifndef _OSL_FILE_HXX_
+#include "osl/file.hxx"
+#endif
+#ifndef _RTL_STRING_H_
+#include "rtl/string.h"
+#endif
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include "rtl/ustrbuf.hxx"
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include "rtl/ustring.hxx"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
+#ifndef INCLUDED_LIMITS
+#include <limits>
+#define INCLUDED_LIMITS
 #endif
 
 namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
@@ -3076,6 +3101,163 @@ UniString INetURLObject::GetURLNoMark(DecodeMechanism eMechanism,
     INetURLObject aTemp(*this);
     aTemp.clearFragment();
     return aTemp.GetMainURL(eMechanism, eCharset);
+}
+
+//============================================================================
+UniString INetURLObject::getAbbreviated(sal_Int32 nLength,
+                                        DecodeMechanism eMechanism,
+                                        rtl_TextEncoding eCharset)
+    const
+{
+    sal_Char cEscapePrefix = getEscapePrefix();
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.appendAscii(getSchemeInfo().m_pScheme);
+    aBuffer.append(static_cast< sal_Unicode >(':'));
+    OSL_ENSURE(m_aHost.isPresent()
+               || !(m_aUser.isPresent()
+                    || m_aAuth.isPresent()
+                    || m_aPort.isPresent()),
+               "unexpected situation"); // misusing host as authority...
+    if (m_aHost.isPresent())
+    {
+        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+        OSL_ENSURE(m_aUser.isPresent() || !m_aAuth.isPresent(),
+                   "unexpected situation");
+        if (m_aUser.isPresent())
+        {
+            aBuffer.
+                append(decode(m_aUser, cEscapePrefix, eMechanism, eCharset));
+            if (m_aAuth.isPresent())
+            {
+                if (getSchemeInfo().m_bAuth)
+                    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(";AUTH="));
+                else
+                    aBuffer.append(static_cast< sal_Unicode >(':'));
+                aBuffer.append(decode(m_aAuth,
+                                      cEscapePrefix,
+                                      eMechanism,
+                                      eCharset));
+            }
+            aBuffer.append(static_cast< sal_Unicode >('@'));
+        }
+        aBuffer.append(decode(m_aHost, cEscapePrefix, eMechanism, eCharset));
+        if (m_aPort.isPresent())
+        {
+            aBuffer.append(static_cast< sal_Unicode >(':'));
+            aBuffer.
+                append(decode(m_aPort, cEscapePrefix, eMechanism, eCharset));
+        }
+    }
+    bool bSegment = false;
+    if (getSchemeInfo().m_bHierarchical)
+    {
+        OSL_ENSURE(!m_aPath.isEmpty()
+                   && m_aAbsURIRef.GetChar(m_aPath.getBegin()) == '/',
+                   "unexpected situation");
+        aBuffer.append(static_cast< sal_Unicode >('/'));
+        sal_Int32 nUsed
+            = aBuffer.getLength()
+                  + (m_aQuery.isPresent() || m_aFragment.isPresent() ? 4 : 0);
+        sal_Int32 nSize = nUsed < nLength ? nLength - nUsed : 0;
+        bool bEllipsis = false;
+        rtl::OUStringBuffer aTrailer;
+        sal_Unicode const * pBegin = m_aAbsURIRef.GetBuffer()
+                                         + m_aPath.getBegin();
+        sal_Unicode const * pEnd = pBegin + m_aPath.getLength();
+        bool bPrefix = true;
+        bool bSuffix = true;
+        sal_Unicode const * pPrefixBegin = pBegin;
+        sal_Unicode const * pSuffixEnd = pEnd;
+        do
+        {
+            if (bSuffix)
+            {
+                sal_Unicode const * p = pSuffixEnd - 1;
+                while (*p != '/')
+                    --p;
+                rtl::OUString aSegment(decode(p == pBegin ? p + 1 : p,
+                                              pSuffixEnd,
+                                              cEscapePrefix,
+                                              eMechanism,
+                                              eCharset));
+                pSuffixEnd = p;
+                if (aSegment.getLength() <= nSize
+                    && (pBegin == pSuffixEnd
+                        || nSize - aSegment.getLength() >= 3))
+                {
+                    nSize -= aSegment.getLength();
+                    aTrailer.insert(0, aSegment);
+                    bSegment = true;
+                    pEnd = pSuffixEnd;
+                }
+                else
+                {
+                    bEllipsis = true;
+                    bSuffix = false;
+                }
+                if (pPrefixBegin == pSuffixEnd)
+                    break;
+            }
+            if (bPrefix)
+            {
+                sal_Unicode const * p = pPrefixBegin + 1;
+                while (p != pSuffixEnd && *p != '/')
+                    ++p;
+                rtl::OUString aSegment(decode(pPrefixBegin + 1,
+                                              p == pEnd ? p : p + 1,
+                                              cEscapePrefix,
+                                              eMechanism,
+                                              eCharset));
+                pPrefixBegin = p;
+                if (aSegment.getLength() <= nSize
+                    && (pPrefixBegin == pEnd
+                        || nSize - aSegment.getLength() >= 3))
+                {
+                    nSize -= aSegment.getLength();
+                    aBuffer.append(aSegment);
+                    bSegment = true;
+                    pBegin = pPrefixBegin;
+                }
+                else
+                {
+                    bEllipsis = true;
+                    bPrefix = false;
+                }
+                if (pPrefixBegin == pSuffixEnd)
+                    break;
+            }
+        }
+        while (bPrefix || bSuffix);
+        if (bSegment)
+        {
+            if (bEllipsis)
+                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+            aBuffer.append(aTrailer);
+        }
+        else
+            aBuffer.setLength(aBuffer.getLength() - 1);
+                // remove the initial '/' of the path again
+    }
+    if (!bSegment)
+        aBuffer.append(decode(m_aPath, cEscapePrefix, eMechanism, eCharset));
+    if (m_aQuery.isPresent())
+    {
+        aBuffer.append(static_cast< sal_Unicode >('?'));
+        aBuffer.append(decode(m_aQuery, cEscapePrefix, eMechanism, eCharset));
+    }
+    if (m_aFragment.isPresent())
+    {
+        aBuffer.append(static_cast< sal_Unicode >('#'));
+        aBuffer.
+            append(decode(m_aFragment, cEscapePrefix, eMechanism, eCharset));
+    }
+    if (aBuffer.getLength() > nLength)
+    {
+        aBuffer.setLength(nLength < 3 ? 0 : nLength - 3);
+        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+        aBuffer.setLength(std::max< sal_Int32 >(nLength, 0));
+    }
+    return aBuffer.makeStringAndClear();
 }
 
 //============================================================================
