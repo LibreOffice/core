@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:31:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
             case XML_TOK_DRAWPAGE_STYLE_NAME:
             {
-            maStyleName = sValue;
+                maStyleName = sValue;
                 break;
             }
             case XML_TOK_DRAWPAGE_MASTER_PAGE_NAME:
@@ -166,6 +166,22 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 maPageLayoutName =  sValue;
                 break;
             }
+            case XML_TOK_DRAWPAGE_USE_HEADER_NAME:
+            {
+                maUseHeaderDeclName =  sValue;
+                break;
+            }
+            case XML_TOK_DRAWPAGE_USE_FOOTER_NAME:
+            {
+                maUseFooterDeclName =  sValue;
+                break;
+            }
+            case XML_TOK_DRAWPAGE_USE_DATE_TIME_NAME:
+            {
+                maUseDateTimeDeclName =  sValue;
+                break;
+            }
+
             case XML_TOK_DRAWPAGE_ID:
             {
                 sal_Int32 nId;
