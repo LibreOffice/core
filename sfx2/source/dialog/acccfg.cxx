@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:35:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 
 #include <so3/svstor.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "cfg.hxx"
 #include "viewfrm.hxx"
@@ -394,10 +396,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
 
     SfxTabPage( pParent, SfxResId( TP_CONFIG_ACCEL ), rSet ),
 
-    aChangeButton       ( this, ResId( BTN_ACC_CHANGE          ) ),
-    aRemoveButton       ( this, ResId( BTN_ACC_REMOVE          ) ),
     aEntriesBox         ( this, this, ResId( BOX_ACC_ENTRIES   ) ),
     aKeyboardGroup      ( this, ResId( GRP_ACC_KEYBOARD        ) ),
+    aChangeButton       ( this, ResId( BTN_ACC_CHANGE          ) ),
+    aRemoveButton       ( this, ResId( BTN_ACC_REMOVE          ) ),
     aGroupText          ( this, ResId( TXT_ACC_GROUP           ) ),
     aGroupLBox          ( this, ResId( BOX_ACC_GROUP ), SFX_SLOT_ACCELCONFIG ),
     aFunctionText       ( this, ResId( TXT_ACC_FUNCTION        ) ),
@@ -854,7 +856,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, pButton )
     pEntry->SetHelpText( String() );
 
     // Funktionsnamen aus dem Eintrag l"oschen
-    USHORT nCol = aEntriesBox.TabCount() - 1;
+    //USHORT nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( pEntry->GetName(), nPos );  // Nur letzte Spalte auf "" setzen funzt nicht - Bug ??
 
     // change configurable and full array!
