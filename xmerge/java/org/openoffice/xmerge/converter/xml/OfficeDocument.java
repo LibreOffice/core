@@ -321,14 +321,22 @@ public abstract class OfficeDocument
                  * The former are represented by one or more XML files.
                  * The latter are in binary form.
                  */
-                if (type.startsWith("application") && type.indexOf("xml") != -1
-                            && !path.equals("/"))       // Exclude the main document entries
+                if (type.startsWith("application/vnd.sun.xml"))
                 {
+                    if (path.equals("/")) {
+                        // Exclude the main document entries
+                        continue;
+                    }
                     // Take off the trailing '/'
                     String name = path.substring(0, path.length() - 1);
                     embeddedObjects.put(path, new EmbeddedXMLObject(name, type, zip));
                 }
-                else {
+                else if (type.equals("text/xml")) {
+                    // XML entries are either embedded StarOffice doc entries or main
+                    // document entries
+                    continue;
+                }
+                else if (!type.equals("")) {
                     embeddedObjects.put(path, new EmbeddedBinaryObject(path, type, zip));
                 }
             }
