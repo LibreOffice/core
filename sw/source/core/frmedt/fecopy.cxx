@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-04 11:25:32 $
+ *  last change: $Author: ama $ $Date: 2002-06-21 10:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1219,7 +1219,12 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                 Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();
                 pNewObj->NbcMove(Size(aVec.X(), aVec.Y()));
 
-                pNewObj->SetLayer( pOldObj->GetLayer() );
+                if( pNewObj->ISA( SdrUnoObj ) )
+                    pNewObj->SetLayer( GetDoc()->GetControlsId() );
+                else if( pOldObj->ISA( SdrUnoObj ) )
+                    pNewObj->SetLayer( GetDoc()->GetHeavenId() );
+                else
+                    pNewObj->SetLayer( pOldObj->GetLayer() );
 
                 if( pOldObj->IsWriterFlyFrame() )
                 {
@@ -1282,6 +1287,10 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
     {
         GetDoc()->SetNoDrawUndoObj( TRUE );
 
+        sal_Bool bDesignMode = pView->IsDesignMode();
+        if( !bDesignMode )
+            pView->SetDesignMode( sal_True );
+
         pView->Paste( *pModel, aPos );
 
         ULONG nCnt = pView->GetMarkList().GetMarkCount();
@@ -1298,13 +1307,19 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             if ( nCnt > 1 )
                 pView->GroupMarked();
             SdrObject *pObj = pView->GetMarkList().GetMark(0)->GetObj();
-            pObj->SetLayer( pObj->ISA( SdrUnoObj )
-                                ? GetDoc()->GetControlsId()
-                                : GetDoc()->GetHeavenId() );
+            if( pObj->ISA( SdrUnoObj ) )
+            {
+                pObj->SetLayer( GetDoc()->GetControlsId() );
+                bDesignMode = sal_True;
+            }
+            else
+                pObj->SetLayer( GetDoc()->GetHeavenId() );
             const Rectangle &rSnap = pObj->GetSnapRect();
             const Size aDiff( rSnap.GetWidth()/2, rSnap.GetHeight()/2 );
             pView->MoveMarkedObj( aDiff );
             ImpEndCreate();
+            if( !bDesignMode )
+                pView->SetDesignMode( sal_False );
         }
         GetDoc()->SetNoDrawUndoObj( FALSE );
     }
