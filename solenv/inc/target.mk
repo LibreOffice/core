@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.135 $
+#   $Revision: 1.136 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 13:00:31 $
+#   last change: $Author: hr $ $Date: 2003-04-29 17:34:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1863,6 +1863,14 @@ ALLTAR:	\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN)\
+    $(HIDFILES) \
+        $(HID1FILES) $(HID2FILES) \
+        $(HID3FILES) $(HID4FILES) \
+        $(HID5FILES) $(HID6FILES) \
+        $(HID7FILES) $(HID8FILES) \
+        $(HID9FILES) \
+        $(PRJHIDOTHERTARGET) \
+        $(PRJHIDTARGET) \
         $(REMOTE_BUILD)\
         last_target
 
@@ -1995,6 +2003,12 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN) \
+        $(HIDFILES) \
+        $(HID1FILES) $(HID2FILES) \
+        $(HID3FILES) $(HID4FILES) \
+        $(HID5FILES) $(HID6FILES) \
+        $(HID7FILES) $(HID8FILES) \
+        $(HID9FILES) \
         $(PRJHIDOTHERTARGET) \
         $(PRJHIDTARGET) \
                 $(SIGNFORNETSCAPE) \
@@ -2902,13 +2916,13 @@ warn_target_empty:
 UNOUCRDEPxxx : $(UNOUCRDEP);
 .ENDIF			# "$(UNOTYPES)" != ""
 
-$(SRS)$/hidother.hid : hidother.src
-    @+echo Making $@ :
-    @+echo ---------------
-    @+mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-    @+echo done Making $@
-
-$(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES) $(PRJHIDOTHERTARGET)
+$(MISC)$/$(PRJNAME).hid : \
+        $(RESLIB1SRSFILES)  $(RESLIB2SRSFILES) \
+        $(RESLIB3SRSFILES)  $(RESLIB4SRSFILES) \
+        $(RESLIB5SRSFILES)  $(RESLIB6SRSFILES) \
+        $(RESLIB7SRSFILES)  $(RESLIB8SRSFILES) \
+        $(RESLIB9SRSFILES) \
+        $(PRJHIDOTHERTARGET)
     @echo Making $@ :
     @echo ---------------
     @+if exist $@ del $@
