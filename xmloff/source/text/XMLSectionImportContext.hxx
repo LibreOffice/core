@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-09 13:13:23 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ class XMLSectionImportContext : public SvXMLImportContext
     const ::rtl::OUString sIndexHeaderSection;
     const ::rtl::OUString sCondition;
     const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sPassword;
+    const ::rtl::OUString sProtectionKey;
     const ::rtl::OUString sIsProtected;
     const ::rtl::OUString sEmpty;
 

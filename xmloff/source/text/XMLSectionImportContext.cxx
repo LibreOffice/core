@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 15:49:51 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ const sal_Char sAPI_IndexHeaderSection[] = "com.sun.star.text.IndexHeaderSection
 const sal_Char sAPI_IsProtected[] = "IsProtected";
 const sal_Char sAPI_Condition[] = "Condition";
 const sal_Char sAPI_IsVisible[] = "IsVisible";
-const sal_Char sAPI_Password[] = "Password";
+const sal_Char sAPI_ProtectionKey[] = "ProtectionKey";
 
 enum XMLSectionToken {
     XML_TOK_SECTION_STYLE_NAME,
@@ -188,7 +188,7 @@ XMLSectionImportContext::XMLSectionImportContext(
             sAPI_IndexHeaderSection)),
         sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition)),
         sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
-        sPassword(RTL_CONSTASCII_USTRINGPARAM(sAPI_Password)),
+        sProtectionKey(RTL_CONSTASCII_USTRINGPARAM(sAPI_ProtectionKey)),
         sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected)),
         sStyleName(),
         sName(),
@@ -277,7 +277,7 @@ void XMLSectionImportContext::StartElement(
                 {
                     Any aAny;
                     aAny <<= aSequence;
-                    xPropSet->setPropertyValue(sPassword, aAny);
+                    xPropSet->setPropertyValue(sProtectionKey, aAny);
                 }
 
                 // protection

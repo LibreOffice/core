@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 15:49:51 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ XMLSectionExport::XMLSectionExport(
         sIndexTitle(RTL_CONSTASCII_USTRINGPARAM(sXML_index_title)),
         sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
         sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
-        sPassword(RTL_CONSTASCII_USTRINGPARAM("Password")),
+        sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey")),
         sEmpty()
 {
 }
@@ -582,7 +582,7 @@ void XMLSectionExport::ExportRegularSectionStart(
                                       sXML_true);
     }
     Sequence<sal_Int8> aPassword;
-    xPropSet->getPropertyValue(sPassword) >>= aPassword;
+    xPropSet->getPropertyValue(sProtectionKey) >>= aPassword;
     if (aPassword.getLength() > 0)
     {
         OUStringBuffer aBuffer;
