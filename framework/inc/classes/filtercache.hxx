@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: as $ $Date: 2002-08-23 08:14:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@ namespace framework{
 class FilterCache   :   private ThreadHelpBase
                     ,   private TransactionBase
 {
+    public:
+
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -196,7 +198,7 @@ class FilterCache   :   private ThreadHelpBase
 
         virtual ~FilterCache();
 
-        void flush();
+        void flush( DataContainer::ECFGType eType );
 
         /*-****************************************************************************************************//**
             @short      get the current state of the cache
@@ -211,7 +213,7 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool isValid            () const;
+        sal_Bool isValidOrRepairable() const;
         sal_Bool hasTypes           () const;
         sal_Bool hasFilters         () const;
         sal_Bool hasDetectors       () const;
@@ -244,8 +246,8 @@ class FilterCache   :   private ThreadHelpBase
         *//*-*****************************************************************************************************/
 
         sal_Bool searchType                     (   const   ::rtl::OUString&            sURL                ,
-                                                    const   ::rtl::OUString*            pMediaType          ,
-                                                    const   ::rtl::OUString*            pClipboardFormat    ,
+                                                    const   ::rtl::OUString&            sMediaType          ,
+                                                    const   ::rtl::OUString&            sClipboardFormat    ,
                                                             CheckedTypeIterator&        aStartEntry         ,
                                                             ::rtl::OUString&            sResult             ) const;
 
@@ -372,13 +374,48 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    We return false then.
         *//*-*****************************************************************************************************/
 
-        void addFilter      (   const   ::rtl::OUString&                                    sName       ,
-                                const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties ) throw( css::container::ElementExistException );
+        sal_Bool addFilter    ( const ::rtl::OUString&                                 sName       ,
+                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                      sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+        sal_Bool replaceFilter( const ::rtl::OUString&                                 sName       ,
+                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+        sal_Bool removeFilter ( const ::rtl::OUString&                                 sName       ,
+                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                           css::registry::InvalidRegistryException);
 
-        void replaceFilter  (   const   ::rtl::OUString&                                    sName       ,
-                                const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties ) throw( css::container::NoSuchElementException );
+        sal_Bool addType      ( const ::rtl::OUString&                                 sName       ,
+                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                      sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+        sal_Bool replaceType  ( const ::rtl::OUString&                                 sName       ,
+                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+        sal_Bool removeType   ( const ::rtl::OUString&                                 sName       ,
+                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                           css::registry::InvalidRegistryException);
 
-        void removeFilter   (   const   ::rtl::OUString&                                    sName       ) throw( css::container::NoSuchElementException );
+        sal_Bool addDetector    ( const ::rtl::OUString&                                 sName       ,
+                                  const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                        sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
+                                                                                                             css::registry::InvalidRegistryException);
+        sal_Bool replaceDetector( const ::rtl::OUString&                                 sName       ,
+                                  const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                        sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                             css::registry::InvalidRegistryException);
+        sal_Bool removeDetector ( const ::rtl::OUString&                                 sName       ,
+                                        sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                             css::registry::InvalidRegistryException);
+
+        sal_Bool validateAndRepair();
+        sal_Bool validateAndRepairTypes();
+        sal_Bool validateAndRepairFilter();
+        sal_Bool validateAndRepairDetectors();
+        sal_Bool validateAndRepairLoader();
+        sal_Bool validateAndRepairHandler();
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
