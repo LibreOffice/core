@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 09:32:04 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,8 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
         }
         case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
+        case SID_RULER_ROWS:
+        case SID_RULER_ROWS_VERTICAL:
         {
             const SvxColumnItem *pItem = PTR_CAST(SvxColumnItem, pState);
             DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxColumnItem erwartet");
@@ -149,14 +151,14 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             if(pItem)
             {
                 if(pItem->IsConsistent())
-                    rRuler.Update(pItem);
+                    rRuler.Update(pItem, nSID);
                 else
                     DBG_ERROR("Spaltenitem corrupted");
             }
             else
-                rRuler.Update(pItem);
+                rRuler.Update(pItem, nSID);
 #else
-            rRuler.Update(pItem);
+            rRuler.Update(pItem, nSID);
 #endif
             break;
         }
