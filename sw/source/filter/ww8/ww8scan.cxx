@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 18:14:29 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 12:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5850,6 +5850,27 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
     return pStd;
 }
 
+//Belt and Braces style strings start with a char count and end with 0 so if
+//the two don't match up there is a problem somewhere, e.g.  someone forgot to
+//use unicode strings in a unicode document.
+bool TestBeltAndBraces(SvStream& rStrm)
+{
+    bool bRet = false;
+    sal_uInt32 nOldPos = rStrm.Tell();
+    sal_uInt16 nBelt;
+    rStrm >> nBelt;
+    rStrm.SeekRel(nBelt);
+    if (!rStrm.GetError())
+    {
+        sal_uInt16 cBraces;
+        rStrm >> cBraces;
+        if (!rStrm.GetError() && cBraces == 0)
+            bRet = true;
+    }
+    rStrm.Seek(nOldPos);
+    return bRet;
+}
+
 WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
 {
     // OS2, or WIN with Mac-Doc,...
@@ -5870,13 +5891,32 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     // lies Pascal-String
                     *pString = WW8ReadPString( rSt, RTL_TEXTENCODING_MS_1252 );
                     // leading len and trailing zero --> 2
-                    rSkip   -= 2+ pString->Len();
+                    rSkip -= 2+ pString->Len();
                     break;
                 case 8:
-                    // lies Unicode-String mit fuehrendem Laengenbyte and
+                    // handle Unicode-String with leading length short and
                     // trailing zero
-                    *pString = WW8Read_xstz(rSt, 0, true);
-                    rSkip   -= (pString->Len() + 2) * 2;
+                    if (TestBeltAndBraces(rSt))
+                    {
+                        *pString = WW8Read_xstz(rSt, 0, true);
+                        rSkip -= (pString->Len() + 2) * 2;
+                    }
+                    else
+                    {
+                        /*
+                        #i8114#
+                        This is supposed to be impossible, its just supposed
+                        to be 16 bit count followed by the string and ending
+                        in a 0 short. But "Lotus SmartSuite Product: Word Pro"
+                        is creating invalid style names in ww7- format. So we
+                        use the belt and braces of the ms strings to see if
+                        they are not corrupt. If they are then we try them as
+                        8bit ones
+                        */
+                        *pString = WW8ReadPString(rSt,RTL_TEXTENCODING_MS_1252);
+                        // leading len and trailing zero --> 2
+                        rSkip -= 2+ pString->Len();
+                    }
                     break;
                 default:
                     ASSERT(!this, "Es wurde vergessen, nVersion zu kodieren!");

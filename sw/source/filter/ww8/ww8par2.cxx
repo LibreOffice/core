@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 17:22:16 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 12:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,11 +661,23 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt* pNum, WW8_ANLV* pAV,
     bool bInsert = false;                       // Default
     CharSet eCharSet = eStructCharSet;
 
-    const WW8_FFN* pF = pFonts->GetFont( SVBT16ToShort( pAV->ftc ) ); // FontInfo
+    const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(pAV->ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
 
-    String sTxt( (sal_Char*)pTxt,  SVBT8ToByte( pAV->cbTextBefore )
+    String sTxt;
+    if (bVer67)
+    {
+        sTxt = String( (sal_Char*)pTxt,  SVBT8ToByte( pAV->cbTextBefore )
                                  + SVBT8ToByte( pAV->cbTextAfter  ), eCharSet );
+    }
+    else
+    {
+        for(xub_StrLen i = SVBT8ToByte(pAV->cbTextBefore);
+            i < SVBT8ToByte(pAV->cbTextAfter); ++i, pTxt += 2)
+        {
+            sTxt.Append(SVBT16ToShort(*(SVBT16*)pTxt));
+        }
+    }
 
     if( bOutline )
     {                             // Gliederung
@@ -876,6 +888,8 @@ void SwWW8ImplReader::SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel 
                     + SVBT8ToByte( pAV1->cbTextAfter );
     }
 
+    if (!bVer67)
+        nTxtOfs *= 2;
     SetAnlvStrings( &aNF, pAV, pO->rgch + nTxtOfs, true); // und rein
     pNumR->Set( nSwLevel, aNF );
 }
@@ -944,7 +958,7 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
             else
             {
                 // this is ROW numbering ?
-                pS12 = pPlcxMan->HasParaSprm(12);   // sprmAnld
+                pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
                 if (pS12 && 0 != SVBT8ToByte(((WW8_ANLD*)pS12)->fNumberAcross))
                     sNumRule.Erase();
             }
@@ -966,7 +980,7 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
         if( pTableDesc )
         {
             if (!pS12)
-                pS12 = pPlcxMan->HasParaSprm(12);   // sprmAnld
+                pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
             if (!pS12 || !SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross))
                 pTableDesc->SetNumRuleName( pNumRule->GetName() );
         }
@@ -997,7 +1011,8 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
         if (!pNumRule->GetNumFmt(nSwNumLevel))
         {
             // noch nicht definiert
-            const BYTE* pS12 = pPlcxMan->HasParaSprm(12);       // sprmAnld o. 0
+            // sprmAnld o. 0
+            const BYTE* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
             SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
         }
     }
@@ -1011,7 +1026,8 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
                 SetNumOlst(pNumRule, pNumOlst , nSwNumLevel);
             else                                // kein Olst, nimm Anld
             {
-                const BYTE* pS12 = pPlcxMan->HasParaSprm(12);   // sprmAnld
+                // sprmAnld
+                const BYTE* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
                 SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
             }
         }

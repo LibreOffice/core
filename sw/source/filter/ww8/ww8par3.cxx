@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-27 12:10:15 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 12:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1735,19 +1735,30 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if( pAktColl && (nLFOPosition == 2047-1) )
+            if (pAktColl && (nLFOPosition == 2047-1))
                 pCollA[nAktColl].bHasBrokenWW6List = true;
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
-            if ((USHRT_MAX > nLFOPosition) && (nLFOPosition != 2047-1))
+            if (USHRT_MAX > nLFOPosition)
             {
-                if (WW8ListManager::nMaxLevel == nListLevel)
-                    nListLevel = 0;
-                else if (WW8ListManager::nMaxLevel > nListLevel)
+                if (nLFOPosition != 2047-1) //Normal ww8+ list behaviour
                 {
-                    RegisterNumFmt(nLFOPosition, nListLevel);
-                    nLFOPosition = USHRT_MAX;
-                    nListLevel = WW8ListManager::nMaxLevel;
+                    if (WW8ListManager::nMaxLevel == nListLevel)
+                        nListLevel = 0;
+                    else if (WW8ListManager::nMaxLevel > nListLevel)
+                    {
+                        RegisterNumFmt(nLFOPosition, nListLevel);
+                        nLFOPosition = USHRT_MAX;
+                        nListLevel = WW8ListManager::nMaxLevel;
+                    }
+                }
+                else if (pPlcxMan && pPlcxMan->HasParaSprm(0xC63E))
+                {
+                    /*
+                     #i8114# Horrific backwards compatible ww7- lists in ww8+
+                     docs
+                    */
+                    Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &nListLevel, 1);
                 }
             }
         }
