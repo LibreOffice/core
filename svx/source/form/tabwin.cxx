@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 12:21:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-08 08:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
             }
         }
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_WARNING("FmFieldWin::Update(::com::sun::star::form::XForm) : could not collect the fields of the current data source !");
     }
