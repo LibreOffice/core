@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-20 13:03:50 $
+ *  last change: $Author: af $ $Date: 2002-09-18 08:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ void SdViewShell::Construct(void)
 
     pHScrlArray[0] = new ScrollBar(&GetViewFrame()->GetWindow(),
                                     WinBits(WB_HSCROLL | WB_DRAG));
+    pHScrlArray[0]->EnableRTL (FALSE);
     pHScrlArray[0]->SetRange(Range(0, 32000));
     pHScrlArray[0]->SetScrollHdl(LINK(this, SdViewShell, HScrollHdl));
     pHScrlArray[0]->Show();
