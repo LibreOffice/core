@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:31:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_ACCEL_CXX
-
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -81,7 +79,7 @@
 #include <accel.hxx>
 #endif
 #ifndef _RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
@@ -419,7 +417,6 @@ void Accelerator::InsertItem( const ResId& rResId )
     USHORT              nAccelKeyId;
     USHORT              bDisable;
     KeyCode             aKeyCode;
-    BOOL                bEnable     = FALSE;
     Accelerator*        pAutoAccel  = NULL;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
