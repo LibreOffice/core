@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: bc $ $Date: 2002-10-01 14:02:24 $
+ *  last change: $Author: bc $ $Date: 2002-10-02 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,7 +1353,6 @@ public class ReportWizard {
     public static void main (String args[]) {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
     try {
-
         xGlobalMSF = tools.connect(ConnectStr);
         if(xGlobalMSF != null)  System.out.println("Connected to "+ ConnectStr);
         ReportWizard CurReportWizard = new ReportWizard();
