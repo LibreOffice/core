@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentbuilder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ namespace DOM
         throw (RuntimeException)
     {
         sal_Int32 bsize = 4096;
-        char* buffer = new char[bsize];
+        char* buffer = (char*)rtl_allocateMemory(bsize);
         sal_Int32 nbytes = 0;
         sal_Int32 nread = 0;
         sal_Int32 csize = bsize;
@@ -201,6 +201,7 @@ namespace DOM
         // try to parse the buffer
         xmlDocPtr pDoc = xmlParseMemory(buffer, nbytes);
         // XXX error checking
+        rtl_freeMemory(buffer);
 
         return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
 
