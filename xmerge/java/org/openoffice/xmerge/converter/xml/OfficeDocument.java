@@ -699,6 +699,9 @@ public abstract class OfficeDocument
         try {
             // First of all try for JAXP 1.0
             if (domImpl.equals("com.sun.xml.tree.XmlDocument")) {
+
+                Debug.log(Debug.INFO, "Using JAXP");
+
                 Class jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
 
                 // The method is in the XMLDocument class itself, not a helper
@@ -709,6 +712,8 @@ public abstract class OfficeDocument
             }
          else if (domImpl.equals("org.apache.crimson.tree.XmlDocument"))
         {
+                Debug.log(Debug.INFO, "Using Crimson");
+
          Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
          // The method is in the XMLDocument class itself, not a helper
                 meth = crimsonDoc.getMethod("write",
@@ -718,6 +723,9 @@ public abstract class OfficeDocument
         }
             else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl")
             || domImpl.equals("org.apache.xerces.dom.DeferredDocumentImpl")) {
+
+                Debug.log(Debug.INFO, "Using Xerces");
+
                 // Try for Xerces
                 Class xercesSer =
                         Class.forName("org.apache.xml.serialize.XMLSerializer");
