@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 14:02:09 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 
 #ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
+#endif
+
+#ifdef BIDI
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #endif
 
 #ifndef _DOC_HXX
@@ -2705,6 +2711,37 @@ FASTBOOL SwCrsrShell::IsSelFullPara() const
     return bRet;
 }
 
+#ifdef BIDI
+
+short SwCrsrShell::GetTextDirection( const Point* pPt ) const
+{
+    SwPosition aPos( *pCurCrsr->GetPoint() );
+    Point aPt( pPt ? *pPt : pCurCrsr->GetPtPos() );
+    if( pPt )
+    {
+        SwCrsrMoveState aTmpState( MV_NONE );
+        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+
+        GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
+    }
+
+    return pDoc->GetTextDirection( aPos, &aPt );
+}
+
+FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
+{
+    const short nDir = GetTextDirection( pPt );
+    return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
+}
+
+FASTBOOL SwCrsrShell::IsInRightToLeftText( const Point* pPt ) const
+{
+    const short nDir = GetTextDirection( pPt );
+    return FRMDIR_HORI_RIGHT_TOP == nDir;
+}
+
+#else
+
 FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
 {
     SwPosition aPos( *pCurCrsr->GetPoint() );
@@ -2718,6 +2755,8 @@ FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
     }
     return pDoc->IsInVerticalText( aPos, &aPt );
 }
+
+#endif
 
 /*  */
 

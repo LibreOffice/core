@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-18 09:22:12 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,10 @@ private:
     FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
     FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
     FASTBOOL SttEndDoc( BOOL bStt );
+
+#ifdef BIDI
+    short GetTextDirection( const Point* pPt = 0 ) const;
+#endif
 
 typedef FASTBOOL (SwCursor:: *FNCrsr)();
     FASTBOOL CallCrsrFN( FNCrsr );
@@ -818,6 +822,10 @@ public:
 
     // is cursor or the point in/over a vertical formatted text?
     FASTBOOL IsInVerticalText( const Point* pPt = 0 ) const;
+#ifdef BIDI
+    // is cursor or the point in/over a right to left formatted text?
+    FASTBOOL IsInRightToLeftText( const Point* pPt = 0 ) const;
+#endif
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-18 09:23:25 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1961,6 +1961,84 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
             0 != pNd->FindFooterStartNode();
 }
 
+#ifdef BIDI
+
+short SwDoc::GetTextDirection( const SwPosition& rPos,
+                               const Point* pPt ) const
+{
+    short nRet;
+    Point aPt;
+    if( pPt )
+        aPt = *pPt;
+
+    SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
+    SwCntntFrm *pFrm;
+
+    if( pNd && 0 != (pFrm = pNd->GetFrm( &aPt, &rPos )) )
+    {
+        if ( pFrm->IsVertical() )
+        {
+            if ( pFrm->IsRightToLeft() )
+                nRet = FRMDIR_VERT_TOP_LEFT;
+            else
+                nRet = FRMDIR_VERT_TOP_RIGHT;
+        }
+        else
+        {
+            if ( pFrm->IsRightToLeft() )
+                nRet = FRMDIR_HORI_RIGHT_TOP;
+            else
+                nRet = FRMDIR_HORI_LEFT_TOP;
+        }
+    }
+    else
+    {
+        const SvxFrameDirectionItem* pItem = 0;
+        if( pNd )
+        {
+            // in a flyframe? Then look at that for the correct attribute
+            const SwFrmFmt* pFlyFmt = pNd->GetFlyFmt();
+            while( pFlyFmt )
+            {
+                pItem = &pFlyFmt->GetFrmDir();
+                if( FRMDIR_ENVIRONMENT == pItem->GetValue() )
+                {
+                    pItem = 0;
+                    const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
+                    if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                        pAnchor->GetCntntAnchor() )
+                        pFlyFmt = pAnchor->GetCntntAnchor()->nNode.
+                                            GetNode().GetFlyFmt();
+                    else
+                        pFlyFmt = 0;
+                }
+                else
+                    pFlyFmt = 0;
+            }
+
+            if( !pItem )
+            {
+                const SwPageDesc* pPgDsc = pNd->FindPageDesc( FALSE );
+                if( pPgDsc )
+                    pItem = &pPgDsc->GetMaster().GetFrmDir();
+            }
+        }
+        if( !pItem )
+            pItem = (SvxFrameDirectionItem*)&GetAttrPool().GetDefaultItem(
+                                                            RES_FRAMEDIR );
+        nRet = pItem->GetValue();
+    }
+    return nRet;
+}
+
+sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
+{
+    const short nDir = GetTextDirection( rPos, pPt );
+    return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
+}
+
+#else
+
 sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
 {
     sal_Bool bRet;
@@ -2013,3 +2091,5 @@ sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) con
     }
     return bRet;
 }
+
+#endif

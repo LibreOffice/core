@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 11:56:25 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,6 +744,10 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
     sal_Bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
+#ifdef BIDI
+    short GetTextDirection( const SwPosition& rPos,
+                            const Point* pPt = 0 ) const;
+#endif
     sal_Bool IsInVerticalText( const SwPosition& rPos,
                                const Point* pPt = 0 ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 14:21:05 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,6 +987,29 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // compiler has problem with the code. Has to remove if the new general
         // handler exist.
         USHORT nKey = rKEvt.GetKeyCode().GetCode();
+
+#ifdef BIDI
+        if( KEY_UP == nKey || KEY_DOWN == nKey ||
+            KEY_LEFT == nKey || KEY_RIGHT == nKey )
+        {
+            if( rSh.IsInVerticalText() )
+            {
+                if( KEY_UP == nKey ) nKey = KEY_LEFT;
+                else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
+                else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
+                else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
+            }
+            else if ( rSh.IsInRightToLeftText() )
+            {
+                if( KEY_LEFT == nKey ) nKey = KEY_RIGHT;
+                else if( KEY_RIGHT == nKey ) nKey = KEY_LEFT;
+            }
+
+            aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
+                            KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
+                            rKEvt.GetRepeat() );
+        }
+#else
         if( KEY_UP == nKey ) nKey = KEY_LEFT;
         else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
         else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
@@ -999,6 +1022,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                             KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
                             rKEvt.GetRepeat() );
         }
+#endif
     }
 
     const KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
