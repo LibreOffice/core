@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-20 17:16:21 $
+ *  last change: $Author: mba $ $Date: 2001-03-21 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,18 @@ SotStorage::SotStorage( BaseStorage * pStor )
     pOwnStg = pStor;
     ULONG nErr = pOwnStg->GetError();
     SetError( nErr );
+}
+
+SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
+    INIT_SotStorage()
+{
+    SetError( rStm.GetError() );
+
+    // try as UCBStorage, next try as OLEStorage
+    if ( UCBStorage::IsStorageFile( &rStm ) || bUCBStorage )
+        pOwnStg = new UCBStorage( rStm, FALSE );
+    else
+        pOwnStg = new Storage( rStm, FALSE );
 }
 
 SotStorage::SotStorage( SvStream & rStm )
