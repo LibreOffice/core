@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2001-01-29 12:23:29 $
+#   last change: $Author: hjs $ $Date: 2001-01-29 15:36:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -604,9 +604,15 @@ ROUT=$(OUTPATH).tlk
 # common output tree
 COMMON_OUTDIR*=common
 .IF "$(common_build)"!=""
+.IF "$(no_common_build_reslib)"==""
 common_build_reslib=true
+.ENDIF			# "$(no_common_build_reslib)"==""
+.IF "$(no_common_build_zip)"==""
 common_build_zip=true
+.ENDIF			# "$(no_common_build_zip)"==""
+.IF "$(no_common_build_sign_jar)"==""
 common_build_sign_jar=true
+.ENDIF			# "$(no_common_build_sign_jar)"==""
 .ENDIF			# "$(common_build)"!=""
 
 # --- generate output tree -----------------------------------------
