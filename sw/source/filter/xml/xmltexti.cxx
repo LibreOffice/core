@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-30 13:59:19 $
+ *  last change: $Author: dvo $ $Date: 2001-08-02 12:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,16 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
-    delete pRedlineHelper;
+    // #90463# the redline helper destructor sets properties on the document
+    //         and may through an exception while doing so... catch this
+    try
+    {
+        delete pRedlineHelper;
+    }
+    catch ( const RuntimeException& e )
+    {
+        // ignore
+    }
 }
 
 SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
