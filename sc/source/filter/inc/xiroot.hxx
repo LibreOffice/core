@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:04:08 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ struct XclImpRootData : public XclRootData
     explicit                    XclImpRootData(
                                     XclBiff eBiff,
                                     ScDocument& rDocument,
-                                    const String& rBasePath,
+                                    const String& rDocUrl,
                                     CharSet eCharSet );
     virtual                     ~XclImpRootData();
 };
