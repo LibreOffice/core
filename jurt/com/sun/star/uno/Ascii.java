@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Ascii.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 14:06:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,8 @@ package com.sun.star.uno;
 /**
  * The Ascii class represents the IDL build in type <code>ascii</code>.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:06:54 $
+ * @version     $Revision: 1.3 $ $ $Date: 2004-11-03 09:05:37 $
  * @author      Markus Meyer
- * @since       UDK1.0
  * @deprecated do not use
  */
 public final class Ascii {
