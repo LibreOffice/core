@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-21 11:55:58 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,6 @@ public:
 class SvxFrmValueSet_Impl : public ValueSet
 {
     USHORT          nModifier;
-
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
 public:
     SvxFrmValueSet_Impl(Window* pParent,  WinBits nWinStyle)
@@ -359,6 +358,7 @@ class SvxFrameWindow_Impl : public SfxPopupWindow
 private:
     SvxFrmValueSet_Impl  aFrameSet;
     ImageList       aImgList;
+    sal_Bool        bParagraphMode;
 
 #if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
@@ -371,7 +371,8 @@ protected:
     virtual void    GetFocus();
 
 public:
-    SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, BOOL bParagraphMode );
+    SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame );
+    ~SvxFrameWindow_Impl();
 
     void            StartSelection();
 
@@ -1301,13 +1302,16 @@ void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const 
 // class SvxFrameWindow_Impl --------------------------------------------------
 //========================================================================
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, BOOL bParagraphMode ) :
+SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame ) :
 
     SfxPopupWindow( nId, rFrame, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ) ),
-
-    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )
+    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    bParagraphMode(sal_False)
 
 {
+    BindListener();
+    String sCommand(String::CreateFromAscii( ".uno:BorderReducedMode" ));
+    AddStatusListener( sCommand );
     aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
 
     /*
@@ -1325,6 +1329,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
     for ( i=1; i<9; i++ )
         aFrameSet.InsertItem( i, aImgList.GetImage(i) );
 
+    //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         for ( i = 9; i < 13; i++ )
             aFrameSet.InsertItem( i, aImgList.GetImage(i) );
@@ -1338,11 +1343,18 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
     aFrameSet.Show();
 }
+/*-- 22.09.2004 12:27:50---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
+{
+    UnbindListener();
+}
 
 SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
 {
     //! HACK: wie bekomme ich den Paragraph-Mode ??
-    return new SvxFrameWindow_Impl( GetId(), GetFrame(), FALSE );
+    return new SvxFrameWindow_Impl( GetId(), GetFrame() );
 }
 
 Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
@@ -1514,32 +1526,36 @@ void SvxFrameWindow_Impl::StateChanged(
     USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    if ( pState )
+    if ( pState && nSID == SID_BORDER_REDUCED_MODE)
     {
-        const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );
+        const SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
 
         if ( pItem )
         {
-            BOOL bParMode   = (BOOL)pItem->GetValue();
-            BOOL bTableMode = ( aFrameSet.GetItemCount() == 12 );
-            BOOL bResize    = FALSE;
+            bParagraphMode = (BOOL)pItem->GetValue();
+            //initial calls mustn't insert or remove elements
+            if(aFrameSet.GetItemCount())
+            {
+                BOOL bTableMode = ( aFrameSet.GetItemCount() == 12 );
+                BOOL bResize    = FALSE;
 
-            if ( bTableMode && bParMode )
-            {
-                for ( USHORT i = 9; i < 13; i++ )
-                    aFrameSet.RemoveItem(i);
-                bResize = TRUE;
-            }
-            else if ( !bTableMode && !bParMode )
-            {
-                for ( USHORT i = 9; i < 13; i++ )
-                    aFrameSet.InsertItem( i, aImgList.GetImage(i) );
-                bResize = TRUE;
-            }
+                if ( bTableMode && bParagraphMode )
+                {
+                    for ( USHORT i = 9; i < 13; i++ )
+                        aFrameSet.RemoveItem(i);
+                    bResize = TRUE;
+                }
+                else if ( !bTableMode && !bParagraphMode )
+                {
+                    for ( USHORT i = 9; i < 13; i++ )
+                        aFrameSet.InsertItem( i, aImgList.GetImage(i) );
+                    bResize = TRUE;
+                }
 
-            if ( bResize )
-            {
-                lcl_CalcSizeValueSet( *this, aFrameSet,Size( 20, 20 ));
+                if ( bResize )
+                {
+                    lcl_CalcSizeValueSet( *this, aFrameSet,Size( 20, 20 ));
+                }
             }
         }
     }
@@ -3001,8 +3017,7 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     USHORT      nId,
     ToolBox&    rTbx )
 
-    :   SfxToolBoxControl( nSlotId, nId, rTbx ),
-        bParagraphMode   ( FALSE )
+    :   SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
@@ -3019,7 +3034,7 @@ SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
 {
     SvxFrameWindow_Impl* pFrameWin = new SvxFrameWindow_Impl(
-                                        GetSlotId(), m_xFrame, bParagraphMode );
+                                        GetSlotId(), m_xFrame );
 
     pFrameWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pFrameWin->StartSelection();
@@ -3039,16 +3054,10 @@ void SvxFrameToolBoxControl::StateChanged(
     ToolBox&                rTbx    = GetToolBox();
     const SfxUInt16Item*    pItem   = 0;
 
-    if ( SFX_ITEM_DONTCARE != eState )
-        pItem = PTR_CAST( SfxUInt16Item, pState );
-
-    if ( pItem )
-        bParagraphMode = (BOOL)pItem->GetValue();
-
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
-                                ? STATE_DONTKNOW
-                                : STATE_NOCHECK );
+                            ? STATE_DONTKNOW
+                            : STATE_NOCHECK );
 }
 
 //========================================================================
