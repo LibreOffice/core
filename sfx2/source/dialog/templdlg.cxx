@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:59:51 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2309,7 +2309,6 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     m_aActionTbR        ( pWindow, ResId( TB_ACTION ) )
 
 {
-
     pWindow->FreeResource();
     Initialize();
 
@@ -2322,14 +2321,6 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
-/*
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
-    if ( pImgMgr )
-    {
-        pImgMgr->RegisterToolBox( &m_aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
-        pImgMgr->RegisterToolBox( &m_aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
-    }
-*/
 }
 
 // ------------------------------------------------------------------------
@@ -2363,7 +2354,7 @@ void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
     m_aActionTbR.HideItem(SID_STYLE_UPDATE_BY_EXAMPLE);
     m_aActionTbR.SetItemBits( SID_STYLE_NEW_BY_EXAMPLE,
-            TIB_DROPDOWN|m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
+            TIB_DROPDOWNONLY|m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
 }
 
 // ------------------------------------------------------------------------
