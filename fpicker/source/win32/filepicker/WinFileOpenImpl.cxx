@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 13:28:09 $
+ *  last change: $Author: tra $ $Date: 2001-07-11 09:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter(  ) throw(RuntimeException)
 //=================================================================================================================
 
 void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     if ( m_bInExecuteMode )
     {
@@ -501,7 +501,7 @@ void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aContr
 //-----------------------------------------------------------------------------------------
 
 Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     Any aAny;
 
@@ -559,7 +559,7 @@ Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aContro
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEnable )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( ControlID );
 
@@ -567,7 +567,7 @@ void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEn
     {
 
 #pragma message( "################################" )
-#pragma message( " fix this"
+#pragma message( " fix this" )
 #pragma message( "################################" )
         /*
         will be enabled again when enableControl in offline
@@ -587,14 +587,14 @@ void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEn
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     if ( !hwndCtrl )
     {
 #pragma message( "################################" )
-#pragma message( " fix this"
+#pragma message( " fix this" )
 #pragma message( "################################" )
         /*
         will be enabled again when setLabel in offline
@@ -615,14 +615,14 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUS
 //-----------------------------------------------------------------------------------------
 
 OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
-        throw (IllegalArgumentException, RuntimeException)
+        throw (RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     if ( !hwndCtrl )
     {
 #pragma message( "################################" )
-#pragma message( " fix this"
+#pragma message( " fix this" )
 #pragma message( "################################" )
         /*
         will be enabled again when setLabel in offline
