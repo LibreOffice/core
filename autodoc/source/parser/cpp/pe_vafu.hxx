@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vafu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ class PE_VarFunc : public Cpp_PE
     void                On_start_inline(const char * i_sText);
     void                On_start_explicit(const char * i_sText);
     void                On_start_Bracket_Right(const char * i_sText);
+    void                On_start_typename(const char * i_sText);
 
     void                On_expectCtor_Bracket_Left(const char * i_sText);
 

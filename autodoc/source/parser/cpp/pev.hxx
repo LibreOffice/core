@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pev.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,9 @@ class PeEnvironment : protected TokenProcessing_Types
                             const StringVector &
                                                 i_rParameters );
     /// Removes parameters from this object.
-    DYN StringVector *
-                        Get_CurTemplateParameters();
+    DYN StringVector *  Get_CurTemplateParameters();
+    /// Checks, if a template is still open, and if yes, closes it.
+    void                Close_OpenTemplate();
 
         // Special events
     void                Event_Class_FinishedBase(
@@ -196,6 +197,7 @@ class PeEnvironment : protected TokenProcessing_Types
                                                 i_rParameters ) = 0;
     virtual DYN StringVector *
                         do_Get_CurTemplateParameters() = 0;
+    virtual void        do_Close_OpenTemplate() = 0;
     virtual void        do_Event_Class_FinishedBase(
                             const udmstri &     i_sBaseName ) = 0;
 
@@ -269,6 +271,9 @@ PeEnvironment::OpenTemplate( const StringVector & i_rParameters )
 inline DYN StringVector *
 PeEnvironment::Get_CurTemplateParameters()
     { return do_Get_CurTemplateParameters(); }
+inline void
+PeEnvironment::Close_OpenTemplate()
+    { do_Close_OpenTemplate(); }
 inline void
 PeEnvironment::Event_Class_FinishedBase( const udmstri &  i_sBaseName )
     { do_Event_Class_FinishedBase(i_sBaseName); }
