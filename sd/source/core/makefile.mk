@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2000-11-24 18:48:59 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 19:42:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,8 +99,12 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/cusshow.obj
 
 EXCEPTIONSFILES= \
-           $(SLO)$/drawdoc.obj \
+           $(SLO)$/drawdoc.obj
+
+.IF "$(SVXLIGHT)"!=""
+EXCEPTIONSFILES+= \
            $(OBJ)$/sxl_drawdoc.obj
+.ENDIF          # "$(SVXLIGHT)"!=""
 
 SVXLIGHTOBJFILES = \
            $(OBJ)$/stlsheet.obj  \
