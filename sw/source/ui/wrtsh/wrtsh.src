@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:38:42 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,10 +1633,10 @@ String STR_TRANSLITERATE
     TEXT[ portuguese ] = "Change case";
     TEXT[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
     TEXT[ greek ] = "Êåöáëáßá/ĞåæÜ";
-    TEXT[ dutch ] = "Change case";
+    TEXT[ dutch ] = "Hoofd-/kleine letters";
     TEXT[ french ] = "Casse/Caractères";
     TEXT[ spanish ] = "Mayúsculas/minúsculas";
-    TEXT[ italian ] = "Change case";
+    TEXT[ italian ] = "Maiuscole/minuscole";
     TEXT[ danish ] = "Change case";
     TEXT[ swedish ] = "Versalkänslig";
     TEXT[ polish ] = "Wielkie i ma³e litery";
@@ -2221,7 +2221,7 @@ String STR_UNDO_CHAIN
     Text[ chinese_simplified ] = "Á´½ÓÎÄ±¾¿ò";
     Text[ russian ] = "Îáúåäèíèòü òåêñòîâûå ğàìêè";
     Text[ polish ] = "Po³¹cz ramkê tekstow¹";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì˜AŒ‹";
+    Text[ japanese ] = "Ã·½Ä˜g‚Ì˜AŒ‹";
     Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
     Text[ arabic ] = "ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkader verbinden";
@@ -2247,7 +2247,7 @@ String STR_UNDO_UNCHAIN
     Text[ chinese_simplified ] = "È¡ÏûÎÄ±¾¿òµÄÁ´½Ó";
     Text[ russian ] = "Ğàçúåäèíèòü òåêñòîâóş ğàìêó";
     Text[ polish ] = "Roz³¹cz ramki tekstu";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì˜AŒ‹‰ğœ";
+    Text[ japanese ] = "Ã·½Ä˜g‚Ì˜AŒ‹‰ğœ";
     Text[ chinese_traditional ] = "¨ú®ø¤å¦r¤è¶ôªº³sµ²";
     Text[ arabic ] = "İß ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkaderverbinding verwijderen";
@@ -2369,10 +2369,10 @@ String STR_UNDO_SETRUBYATTR
     Text[ portuguese ] = "Set phonetic Symbols";
     Text[ russian ] = "Ïîìåñòèòü äèàêğèòè÷åñêèå çíàêè";
     Text[ greek ] = "Ïñéóìüò öùíçôéêşí óõìâüëùí";
-    Text[ dutch ] = "Set phonetic Symbols";
+    Text[ dutch ] = "Fonetische symbolen invoegen";
     Text[ french ] = "Attribut Ruby";
     Text[ spanish ] = "Aplicar símbolos fonéticos";
-    Text[ italian ] = "Set phonetic Symbols";
+    Text[ italian ] = "Imposta testo ruby";
     Text[ danish ] = "Set phonetic Symbols";
     Text[ swedish ] = "Sätt fonetiska symboler";
     Text[ polish ] = "OsadŸ znaki diakrytyczne";
