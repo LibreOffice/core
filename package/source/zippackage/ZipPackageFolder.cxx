@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:18:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xF
 ZipPackageFolder::~ZipPackageFolder()
 {
 }
+
 void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
 {
       rDest.nVersion            = rSource.nVersion;
@@ -291,6 +292,33 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
+    if ( maContents.begin() == maContents.end() )
+    {
+        // it is an empty folder, use workaround to store it
+        ZipEntry* pTempEntry = new ZipEntry();
+        ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
+        pTempEntry->nNameLen = (sal_Int16)rPath.getLength();
+        pTempEntry->nExtraLen = -1;
+        pTempEntry->sName = rPath;
+
+        try
+        {
+            vos::ORef < EncryptionData > aEmptyEncr;
+            rZipOut.putNextEntry ( *pTempEntry, aEmptyEncr, sal_False );
+            rZipOut.rawCloseEntry();
+        }
+        catch ( ZipException& )
+        {
+            VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+            bWritingFailed = sal_True;
+        }
+        catch ( IOException& )
+        {
+            VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+            bWritingFailed = sal_True;
+        }
+    }
+
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           aCI != aEnd;
           aCI++)
@@ -328,7 +356,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
             pTempEntry->sName = rPath + rShortName;
-            pTempEntry->nNameLen = pTempEntry->sName.getLength();
+            pTempEntry->nNameLen = (sal_Int16)( pTempEntry->sName.getLength() );
 
             sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && (bHaveEncryptionKey || pStream->HasOwnKey());
             sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();
@@ -470,12 +498,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                     rZipOut.rawCloseEntry();
                 }
-                catch ( ZipException& r )
+                catch ( ZipException& )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
-                catch ( IOException& r )
+                catch ( IOException& )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
@@ -519,12 +547,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                     rZipOut.closeEntry();
                 }
-                catch ( ZipException& r )
+                catch ( ZipException& )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
-                catch ( IOException& r )
+                catch ( IOException& )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
@@ -577,6 +605,17 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
 void ZipPackageFolder::releaseUpwardRef( void )
 {
+    // Now it is possible that a package folder is disconnected from the package before removing of the folder.
+    // Such a scenario is used in storage implementation. When a new version of a folder is provided the old
+    // one is retrieved, removed from the package but preserved for the error handling.
+    // In this scenario the referencing to the parent is not really useful, since it requires disposing.
+
+    // Actually there is no need in having a reference to the parent, it even make things more complicated and
+    // requires disposing mechanics. Using of a simple pointer seems to be easier solution and also a safe enough.
+
+    clearParent();
+
+#if 0
     for ( ContentHash::const_iterator aCI = maContents.begin();
           aCI!=maContents.end();
           aCI++)
@@ -588,6 +627,9 @@ void ZipPackageFolder::releaseUpwardRef( void )
             rInfo.pStream->clearParent();
     }
     clearParent();
+
+    VOS_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
+#endif
 }
 
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& aIdentifier )
