@@ -2,9 +2,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ namespace DOM
     Removes an attribute by name.
     */
     void CElement::removeAttribute(const OUString& name)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         xmlChar *xName = (xmlChar*)OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr();
         if (m_aNodePtr != NULL) {
@@ -230,7 +230,7 @@ namespace DOM
     Removes an attribute by local name and namespace URI.
     */
     void CElement::removeAttributeNS(const OUString& namespaceURI, const OUString& localName)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -247,7 +247,7 @@ namespace DOM
     Removes the specified attribute node.
     */
     Reference< XAttr > CElement::removeAttributeNode(const Reference< XAttr >& oldAttr)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         Reference< XAttr > aAttr;
         if(m_aNodePtr != NULL)
@@ -325,7 +325,7 @@ namespace DOM
     }
 
     Reference< XAttr > CElement::setAttributeNode(const Reference< XAttr >& newAttr)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return _setAttributeNode(newAttr, sal_False);
     }
@@ -334,7 +334,7 @@ namespace DOM
     Adds a new attribute.
     */
     Reference< XAttr > CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return _setAttributeNode(newAttr, sal_True);
     }
@@ -343,7 +343,7 @@ namespace DOM
     Adds a new attribute.
     */
     void CElement::setAttribute(const OUString& name, const OUString& value)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -382,7 +382,7 @@ namespace DOM
     */
     void CElement::setAttributeNS(
             const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
-        throw (RuntimeException)
+        throw (DOMException)
     {       
         if (namespaceURI.getLength() == 0) throw RuntimeException();
         

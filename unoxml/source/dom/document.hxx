@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:11 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,13 @@ namespace DOM
         Creates an Attr of the given name.
         */
         virtual Reference< XAttr > SAL_CALL createAttribute(const OUString& name)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Creates an attribute of the given qualified name and namespace URI.
         */
         virtual Reference< XAttr > SAL_CALL createAttributeNS(const OUString& namespaceURI, const OUString& qualifiedName)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Creates a CDATASection node whose value is the specified string.
@@ -139,19 +139,19 @@ namespace DOM
         Creates an element of the type specified.
         */
         virtual Reference< XElement > SAL_CALL createElement(const OUString& tagName)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Creates an element of the given qualified name and namespace URI.
         */
         virtual Reference< XElement > SAL_CALL createElementNS(const OUString& namespaceURI, const OUString& qualifiedName)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Creates an EntityReference object.
         */
         virtual Reference< XEntityReference > SAL_CALL createEntityReference(const OUString& name)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Creates a ProcessingInstruction node given the specified name and 
@@ -159,7 +159,7 @@ namespace DOM
         */
         virtual Reference< XProcessingInstruction > SAL_CALL createProcessingInstruction(
                 const OUString& target, const OUString& data)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Creates a Text node given the specified string.
@@ -213,7 +213,7 @@ namespace DOM
         Imports a node from another document to this document.
         */
         virtual Reference< XNode > SAL_CALL importNode(const Reference< XNode >& importedNode, sal_Bool deep)
-            throw (RuntimeException);
+            throw (DOMException);
 
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
@@ -223,7 +223,7 @@ namespace DOM
             throw (RuntimeException);        
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return CNode::appendChild(newChild);
     }
@@ -304,7 +304,7 @@ namespace DOM
     }
     virtual Reference< XNode > SAL_CALL insertBefore(
             const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return CNode::insertBefore(newChild, refChild);
     }
@@ -319,23 +319,23 @@ namespace DOM
         CNode::normalize();
     }
     virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return CNode::removeChild(oldChild);
     }
     virtual Reference< XNode > SAL_CALL replaceChild(
             const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return CNode::replaceChild(newChild, oldChild);
     }
     virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return CNode::setNodeValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         return CNode::setPrefix(prefix);
     }

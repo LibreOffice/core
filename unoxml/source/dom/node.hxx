@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
+#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <libxml/tree.h>
 
 using namespace rtl;
@@ -130,7 +131,7 @@ namespace DOM
         Adds the node newChild to the end of the list of children of this node.
         */
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Returns a duplicate of this node, i.e., serves as a generic copy 
@@ -243,7 +244,7 @@ namespace DOM
         */
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Tests whether the DOM implementation implements a specific feature and
@@ -267,7 +268,7 @@ namespace DOM
         and returns it.
         */
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Replaces the child node oldChild with newChild in the list of children,
@@ -275,19 +276,19 @@ namespace DOM
         */
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         The value of this node, depending on its type; see the table above.
         */
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         The namespace prefix of this node, or null if it is unspecified.
         */
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (RuntimeException);
+            throw (DOMException);
 
 
         // --- XUnoTunnel

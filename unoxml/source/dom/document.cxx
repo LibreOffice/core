@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ namespace DOM
 
     // Creates an Attr of the given name.
     Reference< XAttr > SAL_CALL CDocument::createAttribute(const OUString& name)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -142,7 +142,7 @@ namespace DOM
     // Creates an attribute of the given qualified name and namespace URI.
     Reference< XAttr > SAL_CALL CDocument::createAttributeNS(
             const OUString& ns, const OUString& qname)
-        throw (RuntimeException)
+        throw (DOMException)
     {
 
         // libxml does not allow a NS definition to be attached to an
@@ -205,7 +205,7 @@ namespace DOM
 
     // Creates an element of the type specified.
     Reference< XElement > SAL_CALL CDocument::createElement(const OUString& tagName)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(tagName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -216,7 +216,7 @@ namespace DOM
     // Creates an element of the given qualified name and namespace URI.
     Reference< XElement > SAL_CALL CDocument::createElementNS(
             const OUString& ns, const OUString& qname)
-        throw (RuntimeException)
+        throw (DOMException)
     {        
         sal_Int32 i = qname.indexOf(':');
         if (ns.getLength() == 0) throw RuntimeException();
@@ -247,7 +247,7 @@ namespace DOM
 
     //Creates an EntityReference object.
     Reference< XEntityReference > SAL_CALL CDocument::createEntityReference(const OUString& name)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -259,7 +259,7 @@ namespace DOM
     // data strings.
     Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(target, RTL_TEXTENCODING_UTF8);
         xmlChar *xTarget = (xmlChar*)o1.getStr();
@@ -396,7 +396,7 @@ namespace DOM
 
     Reference< XNode > SAL_CALL CDocument::importNode(
             const Reference< XNode >& importedNode, sal_Bool deep)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         // this node could be from another memory model
         // only use uno interfaces to access is!!!

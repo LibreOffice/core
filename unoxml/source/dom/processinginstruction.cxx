@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processinginstruction.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:41 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace DOM
     /**
     The content of this processing instruction.
     */
-    void SAL_CALL CProcessingInstruction::setData(const OUString& data) throw (RuntimeException)
+    void SAL_CALL CProcessingInstruction::setData(const OUString& data) throw (DOMException)
     {
         // XXX
     }

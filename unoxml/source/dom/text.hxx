@@ -2,9 +2,9 @@
  *
  *  $RCSfile: text.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-19 13:24:05 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,12 @@ namespace DOM
 
          // --- delegations for XCharacterData
         virtual void SAL_CALL appendData(const OUString& arg)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             CCharacterData::appendData(arg);
         }
         virtual void SAL_CALL deleteData(sal_Int32 offset, sal_Int32 count) 
-            throw (RuntimeException)
+            throw (DOMException)
         {
             CCharacterData::deleteData(offset, count);
         }
@@ -114,22 +114,22 @@ namespace DOM
             return CCharacterData::getLength();
         }
         virtual void SAL_CALL insertData(sal_Int32 offset, const OUString& arg)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             CCharacterData::insertData(offset, arg);
         }
         virtual void SAL_CALL replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             CCharacterData::replaceData(offset, count, arg);
         }
         virtual void SAL_CALL setData(const OUString& data)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             CCharacterData::setData(data);
         }
         virtual OUString SAL_CALL subStringData(sal_Int32 offset, sal_Int32 count)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::subStringData(offset, count);
         }
@@ -142,7 +142,7 @@ namespace DOM
         // --- resolve uno inheritance problems...
         // --- delegation for XNde base.
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::appendChild(newChild);
         }
@@ -227,7 +227,7 @@ namespace DOM
         }
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::insertBefore(newChild, refChild);
         }
@@ -242,23 +242,23 @@ namespace DOM
             CCharacterData::normalize();
         }
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::removeChild(oldChild);
         }
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::replaceChild(newChild, oldChild);
         }
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::setNodeValue(nodeValue);
         }
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CCharacterData::setPrefix(prefix);
         }

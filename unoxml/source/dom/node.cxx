@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ namespace DOM
     Adds the node newChild to the end of the list of children of this node.
     */
     Reference< XNode > CNode::appendChild(const Reference< XNode >& newChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         Reference< XNode> aNode;
         if (m_aNodePtr != NULL) {
@@ -280,17 +280,23 @@ namespace DOM
 
             // error checks:
             // from other document
-            if (cur->doc != m_aNodePtr->doc)
-                throw (RuntimeException(OUString::createFromAscii(
-                    "appended node belongs to other document"), Reference<XInterface>()));
+            if (cur->doc != m_aNodePtr->doc) {
+                DOMException e;
+                e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+                throw e;
+            }
             // same node
-            if (cur == m_aNodePtr)
-                throw (RuntimeException(OUString::createFromAscii(
-                    "appended node is same as parent"), Reference<XInterface>()));
+            if (cur == m_aNodePtr) {
+                DOMException e;
+                e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+                throw e;                
+            }
             // already has parant and is not attribute
-            if (cur->parent != NULL && cur->type != XML_ATTRIBUTE_NODE)
-                throw (RuntimeException(OUString::createFromAscii(
-                    "appended node has other parent"), Reference<XInterface>()));
+            if (cur->parent != NULL && cur->type != XML_ATTRIBUTE_NODE) {
+                DOMException e;
+                e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+                throw e;                
+            }
 
             // check whether this is an attribute node so we remove it's
             // carrier node
@@ -299,7 +305,11 @@ namespace DOM
             {
                 if (m_aNodePtr->type != XML_ELEMENT_NODE || cur->parent == NULL 
                     || strcmp((char*)cur->parent->name, "__private") != NULL)
-                    throw RuntimeException();
+                {
+                    DOMException e;
+                    e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+                    throw e;                
+                }
 
                 xmlNsPtr pAttrNs = cur->ns;
                 xmlNsPtr pParentNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, pAttrNs->prefix);
@@ -598,9 +608,19 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::insertBefore(
             const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
-        // XXX check node types
+        
+        if (newChild->getOwnerDocument() != getOwnerDocument()) {
+            DOMException e;
+            e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+            throw e;
+        }
+        if (refChild->getParentNode() != Reference< XNode >(this)) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
 
         Reference< XUnoTunnel > tref(refChild, UNO_QUERY);
         Reference< XUnoTunnel > tnew(newChild, UNO_QUERY);
@@ -653,8 +673,15 @@ namespace DOM
     and returns it.
     */
     Reference< XNode > SAL_CALL CNode::removeChild(const Reference< XNode >& oldChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
+
+        if (oldChild->getParentNode() != Reference< XNode >(this)) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+
         Reference< XUnoTunnel > told(oldChild, UNO_QUERY);
         xmlNodePtr old = (xmlNodePtr)told->getSomething(Sequence< sal_Int8>());
         xmlNodePtr cur = m_aNodePtr->children;
@@ -700,10 +727,15 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::replaceChild(
             const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         // XXX check node types
 
+        if (oldChild->getParentNode() != Reference< XNode >(this)) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
 
         Reference< XNode > aNode = removeChild(oldChild);
         appendChild(newChild);
@@ -747,22 +779,20 @@ namespace DOM
     The value of this node, depending on its type; see the table above.
     */
     void SAL_CALL CNode::setNodeValue(const OUString& nodeValue)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         // use specific node implememntation
-        /*
-        xmlChar *pBuf = OUString2OString(nodeValue, RTL_TEXTENCODING_UTF8).getStr();
-        // XXX how to free the old content?
-        m_aNodePtr->content = pBuf;
-        */
-
+        // if we end up down here, something went wrong
+        DOMException e;
+        e.Code = DOMExceptionType_NO_MODIFICATION_ALLOWED_ERR;
+        throw e;
     }
 
     /**
     The namespace prefix of this node, or null if it is unspecified.
     */
     void SAL_CALL CNode::setPrefix(const OUString& prefix)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OString o1 = OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         xmlChar *pBuf = (xmlChar*)o1.getStr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-19 13:24:04 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@ namespace DOM
         Append the string to the end of the character data of the node.
         */
         virtual void SAL_CALL appendData(const OUString& arg)
-            throw (RuntimeException);
+            throw (DOMException);
         
         /**
         Remove a range of 16-bit units from the node.
         */
         virtual void SAL_CALL deleteData(sal_Int32 offset, sal_Int32 count) 
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Return the character data of the node that implements this interface.
@@ -117,30 +117,30 @@ namespace DOM
         Insert a string at the specified 16-bit unit offset.
         */
         virtual void SAL_CALL insertData(sal_Int32 offset, const OUString& arg)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Replace the characters starting at the specified 16-bit unit offset 
         with the specified string.
         */
         virtual void SAL_CALL replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Set the character data of the node that implements this interface.
         */
         virtual void SAL_CALL setData(const OUString& data)
-            throw (RuntimeException);
+            throw (DOMException);
 
         /**
         Extracts a range of data from the node.
         */
         virtual OUString SAL_CALL subStringData(sal_Int32 offset, sal_Int32 count)
-            throw (RuntimeException);
+            throw (DOMException);
 
         // --- delegation for XNode base.
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CNode::appendChild(newChild);
         }
@@ -231,7 +231,7 @@ namespace DOM
         }
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CNode::insertBefore(newChild, refChild);
         }
@@ -246,23 +246,23 @@ namespace DOM
             CNode::normalize();
         }
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CNode::removeChild(oldChild);
         }
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CNode::replaceChild(newChild, oldChild);
         }
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return setData(nodeValue);
         }
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (RuntimeException)
+            throw (DOMException)
         {
             return CNode::setPrefix(prefix);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:46 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ namespace DOM
     Append the string to the end of the character data of the node.
     */
     void SAL_CALL CCharacterData::appendData(const OUString& arg)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -103,15 +103,18 @@ namespace DOM
     Remove a range of 16-bit units from the node.
     */
     void SAL_CALL CCharacterData::deleteData(sal_Int32 offset, sal_Int32 count) 
-        throw (RuntimeException)
+        throw (DOMException)
     {
         if (m_aNodePtr != NULL)
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
-            if (offset > tmp.getLength() || offset < 0 || count < 0) 
-                return;
+            if (offset > tmp.getLength() || offset < 0 || count < 0) {
+                DOMException e;
+                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+                throw e;
+            }
             if ((offset+count) > tmp.getLength())
                 count = tmp.getLength() - offset;
 
@@ -158,15 +161,18 @@ namespace DOM
     Insert a string at the specified 16-bit unit offset.
     */
     void SAL_CALL CCharacterData::insertData(sal_Int32 offset, const OUString& arg)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         if (m_aNodePtr != NULL)
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
-            if (offset > tmp.getLength() || offset < 0) 
-                return;
+            if (offset > tmp.getLength() || offset < 0) {
+                DOMException e;
+                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+                throw e;
+            }
 
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += arg;
@@ -185,15 +191,18 @@ namespace DOM
     with the specified string.
     */
     void SAL_CALL CCharacterData::replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         if (m_aNodePtr != NULL)
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
-            if (offset > tmp.getLength() || offset < 0 || count < 0) 
-                return;
+            if (offset > tmp.getLength() || offset < 0 || count < 0){
+                DOMException e;
+                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+                throw e;
+            } 
             if ((offset+count) > tmp.getLength())
                 count = tmp.getLength() - offset;
 
@@ -211,7 +220,7 @@ namespace DOM
     Set the character data of the node that implements this interface.
     */
     void SAL_CALL CCharacterData::setData(const OUString& data)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -227,7 +236,7 @@ namespace DOM
     Extracts a range of data from the node.
     */
     OUString SAL_CALL CCharacterData::subStringData(sal_Int32 offset, sal_Int32 count)
-        throw (RuntimeException)
+        throw (DOMException)
     {
         OUString aStr;
         if (m_aNodePtr != NULL)
@@ -235,6 +244,11 @@ namespace DOM
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            if (offset > tmp.getLength() || offset < 0 || count < 0) {
+                DOMException e;
+                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+                throw e;
+            }
             aStr = tmp.copy(offset, count);
         }
         return aStr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:30:50 $
+ *  last change: $Author: lo $ $Date: 2004-02-26 14:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ namespace DOM
     Sets the value of the attribute from a string.
     */
     void SAL_CALL CAttr::setValue(const OUString& value)
-        throw (RuntimeException)
+        throw (DOMException)
     {   
         OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar* xValue = (xmlChar*)o1.getStr();
