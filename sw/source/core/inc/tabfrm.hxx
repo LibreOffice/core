@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-10 15:36:10 $
+ *  last change: $Author: ama $ $Date: 2002-06-19 14:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,14 +135,13 @@ public:
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( const SwRect& ) const;
+    virtual void  CheckDirection( BOOL bVert );
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
-#ifdef VERTICAL_LAYOUT
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, sal_Bool bNotify = sal_True );
-#endif
 
                  SwCntntFrm *FindLastCntnt();
     inline const SwCntntFrm *FindLastCntnt() const;

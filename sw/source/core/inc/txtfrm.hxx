@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-11 13:36:28 $
+ *  last change: $Author: ama $ $Date: 2002-06-19 14:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,11 @@ struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
 
-#ifdef VERTICAL_LAYOUT
 #define GRID_ON         0
 #define GRID_HEIGHT     1
 #define RUBY_HEIGHT     2
 #define RUBY_TOP        3
 #define GRID_CELLS      4
-#endif
 
 class SwTxtFrm: public SwCntntFrm
 {
@@ -158,10 +156,8 @@ class SwTxtFrm: public SwCntntFrm
     sal_Bool bBlinkPor      : 1;        // enthaelt Blink-Portions
     sal_Bool bFieldFollow   : 1;        // beginne mit Feldrest des Masters
     sal_Bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
-#ifdef VERTICAL_LAYOUT
     sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
-#endif
 
     void ResetPreps();
     inline void Lock() { bLocked = sal_True; }
@@ -357,9 +353,7 @@ public:
         { ( (SwTxtFrm*)this )->bHasAnimation = sal_True; }
     inline sal_Bool HasAnimation() const { return bHasAnimation; }
 
-#ifdef VERTICAL_LAYOUT
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
-#endif
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
 #ifdef PRODUCT
@@ -391,6 +385,7 @@ public:
     inline SwTwips GetRightMargin() const;
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void  CheckDirection( BOOL bVert );
 
     // Liefert die Summe der Zeilenhoehen in pLine zurueck.
     USHORT GetParHeight() const;
@@ -479,7 +474,6 @@ public:
     // returns the script info stored at the paraportion
     const SwScriptInfo* GetScriptInfo() const;
 
-#ifdef VERTICAL_LAYOUT
     // Swaps width and height of the text frame
     void SwapWidthAndHeight();
     // Calculates the coordinates of a rectangle when switching from
@@ -500,7 +494,6 @@ public:
     // Calculates the a limit value when switching from
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
-#endif
 
 #ifdef BIDI
     // Calculates the coordinates of a rectangle when switching from
@@ -568,11 +561,7 @@ inline SwTwips SwTxtFrm::GetRightMargin() const
 }
 inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
 {
-#ifdef VERTICAL_LAYOUT
     return Grow( nGrow, sal_True );
-#else
-    return Grow( nGrow, pHeight, sal_True );
-#endif
 }
 
 #ifdef DEBUG
@@ -697,8 +686,6 @@ extern SwLinguStatistik aSwLinguStat;
 
 #endif
 
-#ifdef VERTICAL_LAYOUT
-
 #define SWAP_IF_SWAPPED( pFrm )\
     sal_Bool bUndoSwap = sal_False;   \
     if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
@@ -729,8 +716,6 @@ public:
     SwFrmSwapper( const SwTxtFrm* pFrm, sal_Bool bSwapIfNotSwapped );
     ~SwFrmSwapper();
 };
-
-#endif
 
 #ifdef BIDI
 

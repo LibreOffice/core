@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-16 15:42:30 $
+ *  last change: $Author: ama $ $Date: 2002-06-19 14:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 #ifndef _BODYFRM_HXX
 #include <bodyfrm.hxx>
 #endif
@@ -241,9 +244,7 @@ SwFrm::SwFrm( SwModify *pMod ) :
 #endif
 {
 #ifndef PRODUCT
-#ifdef VERTICAL_LAYOUT
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
-#endif
 #ifdef DEBUG
     static USHORT nStopAt = USHRT_MAX;
     if ( nFrmId == nStopAt )
@@ -254,63 +255,88 @@ SwFrm::SwFrm( SwModify *pMod ) :
 #endif
 
     ASSERT( pMod, "Kein Frameformat uebergeben." );
-#ifdef VERTICAL_LAYOUT
-    bInvalidR2L = bInvalidVert = bDerivedR2L = bDerivedVert = 1;
-    bRightToLeft = bVertical = bReverse = 0;
+    bInvalidR2L = bInvalidVert = 1;
+    bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = 0;
     bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
     bFixSize = bColLocked = FALSE;
     bCompletePaint = bInfInvalid = TRUE;
-#else
-    bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
-    bFixHeight = bFixWidth = bColLocked = FALSE;
-    bCompletePaint = bInfInvalid = bVarHeight = TRUE;
-#endif
 }
 
-#ifdef VERTICAL_LAYOUT
+void SwFrm::CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse )
+{
+    if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
+    {
+        bDerivedVert = 1;
+        bDerivedR2L = 1;
+        SetDirFlags( bVert );
+    }
+    else if( bVert )
+    {
+        bInvalidVert = 0;
+        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
+            || bBrowse )
+            bVertical = 0;
+        else
+            bVertical = 1;
+    }
+    else
+    {
+        bInvalidR2L = 0;
+        if( FRMDIR_HORI_RIGHT_TOP == nDir )
+            bRightToLeft = 1;
+        else
+            bRightToLeft = 0;
+    }
+}
+
 void SwFrm::CheckDirection( BOOL bVert )
 {
     if( !IsHeaderFrm() && !IsFooterFrm() )
     {
-        if( IsFlyFrm() )
-        {
-            UINT16 nDir = ((SvxFrameDirectionItem&)((SwFlyFrm*)this)->GetFmt()->
-                            GetAttr( RES_FRAMEDIR )).GetValue();
-            if( FRMDIR_ENVIRONMENT == nDir )
-            {
-                bDerivedVert = 1;
-                bDerivedR2L = 1;
-                SetDirFlags( bVert );
-            }
-            else if ( bVert )
-            {
-                bInvalidVert = 0;
-                if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP==nDir
-                    || ((SwFlyFrm*)this)->GetFmt()->GetDoc()->IsBrowseMode() )
-                    bVertical = 0;
-                else
-                    bVertical = 1;
-            }
-            else
-            {
-                bInvalidR2L = 0;
-                if( FRMDIR_HORI_RIGHT_TOP == nDir )
-                    bRightToLeft = 1;
-                else
-                    bRightToLeft = 0;
-            }
-        }
+        if( bVert )
+            bDerivedVert = 1;
         else
-        {
-            if( bVert )
-                bDerivedVert = 1;
-            else
-                bDerivedR2L = 1;
-            SetDirFlags( bVert );
-        }
+            bDerivedR2L = 1;
+        SetDirFlags( bVert );
     }
 }
-#endif
+
+void SwSectionFrm::CheckDirection( BOOL bVert )
+{
+    const SwFrmFmt* pFmt = GetFmt();
+    if( pFmt )
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+                    bVert, sal_True, pFmt->GetDoc()->IsBrowseMode() );
+    else
+        SwFrm::CheckDirection( bVert );
+}
+
+void SwFlyFrm::CheckDirection( BOOL bVert )
+{
+    const SwFrmFmt* pFmt = GetFmt();
+    if( pFmt )
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+                    bVert, sal_False, pFmt->GetDoc()->IsBrowseMode() );
+    else
+        SwFrm::CheckDirection( bVert );
+}
+
+void SwTabFrm::CheckDirection( BOOL bVert )
+{
+    const SwFrmFmt* pFmt = GetFmt();
+    if( pFmt )
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+                    bVert, sal_True, pFmt->GetDoc()->IsBrowseMode() );
+    else
+        SwFrm::CheckDirection( bVert );
+}
+
+void SwTxtFrm::CheckDirection( BOOL bVert )
+{
+    CheckDir( GetTxtNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
+              sal_True, GetTxtNode()->GetDoc()->IsBrowseMode() );
+}
+
 /*************************************************************************
 |*
 |*  SwFrm::Modify()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:19:04 $
+ *  last change: $Author: ama $ $Date: 2002-06-19 14:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,8 @@ public:
     SwSectionFrm( SwSectionFrm &, BOOL bMaster );//_Nur_ zum Erzeugen von Master/Follows
     ~SwSectionFrm();
 
-#ifdef VERTICAL_LAYOUT
     void Init();
-#endif
+    virtual void  CheckDirection( BOOL bVert );
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

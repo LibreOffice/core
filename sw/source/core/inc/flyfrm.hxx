@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:10:19 $
+ *  last change: $Author: ama $ $Date: 2002-06-19 14:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ public:
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                                 const SwCrsrMoveState* = 0 ) const;
 
+    virtual void  CheckDirection( BOOL bVert );
     virtual void Cut();
 #ifndef PRODUCT
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

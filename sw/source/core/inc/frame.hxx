@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:42:08 $
+ *  last change: $Author: ama $ $Date: 2002-06-19 14:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,6 @@
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
 
-#ifdef VERTICAL_LAYOUT
-
 #define SZPTR
 #define PHEIGHT
 #define PWIDTH
@@ -79,28 +77,6 @@
 typedef long Size::* SizePtr;
 typedef long Point::* PointPtr;
 
-#else
-
-typedef long Size::* SzPtr;
-extern SzPtr pHeight;
-extern SzPtr pWidth;
-typedef long Point::* PtPtr;
-extern PtPtr pX;
-extern PtPtr pY;
-#define PTPTR PtPtr
-#define SIZEPTR SzPtr
-
-//Liefern Memberpointer auf die jeweiligen Groessen.
-#define pFIXPOS  ( bVarHeight ? pX : pY )
-#define pFIXSIZE ( bVarHeight ? pWidth : pHeight )
-#define pVARPOS  ( bVarHeight ? pY : pX )
-#define pVARSIZE ( bVarHeight ? pHeight : pWidth )
-
-#define SZPTR const SzPtr,
-#define PHEIGHT ,pHeight
-#define PWIDTH ,pWidth
-#define BFIXHEIGHT bFixHeight
-#endif
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -175,7 +151,6 @@ struct SwCrsrMoveState;
 //0100 0000 0000 0000   TXT
 //1000 0000 0000 0000   NOTXT
 
-#ifdef VERTICAL_LAYOUT
 // The type of the frame is internal represented by the 4-bit value nType,
 // which can expanded to the types above by shifting a bit (0x1 << nType)
 // Here are the corresponding defines for the compressed representation:
@@ -293,32 +268,6 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
 
-#else
-
-#define SWRECTFN
-#define V_WIDTH SSize().*pWidth
-#define V_HEIGHT SSize().*pHeight
-#define V_X Pos().*pX
-#define V_Y Pos().*pY
-
-#define FRMC_ROOT        0x0001
-#define FRMC_PAGE        0x0002
-#define FRMC_COLUMN      0x0004
-#define FRMC_HEADER      0x0008
-#define FRMC_FOOTER      0x0010
-#define FRMC_FTNCONT     0x0020
-#define FRMC_FTN         0x0040
-#define FRMC_BODY        0x0080
-#define FRMC_FLY         0x0100
-#define FRMC_SECTION     0x0200
-#define FRMC_UNUSED      0x0400
-#define FRMC_TAB         0x0800
-#define FRMC_ROW         0x1000
-#define FRMC_CELL        0x2000
-#define FRMC_TXT         0x4000
-#define FRMC_NOTXT       0x8000
-
-#endif
 
 //fuer Prepare() zur Benachrichtigung des Inhaltes durch das Layout auf
 //dem kurzen Dienstweg.
@@ -440,9 +389,7 @@ class SwFrm: public SwClient
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE & );
     SwFrm* _GetIndPrev();
     SwFrm* _GetIndNext();
-#ifdef VERTICAL_LAYOUT
     void SetDirFlags( BOOL bVert );
-#endif
 
     SwFrm( SwFrm & );       //Kopieren ist nicht erlaubt.
 protected:
@@ -451,7 +398,6 @@ protected:
     SwRect  aFrm;   //Absolute Dokumentposition und groesse des Frm
     SwRect  aPrt;   //Position der PrtArea rel zum Frm und groesse der PrtArea
 
-#ifdef VERTICAL_LAYOUT
     USHORT bFlag01:         1;
     USHORT bFlag02:         1;
     USHORT bFlag03:         1;
@@ -466,21 +412,13 @@ protected:
     USHORT bDerivedVert:    1;
     USHORT bVertical:       1;
     USHORT nType:         4;  //Who am I?
-#else
-    USHORT  nType; // I am what I am.
-#endif
 
     BOOL bValidPos:         1;
     BOOL bValidPrtArea:     1;
     BOOL bValidSize:        1;
     BOOL bValidLineNum:     1;
-#ifdef VERTICAL_LAYOUT
     BOOL bFixSize:          1;
     BOOL bUnUsed1:          1;
-#else
-    BOOL bFixHeight:        1;
-    BOOL bFixWidth:         1;
-#endif
     BOOL bCompletePaint:    1;  //Frame wird ganz gepaintet wenn TRUE, auch
                                 //wenn der Inhalt nur teilw. veraendert ist;
                                 //Bei CntntFrms wird ausschliesslich wenn TRUE
@@ -488,11 +426,7 @@ protected:
     BOOL bRetouche:         1;  //Der Frame ist fuer Retusche verantwortlich
                                 //wenn TRUE.
 public:
-#ifdef VERTICAL_LAYOUT
     BOOL bUnUsed2:          1;
-#else
-    BOOL bVarHeight:        1;  //Variable groesse ist die Hoehe wenn TRUE.
-#endif
 protected:
     BOOL bInfInvalid:       1;  //InfoFlags sind Invalid.
     BOOL bInfBody:          1;  //Frm steht im DokumentBody.
@@ -526,14 +460,11 @@ protected:
 
     SwFrm( SwModify* );
 
+    void CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse );
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
 
-#ifdef VERTICAL_LAYOUT
     USHORT GetType() const { return 0x1 << nType; }
-#else
-    USHORT GetType() const { return nType; }
-#endif
 
     static SwCache &GetCache()                { return *pCache; }
     static SwCache *GetCachePtr()             { return pCache;  }
@@ -615,7 +546,6 @@ public:
     inline BOOL IsInTab() const;
     inline BOOL IsInFly() const;
     inline BOOL IsInSct() const;
-#ifdef VERTICAL_LAYOUT
     inline BOOL IsReverse() const { return bReverse; }
     inline void SetReverse( BOOL bNew ){ bReverse = bNew ? 1 : 0; }
     inline BOOL IsVertical() const;
@@ -629,7 +559,6 @@ public:
     inline void SetDerivedR2L( BOOL bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
     inline void SetInvalidR2L( BOOL bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
     void CheckDirChange();
-#endif
     BOOL IsMoveable() const;
 
     //Ist es fuer den (Txt)Frm in der aktuellen Umgebung erlaubt eine
@@ -639,9 +568,7 @@ public:
     virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
 
-#ifdef VERTICAL_LAYOUT
     virtual void  CheckDirection( BOOL bVert );
-#endif
 
     void ReinitializeFrmSizeAttrFlags();
 
@@ -649,11 +576,7 @@ public:
           SwAttrSet *GetAttrSet();
     void             GetAttrSet( SwAttrSet* );
 
-#ifdef VERTICAL_LAYOUT
     inline BOOL HasFixSize() const { return bFixSize; }
-#else
-    BOOL HasFixSize( const SzPtr ) const;
-#endif
 
     //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
     //gehoert. Impl in frmsh.hxx
@@ -829,7 +752,6 @@ public:
 
     virtual ~SwFrm();
 
-#ifdef VERTICAL_LAYOUT
     // No inline cause we need the function pointers
     long GetTopMargin() const;
     long GetBottomMargin() const;
@@ -857,7 +779,6 @@ public:
     void MakeRightPos( const SwFrm*, const SwFrm*, BOOL );
     inline BOOL SwFrm::IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
-#endif
 
 #ifndef PRODUCT
     inline USHORT GetFrmId() const { return nFrmId; }
@@ -895,7 +816,6 @@ inline BOOL SwFrm::IsInSct() const
         ((SwFrm*)this)->SetInfFlags();
     return bInfSct;
 }
-#ifdef VERTICAL_LAYOUT
 BOOL SwFrm::IsVertical() const
 {
     if( bInvalidVert )
@@ -916,7 +836,6 @@ BOOL SwFrm::GetRightToLeftFlag() const
 {
     return bRightToLeft != 0;
 }
-#endif
 
 inline void SwFrm::SetCompletePaint() const
 {
