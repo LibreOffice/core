@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:31:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class ScUndoDoOutline: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoDoOutline( ScDocShell* pNewDocShell,
-                            USHORT nNewStart, USHORT nNewEnd, USHORT nNewTab,
+                            SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, BOOL bNewColumns,
                             USHORT nNewLevel, USHORT nNewEntry, BOOL bNewShow );
     virtual         ~ScUndoDoOutline();
@@ -112,9 +112,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nStart;
-    USHORT          nEnd;
-    USHORT          nTab;
+    SCCOLROW        nStart;
+    SCCOLROW        nEnd;
+    SCTAB           nTab;
     ScDocument*     pUndoDoc;
     BOOL            bColumns;
     USHORT          nLevel;
@@ -128,8 +128,8 @@ class ScUndoMakeOutline: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoMakeOutline( ScDocShell* pNewDocShell,
-                            USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                            USHORT nEndX, USHORT nEndY, USHORT nEndZ,
+                            SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                            SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScOutlineTable* pNewUndoTab,
                             BOOL bNewColumns, BOOL bNewMake );
     virtual         ~ScUndoMakeOutline();
@@ -142,8 +142,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScTripel        aBlockStart;
-    ScTripel        aBlockEnd;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
     ScOutlineTable* pUndoTable;
     BOOL            bColumns;
     BOOL            bMake;
@@ -155,7 +155,7 @@ class ScUndoOutlineLevel: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoOutlineLevel( ScDocShell* pNewDocShell,
-                            USHORT nNewStart, USHORT nNewEnd, USHORT nNewTab,
+                            SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             BOOL bNewColumns, USHORT nNewLevel );
     virtual         ~ScUndoOutlineLevel();
@@ -168,9 +168,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nStart;
-    USHORT          nEnd;
-    USHORT          nTab;
+    SCCOLROW        nStart;
+    SCCOLROW        nEnd;
+    SCTAB           nTab;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
     BOOL            bColumns;
@@ -183,8 +183,8 @@ class ScUndoOutlineBlock: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoOutlineBlock( ScDocShell* pNewDocShell,
-                            USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                            USHORT nEndX, USHORT nEndY, USHORT nEndZ,
+                            SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                            SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             BOOL bNewShow );
     virtual         ~ScUndoOutlineBlock();
@@ -197,8 +197,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScTripel        aBlockStart;
-    ScTripel        aBlockEnd;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
     BOOL            bShow;
@@ -210,8 +210,8 @@ class ScUndoRemoveAllOutlines: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
-                            USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                            USHORT nEndX, USHORT nEndY, USHORT nEndZ,
+                            SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                            SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab );
     virtual         ~ScUndoRemoveAllOutlines();
 
@@ -223,8 +223,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScTripel        aBlockStart;
-    ScTripel        aBlockEnd;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
 };
@@ -235,8 +235,8 @@ class ScUndoAutoOutline: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoAutoOutline( ScDocShell* pNewDocShell,
-                            USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                            USHORT nEndX, USHORT nEndY, USHORT nEndZ,
+                            SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                            SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab );
     virtual         ~ScUndoAutoOutline();
 
@@ -248,8 +248,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScTripel        aBlockStart;
-    ScTripel        aBlockEnd;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
 };
@@ -259,8 +259,8 @@ class ScUndoSubTotals: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoSubTotals( ScDocShell* pNewDocShell, USHORT nNewTab,
-                            const ScSubTotalParam& rNewParam, USHORT nNewEndY,
+                    ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
+                            const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
 //                          ScDBData* pNewData,
                             ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB );
@@ -274,9 +274,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     ScSubTotalParam aParam;                         // Original uebergebener Parameter
-    USHORT          nNewEndRow;                     // Ergebnis-Groesse
+    SCROW           nNewEndRow;                     // Ergebnis-Groesse
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
 //  ScDBData*       pUndoDBData;
@@ -289,7 +289,7 @@ class ScUndoSort: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoSort( ScDocShell* pNewDocShell, USHORT nNewTab,
+                    ScUndoSort( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSortParam& rParam,
                             BOOL bQuery, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pDest = NULL );
@@ -303,7 +303,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     ScSortParam     aSortParam;
     BOOL            bRepeatQuery;
     ScDocument*     pUndoDoc;
@@ -317,7 +317,7 @@ class ScUndoQuery: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoQuery( ScDocShell* pNewDocShell, USHORT nNewTab,
+                    ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScQueryParam& rParam, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pOld,
                             BOOL bSize, const ScRange* pAdvSrc );
@@ -331,7 +331,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     ScQueryParam    aQueryParam;
     ScDocument*     pUndoDoc;
     ScDBCollection* pUndoDB;                // wegen Quell- und Zielbereich
@@ -368,9 +368,9 @@ class ScUndoImportData: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoImportData( ScDocShell* pNewDocShell, USHORT nNewTab,
-                            const ScImportParam& rParam, USHORT nNewEndX, USHORT nNewEndY,
-                            USHORT nNewFormula,
+                    ScUndoImportData( ScDocShell* pNewDocShell, SCTAB nNewTab,
+                            const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
+                            SCCOL nNewFormula,
                             ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                             ScDBData* pNewUndoData, ScDBData* pNewRedoData );
     virtual         ~ScUndoImportData();
@@ -383,15 +383,15 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     ScImportParam   aImportParam;
-    USHORT          nEndCol;
-    USHORT          nEndRow;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
     ScDBData*       pUndoDBData;
     ScDBData*       pRedoDBData;
-    USHORT          nFormulaCols;
+    SCCOL           nFormulaCols;
     BOOL            bRedoFilled;
 };
 
@@ -400,9 +400,9 @@ class ScUndoRepeatDB: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoRepeatDB( ScDocShell* pNewDocShell, USHORT nNewTab,
-                            USHORT nStartX, USHORT nStartY, USHORT nEndX, USHORT nEndY,
-                            USHORT nResultEndRow, USHORT nCurX, USHORT nCurY,
+                    ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
+                            SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
+                            SCROW nResultEndRow, SCCOL nCurX, SCROW nCurY,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB,
                             const ScRange* pOldQ, const ScRange* pNewQ );
@@ -416,10 +416,10 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScTripel        aBlockStart;
-    ScTripel        aBlockEnd;
-    USHORT          nNewEndRow;
-    ScTripel        aCursorPos;
+    ScAddress       aBlockStart;
+    ScAddress       aBlockEnd;
+    SCROW           nNewEndRow;
+    ScAddress       aCursorPos;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
     ScRangeName*    pUndoRange;
@@ -498,7 +498,7 @@ public:
                         ScUndoConsolidate( ScDocShell* pNewDocShell,
                                 const ScArea& rArea, const ScConsolidateParam& rPar,
                                 ScDocument* pNewUndoDoc, BOOL bReference,
-                                USHORT nInsCount, ScOutlineTable* pTab,
+                                SCROW nInsCount, ScOutlineTable* pTab,
                                 ScDBData* pData );
     virtual             ~ScUndoConsolidate();
 
@@ -514,7 +514,7 @@ private:
     ScDocument*         pUndoDoc;
     ScConsolidateParam  aParam;
     BOOL                bInsRef;
-    USHORT              nInsertCount;
+    SCSIZE              nInsertCount;
     ScOutlineTable*     pUndoTab;
     ScDBData*           pUndoData;
 };
