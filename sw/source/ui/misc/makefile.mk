@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:33:40 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:23:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,6 @@ LIB1TARGET = $(SLB)$/$(TARGET).lib
 LIB1OBJFILES =	\
         $(SLO)$/glosdoc.obj	\
         $(SLO)$/glshell.obj \
-        $(SLO)$/hdftctrl.obj \
         $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/redlndlg.obj
        
