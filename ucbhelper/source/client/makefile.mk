@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2002-04-03 13:17:16 $
+#   last change: $Author: vg $ $Date: 2002-04-05 09:57:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,6 @@ SLOFILES=\
         $(SLO)$/commandenvironment.obj	\
                 $(SLO)$/fileidentifierconverter.obj \
         $(SLO)$/activedatasink.obj
-
-.IF "$(OS)$(CPUNAME)$(COMID)"=="LINUXINTELgcc3"
-NOOPTFILES=$(SLO)$/content.obj
-.ENDIF
 
 .ENDIF
 
