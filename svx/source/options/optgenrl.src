@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:16:21 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage RID_SFXPAGE_GENERAL
     Text [ french ] = "Donnйes d'identitй" ;
     Text [ dutch ] = "Gebruikersgegevens" ;
     Text [ portuguese_brazilian ] = "Benutzerdaten" ;
-    Text [ portuguese ] = "Dados sobre utilizador" ;
+    Text [ portuguese ] = "Dados de utilizador" ;
     Text[ chinese_simplified ] = "УГ»§ЧКБП";
     Text[ russian ] = "Данные пользователя";
     Text[ polish ] = "Dane uїytkownika";
@@ -215,7 +215,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ finnish ] = "~Lдhiosoite" ;
         Text [ danish ] = "Gade" ;
         Text [ french ] = "~Rue" ;
-        Text [ swedish ] = "~Gata" ;
+        Text [ swedish ] = "~Gatuadress" ;
         Text [ dutch ] = "~Straat" ;
         Text [ spanish ] = "~Calle" ;
         Text [ english_us ] = "~Street" ;
@@ -273,7 +273,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text = "PL~Z/Ort" ;
         Text [ ENGLISH ] = "~Zip/City" ;
         Text[ english_us ] = "Zip/City";
-        Text[ portuguese ] = "~CP/Cidade";
+        Text[ portuguese ] = "~CP/Localidade";
         Text[ russian ] = "Почт. индекс/Город";
         Text[ dutch ] = "~Postcode/Plaats";
         Text[ french ] = "Code postal/Ville";
@@ -341,8 +341,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ polish ] = "Paсstwo";
         Text[ portuguese_brazilian ] = "Paнs/~CEP/Cidade";
         Text[ japanese ] = "Ќ‘–ј";
-        Text[ chinese_simplified ] = "№ъјТ";
-        Text[ chinese_traditional ] = "°к®a";
+        Text[ chinese_simplified ] = "№ъјТ(~L)";
+        Text[ chinese_traditional ] = "°к®a(~L)";
         Text[ arabic ] = "ЗбИбП";
         Text[ greek ] = "Чюсб";
         Text[ korean ] = "±№°Ў";
@@ -406,17 +406,17 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ portuguese ] = "Tel. (~part./emprego)" ;
         Text [ finnish ] = "~Puhelin (kotiin/Co.)" ;
         Text [ danish ] = "Tlf. (priv./arb.)" ;
-        Text [ french ] = "Tйl. (Domicile/Bureau)" ;
+        Text [ french ] = "Tйl. (domicile/bureau)" ;
         Text [ swedish ] = "Tfn.: (~Priv./Arb.)" ;
         Text [ dutch ] = "Tel. (Priv/~Za)" ;
         Text [ spanish ] = "~Tel. (Privado/trabajo)" ;
         Text [ english_us ] = "Tel. (Home/Work)" ;
         LeftLabel = TRUE ;
-        Text[ chinese_simplified ] = "µз»°";
+        Text[ chinese_simplified ] = "µз»°(ЛЅИЛ/°м№«КТ)(~E)";
         Text[ russian ] = "Телефон (дом./служ.)";
         Text[ polish ] = "Tel. (pryw./sіuїb.)";
         Text[ japanese ] = "Tel.(Ћ©‘о/‰пЋР)";
-        Text[ chinese_traditional ] = "№qёЬ";
+        Text[ chinese_traditional ] = "№qёЬ(Ёp¤H/їм¤Ѕ«З)(~E)";
         Text[ arabic ] = "ЗбеЗКЭ (гдТб/Ъгб)";
         Text[ greek ] = "Фзл. (ПйкЯб/ЕсгбуЯб)";
         Text[ korean ] = "Tel. (Бэ/Иё»з)";
@@ -487,19 +487,19 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ portuguese_brazilian ] = "Endereзo " ;
         Text [ portuguese ] = "  Endereзo  " ;
         Text [ finnish ] = " Osoite " ;
-        Text [ danish ] = " Adresse" ;
-        Text [ french ] = " Adresse" ;
+        Text [ danish ] = " Adresse " ;
+        Text [ french ] = " Adresse " ;
         Text [ swedish ] = " Adress  " ;
-        Text [ dutch ] = " Adres  " ;
-        Text [ spanish ] = " Direcciуn" ;
-        Text [ english_us ] = " Address" ;
-        Text[ chinese_simplified ] = " µШЦ·";
-        Text[ russian ] = "Почтовый адрес ";
-        Text[ polish ] = "Adres ";
-        Text[ japanese ] = " ЏZЏЉ";
-        Text[ chinese_traditional ] = " ¦a§}";
+        Text [ dutch ] = "  Adres   " ;
+        Text [ spanish ] = "  Direcciуn " ;
+        Text [ english_us ] = " Address " ;
+        Text[ chinese_simplified ] = " µШЦ· ";
+        Text[ russian ] = " Адрес ";
+        Text[ polish ] = " Adres ";
+        Text[ japanese ] = " ЏZЏЉ ";
+        Text[ chinese_traditional ] = " ¦a§} ";
         Text[ arabic ] = "ЗбЪджЗд ";
-        Text[ greek ] = " Дйеэихнуз";
+        Text[ greek ] = " Дйеэихнуз ";
         Text[ korean ] = "БЦјТ ";
         Text[ turkish ] = "Adres ";
         Text[ language_user1 ] = " ";
@@ -541,7 +541,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ portuguese ] = "~Cidade/Paнs/CP";
         Text[ russian ] = "Улица/Область/Почтовый индекс";
         Text[ dutch ] = "Plaats/~Straat/Postcode";
-        Text[ french ] = "Ville/Pays/Code postal";
+        Text[ french ] = "Ville/Йtat/Code postal";
         Text[ spanish ] = "~Ciudad/Paнs/CP";
         Text[ italian ] = "Localiа/Provincia/C.A.P.";
         Text[ danish ] = "By/Land/Postnummer";
@@ -563,7 +563,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ English ] = "Bitte beachten Sie, daЯ StraЯe, Postleitzahl und Ort fьr die Berechnung des Registrierungsschlьssels herangezogen werden. Bis zur Registrierung kцnnen diese Benutzerdaten nicht mehr geдndert werden.  Wollen Sie diese Benutzerdaten jetzt noch дndern?" ;
         Text[ english_us ] = "Note that street, Zip code and city are used for generating the registration key. Until the registration has been carried out successfully, user data cannot be changed. Do you want to modify personal data now?";
         Text[ portuguese ] = "Nгo esqueзa que a rua, o cуdigo postal e a localidade serгo utilizados para calcular o seu cуdigo de registo. Nгo poderб modificar estes dados de utilizador atй efectuar o seu registo. Ainda deseja modificar estes dados?";
-        Text[ russian ] = "Пожалуйста, учтите, что данные почтового адреса будт использованы для создания регистрационного ключа. Изменять эти данные до осуществления регистрации нельзя. Вы хотие сейчас изменить данные пользователя?";
+        Text[ russian ] = "Пожалуйста, учтите, что данные почтового адреса будут использованы для создания регистрационного ключа. Изменять эти данные до осуществления регистрации нельзя. Вы хотите сейчас изменить данные пользователя?";
         Text[ dutch ] = "Wij wijzen u erop dat straat, postcode en plaats worden gebruikt voor het berekenen van de registratiesleutel. Tot aan de registratie mag u deze gegevens niet meer veranderen. Wilt u ze nu nog veranderen?";
         Text[ french ] = "Veuillez noter que le code d'enregistrement est gйnйrй а partir de vos donnйes d'identitй telles que rue, code postal et ville. Vous ne pourrez plus modifier ces donnйes jusqu'а ce que vous vous fassiez enregistrer. Avez-vous une derniиre modification а apporter avant de poursuivre ?";
         Text[ spanish ] = "Tenga en cuenta que la calle, el cуdigo postal y la ciudad se tendrбn en cuenta para determinar la clave de registro. Estos datos no podrбn ser modificados hasta que se registre. їDesea modificar aъn estos datos de usuario?";
@@ -606,8 +606,8 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ portuguese ] = "Modificou os dados de utilizador.\nNгo se esqueзa de que o seu registo expirarб.\nPor esta razгo necessitarб de um novo cуdigo de registo dentro do prazo de 30 dias.\nEncontrarб o formulбrio de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
     Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten geдndert.\nBitte bedenken Sie, daЯ dadurch die Registrierung verfдllt.\nSie benцtigen einen neuen Registrierungsschlьssel, der innerhalb der nдchsten 30 Tage eingegeben werden muЯ.\nDas Registrierungsformular finden Sie im Menь Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich дndern?";
     Message[ danish ] = "Du har жndret brugerdataene.\nBemжrk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnшgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjжlp - Registrering...\nEr du sikker pе, at du vil жndre brugerdataene?";
-    Message[ chinese_simplified ] = "ДъТСѕ­ёьёДБЛУГ»§ЧКБПЎЈ\nХвСщДъµДЧўІбѕН»бОЮР§ЎЈ\nДъ±ШРлФЪЅсєу30МмЦ®ДЪКдИлТ»ёцРВµДЧўІбГЬВлЎЈ\nДъДЬ№»ФЪІЛµҐГьБо\"ЗуЦъ - ЧўІб...\"ґ¦ХТµЅЧўІб±нµҐЎЈ\nДъХжТЄёьёДУГ»§ЧКБПЈї";
-    Message[ russian ] = "Вы изменили данные пользователя.\nПожалуйста, помните, что из-за этого Вы утратите регистрацию.\nВам понодобится новый регистрационный ключ, который необходимо будет ввести в течение 30 дней.\nРегистрационный формуляр Вы найдете в меню Помощь - Регистрация...\nВы действительно хотите изменить данные пользователя?";
+    Message[ chinese_simplified ] = "ДъТСѕ­ёьёДБЛУГ»§ЧКБПЎЈ\nХвСщДъµДЧўІбѕН»бОЮР§ЎЈ\nДъ±ШРлФЪЅсєу30МмЦ®ДЪКдИлТ»ёцРВµДЧўІбГЬВлЎЈ\nДъДЬ№»ФЪІЛµҐЎ°°пЦъ - ЧўІб...Ў±ґ¦ХТµЅЧўІб±нµҐЎЈ\nДъХжТЄёьёДУГ»§ЧКБПЈї";
+    Message[ russian ] = "Вы изменили данные пользователя.\nПожалуйста, помните, что из-за этого вы утратите регистрацию.\nВам понодобится новый регистрационный ключ, который необходимо будет ввести в течение 30 дней.\nРегистрационный формуляр вы найдете в меню Помощь - Регистрация...\nВы действительно хотите изменить данные пользователя?";
     Message[ polish ] = "Zmieniіeњ dane uїytkownika.\nProszк uwzglкdnij, їe przez to traci waїnoњж rejestracja.\nPotrzebujesz nowego klucza rejestracyjnego, ktуry musi byж wpisany w ci№gu nastкpnych 30 dni.\nFormularz rejestracji znajdziesz w menu Pomoc - Rejestracja...\nChcesz na pewno zmieniж dane uїytkownika?";
     Message[ japanese ] = "Х°»Ю°ГЮ°А‚Є•ПЌX‚і‚к‚Ь‚µ‚ЅЃB\n‚»‚М‚Ѕ‚Я“o^‚ЄЋёЊш‚·‚й‚М‚Н–Ж‚к‚Ь‚№‚сЃB\nђV‚µ‚ў“o^·°‚Є•K—v‚Ж‚И‚и¤‚»‚к‚р30“ъ€И“а‚ЙЌП‚Ь‚і‚И‚Ї‚к‚О‚И‚и‚Ь‚№‚сЃB\n“o^—pЋ†‚Н[ТЖ­°НЩМЯ/“o^...]‚Й‚ ‚и‚Ь‚·ЃB\nХ°»Ю°ГЮ°А‚р–{“–‚Й•ПЌX‚µ‚Ь‚·‚©?";
     Message[ chinese_traditional ] = "±z¤wёgЕЬ§уЁПҐОЄМёк®ЖЎC\nіoјЛ±zЄєµщҐUґN·|µL®ДЎC\n±z»Э­n¤@­У·sЄєЎMҐBҐІ¶·¦b30¤С¤§¤єїй¤JЄєµщҐU±KБдЅXЎC\n±zЇа°ч¦bҐ\\ЇаЄн»Ў©ъЎAµщҐU¤§¤U§дЁмµщҐUЄн®жЎC\nЇu­n­Ч§пЁПҐОЄМёк®ЖЎH";
