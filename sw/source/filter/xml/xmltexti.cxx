@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: mib $ $Date: 2001-04-04 10:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
+#ifndef _FMTANCHR_HXX
+#include <fmtanchr.hxx>
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -156,6 +159,9 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal
             nHeight = MINFLY;
         rItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
     }
+
+    SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
+    rItemSet.Put( aAnchor );
 }
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
@@ -224,7 +230,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
+                         RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     SwFrmFmt *pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(),
@@ -316,7 +323,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
+                         RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     SwApplet_Impl aAppletImpl ( aItemSet );
@@ -342,7 +350,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
+                         RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
        INetURLObject aURLObj;
@@ -378,8 +387,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
-
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
+                         RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     SfxFrameDescriptor *pFrameDesc = new SfxFrameDescriptor( 0 );
