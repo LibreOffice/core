@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:52:10 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,17 +148,6 @@
 
 namespace
 {
-    //Utility to sort SwTxtFmtColl's by their outline numbering level
-    class outlinecmp : public
-        std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
-    {
-    public:
-        bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
-        {
-            return pB->GetOutlineLevel() < pB->GetOutlineLevel();
-        }
-    };
-
     /*
      Stroustroup forgets copy_if, See C++ Programming language Chp 18, pg 530
     */
@@ -172,6 +161,22 @@ namespace
             ++first;
         }
         return res;
+    }
+
+    //Utility to sort SwTxtFmtColl's by their outline numbering level
+    class outlinecmp : public
+        std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
+    {
+    public:
+        bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
+        {
+            return pB->GetOutlineLevel() < pB->GetOutlineLevel();
+        }
+    };
+
+    bool IsValidSlotWhich(USHORT nSlotId, USHORT nWhichId)
+    {
+        return (nSlotId != 0 && nWhichId != 0 && nSlotId != nWhichId);
     }
 
     /*
@@ -331,10 +336,33 @@ namespace sw
 
     namespace hack
     {
+
+        USHORT TransformWhichBetweenPools(const SfxItemPool &rDestPool,
+            const SfxItemPool &rSrcPool, USHORT nWhich)
+        {
+            USHORT nSlotId = rSrcPool.GetSlotId(nWhich);
+            if (IsValidSlotWhich(nSlotId, nWhich))
+                nWhich = rDestPool.GetWhich(nSlotId);
+            else
+                nWhich = 0;
+            return nWhich;
+        }
+
+        USHORT GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
+            const SwDoc &rDoc, USHORT nWhich)
+        {
+            if (RES_WHICHHINT_END < *(rSet.GetRanges()))
+            {
+                nWhich = TransformWhichBetweenPools(*rSet.GetPool(),
+                    rDoc.GetAttrPool(), nWhich);
+            }
+            return nWhich;
+        }
+
         DrawingOLEAdaptor::DrawingOLEAdaptor(SdrOle2Obj &rObj,
             SvPersist &rPers)
-            : mxIPRef(rObj.GetObjRef()),
-            msOrigPersistName(rObj.GetPersistName()), mrPers(rPers)
+            : msOrigPersistName(rObj.GetPersistName()),
+            mxIPRef(rObj.GetObjRef()), mrPers(rPers)
         {
             rObj.SetPersistName(String());
             rObj.SetObjRef(SvInPlaceObjectRef());
