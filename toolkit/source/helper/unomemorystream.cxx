@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomemorystream.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: hjs $ $Date: 2000-11-03 17:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 
 #include <toolkit/helper/unomemorystream.hxx>
+#include <algorithm>
 
 //  ----------------------------------------------------
 //  class UnoMemoryStream
@@ -101,7 +102,7 @@ sal_Int32 UnoMemoryStream::readSomeBytes( ::com::sun::star::uno::Sequence< sal_I
     sal_Int32 nAvailable = available();
     if( nAvailable )
     {
-        return readBytes( rData, min( nMaxBytesToRead , nAvailable ) );
+        return readBytes( rData, std::min( nMaxBytesToRead , nAvailable ) );
     }
     else
     {
