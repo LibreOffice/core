@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-01 11:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,51 +706,51 @@ bool ControlImportContext::importDateFormatProperty(
     if (aFormat.getLength())
     {
         sal_Int16 nFormat;
-        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system short") ))
+        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short") ))
         {
             nFormat = 0;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system short YY") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short_YY") ))
         {
             nFormat = 1;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system short YYYY") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_short_YYYY") ))
         {
             nFormat = 2;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system long") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system_long") ))
         {
             nFormat = 3;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short DDMMYY") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_DDMMYY") ))
         {
             nFormat = 4;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short MMDDYY") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_MMDDYY") ))
         {
             nFormat = 5;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYMMDD") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYMMDD") ))
         {
             nFormat = 6;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short DDMMYYYY") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_DDMMYYYY") ))
         {
             nFormat = 7;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short MMDDYYYY") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_MMDDYYYY") ))
         {
             nFormat = 8;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYYYMMDD") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYYYMMDD") ))
         {
             nFormat = 9;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYMMDD DIN5008") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYMMDD_DIN5008") ))
         {
             nFormat = 10;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYYYMMDD DIN5008") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short_YYYYMMDD_DIN5008") ))
         {
             nFormat = 11;
         }
@@ -775,27 +775,27 @@ bool ControlImportContext::importTimeFormatProperty(
     if (aFormat.getLength())
     {
         sal_Int16 nFormat;
-        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h short") ))
+        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h_short") ))
         {
             nFormat = 0;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h long") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h_long") ))
         {
             nFormat = 1;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h short") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h_short") ))
         {
             nFormat = 2;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h long") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h_long") ))
         {
             nFormat = 3;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration short") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration_short") ))
         {
             nFormat = 4;
         }
-        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration long") ))
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration_long") ))
         {
             nFormat = 5;
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.3 2001-02-28 18:22:06 dbo Exp $
+	$Id: dialog.dtd,v 1.4 2001-03-01 11:22:45 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -56,29 +56,46 @@
 
 <!ENTITY % boolean "(true|false)">
 <!ENTITY % numeric "CDATA">
-<!ENTITY % date-format "(system short|system short YY|system short YYYY|system long|short DDMMYY|short MMDDYY|short YYMMDD|short DDMMYYYY|short MMDDYYYY|short YYYYMMDD|short YYMMDD DIN5008|short YYYYMMDD DIN5008)">
-<!ENTITY % time-format "(24h short|24h long|12h short|12h long|Duration short|Duration long)">
 
-<!ENTITY % pos "dialog:left %numeric; #REQUIRED dialog:top %numeric; #REQUIRED">
-<!ENTITY % size "dialog:width %numeric; #REQUIRED dialog:height %numeric; #REQUIRED">
-
-<!ENTITY % default-attributes "dialog:style-id CDATA #IMPLIED
-			       dialog:id CDATA #REQUIRED
+<!ENTITY % default-attributes "dialog:id CDATA #REQUIRED
+			       dialog:left %numeric; #REQUIRED
+			       dialog:top %numeric; #REQUIRED
+			       dialog:width %numeric; #REQUIRED
+			       dialog:height %numeric; #REQUIRED
+			       dialog:style-id CDATA #IMPLIED
 			       dialog:class-id CDATA #IMPLIED
 			       dialog:tab-index %numeric; #IMPLIED
 			       dialog:disabled %boolean; #IMPLIED
-			       %pos;
-			       %size;
 			       dialog:printable %boolean; #IMPLIED
 			       ">
 
-<!ENTITY % control "(dialog:bulletinboard|dialog:button|dialog:checkbox|dialog:menulist|dialog:radiogroup|dialog:titledbox|dialog:textfield|dialog:text|dialog:currencyfield|dialog:filecontrol|dialog:img|dialog:datefield|dialog:numericfield|dialog:patternfield)">
+<!ENTITY % control "(dialog:bulletinboard|
+		     dialog:button|
+		     dialog:checkbox|
+		     dialog:combobox|
+		     dialog:menulist|
+		     dialog:radiogroup|
+		     dialog:titledbox|
+		     dialog:textfield|
+		     dialog:text|
+		     dialog:filecontrol|
+		     dialog:img|
+		     dialog:timefield|
+		     dialog:datefield|
+		     dialog:numericfield|
+		     dialog:currencyfield|
+		     dialog:patternfield)
+		   ">
 		    
 <!ELEMENT dialog:dialogs (dialog:window*)>
 <!ATTLIST dialog:dialogs xmlns:dialog CDATA #FIXED "http://openoffice.org/2000/dialog">
 
 <!ELEMENT dialog:window (dialog:styles*, dialog:bulletinboard*)>
-<!ATTLIST dialog:window %pos; %size; dialog:value CDATA #IMPLIED>
+<!ATTLIST dialog:window dialog:left %numeric; #IMPLIED
+			dialog:top %numeric; #IMPLIED
+			dialog:width %numeric; #IMPLIED
+			dialog:height %numeric; #IMPLIED
+			dialog:title CDATA #IMPLIED>
 
 <!ELEMENT dialog:styles (dialog:style+)>
 
@@ -111,10 +128,12 @@
 		       dialog:script-type CDATA #IMPLIED
 		       dialog:script-code CDATA #IMPLIED
 		       dialog:param CDATA #IMPLIED
-			>
+		       >
 			
-<!ELEMENT dialog:bulletinboard (%control;*)>
-<!ATTLIST dialog:bulletinboard %pos;>
+<!ELEMENT dialog:bulletinboard ((%control;)*)>
+<!ATTLIST dialog:bulletinboard dialog:left %numeric; #IMPLIED
+			       dialog:top %numeric; #IMPLIED
+			       >
 
 <!ELEMENT dialog:button (dialog:event*)>
 <!ATTLIST dialog:button %default-attributes;
@@ -165,7 +184,7 @@
 		       dialog:tristate %boolean; #IMPLIED
 		       >
 
-<!ELEMENT dialog:titledbox (dialog:title?, dialog:radio*, %control;*)>
+<!ELEMENT dialog:titledbox (dialog:title?, dialog:radio*, (%control;)*)>
 <!ATTLIST dialog:titledbox %default-attributes;
 			   >
 <!ELEMENT dialog:title EMPTY>
@@ -224,7 +243,7 @@
 			   dialog:tabstop %boolean; #IMPLIED
 			   dialog:readonly %boolean; #IMPLIED
 			   dialog:strict-format %boolean; #IMPLIED
-			   dialog:date-format %date-format; #IMPLIED
+			   dialog:date-format (system_short|system_short_YY|system_short_YYYY|system_long|short_DDMMYY|short_MMDDYY|short_YYMMDD|short_DDMMYYYY|short_MMDDYYYY|short_YYYYMMDD|short_YYMMDD_DIN5008|short_YYYYMMDD_DIN5008) #IMPLIED
 			   dialog:value CDATA #IMPLIED
 			   dialog:value-min CDATA #IMPLIED
 			   dialog:value-max CDATA #IMPLIED
@@ -250,13 +269,13 @@
 			   dialog:tabstop %boolean; #IMPLIED
 			   dialog:readonly %boolean; #IMPLIED
 			   dialog:strict-format %boolean; #IMPLIED
-			   dialog:time-format %time-format; #IMPLIED
+			   dialog:time-format (24h_short|24h_long|12h_short|12h_long|Duration_short|Duration_long) #IMPLIED
 			   dialog:value CDATA #IMPLIED
 			   dialog:value-min CDATA #IMPLIED
 			   dialog:value-max CDATA #IMPLIED
 			   dialog:spin %boolean; #IMPLIED
 			   >
-				
+
 <!ELEMENT dialog:patternfield (dialog:event*)>
 <!ATTLIST dialog:patternfield %default-attributes;
 			      dialog:tabstop %boolean; #IMPLIED

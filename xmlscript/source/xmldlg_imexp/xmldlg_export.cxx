@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-01 11:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,40 +586,40 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
             switch (*(sal_Int16 const *)a.getValue())
             {
             case 0:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system short") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short") ) );
                 break;
             case 1:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system short YY") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short_YY") ) );
                 break;
             case 2:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system short YYYY") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short_YYYY") ) );
                 break;
             case 3:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system long") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_long") ) );
                 break;
             case 4:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short DDMMYY") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_DDMMYY") ) );
                 break;
             case 5:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short MMDDYY") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_MMDDYY") ) );
                 break;
             case 6:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYMMDD") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYMMDD") ) );
                 break;
             case 7:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short DDMMYYYY") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_DDMMYYYY") ) );
                 break;
             case 8:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short MMDDYYYY") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_MMDDYYYY") ) );
                 break;
             case 9:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYYYMMDD") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD") ) );
                 break;
             case 10:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYMMDD DIN5008") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYMMDD_DIN5008") ) );
                 break;
             case 11:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYYYMMDD DIN5008") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD_DIN5008") ) );
                 break;
             }
         }
@@ -636,22 +636,22 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
             switch (*(sal_Int16 const *)a.getValue())
             {
             case 0:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h short") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h_short") ) );
                 break;
             case 1:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h long") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h_long") ) );
                 break;
             case 2:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h short") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h_short") ) );
                 break;
             case 3:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h long") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h_long") ) );
                 break;
             case 4:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration short") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_short") ) );
                 break;
             case 5:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration long") ) );
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_long") ) );
                 break;
             }
         }
@@ -1123,7 +1123,11 @@ static void exportDialogModel(
         ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
         Reference< xml::sax::XAttributeList > xWindow( pWindow );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":label") ) );
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
+        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
+        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
         pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
         pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
