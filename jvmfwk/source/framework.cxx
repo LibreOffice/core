@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:54:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#include "external/boost/scoped_array.hpp"
+#include "boost/scoped_array.hpp"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "osl/thread.hxx"
