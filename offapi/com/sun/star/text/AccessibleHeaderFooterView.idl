@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleHeaderFooterView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:18:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,23 +92,30 @@ service AccessibleHeaderFooterView
         on the screen.
 
         <ul>
-            <li>The parent returned by <type>getAccessibleParent</type>
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method>
                 is either the accessible view of a text document,
                 a page of the accessible page preview of a text document,
                 or the accessible page preview of a spreadsheet document.
-            <li>The children returned by <type>getAccessibleChild</type> all
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all
                 support the interface XAccessible. Calling
-                <type>getAccessibleContext</type> for these children returns
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these children returns
                 an object that supports one of the following services.
                 <ul>
-                    <li><type>com.sun.star.text.AccessibleParagraphView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>:
                         A child of this kind is returned for every paragraph
                         that is contained in the document body and
                         is at least partially visible. The child always
                         represents a whole paragarph (and not a fragment only),
                         because there are no page breaks within headers and
                         footers.
-                    <li><type>com.sun.star.table.AccessibleTableView</type>:
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>:
                         A child of this kind is returned for every table
                         that is contained in the document body
                         and is at least partially visible. The child always
@@ -117,7 +124,11 @@ service AccessibleHeaderFooterView
                         footers.
                 </ul>
             <p>The logical order of paragraphs and tables is never changed.
-            <li>The role is either <type>HEADER</type> or <type>FOOTER</type>.
+            <li>The role is either
+                <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::HEADER</const> or
+                <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::FOOTER</const>.
             <li>The name is "header" or "footer" (or the equivalent term
                 in application's language) with a number appended.
             <li>The description is "header" or "footer" (or the equivalent term
@@ -125,16 +136,23 @@ service AccessibleHeaderFooterView
                 the format that is specified in the page's style.
             <li>There are no relations.
             <li>The following states might be contained in the state set
-                returned by <type>getAccessibleStateSet</type>:
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleStateSet</type>:
                 <ul>
-                    <li><type>DEFUNC</type> (indicates that the document
-                        window has been closed or the header or footer is
-                        not existing any longer)
-                    <li><type>EDITABLE</type>
-                    <li><type>ENABLED</type> (always contained)
-                    <li><type>OPAQUE</type>
-                    <li><type>SHOWING</type>
-                    <li><type>VISIBLE</type>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the header or
+                        footer is not existing any longer)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::EDITABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
                 the western, asian or complex default language of the document.

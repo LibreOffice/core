@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:18:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,44 +91,60 @@ service AccessiblePageView
           page preview of a text document.
 
         <ul>
-            <li>The parent returned by <type>getAccessibleParent</type>
-                is the accessible page preview of a text document.
-                That is, the object returned by
-                <type>getAccessibleContext</type> supports
-                <type>com.sun.star.text.AccessibleTextDocumentPageView</type>.
-            <li>The children returned by <type>getAccessibleChild</type> all
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method> is the
+                accessible page preview of a text document.  That is, the
+                object returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> supports
+                <type scope="::com::sun::star::text"
+                >AccessibleTextDocumentPageView</type>.
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all
                 support the interface XAccessible. Calling
-                <type>getAccessibleContext</type> for these children returns
-                an object that supports one of the following services.
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these
+                children returns an object that supports one of the
+                following services.
                 <ul>
-                    <li><type>com.sun.star.text.AccessibleHeaderFooterView</type>:
-                        A child of this kind is returned for every header and
-                        footer that is conatined in the page.
-                    <li><type>com.sun.star.text.AccessibleFootnoteView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleHeaderFooterView</type>:
+                        A child of this kind is returned for every header
+                        and footer that is conatined in the page.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleFootnoteView</type>:
                         A child of this kind is returned for every footnote
                         that is conatined in the page.
-                    <li><type>com.sun.star.text.AccessibleEndnoteView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleEndnoteView</type>:
                         A child of this kind is returned for every endnote
                         that is conatined in the page.
-                    <li><type>com.sun.star.text.AccessibleParagraphView</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>:
                         A child of this kind is returned for every paragraph
                         fragment that is contained in the page.
                         A paragraph fragment is the part of a paragraph that
                         is displayed on a certain page.
-                    <li><type>com.sun.star.table.AccessibleTableView</type>:
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>:
                         A child of this kind is returned for every table
                         fragment that is contained in the page.
                         A table fragment is the part of a table that is
                         displayed on a certain page.
-                    <li><type>com.sun.star.text.AccessibleTextFrameView</type>:
-                        A child of this kind is returned for every text frame
-                        that is conrtained in the page. These objects are
-                           children of the <type>AccessiblePageView</type>
-                        regardless whether they are bound to the page,
-                        a paragarph, a frame, or a character. The only
-                        exception are text frames that are bound as character.
-                        They are childen of the paragraph they are contained in.
-                    <li><type>com.sun.star.text.AccessibleTextGraphicObject</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextFrameView</type>:
+                        A child of this kind is returned for every text
+                        frame that is conrtained in the page. These objects
+                        are children of the <type>AccessiblePageView</type>
+                        regardless whether they are bound to the page, a
+                        paragarph, a frame, or a character. The only
+                        exception are text frames that are bound as
+                        character.  They are childen of the paragraph they
+                        are contained in.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextGraphicObject</type>:
                         A child of this kind is returned for every graphic that
                         is contained in the page. These objects are
                         children of the <type>AccessiblePageView</type>
@@ -136,7 +152,8 @@ service AccessiblePageView
                         a frame or a character. The only exception
                         are text frames that are bound as character. They are
                         childen of the paragraph they are contained in.
-                    <li><type>com.sun.star.text.AccessibleTextEmbeddedObject</type>:
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextEmbeddedObject</type>:
                         A child of this kind is returned for every embedded
                         object that is conatained in the page.
                         These objects are children of the
@@ -144,10 +161,12 @@ service AccessiblePageView
                         whether they are bound to a page, a paragarph, a frame,
                         or a character.  They are childen of the paragraph they
                         are contained in.
-                    <li><type>com.sun.star.drawing.Accessible*</type>:
-                        A child of this kind is returned for every shape that
-                        is contained in the page. These objects are
-                        children of the <type>AccessibleTextDocumentView</type>
+                    <li><type scope="::com::sun::star::drawing"
+                        >AccessibleShape</type>:
+                        A child of this kind (or one of its derived
+                        interfaces) is returned for every shape that is
+                        contained in the page. These objects are children of
+                        the <type>AccessibleTextDocumentView</type>
                         regardless whether they are bound to a page, a
                         paragraph, a frame or a character.
                 </ul>
@@ -176,26 +195,36 @@ service AccessiblePageView
                         with the exception of controls that appear really last,
                         but also keep the z order.
                 </ul>
-            <li>The role is <type>PANEL</type>
+            <li>The role is <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::PANEL</const>
             <li>The name is "page" (or the equivalent term
                 in application's language) with a number appended.
             <li>The description is "page" (or the equivalent term
                 in application's language) with the page number or
                 character appended in the format that is specified in the
                 page style.
-            <li>There are no relations.</em>
+            <li>There are no relations.</li>
             <li>The following states might be contained in the state set
-                returned by <type>getAccessibleStateSet</type>:
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>:
                 <ul>
-                    <li><type>DEFUNC</type> (indicates that the document
-                        window has been closed or the endnote is
-                        not existing any longer)
-                    <li><type>ENABLED</type> (always contained)
-                    <li><type>OPAQUE</type>
-                    <li><type>FOCUSABLE</type>
-                    <li><type>FOCUSED</type>
-                    <li><type>SHOWING</type>
-                    <li><type>VISIBLE</type>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the endnote
+                        is not existing any longer)</li>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always
+                        contained)</li>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSED</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>The locale is the application's locale.
         </ul>
