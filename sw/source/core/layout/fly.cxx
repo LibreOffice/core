@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:39:46 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _POLY_HXX //autogen
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _CONTDLG_HXX_ //autogen
 #include <svx/contdlg.hxx>
