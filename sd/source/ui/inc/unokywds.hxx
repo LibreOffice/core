@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 12:40:59 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 16:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,10 @@ SD_CONSTASCII_ACTION( sUNO_Service_MeasureProperties, UNO_PREFIX "drawing.Measur
 SD_CONSTASCII_ACTION( sUNO_Service_PageBackground, UNO_PREFIX "drawing.PageBackground" );
 SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayer, UNO_PREFIX "drawing.Layer" );
 SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayerManager, UNO_PREFIX "drawing.LayerManager" );
+SD_CONSTASCII_ACTION( sUNO_Service_GraphicObjectShape, UNO_PREFIX "drawing.GraphicObjectShape" );
+SD_CONSTASCII_ACTION( sUNO_Service_ImageMapRectangleObject, UNO_PREFIX "image.ImageMapRectangleObject" );
+SD_CONSTASCII_ACTION( sUNO_Service_ImageMapCircleObject, UNO_PREFIX "image.ImageMapCircleObject" );
+SD_CONSTASCII_ACTION( sUNO_Service_ImageMapPolygonObject, UNO_PREFIX "image.ImageMapPolygonObject" );
 
 // properties
 SD_CONSTASCII_ACTION( sUNO_Prop_Background, "Background" );
