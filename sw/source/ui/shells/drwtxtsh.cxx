@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 12:01:33 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
     {
         LanguageType nLang = ((const SvxLanguageItem&)rSh.GetDefault(
                                    GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetScriptTypeOfLanguage( LANGUAGE_SYSTEM )) )
+                                GetScriptTypeOfLanguage( GetAppLanguage())) )
                                 ).GetLanguage();
         switch(rReq.GetSlot())
         {
@@ -712,6 +712,9 @@ void SwDrawTextShell::InsertSymbol()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/03/09 12:01:33  jp
+      new: Transliteration for TextBoxes
+
       Revision 1.2  2001/02/21 17:38:28  jp
       use new function GetWhichOfScript/GetScriptTypeOfLanguage
 

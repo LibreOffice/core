@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 10:42:29 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             if( !aOpt.GetLanguage() )
             {
                 USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetScriptTypeOfLanguage( LANGUAGE_SYSTEM ));
+                                GetScriptTypeOfLanguage( GetAppLanguage() ));
                 aOpt.SetLanguage( ((SvxLanguageItem&)rDocSh.GetDoc()->
                             GetDefault( nWhich )).GetLanguage());
             }
@@ -522,6 +522,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/03/22 10:42:29  tl
+      Type of aLanguageLB changed to SvxLanguageBox
+
       Revision 1.3  2001/02/21 12:55:55  jp
       use new function GetWhichOfScript() to get right WhichId
 
