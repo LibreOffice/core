@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CreateDateTime.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:27:46 $
+ *  last change: $Author: os $ $Date: 2002-11-15 14:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@ service CreateDateTime
         @see com::sun::star::util::NumberFormatter
     */
     [property]long NumberFormat;
+    /** determines whether changes in language attributes at the position the text field
+        is located also change the number format as appropriate for this language.
+     */
+    [optional, property] boolean IsFixedLanguage;
 };
 
 //=============================================================================

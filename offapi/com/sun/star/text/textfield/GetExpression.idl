@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GetExpression.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:34:00 $
+ *  last change: $Author: os $ $Date: 2002-11-15 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,10 @@ service GetExpression
     /** deprecated
      */
     [property]short VariableSubtype;
-
+    /** determines whether changes in language attributes at the position the text field
+        is located also change the number format as appropriate for this language.
+     */
+    [optional, property] boolean IsFixedLanguage;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: os $ $Date: 2002-01-08 15:29:08 $
+#   last change: $Author: os $ $Date: 2002-11-15 14:00:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ IDLFILES=\
     ChangeAuthor.idl\
     ChangeDateTime.idl\
     CreateAuthor.idl\
+    CreateDateTime.idl\
     ChangeAuthor.idl\
     Description.idl\
     EditTime.idl\

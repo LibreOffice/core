@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetExpression.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:16 $
+ *  last change: $Author: os $ $Date: 2002-11-15 14:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,10 @@ service SetExpression
     /** contains the name of the set expression field master this field is connected to.
      */
     [property]string VariableName;
-
+    /** determines whether changes in language attributes at the position the text field
+        is located also change the number format as appropriate for this language.
+     */
+    [optional, property] boolean IsFixedLanguage;
 };
 
 //=============================================================================
