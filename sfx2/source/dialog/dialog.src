@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 21:56:03 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message[ chinese_traditional ] = "³o­ΣΌΛ¦΅µLªk³Q·ν§@ΌΛ¦΅¤ε¥σ΅M\n§_«h·|¤ή°_»ΌΒk¤ή¥Ξ΅C";
     Message[ arabic ] = "αΗ νγίδ ΗΣΚΞΟΗγ εΠΗ ΗαήΗαΘ ίήΗαΘ ΓΣΗΣν΅\nαΓδ εΠΗ Σζέ νΔΟν αδΤζΑ γΡΜΪ γΚΡΟΟ (Ώ).";
     Message[ greek ] = "Δεν είναι δυνατόν να χρησιμοποιηθεί αυτό πρότυπο ως βασικό πρότυπο;\nεπειδή προκύπτει μία αναδρομική λειτουργία.";
-    Message[ korean ] = "ΐΜ Ό­½Δ ΖΔΐΟΐΊ ±βΊ» Ό­½Δ ΖΔΐΟ·Ξ »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω. \nΈ®ΔΏΌΗΐΜ΅΅Ήί»ύΗÒ Όφ ΐΦ±β ¶§Ή®ΐΤ΄Ο΄Ω.";
+    Message[ korean ] = "ΐΜ Ό­½Δ ΖΔΐΟΐΊ ±βΊ» Ό­½Δ ΖΔΐΟ·Ξ »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.\nΈ®ΔΏΌΗΐΜ΅΅Ήί»ύΗÒ Όφ ΐΦ±β ¶§Ή®ΐΤ΄Ο΄Ω.";
     Message[ turkish ] = "Bu ώablon (φzyineleme nedeniyle)\n temel ώablon olarak kullanύlamaz.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Esta plantilla no se puede utilizar como plantilla base,\nya que podrνa provocar una referencia recursiva.";
@@ -1095,5 +1095,6 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
 
