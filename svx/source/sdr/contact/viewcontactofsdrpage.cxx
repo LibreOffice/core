@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:47:00 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,13 +219,13 @@ namespace sdr
 
                                 if(rView.IsPageBorderVisible())
                                 {
-                                    DrawPaperBorder(rDisplayInfo);
+                                    DrawPaperBorder(rDisplayInfo, GetSdrPage());
                                 }
                             }
 
                             if(rView.IsBordVisible())
                             {
-                                DrawBorder(rDisplayInfo);
+                                DrawBorder(rDisplayInfo, GetSdrPage());
                             }
 
                             if(rView.IsGridVisible() && !rView.IsGridFront())
@@ -419,7 +419,8 @@ namespace sdr
             }
         }
 
-        void ViewContactOfSdrPage::DrawPaperBorder(DisplayInfo& rDisplayInfo)
+        // #i37869#
+        void ViewContactOfSdrPage::DrawPaperBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage)
         {
             OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
 
@@ -427,12 +428,13 @@ namespace sdr
             pOut->SetFillColor();
             pOut->DrawRect(Rectangle(
                 0L, 0L,
-                GetSdrPage().GetWdt(), GetSdrPage().GetHgt()));
+                rPage.GetWdt(), rPage.GetHgt()));
         }
 
-        void ViewContactOfSdrPage::DrawBorder(DisplayInfo& rDisplayInfo)
+        // #i37869#
+        void ViewContactOfSdrPage::DrawBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage)
         {
-            if(GetSdrPage().GetLftBorder() || GetSdrPage().GetUppBorder() || GetSdrPage().GetRgtBorder() || GetSdrPage().GetLwrBorder())
+            if(rPage.GetLftBorder() || rPage.GetUppBorder() || rPage.GetRgtBorder() || rPage.GetLwrBorder())
             {
                 OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
                 Color aBorderColor;
@@ -451,12 +453,12 @@ namespace sdr
 
                 Rectangle aRect(Rectangle(
                     0L, 0L,
-                    GetSdrPage().GetWdt(), GetSdrPage().GetHgt()));
+                    rPage.GetWdt(), rPage.GetHgt()));
 
-                aRect.Left() += GetSdrPage().GetLftBorder();
-                aRect.Top() += GetSdrPage().GetUppBorder();
-                aRect.Right() -= GetSdrPage().GetRgtBorder();
-                aRect.Bottom() -= GetSdrPage().GetLwrBorder();
+                aRect.Left() += rPage.GetLftBorder();
+                aRect.Top() += rPage.GetUppBorder();
+                aRect.Right() -= rPage.GetRgtBorder();
+                aRect.Bottom() -= rPage.GetLwrBorder();
 
                 pOut->DrawRect(aRect);
             }
