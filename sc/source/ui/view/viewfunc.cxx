@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:34:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,21 +1171,18 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
                                          pUndoDoc, FALSE, &rAttr, pNewOuter, pNewInner ) );
         }
 
-        BOOL bOldLines = pDoc->HasAttrib( nStartCol, nStartRow, nStartTab,
-                                          nEndCol,   nEndRow,   nEndTab,
-                                          HASATTR_PAINTEXT );
+        USHORT nExt = SC_PF_TESTMERGE;
+        pDocSh->UpdatePaintExt( nExt, nStartCol, nStartRow, nStartTab,
+                                      nEndCol,   nEndRow,   nEndTab );      // content before the change
 
         pDoc->ApplySelectionFrame( rMark, pNewOuter, pNewInner );
 
-        BOOL bNewLines = pDoc->HasAttrib( nStartCol, nStartRow, nStartTab,
-                                          nEndCol,   nEndRow,   nEndTab,
-                                          HASATTR_PAINTEXT );
+        pDocSh->UpdatePaintExt( nExt, nStartCol, nStartRow, nStartTab,
+                                      nEndCol,   nEndRow,   nEndTab );      // content after the change
 
         rMark.MarkToMulti();
         pDoc->ApplySelectionPattern( rAttr, rMark );
 
-        USHORT nExt = SC_PF_TESTMERGE;
-        if (bOldLines || bNewLines) nExt |= SC_PF_LINES;
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol,   nEndRow,   nEndTab,
                            PAINT_GRID, nExt );
@@ -1214,14 +1211,22 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    ScDocShellModificator aModificator( *pDocSh );
+    //  State from old ItemSet doesn't matter for paint flags, as any change will be
+    //  from SFX_ITEM_SET in the new ItemSet (default is ignored in ApplyPattern).
+    //  New alignment is checked (check in PostPaint isn't enough) in case a right
+    //  alignment is changed to left.
+    const SfxItemSet& rNewSet = rAttr.GetItemSet();
+    BOOL bSetLines = rNewSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET ||
+                     rNewSet.GetItemState( ATTR_SHADOW, TRUE ) == SFX_ITEM_SET;
+    BOOL bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, TRUE ) == SFX_ITEM_SET;
 
-    USHORT nStartCol;
-    USHORT nStartRow;
-    USHORT nStartTab;
-    USHORT nEndCol;
-    USHORT nEndRow;
-    USHORT nEndTab;
+    USHORT nExtFlags = 0;
+    if ( bSetLines )
+        nExtFlags |= SC_PF_LINES;
+    if ( bSetAlign )
+        nExtFlags |= SC_PF_WHOLEROWS;
+
+    ScDocShellModificator aModificator( *pDocSh );
 
     BOOL bMulti = rMark.IsMultiMarked();
     rMark.MarkToMulti();
@@ -1238,17 +1243,17 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
 
     if (rMark.IsMultiMarked() && !bCursorOnly)
     {
+        ScRange aMarkRange;
+        rMark.GetMultiMarkArea( aMarkRange );
+        USHORT nStartCol = aMarkRange.aStart.Col();
+        USHORT nStartRow = aMarkRange.aStart.Row();
+        USHORT nStartTab = aMarkRange.aStart.Tab();
+        USHORT nEndCol = aMarkRange.aEnd.Col();
+        USHORT nEndRow = aMarkRange.aEnd.Row();
+        USHORT nEndTab = aMarkRange.aEnd.Tab();
+
         if (bRecord)
         {
-            ScRange aMarkRange;
-            rMark.GetMultiMarkArea( aMarkRange );
-            nStartCol = aMarkRange.aStart.Col();
-            nStartRow = aMarkRange.aStart.Row();
-            nStartTab = aMarkRange.aStart.Tab();
-            nEndCol = aMarkRange.aEnd.Col();
-            nEndRow = aMarkRange.aEnd.Row();
-            nEndTab = aMarkRange.aEnd.Tab();
-
             ScRange aCopyRange = aMarkRange;
             USHORT nTabCount = pDoc->GetTableCount();
             aCopyRange.aStart.SetTab(0);
@@ -1280,7 +1285,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
 
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol,   nEndRow,   nEndTab,
-                           PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+                           PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
         pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
@@ -1291,13 +1296,6 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         USHORT nRow = pViewData->GetCurY();
         USHORT nTab = pViewData->GetTabNo();
         ScPatternAttr* pOldPat = new ScPatternAttr(*pDoc->GetPattern( nCol, nRow, nTab ));
-
-        const SfxItemSet& rOldSet = pOldPat->GetItemSet();
-        BOOL bOldLines = rOldSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET ||
-                         rOldSet.GetItemState( ATTR_SHADOW, TRUE ) == SFX_ITEM_SET;
-        const SfxItemSet& rNewSet = rAttr.GetItemSet();
-        BOOL bNewLines = rNewSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET ||
-                         rNewSet.GetItemState( ATTR_SHADOW, TRUE ) == SFX_ITEM_SET;
 
         pDoc->ApplyPattern( nCol, nRow, nTab, rAttr );
 
@@ -1313,11 +1311,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         }
         delete pOldPat;     // wird im Undo kopiert (Pool)
 
-        USHORT nFlags = 0;
-        if ( bOldLines || bNewLines )
-            nFlags |= SC_PF_LINES;
-
-        pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+        pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
         pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
@@ -1747,10 +1741,9 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
                 bObjects = FALSE;
     }
 
-    USHORT nExtFlags = 0;                       // Linien interessieren nur, wenn Attribute
-    if ( nFlags & IDF_ATTRIB )                  // geloescht werden
-        if (pDoc->HasAttrib( aMarkRange, HASATTR_PAINTEXT ))
-            nExtFlags |= SC_PF_LINES;
+    USHORT nExtFlags = 0;       // extra flags are needed only if attributes are deleted
+    if ( nFlags & IDF_ATTRIB )
+        pDocSh->UpdatePaintExt( nExtFlags, aMarkRange );
 
     //  Reihenfolge:
     //  1) BeginDrawUndo
