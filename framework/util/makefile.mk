@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.91 $
+#   $Revision: 1.92 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:44:13 $
+#   last change: $Author: vg $ $Date: 2005-02-18 09:16:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -332,8 +332,8 @@ SHL4OBJS=       \
                 $(SLO)$/uicategorydescription.obj       \
                 $(SLO)$/vclstatusindicator.obj          \
                 $(SLO)$/wakeupthread.obj               \
-                $(SLO)$/sessionlistener.obj            \   
-                $(SLO)$/newmenucontroller.obj
+                $(SLO)$/newmenucontroller.obj          \
+                $(SLO)$/sessionlistener.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
