@@ -69,7 +69,7 @@ Public Const SBVALUECOLUMN = 4
 Public Const SBSTARTROW = 25
 Public Const SBCHARTPERIOD = 14
 Public Const SBINTERVAL = &quot;d&quot;
-Public Const SBCOLUMNHEADER = &quot;Spaltenkopf&quot;
+Public sColumnHeader as String
 Public StartDate as Date
 Public EndDate as Date
 Public iCurRow as Integer

@@ -9,6 +9,7 @@ Sub LoadChineseTradLanguage()
 	sProductname = GetProductname
 	sOK = &quot;確定&quot; 
 	sCancel = &quot;取消&quot;
+	sColumnHeader = &quot;欄標簽&quot;	
 	sInsertStockName = &quot;請先填入股票名稱!&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: 股票管理&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)

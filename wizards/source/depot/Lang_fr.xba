@@ -9,6 +9,7 @@ Sub LoadFrenchLanguage()
 	sProductname = GetProductname
 	sOK = &quot;~OK&quot; 
 	sCancel = &quot;Annuler&quot;
+	sColumnHeader = &quot;En-tête de colonne&quot;	
 	sInsertStockName = &quot;Saisissez quelques actions dans votre portefeuille !&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt; : Gestion d&apos;actions&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)

@@ -191,7 +191,7 @@ Dim iCellValue as Long
 	&apos; Delete all Cells in Date Area
 	Do
 		oCell = oSheet.GetCellbyPosition(SBDATECOLUMN,iCurRow)
-		If oCell.CellStyle = SBCOLUMNHEADER Then
+		If oCell.CellStyle = sColumnHeader Then
 			bLeaveLoop = True
 			StartIndex = iCurRow
 			iCurRow = iCurRow + 1

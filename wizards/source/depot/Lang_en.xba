@@ -9,6 +9,7 @@ Sub LoadEnglishLanguage()
 	sProductname = GetProductname
 	sOK = &quot;~OK&quot; 
 	sCancel = &quot;Cancel&quot;
+	sColumnHeader = &quot;Column Header&quot;
 	sInsertStockName = &quot;Please enter shares in your portfolio.&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: Stocks Manager&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)

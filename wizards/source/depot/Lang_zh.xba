@@ -9,6 +9,7 @@ Sub LoadChineseSimpleLanguage()
 	sProductname = GetProductname
 	sOK = &quot;确定&quot; 
 	sCancel = &quot;取消&quot;
+	sColumnHeader = &quot;列标题&quot;
 	sInsertStockName = &quot;请首先往您的帐号内输入一些股票名称！&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;：股票管理&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)

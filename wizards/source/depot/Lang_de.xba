@@ -9,6 +9,7 @@ Sub LoadGermanLanguage()
 	sProductname = GetProductname
 	sOK = &quot;~OK&quot; 
 	sCancel = &quot;Abbrechen&quot;
+	sColumnHeader = &quot;Spaltenkopf&quot;
 	sInsertStockName = &quot;Bitte fügen Sie zunächst einige Aktien in Ihr Depot ein!&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;: Aktienverwaltung&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)

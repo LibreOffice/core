@@ -9,6 +9,7 @@ Sub LoadSwedishLanguage()
 	sProductname = GetProductname
 	sOK = &quot;~OK&quot; 
 	sCancel = &quot;Avbryt&quot;
+	sColumnHeader = &quot;Kolumnhuvud&quot;	
 	sInsertStockName = &quot;Infoga först några aktier i Din portfölj!&quot;
 	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: Aktieförvaltning&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)
