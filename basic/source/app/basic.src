@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ swedish ] = "~Text";
         TEXT[ polish ] = "~Text";
         TEXT[ portuguese_brazilian ] = "~Text";
-        TEXT[ japanese ] = "•¶š—ñ";
+        TEXT[ japanese ] = "~Text";
         TEXT[ korean ] = "ÅØ½ºÆ®(~T)";
         TEXT[ chinese_simplified ] = "~Text";
         TEXT[ chinese_traditional ] = "~Text";
@@ -339,7 +339,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ swedish ] = "~Cancel";
         TEXT[ polish ] = "~Cancel";
         TEXT[ portuguese_brazilian ] = "~Abbruch";
-        TEXT[ japanese ] = "·¬İ¾Ù";
+        TEXT[ japanese ] = "~Cancel";
         TEXT[ korean ] = "Ãë¼Ò(~C)";
         TEXT[ chinese_simplified ] = "~Abbruch";
         TEXT[ chinese_traditional ] = "~Cancel";
@@ -389,7 +389,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ swedish ] = "~Previous text";
         TEXT[ polish ] = "~Previous text ";
         TEXT[ portuguese_brazilian ] = "~Alter Text";
-        TEXT[ japanese ] = "‹Œ•¶š—ñ";
+        TEXT[ japanese ] = "~Previous text";
         TEXT[ korean ] = "ÀÌÀü ÅØ½ºÆ®(~P)";
         TEXT[ chinese_simplified ] = "~Alter Text";
         TEXT[ chinese_traditional ] = "~Previous text";
@@ -412,7 +412,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ swedish ] = "~New text";
         TEXT[ polish ] = "~New text ";
         TEXT[ portuguese_brazilian ] = "~Neuer Text";
-        TEXT[ japanese ] = "V•¶š—ñ";
+        TEXT[ japanese ] = "~New text";
         TEXT[ korean ] = "»õ ÅØ½ºÆ®(~N)";
         TEXT[ chinese_simplified ] = "~Neuer Text";
         TEXT[ chinese_traditional ] = "~New text";
@@ -473,7 +473,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ swedish ] = "~Cancel";
         TEXT[ polish ] = "~Cancel ";
         TEXT[ portuguese_brazilian ] = "~Abbruch";
-        TEXT[ japanese ] = "·¬İ¾Ù";
+        TEXT[ japanese ] = "~Cancel";
         TEXT[ korean ] = "Ãë¼Ò(~C)";
         TEXT[ chinese_simplified ] = "~Abbruch";
         TEXT[ chinese_traditional ] = "~Cancel";
@@ -513,7 +513,7 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ swedish ] = "The print function is not available!";
     MESSAGE[ polish ] = "The print function is not available! ";
     MESSAGE[ portuguese_brazilian ] = "Drucken steht nicht zur Verfügung!";
-    MESSAGE[ japanese ] = "ÌßØİÀ‚ª‚ ‚è‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "ÌßØİÀ‚ª‚ ‚è‚Ü‚¹‚ñ";
     MESSAGE[ korean ] = "ÇÁ¸°ÅÍ ±â´ÉÀÌ ¾ÈµÊ!";
     MESSAGE[ chinese_simplified ] = "Drucken steht nicht zur Verfügung!";
     MESSAGE[ chinese_traditional ] = "The print function is not available!";
@@ -536,7 +536,7 @@ ErrorBox IDS_CANTLOAD {
     MESSAGE[ swedish ] = "Library cannot be loaded!";
     MESSAGE[ polish ] = "Library cannot be loaded! ";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht geladen werden!";
-    MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "¶óÀÌºê·¯¸®°¡ ·ÎµåµÉ ¼ö ¾ø½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "Library kann nicht geladen werden!";
     MESSAGE[ chinese_traditional ] = "Library cannot be loaded!";
@@ -575,7 +575,7 @@ ErrorBox IDS_CANTSAVE {
     MESSAGE[ swedish ] = "Library cannot be saved!";
     MESSAGE[ polish ] = "Library cannot be saved! ";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht gespeichert werden!";
-    MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "¶óÀÌºê·¯¸®°¡ ÀúÀåµÇÁö¾Ê¾ÒÀ½!";
     MESSAGE[ chinese_simplified ] = "Library kann nicht gespeichert werden!";
     MESSAGE[ chinese_traditional ] = "Library cannot be saved!";
@@ -614,7 +614,7 @@ ErrorBox IDS_NOMAINPGM {
     MESSAGE[ swedish ] = "This window does not contain a main program!";
     MESSAGE[ polish ] = "This window does not contain a main program! ";
     MESSAGE[ portuguese_brazilian ] = "Dieses Fenster enthält kein Hauptprogramm!";
-    MESSAGE[ japanese ] = "‚±‚Ì³¨İÄŞ³‚É‚ÍÒ²İÌßÛ¸Ş×Ñ‚Í‚ ‚è‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "‚±‚Ì³¨İÄŞ³‚ÉÒ²İÌßÛ¸Ş×Ñ‚Í‚ ‚è‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "ÀÌ À©µµ¿ì´Â ¸ŞÀÎÇÁ·Î±×·¥À» Æ÷ÇÔÇÏ°í ÀÖÁö ¾Ê½À´Ï´Ù !";
     MESSAGE[ chinese_simplified ] = "Dieses Fenster enthält kein Hauptprogramm!";
     MESSAGE[ chinese_traditional ] = "This window does not contain a main program!";
@@ -653,7 +653,7 @@ ErrorBox IDS_READERROR {
     MESSAGE[ swedish ] = "File cannot be read!";
     MESSAGE[ polish ] = "File cannot be read! ";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht eingelesen werden!";
-    MESSAGE[ japanese ] = "Ì§²Ù‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "Ì§²Ù‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "ÆÄÀÏÀ» ÀĞÀ»¼ö ¾ø½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "Datei kann nicht eingelesen werden!";
     MESSAGE[ chinese_traditional ] = "File cannot be read!";
@@ -692,7 +692,7 @@ ErrorBox IDS_WRITEERROR {
     MESSAGE[ swedish ] = "File cannot be saved!";
     MESSAGE[ polish ] = "File cannot be saved! ";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht abgespeichert werden!";
-    MESSAGE[ japanese ] = "Ì§²Ù‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "Ì§²Ù‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "ÆÄÀÏÀÌ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù !";
     MESSAGE[ chinese_simplified ] = "Datei kann nicht abgespeichert werden!";
     MESSAGE[ chinese_traditional ] = "File cannot be saved!";
@@ -731,7 +731,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     MESSAGE[ swedish ] = "Search term not found!";
     MESSAGE[ polish ] = "Search key not found!";
     MESSAGE[ portuguese_brazilian ] = "Suchbegriff nicht gefunden!";
-    MESSAGE[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ!";
+    MESSAGE[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "°Ë»ö¾î¸¦ Ã£Áö ¸øÇßÀ½!";
     MESSAGE[ chinese_simplified ] = "Suchbegriff nicht gefunden!";
     MESSAGE[ chinese_traditional ] = "Search key not found!";
@@ -2866,7 +2866,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ swedish ] = "Print from  ";
         TEXT[ polish ] = "Print from ";
         TEXT[ portuguese_brazilian ] = "Druck von ";
-        TEXT[ japanese ] = "ˆóü”ÍˆÍ ";
+        TEXT[ japanese ] = "Print from ";
         TEXT[ korean ] = "·ÎºÎÅÍ ÀÎ¼â ";
         TEXT[ chinese_simplified ] = "Druck von ";
         TEXT[ chinese_traditional ] = "Print from ";
@@ -2889,7 +2889,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ swedish ] = "Cancel";
         TEXT[ polish ] = "Cancel";
         TEXT[ portuguese_brazilian ] = "Abbruch";
-        TEXT[ japanese ] = "·¬İ¾Ù";
+        TEXT[ japanese ] = "Cancel";
         TEXT[ korean ] = "Ãë¼Ò";
         TEXT[ chinese_simplified ] = "Abbruch";
         TEXT[ chinese_traditional ] = "Cancel";
@@ -3032,7 +3032,7 @@ TabPage RID_TP_GENERIC {
         Text[ swedish ] = "Range";
         Text[ polish ] = "Range";
         Text[ portuguese_brazilian ] = "Bereich";
-        Text[ japanese ] = "”ÍˆÍ";
+        Text[ japanese ] = "Range";
         Text[ korean ] = "¹üÀ§";
         Text[ chinese_simplified ] = "Bereich";
         Text[ chinese_traditional ] = "Range";
@@ -3113,7 +3113,7 @@ TabPage RID_TP_GENERIC {
         Text[ swedish ] = "Setting";
         Text[ polish ] = "Setting";
         Text[ portuguese_brazilian ] = "Einstellung";
-        Text[ japanese ] = "İ’è";
+        Text[ japanese ] = "Setting";
         Text[ korean ] = "¼³Á¤";
         Text[ chinese_simplified ] = "Einstellung";
         Text[ chinese_traditional ] = "Settings";
@@ -3200,7 +3200,7 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "Directories";
         Text[ polish ] = "Directories";
         Text[ portuguese_brazilian ] = "Verzeichnisse";
-        Text[ japanese ] = "ÃŞ¨Ú¸ÄØ";
+        Text[ japanese ] = "Directories";
         Text[ korean ] = "µğ·ºÅä¸®";
         Text[ chinese_simplified ] = "Verzeichnisse";
         Text[ chinese_traditional ] = "Directories";
@@ -3223,7 +3223,7 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "Log home directory";
         Text[ polish ] = "Log home directory";
         Text[ portuguese_brazilian ] = "Log Basisverzeichnis";
-        Text[ japanese ] = "Û¸Ş Î°Ñ ÃŞ¨Ú¸ÄØ";
+        Text[ japanese ] = "Log home directory";
         Text[ korean ] = "·Î±× È¨ µğ·ºÅä¸®";
         Text[ chinese_simplified ] = "Log Basisverzeichnis";
         Text[ chinese_traditional ] = "Log home directory";
@@ -3246,7 +3246,7 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "Home directory";
         Text[ polish ] = "Home directory";
         Text[ portuguese_brazilian ] = "Basisverzeichnis";
-        Text[ japanese ] = "Î°Ñ ÃŞ¨Ú¸ÄØ";
+        Text[ japanese ] = "Home directory";
         Text[ korean ] = "È¨ µğ·ºÅä¸®";
         Text[ chinese_simplified ] = "Basisverzeichnis";
         Text[ chinese_traditional ] = "Home directory";
@@ -3269,7 +3269,7 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "HID directory";
         Text[ polish ] = "HID directory";
         Text[ portuguese_brazilian ] = "HID Verzeichnis";
-        Text[ japanese ] = "HID ÃŞ¨Ú¸ÄØ";
+        Text[ japanese ] = "HID directory";
         Text[ korean ] = "HID µğ·ºÅä¸®";
         Text[ chinese_simplified ] = "HID Verzeichnis";
         Text[ chinese_traditional ] = "HID directory";
@@ -3382,7 +3382,7 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "Other settings";
         Text[ polish ] = "Other settings";
         Text[ portuguese_brazilian ] = "Andere Einstellungen";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ìİ’è";
+        Text[ japanese ] = "Other settings";
         Text[ korean ] = "´Ù¸¥ ¼³Á¤";
         Text[ chinese_simplified ] = "Andere Einstellungen";
         Text[ chinese_traditional ] = "Ohter settings";
@@ -3405,7 +3405,7 @@ TabPage RID_TP_SPECIAL {
         Text[ swedish ] = "Server Timeout";
         Text[ polish ] = "Server Timeout";
         Text[ portuguese_brazilian ] = "Server Timeout";
-        Text[ japanese ] = "»°ÊŞ° À²Ñ±³Ä";
+        Text[ japanese ] = "Server Timeout";
         Text[ korean ] = "¼­¹ö Å¸ÀÓ¾Æ¿ô";
         Text[ chinese_simplified ] = "Server Timeout";
         Text[ chinese_traditional ] = "Server Timeout";
