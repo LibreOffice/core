@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-12 11:22:50 $
+ *  last change: $Author: jp $ $Date: 2001-11-27 16:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <stdio.h>                      // for EOF
 
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
@@ -108,24 +111,13 @@ int SvRTFParser::_GetNextToken()
                 case '{':
                 case '}':
                 case '\\':
-                    aToken = nNextCh;
-                    goto ISCHAR_SCANTEXT;
+                case '+':       // habe ich in einem RTF-File gefunden
                 case '~':       // nonbreaking space
-                    aToken = 0xA0;
-                    goto ISCHAR_SCANTEXT;
                 case '-':       // optional hyphen
-                    aToken = 0xAD;
-                    goto ISCHAR_SCANTEXT;
                 case '_':       // nonbreaking hyphen
-                    aToken = 0x2011;
-                    goto ISCHAR_SCANTEXT;
-
                 case '\'':      // HexValue
-                    // es folgt normaler Text
-                    aToken = ByteString::ConvertToUnicode( GetHexValue(),
-                                                        GetSrcEncoding() );
-ISCHAR_SCANTEXT:
-                    nNextCh = GetNextChar();
+                    nNextCh = '\\';
+                    rInput.SeekRel( -1 );
                     ScanText();
                     nRet = RTF_TEXTTOKEN;
                     bNextCh = 0 == nNextCh;
@@ -156,9 +148,7 @@ ISCHAR_SCANTEXT:
                                                             MAX_TOKEN_LEN );
                             int nStrLen = 0;
                             do {
-                                *(pStr + nStrLen++) = ByteString::
-                                        ConvertToUnicode( nNextCh,
-                                                        GetSrcEncoding() );
+                                *(pStr + nStrLen++) = nNextCh;
                                 if( MAX_TOKEN_LEN == nStrLen )
                                 {
                                     aToken += aStrBuffer;
@@ -284,7 +274,7 @@ ISCHAR_SCANTEXT:
             {
                 if( 0 <= nOpenBrakets )
                 {
-                    RtfParserState_Impl aState( nUCharOverread );
+                    RtfParserState_Impl aState( nUCharOverread, GetSrcEncoding() );
                     aParserStates.Insert( aState, nOpenBrakets );
                 }
                 ++nOpenBrakets;
@@ -299,9 +289,18 @@ ISCHAR_SCANTEXT:
             if( 0 <= nOpenBrakets )
             {
                 aParserStates.Remove( nOpenBrakets );
-                nUCharOverread = aParserStates.Count()
-                        ? aParserStates[aParserStates.Count()-1].nUCharOverread
-                        : 1;
+                if( aParserStates.Count() )
+                {
+                    const RtfParserState_Impl& rRPS =
+                            aParserStates[ aParserStates.Count() - 1 ];
+                    nUCharOverread = rRPS.nUCharOverread;
+                    SetSrcEncoding( rRPS.eCodeSet );
+                }
+                else
+                {
+                    nUCharOverread = 1;
+                    SetSrcEncoding( GetCodeSet() );
+                }
             }
             DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
                         "ParserStateStack unequal to bracket count" );
@@ -364,8 +363,38 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 switch( nNextCh = GetNextChar() )
                 {
                 case '\'':
-                    *(pStr + nStrLen++) = ByteString::ConvertToUnicode(
-                                            GetHexValue(), GetSrcEncoding() );
+                    {
+                    rtl_TextEncodingInfo aEncInfo;
+                    if( rtl_getTextEncodingInfo( GetSrcEncoding(), &aEncInfo )
+                        && 2 == aEncInfo.MaximumCharSize )
+                    {
+                        rtl_TextEncoding eSvSet = GetSrcEncoding();
+                        SetSrcEncoding( RTL_TEXTENCODING_ASCII_US );
+
+                        sal_Char aDblChr[ 2 ];
+                        aDblChr[0] = (sal_Char)GetHexValue();
+                        nNextCh = GetNextChar();
+                        while( 0xD == nNextCh )
+                            nNextCh = GetNextChar();
+                        while( 0xA == nNextCh )
+                            nNextCh = GetNextChar();
+
+                        if( '\\' == nNextCh &&
+                            '\'' == ( nNextCh = GetNextChar()) )
+                            aDblChr[1] = (sal_Char)GetHexValue();
+                        else
+                            aDblChr[1] = (sal_Char)nNextCh;
+
+                        SetSrcEncoding( eSvSet );
+
+                        sal_Size nL = sizeof( aDblChr );
+                        *(pStr + nStrLen++) = ByteString::ConvertToUnicode(
+                                            aDblChr, &nL, GetSrcEncoding() );
+                    }
+                    else
+                        *(pStr + nStrLen++) = ByteString::ConvertToUnicode(
+                                (sal_Char)GetHexValue(), GetSrcEncoding() );
+                    }
                     break;
 
                 case '\\':
@@ -458,8 +487,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             {
                 do {
                     // alle anderen Zeichen kommen in den Text
-                    *(pStr + nStrLen++) = ByteString::ConvertToUnicode(
-                                            nNextCh, GetSrcEncoding() );
+                    *(pStr + nStrLen++) = nNextCh;
 
                     if( MAX_STRING_LEN == nStrLen )
                     {
@@ -546,7 +574,7 @@ SvParserState SvRTFParser::CallParser()
     rInput >> cFirstCh; nNextCh = cFirstCh;
     eState = SVPAR_WORKING;
     nOpenBrakets = 0;
-    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
+    SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );
     eUNICodeSet = RTL_TEXTENCODING_MS_1252;     // default ist ANSI-CodeSet
 
     // die 1. beiden Token muessen '{' und \\rtf sein !!
@@ -605,22 +633,33 @@ void SvRTFParser::Continue( int nToken )
             break;      // unbekannte Token ueberspringen
 
         case RTF_NEXTTYPE:
-        case RTF_ANSITYPE:      SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );     break;
-        case RTF_MACTYPE:       SetSrcEncoding( RTL_TEXTENCODING_APPLE_ROMAN );     break;
-        case RTF_PCTYPE:        SetSrcEncoding( RTL_TEXTENCODING_IBM_437 ); break;
-        case RTF_PCATYPE:       SetSrcEncoding( RTL_TEXTENCODING_IBM_850 ); break;
+        case RTF_ANSITYPE:      SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );      break;
+        case RTF_MACTYPE:       SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN );      break;
+        case RTF_PCTYPE:        SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );  break;
+        case RTF_PCATYPE:       SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );  break;
 
         case RTF_ANSICPG:
-                switch ( nTokenValue )
+                switch( nTokenValue )
                 {
-                case 1250:  SetSrcEncoding( RTL_TEXTENCODING_MS_1250 ); break;
-                case 1251:  SetSrcEncoding( RTL_TEXTENCODING_MS_1251 ); break;
-                case 1253:  SetSrcEncoding( RTL_TEXTENCODING_MS_1253 ); break;
-                case 1254:  SetSrcEncoding( RTL_TEXTENCODING_MS_1254 ); break;
-                case 1255:  SetSrcEncoding( RTL_TEXTENCODING_MS_1255 ); break;
-                case 1256:  SetSrcEncoding( RTL_TEXTENCODING_MS_1256 ); break;
-                case 1257:  SetSrcEncoding( RTL_TEXTENCODING_MS_1257 ); break;
-                case 1258:  SetSrcEncoding( RTL_TEXTENCODING_MS_1258 ); break;
+                case 1250:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1250 );  break;
+                case 1251:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1251 );  break;
+                case 1253:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1253 );  break;
+                case 1254:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1254 );  break;
+                case 1255:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1255 );  break;
+                case 1256:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1256 );  break;
+                case 1257:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1257 );  break;
+                case 1258:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1258 );  break;
+                case  950:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_950 );   break;
+                case  932:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_932 );   break;
+                case  936:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_936 );   break;
+                case  437:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );  break;
+                case  850:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );  break;
+                case  852:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_852 );  break;
+                case  862:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_862 );  break;
+                case  863:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_863 );  break;
+                case  864:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_864 );  break;
+                case  865:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_865 );  break;
+                case  866:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_866 );  break;
                 }
                 break;
 
@@ -639,6 +678,19 @@ NEXTTOKEN:
         eState = SVPAR_ERROR;
 }
 
+void SvRTFParser::SetEncoding( rtl_TextEncoding eEnc )
+{
+    switch( eEnc )
+    {
+    case RTL_TEXTENCODING_DONTKNOW:
+    case RTL_TEXTENCODING_SYMBOL:
+        eEnc = GetCodeSet();
+        break;
+    }
+    if( aParserStates.Count() )
+        aParserStates[ aParserStates.Count() - 1 ].eCodeSet = eEnc;
+    SetSrcEncoding( eEnc );
+}
 
 #ifdef USED
 void SvRTFParser::SaveState( int nToken )
