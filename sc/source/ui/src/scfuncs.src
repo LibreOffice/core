@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:33:08 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9977,7 +9977,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "ћассив или ссылка на €чейки, содержимое которых соответствует платежам.";
             Text[ greek ] = "ћйб мёфсб ё мйб бнбцпс№ уе келй№, фщн прпящн фб ресйечьменб бнфйуфпйчпэн уфйт рлзсщмЁт.";
             Text[ dutch ] = "Matrix of celverwijzing naar cellen waarvan de inhoud overeenkomt met de betalingen.  ";
-            Text[ french ] = "Une matrice ou une rйfйrence а des cellules dont le contenu correspond aux paiements. ";
+            Text[ french ] = "Une matrice ou une rйfйrence а des cellules dont le contenu correspond aux paiements.";
             Text[ spanish ] = "Matriz o referencia de celda a celdas cuyo contenido corresponde a los pagos. ";
             Text[ italian ] = "» una matrice o un riferimento a celle il cui contenuto corrisponde ai pagamenti. ";
             Text[ danish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
@@ -10096,7 +10096,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "¬ычисл€ет размер процентной ставки при константных нормах погашени€.";
             Text[ greek ] = "Returns the amount of interest for constant redemption rates.";
             Text[ dutch ] = "Berekent de hoogte van de rente bij gelijkblijvende aflossingstermijnen.";
-            Text[ french ] = "Calcule le montant des intйrкts pour un taux d'amortissement constant.";
+            Text[ french ] = "Calcule le montant des intйrкts pour un emprunt а remboursement constant.";
             Text[ spanish ] = "Returns the amount of interest for constant redemption rates.";
             Text[ italian ] = "Returns the amount of interest for constant redemption rates.";
             Text[ danish ] = "Returns the amount of interest for constant redemption rates.";
