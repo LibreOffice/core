@@ -14,7 +14,7 @@ $main::OO_SDK_HOME = "";
 $main::OO_SDK_HOME_SUGGESTION = $main::currentWorkingDir;
 
 $main::OFFICE_HOME = "";
-$main::OFFICE_HOME_SUGGESTION=`egrep "=file://" \$HOME/.sversionrc | tr -d \\\r | head -1 | sed -e 's#.*=file://##'`;
+$main::OFFICE_HOME_SUGGESTION=`egrep "=file://" \$HOME/.sversionrc | tr -d \\\r | head -n 1 | sed -e 's#.*=file://##'`;
 chop ($main::OFFICE_HOME_SUGGESTION);
 
 $main::OO_SDK_MAKE_HOME = "";
