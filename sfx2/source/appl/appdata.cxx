@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:42:48 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,10 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         nDocModalMode(0),
         nAutoTabPageId(0),
         nExecutingSID( 0 ),
+        nBasicCallLevel(0),
+        nRescheduleLocks(0),
+        nInReschedule(0),
+        nAsynchronCalls(0),
         bPlugged(sal_False),
         bDirectAliveCount(sal_False),
         bInQuit(sal_False),
