@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:02:33 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,12 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
     {
         // try to get a graphic from the object first
         if( pObj->ISA( SdrGrafObj ) )
-            aRet = static_cast< SdrGrafObj* >( pObj )->GetGraphic();
+        {
+            // #110981# Make behaviour coherent with metafile
+            // recording below (which of course also takes
+            // view-transformed objects)
+            aRet = static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic();
+        }
         else if( pObj->ISA( SdrOle2Obj ) )
         {
             SdrOle2Obj* pOLEObj = static_cast< SdrOle2Obj* >( pObj );
