@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:31:10 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,7 +1361,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
         if (xQuery.is())
         {
             ::rtl::OUStringBuffer sQuery(256);
-            sQuery.appendAscii("getDefaultFilterForType:");
+            sQuery.appendAscii("getDefaultFilterForType=");
             sQuery.append     (sTypeName                 );
             css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
             if (
