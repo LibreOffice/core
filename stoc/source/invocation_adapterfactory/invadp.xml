@@ -1,53 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Daniel Boelzle </Author>
-
-<Name>  com.sun.star.comp.stoc.InvocationAdapterFactory </Name>
-
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   invadp  </module-name>
+    <component-description>
+        <author> Daniel Boelzle </author>
+        <name>  com.sun.star.comp.stoc.InvocationAdapterFactory </name>
+        <description>
 You can create adapter interfaces of any given type for an invocation
 interface by using an adapter factory instance.
-</Description>
-
-<ModuleName>    invadp  </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  C++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>  com.sun.star.script.InvocationAdapterFactory    </SupportedService>
-
-<ServiceDependency></ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal     </RuntimeModuleDependency>
-
-<Type>  com.sun.star.script.XInvocationAdapterFactory       </Type>
-<Type>  com.sun.star.script.XInvocationAdapterFactory2      </Type>
-<Type>  com.sun.star.lang.XTypeProvider                     </Type>
-<Type>  com.sun.star.lang.XServiceInfo                      </Type>
-<Type>  com.sun.star.lang.XSingleServiceFactory             </Type>
-<Type>  com.sun.star.lang.XMultiServiceFactory              </Type>
-<Type>  com.sun.star.registry.XSimpleRegistry               </Type>
-<Type>  com.sun.star.registry.XRegistryKey                  </Type>
-<Type>  com.sun.star.uno.XAggregation                       </Type>
-<Type>  com.sun.star.uno.XWeak                              </Type>
-<Type>  com.sun.star.uno.TypeClass                          </Type>
-<Type>  com.sun.star.container.XEnumerationAccess           </Type>
-<Type>  com.sun.star.container.XNameContainer               </Type>
-<Type>  com.sun.star.container.XIndexContainer              </Type>
-<Type>  com.sun.star.reflection.InvocationTargetException   </Type>
-
-</COMPONENTDESCRIPTION>
-
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  C++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.script.InvocationAdapterFactory    </supported-service>
+        <type>  com.sun.star.script.XInvocationAdapterFactory       </type>
+        <type>  com.sun.star.script.XInvocationAdapterFactory2      </type>
+        <type>  com.sun.star.lang.XTypeProvider                     </type>
+        <type>  com.sun.star.lang.XServiceInfo                      </type>
+        <type>  com.sun.star.lang.XSingleServiceFactory             </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory              </type>
+        <type>  com.sun.star.registry.XSimpleRegistry               </type>
+        <type>  com.sun.star.registry.XRegistryKey                  </type>
+        <type>  com.sun.star.uno.XAggregation                       </type>
+        <type>  com.sun.star.uno.XWeak                              </type>
+        <type>  com.sun.star.uno.TypeClass                          </type>
+        <type>  com.sun.star.container.XEnumerationAccess           </type>
+        <type>  com.sun.star.container.XNameContainer               </type>
+        <type>  com.sun.star.container.XIndexContainer              </type>
+        <type>  com.sun.star.reflection.InvocationTargetException   </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu        </runtime-module-dependency>
+    <runtime-module-dependency> sal     </runtime-module-dependency>
+</module-description>

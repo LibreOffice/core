@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Daniel Boelzle </Author>
-
-<Name>  com.sun.star.comp.stoc.Invocation   </Name>
-
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   inv </module-name>
+    <component-description>
+        <author> Daniel Boelzle </author>
+        <name>  com.sun.star.comp.stoc.Invocation   </name>
+        <description>
 You can construct Invocation objects through this factory service.
 Invoke createInstanceWithArguments() of XSingleServiceFactory
 to create an Invocation adapter for your object;
@@ -24,66 +21,53 @@ properties with XInvocation::getIntrospection().
 Container access is available through the XIndexContainer,
 XNameContainer and XEnumerationContainer
 (use XInterface::queryInterface).
-</Description>
-
-<ModuleName>    inv </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  C++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>
-com.sun.star.script.Invocation
-</SupportedService>
-
-<ServiceDependency>com.sun.star.script.Converter</ServiceDependency>
-<ServiceDependency>com.sun.star.beans.Introspection</ServiceDependency>
-<ServiceDependency>com.sun.star.reflection.CoreReflection</ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    vos         </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal     </RuntimeModuleDependency>
-
-<Type>  com.sun.star.script.XInvocation                 </Type>
-<Type>  com.sun.star.script.XInvocation2                </Type>
-<Type>  com.sun.star.script.InvocationInfo              </Type>
-<Type>  com.sun.star.script.MemberType                  </Type>
-<Type>  com.sun.star.script.XTypeConverter              </Type>
-<Type>  com.sun.star.script.FailReason                  </Type>
-<Type>  com.sun.star.beans.XIntrospection               </Type>
-<Type>  com.sun.star.beans.XIntrospectionAccess         </Type>
-<Type>  com.sun.star.beans.XPropertySet                 </Type>
-<Type>  com.sun.star.beans.XFastPropertySet             </Type>
-<Type>  com.sun.star.beans.XMaterialHolder              </Type>
-<Type>  com.sun.star.beans.XExactName                   </Type>
-<Type>  com.sun.star.beans.PropertyAttribute            </Type>
-<Type>  com.sun.star.beans.PropertyConcept              </Type>
-<Type>  com.sun.star.beans.MethodConcept                </Type>
-<Type>  com.sun.star.lang.XEventListener                </Type>
-<Type>  com.sun.star.lang.XInitialization               </Type>
-<Type>  com.sun.star.lang.XTypeProvider                 </Type>
-<Type>  com.sun.star.lang.XServiceInfo                  </Type>
-<Type>  com.sun.star.lang.XSingleServiceFactory         </Type>
-<Type>  com.sun.star.lang.XMultiServiceFactory          </Type>
-<Type>  com.sun.star.registry.XRegistryKey              </Type>
-<Type>  com.sun.star.uno.XAggregation                   </Type>
-<Type>  com.sun.star.uno.XWeak                          </Type>
-<Type>  com.sun.star.uno.TypeClass                      </Type>
-<Type>  com.sun.star.container.XEnumerationAccess       </Type>
-<Type>  com.sun.star.container.XNameContainer           </Type>
-<Type>  com.sun.star.container.XIndexContainer          </Type>
-<Type>  com.sun.star.reflection.XIdlReflection          </Type>
-<Type>  com.sun.star.reflection.XIdlClassProvider       </Type>
-<Type>  com.sun.star.reflection.XIdlClass               </Type>
-<Type>  com.sun.star.reflection.XIdlArray               </Type>
-<Type>  com.sun.star.reflection.FieldAccessMode         </Type>
-
-</COMPONENTDESCRIPTION>
-
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  C++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.script.Invocation </supported-service>
+        <service-dependency>com.sun.star.script.Converter</service-dependency>
+        <service-dependency>com.sun.star.beans.Introspection</service-dependency>
+        <service-dependency>com.sun.star.reflection.CoreReflection</service-dependency>
+        <type>  com.sun.star.script.XInvocation                 </type>
+        <type>  com.sun.star.script.XInvocation2                </type>
+        <type>  com.sun.star.script.InvocationInfo              </type>
+        <type>  com.sun.star.script.MemberType                  </type>
+        <type>  com.sun.star.script.XTypeConverter              </type>
+        <type>  com.sun.star.script.FailReason                  </type>
+        <type>  com.sun.star.beans.XIntrospection               </type>
+        <type>  com.sun.star.beans.XIntrospectionAccess         </type>
+        <type>  com.sun.star.beans.XPropertySet                 </type>
+        <type>  com.sun.star.beans.XFastPropertySet             </type>
+        <type>  com.sun.star.beans.XMaterialHolder              </type>
+        <type>  com.sun.star.beans.XExactName                   </type>
+        <type>  com.sun.star.beans.PropertyAttribute            </type>
+        <type>  com.sun.star.beans.PropertyConcept              </type>
+        <type>  com.sun.star.beans.MethodConcept                </type>
+        <type>  com.sun.star.lang.XEventListener                </type>
+        <type>  com.sun.star.lang.XInitialization               </type>
+        <type>  com.sun.star.lang.XTypeProvider                 </type>
+        <type>  com.sun.star.lang.XServiceInfo                  </type>
+        <type>  com.sun.star.lang.XSingleServiceFactory         </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory          </type>
+        <type>  com.sun.star.registry.XRegistryKey              </type>
+        <type>  com.sun.star.uno.XAggregation                   </type>
+        <type>  com.sun.star.uno.XWeak                          </type>
+        <type>  com.sun.star.uno.TypeClass                      </type>
+        <type>  com.sun.star.container.XEnumerationAccess       </type>
+        <type>  com.sun.star.container.XNameContainer           </type>
+        <type>  com.sun.star.container.XIndexContainer          </type>
+        <type>  com.sun.star.reflection.XIdlReflection          </type>
+        <type>  com.sun.star.reflection.XIdlClassProvider       </type>
+        <type>  com.sun.star.reflection.XIdlClass               </type>
+        <type>  com.sun.star.reflection.XIdlArray               </type>
+        <type>  com.sun.star.reflection.FieldAccessMode         </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu        </runtime-module-dependency>
+    <runtime-module-dependency> sal     </runtime-module-dependency>
+</module-description>
