@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XElement.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:10:47 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@ interface XElement : com::sun::star::uno::XInterface
 
     /** Called upon each occuring child element.
 
-        @param Uid
+        @param uid
                namespace uid of element
-        @param LocalName
+        @param localName
                localname of element
         @param xAttributes
                attributes of element
@@ -111,34 +111,34 @@ interface XElement : com::sun::star::uno::XInterface
                 child import context
     */
     XElement startChildElement(
-        [in] long Uid, [in] string LocalName, [in] XAttributes xAttributes )
+        [in] long uid, [in] string localName, [in] XAttributes xAttributes )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Called upon retrieval of characters.
 
-        @param Chars
+        @param chars
                characters
     */
-    void characters( [in] string Chars )
+    void characters( [in] string chars )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Receives notification of white space that can be ignored.
 
-        @param Whitespace
+        @param whitespace
                white space characters
     */
-    void ignorableWhitespace( [in] string Whitespace )
+    void ignorableWhitespace( [in] string whitespace )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Receives notification of a processing instruction.
 
-        @param Target
+        @param target
                target
-        @param Data
+        @param data
                data
     */
     void processingInstruction(
-        [in] string Target, [in] string Data )
+        [in] string target, [in] string data )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Receives notification of element closing.
