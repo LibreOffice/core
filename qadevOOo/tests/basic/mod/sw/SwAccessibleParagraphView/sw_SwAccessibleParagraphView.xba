@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwAccessibleParagraphView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:03:11 $ 
+'*  last change:$Date: 2003-06-11 16:30:09 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -76,6 +76,7 @@ Global oText As Object
 Global hasChangeableAttrs As Boolean
 Global multiSelection As Boolean
 Global accText As String
+Global readOnly as Boolean
 
 
 Sub CreateObj()
@@ -97,10 +98,12 @@ On Error Goto ErrHndl
     Dim oWin As Object
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 103)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+                            com.sun.star.accessibility.AccessibleRole.PARAGRAPH)
     hasChangeableAttrs = true
     accText = oObj.getText()
     multiSelection = true
+    readOnly = false
 
 Exit Sub
 ErrHndl:
