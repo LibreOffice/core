@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ IMPLEMENT_SERVICE_INFO(ODbaseConnection, "com.sun.star.sdbc.drivers.dbase.Connec
 Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_B::rBHelper.bDisposed)
+    if (OConnection_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
