@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-04 18:04:50 $
+#   last change: $Author: hjs $ $Date: 2001-02-02 13:58:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,64 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 .ENDIF
 
 .INCLUDE : pstrules.mk
+
+.IF "$(TESTOBJECTS)"!=""
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB1OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB2OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB3OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB4OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB5OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB6OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB7OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB8OBJFILES:s/.obj/.dpcc/)))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB9OBJFILES:s/.obj/.dpcc/)))
+
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL1OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL2OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL3OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL4OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL5OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL6OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL7OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL8OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL9OBJS:s/.obj/.dpcc/))
+
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP1OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP2OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP3OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP4OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP5OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP6OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP7OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP8OBJS:s/.obj/.dpcc/))
+DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP9OBJS:s/.obj/.dpcc/))
+DEPFILESx+=$(uniq $(DEPFILES_TEST))
+.ENDIF			# "$(TESTOBJECTS)"!=""
+
+#DEPFILESx+=$(CXXFILES) $(CFILES) $(HXXFILES) $(RCFILES)
+DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
+DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
+DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
+DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpcc/))
+DEPFILES=$(uniq $(DEPFILESx))
+
+.IF "$(TESTOBJECTS)"!=""
+.IF "$(strip $(DEPFILES_TEST))"!=""
+.IF "$(DEPFILES)"=="$(strip $(DEPFILESx))"
+something_wrong_with_objects :
+    @+echo --------------------------------------------------
+    @+echo make sure that every object appears in either	
+    @+echo     OBJFILES,
+    @+echo     SLOFILES
+    @+echo  or DEPOBJFILES
+    @+echo --------------------------------------------------
+#	@+echo ooo$(strip $(DEPFILES_TEST))ooo
+#	@+echo $(DEPFILES)
+#	@+echo $(DEPFILESx)
+    force_dmake_to_error
+.ENDIF			# "$(DEPFILES)"!="$(strip $(DEPFILESX))"
+.ENDIF			# "$(DEPFILES_TEST)"!=""
+.ENDIF			# "$(TESTOBJECTS)"!=""
 
 .IF "$(depend)" == ""
 
@@ -409,18 +467,18 @@ REAL_SVXLIGHTOBJFILES=$(foreach,i,$(SVXLIGHTOBJFILES) $(i:d)sxl_$(i:f))
 .ENDIF			# "$(SVXLIGHT)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
-.IF "$($(SECOND_BUILD)SLOFILES)"!=""
+.IF "$($(SECOND_BUILD)_SLOFILES)"!=""
 .IF "$(LIBTARGET)"==""
 $(SECOND_BUILD)SLOTARGET=$(SLB)$/$(SECOND_BUILD)_$(TARGET).lib
 .ENDIF			# "$(LIBTARGET)"==""
-REAL_$(SECOND_BUILD)SLOFILES=$(foreach,i,$($(SECOND_BUILD)SLOFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
+REAL_$(SECOND_BUILD)_SLOFILES=$(foreach,i,$($(SECOND_BUILD)_SLOFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
 .ENDIF
 
-.IF "$($(SECOND_BUILD)OBJFILES)"!=""
+.IF "$($(SECOND_BUILD)_OBJFILES)"!=""
 .IF "$(LIBTARGET)"==""
 $(SECOND_BUILD)OBJTARGET=$(LB)$/$(SECOND_BUILD)_$(TARGET).lib
 .ENDIF			# "$(LIBTARGET)"==""
-REAL_$(SECOND_BUILD)OBJFILES=$(foreach,i,$($(SECOND_BUILD)OBJFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
+REAL_$(SECOND_BUILD)_OBJFILES=$(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
 .ENDIF
 .ENDIF			# "$(SECOND_BUILD)"!=""
 
@@ -1896,7 +1954,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(UNOIDLTARGETS) \
         $(PROJECTPCHTARGET) \
         $(ADDOPTTARGET) $(DELOPTTARGET) \
-        $(DPCTARGET) \
+        $(DEPFILES) $(DPCTARGET) \
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(IDLTARGET)	$(SDITARGET)	\
@@ -2337,6 +2395,7 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 
 .IF "$(MAKEFILERC)"==""
 .IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
+.INCLUDE : $(DEPFILES)
 .INCLUDE : $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
 .IF "$(debug)"!=""
@@ -2474,7 +2533,7 @@ $(PROJECTPCHTARGET): $(PROJECTPCHSOURCE).cxx
 .IF "$(NOOPTTARGET)" != ""
 .IF "$(NOOPT_FLAG)" == ""
 
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)SLOFILES) $($(SECOND_BUILD)OBJFILES) : $(NOOPTTARGET)
+#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)_SLOFILES) $($(SECOND_BUILD)_OBJFILES) : $(NOOPTTARGET)
 
 $(NOOPTTARGET):
     @+echo --- NOOPTFILES ---
@@ -2496,7 +2555,7 @@ $(NOOPTFILES):
 .IF "$(EXCEPTIONSTARGET)" != ""
 .IF "$(EXCEPTIONS_FLAG)" == ""
 
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)SLOFILES) $($(SECOND_BUILD)OBJFILES) : $(EXCEPTIONSTARGET)
+#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)_SLOFILES) $($(SECOND_BUILD)_OBJFILES) : $(EXCEPTIONSTARGET)
 
 $(EXCEPTIONSTARGET):
     @+echo --- EXCEPTIONSFILES ---
@@ -2519,7 +2578,7 @@ $(EXCEPTIONSFILES):
 .IF "$(EXCEPTIONSNOOPTTARGET)" != ""
 .IF "$(EXCEPTIONSNOOPT_FLAG)" == ""
 
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)SLOFILES) $($(SECOND_BUILD)OBJFILES) : $(EXCEPTIONSTARGET)
+#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)_SLOFILES) $($(SECOND_BUILD)_OBJFILES) : $(EXCEPTIONSTARGET)
 
 $(EXCEPTIONSNOOPTTARGET):
     @+echo --- EXCEPTIONSNOOPTFILES ---
@@ -2738,67 +2797,6 @@ ZIPALLTARGET: \
         $(ZIP8TARGETN) \
         $(ZIP9TARGETN)
 
-make_all_current_resources:
-.IF "$(NO_REC_RES)"==""
-.IF "$(UPDATER)"!=""
-.IF "$(profile)" == ""
-.IF "$(PRJNAME)"!="sm"
-.IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)$(RCFILES)$(IMGLSTTARGET)"!=""
-.IF "$(MULTI_RESLIB_FLAG)"==""
-.IF "$(RECURSIVE)"==""
-.IF "$(RES_ENUS)"!=""
-        @dmake  solarlang=enus RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_ITAL)"!=""
-        @dmake   solarlang=ital RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_SPAN)"!=""
-        @dmake   solarlang=span RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_FREN)"!=""
-        @dmake  solarlang=fren RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_DTCH)"!=""
-        @dmake   solarlang=dtch RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_DAN)"!=""
-        @dmake  solarlang=dan RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_SWED)"!=""
-        @dmake   solarlang=swed RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_PORT)"!=""
-        @dmake  solarlang=port RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_JAPN)"!=""
-        @dmake  solarlang=japn RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_CHINSIM)"!=""
-        @dmake  solarlang=chinsim RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_CHINTRAD)"!=""
-        @dmake  solarlang=chintrad RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_RUSS)"!=""
-        @dmake  solarlang=russ RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_POL)"!=""
-        @dmake  solarlang=pol RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_ARAB)"!=""
-        @dmake  solarlang=arab RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.IF "$(RES_TURK)"!=""
-        @dmake  solarlang=turk RECURSIVE=TRUE $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-    @+echo . > $(NULLDEV)
 
 #temporary workaround for non-existing delzip in extras
 delzip:
@@ -2813,11 +2811,6 @@ $(MISC)$/helpids.don: $(HELPIDFILES)
     @$(TOUCH) $(MISC)\helpids.don
 
 .IF "$(depend)"==""
-$(MISC)$/$(TARGET).dpc : \
-    $(CXXFILES) $(CFILES) $(HXXFILES) $(RCFILES) \
-    $(SLOFILES) $(OBJFILES) $(DEPOBJFILES) \
-    $(ALLPARFILES)
-
 .IF "$(SVXLIGHT)"!=""
 $(MISC)$/$(TARGET).dpc : \
     $(foreach,i,$(SVXLIGHTSLOFILES) $(i:d)sxl_$(i:f)) \
@@ -2825,10 +2818,10 @@ $(MISC)$/$(TARGET).dpc : \
 .ENDIF
 .IF "$(SECOND_BUILD)"!=""
 $(MISC)$/$(TARGET).dpc : \
-    $(foreach,i,$($(SECOND_BUILD)SLOFILES) $(i:d)$(SECOND_BUILD)_$(i:f)) \
-    $(foreach,i,$($(SECOND_BUILD)OBJFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
+    $(foreach,i,$($(SECOND_BUILD)_SLOFILES) $(i:d)$(SECOND_BUILD)_$(i:f)) \
+    $(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
 .ENDIF
-.ENDIF
+.ENDIF			# "$(depend)"==""
 
 .IF "$(make_srs_deps)"==""
 $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)

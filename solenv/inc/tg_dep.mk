@@ -12,12 +12,14 @@ ALLDEP .PHONY:
     @+-$(RM) $(MISC)$/$(TARGET).dp3 >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
+    @+-$(RM) $(MISC)$/*.dpcc >& $(NULLDEV)
     +@echo ---
     +@echo      Old dependency files removed
     +@echo ---
 
 
 ALLDPC: \
+        $(DEPFILES) \
         $(CFILES) \
         $(CXXFILES) \
         $(RCFILES) \
@@ -41,26 +43,26 @@ ALLDPC: \
 .IF "$(GUI)"=="UNX"
 #	@+if ( -e  $(MISC)$/$(TARGET).dpr ) $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
     @+if ( -e  $(MISC)$/$(TARGET).dpw ) $(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
+    @+if ( -e  $(MISC)$/$(TARGET).dpj ) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+if ( -e  $(MISC)$/genjava.mk ) $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
 .ELSE
 #	@+-if exist $(MISC)$/$(TARGET).dpr $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
     @+-if exist $(MISC)$/$(TARGET).dpw $(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
+    @+-if exist $(MISC)$/$(TARGET).dpj $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+-if exist $(MISC)$/genjava.mk $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
 .ENDIF
-    +$(MKDEP) @$(mktmp -O:$(MISC)$/$(TARGET).dpc $(MKDEPFLAGS) \
-    $(HDBDEPNTARGET) $(OBJFILES) $(DEPOBJFILES) $(SLOFILES) $(RCFILES) \
-    $(ALLPARFILES) )
+    +touch $(MISC)$/$(TARGET).dpc
 #.IF "$(SVXLIGHTSLOFILES)"!=""
 #	@+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTSLOFILES) $(i:d:^"\n")sxl_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
 #.ENDIF
 .IF "$(SVXLIGHTOBJFILES)"!=""
     @+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTOBJFILES) $(i:d:^"\n")sxl_$(i:f) : $(i:d:s/obj/slo/)$(i:b).obj )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
-.IF "$($(SECOND_BUILD)SLOFILES)"!=""
-    @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)SLOFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
+.IF "$($(SECOND_BUILD)_SLOFILES)"!=""
+    @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)_SLOFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
-.IF "$($(SECOND_BUILD)OBJFILES)"!=""
-    @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)OBJFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $(i:d:s/obj/slo/)$(i:b).obj )) >> $(MISC)$/$(TARGET).dpc
+.IF "$($(SECOND_BUILD)_OBJFILES)"!=""
+    @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $(i:d:s/obj/slo/)$(i:b).obj )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
 .IF "$(GROUP)"=="WRITER"
 .IF "$(debug)"==""
