@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:46:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ public:
 
     BOOL CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
                          long& rRightOffset ) const;
+
+    SwTwips CalcHeightOfFirstContentLine() const;
 
     bool SwTabFrm::IsInHeadline( const SwFrm& rFrm ) const;
     SwRowFrm* GetFirstNonHeadlineRow() const;
