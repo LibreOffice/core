@@ -143,6 +143,7 @@ Dim FileNames() as String
 		nOldLevel = iCurLevel
 	Next i
 	ToggleDialogControls(True)
+	DlgReadDir.Model.cmdGoOn.Enabled = False	
 End Sub
 
 
