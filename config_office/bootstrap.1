@@ -17,7 +17,7 @@ else if ($platform == "Darwin") then
    make macosx
 endif
 
-if "$?" != "0" exit
+if "$?" != "0" exit $?
 
 cd ..
 
