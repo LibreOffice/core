@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mh $ $Date: 2004-11-28 16:17:03 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,13 @@ namespace
             /*130 SOT_FORMATSTR_ID_STARCHART_8*/           { MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII, "Chart 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII, "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*132 SOT_FORMATSTR_ID_STARBASE_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*133 SOT_FORMATSTR_ID_XFORMS */               { "application/x-openoffice-xforms;windows_formatname=\"??? Format\"", "???", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+            /*133 SOT_FORMATSTR_ID_XFORMS */               { "application/x-openoffice-xforms;windows_formatname=\"??? Format\"", "???", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*134 SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE*/          { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII, "Writer 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*135 SOT_FORMATSTR_ID_STARWDRAW_8_TEMPLATE*/           { MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII, "Draw 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*136 SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE*/         { MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII, "Impress 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*137 SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE*/            { MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII, "Calc 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*138 SOT_FORMATSTR_ID_STARCHART_8_TEMPLATE*/           { MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII, "Chart 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*139 SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE*/            { MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII, "Math 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             };
         return &aInstance[0];
         }
