@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:18:33 $
+ *  last change: $Author: os $ $Date: 2001-04-16 15:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,6 +1394,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_VERTORIENT_POSITION|CONVERT_TWIPS   },
                     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_VERTORIENT_RELATION },
                     { SW_PROP_NAME(UNO_NAME_TEXT_RANGE),                FN_TEXT_RANGE,          &::getCppuType((uno::Reference<text::XTextRange>*)0),       PROPERTY_NONE, 0},
+                    { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aShapeMap_Impl;

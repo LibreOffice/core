@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 12:29:11 $
+ *  last change: $Author: os $ $Date: 2001-04-16 15:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ class SwShapeDescriptor_Impl
     SwFmtSurround*      pSurround;
     SvxULSpaceItem*     pULSpace;
     SvxLRSpaceItem*     pLRSpace;
+    sal_Bool            bOpaque;
     uno::Reference< XTextRange >        xTextRange;
 
 public:
@@ -174,7 +175,8 @@ public:
      pAnchor(0),
      pSurround(0),
      pULSpace(0),
-     pLRSpace(0)
+     pLRSpace(0),
+     bOpaque(sal_False)
      {}
 
     ~SwShapeDescriptor_Impl()
@@ -227,12 +229,21 @@ public:
     {
         return xTextRange;
     }
+    sal_Bool    IsOpaque()
+        {
+            return bOpaque;
+        }
+    const sal_Bool&    GetOpaque()
+        {
+            return bOpaque;
+        }
     void RemoveHOrient(){DELETEZ(pHOrient);}
     void RemoveVOrient(){DELETEZ(pVOrient);}
     void RemoveAnchor(){DELETEZ(pAnchor);}
     void RemoveSurround(){DELETEZ(pSurround);}
     void RemoveULSpace(){DELETEZ(pULSpace);}
     void RemoveLRSpace(){DELETEZ(pLRSpace);}
+    void SetOpaque(sal_Bool bSet){bOpaque = bSet;}
 };
 /****************************************************************************
     class SwFmDrawPage
@@ -552,6 +563,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                                         RES_FRMATR_END-1 );
     SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+    sal_Bool bOpaque = sal_False;
     if( pDesc )
     {
         if(pDesc->GetSurround())
@@ -583,11 +595,12 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
         if(pDesc->GetSurround())
             aSet.Put( *pDesc->GetSurround());
+        bOpaque = pDesc->IsOpaque();
     }
 
     pSvxShape->setPosition(aMM100Pos);
     SdrObject* pObj = pSvxShape->GetSdrObject();
-    pObj->SetLayer( pDoc->GetHeavenId() );
+    pObj->SetLayer( bOpaque ? pDoc->GetHellId() : pDoc->GetHeavenId() );
 
     SwPaM* pPam = new SwPaM(pDoc->GetNodes().GetEndOfContent());
     SwUnoInternalPaM* pInternalPam = 0;
@@ -994,6 +1007,18 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     if(!bDone)
                         throw IllegalArgumentException();
                 }
+                else if(RES_OPAQUE == pMap->nWID)
+                {
+                    SvxShape* pSvxShape = GetSvxShape();
+                    DBG_ASSERT(pSvxShape, "No SvxShape found!")
+                    if(pSvxShape)
+                    {
+                        SdrObject* pObj = pSvxShape->GetSdrObject();
+                        pObj->SetLayer( *(sal_Bool*)aValue.getValue() ?
+                                    pDoc->GetHellId() : pDoc->GetHeavenId() );
+                    }
+
+                }
                 else if( pDoc->GetRootFrm() )
                 {
                     UnoActionContext aCtx(pDoc);
@@ -1052,6 +1077,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             rRange = *(uno::Reference< XTextRange > *)aValue.getValue();
                         }
                     }
+                    break;
+                    case RES_OPAQUE :
+                        pImpl->SetOpaque(*(sal_Bool*)aValue.getValue());
                     break;
                 }
                 if(pItem)
@@ -1122,6 +1150,9 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     break;
                     case FN_TEXT_RANGE :
                         aRet.setValue(&pImpl->GetTextRange(), ::getCppuType((Reference<XTextRange>*)0));
+                    break;
+                    case RES_OPAQUE :
+                        aRet.setValue(&pImpl->GetOpaque(), ::getBooleanCppuType());
                     break;
                 }
                 if(pItem)
@@ -1210,6 +1241,7 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                             pItem = pImpl->GetSurround();
                         break;
                         case FN_TEXT_RANGE :
+                        case RES_OPAQUE :
                             pRet[nProperty] = PropertyState_DIRECT_VALUE;
                             continue;
                         break;
@@ -1270,6 +1302,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
                     case  RES_LR_SPACE:     pImpl->RemoveLRSpace(); break;
                     case  RES_UL_SPACE:     pImpl->RemoveULSpace(); break;
                     case  RES_SURROUND:     pImpl->RemoveSurround();break;
+                    case RES_OPAQUE :       pImpl->SetOpaque(sal_False);  break;
                     case FN_TEXT_RANGE :
                     break;
                 }
