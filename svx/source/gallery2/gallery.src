@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:43:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3013,6 +3013,20 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
