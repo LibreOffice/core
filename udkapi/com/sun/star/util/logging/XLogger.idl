@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLogger.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $  $Date: 2003-03-27 17:37:25 $
+ *  last change: $Author: rt $  $Date: 2003-04-17 09:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ module com { module sun { module star { module util { module logging {
     component implementing this interface for remote communication.
     This will enable some prechecks before the costly remote logging call is
     made.
+
+    @since #107627#
 */
 
 interface XLogger: com::sun::star::uno::XInterface
