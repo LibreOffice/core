@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:42:30 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,16 +1652,16 @@ EditTextObject* ScFormulaCell::CreateURLObject()
 
     if(pMatrix)
     {
-        BOOL bIsString;
+        ScMatValType nMatValType;
         // determine if the matrix result is a string or value.
-        const MatValue* pMatVal = pMatrix->Get(0, 1, bIsString);
+        const ScMatrixValue* pMatVal = pMatrix->Get(0, 1, nMatValType);
         if (pMatVal)
-    {
-            if (bIsString)
+        {
+            if (nMatValType != SC_MATVAL_VALUE)
                 aURL = pMatVal->GetString();
             else
                 pFormatter->GetOutputString( pMatVal->fVal, nURLFormat, aURL, &pColor );
-    }
+        }
     }
 
     if(!aURL.Len())
