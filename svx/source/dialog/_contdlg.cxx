@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 11:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,7 +936,8 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetModuleFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
-    const sal_Unicode cSep = International().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
     aStr.Append( String::CreateFromAscii( " x " ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-02 14:42:08 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 11:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,11 +751,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     if(xLinguSrvcMgr.is())
     {
         Locale aCurrentLocale;
-        LanguageType eLang = Application::GetAppInternational().GetLanguage();
-        if(LANGUAGE_SYSTEM == eLang)
-        {
-            eLang = GetSystemLanguage();
-        }
+        LanguageType eLang = Application::GetSettings().GetLanguage();
         SvxLanguageToLocale(aCurrentLocale, eLang);
         Sequence<Any> aArgs(2);//second arguments has to be empty!
         aArgs.getArray()[0] <<= SvxGetLinguPropertySet();
