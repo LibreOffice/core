@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:03:45 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,14 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "ÆÄÀÏ(~F)...";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_ADDRESSTEMPLATE
+    {
+        Pos = MAP_APPFONT ( 205 , 124 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Adressbuch..." ;
+        Text [ english ] = "~Address Book..." ;
+        Text [ english_us ] = "~Address Book..." ;
     };
     ListBox LB_LEFT_TYP
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #define LB_LEFT_TYP 2
 #define BTN_EDIT 105
 #define BTN_FILES 3
+#define BTN_ADDRESSTEMPLATE 4
 #define LB_LEFT 1
 #define FT_DEFAULT_TEMPLATE_LABEL 20
 #define FT_DEFAULT_TEMPLATE 21

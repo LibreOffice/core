@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,13 @@
 #include "docvor.hrc"
 #include "docfilt.hxx"
 
+#ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
+#include <svtools/addresstemplate.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 static const char cDelim = ':';
 BOOL SfxOrganizeListBox_Impl::bDropMoveOk=TRUE;
 
@@ -154,6 +161,7 @@ friend class SfxOrganizeListBox_Impl;
     OKButton                aOkBtn;
     MenuButton              aEditBtn;
     HelpButton              aHelpBtn;
+    PushButton              aAddressTemplateBtn;
     PushButton              aFilesBtn;
 
 //    FixedText               aDefaultTemplateLabel;
@@ -176,6 +184,7 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( MenuSelect_Impl, Menu * );
     DECL_LINK( MenuActivate_Impl, Menu * );
     DECL_LINK( AddFiles_Impl, Button * );
+    DECL_LINK( OnAddressTemplateClicked, Button * );
     BOOL                    DontDelete_Impl( SvLBoxEntry *pEntry);
     void                    OkHdl(Button *);
 
@@ -196,6 +205,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aLeftLb( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
     aRightLb( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
     aFilesBtn( pParent, ResId( BTN_FILES ) ),
+    aAddressTemplateBtn( pParent, ResId( BTN_ADDRESSTEMPLATE ) ),
     aEditAcc( ResId( ACC_EDIT ) ),
     aEditBtn( pParent, ResId( BTN_EDIT ) ),
     aMgr(&aLeftLb, &aRightLb, pTempl),
@@ -246,6 +256,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
 
     aFilesBtn.SetClickHdl(
         LINK(this,SfxOrganizeDlg_Impl, AddFiles_Impl));
+    aAddressTemplateBtn.SetClickHdl(
+        LINK(this,SfxOrganizeDlg_Impl, OnAddressTemplateClicked));
     aLeftTypLb.SetSelectHdl(
         LINK(this, SfxOrganizeDlg_Impl, LeftListBoxSelect_Impl));
     aRightTypLb.SetSelectHdl(
@@ -1898,6 +1910,15 @@ IMPL_LINK( SfxOrganizeDlg_Impl, RightListBoxSelect_Impl, ListBox *, pBox )
     aRightLb.GrabFocus();
     GetFocus_Impl(&aRightLb);
     return 0;
+}
+
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxOrganizeDlg_Impl, OnAddressTemplateClicked, Button *, pButton )
+{
+    svt::AddressBookSourceDialog aDialog(pDialog, ::comphelper::getProcessServiceFactory());
+    aDialog.Execute();
+    return 0L;
 }
 
 //-------------------------------------------------------------------------
