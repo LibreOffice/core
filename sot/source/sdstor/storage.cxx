@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:52:37 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,7 +833,10 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
     if ( GetError() == ERRCODE_NONE )
     {
         StreamMode nMode = ( ( nUNOStorageMode & embed::ElementModes::ELEMENT_WRITE ) == embed::ElementModes::ELEMENT_WRITE ) ?
-                                    STREAM_WRITE : STREAM_READ;
+                                    STREAM_WRITE : STREAM_READ | STREAM_NOCREATE;
+
+        if ( nUNOStorageMode & embed::ElementModes::ELEMENT_NOCREATE )
+            nMode |= STREAM_NOCREATE;
 
         sal_Bool bStorageReady = !IsStorage( rEleName );
         SotStorageRef pChildStorage = OpenUCBStorage( rEleName, nMode, STORAGE_TRANSACTED );
