@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:48:57 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _SVX_XFTSFIT_HXX //autogen
 #include <svx/xftsfit.hxx>
+#endif
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -247,6 +250,28 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         }
         break;
 
+        case SID_EXTRUSION_TOOGLE:
+        case SID_EXTRUSION_TILT_DOWN:
+        case SID_EXTRUSION_TILT_UP:
+        case SID_EXTRUSION_TILT_LEFT:
+        case SID_EXTRUSION_TILT_RIGHT:
+        case SID_EXTRUSION_3D_COLOR:
+        case SID_EXTRUSION_DEPTH:
+        case SID_EXTRUSION_DIRECTION:
+        case SID_EXTRUSION_PROJECTION:
+        case SID_EXTRUSION_LIGHTING_DIRECTION:
+        case SID_EXTRUSION_LIGHTING_INTENSITY:
+        case SID_EXTRUSION_SURFACE:
+        case SID_EXTRUSION_DEPTH_FLOATER:
+        case SID_EXTRUSION_DIRECTION_FLOATER:
+        case SID_EXTRUSION_LIGHTING_FLOATER:
+        case SID_EXTRUSION_SURFACE_FLOATER:
+        case SID_EXTRUSION_DEPTH_DIALOG:
+            svx::ExtrusionBar::execute( pSdrView, rReq, rBnd );
+            rReq.Ignore ();
+            break;
+
+
         default:
             DBG_ASSERT(!this, "falscher Dispatcher");
             return;
@@ -332,6 +357,8 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
         }
         nWhich = aIter.NextWhich();
     }
+
+    svx::ExtrusionBar::getState( pSdrView, rSet );
 }
 
 /*--------------------------------------------------------------------
