@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIConfigurationManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:15:20 $
+ *  last change: $Date: 2004-05-12 16:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,9 @@ public class UIConfigurationManager extends TestCase {
             XSingleServiceFactory.class, o);
             Object[] props = new Object[2];
             props[0] = util.utils.getFullTestURL("delete.cfg");
-            props[1] = new Integer(ElementModes.ELEMENT_READWRITE);
+            props[1] = new Integer(ElementModes.READWRITE);
             XStorage xRootStorage = (XStorage)UnoRuntime.queryInterface(XStorage.class, xSSF.createInstanceWithArguments(props));
-            xSubStorage = xRootStorage.openStorageElement("Configurations2", ElementModes.ELEMENT_READWRITE);
+            xSubStorage = xRootStorage.openStorageElement("Configurations2", ElementModes.READWRITE);
 
             XUIConfigurationStorage xConfigStorage =(XUIConfigurationStorage)UnoRuntime.queryInterface(XUIConfigurationStorage.class, xManager);
             xConfigStorage.setStorage(xSubStorage);

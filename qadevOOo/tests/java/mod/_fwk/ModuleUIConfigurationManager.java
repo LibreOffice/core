@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModuleUIConfigurationManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:14:37 $
+ *  last change: $Date: 2004-05-12 16:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public class ModuleUIConfigurationManager extends TestCase {
                     UnoRuntime.queryInterface(XSingleServiceFactory.class, o);
             Object[]props = new Object[2];
             props[0] = util.utils.getOfficeTempDir(xMSF) + "dummyFile.dat";
-            props[1] = new Integer(ElementModes.ELEMENT_READWRITE);
+            props[1] = new Integer(ElementModes.READWRITE);
             XStorage xStore = (XStorage)UnoRuntime.queryInterface(XStorage.class, xStorageService.createInstanceWithArguments(props));
 
             PropertyValue[] initProps = new PropertyValue[4];
