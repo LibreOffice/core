@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:57:04 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@
 #ifndef _ATRHNDL_HXX
 #include <atrhndl.hxx>
 #endif
+
 /*************************************************************************
  *                      class SwTmpEndPortion
  *************************************************************************/
@@ -421,6 +422,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
         0 != GetTxtNode()->GetOutlineNum() ||
+        GetTxtNode()->HasHiddenCharAttribute( true ) ||
          IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return sal_False;
     const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
@@ -588,3 +590,29 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
     }
     return ( 0 != rRegDiff );
 }
+
+
+void SwHiddenTextPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+#if OSL_DEBUG_LEVEL > 1
+    OutputDevice* pOut = (OutputDevice*)rInf.GetOut();
+    Color aCol( SwViewOption::GetFieldShadingsColor() );
+    Color aOldColor( pOut->GetFillColor() );
+    pOut->SetFillColor( aCol );
+    Point aPos( rInf.GetPos() );
+    aPos.Y() -= 150;
+    aPos.X() -= 25;
+    SwRect aRect( aPos, Size( 100, 200 ) );
+    ((OutputDevice*)pOut)->DrawRect( aRect.SVRect() );
+    pOut->SetFillColor( aOldColor );
+#endif
+}
+
+sal_Bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
+{
+    Width( 0 );
+    rInf.GetTxtFrm()->HideFootnotes( rInf.GetIdx(), rInf.GetIdx() + GetLen() );
+
+    return sal_False;
+};
+
