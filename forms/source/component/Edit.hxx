@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:51:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
+// XReset
+    virtual void SAL_CALL reset(  ) throw(::com::sun::star::uno::RuntimeException);
+
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OEditModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
@@ -132,6 +135,10 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
+    // OControlModel overridables
+    virtual void writeAggregate( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& _rxOutStream ) const;
+    virtual void readAggregate( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& _rxInStream );
+
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( );
@@ -144,10 +151,15 @@ protected:
     virtual void            onDisconnectedDbColumn();
 
     virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
+    virtual sal_Bool        approveDbColumnType( sal_Int32 _nColumnType );
+
 protected:
     virtual sal_Int16 getPersistenceFlags() const;
 
     DECLARE_XCLONEABLE();
+
+private:
+    bool    implActsAsRichText( ) const;
 };
 
 //==================================================================
