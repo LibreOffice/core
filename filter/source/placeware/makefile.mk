@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cl $ $Date: 2002-10-02 15:43:44 $
+#   last change: $Author: jbu $ $Date: 2002-10-08 09:31:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..
 PRJNAME=filter
 TARGET=epwp
 
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 

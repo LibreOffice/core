@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: cl $ $Date: 2002-07-17 20:09:45 $
+#   last change: $Author: jbu $ $Date: 2002-10-08 09:30:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..
 PRJNAME=filter
 TARGET=flash
 
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
