@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-12 09:44:25 $
+ *  last change: $Author: mav $ $Date: 2002-09-18 12:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,31 +992,15 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
                 if ( IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
                 {
-                    sal_Bool bForceUCB = ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) );
-
                     CreateTempFile();
-                    aStorage = new SvStorage( bForceUCB, aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                    aStorage = new SvStorage( bUCBStorage, aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
                 }
                 else
                 {
-                    /*
-                    if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) &&
-                        ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) ) )
-                    {
-                        // JAR files can't be created on a stream,
-                        // ctor with stream copies the stream to a TempFile and opens it
-
-                        CloseInStream();
-                        aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
-                    }
-                    else
-                    */
-                    {
-                        // create a storage on the stream
-                        aStorage = new SvStorage( pInStream, FALSE );
-                        if ( !aStorage->GetName().Len() )
-                            aStorage->SetName( aStorageName );
-                    }
+                    // create a storage on the stream
+                    aStorage = new SvStorage( bUCBStorage, *pInStream );
+                    if ( !aStorage->GetName().Len() )
+                           aStorage->SetName( aStorageName );
                 }
             }
         }
