@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:21:22 $
+ *  last change: $Author: nn $ $Date: 2001-04-19 18:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5243,27 +5243,10 @@ void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& x
                                         const rtl::OUString& aString, sal_Bool bAbsorb )
                                     throw(uno::RuntimeException)
 {
+    // special handling for ScCellTextCursor is no longer needed,
+    // SvxUnoText::insertString checks for SvxUnoTextRangeBase instead of SvxUnoTextRange
+
     ScUnoGuard aGuard;
-
-    // der SvxUnoText kennt den ScCellTextCursor nicht, darum muss der Fall hier abgefangen werden
-
-    if ( xRange.is() )
-    {
-        ScCellTextCursor* pCursor = ScCellTextCursor::getImplementation( xRange );
-        if ( pCursor )
-        {
-            //  setString am Cursor statt selber QuickInsertText und UpdateData,
-            //  damit die Selektion am Cursor angepasst wird.
-            //! Eigentlich muessten alle Cursor-Objekte dieses Textes angepasst werden!
-
-            if (!bAbsorb)                   // nicht ersetzen -> hinten anhaengen
-                pCursor->CollapseToEnd();
-
-            pCursor->setString( aString );
-            return;
-        }
-    }
-
     GetUnoText().insertString(xRange, aString, bAbsorb);
 }
 
