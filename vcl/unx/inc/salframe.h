@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-05 16:11:13 $
+ *  last change: $Author: pl $ $Date: 2001-02-21 17:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ class SalFrameData
             XLIB_Window     hForeignTopLevelWindow_;
             Widget          hNoFullscreenShell_;
             Widget          hNoFullscreenComposite_;
+    static  XLIB_Window     s_aFullScreenWindow;
             // window to fall back to when no longer in fullscreen mode
             XLIB_Window     hStackingWindow_;
             // window to listen for CirculateNotify events
@@ -202,6 +203,7 @@ class SalFrameData
 public:
             long            Dispatch( XEvent *pEvent );
             void            Init( USHORT nSalFrameStyle, SystemParentData* pParentData = NULL );
+    static  XLIB_Window     GetFullScreenWindow() { return s_aFullScreenWindow; }
 
             SalDisplay     *GetDisplay() const { return pDisplay_; }
     inline  Display        *GetXDisplay() const;
