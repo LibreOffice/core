@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:13:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,10 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 if( 0 == (nFlags & SETATTR_APICALL) &&
                     0 != ( pTblNd = pNode->FindTableNode() ) )
                 {
+                    SwTableNode* pCurTblNd = pTblNd;
+                    while ( 0 != ( pCurTblNd = pCurTblNd->FindStartNode()->FindTableNode() ) )
+                        pTblNd = pCurTblNd;
+
                     // dann am Tabellen Format setzen
                     SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
                     SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
@@ -769,6 +773,10 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SFX_ITEM_SET == aOtherSet.GetItemState( RES_BREAK,
                         FALSE, (const SfxPoolItem**)&pBreak ) )
         {
+            SwTableNode* pCurTblNd = pTblNd;
+            while ( 0 != ( pCurTblNd = pCurTblNd->FindStartNode()->FindTableNode() ) )
+                pTblNd = pCurTblNd;
+
             // dann am Tabellen Format setzen
             SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
             SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
