@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsGenericPageCache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:32:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_SLIDESORTER_GENERIC_PAGE_CACHE_HXX
 #define SD_SLIDESORTER_GENERIC_PAGE_CACHE_HXX
 
@@ -120,10 +119,21 @@ public:
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
         method does nothing.
+        @param rRequestData
+            This data is used to determine the preview.
+        @param rSize
+            The size of the requested preview bitmap in pixel coordinates.
+        @param bMayBeUpToDate
+            This flag helps the method to determine whether an existing
+            preview that matches the request is up to date.  If the caller
+            know that it is not then by passing <FALSE/> he tells us that we
+            do not have to check the up-to-date flag a second time.  If
+            unsure pass <TRUE/>.
     */
     void RequestPreviewBitmap (
         RequestData& rRequestData,
-        const Size& rSize);
+        const Size& rSize,
+        bool bMayBeUpToDate = true);
 
     /** Tell the cache to replace the bitmap associated with the given
         request data with a new one that reflects recent changes in the
@@ -159,7 +169,7 @@ public:
 
     /** With the precious flag you can control whether a bitmap can be
         removed or reduced in size to make room for other bitmaps or is so
-        precious that it will not touched.  A typical use is to set the
+        precious that it will not be touched.  A typical use is to set the
         precious flag for exactly the visible pages.
     */
     void SetPreciousFlag (RequestData& rRequestData, bool bIsPrecious);
@@ -181,8 +191,8 @@ private:
         after a Clear() call.  This is important because afterwards the
         cache will be constantly at its limit of capacity.  Therefore
         requests with another than the highest priority class will not be
-        processed, the resulting preview bitmaps would be removed shortly
-        afterwards.
+        processed since the resulting preview bitmaps would be removed
+        shortly afterwards.
     */
     bool mbLimitHasBeenReached;
 };
@@ -257,26 +267,32 @@ BitmapEx GenericPageCache<
         RequestData& rRequestData,
         const Size& rSize)
 {
-    BitmapEx aPreview (maBitmapCache.GetBitmap (rRequestData.GetPage()));
-    Size aBitmapSize (aPreview.GetSizePixel());
-    if (aBitmapSize != rSize)
+    BitmapEx aPreview;
+    bool bMayBeUpToDate = true;
+    if (maBitmapCache.HasBitmap (rRequestData.GetPage()))
     {
-        DBG_ASSERT (rSize.Width() < 1000,
-            "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width.  This may indicate an error.");
+        aPreview = maBitmapCache.GetBitmap (rRequestData.GetPage());
+        Size aBitmapSize (aPreview.GetSizePixel());
+        if (aBitmapSize != rSize)
+        {
+            // The bitmap has the wrong size.
+            DBG_ASSERT (rSize.Width() < 1000,
+                "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width.  This may indicate an error.");
 
-        // Scale the bitmap to the desired size when that is possible,
-        // i.e. the bitmap is not empty.
-        if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
-            // BMP_SCALE_NONE               0x00000000UL
-            // BMP_SCALE_FAST               0x00000001UL
-            // BMP_SCALE_INTERPOLATE        0x00000002UL
-            aPreview.Scale (rSize, BMP_SCALE_FAST);
+            // Scale the bitmap to the desired size when that is possible,
+            // i.e. the bitmap is not empty.
+            if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
+                aPreview.Scale (rSize, BMP_SCALE_FAST);
+        }
+        bMayBeUpToDate = true;
     }
+    else
+        bMayBeUpToDate = false;
 
     // Request the creation of a correctly sized preview bitmap.  We do this
     // even when the size of the bitmap in the cache is correct because its
     // content may be not up-to-date anymore.
-    RequestPreviewBitmap (rRequestData, rSize);
+    RequestPreviewBitmap (rRequestData, rSize, bMayBeUpToDate);
 
     return aPreview;
 }
@@ -295,12 +311,15 @@ void GenericPageCache<
     CompactionPolicy, QueueProcessor
     >::RequestPreviewBitmap (
         RequestData& rRequestData,
-        const Size& rSize)
+        const Size& rSize,
+        bool bMayBeUpToDate)
 {
     const SdrPage* pPage = rRequestData.GetPage();
 
     // Determine if the available bitmap is up to date.
-    bool bIsUpToDate = maBitmapCache.BitmapIsUpToDate (pPage);
+    bool bIsUpToDate = false;
+    if (bMayBeUpToDate)
+        bIsUpToDate = maBitmapCache.BitmapIsUpToDate (pPage);
     if (bIsUpToDate)
     {
         BitmapEx aPreview (maBitmapCache.GetBitmap (pPage));
@@ -311,10 +330,9 @@ void GenericPageCache<
     if ( ! bIsUpToDate)
     {
         // No, the bitmap is not up-to-date.  Request a new one.
-        maRequestQueue.InsertFrontRequest (
-            rRequestData,
-            rRequestData.GetPageDescriptor().IsVisible() ? 0 : 1);
-        mpQueueProcessor->Start();
+        int nPriorityClass = rRequestData.GetPageDescriptor().IsVisible() ? 0 : 1;
+        maRequestQueue.AddRequest (rRequestData, nPriorityClass);
+        mpQueueProcessor->Start (nPriorityClass);
     }
 
     // Reduce the cache size if it grew too large.
