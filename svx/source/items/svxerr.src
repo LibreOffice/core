@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:22:55 $
+ *  last change: $Author: kz $ $Date: 2002-01-22 21:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,7 @@ Resource RID_SVXERRCODE
         TEXT[ spanish ] = "Se perder�n todas las modificaciones del Basic Code del documento. En su lugar se guardar� el c�digo macro VBA original.";
         TEXT[ italian ] = "Tutte le modifiche apportate al documento Basic Code andranno perdute. Pertanto verr� salvato l'originale VBA.";
         TEXT[ danish ] = "Alle �ndringer i dokumentet Basic Code g�r tabt. I stedet gemmes gemmes den originale VBA Macro Code.";
-        TEXT[ swedish ] = "Alla �ndringar av dokument-Basic Code g�r f�rlorade. I st�llet sparas original-VBA-makrokoden.";
+        TEXT[ swedish ] = "Alla �ndringar av dokument-Basic-koden g�r f�rlorade. I st�llet sparas original-VBA-makrokoden.";
         TEXT[ polish ] = "Wszelkie modyfikacje dotycz�ce Basic Code dokumentu b�d� anulowane. Zapisany zostanie za to oryginalny kod makro VBA.";
         TEXT[ portuguese_brazilian ] = "The Basic-Code is modified and so it can not be saved as original.";
         TEXT[ japanese ] = "Basic Code ドキュメントのすべての変更は失われました。オリジナルの VBA Makrocodeがその代りに保存されます。";
@@ -668,7 +668,7 @@ Resource RID_SVXERRCODE
         TEXT[ spanish ] = "No se guardar� el Basic Code VBA incluido en el documento.";
         TEXT[ italian ] = "Non � possibile salvare il codice VBA Basic contenuto nel documeto.";
         TEXT[ danish ] = "Den originale VBA Basic Code, som er indeholdt i dokumentet, gemmes ikke.";
-        TEXT[ swedish ] = "Original-VBA-basickoden som finns i dokumentet sparas inte.";
+        TEXT[ swedish ] = "Original-VBA-Basic-koden som finns i dokumentet sparas inte.";
         TEXT[ polish ] = "Zawarty w dokumencie oryginalny VBA Basic Code nie zostanie zapisany.";
         TEXT[ portuguese_brazilian ] = "The original VBA basic code contained in the document will no be saved.";
         TEXT[ japanese ] = "ドキュメントに含まれているオリジナルの VBA Basic Code は保存されません。";
