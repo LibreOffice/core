@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCellRangeData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:58:59 $
+ *  last change:$Date: 2003-11-18 16:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import com.sun.star.sheet.XCellRangeData;
 public class _XCellRangeData extends MultiMethodTest {
 
     public XCellRangeData oObj = null;
+    private Object[][] maCRData = null;
 
     /**
     * Test calls the method
@@ -76,8 +77,8 @@ public class _XCellRangeData extends MultiMethodTest {
     * isn't empty
     */
     public void _getDataArray() {
-        Object[] CRData = oObj.getDataArray();
-        boolean bResult = (CRData.length > 0);
+        maCRData = oObj.getDataArray();
+        boolean bResult = (maCRData.length > 0);
         tRes.tested("getDataArray()", bResult);
     }
 
@@ -89,20 +90,29 @@ public class _XCellRangeData extends MultiMethodTest {
     * one formerly set.
     */
     public void _setDataArray() {
-        Object[][] NewData = (Object[][]) tEnv.getObjRelation("NewData");
-        if (NewData != null) {
-            oObj.setDataArray(NewData);
-        } else {
-            NewData = new Object[2][];
-            NewData[0] = new Double[]{new Double(2.5),new Double(5)};
-            NewData[1] = new Double[]{new Double(4),new Double(9)};
-            oObj.setDataArray(NewData);
+        Object[][] newData = (Object[][]) tEnv.getObjRelation("NewData");
+        if (newData == null) {
+            newData = new Object[maCRData.length][maCRData[0].length];
+            for (int i=0; i<newData.length; i++) {
+                for (int j=0; j<newData[i].length; j++) {
+                    newData[i][j] = new Double(10*i +j);
+                }
+            }
         }
-        Object[][] CRData = oObj.getDataArray();
-        boolean res = ValueComparer.equalValue(CRData[0][0],NewData[0][0]);
-        res &= ValueComparer.equalValue(CRData[0][1],NewData[0][1]);
-        res &= ValueComparer.equalValue(CRData[1][0],NewData[1][0]);
-        res &= ValueComparer.equalValue(CRData[1][1],NewData[1][1]);
+        oObj.setDataArray(newData);
+        Object[][] oCRData = oObj.getDataArray();
+        boolean res = ValueComparer.equalValue(oCRData[0][0],newData[0][0]);
+        res &= ValueComparer.equalValue(oCRData[0][1],newData[0][1]);
+        res &= ValueComparer.equalValue(oCRData[1][0],newData[1][0]);
+        res &= ValueComparer.equalValue(oCRData[1][1],newData[1][1]);
+        // delete values
+        Object[][] emptyData = new Object[newData.length][newData[0].length];
+        for (int i=0; i<emptyData.length; i++) {
+            for (int j=0; j<emptyData[i].length; j++) {
+                emptyData[i][j] = new String();
+            }
+        }
+        oObj.setDataArray(emptyData);
         tRes.tested("setDataArray()", res);
     }
 }
