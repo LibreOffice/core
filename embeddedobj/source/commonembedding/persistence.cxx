@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:24:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,7 @@
 
 #include "convert.hxx"
 
-
 #define USE_STORAGEBASED_DOCUMENT
-
 
 using namespace ::com::sun::star;
 
