@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,13 +206,12 @@ sal_Int64 DBTypeConversion::toINT64(const DateTime& rVal)
 //------------------------------------------------------------------------------
 sal_Int32 DBTypeConversion::getMsFromTime(const Time& rVal)
 {
-    sal_Int16   nSign     = (toINT32(rVal) >= 0) ? +1 : -1;
     sal_Int32   nHour     = rVal.Hours;
     sal_Int32   nMin      = rVal.Minutes;
     sal_Int32   nSec      = rVal.Seconds;
     sal_Int32   n100Sec   = rVal.HundredthSeconds;
 
-    return (((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10))*nSign);
+    return ((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10));
 }
 
 //------------------------------------------------------------------------------
@@ -325,15 +324,14 @@ double DBTypeConversion::toDouble(const Time& rVal)
 double DBTypeConversion::toDouble(const DateTime& _rVal, const Date& _rNullDate)
 {
     sal_Int64   nTime     = toDays(Date(_rVal.Day, _rVal.Month, _rVal.Year), _rNullDate);
-    sal_Int16   nSign     = (nTime >= 0) ? +1 : -1;
-    sal_Int32   nHour     = _rVal.Hours;
-    sal_Int32   nMin      = _rVal.Minutes;
-    sal_Int32   nSec      = _rVal.Seconds;
-    sal_Int32   n100Sec   = _rVal.HundredthSeconds;
+    Time aTimePart;
 
-    double nVal = (((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10))*nSign);
+    aTimePart.Hours             = _rVal.Hours;
+    aTimePart.Minutes           = _rVal.Minutes;
+    aTimePart.Seconds           = _rVal.Seconds;
+    aTimePart.HundredthSeconds  = _rVal.HundredthSeconds;
 
-    return ((double)nTime) + (nVal * (1/fMilliSecondsPerDay));
+    return ((double)nTime) + toDouble(aTimePart);
 }
 // -------------------------------------------------------------------------
 static void addDays(sal_Int32 nDays, Date& _rDate)
