@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:03:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,25 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+
 namespace com{namespace sun{namespace star{namespace container{
     class XNameAccess;
 }}}}
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
 #endif
+
 class SwDBTreeList_Impl;
 class SwWrtShell;
-class SwDBTreeList : public SvTreeListBox
+
+class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 {
     ImageList       aImageList;
     ImageList       aImageListHC;
@@ -94,13 +100,13 @@ class SwDBTreeList : public SvTreeListBox
 
     SwDBTreeList_Impl* pImpl;
 
-    DECL_LINK( DBCompare, SvSortData* );
+    SW_DLLPRIVATE DECL_LINK( DBCompare, SvSortData* );
 
-    void            InitTreeList();
-    virtual void    RequestingChilds( SvLBoxEntry* pParent );
+    SW_DLLPRIVATE void          InitTreeList();
+    SW_DLLPRIVATE virtual void  RequestingChilds( SvLBoxEntry* pParent );
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    SW_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    SW_DLLPRIVATE virtual void  StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 public:
      SwDBTreeList( Window* pParent, const ResId& rResId,
