@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:35:30 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,6 @@
 #endif
 #ifndef _SV_CLIP_HXX //autogen
 #include <vcl/clip.hxx>
-#endif
-#ifndef _DATAEX_HXX //autogen
-#include <dataex.hxx>
 #endif
 #ifndef _VCL_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -1007,29 +1004,6 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if(rHint.ISA(SfxSimpleHint) &&
         ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING)
     {
-        // Clipboard loslassen:
-        if( pClipboard )
-        {
-            sal_Bool bFlushToSystem = sal_False;
-            if( VclClipboard::ExistsSystemClipboard() )
-            {
-                if( pClipboard->IsBig() )
-                {
-                    QueryBox aBox( 0, SW_RES(MSG_CLPBRD_CLEAR) );
-                    if( RET_YES == aBox.Execute() )
-                        bFlushToSystem = sal_True;
-                }
-                else
-                    bFlushToSystem = sal_True;
-            }
-
-            if ( pClipboard )
-            {
-                VclClipboard::ReleaseClipboard( bFlushToSystem );
-                ASSERT( !pClipboard, "can't get off this Clipboard" );
-            }
-        }
-
         if(pSrcViewConfig)
         {
             if(pSrcViewConfig->IsModified())
