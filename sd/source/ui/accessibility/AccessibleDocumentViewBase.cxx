@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-05-13 12:32:53 $
+ *  last change: $Author: af $ $Date: 2002-05-22 08:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,14 +149,14 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
         *static_cast<OutputDevice*>(pSdWindow))
 {
     OSL_TRACE ("new view is %xd", pViewShell->GetView());
-    if (rxController.is())
-        mxModel = rxController->getModel();
+    if (mxController.is())
+        mxModel = mxController->getModel();
 
     // Fill the shape tree info.
     maShapeTreeInfo.SetModelBroadcaster (
         uno::Reference<document::XEventBroadcaster>(
             mxModel, uno::UNO_QUERY));
-    maShapeTreeInfo.SetController (rxController);
+    maShapeTreeInfo.SetController (mxController);
     maShapeTreeInfo.SetSdrView (pViewShell->GetView());
     maShapeTreeInfo.SetWindow (pSdWindow);
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
