@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAutoFormatFieldObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:42 $
+ *  last change:$Date: 2003-01-31 14:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -104,8 +106,7 @@ public class ScAutoFormatFieldObj extends TestCase {
     * retrieved.
     */
     public synchronized TestEnvironment createTestEnvironment
-        ( TestParameters Param, PrintWriter log )
-        throws StatusException {
+            ( TestParameters Param, PrintWriter log ) throws StatusException {
 
         XInterface oObj = null;
 
@@ -118,14 +119,16 @@ public class ScAutoFormatFieldObj extends TestCase {
                 ("com.sun.star.sheet.TableAutoFormats");
             XIndexAccess formatsIndex = (XIndexAccess)UnoRuntime.queryInterface
                 (XIndexAccess.class, formats);
-            XInterface format = (XInterface)formatsIndex.getByIndex(0);
+            XInterface format = (XInterface) AnyConverter.toObject(
+                        new Type(XInterface.class),formatsIndex.getByIndex(0));
             XIndexAccess formatIndex = (XIndexAccess) UnoRuntime.queryInterface
                 (XIndexAccess.class, format);
-            oObj = (XInterface)formatIndex.getByIndex(0);
+            oObj = (XInterface) AnyConverter.toObject(
+                        new Type(XInterface.class),formatIndex.getByIndex(0));
 
         } catch (com.sun.star.uno.Exception e) {
-          log.println ("Exception occured while creating test Object.") ;
-          e.printStackTrace(log) ;
+            log.println ("Exception occured while creating test Object.") ;
+            e.printStackTrace(log) ;
         }
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
