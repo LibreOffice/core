@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:42:24 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,8 +1491,10 @@ public:
     sal_uInt16 GetScriptAtPos( xub_StrLen nPos,
                                sal_uInt16 nWeak=CSS1_OUTMODE_ANY_SCRIPT );
 
-    void OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos );
-    void OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos );
+    void OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+                        HTMLOutContext *pContext = 0 );
+    void OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+                      HTMLOutContext *pContext = 0 );
 
     USHORT Count() const { return aEndLst.Count(); }
 
@@ -2235,7 +2237,8 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
     return nRet;
 }
 
-void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos )
+void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+                                      HTMLOutContext *pContext  )
 {
     rHWrt.bTagOn = TRUE;
 
@@ -2260,13 +2263,19 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos )
             {
                 rHWrt.nCSS1Script = GetScriptAtPos( nPos, nCSS1Script );
             }
+            if( pContext )
+            {
+                HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
+                pContext = 0; // one time ony
+            }
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             rHWrt.nCSS1Script = nCSS1Script;
         }
     }
 }
 
-void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos )
+void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+                                     HTMLOutContext *pContext )
 {
     rHWrt.bTagOn = FALSE;
 
@@ -2279,6 +2288,11 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos )
 
         if( STRING_MAXLEN==nPos || nEnd == nPos )
         {
+            if( pContext )
+            {
+                HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
+                pContext = 0; // one time ony
+            }
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             _RemoveItem( i );
         }
@@ -2594,6 +2608,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // ausgegeben, so muessen auch da die Attribute stimmen!!
     rHTMLWrt.bTxtAttr = TRUE;
 
+
     USHORT nAttrPos = 0;
     xub_StrLen nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const SwTxtAttr * pHt = 0;
@@ -2649,157 +2664,167 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         NO_NUMBERING != pNd->GetNum()->GetLevel() )
         bWriteBreak = FALSE;
 
-    xub_StrLen nPreSplitPos = 0;
-    for( ; nStrPos < nEnde; nStrPos++ )
     {
-        aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
+        HTMLOutContext aContext( rHTMLWrt.eDestEnc );
 
-        // Die an der aktuellen Position verankerten Rahmen ausgeben
-        if( bFlysLeft )
-            bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
-                                            nStrPos, HTML_POS_INSIDE );
-
-        BOOL bOutChar = TRUE;
-        const SwTxtAttr * pTxtHt = 0;
-        if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
-            && nStrPos != nEnde )
+        xub_StrLen nPreSplitPos = 0;
+        for( ; nStrPos < nEnde; nStrPos++ )
         {
-            do {
-                if( pHt->GetEnd() )
-                {
-                    if( RES_CHRATR_KERNING == pHt->Which() &&
-                        rHTMLWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) &&
-                        *pHt->GetEnd() - nStrPos == 1 &&
-                        ' ' == rStr.GetChar(nStrPos) &&
-                        ((const SvxKerningItem&)pHt->GetAttr()).GetValue() > 0 )
-                    {
-                        // Wenn erlaubt, wird das Ding als Spacer exportiert
+            aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
 
-                        bOutChar = FALSE;   // Space nicht ausgeben
-                        bWriteBreak = FALSE;    // der Absatz ist aber auch nicht leer
+            // Die an der aktuellen Position verankerten Rahmen ausgeben
+            if( bFlysLeft )
+                bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
+                                                nStrPos, HTML_POS_INSIDE,
+                                                &aContext );
 
-                        OutHTML_HoriSpacer( rWrt,
-                            ((const SvxKerningItem&)pHt->GetAttr()).GetValue() );
-
-                        // Der Hint braucht nun doch nicht weiter
-                        // beruecksichtigt werden.
-                    }
-                    else if( *pHt->GetEnd() != nStrPos )
-                    {
-                        // Hints mit Ende einsortieren, wenn sie keinen
-                        // leeren Bereich aufspannen (Hints, die keinen
-                        // Bereich aufspannen werden ignoriert
-                        aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
-                                           *pHt->GetEnd() + nOffset,
-                                           rHTMLWrt.aChrFmtInfos );
-                    }
-                    else
-                    {
-#if 0
-                        // leere Hinst gleich ausgeben
-                        rHTMLWrt.bTagOn = TRUE;
-                        Out( aHTMLAttrFnTab, pHt->GetAttr(), rHTMLWrt );
-                        rHTMLWrt.bTagOn = FALSE;
-                        Out( aHTMLAttrFnTab, pHt->GetAttr(), rHTMLWrt );
-#endif
-                    }
-                }
-                else
-                {
-                    // Hints ohne-Ende werden als letztes ausgebeben
-                    ASSERT( !pTxtHt,
-                            "Wieso gibt es da schon ein Attribut ohne Ende?" );
-                    if( rHTMLWrt.nTxtAttrsToIgnore>0 )
-                    {
-                        rHTMLWrt.nTxtAttrsToIgnore--;
-                    }
-                    else
-                    {
-                        pTxtHt = pHt;
-                        USHORT nFldWhich;
-                        if( RES_TXTATR_FIELD != pHt->Which() ||
-                             ( RES_POSTITFLD != (nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetFld()->Which()) &&
-                            RES_SCRIPTFLD != nFldWhich ) )
-                            bWriteBreak = FALSE;
-                    }
-                    bOutChar = FALSE;       // keine 255 ausgeben
-                }
-            } while( ++nAttrPos < nCntAttr && nStrPos ==
-                *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
-        }
-
-        // Manche Draw-Formate koennen auch noch Attribute mitbringen
-        if( pTxtHt && RES_TXTATR_FLYCNT == pTxtHt->Which() )
-        {
-            const SwFrmFmt* pFrmFmt =
-                ((const SwFmtFlyCnt &)pTxtHt->GetAttr()).GetFrmFmt();
-
-            if( RES_DRAWFRMFMT == pFrmFmt->Which() )
-                aEndPosLst.Insert( *((const SwDrawFrmFmt *)pFrmFmt),
-                                    nStrPos + nOffset,
-                                    rHTMLWrt.aChrFmtInfos );
-        }
-
-        aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
-        aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset );
-
-        if( pTxtHt )
-        {
-            rHTMLWrt.bLFPossible = !rHTMLWrt.nLastParaToken && nStrPos > 0 &&
-                                   rStr.GetChar(nStrPos-1) == ' ';
-            sal_uInt16 nCSS1Script = rHTMLWrt.nCSS1Script;
-            rHTMLWrt.nCSS1Script = aEndPosLst.GetScriptAtPos(
-                                            nStrPos + nOffset, nCSS1Script );
-            Out( aHTMLAttrFnTab, pTxtHt->GetAttr(), rHTMLWrt );
-            rHTMLWrt.nCSS1Script = nCSS1Script;
-            rHTMLWrt.bLFPossible = FALSE;
-        }
-
-        if( bOutChar )
-        {
-            sal_Unicode c = rStr.GetChar( nStrPos );
-            // versuche nach ungefaehr 255 Zeichen eine neue Zeile zu
-            // beginnen, aber nicht in PRE und nur bei Spaces
-            if( ' '==c && !rHTMLWrt.nLastParaToken  )
+            BOOL bOutChar = TRUE;
+            const SwTxtAttr * pTxtHt = 0;
+            if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
+                && nStrPos != nEnde )
             {
-                xub_StrLen nLineLen;
-                if( rHTMLWrt.nLastParaToken )
-                    nLineLen = nStrPos - nPreSplitPos;
-                else
-                    nLineLen = rHTMLWrt.GetLineLen();
+                do {
+                    if( pHt->GetEnd() )
+                    {
+                        if( RES_CHRATR_KERNING == pHt->Which() &&
+                            rHTMLWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) &&
+                            *pHt->GetEnd() - nStrPos == 1 &&
+                            ' ' == rStr.GetChar(nStrPos) &&
+                            ((const SvxKerningItem&)pHt->GetAttr()).GetValue() > 0 )
+                        {
+                            // Wenn erlaubt, wird das Ding als Spacer exportiert
 
-                xub_StrLen nWordLen = rStr.Search( ' ', nStrPos+1 );
-                if( nWordLen == STRING_NOTFOUND )
-                    nWordLen = nEnde;
-                nWordLen -= nStrPos;
+                            bOutChar = FALSE;   // Space nicht ausgeben
+                            bWriteBreak = FALSE;    // der Absatz ist aber auch nicht leer
+                            HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                            OutHTML_HoriSpacer( rWrt,
+                                ((const SvxKerningItem&)pHt->GetAttr()).GetValue() );
 
-                if( nLineLen >= rHTMLWrt.nWhishLineLen ||
-                    (nLineLen+nWordLen) >= rHTMLWrt.nWhishLineLen )
-                {
-                    rHTMLWrt.OutNewLine();
-                    bOutChar = FALSE;
-                    if( rHTMLWrt.nLastParaToken )
-                        nPreSplitPos = nStrPos+1;
-                }
+                            // Der Hint braucht nun doch nicht weiter
+                            // beruecksichtigt werden.
+                        }
+                        else if( *pHt->GetEnd() != nStrPos )
+                        {
+                            // Hints mit Ende einsortieren, wenn sie keinen
+                            // leeren Bereich aufspannen (Hints, die keinen
+                            // Bereich aufspannen werden ignoriert
+                            aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
+                                               *pHt->GetEnd() + nOffset,
+                                               rHTMLWrt.aChrFmtInfos );
+                        }
+                        else
+                        {
+#if 0
+                            // leere Hinst gleich ausgeben
+                            rHTMLWrt.bTagOn = TRUE;
+                            Out( aHTMLAttrFnTab, pHt->GetAttr(), rHTMLWrt );
+                            rHTMLWrt.bTagOn = FALSE;
+                            Out( aHTMLAttrFnTab, pHt->GetAttr(), rHTMLWrt );
+#endif
+                        }
+                    }
+                    else
+                    {
+                        // Hints ohne-Ende werden als letztes ausgebeben
+                        ASSERT( !pTxtHt,
+                                "Wieso gibt es da schon ein Attribut ohne Ende?" );
+                        if( rHTMLWrt.nTxtAttrsToIgnore>0 )
+                        {
+                            rHTMLWrt.nTxtAttrsToIgnore--;
+                        }
+                        else
+                        {
+                            pTxtHt = pHt;
+                            USHORT nFldWhich;
+                            if( RES_TXTATR_FIELD != pHt->Which() ||
+                                ( RES_POSTITFLD != (nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetFld()->Which()) &&
+                                RES_SCRIPTFLD != nFldWhich ) )
+                                bWriteBreak = FALSE;
+                        }
+                        bOutChar = FALSE;       // keine 255 ausgeben
+                    }
+                } while( ++nAttrPos < nCntAttr && nStrPos ==
+                    *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
+            }
+
+            // Manche Draw-Formate koennen auch noch Attribute mitbringen
+            if( pTxtHt && RES_TXTATR_FLYCNT == pTxtHt->Which() )
+            {
+                const SwFrmFmt* pFrmFmt =
+                    ((const SwFmtFlyCnt &)pTxtHt->GetAttr()).GetFrmFmt();
+
+                if( RES_DRAWFRMFMT == pFrmFmt->Which() )
+                    aEndPosLst.Insert( *((const SwDrawFrmFmt *)pFrmFmt),
+                                        nStrPos + nOffset,
+                                        rHTMLWrt.aChrFmtInfos );
+            }
+
+            aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
+            aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
+
+            if( pTxtHt )
+            {
+                rHTMLWrt.bLFPossible = !rHTMLWrt.nLastParaToken && nStrPos > 0 &&
+                                       rStr.GetChar(nStrPos-1) == ' ';
+                sal_uInt16 nCSS1Script = rHTMLWrt.nCSS1Script;
+                rHTMLWrt.nCSS1Script = aEndPosLst.GetScriptAtPos(
+                                                nStrPos + nOffset, nCSS1Script );
+                HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                Out( aHTMLAttrFnTab, pTxtHt->GetAttr(), rHTMLWrt );
+                rHTMLWrt.nCSS1Script = nCSS1Script;
+                rHTMLWrt.bLFPossible = FALSE;
             }
 
             if( bOutChar )
             {
-                if( 0x0a == c )
-                    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_linebreak );
-                else
-                    HTMLOutFuncs::Out_Char( rWrt.Strm(), c, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                sal_Unicode c = rStr.GetChar( nStrPos );
+                // versuche nach ungefaehr 255 Zeichen eine neue Zeile zu
+                // beginnen, aber nicht in PRE und nur bei Spaces
+                if( ' '==c && !rHTMLWrt.nLastParaToken  )
+                {
+                    xub_StrLen nLineLen;
+                    if( rHTMLWrt.nLastParaToken )
+                        nLineLen = nStrPos - nPreSplitPos;
+                    else
+                        nLineLen = rHTMLWrt.GetLineLen();
 
-                // Wenn das letzte Zeichen eines Absatzed ein harter
-                // Zeilen-Umbruch ist brauchen wir noch ein <BR> mehr, weil
-                // Netscape & Co in diesem Fall fuer den naechsten Absatz
-                // nicht in die naechste Zeile gehen.
-                bWriteBreak = (0x0a == c) &&
-                              (HTML_PREFORMTXT_ON != rHTMLWrt.nLastParaToken);
+                    xub_StrLen nWordLen = rStr.Search( ' ', nStrPos+1 );
+                    if( nWordLen == STRING_NOTFOUND )
+                        nWordLen = nEnde;
+                    nWordLen -= nStrPos;
+
+                    if( nLineLen >= rHTMLWrt.nWhishLineLen ||
+                        (nLineLen+nWordLen) >= rHTMLWrt.nWhishLineLen )
+                    {
+                        HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                        rHTMLWrt.OutNewLine();
+                        bOutChar = FALSE;
+                        if( rHTMLWrt.nLastParaToken )
+                            nPreSplitPos = nStrPos+1;
+                    }
+                }
+
+                if( bOutChar )
+                {
+                    if( 0x0a == c )
+                    {
+                        HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_linebreak );
+                    }
+                    else
+                        HTMLOutFuncs::Out_Char( rWrt.Strm(), c, aContext, &rHTMLWrt.aNonConvertableCharacters );
+
+                    // Wenn das letzte Zeichen eines Absatzed ein harter
+                    // Zeilen-Umbruch ist brauchen wir noch ein <BR> mehr, weil
+                    // Netscape & Co in diesem Fall fuer den naechsten Absatz
+                    // nicht in die naechste Zeile gehen.
+                    bWriteBreak = (0x0a == c) &&
+                                  (HTML_PREFORMTXT_ON != rHTMLWrt.nLastParaToken);
+                }
             }
         }
+        HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
     }
-
 
     BOOL bEndAttrsWritten = aEndPosLst.Count() > 0;
     aEndPosLst.OutEndAttrs( rHTMLWrt, STRING_MAXLEN );
@@ -3156,9 +3181,11 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt )
 {
+    HTMLOutContext aContext ( ((SwHTMLWriter&)rWrt).eDestEnc );
     HTMLOutFuncs::Out_Char( rWrt.Strm(), ((SwFmtHardBlank&)rHt).GetChar(),
-                            ((SwHTMLWriter&)rWrt).eDestEnc,
+                            aContext,
                             &((SwHTMLWriter&)rWrt).aNonConvertableCharacters);
+    HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
     return rWrt;
 }
 
