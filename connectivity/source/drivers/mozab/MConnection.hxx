@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 17:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ namespace connectivity
             static const sal_Char*    getSDBC_SCHEME_LDAP();
             static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
             static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
-            static ::rtl::OUString    getImplementationName_Static();
+            static ::rtl::OUString    getDriverImplementationName();
 
             // End of Additions from the land of mozilla
         };

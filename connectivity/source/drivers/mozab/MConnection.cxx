@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 17:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_EXPRESS()
     return SDBC_SCHEME_OUTLOOK_EXPRESS;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OConnection::getImplementationName_Static()
+::rtl::OUString OConnection::getDriverImplementationName()
 {
     return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
 }
