@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 13:52:14 $
+ *  last change: $Author: bm $ $Date: 2001-01-17 10:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,30 +101,35 @@ SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
 
 SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 {
-    xNextMapper = 0;
+    mxNextMapper = 0;
 }
 
 void SvXMLImportPropertyMapper::ChainImportMapper(
         const UniReference< SvXMLImportPropertyMapper>& rMapper )
 {
+    // add map entries from rMapper to current map
     maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
+    // rMapper uses the same map as 'this'
     rMapper->maPropMapper = maPropMapper;
 
-    if( xNextMapper.is() )
-        xNextMapper->_ChainImportMapper( rMapper );
-    else
-        xNextMapper = rMapper;
-}
+    // set rMapper as last mapper in current chain
+    UniReference< SvXMLImportPropertyMapper > xNext = mxNextMapper;
+    if( xNext.is())
+    {
+        while( xNext->mxNextMapper.is())
+            xNext = xNext->mxNextMapper;
+        xNext->mxNextMapper = rMapper;
+    }
 
-void SvXMLImportPropertyMapper::_ChainImportMapper(
-        const UniReference< SvXMLImportPropertyMapper>& rMapper )
-{
-    maPropMapper = rMapper->getPropertySetMapper();
+    // if rMapper was already chained, correct
+    // map pointer of successors
+    xNext = rMapper;
 
-    if( xNextMapper.is() )
-        xNextMapper->_ChainImportMapper( rMapper );
-    else
-        xNextMapper = rMapper;
+    while( xNext->mxNextMapper.is())
+    {
+        xNext = xNext->mxNextMapper;
+        xNext->maPropMapper = maPropMapper;
+    }
 }
 
 void SvXMLImportPropertyMapper::importXML(
@@ -304,9 +309,9 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    DBG_ASSERT( xNextMapper.is(), "unsuported special item in xml import" );
-    if( xNextMapper.is() )
-        return xNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
+    DBG_ASSERT( mxNextMapper.is(), "unsuported special item in xml import" );
+    if( mxNextMapper.is() )
+        return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
     else
         return FALSE;
@@ -320,9 +325,9 @@ BOOL SvXMLImportPropertyMapper::handleNoItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap) const
 {
-    DBG_ASSERT( xNextMapper.is(), "unsuported no item in xml import" );
-    if( xNextMapper.is() )
-        return xNextMapper->handleNoItem( nIndex, rProperties, rValue,
+    DBG_ASSERT( mxNextMapper.is(), "unsuported no item in xml import" );
+    if( mxNextMapper.is() )
+        return mxNextMapper->handleNoItem( nIndex, rProperties, rValue,
                                           rUnitConverter, rNamespaceMap );
     else
         return FALSE;
@@ -364,6 +369,6 @@ void SvXMLImportPropertyMapper::finished(
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     // nothing to do here
-    if( xNextMapper.is() )
-        xNextMapper->finished( rProperties, nStartIndex, nEndIndex );
+    if( mxNextMapper.is() )
+        mxNextMapper->finished( rProperties, nStartIndex, nEndIndex );
 }

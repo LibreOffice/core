@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
+ *  last change: $Author: bm $ $Date: 2001-01-17 10:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,30 +128,35 @@ SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
 
 SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 {
-    xNextMapper = 0;
+    mxNextMapper = 0;
 }
 
 void SvXMLExportPropertyMapper::ChainExportMapper(
         const UniReference< SvXMLExportPropertyMapper>& rMapper )
 {
+    // add map entries from rMapper to current map
     maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
+    // rMapper uses the same map as 'this'
     rMapper->maPropMapper = maPropMapper;
 
-    if( xNextMapper.is() )
-        xNextMapper->_ChainExportMapper( rMapper );
-    else
-        xNextMapper = rMapper;
-}
+    // set rMapper as last mapper in current chain
+    UniReference< SvXMLExportPropertyMapper > xNext = mxNextMapper;
+    if( xNext.is())
+    {
+        while( xNext->mxNextMapper.is())
+            xNext = xNext->mxNextMapper;
+        xNext->mxNextMapper = rMapper;
+    }
 
-void SvXMLExportPropertyMapper::_ChainExportMapper(
-        const UniReference< SvXMLExportPropertyMapper>& rMapper )
-{
-    maPropMapper = rMapper->getPropertySetMapper();
+    // if rMapper was already chained, correct
+    // map pointer of successors
+    xNext = rMapper;
 
-    if( xNextMapper.is() )
-        xNextMapper->_ChainExportMapper( rMapper );
-    else
-        xNextMapper = rMapper;
+    while( xNext->mxNextMapper.is())
+    {
+        xNext = xNext->mxNextMapper;
+        xNext->maPropMapper = maPropMapper;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -309,8 +314,8 @@ void SvXMLExportPropertyMapper::ContextFilter(
         Reference< XPropertySet > rPropSet ) const
 {
     // Derived class could implement this.
-    if( xNextMapper.is() )
-        xNextMapper->ContextFilter( rProperties, rPropSet );
+    if( mxNextMapper.is() )
+        mxNextMapper->ContextFilter( rProperties, rPropSet );
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -459,9 +464,9 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ASSERT( xNextMapper.is(), "special item not handled in xml export" );
-    if( xNextMapper.is() )
-        xNextMapper->handleSpecialItem( rAttrList, rProperty, rUnitConverter,
+    DBG_ASSERT( mxNextMapper.is(), "special item not handled in xml export" );
+    if( mxNextMapper.is() )
+        mxNextMapper->handleSpecialItem( rAttrList, rProperty, rUnitConverter,
                                         rNamespaceMap, pProperties, nIdx );
 }
 
@@ -475,9 +480,9 @@ void SvXMLExportPropertyMapper::handleNoItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ASSERT( xNextMapper.is(), "no item not handled in xml export" );
-    if( xNextMapper.is() )
-        xNextMapper->handleNoItem( rAttrList, rProperty, rUnitConverter,
+    DBG_ASSERT( mxNextMapper.is(), "no item not handled in xml export" );
+    if( mxNextMapper.is() )
+        mxNextMapper->handleNoItem( rAttrList, rProperty, rUnitConverter,
                                    rNamespaceMap, pProperties, nIdx );
 }
 
@@ -492,9 +497,9 @@ void SvXMLExportPropertyMapper::handleElementItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ASSERT( xNextMapper.is(), "element item not handled in xml export" );
-    if( xNextMapper.is() )
-        xNextMapper->handleElementItem( rHandler, rProperty, rUnitConverter,
+    DBG_ASSERT( mxNextMapper.is(), "element item not handled in xml export" );
+    if( mxNextMapper.is() )
+        mxNextMapper->handleElementItem( rHandler, rProperty, rUnitConverter,
                                            rNamespaceMap, nFlags, pProperties,
                                         nIdx );
 }
@@ -533,7 +538,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                         & MID_FLAG_NO_ITEM_EXPORT ) == 0 )
             {
                 if( ( maPropMapper->GetEntryFlags( nPropMapIdx )
-                            & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
+                      & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
                 {
                     // element items do not add any properties,
                     // we export it later
