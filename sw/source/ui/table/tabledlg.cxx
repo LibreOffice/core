@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 10:00:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1670,6 +1670,11 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     aSplitCB        (this, SW_RES(CB_SPLIT          )),
     aSplitRowCB     (this, SW_RES(CB_SPLIT_ROW      )),
     aHeadLineCB     (this, SW_RES(CB_HEADLINE       )),
+    aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER  )),
+    aRepeatHeaderBeforeFT   (this),
+    aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER  )),
+    aRepeatHeaderAfterFT    (this),
+    aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
     aTextDirectionFT(this, SW_RES(FT_TEXTDIRECTION  )),
     aTextDirectionLB(this, SW_RES(LB_TEXTDIRECTION  )),
     aVertOrientFL   (this, SW_RES(FL_VERT_ORIENT    )),
@@ -1696,6 +1701,7 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
         LINK( this, SwTextFlowPage, SplitHdl_Impl));
     aSplitRowCB.SetClickHdl(
         LINK( this, SwTextFlowPage, SplitRowHdl_Impl));
+    aHeadLineCB.SetClickHdl( LINK( this, SwTextFlowPage, HeadLineCBClickHdl ) );
 
 #ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
@@ -1707,6 +1713,10 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
         aSplitCB.Hide();
         aSplitRowCB.Hide();
     }
+
+    aRepeatHeaderCombo.Arrange( aRepeatHeaderFT );
+
+    HeadLineCBClickHdl();
 }
 
 /*-----------------12.12.96 12.22-------------------
@@ -1730,10 +1740,11 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     BOOL bModified = FALSE;
 
     //Ueberschrift wiederholen
-    if(aHeadLineCB.IsChecked() != aHeadLineCB.GetSavedValue())
+    if(aHeadLineCB.IsChecked() != aHeadLineCB.GetSavedValue() ||
+        String::CreateFromInt32( aRepeatHeaderNF.GetValue() ) != aRepeatHeaderNF.GetSavedValue() )
     {
-        bModified |= 0 != rSet.Put( SfxBoolItem(FN_PARAM_TABLE_HEADLINE,
-                                    aHeadLineCB.IsChecked()));
+        bModified |= 0 != rSet.Put(
+            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, aHeadLineCB.IsChecked()? USHORT(aRepeatHeaderNF.GetValue()) : 0 ));
     }
     if(aKeepCB.IsChecked() != aKeepCB.GetSavedValue())
         bModified |= 0 != rSet.Put( SvxFmtKeepItem( aKeepCB.IsChecked()));
@@ -1987,8 +1998,11 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
     if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, FALSE, &pItem ))
     {
-        aHeadLineCB.Check( ((const SfxBoolItem*)pItem)->GetValue() );
+        USHORT nRep = ((const SfxUInt16Item*)pItem)->GetValue();
+        aHeadLineCB.Check( nRep > 0 );
         aHeadLineCB.SaveValue();
+        aRepeatHeaderNF.SetValue( nRep );
+        aRepeatHeaderNF.SaveValue();
     }
     if ( rSet.GetItemState(FN_TABLE_BOX_TEXTDIRECTION) > SFX_ITEM_AVAILABLE )
     {
@@ -2017,8 +2031,16 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     aPgBrkBeforeRB.SaveValue();
     aPgBrkAfterRB.SaveValue();
     aPageNoNF.SaveValue();
+<<<<<<< tabledlg.cxx
     aTextDirectionLB.SaveValue();
     aVertOrientLB.SaveValue();
+=======
+    aTopRB.SaveValue();
+    aCenterRB.SaveValue();
+    aBottomRB.SaveValue();
+
+    HeadLineCBClickHdl();
+>>>>>>> 1.21.78.2
 }
 /*-----------------16.04.98 14:48-------------------
 
@@ -2163,6 +2185,14 @@ IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
     pBox->EnableTriState(FALSE);
     return 0;
 }
+
+IMPL_LINK( SwTextFlowPage, HeadLineCBClickHdl, void*, EMPTYARG )
+{
+    aRepeatHeaderCombo.Enable(aHeadLineCB.IsChecked());
+
+    return 0;
+}
+
 /*-----------------30.05.97 07:37-------------------
 
 --------------------------------------------------*/
