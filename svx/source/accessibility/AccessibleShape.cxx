@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
+ *  last change: $Author: af $ $Date: 2002-05-24 09:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,23 +526,57 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     // mm).  Use the property BoundRect.  Only if that is not supported ask
     // the shape for its position and size directly.
     Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+    Reference<beans::XPropertySetInfo> xSetInfo;
+    bool bFoundBoundRect = false;
     if (xSet.is())
     {
-        try
+        xSetInfo = xSet->getPropertySetInfo ();
+        if (xSetInfo.is())
         {
-            uno::Any aValue = xSet->getPropertyValue (
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect")));
-            aValue >>= aBoundingBox;
+            if (xSetInfo->hasPropertyByName (
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect"))))
+            {
+                try
+                {
+                    uno::Any aValue = xSet->getPropertyValue (
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect")));
+                    aValue >>= aBoundingBox;
+                    bFoundBoundRect = true;
+                }
+                catch (beans::UnknownPropertyException e)
+                {
+                    // Handled below (bFoundBoundRect stays false).
+                }
+            }
+            else
+                OSL_TRACE (" no property BoundRect");
         }
-        catch (beans::UnknownPropertyException e)
+    }
+
+    // Fallback when there is no BoundRect Property.
+    if ( ! bFoundBoundRect)
+    {
+        awt::Point aPosition (mxShape->getPosition());
+        awt::Size aSize (mxShape->getSize());
+        aBoundingBox = awt::Rectangle (
+            aPosition.X, aPosition.Y,
+            aSize.Width, aSize.Height);
+
+        // While BoundRects have absolute positions, the position returend
+        // by XPosition::getPosition is relative.  Get the anchor position
+        // (usually not (0,0) for Writer shapes).
+        if (xSetInfo.is())
         {
-            // Fallback when there is no BoundRect Property.
-            OSL_TRACE ("unknown property BoundRect");
-            awt::Point aPosition (mxShape->getPosition());
-            awt::Size aSize (mxShape->getSize());
-            aBoundingBox = awt::Rectangle (
-                aPosition.X, aPosition.Y,
-                aSize.Width, aSize.Height);
+            if (xSetInfo->hasPropertyByName (
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition"))))
+            {
+                uno::Any aPos = xSet->getPropertyValue (
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition")));
+                awt::Point aAnchorPosition;
+                aPos >>= aAnchorPosition;
+                aBoundingBox.X += aAnchorPosition.X;
+                aBoundingBox.Y += aAnchorPosition.Y;
+            }
         }
     }
 
@@ -575,9 +609,12 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
             aBBox.getHeight());
     }
     else
+    {
+        OSL_TRACE ("parent does not support component");
         aBoundingBox = awt::Rectangle (
             aPixelPosition.getX(), aPixelPosition.getY(),
             aPixelSize.getWidth(), aPixelSize.getHeight());
+    }
 
     return aBoundingBox;
 }
@@ -589,22 +626,8 @@ awt::Point SAL_CALL AccessibleShape::getLocation (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    // Get absolute position...
-    awt::Point aLocation (getLocationOnScreen ());
-
-    // ... and subtract absolute position of the parent.
-    uno::Reference<XAccessibleComponent> xParentComponent (
-        getAccessibleParent(), uno::UNO_QUERY);
-    if (xParentComponent.is())
-    {
-        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
-        aLocation.X -= aParentLocation.X;
-        aLocation.Y -= aParentLocation.Y;
-    }
-    else
-        OSL_TRACE ("getLocation: parent does not support XAccessibleComponent");
-
-    return aLocation;
+    awt::Rectangle aBoundingBox (getBounds());
+    return awt::Point (aBoundingBox.X, aBoundingBox.Y);
 }
 
 
@@ -614,8 +637,22 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    awt::Rectangle aBoundingBox (getBounds());
-    return awt::Point (aBoundingBox.X, aBoundingBox.Y);
+
+    // Get relative position...
+    awt::Point aLocation (getLocation ());
+
+    // ... and add absolute position of the parent.
+    uno::Reference<XAccessibleComponent> xParentComponent (
+        getAccessibleParent(), uno::UNO_QUERY);
+    if (xParentComponent.is())
+    {
+        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
+        aLocation.X += aParentLocation.X;
+        aLocation.Y += aParentLocation.Y;
+    }
+    else
+        OSL_TRACE ("getLocation: parent does not support XAccessibleComponent");
+    return aLocation;
 }
 
 
