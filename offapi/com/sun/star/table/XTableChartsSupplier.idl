@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTableChartsSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module table {
 /** provides a method to access a collection of charts in a table or
     spreadsheet.
  */
-interface XTableChartsSupplier: com::sun::star::uno::XInterface
+published interface XTableChartsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
