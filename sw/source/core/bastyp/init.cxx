@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-30 12:20:11 $
+ *  last change: $Author: jp $ $Date: 2001-01-25 20:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,17 @@
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
+
 #ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
 #endif
@@ -316,15 +327,10 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#ifndef _SWCALWRP_HXX
+#include <swcalwrp.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
+
 
 extern void _FrmFinit();
 extern void ClearFEShellTabCols();
@@ -595,6 +601,7 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 SwBreakIt* pBreakIt = 0;
 CharClass* pAppCharClass = 0;
 LocaleDataWrapper* pAppLocaleData = 0;
+SwCalendarWrapper* pCalendarWrapper = 0;
 
 /******************************************************************************
  *  void _InitCore()
@@ -886,9 +893,13 @@ void _InitCore()
 
     pBreakIt = new SwBreakIt();
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( LANGUAGE_SYSTEM ));
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
     pAppCharClass = new CharClass( aLcl );
-    pAppLocaleData = new LocaleDataWrapper(
-                        ::comphelper::getProcessServiceFactory(), aLcl );
+
+    pAppLocaleData = new LocaleDataWrapper( xMSF, aLcl );
+    pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();
@@ -919,6 +930,7 @@ void _FinitCore()
     delete pBreakIt;
     delete pAppCharClass;
     delete pAppLocaleData;
+    delete pCalendarWrapper;
 
     // das default TableAutoFormat zerstoeren
     delete SwTableAutoFmt::pDfltBoxAutoFmt;
@@ -978,4 +990,16 @@ LocaleDataWrapper& GetAppLocaleData()
 }
 
 
+void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
+{
+    sUniqueId.Erase();
+    if( eLang != nLang )
+        loadDefaultCalendar( SvxCreateLocale( nLang = eLang ));
+}
+
+void SwCalendarWrapper::LoadCalendar( USHORT eLang, const String& rUniqueId )
+{
+    if( eLang != nLang || sUniqueId != rUniqueId )
+        loadCalendar( sUniqueId = rUniqueId,SvxCreateLocale( nLang = eLang ));
+}
 
