@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 14:13:49 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 15:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,10 +254,7 @@ void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPn
                 aPnt2 = Rotate( aPnt2, nOrientation, rOrigin );
             }
 
-            Color aOldColor( pOutDev->GetLineColor() );
-            pOutDev->SetLineColor( COL_LIGHTRED );
             pOutDev->DrawWaveLine( aPnt1, aPnt2, nStyle );
-            pOutDev->SetLineColor( aOldColor );
 
             nStart = nEnd+1;
             if ( nEnd < nMaxEnd )
@@ -2687,7 +2684,10 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 #ifndef SVX_LIGHT
                                     if ( GetStatus().DoOnlineSpelling() && GetStatus().DoDrawRedLines() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
                                     {
+                                        Color aOldColor( pOutDev->GetLineColor() );
+                                        pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svx::SPELL ).nColor ) );
                                         lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical() );
+                                        pOutDev->SetLineColor( aOldColor );
                                     }
 #endif // !SVX_LIGHT
                                 }

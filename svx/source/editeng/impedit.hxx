@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 14:13:49 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 15:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <editstt2.hxx>
 #include <editdata.hxx>
 #include <svxacorr.hxx>
+#include <colorcfg.hxx>
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -444,6 +445,8 @@ private:
     VirtualDevice*      pVirtDev;
     OutputDevice*       pRefDev;
 
+    svx::ColorConfig*   pColorConfig;
+
     SfxItemSet*         pEmptyItemSet;
     EditUndoManager*    pUndoManager;
     ESelection*         pUndoMarkSelection;
@@ -806,6 +809,8 @@ public:
 
     void            FormatAndUpdate( EditView* pCurView = 0 );
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
+
+    svx::ColorConfig& GetColorConfig();
 
     EditSelection           ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
     inline EPaM             CreateEPaM( const EditPaM& rPaM );

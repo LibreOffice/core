@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 14:31:06 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 15:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pUndoManager        = NULL;
     pUndoMarkSelection  = NULL;
     pTextRanger         = NULL;
+    pColorConfig        = NULL;
 
     nCurTextHeight      = 0;
     nBigTextObjectStart = 20;
@@ -262,6 +263,7 @@ ImpEditEngine::~ImpEditEngine()
     delete pUndoManager;
     delete pTextRanger;
     delete mpIMEInfos;
+    delete pColorConfig;
     if ( bOwnerOfRefDev )
         delete pRefDev;
 }
@@ -2195,9 +2197,9 @@ BOOL ImpEditEngine::UpdateFields()
                 EditCharAttribField* pField = (EditCharAttribField*)pAttr;
                 EditCharAttribField* pCurrent = new EditCharAttribField( *pField );
                 pField->Reset();
-                // Felder sind per default grau.
+
                 if ( aStatus.MarkFields() )
-                    pField->GetFldColor() = new Color( COL_LIGHTGRAY );
+                    pField->GetFldColor() = new Color( GetColorConfig().GetColorValue( svx::WRITERFIELDSHADINGS ).nColor );
 
                 XubString aFldValue = GetEditEnginePtr()->CalcFieldValue(
                                         (const SvxFieldItem&)*pField->GetItem(),
@@ -3376,4 +3378,13 @@ void ImpEditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTabl
 {
     EE_DLL()->GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }
+
+svx::ColorConfig& ImpEditEngine::GetColorConfig()
+{
+    if ( !pColorConfig )
+        pColorConfig = new svx::ColorConfig;
+
+    return *pColorConfig;
+}
+
 
