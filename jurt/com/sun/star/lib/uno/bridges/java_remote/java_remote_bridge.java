@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-18 14:23:37 $
+ *  last change: $Author: kr $ $Date: 2001-01-31 10:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2001-01-18 14:23:37 $
+ * @version     $Revision: 1.12 $ $ $Date: 2001-01-31 10:32:33 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -602,6 +602,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     public Object mapInterfaceFrom(Object oId, Type type) throws MappingException   {
         if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").mapInterfaceFrom - is disposed");
 
+        acquire();
+
         // see if we already have object with zInterface of given oid
         Object object = _java_environment.getRegisteredInterface((String)oId, type);
         if(object != null) {
@@ -611,7 +613,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 if(dispatcherAdapterBase.getObject() instanceof DispatcherAdapterBase) {
                     dispatcherAdapterBase = (DispatcherAdapterBase)dispatcherAdapterBase.getObject();
 
-                    if(!(dispatcherAdapterBase.getObject() instanceof String)) { // is it not my object?
+                    if((dispatcherAdapterBase.getObject() instanceof String)) { // is it not my object?
                         try {
                             sendRequest(oId, type, "release", null, null, null);
                         }
@@ -627,7 +629,6 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
             Object proxy = Proxy.create(this, oid[0], type, false, _forceSynchronouse); // this proxy sends a release, when finalized
             object = _java_environment.registerInterface(proxy, oid, type);
-            acquire();
         }
 
           if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceFrom:" + oId + " interface:" + type + " "  + object);
