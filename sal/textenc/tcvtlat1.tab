@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtlat1.tab,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,6 @@ static ImplTextEncodingData const aImplIBM437TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_IBM_437,
         1,
         1,
         1,
@@ -365,7 +364,6 @@ static ImplTextEncodingData const aImplIBM850TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_IBM_850,
         1,
         1,
         1,
@@ -539,7 +537,6 @@ static ImplTextEncodingData const aImplIBM860TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_IBM_860,
         1,
         1,
         1,
@@ -715,7 +712,6 @@ static ImplTextEncodingData const aImplIBM861TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_IBM_861,
         1,
         1,
         1,
@@ -891,7 +887,6 @@ static ImplTextEncodingData const aImplIBM863TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_IBM_863,
         1,
         1,
         1,
@@ -1067,7 +1062,6 @@ static ImplTextEncodingData const aImplIBM865TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_IBM_865,
         1,
         1,
         1,
@@ -1173,7 +1167,6 @@ static ImplTextEncodingData const aImplMS1252TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_1252,
         1,
         1,
         1,
@@ -1239,7 +1232,6 @@ static ImplTextEncodingData const aImplISO88591TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_ISO_8859_1,
         1,
         1,
         1,
@@ -1368,7 +1360,6 @@ static ImplTextEncodingData const aImplISO885914TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_ISO_8859_14,
         1,
         1,
         1,
@@ -1471,7 +1462,6 @@ static ImplTextEncodingData const aImplISO885915TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_ISO_8859_15,
         1,
         1,
         1,
@@ -1612,7 +1602,6 @@ static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_APPLE_ICELAND,
         1,
         1,
         1,
@@ -1760,7 +1749,6 @@ static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_APPLE_ROMAN,
         1,
         1,
         1,
@@ -1809,7 +1797,6 @@ static ImplTextEncodingData const aImplUSASCIITextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_ASCII_US,
         1,
         1,
         1,

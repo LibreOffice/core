@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtsym1.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@ static ImplTextEncodingData const aImplSYMBOLTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_SYMBOL,
         1,
         1,
         1,

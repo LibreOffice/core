@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertbig5hkscs.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-25 15:07:48 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ static ImplTextEncodingData const aImplBig5HkscsTextEncodingData
           &ImplCreateUnicodeToTextContext,
           &ImplDestroyContext,
           &ImplResetUnicodeToTextContext },
-        RTL_TEXTENCODING_BIG5_HKSCS,
         1,
         2,
         2,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn6.tab,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-27 15:38:22 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,6 @@ static ImplTextEncodingData const aImplBIG5TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_BIG5,
         1,
         2,
         2,
@@ -1200,7 +1199,6 @@ static ImplTextEncodingData const aImplMS950TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_950,
         1,
         2,
         2,
@@ -1758,7 +1756,6 @@ static ImplTextEncodingData const aImplAPPLECHINTRADTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_APPLE_CHINTRAD,
         1,
         2,
         2,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtkr6.tab,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,7 +629,6 @@ static ImplTextEncodingData const aImplEUCKRTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_EUC_KR,
         1,
         2,
         2,
@@ -653,7 +652,6 @@ static ImplTextEncodingData const aImplMS949TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_949,
         1,
         2,
         2,
@@ -677,7 +675,6 @@ static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_APPLE_KOREAN,
         1,
         2,
         2,
@@ -1251,7 +1248,6 @@ static ImplTextEncodingData const aImplMS1361TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_1361,
         1,
         2,
         2,

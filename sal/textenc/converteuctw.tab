@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converteuctw.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 13:10:29 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ static ImplTextEncodingData const aImplEucTwTextEncodingData
           &ImplCreateUnicodeToTextContext,
           &ImplDestroyContext,
           &ImplResetUnicodeToTextContext },
-        RTL_TEXTENCODING_EUC_TW,
         1,
         4,
         2,

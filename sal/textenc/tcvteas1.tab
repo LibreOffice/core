@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvteas1.tab,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-18 14:43:42 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ static ImplTextEncodingData const aImplMS874TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_874,
         1,
         1,
         1,
@@ -218,7 +217,6 @@ static ImplTextEncodingData const aImplTis620TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_TIS_620,
         1,
         1,
         1,
@@ -355,7 +353,6 @@ static ImplTextEncodingData const aImplMS1258TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_1258,
         1,
         1,
         1,

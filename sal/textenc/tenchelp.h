@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,6 @@ typedef struct
 typedef struct
 {
     ImplTextConverter maConverter;
-    rtl_TextEncoding meTextEncoding;
     sal_uInt8 mnMinCharSize;
     sal_uInt8 mnMaxCharSize;
     sal_uInt8 mnAveCharSize;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022cn.tab,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-23 09:42:42 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ static ImplTextEncodingData const aImplIso2022CnTextEncodingData
           &ImplCreateUnicodeToIso2022CnContext,
           &ImplDestroyContext,
           &ImplResetUnicodeToIso2022CnContext },
-        RTL_TEXTENCODING_ISO_2022_CN,
         1,
         8,
         2,

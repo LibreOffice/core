@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-06-07 13:47:20 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 13:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,6 @@ static ImplTextEncodingData const aImplGB2312TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_GB_2312,
         1,
         2,
         2,
@@ -663,7 +662,6 @@ static ImplTextEncodingData const aImplEUCCNTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_EUC_CN,
         1,
         2,
         2,
@@ -1220,7 +1218,6 @@ static ImplTextEncodingData const aImplGBT12345TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_GBT_12345,
         1,
         2,
         2,
@@ -1865,7 +1862,6 @@ static ImplTextEncodingData const aImplGBKTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_GBK,
         1,
         2,
         2,
@@ -2424,7 +2420,6 @@ static ImplTextEncodingData const aImplMS936TextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_MS_936,
         1,
         2,
         2,
@@ -2982,7 +2977,6 @@ static ImplTextEncodingData const aImplAPPLECHINSIMPTextEncodingData
           NULL,
           NULL,
           NULL },
-        RTL_TEXTENCODING_APPLE_CHINSIMP,
         1,
         2,
         2,
