@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:34 $
+ *  last change: $Author: hdu $ $Date: 2002-08-29 16:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,36 +629,45 @@ void GenericSalLayout::Justify( long nNewWidth )
 
 void GenericSalLayout::GetCursorPositions( long* pCursorXArray ) const
 {
-    // TODO: adjust the cursor positions to right for RTL glyphs
-    int n;
-    for( n = 0; n <= mnEndCharIndex - mnFirstCharIndex; ++n )
-        pCursorXArray[ n ] = -1;
+    const int nMaxIdx = 2 * (mnEndCharIndex - mnFirstCharIndex);
+    int i;
+    for( i = 0; i < nMaxIdx; ++i )
+        pCursorXArray[ i ] = -1;
 
+    long nXPos = 0;
+    int nLeftIdx = 0;
     const GlyphItem* pG = mpGlyphItems;
-    for( int i = mnGlyphCount; --i >= 0; ++pG )
+    for( i = mnGlyphCount; --i >= 0; )
     {
-        n = pG->mnCharIndex;
-        if( n > mnEndCharIndex )
-            continue;
-        n -= mnFirstCharIndex;
-        if( n < 0 )
-            continue;
-
-        long nXPos = pG->maLinearPos.X();
-        pCursorXArray[ n ] = nXPos;
+        nXPos = pG->maLinearPos.X();
+        long nXRight = nXPos + pG->mnNewWidth;
+        int n = pG->mnCharIndex;
+        if( (n >= mnFirstCharIndex) && (n < mnEndCharIndex) )
+        {
+            int nCurrIdx = 2 * (n - mnFirstCharIndex);
+            if( nLeftIdx <= nCurrIdx )
+            {
+                // normal positions for LTR case
+                pCursorXArray[ nCurrIdx ]   = nXPos;
+                pCursorXArray[ nCurrIdx+1 ] = nXRight;
+            }
+            else
+            {
+                // reverse positions for RTL case
+                pCursorXArray[ nCurrIdx ]   = nXRight;
+                pCursorXArray[ nCurrIdx+1 ] = nXPos;
+            }
+        }
+        nLeftIdx = n;
     }
 
-    long nOldXPos = 0;
-    for( n = 0; n <= mnEndCharIndex - mnFirstCharIndex; ++n )
+    for( i = 0; i < nMaxIdx; ++i )
     {
-        if( pCursorXArray[ n ] >= 0 )
-            nOldXPos = pCursorXArray[ n ];
+        if( pCursorXArray[ i ] >= 0 )
+            nXPos = pCursorXArray[ i ];
         else
-            pCursorXArray[ n ] = nOldXPos;
+            pCursorXArray[ i ] = nXPos;
     }
-
-    // TODO: special handling for last character
-    // if( pCursorXArray[ n ] < 0 )
 }
 
 // -----------------------------------------------------------------------
