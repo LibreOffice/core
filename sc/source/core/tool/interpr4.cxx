@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:30:24 $
+ *  last change: $Author: er $ $Date: 2001-03-21 10:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,13 +631,16 @@ BOOL ScInterpreter::CreateStringArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                     if (bOk)
                     {
                         ByteString aTmp( aStr, osl_getThreadTextEncoding() );
-                        // Wir schummeln hier und haengen ein 0-Byte dran,
-                        // falls die Stringlaenge ungerade werden sollte!
+                        // In case the xub_StrLen will be longer than USHORT
+                        // one day, and room for pad byte check.
+                        if ( aTmp.Len() > ((USHORT)(~0)) - 2 )
+                            return FALSE;
+                        // Append a 0-pad-byte if string length is not even
                         //! MUST be USHORT and not xub_StrLen
                         USHORT nStrLen = (USHORT) aTmp.Len();
                         USHORT nLen = ( nStrLen + 2 ) & ~1;
 
-                        if ((nPos + (5 * sizeof(USHORT)) + nLen) > MAXARRSIZE)
+                        if (((ULONG)nPos + (5 * sizeof(USHORT)) + nLen) > MAXARRSIZE)
                             return FALSE;
                         *p++ = nCol;
                         *p++ = nRow;
@@ -744,12 +747,15 @@ BOOL ScInterpreter::CreateCellArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                         else
                         {
                             ByteString aTmp( aStr, osl_getThreadTextEncoding() );
-                            // Wir schummeln hier und haengen ein 0-Byte dran,
-                            // falls die Stringlaenge ungerade werden sollte!
+                            // In case the xub_StrLen will be longer than USHORT
+                            // one day, and room for pad byte check.
+                            if ( aTmp.Len() > ((USHORT)(~0)) - 2 )
+                                return FALSE;
+                            // Append a 0-pad-byte if string length is not even
                             //! MUST be USHORT and not xub_StrLen
                             USHORT nStrLen = (USHORT) aTmp.Len();
                             USHORT nLen = ( nStrLen + 2 ) & ~1;
-                            if ((nPos + 2 + nLen) > MAXARRSIZE)
+                            if ( ((ULONG)nPos + 2 + nLen) > MAXARRSIZE)
                                 return FALSE;
                             *p++ = nLen;
                             memcpy( p, aTmp.GetBuffer(), nStrLen + 1);
@@ -1630,9 +1636,15 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING :
                         {
-                            pStr[i-1] = new sal_Char[MAXSTRLEN];
-                            strcpy( pStr[i-1], ByteString( GetString(), osl_getThreadTextEncoding() ).GetBuffer() );
-                            ppParam[i] = pStr[i-1];
+                            String aStr( GetString() );
+                            if ( aStr.Len() >= MAXSTRLEN )
+                                SetError( errStringOverflow );
+                            else
+                            {
+                                pStr[i-1] = new sal_Char[MAXSTRLEN];
+                                strcpy( pStr[i-1], ByteString( aStr, osl_getThreadTextEncoding() ).GetBuffer() );
+                                ppParam[i] = pStr[i-1];
+                            }
                         }
                         break;
                     case PTR_DOUBLE_ARR :
