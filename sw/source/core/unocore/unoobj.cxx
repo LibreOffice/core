@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 12:31:03 $
+ *  last change: $Author: os $ $Date: 2001-05-29 12:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,11 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
     if(!aCrsr.HasMark())
         return;
     SvCacheStream aStream( 20480 );
+#ifdef __BIGENDIAN
+    aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+#else
+    aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+#endif
     WriterRef xWrt;
     SwIoSystem::GetWriter( C2S(FILTER_TEXT_DLG), xWrt );
     if( xWrt.Is() )
