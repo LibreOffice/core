@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:50:45 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
 // (0x0031) FONT --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_FONT                = 0x0031;
+const sal_uInt16 EXC_ID2_FONT               = 0x0031;
+const sal_uInt16 EXC_ID3_FONT               = 0x0231;
 
 const sal_uInt16 EXC_FONT_APP               = 0;        /// Application font index.
 const sal_uInt16 EXC_FONT_NOTFOUND          = 0xFFFF;
@@ -249,6 +251,10 @@ const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
 const sal_uInt32 EXC_XF_DIAGONAL_TL_TO_BR   = 0x40000000;   /// Top-left to bottom-right.
 const sal_uInt32 EXC_XF_DIAGONAL_BL_TO_TR   = 0x80000000;   /// Bottom-left to top-right.
 const sal_uInt32 EXC_XF_DIAGONAL_BOTH       = 0xC0000000;   /// Both.
+
+// (0x0045) EFONT -------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_EFONT               = 0x0045;
 
 // (0x0092) PALETTE -----------------------------------------------------------
 
