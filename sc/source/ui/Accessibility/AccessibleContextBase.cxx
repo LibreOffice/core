@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:49:25 $
+ *  last change: $Author: sab $ $Date: 2002-01-31 10:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,12 @@ ScAccessibleContextBase::ScAccessibleContextBase (
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
     if (mpPropertyChangeListeners)
+    {
+        lang::EventObject aEvent;
+        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        mpPropertyChangeListeners->disposeAndClear(aEvent);
         delete mpPropertyChangeListeners;
+    }
 }
 
 //=====  XAccessible  =========================================================
@@ -405,11 +410,19 @@ void ScAccessibleContextBase::CommitChange(const rtl::OUString& rPropertyName,
     aEvent.NewValue = rNewValue;
 
     //  Call all listeners.
-       /*PropertyChangeListenerListType::iterator I;
-       for (I=mxPropertyChangeListeners.begin();
-           I!=mxPropertyChangeListeners.end(); I++)
+    uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpPropertyChangeListeners->getElements();
+    sal_uInt32 nLength(aListeners.getLength());
+    if (nLength)
     {
-        (*I)->propertyChange (aEvent);
-    }*/
-    DBG_ERROR("not implemented");
+        const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+        if (pInterfaces)
+        {
+            for (sal_uInt32 i = 0; i < nLength; i++)
+            {
+                uno::Reference<beans::XPropertyChangeListener> xListener(pInterfaces[i], uno::UNO_QUERY);
+                if (xListener.is())
+                    xListener->propertyChange(aEvent);
+            }
+        }
+    }
 }
