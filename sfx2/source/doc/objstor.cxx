@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:53:46 $
+ *  last change: $Author: mav $ $Date: 2005-02-02 16:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2916,7 +2916,7 @@ sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
     {
         try
         {
-            // we assume that the storage is *never* kept permanently open elsewhere
+            GetEmbeddedObjectContainer().ReleaseImageSubStorage();
             ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
             if ( !bOasis && GetStorage()->hasByName( aObjReplElement ) && GetStorage()->isStorageElement( aObjReplElement ) )
                 GetStorage()->removeElement( aObjReplElement );
@@ -3024,6 +3024,7 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
     {
         try
         {
+            // the substorage still can not be locked by the embedded object conteiner
             ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
             if ( xStorage->hasByName( aObjReplElement ) && xStorage->isStorageElement( aObjReplElement ) )
                 xStorage->removeElement( aObjReplElement );
