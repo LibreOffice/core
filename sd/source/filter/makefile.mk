@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+#   last change: $Author: sj $ $Date: 2001-01-25 17:24:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,11 +79,13 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = $(PRJ)$/util$/sd.cxx \
-                pptin.cxx	\
-                propread.cxx
+                pptin.cxx		\
+                propread.cxx	\
+                sdpptwrp.cxx
 
-SLOFILES =	$(SLO)$/pptin.obj \
-            $(SLO)$/propread.obj
+SLOFILES =	$(SLO)$/pptin.obj	\
+            $(SLO)$/propread.obj\
+            $(SLO)$/sdpptwrp.obj
 
 # --- Tagets -------------------------------------------------------
 
