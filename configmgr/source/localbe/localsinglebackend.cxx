@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_INSUFFICIENTACCESSRIGHTSEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
+#endif
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -98,6 +101,7 @@
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
+#include <memory>
 
 namespace configmgr { namespace localbe {
 
@@ -113,7 +117,7 @@ LocalSingleBackend::LocalSingleBackend(
 
 LocalSingleBackend::~LocalSingleBackend(void) {}
 //------------------------------------------------------------------------------
-static inline bool isValidFileURL (rtl::OUString& _sFileURL)
+static inline bool isValidFileURL (rtl::OUString const& _sFileURL)
 {
     using osl::File;
 
@@ -144,7 +148,7 @@ bool implEnsureAbsoluteURL(rtl::OUString & _rsURL) // also strips embedded dots 
 // ---------------------------------------------------------------------------------------
 
 static
-bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
+osl::DirectoryItem::RC implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 {
     using namespace osl;
 
@@ -154,32 +158,59 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     FileStatus aFileStatus(cFileStatusMask);
 
-    if (aDirItem.getFileStatus(aFileStatus) != DirectoryItem::E_None)
-        return false;
+    DirectoryItem::RC rc = aDirItem.getFileStatus(aFileStatus);
 
-    OUString aNormalizedURL = aFileStatus.getFileURL();
+    if (rc == DirectoryItem::E_None)
+    {
+        OUString aNormalizedURL = aFileStatus.getFileURL();
 
-    if (aNormalizedURL.getLength() == 0)
-        return false;
-
-    _sURL = aNormalizedURL;
-    return true;
+        if (aNormalizedURL.getLength() != 0)
+            _sURL = aNormalizedURL;
+        else
+            rc = DirectoryItem::E_INVAL;
+    }
+    return rc;
 }
 
 // ---------------------------------------------------------------------------------------
 static
-bool normalizeURL(OUString & _sURL)
+bool normalizeURL(OUString & _sURL, backend::XBackendEntities * pContext)
 {
     using namespace osl;
 
+    if (_sURL.getLength() == 0)
+        return false;
+
     DirectoryItem aDirItem;
 
-    bool bResult = DirectoryItem::get(_sURL, aDirItem) == DirectoryItem::E_None;
+    DirectoryItem::RC rc = DirectoryItem::get(_sURL, aDirItem);
 
-    if ( bResult )
-        bResult = implNormalizeURL(_sURL,aDirItem);
+    if (rc == DirectoryItem::E_None)
+        rc = implNormalizeURL(_sURL,aDirItem);
 
-    return bResult;
+    switch (rc)
+    {
+    case DirectoryItem::E_None:  return true;
+
+    case DirectoryItem::E_NOENT: return false;
+
+    case DirectoryItem::E_ACCES:
+        {
+            rtl::OUStringBuffer msg;
+            msg.appendAscii("LocalBackend: Cannot normalize URL \"" );
+            msg.append(_sURL);
+            msg.appendAscii("\" - InsufficientAccess");
+            throw backend::InsufficientAccessRightsException(msg.makeStringAndClear(),pContext,uno::Any());
+        }
+    default:
+        {
+            rtl::OUStringBuffer msg;
+            msg.appendAscii("LocalBackend: Cannot normalize URL \"" );
+            msg.append(_sURL);
+            msg.appendAscii("\" - ").append(FileHelper::createOSLErrorString(rc));
+            throw backend::BackendAccessException(msg.makeStringAndClear(),pContext,uno::Any());
+        }
+    }
 }
 // ---------------------------------------------------------------------------------------
 static void fillFromBlankSeparated(const rtl::OUString& aList,
@@ -198,6 +229,19 @@ static void fillFromBlankSeparated(const rtl::OUString& aList,
         for (token = tokens.begin() ; token != tokens.end() ; ++ token) {
             aTarget [i ++] = *token ;
         }
+    }
+}
+//------------------------------------------------------------------------------
+static inline bool checkOptionalArg(rtl::OUString& aArg)
+{
+    if (aArg.getLength() && aArg[0] == sal_Unicode('?'))
+    {
+        aArg = aArg.copy(1);
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 //------------------------------------------------------------------------------
@@ -233,28 +277,55 @@ void SAL_CALL LocalSingleBackend::initialize(
         if (aParameters [i] >>= context) { break ; }
     }
 
-    // Setting: schema
-    context->getValueByName(kSchemaDataUrl) >>= mSchemaDataUrl;
-    //validate SchemaDataUrl
-    validateFileURL(mSchemaDataUrl);
-    //NormalizeURL
-    implEnsureAbsoluteURL(mSchemaDataUrl);
-    normalizeURL(mSchemaDataUrl);
+    // Setting: schema diretory(ies)
+    uno::Any const aSchemaDataSetting = context->getValueByName(kSchemaDataUrl);
+    rtl::OUString schemas;
 
-    checkFileExists(mSchemaDataUrl);
-    checkIfDirectory(mSchemaDataUrl);
+    if (aSchemaDataSetting >>= schemas)
+    {
+        fillFromBlankSeparated(schemas, mSchemaDataUrls) ;
+    }
+    else
+    {
+        aSchemaDataSetting >>=  mSchemaDataUrls;
+    }
+    //validate SchemaDataUrls
+    sal_Int32 nExistingSchemaLocations = 0;
+    for (sal_Int32 j = 0; j < mSchemaDataUrls.getLength(); ++j)
+    {
+        bool bOptional = checkOptionalArg(mSchemaDataUrls[j]);
+
+        validateFileURL(mSchemaDataUrls[j]);
+        //NormalizeURL
+        implEnsureAbsoluteURL(mSchemaDataUrls[j]);
+        normalizeURL(mSchemaDataUrls[j],this);
+
+        if (!bOptional)
+            checkFileExists(mSchemaDataUrls[j]);
+
+        else if(!FileHelper::fileExists(mSchemaDataUrls[j]))
+            continue; // skip the directory check
+
+        checkIfDirectory(mSchemaDataUrls[j]);
+        ++nExistingSchemaLocations;
+    }
+    if (0 == nExistingSchemaLocations)
+    {
+        rtl::OUString sMsg = rtl::OUString::createFromAscii("LocalBackend: No schema directories found");
+        throw backend::BackendSetupException(sMsg,*this, uno::Any()) ;
+    }
 
     // Setting: default layer(s)
-    uno::Any aDefaultDataSetting = context->getValueByName(kDefaultDataUrl);
+    uno::Any const aDefaultDataSetting = context->getValueByName(kDefaultDataUrl);
     rtl::OUString defaults;
 
-    if (context->getValueByName(kDefaultDataUrl) >>= defaults)
+    if (aDefaultDataSetting >>= defaults)
     {
         fillFromBlankSeparated(defaults, mDefaultDataUrls) ;
     }
     else
     {
-        context->getValueByName(kDefaultDataUrl) >>= mDefaultDataUrls ;
+        aDefaultDataSetting >>= mDefaultDataUrls ;
     }
     //validate DefaultDataUrls
     for (sal_Int32 ix = 0; ix < mDefaultDataUrls.getLength(); ++ix)
@@ -262,7 +333,7 @@ void SAL_CALL LocalSingleBackend::initialize(
         validateFileURL(mDefaultDataUrls[ix]);
         //NormalizeURL
         implEnsureAbsoluteURL(mDefaultDataUrls[ix]);
-        normalizeURL(mDefaultDataUrls[ix]);
+        normalizeURL(mDefaultDataUrls[ix],this);
         if(FileHelper::fileExists(mDefaultDataUrls[ix]))
         {
             checkIfDirectory(mDefaultDataUrls[ix]);
@@ -282,7 +353,7 @@ void SAL_CALL LocalSingleBackend::initialize(
             validateFileURL(mUserDataUrl);
             //NormalizeURL
             implEnsureAbsoluteURL(mUserDataUrl);
-            normalizeURL(mUserDataUrl);
+            normalizeURL(mUserDataUrl,this);
             if(FileHelper::fileExists(mUserDataUrl))
             {
                 checkIfDirectory(mUserDataUrl);
@@ -316,7 +387,7 @@ void SAL_CALL LocalSingleBackend::initialize(
         validateFileURL(mUserDataUrl);
         //GetAbsolsoluteURL
         implEnsureAbsoluteURL(mUserDataUrl);
-        normalizeURL(mUserDataUrl);
+        normalizeURL(mUserDataUrl,this);
         if(FileHelper::fileExists(mUserDataUrl))
         {
             checkIfDirectory(mUserDataUrl);
@@ -337,37 +408,137 @@ static rtl::OUString componentToPath(const rtl::OUString& aComponent) {
 }
 //------------------------------------------------------------------------------
 
+const sal_Int32 k_UserLayerEntity = 0;
+const sal_Int32 k_InvalidEntity         = k_UserLayerEntity - 1;
+const sal_Int32 k_DefaultEntityOffset   = k_UserLayerEntity + 1;
+//------------------------------------------------------------------------------
+static inline bool isValidEntity(sal_Int32 ent)
+{
+    return ent > k_InvalidEntity;
+}
+//------------------------------------------------------------------------------
+static inline sal_Int32 indexToEntity(sal_Int32 ix)
+{
+    OSL_ASSERT(0 <= ix);
+    return ix + k_DefaultEntityOffset;
+}
+static inline sal_Int32 entityToIndex(sal_Int32 ent)
+{
+    OSL_ASSERT(k_DefaultEntityOffset <= ent);
+    return ent - k_DefaultEntityOffset;
+}
+//------------------------------------------------------------------------------
+
+
 /**
   Transforms a file url into a layer id. The layer id will
   contain the URL passed plus an integer indicating which
-  layer the URL points to. If the integer is -1, the URL
+  layer the URL points to. If the integer is 0, the URL
   is a user layer, otherwise it is one of the default layers.
 
   @param aFileUrl   URL to encode
-  @param aIndex     index of the layer concerned (-1 = user, other = default)
+  @param aIndex     index of the layer concerned (0 = user, other = default)
   @return   layer id
   */
-static rtl::OUString urlToLayerId(const rtl::OUString& aFileUrl,
-                                  sal_Int32 aIndex) {
-    rtl::OUStringBuffer retCode ;
+static
+rtl::OUString urlToLayerId(const rtl::OUString& aFileUrl,sal_Int32 aIndex)
+{
+    rtl::OUStringBuffer id ;
 
-    retCode.append(aIndex).appendAscii(" ").append(aFileUrl) ;
-    return retCode.makeStringAndClear() ;
+    OSL_ASSERT(isValidEntity(aIndex));
+    if (aIndex)
+        id.append(aIndex).appendAscii(" ",1);     // non-user layers
+    else
+        id.appendAscii("U ",2); // user layer
+
+    id.append(aFileUrl) ;
+    return id.makeStringAndClear() ;
 }
 
-static void layerIdToUrl(const rtl::OUString& aLayerId,
-                         rtl::OUString& aFileUrl,
-                         sal_Int32& aIndex) {
-    sal_Int32 space = aLayerId.indexOf(' ') ;
+static
+inline
+bool layerIdToUrl( const rtl::OUString& aLayerId,
+                    rtl::OUString& aFileUrl,
+                    sal_Int32& aIndex)
+{
+    sal_Int32 const sep = aLayerId.indexOf(sal_Unicode(' ')) ;
 
-    if (space == -1) {
-        aFileUrl = aLayerId ;
-        aIndex = -1 ;
+    if (sep < 0) return false;
+
+    // detect user layer id
+    if (aLayerId[0] == sal_Unicode('U'))
+    {
+        if (sep != 1) return false;
+        aIndex   = 0;
     }
-    else {
-        aFileUrl = aLayerId.copy(space + 1) ;
-        aIndex = aLayerId.copy(0, space).toInt32() ;
+    else
+    {
+        aIndex   = aLayerId.copy(0, sep).toInt32() ;
+        if (0 == aIndex || !isValidEntity(aIndex)) return false;
+
+        OSL_ENSURE( aLayerId.copy(0, sep).equals(OUString::valueOf(aIndex)),
+                    "Invalid layer id was not detected");
     }
+    aFileUrl = aLayerId.copy(sep + 1);
+
+    return true;
+}
+//------------------------------------------------------------------------------
+sal_Int32 LocalSingleBackend::resolveLayerId(const rtl::OUString& aLayerId,
+                                                  rtl::OUString& aFileUrl)
+{
+    sal_Int32 nIndex = k_InvalidEntity;
+    if (!layerIdToUrl(aLayerId,aFileUrl,nIndex))
+    {
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
+                "LocalSingleBackend - Invalid layer id: "));
+
+        // layer id is always the second parameter
+        throw lang::IllegalArgumentException(sMsg.concat(aLayerId), *this, 2);
+    }
+    OSL_ASSERT(isValidEntity(nIndex));
+    return nIndex;
+}
+//------------------------------------------------------------------------------
+
+sal_Int32 LocalSingleBackend::findEntity(const rtl::OUString& aEntity)
+{
+    if (aEntity.getLength() == 0)
+    {
+        return k_InvalidEntity;
+    }
+
+    // quick check for OwnerEntity first
+    if (aEntity.equals(mUserDataUrl))
+    {
+        return k_UserLayerEntity;
+    }
+
+    OUString sNormalizedEntityUrl(aEntity);
+    normalizeURL(sNormalizedEntityUrl,this);
+
+    for (sal_Int32 ix = 0; ix < mDefaultDataUrls.getLength(); ++ix)
+    {
+        OUString sNormalizedDefaultUrl(mDefaultDataUrls[ix]);
+        normalizeURL(sNormalizedDefaultUrl,this);
+
+        if (sNormalizedEntityUrl.equals(sNormalizedDefaultUrl))
+        {
+            // found it
+            return indexToEntity(ix);
+        }
+    }
+
+    //Try normalized version of mUserDataUrl
+    OUString sNormalizedUserUrl(mUserDataUrl);
+    normalizeURL(sNormalizedUserUrl,this);
+    if (sNormalizedEntityUrl.equals(sNormalizedUserUrl))
+    {
+        return k_UserLayerEntity;
+    }
+
+    // not found
+    return k_InvalidEntity;
 }
 //------------------------------------------------------------------------------
 
@@ -378,23 +549,35 @@ uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::listLayerIds(
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    if (aEntity.getLength() > 0 && !aEntity.equals(mUserDataUrl)) {
-        throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Can only access user data")),
-                *this, 1) ;
+    sal_Int32 nEntity = findEntity(aEntity);
+    if ( !isValidEntity(nEntity) )
+    {
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
+                "LocalSingleBackend - Unknown entity: "));
+
+        throw lang::IllegalArgumentException(sMsg.concat(aEntity), *this, 2);
     }
-    sal_Int32 nbLayers = mDefaultDataUrls.getLength() + 1 ;
-    uno::Sequence<rtl::OUString> retCode(nbLayers) ;
-    rtl::OUString componentSubPath = componentToPath(aComponent) + kDataSuffix ;
+
+    sal_Int32 nDefLayers = (k_UserLayerEntity == nEntity)
+                            ? mDefaultDataUrls.getLength()
+                            : entityToIndex(nEntity);
+
+    OSL_ASSERT(0 <= nDefLayers && nDefLayers <= mDefaultDataUrls.getLength());
+
+    rtl::OUString const componentSubPath = componentToPath(aComponent) + kDataSuffix ;
+
+    uno::Sequence<rtl::OUString> aLayerIds(nDefLayers + 1) ;
+    OSL_ASSERT(0 < aLayerIds.getLength());
 
     // First, the defaults...
-    for (sal_Int32 i = 0 ; i < nbLayers - 1 ; ++ i) {
-        retCode [i] = urlToLayerId(componentSubPath, i) ;
+    for (sal_Int32 ix = 0; ix < nDefLayers ; ++ ix)
+    {
+        aLayerIds[ix] = urlToLayerId(componentSubPath, indexToEntity(ix)) ;
     }
-    // Then the user delta.
-    retCode [nbLayers - 1] = urlToLayerId(componentSubPath, -1) ;
-    return retCode ;
+    // Then the entity data.
+    aLayerIds [nDefLayers] = urlToLayerId(componentSubPath, nEntity) ;
+
+    return  aLayerIds;
 }
 //------------------------------------------------------------------------------
 
@@ -403,55 +586,64 @@ rtl::OUString SAL_CALL LocalSingleBackend::getUpdateLayerId(
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    sal_Bool bFoundDefaultLayer = sal_False;
-    sal_Int32 nIndex = 0;
+    sal_Int32 nEntity = findEntity(aEntity);
+    if ( !isValidEntity(nEntity) )
+    {
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
+                "LocalSingleBackend - Unknown entity for update: "));
 
-    if ((aEntity.getLength() > 0) && aEntity.equals(mUserDataUrl))
-    {
-        nIndex=-1;
+        throw lang::IllegalArgumentException(sMsg.concat(aEntity), *this, 2);
     }
-    else
-    {
-        OUString sTempEntityUrl(aEntity);
-        normalizeURL(sTempEntityUrl);
-        for (sal_Int32 ix = 0; ix < mDefaultDataUrls.getLength()&&!bFoundDefaultLayer; ix++)
-        {
-            OUString sTempDefaultUrl(mDefaultDataUrls[ix]);
-            normalizeURL(sTempDefaultUrl);
-            if (sTempEntityUrl.equals(sTempDefaultUrl))
-            {
-                bFoundDefaultLayer = sal_True;
-                nIndex = ix;
-            }
-        }
-        if (!bFoundDefaultLayer)
-        {
-            //Try normalized version of mUserDataUrl
-            OUString sTempUserUrl(mUserDataUrl);
-            normalizeURL(sTempUserUrl);
-            if (sTempUserUrl.equals(sTempEntityUrl))
-            {
-                nIndex=-1;
-            }
-            else
-            {
-                rtl::OUStringBuffer sMsg;
-                sMsg.appendAscii(" Cannot update data: Invalid Layer URL: \"");
-                sMsg.append(aEntity);
-                sMsg.appendAscii("\"");
-                throw lang::IllegalArgumentException(sMsg.makeStringAndClear(),
-                                                     *this, 1) ;
-            }
-        }
-    }
-    return urlToLayerId(componentToPath(aComponent) + kDataSuffix, nIndex) ;
+
+    return urlToLayerId(componentToPath(aComponent) + kDataSuffix, nEntity) ;
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LocalSingleBackend::getOwnId(void)
+OUString SAL_CALL LocalSingleBackend::getOwnerEntity()
     throw (uno::RuntimeException)
 {
     return mUserDataUrl ;
+}
+//------------------------------------------------------------------------------
+
+OUString SAL_CALL LocalSingleBackend::getAdminEntity()
+    throw (uno::RuntimeException)
+{
+    return mDefaultDataUrls.getLength() > 0 ? mDefaultDataUrls[0] : mUserDataUrl;
+}
+//------------------------------------------------------------------------------
+
+sal_Bool SAL_CALL LocalSingleBackend::supportsEntity( const OUString& aEntity )
+    throw (backend::BackendAccessException, uno::RuntimeException)
+{
+    return isValidEntity(findEntity(aEntity)) ;
+}
+//------------------------------------------------------------------------------
+
+sal_Bool SAL_CALL LocalSingleBackend::isEqualEntity(const OUString& aEntity, const OUString& aOtherEntity)
+    throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+{
+    if (aEntity.getLength() == 0)
+    {
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
+                "LocalSingleBackend - Invalid empty entity."));
+
+        throw lang::IllegalArgumentException(sMsg, *this, 1);
+    }
+    if (aOtherEntity.getLength() == 0)
+    {
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
+                "LocalSingleBackend - Invalid empty entity."));
+
+        throw lang::IllegalArgumentException(sMsg, *this, 2);
+    }
+    OUString aNormalizedEntity(aEntity);
+    normalizeURL(aNormalizedEntity,this);
+
+    OUString aNormalizedOther(aOtherEntity);
+    normalizeURL(aNormalizedOther,this);
+
+    return aNormalizedEntity == aNormalizedOther;
 }
 //------------------------------------------------------------------------------
 
@@ -462,7 +654,8 @@ sal_Bool LocalSingleBackend::isMoreRecent(const rtl::OUString& aFileUrl,
     rtl::OUString subLayerUrl ;
 
     getLayerDirectories(aLayerIndex, layerUrl, subLayerUrl) ;
-    return (LocalFileLayer::getTimestamp(layerUrl + aFileUrl).compareTo(
+
+    return (BasicLocalFileLayer::getTimestamp(layerUrl + aFileUrl).compareTo(
                                                             aTimestamp) > 0) ;
 }
 //------------------------------------------------------------------------------
@@ -478,14 +671,14 @@ uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
             uno::RuntimeException)
 {
     rtl::OUString fileUrl ;
-    sal_Int32 defaultIndex = -1 ;
 
-    layerIdToUrl(aLayerId, fileUrl, defaultIndex) ;
+    sal_Int32 defaultIndex = resolveLayerId(aLayerId, fileUrl) ;
+
     if (!isMoreRecent(fileUrl, defaultIndex, aTimestamp)) { return NULL ; }
-    uno::Reference<backend::XCompositeLayer> layer = getFileLayer(fileUrl,
-                                                                defaultIndex) ;
 
-    return uno::Reference<backend::XLayer>::query(layer) ;
+    uno::Reference<backend::XUpdatableLayer> xLayer = getFileLayer(fileUrl,defaultIndex);
+    uno::Reference<backend::XLayer> xResult = xLayer.get();
+    return xResult;
 }
 //------------------------------------------------------------------------------
 
@@ -537,54 +730,87 @@ LocalSingleBackend::getUpdatableLayer(const rtl::OUString& aLayerId)
 }
 //------------------------------------------------------------------------------
 
-uno::Reference<backend::XLayerHandler> SAL_CALL
-LocalSingleBackend::getWriteHandler(const rtl::OUString& aLayerId)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException,
-            uno::RuntimeException)
-{
-    LocalFileLayer *layer = getFileLayer(aLayerId) ;
-    uno::Reference<backend::XUpdatableLayer> xLayer(layer);
-
-    uno::Reference<backend::XLayerHandler> retCode = layer->createLayerWriter() ;
-
-    return retCode ;
-}
-//------------------------------------------------------------------------------
-
 static const rtl::OUString kSchemaSuffix(RTL_CONSTASCII_USTRINGPARAM(".xcs")) ;
 static const rtl::OUString kXMLSchemaParser(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.configuration.backend.xml.SchemaParser")) ;
 
-uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
-                                              const rtl::OUString& aComponent)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException,
-            uno::RuntimeException)
+uno::Reference<backend::XSchema> SAL_CALL
+    LocalSingleBackend::getComponentSchema(const rtl::OUString& aComponent)
+        throw (backend::BackendAccessException, lang::IllegalArgumentException,
+                uno::RuntimeException)
 {
     rtl::OUString subPath = componentToPath(aComponent) ;
-    rtl::OUStringBuffer schemaUrl(mSchemaDataUrl) ;
 
-    schemaUrl.append(subPath).append(kSchemaSuffix) ;
-    osl::File *schemaFile = new osl::File(schemaUrl.makeStringAndClear()) ;
-    osl::FileBase::RC errorCode = schemaFile->open(OpenFlag_Read) ;
+    osl::File * schemaFile = NULL;
+    OUString errorMessage;
+    bool bInsufficientAccess = false;
+    for (sal_Int32 ix = 0; ix < mSchemaDataUrls.getLength(); ++ix)
+    {
+        rtl::OUStringBuffer schemaUrl(mSchemaDataUrls[ix]) ;
 
-    if (errorCode != osl_File_E_None) {
-        throw backend::BackendAccessException(
-                FileHelper::createOSLErrorString(errorCode),
-                *this, uno::Any()) ;
+        schemaUrl.append(subPath).append(kSchemaSuffix) ;
+
+        OUString const aFileUrl = schemaUrl.makeStringAndClear();
+
+        std::auto_ptr<osl::File> checkFile( new osl::File(aFileUrl) );
+        osl::File::RC rc = checkFile->open(OpenFlag_Read) ;
+
+        if (rc == osl::File::E_None)
+        {
+            schemaFile = checkFile.release();
+            break;
+        }
+        else if (rc != osl::File::E_NOENT)
+        {
+            if (rc == osl::File::E_ACCES)
+                bInsufficientAccess =true;
+
+            // accumulate error messages
+            rtl::OUStringBuffer sMsg(errorMessage);
+            if (errorMessage.getLength())
+                sMsg.appendAscii("LocalFile SchemaSupplier - Error accessing schema: ");
+
+            sMsg.appendAscii("\n- Cannot open input file \"");
+            sMsg.append(aFileUrl);
+            sMsg.appendAscii("\" : ");
+            sMsg.append(FileHelper::createOSLErrorString(rc));
+
+            errorMessage = sMsg.makeStringAndClear();
+        }
     }
+
+    if (NULL == schemaFile)
+    {
+        if (errorMessage.getLength() != 0)
+        {
+            // a real error occured
+            io::IOException ioe(errorMessage,*this);
+
+            rtl::OUStringBuffer sMsg;
+            sMsg.appendAscii("LocalFileLayer - Cannot readData: ").append(errorMessage);
+
+            if (bInsufficientAccess)
+                throw backend::InsufficientAccessRightsException(sMsg.makeStringAndClear(),*this,uno::makeAny(ioe));
+            else
+                throw backend::BackendAccessException(sMsg.makeStringAndClear(),*this,uno::makeAny(ioe));
+        }
+        // simply not found
+        return NULL;
+    }
+
     uno::Sequence<uno::Any> arguments(1) ;
-    uno::Reference<io::XInputStream> stream =
-                            new OSLInputStreamWrapper(schemaFile, sal_True) ;
+    uno::Reference<io::XInputStream> stream( new OSLInputStreamWrapper(schemaFile, true) );
 
     arguments [0] <<= stream ;
     uno::Reference<backend::XSchema> schema(
             mFactory->createInstanceWithArguments(kXMLSchemaParser, arguments),
             uno::UNO_QUERY) ;
 
-    if (!schema.is()) {
+    if (!schema.is())
+    {
         throw uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Cannot instantiate Schema")),
+                        "Cannot instantiate Schema Parser for ")) + aComponent,
                 *this) ;
     }
     return schema ;
@@ -614,7 +840,8 @@ void LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
                                              rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl)
 {
-    OUString aLayerBaseUrl = (aLayerIndex == -1 ? mUserDataUrl : mDefaultDataUrls [aLayerIndex]) ;
+    OSL_ASSERT(isValidEntity(aLayerIndex));
+    OUString aLayerBaseUrl = (aLayerIndex == k_UserLayerEntity ? mUserDataUrl : mDefaultDataUrls [entityToIndex(aLayerIndex)]) ;
 
     impl_getLayerSubDirectories(aLayerBaseUrl,aLayerUrl,aSubLayerUrl);
 }
@@ -643,24 +870,23 @@ uno::Reference<backend::XLayer> LocalSingleBackend::createSimpleLayer(
 //------------------------------------------------------------------------------
 
 
-LocalFileLayer *LocalSingleBackend::getFileLayer(const rtl::OUString& aLayerId)
+uno::Reference<backend::XUpdatableLayer> LocalSingleBackend::getFileLayer(const rtl::OUString& aLayerId)
     throw (lang::IllegalArgumentException)
 {
     rtl::OUString fileUrl ;
-    sal_Int32 defaultIndex = -1 ;
+    sal_Int32 defaultIndex = resolveLayerId(aLayerId, fileUrl) ;
 
-    layerIdToUrl(aLayerId, fileUrl, defaultIndex) ;
     return getFileLayer(fileUrl, defaultIndex) ;
 }
 //------------------------------------------------------------------------------
 
-LocalFileLayer *LocalSingleBackend::getFileLayer(
+uno::Reference<backend::XUpdatableLayer> LocalSingleBackend::getFileLayer(
                     const rtl::OUString& aComponent, sal_Int32 aLayerIndex) {
     rtl::OUString layerPath ;
     rtl::OUString subLayerPath ;
 
     getLayerDirectories(aLayerIndex, layerPath, subLayerPath) ;
-    return new LocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
+    return createLocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
 }
 //------------------------------------------------------------------------------
 
@@ -723,14 +949,16 @@ SAL_CALL LocalSingleBackend::getSupportedServiceNames(void)
 
 void LocalSingleBackend::validateFileURL(rtl::OUString& aFileURL)
 {
-     rtl::OUStringBuffer sMsg;
-     sMsg.appendAscii(" Not a Valid File URL: \"");
-     sMsg.append(aFileURL);
-     sMsg.appendAscii("\"");
      if (!isValidFileURL( aFileURL))
      {
+         rtl::OUStringBuffer sMsg;
+         sMsg.appendAscii(" Not a Valid File URL: \"");
+         sMsg.append(aFileURL);
+         sMsg.appendAscii("\"");
+
+         // todo: get configmgrrc url from context
           throw com::sun::star::configuration::InvalidBootstrapFileException(
-            sMsg.makeStringAndClear(),*this, aFileURL ) ;
+            sMsg.makeStringAndClear(),*this, OUString() ) ;
      }
 }
 //------------------------------------------------------------------------------
