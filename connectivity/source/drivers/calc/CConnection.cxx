@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,13 +157,35 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
         throw SQLException();
     }
 
-    //  open read-only as long as updating isn't implemented
+    ::rtl::OUString sPassword;
+    const char* pPwd        = "password";
 
+    const PropertyValue *pIter  = info.getConstArray();
+    const PropertyValue *pEnd   = pIter + info.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        if(!pIter->Name.compareToAscii(pPwd))
+        {
+            pIter->Value >>= sPassword;
+            break;
+        }
+    }
+
+    //  open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
     aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
     aArgs[0].Value <<= (sal_Bool) sal_True;
     aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
     aArgs[1].Value <<= (sal_Bool) sal_True;
+
+    if ( sPassword.getLength() )
+    {
+        sal_Int32 nPos = aArgs.getLength();
+        aArgs.realloc(nPos+1);
+        aArgs[nPos].Name = ::rtl::OUString::createFromAscii("Password");
+        aArgs[nPos].Value <<= sPassword;
+    }
+
 
     Reference<XComponent> xComponent = xDesktop->loadComponentFromURL(
                             aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
@@ -263,5 +285,5 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const ::r
 
     return NULL;
 }
-
+// -----------------------------------------------------------------------------
 
