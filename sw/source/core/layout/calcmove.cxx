@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:19:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "rootfrm.hxx"
@@ -370,57 +369,65 @@ void SwFrm::PrepareMake()
             }
         }
 
-        SwFrm *pFrm = GetUpper()->Lower();
-        while ( pFrm != this )
+        // --> OD 2005-03-04 #i44049# - no format of previous frame, if current
+        // frame is a table frame and its previous frame wants to keep with it.
+        const bool bFormatPrev = !bTab ||
+                                 !GetPrev() ||
+                                 !GetPrev()->GetAttrSet()->GetKeep().GetValue();
+        if ( bFormatPrev )
         {
-            ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
-            if ( !pFrm )
-                return; //Oioioioi ...
-
-            if ( !pFrm->IsValid() )
+            SwFrm *pFrm = GetUpper()->Lower();
+            while ( pFrm != this )
             {
-                //Ein kleiner Eingriff der hoffentlich etwas zur Verbesserung
-                //der Stabilitaet beitraegt:
-                //Wenn ich Follow _und_ Nachbar eines Frms vor mir bin,
-                //so wuerde dieser mich beim Formatieren deleten; wie jeder
-                //leicht sehen kann waere dies eine etwas unuebersichtliche
-                //Situation die es zu vermeiden gilt.
-                if ( bFoll && pFrm->IsFlowFrm() &&
-                     (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
-                    break;
+                ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
+                if ( !pFrm )
+                    return; //Oioioioi ...
 
-//MA: 24. Mar. 94, Calc wuerde doch nur wieder in ein _Prepare laufen und so
-//die ganze Kette nocheinmal abhuenern.
-//              pFrm->Calc();
-                pFrm->MakeAll();
-                if( IsSctFrm() && !((SwSectionFrm*)this)->GetSection() )
-                    break;
-            }
-            //Die Kette kann bei CntntFrms waehrend des durchlaufens
-            //aufgebrochen werden, deshalb muss der Nachfolger etwas
-            //umstaendlich ermittelt werden. However, irgendwann _muss_
-            //ich wieder bei mir selbst ankommen.
-            pFrm = pFrm->FindNext();
+                if ( !pFrm->IsValid() )
+                {
+                    //Ein kleiner Eingriff der hoffentlich etwas zur Verbesserung
+                    //der Stabilitaet beitraegt:
+                    //Wenn ich Follow _und_ Nachbar eines Frms vor mir bin,
+                    //so wuerde dieser mich beim Formatieren deleten; wie jeder
+                    //leicht sehen kann waere dies eine etwas unuebersichtliche
+                    //Situation die es zu vermeiden gilt.
+                    if ( bFoll && pFrm->IsFlowFrm() &&
+                         (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
+                        break;
 
-            //Wenn wir in einem SectionFrm gestartet sind, koennen wir durch die
-            //MakeAll-Aufrufe in einen Section-Follow gewandert sein.
-            //FindNext liefert allerdings den SectionFrm, nicht seinen Inhalt.
-            // => wir finden uns selbst nicht mehr!
-            if( bNoSect && pFrm && pFrm->IsSctFrm() )
-            {
-                SwFrm* pCnt = ((SwSectionFrm*)pFrm)->ContainsAny();
-                if( pCnt )
-                    pFrm = pCnt;
+    //MA: 24. Mar. 94, Calc wuerde doch nur wieder in ein _Prepare laufen und so
+    //die ganze Kette nocheinmal abhuenern.
+    //              pFrm->Calc();
+                    pFrm->MakeAll();
+                    if( IsSctFrm() && !((SwSectionFrm*)this)->GetSection() )
+                        break;
+                }
+                //Die Kette kann bei CntntFrms waehrend des durchlaufens
+                //aufgebrochen werden, deshalb muss der Nachfolger etwas
+                //umstaendlich ermittelt werden. However, irgendwann _muss_
+                //ich wieder bei mir selbst ankommen.
+                pFrm = pFrm->FindNext();
+
+                //Wenn wir in einem SectionFrm gestartet sind, koennen wir durch die
+                //MakeAll-Aufrufe in einen Section-Follow gewandert sein.
+                //FindNext liefert allerdings den SectionFrm, nicht seinen Inhalt.
+                // => wir finden uns selbst nicht mehr!
+                if( bNoSect && pFrm && pFrm->IsSctFrm() )
+                {
+                    SwFrm* pCnt = ((SwSectionFrm*)pFrm)->ContainsAny();
+                    if( pCnt )
+                        pFrm = pCnt;
+                }
             }
+            ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
+            if ( !GetUpper() )
+                return;
+
+            if ( lcl_IsCalcUpperAllowed( *this ) )
+                GetUpper()->Calc();
+
+            ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
         }
-        ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
-        if ( !GetUpper() )
-            return;
-
-        if ( lcl_IsCalcUpperAllowed( *this ) )
-            GetUpper()->Calc();
-
-        ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
 
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( (SwTabFrm*)this );
@@ -1346,12 +1353,6 @@ void SwCntntFrm::MakeAll()
             // <--
         }
 
-        if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() )
-        {
-            // OD 2004-07-01 #i28701# - use new method <SwFrm::InvalidateObjs(..)>
-            // No format is performed for the floating screen objects.
-            InvalidateObjs( true );
-        }
         //Damit die Witwen- und Waisen-Regelung eine Change bekommt muss der
         //CntntFrm benachrichtigt werden.
         //Kriterium:
@@ -1435,9 +1436,6 @@ void SwCntntFrm::MakeAll()
                 MakePos();
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() )
                 {
-                    // OD 2004-07-01 #i28701# - use new method <SwFrm::InvalidateObjs(..)>
-                    // No format is performed for the floating screen objects.
-                    InvalidateObjs( true );
                     Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE );
                     if ( !bValidSize )
                     {
