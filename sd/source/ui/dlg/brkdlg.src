@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:38:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,113 +66,31 @@ ModalDialog DLG_BREAK
     SVLook   = TRUE;
     Pos      = MAP_APPFONT( 84, 34 );
     Size     = MAP_APPFONT( 160, 74 );
-    Text     = "Aufbrechen";
-    Text [ ENGLISH ] = "Break";
+    Text [ de ] = "Aufbrechen";
     Moveable = TRUE;
     FixedText FT_OBJ_INFO
     {
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 85, 10 );
-        Text = "Bearbeitetes Metafile:";
-        Text [ ENGLISH ] = "Processing Metafile:";
-        Text[ language_user1 ] = "; EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
-        Text[ portuguese ] = "Processing metafile:";
-        Text[ russian ] = "Processing metafile:";
-        Text[ spanish ] = "Procesando el metaarchivo:";
-        Text[ italian ] = "Metafile elaborati:";
-        Text[ swedish ] = "Metafil som bearbetas:";
-        Text[ polish ] = "Processing metafile:";
-        Text[ portuguese_brazilian ] = "Processando o meta-arquivo:";
-        Text[ japanese ] = "メタファイルの処理:";
-        Text[ korean ] = "처리 중인 메타 파일:";
-        Text[ turkish ] = "��lenecek metadosyas�:";
-        Text[ thai ] = "Processing metafile:";
-        Text[ english_us ] = "Processing metafile:";
-        Text[ greek ] = "Processing metafile:";
-        Text[ dutch ] = "Processing metafile:";
-        Text[ french ] = "Traitement du m�tafichier :";
-        Text[ finnish ] = "Processing metafile:";
-        Text[ danish ] = "Behandler metafil:";
-        Text[ chinese_simplified ] = "处理图元文件:";
-        Text[ chinese_traditional ] = "處理元檔案：";
-        Text[ arabic ] = "Processing metafile:";
-        Text[ catalan ] = "Processing metafile:";
-        Text[ czech ] = "Zpracování metasouboru:";
-        Text[ hebrew ] = "Bearbeitetes Metafile:";
-        Text[ hindi ] = "Processing metafile:";
-        Text[ slovak ] = "Spracovávam metasúbor:";
-        Text[ hungarian ] = "Metafájl feldolgozása:";
-        Text[ slovenian ] = "Obdelava metadatoteke:";
+        Text [ de ] = "Bearbeitetes Metafile:";
+        Text [ x-comment ] = "; EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
+        Text [ en-US ] = "Processing metafile:";
     };
     FixedText FT_ACT_INFO
     {
         Pos = MAP_APPFONT( 6, 22 );
         Size = MAP_APPFONT( 106, 10 );
-        Text = "Metaobjekte aufgebrochen:";
-        Text [ ENGLISH ] = "Brokened down metaobjects:";
-        Text[ language_user1 ] = "; EM Dec 2002: This string shows up in an error message. The colon is followed by the number of metaobjects that were broken down. (as in \"Break\" found in context menu of a selected metafile)";
-        Text[ portuguese ] = "Brokened down metaobjects:";
-        Text[ russian ] = "Brokened down metaobjects:";
-        Text[ spanish ] = "Metaobjetos quebrados:";
-        Text[ italian ] = "Metaoggetti suddivisi:";
-        Text[ swedish ] = "Uppbrutna metaobjekt:";
-        Text[ polish ] = "Brokened down metaobjects:";
-        Text[ portuguese_brazilian ] = "Meta-objetos quebrados: ";
-        Text[ japanese ] = "詳細なメタオブジェクト:";
-        Text[ korean ] = "메타 개체 분할됨:";
-        Text[ turkish ] = "Bozulmu� metanesneleri:";
-        Text[ thai ] = "Brokened down metaobjects:";
-        Text[ english_us ] = "Broken down metaobjects:";
-        Text[ greek ] = "Brokened down metaobjects:";
-        Text[ dutch ] = "Brokened down metaobjects:";
-        Text[ french ] = "M�ta-objets fractionn�s :";
-        Text[ finnish ] = "Brokened down metaobjects:";
-        Text[ danish ] = "Nedbrudte metaobjekter:";
-        Text[ chinese_simplified ] = "拆开的图元对象：";
-        Text[ chinese_traditional ] = "分開元物件：";
-        Text[ arabic ] = "Brokened down metaobjects:";
-        Text[ catalan ] = "Brokened down metaobjects:";
-        Text[ czech ] = "Rozbité metaobjekty:";
-        Text[ hebrew ] = "Metaobjekte aufgebrochen:";
-        Text[ hindi ] = "Broken down metaobjects:";
-        Text[ slovak ] = "Zlomené meta objekty:";
-        Text[ hungarian ] = "Hibás metaobjektumok:";
-        Text[ slovenian ] = "Razdelani metapredmeti:";
+        Text [ de ] = "Metaobjekte aufgebrochen:";
+        Text [ x-comment ] = "; EM Dec 2002: This string shows up in an error message. The colon is followed by the number of metaobjects that were broken down. (as in \"Break\" found in context menu of a selected metafile)";
+        Text [ en-US ] = "Broken down metaobjects:";
     };
     FixedText FT_INS_INFO
     {
         Pos = MAP_APPFONT( 6, 38 );
         Size = MAP_APPFONT( 90, 10 );
-        Text = "Zeichenobjekte eingef�gt:";
-        Text [ ENGLISH ] = "Inserted drawing objects:";
-        Text[ language_user1 ] = "; EM Dec 2002: This string shows up in a rare error message. The colon is followed by a number. How many inserted drawing objects? \"Inserted drawing objects: 3\"";
-        Text[ portuguese ] = "Inserted drawing objects:";
-        Text[ russian ] = "Inserted drawing objects:";
-        Text[ spanish ] = "Objetos de dibujo insertados:";
-        Text[ italian ] = "Oggetti di disegno inseriti:";
-        Text[ swedish ] = "Infogade ritobjekt:";
-        Text[ polish ] = "Inserted drawing objects:";
-        Text[ portuguese_brazilian ] = "Objetos de desenho inseridos";
-        Text[ japanese ] = "挿入された図形オブジェクト:";
-        Text[ korean ] = "그리기 개체 삽입됨:";
-        Text[ turkish ] = "Eklenmi� �izim nesneleri:";
-        Text[ thai ] = "Inserted drawing objects:";
-        Text[ english_us ] = "Inserted drawing objects:";
-        Text[ greek ] = "Inserted drawing objects:";
-        Text[ dutch ] = "Inserted drawing objects:";
-        Text[ french ] = "Objets de dessin ins�r�s :";
-        Text[ finnish ] = "Inserted drawing objects:";
-        Text[ danish ] = "Indsatte tegningsobjekter:";
-        Text[ chinese_simplified ] = "插入的绘图对象：";
-        Text[ chinese_traditional ] = "插入繪圖物件：";
-        Text[ arabic ] = "Inserted drawing objects:";
-        Text[ catalan ] = "Inserted drawing objects:";
-        Text[ czech ] = "Vložené kreslící objekty:";
-        Text[ hebrew ] = "Zeichenobjekte eingefügt:";
-        Text[ hindi ] = "Inserted drawing objects:";
-        Text[ slovak ] = "Vložené kresby:";
-        Text[ hungarian ] = "Beszúrt rajzobjektumok:";
-        Text[ slovenian ] = "Vstavljeni risani predmeti:";
+        Text [ de ] = "Zeichenobjekte eingef�gt:";
+        Text [ x-comment ] = "; EM Dec 2002: This string shows up in a rare error message. The colon is followed by a number. How many inserted drawing objects? \"Inserted drawing objects: 3\"";
+        Text [ en-US ] = "Inserted drawing objects:";
     };
     FixedText FI_OBJ_INFO
     {
@@ -195,34 +113,8 @@ ModalDialog DLG_BREAK
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text[ language_user1 ] = "; EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
-    Text[ portuguese ] = "Subdividir";
-    Text[ russian ] = "�������";
-    Text[ spanish ] = "Quebrar";
-    Text[ italian ] = "Suddividi";
-    Text[ swedish ] = "Bryt upp";
-    Text[ polish ] = "Podziel";
-    Text[ portuguese_brazilian ] = "Quebrar";
-    Text[ japanese ] = "区切る";
-    Text[ korean ] = "분할";
-    Text[ turkish ] = "Kesme";
-    Text[ thai ] = "แบ่ง";
-    Text[ english_us ] = "Break";
-    Text[ greek ] = "��������";
-    Text[ dutch ] = "Splitsen";
-    Text[ french ] = "Fractionnement";
-    Text[ finnish ] = "Keskeytys";
-    Text[ danish ] = "Bryd";
-    Text[ chinese_simplified ] = "分开";
-    Text[ chinese_traditional ] = "分開";
-    Text[ arabic ] = "����";
-    Text[ catalan ] = "Salt";
-    Text[ czech ] = "Rozbít";
-    Text[ hebrew ] = "Aufbrechen";
-    Text[ hindi ] = "खण्डन";
-    Text[ slovak ] = "Zalomenie";
-    Text[ hungarian ] = "Szétválasztás";
-    Text[ slovenian ] = "Prelomi";
+    Text [ x-comment ] = "; EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
+    Text [ en-US ] = "Break";
 };
 
 
