@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:08:58 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,3 +84,11 @@ File gid_File_Exe_Sdraw
 End
 
 #endif
+
+// new user interface configuration files
+File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar;
+    Name = "/uiconfig/sdraw/menubar/menubar.xml";
+End
