@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:27:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,8 +666,11 @@ protected:
             This page is either duplicated or becomes the predecessor of the
             new slide.  If NULL a duplication request is ignored.  A new
             slide is inserted as first slide.
+        @return
+            The new slide is returned.  If for some reason a new page can
+            not be created then NULL is returned.
     */
-    virtual void CreateOrDuplicatePage (
+    virtual SdPage* CreateOrDuplicatePage (
         SfxRequest& rRequest,
         PageKind ePageKind,
         SdPage* pPage);
