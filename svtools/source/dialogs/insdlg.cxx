@@ -1,0 +1,405 @@
+/*************************************************************************
+ *
+ *  $RCSfile: insdlg.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:45:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define _INSDLG_CXX
+
+// include ---------------------------------------------------------------
+
+//#include <stdio.h>
+#include "insdlg.hxx"
+
+//#include <tools/urlobj.hxx>
+//#include <tools/debug.hxx>
+//#include <svtools/urihelper.hxx>
+#include "sores.hxx"
+
+#include <sot/clsids.hxx>
+#include <tools/rc.hxx>
+#include <sot/stg.hxx>
+
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+//#include <osl/file.hxx>
+
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::ui::dialogs;
+
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
+
+//---------------------------------------------
+// this struct conforms to the Microsoft
+// OBJECTDESCRIPTOR -> see oleidl.h
+// (MS platform sdk)
+//---------------------------------------------
+
+struct OleObjectDescriptor
+{
+    sal_uInt32  cbSize;
+    ClsId       clsid;
+    sal_uInt32  dwDrawAspect;
+    Size        sizel;
+    Point       pointl;
+    sal_uInt32  dwStatus;
+    sal_uInt32  dwFullUserTypeName;
+    sal_uInt32  dwSrcOfCopy;
+};
+
+/********************** SvObjectServerList ********************************
+**************************************************************************/
+PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
+
+/*************************************************************************
+|*    SvObjectServerList::SvObjectServerList()
+|*
+|*    Beschreibung
+*************************************************************************/
+const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
+{
+    for( ULONG i = 0; i < Count(); i++ )
+    {
+        if( rHumanName == GetObject( i ).GetHumanName() )
+            return &GetObject( i );
+    }
+    return NULL;
+}
+
+/*************************************************************************
+|*    SvObjectServerList::SvObjectServerList()
+|*
+|*    Beschreibung
+*************************************************************************/
+const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
+{
+    for( ULONG i = 0; i < Count(); i++ )
+    {
+        if( rName == GetObject( i ).GetClassName() )
+            return &GetObject( i );
+    }
+    return NULL;
+}
+
+void SvObjectServerList::Remove( const SvGlobalName & rName )
+{
+    SvObjectServer * pS = (SvObjectServer *)aTypes.First();
+    while( pS )
+    {
+        if( rName == pS->GetClassName() )
+        {
+            Remove();
+            pS = (SvObjectServer *)aTypes.GetCurObject();
+        }
+        else
+            pS = (SvObjectServer *)aTypes.Next();
+    }
+}
+
+//---------------------------------------------------------------------
+void SvObjectServerList::FillInsertObjects()
+/* [Beschreibung]
+
+    Die Liste wird mit allen Typen gef"ullt, die im Insert-Dialog
+    ausgew"ahlt werden k"onnen.
+*/
+{
+    try{
+    Reference< XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
+    if( _globalMSFactory.is())
+    {
+        OUString sProviderService =
+        OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+        Reference<XMultiServiceFactory > sProviderMSFactory(
+            _globalMSFactory->createInstance( sProviderService ),UNO_QUERY );
+
+        if( sProviderMSFactory.is())
+        {
+            OUString sReaderService =
+                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+            Sequence< Any > aArguments( 1 );
+            beans::PropertyValue aPathProp;
+            aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+            aPathProp.Value <<= OUString::createFromAscii( "/org.openoffice.Office.Embedding/ObjectNames");
+            aArguments[0] <<= aPathProp;
+
+            Reference< XNameAccess > xNameAccess(
+                sProviderMSFactory->createInstanceWithArguments( sReaderService,aArguments ),
+                UNO_QUERY );
+
+            if( xNameAccess.is())
+            {
+                Sequence<OUString> seqNames= xNameAccess->getElementNames();
+
+                sal_Int32 nInd;
+                for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
+                {
+                    Reference< XNameAccess > xEntry ;
+                    xNameAccess->getByName( seqNames[nInd] ) >>= xEntry;
+                    if ( xEntry.is() )
+                    {
+                        ::rtl::OUString aUIName;
+                        ::rtl::OUString aClassID;
+                        xEntry->getByName( OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
+                        xEntry->getByName( OUString::createFromAscii("ClassID") ) >>= aClassID;
+
+                        SvGlobalName aClassName;
+                        if( aClassName.MakeId( String( aClassID )))
+                        {
+                            if( !Get( aClassName ) )
+                                // noch nicht eingetragen
+                                Append( SvObjectServer( aClassName, String( aUIName.getStr() ) ) );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+#ifdef WNT
+    SvGlobalName aOleFact( SO3_OUT_CLASSID );
+    String aOleObj( ResId( STR_FURTHER_OBJECT ) );
+    Append( SvObjectServer( aOleFact, aOleObj ) );
+#endif
+
+    }catch( com::sun::star::container::NoSuchElementException)
+    {
+    }catch( ::com::sun::star::uno::Exception)
+    {
+    }
+    catch(...)
+    {
+    }
+}
+
+String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
+{
+    struct SotResourcePair
+    {
+        SotFormatStringId   mnSotId;
+        USHORT              mnResId;
+    };
+
+    static const SotResourcePair aSotResourcePairs[] =
+    {
+        { SOT_FORMAT_STRING,                    STR_FORMAT_STRING },
+        { SOT_FORMAT_BITMAP,                    STR_FORMAT_BITMAP },
+        { SOT_FORMAT_GDIMETAFILE,               STR_FORMAT_GDIMETAFILE },
+        { SOT_FORMAT_RTF,                       STR_FORMAT_RTF },
+        { SOT_FORMATSTR_ID_DRAWING,             STR_FORMAT_ID_DRAWING },
+        { SOT_FORMATSTR_ID_SVXB,                STR_FORMAT_ID_SVXB },
+        { SOT_FORMATSTR_ID_INTERNALLINK_STATE,  STR_FORMAT_ID_INTERNALLINK_STATE },
+        { SOT_FORMATSTR_ID_SOLK,                STR_FORMAT_ID_SOLK },
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,   STR_FORMAT_ID_NETSCAPE_BOOKMARK },
+        { SOT_FORMATSTR_ID_STARSERVER,          STR_FORMAT_ID_STARSERVER },
+        { SOT_FORMATSTR_ID_STAROBJECT,          STR_FORMAT_ID_STAROBJECT },
+        { SOT_FORMATSTR_ID_APPLETOBJECT,        STR_FORMAT_ID_APPLETOBJECT },
+        { SOT_FORMATSTR_ID_PLUGIN_OBJECT,       STR_FORMAT_ID_PLUGIN_OBJECT },
+        { SOT_FORMATSTR_ID_STARWRITER_30,       STR_FORMAT_ID_STARWRITER_30 },
+        { SOT_FORMATSTR_ID_STARWRITER_40,       STR_FORMAT_ID_STARWRITER_40 },
+        { SOT_FORMATSTR_ID_STARWRITER_50,       STR_FORMAT_ID_STARWRITER_50 },
+        { SOT_FORMATSTR_ID_STARWRITERWEB_40,    STR_FORMAT_ID_STARWRITERWEB_40 },
+        { SOT_FORMATSTR_ID_STARWRITERWEB_50,    STR_FORMAT_ID_STARWRITERWEB_50 },
+        { SOT_FORMATSTR_ID_STARWRITERGLOB_40,   STR_FORMAT_ID_STARWRITERGLOB_40 },
+        { SOT_FORMATSTR_ID_STARWRITERGLOB_50,   STR_FORMAT_ID_STARWRITERGLOB_50 },
+        { SOT_FORMATSTR_ID_STARDRAW,            STR_FORMAT_ID_STARDRAW },
+        { SOT_FORMATSTR_ID_STARDRAW_40,         STR_FORMAT_ID_STARDRAW_40 },
+        { SOT_FORMATSTR_ID_STARIMPRESS_50,      STR_FORMAT_ID_STARIMPRESS_50 },
+        { SOT_FORMATSTR_ID_STARDRAW_50,         STR_FORMAT_ID_STARDRAW_50 },
+        { SOT_FORMATSTR_ID_STARCALC,            STR_FORMAT_ID_STARCALC },
+        { SOT_FORMATSTR_ID_STARCALC_40,         STR_FORMAT_ID_STARCALC_40 },
+        { SOT_FORMATSTR_ID_STARCALC_50,         STR_FORMAT_ID_STARCALC_50 },
+        { SOT_FORMATSTR_ID_STARCHART,           STR_FORMAT_ID_STARCHART },
+        { SOT_FORMATSTR_ID_STARCHART_40,        STR_FORMAT_ID_STARCHART_40 },
+        { SOT_FORMATSTR_ID_STARCHART_50,        STR_FORMAT_ID_STARCHART_50 },
+        { SOT_FORMATSTR_ID_STARIMAGE,           STR_FORMAT_ID_STARIMAGE },
+        { SOT_FORMATSTR_ID_STARIMAGE_40,        STR_FORMAT_ID_STARIMAGE_40 },
+        { SOT_FORMATSTR_ID_STARIMAGE_50,        STR_FORMAT_ID_STARIMAGE_50 },
+        { SOT_FORMATSTR_ID_STARMATH,            STR_FORMAT_ID_STARMATH },
+        { SOT_FORMATSTR_ID_STARMATH_40,         STR_FORMAT_ID_STARMATH_40 },
+        { SOT_FORMATSTR_ID_STARMATH_50,         STR_FORMAT_ID_STARMATH_50 },
+        { SOT_FORMATSTR_ID_STAROBJECT_PAINTDOC, STR_FORMAT_ID_STAROBJECT_PAINTDOC },
+        { SOT_FORMATSTR_ID_HTML,                STR_FORMAT_ID_HTML },
+        { SOT_FORMATSTR_ID_HTML_SIMPLE,         STR_FORMAT_ID_HTML_SIMPLE },
+        { SOT_FORMATSTR_ID_BIFF_5,              STR_FORMAT_ID_BIFF_5 },
+        { SOT_FORMATSTR_ID_BIFF_8,              STR_FORMAT_ID_BIFF_8 },
+        { SOT_FORMATSTR_ID_SYLK,                STR_FORMAT_ID_SYLK },
+        { SOT_FORMATSTR_ID_LINK,                STR_FORMAT_ID_LINK },
+        { SOT_FORMATSTR_ID_DIF,                 STR_FORMAT_ID_DIF },
+        { SOT_FORMATSTR_ID_MSWORD_DOC,          STR_FORMAT_ID_MSWORD_DOC },
+        { SOT_FORMATSTR_ID_STAR_FRAMESET_DOC,   STR_FORMAT_ID_STAR_FRAMESET_DOC },
+        { SOT_FORMATSTR_ID_OFFICE_DOC,          STR_FORMAT_ID_OFFICE_DOC },
+        { SOT_FORMATSTR_ID_NOTES_DOCINFO,       STR_FORMAT_ID_NOTES_DOCINFO },
+        { SOT_FORMATSTR_ID_SFX_DOC,             STR_FORMAT_ID_SFX_DOC },
+        { SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50,STR_FORMAT_ID_STARCHARTDOCUMENT_50 },
+        { SOT_FORMATSTR_ID_GRAPHOBJ,            STR_FORMAT_ID_GRAPHOBJ },
+        { SOT_FORMATSTR_ID_STARWRITER_60,       STR_FORMAT_ID_STARWRITER_60 },
+        { SOT_FORMATSTR_ID_STARWRITERWEB_60,    STR_FORMAT_ID_STARWRITERWEB_60 },
+        { SOT_FORMATSTR_ID_STARWRITERGLOB_60,   STR_FORMAT_ID_STARWRITERGLOB_60 },
+        { SOT_FORMATSTR_ID_STARDRAW_60,         STR_FORMAT_ID_STARDRAW_60 },
+        { SOT_FORMATSTR_ID_STARIMPRESS_60,      STR_FORMAT_ID_STARIMPRESS_60 },
+        { SOT_FORMATSTR_ID_STARCALC_60,         STR_FORMAT_ID_STARCALC_60 },
+        { SOT_FORMATSTR_ID_STARCHART_60,        STR_FORMAT_ID_STARCHART_60 },
+        { SOT_FORMATSTR_ID_STARMATH_60,         STR_FORMAT_ID_STARMATH_60 },
+        { SOT_FORMATSTR_ID_WMF,                 STR_FORMAT_ID_WMF },
+        { SOT_FORMATSTR_ID_DBACCESS_QUERY,      STR_FORMAT_ID_DBACCESS_QUERY },
+        { SOT_FORMATSTR_ID_DBACCESS_TABLE,      STR_FORMAT_ID_DBACCESS_TABLE },
+        { SOT_FORMATSTR_ID_DBACCESS_COMMAND,    STR_FORMAT_ID_DBACCESS_COMMAND },
+        { SOT_FORMATSTR_ID_DIALOG_60,           STR_FORMAT_ID_DIALOG_60 },
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR,   STR_FORMAT_ID_FILEGRPDESCRIPTOR },
+        { SOT_FORMATSTR_ID_HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT }
+    };
+
+    String aUIName;
+    USHORT nResId = 0;
+
+    for( sal_uInt32 i = 0, nCount = sizeof( aSotResourcePairs ) / sizeof( aSotResourcePairs[ 0 ] ); ( i < nCount ) && !nResId; i++ )
+    {
+        if( aSotResourcePairs[ i ].mnSotId == nId )
+            nResId = aSotResourcePairs[ i ].mnResId;
+    }
+
+    if( nResId )
+        aUIName = String( ResId( nResId ) );
+    else
+        aUIName = SotExchange::GetFormatName( nId );
+
+    return aUIName;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData,String& _rName,String& _rSource,SotFormatStringId& _nFormat)
+{
+    sal_Bool bRet = sal_False;
+    if( _nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || _nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
+    {
+        ::com::sun::star::datatransfer::DataFlavor aFlavor;
+        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aFlavor );
+
+        ::com::sun::star::uno::Any aAny;
+        if( rData.HasFormat( aFlavor ) &&
+            ( aAny = rData.GetAny( aFlavor ) ).hasValue() )
+        {
+            ::com::sun::star::uno::Sequence< sal_Int8 > anySequence;
+            aAny >>= anySequence;
+
+            OleObjectDescriptor* pOleObjDescr =
+                reinterpret_cast< OleObjectDescriptor* >( anySequence.getArray( ) );
+
+            // determine the user friendly description of the embedded object
+            if ( pOleObjDescr->dwFullUserTypeName )
+            {
+                // we set the pointer to the start of user friendly description
+                // string. it starts  at &OleObjectDescriptor + dwFullUserTypeName.
+                // dwFullUserTypeName is the offset in bytes.
+                // the user friendly description string is '\0' terminated.
+                const sal_Unicode* pUserTypeName =
+                    reinterpret_cast< sal_Unicode* >(
+                        reinterpret_cast< sal_Char* >( pOleObjDescr ) +
+                            pOleObjDescr->dwFullUserTypeName );
+
+                _rName.Append( pUserTypeName );
+                _nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+            }
+
+            // determine the source of the embedded object
+            if ( pOleObjDescr->dwSrcOfCopy )
+            {
+                // we set the pointer to the start of source string
+                // it starts  at &OleObjectDescriptor + dwSrcOfCopy.
+                // dwSrcOfCopy is the offset in bytes.
+                // the source string is '\0' terminated.
+                const sal_Unicode* pSrcOfCopy =
+                    reinterpret_cast< sal_Unicode* >(
+                        reinterpret_cast< sal_Char* >( pOleObjDescr ) +
+                            pOleObjDescr->dwSrcOfCopy );
+
+                _rSource.Append( pSrcOfCopy );
+            }
+            else
+                _rSource =
+                    String( ResId( STR_UNKNOWN_SOURCE ) );
+        }
+        bRet = sal_True;
+    }
+    return bRet;
+}
+// -----------------------------------------------------------------------------
+
