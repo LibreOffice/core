@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:08:15 $
+ *  last change: $Author: aw $ $Date: 2001-06-26 14:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,10 @@
 
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
+#endif
+
+#ifndef _SVX_XFLFTRIT_HXX
+#include "xflftrit.hxx"
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
@@ -277,17 +281,28 @@ BOOL E3dScene::AreThereTransparentParts() const
         // Nur darstellbare Objekte bewerten
         if(pObj->ISA(E3dCompoundObject))
         {
+            // get const ItemSet reference
+            const SfxItemSet& rSet = pObj->GetItemSet();
+
             // Flaechenattribut testen
-            UINT16 nFillTrans = ITEMVALUE( pObj->GetItemSet(), XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
-            if(nFillTrans)
+            UINT16 nFillTrans = ((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue();
+            if(nFillTrans != 0)
                 bRetval = TRUE;
 
             if(!bRetval)
             {
                 // Linienattribut testen
-                UINT16 nLineTransparence = ITEMVALUE( pObj->GetItemSet(), XATTR_LINETRANSPARENCE, XLineTransparenceItem );
-                if(nLineTransparence)
+                UINT16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+                if(nLineTransparence != 0)
                     bRetval = TRUE;
+
+                if(!bRetval)
+                {
+                    // test FloatTransparence
+                    const XFillFloatTransparenceItem& rFloatTrans = ((const XFillFloatTransparenceItem&)(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)));
+                    if(rFloatTrans.IsEnabled())
+                        bRetval = TRUE;
+                }
             }
         }
     }
