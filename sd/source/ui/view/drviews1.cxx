@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-09 12:55:49 $
+ *  last change: $Author: thb $ $Date: 2002-01-17 13:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,9 +692,8 @@ SvxRuler* SdDrawViewShell::CreateVRuler(SdWindow* pWin)
                           GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
-    // Metric am Lineal einstellen
-    SdOptions*  pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
-    UINT16      nMetric = pOptions->GetMetric();
+    // #96629# Metric same as HRuler, use document setting
+    UINT16 nMetric = pDoc->GetUIUnit();
 
     if( nMetric == 0xffff )
         nMetric = GetModuleFieldUnit();
