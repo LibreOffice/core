@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:05:57 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 14:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,6 +759,25 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
 }
 
 
+// Returns the position of the last character of any of the following
+// EOL char combinations: CR, CR/LF, LF, return -1 if no EOL is found
+sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex )
+{
+    sal_Int32 iRetPos = -1;
+
+    sal_Int32 iLF = rStr.indexOf( LINE_SEP, fromIndex );
+    if( iLF != -1 )
+    {
+        iRetPos = iLF;
+    }
+    else
+    {
+        iRetPos = rStr.indexOf( LINE_SEP_CR, fromIndex );
+    }
+    return iRetPos;
+}
+
+
 void EditorWindow::CreateEditEngine()
 {
     if ( pEditEngine )
@@ -787,7 +806,7 @@ void EditorWindow::CreateEditEngine()
     do
     {
         nLines++;
-        nIndex = aOUSource.indexOf( LINE_SEP, nIndex+1 );
+        nIndex = searchEOL( aOUSource, nIndex+1 );
     }
     while ( nIndex >= 0 );
 
