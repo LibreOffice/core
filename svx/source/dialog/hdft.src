@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:43:06 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,11 +813,12 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message[ chinese_traditional ] = "¤£±Δ¥Ξ­¶­Ί©Ξ­¶§ΐ΄N·|§R°£·ν«eªΊ¤ε¦r΅C\n­n§R°£³o¨Η¤ε¦r΅H";
     Message[ arabic ] = "ΕΞέΗΑ ΡΓΣ/ ΚΠννα ΗαΥέΝΙ Σζέ νΔΟν Εαμ ΝΠέ γΝΚζνΗΚε.\nεα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαγΝΚζνΗΚΏ";
     Message[ greek ] = "Με την απενεργοποίηση της κεφαλίδας ή της υποκεφαλίδας διαγράφεται το υπάρχον περιεχόμενο.\nΘέλετε να διαγραφεί το περιεχόμενο;";
-    Message[ korean ] = "ΈΣΈ®±ΫΐΜ³ª ΉΩ΄Ϊ±Ϋΐ» ΎψΎΦΈι ±βΑΈΐΗ ΕΨ½ΊΖ®°΅ »θΑ¦µΛ΄Ο΄Ω. \n³»Ώλΐ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "ΈΣΈ®±ΫΐΜ³ª ΉΩ΄Ϊ±Ϋΐ» ΎψΎΦΈι ±βΑΈΐΗ ΕΨ½ΊΖ®°΅ »θΑ¦µΛ΄Ο΄Ω.\n³»Ώλΐ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "άstbilgi ve altbilginin kaldύrύlmasύ ile mevcut metin silinecek.\nέηeriπi silmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Al desactivar el encabezamiento o pie de pαgina se eliminarα su contenido.\nΏDesea eliminarlo?";
 };
 
  // ********************************************************************** EOF
+
 
