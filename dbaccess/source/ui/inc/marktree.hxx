@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:09:23 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@ public:
     /// the handler given is called whenever the check state of one or more items changed
     void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
 
+    /** call when HiContrast change.
+    */
+    virtual void notifyHiContrastChanged();
+
 protected:
     virtual void Paint(const Rectangle& _rRect);
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
@@ -116,6 +120,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/27 08:09:23  fs
+ *  +implDeterminedState - needed to correctly implement CheckButtons
+ *
  *  Revision 1.3  2001/01/30 08:28:00  fs
  *  +checkedButton_noBroadcast
  *
