@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1757,8 +1757,8 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             if ( !pPage->IsEndNotePage() )
             {
                 SwPageDesc *pDesc = pDoc->GetEndNoteInfo().GetPageDesc( *pDoc );
-                BOOL bOdd = pPage->GetVirtPageNum() % 2 ? FALSE : TRUE;
-                pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(), bOdd, TRUE, 0 );
+                pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(),
+                        !pPage->OnRightPage(), FALSE, TRUE, 0 );
                 pPage->SetEndNotePage( TRUE );
                 bChgPage = TRUE;
             }
@@ -1801,8 +1801,8 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         if ( !pPage->IsFtnPage() )
         {
             SwPageDesc *pDesc = pDoc->GetFtnInfo().GetPageDesc( *pDoc );
-            BOOL bOdd = pPage->GetVirtPageNum() % 2 ? FALSE : TRUE;
-            pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(), bOdd, TRUE, pPage->GetNext() );
+            pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(),
+                !pPage->OnRightPage(), FALSE, TRUE, pPage->GetNext() );
             bChgPage = TRUE;
         }
         else

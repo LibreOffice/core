@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-11 12:16:07 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1499,8 +1499,7 @@ void SwFlyFrm::MakeFlyPos()
 
 
         //Jetzt die Horizontale Position
-        const BOOL bToggle = aHori.IsPosToggle() &&
-                       !(FindPageFrm()->GetVirtPageNum() % 2);
+        const BOOL bToggle = aHori.IsPosToggle()&&!FindPageFrm()->OnRightPage();
         BOOL bTmpToggle = bToggle;
         //und wieder erst der Bezugsrahmen
         SwTwips nRel, nAdd;

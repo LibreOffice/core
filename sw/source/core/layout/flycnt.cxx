@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-10 12:19:47 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,7 +1712,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
             pPage = pPage->GetUpper();
         }
 
-        const BOOL bEven = !(pPage->FindPageFrm()->GetVirtPageNum() % 2);
+        const BOOL bEven = !pPage->OnRightPage();
         const BOOL bToggle = aHori.IsPosToggle() && bEven;
         BOOL bTmpToggle = bToggle;
         BOOL bPageRel = FALSE;

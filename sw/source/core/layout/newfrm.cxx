@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 20:32:29 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _NOTXTFRM_HXX
 #include <notxtfrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 
 
@@ -332,13 +335,14 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
         //#19104# Seitennummeroffset beruecksictigen!!
         bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
     }
+    else
+        bIsVirtPageNum = FALSE;
     if ( !pDesc )
         pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
-    if( !nPgNum )
-        nPgNum = 1;
+    const BOOL bOdd = !nPgNum || 0 != ( nPgNum % 2 );
 
     //Eine Seite erzeugen und in das Layout stellen
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, 0 != nPgNum % 2 , FALSE, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, FALSE, FALSE, 0 );
 
     //Erstes Blatt im Bodytext-Bereich suchen.
     SwLayoutFrm *pLay = pPage->FindBodyCont();

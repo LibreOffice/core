@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 16:22:11 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,17 +761,27 @@ BOOL SwFrm::WrongPageDesc( SwPageFrm* pNew )
 
     //Mein Pagedesc zaehlt nicht, wenn ich ein Follow bin!
     SwPageDesc *pDesc = 0;
+    USHORT nTmp = 0;
     SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( this );
     if ( !pFlow || !pFlow->IsFollow() )
+    {
         pDesc = (SwPageDesc*)rFmtDesc.GetPageDesc();
+        if( pDesc )
+        {
+            if( !pDesc->GetRightFmt() )
+                nTmp = 2;
+            else if( !pDesc->GetLeftFmt() )
+                nTmp = 1;
+            else if( rFmtDesc.GetNumOffset() )
+                nTmp = rFmtDesc.GetNumOffset();
+        }
+    }
 
     //Bringt der Cntnt einen Pagedesc mit oder muss zaehlt die
     //virtuelle Seitennummer des neuen Layoutleafs?
     // Bei Follows zaehlt der PageDesc nicht
-    const USHORT nTmp = ( pDesc && rFmtDesc.GetNumOffset() )
-                                    ? rFmtDesc.GetNumOffset()
-                                    : pNew->GetVirtPageNum();
-    const BOOL bOdd = nTmp % 2 ? TRUE : FALSE;
+    const BOOL bOdd = nTmp ? ( nTmp % 2 ? TRUE : FALSE )
+                           : pNew->OnRightPage();
     if ( !pDesc )
         pDesc = pNew->FindPageDesc();
     const SwFlowFrm *pNewFlow = pNew->FindFirstBodyCntnt();
