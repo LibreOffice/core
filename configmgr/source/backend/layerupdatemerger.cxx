@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:29 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 13:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,11 @@ void SAL_CALL LayerUpdateMerger::overrideProperty( const OUString& aName, sal_In
 
     if (PropertyUpdate * pPropUpdate = xUpdate->asPropertyUpdate())
     {
-        // TODO: validate type
+        OSL_ENSURE( aType == pPropUpdate->getValueType() ||
+                    aType == uno::Type()                 ||
+                    pPropUpdate->getValueType() == uno::Type(),
+                    "Error in update merger: type mismatch overriding property ...");
+
         getResultWriter()->overrideProperty(aName, pPropUpdate->updateFlags(aAttributes), aType);
         m_xCurrentProp.set(pPropUpdate);
     }

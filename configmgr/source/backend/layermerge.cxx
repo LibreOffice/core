@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 10:30:22 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 13:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,12 +274,14 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
         {
             if (pValue->getValueType().getTypeClass() == uno::TypeClass_ANY)
             {
-                if (_aType == uno::Type()) // VOID
-                    m_aContext.raiseIllegalTypeException("Layer merging: Illegal property type: VOID overriding ANY");
-
                 OSL_ENSURE( pValue->isNull(), "Layer merging: Non-null 'any' value" );
 
-                OSL_VERIFY( pValue->setValueType(_aType) );
+                if (_aType != uno::Type())
+                    OSL_VERIFY( pValue->setValueType(_aType) );
+
+                else
+                    OSL_TRACE("Layer merging: Illegal property type: VOID overriding ANY");
+                    // m_aContext.raiseIllegalTypeException("Layer merging: Illegal property type: VOID overriding ANY");
             }
             else if (_aType == uno::Type() && m_pConverter)
                 m_pConverter->m_bConvertData = true;
