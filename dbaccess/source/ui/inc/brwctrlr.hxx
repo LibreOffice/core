@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 13:03:51 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 11:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,6 @@ namespace dbaui
 
         sal_uInt16  m_nFormActionNestingLevel;  // see enter-/leaveFormAction
         bool        m_bErrorOccured;            // dito
-
-        ::cppu::OBroadcastHelper    m_aPropertyBroadcastHelper;
 
         // for implementing the XFormController
         class FormControllerImpl;
