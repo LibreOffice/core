@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2002-01-14 16:00:14 $
+ *  last change: $Author: tl $ $Date: 2002-02-06 12:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2323,8 +2323,9 @@ void SmParser::Special()
                 }
             }
         }
-        else
-            DBG_ERROR( "unexpected conversion or data missing" );
+        // else:
+        // conversion arrays not found or (usually)
+        // conversion not necessary
     }
 
     if (bReplace  &&  aNewName.Len()  &&  rName != aNewName)
