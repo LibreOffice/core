@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:00:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,17 @@
 #ifndef _SFX_HELP_HXX
 #define _SFX_HELP_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
@@ -69,7 +80,7 @@
 
 class SfxHelp_Impl;
 class SfxFrame;
-class SfxHelp : public Help
+class SFX2_DLLPUBLIC SfxHelp : public Help
 {
     String          aTicket;        // for Plugins
     String          aUser;
@@ -79,12 +90,12 @@ class SfxHelp : public Help
     SfxHelp_Impl*   pImp;
 
 private:
-    virtual BOOL    Start( ULONG nHelpId, const Window* pWindow );
-    virtual BOOL    Start( const String& rURL, const Window* pWindow );
+    SAL_DLLPRIVATE virtual BOOL Start( ULONG nHelpId, const Window* pWindow );
+    SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
 
-    String          GetHelpModuleName_Impl( );
-    String          CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );
-    String          CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName );
+    SAL_DLLPRIVATE String GetHelpModuleName_Impl();
+    SAL_DLLPRIVATE String CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );
+    SAL_DLLPRIVATE String CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName );
 
 public:
 
