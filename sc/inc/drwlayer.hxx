@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-30 16:50:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ private:
     BOOL            bAdjustEnabled;
 
 private:
-    void            MoveAreaMM( USHORT nTab, const Rectangle& rArea, const Point& rMove,
+    void            MoveAreaTwips( USHORT nTab, const Rectangle& rArea, const Point& rMove,
                                 const Point& rTopLeft );
     void            MoveCells( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2,USHORT nRow2,
                                 short nDx,short nDy );

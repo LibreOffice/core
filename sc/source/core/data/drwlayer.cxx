@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 14:59:13 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 15:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,6 +659,8 @@
 //  und noch etwas mehr, damit das Objekt auch sichtbar in der Zelle liegt
 #define SHRINK_DIST     25
 
+#define SHRINK_DIST_TWIPS   15
+
 // -----------------------------------------------------------------------
 //
 //  Das Anpassen der Detektiv-UserData muss zusammen mit den Draw-Undo's
@@ -760,7 +762,34 @@ __EXPORT ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 inline void TwipsToMM( long& nVal )
 {
-    nVal = (long) ( nVal * (CM_PER_TWIPS*1000.0) );
+    nVal = (long) ( nVal * HMM_PER_TWIPS );
+}
+
+inline void ReverseTwipsToMM( long& nVal )
+{
+    //  reverse the effect of TwipsToMM - round up here (add 1)
+
+    nVal = ((long) ( nVal / HMM_PER_TWIPS )) + 1;
+}
+
+void lcl_TwipsToMM( Point& rPoint )
+{
+    TwipsToMM( rPoint.X() );
+    TwipsToMM( rPoint.Y() );
+}
+
+void lcl_ReverseTwipsToMM( Point& rPoint )
+{
+    ReverseTwipsToMM( rPoint.X() );
+    ReverseTwipsToMM( rPoint.Y() );
+}
+
+void lcl_ReverseTwipsToMM( Rectangle& rRect )
+{
+    ReverseTwipsToMM( rRect.Left() );
+    ReverseTwipsToMM( rRect.Right() );
+    ReverseTwipsToMM( rRect.Top() );
+    ReverseTwipsToMM( rRect.Bottom() );
 }
 
 // -----------------------------------------------------------------------
@@ -1428,7 +1457,8 @@ SdrUndoGroup* ScDrawLayer::GetCalcUndo()
     return pRet;
 }
 
-void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
+//  MoveAreaTwips: all measures are kept in twips
+void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
         const Point& rMove, const Point& rTopLeft )
 {
     if (!rMove.X() && !rMove.Y())
@@ -1438,9 +1468,6 @@ void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
     DBG_ASSERT(pPage,"Page nicht gefunden");
     if (!pPage)
         return;
-
-    Point aNewPos;
-    Rectangle aObjRect;
 
     // fuer Shrinking!
     Rectangle aNew( rArea );
@@ -1475,6 +1502,7 @@ void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
                 {
                     BOOL bMoved = FALSE;
                     Point aPoint = pObject->GetPoint(i);
+                    lcl_ReverseTwipsToMM( aPoint );
                     if (rArea.IsInside(aPoint))
                     {
                         aPoint += rMove; bMoved = TRUE;
@@ -1484,13 +1512,13 @@ void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
                         //  Punkt ist in betroffener Zelle - Test auf geloeschten Bereich
                         if ( rMove.X() && aPoint.X() >= rArea.Left() + rMove.X() )
                         {
-                            aPoint.X() = rArea.Left() + rMove.X() - SHRINK_DIST;
+                            aPoint.X() = rArea.Left() + rMove.X() - SHRINK_DIST_TWIPS;
                             if ( aPoint.X() < 0 ) aPoint.X() = 0;
                             bMoved = TRUE;
                         }
                         if ( rMove.Y() && aPoint.Y() >= rArea.Top() + rMove.Y() )
                         {
-                            aPoint.Y() = rArea.Top() + rMove.Y() - SHRINK_DIST;
+                            aPoint.Y() = rArea.Top() + rMove.Y() - SHRINK_DIST_TWIPS;
                             if ( aPoint.Y() < 0 ) aPoint.Y() = 0;
                             bMoved = TRUE;
                         }
@@ -1498,13 +1526,16 @@ void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
                     if( bMoved )
                     {
                         AddCalcUndo( new SdrUndoGeoObj( *pObject ) );
+                        lcl_TwipsToMM( aPoint );
                         pObject->SetPoint( aPoint, i );
                     }
                 }
             }
             else
             {
-                aObjRect = pObject->GetLogicRect();
+                Rectangle aObjRect = pObject->GetLogicRect();
+                Point aOldMMPos = aObjRect.TopLeft();           // not converted, millimeters
+                lcl_ReverseTwipsToMM( aObjRect );
                 Point aTopLeft = aObjRect.TopLeft();
                 Size aMoveSize;
                 BOOL bDoMove = FALSE;
@@ -1533,6 +1564,12 @@ void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
                         aMoveSize.Width() = -aTopLeft.X();
                     if ( aTopLeft.Y() + aMoveSize.Height() < 0 )
                         aMoveSize.Height() = -aTopLeft.Y();
+
+                    //  get corresponding move size in millimeters:
+                    Point aNewPos( aTopLeft.X() + aMoveSize.Width(), aTopLeft.Y() + aMoveSize.Height() );
+                    lcl_TwipsToMM( aNewPos );
+                    aMoveSize = Size( aNewPos.X() - aOldMMPos.X(), aNewPos.Y() - aOldMMPos.Y() );   // millimeters
+
                     AddCalcUndo( new SdrUndoMoveObj( *pObject, aMoveSize ) );
                     pObject->Move( aMoveSize );
                 }
@@ -1544,8 +1581,8 @@ void ScDrawLayer::MoveAreaMM( USHORT nTab, const Rectangle& rArea,
                     AddCalcUndo( new SdrUndoGeoObj( *pObject ) );
                     long nOldSizeX = aObjRect.Right() - aObjRect.Left() + 1;
                     long nOldSizeY = aObjRect.Bottom() - aObjRect.Top() + 1;
-                    pObject->Resize( aObjRect.TopLeft(), Fraction( nOldSizeX+rMove.X(), nOldSizeX ),
-                                                         Fraction( nOldSizeY+rMove.Y(), nOldSizeY ) );
+                    pObject->Resize( aOldMMPos, Fraction( nOldSizeX+rMove.X(), nOldSizeX ),
+                                                Fraction( nOldSizeY+rMove.Y(), nOldSizeY ) );
                 }
             }
         }
@@ -1560,6 +1597,8 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
         return;
 
     Rectangle aRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+    lcl_ReverseTwipsToMM( aRect );
+    //! use twips directly?
 
     short s;
     Point aMove;
@@ -1577,9 +1616,6 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
         for (s=-1; s>=nDy; s--)
             aMove.Y() -= pDoc->FastGetRowHeight(s+(short)nRow1,nTab);
 
-    TwipsToMM( aMove.X() );
-    TwipsToMM( aMove.Y() );
-
     Point aTopLeft = aRect.TopLeft();       // Anfang beim Verkleinern
     if (bInsDel)
     {
@@ -1589,7 +1625,7 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
             aTopLeft.Y() += aMove.Y();
     }
 
-    MoveAreaMM( nTab, aRect, aMove, aTopLeft );
+    MoveAreaTwips( nTab, aRect, aMove, aTopLeft );
 
         //
         //      Detektiv-Pfeile: Zellpositionen anpassen
@@ -1612,18 +1648,13 @@ void ScDrawLayer::WidthChanged( USHORT nTab, USHORT nCol, long nDifTwips )
     aTopLeft.X() = aRect.Left();
     aRect.Left() += pDoc->GetColWidth(nCol,nTab);
 
-    TwipsToMM( aRect.Left() );
-    TwipsToMM( aTopLeft.X() );
-
     aRect.Right() = MAXMM;
     aRect.Top() = 0;
     aRect.Bottom() = MAXMM;
 
-    TwipsToMM( nDifTwips );
-
     //! aTopLeft ist falsch, wenn mehrere Spalten auf einmal ausgeblendet werden
 
-    MoveAreaMM( nTab, aRect, Point( nDifTwips,0 ), aTopLeft );
+    MoveAreaTwips( nTab, aRect, Point( nDifTwips,0 ), aTopLeft );
 }
 
 void ScDrawLayer::HeightChanged( USHORT nTab, USHORT nRow, long nDifTwips )
@@ -1640,18 +1671,13 @@ void ScDrawLayer::HeightChanged( USHORT nTab, USHORT nRow, long nDifTwips )
     aTopLeft.Y() = aRect.Top();
     aRect.Top() += pDoc->FastGetRowHeight(nRow,nTab);
 
-    TwipsToMM( aRect.Top() );
-    TwipsToMM( aTopLeft.Y() );
-
     aRect.Bottom() = MAXMM;
     aRect.Left() = 0;
     aRect.Right() = MAXMM;
 
-    TwipsToMM( nDifTwips );
-
     //! aTopLeft ist falsch, wenn mehrere Zeilen auf einmal ausgeblendet werden
 
-    MoveAreaMM( nTab, aRect, Point( 0,nDifTwips ), aTopLeft );
+    MoveAreaTwips( nTab, aRect, Point( 0,nDifTwips ), aTopLeft );
 }
 
 BOOL ScDrawLayer::HasObjectsInRows( USHORT nTab, USHORT nStartRow, USHORT nEndRow )
