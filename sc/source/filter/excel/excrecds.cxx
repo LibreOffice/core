@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-12 12:21:59 $
+ *  last change: $Author: gt $ $Date: 2001-01-15 11:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ const BYTE      ExcDummy_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // SAVERECALC
 //  0x2a, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PRINTHEADERS
 //  0x2b, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRINTGRIDLINES
-    0x82, 0x00, 0x02, 0x00, 0x00, 0x00,                     // GRIDSET
+    0x82, 0x00, 0x02, 0x00, 0x01, 0x00,                     // GRIDSET
 //  0x80, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   // GUTS
 //  0x00, 0x00, 0x00,
     0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00,         // DEFAULTROWHEIGHT
@@ -3628,8 +3628,13 @@ ExcSetup::ExcSetup( RootData* pExcRoot )
 
         nPageStart = ( UINT16 ) ( ( const SfxUInt16Item& ) rSet.Get( ATTR_PAGE_FIRSTPAGENO ) ).GetValue();
 
-        if( nPageStart != 1 )
-            nGrbit |= 0x0080;   // fUsePage
+        const UINT16    nTab = *pExcRoot->pAktTab;
+
+        if( nPageStart )
+        {
+            if( nTab == 0 || pExcRoot->pDoc->NeedPageResetAfterTab( nTab - 1 ) )
+                nGrbit |= 0x0080;   // fUsePage
+        }
 
         if( !( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_TOPDOWN ) ).GetValue() )
             nGrbit |= 0x0001;   // ffLeftToRight
