@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:56 $
+#   last change: $Author: jbu $ $Date: 2000-10-31 15:53:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,13 +78,10 @@ UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT=$(OUT)$/inc$/factory
 INCPRE+= $(UNOUCROUT)
-UNOTYPES=$($(TARGET)_XML2CMPTYPES)
 
 SLOFILES= \
     $(SLO)$/bridgefactory.obj\
-    $(SLO)$/bridgeimpl.obj \
-    $(SLO)$/$(COMP1TYPELIST)_description.obj
-
+    $(SLO)$/bridgeimpl.obj 
 
 SHL1TARGET= $(TARGET)
 

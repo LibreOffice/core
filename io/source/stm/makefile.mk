@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2000-10-16 12:22:47 $
+#   last change: $Author: jbu $ $Date: 2000-10-31 15:58:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,15 +78,14 @@ UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT=$(OUT)$/inc$/stm
 INCPRE+= $(UNOUCROUT)
 
-UNOTYPES=$($(TARGET)_XML2CMPTYPES)
 
 SLOFILES = 	$(SLO)$/opipe.obj\
         $(SLO)$/factreg.obj\
         $(SLO)$/omark.obj\
         $(SLO)$/odata.obj \
         $(SLO)$/streamhelper.obj \
-        $(SLO)$/opump.obj \
-               $(SLO)$/$(COMP1TYPELIST)_description.obj
+        $(SLO)$/opump.obj
+
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
