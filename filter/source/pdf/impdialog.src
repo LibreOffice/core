@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:22:56 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,8 @@ ModalDialog RID_PDF_EXPORT_DLG
     Text[ hindi ] = "PDF Options";
     Text[ slovak ] = "PDF voľby";
 };
+
+
 
 
 
