@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:12:47 $
+ *  last change: $Author: fs $ $Date: 2002-01-10 13:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ TabPage PAGE_GENERAL
     FixedText FT_DATASOURCENAME
     {
         Pos = MAP_APPFONT ( 7 , 7 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Name";
         Text [ english ] = "~Name";
         Text [ english_us ] = "~Name";
@@ -603,7 +603,7 @@ TabPage PAGE_GENERAL
     FixedText FT_DATATYPE
     {
         Pos = MAP_APPFONT ( 7 , 35 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "Datenbank~typ ";
         Text [ english ] = "Database ~type ";
         Text [ english_us ] = "Database ~type ";
@@ -641,7 +641,7 @@ TabPage PAGE_GENERAL
     {
         HelpId = HID_DSADMIN_URL_GENERAL;
         Pos = MAP_APPFONT ( 7 , 54 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "D~atenquellen-URL" ;
         Text [ english ] = "~Data source URL" ;
         Text [ english_us ] = "~Data source URL" ;
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.84  2002/01/09 21:12:47  kz
+ *  Merge SRC641: 09.01.02 - 22:08:38
+ *
  *  Revision 1.83  2001/12/14 16:50:53  kz
  *  Merge SRC641: 14.12.01 - 17:51:09
  *
