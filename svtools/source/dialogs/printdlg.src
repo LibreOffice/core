@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:15:46 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 17:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ª`¸Ñ";
         Text[ arabic ] = "ÊÚáíÞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ÁÖ";
+        Text[ korean ] = "ÁÖ¼®";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
     };
