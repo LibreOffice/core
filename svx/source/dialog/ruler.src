@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:24:12 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT [ english_us ] = "Center" ;
     TEXT[ chinese_simplified ] = "¾ÓÖÐ";
     TEXT[ russian ] = "Ïî öåíòðó";
-    TEXT[ polish ] = "Wy?rodkuj";
+    TEXT[ polish ] = "Wyœrodkuj";
     TEXT[ japanese ] = "’†‰›‘µ‚¦";
     TEXT[ chinese_traditional ] = "¸m¤¤";
     TEXT[ arabic ] = "ÊæÓíØ";
