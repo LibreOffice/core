@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:56:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Menu MN_SPELL_POPUP
             Text[ dutch ] = "~Spellingcontrole";
             Text[ chinese_simplified ] = "Æ´Ð´¼ì²é(~S)";
             Text[ greek ] = "Ïñèïã~ñáößá";
-            Text[ korean ] = "¸ÂÃã¹ý";
+            Text[ korean ] = "¸ÂÃã¹ý(~S)";
             Text[ turkish ] = "~Yazým kýlavuzu";
             Text[ language_user1 ] = " ";
         };
@@ -122,7 +122,7 @@ Menu MN_SPELL_POPUP
             Text[ dutch ] = "~Toevoegen";
             Text[ chinese_simplified ] = "½ÓÊÜ(~A)";
             Text[ greek ] = "Ðñ~ïóèÞêç";
-            Text[ korean ] = "Ãß°¡";
+            Text[ korean ] = "Ãß°¡(~A)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
         };
