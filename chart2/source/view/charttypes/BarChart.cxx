@@ -343,8 +343,6 @@ void BarChart::createShapes()
             {
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
                     getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
-                uno::Reference< drawing::XShapes > xLabelGroupShape_Shapes(
-                    getLabelsGroupShape(*aSeriesIter, xTextTarget) );
 
                 //collect data point information (logic coordinates, style ):
                 double fLogicX = m_pPosHelper->getSlotPos( (double)nCatIndex, fSlotX );
@@ -447,17 +445,17 @@ void BarChart::createShapes()
                             xPointGroupShape_Shapes
                             , aTransformedGeom
                             , (*aSeriesIter)->getPropertiesOfPoint( nCatIndex ));
-
-                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nCatIndex, m_xLogicTarget );
                     }
                     //set name/classified ObjectID (CID)
                     ShapeFactory::setShapeName(xShape
                         , ObjectIdentifier::createPointCID(
                             (*aSeriesIter)->getPointCID_Stub(),nCatIndex) );
 
+                    //create error bar
+                    createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nCatIndex, m_xLogicTarget );
+
                     //------------
                     //create data point label
-
                     bool bMiddlePosition = false;
                     if( pSeriesList->begin() != pSeriesList->end() )
                         bMiddlePosition = true;
@@ -471,7 +469,7 @@ void BarChart::createShapes()
                         aScreenPosition2D.Y -= static_cast<sal_Int32>(aTransformedGeom.m_aSize.DirectionY/2.0);
 
                     double fLogicSum = bPositive ? fLogicPositiveYSum : fLogicNegativeYSum;
-                    this->createDataLabel( xLabelGroupShape_Shapes, *(*aSeriesIter), nCatIndex
+                    this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
                                     , fLogicBarHeight, fLogicSum, aScreenPosition2D );
                 }//end iteration through partial points
 
