@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:29:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ static const sal_Char __FAR_DATA pFilterHtmlWeb[]   = "calc_HTML_WebQuery";
 static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
 
 
-BOOL lcl_MayBeAscii( SvStream& rStream )
+static BOOL lcl_MayBeAscii( SvStream& rStream )
 {
     //  ASCII is considered possible if there are no null bytes
 
@@ -221,7 +221,7 @@ BOOL lcl_MayBeAscii( SvStream& rStream )
     return !bNullFound;
 }
 
-BOOL lcl_MayBeDBase( SvStream& rStream )
+static BOOL lcl_MayBeDBase( SvStream& rStream )
 {
     //  for dBase, look for the 0d character at the end of the header
 
@@ -251,7 +251,7 @@ BOOL lcl_MayBeDBase( SvStream& rStream )
             ((nHeaderLen % 2 == 0) && nOneBefore == 0x0d && nEndFlag == 0x00) );
 }
 
-BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
+static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
 {
     if ( !pFilter )
         return FALSE;
@@ -577,6 +577,12 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             M_ALT(2), 0x0004, 0x0006,
                             0x0004, M_ENDE };
 
+            const UINT16 pLotusNew[] =              // Lotus >= 9.7
+                { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
+                  M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
+                  0x0010, 0x0004, 0x0000, 0x0000,
+                  M_ENDE };
+
                         const UINT16 pExcel1[] =        // Excel Biff/3/4 Tabellen
                             { 0x0009,
                             M_ALT(2), 0x0002, 0x0004,
@@ -632,20 +638,7 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             'I', 'D', ';', 'P',
                             M_ENDE };
 
-        #ifdef SINIX
-                        const UINT16 nAnzMuster = 9;    // sollte fuer indiz. Zugriff stimmen...
-                        UINT16 *ppMuster[ nAnzMuster ];         // Arrays mit Suchmustern
-                        ppMuster[ 0 ] = pLotus;
-                        ppMuster[ 1 ] = pExcel1;
-                        ppMuster[ 2 ] = pExcel2;
-                        ppMuster[ 3 ] = pExcel3;
-                        ppMuster[ 4 ] = pSc10;
-                        ppMuster[ 5 ] = pDIF1;
-                        ppMuster[ 6 ] = pDIF2;
-                        ppMuster[ 7 ] = pSylk;
-                        ppMuster[ 8 ] = pLotus2;                // Lotus immer ganz hinten wegen Ini-Eintrag
-        #else
-                        const UINT16 *ppMuster[] =      // Arrays mit Suchmustern
+                        const UINT16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
                             {
                             pLotus,
                             pExcel1,
@@ -655,12 +648,12 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pDIF1,
                             pDIF2,
                             pSylk,
+                            pLotusNew,
                             pLotus2
                             };
-                        const UINT16 nAnzMuster = sizeof(ppMuster) / sizeof(ppMuster[0]);
-        #endif
+                        const UINT16 nFilterCount = sizeof(ppFilterPatterns) / sizeof(ppFilterPatterns[0]);
 
-                        const sal_Char* pFilterName[ nAnzMuster ] =     // zugehoerige Filter
+                        const sal_Char* pFilterName[ nFilterCount ] =     // zugehoerige Filter
                             {
                             pFilterLotus,
                             pFilterExcel4,
@@ -670,6 +663,7 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pFilterDif,
                             pFilterDif,
                             pFilterSylk,
+                            pFilterLotus,
                             pFilterLotus
                             };
 
@@ -682,19 +676,12 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         BOOL            bSync;          // Datei und Muster stimmen ueberein
                         USHORT          nFilter;        // Zaehler ueber alle Filter
                         const UINT16    *pSearch;       // aktuelles Musterwort
-                        UINT16          nFilterLimit = nAnzMuster;
 
-                        // nur solange, bis es etwas Globales gibt
-                        // funzt nur, solange Eintraege fuer WK3 letzte Muster-Tabelle ist!
-        //!MBA              //ScLibOptions aLibOpt;
-                        //if( !aLibOpt.GetWK3Flag() )
-                        //  nFilterLimit--;
-
-                        for ( nFilter = 0 ; nFilter < nFilterLimit ; nFilter++ )
+                        for ( nFilter = 0 ; nFilter < nFilterCount ; nFilter++ )
                         {
                             rStr.Seek( 0 ); // am Anfang war alles Uebel...
                             rStr >> nAkt;
-                            pSearch = ppMuster[ nFilter ];
+                            pSearch = ppFilterPatterns[ nFilter ];
                             bSync = TRUE;
                             while( !rStr.IsEof() && bSync )
                             {
