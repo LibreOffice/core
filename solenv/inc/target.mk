@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-14 19:35:58 $
+#   last change: $Author: hjs $ $Date: 2002-01-15 17:18:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2077,7 +2077,7 @@ $(SLOFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
 $(UNOUCRTARGET) : $(UNOUCRDEP)
 .IF "$(XML2MK_FILES)"!=""
-    @+del $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
+    @+-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
 .ENDIF			# "$(XML2MK_FILES)"!=""
     +cppumaker @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
 .ENDIF			# "$(SINGLE_SHOT)" == ""
