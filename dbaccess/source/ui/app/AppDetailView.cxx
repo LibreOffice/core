@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:49:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,35 +138,206 @@ using namespace ::com::sun::star::container;
 
 #define SPACEBETWEENENTRIES     4
 
-OCreationList::OCreationList(OTasksWindow* _pParent) : SvTreeListBox(_pParent,WB_TABSTOP|WB_HASBUTTONSATROOT|WB_HASBUTTONS)
-,m_pTaskWindow(_pParent)
+OCreationList::OCreationList(OTasksWindow* _pParent)
+    :SvTreeListBox( _pParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
+    ,m_pTaskWindow(_pParent)
+    ,m_pMouseDownEntry( NULL )
+    ,m_pLastActiveEntry( NULL )
 {
     USHORT nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
+    SetSelectionMode( NO_SELECTION );
+    SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
+}
+// -----------------------------------------------------------------------------
+void OCreationList::Paint( const Rectangle& _rRect )
+{
+    if ( m_pMouseDownEntry )
+        m_aOriginalFont = GetFont();
+
+    m_aOriginalBackgroundColor = GetBackground().GetColor();
+    SvTreeListBox::Paint( _rRect );
+    SetBackground( m_aOriginalBackgroundColor );
+
+    if ( m_pMouseDownEntry )
+        Control::SetFont( m_aOriginalFont );
+}
+// -----------------------------------------------------------------------------
+void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
+{
+    Wallpaper aEntryBackground( m_aOriginalBackgroundColor );
+    if ( _pEntry )
+    {
+        if ( _pEntry == GetCurEntry() )
+        {
+            // draw a selection background
+            bool bIsMouseDownEntry = ( _pEntry == m_pMouseDownEntry );
+            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, FALSE, TRUE, FALSE );
+
+            if ( bIsMouseDownEntry )
+            {
+                Font aFont( GetFont() );
+                aFont.SetColor( GetSettings().GetStyleSettings().GetHighlightTextColor() );
+                Control::SetFont( aFont );
+            }
+
+            // and temporary set a transparent background, for all the other
+            // paint operations the SvTreeListBox is going to do
+            aEntryBackground = Wallpaper( Color( COL_TRANSPARENT ) );
+        }
+    }
+
+    SetBackground( aEntryBackground );
+}
+// -----------------------------------------------------------------------------
+Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
+{
+    Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
+    aRect.Left() = 0;
+
+    // try to let the focus rect start before the bitmap item - this looks better
+    SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP );
+    USHORT nTabPos = 0;
+    SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : NULL;
+    SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
+    DBG_ASSERT( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
+    if ( pTab && pItemData )
+        aRect.Left() = pTab->GetPos() - pItemData->aSize.Width() / 2;
+
+    // inflate the rectangle a little bit - looks better, too
+    aRect.Left() = ::std::max< long >( 0, aRect.Left() - 2 );
+    aRect.Right() = ::std::min< long >( GetOutputSizePixel().Width() - 1, aRect.Right() + 2 );
+
+    return aRect;
+}
+// -----------------------------------------------------------------------------
+void OCreationList::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
+    // don't give this to the base class, it does a ReleaseMouse as very first action
+    // Though I think this is a bug (it should ReleaseMouse only if it is going to do
+    // something with the drag-event), I hesitate to fix it in the current state,
+    // since I don't overlook the consequences, and we're close to 2.0 ...)
+}
+// -----------------------------------------------------------------------------
+void OCreationList::GetFocus()
+{
+    SvTreeListBox::GetFocus();
+    if ( !GetCurEntry() )
+        setCurrentEntryInvalidate( m_pLastActiveEntry ? m_pLastActiveEntry : GetFirstEntryInView() );
+}
+// -----------------------------------------------------------------------------
+void OCreationList::LoseFocus()
+{
+    SvTreeListBox::LoseFocus();
+    m_pLastActiveEntry = GetCurEntry();
+    setCurrentEntryInvalidate( NULL );
+}
+// -----------------------------------------------------------------------------
+void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    SvTreeListBox::MouseButtonDown( rMEvt );
+
+    DBG_ASSERT( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
+    m_pMouseDownEntry = GetCurEntry();
+    if ( m_pMouseDownEntry )
+    {
+        InvalidateEntry( m_pMouseDownEntry );
+        CaptureMouse();
+    }
 }
 // -----------------------------------------------------------------------------
 void OCreationList::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
-        SelectAll(FALSE);
-    else
     {
-        SvLBoxEntry* pEntry = GetEntry(rMEvt.GetPosPixel());
-        if ( pEntry )
+        setCurrentEntryInvalidate( NULL );
+    }
+    else if ( !rMEvt.IsSynthetic() )
+    {
+        SvLBoxEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
+
+        if ( m_pMouseDownEntry )
         {
-            Select(pEntry);
-            m_pTaskWindow->setHelpText(reinterpret_cast<TResourcePair*>(pEntry->GetUserData())->second);
+            // we're currently in a "mouse down" phase
+            DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
+            if ( pEntry == m_pMouseDownEntry )
+            {
+                setCurrentEntryInvalidate( m_pMouseDownEntry );
+            }
+            else
+            {
+                DBG_ASSERT( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
+                    "OCreationList::MouseMove: inconsistence (2)!" );
+                setCurrentEntryInvalidate( NULL );
+            }
+        }
+        else
+        {
+            // the user is simply hovering with the mouse
+            if ( setCurrentEntryInvalidate( pEntry ) )
+            {
+                if ( !m_pMouseDownEntry )
+                    updateHelpText();
+            }
         }
     }
 
     SvTreeListBox::MouseMove(rMEvt);
 }
 // -----------------------------------------------------------------------------
-void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
+void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    SvLBoxEntry* pEntry = GetEntry(rMEvt.GetPosPixel());
-    if ( pEntry && !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
-        m_pTaskWindow->getDetailView()->onCreationClick(reinterpret_cast<TResourcePair*>(pEntry->GetUserData())->first);
+    SvLBoxEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
+    bool bExecute = false;
+    // Was the mouse released over the active entry?
+    // (i.e. the entry which was under the mouse when the button went down)
+    if ( pEntry && ( m_pMouseDownEntry == pEntry ) )
+    {
+        if ( !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
+            bExecute = true;
+    }
+
+    if ( m_pMouseDownEntry )
+    {
+        DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
+        ReleaseMouse();
+
+        InvalidateEntry( m_pMouseDownEntry );
+        m_pMouseDownEntry = NULL;
+    }
+
+    SvTreeListBox::MouseButtonUp( rMEvt );
+
+    if ( bExecute )
+        onSelected( pEntry );
+}
+// -----------------------------------------------------------------------------
+bool OCreationList::setCurrentEntryInvalidate( SvLBoxEntry* _pEntry )
+{
+    if ( GetCurEntry() != _pEntry )
+    {
+        if ( GetCurEntry() )
+            InvalidateEntry( GetCurEntry() );
+        SetCurEntry( _pEntry );
+        if ( GetCurEntry() )
+            InvalidateEntry( GetCurEntry() );
+        return true;
+    }
+    return false;
+}
+// -----------------------------------------------------------------------------
+void OCreationList::updateHelpText()
+{
+    USHORT nHelpTextId = 0;
+    if ( GetCurEntry() )
+        nHelpTextId = reinterpret_cast< TResourcePair* >( GetCurEntry()->GetUserData() )->second;
+    m_pTaskWindow->setHelpText( nHelpTextId );
+}
+// -----------------------------------------------------------------------------
+void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
+{
+    DBG_ASSERT( _pEntry, "OCreationList::onSelected: invalid entry!" );
+    m_pTaskWindow->getDetailView()->onCreationClick( reinterpret_cast< TResourcePair* >( _pEntry->GetUserData() )->first );
 }
 // -----------------------------------------------------------------------------
 void OCreationList::KeyInput( const KeyEvent& rKEvt )
@@ -174,21 +345,26 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
     const KeyCode& rCode = rKEvt.GetKeyCode();
     if ( !rCode.IsMod1() && !rCode.IsMod2() && !rCode.IsShift() )
     {
-        switch( rCode.GetCode() )
+        if ( rCode.GetCode() == KEY_RETURN )
         {
-            case KEY_RETURN:
-                {
-                    SvLBoxEntry* pEntry = FirstSelected();
-                    if ( pEntry )
-                        m_pTaskWindow->getDetailView()->onCreationClick(reinterpret_cast<TResourcePair*>(pEntry->GetUserData())->first);
-                }
-                break;
-            default:
-                SvTreeListBox::KeyInput(rKEvt);
+            SvLBoxEntry* pEntry = FirstSelected();
+            if ( pEntry )
+                onSelected( pEntry );
+            return;
         }
     }
-    else
-        SvTreeListBox::KeyInput(rKEvt);
+    SvLBoxEntry* pOldCurrent = GetCurEntry();
+    SvTreeListBox::KeyInput(rKEvt);
+    SvLBoxEntry* pNewCurrent = GetCurEntry();
+
+    if ( pOldCurrent != pNewCurrent )
+    {
+        if ( pOldCurrent )
+            InvalidateEntry( pOldCurrent );
+        if ( pNewCurrent )
+            InvalidateEntry( pNewCurrent );
+        updateHelpText();
+    }
 }
 // -----------------------------------------------------------------------------
 DBG_NAME(OTasksWindow)
@@ -221,7 +397,10 @@ OTasksWindow::~OTasksWindow()
 void OTasksWindow::setHelpText(USHORT _nId)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
-    m_aHelpText.SetText(ModuleRes(_nId));
+    if ( _nId )
+        m_aHelpText.SetText(ModuleRes(_nId));
+    else
+        m_aHelpText.SetText(String());
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, _pTreeBox)
@@ -302,6 +481,7 @@ void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
     m_aHelpText.Show();
     m_aDescription.Show();
     m_aFL.Show();
+    m_aCreation.updateHelpText();
 }
 // -----------------------------------------------------------------------------
 void OTasksWindow::Clear()
@@ -346,7 +526,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent) : OSp
     const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
     m_aHorzSplitter.SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
     // now set the components at the base class
-    init(&m_aContainer,&m_aTasks);
+    set(&m_aContainer,&m_aTasks);
 
     m_aHorzSplitter.Show();
     m_aHorzSplitter.SetUniqueId(UID_APP_VIEW_HORZ_SPLIT);
@@ -356,6 +536,8 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent) : OSp
 OApplicationDetailView::~OApplicationDetailView()
 {
     DBG_DTOR(OApplicationDetailView,NULL);
+    set(NULL,NULL);
+    setSplitter(NULL);
     m_pControlHelper = NULL;
 }
 //  -----------------------------------------------------------------------------
