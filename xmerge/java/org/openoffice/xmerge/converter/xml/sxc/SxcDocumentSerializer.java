@@ -747,7 +747,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             //
             Debug.log(Debug.INFO,
             "TextNode, DateNode, TimeNode or BooleanNode\n");
-
+            // This handles the case where we have style information but no content
+            if(styleName.length()!=0) {
+                addCell("");
+            }
             if (node.hasChildNodes()) {
                 NodeList childList = node.getChildNodes();
                 int len = childList.getLength();

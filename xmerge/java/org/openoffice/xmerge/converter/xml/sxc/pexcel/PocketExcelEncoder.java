@@ -233,8 +233,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             cellContents = parseFormula(cellContents);
             Debug.log(Debug.TRACE,"Parsing Formula " + cellContents);
         }
-        if(cellContents.length()>0)
-            wb.addCell(row, column, fmt, cellContents);
+        wb.addCell(row, column, fmt, cellContents);
     }
 
 
