@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-02-26 21:51:20 $
-#*    $Revision: 1.13 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-02-28 03:14:09 $
+#*    $Revision: 1.14 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -104,6 +104,12 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@

@@ -58,6 +58,12 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -219,6 +225,12 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -380,6 +392,12 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -541,6 +559,12 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -702,6 +726,12 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -863,6 +893,12 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -1024,6 +1060,12 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -1185,6 +1227,12 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -1346,6 +1394,12 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@
@@ -1507,6 +1561,12 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @create-bundle $@

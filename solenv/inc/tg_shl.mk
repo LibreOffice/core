@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-26 21:51:20 $
+#   last change: $Author: pluby $ $Date: 2001-02-28 03:14:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -445,6 +445,12 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL$(TNR)VERSIONMAP) $@
 .ENDIF

@@ -345,6 +345,12 @@ $(SHL1TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL1VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL1VERSIONMAP) $@
 .ENDIF
@@ -713,6 +719,12 @@ $(SHL2TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL2VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL2VERSIONMAP) $@
 .ENDIF
@@ -1081,6 +1093,12 @@ $(SHL3TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL3VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL3VERSIONMAP) $@
 .ENDIF
@@ -1449,6 +1467,12 @@ $(SHL4TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL4VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL4VERSIONMAP) $@
 .ENDIF
@@ -1817,6 +1841,12 @@ $(SHL5TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL5VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL5VERSIONMAP) $@
 .ENDIF
@@ -2185,6 +2215,12 @@ $(SHL6TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL6VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL6VERSIONMAP) $@
 .ENDIF
@@ -2553,6 +2589,12 @@ $(SHL7TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL7VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL7VERSIONMAP) $@
 .ENDIF
@@ -2921,6 +2963,12 @@ $(SHL8TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL8VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL8VERSIONMAP) $@
 .ENDIF
@@ -3289,6 +3337,12 @@ $(SHL9TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL9VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL9VERSIONMAP) $@
 .ENDIF
@@ -3657,6 +3711,12 @@ $(SHL10TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+# This is a hack as libstatic and libcppuhelper have a circular dependency
+.IF "$(PRJNAME)"=="cppuhelper"
+    @echo "------------------------------"
+    @echo "Rerunning static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
+.ENDIF
 .IF "$(SHL10VERSIONMAP)"!=""
     @strip -i -r -u -s $(SHL10VERSIONMAP) $@
 .ENDIF
