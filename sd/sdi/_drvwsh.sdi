@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:19:34 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,7 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    SID_ATTR_CHAR_VERTICAL // ole : no, status : ?
+    SID_DRAW_TEXT_VERTICAL // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
@@ -676,6 +676,15 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
+    SID_VERTICALTEXT_STATE
+    [
+        StateMethod = GetMenuState ;
+    ]
+    SID_CTLFONT_STATE
+    [
+        StateMethod = GetMenuState ;
+    ]
+
     /* -> SVX
     SID_OBJECT_ROTATE // ole : no, status : ?
     [
@@ -705,17 +714,10 @@ interface DrawView
     ]
 */
 
-    SfxVoidItem Mirror SID_OBJECT_MIRROR // ole : no, status : play rec
-    (
-        SfxBoolItem MirrorVert  ID_VAL_MIRRORVERT;
-    )
+    SID_OBJECT_MIRROR // ole : no, status : play rec
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
-        SlotType = SfxBoolItem ;
-        GroupId = GID_DOCUMENT ;
-        Cachable , AutoUpdate ,
-        MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
 
     SID_OBJECT_TRANSPARENCE // ole : no, status : ?
@@ -1274,6 +1276,30 @@ interface DrawView
     SID_ATTR_LINE_DASH // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_DASH_LIST
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_LINEEND_LIST
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_COLOR_TABLE
+    [
+        StateMethod = GetAttrState;
+    ]
+    SID_GRADIENT_LIST
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_HATCH_LIST
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_BITMAP_LIST
+    [
         StateMethod = GetAttrState ;
     ]
     SID_ATTR_LINE_WIDTH // ole : no, status : ?
