@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 15:05:09 $
+ *  last change: $Author: ama $ $Date: 2002-06-17 10:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ void ViewShell::PreViewPage(
     pPage = pSttPage;
     Font* pEmptyPgFont = 0;
     nSelectedPage -= nSttPage;
-    Color aLineColor(COL_BLUE);
+    Color aLineColor(COL_LIGHTBLUE);
     DBG_ASSERT(pWin, "no window available")
     const StyleSettings& rSettings = GetWin()->GetSettings().GetStyleSettings();
     if(rSettings.GetHighContrastMode())
@@ -1345,6 +1345,9 @@ Point ViewShell::GetPreviewFreePix() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2002/05/29 15:05:09  mib
+      #99641#: focus in page preview
+
       Revision 1.9  2002/05/29 14:28:45  os
       #99649# 'single print job' corrected
 
