@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Number_Formats.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:59:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,43 +40,16 @@
 
 // __________ Imports __________
 
-// base classes
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
-
-// factory for creating components
-import com.sun.star.comp.servicemanager.ServiceManager;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.frame.XDesktop;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XComponentLoader;
-
-// property access
-import com.sun.star.beans.*;
-
-// container access
-import com.sun.star.container.*;
-
-// utilities
-import com.sun.star.util.*;
-
-// internationalization
-import com.sun.star.i18n.*;
-
-// application specific classes
-import com.sun.star.sheet.*;
-import com.sun.star.table.*;
-import com.sun.star.chart.*;
-
-// base graphics things
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Size;
-
-// Exceptions
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.container.NoSuchElementException;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.table.XCell;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 
 // __________ Implementation __________
@@ -94,15 +67,15 @@ public class Number_Formats
 
     public static void main( String args[] )
     {
-        Number_Formats aSample = new Number_Formats( args );
-
         try
         {
+            Number_Formats aSample = new Number_Formats( args );
             aSample.doFunction();
         }
         catch( Exception ex )
         {
-            System.out.println( "Sample caught exception! " + ex );
+            System.err.println( "Sample caught exception! " + ex );
+            ex.printStackTrace();
             System.exit(1);
         }
 
@@ -188,7 +161,8 @@ public class Number_Formats
             }
             catch( com.sun.star.util.MalformedNumberFormatException ex )
             {
-                System.out.println( "Bad number format code: " + ex );
+                System.err.println( "Bad number format code: " + ex );
+                ex.printStackTrace();
                 nIndexKey = -1;
             }
         }
@@ -196,86 +170,63 @@ public class Number_Formats
         // Set the new format at the cell
         if ( nIndexKey != -1 )
             xCellProp.setPropertyValue( "NumberFormat", new Integer(nIndexKey) );
+
+
+        // Set column containing the example values to optimal width to show
+        // the new format of cell B3
+        com.sun.star.table.XColumnRowRange xColRowRange =
+            (com.sun.star.table.XColumnRowRange)
+            UnoRuntime.queryInterface(com.sun.star.table.XColumnRowRange.class,
+                                      maSheet);
+
+        com.sun.star.container.XIndexAccess xIndexAccess =
+            (com.sun.star.container.XIndexAccess)
+            UnoRuntime.queryInterface(com.sun.star.container.XIndexAccess.class,
+                                      xColRowRange.getColumns());
+
+        com.sun.star.beans.XPropertySet xColPropSet =
+            (com.sun.star.beans.XPropertySet)
+            UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
+                                      xIndexAccess.getByIndex(1));
+
+        xColPropSet.setPropertyValue( "OptimalWidth", new Boolean(true) );
     }
 
     // ____________________
 
-    public Number_Formats( String[] args )
+    public Number_Formats( String[] args ) throws java.lang.Exception
     {
-        boolean bOk = true;
-
-        // connect to a running office and get the ServiceManager
-        try
-        {
-            String sConn = "uno:" + msConnectString + ";urp;StarOffice.ServiceManager";
-            System.out.println( "connecting: " + sConn );
-            maMSFactory = connect( sConn );
-        }
-        catch( Exception ex )
-        {
-            System.out.println( "Couldn't get ServiceManager: " + ex );
-            System.exit( 0 );
-        }
+        // get the remote office context. If necessary a new office
+        // process is started
+        maOfficeContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+        System.out.println("Connected to a running office ...");
+        maServiceManager = maOfficeContext.getServiceManager();
 
         // create a new spreadsheet document
-        try
-        {
-            XComponentLoader aLoader = (XComponentLoader) UnoRuntime.queryInterface(
-                XComponentLoader.class,
-                maMSFactory.createInstance( "com.sun.star.frame.Desktop" ) );
+        XComponentLoader aLoader = (XComponentLoader) UnoRuntime.queryInterface(
+            XComponentLoader.class, maServiceManager.createInstanceWithContext(
+                "com.sun.star.frame.Desktop", maOfficeContext) );
 
-            maSpreadsheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
-                XSpreadsheetDocument.class,
-                aLoader.loadComponentFromURL( "private:factory/scalc",
-                                              "_blank",
-                                              0,
-                                              new PropertyValue[ 0 ] ) );
+        maSpreadsheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
+            XSpreadsheetDocument.class,
+            aLoader.loadComponentFromURL( "private:factory/scalc",
+                                          "_blank",
+                                          0,
+                                          new PropertyValue[ 0 ] ) );
 
-            bOk = initSpreadsheet();
-        }
-        catch( Exception ex )
-        {
-            System.out.println( "Couldn't create SpreadsheetDocument: " + ex );
-            bOk = false;
-        }
-
-        if ( !bOk )
+        if ( !initSpreadsheet() )
             System.exit( 0 );
     }
 
 
     // __________ private members and methods __________
-
-    private final String  msConnectString  = "socket,host=localhost,port=2083";
-
     private final String  msDataSheetName  = "Data";
 
-    private XMultiServiceFactory    maMSFactory;
-    private XSpreadsheetDocument    maSpreadsheetDoc;
-    private XSpreadsheet            maSheet;  // the first sheet
+    private XComponentContext      maOfficeContext;
+    private XMultiComponentFactory maServiceManager;
+    private XSpreadsheetDocument   maSpreadsheetDoc;
+    private XSpreadsheet           maSheet;  // the first sheet
 
-
-    // ____________________
-
-    /** Connect to a running office that is accepting connections
-        and return the ServiceManager to instantiate office components
-     */
-    private XMultiServiceFactory connect( String sConnectString )
-        throws RuntimeException, Exception
-    {
-        XMultiServiceFactory aLocalServiceManager =
-            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-
-        XUnoUrlResolver aURLResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-            XUnoUrlResolver.class,
-            aLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" ) );
-
-        XMultiServiceFactory aServiceManager = (XMultiServiceFactory) UnoRuntime.queryInterface(
-            XMultiServiceFactory.class,
-            aURLResolver.resolve( sConnectString ) );
-
-        return aServiceManager;
-    }
 
     // ____________________
 
@@ -299,7 +250,8 @@ public class Number_Formats
         }
         catch( Exception ex )
         {
-            System.out.println( "Couldn't initialize Spreadsheet Document: " + ex );
+            System.err.println( "Couldn't initialize Spreadsheet Document: " + ex );
+            ex.printStackTrace();
             bOk = false;
         }
         return bOk;
