@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:04 $
+#   last change: $Author: hjs $ $Date: 2000-11-14 10:48:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -210,6 +210,7 @@ ICOLIB=-lico$(UPD)$(DLLPOSTFIX)
 BSTRPLIB=-lbtstrp
 VCLLIBST=-lvcl
 VCLLIB=$(SVLIB)
+FREETYPELIB=-lfreetype
 XPLIB=-l_xp
 TKLIB=-ltk$(UPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(UPD)$(DLLPOSTFIX)
@@ -395,20 +396,8 @@ SSCLIB=$(LIBPRE) ssc.lib
 SSLLIB=$(LIBPRE) ssl.lib
 SSWLIB=$(LIBPRE) ssw.lib
 SVLIBDEPEND=$(L)$/sv.lib
-.IF "$(GUI)"=="WNT"
-SVLIB=$(LIBPRE) sv.lib $(LIBPRE) isv.lib
-VCLLIB=$(SVLIB)
 SFX2LIB=$(LIBPRE) sfx.lib
 SFXLIB=$(SFX2LIB)
-.ELSE
-.IF "$(GUI)"!="DOS"
-SVLIB=$(LIBPRE) sv.lib
-VCLLIB=$(SVLIB)
-SFX2LIB=$(LIBPRE) sfx.lib
-SFXLIB=$(LIBPRE) sfx.lib
-SFXDEBUGLIB=$(LIBPRE) sfxdebug.lib
-.ENDIF
-.ENDIF				#  "$(GUI)"=="WNT"
 BTSTRPLIB=$(LIBPRE) bootstrp.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
@@ -464,19 +453,12 @@ SCLIB=$(LIBPRE) sclib.lib
 SDLIB=$(LIBPRE) sdlib.lib
 SDLLIB=$(LIBPRE) sdl.lib
 SWLIB=$(LIBPRE) swlib.lib
-.IF "$(VCL)" != ""
-.IF "$(WORK_STAMP)"=="MIX364"
-SVLIB=$(LIBPRE) vcl.lib
-VCLLIB=$(SVLIB)
-SVLIBDEPEND=$(L)$/vcl.lib
-.ELSE				# "$(WORK_STAMP)"=="MIX364"
 SVLIB=$(LIBPRE) ivcl.lib
 VCLLIB=$(SVLIB)
 TKLIB=$(LIBPRE) itk.lib
 SVLIBDEPEND=$(L)$/ivcl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
-.ENDIF				# "$(WORK_STAMP)"=="MIX364"
-.ENDIF				# "$(VCL)" != ""
+FREETYPELIB=freetype.lib
 
 .IF "$(BIG_TOOLS)"!=""
 SALLIB=
