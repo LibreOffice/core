@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:07:13 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@ public:
     INLINE const SwFmtURL               &GetURL( BOOL = TRUE ) const;
     INLINE const SwFmtEditInReadonly    &GetEditInReadonly( BOOL = TRUE ) const;
     INLINE const SwFmtLayoutSplit       &GetLayoutSplit( BOOL = TRUE ) const;
+    INLINE const SwFmtRowSplit          &GetRowSplit( BOOL = TRUE ) const;
     INLINE const SwFmtChain             &GetChain( BOOL = TRUE ) const;
     INLINE const SwFmtLineNumber        &GetLineNumber( BOOL = TRUE ) const;
     INLINE const SwFmtFtnAtTxtEnd       &GetFtnAtTxtEnd( BOOL = TRUE ) const;
