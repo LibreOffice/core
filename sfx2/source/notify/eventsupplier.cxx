@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-22 14:36:24 $
+ *  last change: $Author: dv $ $Date: 2001-05-21 11:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 //--------------------------------------------------------------------------------------------------------
     //  --- XNameReplace ---
 //--------------------------------------------------------------------------------------------------------
-void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY & aElement )
+void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY & rElement )
                                 throw( ILLEGALARGUMENTEXCEPTION, NOSUCHELEMENTEXCEPTION,
                                        WRAPPEDTARGETEXCEPTION, RUNTIMEEXCEPTION )
 {
@@ -117,21 +117,21 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 
     // find the event in the list and replace the data
 
-    long        nCount  = maEventNames.getLength();
-    OUSTRING*   pNames  = maEventNames.getArray();
+    long nCount = maEventNames.getLength();
 
     for ( long i=0; i<nCount; i++ )
     {
-        if ( pNames[i] == aName )
+        if ( maEventNames[i] == aName )
         {
-            ANY* pElement = maEventData.getArray();
             // check for correct type of the element
             if ( ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) ==
-                 aElement.getValueType() )
+                 rElement.getValueType() )
             {
-                pElement[i] = aElement;
+                ANY aValue = BlowUpMacro( rElement );
 
-                SvxMacro   *pMacro = ConvertToMacro( aElement );
+                maEventData[i] = aValue;
+
+                SvxMacro   *pMacro = ConvertToMacro( aValue );
                 USHORT      nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
 
                 if ( nID && pMacro )
@@ -161,16 +161,12 @@ ANY SAL_CALL SfxEvents_Impl::getByName( const OUSTRING& aName )
 
     // find the event in the list and return the data
 
-    long        nCount  = maEventNames.getLength();
-    OUSTRING*   pNames  = maEventNames.getArray();
+    long nCount = maEventNames.getLength();
 
     for ( long i=0; i<nCount; i++ )
     {
-        if ( pNames[i] == aName )
-        {
-            ANY* pElement = maEventData.getArray();
-            return pElement[i];
-        }
+        if ( maEventNames[i] == aName )
+            return maEventData[i];
     }
 
     throw NOSUCHELEMENTEXCEPTION();
@@ -191,15 +187,12 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUSTRING& aName ) throw ( RUN
 
     // find the event in the list and return the data
 
-    long        nCount  = maEventNames.getLength();
-    OUSTRING*   pNames  = maEventNames.getArray();
+    long nCount = maEventNames.getLength();
 
     for ( long i=0; i<nCount; i++ )
     {
-        if ( pNames[i] == aName )
-        {
+        if ( maEventNames[i] == aName )
             return sal_True;
-        }
     }
 
     return sal_False;
@@ -235,14 +228,13 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
     // get the event name, find the coresponding data, execute the data
 
     OUSTRING    aName   = aEvent.EventName;
-    OUSTRING*   pNames  = maEventNames.getArray();
     long        nCount  = maEventNames.getLength();
     long        nIndex  = 0;
     sal_Bool    bFound  = sal_False;
 
     while ( !bFound && ( nIndex < nCount ) )
     {
-        if ( pNames[nIndex] == aName )
+        if ( maEventNames[nIndex] == aName )
             bFound = sal_True;
         else
             nIndex += 1;
@@ -252,11 +244,10 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
         return;
 
     SEQUENCE < PROPERTYVALUE > aProperties;
-    ANY aEventData = maEventData.getArray()[ nIndex ];
+    ANY aEventData = maEventData[ nIndex ];
 
     if ( aEventData >>= aProperties )
     {
-        PROPERTYVALUE  *pValues     = aProperties.getArray();
         OUSTRING        aType;
         OUSTRING        aScript;
         OUSTRING        aLibrary;
@@ -270,21 +261,21 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
         nIndex = 0;
         while ( nIndex < nCount )
         {
-            if ( pValues[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aType;
+                aProperties[ nIndex ].Value >>= aType;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aScript;
+                aProperties[ nIndex ].Value >>= aScript;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aLibrary;
+                aProperties[ nIndex ].Value >>= aLibrary;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aMacroName;
+                aProperties[ nIndex ].Value >>= aMacroName;
             }
             nIndex += 1;
         }
@@ -362,15 +353,14 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEvents_Impl::ConvertToMacro( ANY aElement )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement ) const
 {
     SvxMacro* pMacro = NULL;
 
     SEQUENCE < PROPERTYVALUE > aProperties;
 
-    if ( aElement >>= aProperties )
+    if ( rElement >>= aProperties )
     {
-        PROPERTYVALUE  *pValues     = aProperties.getArray();
         OUSTRING        aType;
         OUSTRING        aScriptURL;
         OUSTRING        aLibrary;
@@ -384,21 +374,21 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( ANY aElement )
 
         while ( nIndex < nCount )
         {
-            if ( pValues[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aType;
+                aProperties[ nIndex ].Value >>= aType;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aScriptURL;
+                aProperties[ nIndex ].Value >>= aScriptURL;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aLibrary;
+                aProperties[ nIndex ].Value >>= aLibrary;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
             {
-                pValues[ nIndex ].Value >>= aMacroName;
+                aProperties[ nIndex ].Value >>= aMacroName;
             }
             nIndex += 1;
         }
@@ -464,5 +454,98 @@ sal_Bool SfxEvents_Impl::Warn_Impl()
     }
 
     return !bWarn;
+}
+
+//--------------------------------------------------------------------------------------------------------
+ANY SfxEvents_Impl::BlowUpMacro( const ANY& rEvent ) const
+{
+    SEQUENCE < PROPERTYVALUE > aInProps;
+    SEQUENCE < PROPERTYVALUE > aOutProps;
+
+    if ( ! ( rEvent >>= aInProps ) )
+        return rEvent;
+
+    sal_Int32 nCount = aInProps.getLength();
+
+    if ( !nCount )
+        return rEvent;
+
+    OUSTRING aType;
+    OUSTRING aScript;
+    OUSTRING aLibrary;
+    OUSTRING aMacroName;
+
+    sal_Int32 nIndex = 0;
+
+    while ( nIndex < nCount )
+    {
+        if ( aInProps[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            aInProps[ nIndex ].Value >>= aType;
+        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            aInProps[ nIndex ].Value >>= aScript;
+        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            aInProps[ nIndex ].Value >>= aLibrary;
+        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            aInProps[ nIndex ].Value >>= aMacroName;
+        nIndex += 1;
+    }
+
+    if ( aScript.getLength() && ( ! aMacroName.getLength() || ! aLibrary.getLength() ) &&
+                                ( aType.compareToAscii( STAR_BASIC ) == 0 ) )
+    {
+        if ( ! aMacroName.getLength() )
+            nIndex += 1;
+        if ( ! aLibrary.getLength() )
+            nIndex += 1;
+
+        sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
+        sal_Int32 nArgsPos = aScript.indexOf( '(' );
+
+        if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
+        {
+            OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
+
+            if ( aBasMgrName.compareToAscii(".") == 0 )
+                aLibrary = mpObjShell->GetTitle( SFX_TITLE_APINAME );
+            else if ( aBasMgrName.getLength() )
+                aLibrary = aBasMgrName;
+            else
+                aLibrary = SFX_APP()->GetName();
+
+            // Get the macro name
+            aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
+        }
+        else
+        {
+            DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
+        }
+
+        aOutProps = SEQUENCE < PROPERTYVALUE > ( nIndex );
+        nIndex = 0;
+        sal_Int32 i = 0;
+
+        while ( nIndex < nCount )
+        {
+            if ( ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) != 0 ) &&
+                 ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) != 0 ) )
+            {
+                aOutProps[ i++ ] = aInProps[ nIndex ];
+            }
+            nIndex += 1;
+        }
+
+        aOutProps[i].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
+        aOutProps[i].Value <<= aLibrary;
+        i+= 1;
+        aOutProps[i].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
+        aOutProps[i].Value <<= aMacroName;
+
+        ANY aRet;
+        aRet <<= aOutProps;
+
+        return aRet;
+    }
+
+    return rEvent;
 }
 
