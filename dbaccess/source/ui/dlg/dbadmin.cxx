@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:29:23 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,12 +1040,16 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     // open our own resource block, as the page titles are strings local to this block
     OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
+    // doe have to reset the "password required" flag to false? (in case the datasource does not support passwords)
+    sal_Bool bResetPasswordRequired = sal_False;
+
     // and insert the new ones
     switch (_pTabPage->GetSelectedType())
     {
         case DST_DBASE:
             AddTabPage(PAGE_DBASE, String(ResId(STR_PAGETITLE_DBASE)), ODbaseDetailsPage::Create, 0, sal_False, 1);
             m_aCurrentDetailPages.push(PAGE_DBASE);
+            bResetPasswordRequired = sal_True;
             break;
         case DST_JDBC:
             AddTabPage(PAGE_JDBC, String(ResId(STR_PAGETITLE_JDBC)), OJdbcDetailsPage::Create, 0, sal_False, 1);
@@ -1054,6 +1058,7 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
         case DST_TEXT:
             AddTabPage(PAGE_TEXT, String(ResId(STR_PAGETITLE_TEXT)), OTextDetailsPage::Create, 0, sal_False, 1);
             m_aCurrentDetailPages.push(PAGE_TEXT);
+            bResetPasswordRequired = sal_True;
             break;
         case DST_ODBC:
             AddTabPage(PAGE_ODBC, String(ResId(STR_PAGETITLE_ODBC)), OOdbcDetailsPage::Create, 0, sal_False, 1);
@@ -1063,6 +1068,13 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             AddTabPage(PAGE_ADABAS, String(ResId(STR_PAGETITLE_ADABAS)), OAdabasDetailsPage::Create, 0, sal_False, 1);
             m_aCurrentDetailPages.push(PAGE_ADABAS);
             break;
+    }
+
+    if (bResetPasswordRequired)
+    {
+        GetInputSetImpl()->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_False));
+        if (pExampleSet)
+            pExampleSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_False));
     }
 
     return 0L;
@@ -2195,6 +2207,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2000/12/03 10:29:23  fs
+ *  #79820# SetSavePassword on the login dialog
+ *
  *  Revision 1.23  2000/11/30 08:32:30  fs
  *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
  *
