@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-27 08:08:14 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,16 +170,15 @@ void ScMyShapeResizer::ResizeShapes()
                                         pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
                                             static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
                                             static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
-                                        sal_Int32 Y (nHeight - aItr->nEndY);
                                         aItr->nEndX += pRect->Left();
-                                        Y = pRect->Bottom() - Y;
+                                        aItr->nEndY += pRect->Top();
                                         awt::Point aPoint = aItr->xShape->getPosition();
                                         awt::Size aOldSize = aItr->xShape->getSize();
                                         awt::Size aSize(aOldSize);
                                         aPoint.X += aRefPoint.X;
                                         aPoint.Y += aRefPoint.Y;
                                         aSize.Width = aItr->nEndX - aPoint.X;
-                                        aSize.Height = Y - aPoint.Y;
+                                        aSize.Height = aItr->nEndY - aPoint.Y;
                                         aItr->xShape->setPosition(aPoint);
                                         if( (aSize.Width != aOldSize.Width) ||
                                             (aSize.Height != aOldSize.Height) )
