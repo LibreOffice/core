@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:29:04 $
+ *  last change: $Author: mt $ $Date: 2001-04-12 09:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,7 +1193,7 @@ const XubString& Menu::GetHelpText( USHORT nItemId ) const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pData->aHelpText = pHelp->GetHelpText( pData->nHelpId );
+                pData->aHelpText = pHelp->GetHelpText( pData->nHelpId, NULL );
         }
 
         return pData->aHelpText;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: th $ $Date: 2001-04-06 12:48:28 $
+ *  last change: $Author: mt $ $Date: 2001-04-12 09:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6451,7 +6451,7 @@ const XubString& Window::GetHelpText() const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                ((Window*)this)->maHelpText = pHelp->GetHelpText( GetHelpId() );
+                ((Window*)this)->maHelpText = pHelp->GetHelpText( GetHelpId(), this );
         }
     }
 
