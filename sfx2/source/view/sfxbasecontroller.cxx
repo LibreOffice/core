@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:56:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,10 +715,6 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
 
         if ( m_pData->m_pViewShell->PrepareClose() )
         {
-            if ( StarBASIC::IsRunning() )
-                // don't allow closing the document via UI while a macro is running
-                return FALSE;
-
             if ( getFrame().is() )
                 getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
             SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
