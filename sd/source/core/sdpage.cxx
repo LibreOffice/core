@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:47:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3351,7 +3351,7 @@ void SdPage::SetName (const String& rName)
     ActionChanged();
 }
 
-HeaderFooterSettings& SdPage::getHeaderFooterSettings()
+const HeaderFooterSettings& SdPage::getHeaderFooterSettings() const
 {
     if( ePageKind == PK_HANDOUT && !bMaster )
     {
@@ -3360,6 +3360,24 @@ HeaderFooterSettings& SdPage::getHeaderFooterSettings()
     else
     {
         return maHeaderFooterSettings;
+    }
+}
+
+void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings )
+{
+    if( ePageKind == PK_HANDOUT && !bMaster )
+    {
+        (((SdPage&)TRG_GetMasterPage()).maHeaderFooterSettings) = rNewSettings;
+    }
+    else
+    {
+        maHeaderFooterSettings = rNewSettings;
+    }
+
+    SetChanged();
+    if(TRG_HasMasterPage())
+    {
+        TRG_GetMasterPageDescriptorViewContact().ActionChanged();
     }
 }
 
@@ -3435,7 +3453,7 @@ HeaderFooterSettings::HeaderFooterSettings()
     meDateTimeFormat = SVXDATEFORMAT_A;
 }
 
-bool HeaderFooterSettings::operator==( const HeaderFooterSettings& rSettings )
+bool HeaderFooterSettings::operator==( const HeaderFooterSettings& rSettings ) const
 {
     return (mbHeaderVisible == rSettings.mbHeaderVisible) &&
            (maHeaderText == rSettings.maHeaderText) &&
