@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:10:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,11 @@ public:
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     void StopQuickHelp();
 
-    BOOL SwEditWin::RulerMarginDrag( SwView& rView , const MouseEvent& rMEvt);
+    // --> OD 2005-02-18 #i42921# - add parameter <bVerticalMode>
+    BOOL SwEditWin::RulerMarginDrag( SwView& rView,
+                                     const MouseEvent& rMEvt,
+                                     const bool bVerticalMode );
+    // <--
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();
