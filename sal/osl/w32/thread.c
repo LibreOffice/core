@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-14 08:53:48 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 /*
     Thread-data structure hidden behind oslThread:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include <osl/conditn.h>
 #include <osl/types.h>
 #include <osl/diagnose.h>
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 /*
     under WIN32, we use the void* oslCondition

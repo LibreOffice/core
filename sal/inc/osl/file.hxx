@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 08:28:38 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #define _OSL_FILE_HXX_
 
 #ifdef __cplusplus
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #ifndef _RTL_MEMORY_H_
 #   include <rtl/memory.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:45:43 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
 #ifndef _RTL_USTRING_H_
 #   include <rtl/ustring.h>
 #endif
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
+
 
 #ifndef _OSL_TYPES_H_
 #   include <osl/types.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-27 14:34:48 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <osl/signal.h>
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <ctype.h>
 

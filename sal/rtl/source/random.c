@@ -2,9 +2,9 @@
  *
  *  $RCSfile: random.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _RTL_RANDOM_C_ "$Revision: 1.1.1.1 $"
+#define _RTL_RANDOM_C_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -83,6 +83,10 @@
 
 #ifndef _RTL_RANDOM_H_
 #include <rtl/random.h>
+#endif
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
 #endif
 
 /*========================================================================

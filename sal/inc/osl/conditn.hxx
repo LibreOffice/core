@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 08:26:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #define _OSL_CONDITN_HXX_
 
 #ifdef __cplusplus
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <osl/conditn.h>
 
