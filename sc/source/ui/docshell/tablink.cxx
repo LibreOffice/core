@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 09:00:37 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,17 +436,8 @@ void ScDocumentLoader::GetFilterName( const String& rFileName,
     SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
-        SfxFilterContainer* pContainer = ScDocShell::Factory().GetFilterContainer();
-        if ( bWithContent && pContainer )
-        {
-            // look at file content (call DetectFilter)
-            pContainer->GetFilter4Content( *pMedium, &pSfxFilter );
-        }
-        else
-        {
-            SfxFilterMatcher aMatcher( pContainer );
-            aMatcher.GuessFilter( *pMedium, &pSfxFilter );
-        }
+        SfxFilterMatcher aMatcher( String::CreateFromAscii("scalc") );
+        aMatcher.GuessFilter( *pMedium, &pSfxFilter );
     }
 
     if ( pSfxFilter )
