@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-16 08:08:57 $
+ *  last change: $Author: nn $ $Date: 2000-12-11 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,17 @@ void __EXPORT ScAreaLink::DataChanged(SvData& rData)
         xub_StrLen nPreLen = aAppPrefix.Len();
         if ( aFilter.Copy(0,nPreLen) == aAppPrefix )
             aFilter.Erase(0,nPreLen);
+
+        // #81155# dialog doesn't set area, so keep old one
+        if ( !aArea.Len() )
+        {
+            aArea = aSourceArea;
+
+            // adjust in dialog:
+            String aLinkName;
+            MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
+            SetName( new SvLinkName( aLinkName ) );
+        }
 
         Refresh(aFile,aFilter,aArea);
     }
