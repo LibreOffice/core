@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:36:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,285 +69,20 @@
 		<info>
 			<author>OJ</author>
 		</info>
-		<group oor:name="DataSettings">
+		<group oor:name="DatabaseNameSetting">
 			<info>
-				<desc >Contains information for displaying, sorting and ordering of data.</desc>
+				<desc xml:lang="en-US">Describes how to establish a database connection and how to filter and layout the database data.</desc>
 			</info>
-			<prop oor:name="Filter" oor:type="xs:string">
+			<prop oor:name="Name" oor:type="xs:string">
 				<info>
-					<desc>Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="ApplyFilter" oor:type="xs:boolean">
-				<info>
-					<desc>Indicates whether the filter is applied.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="Order" oor:type="xs:string">
-				<info>
-					<desc>Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="RowHeight" oor:type="xs:int">
-				<info>
-					<desc>Specifies the height of a data row.</desc>
+					<desc xml:lang="en-US">Specifies the name of the database.</desc>
 				</info>
 			</prop>
-			<prop oor:name="TextColor" oor:type="xs:int">
+			<prop oor:name="Location" oor:type="xs:string">
 				<info>
-					<desc>Specifies the text color (RGB) for displaying text.</desc>
+					<desc xml:lang="en-US">Specifies the location of the database.</desc>
 				</info>
 			</prop>
-			<prop oor:name="TextLineColor" oor:type="xs:int">
-				<info>
-					<desc>Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
-				</info>
-			</prop>
-			<prop oor:name="CharacterEmphasis" oor:type="xs:short">
-				<info>
-					<desc>Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
-				</info>
-			</prop>
-			<prop oor:name="CharacterRelief" oor:type="xs:short">
-				<info>
-					<desc>Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
-				</info>
-			</prop>
-			<node-ref oor:name="Font" oor:node-type="Font" oor:component="org.openoffice.Office.Common">
-				<info>
-					<desc>Specifies the font attributes for data displaying.</desc>
-				</info>
-			</node-ref>
-		</group>
-		<group oor:name="Column">
-			<info>
-				<desc>Contains information for displaying the data of a column.</desc>
-			</info>
-			<prop oor:name="FormatKey" oor:type="xs:int">
-				<info>
-					<desc>Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
-				</info>
-			</prop>
-			<prop oor:name="FormatString" oor:type="xs:string">
-				<info>
-					<desc>Contains the format which will be used to query the format key when not already set.</desc>
-				</info>
-			</prop>
-			<prop oor:name="FormatLocale" oor:type="xs:string">
-				<info>
-					<desc>Contains the locale which will be used to query the format key when not already set.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Align" oor:type="xs:int">
-				<info>
-					<desc>Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>left</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>center</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>right</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-			<prop oor:name="Width" oor:type="xs:int">
-				<info>
-					<desc>Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
-				</info>
-			</prop>
-			<prop oor:name="Position" oor:type="xs:int">
-				<info>
-					<desc>Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Hidden" oor:type="xs:boolean">
-				<info>
-					<desc>Determines whether the column is displayed.</desc>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="Control" oor:type="xs:hexBinary">
-				<info>
-					<desc>Contains information about a control used for displaying and editing the columns data.</desc>
-				</info>
-			</prop>
-			<prop oor:name="HelpText" oor:type="xs:string">
-				<info>
-					<desc>Describes an optional help text which can be used by UI components when representing this column.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ControlDefault" oor:type="xs:string">
-				<info>
-					<desc>Describes the default value which should be displayed by a control when moving to a new row.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Table">
-			<info>
-				<desc>Contains information for displaying the data of a table.</desc>
-			</info>
-			<node-ref oor:name="Settings" oor:node-type="DataSettings">
-				<info>
-					<desc>Extends the database table with additional display information, sorting and filtering criterias.</desc>
-				</info>
-			</node-ref>
-			<set oor:name="Columns" oor:node-type="Column">
-				<info>
-					<desc>Contains a list of column layout information.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="Query">
-			<info>
-				<desc>Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
-			</info>
-			<prop oor:name="Command" oor:type="xs:string">
-				<info>
-					<desc>Specifies the SQL command.</desc>
-				</info>
-			</prop>
-			<prop oor:name="EscapeProcessing" oor:type="xs:boolean">
-				<info>
-					<desc>Determines whether the escape processing should be applied on the command.</desc>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="UpdateTableName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
-				</info>
-			</prop>
-			<prop oor:name="UpdateSchemaName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the update table schema.</desc>
-				</info>
-			</prop>
-			<prop oor:name="UpdateCatalogName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the update table catalog.</desc>
-				</info>
-			</prop>
-			<prop oor:name="LayoutInformation" oor:type="xs:hexBinary" oor:nillable="false">
-				<info>
-					<desc>Contains the information for the query design.</desc>
-				</info>
-			</prop>
-			<node-ref oor:name="Settings" oor:node-type="DataSettings">
-				<info>
-					<desc>Extends the database table with additional display information, sorting and filtering criterias.</desc>
-				</info>
-			</node-ref>
-			<set oor:name="Columns" oor:node-type="Column">
-				<info>
-					<desc>Contains a list of column layout information.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="DataSourceSetting">
-			<info>
-				<desc>Defines the value for database driver specific value.</desc>
-			</info>
-			<prop oor:name="Value" oor:type="oor:any">
-				<info>
-					<desc>Contains the value of the data source setting item.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Bookmark">
-			<info>
-				<desc>Contains a list of bookmarks to documents.</desc>
-			</info>
-			<prop oor:name="DocumentLocation" oor:type="xs:string">
-				<info>
-					<desc>Specifies the location of a document.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="DataSourceDescription">
-			<info>
-				<desc>Describes how to establish a database connection and how to filter and layout the database data.</desc>
-			</info>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>Indicates a database URL, which locates a database driver.</desc>
-				</info>
-			</prop>
-			<prop oor:name="IsPasswordRequired" oor:type="xs:boolean">
-				<info>
-					<desc>Indicates that a password is always necessary.</desc>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="TableFilter" oor:type="oor:string-list">
-				<info>
-					<desc>Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
-				</info>
-				<value oor:separator=";">%</value>
-			</prop>
-			<prop oor:name="TableTypeFilter" oor:type="oor:string-list">
-				<info>
-					<desc>Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
-				</info>
-			</prop>
-			<prop oor:name="NumberFormatSettings" oor:type="xs:hexBinary">
-				<info>
-					<desc>Provides information about number formats used for the columns of queries and tables.</desc>
-				</info>
-			</prop>
-			<prop oor:name="User" oor:type="xs:string">
-				<info>
-					<desc>Specifies the user name for the authentication upon creating a connection to the data source.</desc>
-				</info>
-			</prop>
-			<prop oor:name="LoginTimeout" oor:type="xs:int">
-				<info>
-					<desc>Specifies the default time-out to be used when establishing a connection for this data source.</desc>
-				</info>
-			</prop>
-			<prop oor:name="SuppressVersionColumns" oor:type="xs:boolean">
-				<info>
-					<desc>Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="LayoutInformation" oor:type="xs:hexBinary" oor:nillable="false">
-				<info>
-					<desc>Contains the information for the relation design.</desc>
-				</info>
-			</prop>
-			<set oor:name="DataSourceSettings" oor:node-type="DataSourceSetting">
-				<info>
-					<desc>Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
-				</info>
-			</set>
-			<set oor:name="Tables" oor:node-type="Table">
-				<info>
-					<desc>Contains filtering and layout settings for specific database tables.</desc>
-				</info>
-			</set>
-			<set oor:name="Queries" oor:node-type="Query">
-				<info>
-					<desc>Contains a list of database queries.</desc>
-				</info>
-			</set>
-			<set oor:name="Bookmarks" oor:node-type="Bookmark">
-				<info>
-					<desc>Contains a list of links to associated documents.</desc>
-				</info>
-			</set>
 		</group>
 		<group oor:name="DataSource">
 			<info>
@@ -461,9 +196,10 @@
 				</info>
 			</set>
 		</group>
-		<set oor:name="DataSources" oor:node-type="DataSourceDescription">
+		
+		<set oor:name="RegisteredNames" oor:node-type="DatabaseNameSetting">
 			<info>
-				<desc>Contains a list of descriptions for data sources.</desc>
+				<desc xml:lang="en-US">Specifies all names which are registered.</desc>
 			</info>
 		</set>
 		<set oor:name="UserDefinedDriverSettings" oor:node-type="UserDefinedDriver">
