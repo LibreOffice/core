@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTreeListBoxEntry.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 13:34:08 $
+ *  last change:$Date: 2003-09-08 12:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,21 @@
  *
  *
  ************************************************************************/
-
 package mod._svtools;
 
 import java.io.PrintWriter;
 
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
@@ -71,23 +81,14 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.awt.XExtendedToolkit;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
-import com.sun.star.lang.XInitialization;
+import com.sun.star.util.XCloseable;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -120,7 +121,6 @@ import com.sun.star.lang.XInitialization;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleTreeListBoxEntry extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
 
@@ -128,20 +128,20 @@ public class AccessibleTreeListBoxEntry extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+        (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
-            xTextDoc.dispose();
+            closeDoc();
         }
     }
 
@@ -177,41 +177,45 @@ public class AccessibleTreeListBoxEntry extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleSelection
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
-
-        if (xTextDoc != null) xTextDoc.dispose();
+        if (xTextDoc != null) {
+            closeDoc();
+        }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a text document" );
+            log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
-            queryInterface(XDispatchProvider.class, secondController);
+        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                          XDispatchProvider.class,
+                                          secondController);
 
         XDispatch getting = null;
 
-        log.println( "opening DatasourceBrowser" );
+        log.println("opening DatasourceBrowser");
+
         URL the_url = new URL();
         the_url.Complete = ".component:DB/DataSourceBrowser";
         getting = aProv.queryDispatch(the_url, "_beamer", 12);
+
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
@@ -229,46 +233,69 @@ public class AccessibleTreeListBoxEntry extends TestCase {
 
         XInterface oObj = null;
 
+        XInitialization xInit = (XInitialization) UnoRuntime.queryInterface(
+                                        XInitialization.class,
+                                        the_frame2.getController());
+
+        Object[] params = new Object[3];
+        PropertyValue param1 = new PropertyValue();
+        param1.Name = "DataSourceName";
+        param1.Value = "Bibliography";
+        params[0] = param1;
+
+        PropertyValue param2 = new PropertyValue();
+        param2.Name = "CommandType";
+        param2.Value = new Integer(com.sun.star.sdb.CommandType.QUERY);
+        params[1] = param2;
+
+        PropertyValue param3 = new PropertyValue();
+        param3.Name = "Command";
+        param3.Value = "select * from biblio";
+        params[2] = param3;
+
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            xInit.initialize(params);
+            shortWait();
+            oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
+                                      .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
+        shortWait();
+
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.LABEL, "Bibliography");
+        //at.printAccessibleTree(log,xRoot);
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL,
+                                             "Bibliography");
+
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this component");
-
-        final XAccessibleComponent fXComp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
+                            "This method isn't supported in this component");
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+            }
+        });
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-            new Boolean(false));
+                            new Boolean(false));
 
         tEnv.addObjRelation("XAccessibleText.Text", "Bibliography");
 
@@ -281,10 +308,22 @@ public class AccessibleTreeListBoxEntry extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.currentThread().sleep(500);
         } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e);
         }
     }
 
+    protected void closeDoc() {
+        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                    XCloseable.class, xTextDoc);
+
+        try {
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("Couldn't close document " + e.getMessage());
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("Couldn't close document " + e.getMessage());
+        }
+    }
 }
