@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:54:27 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         bool mbValidPos;
 
         // rectangle, keeping the last object rectangle after the postioning
-        Rectangle maLastObjRect;
+        // --> OD 2004-09-29 #i34748# - change <maLastObjRect> to a pointer
+        Rectangle* mpLastObjRect;
 
         // boolean, indicating that anchored drawing object hasn't been attached
         // to a anchor frame yet. Once, it is attached to a anchor frame the
@@ -111,18 +112,19 @@ class SwAnchoredDrawObject : public SwAnchoredObject
             @author OD
         */
         void _MakeObjPosAnchoredAtLayout();
-        /** method to convert positioning attributes from horizontal
-            left-to-right layout to the layout direction of its anchor frame
 
-            OD 2004-08-09 #i28749#
-            The positioning attributes are converted by the current object geometry.
-            Conversion has to be done for drawing objects (not anchored
-            as-character) imported from OpenOffice.org file format only once
-            and directly before the first positioning.
+            /** method to set positioning attributes (not for as-character anchored)
+
+            OD 2004-10-20 #i35798#
+            During load the positioning attributes aren't set.
+            Thus, the positioning attributes are set by the current object geometry.
+            This method is also used for the conversion for drawing objects
+            (not anchored as-character) imported from OpenOffice.org file format
+            once and directly before the first positioning.
 
             @author OD
         */
-        void _ConvertPositioningAttr();
+        void _SetPositioningAttr();
 
         /** method to set internal anchor position of <SdrObject> instance
             of the drawing object
@@ -178,8 +180,13 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         virtual const SwRect GetObjRect() const;
         virtual void SetObjTop( const SwTwips _nTop);
         virtual void SetObjLeft( const SwTwips _nLeft);
-        const Rectangle& GetLastObjRect() const;
-        Rectangle& LastObjRect();
+        // --> OD 2004-09-29 #i34748# - change return type to a pointer.
+        // Return value can be NULL.
+        const Rectangle* GetLastObjRect() const;
+        // <--
+        // --> OD 2004-09-29 #i34748# - change method
+        void SetLastObjRect( const Rectangle& _rNewObjRect );
+        // <--
 
         /** adjust positioning and alignment attributes for new anchor frame
 
