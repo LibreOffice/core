@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 08:17:21 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 11:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,16 +151,68 @@
 #include <comphelper/extract.hxx>
 #endif
 
+// [ed] 6/19/02 Note to future authors in this file:  MACOSX has a very difficult time
+// with this file and it ices on gcc2 without the MACOSX changes.  So please...
+//
+// 1:  don't add in any new using namespace directives.  The ones commented out below
+//     may have just overloaded the frontend with too many symbols
+//
+// 2:  If your'e using something from teh container, sdbc, or form packages please add
+//     in an appropriate #define in the MACOSX section fully qualifying the class name
+//
+// 3:  At no time should you assume that you cna reference nested namespaces implicitly.
+//     For example:
+//
+//     namespace com {
+//       namespace foo {
+//         class bar; }}
+//
+//    Trying to refer to bar with "using namespace ::com" and then referencing it as "foo::bar"
+//    without specifying com will make the front end unhappy as well.  awt did this in this file.
+//
+// It took great pains to get this file to not ICE on OS X, so please help and try to
+// keep it that way!
+
 using namespace ::svxform;
+#ifndef MACOSX
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
+#endif
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+#ifndef MACOSX
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star;
+#endif
 using namespace ::com::sun::star::util;
+
+#ifdef MACOSX
+#define XContainerListener ::com::sun::star::container::XContainerListener
+#define ContainerEvent ::com::sun::star::container::ContainerEvent
+#define XIndexContainer ::com::sun::star::container::XIndexContainer
+#define XIndexAccess ::com::sun::star::container::XIndexAccess
+#define XElementAccess ::com::sun::star::container::XElementAccess
+#define XEnumeration ::com::sun::star::container::XEnumeration
+#define XEnumerationAccess ::com::sun::star::container::XEnumerationAccess
+#define XContainer ::com::sun::star::container::XContainer
+
+#define XRowSet ::com::sun::star::sdbc::XRowSet
+#define XResultSet ::com::sun::star::sdbc::XResultSet
+#define ResultSetType ::com::sun::star::sdbc::ResultSetType
+
+#define XUpdateListener ::com::sun::star::form::XUpdateListener
+#define XGridPeer ::com::sun::star::form::XGridPeer
+#define XFormComponent ::com::sun::star::form::XFormComponent
+#define XGridFieldDataSupplier ::com::sun::star::form::XGridFieldDataSupplier
+#define XBoundComponent ::com::sun::star::form::XBoundComponent
+#define XGrid ::com::sun::star::form::XGrid
+#define FormComponentType ::com::sun::star::form::FormComponentType
+#define XReset ::com::sun::star::form::XReset
+#define XResetListener ::com::sun::star::form::XResetListener
+#define XLoadable ::com::sun::star::form::XLoadable
+#endif
 
 //------------------------------------------------------------------
 ::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
@@ -791,7 +843,12 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
         }
 
         mbDesignMode = bOn;
+
+#ifdef MACOSX
+                Reference< ::com::sun::star::awt::XVclWindowPeer> xVclWindowPeer(mxPeer, UNO_QUERY);
+#else
         Reference< awt::XVclWindowPeer >  xVclWindowPeer(mxPeer, UNO_QUERY);
+#endif
         if (xVclWindowPeer.is())
             xVclWindowPeer->setDesignMode(bOn);
     }
