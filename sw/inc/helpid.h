@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:53:47 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
 #endif
@@ -917,4 +916,4 @@
 #define HID_SECTION_INDENTS_PAGE                    (HID_BASE + 2185 )
 
 #define HID_FLD_DROPDOWN                            (HID_BASE + 2186 )
-
+#define HID_DLG_WORDCOUNT                           (HID_BASE + 2187 )
