@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:47:18 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 13:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ namespace dbaui
                         xSrcConnection = xDestConnection;
                     else if(!xSrcConnection.is())
                     {
-                        Reference< XEventListener> xEvt(static_cast<::cppu::OWeakObject*>(this), UNO_QUERY);
+                        Reference< XEventListener> xEvt(static_cast< ::cppu::OWeakObject*>(this), UNO_QUERY);
                         showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
                         bDispose = sal_True;
                     }
@@ -801,6 +801,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/30 08:47:18  oj
+ *  correct the creation of views
+ *
  *  Revision 1.3  2001/03/28 15:44:58  fs
  *  changed the ctor of ODataClipboard
  *
