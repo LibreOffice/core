@@ -322,7 +322,8 @@ public class XSLTransformer
                         transformer.setParameter("publicType", pubtype);
                     if(systype != null)
                         transformer.setParameter("systemType", systype);
-
+                    if(svcfactory != null)
+                        transformer.setParameter("XMultiServiceFactory",svcfactory);
                     long tstart = System.currentTimeMillis();
                     transformer.transform(xmlsource, xmlresult);
                     long time = System.currentTimeMillis() - tstart;
