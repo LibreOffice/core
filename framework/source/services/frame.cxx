@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:22:23 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1843,13 +1843,14 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // May be we will die before we could finish this method ...
     css::uno::Reference< css::frame::XFrame > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
+    LOG_DISPOSEEVENT( "Frame", sName )
+
     // First operation should be ... "stopp all listening for window events on our container window".
     // These events are superflous but can make trouble!
     // We will die, die and die ...
     implts_stopWindowListening();
 
     // Send message to all listener and forget her references.
-    LOG_DISPOSEEVENT( "Frame", sName )
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
@@ -1873,6 +1874,19 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // We should be alone for ever and further dispose calls are rejected by lines before ...
     // I hope it :-)
 
+    // Free references of our frame tree.
+    // Force parent container to forget this frame too ...
+    // ( It's contained in m_xParent and so no css::lang::XEventListener for m_xParent! )
+    // It's important to do that before we free some other internal structures.
+    // Because if our parent gets an activate and found us as last possible active frame
+    // he try to deactivate us ... and we run into some trouble (DisposedExceptions!).
+    if( m_xParent.is() == sal_True )
+    {
+        m_xParent->getFrames()->remove( xThis );
+        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
+    }
+
+    /* } SAFE */
     // Forget our internal component and her window first.
     // So we can release our container window later without problems.
     // Because this container window is the parent of the component window ...
@@ -1881,7 +1895,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // Because the window is used by the controller too ...
     if (m_xController.is())
     {
-        LOG_WARNING("Frame::dispose()", "Sorry - but controller shouldn't exist at this point!")
         css::uno::Reference< css::lang::XComponent > xDisposable( m_xController, css::uno::UNO_QUERY );
         if (xDisposable.is())
             xDisposable->dispose();
@@ -1889,23 +1902,12 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 
     if (m_xComponentWindow.is())
     {
-        LOG_WARNING("Frame::dispose()", "Sorry - but component window shouldn't exist at this point!")
         css::uno::Reference< css::lang::XComponent > xDisposable( m_xComponentWindow, css::uno::UNO_QUERY );
         if (xDisposable.is())
             xDisposable->dispose();
     }
 
-    // Free references of our frame tree.
-    // Force parent container to forget this frame too ...
-    // ( It's contained in m_xParent and so no css::lang::XEventListener for m_xParent! )
-    // It's important to do that before we free some other internal structures.
-    // Because if our parent gets an activate and found us as last possible active frame
-    // he try to deactivate us ... and we run into some trouble.
-    if( m_xParent.is() == sal_True )
-    {
-        m_xParent->getFrames()->remove( xThis );
-        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
-    }
+    impl_checkMenuCloser();
 
     /*ATTENTION
         It's neccessary to release our StatusIndicatorFactory-helper at first!
