@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:53:17 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "¦¬¥σªΜ(~E)";
         Text[ arabic ] = "ΗαγΣΚαγ";
         Text[ greek ] = "Παραλήπτης";
-        Text[ korean ] = "Ήή΄Β »η¶χ";
+        Text[ korean ] = "Ήή΄Β »η¶χ(~E)";
         Text[ turkish ] = "Alύcύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Destinatario";
@@ -396,7 +396,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "Έκ®Ζ®wΔζ¦μ(~D)";
         Text[ arabic ] = "Νήα ήΗΪΟΙ ΗαΘνΗδΗΚ";
         Text[ greek ] = "Πεδίο βάσης δεδομένων";
-        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµε";
+        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµε(~D)";
         Text[ turkish ] = "Veritabanύ alanύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Campo base de datos";
@@ -434,7 +434,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "±H¥σªΜ(~S)";
         Text[ arabic ] = "ΗαγΡΣα";
         Text[ greek ] = "Αποστολέας";
-        Text[ korean ] = "ΊΈ³½ »η¶χ";
+        Text[ korean ] = "ΊΈ³½ »η¶χ(~S)";
         Text[ turkish ] = "Gφnderen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "R~emitente";
@@ -485,6 +485,7 @@ String STR_DOC_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
 };
+
 
 
 
