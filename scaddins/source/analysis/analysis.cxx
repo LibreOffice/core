@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ const sal_Char* pFuncDatas[] =
         INTERNPARAM, "pSettlement", "pMaturity", "pPrice", "pRedemption", "pBase",
         INTERNPARAM, "PSettlement", "PMaturity", "PPrice", "PRedemption", "PBase",
         EOE,
-    "igetDuration", "1Duration", "2Duration",
+    "igetDuration", "1Duration", "2Duration_add",
         "dReturns the annual duration of a security with periodic interest payments",
         INTERNPARAM, "pSettlement", "pMaturity", "pCoupon", "pYield", "pFrequency", "pBase",
         INTERNPARAM, "PSettlement", "PMaturity", "PCoupon", "PYield", "PFrequency", "PBase",
