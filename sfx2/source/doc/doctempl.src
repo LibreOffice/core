@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:23:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     {
         < "±ê×¼" ; > ;
         < "ÉÌÎñÐÅº¯" ; > ;
-        < "ÆäËüÉÌÎñÎÄµµ" ; > ;
+        < "ÆäËûÉÌÎñÎÄµµ" ; > ;
         < "Ë½ÈËÐÅº¯ºÍÎÄµµ" ; > ;
         < "±íµ¥ºÍºÏÍ¬" ; > ;
         < "²ÆÎñ" ; > ;
@@ -307,7 +307,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     {
         < "¼Ð·Ç" ; > ;
         < "°Ó°È«H¨ç" ; > ;
-        < "¨ä¥¦°Ó°È¤å¥ó" ; > ;
+        < "¨ä¥L°Ó°È¤å¥ó" ; > ;
         < "¨p¤H«H¨ç©M¤å¥ó" ; > ;
         < "ªí³æ©M¦X¦P" ; > ;
         < "°]°È" ; > ;
@@ -410,6 +410,7 @@ String RID_CNT_STR_WAITING
     Text[ catalan ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
     Text[ finnish ] = "Alustetaan ohjelman %PRODUCTNAME osat ensimmäistä kertaa asennuksen jälkeen.";
 };
+
 
 
 
