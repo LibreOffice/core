@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2000-11-09 09:48:41 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 11:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,7 +763,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
                 switch ( pValues[nProp].getValueTypeClass() )

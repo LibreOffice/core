@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-06 12:58:00 $
+ *  last change: $Author: pb $ $Date: 2000-11-10 11:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,6 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
 
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
                 if ( pValues[nProp] >>= aTempStr )
