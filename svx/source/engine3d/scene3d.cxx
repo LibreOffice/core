@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-15 15:44:02 $
+ *  last change: $Author: cl $ $Date: 2002-04-08 10:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1828,12 +1828,12 @@ BOOL E3dScene::IsBreakObjPossible()
 |*
 \************************************************************************/
 
-void E3dScene::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
+void E3dScene::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel )
 {
     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
     {
         // call parent
-        E3dObject::MigrateItemPool(pSrcPool, pDestPool);
+        E3dObject::MigrateItemPool(pSrcPool, pDestPool, pNewModel);
 
         // own reaction, but only with outmost scene
         SdrObjList* pSubList = GetSubList();
@@ -1844,7 +1844,7 @@ void E3dScene::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
             {
                 E3dObject* pObj = (E3dObject*) a3DIterator.Next();
                 DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-                pObj->MigrateItemPool(pSrcPool, pDestPool);
+                pObj->MigrateItemPool(pSrcPool, pDestPool, pNewModel);
             }
         }
     }
